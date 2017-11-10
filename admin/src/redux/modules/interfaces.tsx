@@ -1,5 +1,7 @@
 export { IStore } from "./reducer"
-export { IModule as IAppModule, eEalUIComponent } from "./app"
+export { IModule as IAppModule, eAppEnv } from "./app"
+export { IModule as IUserModule, ISelf, IUser } from "./user"
+export { IModule as ISnackbarsModule } from "./snackbars"
 
 export interface IConfig {
     GOOGLE_ANALYTICS_UA: string

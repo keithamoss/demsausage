@@ -9,4 +9,5 @@ declare module "ol-react"
 declare module "dot-prop-immutable"
 declare module "react-cookie"
 declare module "react-svg"
+declare module "react-google-map"
 // declare function require(string: string): string

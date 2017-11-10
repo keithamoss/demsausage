@@ -1,54 +1,99 @@
 import * as React from "react"
-import { connect } from "react-redux"
-import { fetchStuff } from "./redux/modules/app"
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import styled from "styled-components"
+import { Link } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
+import { IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
 import "./App.css"
 
-const logo = require("./logo.svg")
+import AppBar from "material-ui/AppBar"
+import { ToolbarGroup } from "material-ui/Toolbar"
+import Snackbar from "material-ui/Snackbar"
+import LinearProgress from "material-ui/LinearProgress"
+import IconMenu from "material-ui/IconMenu"
+import MenuItem from "material-ui/MenuItem"
+import IconButton from "material-ui/IconButton"
+import FlatButton from "material-ui/FlatButton"
+import ActionFace from "material-ui/svg-icons/action/face"
+import ActionExitToApp from "material-ui/svg-icons/action/exit-to-app"
 
-interface IDispatchProps {
-    fetchStuff: Function
+// const logo = require("./logo.svg")
+
+const HiddenIconButton = styled(IconButton)`
+    width: 0px !important;
+    height: 0px !important;
+    padding: 0px !important;
+`
+
+const HeaderBarButton = styled(FlatButton)`
+    color: #ffffff !important;
+    margin: 4px 0px !important;
+`
+
+export interface IProps {
+    muiThemePalette: any
+    app: IAppModule
+    user: IUser
+    snackbars: ISnackbarsModule
+    handleSnackbarClose: any
+    doLogout: any
+    content: any
+    sidebar: any
 }
 
-class App extends React.Component<IDispatchProps, {}> {
-    componentDidMount() {
-        const { fetchStuff } = this.props
-        fetchStuff()
-    }
-
+class App extends React.Component<IProps, {}> {
     render() {
+        const { muiThemePalette, app, user, snackbars, handleSnackbarClose, doLogout, content, sidebar } = this.props
+
+        const styles: React.CSSProperties = {
+            linearProgressStyle: {
+                position: "fixed",
+                top: "0px",
+                zIndex: 1200,
+                display: app.requestsInProgress > 0 ? "block" : "none",
+            },
+        }
+
         return (
-            <MuiThemeProvider>
-                <div className="App">
-                    <div className="App-header">
-                        <img src={logo} className="App-logo" alt="logo" />
-                        <h2>Welcome to React</h2>
-                        <LoginDialog open={true} />
-                    </div>
-                    <p className="App-intro">
-                        To get started, edit <code>src/App.tsx</code> and save to reload.
-                    </p>
+            <div className="page">
+                <div className="page-header">
+                    <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
+                    <AppBar
+                        title={"Democracy Sausage"}
+                        iconElementRight={
+                            <ToolbarGroup>
+                                <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />
+                                <HeaderBarButton label="Maps" containerElement={<Link to={"/maps"} />} />
+                                <HeaderBarButton label="About" containerElement={<Link to={"/about"} />} />
+                                {user !== null && <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} />}
+                                {user !== null && (
+                                    <IconMenu iconButtonElement={<HiddenIconButton />}>
+                                        <MenuItem primaryText="Logout" leftIcon={<ActionExitToApp />} onClick={doLogout} />
+                                    </IconMenu>
+                                )}
+                            </ToolbarGroup>
+                        }
+                    />
                 </div>
-            </MuiThemeProvider>
+                <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
+                    <LoginDialog open={user === null} />
+                    <main className="page-main-content">{content || this.props.children}</main>
+                    <nav className="page-nav">{sidebar || <div />}</nav>
+                </div>
+                <Snackbar
+                    open={snackbars.open}
+                    message={snackbars.active.message}
+                    action={snackbars.active.action}
+                    autoHideDuration={snackbars.active.autoHideDuration}
+                    onActionTouchTap={() => {
+                        if ("onActionTouchTap" in snackbars.active) {
+                            snackbars.active.onActionTouchTap!()
+                        }
+                    }}
+                    onRequestClose={handleSnackbarClose}
+                />
+            </div>
         )
     }
 }
 
-const mapStateToProps = (state: any) => {
-    // const { app, map, ealgis, snackbars } = state
-
-    return {}
-}
-
-const mapDispatchToProps = (dispatch: Function) => {
-    return {
-        fetchStuff: () => {
-            dispatch(fetchStuff())
-        },
-    }
-}
-
-const AppWrapped = connect(mapStateToProps, mapDispatchToProps)(App as any)
-
-export default AppWrapped
+export default App
