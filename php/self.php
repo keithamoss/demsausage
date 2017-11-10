@@ -12,6 +12,14 @@ if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
 }
 session_start();
 
+header("Content-type: application/json");
+header("Access-Control-Allow-Credentials: true");
+if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
+  header("Access-Control-Allow-Origin: http://localhost:3000");
+} else {
+  header("Access-Control-Allow-Origin: http://" . $_SERVER["HTTP_HOST"]);
+}
+
 $client = new Google_Client();
 $client->setAuthConfigFile('client_secrets.inc');
 $client->addScope(Google_Service_Plus::USERINFO_EMAIL);
@@ -25,12 +33,14 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   $secrets = (array)json_decode(file_get_contents("sausage_secrets.inc"));
   if(isset($me["emails"]) && in_array($me["emails"][0]["value"], $secrets["authorised_users"])) {
     // OK
-    header("Content-type: application/json");
-    echo json_encode($me["emails"]);
+    echo json_encode(array("success" => true, "user" => array("email" => $me["emails"][0]["value"])));
+    // echo json_encode($me["emails"]);
   } else {
     // NOT OK
-    header("HTTP/1.1 401 Unauthorized");
+    // header("HTTP/1.1 401 Unauthorized");
+    echo json_encode(array("success" => false));
   }
 } else {
-  header("HTTP/1.1 401 Unauthorized");
+  // header("HTTP/1.1 401 Unauthorized");
+  echo json_encode(array("success" => false));
 }

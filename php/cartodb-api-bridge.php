@@ -4,7 +4,12 @@
 // error_reporting(E_ALL);
 
 header("Content-type: application/json");
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Credentials: true");
+if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
+  header("Access-Control-Allow-Origin: http://localhost:3000");
+} else {
+  header("Access-Control-Allow-Origin: http://" . $_SERVER["HTTP_HOST"]);
+}
 
 // if(isset($_SERVER["HTTP_REFERER"]) && stristr($_SERVER["HTTP_REFERER"], "dev.democracysausage.org") !== false) {
 //   session_set_cookie_params(86400 * 365 * 5, "/", "dev.democracysausage.org");
