@@ -31,7 +31,7 @@ const initialState: IModule = {
 }
 
 // Reducer
-export default function reducer(state = initialState, action: IAction) {
+export default function reducer(state: IModule = initialState, action: IAction) {
     let requestsInProgress = dotProp.get(state, "requestsInProgress")
 
     switch (action.type) {

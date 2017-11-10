@@ -12,7 +12,6 @@ export class EALGISApiClient {
         // Raven.captureException(error)
         // Raven.showReportDialog({})
 
-        console.log(`Error from ${url}`)
         return {}
         // dispatch(
         //     sendSnackbarMessage({

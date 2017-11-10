@@ -2,12 +2,12 @@ import * as React from "react"
 import Dialog from "material-ui/Dialog"
 import { SocialLoginButton } from "../social-login-button/SocialLoginButton"
 
-export interface LoginDialogProps {
+export interface ILoginDialogProps {
     open: boolean
 }
-export interface LoginDialogState {}
+export interface ILoginDialogState {}
 
-export class LoginDialog extends React.Component<LoginDialogProps, LoginDialogState> {
+export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialogState> {
     render() {
         const { open } = this.props
         const providerUrl = window.location.host.startsWith("localhost:")

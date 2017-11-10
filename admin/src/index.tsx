@@ -1,5 +1,5 @@
 import "es6-promise/auto"
-import registerServiceWorker from "./registerServiceWorker"
+// import registerServiceWorker from "./registerServiceWorker"
 import "./index.css"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
@@ -43,4 +43,4 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("root")
 )
-registerServiceWorker()
+// registerServiceWorker()
