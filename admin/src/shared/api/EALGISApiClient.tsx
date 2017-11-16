@@ -6,57 +6,28 @@ import { iterate as iterateSnackbar, sendMessage as sendSnackbarMessage } from "
 import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
 
 export class EALGISApiClient {
-    baseURL: string
+    dsBaseURL: string
+    cartoBaseURL: string
 
     constructor() {
-        this.baseURL = getAPIBaseURL()
+        this.dsBaseURL = getAPIBaseURL()
+        this.cartoBaseURL = "https://democracy-sausage.cartodb.com/api/v2/sql"
     }
 
-    // Only handles fatal errors from the API
-    // FIXME Refactor to be able to handle errors that the calling action can't handle
-    public handleError(error: any, url: string, dispatch: any) {
-        // Raven.captureException(error)
-        // Raven.showReportDialog({})
-
-        dispatch(
-            sendSnackbarMessage({
-                message: `Error from ${url}`,
-                // key: "SomeUID",
-                action: "Dismiss",
-                autoHideDuration: 4000,
-                onActionTouchTap: () => {
-                    dispatch(iterateSnackbar())
-                },
-            })
-        )
+    public cartoGet(sql: string, dispatch: Function): Promise<void> {
+        const params: object = { q: sql }
+        const fetchOptions: object = { credentials: "omit" }
+        return this.get(this.cartoBaseURL, dispatch, params, fetchOptions)
     }
 
-    public get(url: string, dispatch: Function, params: object = {}): Promise<void> {
-        dispatch(beginFetch())
-
-        if (Object.keys(params).length > 0) {
-            // Yay, a library just to do query string operations for fetch()
-            // https://github.com/github/fetch/issues/256
-            url += "?" + qs.stringify(params)
-        }
-
-        return fetch(this.baseURL + url, {
-            credentials: "include",
-        })
-            .then((response: any) => {
-                dispatch(finishFetch())
-                return response.json().then((json: any) => ({
-                    response: response,
-                    json: json,
-                }))
-            })
-            .catch((error: any) => this.handleError(error, url, dispatch))
+    public dsGet(url: string, dispatch: Function, params: object = {}): Promise<void> {
+        return this.get(this.dsBaseURL + url, dispatch, params)
     }
 
     public post(url: string, body: object, dispatch: any) {
         dispatch(beginFetch())
 
-        return fetch(this.baseURL + url, {
+        return fetch(url, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -78,7 +49,7 @@ export class EALGISApiClient {
     public put(url: string, body: object, dispatch: any) {
         dispatch(beginFetch())
 
-        return fetch(this.baseURL + url, {
+        return fetch(url, {
             method: "PUT",
             credentials: "include",
             headers: {
@@ -100,7 +71,7 @@ export class EALGISApiClient {
     public delete(url: string, dispatch: any) {
         dispatch(beginFetch())
 
-        return fetch(this.baseURL + url, {
+        return fetch(url, {
             method: "DELETE",
             credentials: "include",
             headers: {
@@ -113,12 +84,52 @@ export class EALGISApiClient {
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
+
+    private get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<void> {
+        dispatch(beginFetch())
+
+        if (Object.keys(params).length > 0) {
+            // Yay, a library just to do query string operations for fetch()
+            // https://github.com/github/fetch/issues/256
+            url += "?" + qs.stringify(params)
+        }
+
+        return fetch(url, { ...{ credentials: "include" }, ...fetchOptions })
+            .then((response: any) => {
+                dispatch(finishFetch())
+                return response.json().then((json: any) => ({
+                    response: response,
+                    json: json,
+                }))
+            })
+            .catch((error: any) => this.handleError(error, url, dispatch))
+    }
+
+    // Only handles fatal errors from the API
+    // FIXME Refactor to be able to handle errors that the calling action can't handle
+    private handleError(error: any, url: string, dispatch: any) {
+        // Raven.captureException(error)
+        // Raven.showReportDialog({})
+
+        dispatch(
+            sendSnackbarMessage({
+                message: `Error from ${url}`,
+                // key: "SomeUID",
+                action: "Dismiss",
+                autoHideDuration: 4000,
+                onActionTouchTap: () => {
+                    dispatch(iterateSnackbar())
+                },
+            })
+        )
+    }
 }
 
 // Models
 export interface IEALGISApiClient {
     handleError: Function
-    get: Function
+    dsGet: Function
+    cartoGet: Function
     post: Function
     put: Function
     delete: Function
@@ -126,4 +137,15 @@ export interface IEALGISApiClient {
 
 export interface IHttpResponse {
     status: number
+}
+
+export interface ICartoAPIResponse {
+    // rows: Array<object>
+    time: number
+    fields: {
+        [key: string]: {
+            type: string
+        }
+    }
+    total_rows: number
 }

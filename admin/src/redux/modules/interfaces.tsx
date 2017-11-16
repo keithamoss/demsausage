@@ -1,7 +1,9 @@
 export { IStore } from "./reducer"
+export { IEALGISApiClient, IHttpResponse, ICartoAPIResponse } from "../../shared/api/EALGISApiClient"
 export { IModule as IAppModule, eAppEnv } from "./app"
 export { IModule as IUserModule, ISelf, IUser } from "./user"
 export { IModule as ISnackbarsModule } from "./snackbars"
+export { IModule as IElectionsModule, IElections, IElection } from "./elections"
 
 export interface IConfig {
     GOOGLE_ANALYTICS_UA: string

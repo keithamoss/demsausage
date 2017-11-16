@@ -1,6 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
-import { ISelf, fetchUser } from "./user"
+import { IEALGISApiClient } from "../../redux/modules/interfaces"
+import { fetchUser } from "./user"
+import { fetchElections } from "./elections"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -134,17 +135,19 @@ export function fetchInitialAppState() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         dispatch(loading())
 
-        const self: ISelf = await dispatch(fetchUser())
-        if (self && self.success) {
-            // await Promise.all([
-            //     dispatch(fetchMaps()),
-            //     dispatch(fetchGeomInfo()),
-            //     dispatch(fetchColourInfo()),
-            //     dispatch(fetchSchemaInfo()),
-            //     dispatch(fetchTablesIfUncached([...self.user.favourite_tables, ...self.user.recent_tables])),
-            // ])
-            // await dispatch(fetchColumnsForMaps())
-        }
+        await Promise.all([dispatch(fetchUser()), dispatch(fetchElections())])
+
+        // const self: ISelf = await dispatch(fetchUser())
+        // if (self && self.success) {
+        //     await Promise.all([
+        //         dispatch(fetchElections()),
+        //         //     dispatch(fetchGeomInfo()),
+        //         //     dispatch(fetchColourInfo()),
+        //         //     dispatch(fetchSchemaInfo()),
+        //         //     dispatch(fetchTablesIfUncached([...self.user.favourite_tables, ...self.user.recent_tables])),
+        //     ])
+        //     // await dispatch(fetchColumnsForMaps())
+        // }
 
         dispatch(loaded())
     }

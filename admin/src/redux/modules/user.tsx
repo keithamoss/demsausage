@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IEALGISApiClient } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -23,7 +23,7 @@ export default function reducer(state: IModule = initialState, action: IAction) 
 export function loadUser(self: ISelf) {
     return {
         type: LOAD_USER,
-        user: self.user,
+        user: self.user || null,
     }
 }
 
@@ -53,7 +53,7 @@ export interface IUser {
 // e.g. thunks, epics, et cetera
 export function fetchUser() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.get("/self.php", dispatch)
+        const { response, json } = await ealapi.dsGet("/self.php", dispatch)
         if (response.status === 200) {
             dispatch(loadUser(json))
             return json
@@ -63,7 +63,7 @@ export function fetchUser() {
 
 export function logoutUser() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        await ealapi.get("/login.php?nuke_session=1", dispatch)
+        await ealapi.dsGet("/login.php?nuke_session=1", dispatch)
         window.location.reload()
     }
 }

@@ -2,8 +2,17 @@ import * as React from "react"
 import styled from "styled-components"
 import { Link } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import { IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
+import { IAppModule, ISnackbarsModule, IElections, IElection, IUser } from "./redux/modules/interfaces"
 import "./App.css"
+
+import SelectField from "material-ui/SelectField"
+// import MenuItem from "material-ui/MenuItem"
+
+import { List, ListItem } from "material-ui/List"
+import ContentInbox from "material-ui/svg-icons/content/inbox"
+import ActionGrade from "material-ui/svg-icons/action/grade"
+import ContentSend from "material-ui/svg-icons/content/send"
+import ContentDrafts from "material-ui/svg-icons/content/drafts"
 
 import AppBar from "material-ui/AppBar"
 import { ToolbarGroup } from "material-ui/Toolbar"
@@ -34,7 +43,10 @@ export interface IProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
+    elections: IElections
+    currentElection: IElection
     handleSnackbarClose: any
+    onChangeElection: any
     doLogout: any
     content: any
     sidebar: any
@@ -42,7 +54,20 @@ export interface IProps {
 
 class App extends React.Component<IProps, {}> {
     render() {
-        const { muiThemePalette, app, user, snackbars, handleSnackbarClose, doLogout, content, sidebar } = this.props
+        const {
+            muiThemePalette,
+            app,
+            user,
+            snackbars,
+            elections,
+            currentElection,
+            handleSnackbarClose,
+            doLogout,
+            onChangeElection,
+            content,
+            sidebar,
+        } = this.props
+        console.log(sidebar)
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -58,12 +83,10 @@ class App extends React.Component<IProps, {}> {
                 <div className="page-header">
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
                     <AppBar
-                        title={"Democracy Sausage"}
+                        title={"Democracy Sausage Admin Console"}
                         iconElementRight={
                             <ToolbarGroup>
                                 <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />
-                                <HeaderBarButton label="Maps" containerElement={<Link to={"/maps"} />} />
-                                <HeaderBarButton label="About" containerElement={<Link to={"/about"} />} />
                                 {user !== null && <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} />}
                                 {user !== null && (
                                     <IconMenu iconButtonElement={<HiddenIconButton />}>
@@ -77,7 +100,29 @@ class App extends React.Component<IProps, {}> {
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <LoginDialog open={user === null} />
                     <main className="page-main-content">{content || this.props.children}</main>
-                    <nav className="page-nav">{sidebar || <div />}</nav>
+                    <nav className="page-nav">
+                        <List>
+                            <ListItem disabled={true} leftIcon={<ContentInbox />}>
+                                <SelectField floatingLabelText="Elections" value={currentElection.cartodb_id} onChange={onChangeElection}>
+                                    {Object.keys(elections)
+                                        .reverse()
+                                        .map((electionId: string, key: number) => (
+                                            <MenuItem
+                                                key={electionId}
+                                                value={elections[electionId].cartodb_id}
+                                                primaryText={elections[electionId].name}
+                                            />
+                                        ))}
+                                </SelectField>
+                            </ListItem>
+
+                            <ListItem primaryText="Edit Polling Places" leftIcon={<ActionGrade />} />
+                            <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} />
+                            <ListItem primaryText="Edit Polling Place Types" leftIcon={<ContentDrafts />} />
+                            <ListItem primaryText="Create Election" leftIcon={<ContentInbox />} />
+                            <ListItem primaryText="User Management" leftIcon={<ContentInbox />} />
+                        </List>
+                    </nav>
                 </div>
                 <Snackbar
                     open={snackbars.open}

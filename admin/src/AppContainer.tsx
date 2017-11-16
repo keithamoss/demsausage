@@ -24,7 +24,9 @@ import { logoutUser } from "./redux/modules/user"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 // import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
-import { IStore, IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
+
+import { setCurrentElection, IElection } from "./redux/modules/elections"
+import { IStore, IAppModule, ISnackbarsModule, IUser, IElections } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 const muiTheme = getMuiTheme({
@@ -54,12 +56,15 @@ export interface IStateProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
+    elections: IElections
+    currentElection: IElection
 }
 
 export interface IDispatchProps {
     fetchInitialAppState: Function
     handleSnackbarClose: Function
     doLogout: Function
+    onChangeElection: Function
 }
 
 export interface IRouteProps {
@@ -75,7 +80,19 @@ export class AppContainer extends React.Component<IStateProps & IDispatchProps &
     }
 
     render() {
-        const { app, user, snackbars, handleSnackbarClose, doLogout, children, content, sidebar } = this.props
+        const {
+            app,
+            user,
+            snackbars,
+            elections,
+            currentElection,
+            handleSnackbarClose,
+            doLogout,
+            onChangeElection,
+            children,
+            content,
+            sidebar,
+        } = this.props
 
         if (app.loading === true) {
             return (
@@ -94,8 +111,11 @@ export class AppContainer extends React.Component<IStateProps & IDispatchProps &
                     app={app}
                     user={user}
                     snackbars={snackbars}
+                    elections={elections}
+                    currentElection={currentElection}
                     handleSnackbarClose={handleSnackbarClose}
                     doLogout={doLogout}
+                    onChangeElection={onChangeElection}
                     children={children}
                     content={content}
                     sidebar={sidebar}
@@ -106,12 +126,14 @@ export class AppContainer extends React.Component<IStateProps & IDispatchProps &
 }
 
 const mapStateToProps = (state: IStore): IStateProps => {
-    const { app, user, snackbars } = state
+    const { app, user, snackbars, elections } = state
 
     return {
         app: app,
         user: user.user,
         snackbars: snackbars,
+        elections: elections.elections,
+        currentElection: elections.elections[elections.current_election_id],
     }
 }
 
@@ -127,6 +149,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         doLogout: () => {
             dispatch(logoutUser())
+        },
+        onChangeElection: (event: any, index: number, electionId: number) => {
+            dispatch(setCurrentElection(electionId))
         },
     }
 }
