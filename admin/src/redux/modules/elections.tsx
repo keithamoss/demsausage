@@ -29,7 +29,7 @@ export function loadElections(elections: IElections) {
         elections,
     }
 }
-export function setCurrentElection(electionId: number) {
+export function setCurrentElection(electionId: string) {
     return {
         type: SET_CURRENT_ELECTION,
         electionId,
@@ -39,13 +39,13 @@ export function setCurrentElection(electionId: number) {
 // Models
 export interface IModule {
     elections: IElections
-    current_election_id: number // cartodb_id
+    current_election_id: string // election.db_table_name
 }
 
 export interface IAction {
     type: string
     elections: Array<IElection>
-    electionId: number
+    electionId: string
     meta?: {
         // analytics: IAnalyticsMeta
     }
@@ -77,15 +77,15 @@ export function fetchElections() {
         const sql = "SELECT *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat FROM elections WHERE hidden != true ORDER BY cartodb_id DESC"
         const { response, json } = await ealapi.cartoGet(sql, dispatch)
         if (response.status === 200) {
-            // Map elections from an array of objects to a dict keyed by cartodb_id
+            // Map elections from an array of objects to a dict keyed by db_table_name
             const elections = Object.assign(
                 {},
-                ...json.rows.map((election: IElection, index: number, array: Array<IElection>) => ({ [election.cartodb_id]: election }))
+                ...json.rows.map((election: IElection, index: number, array: Array<IElection>) => ({ [election.db_table_name]: election }))
             )
             dispatch(loadElections(elections))
 
             const activeElection = json.rows.find((election: IElection) => election.is_active)
-            dispatch(setCurrentElection(activeElection.cartodb_id))
+            dispatch(setCurrentElection(activeElection.db_table_name))
         }
     }
 }

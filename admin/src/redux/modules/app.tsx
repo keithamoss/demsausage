@@ -15,7 +15,8 @@ const TOGGLE_MODAL = "ealgis/app/TOGGLE_MODAL"
 
 export enum eAppEnv {
     DEV = 1,
-    PROD = 2,
+    TEST = 2,
+    PROD = 3,
 }
 
 const initialState: IModule = {
@@ -124,7 +125,7 @@ export interface IAction {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function getEnvironment(): eAppEnv {
-    return window.location.hostname === "localhost" ? eAppEnv.DEV : eAppEnv.PROD
+    return process.env.NODE_ENV === "development" ? eAppEnv.DEV : eAppEnv.PROD
 }
 
 export function getAPIBaseURL(): string {

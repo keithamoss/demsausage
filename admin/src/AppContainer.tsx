@@ -73,13 +73,10 @@ export interface IStateProps {}
 
 export interface IRouteProps {
     content: any
-    sidebar: any
     location: any
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
-    onFieldChangeDebounced: Function
-
     constructor(props: IStoreProps & IDispatchProps & IRouteProps) {
         super(props)
     }
@@ -101,7 +98,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             onChangeElection,
             children,
             content,
-            sidebar,
         } = this.props
 
         if (app.loading === true) {
@@ -128,7 +124,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     onChangeElection={onChangeElection}
                     children={children}
                     content={content}
-                    sidebar={sidebar}
                 />
             </MuiThemeProvider>
         )
@@ -160,7 +155,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         doLogout: () => {
             dispatch(logoutUser())
         },
-        onChangeElection: (event: any, index: number, electionId: number) => {
+        onChangeElection: (event: any, index: number, electionId: string) => {
             dispatch(setCurrentElection(electionId))
         },
     }

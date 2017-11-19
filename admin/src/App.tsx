@@ -1,9 +1,8 @@
 import * as React from "react"
 import styled from "styled-components"
-import { Link, browserHistory } from "react-router"
+import { Link } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import PollingPlaceAutocompleteContainer from "./polling_places/polling_place_autocomplete/PollingPlaceAutocompleteContainer"
-import { IAppModule, ISnackbarsModule, IElections, IElection, IPollingPlace, IUser } from "./redux/modules/interfaces"
+import { IAppModule, ISnackbarsModule, IElections, IElection, IUser } from "./redux/modules/interfaces"
 import "./App.css"
 
 import SelectField from "material-ui/SelectField"
@@ -51,7 +50,6 @@ export interface IProps {
     onChangeElection: any
     doLogout: any
     content: any
-    sidebar: any
 }
 
 class App extends React.Component<IProps, {}> {
@@ -67,9 +65,7 @@ class App extends React.Component<IProps, {}> {
             doLogout,
             onChangeElection,
             content,
-            sidebar,
         } = this.props
-        console.log("sidebar", sidebar)
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -101,32 +97,32 @@ class App extends React.Component<IProps, {}> {
                 </div>
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <LoginDialog open={user === null} />
-                    <main className="page-main-content">
-                        <PollingPlaceAutocompleteContainer
-                            election={currentElection}
-                            onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-                                browserHistory.push(`/${currentElection.db_table_name}/${pollingPlace.cartodb_id}`)
-                            }}
-                        />
-                        {content || this.props.children}
-                    </main>
+                    <main className="page-main-content">{content || this.props.children}</main>
                     <nav className="page-nav">
                         <List>
                             <ListItem disabled={true} leftIcon={<ContentInbox />}>
-                                <SelectField floatingLabelText="Elections" value={currentElection.cartodb_id} onChange={onChangeElection}>
+                                <SelectField
+                                    floatingLabelText="Elections"
+                                    value={currentElection.db_table_name}
+                                    onChange={onChangeElection}
+                                >
                                     {Object.keys(elections)
                                         .reverse()
                                         .map((electionId: string, key: number) => (
                                             <MenuItem
                                                 key={electionId}
-                                                value={elections[electionId].cartodb_id}
+                                                value={elections[electionId].db_table_name}
                                                 primaryText={elections[electionId].name}
                                             />
                                         ))}
                                 </SelectField>
                             </ListItem>
 
-                            <ListItem primaryText="Edit Polling Places" leftIcon={<ActionGrade />} />
+                            <ListItem
+                                primaryText="Edit Polling Places"
+                                leftIcon={<ActionGrade />}
+                                containerElement={<Link to={`/election/${currentElection.db_table_name}/`} />}
+                            />
                             <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} />
                             <ListItem primaryText="Edit Polling Place Types" leftIcon={<ContentDrafts />} />
                             <ListItem primaryText="Create Election" leftIcon={<ContentInbox />} />

@@ -71,12 +71,26 @@ export interface IPollingPlace {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 
-export function fetchPollingPlaces(election: IElection, searchTerm: string) {
+export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const sql = `SELECT 
           *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat 
           FROM ${election.db_table_name} 
           WHERE premises ILIKE '%${searchTerm}%' OR polling_place_name ILIKE '%${searchTerm}%' OR address ILIKE '%${searchTerm}%'`
+
+        const { response, json } = await ealapi.cartoGet(sql, dispatch)
+        if (response.status === 200) {
+            return json.rows
+        }
+    }
+}
+
+export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const sql = `SELECT 
+          *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat 
+          FROM ${election.db_table_name} 
+          WHERE cartodb_id in (${pollingPlaceIds.join(", ")})`
 
         const { response, json } = await ealapi.cartoGet(sql, dispatch)
         if (response.status === 200) {

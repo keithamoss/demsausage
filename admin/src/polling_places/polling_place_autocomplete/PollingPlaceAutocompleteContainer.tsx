@@ -3,7 +3,7 @@ import PollingPlaceAutocomplete from "./PollingPlaceAutocomplete"
 import { connect } from "react-redux"
 import { debounce } from "lodash-es"
 
-import { fetchPollingPlaces } from "../../redux/modules/polling_places"
+import { searchPollingPlaces } from "../../redux/modules/polling_places"
 import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
 
 export interface IProps {
@@ -68,7 +68,7 @@ const mapStateToProps = (state: IStore): any => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onPollingPlaceSearch: async (election: IElection, searchTerm: string) => {
-            return await dispatch(fetchPollingPlaces(election, searchTerm))
+            return await dispatch(searchPollingPlaces(election, searchTerm))
         },
     }
 }

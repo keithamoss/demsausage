@@ -6,6 +6,13 @@ export { IModule as ISnackbarsModule } from "./snackbars"
 export { IModule as IElectionsModule, IElections, IElection } from "./elections"
 export { IModule as IPollingPlacesModule, IPollingPlace } from "./polling_places"
 
+export interface IEnvVars {
+    NODE_ENV: string // development, test, production
+    REACT_APP_GOOGLE_MAPS_API_KEY: string
+    REACT_APP_GOOGLE_ANALYTICS_UA: string
+    REACT_APP_CARTO_DB_API_KEY: string
+}
+
 export interface IConfig {
     GOOGLE_ANALYTICS_UA: string
     GOOGLE_MAPS_API_KEY: string
