@@ -4,6 +4,7 @@ export { IModule as IAppModule, eAppEnv } from "./app"
 export { IModule as IUserModule, ISelf, IUser } from "./user"
 export { IModule as ISnackbarsModule } from "./snackbars"
 export { IModule as IElectionsModule, IElections, IElection } from "./elections"
+export { IModule as IPollingPlacesModule, IPollingPlace } from "./polling_places"
 
 export interface IConfig {
     GOOGLE_ANALYTICS_UA: string

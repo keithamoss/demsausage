@@ -1,13 +1,15 @@
 import * as React from "react"
 import styled from "styled-components"
-import { Link } from "react-router"
+import { Link, browserHistory } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import { IAppModule, ISnackbarsModule, IElections, IElection, IUser } from "./redux/modules/interfaces"
+import PollingPlaceAutocompleteContainer from "./polling_places/polling_place_autocomplete/PollingPlaceAutocompleteContainer"
+import { IAppModule, ISnackbarsModule, IElections, IElection, IPollingPlace, IUser } from "./redux/modules/interfaces"
 import "./App.css"
 
 import SelectField from "material-ui/SelectField"
 // import MenuItem from "material-ui/MenuItem"
 
+// import AutoComplete from "material-ui/AutoComplete"
 import { List, ListItem } from "material-ui/List"
 import ContentInbox from "material-ui/svg-icons/content/inbox"
 import ActionGrade from "material-ui/svg-icons/action/grade"
@@ -67,7 +69,7 @@ class App extends React.Component<IProps, {}> {
             content,
             sidebar,
         } = this.props
-        console.log(sidebar)
+        console.log("sidebar", sidebar)
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -99,7 +101,15 @@ class App extends React.Component<IProps, {}> {
                 </div>
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <LoginDialog open={user === null} />
-                    <main className="page-main-content">{content || this.props.children}</main>
+                    <main className="page-main-content">
+                        <PollingPlaceAutocompleteContainer
+                            election={currentElection}
+                            onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+                                browserHistory.push(`/${currentElection.db_table_name}/${pollingPlace.cartodb_id}`)
+                            }}
+                        />
+                        {content || this.props.children}
+                    </main>
                     <nav className="page-nav">
                         <List>
                             <ListItem disabled={true} leftIcon={<ContentInbox />}>

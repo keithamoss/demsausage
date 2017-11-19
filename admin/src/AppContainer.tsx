@@ -17,11 +17,13 @@ import {
 import { fade } from "material-ui/utils/colorManipulator"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import getMuiTheme from "material-ui/styles/getMuiTheme"
+
 import App from "./App"
 import { connect } from "react-redux"
 import { fetchInitialAppState } from "./redux/modules/app"
 import { logoutUser } from "./redux/modules/user"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
+
 // import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 
@@ -51,7 +53,7 @@ const muiTheme = getMuiTheme({
     },
 })
 
-export interface IStateProps {
+export interface IStoreProps {
     // From Props
     app: IAppModule
     user: IUser
@@ -67,13 +69,21 @@ export interface IDispatchProps {
     onChangeElection: Function
 }
 
+export interface IStateProps {}
+
 export interface IRouteProps {
     content: any
     sidebar: any
     location: any
 }
 
-export class AppContainer extends React.Component<IStateProps & IDispatchProps & IRouteProps, {}> {
+export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
+    onFieldChangeDebounced: Function
+
+    constructor(props: IStoreProps & IDispatchProps & IRouteProps) {
+        super(props)
+    }
+
     componentDidMount() {
         const { fetchInitialAppState } = this.props
         fetchInitialAppState()
@@ -125,7 +135,7 @@ export class AppContainer extends React.Component<IStateProps & IDispatchProps &
     }
 }
 
-const mapStateToProps = (state: IStore): IStateProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { app, user, snackbars, elections } = state
 
     return {
