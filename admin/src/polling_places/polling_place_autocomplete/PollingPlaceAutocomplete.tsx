@@ -20,6 +20,13 @@ const HighlightedString = styled.span`
     font-weight: bold !important;
 `
 
+// Working around issues with onClick not being exposed and causing TS linting errors
+class CustomAutoComplete extends React.Component<any, any> {
+    render(): any {
+        return <AutoComplete {...this.props} />
+    }
+}
+
 class App extends React.PureComponent<IProps, {}> {
     render() {
         const { searchText, pollingPlaces, onPollingPlaceAutocompleteSelect, onChoosePollingPlace } = this.props
@@ -46,7 +53,7 @@ class App extends React.PureComponent<IProps, {}> {
         })
 
         return (
-            <AutoComplete
+            <CustomAutoComplete
                 floatingLabelText={"Search for a polling place"}
                 dataSource={pollingPlaceResults}
                 filter={AutoComplete.noFilter}
@@ -55,6 +62,9 @@ class App extends React.PureComponent<IProps, {}> {
                 menuProps={{ maxHeight: 500 }}
                 onUpdateInput={onPollingPlaceAutocompleteSelect}
                 onNewRequest={onChoosePollingPlace}
+                onClick={(evt: any) => {
+                    evt.target.setSelectionRange(0, evt.target.value.length)
+                }}
             />
         )
     }

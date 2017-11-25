@@ -1,4 +1,5 @@
 import * as React from "react"
+import styled from "styled-components"
 import { browserHistory } from "react-router"
 import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
 import PollingPlaceInfoCardContainer from "../polling_place_info_card/PollingPlaceInfoCardContainer"
@@ -6,12 +7,19 @@ import PollingPlaceFormContainer from "../polling_place_form/PollingPlaceFormCon
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceEditor.css"
 
+import Divider from "material-ui/Divider"
+
+const PuffyDivider = styled(Divider)`
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+`
+
 export interface IProps {
     election: IElection
-    pollingPlace: IPollingPlace
+    pollingPlace?: IPollingPlace
 }
 
-class PollingPlaceEditor extends React.Component<IProps, {}> {
+class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
     render() {
         const { election, pollingPlace } = this.props
 
@@ -23,8 +31,9 @@ class PollingPlaceEditor extends React.Component<IProps, {}> {
                         browserHistory.push(`/election/${election.db_table_name}/${pollingPlace.cartodb_id}/edit`)
                     }}
                 />
-                <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />
-                <PollingPlaceFormContainer election={election} pollingPlace={pollingPlace} />
+                {pollingPlace && <PuffyDivider />}
+                {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
+                {pollingPlace && <PollingPlaceFormContainer election={election} pollingPlace={pollingPlace} />}
             </div>
         )
     }

@@ -15,7 +15,7 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
-    pollingPlace: IPollingPlace
+    pollingPlace?: IPollingPlace
 }
 
 interface IRouteProps {
@@ -34,18 +34,27 @@ export class PollingPlaceEditorContainer extends React.Component<IStoreProps & I
 
     async componentWillMount() {
         const { fetchRequiredState, election, pollingPlaceId } = this.props
+
         if (pollingPlaceId !== null) {
             this.setState({ pollingPlace: await fetchRequiredState(election, pollingPlaceId) })
         }
     }
 
+    async componentWillReceiveProps(nextProps: any) {
+        const { fetchRequiredState, election, pollingPlaceId } = nextProps
+
+        if (pollingPlaceId !== null) {
+            this.setState({ pollingPlace: await fetchRequiredState(election, pollingPlaceId) })
+        } else if (pollingPlaceId === null) {
+            await this.setState({ pollingPlace: undefined })
+        }
+    }
+
     render() {
         const { election } = this.props
+        const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
-        if (this.state !== null) {
-            return <PollingPlaceEditor election={election} pollingPlace={this.state.pollingPlace} />
-        }
-        return null
+        return <PollingPlaceEditor election={election} pollingPlace={pollingPlace} />
     }
 }
 

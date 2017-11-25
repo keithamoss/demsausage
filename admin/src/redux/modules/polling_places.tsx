@@ -1,4 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -119,11 +120,12 @@ export function updatePollingPlace(election: IElection, pollingPlaceId: number, 
         }
 
         const sql = `UPDATE ${election.db_table_name} 
-            SET ${setValues}
+            SET ${setValues}, latest_report = now()
             WHERE cartodb_id = ${pollingPlaceId}`
 
         const { response, json } = await ealapi.cartoBridgeGetSQL(sql, dispatch)
         if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
             return json
         }
     }

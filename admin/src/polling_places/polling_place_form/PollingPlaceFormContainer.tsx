@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 
@@ -116,14 +117,10 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        onFormSubmit(values: object, dispatch: Function, props: IProps) {
-            // console.log("onFormSubmit")
-            // console.log("values", values)
-            // console.log("props", props)
-
+        async onFormSubmit(values: object, dispatch: Function, props: IProps) {
             const pollingPlace: Partial<IPollingPlace> = fromFormValues(values)
-            // console.log("pollingPlace", pollingPlace)
-            dispatch(updatePollingPlace(props.election, props.pollingPlace.cartodb_id, pollingPlace))
+            await dispatch(updatePollingPlace(props.election, props.pollingPlace.cartodb_id, pollingPlace))
+            browserHistory.push(`/election/${props.election.db_table_name}/`)
             // dispatch(initialize("layerForm", layerFormValues, false))
         },
         onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {
