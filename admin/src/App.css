@@ -43,6 +43,7 @@ body {
         flex: 1;
         padding-left: 10px;
         padding-right: 20px;
+        overflow-y: scroll;
     }
     .page-main-content > div {
         height: 100%;

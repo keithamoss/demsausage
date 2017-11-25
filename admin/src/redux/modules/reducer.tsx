@@ -6,7 +6,7 @@ import { default as app, IModule as IAppModule } from "./app"
 import { default as user, IModule as IUserModule } from "./user"
 import { default as snackbars, IModule as ISnackbarsModule } from "./snackbars"
 import { default as elections, IModule as IElectionsModule } from "./elections"
-import { default as polling_places, IModule as IPollingPlacesModule } from "./polling_places"
+import { default as polling_places, IModule as IPollingPlacesModule, reduxFormReducer as pollingPlaceFormReducer } from "./polling_places"
 
 const formReducer: any = form // Silencing TypeScript errors due to older @types/redux-form package
 
@@ -25,7 +25,7 @@ const rootReducer: Redux.Reducer<IStore> = Redux.combineReducers<IStore>({
     elections,
     polling_places,
     routing: routerReducer,
-    form: formReducer.plugin({}),
+    form: formReducer.plugin({ pollingPlace: pollingPlaceFormReducer }),
 })
 
 export default rootReducer

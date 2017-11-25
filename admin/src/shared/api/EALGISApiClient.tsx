@@ -8,16 +8,38 @@ import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
 export class EALGISApiClient {
     dsBaseURL: string
     cartoBaseURL: string
+    cartoBridgeBaseURL: string
 
     constructor() {
         this.dsBaseURL = getAPIBaseURL()
         this.cartoBaseURL = "https://democracy-sausage.cartodb.com/api/v2/sql"
+        this.cartoBridgeBaseURL = `${this.dsBaseURL}/cartodb-api-bridge.php`
     }
 
-    public cartoGet(sql: string, dispatch: Function): Promise<void> {
+    public paramsToSQL(params: object = {}): string {
+        return Object.keys(params)
+            .map((key: string) => {
+                // Booleans
+                if (key === "has_bbq" || key === "has_caek" || key === "has_nothing" || key === "has_run_out") {
+                    return `${key} = ${params[key]}`
+                } else if (key === "cartodb_id") {
+                    return null
+                }
+                return `${key} = '${params[key].replace(/'/, "\\'")}'`
+            })
+            .join(", ")
+    }
+
+    public cartoGetSQL(sql: string, dispatch: Function): Promise<void> {
         const params: object = { q: sql }
         const fetchOptions: object = { credentials: "omit" }
         return this.get(this.cartoBaseURL, dispatch, params, fetchOptions)
+    }
+
+    public cartoBridgeGetSQL(sql: string, dispatch: Function): Promise<void> {
+        const params: object = { q: sql }
+        const fetchOptions: object = { credentials: "omit" }
+        return this.get(this.cartoBridgeBaseURL, dispatch, params, fetchOptions)
     }
 
     public dsGet(url: string, dispatch: Function, params: object = {}): Promise<void> {
@@ -129,7 +151,9 @@ export class EALGISApiClient {
 export interface IEALGISApiClient {
     handleError: Function
     dsGet: Function
-    cartoGet: Function
+    paramsToSQL: Function
+    cartoGetSQL: Function
+    cartoBridgeGetSQL: Function
     post: Function
     put: Function
     delete: Function

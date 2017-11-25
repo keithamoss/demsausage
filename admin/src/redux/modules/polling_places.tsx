@@ -1,9 +1,10 @@
-// import * as dotProp from "dot-prop-immutable"
+import * as dotProp from "dot-prop-immutable"
 import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
 // const LOAD_SEARCH_RESULTS = "ealgis/polling_places/LOAD_SEARCH_RESULTS"
+const VALIDATION_ERRORS = "ealgis/polling_places/VALIDATION_ERRORS"
 
 const initialState: Partial<IModule> = {
     // searchResults: [] as Array<IPollingPlace>,
@@ -12,6 +13,16 @@ const initialState: Partial<IModule> = {
 // Reducer
 export default function reducer(state: Partial<IModule> = initialState, action: IAction) {
     switch (action.type) {
+        default:
+            return state
+    }
+}
+
+export const reduxFormReducer = (state: {}, action: any) => {
+    switch (action.type) {
+        case VALIDATION_ERRORS:
+            state = dotProp.set(state, "submitSucceeded", false)
+            return dotProp.merge(state, "syncErrors", action.errors)
         default:
             return state
     }
@@ -33,6 +44,7 @@ export interface IModule {
 export interface IAction {
     type: string
     // pollingPlaces: Array<IPollingPlace>
+    errors?: object
     meta?: {
         // analytics: IAnalyticsMeta
     }
@@ -78,7 +90,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
           FROM ${election.db_table_name} 
           WHERE premises ILIKE '%${searchTerm}%' OR polling_place_name ILIKE '%${searchTerm}%' OR address ILIKE '%${searchTerm}%'`
 
-        const { response, json } = await ealapi.cartoGet(sql, dispatch)
+        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
         if (response.status === 200) {
             return json.rows
         }
@@ -92,9 +104,27 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
           FROM ${election.db_table_name} 
           WHERE cartodb_id in (${pollingPlaceIds.join(", ")})`
 
-        const { response, json } = await ealapi.cartoGet(sql, dispatch)
+        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
         if (response.status === 200) {
             return json.rows
+        }
+    }
+}
+
+export function updatePollingPlace(election: IElection, pollingPlaceId: number, pollingPlace: Partial<IPollingPlace>) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        let setValues: string = ealapi.paramsToSQL(pollingPlace)
+        if (pollingPlace.first_report === null) {
+            setValues += ", first_report = now()"
+        }
+
+        const sql = `UPDATE ${election.db_table_name} 
+            SET ${setValues}
+            WHERE cartodb_id = ${pollingPlaceId}`
+
+        const { response, json } = await ealapi.cartoBridgeGetSQL(sql, dispatch)
+        if (response.status === 200) {
+            return json
         }
     }
 }

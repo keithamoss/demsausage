@@ -75,7 +75,7 @@ export interface IElection {
 export function fetchElections() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const sql = "SELECT *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat FROM elections WHERE hidden != true ORDER BY cartodb_id DESC"
-        const { response, json } = await ealapi.cartoGet(sql, dispatch)
+        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
         if (response.status === 200) {
             // Map elections from an array of objects to a dict keyed by db_table_name
             const elections = Object.assign(

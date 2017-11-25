@@ -2,6 +2,7 @@ import * as React from "react"
 import { browserHistory } from "react-router"
 import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
 import PollingPlaceInfoCardContainer from "../polling_place_info_card/PollingPlaceInfoCardContainer"
+import PollingPlaceFormContainer from "../polling_place_form/PollingPlaceFormContainer"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceEditor.css"
 
@@ -23,6 +24,7 @@ class PollingPlaceEditor extends React.Component<IProps, {}> {
                     }}
                 />
                 <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />
+                <PollingPlaceFormContainer election={election} pollingPlace={pollingPlace} />
             </div>
         )
     }
