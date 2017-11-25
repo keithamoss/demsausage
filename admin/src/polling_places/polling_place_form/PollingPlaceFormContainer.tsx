@@ -27,7 +27,7 @@ export interface IStateProps {}
 interface IOwnProps {}
 
 const toFormValues = (pollingPlace: IPollingPlace) => {
-    const hasOther: any = JSON.parse(pollingPlace.has_other)
+    const hasOther: any = JSON.parse(pollingPlace.has_other || "{}")
     return {
         has_bbq: pollingPlace.has_bbq,
         has_caek: pollingPlace.has_caek,
