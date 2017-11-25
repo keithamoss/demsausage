@@ -5,6 +5,7 @@ export { IModule as IUserModule, ISelf, IUser } from "./user"
 export { IModule as ISnackbarsModule } from "./snackbars"
 export { IModule as IElectionsModule, IElections, IElection } from "./elections"
 export { IModule as IPollingPlacesModule, IPollingPlace } from "./polling_places"
+export { IModule as IStallModule, IStall } from "./stalls"
 
 export interface IEnvVars {
     NODE_ENV: string // development, test, production

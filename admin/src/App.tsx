@@ -123,7 +123,11 @@ class App extends React.Component<IProps, {}> {
                                 leftIcon={<ActionGrade />}
                                 containerElement={<Link to={`/election/${currentElection.db_table_name}/`} />}
                             />
-                            <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} />
+                            <ListItem
+                                primaryText="Review Pending Stalls"
+                                leftIcon={<ContentSend />}
+                                containerElement={<Link to={`/stalls`} />}
+                            />
                             <ListItem primaryText="Edit Polling Place Types" leftIcon={<ContentDrafts />} />
                             <ListItem primaryText="Create Election" leftIcon={<ContentInbox />} />
                             <ListItem primaryText="User Management" leftIcon={<ContentInbox />} />

@@ -2,6 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { IEALGISApiClient } from "../../redux/modules/interfaces"
 import { fetchUser } from "./user"
 import { fetchElections } from "./elections"
+import { fetchPendingStalls } from "./stalls"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -136,7 +137,7 @@ export function fetchInitialAppState() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         dispatch(loading())
 
-        await Promise.all([dispatch(fetchUser()), dispatch(fetchElections())])
+        await Promise.all([dispatch(fetchUser()), dispatch(fetchElections()), dispatch(fetchPendingStalls())])
 
         // const self: ISelf = await dispatch(fetchUser())
         // if (self && self.success) {
