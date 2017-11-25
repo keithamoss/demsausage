@@ -3,12 +3,13 @@ import { connect } from "react-redux"
 
 import PendingStallEditor from "./PendingStallEditor"
 // import { fetchPendingStalls } from "../../redux/modules/stalls"
-import { IStore, IStall } from "../../redux/modules/interfaces"
+import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
-export interface IProps {
+export interface IProps {}
+export interface IStoreProps {
     stall: IStall
+    election: IElection
 }
-export interface IStoreProps {}
 
 export interface IDispatchProps {}
 
@@ -24,20 +25,24 @@ interface IOwnProps {
 
 export class PendingStallEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { stall } = this.props
+        const { stall, election } = this.props
 
-        return <PendingStallEditor stall={stall} />
+        return <PendingStallEditor election={election} stall={stall} />
     }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { stalls } = state
+    const { stalls, elections } = state
 
+    // Sorry.
     const filteredStall: Array<IStall> = stalls.pending.filter(
         (stall: IStall) => stall.cartodb_id === parseInt(ownProps.params.stallId, 10)
     )
+    const filteredElection: Array<string> = Object.keys(elections.elections).filter(
+        (key: string) => elections.elections[key].cartodb_id === filteredStall[0].elections_cartodb_id
+    )
 
-    return { stall: filteredStall[0] }
+    return { stall: filteredStall[0], election: elections.elections[filteredElection[0]] }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {

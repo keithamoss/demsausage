@@ -5,10 +5,11 @@ import PollingPlaceEditor from "./PollingPlaceEditor"
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
 import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
 
-export interface IStoreProps {
+export interface IProps {
     election: IElection
     pollingPlaceId: number | null
 }
+export interface IStoreProps {}
 
 export interface IDispatchProps {
     fetchRequiredState: Function
@@ -18,20 +19,9 @@ export interface IStateProps {
     pollingPlace?: IPollingPlace
 }
 
-interface IRouteProps {
-    electionIdentifier: string
-    pollingPlaceId?: number
-}
+interface IOwnProps {}
 
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class PollingPlaceEditorContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
-    constructor(props: IStoreProps & IDispatchProps & IRouteProps) {
-        super(props)
-    }
-
+export class PollingPlaceEditorContainer extends React.Component<IProps & IDispatchProps, IStateProps> {
     async componentWillMount() {
         const { fetchRequiredState, election, pollingPlaceId } = this.props
 
@@ -59,12 +49,9 @@ export class PollingPlaceEditorContainer extends React.Component<IStoreProps & I
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
+    // const { elections } = state
 
-    return {
-        election: elections.elections[ownProps.params.electionIdentifier],
-        pollingPlaceId: ownProps.params.pollingPlaceId || null,
-    }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
