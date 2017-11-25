@@ -84,7 +84,7 @@ if(isset($_GET['add-stall'])) {
 }
 
 // Temporary and a horrid hack
-if($_SERVER['HTTP_REFERER'] === 'http://localhost:5000/') {
+if(stristr($_SERVER['HTTP_REFERER'], 'http://localhost:3000')) {
   do_request($_GET["q"]);
   exit;
 }
@@ -95,7 +95,8 @@ if(stristr($_SERVER['HTTP_REFERER'], 'http://dev.democracysausage.org:5000/') !=
 }
 
 
-require_once 'google-api-php-client/src/Google/autoload.php';
+// require_once 'google-api-php-client/src/Google/autoload.php';
+require_once 'google-api-php-client-2.2.0/vendor/autoload.php';
 
 $client = new Google_Client();
 $client->setAuthConfigFile('client_secrets.inc');
