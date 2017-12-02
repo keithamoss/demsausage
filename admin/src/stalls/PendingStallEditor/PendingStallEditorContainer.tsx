@@ -1,8 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 
 import PendingStallEditor from "./PendingStallEditor"
-// import { fetchPendingStalls } from "../../redux/modules/stalls"
+import { markStallAsRead } from "../../redux/modules/stalls"
 import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
@@ -29,7 +30,19 @@ export class PendingStallEditorContainer extends React.Component<IProps & IStore
     render() {
         const { stall, election, onPollingPlaceEdited } = this.props
 
-        return <PendingStallEditor election={election} stall={stall} onPollingPlaceEdited={onPollingPlaceEdited} />
+        if (stall === null || election === null) {
+            return null
+        }
+
+        return (
+            <PendingStallEditor
+                election={election}
+                stall={stall}
+                onPollingPlaceEdited={() => {
+                    onPollingPlaceEdited(stall.id)
+                }}
+            />
+        )
     }
 }
 
@@ -38,17 +51,24 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
     // Sorry.
     const filteredStall: Array<IStall> = stalls.pending.filter((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))
-    const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-        (key: string) => elections.elections[key].id === filteredStall[0].elections_id
-    )
+    let election = null
+    if (filteredStall.length === 1) {
+        const filteredElection: Array<string> = Object.keys(elections.elections).filter(
+            (key: string) => elections.elections[key].id === filteredStall[0].elections_id
+        )
+        election = elections.elections[filteredElection[0]]
+    }
 
-    return { stall: filteredStall[0], election: elections.elections[filteredElection[0]] }
+    return { stall: filteredStall[0], election: election }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        onPollingPlaceEdited: () => {
-            console.log("onPollingPlaceEdited")
+        onPollingPlaceEdited: async (id: number) => {
+            const json = await dispatch(markStallAsRead(id))
+            if (json.rows === 1) {
+                browserHistory.push("/stalls")
+            }
         },
     }
 }

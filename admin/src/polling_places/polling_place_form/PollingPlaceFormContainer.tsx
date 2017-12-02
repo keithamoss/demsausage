@@ -88,7 +88,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
         this.initialValues = JSON.parse(JSON.stringify(toFormValues(pollingPlace)))
     }
     render() {
-        const { election, pollingPlace, isDirty, onFormSubmit, onSaveForm } = this.props
+        const { election, pollingPlace, onPollingPlaceEdited, isDirty, onFormSubmit, onSaveForm } = this.props
 
         return (
             <PollingPlaceForm
@@ -96,7 +96,9 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
                 pollingPlace={pollingPlace}
                 initialValues={this.initialValues}
                 isDirty={isDirty}
-                onSubmit={onFormSubmit}
+                onSubmit={(values: object, dispatch: Function, props: IProps) => {
+                    onFormSubmit(values, election, pollingPlace, onPollingPlaceEdited)
+                }}
                 onSaveForm={() => {
                     onSaveForm(pollingPlace, isDirty)
                 }}
@@ -117,10 +119,12 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        async onFormSubmit(values: object, dispatch: Function, props: IProps) {
+        async onFormSubmit(values: object, election: IElection, pollingPlace: IPollingPlace, onPollingPlaceEdited: Function) {
             const pollingPlaceNew: Partial<IPollingPlace> = fromFormValues(values)
-            await dispatch(updatePollingPlace(props.election, props.pollingPlace, pollingPlaceNew))
-            props.onPollingPlaceEdited()
+            const json = await dispatch(updatePollingPlace(election, pollingPlace, pollingPlaceNew))
+            if (json.rows === 1) {
+                onPollingPlaceEdited()
+            }
             // dispatch(initialize("layerForm", layerFormValues, false))
         },
         onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {

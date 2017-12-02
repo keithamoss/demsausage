@@ -31,10 +31,15 @@ if(isAuthorisedUser("su")) {
     closeDb();
   }
 
-  // Delete pending stall
-  if(stristr($_SERVER["QUERY_STRING"], "delete-pending-stall") !== false) {
-    print_r($_GET);
-    // deletePendingStall(1011);
+  // Mark pending stall as read
+  if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
+    $rowCount = markPendingStallAsRead($_GET["id"]);
+    if($rowCount !== 1) {
+      failForAPI("Failed to mark pending stall as read. (Error: $rowCount)");
+    } else {
+      echo json_encode(["rows" => $rowCount]);
+      closeDb();
+    }
     // closeDb();
   }
 
