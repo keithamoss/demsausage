@@ -1,0 +1,71 @@
+<?php
+// SELECT ST_X(the_geom) AS lon, ST_Y(the_geom) AS lat, * FROM federal_2016_polling_places_v1_1
+require_once "auth.php";
+require_once "db.php";
+
+############################
+# Public Endpoints
+############################
+// Fetch Elections
+if(stristr($_SERVER["QUERY_STRING"], "fetch-elections") !== false) {
+  $elections = fetchElections();
+  echo json_encode($elections);
+  closeDb();
+}
+
+// Add Pending Stall
+if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
+  // $params = array("stall_name" => "Foo", "stall_description" => "Bar");
+  // addPendingStall($params);
+  closeDb();
+}
+
+############################
+# Super User Endpoints
+############################
+if(isAuthorisedUser("su")) {
+  // Fetch pending stalls
+  if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
+    $stalls = fetchPendingStalls();
+    echo json_encode($stalls);
+    closeDb();
+  }
+
+  // Delete pending stall
+  if(stristr($_SERVER["QUERY_STRING"], "delete-pending-stall") !== false) {
+    print_r($_GET);
+    // deletePendingStall(1011);
+    // closeDb();
+  }
+
+  // Add Election
+  // closeDb();
+
+  // Search polling places
+  if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
+    $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionName"]);
+    echo json_encode($pollingPlaces);
+    closeDb();
+  }
+  
+  // Fetch polling place by ids
+  if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
+    $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionName"]);
+    echo json_encode($pollingPlaces);
+    closeDb();
+  }
+
+  // Update polling place
+  if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
+    $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionName"]);
+    if($rowCount !== 1) {
+      failForAPI("Failed to update polling place. (Error: $rowCount)");
+    } else {
+      echo json_encode(["rows" => $rowCount]);
+      closeDb();
+    }
+  }
+}
+
+closeDb();
+?>
