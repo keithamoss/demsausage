@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 
 import PollingPlaceEditorContainer from "./PollingPlaceEditorContainer"
 import { IStore, IElection } from "../../redux/modules/interfaces"
@@ -26,7 +27,16 @@ export class PollingPlaceEditorContainerRoute extends React.Component<IStoreProp
     render() {
         const { election, pollingPlaceId } = this.props
 
-        return <PollingPlaceEditorContainer election={election} pollingPlaceId={pollingPlaceId} />
+        return (
+            <PollingPlaceEditorContainer
+                election={election}
+                pollingPlaceId={pollingPlaceId}
+                showAutoComplete={true}
+                onPollingPlaceEdited={() => {
+                    browserHistory.push(`/election/${election.db_table_name}/`)
+                }}
+            />
+        )
     }
 }
 

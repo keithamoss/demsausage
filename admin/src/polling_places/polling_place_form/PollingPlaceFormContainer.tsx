@@ -1,6 +1,5 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 
@@ -11,6 +10,7 @@ import { updatePollingPlace } from "../../redux/modules/polling_places"
 export interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
+    onPollingPlaceEdited: Function
 }
 
 export interface IDispatchProps {
@@ -27,7 +27,7 @@ export interface IStateProps {}
 interface IOwnProps {}
 
 const toFormValues = (pollingPlace: IPollingPlace) => {
-    const hasOther: any = JSON.parse(pollingPlace.has_other || "{}")
+    const hasOther: any = pollingPlace.has_other
     return {
         has_bbq: pollingPlace.has_bbq,
         has_caek: pollingPlace.has_caek,
@@ -118,9 +118,9 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, dispatch: Function, props: IProps) {
-            const pollingPlace: Partial<IPollingPlace> = fromFormValues(values)
-            await dispatch(updatePollingPlace(props.election, props.pollingPlace.cartodb_id, pollingPlace))
-            browserHistory.push(`/election/${props.election.db_table_name}/`)
+            const pollingPlaceNew: Partial<IPollingPlace> = fromFormValues(values)
+            await dispatch(updatePollingPlace(props.election, props.pollingPlace, pollingPlaceNew))
+            props.onPollingPlaceEdited()
             // dispatch(initialize("layerForm", layerFormValues, false))
         },
         onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {

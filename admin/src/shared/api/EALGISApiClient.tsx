@@ -46,6 +46,22 @@ export class EALGISApiClient {
         return this.get(this.dsBaseURL + url, dispatch, params)
     }
 
+    public dsAPIGet(params: object = {}, dispatch: Function): Promise<void> {
+        return this.get(this.dsBaseURL + "/api.php", dispatch, params)
+    }
+
+    public dsAPIPost(params: object = {}, dispatch: Function): Promise<void> {
+        return this.post(this.dsBaseURL + "/api.php", params, dispatch)
+    }
+
+    public dsAPIPut(params: object = {}, dispatch: Function): Promise<void> {
+        return this.put(this.dsBaseURL + "/api.php", params, dispatch)
+    }
+
+    public dsAPIDelete(dispatch: Function): Promise<void> {
+        return this.delete(this.dsBaseURL + "/api.php", dispatch)
+    }
+
     public post(url: string, body: object, dispatch: any) {
         dispatch(beginFetch())
 
@@ -151,6 +167,10 @@ export class EALGISApiClient {
 export interface IEALGISApiClient {
     handleError: Function
     dsGet: Function
+    dsAPIGet: Function
+    dsAPIPost: Function
+    dsAPIPut: Function
+    dsAPIDelete: Function
     paramsToSQL: Function
     cartoGetSQL: Function
     cartoBridgeGetSQL: Function

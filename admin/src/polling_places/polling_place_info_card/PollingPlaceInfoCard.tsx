@@ -17,8 +17,8 @@ class PollingPlaceInfoCard extends React.PureComponent<IProps, {}> {
 
         // const MyMapComponent: any = withScriptjs(
         //     withGoogleMap((props: any) => (
-        //         <GoogleMap defaultZoom={9} defaultCenter={{ lat: pollingPlace.lat, lng: pollingPlace.lng }}>
-        //             <Marker position={{ lat: pollingPlace.lat, lng: pollingPlace.lng }} />
+        //         <GoogleMap defaultZoom={9} defaultCenter={{ lat: pollingPlace.lat, lon: pollingPlace.lon }}>
+        //             <Marker position={{ lat: pollingPlace.lat, lon: pollingPlace.lon }} />
         //         </GoogleMap>
         //     ))
         // )

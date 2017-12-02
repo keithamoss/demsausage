@@ -43,9 +43,7 @@ export interface IAction {
 }
 
 export interface IStall {
-    cartodb_id: number
-    the_geom: string // WKB - Always null
-    the_geom_webmercator: string // WKB - Always null
+    id: number
     stall_description: string
     stall_name: string
     stall_website: string
@@ -54,9 +52,9 @@ export interface IStall {
     has_caek: boolean
     has_vego: boolean
     has_halal: boolean
-    polling_place_cartodb_id: number
+    polling_place_id: number
     polling_place_premises: string
-    elections_cartodb_id: number
+    elections_id: number
 }
 
 // Side effects, only as applicable
@@ -64,11 +62,9 @@ export interface IStall {
 
 export function fetchPendingStalls() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const sql = "SELECT * FROM pending_stalls"
-
-        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
+        const { response, json } = await ealapi.dsAPIGet({ "fetch-pending-stalls": 1 }, dispatch)
         if (response.status === 200) {
-            dispatch(loadPendingStalls(json.rows))
+            dispatch(loadPendingStalls(json))
             return json.rows
         }
     }

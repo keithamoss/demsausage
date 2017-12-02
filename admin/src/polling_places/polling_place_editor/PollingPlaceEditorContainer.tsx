@@ -8,6 +8,8 @@ import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces
 export interface IProps {
     election: IElection
     pollingPlaceId: number | null
+    showAutoComplete: boolean
+    onPollingPlaceEdited: Function
 }
 export interface IStoreProps {}
 
@@ -41,10 +43,17 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
     }
 
     render() {
-        const { election } = this.props
+        const { election, showAutoComplete, onPollingPlaceEdited } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
-        return <PollingPlaceEditor election={election} pollingPlace={pollingPlace} />
+        return (
+            <PollingPlaceEditor
+                election={election}
+                pollingPlace={pollingPlace}
+                showAutoComplete={showAutoComplete}
+                onPollingPlaceEdited={onPollingPlaceEdited}
+            />
+        )
     }
 }
 

@@ -52,33 +52,32 @@ export interface IAction {
 }
 
 export interface IPollingPlace {
-    cartodb_id: number
-    the_geom: string // WKB
-    the_geom_webmercator: string // WKB
-    division: string
-    extra_info: string
-    polling_place_name: string
-    address: string
-    state: string
-    booth_info: string
-    premises: string
-    opening_hours: string
-    polling_place_type: string
+    id: number
+    lon: number
+    lat: number
     has_bbq: boolean
     has_nothing: boolean
     has_caek: boolean
     has_run_out: boolean
-    has_other: string // JSON
-    source: string
+    has_other: object
     stall_name: string
     stall_description: string
     stall_website: string
     first_report: string // Datetime
     latest_report: string // Datetime
-    ess_stall_id: string
+    polling_place_name: string
+    polling_place_type: string
+    extra_info: string
+    booth_info: string
+    wheelchairaccess: string
+    opening_hours: string
+    premises: string
+    address: string
+    division: string
+    state: string
+    source: string
+    ess_stall_id: number
     ess_stall_url: string
-    lng: number
-    lat: number
 }
 
 // Side effects, only as applicable
@@ -86,44 +85,42 @@ export interface IPollingPlace {
 
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const sql = `SELECT 
-          *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat 
-          FROM ${election.db_table_name} 
-          WHERE premises ILIKE '%${searchTerm}%' OR polling_place_name ILIKE '%${searchTerm}%' OR address ILIKE '%${searchTerm}%'`
+        const params = { "search-polling-places": 1, searchTerm: searchTerm, electionName: election.db_table_name }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
         if (response.status === 200) {
-            return json.rows
+            return json
         }
     }
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const sql = `SELECT 
-          *, ST_X(the_geom) as lng, ST_Y(the_geom) as lat 
-          FROM ${election.db_table_name} 
-          WHERE cartodb_id in (${pollingPlaceIds.join(", ")})`
+        const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionName: election.db_table_name }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-        const { response, json } = await ealapi.cartoGetSQL(sql, dispatch)
         if (response.status === 200) {
-            return json.rows
+            return json
         }
     }
 }
 
-export function updatePollingPlace(election: IElection, pollingPlaceId: number, pollingPlace: Partial<IPollingPlace>) {
+export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: Partial<IPollingPlace>) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        let setValues: string = ealapi.paramsToSQL(pollingPlace)
-        if (pollingPlace.first_report === null) {
-            setValues += ", first_report = now()"
+        if (pollingPlace.first_report === "") {
+            pollingPlaceNew.first_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
+        }
+        pollingPlaceNew.latest_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
+
+        const params = {
+            "update-polling-place": 1,
+            pollingPlaceId: pollingPlace.id,
+            pollingPlace: pollingPlaceNew,
+            electionName: election.db_table_name,
         }
 
-        const sql = `UPDATE ${election.db_table_name} 
-            SET ${setValues}, latest_report = now()
-            WHERE cartodb_id = ${pollingPlaceId}`
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-        const { response, json } = await ealapi.cartoBridgeGetSQL(sql, dispatch)
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
             return json

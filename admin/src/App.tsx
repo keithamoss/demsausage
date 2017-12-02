@@ -106,15 +106,13 @@ class App extends React.Component<IProps, {}> {
                                     value={currentElection.db_table_name}
                                     onChange={onChangeElection}
                                 >
-                                    {Object.keys(elections)
-                                        .reverse()
-                                        .map((electionId: string, key: number) => (
-                                            <MenuItem
-                                                key={electionId}
-                                                value={elections[electionId].db_table_name}
-                                                primaryText={elections[electionId].name}
-                                            />
-                                        ))}
+                                    {Object.keys(elections).map((electionId: string, key: number) => (
+                                        <MenuItem
+                                            key={electionId}
+                                            value={elections[electionId].db_table_name}
+                                            primaryText={elections[electionId].name}
+                                        />
+                                    ))}
                                 </SelectField>
                             </ListItem>
 

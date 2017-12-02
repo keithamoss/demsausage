@@ -15,14 +15,17 @@ export interface IProps {
 class StallInfoCard extends React.PureComponent<IProps, {}> {
     render() {
         const { stall } = this.props
-        console.log("stall", stall)
 
         return (
             <Card>
                 <CardHeader title={stall.polling_place_premises} />
                 <CardTitle title={stall.stall_name} subtitle={stall.stall_description} />
                 <CardText>
-                    {stall.stall_website}
+                    Website: {stall.stall_website}
+                    <br />
+                    Email: {stall.contact_email}
+                    <br />
+                    <h4>Decliciousness</h4>
                     {stall.has_bbq && <FlatButton label="BBQ" secondary={true} icon={<ActionCheckCircle />} />}
                     {stall.has_caek && <FlatButton label="Cake" secondary={true} icon={<ActionCheckCircle />} />}
                     {stall.has_halal && <FlatButton label="Halal" secondary={true} icon={<ActionCheckCircle />} />}

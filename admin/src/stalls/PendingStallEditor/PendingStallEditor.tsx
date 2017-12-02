@@ -12,16 +12,23 @@ import PollingPlaceEditorContainer from "../../polling_places/polling_place_edit
 export interface IProps {
     election: IElection
     stall: IStall
+    onPollingPlaceEdited: Function
 }
 
 class PendingStallEditor extends React.PureComponent<IProps, {}> {
     render() {
-        const { stall, election } = this.props
+        const { stall, election, onPollingPlaceEdited } = this.props
 
         return (
             <div>
                 <StallInfoCardContainer stall={stall} />
-                <PollingPlaceEditorContainer election={election} pollingPlaceId={stall.polling_place_cartodb_id} />
+                <br />
+                <PollingPlaceEditorContainer
+                    election={election}
+                    pollingPlaceId={stall.polling_place_id}
+                    showAutoComplete={false}
+                    onPollingPlaceEdited={onPollingPlaceEdited}
+                />
             </div>
         )
     }

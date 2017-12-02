@@ -11,7 +11,9 @@ export interface IStoreProps {
     election: IElection
 }
 
-export interface IDispatchProps {}
+export interface IDispatchProps {
+    onPollingPlaceEdited: Function
+}
 
 export interface IStateProps {}
 
@@ -25,9 +27,9 @@ interface IOwnProps {
 
 export class PendingStallEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { stall, election } = this.props
+        const { stall, election, onPollingPlaceEdited } = this.props
 
-        return <PendingStallEditor election={election} stall={stall} />
+        return <PendingStallEditor election={election} stall={stall} onPollingPlaceEdited={onPollingPlaceEdited} />
     }
 }
 
@@ -35,18 +37,20 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { stalls, elections } = state
 
     // Sorry.
-    const filteredStall: Array<IStall> = stalls.pending.filter(
-        (stall: IStall) => stall.cartodb_id === parseInt(ownProps.params.stallId, 10)
-    )
+    const filteredStall: Array<IStall> = stalls.pending.filter((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))
     const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-        (key: string) => elections.elections[key].cartodb_id === filteredStall[0].elections_cartodb_id
+        (key: string) => elections.elections[key].id === filteredStall[0].elections_id
     )
 
     return { stall: filteredStall[0], election: elections.elections[filteredElection[0]] }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-    return {}
+    return {
+        onPollingPlaceEdited: () => {
+            console.log("onPollingPlaceEdited")
+        },
+    }
 }
 
 const PendingStallEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PendingStallEditorContainer)

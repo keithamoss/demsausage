@@ -17,23 +17,33 @@ const PuffyDivider = styled(Divider)`
 export interface IProps {
     election: IElection
     pollingPlace?: IPollingPlace
+    showAutoComplete: boolean
+    onPollingPlaceEdited: Function
 }
 
 class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
     render() {
-        const { election, pollingPlace } = this.props
+        const { election, pollingPlace, showAutoComplete, onPollingPlaceEdited } = this.props
 
         return (
             <div>
-                <PollingPlaceAutocompleteContainer
-                    election={election}
-                    onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-                        browserHistory.push(`/election/${election.db_table_name}/${pollingPlace.cartodb_id}/edit`)
-                    }}
-                />
-                {pollingPlace && <PuffyDivider />}
+                {showAutoComplete && (
+                    <PollingPlaceAutocompleteContainer
+                        election={election}
+                        onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+                            browserHistory.push(`/election/${election.db_table_name}/${pollingPlace.id}/edit`)
+                        }}
+                    />
+                )}
+                {showAutoComplete && pollingPlace && <PuffyDivider />}
                 {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
-                {pollingPlace && <PollingPlaceFormContainer election={election} pollingPlace={pollingPlace} />}
+                {pollingPlace && (
+                    <PollingPlaceFormContainer
+                        election={election}
+                        pollingPlace={pollingPlace}
+                        onPollingPlaceEdited={onPollingPlaceEdited}
+                    />
+                )}
             </div>
         )
     }

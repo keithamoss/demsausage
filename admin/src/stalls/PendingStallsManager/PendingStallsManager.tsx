@@ -18,10 +18,10 @@ class PendingStallsManager extends React.PureComponent<IProps, {}> {
             <List>
                 {stalls.map((stall: IStall) => (
                     <ListItem
-                        key={stall.cartodb_id}
+                        key={stall.id}
                         primaryText={stall.stall_name}
                         secondaryText={stall.polling_place_premises}
-                        containerElement={<Link to={`/stalls/${stall.cartodb_id}/`} />}
+                        containerElement={<Link to={`/stalls/${stall.id}/`} />}
                     />
                 ))}
             </List>
