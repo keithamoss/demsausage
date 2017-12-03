@@ -51,7 +51,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
     // Sorry.
     const filteredStall: Array<IStall> = stalls.pending.filter((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))
-    let election = null
+    let election: any = null
     if (filteredStall.length === 1) {
         const filteredElection: Array<string> = Object.keys(elections.elections).filter(
             (key: string) => elections.elections[key].id === filteredStall[0].elections_id

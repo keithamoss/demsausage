@@ -4,11 +4,15 @@ $file_db = new PDO('sqlite:demsausage.sqlite3');
 $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Tables
+$electionPKeyFieldName = "id";
+$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden");
+
 $pendingStallsPKeyFieldName = "id";
 $pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "polling_place_id", "polling_place_premises", "elections_id", "active");
 
 $pollingPlacesPKeyFieldName = "id";
 $pollingPlacesAllowedFields = array("the_geom", "stall_description", "lon", "has_run_out", "has_nothing", "has_caek", "has_bbq", "noofdecissuingoff", "noordissuingoff", "decvoteest", "ordvoteest", "ccd", "ppid", "latest_report", "first_report", "stall_website", "lat", "stall_name", "extra_info", "source", "has_other", "wheelchairaccess", "entrancesdesc", "polling_place_type", "booth_info", "opening_hours", "premises", "address", "polling_place_name", "division", "state", "ess_stall_id", "ess_stall_url");
+
 
 function translateElectionFromDB($row) {
   return [
@@ -22,6 +26,22 @@ function translateElectionFromDB($row) {
     "is_active" => (bool)$row["is_active"],
     "hidden" => (bool)$row["hidden"]
   ];
+}
+
+function translateElectionToDB($row) {
+  $new = [];
+  foreach($row as $key => $val) {
+    if(in_array($key, ["has_division_boundaries", "is_active", "hidden"])) {
+      $new[$key] = ($val === "false") ? false : true;
+    } elseif(in_array($key, ["lon", "lat"])) {
+      $new[$key] = (float)$val;
+    } elseif(in_array($key, ["id", "default_zoom_level"])) {
+      $new[$key] = (int)$val;
+    } else {
+      $new[$key] = $val;
+    }
+  }
+  return $new;
 }
 
 function translateStallFromDB($row) {
@@ -202,6 +222,23 @@ function fetchElections() {
       $stalls[] = translateElectionFromDB($row);
   }
   return $stalls;
+}
+
+function createElection(array $params) {
+  global $file_db, $electionAllowedFields;
+
+  $insert = fieldsToInsertSQL("elections", $electionAllowedFields, array_keys($params));
+  $stmt = $file_db->prepare($insert);
+  
+  return fieldsToStmnt($stmt, $electionAllowedFields, $params);
+}
+
+function updateElection($id, array $params) {
+  global $file_db, $electionPKeyFieldName, $electionAllowedFields;
+
+  $election = translateElectionToDB($params);
+  
+  return updateTable($id, $election, "elections", $electionPKeyFieldName, $electionAllowedFields);
 }
 
 function isElectionDBTableValid($dbTableName) {

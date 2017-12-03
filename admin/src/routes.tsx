@@ -4,6 +4,9 @@ import { Route } from "react-router"
 import AppContainer from "./AppContainer"
 import PollingPlaceEditorContainerRoute from "./polling_places/polling_place_editor/PollingPlaceEditorContainerRoute"
 import PendingStallsManagerContainer from "./stalls/PendingStallsManager/PendingStallsManagerContainer"
+import ElectionsManagerContainer from "./elections/ElectionsManager/ElectionsManagerContainer"
+import ElectionEditorContainer from "./elections/ElectionEditor/ElectionEditorContainer"
+import ElectionCreatorContainer from "./elections/ElectionEditor/ElectionCreatorContainer"
 import PendingStallEditorContainer from "./stalls/PendingStallEditor/PendingStallEditorContainer"
 import { IStore } from "./redux/modules/interfaces"
 
@@ -12,6 +15,11 @@ export default (store: IStore) => {
         <Route path="/" component={AppContainer}>
             {/* Home (main) route */}
             {/* <IndexRoute components={{ content: Welcome }} /> */}
+
+            {/* Elections Routes */}
+            <Route path="/elections" components={{ content: ElectionsManagerContainer }} />
+            <Route path="/election/new" components={{ content: ElectionCreatorContainer }} />
+            <Route path="/election/:electionIdentifier" components={{ content: ElectionEditorContainer }} />
 
             {/* Polling Place Routes */}
             <Route

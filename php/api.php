@@ -43,8 +43,28 @@ if(isAuthorisedUser("su")) {
     // closeDb();
   }
 
-  // Add Election
-  // closeDb();
+  // Create election
+  if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
+    $rowCount = createElection($_GET["election"]);
+    if($rowCount !== 1) {
+      failForAPI("Failed to create election. (Error: $rowCount)");
+    } else {
+      echo json_encode(["rows" => $rowCount]);
+      closeDb();
+    }
+    closeDb();
+  }
+
+  // Update election
+  if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
+    $rowCount = updateElection($_GET["electionId"], $_GET["election"]);
+    if($rowCount !== 1) {
+      failForAPI("Failed to update election. (Error: $rowCount)");
+    } else {
+      echo json_encode(["rows" => $rowCount]);
+      closeDb();
+    }
+  }
 
   // Search polling places
   if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {

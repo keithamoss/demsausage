@@ -1,4 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IEALGISApiClient } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -52,7 +53,7 @@ export interface IAction {
 }
 
 export interface IElections {
-    [key: number]: IElection
+    [key: string]: IElection
 }
 
 export interface IElection {
@@ -82,6 +83,39 @@ export function fetchElections() {
 
             const activeElection = json.find((election: IElection) => election.is_active)
             dispatch(setCurrentElection(activeElection.db_table_name))
+        }
+    }
+}
+
+export function createElection(electionNew: Partial<IElection>) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "create-election": 1,
+            election: electionNew,
+        }
+
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Election created! 🌭🎉"))
+            return json
+        }
+    }
+}
+
+export function updateElection(election: IElection, electionNew: Partial<IElection>) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "update-election": 1,
+            electionId: election.id,
+            election: electionNew,
+        }
+
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Election updated! 🌭🎉"))
+            return json
         }
     }
 }
