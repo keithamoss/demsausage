@@ -6,54 +6,94 @@ import { IElection } from "../../redux/modules/interfaces"
 // import "./ElectionEditor.css"
 
 // import { grey100 } from "material-ui/styles/colors"
-import { TextField } from "redux-form-material-ui"
+import { TextField, SelectField } from "redux-form-material-ui"
+import MenuItem from "material-ui/MenuItem"
+import Toggle from "material-ui/Toggle"
 import RaisedButton from "material-ui/RaisedButton"
 
-export interface IProps {
-    election: IElection | null
-    onSubmit: any
-    onSaveForm: any
+const PaddedToggle = styled(Toggle)`
+  margin-bottom: 16px;
+`
 
-    // From redux-form
-    initialValues: any
-    handleSubmit: any
-    isDirty: any
+export interface IProps {
+  election: IElection | null
+  onSubmit: any
+  onSaveForm: any
+
+  // From redux-form
+  initialValues: any
+  handleSubmit: any
+  isDirty: any
 }
 
 // Work around TypeScript issues with redux-form. There's a bunch of issues logged in DefinitelyTyped's issue tracker.
 class CustomField extends React.Component<any, any> {
-    render(): any {
-        return <Field autoComplete={"off"} {...this.props} />
-    }
+  render(): any {
+    return <Field autoComplete={"off"} {...this.props} />
+  }
 }
 
 const HiddenButton = styled.button`
-    display: none;
+  display: none;
 `
 
 class ElectionEditor extends React.PureComponent<IProps, {}> {
-    render() {
-        const { election, isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
+  render() {
+    const { election, isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
 
-        return (
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <CustomField name="name" component={TextField} floatingLabelText={"The name of the stall that is here"} fullWidth={true} />
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CustomField
+          name="name"
+          component={TextField}
+          floatingLabelText={"The name of the election (e.g. Federal Election 2018)"}
+          fullWidth={true}
+        />
 
-                <RaisedButton label={election === null ? "Create" : "Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
-                <HiddenButton type="submit" />
-            </form>
-        )
-    }
+        <CustomField
+          name="db_table_name"
+          component={TextField}
+          floatingLabelText={"The short name for the election (e.g. federal_2016_polling_places)"}
+          fullWidth={true}
+        />
+
+        <CustomField name="lon" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} />
+
+        <CustomField name="lat" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} />
+
+        <CustomField name="default_zoom_level" component={SelectField} floatingLabelText={"Default map zoom level"} fullWidth={true}>
+          <MenuItem value={4} primaryText="4 (The whole country)" />
+          <MenuItem value={5} primaryText="5 (Larger states and territories)" />
+          <MenuItem value={6} primaryText="6 (Smaller states and territories)" />
+          <MenuItem value={7} primaryText="7" />
+          <MenuItem value={8} primaryText="8" />
+          <MenuItem value={9} primaryText="9" />
+          <MenuItem value={10} primaryText="10 (Really small states and territories)" />
+          <MenuItem value={11} primaryText="11" />
+          <MenuItem value={12} primaryText="12" />
+          <MenuItem value={13} primaryText="13" />
+          <MenuItem value={14} primaryText="14" />
+        </CustomField>
+
+        <CustomField name="is_active" component={PaddedToggle} label="Is this an active election?" />
+
+        <CustomField name="hidden" component={PaddedToggle} label="Should this election be hidden?" />
+
+        <RaisedButton label={election === null ? "Create" : "Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
+        <HiddenButton type="submit" />
+      </form>
+    )
+  }
 }
 
 // Decorate the form component
 let ElectionEditorReduxForm = reduxForm({
-    form: "election", // a unique name for this form
-    enableReinitialize: true,
-    onChange: (values: object, dispatch: Function, props: any) => {
-        // console.log("values", values)
-        // props.onFormChange(values, dispatch, props)
-    },
+  form: "election", // a unique name for this form
+  enableReinitialize: true,
+  onChange: (values: object, dispatch: Function, props: any) => {
+    // console.log("values", values)
+    // props.onFormChange(values, dispatch, props)
+  },
 })(ElectionEditor)
 
 export default ElectionEditorReduxForm
