@@ -120,6 +120,12 @@ function failForAPI($msg = "") {
   closeDb();
 }
 
+function failForAuthReasons($msg = "You do not have access to this resource.") {
+  http_response_code(403);
+  echo json_encode(["error" => $msg]);
+  closeDb();
+}
+
 function closeDb() {
   global $file_db;
 

@@ -23,72 +23,98 @@ if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
 ############################
 # Super User Endpoints
 ############################
-if(isAuthorisedUser("su")) {
-  // Fetch pending stalls
-  if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
-    $stalls = fetchPendingStalls();
-    echo json_encode($stalls);
-    closeDb();
+// Fetch pending stalls
+if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
   }
 
-  // Mark pending stall as read
-  if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
-    $rowCount = markPendingStallAsRead($_GET["id"]);
-    if($rowCount !== 1) {
-      failForAPI("Failed to mark pending stall as read. (Error: $rowCount)");
-    } else {
-      echo json_encode(["rows" => $rowCount]);
-      closeDb();
-    }
-    // closeDb();
-  }
+  $stalls = fetchPendingStalls();
+  echo json_encode($stalls);
+  closeDb();
+}
 
-  // Create election
-  if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
-    $rowCount = createElection($_GET["election"]);
-    if($rowCount !== 1) {
-      failForAPI("Failed to create election. (Error: $rowCount)");
-    } else {
-      echo json_encode(["rows" => $rowCount]);
-      closeDb();
-    }
-    closeDb();
-  }
-
-  // Update election
-  if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
-    $rowCount = updateElection($_GET["electionId"], $_GET["election"]);
-    if($rowCount !== 1) {
-      failForAPI("Failed to update election. (Error: $rowCount)");
-    } else {
-      echo json_encode(["rows" => $rowCount]);
-      closeDb();
-    }
-  }
-
-  // Search polling places
-  if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
-    $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionName"]);
-    echo json_encode($pollingPlaces);
-    closeDb();
+// Mark pending stall as read
+if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
   }
   
-  // Fetch polling place by ids
-  if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
-    $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionName"]);
-    echo json_encode($pollingPlaces);
+  $rowCount = markPendingStallAsRead($_GET["id"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to mark pending stall as read. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
     closeDb();
   }
+  // closeDb();
+}
 
-  // Update polling place
-  if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
-    $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionName"]);
-    if($rowCount !== 1) {
-      failForAPI("Failed to update polling place. (Error: $rowCount)");
-    } else {
-      echo json_encode(["rows" => $rowCount]);
-      closeDb();
-    }
+// Create election
+if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = createElection($_GET["election"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to create election. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
+  }
+  closeDb();
+}
+
+// Update election
+if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = updateElection($_GET["electionId"], $_GET["election"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to update election. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
+  }
+}
+
+// Search polling places
+if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionName"]);
+  echo json_encode($pollingPlaces);
+  closeDb();
+}
+
+// Fetch polling place by ids
+if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionName"]);
+  echo json_encode($pollingPlaces);
+  closeDb();
+}
+
+// Update polling place
+if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionName"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to update polling place. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
   }
 }
 
