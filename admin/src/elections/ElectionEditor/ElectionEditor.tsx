@@ -6,19 +6,27 @@ import { IElection } from "../../redux/modules/interfaces"
 // import "./ElectionEditor.css"
 
 // import { grey100 } from "material-ui/styles/colors"
-import { TextField, SelectField } from "redux-form-material-ui"
+import { TextField, SelectField, Checkbox } from "redux-form-material-ui"
 import MenuItem from "material-ui/MenuItem"
-import Toggle from "material-ui/Toggle"
 import RaisedButton from "material-ui/RaisedButton"
 
-const PaddedToggle = styled(Toggle)`
+const PaddedCheckbox = styled(Checkbox)`
   margin-bottom: 16px;
+`
+
+const PaddedButton = styled(RaisedButton)`
+  margin: 8px;
+`
+
+const HiddenButton = styled.button`
+  display: none;
 `
 
 export interface IProps {
   election: IElection | null
   onSubmit: any
   onSaveForm: any
+  onCancelForm: any
 
   // From redux-form
   initialValues: any
@@ -33,13 +41,9 @@ class CustomField extends React.Component<any, any> {
   }
 }
 
-const HiddenButton = styled.button`
-  display: none;
-`
-
 class ElectionEditor extends React.PureComponent<IProps, {}> {
   render() {
-    const { election, isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
+    const { election, isDirty, onSaveForm, onCancelForm, handleSubmit, onSubmit } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,9 +61,9 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
           fullWidth={true}
         />
 
-        <CustomField name="lon" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} />
+        <CustomField name="lon" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} type="number" />
 
-        <CustomField name="lat" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} />
+        <CustomField name="lat" component={TextField} floatingLabelText={"Latitude"} fullWidth={true} type="number" />
 
         <CustomField name="default_zoom_level" component={SelectField} floatingLabelText={"Default map zoom level"} fullWidth={true}>
           <MenuItem value={4} primaryText="4 (The whole country)" />
@@ -75,11 +79,12 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
           <MenuItem value={14} primaryText="14" />
         </CustomField>
 
-        <CustomField name="is_active" component={PaddedToggle} label="Is this an active election?" />
+        <CustomField name="is_active" component={PaddedCheckbox} label="Is this an active election?" labelPosition="right" />
 
-        <CustomField name="hidden" component={PaddedToggle} label="Should this election be hidden?" />
+        <CustomField name="hidden" component={PaddedCheckbox} label="Hide election?" labelPosition="right" />
 
-        <RaisedButton label={election === null ? "Create" : "Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
+        <PaddedButton label={election === null ? "Create" : "Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
+        <PaddedButton label={"Cancel"} primary={false} onClick={onCancelForm} />
         <HiddenButton type="submit" />
       </form>
     )

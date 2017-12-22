@@ -56,11 +56,11 @@ if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
     failForAuthReasons();
   }
   
-  $rowCount = createElection($_GET["election"]);
-  if($rowCount !== 1) {
+  $newElection = createElection($_GET["election"]);
+  if($newElection === false) {
     failForAPI("Failed to create election. (Error: $rowCount)");
   } else {
-    echo json_encode(["rows" => $rowCount]);
+    echo json_encode($newElection);
     closeDb();
   }
   closeDb();

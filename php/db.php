@@ -172,6 +172,18 @@ function fieldsToStmnt($stmt, array $allowedFields, array $params) {
   return false;
 }
 
+function fieldsToStmntLastInsertId($stmt, array $allowedFields, array $params) {
+  global $file_db;
+
+  $rowCount = fieldsToStmnt($stmt, $allowedFields, $params);
+  if($rowCount === 1) {
+    $stmt2 = $file_db->prepare("SELECT LAST_INSERT_ROWID()");
+    $stmt2->execute();
+    return $stmt2->fetchColumn();
+  }
+  return false;
+}
+
 function updateTable($id, array $params, string $table_name, string $pkeyFieldName, array $allowedFields) {
   global $file_db;
 
@@ -235,8 +247,13 @@ function createElection(array $params) {
 
   $insert = fieldsToInsertSQL("elections", $electionAllowedFields, array_keys($params));
   $stmt = $file_db->prepare($insert);
+  $lastInsertId = fieldsToStmntLastInsertId($stmt, $electionAllowedFields, $params);
   
-  return fieldsToStmnt($stmt, $electionAllowedFields, $params);
+  $stmt = $file_db->query("SELECT * FROM elections WHERE id = :id");
+  $stmt->bindParam(":id", $lastInsertId);
+  $stmt->execute();
+  $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+  return translateElectionFromDB($row);
 }
 
 function updateElection($id, array $params) {
