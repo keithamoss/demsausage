@@ -93,7 +93,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
   if (ownProps.params.electionIdentifier !== null) {
     // Sorry.
     const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-      (key: string) => elections.elections[key].id === parseInt(ownProps.params.electionIdentifier, 10)
+      (key: string) => elections.elections[key].db_table_name === ownProps.params.electionIdentifier
     )
     election = elections.elections[filteredElection[0]]
   }
