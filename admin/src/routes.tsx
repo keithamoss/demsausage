@@ -11,25 +11,25 @@ import PendingStallEditorContainer from "./stalls/PendingStallEditor/PendingStal
 import { IStore } from "./redux/modules/interfaces"
 
 export default (store: IStore) => {
-    return (
-        <Route path="/" component={AppContainer}>
-            {/* Home (main) route */}
-            {/* <IndexRoute components={{ content: Welcome }} /> */}
+  return (
+    <Route path="/" component={AppContainer}>
+      {/* Home (main) route */}
+      {/* <IndexRoute components={{ content: Welcome }} /> */}
 
-            {/* Elections Routes */}
-            <Route path="/elections" components={{ content: ElectionsManagerContainer }} />
-            <Route path="/election/new" components={{ content: ElectionCreatorContainer }} />
-            <Route path="/election/:electionIdentifier" components={{ content: ElectionEditorContainer }} />
+      {/* Elections Routes */}
+      <Route path="/elections" components={{ content: ElectionsManagerContainer }} />
+      <Route path="/election/new" components={{ content: ElectionCreatorContainer }} />
+      <Route path="/election/:electionIdentifier" components={{ content: ElectionEditorContainer }} />
 
-            {/* Polling Place Routes */}
-            <Route
-                path="/election/:electionIdentifier(/:pollingPlaceId)(/edit)"
-                components={{ content: PollingPlaceEditorContainerRoute }}
-            />
+      {/* Polling Place Routes */}
+      <Route
+        path="/election/:electionIdentifier/polling_places/(/:pollingPlaceId)(/edit)"
+        components={{ content: PollingPlaceEditorContainerRoute }}
+      />
 
-            {/* Stalls Routes */}
-            <Route path="/stalls" components={{ content: PendingStallsManagerContainer }} />
-            <Route path="/stalls(/:stallId)" components={{ content: PendingStallEditorContainer }} />
-        </Route>
-    )
+      {/* Stalls Routes */}
+      <Route path="/stalls" components={{ content: PendingStallsManagerContainer }} />
+      <Route path="/stalls(/:stallId)" components={{ content: PendingStallEditorContainer }} />
+    </Route>
+  )
 }
