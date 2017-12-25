@@ -81,7 +81,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
               leftIcon={<AlertError color={greenA200} />}
               disabled={true}
             />
-            <RaisedButton label={"Create Election"} primary={true} containerElement={<Link to={`/elections/`} />} />
+            <RaisedButton label={"Yay! 👏"} primary={true} containerElement={<Link to={`/elections/`} />} />
           </div>
         )}
 

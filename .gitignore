@@ -3,5 +3,6 @@
 /php/sausage_secrets.inc
 /php/google-api-php-client-*
 /php/v3-test/*
+/php/carto-dump/*
 *.sqlite3*
 /python/*

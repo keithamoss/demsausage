@@ -145,9 +145,62 @@ EOT
   $file_db->exec("ALTER TABLE elections_tmp RENAME TO elections");
 }
 
+function addEntranceDesc() {
+  global $file_db;
+
+  $elections = [];
+
+  foreach($elections as $electionName) {
+    $file_db->exec(<<<EOT
+      CREATE TABLE `{$electionName}_tmp` (
+        `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+        `lon`	NUMERIC,
+        `lat`	NUMERIC,
+        `has_bbq`	INTEGER,
+        `has_caek`	INTEGER,
+        `has_nothing`	INTEGER,
+        `has_run_out`	INTEGER,
+        `has_other`	TEXT,
+        `chance_of_sausage` NUMERIC,
+        `stall_name`	TEXT,
+        `stall_description`	TEXT,
+        `stall_website`	TEXT,
+        `latest_report`	TIMESTAMP,
+        `first_report`	TIMESTAMP,
+        `polling_place_name`	TEXT,
+        `polling_place_type`	TEXT,
+        `extra_info`	TEXT,
+        `booth_info`	TEXT,
+        `wheelchairaccess`	TEXT,
+        `entrancesdesc`	TEXT,
+        `opening_hours`	TEXT,
+        `premises`	TEXT,
+        `address`	TEXT,
+        `division`	TEXT,
+        `state`	TEXT,
+        `source`	TEXT,
+        `ess_stall_id`	INTEGER,
+        `ess_stall_url`	TEXT
+      )
+EOT
+    );
+
+    $file_db->exec(<<<EOT
+      INSERT INTO {$electionName}_tmp(lon, lat, has_bbq, has_caek, has_nothing, has_run_out, has_other, chance_of_sausage, stall_name, stall_description, stall_website, latest_report, first_report, polling_place_name, polling_place_type, extra_info, booth_info, wheelchairaccess, entrancesdesc, opening_hours, premises, address, division, state, source, ess_stall_id, ess_stall_url) 
+        SELECT lon, lat, has_bbq, has_caek, has_nothing, has_run_out, has_other, chance_of_sausage, stall_name, stall_description, stall_website, latest_report, first_report, polling_place_name, polling_place_type, extra_info, booth_info, wheelchairaccess, entrancesdesc, opening_hours, premises, address, division, state, source, ess_stall_id, ess_stall_url 
+        FROM $electionName
+EOT
+    );
+
+    $file_db->exec("DROP TABLE $electionName");
+    $file_db->exec("ALTER TABLE {$electionName}_tmp RENAME TO $electionName");
+  }
+}
+
 // ingestPendingStalls()
 // ingestPollingPlaces("qld_2017_polling_places");
 // ingestElections();
+// addEntranceDesc();
 
 // Close file db connection
 $file_db = null;
