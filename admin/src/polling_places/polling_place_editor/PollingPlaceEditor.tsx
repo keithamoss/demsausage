@@ -31,7 +31,7 @@ class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
           <PollingPlaceAutocompleteContainer
             election={election}
             onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-              browserHistory.push(`/election/${election.id}/${pollingPlace.id}/edit`)
+              browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
             }}
           />
         )}

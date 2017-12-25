@@ -25,7 +25,7 @@ export default (store: IStore) => {
 
       {/* Polling Place Routes */}
       <Route
-        path="/election/:electionIdentifier/polling_places/(/:pollingPlaceId)(/edit)"
+        path="/election/:electionIdentifier/polling_places(/:pollingPlaceId)(/edit)"
         components={{ content: PollingPlaceEditorContainerRoute }}
       />
 
