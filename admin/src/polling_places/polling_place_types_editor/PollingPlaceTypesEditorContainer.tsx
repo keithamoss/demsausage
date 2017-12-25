@@ -50,18 +50,9 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
   const { elections, polling_places } = state
 
-  let election: IElection | null = null
-  if (ownProps.params.electionIdentifier !== null) {
-    // Sorry.
-    const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-      (key: string) => elections.elections[key].id === parseInt(ownProps.params.electionIdentifier, 10)
-    )
-    election = elections.elections[filteredElection[0]]
-  }
-
   return {
-    election: election!,
-    pollingPlaces: polling_places.by_election[election!.id] || [],
+    election: elections.elections[ownProps.params.electionIdentifier],
+    pollingPlaces: polling_places.by_election[ownProps.params.electionIdentifier] || [],
     pollingPlaceTypes: polling_places.types,
   }
 }

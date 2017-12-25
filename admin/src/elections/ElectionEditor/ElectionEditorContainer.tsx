@@ -88,17 +88,8 @@ export class ElectionEditorContainer extends React.Component<IProps & IStoreProp
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
   const { elections } = state
 
-  let election: IElection | null = null
-  if (ownProps.params.electionIdentifier !== null) {
-    // Sorry.
-    const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-      (key: string) => elections.elections[key].id === parseInt(ownProps.params.electionIdentifier, 10)
-    )
-    election = elections.elections[filteredElection[0]]
-  }
-
   return {
-    election: election!,
+    election: elections.elections[ownProps.params.electionIdentifier],
     isDirty: isDirty("election")(state),
   }
 }
