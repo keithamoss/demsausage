@@ -33,7 +33,7 @@ export class PollingPlaceEditorContainerRoute extends React.Component<IStoreProp
         pollingPlaceId={pollingPlaceId}
         showAutoComplete={true}
         onPollingPlaceEdited={() => {
-          browserHistory.push(`/election/${election.id}/`)
+          browserHistory.push(`/election/${election.id}/polling_places`)
         }}
       />
     )

@@ -106,10 +106,31 @@ function fetchPollingPlaces($ids, string $electionId) {
   return $pollingPlaces;
 }
 
-function fetchAllPollingPlaces(string $electionTableName, bool $validateElection = true) {
+function fetchPollingPlaceTypes(string $electionId) {
+  global $validPollingPlaceTypes;
+
+  return $validPollingPlaceTypes;
+}
+
+function fetchAllPollingPlaces(string $electionId) {
   global $file_db;
   
-  if($validateElection === true && isElectionDBTableValid($electionTableName) === false) {
+  $election = fetchElection($electionId);
+
+  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"]);
+  $stmt->execute();
+  
+  $pollingPlaces = [];
+  while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+      $pollingPlaces[] = translatePollingPlaceFromDB($row);
+  }
+  return $pollingPlaces;
+}
+
+function fetchAllPollingPlacesByElectionTableName(string $electionTableName) {
+  global $file_db;
+  
+  if(isElectionDBTableValid($electionTableName) === false) {
     failForAPI();
   }
 
@@ -402,7 +423,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     "message" => "Found " . count($rows) . " polling places.",
   ];
 
-  $pollingPlaces = fetchAllPollingPlaces($response["table_name"], false);
+  $pollingPlaces = fetchAllPollingPlacesByElectionTableName($response["table_name"]);
 
   foreach($pollingPlaces as $pollingPlace) {
     $historical = fetchHistoricalData($pollingPlace, $election);

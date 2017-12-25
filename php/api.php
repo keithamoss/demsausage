@@ -97,6 +97,28 @@ if(stristr($_SERVER["QUERY_STRING"], "load-polling-places") !== false) {
   closeDb();
 }
 
+// Fetch polling place types
+if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-place-types") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $pollingPlaceTypes = fetchPollingPlaceTypes($_GET["electionId"]);
+  echo json_encode($pollingPlaceTypes);
+  closeDb();
+}
+
+// Fetch polling places
+if(stristr($_SERVER["QUERY_STRING"], "fetch-all-polling-places") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $pollingPlaces = fetchAllPollingPlaces($_GET["electionId"]);
+  echo json_encode($pollingPlaces);
+  closeDb();
+}
+
 // Search polling places
 if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
   if(isAuthorisedUser("su") === false) {

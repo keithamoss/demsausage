@@ -115,7 +115,11 @@ class App extends React.Component<IProps, {}> {
                 containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
               />
               <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} containerElement={<Link to={`/stalls`} />} />
-              <ListItem primaryText="Edit Polling Place Types" leftIcon={<ContentDrafts />} />
+              <ListItem
+                primaryText="Edit Polling Place Types"
+                leftIcon={<ContentDrafts />}
+                containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
+              />
               <ListItem primaryText="Election Management" leftIcon={<ContentInbox />} containerElement={<Link to={`/elections`} />} />
               <ListItem primaryText="User Management" leftIcon={<ContentInbox />} />
             </List>

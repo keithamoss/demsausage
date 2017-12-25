@@ -48,6 +48,8 @@ function fieldsToUpdateSQL(string $tableName, array $allowedFields, array $param
     if(in_array($fieldName, ["first_report", "latest_report"])) {
       if(is_null($params[$fieldName])) {
         return $fieldName . " = NULL";
+      } elseif(stristr($params[$fieldName], "strftime") !== false) {
+        return $fieldName . " = " . $params[$fieldName];
       } else {
         return $fieldName . " = '" . $params[$fieldName]. "'";
       }

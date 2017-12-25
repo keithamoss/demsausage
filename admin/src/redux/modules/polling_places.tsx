@@ -4,16 +4,22 @@ import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
-// const LOAD_SEARCH_RESULTS = "ealgis/polling_places/LOAD_SEARCH_RESULTS"
+const LOAD = "ealgis/polling_places/LOAD"
+const LOAD_TYPES = "ealgis/polling_places/LOAD_TYPES"
 const VALIDATION_ERRORS = "ealgis/polling_places/VALIDATION_ERRORS"
 
 const initialState: Partial<IModule> = {
-  // searchResults: [] as Array<IPollingPlace>,
+  types: [],
+  by_election: {},
 }
 
 // Reducer
 export default function reducer(state: Partial<IModule> = initialState, action: IAction) {
   switch (action.type) {
+    case LOAD:
+      return dotProp.set(state, `by_election.${action.election.id}`, action.pollingPlaces)
+    case LOAD_TYPES:
+      return dotProp.set(state, "types", action.pollingPlaceTypes)
     default:
       return state
   }
@@ -30,21 +36,34 @@ export const reduxFormReducer = (state: {}, action: any) => {
 }
 
 // Action Creators
-// export function loadSearchResults(pollingPlaces: Array<IPollingPlace>) {
-//     return {
-//         type: LOAD_SEARCH_RESULTS,
-//         pollingPlaces,
-//     }
-// }
+export function loadPollingPlacesForElection(election: IElection, pollingPlaces: Array<IPollingPlace>) {
+  return {
+    type: LOAD,
+    election,
+    pollingPlaces,
+  }
+}
+
+export function loadPollingPlaceTypes(pollingPlaceTypes: Array<string>) {
+  return {
+    type: LOAD_TYPES,
+    pollingPlaceTypes,
+  }
+}
 
 // Models
 export interface IModule {
-  // searchResults: Array<IPollingPlace>
+  types: Array<string>
+  by_election: {
+    [key: number]: Array<IPollingPlace>
+  }
 }
 
 export interface IAction {
   type: string
-  // pollingPlaces: Array<IPollingPlace>
+  election: IElection
+  pollingPlaces: Array<IPollingPlace>
+  pollingPlaceTypes: Array<string>
   errors?: object
   meta?: {
     // analytics: IAnalyticsMeta
@@ -95,7 +114,6 @@ export interface IPollingPlaceLoaderResponseMessage {
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
-
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
   return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
     const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
@@ -103,6 +121,17 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
     if (response.status === 200) {
       return json
+    }
+  }
+}
+
+export function fetchAllPollingPlaces(election: IElection) {
+  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    const params = { "fetch-all-polling-places": 1, electionId: election.id }
+    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+    if (response.status === 200) {
+      dispatch(loadPollingPlacesForElection(election, json))
     }
   }
 }
@@ -120,11 +149,6 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: Partial<IPollingPlace>) {
   return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    if (pollingPlace.first_report === "") {
-      pollingPlaceNew.first_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
-    }
-    pollingPlaceNew.latest_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
-
     const params = {
       "update-polling-place": 1,
       pollingPlaceId: pollingPlace.id,
@@ -153,6 +177,17 @@ export function loadPollingPlaces(election: IElection, file: File) {
 
     if (response.status === 200) {
       return json
+    }
+  }
+}
+
+export function fetchPollingPlaceTypes() {
+  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    const params = { "fetch-polling-place-types": 1, electionId: null }
+    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+    if (response.status === 200) {
+      dispatch(loadPollingPlaceTypes(json))
     }
   }
 }
