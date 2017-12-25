@@ -98,7 +98,7 @@ export interface IPollingPlaceLoaderResponseMessage {
 
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
   return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "search-polling-places": 1, searchTerm: searchTerm, electionName: election.db_table_name }
+    const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
     const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
     if (response.status === 200) {
@@ -109,7 +109,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
   return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionName: election.db_table_name }
+    const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionId: election.id }
     const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
     if (response.status === 200) {
@@ -129,7 +129,7 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
       "update-polling-place": 1,
       pollingPlaceId: pollingPlace.id,
       pollingPlace: pollingPlaceNew,
-      electionName: election.db_table_name,
+      electionId: election.id,
     }
 
     const { response, json } = await ealapi.dsAPIGet(params, dispatch)

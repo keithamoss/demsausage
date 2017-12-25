@@ -40,7 +40,6 @@ const toFormValues = (election: IElection) => {
     name: election.name,
     default_zoom_level: election.default_zoom_level,
     has_division_boundaries: election.has_division_boundaries,
-    db_table_name: election.db_table_name,
     is_active: election.is_active,
     hidden: election.hidden,
   }

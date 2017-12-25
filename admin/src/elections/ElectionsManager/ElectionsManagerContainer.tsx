@@ -3,9 +3,10 @@ import { connect } from "react-redux"
 
 import ElectionsManager from "./ElectionsManager"
 import { IStore, IElections } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/elections"
 
 export interface IStoreProps {
-    elections: IElections
+  elections: IElections
 }
 
 export interface IDispatchProps {}
@@ -15,27 +16,33 @@ export interface IStateProps {}
 interface IRouteProps {}
 
 interface IOwnProps {
-    params: IRouteProps
+  params: IRouteProps
 }
 
 export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
-    render() {
-        const { elections } = this.props
+  render() {
+    const { elections } = this.props
 
-        return <ElectionsManager elections={Object.keys(elections).map(k => elections[k])} />
-    }
+    return (
+      <ElectionsManager
+        elections={Object.keys(elections)
+          .map(k => elections[k])
+          .sort((a: IElection, b: IElection) => b.id - a.id)}
+      />
+    )
+  }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
+  const { elections } = state
 
-    return {
-        elections: elections.elections,
-    }
+  return {
+    elections: elections.elections,
+  }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-    return {}
+  return {}
 }
 
 const ElectionsManagerContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionsManagerContainer)

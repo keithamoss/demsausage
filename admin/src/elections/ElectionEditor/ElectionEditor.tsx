@@ -54,13 +54,6 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
           fullWidth={true}
         />
 
-        <CustomField
-          name="db_table_name"
-          component={TextField}
-          floatingLabelText={"The short name for the election (e.g. federal_2016_polling_places)"}
-          fullWidth={true}
-        />
-
         <CustomField name="lon" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} type="number" />
 
         <CustomField name="lat" component={TextField} floatingLabelText={"Latitude"} fullWidth={true} type="number" />

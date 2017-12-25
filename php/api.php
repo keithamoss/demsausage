@@ -103,7 +103,7 @@ if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
     failForAuthReasons();
   }
   
-  $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionName"]);
+  $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionId"]);
   echo json_encode($pollingPlaces);
   closeDb();
 }
@@ -114,7 +114,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
     failForAuthReasons();
   }
   
-  $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionName"]);
+  $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionId"]);
   echo json_encode($pollingPlaces);
   closeDb();
 }
@@ -125,7 +125,7 @@ if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
     failForAuthReasons();
   }
   
-  $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionName"]);
+  $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionId"]);
   if($rowCount !== 1) {
     failForAPI("Failed to update polling place. (Error: $rowCount)");
   } else {

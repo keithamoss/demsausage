@@ -10,43 +10,39 @@ import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import Divider from "material-ui/Divider"
 
 const PuffyDivider = styled(Divider)`
-    margin-top: 25px !important;
-    margin-bottom: 25px !important;
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
 `
 
 export interface IProps {
-    election: IElection
-    pollingPlace?: IPollingPlace
-    showAutoComplete: boolean
-    onPollingPlaceEdited: Function
+  election: IElection
+  pollingPlace?: IPollingPlace
+  showAutoComplete: boolean
+  onPollingPlaceEdited: Function
 }
 
 class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
-    render() {
-        const { election, pollingPlace, showAutoComplete, onPollingPlaceEdited } = this.props
+  render() {
+    const { election, pollingPlace, showAutoComplete, onPollingPlaceEdited } = this.props
 
-        return (
-            <div>
-                {showAutoComplete && (
-                    <PollingPlaceAutocompleteContainer
-                        election={election}
-                        onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-                            browserHistory.push(`/election/${election.db_table_name}/${pollingPlace.id}/edit`)
-                        }}
-                    />
-                )}
-                {showAutoComplete && pollingPlace && <PuffyDivider />}
-                {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
-                {pollingPlace && (
-                    <PollingPlaceFormContainer
-                        election={election}
-                        pollingPlace={pollingPlace}
-                        onPollingPlaceEdited={onPollingPlaceEdited}
-                    />
-                )}
-            </div>
-        )
-    }
+    return (
+      <div>
+        {showAutoComplete && (
+          <PollingPlaceAutocompleteContainer
+            election={election}
+            onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+              browserHistory.push(`/election/${election.id}/${pollingPlace.id}/edit`)
+            }}
+          />
+        )}
+        {showAutoComplete && pollingPlace && <PuffyDivider />}
+        {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
+        {pollingPlace && (
+          <PollingPlaceFormContainer election={election} pollingPlace={pollingPlace} onPollingPlaceEdited={onPollingPlaceEdited} />
+        )}
+      </div>
+    )
+  }
 }
 
 export default PollingPlaceEditor

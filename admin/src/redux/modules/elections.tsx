@@ -19,12 +19,12 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
       return dotProp.set(state, "elections", action.elections)
     case LOAD_ELECTION:
       let election: Partial<IElection>
-      if (action.election.db_table_name! in state.elections!) {
-        election = Object.assign({}, state.elections![action.election.db_table_name!], action.election)
+      if (action.election.id! in state.elections!) {
+        election = Object.assign({}, state.elections![action.election.id!], action.election)
       } else {
         election = Object.assign({}, action.election)
       }
-      return dotProp.set(state, `elections.${action.election.db_table_name}`, election)
+      return dotProp.set(state, `elections.${action.election.id}`, election)
     case SET_CURRENT_ELECTION:
       return dotProp.set(state, "current_election_id", action.electionId)
     default:
@@ -57,7 +57,7 @@ export function setCurrentElection(electionId: string) {
 // Models
 export interface IModule {
   elections: IElections
-  current_election_id: string // election.db_table_name
+  current_election_id: string // election.id
 }
 
 export interface IAction {
@@ -92,15 +92,15 @@ export function fetchElections() {
   return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
     const { response, json } = await ealapi.dsAPIGet({ "fetch-elections": 1 }, dispatch)
     if (response.status === 200) {
-      // Map elections from an array of objects to a dict keyed by db_table_name
+      // Map elections from an array of objects to a dict keyed by election id
       const elections = Object.assign(
         {},
-        ...json.map((election: IElection, index: number, array: Array<IElection>) => ({ [election.db_table_name]: election }))
+        ...json.map((election: IElection, index: number, array: Array<IElection>) => ({ [election.id]: election }))
       )
       dispatch(loadElections(elections))
 
       const activeElection = json.find((election: IElection) => election.is_active)
-      dispatch(setCurrentElection(activeElection.db_table_name))
+      dispatch(setCurrentElection(activeElection.id))
     }
   }
 }

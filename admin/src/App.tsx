@@ -101,17 +101,18 @@ class App extends React.Component<IProps, {}> {
           <nav className="page-nav">
             <List>
               <ListItem disabled={true} leftIcon={<ContentInbox />}>
-                <SelectField floatingLabelText="Elections" value={currentElection.db_table_name} onChange={onChangeElection}>
-                  {Object.keys(elections).map((electionId: string, key: number) => (
-                    <MenuItem key={electionId} value={elections[electionId].db_table_name} primaryText={elections[electionId].name} />
-                  ))}
+                <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
+                  {Object.keys(elections)
+                    .map(k => elections[k])
+                    .sort((a: IElection, b: IElection) => b.id - a.id)
+                    .map((election: IElection) => <MenuItem key={election.id} value={election.id} primaryText={election.name} />)}
                 </SelectField>
               </ListItem>
 
               <ListItem
                 primaryText="Edit Polling Places"
                 leftIcon={<ActionGrade />}
-                containerElement={<Link to={`/election/${currentElection.db_table_name}/polling_places/`} />}
+                containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
               />
               <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} containerElement={<Link to={`/stalls`} />} />
               <ListItem primaryText="Edit Polling Place Types" leftIcon={<ContentDrafts />} />

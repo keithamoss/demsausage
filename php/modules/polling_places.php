@@ -56,26 +56,30 @@ function translatePollingPlaceToDB($row) {
   return $new;
 }
 
-function updatePollingPlace($id, array $params, string $electionTableName, bool $validateElection = true) {
+// electionTableName
+function updatePollingPlace($id, array $params, string $electionId) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
-  if($validateElection === true && isElectionDBTableValid($electionTableName) === false) {
-    failForAPI();
-  }
+  $election = fetchElection($electionId);
+  $pollingPlace = translatePollingPlaceToDB($params);
+  
+  return updateTable($id, $pollingPlace, $election["db_table_name"], $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
+}
 
+function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName) {
+  global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
+  
   $pollingPlace = translatePollingPlaceToDB($params);
   
   return updateTable($id, $pollingPlace, $electionTableName, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
 }
 
-function searchPollingPlaces($searchTerm, string $electionTableName) {
+function searchPollingPlaces($searchTerm, string $electionId) {
   global $file_db;
 
-  if(isElectionDBTableValid($electionTableName) === false) {
-    failForAPI();
-  }
+  $election = fetchElection($electionId);
 
-  $stmt = $file_db->prepare("SELECT * FROM $electionTableName WHERE premises LIKE LOWER(:searchTerm) OR polling_place_name LIKE LOWER(:searchTerm) OR address LIKE LOWER(:searchTerm)");
+  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE premises LIKE LOWER(:searchTerm) OR polling_place_name LIKE LOWER(:searchTerm) OR address LIKE LOWER(:searchTerm)");
   $stmt->bindParam(":searchTerm", strtolower("%" . $searchTerm . "%"));
   $stmt->execute();
 
@@ -86,14 +90,12 @@ function searchPollingPlaces($searchTerm, string $electionTableName) {
   return $pollingPlaces;
 }
 
-function fetchPollingPlaces($ids, string $electionTableName) {
+function fetchPollingPlaces($ids, string $electionId) {
   global $file_db;
   
-  if(isElectionDBTableValid($electionTableName) === false) {
-    failForAPI();
-  }
+  $election = fetchElection($electionId);
 
-  $stmt = $file_db->prepare("SELECT * FROM $electionTableName WHERE id IN (:ids)");
+  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE id IN (:ids)");
   $stmt->bindParam(":ids", implode(", ", $ids));
   $stmt->execute();
   
@@ -435,7 +437,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
           "message" => "Polling Place '" . $pollingPlace["polling_place_name"] . "': Detected polling place type of '" . $detectedPollingPlaceType . "' is not valid.",
         ];
       } else {
-        updatePollingPlace($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"], false);
+        updatePollingPlaceByElectionTableName($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"]);
       }
     }
 
@@ -446,7 +448,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     $score = array_sum($pollingPlaceScores);
     $chance = $score / count($historical);
 
-    updatePollingPlace($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"], false);
+    updatePollingPlaceByElectionTableName($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"]);
   }
 
   // Merge stall info from the current active table
@@ -476,7 +478,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
         "ess_stall_id" => $pollingPlace["ess_stall_id"],
         "ess_stall_url" => $pollingPlace["ess_stall_url"],
       ];
-      updatePollingPlace($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
+      updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"]);
     }
   }
 
