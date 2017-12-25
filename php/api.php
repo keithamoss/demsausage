@@ -81,6 +81,22 @@ if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
   }
 }
 
+// Load polling places to election
+if(stristr($_SERVER["QUERY_STRING"], "load-polling-places") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+
+  // Check for file
+  if(array_key_exists("file", $_FILES) === false) {
+    failForAPI("Could not find file");
+  }
+
+  $response = loadPollingPlaces($_GET["electionId"], ($_GET["dryrun"] === "true") ? true : false, $_FILES["file"]);
+  echo json_encode($response);
+  closeDb();
+}
+
 // Search polling places
 if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
   if(isAuthorisedUser("su") === false) {
