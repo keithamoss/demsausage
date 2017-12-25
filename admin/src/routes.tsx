@@ -7,6 +7,7 @@ import PendingStallsManagerContainer from "./stalls/PendingStallsManager/Pending
 import ElectionsManagerContainer from "./elections/ElectionsManager/ElectionsManagerContainer"
 import ElectionEditorContainer from "./elections/ElectionEditor/ElectionEditorContainer"
 import ElectionCreatorContainer from "./elections/ElectionEditor/ElectionCreatorContainer"
+import ElectionPollingPlaceLoaderContainer from "./elections/ElectionPollingPlaceLoader/ElectionPollingPlaceLoaderContainer"
 import PendingStallEditorContainer from "./stalls/PendingStallEditor/PendingStallEditorContainer"
 import { IStore } from "./redux/modules/interfaces"
 
@@ -19,6 +20,7 @@ export default (store: IStore) => {
       {/* Elections Routes */}
       <Route path="/elections" components={{ content: ElectionsManagerContainer }} />
       <Route path="/election/new" components={{ content: ElectionCreatorContainer }} />
+      <Route path="/election/:electionIdentifier/load_polling_places" components={{ content: ElectionPollingPlaceLoaderContainer }} />
       <Route path="/election/:electionIdentifier" components={{ content: ElectionEditorContainer }} />
 
       {/* Polling Place Routes */}

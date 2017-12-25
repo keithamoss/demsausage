@@ -139,3 +139,14 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
     }
   }
 }
+
+export function setElectionTableName(election: IElection, newDBTableName: string) {
+  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    dispatch(
+      loadElection({
+        id: election.id,
+        db_table_name: newDBTableName,
+      })
+    )
+  }
+}
