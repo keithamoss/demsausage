@@ -30,7 +30,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
   async componentWillMount() {
     const { fetchRequiredState, election, pollingPlaceId } = this.props
 
-    if (pollingPlaceId !== null) {
+    if (pollingPlaceId !== null && election.db_table_name !== "") {
       this.setState({ pollingPlace: await fetchRequiredState(election, pollingPlaceId) })
     }
   }
