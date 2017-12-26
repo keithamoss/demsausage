@@ -1,36 +1,12 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import styled from "styled-components"
 
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
+import EmptyState from "../../shared/empty_state/EmptyState"
 import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { fetchAllPollingPlaces, updatePollingPlace } from "../../redux/modules/polling_places"
 
-import { GridTile } from "material-ui/GridList"
 import CommunicationLocationOff from "material-ui/svg-icons/communication/location-off"
-
-const EmptyState = styled.div`
-  max-width: 250px;
-  max-height: 250px;
-  opacity: 0.4;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`
-
-const CenteredCommunicationLocationOff = styled(CommunicationLocationOff)`
-  width: 125px !important;
-  height: 125px !important;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`
 
 export interface IStoreProps {
   election: IElection
@@ -64,19 +40,14 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
 
     if (election.db_table_name === "") {
       return (
-        <EmptyState>
-          <GridTile
-            title={
-              <div>
-                We don't have any polling<br />places for this election yet :(
-              </div>
-            }
-            titleBackground={"rgb(255, 255, 255)"}
-            titleStyle={{ color: "black" }}
-          >
-            <CenteredCommunicationLocationOff />
-          </GridTile>
-        </EmptyState>
+        <EmptyState
+          message={
+            <div>
+              We don't have any polling<br />places for this election yet :(
+            </div>
+          }
+          icon={<CommunicationLocationOff />}
+        />
       )
     }
 
