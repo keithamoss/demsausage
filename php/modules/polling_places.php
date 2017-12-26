@@ -300,7 +300,7 @@ function fetchHistoricalData($pollingPlace, $currentElection) {
 
   $results = [];
 
-  foreach(fetchElections() as $election) {
+  foreach(fetchAllElections() as $election) {
     if($election["id"] === $currentElection["id"] || $election["db_table_name"] === "") {
       continue;
     }
