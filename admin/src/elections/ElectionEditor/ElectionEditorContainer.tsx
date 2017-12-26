@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
+import { cloneDeep } from "lodash-es"
 
 import ElectionEditor from "./ElectionEditor"
 import { IStore, IElection } from "../../redux/modules/interfaces"
@@ -42,11 +43,12 @@ const toFormValues = (election: IElection) => {
     has_division_boundaries: election.has_division_boundaries,
     is_active: election.is_active,
     hidden: election.hidden,
+    election_day: new Date(election.election_day),
   }
 }
 
 const fromFormValues = (formValues: any): IElection => {
-  let formValuesCopy = JSON.parse(JSON.stringify(formValues))
+  let formValuesCopy = cloneDeep(formValues)
   return {
     ...formValuesCopy,
     lon: parseFloat(formValuesCopy.lon),
@@ -55,13 +57,13 @@ const fromFormValues = (formValues: any): IElection => {
 }
 
 export class ElectionEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-  initialValues: object
+  initialValues: any
   componentWillMount() {
     const { election } = this.props
 
     // Each layer mounts this component anew, so store their initial layer form values.
     // e.g. For use in resetting the form state (Undo/Discard Changes)
-    this.initialValues = JSON.parse(JSON.stringify(toFormValues(election)))
+    this.initialValues = cloneDeep(toFormValues(election))
   }
   render() {
     const { election, onElectionEdited, isDirty, onFormSubmit, onSaveForm } = this.props
@@ -98,7 +100,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
     async onFormSubmit(values: object, election: IElection, onElectionEdited: Function) {
       const electionNew: Partial<IElection> = fromFormValues(values)
-
       const json = await dispatch(updateElection(election, electionNew))
       if (json.rows === 1) {
         // onElectionEdited()

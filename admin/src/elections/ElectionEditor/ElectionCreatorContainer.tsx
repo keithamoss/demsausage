@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
+import { cloneDeep } from "lodash-es"
 
 import ElectionEditor from "./ElectionEditor"
 import { IStore, IElection } from "../../redux/modules/interfaces"
@@ -26,7 +27,7 @@ export interface IStateProps {}
 interface IOwnProps {}
 
 const fromFormValues = (formValues: any): IElection => {
-  let formValuesCopy = JSON.parse(JSON.stringify(formValues))
+  let formValuesCopy = cloneDeep(formValues)
   return {
     ...formValuesCopy,
     lon: parseFloat(formValuesCopy.lon),

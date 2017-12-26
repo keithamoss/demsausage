@@ -1,6 +1,6 @@
 <?php
 $electionPKeyFieldName = "id";
-$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden");
+$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day");
 
 function translateElectionFromDB($row) {
   return [
@@ -12,7 +12,8 @@ function translateElectionFromDB($row) {
     "has_division_boundaries" => (bool)$row["has_division_boundaries"],
     "db_table_name" => $row["db_table_name"],
     "is_active" => (bool)$row["is_active"],
-    "hidden" => (bool)$row["hidden"]
+    "hidden" => (bool)$row["hidden"],
+    "election_day" => $row["election_day"],
   ];
 }
 

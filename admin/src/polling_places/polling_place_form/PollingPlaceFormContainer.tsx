@@ -2,6 +2,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
+import { cloneDeep } from "lodash-es"
 
 import PollingPlaceForm from "./PollingPlaceForm"
 import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
@@ -66,7 +67,7 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     hasOther.has_freetext = formValues.has_freetext
   }
 
-  let formValuesCopy = JSON.parse(JSON.stringify(formValues))
+  let formValuesCopy = cloneDeep(formValues)
   delete formValuesCopy.has_coffee
   delete formValuesCopy.has_vego
   delete formValuesCopy.has_halal
@@ -86,7 +87,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
 
     // Each layer mounts this component anew, so store their initial layer form values.
     // e.g. For use in resetting the form state (Undo/Discard Changes)
-    this.initialValues = JSON.parse(JSON.stringify(toFormValues(pollingPlace)))
+    this.initialValues = cloneDeep(toFormValues(pollingPlace))
   }
   render() {
     const { election, pollingPlace, onPollingPlaceEdited, isDirty, pollingPlaceTypes, onFormSubmit, onSaveForm } = this.props

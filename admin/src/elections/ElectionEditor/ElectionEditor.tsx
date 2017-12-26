@@ -6,9 +6,11 @@ import { IElection } from "../../redux/modules/interfaces"
 // import "./ElectionEditor.css"
 
 // import { grey100 } from "material-ui/styles/colors"
-import { TextField, SelectField, Checkbox } from "redux-form-material-ui"
+import { TextField, SelectField, Checkbox, DatePicker } from "redux-form-material-ui"
 import MenuItem from "material-ui/MenuItem"
 import RaisedButton from "material-ui/RaisedButton"
+
+const required = (value: any) => (value ? undefined : "Required")
 
 const PaddedCheckbox = styled(Checkbox)`
   margin-bottom: 16px;
@@ -52,13 +54,36 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
           component={TextField}
           floatingLabelText={"The name of the election (e.g. Federal Election 2018)"}
           fullWidth={true}
+          validate={[required]}
         />
 
-        <CustomField name="lon" component={TextField} floatingLabelText={"Longitude"} fullWidth={true} type="number" />
+        <CustomField
+          name="election_day"
+          component={DatePicker}
+          floatingLabelText={"What day is election day?"}
+          fullWidth={true}
+          mode="landscape"
+          required={true}
+        />
 
-        <CustomField name="lat" component={TextField} floatingLabelText={"Latitude"} fullWidth={true} type="number" />
+        <CustomField
+          name="lon"
+          component={TextField}
+          floatingLabelText={"Longitude"}
+          fullWidth={true}
+          type="number"
+          validate={[required]}
+        />
 
-        <CustomField name="default_zoom_level" component={SelectField} floatingLabelText={"Default map zoom level"} fullWidth={true}>
+        <CustomField name="lat" component={TextField} floatingLabelText={"Latitude"} fullWidth={true} type="number" validate={[required]} />
+
+        <CustomField
+          name="default_zoom_level"
+          component={SelectField}
+          floatingLabelText={"Default map zoom level"}
+          fullWidth={true}
+          validate={[required]}
+        >
           <MenuItem value={4} primaryText="4 (The whole country)" />
           <MenuItem value={5} primaryText="5 (Larger states and territories)" />
           <MenuItem value={6} primaryText="6 (Smaller states and territories)" />

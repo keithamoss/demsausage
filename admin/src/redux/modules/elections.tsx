@@ -84,6 +84,7 @@ export interface IElection {
   db_table_name: string
   is_active: boolean
   hidden: boolean
+  election_day: string // Datetime
 }
 
 // Side effects, only as applicable
@@ -133,6 +134,7 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
     const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
     if (response.status === 200) {
+      electionNew.id = election.id
       dispatch(loadElection(electionNew))
       dispatch(sendSnackbarNotification("Election updated! 🌭🎉"))
       return json
