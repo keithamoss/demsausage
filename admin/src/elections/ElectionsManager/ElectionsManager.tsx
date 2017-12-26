@@ -38,6 +38,18 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
             <ListItem
               key={election.id}
               primaryText={election.name}
+              secondaryText={
+                <span>
+                  {new Date(election.election_day).toLocaleDateString("en-AU", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                  {election.is_active ? " (ACTIVE)" : undefined}
+                  {election.hidden ? " (HIDDEN)" : undefined}
+                </span>
+              }
               onClick={this.onClickElection.bind(this, election)}
               rightIconButton={
                 <IconButton tooltip="Load polling places" onClick={this.onClickFileUpload.bind(this, election)}>

@@ -8,7 +8,7 @@ require_once "db.php";
 ############################
 // Fetch Elections
 if(stristr($_SERVER["QUERY_STRING"], "fetch-elections") !== false) {
-  $elections = fetchElections();
+  $elections = fetchPublicElections();
   echo json_encode($elections);
   closeDb();
 }
@@ -23,6 +23,13 @@ if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
 ############################
 # Super User Endpoints
 ############################
+// Fetch All Elections
+if(stristr($_SERVER["QUERY_STRING"], "fetch-all-elections") !== false) {
+  $elections = fetchAllElections();
+  echo json_encode($elections);
+  closeDb();
+}
+
 // Fetch pending stalls
 if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
   if(isAuthorisedUser("su") === false) {

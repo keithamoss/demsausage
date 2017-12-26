@@ -33,10 +33,21 @@ function translateElectionToDB($row) {
   return $new;
 }
 
-function fetchElections() {
+function fetchPublicElections() {
   global $file_db;
 
-  $stmt = $file_db->query("SELECT * FROM elections ORDER BY id DESC");
+  $stmt = $file_db->query("SELECT * FROM elections WHERE hidden != 1 ORDER BY election_day DESC");
+  $stalls = [];
+  while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+      $stalls[] = translateElectionFromDB($row);
+  }
+  return $stalls;
+}
+
+function fetchAllElections() {
+  global $file_db;
+
+  $stmt = $file_db->query("SELECT * FROM elections ORDER BY election_day DESC");
   $stalls = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
       $stalls[] = translateElectionFromDB($row);
