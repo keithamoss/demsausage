@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once "secrets.php";
 // require_once 'google-api-php-client/src/Google/autoload.php';
 require_once 'google-api-php-client-2.2.0/vendor/autoload.php';
 
@@ -50,8 +51,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   $plus_service = new Google_Service_Plus($client);
   $me = $plus_service->people->get("me", array("fields" => "emails"));
 
-  $secrets = (array)json_decode(file_get_contents("sausage_secrets.inc"));
-  if(isset($me["emails"]) && in_array($me["emails"][0]["value"], $secrets["authorised_users"])) {
+  if(isset($me["emails"]) && in_array($me["emails"][0]["value"], unserialize(AUTHORISED_USERS))) {
     // OK
     echo json_encode(array("success" => true, "user" => array("email" => $me["emails"][0]["value"])));
     // echo json_encode($me["emails"]);

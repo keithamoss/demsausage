@@ -1,5 +1,6 @@
 <?php
 // SELECT ST_X(the_geom) AS lon, ST_Y(the_geom) AS lat, * FROM federal_2016_polling_places_v1_1
+require_once "secrets.php";
 require_once "auth.php";
 require_once "db.php";
 

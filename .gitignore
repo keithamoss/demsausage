@@ -1,4 +1,5 @@
 /admin/.env
+/php/secrets.php
 /php/client_secrets.inc
 /php/sausage_secrets.inc
 /php/google-api-php-client-*

@@ -7,7 +7,7 @@ require_once "modules/stalls.php";
 $file_db = new PDO('sqlite:demsausage.sqlite3');
 $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-function failForAPI($msg = "") {
+function failForAPI($msg = "Failed for an unknown reason. Oh dear, Master Luke!") {
   http_response_code(500);
   if($msg !== "") {
     echo json_encode([

@@ -1,4 +1,6 @@
 <?php
+require_once "secrets.php";
+
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
@@ -63,8 +65,7 @@ function isAuthorisedUser($level = "su") {
 
     // Super Users can do anything
     if(isset($me["emails"])) {
-      $secrets = (array)json_decode(file_get_contents("sausage_secrets.inc"));
-      if(in_array($me["emails"][0]["value"], $secrets["authorised_users"])) {
+      if(in_array($me["emails"][0]["value"], unserialize(AUTHORISED_USERS))) {
         return true;
       }
     }
