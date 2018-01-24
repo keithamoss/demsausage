@@ -1,12 +1,41 @@
 <?php
-require_once "secrets.php";
+$mailgunEventsPKeyFieldName = "id";
+$mailgunEventsAllowedFields = array("timestamp", "type", "json");
+
+function translateMailgunEventToDB($row) {
+  $new = [];
+  foreach($row as $key => $val) {
+    if(in_array($key, ["json"])) {
+      $new[$key] = (gettype($val) === "string") ? $val : json_encode($val);
+    } elseif(in_array($key, ["id", "timestamp"])) {
+      $new[$key] = (int)$val;
+    } else {
+      $new[$key] = $val;
+    }
+  }
+  return $new;
+}
+
+function addMailgunEvent($timestamp, $event_type, $body) {
+  global $file_db, $mailgunEventsAllowedFields;
+
+  $params = [
+    "timestamp" => $timestamp,
+    "type" => $event_type,
+    "json" => json_encode($body),
+  ];
+  $insert = fieldsToInsertSQL("mailgun_events", $mailgunEventsAllowedFields, array_keys($params));
+  $stmt = $file_db->prepare($insert);
+  
+  return fieldsToStmnt($stmt, $mailgunEventsAllowedFields, $params);
+}
 
 function mailgunPOST(string $url, array $body) {
   $ch = curl_init();
 
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_USERPWD, MAILGUN_API_KEY);
+  curl_setopt($ch, CURLOPT_USERPWD, "api:" . MAILGUN_API_KEY);
   curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($body));
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -24,7 +53,7 @@ function mailgunGET(string $url, array $params) {
   $ch = curl_init();
 
   curl_setopt($ch, CURLOPT_URL, $url."?".http_build_query($params));
-  curl_setopt($ch, CURLOPT_USERPWD, MAILGUN_API_KEY);
+  curl_setopt($ch, CURLOPT_USERPWD, "api:" . MAILGUN_API_KEY);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
   $output = curl_exec($ch);
@@ -89,5 +118,16 @@ function sendStallApprovedEmail($toEmail, $toName, $mailInfo) {
     "html" => rollYourOwnTemplating("stall_approved", $mailInfo),
   );
   return sendMailgunEmail($body);
+}
+
+// https://documentation.mailgun.com/en/latest/user_manual.html#webhooks
+function verifyWebhook($apiKey, $token, $timestamp, $signature) {
+  // Check if the timestamp is fresh
+  if (abs(time() - $timestamp) > 15) {
+      return false;
+  }
+
+  // Returns true if signature is valid
+  return hash_hmac("sha256", $timestamp.$token, $apiKey) === $signature;
 }
 ?>

@@ -1,3 +1,4 @@
+/.vscode
 /admin/.env
 /php/secrets.php
 /php/client_secrets.inc

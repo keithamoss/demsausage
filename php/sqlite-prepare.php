@@ -197,6 +197,20 @@ EOT
   }
 }
 
+function createMailgunEvents() {
+  global $file_db;
+
+  $file_db->exec(<<<EOT
+    CREATE TABLE `mailgun_events` (
+      `id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+      `timestamp`	NUMERIC,
+      `type`	TEXT,
+      `json`	TEXT
+    );
+EOT
+  );
+}
+
 // ingestPendingStalls()
 // ingestPollingPlaces("qld_2017_polling_places");
 // ingestElections();
