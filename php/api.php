@@ -21,6 +21,14 @@ if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
   closeDb();
 }
 
+// Confirm Email
+if(stristr($_SERVER["QUERY_STRING"], "confirm-email") !== false) {
+  if(confirmEmailOptin($_GET["confirm_key"]) === true) {
+    echo "Email Confirmed :)";
+  }
+  closeDb();
+}
+
 ############################
 # Super User Endpoints
 ############################

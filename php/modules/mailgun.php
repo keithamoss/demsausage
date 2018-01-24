@@ -102,7 +102,12 @@ function sendMailgunEmail(array $body) {
   return mailgunPOST($url, $body);
 }
 
-function sendStallSubmittedEmail($toEmail, $toName, $mailInfo) {
+function sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo) {
+  // @TODO move this to the calling function and handle making it dependent on
+  // the email not having been confirmed elsewhere before.
+  $confirmUrl = BASE_URL."/api.php?confirm-email=1&confirm_key=" . makeConfirmationHash($toEmail, $stallId);
+  $mailInfo["CONFIRM_LINK"] = "Blah blah blah confirm email <a href='$confirmUrl'>here</a>.<br /><br/>";
+
   $body = array(
     "to" => "$toName <$toEmail>",
     "subject" => "Your Democracy Sausage stall has been received!",
@@ -129,5 +134,13 @@ function verifyWebhook($apiKey, $token, $timestamp, $signature) {
 
   // Returns true if signature is valid
   return hash_hmac("sha256", $timestamp.$token, $apiKey) === $signature;
+}
+
+function makeConfirmationHash($email, $stallId) {
+  return hash_hmac("sha256", $email.$stallId.MAILGUN_CONFIRM_SECRET, MAILGUN_HMAC_KEY);
+}
+
+function checkConfirmationHash($email, $stallId, $confirmCode) {
+  return hash_hmac("sha256", $email.$stallId.MAILGUN_CONFIRM_SECRET, MAILGUN_HMAC_KEY) === $confirmCode;
 }
 ?>

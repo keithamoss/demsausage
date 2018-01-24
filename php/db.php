@@ -27,6 +27,11 @@ function failForAuthReasons($msg = "You do not have access to this resource.") {
   closeDb();
 }
 
+function failNicelyForAuthReasons($msg = "You do not have access to this resource.") {
+  echo $msg;
+  closeDb();
+}
+
 function closeDb() {
   global $file_db;
 

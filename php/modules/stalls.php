@@ -2,7 +2,7 @@
 require_once "modules/mailgun.php";
 
 $pendingStallsPKeyFieldName = "id";
-$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "polling_place_id", "polling_place_premises", "elections_id", "active");
+$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "polling_place_id", "polling_place_premises", "elections_id", "active", "mail_confirm_key", "mail_confirmed");
 
 function translateStallFromDB($row) {
   return [
@@ -18,7 +18,9 @@ function translateStallFromDB($row) {
     "polling_place_id" => (int)$row["polling_place_id"],
     "polling_place_premises" => $row["polling_place_premises"],
     "elections_id" => (int)$row["elections_id"],
-    "active" => (bool)$row["active"]
+    "active" => (bool)$row["active"],
+    "mail_confirm_key" => $row["mail_confirm_key"],
+    "mail_confirmed" => (bool)$row["mail_confirmed"]
   ];
 }
 
@@ -105,5 +107,37 @@ function fetchPendingStalls() {
       $stalls[] = translateStallFromDB($row);
   }
   return $stalls;
+}
+
+function fetchPendingStallByMailConfirmCode($confirmKey) {
+  global $file_db;
+
+  $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE mail_confirm_key = :mail_confirm_key");
+  $stmt->bindParam(":mail_confirm_key", $confirmKey);
+  $stmt->execute();
+  return $stmt->fetch(\PDO::FETCH_ASSOC);
+}
+
+function confirmEmailOptin($confirmKey) {
+  global $file_db;
+
+  $stall = fetchPendingStallByMailConfirmCode($confirmKey);
+  if(!(is_array($stall) && isset($stall["id"]))) {
+    failNicelyForAuthReasons("Unable to find stall.");
+  }
+
+  if(checkConfirmationHash($stall["contact_email"], $stall["id"], $confirmKey) === false) {
+    failNicelyForAuthReasons("Confirmation code has expired.");
+  }
+
+  if($stall["mail_confirmed"] == 1) {
+    failNicelyForAuthReasons("Your email has already been confirmed :)");
+  }
+
+  $stmt = $file_db->prepare("UPDATE pending_stalls SET mail_confirmed = 1 WHERE id = :stall_id");
+  $stmt->bindParam(":stall_id", $stall["id"]);
+  
+  $stmt->execute();
+  return ($stmt->rowCount() === 1);
 }
 ?>

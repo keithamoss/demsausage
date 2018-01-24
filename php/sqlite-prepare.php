@@ -24,7 +24,9 @@ function ingestPendingStalls() {
       `polling_place_id`	INTEGER,
       `polling_place_premises`	TEXT,
       `elections_id`	INTEGER,
-      `active` INTEGER
+      `active` INTEGER DEFAULT 1,
+      `mail_confirm_key`	TEXT,
+      `mail_confirmed`	INTEGER DEFAULT 0
     )
 EOT
   );
