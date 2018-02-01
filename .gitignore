@@ -1,5 +1,6 @@
 /.vscode
 /admin/.env
+/public/.env
 /php/secrets.php
 /php/elections/*.geojson
 /php/client_secrets.inc
