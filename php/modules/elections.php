@@ -65,6 +65,16 @@ function fetchElection($id) {
   return translateElectionFromDB($row);
 }
 
+function fetchElectionByName($electionTableName) {
+  global $file_db;
+
+  $stmt = $file_db->query("SELECT * FROM elections WHERE db_table_name = :db_table_name");
+  $stmt->bindParam(":db_table_name", $electionTableName);
+  $stmt->execute();
+  $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+  return translateElectionFromDB($row);
+}
+
 function createElection(array $params) {
   global $file_db, $electionAllowedFields;
 

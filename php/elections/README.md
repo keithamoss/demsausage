@@ -1,0 +1,1 @@
+Static GeoJSON files containing polling place data for each election.

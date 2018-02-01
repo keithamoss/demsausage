@@ -64,21 +64,36 @@ function translatePollingPlaceToDB($row) {
 }
 
 // electionTableName
-function updatePollingPlace($id, array $params, string $electionId) {
+function updatePollingPlace($id, array $params, string $electionId, boolean $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
   $election = fetchElection($electionId);
   $pollingPlace = translatePollingPlaceToDB($params);
   
-  return updateTable($id, $pollingPlace, $election["db_table_name"], $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
+  $rowCount = updateTable($id, $pollingPlace, $election["db_table_name"], $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
+
+  // Regenerate the polling place GeoJSON
+  if($regenerateGeoJSON === true) {
+    regeneratePollingPlaceGeoJSON($electionId);
+  }
+
+  return $rowCount;
 }
 
-function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName) {
+function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, boolean $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
   $pollingPlace = translatePollingPlaceToDB($params);
   
-  return updateTable($id, $pollingPlace, $electionTableName, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
+  $rowCount = updateTable($id, $pollingPlace, $electionTableName, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
+
+  // Regenerate the polling place GeoJSON
+  if($regenerateGeoJSON === true) {
+    $election = fetchElectionByName($electionTableName);
+    regeneratePollingPlaceGeoJSON($election["id"]);
+  }
+
+  return $rowCount;
 }
 
 function searchPollingPlaces($searchTerm, string $electionId) {
@@ -526,7 +541,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     $divisions = implode(", ", array_map(function($pollingPlace) {
       return $pollingPlace["division"];
     }, $pollingPlaces));
-    updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"]);
+    updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"], false);
 
     // Remove the duplicate polling places
     foreach($pollingPlaces as $pollingPlace) {
@@ -599,7 +614,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
           "message" => "Polling Place '" . $pollingPlace["polling_place_name"] . "': Detected polling place type of '" . $detectedPollingPlaceType . "' is not valid.",
         ];
       } else {
-        updatePollingPlaceByElectionTableName($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"]);
+        updatePollingPlaceByElectionTableName($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"], false);
       }
     }
 
@@ -610,7 +625,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     $score = array_sum($pollingPlaceScores);
     $chance = $score / count($historical);
 
-    updatePollingPlaceByElectionTableName($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"]);
+    updatePollingPlaceByElectionTableName($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"], false);
   }
 
   if($noHistoricalDataCount > 0) {
@@ -651,7 +666,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
           "ess_stall_id" => $pollingPlace["ess_stall_id"],
           "ess_stall_url" => $pollingPlace["ess_stall_url"],
         ];
-        updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"]);
+        updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
 
         // Update the pending_stalls table to point to the new id
         $stallsUpdated = updateStallPollingPlaceId($election["id"], $pollingPlace["pollingPlace"]["id"], $newPollingPlaces[0]["id"]);
@@ -687,6 +702,9 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
       // Discard our temporary table
       $file_db->exec("DROP TABLE " . $response["table_name"]);
       $response["table_name"] = null;
+
+      // Regenerate the polling place GeoJSON
+      regeneratePollingPlaceGeoJSON($election["id"]);
     }
   } elseif($dryrun === true) {
     // Discard our temporary table
@@ -695,5 +713,44 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   }
 
   return $response;
+}
+
+function createPollingPlaceGeoJSON($electionId) {
+  $geoJSONFeatures = [];
+  $pollingPlaces = fetchAllPollingPlaces($electionId);
+
+  if(count($pollingPlaces) > 0) {
+    foreach($pollingPlaces as $row) {
+      $feature = new stdClass();
+      $feature->type = "Feature";
+      $feature->geometry = new stdClass();
+      $feature->geometry->type = "Point";
+      $feature->geometry->coordinates = [$row["lon"], $row["lat"]];
+      $feature->properties = new stdClass();
+      $feature->properties->id = $row["id"];
+      $feature->properties->has_bbq = $row["has_bbq"];
+      $feature->properties->has_caek = $row["has_caek"];
+      $feature->properties->has_nothing = $row["has_nothing"];
+      $feature->properties->has_run_out = $row["has_run_out"];
+
+      $geoJSONFeatures[] = $feature;
+    }
+
+    $geojsonFeatureCollection = new stdClass();
+    $geojsonFeatureCollection->type = "FeatureCollection";
+    $geojsonFeatureCollection->features = $geoJSONFeatures;
+
+    $existing = "./elections/election-$electionId.geojson";
+    $tmp = "./elections/election-$electionId.geojson.tmp";
+    file_put_contents($tmp, json_encode($geojsonFeatureCollection));
+    rename($tmp, $existing);
+  }
+}
+
+function regeneratePollingPlaceGeoJSON($electionId) {
+  // Send a HTTP request to $url that doesn't wait for a response?
+  // $url = BASE_URL."/api.php?regenerate-geojson=1&electionId=10";
+  
+  createPollingPlaceGeoJSON($electionId);
 }
 ?>

@@ -14,6 +14,12 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-elections") !== false) {
   closeDb();
 }
 
+// Regenerate Polling Place GeoJSON
+if(stristr($_SERVER["QUERY_STRING"], "regenerate-geojson") !== false) {
+  createPollingPlaceGeoJSON($_GET["electionId"]);
+  closeDb();
+}
+
 // Add Pending Stall
 if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
   // $params = array("stall_name" => "Foo", "stall_description" => "Bar");
@@ -163,7 +169,7 @@ if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
     failForAuthReasons();
   }
   
-  $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionId"]);
+  $rowCount = updatePollingPlace($_GET["pollingPlaceId"], $_GET["pollingPlace"], $_GET["electionId"], true);
   if($rowCount !== 1) {
     failForAPI("Failed to update polling place. (Error: $rowCount)");
   } else {
