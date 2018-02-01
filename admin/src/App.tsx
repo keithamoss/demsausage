@@ -29,117 +29,127 @@ import ActionExitToApp from "material-ui/svg-icons/action/exit-to-app"
 // const logo = require("./logo.svg")
 
 const HiddenIconButton = styled(IconButton)`
-  width: 0px !important;
-  height: 0px !important;
-  padding: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    padding: 0px !important;
 `
 
 const HeaderBarButton = styled(FlatButton)`
-  color: #ffffff !important;
-  margin: 4px 0px !important;
+    color: #ffffff !important;
+    margin: 4px 0px !important;
 `
 
 export interface IProps {
-  muiThemePalette: any
-  app: IAppModule
-  user: IUser
-  snackbars: ISnackbarsModule
-  elections: IElections
-  currentElection: IElection
-  handleSnackbarClose: any
-  onChangeElection: any
-  doLogout: any
-  content: any
+    muiThemePalette: any
+    app: IAppModule
+    user: IUser
+    snackbars: ISnackbarsModule
+    elections: IElections
+    currentElection: IElection
+    handleSnackbarClose: any
+    onChangeElection: any
+    doLogout: any
+    content: any
 }
 
 class App extends React.Component<IProps, {}> {
-  render() {
-    const {
-      muiThemePalette,
-      app,
-      user,
-      snackbars,
-      elections,
-      currentElection,
-      handleSnackbarClose,
-      doLogout,
-      onChangeElection,
-      content,
-    } = this.props
+    render() {
+        const {
+            muiThemePalette,
+            app,
+            user,
+            snackbars,
+            elections,
+            currentElection,
+            handleSnackbarClose,
+            doLogout,
+            onChangeElection,
+            content,
+        } = this.props
 
-    const styles: React.CSSProperties = {
-      linearProgressStyle: {
-        position: "fixed",
-        top: "0px",
-        zIndex: 1200,
-        display: app.requestsInProgress > 0 ? "block" : "none",
-      },
+        const styles: React.CSSProperties = {
+            linearProgressStyle: {
+                position: "fixed",
+                top: "0px",
+                zIndex: 1200,
+                display: app.requestsInProgress > 0 ? "block" : "none",
+            },
+        }
+
+        return (
+            <div className="page">
+                <div className="page-header">
+                    <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
+                    <AppBar
+                        title={"Democracy Sausage Admin Console"}
+                        iconElementRight={
+                            <ToolbarGroup>
+                                <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />
+                                {user !== null && <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} />}
+                                {user !== null && (
+                                    <IconMenu iconButtonElement={<HiddenIconButton />}>
+                                        <MenuItem primaryText="Logout" leftIcon={<ActionExitToApp />} onClick={doLogout} />
+                                    </IconMenu>
+                                )}
+                            </ToolbarGroup>
+                        }
+                    />
+                </div>
+                <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
+                    <LoginDialog open={user === null} />
+                    <main className="page-main-content">{content || this.props.children}</main>
+                    <nav className="page-nav">
+                        <List>
+                            <ListItem disabled={true} leftIcon={<ContentInbox />}>
+                                <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
+                                    {Object.keys(elections)
+                                        .map(k => elections[k])
+                                        .sort((a: IElection, b: IElection) => b.id - a.id)
+                                        .map((election: IElection) => (
+                                            <MenuItem key={election.id} value={election.id} primaryText={election.name} />
+                                        ))}
+                                </SelectField>
+                            </ListItem>
+
+                            <ListItem
+                                primaryText="Review Pending Stalls"
+                                leftIcon={<ContentSend />}
+                                containerElement={<Link to={`/stalls`} />}
+                            />
+                            <ListItem
+                                primaryText="Edit Polling Places"
+                                leftIcon={<ActionGrade />}
+                                containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
+                            />
+                            <ListItem
+                                primaryText="Edit Polling Place Types"
+                                leftIcon={<ContentDrafts />}
+                                containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
+                            />
+                            <ListItem
+                                primaryText="Election Management"
+                                leftIcon={<ContentInbox />}
+                                containerElement={<Link to={`/elections`} />}
+                            />
+                            {/* <ListItem primaryText="User Management" leftIcon={<ContentInbox />} /> */}
+                        </List>
+                    </nav>
+                </div>
+                <Snackbar
+                    open={snackbars.open}
+                    message={snackbars.active.message}
+                    action={snackbars.active.action}
+                    autoHideDuration={snackbars.active.autoHideDuration}
+                    onActionTouchTap={() => {
+                        if ("onActionTouchTap" in snackbars.active) {
+                            snackbars.active.onActionTouchTap!()
+                        }
+                    }}
+                    onRequestClose={handleSnackbarClose}
+                />
+            </div>
+        )
     }
-
-    return (
-      <div className="page">
-        <div className="page-header">
-          <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
-          <AppBar
-            title={"Democracy Sausage Admin Console"}
-            iconElementRight={
-              <ToolbarGroup>
-                <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />
-                {user !== null && <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} />}
-                {user !== null && (
-                  <IconMenu iconButtonElement={<HiddenIconButton />}>
-                    <MenuItem primaryText="Logout" leftIcon={<ActionExitToApp />} onClick={doLogout} />
-                  </IconMenu>
-                )}
-              </ToolbarGroup>
-            }
-          />
-        </div>
-        <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
-          <LoginDialog open={user === null} />
-          <main className="page-main-content">{content || this.props.children}</main>
-          <nav className="page-nav">
-            <List>
-              <ListItem disabled={true} leftIcon={<ContentInbox />}>
-                <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
-                  {Object.keys(elections)
-                    .map(k => elections[k])
-                    .sort((a: IElection, b: IElection) => b.id - a.id)
-                    .map((election: IElection) => <MenuItem key={election.id} value={election.id} primaryText={election.name} />)}
-                </SelectField>
-              </ListItem>
-
-              <ListItem primaryText="Review Pending Stalls" leftIcon={<ContentSend />} containerElement={<Link to={`/stalls`} />} />
-              <ListItem
-                primaryText="Edit Polling Places"
-                leftIcon={<ActionGrade />}
-                containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
-              />
-              <ListItem
-                primaryText="Edit Polling Place Types"
-                leftIcon={<ContentDrafts />}
-                containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
-              />
-              <ListItem primaryText="Election Management" leftIcon={<ContentInbox />} containerElement={<Link to={`/elections`} />} />
-              {/* <ListItem primaryText="User Management" leftIcon={<ContentInbox />} /> */}
-            </List>
-          </nav>
-        </div>
-        <Snackbar
-          open={snackbars.open}
-          message={snackbars.active.message}
-          action={snackbars.active.action}
-          autoHideDuration={snackbars.active.autoHideDuration}
-          onActionTouchTap={() => {
-            if ("onActionTouchTap" in snackbars.active) {
-              snackbars.active.onActionTouchTap!()
-            }
-          }}
-          onRequestClose={handleSnackbarClose}
-        />
-      </div>
-    )
-  }
 }
 
 export default App
