@@ -20,7 +20,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme"
 
 import App from "./App"
 import { connect } from "react-redux"
-import { fetchInitialAppState } from "./redux/modules/app"
+import { fetchInitialAppState, toggleSidebarState } from "./redux/modules/app"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 
 // import CircularProgress from "material-ui/CircularProgress"
@@ -63,6 +63,7 @@ export interface IStoreProps {
 export interface IDispatchProps {
     fetchInitialAppState: Function
     handleSnackbarClose: Function
+    toggleSidebar: Function
     onChangeElection: Function
 }
 
@@ -84,7 +85,17 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
     }
 
     render() {
-        const { app, snackbars, elections, currentElection, handleSnackbarClose, onChangeElection, children, content } = this.props
+        const {
+            app,
+            snackbars,
+            elections,
+            currentElection,
+            handleSnackbarClose,
+            toggleSidebar,
+            onChangeElection,
+            children,
+            content,
+        } = this.props
 
         if (app.loading === true) {
             return (
@@ -105,6 +116,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     elections={elections}
                     currentElection={currentElection}
                     handleSnackbarClose={handleSnackbarClose}
+                    toggleSidebar={toggleSidebar}
                     onChangeElection={onChangeElection}
                     children={children}
                     content={content}
@@ -134,6 +146,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             if (reason === "timeout") {
                 dispatch(iterateSnackbar())
             }
+        },
+        toggleSidebar: () => {
+            dispatch(toggleSidebarState())
         },
         onChangeElection: (event: any, index: number, electionId: string) => {
             dispatch(setCurrentElection(electionId))

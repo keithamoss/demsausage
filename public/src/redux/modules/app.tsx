@@ -21,7 +21,7 @@ export enum eAppEnv {
 const initialState: IModule = {
     loading: true,
     requestsInProgress: 0,
-    sidebarOpen: true,
+    sidebarOpen: false,
     previousPath: "",
     modals: new Map(),
 }

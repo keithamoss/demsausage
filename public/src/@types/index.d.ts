@@ -13,4 +13,5 @@ declare module "react-google-maps"
 declare module "react-string-replace"
 declare module "react-tiny-virtual-list"
 declare module "material-ui-bottom-sheet"
+declare module "react-openlayers"
 // declare function require(string: string): string

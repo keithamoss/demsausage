@@ -8,7 +8,7 @@ body,
     font-family: "Roboto", sans-serif;
 }
 
-body {
+.page {
     overflow: hidden;
     margin: 0;
 }
@@ -16,41 +16,22 @@ body {
 .page {
     display: flex;
     flex-direction: column;
-}
-
-.page-header {
-    flex: 0 0 auto;
-    background-color: #dcdcdc;
+    height: 100vh;
 }
 
 .page-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    flex: 1; /* this is the key; consumes all available height */
 }
 
 .page-nav {
-    order: -1;
-    overflow: auto;
+    background-color: white;
+    z-index: 1400;
 }
 
-@media (min-width: 768px) {
-    .page-content {
-        flex-direction: row;
-        flex: 1;
-    }
-    .page-main-content {
-        flex: 1;
-        padding-top: 10px;
-        padding-left: 10px;
-        padding-right: 20px;
-        overflow-y: scroll;
-    }
-    .page-main-content > div {
-        height: 100%;
-    }
-    .page-nav {
-        /* Third param is the width of the column */
-        flex: 0 0 24em;
-    }
+.openlayers-map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
 }

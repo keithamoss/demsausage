@@ -1,22 +1,33 @@
 import * as React from "react"
 // import styled from "styled-components"
-// import { Link } from "react-router"
+import { Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
+
+import {
+    // interaction,
+    layer,
+    // custom,
+    // control, // name spaces
+    // Interactions,
+    // Overlays,
+    Controls, // group
+    Map,
+    Layers,
+    // Overlay,
+    // Util, // objects
+} from "react-openlayers"
 
 import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
 
-// import FloatingActionButton from "material-ui/FloatingActionButton"
-import { ExpandableBottomSheet } from "material-ui-bottom-sheet"
-import { DeviceAccessTime, MapsDirectionsCar, MapsPlace, MapsLocalPhone } from "material-ui/svg-icons"
-import { List, ListItem } from "material-ui"
-import Divider from "material-ui/Divider"
+import { MapsDirectionsCar, MapsPlace } from "material-ui/svg-icons"
+import IconLocationOn from "material-ui/svg-icons/communication/location-on"
 
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
-import IconLocationOn from "material-ui/svg-icons/communication/location-on"
+import { List, ListItem } from "material-ui/List"
 
 // const logo = require("./logo.svg")
 
@@ -27,13 +38,14 @@ export interface IProps {
     elections: IElections
     currentElection: IElection
     handleSnackbarClose: any
+    toggleSidebar: any
     onChangeElection: any
     content: any
 }
 
 class App extends React.Component<IProps, {}> {
     render() {
-        const { muiThemePalette, app, snackbars, handleSnackbarClose, content } = this.props
+        const { muiThemePalette, app, snackbars, handleSnackbarClose, toggleSidebar, content } = this.props
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -48,90 +60,59 @@ class App extends React.Component<IProps, {}> {
             <div className="page">
                 <div className="page-header">
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
-                    <AppBar title={"Democracy Sausage"} />
+                    <AppBar title={"Democracy Sausage"} onLeftIconButtonTouchTap={() => toggleSidebar()} />
                 </div>
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <main className="page-main-content">
                         {content || this.props.children}
 
-                        <ExpandableBottomSheet
-                            style={{ backgroundColor: "none" }}
-                            bodyStyle={{ marginTop: "93vh" }}
-                            // action={
-                            //     <FloatingActionButton zDepth={1}>
-                            //         <MapsDirectionsCar />
-                            //     </FloatingActionButton>
-                            // }
-                            // onRequestClose={() => setState({isOpen: false})}
-                            onRequestClose={() => console.log("onRequestClose")}
-                            onTopReached={() => console.log("onTopReached")}
-                            // open={state.isOpen}
-                            open={true}
-                        >
-                            <Paper zDepth={0}>
-                                <BottomNavigation>
-                                    <BottomNavigationItem
-                                        label="Find"
-                                        icon={<MapsLocalPhone />}
-                                        // onClick={() => this.select(1)}
-                                    />
-                                    <BottomNavigationItem
-                                        label="Report"
-                                        icon={<MapsDirectionsCar />}
-                                        // onClick={() => this.select(2)}
-                                    />
-                                    <BottomNavigationItem
-                                        label="Sausagelytics"
-                                        icon={<IconLocationOn />}
-                                        // onClick={() => this.select(2)}
-                                    />
-                                </BottomNavigation>
-                            </Paper>
-
-                            <h1 style={{ marginLeft: 72, marginTop: 40 }}>Dandelion Chocolate</h1>
-                            <Divider inset={true} />
-                            <List>
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                                <ListItem primaryText="740 Valencia St, San Francisco, CA" leftIcon={<MapsPlace />} />
-                                <ListItem primaryText="(415) 349-0942" leftIcon={<MapsLocalPhone />} />
-                                <ListItem primaryText="Wed, 10 AM - 9 PM" leftIcon={<DeviceAccessTime />} />
-                            </List>
-                        </ExpandableBottomSheet>
+                        <Map view={{ center: [0, 0], zoom: 2 }}>
+                            <Layers>
+                                <layer.Tile />
+                                {/* <layer.Vector source={markers} style={markers.style} zIndex="1" /> */}
+                            </Layers>
+                            <Controls zoom={false} />
+                        </Map>
                     </main>
 
-                    {/* <nav className="page-nav">
-                        <List>
-                            <ListItem
-                                primaryText="Review Pending Stalls"
-                                leftIcon={<DeviceAccessTime />}
-                                containerElement={<Link to={`/stalls`} />}
-                            />
-                        </List>
-                    </nav> */}
+                    {app.sidebarOpen && (
+                        <nav className="page-nav">
+                            <List>
+                                <ListItem
+                                    primaryText="Review Pending Stalls"
+                                    leftIcon={<IconLocationOn />}
+                                    containerElement={<Link to={`/stalls`} />}
+                                />
+                            </List>
+                        </nav>
+                    )}
                 </div>
+
+                <Paper zDepth={1} className="footer">
+                    <BottomNavigation>
+                        <BottomNavigationItem
+                            label="Map"
+                            icon={<IconLocationOn />}
+                            // onClick={() => this.select(1)}
+                        />
+                        <BottomNavigationItem
+                            label="Find"
+                            icon={<IconLocationOn />}
+                            // onClick={() => this.select(1)}
+                        />
+                        <BottomNavigationItem
+                            label="Report"
+                            icon={<MapsDirectionsCar />}
+                            // onClick={() => this.select(2)}
+                        />
+                        <BottomNavigationItem
+                            label="Sausagelytics"
+                            icon={<MapsPlace />}
+                            // onClick={() => this.select(2)}
+                        />
+                    </BottomNavigation>
+                </Paper>
+
                 <Snackbar
                     open={snackbars.open}
                     message={snackbars.active.message}
