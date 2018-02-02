@@ -1,5 +1,6 @@
 import * as React from "react"
 // import styled from "styled-components"
+// import { Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
 
@@ -70,17 +71,17 @@ class App extends React.Component<IProps, {}> {
                             <Paper zDepth={0}>
                                 <BottomNavigation>
                                     <BottomNavigationItem
-                                        label="Recents"
-                                        icon={<MapsDirectionsCar />}
-                                        // onClick={() => this.select(0)}
-                                    />
-                                    <BottomNavigationItem
-                                        label="Favorites"
+                                        label="Find"
                                         icon={<MapsLocalPhone />}
                                         // onClick={() => this.select(1)}
                                     />
                                     <BottomNavigationItem
-                                        label="Nearby"
+                                        label="Report"
+                                        icon={<MapsDirectionsCar />}
+                                        // onClick={() => this.select(2)}
+                                    />
+                                    <BottomNavigationItem
+                                        label="Sausagelytics"
                                         icon={<IconLocationOn />}
                                         // onClick={() => this.select(2)}
                                     />
@@ -120,6 +121,16 @@ class App extends React.Component<IProps, {}> {
                             </List>
                         </ExpandableBottomSheet>
                     </main>
+
+                    {/* <nav className="page-nav">
+                        <List>
+                            <ListItem
+                                primaryText="Review Pending Stalls"
+                                leftIcon={<DeviceAccessTime />}
+                                containerElement={<Link to={`/stalls`} />}
+                            />
+                        </List>
+                    </nav> */}
                 </div>
                 <Snackbar
                     open={snackbars.open}
