@@ -1,6 +1,5 @@
 <?php
-// require_once 'google-api-php-client/src/Google/autoload.php';
-require_once 'google-api-php-client-2.2.0/vendor/autoload.php';
+require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
 
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
   session_set_cookie_params(86400 * 365 * 5, "/");

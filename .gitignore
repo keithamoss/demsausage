@@ -10,3 +10,6 @@
 /php/carto-dump/*
 *.sqlite3*
 /python/*
+/db/*.sqlite3
+/db/carto-dump/*
+/google-api-php-client-2.2.0/*

@@ -6,7 +6,7 @@ header("Access-Control-Allow-Credentials: true");
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
   header("Access-Control-Allow-Origin: http://localhost:3000");
 } else {
-  header("Access-Control-Allow-Origin: http://" . $_SERVER["HTTP_HOST"]);
+  header("Access-Control-Allow-Origin: http://" . $_SERVER["HTTP_REFERER"]);
 }
 
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
@@ -39,9 +39,7 @@ session_start();
 //   exit;
 // }
 
-
-// require_once 'google-api-php-client/src/Google/autoload.php';
-require_once 'google-api-php-client-2.2.0/vendor/autoload.php';
+require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
 
 function isAuthorisedUser($level = "su") {
   $client = new Google_Client();
