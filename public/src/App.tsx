@@ -4,20 +4,6 @@ import { Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
 
-import {
-    // interaction,
-    layer,
-    // custom,
-    // control, // name spaces
-    // Interactions,
-    // Overlays,
-    Controls, // group
-    Map,
-    Layers,
-    // Overlay,
-    // Util, // objects
-} from "react-openlayers"
-
 import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
@@ -63,17 +49,7 @@ class App extends React.Component<IProps, {}> {
                     <AppBar title={"Democracy Sausage"} onLeftIconButtonTouchTap={() => toggleSidebar()} />
                 </div>
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
-                    <main className="page-main-content">
-                        {content || this.props.children}
-
-                        <Map view={{ center: [0, 0], zoom: 2 }}>
-                            <Layers>
-                                <layer.Tile />
-                                {/* <layer.Vector source={markers} style={markers.style} zIndex="1" /> */}
-                            </Layers>
-                            <Controls zoom={false} />
-                        </Map>
-                    </main>
+                    <main className="page-main-content">{content || this.props.children}</main>
 
                     {app.sidebarOpen && (
                         <nav className="page-nav">
