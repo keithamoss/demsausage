@@ -1,3 +1,4 @@
+README.dev.md
 /.vscode
 /admin/.env
 /public/.env
@@ -13,3 +14,4 @@
 /db/*.sqlite3
 /db/carto-dump/*
 /google-api-php-client-2.2.0/*
+/v3-test/*
