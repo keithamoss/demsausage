@@ -27,6 +27,8 @@ body,
 .page-nav {
     background-color: white;
     z-index: 1400;
+    height: 100vh;
+    width: 70%;
 }
 
 .openlayers-map {
