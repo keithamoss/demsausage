@@ -47,7 +47,7 @@ require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
 
 function isAuthorisedUser($level = "su") {
   $client = new Google_Client();
-  $client->setAuthConfigFile('client_secrets.inc');
+  $client->setAuthConfigFile('client_secrets.php');
   $client->addScope(Google_Service_Plus::USERINFO_EMAIL);
 
   if(isset($_SESSION['access_token']) && $_SESSION['access_token']) {

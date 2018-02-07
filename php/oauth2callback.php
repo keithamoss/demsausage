@@ -11,7 +11,7 @@ session_start();
 $client = new Google_Client();
 $client->setAccessType('offline');
 $client->setApprovalPrompt('force');
-$client->setAuthConfigFile('client_secrets.inc');
+$client->setAuthConfigFile('client_secrets.php');
 $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
 $client->addScope(Google_Service_Plus::USERINFO_EMAIL);
 

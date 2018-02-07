@@ -22,7 +22,7 @@ if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
 }
 
 $client = new Google_Client();
-$client->setAuthConfigFile('client_secrets.inc');
+$client->setAuthConfigFile('client_secrets.php');
 $client->addScope(Google_Service_Plus::USERINFO_EMAIL);
 
 header("Content-type: application/json");

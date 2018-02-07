@@ -13,7 +13,7 @@ if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
 session_start();
 
 $client = new Google_Client();
-$client->setAuthConfigFile('client_secrets.inc');
+$client->setAuthConfigFile('client_secrets.php');
 $client->addScope(Google_Service_Plus::USERINFO_EMAIL);
 
 if(isset($_GET["nuke_session"])) {
