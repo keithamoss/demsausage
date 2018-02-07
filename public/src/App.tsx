@@ -64,7 +64,7 @@ class App extends React.Component<IProps, {}> {
                     )}
                 </div>
 
-                <Paper zDepth={1} className="footer">
+                <Paper zDepth={1} className="page-footer">
                     <BottomNavigation>
                         <BottomNavigationItem
                             label="Map"

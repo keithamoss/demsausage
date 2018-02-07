@@ -2,25 +2,26 @@
 
 html,
 body,
-#root,
-.page {
-    height: 100%; /* needed for proper layout */
-    font-family: "Roboto", sans-serif;
-}
-
-.page {
-    overflow: hidden;
-    margin: 0;
+#root {
+    height: 100%;
 }
 
 .page {
     display: flex;
+    height: 100%;
     flex-direction: column;
-    height: 100vh;
+    font-family: "Roboto", sans-serif;
+}
+
+.page-header,
+.page-footer {
+    flex: none;
 }
 
 .page-content {
-    flex: 1; /* this is the key; consumes all available height */
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
 }
 
 .page-nav {
