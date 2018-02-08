@@ -7,6 +7,7 @@
         "lodash-es": "^4.17.4",
         "material-ui": "^0.19.4",
         "material-ui-bottom-sheet": "^0.5.1",
+        "material-ui-search-bar": "^0.4.1",
         "openlayers": "^4.6.4",
         "qs": "^6.5.1",
         "react": "^16.0.0",

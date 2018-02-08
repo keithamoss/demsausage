@@ -1,11 +1,22 @@
 import * as React from "react"
-// import styled from "styled-components"
+import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./SausageMap.css"
 import { IElection } from "../../redux/modules/interfaces"
 import { getAPIBaseURL } from "../../redux/modules/app"
 
 import * as ol from "openlayers"
+import SearchBar from "material-ui-search-bar"
+import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
+import { grey500 } from "material-ui/styles/colors"
+
+const SearchBarContainer = styled.div`
+    position: relative;
+    display: block;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+`
 
 export interface IProps {
     election: IElection
@@ -101,7 +112,24 @@ class SausageMap extends React.PureComponent<IProps, {}> {
     }
 
     render() {
-        return <div id="openlayers-map" className="openlayers-map" />
+        return (
+            <div>
+                <div id="openlayers-map" className="openlayers-map" />
+
+                <SearchBarContainer>
+                    <SearchBar
+                        hintText={"Find polling places with sausages"}
+                        onChange={() => console.log("onChange")}
+                        onRequestSearch={() => console.log("onRequestSearch")}
+                        searchIcon={<DeviceLocationSearching color={grey500} />}
+                        style={{
+                            margin: "0 auto",
+                            maxWidth: 800,
+                        }}
+                    />
+                </SearchBarContainer>
+            </div>
+        )
     }
 }
 
