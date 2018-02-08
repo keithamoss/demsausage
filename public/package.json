@@ -15,6 +15,7 @@
         "react-custom-scrollbars": "^4.2.1",
         "react-dom": "^16.0.0",
         "react-google-maps": "^9.2.2",
+        "react-google-maps-loader": "^4.1.0",
         "react-redux": "^5.0.6",
         "react-router": "^3.2.0",
         "react-router-redux": "^4.0.7",
