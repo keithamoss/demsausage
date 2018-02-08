@@ -8,7 +8,7 @@ import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
 
-import { MapsDirectionsCar, MapsPlace } from "material-ui/svg-icons"
+import { MapsMap, MapsAddLocation, ActionSearch } from "material-ui/svg-icons"
 import IconLocationOn from "material-ui/svg-icons/communication/location-on"
 
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
@@ -66,26 +66,15 @@ class App extends React.Component<IProps, {}> {
 
                 <Paper zDepth={1} className="page-footer">
                     <BottomNavigation>
-                        <BottomNavigationItem
-                            label="Map"
-                            icon={<IconLocationOn />}
-                            // onClick={() => this.select(1)}
-                        />
-                        <BottomNavigationItem
-                            label="Find"
-                            icon={<IconLocationOn />}
-                            // onClick={() => this.select(1)}
-                        />
-                        <BottomNavigationItem
-                            label="Report"
-                            icon={<MapsDirectionsCar />}
-                            // onClick={() => this.select(2)}
-                        />
-                        <BottomNavigationItem
-                            label="Sausagelytics"
-                            icon={<MapsPlace />}
-                            // onClick={() => this.select(2)}
-                        />
+                        <Link to={"/"}>
+                            <BottomNavigationItem label="Map" icon={<MapsMap />} />
+                        </Link>
+                        <Link to={"/search"}>
+                            <BottomNavigationItem label="Find" icon={<ActionSearch />} />
+                        </Link>
+                        <Link to={"/add-stall"}>
+                            <BottomNavigationItem label="Report" icon={<MapsAddLocation />} />} />
+                        </Link>
                     </BottomNavigation>
                 </Paper>
 
