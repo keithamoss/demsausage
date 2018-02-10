@@ -3,9 +3,11 @@ export { IEALGISApiClient, IHttpResponse, ICartoAPIResponse } from "../../shared
 export { IModule as IAppModule, eAppEnv } from "./app"
 export { IModule as ISnackbarsModule } from "./snackbars"
 export { IModule as IElectionsModule, IElections, IElection } from "./elections"
+export { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 export {
     IModule as IPollingPlacesModule,
     IPollingPlace,
+    IPollingPlaceSearchResult,
     IPollingPlaceLoaderResponse,
     IPollingPlaceLoaderResponseMessage,
 } from "./polling_places"

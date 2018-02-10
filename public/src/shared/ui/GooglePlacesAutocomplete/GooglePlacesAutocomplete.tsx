@@ -8,11 +8,16 @@
  * Go back and have a go at that later on.
  */
 
+/**
+ * IMPORTANT!
+ * Hacked for Democracy Sausage to handle using /TeamWertarbyte/material-ui-search-bar
+ * instead of Material UI's Autocomplete.
+ */
+
 import * as React from "react"
-// import { AutoComplete, MenuItem } from "material-ui"
+import { isEqual } from "lodash-es"
 import { MenuItem } from "material-ui"
 import SearchBar from "material-ui-search-bar"
-// import Marker from "material-ui/svg-icons/maps/place"
 
 // const styles: React.CSSProperties = {
 //     menuItem: {
@@ -64,22 +69,52 @@ export interface IProps {
     results?: Function
     // Our props
     inputStyle?: object
+    // Begin Democracy Sausage customisation
     onReceiveSearchResults: any
-    onRequestSearch: any
+    onRequestSearch?: any
     searchIcon: any
+    // End Democracy Sausage customisation
     name?: string
     // Internals
 }
 
 export interface IState {
-    data?: Array<any>
+    data: Array<IGoogleAddressSearchResult>
     searchText?: string
 }
 
 declare global {
+    // tslint:disable-next-line:interface-name
     interface Window {
         google: any
     }
+}
+
+export interface IGoogleAddressSearchResult {
+    id: string
+    place_id: string
+    description: string
+    reference: string
+    matched_substrings: Array<{ length: number; offset: number }>
+    structured_formatting: {
+        main_text: string
+        main_text_matched_substrings: Array<{ length: number; offset: number }>
+        secondary_text: string
+    }
+    terms: Array<{ offset: number; value: string }>
+    types: Array<string>
+}
+
+export interface IGoogleGeocodeResult {
+    address_components: Array<{ long_name: string; short_name: string; types: Array<string> }>
+    formatted_address: string
+    geometry: {
+        bounds: Function
+        location: Function
+        location_type: string
+        viewport: Function
+    }
+    types: Array<string>
 }
 
 class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
@@ -143,9 +178,14 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         }
     }
 
-    populateData(array: Array<any>) {
-        this.setState({ data: array })
-        this.props.onReceiveSearchResults(array)
+    populateData(array: Array<IGoogleAddressSearchResult>) {
+        const currentPlaceIds: Array<string> = this.state.data.map((o: IGoogleAddressSearchResult) => o.place_id)
+        const newPlaceIds: Array<string> = array.map((o: IGoogleAddressSearchResult) => o.place_id)
+
+        if (isEqual(currentPlaceIds, newPlaceIds) === false) {
+            this.props.onReceiveSearchResults(array)
+            this.setState({ data: array })
+        }
     }
 
     getPoweredByGoogleMenuItem() {
@@ -165,6 +205,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                                 alt="presentation"
                             />
                         </div>
+                        // tslint:disable-next-line:jsx-curly-spacing
                     }
                 />
             ),
@@ -175,53 +216,13 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         // https://github.com/callemall/material-ui/pull/6231
         const { componentRestrictions, onReceiveSearchResults, ...autocompleteProps } = this.props
 
-        // console.log("searchText", this.state.searchText)
-        // console.log("data", this.state.data)
-
-        // console.log("foo1")
-        // onReceiveSearchResults(this.state.data)
-        // console.log("foo2")
-
         return (
             <SearchBar
                 {...autocompleteProps as any}
                 // Used by Google Places API / No user input
                 searchText={this.state.searchText}
                 onChange={this.updateInput}
-                // searchIcon={<DeviceLocationSearching color={grey500} />}
             />
-
-            // <AutoComplete
-            //     {...autocompleteProps as any}
-            //     // Used by Google Places API / No user input
-            //     searchText={this.state.searchText}
-            //     onUpdateInput={this.updateInput}
-            //     filter={AutoComplete.noFilter}
-            //     onNewRequest={(chosenRequest, index) => {
-            //         this.getLatLgn(chosenRequest.placeId, (results: Array<any>, status: any) => {
-            //             this.props.results!(results[0].geometry.location.lat(), results[0].geometry.location.lng(), results[0])
-            //         })
-            //     }}
-            //     dataSource={this.state.data!.map((item, i, a) => {
-            //         if (i === a.length - 1) {
-            //             return this.getPoweredByGoogleMenuItem()
-            //         }
-
-            //         return {
-            //             text: item.description,
-            //             placeId: item.place_id,
-            //             value: (
-            //                 <MenuItem
-            //                     style={this.props.menuItemStyle || styles.menuItem}
-            //                     innerDivStyle={this.props.innerDivStyle || styles.menuItemInnerDiv}
-            //                     leftIcon={<Marker style={styles.menuItemMarker} />}
-            //                     // Used by Google Places / No user input
-            //                     primaryText={item.description}
-            //                 />
-            //             ),
-            //         }
-            //     })}
-            // />
         )
     }
 }
