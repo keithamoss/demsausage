@@ -109,10 +109,10 @@ export interface IGoogleGeocodeResult {
     address_components: Array<{ long_name: string; short_name: string; types: Array<string> }>
     formatted_address: string
     geometry: {
-        bounds: Function
-        location: Function
+        bounds: any
+        location: any
         location_type: string
-        viewport: Function
+        viewport: any
     }
     types: Array<string>
 }

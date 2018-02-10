@@ -2,7 +2,14 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import PollingPlaceFinder from "./PollingPlaceFinder"
-import { IStore, IElection, IGoogleGeocodeResult, IGoogleAddressSearchResult } from "../../redux/modules/interfaces"
+import {
+    IStore,
+    IElection,
+    IGoogleGeocodeResult,
+    IGoogleAddressSearchResult,
+    IPollingPlaceSearchResult,
+} from "../../redux/modules/interfaces"
+import { fetchNearbyPollingPlaces } from "../../redux/modules/polling_places"
 
 export interface IStoreProps {
     currentElection: IElection
@@ -64,10 +71,11 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         findNearestPollingPlaces: (election: IElection, value: IGoogleAddressSearchResult) => {
             const google = window.google
             const geocoder = new google.maps.Geocoder()
-            geocoder.geocode({ placeId: value.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
-                // results[0].geometry.location.lat()
-                // results[0].geometry.location.lng()
-                console.log("geocoder", results[0], status)
+            geocoder.geocode({ placeId: value.place_id }, async (results: Array<IGoogleGeocodeResult>, status: string) => {
+                if (results.length > 0) {
+                    const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(fetchNearbyPollingPlaces(election, results[0]))
+                    console.log("pollingPlaces", pollingPlaces)
+                }
             })
         },
     }

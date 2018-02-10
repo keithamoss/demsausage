@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
+import { IEALGISApiClient, IElection, IGoogleGeocodeResult } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -100,7 +100,9 @@ export interface IPollingPlace {
     ess_stall_url: string
 }
 
-export interface IPollingPlaceSearchResult {}
+export interface IPollingPlaceSearchResult extends IPollingPlace {
+    distance_metres: number
+}
 
 export interface IPollingPlaceLoaderResponse {
     error: boolean
@@ -190,6 +192,23 @@ export function fetchPollingPlaceTypes() {
 
         if (response.status === 200) {
             dispatch(loadPollingPlaceTypes(json))
+        }
+    }
+}
+
+export function fetchNearbyPollingPlaces(election: IElection, geocoderResult: IGoogleGeocodeResult) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "fetch-nearby-polling-places": 1,
+            electionId: election.id,
+            lat: geocoderResult.geometry.location.lat(),
+            lon: geocoderResult.geometry.location.lng(),
+        }
+
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            return json
         }
     }
 }
