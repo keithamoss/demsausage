@@ -283,35 +283,65 @@ function isPollingPlaceValid($pollingPlace) {
   return true;
 }
 
-function fetchMatchingPollingPlaceByLocation($electionTableName, $pollingPlace) {
+/**
+ * Calculates the great-circle distance between two points, with
+ * the Haversine formula.
+ * https://stackoverflow.com/a/10054282
+ * 
+ * @param float $latitudeFrom Latitude of start point in [deg decimal]
+ * @param float $longitudeFrom Longitude of start point in [deg decimal]
+ * @param float $latitudeTo Latitude of target point in [deg decimal]
+ * @param float $longitudeTo Longitude of target point in [deg decimal]
+ * @param float $earthRadius Mean earth radius in [m]
+ * @return float Distance between points in [m] (same as earthRadius)
+ */
+function haversineGreatCircleDistance(
+  $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
+{
+  // convert from degrees to radians
+  $latFrom = deg2rad($latitudeFrom);
+  $lonFrom = deg2rad($longitudeFrom);
+  $latTo = deg2rad($latitudeTo);
+  $lonTo = deg2rad($longitudeTo);
+
+  $latDelta = $latTo - $latFrom;
+  $lonDelta = $lonTo - $lonFrom;
+
+  $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+  return $angle * $earthRadius;
+}
+
+function fetchMatchingPollingPlaceByLocation($electionTableName, $lat, $lon, $distanceMetres) {
   global $file_db;
 
   // This save us having Spatialite as a dependency
-  // A polling place matches if it's within ~100 metres
-  $fiftyMetresInDegrees = 1 / (106255 / 200); // At -24 latitude
+  // A polling place matches if it's within $distanceMetres
+  $metresInDegrees = 1 / (106255 / $distanceMetres); // At -24 latitude
+  $earthRadiusAt24S = 6374624;
 
   $stmt = $file_db->prepare("SELECT * FROM $electionTableName WHERE lon BETWEEN :minlon AND :maxlon AND lat BETWEEN :minlat AND :maxlat");
-  $minlon = $pollingPlace["lon"] - $fiftyMetresInDegrees;
+  $minlon = $lon - $metresInDegrees;
   $stmt->bindParam(":minlon", $minlon);
-  $maxlon = $pollingPlace["lon"] + $fiftyMetresInDegrees;
+  $maxlon = $lon + $metresInDegrees;
   $stmt->bindParam(":maxlon", $maxlon);
-  $minlat = $pollingPlace["lat"] - $fiftyMetresInDegrees;
+  $minlat = $lat - $metresInDegrees;
   $stmt->bindParam(":minlat", $minlat);
-  $maxlat = $pollingPlace["lat"] + $fiftyMetresInDegrees;
+  $maxlat = $lat + $metresInDegrees;
   $stmt->bindParam(":maxlat", $maxlat);
   $stmt->execute();
 
-  // For Queensland 2017
-  // We geocoded the addresses (because there was no CSV file), and the locations it gave us were a bit rubbish.
-  // $stmt = $file_db->prepare("SELECT * FROM $electionTableName WHERE LOWER(address) = :address");
-  // $stmt->bindParam(":address", strtolower($pollingPlace["address"]));
-  // $stmt->execute();
-
   $pollingPlaces = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-    $pollingPlaces[] = translatePollingPlaceFromDB($row);
+    $tmp = translatePollingPlaceFromDB($row);
+    $tmp["distance_metres"] = round(haversineGreatCircleDistance($lat, $lon, $tmp["lat"], $tmp["lon"], $earthRadiusAt24S));
+    $pollingPlaces[] = $tmp;
   }
   return $pollingPlaces;
+}
+
+function fetchMatchingPollingPlaceByPollingPlace($electionTableName, $pollingPlace, $distanceMetres = 200) {
+  return fetchMatchingPollingPlaceByLocation($electionTableName, $pollingPlace["lat"], $pollingPlace["lon"], $distanceMetres);
 }
 
 function fetchHistoricalData($pollingPlace, $currentElection) {
@@ -328,7 +358,7 @@ function fetchHistoricalData($pollingPlace, $currentElection) {
     //   continue;
     // }
 
-    $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $pollingPlace);
+    $pollingPlaces = fetchMatchingPollingPlaceByPollingPlace($election["db_table_name"], $pollingPlace);
 
     if(count($pollingPlaces) > 0) {
       $results[] = [
@@ -641,7 +671,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
 
     $currentPollingPlaces = fetchAllPollingPlacesWithData($election["db_table_name"]);
     foreach($currentPollingPlaces as $pollingPlace) {
-      $newPollingPlaces = fetchMatchingPollingPlaceByLocation($response["table_name"], $pollingPlace);
+      $newPollingPlaces = fetchMatchingPollingPlaceByPollingPlace($response["table_name"], $pollingPlace);
       if(count($newPollingPlaces) !== 1) {
         $response["error"] = true;
         $response["messages"][] = [
@@ -752,5 +782,16 @@ function regeneratePollingPlaceGeoJSON($electionId) {
   // $url = BASE_URL."/api.php?regenerate-geojson=1&electionId=10";
   
   createPollingPlaceGeoJSON($electionId);
+}
+
+function fetchNearbyPollingPlaces($electionId, $lat, $lon) {
+  $election = fetchElection($electionId);
+  $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $lat, $lon, 10000);
+
+  usort($pollingPlaces, function ($item1, $item2) {
+      return $item1['distance_metres'] <=> $item2['distance_metres'];
+  });
+
+  return array_slice($pollingPlaces, 0, 15);
 }
 ?>

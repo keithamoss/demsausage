@@ -35,6 +35,13 @@ if(stristr($_SERVER["QUERY_STRING"], "confirm-email") !== false) {
   closeDb();
 }
 
+// Fetch nearby polling places
+if(stristr($_SERVER["QUERY_STRING"], "fetch-nearby-polling-places") !== false) {
+  echo json_encode(fetchNearbyPollingPlaces($_GET["electionId"], $_GET["lat"], $_GET["lon"]));
+  closeDb();
+}
+
+
 ############################
 # Super User Endpoints
 ############################
