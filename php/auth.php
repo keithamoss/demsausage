@@ -6,11 +6,8 @@ header("Access-Control-Allow-Credentials: true");
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
   header("Access-Control-Allow-Origin: http://localhost:3000");
 } else {
-  $referer = $_SERVER["HTTP_REFERER"];
-  if(substr($referer, -1) === "/") {
-      $referer = substr($referer, 0, -1);
-  }
-  header("Access-Control-Allow-Origin: " . $referer);
+  $parsed = parse_url($_SERVER["HTTP_REFERER"]);
+  header("Access-Control-Allow-Origin: " . $parsed["scheme"] . "://" . $parsed["host"]);
 }
 
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
