@@ -25,6 +25,7 @@ body,
 }
 
 .page-nav {
+    position: absolute;
     background-color: white;
     z-index: 1400;
     height: 100vh;
