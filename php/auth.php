@@ -3,13 +3,13 @@ require_once "secrets.php";
 
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");
-if(strpos($_SERVER['HTTP_HOST'], "localhost:") === false) {
-  $parsed = parse_url($_SERVER["HTTP_REFERER"]);
-  header("Access-Control-Allow-Origin: " . $parsed["scheme"] . "://" . $parsed["host"] . ":" . $parsed["port"]);
-} else {
-  $parsed = parse_url($_SERVER["HTTP_REFERER"]);
-  header("Access-Control-Allow-Origin: " . $parsed["scheme"] . "://" . $parsed["host"]);
+
+$parsed = parse_url($_SERVER["HTTP_REFERER"]);
+$cors = $parsed["scheme"] . "://" . $parsed["host"];
+if(array_key_exists("port", $parsed) === true) {
+  $cors .= ":" . $parsed["port"];
 }
+header("Access-Control-Allow-Origin: " . $cors);
 
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
   session_set_cookie_params(86400 * 365 * 5, "/");
