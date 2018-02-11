@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-// import { Link, browserHistory } from "react-router"
+import { browserHistory } from "react-router"
 // import "./SausageMap.css"
 import { IElection } from "../../redux/modules/interfaces"
 import { getAPIBaseURL } from "../../redux/modules/app"
@@ -119,7 +119,9 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                 <SearchBarContainer>
                     <SearchBar
                         hintText={"Find polling places with sausages"}
-                        onChange={() => console.log("onChange")}
+                        // tslint:disable-next-line:no-empty
+                        onChange={() => {}}
+                        onClick={() => browserHistory.push("/search")}
                         onRequestSearch={() => console.log("onRequestSearch")}
                         searchIcon={<DeviceLocationSearching color={grey500} />}
                         style={{
