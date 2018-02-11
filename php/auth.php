@@ -3,8 +3,9 @@ require_once "secrets.php";
 
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");
-if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-  header("Access-Control-Allow-Origin: http://localhost:3000");
+if(strpos($_SERVER['HTTP_HOST'], "localhost:") === false) {
+  $parsed = parse_url($_SERVER["HTTP_REFERER"]);
+  header("Access-Control-Allow-Origin: " . $parsed["scheme"] . "://" . $parsed["host"] . ":" . $parsed["port"]);
 } else {
   $parsed = parse_url($_SERVER["HTTP_REFERER"]);
   header("Access-Control-Allow-Origin: " . $parsed["scheme"] . "://" . $parsed["host"]);
