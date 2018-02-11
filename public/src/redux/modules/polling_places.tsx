@@ -78,7 +78,13 @@ export interface IPollingPlace {
     has_nothing: boolean
     has_caek: boolean
     has_run_out: boolean
-    has_other: object
+    has_other: {
+        has_coffee?: boolean
+        has_vego?: boolean
+        has_halal?: boolean
+        has_baconandeggs?: boolean
+        has_freetext?: string
+    }
     chance_of_sausage: number
     stall_name: string
     stall_description: string
@@ -210,5 +216,24 @@ export function fetchNearbyPollingPlaces(election: IElection, geocoderResult: IG
         if (response.status === 200) {
             return json
         }
+    }
+}
+
+export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
+    return (
+        pollingPlace.has_bbq === true ||
+        pollingPlace.has_caek === true ||
+        pollingPlace.has_nothing === true ||
+        Object.keys(pollingPlace.has_other).length > 0
+    )
+}
+
+export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
+    if (pollingPlace.chance_of_sausage >= 0.7) {
+        return "HIGH"
+    } else if (pollingPlace.chance_of_sausage >= 4) {
+        return "MEDIUM"
+    } else {
+        return "LOW"
     }
 }
