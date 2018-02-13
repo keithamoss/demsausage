@@ -228,6 +228,10 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
     )
 }
 
+export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
+    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || Object.keys(pollingPlace.has_other).length > 0
+}
+
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
     if (pollingPlace.chance_of_sausage >= 0.7) {
         return "HIGH"
@@ -236,4 +240,27 @@ export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
     } else {
         return "LOW"
     }
+}
+
+export function getFoodDescription(pollingPlace: IPollingPlace) {
+    const noms: Array<string> = []
+    if (pollingPlace.has_bbq) {
+        noms.push("sausage sizzle")
+    }
+    if (pollingPlace.has_caek) {
+        noms.push("cake stall")
+    }
+    if ("has_baconandeggs" in pollingPlace.has_other && pollingPlace.has_other.has_baconandeggs) {
+        noms.push("bacon and egg burgers")
+    }
+    if ("has_vego" in pollingPlace.has_other && pollingPlace.has_other.has_vego) {
+        noms.push("vegetarian options")
+    }
+    if ("has_halal" in pollingPlace.has_other && pollingPlace.has_other.has_halal) {
+        noms.push("halal options")
+    }
+    if ("has_coffee" in pollingPlace.has_other && pollingPlace.has_other.has_coffee) {
+        noms.push("coffee")
+    }
+    return noms.join(", ")
 }

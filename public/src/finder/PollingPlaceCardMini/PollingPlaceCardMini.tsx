@@ -3,7 +3,12 @@ import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
 import { IPollingPlaceSearchResult } from "../../redux/modules/interfaces"
-import { pollingPlaceHasReports, getSausageChanceDescription } from "../../redux/modules/polling_places"
+import {
+    pollingPlaceHasReports,
+    pollingPlaceHasReportsOfNoms,
+    getSausageChanceDescription,
+    getFoodDescription,
+} from "../../redux/modules/polling_places"
 
 import Paper from "material-ui/Paper"
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card"
@@ -11,8 +16,6 @@ import RaisedButton from "material-ui/RaisedButton"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-// import Divider from "material-ui/Divider"
-// import Subheader from 'material-ui/Subheader';
 import { MapsNavigation, AlertWarning, EditorInsertChart, MapsAddLocation } from "material-ui/svg-icons"
 import { grey500, yellow600, blue500 } from "material-ui/styles/colors"
 
@@ -120,7 +123,10 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         )}
                         {pollingPlace.division !== "" && <Division>Division(s): {pollingPlace.division}</Division>}
                     </CardText>
-                    <CardText expandable={true}>Nothing to see here. Move along, move along.</CardText>
+                    <CardText expandable={true}>
+                        {pollingPlaceHasReportsOfNoms(pollingPlace) === true &&
+                            `This polling place has ${getFoodDescription(pollingPlace)}.`}
+                    </CardText>
                     <CardActions>
                         <RaisedButton primary={true} label="Report" icon={<MapsAddLocation />} />
                     </CardActions>
