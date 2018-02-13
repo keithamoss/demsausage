@@ -18,6 +18,7 @@ import * as React from "react"
 import { isEqual } from "lodash-es"
 import { MenuItem } from "material-ui"
 import SearchBar from "material-ui-search-bar"
+import { debounce } from "lodash-es"
 
 // const styles: React.CSSProperties = {
 //     menuItem: {
@@ -120,6 +121,7 @@ export interface IGoogleGeocodeResult {
 class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     geocoder: any
     service: any
+    getPlacePredictions: any
 
     constructor(props: IProps) {
         super(props)
@@ -141,6 +143,25 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         this.populateData = this.populateData.bind(this)
         this.getCurrentDataState = this.getCurrentDataState.bind(this)
         this.getLatLgn = this.getLatLgn.bind(this)
+        this.getPlacePredictions = debounce(
+            function(this: GooglePlacesAutocomplete) {
+                const outerScope = this
+                this.service.getPlacePredictions(
+                    {
+                        input: this.state.searchText,
+                        componentRestrictions: this.props.componentRestrictions,
+                        types: this.props.types,
+                    },
+                    (predictions: Array<any>) => {
+                        if (predictions) {
+                            outerScope.populateData(predictions)
+                        }
+                    }
+                )
+            },
+            750,
+            { maxWait: 2000 }
+        )
     }
 
     getCurrentDataState() {
@@ -159,21 +180,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                 {
                     searchText,
                 },
-                () => {
-                    const outerScope = this
-                    this.service.getPlacePredictions(
-                        {
-                            input: this.state.searchText,
-                            componentRestrictions: this.props.componentRestrictions,
-                            types: this.props.types,
-                        },
-                        (predictions: Array<any>) => {
-                            if (predictions) {
-                                outerScope.populateData(predictions)
-                            }
-                        }
-                    )
-                }
+                this.getPlacePredictions
             )
         }
     }
