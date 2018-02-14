@@ -15,11 +15,13 @@ session_start();
 
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");
-if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-  header("Access-Control-Allow-Origin: http://localhost:3000");
-} else {
-  header("Access-Control-Allow-Origin: http://" . $_SERVER["HTTP_HOST"]);
+
+$parsed = parse_url($_SERVER["HTTP_REFERER"]);
+$cors = $parsed["scheme"] . "://" . $parsed["host"];
+if(array_key_exists("port", $parsed) === true) {
+  $cors .= ":" . $parsed["port"];
 }
+header("Access-Control-Allow-Origin: " . $cors);
 
 $client = new Google_Client();
 $client->setAuthConfigFile('client_secrets.php');
