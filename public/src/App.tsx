@@ -9,11 +9,11 @@ import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
 
 import { MapsMap, MapsAddLocation, ActionSearch } from "material-ui/svg-icons"
-import IconLocationOn from "material-ui/svg-icons/communication/location-on"
+// import IconLocationOn from "material-ui/svg-icons/communication/location-on"
 
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
-import { List, ListItem } from "material-ui/List"
+// import { List, ListItem } from "material-ui/List"
 
 // const logo = require("./logo.svg")
 
@@ -71,13 +71,13 @@ class App extends React.Component<IProps, {}> {
 
                     {app.sidebarOpen && (
                         <nav className="page-nav">
-                            <List>
+                            {/* <List>
                                 <ListItem
                                     primaryText="Review Pending Stalls"
                                     leftIcon={<IconLocationOn />}
                                     containerElement={<Link to={`/stalls`} />}
                                 />
-                            </List>
+                            </List> */}
                         </nav>
                     )}
                 </div>
