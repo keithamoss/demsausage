@@ -29,6 +29,17 @@ import ActionExitToApp from "material-ui/svg-icons/action/exit-to-app"
 
 // const logo = require("./logo.svg")
 
+const TitleContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const TitleLogo = styled.img`
+    width: 35px; /* 80% */
+    height: 32px;
+    margin-right: 10px;
+`
+
 const HiddenIconButton = styled(IconButton)`
     width: 0px !important;
     height: 0px !important;
@@ -84,7 +95,11 @@ class App extends React.Component<IProps, {}> {
                 <div className="page-header">
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
                     <AppBar
-                        title={"Democracy Sausage Admin Console"}
+                        title={
+                            <TitleContainer>
+                                <TitleLogo src="./sausage+cake_big.png" /> Democracy Sausage Admin Console
+                            </TitleContainer>
+                        }
                         iconElementRight={
                             <ToolbarGroup>
                                 <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />

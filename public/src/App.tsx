@@ -1,5 +1,5 @@
 import * as React from "react"
-// import styled from "styled-components"
+import styled from "styled-components"
 import { Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
@@ -16,6 +16,17 @@ import Paper from "material-ui/Paper"
 import { List, ListItem } from "material-ui/List"
 
 // const logo = require("./logo.svg")
+
+const TitleContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const TitleLogo = styled.img`
+    width: 35px; /* 80% */
+    height: 32px;
+    margin-right: 10px;
+`
 
 export interface IProps {
     muiThemePalette: any
@@ -46,7 +57,14 @@ class App extends React.Component<IProps, {}> {
             <div className="page">
                 <div className="page-header">
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
-                    <AppBar title={"Democracy Sausage"} onLeftIconButtonTouchTap={() => toggleSidebar()} />
+                    <AppBar
+                        title={
+                            <TitleContainer>
+                                <TitleLogo src="./icons/sausage+cake_big.png" /> Democracy Sausage
+                            </TitleContainer>
+                        }
+                        onLeftIconButtonTouchTap={() => toggleSidebar()}
+                    />
                 </div>
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <main className="page-main-content">{content || this.props.children}</main>
