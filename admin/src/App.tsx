@@ -10,6 +10,7 @@ import SelectField from "material-ui/SelectField"
 
 // import AutoComplete from "material-ui/AutoComplete"
 import { List, ListItem } from "material-ui/List"
+import Badge from "material-ui/Badge"
 import ContentInbox from "material-ui/svg-icons/content/inbox"
 import ActionGrade from "material-ui/svg-icons/action/grade"
 import ContentSend from "material-ui/svg-icons/content/send"
@@ -46,6 +47,7 @@ export interface IProps {
     snackbars: ISnackbarsModule
     elections: IElections
     currentElection: IElection
+    pendingStallCount: number
     handleSnackbarClose: any
     onChangeElection: any
     doLogout: any
@@ -61,6 +63,7 @@ class App extends React.Component<IProps, {}> {
             snackbars,
             elections,
             currentElection,
+            pendingStallCount,
             handleSnackbarClose,
             doLogout,
             onChangeElection,
@@ -114,6 +117,7 @@ class App extends React.Component<IProps, {}> {
                             <ListItem
                                 primaryText="Review Pending Stalls"
                                 leftIcon={<ContentSend />}
+                                rightIcon={<Badge badgeContent={pendingStallCount} secondary={true} />}
                                 containerElement={<Link to={`/stalls`} />}
                             />
                             <ListItem
