@@ -60,6 +60,7 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
                 <CustomField
                     name="election_day"
                     component={DatePicker}
+                    format={(value: any) => (value === "" ? null : value)}
                     floatingLabelText={"What day is election day?"}
                     fullWidth={true}
                     mode="landscape"
