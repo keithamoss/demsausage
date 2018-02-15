@@ -39,10 +39,22 @@ function closeDb() {
   exit();
 }
 
-function fieldsToInsertSQL(string $tableName, array $allowedFields, array $fields) {
+function fieldsToInsertSQL(string $tableName, array $allowedFields, array $fields, array $params) {
   $fields = array_intersect($fields, $allowedFields);
   $fieldNames = implode(", ", $fields);
-  $fieldValues = implode(", ", array_map(function ($a) { return ":" . $a; }, $fields));
+  $fieldValues = implode(", ", array_map(function ($fieldName) use($params) {
+    if(in_array($fieldName, ["first_report", "latest_report", "election_day"])) {
+      if(is_null($params[$fieldName])) {
+        return "NULL";
+      } elseif(stristr($params[$fieldName], "strftime") !== false) {
+        return $params[$fieldName];
+      } else {
+        return "'" . $params[$fieldName]. "'";
+      }
+    } else {
+      return ":" . $fieldName;
+    }
+  }, $fields));
   return "INSERT INTO $tableName ($fieldNames) VALUES ($fieldValues)";
 }
 
@@ -72,15 +84,7 @@ function fieldsToDeleteSQL(string $tableName, $pkeyFieldName) {
 function fieldsToStmnt($stmt, array $allowedFields, array $params) {
   $fields = array_intersect(array_keys($params), $allowedFields);
   foreach($fields as $field) {
-    if(in_array($fieldName, ["first_report", "latest_report", "election_day"])) {
-      if(is_null($params[$fieldName])) {
-        return $fieldName . " = NULL";
-      } elseif(stristr($params[$fieldName], "strftime") !== false) {
-        return $fieldName . " = " . $params[$fieldName];
-      } else {
-        return $fieldName . " = '" . $params[$fieldName]. "'";
-      }
-    } else {
+    if(in_array($field, ["first_report", "latest_report", "election_day"]) === false) { 
       $stmt->bindParam(":" . $field, $params[$field]);
     }
   }

@@ -27,7 +27,7 @@ function translateStallFromDB($row) {
 function addPendingStall(array $params) {
   global $file_db, $pendingStallsAllowedFields;
 
-  $insert = fieldsToInsertSQL("pending_stalls", $pendingStallsAllowedFields, array_keys($params));
+  $insert = fieldsToInsertSQL("pending_stalls", $pendingStallsAllowedFields, array_keys($params), $params);
   $stmt = $file_db->prepare($insert);
   
   return fieldsToStmnt($stmt, $pendingStallsAllowedFields, $params);

@@ -24,7 +24,7 @@ function addMailgunEvent($timestamp, $event_type, $body) {
     "type" => $event_type,
     "json" => json_encode($body),
   ];
-  $insert = fieldsToInsertSQL("mailgun_events", $mailgunEventsAllowedFields, array_keys($params));
+  $insert = fieldsToInsertSQL("mailgun_events", $mailgunEventsAllowedFields, array_keys($params), $params);
   $stmt = $file_db->prepare($insert);
   
   return fieldsToStmnt($stmt, $mailgunEventsAllowedFields, $params);
