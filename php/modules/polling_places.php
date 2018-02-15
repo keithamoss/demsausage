@@ -424,6 +424,11 @@ EOT
   return true;
 }
 
+function createElectionTableName($election) {
+  date_default_timezone_set("Australia/Perth");
+  return str_replace([" ", "-"], "_", strtolower($election["name"])) . "_v" . date("YmdHis");
+}
+
 function loadPollingPlaces($electionId, $dryrun, $file) {
   global $file_db, $pollingPlacesAllowedFields, $validPollingPlaceTypes;
 
@@ -503,8 +508,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   }
 
   // Go ahead and populate the db
-  date_default_timezone_set("Australia/Perth");
-  $response["table_name"] = str_replace([" ", "-"], "_", strtolower($election["name"])) . "_v" . date("YmdHis");
+  $response["table_name"] = createElectionTableName($election);
 
   if(($msg = createPollingPlaceTable($response["table_name"])) !== true) {
     $response["error"] = true;
@@ -525,7 +529,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   foreach($rows as $index => $pollingPlace) {
     $tmpPollingPlace = translatePollingPlaceToDB(array_merge($basePollingPlace, $pollingPlace));
 
-    $insert = fieldsToInsertSQL($response["table_name"], $pollingPlacesAllowedFields, array_keys($tmpPollingPlace));
+    $insert = fieldsToInsertSQL($response["table_name"], $pollingPlacesAllowedFields, array_keys($tmpPollingPlace), $tmpPollingPlace);
     $stmt = $file_db->prepare($insert);
     $rowCount = fieldsToStmnt($stmt, $pollingPlacesAllowedFields, $tmpPollingPlace);
     if($rowCount !== 1) {
@@ -723,6 +727,9 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     // Set this as the active table for this election
     if($response["error"] === false) {
       updateElection($election["id"], ["db_table_name" => $response["table_name"]]);
+
+      // Regenerate the polling place GeoJSON
+      regeneratePollingPlaceGeoJSON($election["id"]);
     } else {
       array_unshift($response["messages"], [
         "level" => "ERROR",
@@ -732,9 +739,6 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
       // Discard our temporary table
       $file_db->exec("DROP TABLE " . $response["table_name"]);
       $response["table_name"] = null;
-
-      // Regenerate the polling place GeoJSON
-      regeneratePollingPlaceGeoJSON($election["id"]);
     }
   } elseif($dryrun === true) {
     // Discard our temporary table
@@ -765,16 +769,16 @@ function createPollingPlaceGeoJSON($electionId) {
 
       $geoJSONFeatures[] = $feature;
     }
-
-    $geojsonFeatureCollection = new stdClass();
-    $geojsonFeatureCollection->type = "FeatureCollection";
-    $geojsonFeatureCollection->features = $geoJSONFeatures;
-
-    $existing = "./elections/election-$electionId.geojson";
-    $tmp = "./elections/election-$electionId.geojson.tmp";
-    file_put_contents($tmp, json_encode($geojsonFeatureCollection));
-    rename($tmp, $existing);
   }
+
+  $geojsonFeatureCollection = new stdClass();
+  $geojsonFeatureCollection->type = "FeatureCollection";
+  $geojsonFeatureCollection->features = $geoJSONFeatures;
+
+  $existing = "./elections/election-$electionId.geojson";
+  $tmp = "./elections/election-$electionId.geojson.tmp";
+  file_put_contents($tmp, json_encode($geojsonFeatureCollection));
+  rename($tmp, $existing);
 }
 
 function regeneratePollingPlaceGeoJSON($electionId) {

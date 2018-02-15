@@ -1,4 +1,7 @@
 <?php
+require_once "db.php";
+require_once "modules/polling_places.php";
+
 $electionPKeyFieldName = "id";
 $electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
 
@@ -79,11 +82,25 @@ function fetchElectionByName($electionTableName) {
 function createElection(array $params) {
   global $file_db, $electionAllowedFields;
 
-  $insert = fieldsToInsertSQL("elections", $electionAllowedFields, array_keys($params));
+  $insert = fieldsToInsertSQL("elections", $electionAllowedFields, array_keys($params), $params);
   $stmt = $file_db->prepare($insert);
-  $lastInsertId = fieldsToStmntLastInsertId($stmt, $electionAllowedFields, $params);
+  $lastInsertId = fieldsToStmntLastInsertId($stmt, $electionAllowedFields, translateElectionToDB($params));
+  $election = fetchElection($lastInsertId);
 
-  return fetchElection($lastInsertId);
+  if($newElection !== false) {
+    $electionTableName = createElectionTableName($election);
+    if(($msg = createPollingPlaceTable($electionTableName)) !== true) {
+      failForAPI("Failed to create empty polling place table because: $msg");
+    }
+
+    // Update the new election with the pointer to its new table
+    updateElection($election["id"], ["db_table_name" => $electionTableName]);
+
+    // Generate the polling place GeoJSON
+    regeneratePollingPlaceGeoJSON($election["id"]);
+  }
+
+  return $election;
 }
 
 function updateElection($id, array $params) {
