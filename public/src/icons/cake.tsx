@@ -5,7 +5,7 @@ import { pure } from "recompose"
 import SvgIcon from "material-ui/SvgIcon"
 
 let svg = (props: any) => (
-    <SvgIcon>
+    <SvgIcon {...props}>
         <svg
             viewBox="0 0 427 495"
             xmlns="http://www.w3.org/2000/svg"
