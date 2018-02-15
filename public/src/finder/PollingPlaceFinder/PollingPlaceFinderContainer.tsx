@@ -54,7 +54,9 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
                 election={currentElection}
                 locationSearched={locationSearched}
                 nearbyPollingPlaces={nearbyPollingPlaces}
-                onGeocoderResults={(value: any) => findNearestPollingPlaces(this.onReceiveNearbyPollingPlaces, currentElection, value)}
+                onGeocoderResults={(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) =>
+                    findNearestPollingPlaces(this.onReceiveNearbyPollingPlaces, currentElection, place)
+                }
             />
         )
     }

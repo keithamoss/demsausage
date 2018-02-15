@@ -103,13 +103,13 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        fetchGeocodedPlace: function(onChoosePlace: Function, value: IGoogleAddressSearchResult, onPlaceChosen: Function) {
+        fetchGeocodedPlace: function(onChoosePlace: Function, addressResult: IGoogleAddressSearchResult, onPlaceChosen: Function) {
             const google = window.google
             const geocoder = new google.maps.Geocoder()
-            geocoder.geocode({ placeId: value.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
+            geocoder.geocode({ placeId: addressResult.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
                 if (results.length > 0) {
                     onPlaceChosen()
-                    onChoosePlace(results[0])
+                    onChoosePlace(addressResult, results[0])
                 }
             })
         },
