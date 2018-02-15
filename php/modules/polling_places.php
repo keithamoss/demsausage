@@ -350,13 +350,9 @@ function fetchHistoricalData($pollingPlace, $currentElection) {
   $results = [];
 
   foreach(fetchAllElections() as $election) {
-    if($election["id"] === $currentElection["id"] || $election["db_table_name"] === "") {
+    if($election["id"] === $currentElection["id"]) {
       continue;
     }
-
-    // if(in_array($election["db_table_name"], ["federal_2016_polling_places_v1_1", "qld_2017_polling_places"]) === false) {
-    //   continue;
-    // }
 
     $pollingPlaces = fetchMatchingPollingPlaceByPollingPlace($election["db_table_name"], $pollingPlace);
 
@@ -670,57 +666,55 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   }
 
   // Merge stall info from the current active table
-  if($election["db_table_name"] !== "") {
-    $stallsUpdatedCount = 0;
+  $stallsUpdatedCount = 0;
 
-    $currentPollingPlaces = fetchAllPollingPlacesWithData($election["db_table_name"]);
-    foreach($currentPollingPlaces as $pollingPlace) {
-      $newPollingPlaces = fetchMatchingPollingPlaceByPollingPlace($response["table_name"], $pollingPlace);
-      if(count($newPollingPlaces) !== 1) {
-        $response["error"] = true;
-        $response["messages"][] = [
-          "level" => "ERROR",
-          "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. ") has a stall, but we found '" . count($newPollingPlaces) . "' matching polling places in the new table.",
-        ];
-      } else {
-        // Merge our existing info about the polling place onto its equivalent in the new table
-        $stallRelatedFields = [
-          "has_bbq" => $pollingPlace["has_bbq"],
-          "has_caek" => $pollingPlace["has_caek"],
-          "has_nothing" => $pollingPlace["has_nothing"],
-          "has_run_out" => $pollingPlace["has_run_out"],
-          "has_other" => $pollingPlace["has_other"],
-          "stall_name" => $pollingPlace["stall_name"],
-          "stall_description" => $pollingPlace["stall_description"],
-          "stall_website" => $pollingPlace["stall_website"],
-          "latest_report" => $pollingPlace["latest_report"],
-          "first_report" => $pollingPlace["first_report"],
-          "extra_info" => $pollingPlace["extra_info"],
-          "source" => $pollingPlace["source"],
-          "ess_stall_id" => $pollingPlace["ess_stall_id"],
-          "ess_stall_url" => $pollingPlace["ess_stall_url"],
-        ];
-        updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
-
-        // Update the pending_stalls table to point to the new id
-        $stallsUpdated = updateStallPollingPlaceId($election["id"], $pollingPlace["pollingPlace"]["id"], $newPollingPlaces[0]["id"]);
-        $response["messages"][] = [
-          "level" => "INFO",
-          "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. "). Updated " . $stallsUpdated . " stalls with its new id.",
-        ];
-        $stallsUpdatedCount += $stallsUpdated;
-      }
-    }
-
-    // Log how many stalls had their polling places updated.
-    // In most cases, we'd usually only expect a few stalls to change their ids.
-    $stallsForElection = count(fetchPendingStallByElection($election["id"]));
-    if($stallsForElection !== $stallsUpdatedCount) {
+  $currentPollingPlaces = fetchAllPollingPlacesWithData($election["db_table_name"]);
+  foreach($currentPollingPlaces as $pollingPlace) {
+    $newPollingPlaces = fetchMatchingPollingPlaceByPollingPlace($response["table_name"], $pollingPlace);
+    if(count($newPollingPlaces) !== 1) {
+      $response["error"] = true;
       $response["messages"][] = [
-        "level" => "WARNING",
-        "message" => "We updated " . $stallsUpdatedCount . " stalls with new polling place ids. " . ($stallsForElection - $stallsUpdatedCount) . " were not updated. (This may or may not be a problem.)",
+        "level" => "ERROR",
+        "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. ") has a stall, but we found '" . count($newPollingPlaces) . "' matching polling places in the new table.",
       ];
+    } else {
+      // Merge our existing info about the polling place onto its equivalent in the new table
+      $stallRelatedFields = [
+        "has_bbq" => $pollingPlace["has_bbq"],
+        "has_caek" => $pollingPlace["has_caek"],
+        "has_nothing" => $pollingPlace["has_nothing"],
+        "has_run_out" => $pollingPlace["has_run_out"],
+        "has_other" => $pollingPlace["has_other"],
+        "stall_name" => $pollingPlace["stall_name"],
+        "stall_description" => $pollingPlace["stall_description"],
+        "stall_website" => $pollingPlace["stall_website"],
+        "latest_report" => $pollingPlace["latest_report"],
+        "first_report" => $pollingPlace["first_report"],
+        "extra_info" => $pollingPlace["extra_info"],
+        "source" => $pollingPlace["source"],
+        "ess_stall_id" => $pollingPlace["ess_stall_id"],
+        "ess_stall_url" => $pollingPlace["ess_stall_url"],
+      ];
+      updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
+
+      // Update the pending_stalls table to point to the new id
+      $stallsUpdated = updateStallPollingPlaceId($election["id"], $pollingPlace["pollingPlace"]["id"], $newPollingPlaces[0]["id"]);
+      $response["messages"][] = [
+        "level" => "INFO",
+        "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. "). Updated " . $stallsUpdated . " stalls with its new id.",
+      ];
+      $stallsUpdatedCount += $stallsUpdated;
     }
+  }
+
+  // Log how many stalls had their polling places updated.
+  // In most cases, we'd usually only expect a few stalls to change their ids.
+  $stallsForElection = count(fetchPendingStallByElection($election["id"]));
+  if($stallsForElection !== $stallsUpdatedCount) {
+    $response["messages"][] = [
+      "level" => "WARNING",
+      "message" => "We updated " . $stallsUpdatedCount . " stalls with new polling place ids. " . ($stallsForElection - $stallsUpdatedCount) . " were not updated. (This may or may not be a problem.)",
+    ];
   }
 
   if($dryrun === false) {
