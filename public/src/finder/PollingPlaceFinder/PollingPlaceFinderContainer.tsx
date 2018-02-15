@@ -20,7 +20,6 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
-    addressSearchResults: Array<IGoogleAddressSearchResult>
     locationSearched: IGoogleGeocodeResult | null
     nearbyPollingPlaces: Array<IPollingPlaceSearchResult>
 }
@@ -34,23 +33,13 @@ interface IOwnProps {
 export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     constructor(props: any) {
         super(props)
-        this.state = { addressSearchResults: [], nearbyPollingPlaces: [], locationSearched: null }
+        this.state = { nearbyPollingPlaces: [], locationSearched: null }
 
-        this.onReceiveAddressSearchResults = this.onReceiveAddressSearchResults.bind(this)
         this.onReceiveNearbyPollingPlaces = this.onReceiveNearbyPollingPlaces.bind(this)
-    }
-
-    onReceiveAddressSearchResults(results: Array<IGoogleAddressSearchResult>) {
-        this.setState({
-            addressSearchResults: results,
-            locationSearched: this.state.locationSearched,
-            nearbyPollingPlaces: this.state.nearbyPollingPlaces,
-        })
     }
 
     async onReceiveNearbyPollingPlaces(pollingPlaces: Array<IPollingPlaceSearchResult>, locationSearched: IGoogleGeocodeResult) {
         this.setState({
-            addressSearchResults: this.state.addressSearchResults,
             locationSearched: locationSearched,
             nearbyPollingPlaces: pollingPlaces,
         })
@@ -58,15 +47,13 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
 
     render() {
         const { currentElection, findNearestPollingPlaces } = this.props
-        const { addressSearchResults, locationSearched, nearbyPollingPlaces } = this.state
+        const { locationSearched, nearbyPollingPlaces } = this.state
 
         return (
             <PollingPlaceFinder
                 election={currentElection}
-                addressSearchResults={addressSearchResults}
                 locationSearched={locationSearched}
                 nearbyPollingPlaces={nearbyPollingPlaces}
-                onAddressSearchResults={this.onReceiveAddressSearchResults}
                 onGeocoderResults={(value: any) => findNearestPollingPlaces(this.onReceiveNearbyPollingPlaces, currentElection, value)}
             />
         )

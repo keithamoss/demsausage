@@ -73,7 +73,7 @@ export interface IProps {
     // Begin Democracy Sausage customisation
     onReceiveSearchResults: any
     onRequestSearch?: any
-    searchIcon: any
+    searchIcon?: any
     // End Democracy Sausage customisation
     name?: string
     // Internals
