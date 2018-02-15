@@ -10,106 +10,107 @@ import { IStore, IElection } from "../../redux/modules/interfaces"
 import { updateElection } from "../../redux/modules/elections"
 
 export interface IProps {
-  // election: IElection
-  onElectionEdited: Function
+    // election: IElection
+    onElectionEdited: Function
 }
 
 export interface IDispatchProps {
-  onFormSubmit: Function
-  onSaveForm: Function
+    onFormSubmit: Function
+    onSaveForm: Function
 }
 
 export interface IStoreProps {
-  election: IElection
-  isDirty: boolean
+    election: IElection
+    isDirty: boolean
 }
 
 export interface IStateProps {}
 
 interface IRouteProps {
-  electionIdentifier: string
+    electionIdentifier: string
 }
 
 interface IOwnProps {
-  params: IRouteProps
+    params: IRouteProps
 }
 
 const toFormValues = (election: IElection) => {
-  return {
-    lon: election.lon,
-    lat: election.lat,
-    name: election.name,
-    default_zoom_level: election.default_zoom_level,
-    has_division_boundaries: election.has_division_boundaries,
-    is_active: election.is_active,
-    hidden: election.hidden,
-    election_day: new Date(election.election_day),
-  }
+    return {
+        lon: election.lon,
+        lat: election.lat,
+        name: election.name,
+        default_zoom_level: election.default_zoom_level,
+        has_division_boundaries: election.has_division_boundaries,
+        is_active: election.is_active,
+        hidden: election.hidden,
+        election_day: new Date(election.election_day),
+        polling_places_loaded: election.polling_places_loaded,
+    }
 }
 
 const fromFormValues = (formValues: any): IElection => {
-  let formValuesCopy = cloneDeep(formValues)
-  return {
-    ...formValuesCopy,
-    lon: parseFloat(formValuesCopy.lon),
-    lat: parseFloat(formValuesCopy.lat),
-  }
+    let formValuesCopy = cloneDeep(formValues)
+    return {
+        ...formValuesCopy,
+        lon: parseFloat(formValuesCopy.lon),
+        lat: parseFloat(formValuesCopy.lat),
+    }
 }
 
 export class ElectionEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-  initialValues: any
-  componentWillMount() {
-    const { election } = this.props
+    initialValues: any
+    componentWillMount() {
+        const { election } = this.props
 
-    // Each layer mounts this component anew, so store their initial layer form values.
-    // e.g. For use in resetting the form state (Undo/Discard Changes)
-    this.initialValues = cloneDeep(toFormValues(election))
-  }
-  render() {
-    const { election, onElectionEdited, isDirty, onFormSubmit, onSaveForm } = this.props
+        // Each layer mounts this component anew, so store their initial layer form values.
+        // e.g. For use in resetting the form state (Undo/Discard Changes)
+        this.initialValues = cloneDeep(toFormValues(election))
+    }
+    render() {
+        const { election, onElectionEdited, isDirty, onFormSubmit, onSaveForm } = this.props
 
-    return (
-      <ElectionEditor
-        election={election}
-        initialValues={this.initialValues}
-        isDirty={isDirty}
-        onSubmit={(values: object, dispatch: Function, props: IProps) => {
-          onFormSubmit(values, election, onElectionEdited)
-        }}
-        onSaveForm={() => {
-          onSaveForm(election, isDirty)
-        }}
-        onCancelForm={() => {
-          browserHistory.push("/elections/")
-        }}
-      />
-    )
-  }
+        return (
+            <ElectionEditor
+                election={election}
+                initialValues={this.initialValues}
+                isDirty={isDirty}
+                onSubmit={(values: object, dispatch: Function, props: IProps) => {
+                    onFormSubmit(values, election, onElectionEdited)
+                }}
+                onSaveForm={() => {
+                    onSaveForm(election, isDirty)
+                }}
+                onCancelForm={() => {
+                    browserHistory.push("/elections/")
+                }}
+            />
+        )
+    }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-  const { elections } = state
+    const { elections } = state
 
-  return {
-    election: elections.elections[ownProps.params.electionIdentifier],
-    isDirty: isDirty("election")(state),
-  }
+    return {
+        election: elections.elections[ownProps.params.electionIdentifier],
+        isDirty: isDirty("election")(state),
+    }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-  return {
-    async onFormSubmit(values: object, election: IElection, onElectionEdited: Function) {
-      const electionNew: Partial<IElection> = fromFormValues(values)
-      const json = await dispatch(updateElection(election, electionNew))
-      if (json.rows === 1) {
-        // onElectionEdited()
-        browserHistory.push("/elections/")
-      }
-    },
-    onSaveForm: (election: IElection, isDirty: boolean) => {
-      dispatch(submit("election"))
-    },
-  }
+    return {
+        async onFormSubmit(values: object, election: IElection, onElectionEdited: Function) {
+            const electionNew: Partial<IElection> = fromFormValues(values)
+            const json = await dispatch(updateElection(election, electionNew))
+            if (json.rows === 1) {
+                // onElectionEdited()
+                browserHistory.push("/elections/")
+            }
+        },
+        onSaveForm: (election: IElection, isDirty: boolean) => {
+            dispatch(submit("election"))
+        },
+    }
 }
 
 const ElectionEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionEditorContainer)

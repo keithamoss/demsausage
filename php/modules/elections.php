@@ -1,6 +1,6 @@
 <?php
 $electionPKeyFieldName = "id";
-$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day");
+$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
 
 function translateElectionFromDB($row) {
   return [
@@ -14,13 +14,14 @@ function translateElectionFromDB($row) {
     "is_active" => (bool)$row["is_active"],
     "hidden" => (bool)$row["hidden"],
     "election_day" => $row["election_day"],
+    "polling_places_loaded" => (bool)$row["polling_places_loaded"],
   ];
 }
 
 function translateElectionToDB($row) {
   $new = [];
   foreach($row as $key => $val) {
-    if(in_array($key, ["has_division_boundaries", "is_active", "hidden"])) {
+    if(in_array($key, ["has_division_boundaries", "is_active", "hidden", "polling_places_loaded"])) {
       $new[$key] = ($val === "false") ? false : true;
     } elseif(in_array($key, ["lon", "lat"])) {
       $new[$key] = (float)$val;
