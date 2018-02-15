@@ -97,7 +97,7 @@ class App extends React.Component<IProps, {}> {
                     <AppBar
                         title={
                             <TitleContainer>
-                                <TitleLogo src="./sausage+cake_big.png" /> Democracy Sausage Admin Console
+                                <TitleLogo src="/sausage+cake_big.png" /> Democracy Sausage Admin Console
                             </TitleContainer>
                         }
                         iconElementRight={
