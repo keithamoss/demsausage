@@ -63,7 +63,17 @@ function translatePollingPlaceToDB($row) {
   return $new;
 }
 
-// electionTableName
+function addPollingPlace(array $params, string $pollingPlaceTableName) {
+  global $file_db, $pollingPlacesAllowedFields;
+
+  $pollingPlace = translatePollingPlaceToDB($params);
+
+  $insert = fieldsToInsertSQL($pollingPlaceTableName, $pollingPlacesAllowedFields, array_keys($pollingPlace), $pollingPlace);
+  $stmt = $file_db->prepare($insert);
+  
+  return fieldsToStmntLastInsertId($stmt, $pollingPlacesAllowedFields, $pollingPlace);
+}
+
 function updatePollingPlace($id, array $params, string $electionId, boolean $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
@@ -523,12 +533,10 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   ];
 
   foreach($rows as $index => $pollingPlace) {
-    $tmpPollingPlace = translatePollingPlaceToDB(array_merge($basePollingPlace, $pollingPlace));
+    $tmpPollingPlace = array_merge($basePollingPlace, $pollingPlace);
+    $pollingPlaceId = addPollingPlace($tmpPollingPlace, $response["table_name"]);
 
-    $insert = fieldsToInsertSQL($response["table_name"], $pollingPlacesAllowedFields, array_keys($tmpPollingPlace), $tmpPollingPlace);
-    $stmt = $file_db->prepare($insert);
-    $rowCount = fieldsToStmnt($stmt, $pollingPlacesAllowedFields, $tmpPollingPlace);
-    if($rowCount !== 1) {
+    if($pollingPlaceId === false) {
       $response["error"] = true;
       $response["messages"][] = [
         "level" => "ERROR",

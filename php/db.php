@@ -43,7 +43,7 @@ function fieldsToInsertSQL(string $tableName, array $allowedFields, array $field
   $fields = array_intersect($fields, $allowedFields);
   $fieldNames = implode(", ", $fields);
   $fieldValues = implode(", ", array_map(function ($fieldName) use($params) {
-    if(in_array($fieldName, ["first_report", "latest_report", "election_day"])) {
+    if(in_array($fieldName, getTimestampFields())) {
       if(is_null($params[$fieldName])) {
         return "NULL";
       } elseif(stristr($params[$fieldName], "strftime") !== false) {
@@ -62,7 +62,7 @@ function fieldsToUpdateSQL(string $tableName, array $allowedFields, array $param
   $fields = array_intersect(array_keys($params), $allowedFields);
   $fieldNames = implode(", ", $fields);
   $fieldNamesAndValues = implode(", ", array_map(function ($fieldName) use($params) {
-    if(in_array($fieldName, ["first_report", "latest_report", "election_day"])) {
+    if(in_array($fieldName, getTimestampFields())) {
       if(is_null($params[$fieldName])) {
         return $fieldName . " = NULL";
       } elseif(stristr($params[$fieldName], "strftime") !== false) {
@@ -84,7 +84,7 @@ function fieldsToDeleteSQL(string $tableName, $pkeyFieldName) {
 function fieldsToStmnt($stmt, array $allowedFields, array $params) {
   $fields = array_intersect(array_keys($params), $allowedFields);
   foreach($fields as $field) {
-    if(in_array($field, ["first_report", "latest_report", "election_day"]) === false) { 
+    if(in_array($field, getTimestampFields()) === false) { 
       $stmt->bindParam(":" . $field, $params[$field]);
     }
   }
@@ -116,5 +116,9 @@ function updateTable($id, array $params, string $table_name, string $pkeyFieldNa
   $stmt->bindParam(":" . $pkeyFieldName, $id);
   
   return fieldsToStmnt($stmt, $allowedFields, $params);
+}
+
+function getTimestampFields() {
+  return ["first_report", "latest_report", "election_day", "reported_timestamp"];
 }
 ?>

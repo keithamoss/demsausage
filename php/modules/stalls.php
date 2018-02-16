@@ -1,8 +1,9 @@
 <?php
 require_once "modules/mailgun.php";
+require_once "modules/polling_places.php";
 
 $pendingStallsPKeyFieldName = "id";
-$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "polling_place_id", "polling_place_premises", "elections_id", "active", "mail_confirm_key", "mail_confirmed");
+$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "polling_place_id", "polling_place_premises", "elections_id", "active", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
 
 function translateStallFromDB($row) {
   return [
@@ -10,40 +11,89 @@ function translateStallFromDB($row) {
     "stall_description" => $row["stall_description"],
     "stall_name" => $row["stall_name"],
     "stall_website" => $row["stall_website"],
+    "stall_location_info" => ($row["stall_location_info"] !== "") ? json_decode($row["stall_location_info"]) : new stdClass(),
     "contact_email" => $row["contact_email"],
     "has_bbq" => (bool)$row["has_bbq"],
     "has_caek" => (bool)$row["has_caek"],
     "has_vego" => (bool)$row["has_vego"],
     "has_halal" => (bool)$row["has_halal"],
+    "has_coffee" => (bool)$row["has_coffee"],
+    "has_baconandeggs" => (bool)$row["has_baconandeggs"],
     "polling_place_id" => (int)$row["polling_place_id"],
     "polling_place_premises" => $row["polling_place_premises"],
     "elections_id" => (int)$row["elections_id"],
     "active" => (bool)$row["active"],
     "mail_confirm_key" => $row["mail_confirm_key"],
-    "mail_confirmed" => (bool)$row["mail_confirmed"]
+    "mail_confirmed" => (bool)$row["mail_confirmed"],
+    "reported_timestamp" => $row["reported_timestamp"],
   ];
 }
 
-function addPendingStall(array $params) {
+function addPendingStall(array $stall, $electionId) {
   global $file_db, $pendingStallsAllowedFields;
 
-  $insert = fieldsToInsertSQL("pending_stalls", $pendingStallsAllowedFields, array_keys($params), $params);
+  $election = fetchElection($electionId);
+
+  $stall["reported_timestamp"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  if($election["polling_places_loaded"] === false) {
+    $stall["stall_location_info"] = (gettype($stall["stall_location_info"]) === "string") ? $stall["stall_location_info"] : json_encode($stall["stall_location_info"]);
+  }
+
+  $insert = fieldsToInsertSQL("pending_stalls", $pendingStallsAllowedFields, array_keys($stall), $stall);
   $stmt = $file_db->prepare($insert);
+  $stallId = fieldsToStmntLastInsertId($stmt, $pendingStallsAllowedFields, $stall);
+
+  if($stallId !== false) {
+    // Send submitted notification to the user
+    if($election["polling_places_loaded"] === false) {
+      $pollingPlace = (array)json_decode($stall["stall_location_info"]);
+    } else {
+      $pollingPlace = fetchPollingPlaceByElectionId($stall["polling_place_id"], $electionId);
+    }
+
+    $toEmail = $stall["contact_email"];
+    $toName = "";
+    $mailInfo = array(
+      "POLLING_PLACE_NAME" => $pollingPlace["polling_place_name"],
+      "POLLING_PLACE_ADDRESS" => $pollingPlace["address"],
+      "STALL_NAME" => $stall["stall_name"],
+      "STALL_DESCRIPTION" => $stall["stall_description"],
+      "STALL_WEBSITE" => $stall["stall_website"],
+      "OVERVIEW_MAP" => getMapboxStaticMap(1, 1),
+    );
+    sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo);
+  }
   
-  return fieldsToStmnt($stmt, $pendingStallsAllowedFields, $params);
+  return $stallId;
 }
 
 function markPendingStallAsRead($id) {
   global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
 
-  $rowCount = updateTable($id, ["active" => 0], "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
+  $stallFieldUpdates = ["active" => 0];
+
+  // If this is an 'unofficial' polling place, add it to the table.
+  // This only applies to stalls approved before we have official
+  // polling places from the electoral commission.
+  $stall = fetchPendingStallById($id);
+  $election = fetchElection($stall["elections_id"]);
+  if($election["polling_places_loaded"] === false) {
+    $pollingPlaceId = addPollingPlace($stall["stall_location_info"], $election["db_table_name"]);
+    if($pollingPlaceId === false) {
+      failForAPI("Error adding polling place information.");
+    }
+    $stallFieldUpdates["polling_place_id"] = $pollingPlaceId;
+  }
+
+  $rowCount = updateTable($id, $stallFieldUpdates, "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
 
   if($rowCount === 1) {
     $stall = fetchPendingStallById($id);
     $pollingPlace = fetchPollingPlaceByElectionId($stall["polling_place_id"], $stall["elections_id"]);
 
+    // Send approval notification to the user
     $toEmail = $stall["contact_email"];
-    $toName = "Foobar";
+    $toName = "";
     $mailInfo = array(
       "POLLING_PLACE_NAME" => $pollingPlace["polling_place_name"],
       "POLLING_PLACE_ADDRESS" => $pollingPlace["address"],

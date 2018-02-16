@@ -109,7 +109,8 @@ function sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo) {
   $mailInfo["CONFIRM_LINK"] = "Blah blah blah confirm email <a href='$confirmUrl'>here</a>.<br /><br/>";
 
   $body = array(
-    "to" => "$toName <$toEmail>",
+    // "to" => "$toName <$toEmail>",
+    "to" => "$toEmail",
     "subject" => "Your Democracy Sausage stall has been received!",
     "html" => rollYourOwnTemplating("stall_submitted", $mailInfo),
   );
@@ -118,7 +119,8 @@ function sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo) {
 
 function sendStallApprovedEmail($toEmail, $toName, $mailInfo) {
   $body = array(
-    "to" => "$toName <$toEmail>",
+    // "to" => "$toName <$toEmail>",
+    "to" => "$toEmail",
     "subject" => "Your Democracy Sausage stall has been approved!",
     "html" => rollYourOwnTemplating("stall_approved", $mailInfo),
   );

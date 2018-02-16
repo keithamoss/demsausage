@@ -22,8 +22,13 @@ if(stristr($_SERVER["QUERY_STRING"], "regenerate-geojson") !== false) {
 
 // Add Pending Stall
 if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
-  // $params = array("stall_name" => "Foo", "stall_description" => "Bar");
-  // addPendingStall($params);
+  $stallId = addPendingStall($_GET["stall"], $_GET["electionId"]);
+  if($stallId === false) {
+    failForAPI("Error adding stall.");
+  } else {
+    echo json_encode(["id" => $stallId]);
+    closeDb();
+  }
   closeDb();
 }
 
