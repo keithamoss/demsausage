@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient } from "../../redux/modules/interfaces"
+import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -53,20 +53,32 @@ export interface IAction {
     }
 }
 
+export interface IStallLocationInfo {
+    lon: number
+    lat: number
+    polling_place_name: string
+    address: string
+    state: string
+}
+
 export interface IStall {
     id: number
     stall_description: string
     stall_name: string
     stall_website: string
+    stall_location_info: IStallLocationInfo | null
     contact_email: string
     has_bbq: boolean
     has_caek: boolean
     has_vego: boolean
     has_halal: boolean
+    has_coffee: boolean
+    has_baconandeggs: boolean
     polling_place_id: number
     polling_place_premises: string
     elections_id: number
     active: boolean
+    reported_timestamp: string // Datetime
 }
 
 // Side effects, only as applicable
@@ -93,6 +105,22 @@ export function markStallAsRead(id: number) {
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
             dispatch(removePendingStall(id))
+            return json
+        }
+    }
+}
+
+export function createStall(election: IElection, stall: Partial<IStall>) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "add-stall": 1,
+            stall: stall,
+            electionId: election.id,
+        }
+
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
             return json
         }
     }

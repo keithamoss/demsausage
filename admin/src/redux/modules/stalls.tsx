@@ -53,20 +53,32 @@ export interface IAction {
     }
 }
 
+export interface IStallLocationInfo {
+    lon: number
+    lat: number
+    polling_place_name: string
+    address: string
+    state: string
+}
+
 export interface IStall {
     id: number
     stall_description: string
     stall_name: string
     stall_website: string
+    stall_location_info: IStallLocationInfo | null
     contact_email: string
     has_bbq: boolean
     has_caek: boolean
     has_vego: boolean
     has_halal: boolean
+    has_coffee: boolean
+    has_baconandeggs: boolean
     polling_place_id: number
     polling_place_premises: string
     elections_id: number
     active: boolean
+    reported_timestamp: string // Datetime
 }
 
 // Side effects, only as applicable
