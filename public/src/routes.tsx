@@ -4,7 +4,7 @@ import { Route, IndexRoute } from "react-router"
 import AppContainer from "./AppContainer"
 import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
 import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
-import AddStallFormContainer from "./add-stall/AddStallForm/AddStallFormContainer"
+import AddStallContainer from "./add-stall/AddStall/AddStallContainer"
 import { IStore } from "./redux/modules/interfaces"
 
 export default (store: IStore) => {
@@ -12,7 +12,7 @@ export default (store: IStore) => {
         <Route path="/" component={AppContainer}>
             <IndexRoute components={{ content: SausageMapContainer }} />
             <Route path="/search" components={{ content: PollingPlaceFinderContainer }} />
-            <Route path="/add-stall" components={{ content: AddStallFormContainer }} />
+            <Route path="/add-stall" components={{ content: AddStallContainer }} />
         </Route>
     )
 }

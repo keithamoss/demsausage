@@ -1,19 +1,37 @@
 import * as React from "react"
 import styled from "styled-components"
 
-import { /* Field, */ reduxForm } from "redux-form"
-import { IElection } from "../../redux/modules/interfaces"
+import { Field, reduxForm } from "redux-form"
+import { IElection, IStallLocationInfo } from "../../redux/modules/interfaces"
 // import "./AddStallForm.css"
 
-// import { grey100 } from "material-ui/styles/colors"
-// import { GridList, GridTile } from "material-ui/GridList"
-// import { TextField, Toggle, SelectField } from "redux-form-material-ui"
-// import MenuItem from "material-ui/MenuItem"
-// import RaisedButton from "material-ui/RaisedButton"
+import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
+import StallLocationCard from "../StallLocationCard/StallLocationCard"
+import { grey100, grey500 } from "material-ui/styles/colors"
+import { TextField, Toggle } from "redux-form-material-ui"
+import RaisedButton from "material-ui/RaisedButton"
+import { List, ListItem } from "material-ui/List"
+
+import SausageIcon from "../../icons/sausage"
+import CakeIcon from "../../icons/cake"
+import VegoIcon from "../../icons/vego"
+import HalalIcon from "../../icons/halal"
+import CoffeeIcon from "../../icons/coffee"
+import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+
+const required = (value: any) => (value ? undefined : "Required")
+const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined)
 
 export interface IProps {
     election: IElection
     // pollingPlace: IPollingPlace
+    locationChosen: boolean
+    stallLocationInfo: IStallLocationInfo
+    onChoosePlace: any
+    onCancelChosenLocation: any
+    onConfirmChosenLocation: any
+    locationConfirmed: boolean
+    formSubmitting: boolean
     onSubmit: any
     onSaveForm: any
 
@@ -24,143 +42,169 @@ export interface IProps {
 }
 
 // Work around TypeScript issues with redux-form. There's a bunch of issues logged in DefinitelyTyped's issue tracker.
-// class CustomField extends React.Component<any, any> {
-//     render(): any {
-//         return <Field autoComplete={"off"} {...this.props} />
-//     }
-// }
+class CustomField extends React.Component<any, any> {
+    render(): any {
+        return <Field autoComplete={"off"} {...this.props} />
+    }
+}
 
-// class DeliciousnessToggle extends React.Component<any, any> {
-//     render(): any {
-//         return <CustomField component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...this.props} />
-//     }
-// }
+class CustomTextField extends React.Component<any, any> {
+    render(): any {
+        const { hintText, ...rest } = this.props
 
-const SausageForm = styled.form`
-    padding: 10px;
-`
+        return (
+            <div>
+                <CustomField {...rest} />
+                <div style={{ color: grey500, fontSize: 12 }}>{hintText}</div>
+            </div>
+        )
+    }
+}
+
+class DeliciousnessToggle extends React.Component<any, any> {
+    render(): any {
+        return <CustomField component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...this.props} />
+    }
+}
 
 const FormSection = styled.div`
-    margin-top: 35px;
-    margin-bottom: 35px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 `
 
 const FormSectionHeader = styled.h2`
     margin-bottom: 0px;
 `
 
-// const DeliciousnessGrid = styled(GridList)`
-//     width: 475px;
-//     margin-top: 15px !important;
-// `
-
-// const DeliciousnessGridTile = styled(GridTile)`
-//     margin-right: 25px;
-// `
-// const HiddenButton = styled.button`
-//     display: none;
-// `
+const HiddenButton = styled.button`
+    display: none;
+`
 
 class AddStallForm extends React.PureComponent<IProps, {}> {
     render() {
-        const { /* isDirty, onSaveForm, */ handleSubmit, onSubmit } = this.props
+        const {
+            election,
+            locationChosen,
+            stallLocationInfo,
+            onChoosePlace,
+            onCancelChosenLocation,
+            onConfirmChosenLocation,
+            locationConfirmed,
+            formSubmitting,
+        } = this.props
+        const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
 
         return (
-            <SausageForm onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FormSection>
-                    <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
+                    <FormSectionHeader>Stall location</FormSectionHeader>
                     <br />
-                    Hi there,<br />
-                    <br />
-                    We're busily rebuilding the Democracy Sausage site for the upcoming Tasmanian and South Australian elections.<br />
-                    <br />
-                    We expect to be ready around the middle of February - in the mean time if you'd like to submit a stall please get in
-                    touch at <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.<br />
-                    <br />
-                    Cheers,<br />
-                    <br />
-                    The Democracy Sausage Team
-                    {/* <DeliciousnessGrid cellHeight={"auto"} cols={3} padding={18}>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_bbq" label={"BBQ"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_caek" label={"Cake"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_nothing" label={"Nothing"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_run_out" label={"Run Out"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_coffee" label={"Coffee"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_vego" label={"Vego"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_halal" label={"Halal"} />
-                        </DeliciousnessGridTile>
-                        <DeliciousnessGridTile>
-                            <DeliciousnessToggle name="has_baconandeggs" label={"Bacon & Eggs"} />
-                        </DeliciousnessGridTile>
-                    </DeliciousnessGrid>
-                    <CustomField
-                        name="has_freetext"
-                        component={TextField}
-                        floatingLabelText={"What other types of delicious are here?"}
-                        fullWidth={true}
-                    /> */}
+                    {locationConfirmed === false &&
+                        election.polling_places_loaded === false && (
+                            <div>
+                                <GooglePlacesAutocompleteList
+                                    componentRestrictions={{ country: "AU" }}
+                                    hintText={"Where is your stall?"}
+                                    onChoosePlace={onChoosePlace}
+                                />
+                                <br />
+                            </div>
+                        )}
+                    {locationChosen && (
+                        <StallLocationCard
+                            stallLocationInfo={stallLocationInfo}
+                            showActions={locationConfirmed === false}
+                            onCancel={onCancelChosenLocation}
+                            onConfirm={onConfirmChosenLocation}
+                        />
+                    )}
                 </FormSection>
 
-                {/* <FormSection>
-                    <FormSectionHeader>Stall Information</FormSectionHeader>
-                    <CustomField
-                        name="stall_name"
-                        component={TextField}
-                        floatingLabelText={"The name of the stall that is here"}
-                        fullWidth={true}
-                    />
-                    <CustomField
-                        name="stall_description"
-                        component={TextField}
-                        floatingLabelText={"A brief description of the stall"}
-                        fullWidth={true}
-                    />
-                    <CustomField
-                        name="stall_website"
-                        component={TextField}
-                        floatingLabelText={"A link to the website of the people organising the stall"}
-                        fullWidth={true}
-                    />
-                </FormSection>
+                {locationConfirmed && (
+                    <div>
+                        <FormSection>
+                            <FormSectionHeader>Stalls details</FormSectionHeader>
+                            <CustomTextField
+                                name="stall_name"
+                                component={TextField}
+                                floatingLabelText={"Stall name"}
+                                hintText={"e.g. Primary School Sausage Sizzle"}
+                                fullWidth={true}
+                                validate={[required]}
+                            />
+                            <CustomTextField
+                                name="stall_description"
+                                component={TextField}
+                                floatingLabelText={"Stall description"}
+                                hintText={"e.g. Sausages, bread rolls, drinks to fund the local cricket team"}
+                                fullWidth={true}
+                                validate={[required]}
+                            />
+                            <CustomTextField
+                                name="stall_website"
+                                component={TextField}
+                                floatingLabelText={"Stall website"}
+                                hintText={"We'll include a link to your site as part of your stall's information"}
+                                fullWidth={true}
+                            />
+                        </FormSection>
 
-                <FormSection>
-                    <FormSectionHeader>Polling Place Information</FormSectionHeader>
-                    <CustomField
-                        name="polling_place_type"
-                        component={SelectField}
-                        floatingLabelText={"What type of polling place is this?"}
-                        fullWidth={true}
-                    />
-                    <CustomField
-                        name="extra_info"
-                        component={TextField}
-                        floatingLabelText={"Is there any extra information to add?"}
-                        fullWidth={true}
-                    />
-                    <CustomField
-                        name="source"
-                        component={TextField}
-                        floatingLabelText={"What is the source? (e.g. Twitter, Facebook, School Newsletter)"}
-                        fullWidth={true}
-                    />
-                </FormSection>
+                        <FormSection>
+                            <FormSectionHeader>Your details</FormSectionHeader>
+                            <CustomTextField
+                                name="contact_email"
+                                component={TextField}
+                                floatingLabelText={"Contact email"}
+                                hintText={"So we can contact you when we approve your stall"}
+                                fullWidth={true}
+                                validate={[required, email]}
+                                type={"email"}
+                            />
+                        </FormSection>
 
-                <RaisedButton label={"Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
-                <HiddenButton type="submit" /> */}
-            </SausageForm>
+                        <FormSection>
+                            <FormSectionHeader>What's on offer?</FormSectionHeader>
+                            <List>
+                                <ListItem
+                                    primaryText="Is there a sausage sizzle?"
+                                    leftIcon={<SausageIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_bbq" />}
+                                />
+                                <ListItem
+                                    primaryText="Is there a cake stall?"
+                                    leftIcon={<CakeIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_caek" />}
+                                />
+                                <ListItem
+                                    primaryText="Are there vegetarian options?"
+                                    leftIcon={<VegoIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_vego" />}
+                                />
+                                <ListItem
+                                    primaryText="Is there any food that's halal?"
+                                    leftIcon={<HalalIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_halal" />}
+                                />
+                                <ListItem
+                                    primaryText="Do you have coffee?"
+                                    leftIcon={<CoffeeIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_coffee" />}
+                                />
+                                <ListItem
+                                    primaryText="Are there bacon and eggs?"
+                                    leftIcon={<BaconandEggsIcon />}
+                                    rightToggle={<DeliciousnessToggle name="has_baconandeggs" />}
+                                />
+                            </List>
+                        </FormSection>
+
+                        <RaisedButton label={"Submit Stall"} disabled={!isDirty || formSubmitting} primary={true} onClick={onSaveForm} />
+                        <HiddenButton type="submit" />
+                        <br />
+                        <br />
+                    </div>
+                )}
+            </form>
         )
     }
 }

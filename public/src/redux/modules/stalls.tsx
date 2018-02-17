@@ -118,10 +118,7 @@ export function createStall(election: IElection, stall: Partial<IStall>) {
             electionId: election.id,
         }
 
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
-
-        if (response.status === 200) {
-            return json
-        }
+        const { /*response,*/ json } = await ealapi.dsAPIGet(params, dispatch)
+        return json
     }
 }

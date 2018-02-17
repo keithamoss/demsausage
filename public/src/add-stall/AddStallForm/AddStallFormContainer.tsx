@@ -5,10 +5,19 @@ import { isDirty, submit } from "redux-form"
 // import { cloneDeep } from "lodash-es"
 
 import AddStallForm from "./AddStallForm"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
-// import { updatePollingPlace } from "../../redux/modules/polling_places"
+import {
+    IStore,
+    IElection,
+    IStallLocationInfo,
+    IStall,
+    IGoogleAddressSearchResult,
+    IGoogleGeocodeResult,
+} from "../../redux/modules/interfaces"
+import { createStall } from "../../redux/modules/stalls"
 
-export interface IProps {}
+export interface IProps {
+    onStallAdded: Function
+}
 
 export interface IDispatchProps {
     onFormSubmit: Function
@@ -20,70 +29,79 @@ export interface IStoreProps {
     isDirty: boolean
 }
 
-export interface IStateProps {}
-
-interface IRouteProps {
-    electionIdentifier: string
+export interface IStateProps {
+    addressResult: IGoogleAddressSearchResult | null
+    geocodedPlace: IGoogleGeocodeResult | null
+    locationConfirmed: boolean
+    formSubmitting: boolean
 }
 
-interface IOwnProps {
-    params: IRouteProps
+// interface IRouteProps {
+//     electionIdentifier: string
+// }
+
+interface IOwnProps {}
+
+const fromFormValues = (formValues: any): IStall => {
+    return {
+        ...formValues,
+    }
 }
-
-// const toFormValues = (pollingPlace: IPollingPlace) => {
-//     const hasOther: any = pollingPlace.has_other
-//     return {
-//         has_bbq: pollingPlace.has_bbq,
-//         has_caek: pollingPlace.has_caek,
-//         has_nothing: pollingPlace.has_nothing,
-//         has_run_out: pollingPlace.has_run_out,
-//         has_coffee: "has_coffee" in hasOther && hasOther.has_coffee === true,
-//         has_vego: "has_vego" in hasOther && hasOther.has_vego === true,
-//         has_halal: "has_halal" in hasOther && hasOther.has_halal === true,
-//         has_baconandeggs: "has_baconandeggs" in hasOther && hasOther.has_baconandeggs === true,
-//         has_freetext: "has_freetext" in hasOther ? hasOther.has_freetext : "",
-//         stall_name: pollingPlace.stall_name,
-//         stall_description: pollingPlace.stall_description,
-//         stall_website: pollingPlace.stall_website,
-//         polling_place_type: pollingPlace.polling_place_type,
-//         extra_info: pollingPlace.extra_info,
-//         source: pollingPlace.source,
-//     }
-// }
-
-// const fromFormValues = (formValues: any): IPollingPlace => {
-//     let hasOther: any = {}
-//     if (formValues.has_coffee === true) {
-//         hasOther.has_coffee = formValues.has_coffee
-//     }
-//     if (formValues.has_vego === true) {
-//         hasOther.has_vego = formValues.has_vego
-//     }
-//     if (formValues.has_halal === true) {
-//         hasOther.has_halal = formValues.has_halal
-//     }
-//     if (formValues.has_baconandeggs === true) {
-//         hasOther.has_baconandeggs = formValues.has_baconandeggs
-//     }
-//     if (formValues.has_freetext === true) {
-//         hasOther.has_freetext = formValues.has_freetext
-//     }
-
-//     let formValuesCopy = cloneDeep(formValues)
-//     delete formValuesCopy.has_coffee
-//     delete formValuesCopy.has_vego
-//     delete formValuesCopy.has_halal
-//     delete formValuesCopy.has_baconandeggs
-//     delete formValuesCopy.has_freetext
-
-//     return {
-//         ...formValuesCopy,
-//         has_other: JSON.stringify(hasOther),
-//     }
-// }
 
 export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     initialValues: object
+
+    constructor(props: any) {
+        super(props)
+        this.state = { addressResult: null, geocodedPlace: null, locationConfirmed: false, formSubmitting: false }
+
+        this.onChoosePlace = this.onChoosePlace.bind(this)
+        this.onCancelChosenLocation = this.onCancelChosenLocation.bind(this)
+        this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
+    }
+
+    onChoosePlace(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) {
+        this.setState(Object.assign(this.state, { addressResult: addressResult, geocodedPlace: place }))
+    }
+
+    onCancelChosenLocation() {
+        this.setState(Object.assign(this.state, { addressResult: null, geocodedPlace: null, locationConfirmed: false }))
+    }
+
+    onConfirmChosenLocation() {
+        this.setState(
+            Object.assign(this.state, {
+                locationConfirmed: true,
+            })
+        )
+    }
+    toggleFormSubmitting() {
+        this.setState(
+            Object.assign(this.state, {
+                formSubmitting: !this.state.formSubmitting,
+            })
+        )
+    }
+
+    getPollingPlaceInfo(): IStallLocationInfo | null {
+        const { addressResult, geocodedPlace } = this.state
+
+        if (addressResult === null || geocodedPlace === null) {
+            return null
+        }
+
+        const stateComponent: any = geocodedPlace.address_components.find(
+            (o: any) => o.types.includes("administrative_area_level_1") && o.types.includes("political")
+        )
+        return {
+            lon: geocodedPlace.geometry.location.lng(),
+            lat: geocodedPlace.geometry.location.lat(),
+            polling_place_name: addressResult.structured_formatting.main_text,
+            address: geocodedPlace.formatted_address,
+            state: stateComponent !== undefined ? stateComponent.short_name : null,
+        }
+    }
+
     componentWillMount() {
         // const { pollingPlace } = this.props
 
@@ -92,16 +110,27 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
         // this.initialValues = cloneDeep(toFormValues(pollingPlace))
         this.initialValues = {}
     }
+
     render() {
-        const { election, isDirty, onFormSubmit, onSaveForm } = this.props
+        const { election, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { addressResult, locationConfirmed, formSubmitting } = this.state
 
         return (
             <AddStallForm
-                election={election}
                 initialValues={this.initialValues}
+                election={election}
+                locationChosen={addressResult !== null}
+                stallLocationInfo={this.getPollingPlaceInfo()}
+                onChoosePlace={this.onChoosePlace}
+                onCancelChosenLocation={this.onCancelChosenLocation}
+                onConfirmChosenLocation={this.onConfirmChosenLocation}
+                locationConfirmed={locationConfirmed}
+                formSubmitting={formSubmitting}
                 isDirty={isDirty}
-                onSubmit={(values: object, dispatch: Function, props: IProps) => {
-                    onFormSubmit(values, election)
+                onSubmit={async (values: object, dispatch: Function, props: IProps) => {
+                    const stallLocationInfo = this.getPollingPlaceInfo()
+                    this.toggleFormSubmitting()
+                    await onFormSubmit(onStallAdded, values, election, stallLocationInfo)
                 }}
                 onSaveForm={() => {
                     onSaveForm(isDirty)
@@ -115,7 +144,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections } = state
 
     return {
-        election: elections.elections[ownProps.params.electionIdentifier],
+        election: elections.elections[elections.current_election_id],
         // pollingPlaceId: ownProps.params.pollingPlaceId || null,
         isDirty: isDirty("addStall")(state),
     }
@@ -123,26 +152,25 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        async onFormSubmit(values: object, election: IElection, pollingPlace: IPollingPlace) {
-            console.log("onFormSubmit", values)
+        async onFormSubmit(onStallAdded: Function, values: object, election: IElection, stallLocationInfo: IStallLocationInfo) {
+            const stall: Partial<IStall> = fromFormValues(values)
+            stall.elections_id = election.id
 
-            // const pollingPlaceNew: Partial<IPollingPlace> = fromFormValues(values)
-            // // if (pollingPlace.first_report === "") {
-            // //     pollingPlaceNew.first_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
-            // // }
-            // // pollingPlaceNew.latest_report = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'"
+            if (election.polling_places_loaded === false) {
+                stall.stall_location_info = stallLocationInfo
+            }
 
-            // const json = await dispatch(updatePollingPlace(election, pollingPlace, pollingPlaceNew))
-            // if (json.rows === 1) {
-            //     // onPollingPlaceEdited()
-            // }
+            const json = await dispatch(createStall(election, stall))
+            if (!("error" in json) && json.id > 0) {
+                onStallAdded()
+            }
         },
-        onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {
+        onSaveForm: (isDirty: boolean) => {
             dispatch(submit("addStall"))
         },
     }
 }
 
-const AddStallFormContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AddStallFormContainer)
+const AddStallFormContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AddStallFormContainer) as any
 
 export default AddStallFormContainerWrapped
