@@ -5,6 +5,7 @@ import { IStall } from "../../redux/modules/interfaces"
 // import "./PendingStallsManager.css"
 
 import { List, ListItem } from "material-ui/List"
+import { ActionHome } from "material-ui/svg-icons"
 
 export interface IProps {
     stalls: Array<IStall>
@@ -20,7 +21,10 @@ class PendingStallsManager extends React.PureComponent<IProps, {}> {
                     <ListItem
                         key={stall.id}
                         primaryText={stall.stall_name}
-                        secondaryText={stall.polling_place_premises}
+                        secondaryText={
+                            stall.stall_location_info === null ? stall.polling_place_premises : stall.stall_location_info.polling_place_name
+                        }
+                        leftIcon={<ActionHome />}
                         containerElement={<Link to={`/stalls/${stall.id}/`} />}
                     />
                 ))}
