@@ -3,7 +3,7 @@ import * as React from "react"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceInfoCard.css"
 
-import { Card, CardTitle, CardText } from "material-ui/Card"
+import { Card, CardTitle } from "material-ui/Card"
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 export interface IProps {
@@ -23,6 +23,11 @@ class PollingPlaceInfoCard extends React.PureComponent<IProps, {}> {
         //     ))
         // )
 
+        const pollingPlaceNameDetails =
+            pollingPlace.premises !== null
+                ? `${pollingPlace.polling_place_name}, ${pollingPlace.premises}`
+                : pollingPlace.polling_place_name
+
         const pollingPlaceAddressDetails =
             pollingPlace.address === pollingPlace.premises ? pollingPlace.state : `${pollingPlace.address}, ${pollingPlace.state}`
 
@@ -37,19 +42,7 @@ class PollingPlaceInfoCard extends React.PureComponent<IProps, {}> {
                         mapElement={<div style={{ height: `100%` }} />}
                     />
                 </CardMedia> */}
-                <CardTitle title={pollingPlace.premises} subtitle={pollingPlaceAddressDetails} />
-                <CardText>
-                    {pollingPlace.extra_info !== "" && (
-                        <span>
-                            <strong>Extra Info:</strong> {pollingPlace.extra_info}
-                        </span>
-                    )}
-                    {pollingPlace.booth_info !== "" && (
-                        <span>
-                            <strong>Booth Info:</strong> {pollingPlace.booth_info}
-                        </span>
-                    )}
-                </CardText>
+                <CardTitle title={pollingPlaceNameDetails} subtitle={pollingPlaceAddressDetails} />
             </Card>
         )
     }
