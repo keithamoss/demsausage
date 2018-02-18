@@ -13,7 +13,7 @@ import SearchBar from "material-ui-search-bar"
 import FlatButton from "material-ui/FlatButton"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
-import Snackbar from "material-ui/Snackbar"
+// import Snackbar from "material-ui/Snackbar"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
 import { ActionInfo } from "material-ui/svg-icons"
@@ -34,8 +34,10 @@ const PollingPlaceCardWrapper = styled.div`
 export interface IProps {
     election: IElection
     queriedPollingPlaces: Array<IPollingPlace>
+    hasSeenElectionAnnouncement: boolean
     onQueryMap: Function
     onCloseQueryMapDialog: any
+    onElectionAnnounceClose: any
 }
 
 const spriteBBQ = new ol.style.Style({
@@ -146,12 +148,13 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             <div>
                 <div id="openlayers-map" className="openlayers-map" />
 
-                <Snackbar
-                    open={true}
+                {/* <Snackbar
+                    open={hasSeenElectionAnnouncement === false}
                     message="The Tasmania 2018 state election is now live!"
-                    style={{ marginBottom: 56 }} /* Height of BottomSheet */
+                    style={{ marginBottom: 56 }}
                     autoHideDuration={5000}
-                />
+                    onRequestClose={onElectionAnnounceClose}
+                /> */}
 
                 <SearchBarContainer>
                     <SearchBar
