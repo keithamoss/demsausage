@@ -8,8 +8,8 @@ import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini
 
 import * as ol from "openlayers"
 import SearchBar from "material-ui-search-bar"
-import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
-import { grey500 } from "material-ui/styles/colors"
+// import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
+// import { grey500 } from "material-ui/styles/colors"
 import FlatButton from "material-ui/FlatButton"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
@@ -152,7 +152,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         onChange={() => {}}
                         onClick={() => browserHistory.push("/search")}
                         onRequestSearch={() => console.log("onRequestSearch")}
-                        searchIcon={<DeviceLocationSearching color={grey500} />}
+                        // searchIcon={<DeviceLocationSearching color={grey500} />}
                         style={{
                             margin: "0 auto",
                             maxWidth: 800,
