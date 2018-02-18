@@ -39,7 +39,7 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
             <FinderContainer>
                 <GooglePlacesAutocompleteList
                     componentRestrictions={{ country: "AU" }}
-                    hintText={"Find polling places with sausages"}
+                    hintText={"Find polling places"}
                     searchIcon={<DeviceLocationSearching color={grey500} />}
                     style={{
                         margin: "0 auto",

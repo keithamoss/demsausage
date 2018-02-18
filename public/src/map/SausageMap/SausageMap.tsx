@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { browserHistory } from "react-router"
+import { browserHistory, Link } from "react-router"
 // import "./SausageMap.css"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { getAPIBaseURL } from "../../redux/modules/app"
@@ -12,6 +12,11 @@ import DeviceLocationSearching from "material-ui/svg-icons/device/location-searc
 import { grey500 } from "material-ui/styles/colors"
 import FlatButton from "material-ui/FlatButton"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
+
+import { ListItem } from "material-ui/List"
+import Avatar from "material-ui/Avatar"
+import { ActionInfo } from "material-ui/svg-icons"
+import { blue500 } from "material-ui/styles/colors"
 
 const SearchBarContainer = styled.div`
     position: relative;
@@ -142,7 +147,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
 
                 <SearchBarContainer>
                     <SearchBar
-                        hintText={"Find polling places with sausages"}
+                        hintText={"Find polling places"}
                         // tslint:disable-next-line:no-empty
                         onChange={() => {}}
                         onClick={() => browserHistory.push("/search")}
@@ -162,11 +167,25 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         title={"Polling Places"}
                         actionButton={<FlatButton label="Close" onClick={onCloseQueryMapDialog} />}
                     >
-                        {queriedPollingPlaces.map((pollingPlace: IPollingPlace) => (
+                        {queriedPollingPlaces.slice(0, 20).map((pollingPlace: IPollingPlace) => (
                             <PollingPlaceCardWrapper key={pollingPlace.id}>
                                 <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} />
                             </PollingPlaceCardWrapper>
                         ))}
+                        {queriedPollingPlaces.length > 20 && (
+                            <ListItem
+                                leftAvatar={<Avatar icon={<ActionInfo />} backgroundColor={blue500} />}
+                                primaryText={"There's a lot of polling places here"}
+                                secondaryText={
+                                    <span>
+                                        Try zooming in on the map and querying again - or hit the <Link to={"/search"}>Find</Link> button
+                                        and search by an address.
+                                    </span>
+                                }
+                                secondaryTextLines={2}
+                                disabled={true}
+                            />
+                        )}
                     </FullscreenDialog>
                 )}
             </div>
