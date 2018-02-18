@@ -64,8 +64,8 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                                 leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
                                 primaryText={"Notice"}
                                 secondaryText={
-                                    "We don't have any official polling places from the electoral commission yet. " +
-                                    "Approving this stall will add it to the map as a temporary polling places."
+                                    "We don't have official polling places for this election yet. " +
+                                    "Approving will add it to the map as a temporary polling place."
                                 }
                                 secondaryTextLines={2}
                                 disabled={true}
