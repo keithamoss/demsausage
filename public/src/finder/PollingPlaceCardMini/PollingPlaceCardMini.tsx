@@ -11,7 +11,7 @@ import {
 } from "../../redux/modules/polling_places"
 
 import Paper from "material-ui/Paper"
-import { Card, CardActions, CardHeader, CardText } from "material-ui/Card"
+import { Card, CardHeader, CardText } from "material-ui/Card"
 import RaisedButton from "material-ui/RaisedButton"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
@@ -127,9 +127,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         {pollingPlaceHasReportsOfNoms(pollingPlace) === true &&
                             `This polling place has ${getFoodDescription(pollingPlace)}.`}
                     </CardText>
-                    <CardActions>
+                    {/* <CardActions>
                         <RaisedButton primary={true} label="Report" icon={<MapsAddLocation />} />
-                    </CardActions>
+                    </CardActions> */}
                 </Card>
             </Paper>
         )
