@@ -92,7 +92,7 @@ function updatePollingPlace($id, array $params, string $electionId, $regenerateG
   return $rowCount;
 }
 
-function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, boolean $regenerateGeoJSON) {
+function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
   $pollingPlace = translatePollingPlaceToDB($params);
@@ -439,6 +439,8 @@ function createElectionTableName($election) {
 
 function loadPollingPlaces($electionId, $dryrun, $file) {
   global $file_db, $pollingPlacesAllowedFields, $validPollingPlaceTypes;
+
+  $dryrun = true;
 
   $election = fetchElection($electionId);
   $response = [

@@ -188,7 +188,12 @@ function fetchPendingStallById($id) {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE id = :id");
   $stmt->bindParam(":id", $id);
   $stmt->execute();
-  return translateStallFromDB($stmt->fetch(\PDO::FETCH_ASSOC));
+
+  $stalls = [];
+  while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+    $stalls[] = translateStallFromDB($row);
+  }
+  return $stalls;
 }
 
 function fetchPendingStallByElection($election_id) {
@@ -197,7 +202,12 @@ function fetchPendingStallByElection($election_id) {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE elections_id = :election_id");
   $stmt->bindParam(":election_id", $election_id);
   $stmt->execute();
-  return translateStallFromDB($stmt->fetch(\PDO::FETCH_ASSOC));
+
+  $stalls = [];
+  while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+    $stalls[] = translateStallFromDB($row);
+  }
+  return $stalls;
 }
 
 function fetchPendingStalls() {
