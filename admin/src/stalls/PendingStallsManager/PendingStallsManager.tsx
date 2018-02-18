@@ -22,7 +22,9 @@ class PendingStallsManager extends React.PureComponent<IProps, {}> {
                         key={stall.id}
                         primaryText={stall.stall_name}
                         secondaryText={
-                            stall.stall_location_info === null ? stall.polling_place_premises : stall.stall_location_info.polling_place_name
+                            stall.stall_location_info === null
+                                ? stall.polling_place_info.premises
+                                : stall.stall_location_info.polling_place_name
                         }
                         leftIcon={<ActionHome />}
                         containerElement={<Link to={`/stalls/${stall.id}/`} />}

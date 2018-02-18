@@ -3,7 +3,7 @@ require_once "modules/mailgun.php";
 require_once "modules/polling_places.php";
 
 $pendingStallsPKeyFieldName = "id";
-$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "polling_place_id", "polling_place_premises", "elections_id", "active", "status", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
+$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "polling_place_id", "elections_id", "active", "status", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
 class StallStatusEnum {
   const PENDING = 0;
   const APPROVED = 1;
@@ -25,7 +25,6 @@ function translateStallFromDB($row) {
     "has_coffee" => (bool)$row["has_coffee"],
     "has_baconandeggs" => (bool)$row["has_baconandeggs"],
     "polling_place_id" => (int)$row["polling_place_id"],
-    "polling_place_premises" => $row["polling_place_premises"],
     "elections_id" => (int)$row["elections_id"],
     "active" => (bool)$row["active"],
     "status" => (int)$row["status"], // StallStatusEnum
@@ -179,19 +178,26 @@ function fetchPendingStalls() {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE active = 1");
   $stalls = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $tmp = translateStallFromDB($row);
+      $stall = translateStallFromDB($row);
 
       // For unofficial polling places, override polling_place_id with its matching polling place
-      if($tmp["stall_location_info"] !== null) {
-        $election = fetchElection($tmp["elections_id"]);
-        $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $tmp["stall_location_info"]->lat, $tmp["stall_location_info"]->lon, 250);
+      if($stall["stall_location_info"] !== null) {
+        $election = fetchElection($stall["elections_id"]);
+        $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $stall["stall_location_info"]->lat, $stall["stall_location_info"]->lon, 250);
         if(count($pollingPlaces) > 0) {
-          $tmp["polling_place_id"] = $pollingPlaces[0]["id"];
+          $stall["polling_place_id"] = $pollingPlaces[0]["id"];
         } elseif(count($pollingPlaces) > 1) {
           failForAPI("Found more than 1 matching polling place for an unofficial stall. This is a problem :(");
         }
       }
-      $stalls[] = $tmp;
+
+      // Link polling place info
+      if($stall["polling_place_id"] > 0) {
+        $pollingPlace = fetchPollingPlaceByElectionId($stall["polling_place_id"], $row["elections_id"]);
+        $stall["polling_place_info"] = ["name" => $pollingPlace["polling_place_name"], "premises" => $pollingPlace["premises"], "address" => $pollingPlace["address"], "state" => $pollingPlace["state"]];
+      }
+
+      $stalls[] = $stall;
   }
   return $stalls;
 }

@@ -34,7 +34,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                             primaryText="Polling Place"
                             secondaryText={
                                 stall.stall_location_info === null
-                                    ? stall.polling_place_premises
+                                    ? stall.polling_place_info.premises
                                     : stall.stall_location_info.polling_place_name
                             }
                             leftIcon={<MapsPlace />}

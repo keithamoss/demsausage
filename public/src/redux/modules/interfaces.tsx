@@ -11,7 +11,7 @@ export {
     IPollingPlaceLoaderResponse,
     IPollingPlaceLoaderResponseMessage,
 } from "./polling_places"
-export { IModule as IStallModule, IStallLocationInfo, IStall } from "./stalls"
+export { IModule as IStallModule, IStallLocationInfo, IStallPollingPlacInfo, StallStatus, IStall } from "./stalls"
 
 export interface IEnvVars {
     NODE_ENV: string // development, test, production

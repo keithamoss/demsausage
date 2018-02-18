@@ -61,6 +61,13 @@ export interface IStallLocationInfo {
     state: string
 }
 
+export interface IStallPollingPlacInfo {
+    name: string
+    premises: string
+    address: string
+    state: string
+}
+
 export enum StallStatus {
     PENDING = 0,
     APPROVED = 1,
@@ -81,11 +88,11 @@ export interface IStall {
     has_coffee: boolean
     has_baconandeggs: boolean
     polling_place_id: number
-    polling_place_premises: string
     elections_id: number
     active: boolean
     status: StallStatus
     reported_timestamp: string // Datetime
+    polling_place_info: IStallPollingPlacInfo
 }
 
 // Side effects, only as applicable
