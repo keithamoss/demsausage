@@ -2,10 +2,10 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import PollingPlaceCardMini from "./PollingPlaceCardMini"
-import { IStore, IPollingPlaceSearchResult } from "../../redux/modules/interfaces"
+import { IStore, IPollingPlace } from "../../redux/modules/interfaces"
 
 export interface IProps {
-    pollingPlace: IPollingPlaceSearchResult
+    pollingPlace: IPollingPlace
 }
 
 export interface IStoreProps {}

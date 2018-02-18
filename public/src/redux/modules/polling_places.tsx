@@ -70,6 +70,15 @@ export interface IAction {
     }
 }
 
+export interface IMapPollingPlace {
+    id: number
+    geometry: any
+    has_bbq: boolean
+    has_nothing: boolean
+    has_caek: boolean
+    has_run_out: boolean
+}
+
 export interface IPollingPlace {
     id: number
     lon: number

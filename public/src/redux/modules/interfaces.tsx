@@ -6,6 +6,7 @@ export { IModule as IElectionsModule, IElections, IElection } from "./elections"
 export { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 export {
     IModule as IPollingPlacesModule,
+    IMapPollingPlace,
     IPollingPlace,
     IPollingPlaceSearchResult,
     IPollingPlaceLoaderResponse,

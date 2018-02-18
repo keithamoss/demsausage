@@ -2,13 +2,16 @@ import * as React from "react"
 import styled from "styled-components"
 import { browserHistory } from "react-router"
 // import "./SausageMap.css"
-import { IElection } from "../../redux/modules/interfaces"
+import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { getAPIBaseURL } from "../../redux/modules/app"
+import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
 
 import * as ol from "openlayers"
 import SearchBar from "material-ui-search-bar"
 import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
 import { grey500 } from "material-ui/styles/colors"
+import FlatButton from "material-ui/FlatButton"
+import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 const SearchBarContainer = styled.div`
     position: relative;
@@ -18,8 +21,15 @@ const SearchBarContainer = styled.div`
     margin-right: 20px;
 `
 
+const PollingPlaceCardWrapper = styled.div`
+    padding: 10px;
+`
+
 export interface IProps {
     election: IElection
+    queriedPollingPlaces: Array<IPollingPlace>
+    onQueryMap: Function
+    onCloseQueryMapDialog: any
 }
 
 const spriteBBQ = new ol.style.Style({
@@ -75,7 +85,7 @@ const styleFunctionSprite = function(feature: any) {
 
 class SausageMap extends React.PureComponent<IProps, {}> {
     componentDidMount() {
-        const { election } = this.props
+        const { election, onQueryMap } = this.props
 
         const vectorSource = new ol.source.Vector({
             url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
@@ -109,9 +119,23 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         })
 
         map.addLayer(vectorLayer)
+
+        map.on("singleclick", function(e: any) {
+            let features: Array<any> = []
+            map.forEachFeatureAtPixel(
+                e.pixel,
+                (feature: any, layer: any) => {
+                    features.push(feature.getProperties())
+                }
+                // { hitTolerance: 5 }
+            )
+            onQueryMap(features)
+        })
     }
 
     render() {
+        const { queriedPollingPlaces, onCloseQueryMapDialog } = this.props
+
         return (
             <div>
                 <div id="openlayers-map" className="openlayers-map" />
@@ -130,6 +154,21 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         }}
                     />
                 </SearchBarContainer>
+
+                {queriedPollingPlaces.length > 0 && (
+                    <FullscreenDialog
+                        open={true}
+                        onRequestClose={onCloseQueryMapDialog}
+                        title={"Polling Places"}
+                        actionButton={<FlatButton label="Close" onClick={onCloseQueryMapDialog} />}
+                    >
+                        {queriedPollingPlaces.map((pollingPlace: IPollingPlace) => (
+                            <PollingPlaceCardWrapper key={pollingPlace.id}>
+                                <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} />
+                            </PollingPlaceCardWrapper>
+                        ))}
+                    </FullscreenDialog>
+                )}
             </div>
         )
     }

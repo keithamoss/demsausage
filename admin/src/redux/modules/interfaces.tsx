@@ -6,6 +6,7 @@ export { IModule as ISnackbarsModule } from "./snackbars"
 export { IModule as IElectionsModule, IElections, IElection } from "./elections"
 export {
     IModule as IPollingPlacesModule,
+    IMapPollingPlace,
     IPollingPlace,
     IPollingPlaceLoaderResponse,
     PollingPlaceLoaderResponseMessageStatus,

@@ -14,5 +14,5 @@ declare module "react-string-replace"
 declare module "react-tiny-virtual-list"
 declare module "material-ui-bottom-sheet"
 declare module "material-ui-search-bar"
-declare module "react-openlayers"
+declare module "material-ui-fullscreen-dialog"
 // declare function require(string: string): string

@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
-import { IPollingPlaceSearchResult } from "../../redux/modules/interfaces"
+// import { IPollingPlace } from "../../redux/modules/interfaces"
 import {
     pollingPlaceHasReports,
     pollingPlaceHasReportsOfNoms,
@@ -12,12 +12,11 @@ import {
 
 import Paper from "material-ui/Paper"
 import { Card, CardHeader, CardText } from "material-ui/Card"
-// import RaisedButton from "material-ui/RaisedButton"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { MapsNavigation, AlertWarning, EditorInsertChart /*, MapsAddLocation*/ } from "material-ui/svg-icons"
-import { grey500, yellow600, blue500 } from "material-ui/styles/colors"
+import { MapsNavigation, AlertWarning, ActionHelpOutline /*, MapsAddLocation*/ } from "material-ui/svg-icons"
+import { grey500, yellow600 } from "material-ui/styles/colors"
 
 import SausageIcon from "../../icons/sausage"
 import CakeIcon from "../../icons/cake"
@@ -58,19 +57,26 @@ const Division = styled.div`
 
 const ChanceOfSausage = styled(ListItem)`
     color: ${grey500};
+    padding-top: 0px !important;
+
     .sausageChance {
         color: red;
     }
 `
 
+const ChanceOfSausageIndicator = styled.span`
+    color: black;
+`
+
 export interface IProps {
-    pollingPlace: IPollingPlaceSearchResult
+    pollingPlace: any // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
     render() {
         const { pollingPlace } = this.props
-        // console.log(pollingPlace)
+
+        const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false
 
         return (
             <Paper>
@@ -78,8 +84,8 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                     <CardHeader
                         title={pollingPlace.polling_place_name}
                         subtitle={pollingPlace.address}
-                        actAsExpander={true}
-                        showExpandableButton={true}
+                        actAsExpander={isExpandable}
+                        showExpandableButton={isExpandable}
                     />
                     {/* <CardMedia overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}>
                     <img src="images/nature-600-337.jpg" alt="" />
@@ -96,10 +102,12 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 {"has_coffee" in pollingPlace.has_other && <CoffeeIcon />}
                                 {"has_baconandeggs" in pollingPlace.has_other && <BaconandEggsIcon />}
                             </FlexboxIcons>
-                            <FlexboxDistance
-                                label={`${(pollingPlace.distance_metres / 1000).toFixed(2)}km`}
-                                icon={<MapsNavigation color={grey500} />}
-                            />
+                            {"distance_metres" in pollingPlace && (
+                                <FlexboxDistance
+                                    label={`${(pollingPlace.distance_metres / 1000).toFixed(2)}km`}
+                                    icon={<MapsNavigation color={grey500} />}
+                                />
+                            )}
                         </FlexboxContainer>
                         {"has_freetext" in pollingPlace.has_other && (
                             <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_freetext}`</HasOtherNoms>
@@ -109,24 +117,32 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
                                 secondaryTextLines={2}
                                 leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={yellow600} />}
+                                disabled={true}
                             />
                         )}
                         {pollingPlaceHasReports(pollingPlace) === false && (
                             <ChanceOfSausage
                                 primaryText={"We don't have any reports for this booth yet."}
-                                secondaryText={`Based on past elections this booth has a ${getSausageChanceDescription(
-                                    pollingPlace
-                                )} chance of having food.`}
+                                secondaryText={
+                                    <span>
+                                        Based on past elections this booth has a{" "}
+                                        <ChanceOfSausageIndicator>{getSausageChanceDescription(pollingPlace)}</ChanceOfSausageIndicator>{" "}
+                                        chance of having food.
+                                    </span>
+                                }
                                 secondaryTextLines={2}
-                                leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={blue500} />}
+                                leftAvatar={<Avatar icon={<ActionHelpOutline />} />}
+                                disabled={true}
                             />
                         )}
                         {pollingPlace.division !== "" && <Division>Division(s): {pollingPlace.division}</Division>}
                     </CardText>
-                    <CardText expandable={true}>
-                        {pollingPlaceHasReportsOfNoms(pollingPlace) === true &&
-                            `This polling place has ${getFoodDescription(pollingPlace)}.`}
-                    </CardText>
+                    {isExpandable && (
+                        <CardText expandable={isExpandable}>
+                            {pollingPlaceHasReportsOfNoms(pollingPlace) === true &&
+                                `This polling place has ${getFoodDescription(pollingPlace)}.`}
+                        </CardText>
+                    )}
                     {/* <CardActions>
                         <RaisedButton primary={true} label="Report" icon={<MapsAddLocation />} />
                     </CardActions> */}
