@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { Link } from "react-router"
+import { browserHistory } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
 
@@ -37,12 +37,20 @@ export interface IProps {
     handleSnackbarClose: any
     toggleSidebar: any
     onChangeElection: any
+    locationPathName: string
     content: any
 }
 
 class App extends React.Component<IProps, {}> {
     render() {
-        const { muiThemePalette, app, snackbars, handleSnackbarClose, toggleSidebar, content } = this.props
+        const { muiThemePalette, app, snackbars, handleSnackbarClose, toggleSidebar, locationPathName, content } = this.props
+
+        let bottomNavSelectedIndex: number = 0
+        if (locationPathName === "/search") {
+            bottomNavSelectedIndex = 1
+        } else if (locationPathName === "/add-stall") {
+            bottomNavSelectedIndex = 2
+        }
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -83,16 +91,14 @@ class App extends React.Component<IProps, {}> {
                 </div>
 
                 <Paper zDepth={1} className="page-footer">
-                    <BottomNavigation>
-                        <Link to={"/"}>
-                            <BottomNavigationItem label="Map" icon={<MapsMap />} />
-                        </Link>
-                        <Link to={"/search"}>
-                            <BottomNavigationItem label="Find" icon={<ActionSearch />} />
-                        </Link>
-                        <Link to={"/add-stall"}>
-                            <BottomNavigationItem label="Add Stall" icon={<MapsAddLocation />} />
-                        </Link>
+                    <BottomNavigation selectedIndex={bottomNavSelectedIndex}>
+                        <BottomNavigationItem label="Map" icon={<MapsMap />} onClick={() => browserHistory.push("/")} />
+                        <BottomNavigationItem label="Find" icon={<ActionSearch />} onClick={() => browserHistory.push("/search")} />
+                        <BottomNavigationItem
+                            label="Add Stall"
+                            icon={<MapsAddLocation />}
+                            onClick={() => browserHistory.push("/add-stall")}
+                        />
                     </BottomNavigation>
                 </Paper>
 

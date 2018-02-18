@@ -93,6 +93,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             handleSnackbarClose,
             toggleSidebar,
             onChangeElection,
+            location,
             children,
             content,
         } = this.props
@@ -118,6 +119,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     handleSnackbarClose={handleSnackbarClose}
                     toggleSidebar={toggleSidebar}
                     onChangeElection={onChangeElection}
+                    locationPathName={location.pathname}
                     children={children}
                     content={content}
                 />
