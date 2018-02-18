@@ -12,11 +12,11 @@ import {
 
 import Paper from "material-ui/Paper"
 import { Card, CardHeader, CardText } from "material-ui/Card"
-import RaisedButton from "material-ui/RaisedButton"
+// import RaisedButton from "material-ui/RaisedButton"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { MapsNavigation, AlertWarning, EditorInsertChart, MapsAddLocation } from "material-ui/svg-icons"
+import { MapsNavigation, AlertWarning, EditorInsertChart /*, MapsAddLocation*/ } from "material-ui/svg-icons"
 import { grey500, yellow600, blue500 } from "material-ui/styles/colors"
 
 import SausageIcon from "../../icons/sausage"
