@@ -603,7 +603,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
 
     $response["messages"][] = [
       "level" => "WARNING",
-      "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). With data: " . count((array)$withData) . ". Removed " . (count($pollingPlaces) - 1) . " polling places."
+      "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. Removed and merged" . (count($pollingPlaces) - 1) . " polling places."
     ];
   }
 
@@ -719,26 +719,30 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
       updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
 
       // Update the pending_stalls table to point to the new id
-      $stallsUpdated = updateStallPollingPlaceId($election["id"], $pollingPlace["pollingPlace"]["id"], $newPollingPlaces[0]["id"]);
-      $response["messages"][] = [
-        "level" => "INFO",
-        "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. "). Updated " . $stallsUpdated . " stalls with its new id.",
-      ];
-      $stallsUpdatedCount += $stallsUpdated;
+      if($dryrun === false) {
+        $stallsUpdated = updateStallPollingPlaceId($election["id"], $pollingPlace["id"], $newPollingPlaces[0]["id"]);
+        $response["messages"][] = [
+          "level" => "INFO",
+          "message" => "Polling Place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. "). Updated " . $stallsUpdated . " stalls with their new ids.",
+        ];
+        $stallsUpdatedCount += $stallsUpdated;
+      }
     }
   }
 
-  // Log how many stalls had their polling places updated.
-  // In most cases, we'd usually only expect a few stalls to change their ids.
-  $stallsForElection = count(fetchPendingStallByElection($election["id"]));
-  if($stallsForElection !== $stallsUpdatedCount) {
-    $response["messages"][] = [
-      "level" => "WARNING",
-      "message" => "We updated " . $stallsUpdatedCount . " stalls with new polling place ids. " . ($stallsForElection - $stallsUpdatedCount) . " were not updated. (This may or may not be a problem.)",
-    ];
-  }
-
   if($dryrun === false) {
+    // Log how many stalls had their polling places updated.
+    // In most cases, we'd usually only expect a few stalls to change their ids.
+    // (I think...Though, ids are based on their position in the CSV file, so a
+    // change in the order of rows in the file would change a lot of ids.)
+    $stallsForElection = count(fetchPendingStallByElection($election["id"]));
+    if($stallsForElection !== $stallsUpdatedCount) {
+      $response["messages"][] = [
+        "level" => "WARNING",
+        "message" => "We updated " . $stallsUpdatedCount . " stalls with new polling place ids. " . ($stallsForElection - $stallsUpdatedCount) . " were not updated. (This may or may not be a problem.)",
+      ];
+    }
+
     // Set this as the active table for this election
     if($response["error"] === false) {
       updateElection($election["id"], ["db_table_name" => $response["table_name"], "polling_places_loaded" => true]);
