@@ -76,7 +76,7 @@ function addPollingPlace(array $params, string $pollingPlaceTableName) {
   return fieldsToStmntLastInsertId($stmt, $pollingPlacesAllowedFields, $pollingPlace);
 }
 
-function updatePollingPlace($id, array $params, string $electionId, boolean $regenerateGeoJSON) {
+function updatePollingPlace($id, array $params, string $electionId, $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
   
   $election = fetchElection($electionId);

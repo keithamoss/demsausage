@@ -84,6 +84,22 @@ if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
   // closeDb();
 }
 
+// Mark pending stall as read (approved) and add an unofficial polling place
+if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall-and-add-polling-place") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = markPendingStallAsReadAndAddUnofficialPollingPlace($_GET["id"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to mark pending stall as read. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
+  }
+  // closeDb();
+}
+
 // Mark pending stall as declined
 if(stristr($_SERVER["QUERY_STRING"], "mark-declined-pending-stall") !== false) {
   if(isAuthorisedUser("su") === false) {

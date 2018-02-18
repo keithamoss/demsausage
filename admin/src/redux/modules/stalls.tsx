@@ -125,6 +125,23 @@ export function markStallAsRead(id: number) {
     }
 }
 
+export function markStallAsReadAndAddPollingPlace(id: number) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "mark-read-pending-stall-and-add-polling-place": 1,
+            id: id,
+        }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Pending stall updated and new polling place added! 🍽🎉"))
+            // dispatch(removePendingStall(id))
+            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            return json
+        }
+    }
+}
+
 export function markStallAsDeclined(id: number) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const params = {

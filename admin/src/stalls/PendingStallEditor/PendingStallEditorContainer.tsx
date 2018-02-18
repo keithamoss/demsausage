@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 
 import PendingStallEditor from "./PendingStallEditor"
-import { markStallAsRead, markStallAsDeclined } from "../../redux/modules/stalls"
+import { markStallAsRead, markStallAsReadAndAddPollingPlace, markStallAsDeclined } from "../../redux/modules/stalls"
 import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             }
         },
         onApproveUnofficialStall: async (id: number) => {
-            const json = await dispatch(markStallAsRead(id))
+            const json = await dispatch(markStallAsReadAndAddPollingPlace(id))
             if (json.rows === 1) {
                 browserHistory.push("/stalls")
             }

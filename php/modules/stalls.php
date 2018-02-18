@@ -72,10 +72,8 @@ function addPendingStall(array $stall, $electionId) {
   return $stallId;
 }
 
-function markPendingStallAsRead($id) {
+function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
   global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
-
-  $stallFieldUpdates = ["active" => 0, "status" => StallStatusEnum::APPROVED];
 
   // If this is an 'unofficial' polling place, add it to the table.
   // This only applies to stalls approved before we have official
@@ -83,6 +81,8 @@ function markPendingStallAsRead($id) {
   $stall = fetchPendingStallById($id);
   $election = fetchElection($stall["elections_id"]);
   if($election["polling_places_loaded"] === false) {
+    $stallFieldUpdates = [];
+
     $pollingPlace = (array)$stall["stall_location_info"];
     $pollingPlace["has_bbq"] = $stall["has_bbq"];
     $pollingPlace["has_caek"] = $stall["has_caek"];
@@ -110,8 +110,36 @@ function markPendingStallAsRead($id) {
     // Turn the stall into a stall attached to a regular polling place (now that it exists)
     $stallFieldUpdates["stall_location_info"] = null;
 
+    // Update the stall to reflect it now has a polling place attached to it
+    updateTable($id, $stallFieldUpdates, "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
+
     // Regenerate GeoJSON for this election so it includes our new stall
     regeneratePollingPlaceGeoJSON($election["id"]);
+  }
+  
+  return markPendingStallAsRead($id);
+}
+
+function markPendingStallAsRead($id) {
+  global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
+
+  $stallFieldUpdates = ["active" => 0, "status" => StallStatusEnum::APPROVED];
+
+  // If this is an 'unofficial' polling place, add it to the table.
+  // This only applies to stalls approved before we have official
+  // polling places from the electoral commission.
+  $stall = fetchPendingStallById($id);
+  $election = fetchElection($stall["elections_id"]);
+  if($election["polling_places_loaded"] === false) {
+    // Turn the stall into a stall attached to a regular polling place (now that it exists)
+    $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $stall["stall_location_info"]->lat, $stall["stall_location_info"]->lon, 250);
+    if(count($pollingPlaces) > 0) {
+      $stallFieldUpdates["polling_place_id"] = $pollingPlaces[0]["id"];
+    } elseif(count($pollingPlaces) > 1) {
+      failForAPI("Found more than 1 matching polling place for an unofficial stall. This is a problem :(");
+    }
+
+    $stallFieldUpdates["stall_location_info"] = null;
   }
 
   $rowCount = updateTable($id, $stallFieldUpdates, "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
