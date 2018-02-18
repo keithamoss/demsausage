@@ -111,7 +111,8 @@ export function markStallAsRead(id: number) {
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
-            dispatch(removePendingStall(id))
+            // dispatch(removePendingStall(id))
+            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
@@ -127,7 +128,8 @@ export function markStallAsDeclined(id: number) {
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))
-            dispatch(removePendingStall(id))
+            // dispatch(removePendingStall(id))
+            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
