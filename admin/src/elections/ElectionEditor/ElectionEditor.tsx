@@ -105,13 +105,6 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
                     <MenuItem value={14} primaryText="14" />
                 </CustomField>
 
-                <CustomField
-                    name="polling_places_loaded"
-                    component={PaddedCheckbox}
-                    label="Have polling places been loaded for this election yet?"
-                    labelPosition="right"
-                />
-
                 <CustomField name="is_active" component={PaddedCheckbox} label="Is this an active election?" labelPosition="right" />
 
                 <CustomField name="hidden" component={PaddedCheckbox} label="Hide election?" labelPosition="right" />

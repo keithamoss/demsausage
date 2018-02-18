@@ -44,7 +44,6 @@ const toFormValues = (election: IElection) => {
         is_active: election.is_active,
         hidden: election.hidden,
         election_day: new Date(election.election_day),
-        polling_places_loaded: election.polling_places_loaded,
     }
 }
 
