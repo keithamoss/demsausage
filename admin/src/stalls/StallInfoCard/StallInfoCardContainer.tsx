@@ -6,6 +6,7 @@ import { IStore, IStall } from "../../redux/modules/interfaces"
 
 export interface IProps {
     stall: IStall
+    cardActions?: any
 }
 
 export interface IDispatchProps {}
@@ -18,9 +19,9 @@ interface IOwnProps {}
 
 export class StallInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
     render() {
-        const { stall } = this.props
+        const { stall, cardActions } = this.props
 
-        return <StallInfoCard stall={stall} />
+        return <StallInfoCard stall={stall} cardActions={cardActions} />
     }
 }
 

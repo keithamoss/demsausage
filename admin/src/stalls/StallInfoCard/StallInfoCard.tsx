@@ -18,11 +18,12 @@ import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 
 export interface IProps {
     stall: IStall
+    cardActions?: any
 }
 
 class StallInfoCard extends React.PureComponent<IProps, {}> {
     render() {
-        const { stall } = this.props
+        const { stall, cardActions } = this.props
 
         return (
             <Card>
@@ -92,6 +93,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                         </ListItem>
                     </List>
                 </CardText>
+                {cardActions}
             </Card>
         )
     }

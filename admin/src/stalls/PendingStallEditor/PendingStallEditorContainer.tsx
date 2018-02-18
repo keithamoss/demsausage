@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 
 import PendingStallEditor from "./PendingStallEditor"
-import { markStallAsRead } from "../../redux/modules/stalls"
+import { markStallAsRead, markStallAsDeclined } from "../../redux/modules/stalls"
 import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
@@ -14,6 +14,8 @@ export interface IStoreProps {
 
 export interface IDispatchProps {
     onPollingPlaceEdited: Function
+    onApproveUnofficialStall: Function
+    onDeclineUnofficialStall: Function
 }
 
 export interface IStateProps {}
@@ -28,7 +30,7 @@ interface IOwnProps {
 
 export class PendingStallEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { stall, election, onPollingPlaceEdited } = this.props
+        const { stall, election, onPollingPlaceEdited, onApproveUnofficialStall, onDeclineUnofficialStall } = this.props
 
         if (stall === null || election === null) {
             return null
@@ -40,6 +42,12 @@ export class PendingStallEditorContainer extends React.Component<IProps & IStore
                 stall={stall}
                 onPollingPlaceEdited={() => {
                     onPollingPlaceEdited(stall.id)
+                }}
+                onApproveUnofficialStall={() => {
+                    onApproveUnofficialStall(stall.id)
+                }}
+                onDeclineUnofficialStall={() => {
+                    onDeclineUnofficialStall(stall.id)
                 }}
             />
         )
@@ -66,6 +74,18 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onPollingPlaceEdited: async (id: number) => {
             const json = await dispatch(markStallAsRead(id))
+            if (json.rows === 1) {
+                browserHistory.push("/stalls")
+            }
+        },
+        onApproveUnofficialStall: async (id: number) => {
+            const json = await dispatch(markStallAsRead(id))
+            if (json.rows === 1) {
+                browserHistory.push("/stalls")
+            }
+        },
+        onDeclineUnofficialStall: async (id: number) => {
+            const json = await dispatch(markStallAsDeclined(id))
             if (json.rows === 1) {
                 browserHistory.push("/stalls")
             }
