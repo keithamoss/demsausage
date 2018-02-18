@@ -180,11 +180,15 @@ function fetchPendingStalls() {
   $stalls = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
       $tmp = translateStallFromDB($row);
+
+      // For unofficial polling places, override polling_place_id with its matching polling place
       if($tmp["stall_location_info"] !== null) {
         $election = fetchElection($tmp["elections_id"]);
         $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $tmp["stall_location_info"]->lat, $tmp["stall_location_info"]->lon, 250);
         if(count($pollingPlaces) > 0) {
           $tmp["polling_place_id"] = $pollingPlaces[0]["id"];
+        } elseif(count($pollingPlaces) > 1) {
+          failForAPI("Found more than 1 matching polling place for an unofficial stall. This is a problem :(");
         }
       }
       $stalls[] = $tmp;
