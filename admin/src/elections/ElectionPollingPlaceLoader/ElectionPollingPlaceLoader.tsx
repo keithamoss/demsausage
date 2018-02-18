@@ -1,7 +1,11 @@
 import * as React from "react"
 import { Link } from "react-router"
 // import styled from "styled-components"
-import { IElection, IPollingPlaceLoaderResponseMessage as IMessage } from "../../redux/modules/interfaces"
+import {
+    IElection,
+    IPollingPlaceLoaderResponseMessage as IMessage,
+    PollingPlaceLoaderResponseMessageStatus as MessageStatus,
+} from "../../redux/modules/interfaces"
 // import "./ElectionPollingPlaceLoader.css"
 
 import RaisedButton from "material-ui/RaisedButton"
@@ -14,112 +18,126 @@ import AlertWarning from "material-ui/svg-icons/alert/warning"
 import ActionInfo from "material-ui/svg-icons/action/info"
 
 export interface IProps {
-  election: IElection
-  file: File | undefined
-  error: boolean | undefined
-  messages: Array<IMessage>
-  onFileUpload: any
+    election: IElection
+    file: File | undefined
+    error: boolean | undefined
+    messages: Array<IMessage>
+    onFileUpload: any
 }
 
 class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
-  onFileChange: any
+    onFileChange: any
 
-  constructor(props: any) {
-    super(props)
+    constructor(props: any) {
+        super(props)
 
-    this.onFileChange = this.uploadFile.bind(this)
-  }
-
-  uploadFile(e: any) {
-    if (e.target.files[0] !== undefined) {
-      this.props.onFileUpload(e.target.files[0])
+        this.onFileChange = this.uploadFile.bind(this)
     }
-  }
 
-  render() {
-    const { election, file, error, messages } = this.props
+    uploadFile(e: any) {
+        if (e.target.files[0] !== undefined) {
+            this.props.onFileUpload(e.target.files[0])
+        }
+    }
 
-    const errors: Array<IMessage> = messages.filter((value: IMessage) => value.level === "ERROR")
-    const info: Array<IMessage> = messages.filter((value: IMessage) => value.level === "INFO")
-    const warnings: Array<IMessage> = messages.filter((value: IMessage) => value.level === "WARNING")
+    render() {
+        const { election, file, error, messages } = this.props
 
-    return (
-      <div>
-        <h1>{election.name}</h1>
+        const info: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.INFO)
+        const errors: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.ERROR)
+        const checks: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.CHECK)
+        const warnings: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.WARNING)
 
-        <RaisedButton
-          containerElement="label"
-          icon={<FileFileUpload />}
-          label="Select polling place CSV file"
-          labelColor="white"
-          primary={true}
-        >
-          <input onChange={this.onFileChange} style={{ display: "none" }} type="file" />
-        </RaisedButton>
+        return (
+            <div>
+                <h1>{election.name}</h1>
 
-        {file !== undefined && (
-          <ListItem
-            primaryText={`${file.name} (${file.type})`}
-            secondaryText={`${(file.size / 1048576).toFixed(3)}MB`}
-            leftIcon={<EditorInsertDriveFile />}
-            disabled={true}
-          />
-        )}
+                <RaisedButton
+                    containerElement="label"
+                    icon={<FileFileUpload />}
+                    label="Select polling place CSV file"
+                    labelColor="white"
+                    primary={true}
+                >
+                    <input onChange={this.onFileChange} style={{ display: "none" }} type="file" />
+                </RaisedButton>
 
-        {error === true && (
-          <ListItem
-            primaryText={"There was a problem loading the polling places. Please review the logs below for further information."}
-            leftIcon={<AlertError color={red500} />}
-            disabled={true}
-          />
-        )}
+                {file !== undefined && (
+                    <ListItem
+                        primaryText={`${file.name} (${file.type})`}
+                        secondaryText={`${(file.size / 1048576).toFixed(3)}MB`}
+                        leftIcon={<EditorInsertDriveFile />}
+                        disabled={true}
+                    />
+                )}
 
-        {error === false && (
-          <div>
-            <ListItem
-              primaryText={"Polling places have been loaded successfully."}
-              leftIcon={<AlertError color={greenA200} />}
-              disabled={true}
-            />
-            <RaisedButton label={"Yay! 👏"} primary={true} containerElement={<Link to={`/elections/`} />} />
-          </div>
-        )}
+                {error === true && (
+                    <ListItem
+                        primaryText={
+                            "There was a problem loading the polling places. Please review the logs below for further information."
+                        }
+                        leftIcon={<AlertError color={red500} />}
+                        disabled={true}
+                    />
+                )}
 
-        {info.length > 0 && (
-          <div>
-            <h2>Info</h2>
-            <List>
-              {info.map((value: IMessage, index: number) => (
-                <ListItem key={index} primaryText={value.message} leftIcon={<ActionInfo />} disabled={true} />
-              ))}
-            </List>
-          </div>
-        )}
+                {error === false && (
+                    <div>
+                        <ListItem
+                            primaryText={"Polling places have been loaded successfully."}
+                            leftIcon={<AlertError color={greenA200} />}
+                            disabled={true}
+                        />
+                        <RaisedButton label={"Yay! 👏"} primary={true} containerElement={<Link to={`/elections/`} />} />
+                    </div>
+                )}
 
-        {error === true && (
-          <div>
-            <h2>Errors</h2>
-            <List>
-              {errors.map((value: IMessage, index: number) => (
-                <ListItem key={index} primaryText={value.message} leftIcon={<AlertError />} disabled={true} />
-              ))}
-            </List>
-          </div>
-        )}
+                {info.length > 0 && (
+                    <div>
+                        <h2>Info</h2>
+                        <List>
+                            {info.map((value: IMessage, index: number) => (
+                                <ListItem key={index} primaryText={value.message} leftIcon={<ActionInfo />} disabled={true} />
+                            ))}
+                        </List>
+                    </div>
+                )}
 
-        {warnings.length > 0 && (
-          <div>
-            <h2>Warnings</h2>
-            <List>
-              {warnings.map((value: IMessage, index: number) => (
-                <ListItem key={index} primaryText={value.message} leftIcon={<AlertWarning />} disabled={true} />
-              ))}
-            </List>
-          </div>
-        )}
-      </div>
-    )
-  }
+                {error === true && (
+                    <div>
+                        <h2>Errors</h2>
+                        <List>
+                            {errors.map((value: IMessage, index: number) => (
+                                <ListItem key={index} primaryText={value.message} leftIcon={<AlertError />} disabled={true} />
+                            ))}
+                        </List>
+                    </div>
+                )}
+
+                {checks.length > 0 && (
+                    <div>
+                        <h2>Hey you, check these!</h2>
+                        <List>
+                            {checks.map((value: IMessage, index: number) => (
+                                <ListItem key={index} primaryText={value.message} leftIcon={<AlertWarning />} disabled={true} />
+                            ))}
+                        </List>
+                    </div>
+                )}
+
+                {warnings.length > 0 && (
+                    <div>
+                        <h2>Warnings</h2>
+                        <List>
+                            {warnings.map((value: IMessage, index: number) => (
+                                <ListItem key={index} primaryText={value.message} leftIcon={<AlertWarning />} disabled={true} />
+                            ))}
+                        </List>
+                    </div>
+                )}
+            </div>
+        )
+    }
 }
 
 export default ElectionPollingPlaceLoader

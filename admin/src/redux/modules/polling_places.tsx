@@ -9,185 +9,192 @@ const LOAD_TYPES = "ealgis/polling_places/LOAD_TYPES"
 const VALIDATION_ERRORS = "ealgis/polling_places/VALIDATION_ERRORS"
 
 const initialState: Partial<IModule> = {
-  types: [],
-  by_election: {},
+    types: [],
+    by_election: {},
 }
 
 // Reducer
 export default function reducer(state: Partial<IModule> = initialState, action: IAction) {
-  switch (action.type) {
-    case LOAD:
-      return dotProp.set(state, `by_election.${action.election.id}`, action.pollingPlaces)
-    case LOAD_TYPES:
-      return dotProp.set(state, "types", action.pollingPlaceTypes)
-    default:
-      return state
-  }
+    switch (action.type) {
+        case LOAD:
+            return dotProp.set(state, `by_election.${action.election.id}`, action.pollingPlaces)
+        case LOAD_TYPES:
+            return dotProp.set(state, "types", action.pollingPlaceTypes)
+        default:
+            return state
+    }
 }
 
 export const reduxFormReducer = (state: {}, action: any) => {
-  switch (action.type) {
-    case VALIDATION_ERRORS:
-      state = dotProp.set(state, "submitSucceeded", false)
-      return dotProp.merge(state, "syncErrors", action.errors)
-    default:
-      return state
-  }
+    switch (action.type) {
+        case VALIDATION_ERRORS:
+            state = dotProp.set(state, "submitSucceeded", false)
+            return dotProp.merge(state, "syncErrors", action.errors)
+        default:
+            return state
+    }
 }
 
 // Action Creators
 export function loadPollingPlacesForElection(election: IElection, pollingPlaces: Array<IPollingPlace>) {
-  return {
-    type: LOAD,
-    election,
-    pollingPlaces,
-  }
+    return {
+        type: LOAD,
+        election,
+        pollingPlaces,
+    }
 }
 
 export function loadPollingPlaceTypes(pollingPlaceTypes: Array<string>) {
-  return {
-    type: LOAD_TYPES,
-    pollingPlaceTypes,
-  }
+    return {
+        type: LOAD_TYPES,
+        pollingPlaceTypes,
+    }
 }
 
 // Models
 export interface IModule {
-  types: Array<string>
-  by_election: {
-    [key: number]: Array<IPollingPlace>
-  }
+    types: Array<string>
+    by_election: {
+        [key: number]: Array<IPollingPlace>
+    }
 }
 
 export interface IAction {
-  type: string
-  election: IElection
-  pollingPlaces: Array<IPollingPlace>
-  pollingPlaceTypes: Array<string>
-  errors?: object
-  meta?: {
-    // analytics: IAnalyticsMeta
-  }
+    type: string
+    election: IElection
+    pollingPlaces: Array<IPollingPlace>
+    pollingPlaceTypes: Array<string>
+    errors?: object
+    meta?: {
+        // analytics: IAnalyticsMeta
+    }
 }
 
 export interface IPollingPlace {
-  id: number
-  lon: number
-  lat: number
-  has_bbq: boolean
-  has_nothing: boolean
-  has_caek: boolean
-  has_run_out: boolean
-  has_other: object
-  chance_of_sausage: number
-  stall_name: string
-  stall_description: string
-  stall_website: string
-  first_report: string // Datetime
-  latest_report: string // Datetime
-  polling_place_name: string
-  polling_place_type: string
-  extra_info: string
-  booth_info: string
-  wheelchairaccess: string
-  opening_hours: string
-  premises: string
-  address: string
-  division: string
-  state: string
-  source: string
-  ess_stall_id: number
-  ess_stall_url: string
+    id: number
+    lon: number
+    lat: number
+    has_bbq: boolean
+    has_nothing: boolean
+    has_caek: boolean
+    has_run_out: boolean
+    has_other: object
+    chance_of_sausage: number
+    stall_name: string
+    stall_description: string
+    stall_website: string
+    first_report: string // Datetime
+    latest_report: string // Datetime
+    polling_place_name: string
+    polling_place_type: string
+    extra_info: string
+    booth_info: string
+    wheelchairaccess: string
+    opening_hours: string
+    premises: string
+    address: string
+    division: string
+    state: string
+    source: string
+    ess_stall_id: number
+    ess_stall_url: string
 }
 
 export interface IPollingPlaceLoaderResponse {
-  error: boolean
-  messages: Array<IPollingPlaceLoaderResponseMessage>
-  table_name: string
-  dryrun: boolean
+    error: boolean
+    messages: Array<IPollingPlaceLoaderResponseMessage>
+    table_name: string
+    dryrun: boolean
+}
+
+export enum PollingPlaceLoaderResponseMessageStatus {
+    ERROR = "ERROR",
+    CHECK = "CHECK",
+    INFO = "INFO",
+    WARNING = "WARNING",
 }
 
 export interface IPollingPlaceLoaderResponseMessage {
-  level: string
-  message: string
+    level: PollingPlaceLoaderResponseMessageStatus
+    message: string
 }
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
-    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-    if (response.status === 200) {
-      return json
+        if (response.status === 200) {
+            return json
+        }
     }
-  }
 }
 
 export function fetchAllPollingPlaces(election: IElection) {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "fetch-all-polling-places": 1, electionId: election.id }
-    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = { "fetch-all-polling-places": 1, electionId: election.id }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-    if (response.status === 200) {
-      dispatch(loadPollingPlacesForElection(election, json))
+        if (response.status === 200) {
+            dispatch(loadPollingPlacesForElection(election, json))
+        }
     }
-  }
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionId: election.id }
-    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionId: election.id }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-    if (response.status === 200) {
-      return json
+        if (response.status === 200) {
+            return json
+        }
     }
-  }
 }
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: Partial<IPollingPlace>) {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = {
-      "update-polling-place": 1,
-      pollingPlaceId: pollingPlace.id,
-      pollingPlace: pollingPlaceNew,
-      electionId: election.id,
-    }
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "update-polling-place": 1,
+            pollingPlaceId: pollingPlace.id,
+            pollingPlace: pollingPlaceNew,
+            electionId: election.id,
+        }
 
-    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-    if (response.status === 200) {
-      dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
-      return json
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
+            return json
+        }
     }
-  }
 }
 
 export function loadPollingPlaces(election: IElection, file: File) {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = {
-      "load-polling-places": 1,
-      electionId: election.id,
-      dryrun: false,
-    }
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "load-polling-places": 1,
+            electionId: election.id,
+            dryrun: false,
+        }
 
-    const { response, json } = await ealapi.dsAPIPostFile(params, file, dispatch)
+        const { response, json } = await ealapi.dsAPIPostFile(params, file, dispatch)
 
-    if (response.status === 200) {
-      return json
+        if (response.status === 200) {
+            return json
+        }
     }
-  }
 }
 
 export function fetchPollingPlaceTypes() {
-  return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-    const params = { "fetch-polling-place-types": 1, electionId: null }
-    const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = { "fetch-polling-place-types": 1, electionId: null }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
 
-    if (response.status === 200) {
-      dispatch(loadPollingPlaceTypes(json))
+        if (response.status === 200) {
+            dispatch(loadPollingPlaceTypes(json))
+        }
     }
-  }
 }

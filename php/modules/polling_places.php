@@ -584,6 +584,12 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     // After that, we can rely on the later merge process to merge for us because we remove duplicates here.
     if(count($withData) > 0) {
       $pollingPlaceToKeep = $withData[0];
+    } elseif(count($withData) > 1) {
+      $response["error"] = true;
+      $response["messages"][] = [
+        "level" => "ERROR",
+        "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. This is a problem that shouldn't actually happen - we can't handle automatically marging these."
+      ];
     } else {
       $pollingPlaceToKeep = $pollingPlaces[0];
     }
@@ -603,7 +609,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
 
     $response["messages"][] = [
       "level" => "WARNING",
-      "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. Removed and merged" . (count($pollingPlaces) - 1) . " polling places."
+      "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. Removed and merged " . (count($pollingPlaces) - 1) . " polling places."
     ];
   }
 
@@ -717,6 +723,16 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
         "ess_stall_url" => $pollingPlace["ess_stall_url"],
       ];
       updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
+
+      // If this is our first load of polling place info, log some CHECK-level
+      // messages to compare the user-entered location info with the official
+      // location info. This is a poke for us to pick up any discrepancies.
+      if($election["polling_places_loaded"] === false) {
+        $response["messages"][] = [
+          "level" => "CHECK",
+          "message" => "User-entered polling place '" . $pollingPlace["polling_place_name"]. "' (" . $pollingPlace["address"]. ") has been merged into the official polling place '" . $newPollingPlaces[0]["polling_place_name"]. "' (" . $newPollingPlaces[0]["address"]. "). Is this the same location?",
+        ];
+      }
 
       // Update the pending_stalls table to point to the new id
       if($dryrun === false) {

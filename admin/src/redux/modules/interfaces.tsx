@@ -8,6 +8,7 @@ export {
     IModule as IPollingPlacesModule,
     IPollingPlace,
     IPollingPlaceLoaderResponse,
+    PollingPlaceLoaderResponseMessageStatus,
     IPollingPlaceLoaderResponseMessage,
 } from "./polling_places"
 export { IModule as IStallModule, IStallLocationInfo, IStallPollingPlacInfo, StallStatus, IStall } from "./stalls"
