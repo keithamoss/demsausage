@@ -440,8 +440,6 @@ function createElectionTableName($election) {
 function loadPollingPlaces($electionId, $dryrun, $file) {
   global $file_db, $pollingPlacesAllowedFields, $validPollingPlaceTypes;
 
-  $dryrun = true;
-
   $election = fetchElection($electionId);
   $response = [
     "error" => false,
