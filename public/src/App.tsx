@@ -91,7 +91,7 @@ class App extends React.Component<IProps, {}> {
                             <BottomNavigationItem label="Find" icon={<ActionSearch />} />
                         </Link>
                         <Link to={"/add-stall"}>
-                            <BottomNavigationItem label="Report" icon={<MapsAddLocation />} />
+                            <BottomNavigationItem label="Add Stall" icon={<MapsAddLocation />} />
                         </Link>
                     </BottomNavigation>
                 </Paper>
