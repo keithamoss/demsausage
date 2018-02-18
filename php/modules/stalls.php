@@ -84,11 +84,35 @@ function markPendingStallAsRead($id) {
   $stall = fetchPendingStallById($id);
   $election = fetchElection($stall["elections_id"]);
   if($election["polling_places_loaded"] === false) {
-    $pollingPlaceId = addPollingPlace($stall["stall_location_info"], $election["db_table_name"]);
+    $pollingPlace = (array)$stall["stall_location_info"];
+    $pollingPlace["has_bbq"] = $stall["has_bbq"];
+    $pollingPlace["has_caek"] = $stall["has_caek"];
+    $hasOther = new stdClass();
+    if($stall["has_coffee"] === true) {
+      $hasOther->has_coffee = true;
+    }
+    if($stall["has_vego"] === true) {
+      $hasOther->has_vego = true;
+    }
+    if($stall["has_halal"] === true) {
+      $hasOther->has_halal = true;
+    }
+    if($stall["has_baconandeggs"] === true) {
+      $hasOther->has_baconandeggs = true;
+    }
+    $pollingPlace["has_other"] = json_encode($hasOther);
+
+    $pollingPlaceId = addPollingPlace($pollingPlace, $election["db_table_name"]);
     if($pollingPlaceId === false) {
       failForAPI("Error adding polling place information.");
     }
     $stallFieldUpdates["polling_place_id"] = $pollingPlaceId;
+
+    // Turn the stall into a stall attached to a regular polling place (now that it exists)
+    $stallFieldUpdates["stall_location_info"] = null;
+
+    // Regenerate GeoJSON for this election so it includes our new stall
+    regeneratePollingPlaceGeoJSON($election["id"]);
   }
 
   $rowCount = updateTable($id, $stallFieldUpdates, "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
@@ -131,24 +155,13 @@ function updateStallPollingPlaceId($election_id, $polling_place_id, $new_polling
   return $stmt->rowCount();
 }
 
-// function deletePendingStall($id) {
-//   global $file_db, $pendingStallsPKeyFieldName;
-
-//   $delete = fieldsToDeleteSQL("pending_stalls", $pendingStallsPKeyFieldName);
-//   $stmt = $file_db->prepare($delete);
-//   $stmt->bindParam(":" . $pendingStallsPKeyFieldName, $id);
-//   $stmt->execute();
-
-//   return $stmt->rowCount();
-// }
-
 function fetchPendingStallById($id) {
   global $file_db;
 
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE id = :id");
   $stmt->bindParam(":id", $id);
   $stmt->execute();
-  return $stmt->fetch(\PDO::FETCH_ASSOC);
+  return translateStallFromDB($stmt->fetch(\PDO::FETCH_ASSOC));
 }
 
 function fetchPendingStallByElection($election_id) {
@@ -157,7 +170,7 @@ function fetchPendingStallByElection($election_id) {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE elections_id = :election_id");
   $stmt->bindParam(":election_id", $election_id);
   $stmt->execute();
-  return $stmt->fetch(\PDO::FETCH_ASSOC);
+  return translateStallFromDB($stmt->fetch(\PDO::FETCH_ASSOC));
 }
 
 function fetchPendingStalls() {
