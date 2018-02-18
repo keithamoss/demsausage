@@ -739,7 +739,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   if($dryrun === false) {
     // Set this as the active table for this election
     if($response["error"] === false) {
-      updateElection($election["id"], ["db_table_name" => $response["table_name"]]);
+      updateElection($election["id"], ["db_table_name" => $response["table_name"], "polling_places_loaded" => true]);
 
       // Regenerate the polling place GeoJSON
       regeneratePollingPlaceGeoJSON($election["id"]);
