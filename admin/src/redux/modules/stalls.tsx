@@ -61,6 +61,12 @@ export interface IStallLocationInfo {
     state: string
 }
 
+export enum StallStatus {
+    PENDING = 0,
+    APPROVED = 1,
+    DECLINED = 2,
+}
+
 export interface IStall {
     id: number
     stall_description: string
@@ -78,6 +84,7 @@ export interface IStall {
     polling_place_premises: string
     elections_id: number
     active: boolean
+    status: StallStatus
     reported_timestamp: string // Datetime
 }
 
@@ -104,6 +111,22 @@ export function markStallAsRead(id: number) {
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
+            dispatch(removePendingStall(id))
+            return json
+        }
+    }
+}
+
+export function markStallAsDeclined(id: number) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "mark-declined-pending-stall": 1,
+            id: id,
+        }
+        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))
             dispatch(removePendingStall(id))
             return json
         }

@@ -3,7 +3,12 @@ require_once "modules/mailgun.php";
 require_once "modules/polling_places.php";
 
 $pendingStallsPKeyFieldName = "id";
-$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "polling_place_id", "polling_place_premises", "elections_id", "active", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
+$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "polling_place_id", "polling_place_premises", "elections_id", "active", "status", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
+class StallStatusEnum {
+  const PENDING = 0;
+  const APPROVED = 1;
+  const DECLINED = 2;
+};
 
 function translateStallFromDB($row) {
   return [
@@ -23,6 +28,7 @@ function translateStallFromDB($row) {
     "polling_place_premises" => $row["polling_place_premises"],
     "elections_id" => (int)$row["elections_id"],
     "active" => (bool)$row["active"],
+    "status" => (int)$row["status"], // StallStatusEnum
     "mail_confirm_key" => $row["mail_confirm_key"],
     "mail_confirmed" => (bool)$row["mail_confirmed"],
     "reported_timestamp" => $row["reported_timestamp"],
@@ -70,7 +76,7 @@ function addPendingStall(array $stall, $electionId) {
 function markPendingStallAsRead($id) {
   global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
 
-  $stallFieldUpdates = ["active" => 0];
+  $stallFieldUpdates = ["active" => 0, "status" => StallStatusEnum::APPROVED];
 
   // If this is an 'unofficial' polling place, add it to the table.
   // This only applies to stalls approved before we have official
@@ -105,6 +111,12 @@ function markPendingStallAsRead($id) {
     sendStallApprovedEmail($toEmail, $toName, $mailInfo);
   }
   return $rowCount;
+}
+
+function markPendingStallAsDeclined($id) {
+  global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
+
+  return updateTable($id, ["active" => 0, "status" => StallStatusEnum::DECLINED], "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
 }
 
 function updateStallPollingPlaceId($election_id, $polling_place_id, $new_polling_place_id) {

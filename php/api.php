@@ -68,7 +68,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
   closeDb();
 }
 
-// Mark pending stall as read
+// Mark pending stall as read (approved)
 if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
@@ -77,6 +77,22 @@ if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
   $rowCount = markPendingStallAsRead($_GET["id"]);
   if($rowCount !== 1) {
     failForAPI("Failed to mark pending stall as read. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
+  }
+  // closeDb();
+}
+
+// Mark pending stall as declined
+if(stristr($_SERVER["QUERY_STRING"], "mark-declined-pending-stall") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = markPendingStallAsDeclined($_GET["id"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to mark pending stall as declined. (Error: $rowCount)");
   } else {
     echo json_encode(["rows" => $rowCount]);
     closeDb();

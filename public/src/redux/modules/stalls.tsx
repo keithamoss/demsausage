@@ -61,6 +61,12 @@ export interface IStallLocationInfo {
     state: string
 }
 
+export enum StallStatus {
+    PENDING = 0,
+    APPROVED = 1,
+    DECLINED = 2,
+}
+
 export interface IStall {
     id: number
     stall_description: string
@@ -78,6 +84,7 @@ export interface IStall {
     polling_place_premises: string
     elections_id: number
     active: boolean
+    status: StallStatus
     reported_timestamp: string // Datetime
 }
 
