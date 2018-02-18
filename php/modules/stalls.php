@@ -154,7 +154,15 @@ function fetchPendingStalls() {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE active = 1");
   $stalls = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $stalls[] = translateStallFromDB($row);
+      $tmp = translateStallFromDB($row);
+      if($tmp["stall_location_info"] !== null) {
+        $election = fetchElection($tmp["elections_id"]);
+        $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $tmp["stall_location_info"]->lat, $tmp["stall_location_info"]->lon, 250);
+        if(count($pollingPlaces) > 0) {
+          $tmp["polling_place_id"] = $pollingPlaces[0]["id"];
+        }
+      }
+      $stalls[] = $tmp;
   }
   return $stalls;
 }
