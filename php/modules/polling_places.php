@@ -129,13 +129,15 @@ function fetchPollingPlaces($ids, string $electionId) {
   
   $election = fetchElection($electionId);
 
-  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE id IN (:ids)");
-  $stmt->bindParam(":ids", implode(", ", $ids));
-  $stmt->execute();
+  // 0_o
+  // https://stackoverflow.com/a/920523
+  $inQuery = implode(',', array_fill(0, count($ids), '?'));
+  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE id IN ($inQuery)");
+  $stmt->execute($ids);
   
   $pollingPlaces = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $pollingPlaces[] = translatePollingPlaceFromDB($row);
+    $pollingPlaces[] = translatePollingPlaceFromDB($row);
   }
   return $pollingPlaces;
 }
