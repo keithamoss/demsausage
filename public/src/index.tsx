@@ -10,11 +10,18 @@ import { Router, browserHistory } from "react-router"
 import { syncHistoryWithStore } from "react-router-redux"
 import thunkMiddleware from "redux-thunk"
 import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
+import * as Raven from "raven-js"
+import * as createRavenMiddleware from "raven-for-redux"
 import getRoutes from "./routes"
 import { IStore } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 let Middleware: Array<any> = []
+
+if ("REACT_RAVEN_URL" in process.env) {
+    Raven.config(process.env.REACT_RAVEN_URL!).install()
+    Middleware.push(createRavenMiddleware(Raven))
+}
 
 if ("REACT_APP_GOOGLE_ANALYTICS_UA" in process.env) {
     Middleware.push(AnalyticsMiddleware as any)
