@@ -30,6 +30,7 @@ body,
     z-index: 1400;
     height: 100vh;
     width: 70%;
+    max-width: 300px;
 }
 
 .openlayers-map {

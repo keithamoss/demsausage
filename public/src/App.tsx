@@ -49,8 +49,8 @@ class App extends React.Component<IProps, {}> {
     render() {
         const { muiThemePalette, app, snackbars, handleSnackbarClose, toggleSidebar, locationPathName, content } = this.props
 
-        let bottomNavSelectedIndex: number = 0
-        if (locationPathName === "/search") {
+        let bottomNavSelectedIndex: number = -1
+        if (locationPathName === "/") {
             bottomNavSelectedIndex = 0
         } else if (locationPathName === "/search") {
             bottomNavSelectedIndex = 1
