@@ -68,8 +68,11 @@ function translatePollingPlaceToDB($row) {
 function addPollingPlace(array $params, string $pollingPlaceTableName) {
   global $file_db, $pollingPlacesAllowedFields;
 
-  $pollingPlace = translatePollingPlaceToDB($params);
+  // Init timestamp fields
+  $params["first_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
 
+  $pollingPlace = translatePollingPlaceToDB($params);
   $insert = fieldsToInsertSQL($pollingPlaceTableName, $pollingPlacesAllowedFields, array_keys($pollingPlace), $pollingPlace);
   $stmt = $file_db->prepare($insert);
   
@@ -78,6 +81,8 @@ function addPollingPlace(array $params, string $pollingPlaceTableName) {
 
 function updatePollingPlace($id, array $params, string $electionId, $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
+
+  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
   
   $election = fetchElection($electionId);
   $pollingPlace = translatePollingPlaceToDB($params);
@@ -94,9 +99,10 @@ function updatePollingPlace($id, array $params, string $electionId, $regenerateG
 
 function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, $regenerateGeoJSON) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
+
+  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
   
   $pollingPlace = translatePollingPlaceToDB($params);
-  
   $rowCount = updateTable($id, $pollingPlace, $electionTableName, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
 
   // Regenerate the polling place GeoJSON
