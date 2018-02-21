@@ -21,7 +21,7 @@ export interface IDispatchProps {
 
 export interface IStateProps {
     locationSearched: IGoogleGeocodeResult | null
-    nearbyPollingPlaces: Array<IPollingPlaceSearchResult>
+    nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
 }
 
 interface IRouteProps {}
@@ -33,7 +33,7 @@ interface IOwnProps {
 export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     constructor(props: any) {
         super(props)
-        this.state = { nearbyPollingPlaces: [], locationSearched: null }
+        this.state = { nearbyPollingPlaces: null, locationSearched: null }
 
         this.onReceiveNearbyPollingPlaces = this.onReceiveNearbyPollingPlaces.bind(this)
     }

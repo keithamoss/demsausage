@@ -5,8 +5,9 @@ import styled from "styled-components"
 import { IElection, IPollingPlaceSearchResult, IGoogleGeocodeResult } from "../../redux/modules/interfaces"
 
 import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
+import EmptyState from "../../shared/empty_state/EmptyState"
 import { PollingPlaceCardMiniContainer } from "../PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
+import { DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
 import { grey500 } from "material-ui/styles/colors"
 
 const FinderContainer = styled.div`
@@ -27,7 +28,7 @@ const PollingPlaceCardWrapper = styled.div`
 export interface IProps {
     election: IElection
     locationSearched: IGoogleGeocodeResult | null
-    nearbyPollingPlaces: Array<IPollingPlaceSearchResult>
+    nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
     onGeocoderResults: any
 }
 
@@ -48,18 +49,32 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     onChoosePlace={onGeocoderResults}
                 />
 
-                {nearbyPollingPlaces.length > 0 && (
-                    <LocationSearched>
-                        Polling places near <em>{locationSearched!.formatted_address}</em>.
-                    </LocationSearched>
-                )}
+                {nearbyPollingPlaces !== null &&
+                    nearbyPollingPlaces.length > 0 && (
+                        <LocationSearched>
+                            Polling places near <em>{locationSearched!.formatted_address}</em>.
+                        </LocationSearched>
+                    )}
 
-                {nearbyPollingPlaces.length > 0 &&
+                {nearbyPollingPlaces !== null &&
+                    nearbyPollingPlaces.length > 0 &&
                     nearbyPollingPlaces.map((value: IPollingPlaceSearchResult, index: number) => (
                         <PollingPlaceCardWrapper key={value.id}>
                             <PollingPlaceCardMiniContainer pollingPlace={value} />
                         </PollingPlaceCardWrapper>
                     ))}
+
+                {nearbyPollingPlaces !== null &&
+                    nearbyPollingPlaces.length === 0 && (
+                        <EmptyState
+                            message={
+                                <div>
+                                    Sorry, we couldn't find any<br />polling places close to you
+                                </div>
+                            }
+                            icon={<ActionSearch />}
+                        />
+                    )}
             </FinderContainer>
         )
     }
