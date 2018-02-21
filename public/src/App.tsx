@@ -81,39 +81,9 @@ class App extends React.Component<IProps, {}> {
                         onLeftIconButtonTouchTap={() => toggleSidebar()}
                     />
                 </div>
+
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <main className="page-main-content">{content || this.props.children}</main>
-
-                    <Drawer open={app.sidebarOpen} docked={false} onRequestChange={(open: boolean) => toggleSidebar()}>
-                        <List>
-                            <ListItem primaryText="About Us" leftIcon={<ActionInfo />} containerElement={<Link to={`/about`} />} />
-                            <ListItem primaryText="Media" leftIcon={<HardwareTv />} containerElement={<Link to={`/media`} />} />
-                            <ListItem
-                                primaryText="Redbubble Store"
-                                leftIcon={<ActionStore />}
-                                containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
-                            />
-                        </List>
-                        <Divider />
-                        <List>
-                            <Subheader>Contact Us</Subheader>
-                            <ListItem
-                                primaryText="Email"
-                                leftIcon={<CommunicationEmail />}
-                                containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
-                            />
-                            <ListItem
-                                primaryText="Twitter"
-                                leftIcon={<TwitterIcon />}
-                                containerElement={<a href={"https://twitter.com/DemSausage"} />}
-                            />
-                            <ListItem
-                                primaryText="Facebook"
-                                leftIcon={<FacebookIcon />}
-                                containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
-                            />
-                        </List>
-                    </Drawer>
                 </div>
 
                 <Paper zDepth={1} className="page-footer">
@@ -127,6 +97,37 @@ class App extends React.Component<IProps, {}> {
                         />
                     </BottomNavigation>
                 </Paper>
+
+                <Drawer open={app.sidebarOpen} docked={false} onRequestChange={(open: boolean) => toggleSidebar()}>
+                    <List>
+                        <ListItem primaryText="About Us" leftIcon={<ActionInfo />} containerElement={<Link to={`/about`} />} />
+                        <ListItem primaryText="Media" leftIcon={<HardwareTv />} containerElement={<Link to={`/media`} />} />
+                        <ListItem
+                            primaryText="Redbubble Store"
+                            leftIcon={<ActionStore />}
+                            containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
+                        />
+                    </List>
+                    <Divider />
+                    <List>
+                        <Subheader>Contact Us</Subheader>
+                        <ListItem
+                            primaryText="Email"
+                            leftIcon={<CommunicationEmail />}
+                            containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
+                        />
+                        <ListItem
+                            primaryText="Twitter"
+                            leftIcon={<TwitterIcon />}
+                            containerElement={<a href={"https://twitter.com/DemSausage"} />}
+                        />
+                        <ListItem
+                            primaryText="Facebook"
+                            leftIcon={<FacebookIcon />}
+                            containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
+                        />
+                    </List>
+                </Drawer>
 
                 <Snackbar
                     open={snackbars.open}

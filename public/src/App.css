@@ -22,6 +22,7 @@ body,
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
+    padding-bottom: 56px; /* Height of BottomNav */
 }
 
 .page-footer {
