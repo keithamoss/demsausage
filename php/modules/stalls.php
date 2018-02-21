@@ -63,7 +63,7 @@ function addPendingStall(array $stall, $electionId) {
       "POLLING_PLACE_ADDRESS" => $pollingPlace["address"],
       "STALL_NAME" => $stall["stall_name"],
       "STALL_DESCRIPTION" => $stall["stall_description"],
-      "STALL_WEBSITE" => $stall["stall_website"],
+      "STALL_WEBSITE" => (array_key_exists("stall_website", $stall) === true) ? $stall["stall_website"] : "",
       "OVERVIEW_MAP" => getMapboxStaticMap(1, 1),
     );
     sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo);
