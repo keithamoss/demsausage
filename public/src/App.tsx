@@ -10,6 +10,7 @@ import LinearProgress from "material-ui/LinearProgress"
 
 import { MapsMap, MapsAddLocation, ActionSearch, ActionStore, ActionInfo, HardwareTv, CommunicationEmail } from "material-ui/svg-icons"
 
+import Drawer from "material-ui/Drawer"
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
 import { List, ListItem } from "material-ui/List"
@@ -83,38 +84,36 @@ class App extends React.Component<IProps, {}> {
                 <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
                     <main className="page-main-content">{content || this.props.children}</main>
 
-                    {app.sidebarOpen && (
-                        <nav className="page-nav">
-                            <List>
-                                <ListItem primaryText="About Us" leftIcon={<ActionInfo />} containerElement={<Link to={`/about`} />} />
-                                <ListItem primaryText="Media" leftIcon={<HardwareTv />} containerElement={<Link to={`/media`} />} />
-                                <ListItem
-                                    primaryText="Redbubble Store"
-                                    leftIcon={<ActionStore />}
-                                    containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
-                                />
-                            </List>
-                            <Divider />
-                            <List>
-                                <Subheader>Contact Us</Subheader>
-                                <ListItem
-                                    primaryText="Email"
-                                    leftIcon={<CommunicationEmail />}
-                                    containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
-                                />
-                                <ListItem
-                                    primaryText="Twitter"
-                                    leftIcon={<TwitterIcon />}
-                                    containerElement={<a href={"https://twitter.com/DemSausage"} />}
-                                />
-                                <ListItem
-                                    primaryText="Facebook"
-                                    leftIcon={<FacebookIcon />}
-                                    containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
-                                />
-                            </List>
-                        </nav>
-                    )}
+                    <Drawer open={app.sidebarOpen} docked={false} onRequestChange={(open: boolean) => toggleSidebar()}>
+                        <List>
+                            <ListItem primaryText="About Us" leftIcon={<ActionInfo />} containerElement={<Link to={`/about`} />} />
+                            <ListItem primaryText="Media" leftIcon={<HardwareTv />} containerElement={<Link to={`/media`} />} />
+                            <ListItem
+                                primaryText="Redbubble Store"
+                                leftIcon={<ActionStore />}
+                                containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
+                            />
+                        </List>
+                        <Divider />
+                        <List>
+                            <Subheader>Contact Us</Subheader>
+                            <ListItem
+                                primaryText="Email"
+                                leftIcon={<CommunicationEmail />}
+                                containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
+                            />
+                            <ListItem
+                                primaryText="Twitter"
+                                leftIcon={<TwitterIcon />}
+                                containerElement={<a href={"https://twitter.com/DemSausage"} />}
+                            />
+                            <ListItem
+                                primaryText="Facebook"
+                                leftIcon={<FacebookIcon />}
+                                containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
+                            />
+                        </List>
+                    </Drawer>
                 </div>
 
                 <Paper zDepth={1} className="page-footer">
