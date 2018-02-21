@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { browserHistory } from "react-router"
+import { browserHistory, Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
 import "./App.css"
 
@@ -8,12 +8,16 @@ import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
 
-import { MapsMap, MapsAddLocation, ActionSearch } from "material-ui/svg-icons"
-// import IconLocationOn from "material-ui/svg-icons/communication/location-on"
+import { MapsMap, MapsAddLocation, ActionSearch, ActionStore, ActionInfo, HardwareTv, CommunicationEmail } from "material-ui/svg-icons"
 
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
-// import { List, ListItem } from "material-ui/List"
+import { List, ListItem } from "material-ui/List"
+import Subheader from "material-ui/Subheader"
+import Divider from "material-ui/Divider"
+
+import TwitterIcon from "./icons/fontawesome/twitter"
+import FacebookIcon from "./icons/fontawesome/facebook"
 
 // const logo = require("./logo.svg")
 
@@ -47,6 +51,8 @@ class App extends React.Component<IProps, {}> {
 
         let bottomNavSelectedIndex: number = 0
         if (locationPathName === "/search") {
+            bottomNavSelectedIndex = 0
+        } else if (locationPathName === "/search") {
             bottomNavSelectedIndex = 1
         } else if (locationPathName === "/add-stall") {
             bottomNavSelectedIndex = 2
@@ -68,7 +74,7 @@ class App extends React.Component<IProps, {}> {
                     <AppBar
                         title={
                             <TitleContainer>
-                                <TitleLogo src="./icons/sausage+cake_big.png" /> Democracy Sausage
+                                <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage
                             </TitleContainer>
                         }
                         onLeftIconButtonTouchTap={() => toggleSidebar()}
@@ -79,13 +85,34 @@ class App extends React.Component<IProps, {}> {
 
                     {app.sidebarOpen && (
                         <nav className="page-nav">
-                            {/* <List>
+                            <List>
+                                <ListItem primaryText="About Us" leftIcon={<ActionInfo />} containerElement={<Link to={`/about`} />} />
+                                <ListItem primaryText="Media" leftIcon={<HardwareTv />} containerElement={<Link to={`/media`} />} />
                                 <ListItem
-                                    primaryText="Review Pending Stalls"
-                                    leftIcon={<IconLocationOn />}
-                                    containerElement={<Link to={`/stalls`} />}
+                                    primaryText="Redbubble Store"
+                                    leftIcon={<ActionStore />}
+                                    containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
                                 />
-                            </List> */}
+                            </List>
+                            <Divider />
+                            <List>
+                                <Subheader>Contact Us</Subheader>
+                                <ListItem
+                                    primaryText="Email"
+                                    leftIcon={<CommunicationEmail />}
+                                    containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
+                                />
+                                <ListItem
+                                    primaryText="Twitter"
+                                    leftIcon={<TwitterIcon />}
+                                    containerElement={<a href={"https://twitter.com/DemSausage"} />}
+                                />
+                                <ListItem
+                                    primaryText="Facebook"
+                                    leftIcon={<FacebookIcon />}
+                                    containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
+                                />
+                            </List>
                         </nav>
                     )}
                 </div>
