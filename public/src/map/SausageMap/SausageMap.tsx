@@ -100,6 +100,20 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             format: new ol.format.GeoJSON(),
         })
 
+        // Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
+        vectorSource.on("change", function(e: any) {
+            if (vectorSource.getState() === "ready") {
+                window.setTimeout(function() {
+                    map.getView().changed()
+                    let view = map.getView()
+                    let centre = view.getCenter()
+                    centre[0] -= 1
+                    view.setCenter(centre)
+                    map.setView(view)
+                }, 1000)
+            }
+        })
+
         const vectorLayer = new ol.layer.Vector({
             renderMode: "image",
             source: vectorSource,
