@@ -24,6 +24,11 @@ body,
     flex-direction: column;
 }
 
+.page-footer {
+    position: fixed;
+    bottom: 0px;
+}
+
 .openlayers-map {
     position: absolute;
     top: 0;
