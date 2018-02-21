@@ -10,6 +10,7 @@ import {
     IPollingPlaceSearchResult,
 } from "../../redux/modules/interfaces"
 import { fetchNearbyPollingPlaces } from "../../redux/modules/polling_places"
+import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IStoreProps {
     currentElection: IElection
@@ -73,9 +74,18 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         findNearestPollingPlaces: function(onReceiveNearbyPollingPlaces: Function, election: IElection, value: IGoogleAddressSearchResult) {
+            gaTrack.event({ category: "Sausage", action: "PollingPlaceFinder", type: "findNearestPollingPlaces" })
+
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: value.place_id }, async (results: Array<IGoogleGeocodeResult>, status: string) => {
+                gaTrack.event({
+                    category: "Sausage",
+                    action: "PollingPlaceFinder",
+                    type: "findNearestPollingPlaces",
+                    payload: { length: results.length },
+                })
+
                 if (results.length > 0) {
                     const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(fetchNearbyPollingPlaces(election, results[0]))
                     onReceiveNearbyPollingPlaces(pollingPlaces, results[0])

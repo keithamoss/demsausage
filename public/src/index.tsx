@@ -9,17 +9,16 @@ import { Provider } from "react-redux"
 import { Router, browserHistory } from "react-router"
 import { syncHistoryWithStore } from "react-router-redux"
 import thunkMiddleware from "redux-thunk"
-// import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
+import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
 import getRoutes from "./routes"
 import { IStore } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
-// declare var DEVELOPMENT: boolean
 let Middleware: Array<any> = []
 
-// if ("GOOGLE_ANALYTICS_UA" in Config) {
-//     Middleware.push(AnalyticsMiddleware as any)
-// }
+if ("REACT_APP_GOOGLE_ANALYTICS_UA" in process.env) {
+    Middleware.push(AnalyticsMiddleware as any)
+}
 
 import reducers from "./redux/modules/reducer"
 
@@ -38,8 +37,9 @@ const history = syncHistoryWithStore(browserHistory as any, store)
 
 ReactDOM.render(
     <Provider store={store}>
-        {/* <Router history={history as any} onUpdate={"GOOGLE_ANALYTICS_UA" in Config ? fireAnalyticsTracking : () => {}}> */}
-        <Router history={history as any}>{getRoutes(store as any)}</Router>
+        <Router history={history as any} onUpdate={"REACT_APP_GOOGLE_ANALYTICS_UA" in process.env ? fireAnalyticsTracking : undefined}>
+            {getRoutes(store as any)}
+        </Router>
     </Provider>,
     document.getElementById("root")
 )

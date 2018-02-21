@@ -1,7 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
 import { IEALGISApiClient } from "../../redux/modules/interfaces"
 import { fetchElections } from "./elections"
-// import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
+import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
 const LOADING = "ealgis/app/LOADING"
@@ -117,7 +117,7 @@ export interface IAction {
     modalId?: string
     open?: boolean
     meta?: {
-        // analytics: IAnalyticsMeta
+        analytics: IAnalyticsMeta
     }
 }
 

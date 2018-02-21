@@ -9,6 +9,8 @@ import { List, ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
 import MapsPlace from "material-ui/svg-icons/maps/place"
 
+import { gaTrack } from "../../../shared/analytics/GoogleAnalytics"
+
 export interface IProps {
     onChoosePlace: Function
     // From SearchBar via GooglePlacesAutocomplete
@@ -40,6 +42,8 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
     }
 
     onReceiveAddressSearchResults(results: Array<IGoogleAddressSearchResult>) {
+        gaTrack.event({ category: "Sausage", action: "GooglePlacesAutocompleteList", type: "onReceiveAddressSearchResults" })
+
         this.setState({
             addressSearchResults: results,
         })
@@ -104,9 +108,18 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchGeocodedPlace: function(onChoosePlace: Function, addressResult: IGoogleAddressSearchResult, onPlaceChosen: Function) {
+            gaTrack.event({ category: "Sausage", action: "GooglePlacesAutocompleteList", type: "fetchGeocodedPlace" })
+
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: addressResult.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
+                gaTrack.event({
+                    category: "Sausage",
+                    action: "GooglePlacesAutocompleteList",
+                    type: "fetchGeocodedPlace",
+                    payload: { length: results.length },
+                })
+
                 if (results.length > 0) {
                     onPlaceChosen()
                     onChoosePlace(addressResult, results[0])
