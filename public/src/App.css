@@ -2,27 +2,15 @@
 
 html,
 body,
-#root {
-    height: 100%;
-}
-
+#root,
 .page {
-    display: flex;
     height: 100%;
-    flex-direction: column;
     font-family: "Roboto", sans-serif;
 }
 
-.page-header,
-.page-footer {
-    flex: none;
-}
-
 .page-content {
-    display: flex;
-    flex: 1 0 auto;
-    flex-direction: column;
-    padding-bottom: 56px; /* Height of BottomNav */
+    margin-top: 60px; /* Height of ResponsiveAppBar + 10px */
+    margin-bottom: 56px; /* Height of BottomNav */
 }
 
 .page-footer {

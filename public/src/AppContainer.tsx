@@ -58,6 +58,8 @@ export interface IStoreProps {
     snackbars: ISnackbarsModule
     elections: IElections
     currentElection: IElection
+    browser: any
+    responsiveDrawer: any
 }
 
 export interface IDispatchProps {
@@ -72,6 +74,11 @@ export interface IStateProps {}
 export interface IRouteProps {
     content: any
     location: any
+}
+
+const DEFAULT_BREAK_POINT = "medium"
+function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, breakPoint: any = DEFAULT_BREAK_POINT) {
+    return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
@@ -90,6 +97,8 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             snackbars,
             elections,
             currentElection,
+            browser,
+            responsiveDrawer,
             handleSnackbarClose,
             toggleSidebar,
             onChangeElection,
@@ -111,11 +120,12 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <App
-                    muiThemePalette={!muiTheme.palette}
+                    muiThemePalette={muiTheme.palette}
                     app={app}
                     snackbars={snackbars}
                     elections={elections}
                     currentElection={currentElection}
+                    isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
                     toggleSidebar={toggleSidebar}
                     onChangeElection={onChangeElection}
@@ -129,13 +139,15 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-    const { app, snackbars, elections } = state
+    const { app, snackbars, elections, browser, responsiveDrawer } = state
 
     return {
         app: app,
         snackbars: snackbars,
         elections: elections.elections,
         currentElection: elections.elections[elections.current_election_id],
+        browser: browser,
+        responsiveDrawer: responsiveDrawer,
     }
 }
 

@@ -15,4 +15,6 @@ declare module "react-tiny-virtual-list"
 declare module "material-ui-bottom-sheet"
 declare module "material-ui-search-bar"
 declare module "material-ui-fullscreen-dialog"
+declare module "material-ui-responsive-drawer"
+declare module "redux-responsive"
 // declare function require(string: string): string

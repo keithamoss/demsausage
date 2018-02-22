@@ -12,6 +12,7 @@ import thunkMiddleware from "redux-thunk"
 import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
 import * as Raven from "raven-js"
 import * as createRavenMiddleware from "raven-for-redux"
+import { responsiveStoreEnhancer } from "redux-responsive"
 import getRoutes from "./routes"
 import { IStore } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
@@ -37,7 +38,7 @@ const composeEnhancers = composeWithDevTools({
 })
 const store: Store<IStore> = createStore(
     reducers,
-    composeEnhancers(applyMiddleware(thunkMiddleware.withExtraArgument(ealapi), ...Middleware))
+    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(ealapi), ...Middleware))
 )
 
 const history = syncHistoryWithStore(browserHistory as any, store)

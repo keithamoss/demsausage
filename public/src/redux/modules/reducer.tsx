@@ -8,6 +8,9 @@ import { default as elections, IModule as IElectionsModule } from "./elections"
 import { default as polling_places, IModule as IPollingPlacesModule, reduxFormReducer as pollingPlaceFormReducer } from "./polling_places"
 import { default as stalls, IModule as IStallsModule } from "./stalls"
 
+import { responsiveStateReducer } from "redux-responsive"
+import { responsiveDrawer } from "material-ui-responsive-drawer"
+
 const formReducer: any = form // Silencing TypeScript errors due to older @types/redux-form package
 
 export interface IStore {
@@ -16,6 +19,9 @@ export interface IStore {
     elections: IElectionsModule
     polling_places: IPollingPlacesModule
     stalls: IStallsModule
+    form: any
+    browser: any
+    responsiveDrawer: any
 }
 
 const rootReducer: Redux.Reducer<IStore> = Redux.combineReducers<IStore>({
@@ -26,6 +32,8 @@ const rootReducer: Redux.Reducer<IStore> = Redux.combineReducers<IStore>({
     stalls,
     routing: routerReducer,
     form: formReducer.plugin({ pollingPlace: pollingPlaceFormReducer }),
+    browser: responsiveStateReducer,
+    responsiveDrawer: responsiveDrawer,
 })
 
 export default rootReducer
