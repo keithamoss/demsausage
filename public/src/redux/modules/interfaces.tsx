@@ -19,7 +19,7 @@ export interface IEnvVars {
     REACT_APP_GOOGLE_MAPS_API_KEY: string
     REACT_APP_GOOGLE_ANALYTICS_UA: string
     REACT_APP_MAPBOX_API_KEY: string
-    REACT_RAVEN_URL: string
+    REACT_APP_RAVEN_URL: string
 }
 
 export interface IConfig {
