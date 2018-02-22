@@ -66,6 +66,11 @@ function fetchElection($id) {
   $stmt->bindParam(":id", $id);
   $stmt->execute();
   $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+  
+  if($row === false) {
+    failForAPI("Election not found.");
+  }
+
   return translateElectionFromDB($row);
 }
 

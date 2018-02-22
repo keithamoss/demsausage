@@ -35,7 +35,7 @@ function translateStallFromDB($row) {
 }
 
 function addPendingStall(array $stall, $electionId) {
-  global $file_db, $pendingStallsAllowedFields;
+  global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
 
   $election = fetchElection($electionId);
 
@@ -49,6 +49,9 @@ function addPendingStall(array $stall, $electionId) {
   $stallId = fieldsToStmntLastInsertId($stmt, $pendingStallsAllowedFields, $stall);
 
   if($stallId !== false) {
+    // Generate our mail confirm key
+    updateTable($stallId, ["mail_confirm_key" => makeConfirmationHash($stall["contact_email"], $stallId)], "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
+    
     // Send submitted notification to the user
     if($election["polling_places_loaded"] === false) {
       $pollingPlace = (array)json_decode($stall["stall_location_info"]);
@@ -64,6 +67,7 @@ function addPendingStall(array $stall, $electionId) {
       "STALL_NAME" => $stall["stall_name"],
       "STALL_DESCRIPTION" => $stall["stall_description"],
       "STALL_WEBSITE" => (array_key_exists("stall_website", $stall) === true) ? $stall["stall_website"] : "",
+      "DELICIOUSNESS" => getFoodDescriptionForStall($stall),
       "OVERVIEW_MAP" => getMapboxStaticMap(1, 1),
     );
     sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo);
@@ -79,6 +83,11 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
   // This only applies to stalls approved before we have official
   // polling places from the electoral commission.
   $stall = fetchPendingStallById($id);
+
+  if($stall["active"] === false) {
+    failForAPI("Stall is already approved.");
+  }
+
   $election = fetchElection($stall["elections_id"]);
   if($election["polling_places_loaded"] === false) {
     $stallFieldUpdates = [];
@@ -129,6 +138,11 @@ function markPendingStallAsRead($id) {
   // This only applies to stalls approved before we have official
   // polling places from the electoral commission.
   $stall = fetchPendingStallById($id);
+
+  if($stall["active"] === false) {
+    failForAPI("Stall is already approved.");
+  }
+
   $election = fetchElection($stall["elections_id"]);
   if($election["polling_places_loaded"] === false) {
     // Turn the stall into a stall attached to a regular polling place (now that it exists)
@@ -157,9 +171,10 @@ function markPendingStallAsRead($id) {
       "STALL_NAME" => $stall["stall_name"],
       "STALL_DESCRIPTION" => $stall["stall_description"],
       "STALL_WEBSITE" => $stall["stall_website"],
+      "DELICIOUSNESS" => getFoodDescriptionForStall($stall),
       "OVERVIEW_MAP" => getMapboxStaticMap(1, 1),
     );
-    sendStallApprovedEmail($toEmail, $toName, $mailInfo);
+    sendStallApprovedEmail($id, $toEmail, $toName, $mailInfo);
   }
   return $rowCount;
 }
@@ -188,12 +203,8 @@ function fetchPendingStallById($id) {
   $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE id = :id");
   $stmt->bindParam(":id", $id);
   $stmt->execute();
-
-  $stalls = [];
-  while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-    $stalls[] = translateStallFromDB($row);
-  }
-  return $stalls;
+  $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+  return translateStallFromDB($row);
 }
 
 function fetchPendingStallByElection($election_id) {
@@ -270,5 +281,48 @@ function confirmEmailOptin($confirmKey) {
   
   $stmt->execute();
   return ($stmt->rowCount() === 1);
+}
+
+function confirmEmailOptout($confirmKey) {
+  global $file_db;
+
+  $stall = fetchPendingStallByMailConfirmCode($confirmKey);
+  if(!(is_array($stall) && isset($stall["id"]))) {
+    failNicelyForAuthReasons("Unable to find stall.");
+  }
+
+  if(checkConfirmationHash($stall["contact_email"], $stall["id"], $confirmKey) === false) {
+    failNicelyForAuthReasons("Confirmation code has expired.");
+  }
+
+  $stmt = $file_db->prepare("UPDATE pending_stalls SET mail_confirmed = 0 WHERE contact_email = :contact_email");
+  $stmt->bindParam(":contact_email", $stall["contact_email"]);
+  
+  $stmt->execute();
+  return true;
+}
+
+function getFoodDescriptionForStall($stall) {
+  $noms = [];
+
+  if ($stall["has_bbq"] === "true" || $stall["has_bbq"] === true) {
+      $noms[] = "sausage sizzle";
+  }
+  if ($stall["has_caek"] === "true" || $stall["has_caek"] === true) {
+      $noms[] = "cake stall";
+  }
+  if ($stall["has_baconandeggs"] === "true" || $stall["has_baconandeggs"] === true) {
+      $noms[] = "bacon and egg burgers";
+  }
+  if ($stall["has_vego"] === "true" || $stall["has_vego"] === true) {
+      $noms[] = "vegetarian options";
+  }
+  if ($stall["has_halal"] === "true" || $stall["has_halal"] === true) {
+      $noms[] = "halal options";
+  }
+  if ($stall["has_coffee"] === "true" || $stall["has_coffee"] === true) {
+      $noms[] = "coffee";
+  }
+  return implode(", ", $noms);
 }
 ?>

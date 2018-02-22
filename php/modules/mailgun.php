@@ -105,8 +105,7 @@ function sendMailgunEmail(array $body) {
 function sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo) {
   // @TODO move this to the calling function and handle making it dependent on
   // the email not having been confirmed elsewhere before.
-  $confirmUrl = BASE_URL."/api.php?confirm-email=1&confirm_key=" . makeConfirmationHash($toEmail, $stallId);
-  $mailInfo["CONFIRM_LINK"] = "Blah blah blah confirm email <a href='$confirmUrl'>here</a>.<br /><br/>";
+  $mailInfo["CONFIRM_OPTIN_URL"] = BASE_URL."/api.php?confirm-email=1&confirm_key=" . makeConfirmationHash($toEmail, $stallId);
 
   $body = array(
     // "to" => "$toName <$toEmail>",
@@ -117,7 +116,11 @@ function sendStallSubmittedEmail($stallId, $toEmail, $toName, $mailInfo) {
   return sendMailgunEmail($body);
 }
 
-function sendStallApprovedEmail($toEmail, $toName, $mailInfo) {
+function sendStallApprovedEmail($stallId, $toEmail, $toName, $mailInfo) {
+  // @TODO move this to the calling function and handle making it dependent on
+  // the email not having been confirmed elsewhere before.
+  $mailInfo["CONFIRM_OPTOUT_URL"] = BASE_URL."/api.php?confirm-email-optout=1&confirm_key=" . makeConfirmationHash($toEmail, $stallId);
+
   $body = array(
     // "to" => "$toName <$toEmail>",
     "to" => "$toEmail",

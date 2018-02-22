@@ -8,20 +8,20 @@ require_once "db.php";
 # Public Endpoints
 ############################
 // Fetch Elections
-if(stristr($_SERVER["QUERY_STRING"], "fetch-elections") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-elections=1") !== false) {
   $elections = fetchPublicElections();
   echo json_encode($elections);
   closeDb();
 }
 
 // Regenerate Polling Place GeoJSON
-if(stristr($_SERVER["QUERY_STRING"], "regenerate-geojson") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "regenerate-geojson=1") !== false) {
   createPollingPlaceGeoJSON($_GET["electionId"]);
   closeDb();
 }
 
 // Add Pending Stall
-if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "add-stall=1") !== false) {
   $stallId = addPendingStall($_GET["stall"], $_GET["electionId"]);
   if($stallId === false) {
     failForAPI("Error adding stall.");
@@ -32,22 +32,30 @@ if(stristr($_SERVER["QUERY_STRING"], "add-stall") !== false) {
   closeDb();
 }
 
-// Confirm Email
-if(stristr($_SERVER["QUERY_STRING"], "confirm-email") !== false) {
+// Confirm Email Optin
+if(stristr($_SERVER["QUERY_STRING"], "confirm-email=1") !== false) {
   if(confirmEmailOptin($_GET["confirm_key"]) === true) {
     echo "Email Confirmed :)";
   }
   closeDb();
 }
 
+// Confirm Email Optout
+if(stristr($_SERVER["QUERY_STRING"], "confirm-email-optout=1") !== false) {
+  if(confirmEmailOptout($_GET["confirm_key"]) === true) {
+    echo "We've removed you from our mailing list :)";
+  }
+  closeDb();
+}
+
 // Fetch nearby polling places
-if(stristr($_SERVER["QUERY_STRING"], "fetch-nearby-polling-places") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-nearby-polling-places=1") !== false) {
   echo json_encode(fetchNearbyPollingPlaces($_GET["electionId"], $_GET["lat"], $_GET["lon"]));
   closeDb();
 }
 
 // Fetch polling place by ids
-if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places=1") !== false) {
   $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionId"]);
   echo json_encode($pollingPlaces);
   closeDb();
@@ -58,14 +66,14 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
 # Super User Endpoints
 ############################
 // Fetch All Elections
-if(stristr($_SERVER["QUERY_STRING"], "fetch-all-elections") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-all-elections=1") !== false) {
   $elections = fetchAllElections();
   echo json_encode($elections);
   closeDb();
 }
 
 // Fetch pending stalls
-if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -76,7 +84,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-pending-stalls") !== false) {
 }
 
 // Mark pending stall as read (approved)
-if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -92,7 +100,7 @@ if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall") !== false) {
 }
 
 // Mark pending stall as read (approved) and add an unofficial polling place
-if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall-and-add-polling-place") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall-and-add-polling-place=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -108,7 +116,7 @@ if(stristr($_SERVER["QUERY_STRING"], "mark-read-pending-stall-and-add-polling-pl
 }
 
 // Mark pending stall as declined
-if(stristr($_SERVER["QUERY_STRING"], "mark-declined-pending-stall") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "mark-declined-pending-stall=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -124,7 +132,7 @@ if(stristr($_SERVER["QUERY_STRING"], "mark-declined-pending-stall") !== false) {
 }
 
 // Create election
-if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "create-election=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -140,7 +148,7 @@ if(stristr($_SERVER["QUERY_STRING"], "create-election") !== false) {
 }
 
 // Update election
-if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "update-election=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -155,7 +163,7 @@ if(stristr($_SERVER["QUERY_STRING"], "update-election") !== false) {
 }
 
 // Load polling places to election
-if(stristr($_SERVER["QUERY_STRING"], "load-polling-places") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "load-polling-places=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -171,7 +179,7 @@ if(stristr($_SERVER["QUERY_STRING"], "load-polling-places") !== false) {
 }
 
 // Fetch polling place types
-if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-place-types") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-place-types=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -182,7 +190,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-place-types") !== false) {
 }
 
 // Fetch polling places
-if(stristr($_SERVER["QUERY_STRING"], "fetch-all-polling-places") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "fetch-all-polling-places=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -193,7 +201,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-all-polling-places") !== false) {
 }
 
 // Search polling places
-if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "search-polling-places=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
@@ -204,7 +212,7 @@ if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
 }
 
 // Update polling place
-if(stristr($_SERVER["QUERY_STRING"], "update-polling-place") !== false) {
+if(stristr($_SERVER["QUERY_STRING"], "update-polling-place=1") !== false) {
   if(isAuthorisedUser("su") === false) {
     failForAuthReasons();
   }
