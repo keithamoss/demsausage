@@ -46,6 +46,13 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-nearby-polling-places") !== false) {
   closeDb();
 }
 
+// Fetch polling place by ids
+if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
+  $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionId"]);
+  echo json_encode($pollingPlaces);
+  closeDb();
+}
+
 
 ############################
 # Super User Endpoints
@@ -192,17 +199,6 @@ if(stristr($_SERVER["QUERY_STRING"], "search-polling-places") !== false) {
   }
   
   $pollingPlaces = searchPollingPlaces($_GET["searchTerm"], $_GET["electionId"]);
-  echo json_encode($pollingPlaces);
-  closeDb();
-}
-
-// Fetch polling place by ids
-if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-places") !== false) {
-  if(isAuthorisedUser("su") === false) {
-    failForAuthReasons();
-  }
-  
-  $pollingPlaces = fetchPollingPlaces($_GET["pollingPlaceIds"], $_GET["electionId"]);
   echo json_encode($pollingPlaces);
   closeDb();
 }
