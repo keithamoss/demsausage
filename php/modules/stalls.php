@@ -50,7 +50,7 @@ function addPendingStall(array $stall, $electionId) {
 
   if($stallId !== false) {
     // Generate our mail confirm key
-    updateTable($stallId, ["mail_confirm_key" => makeConfirmationHash($stall["contact_email"], $stallId)], "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
+    updateTable($stallId, ["mail_confirmed" => 1, "mail_confirm_key" => makeConfirmationHash($stall["contact_email"], $stallId)], "pending_stalls", $pendingStallsPKeyFieldName, $pendingStallsAllowedFields);
     
     // Send submitted notification to the user
     if($election["polling_places_loaded"] === false) {
