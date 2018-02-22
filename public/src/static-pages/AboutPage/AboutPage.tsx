@@ -19,7 +19,8 @@ interface IOwnProps {
 }
 
 const PageWrapper = styled.div`
-    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
 
 export class AboutPage extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {

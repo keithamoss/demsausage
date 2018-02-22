@@ -14,8 +14,8 @@ export interface IProps {
 }
 
 const FormContainer = styled.div`
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
 
 const FormSection = styled.div`

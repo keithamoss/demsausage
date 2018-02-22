@@ -23,7 +23,8 @@ interface IOwnProps {
 }
 
 const PageWrapper = styled.div`
-    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
 
 export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {

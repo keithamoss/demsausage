@@ -11,7 +11,9 @@ import { DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
 import { grey500 } from "material-ui/styles/colors"
 
 const FinderContainer = styled.div`
-    padding: 10px;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
 
 const LocationSearched = styled.div`
