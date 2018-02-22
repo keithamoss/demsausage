@@ -13,5 +13,6 @@ README.dev.md
 /db/*.sqlite3
 /db/carto-dump/*
 /google-api-php-client-2.2.0/*
+/sentry-php/
 /v3-test/*
 flatfilebaby/
