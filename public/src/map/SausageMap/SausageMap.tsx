@@ -191,6 +191,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         onRequestClose={onCloseQueryMapDialog}
                         title={"Polling Places"}
                         actionButton={<FlatButton label="Close" onClick={onCloseQueryMapDialog} />}
+                        containerStyle={{ paddingBottom: 56 }} /* Height of BottomNav */
                     >
                         {queriedPollingPlaces.slice(0, 20).map((pollingPlace: IPollingPlace) => (
                             <PollingPlaceCardWrapper key={pollingPlace.id}>
