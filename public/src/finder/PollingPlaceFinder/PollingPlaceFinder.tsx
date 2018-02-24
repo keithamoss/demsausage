@@ -51,6 +51,8 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     onChoosePlace={onGeocoderResults}
                 />
 
+                {nearbyPollingPlaces === null && <EmptyState message={"Search for polling places"} icon={<ActionSearch />} />}
+
                 {nearbyPollingPlaces !== null &&
                     nearbyPollingPlaces.length > 0 && (
                         <LocationSearched>
