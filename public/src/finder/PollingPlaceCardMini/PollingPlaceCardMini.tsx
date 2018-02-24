@@ -11,7 +11,7 @@ import {
 } from "../../redux/modules/polling_places"
 
 import Paper from "material-ui/Paper"
-import { Card, CardHeader, CardText } from "material-ui/Card"
+import { Card, CardHeader, CardTitle, CardText } from "material-ui/Card"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
@@ -78,11 +78,16 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
 
         const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false
 
+        let title = `${pollingPlace.polling_place_name}`
+        if (pollingPlace.premises !== null) {
+            title = `${pollingPlace.polling_place_name}, ${pollingPlace.premises}`
+        }
+
         return (
             <Paper>
                 <Card>
                     <CardHeader
-                        title={pollingPlace.polling_place_name}
+                        title={title}
                         subtitle={pollingPlace.address}
                         actAsExpander={isExpandable}
                         showExpandableButton={isExpandable}
@@ -90,7 +95,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                     {/* <CardMedia overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}>
                     <img src="images/nature-600-337.jpg" alt="" />
                 </CardMedia> */}
-                    {/* <CardTitle title={pollingPlace.address} subtitle={pollingPlace.premises} /> */}
+                    {pollingPlace.stall_name !== null && (
+                        <CardTitle title={pollingPlace.stall_name} subtitle={pollingPlace.stall_description} />
+                    )}
                     <CardText>
                         <FlexboxContainer>
                             <FlexboxIcons>
@@ -135,7 +142,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
-                        {pollingPlace.division !== "" && <Division>Division(s): {pollingPlace.division}</Division>}
+                        {pollingPlace.division !== null && <Division>Division(s): {pollingPlace.division}</Division>}
+                        {pollingPlace.extra_info !== null && <Division>Extra Info: {pollingPlace.extra_info}</Division>}
+                        {pollingPlace.booth_info !== null && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
                     </CardText>
                     {isExpandable && (
                         <CardText expandable={isExpandable}>
