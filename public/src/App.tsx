@@ -53,6 +53,7 @@ export interface IProps {
     snackbars: ISnackbarsModule
     elections: IElections
     currentElection: IElection
+    defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
     toggleSidebar: any
@@ -67,6 +68,7 @@ class App extends React.Component<IProps, {}> {
             muiThemePalette,
             app,
             snackbars,
+            defaultBreakPoint,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
             locationPathName,
@@ -93,7 +95,7 @@ class App extends React.Component<IProps, {}> {
 
         return (
             <div className="page">
-                <ResponsiveDrawer>
+                <ResponsiveDrawer breakPoint={defaultBreakPoint}>
                     {isResponsiveAndOverBreakPoint === true && (
                         <List>
                             <MenuListItem
@@ -167,10 +169,11 @@ class App extends React.Component<IProps, {}> {
                     </List>
                 </ResponsiveDrawer>
 
-                <BodyContainer>
+                <BodyContainer breakPoint={defaultBreakPoint}>
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
 
                     <ResponsiveAppBar
+                        breakPoint={defaultBreakPoint}
                         title={
                             <TitleContainer>
                                 <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage

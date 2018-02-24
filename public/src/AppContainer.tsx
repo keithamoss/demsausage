@@ -76,7 +76,7 @@ export interface IRouteProps {
     location: any
 }
 
-const DEFAULT_BREAK_POINT = "medium"
+const DEFAULT_BREAK_POINT = "small"
 function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, breakPoint: any = DEFAULT_BREAK_POINT) {
     return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
@@ -125,6 +125,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     snackbars={snackbars}
                     elections={elections}
                     currentElection={currentElection}
+                    defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
                     toggleSidebar={toggleSidebar}
