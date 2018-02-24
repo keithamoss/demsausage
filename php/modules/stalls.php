@@ -34,6 +34,29 @@ function translateStallFromDB($row) {
   ];
 }
 
+function translateStallToDB($row) {
+  $new = [];
+  foreach($row as $key => $val) {
+    if(in_array($key, ["has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_baconandeggs", "active", "mail_confirmed"])) {
+      // Ugh
+      $new[$key] = ($val === false || $val === 0 || $val === "0" || strtolower($val) === "false" || $val === "" || is_null($val)) ? false : true;
+    } elseif(in_array($key, ["stall_location_info"])) {
+      $new[$key] = (gettype($val) === "string") ? $val : json_encode($val);
+    } elseif(in_array($key, ["elections_id", "status"])) {
+      if(is_numeric($val)) {
+        $new[$key] = (int)$val;
+      } else {
+        $new[$key] = NULL;
+      }
+    } elseif(in_array($key, ["id"])) {
+      $new[$key] = (int)$val;
+    } else {
+      $new[$key] = $val;
+    }
+  }
+  return $new;
+}
+
 function addPendingStall(array $stall, $electionId) {
   global $file_db, $pendingStallsPKeyFieldName, $pendingStallsAllowedFields;
 
@@ -44,6 +67,7 @@ function addPendingStall(array $stall, $electionId) {
     $stall["stall_location_info"] = (gettype($stall["stall_location_info"]) === "string") ? $stall["stall_location_info"] : json_encode($stall["stall_location_info"]);
   }
 
+  $stall = translateStallToDB($stall);
   $insert = fieldsToInsertSQL("pending_stalls", $pendingStallsAllowedFields, array_keys($stall), $stall);
   $stmt = $file_db->prepare($insert);
   $stallId = fieldsToStmntLastInsertId($stmt, $pendingStallsAllowedFields, $stall);
@@ -93,6 +117,8 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
     $stallFieldUpdates = [];
 
     $pollingPlace = (array)$stall["stall_location_info"];
+
+    // Copy across deliciousness
     $pollingPlace["has_bbq"] = $stall["has_bbq"];
     $pollingPlace["has_caek"] = $stall["has_caek"];
     $hasOther = new stdClass();
@@ -109,6 +135,11 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
       $hasOther->has_baconandeggs = true;
     }
     $pollingPlace["has_other"] = json_encode($hasOther);
+
+    // Copy across stall-related fields
+    $pollingPlace["stall_name"] = $stall["stall_name"];
+    $pollingPlace["stall_description"] = $stall["stall_description"];
+    $pollingPlace["stall_website"] = $stall["stall_website"];
 
     $pollingPlaceId = addPollingPlace($pollingPlace, $election["db_table_name"]);
     if($pollingPlaceId === false) {
