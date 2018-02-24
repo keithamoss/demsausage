@@ -6,6 +6,8 @@ body,
 .page {
     height: 100%;
     font-family: "Roboto", sans-serif;
+    margin: 0px;
+    padding: 0px;
 }
 
 .page-content {
