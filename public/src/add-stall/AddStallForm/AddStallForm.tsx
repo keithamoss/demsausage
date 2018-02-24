@@ -104,6 +104,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                             <div>
                                 <GooglePlacesAutocompleteList
                                     componentRestrictions={{ country: "AU" }}
+                                    autoFocus={false}
                                     hintText={"Where is your stall?"}
                                     onChoosePlace={onChoosePlace}
                                 />

@@ -74,6 +74,7 @@ export interface IProps {
     onReceiveSearchResults: any
     onRequestSearch?: any
     searchIcon?: any
+    autoFocus?: boolean
     // End Democracy Sausage customisation
     name?: string
     // Internals
@@ -229,7 +230,6 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                 // Used by Google Places API / No user input
                 searchText={this.state.searchText}
                 onChange={this.updateInput}
-                autoFocus={true}
             />
         )
     }
