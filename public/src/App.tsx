@@ -27,10 +27,10 @@ import FacebookIcon from "./icons/fontawesome/facebook"
 const TitleContainer = styled.div`
     display: flex;
     align-items: center;
+    font-size: 20px !important;
 `
 
 const TitleLogo = styled.img`
-    width: 35px; /* 80% */
     height: 32px;
     margin-right: 10px;
 `
