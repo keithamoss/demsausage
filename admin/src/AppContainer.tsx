@@ -21,6 +21,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme"
 import App from "./App"
 import { connect } from "react-redux"
 import { fetchInitialAppState } from "./redux/modules/app"
+import { getPendingStallsForCurrentElection } from "./redux/modules/stalls"
 import { logoutUser } from "./redux/modules/user"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 
@@ -142,7 +143,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         snackbars: snackbars,
         elections: elections.elections,
         currentElection: elections.elections[elections.current_election_id],
-        pendingStallCount: stalls.pending.length,
+        pendingStallCount: getPendingStallsForCurrentElection(stalls, elections).length,
     }
 }
 

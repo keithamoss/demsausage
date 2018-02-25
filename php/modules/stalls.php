@@ -107,12 +107,15 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
   // This only applies to stalls approved before we have official
   // polling places from the electoral commission.
   $stall = fetchPendingStallById($id);
-
   if($stall["active"] === false) {
     failForAPI("Stall is already approved.");
   }
 
   $election = fetchElection($stall["elections_id"]);
+  if($stall["elections_id"] !== $election["id"]) {
+    failForAPI("Stall is not part of this election.");
+  }
+
   if($election["polling_places_loaded"] === false) {
     $stallFieldUpdates = [];
 
@@ -169,12 +172,15 @@ function markPendingStallAsRead($id) {
   // This only applies to stalls approved before we have official
   // polling places from the electoral commission.
   $stall = fetchPendingStallById($id);
-
   if($stall["active"] === false) {
     failForAPI("Stall is already approved.");
   }
 
   $election = fetchElection($stall["elections_id"]);
+  if($stall["elections_id"] !== $election["id"]) {
+    failForAPI("Stall is not part of this election.");
+  }
+
   if($election["polling_places_loaded"] === false) {
     // Turn the stall into a stall attached to a regular polling place (now that it exists)
     $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $stall["stall_location_info"]->lat, $stall["stall_location_info"]->lon, 250);

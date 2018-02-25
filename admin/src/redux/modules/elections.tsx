@@ -57,7 +57,7 @@ export function setCurrentElection(electionId: string) {
 // Models
 export interface IModule {
     elections: IElections
-    current_election_id: string // election.id
+    current_election_id: number // election.id
 }
 
 export interface IAction {

@@ -2,7 +2,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import PendingStallsManager from "./PendingStallsManager"
-// import { fetchPendingStalls } from "../../redux/modules/stalls"
+import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
 import { IStore, IStall } from "../../redux/modules/interfaces"
 
 export interface IStoreProps {
@@ -28,10 +28,10 @@ export class PendingStallsManagerContainer extends React.Component<IStoreProps &
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { stalls } = state
+    const { stalls, elections } = state
 
     return {
-        stalls: stalls.pending,
+        stalls: getPendingStallsForCurrentElection(stalls, elections),
     }
 }
 
