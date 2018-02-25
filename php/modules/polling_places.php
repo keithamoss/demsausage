@@ -831,7 +831,23 @@ function regeneratePollingPlaceGeoJSON($electionId) {
 
 function fetchNearbyPollingPlaces($electionId, $lat, $lon) {
   $election = fetchElection($electionId);
-  $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $lat, $lon, 10000);
+  $pollingPlaces = [];
+  $distanceMetres = 10000;
+  $distanceThreshold = 50000;
+  $distanceMetresMax = 1000000;
+
+  for($distanceMetres = 10000; $distanceMetres <= $distanceThreshold; $distanceMetres += 10000) {
+    $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $lat, $lon, $distanceMetres);
+    if(count($pollingPlaces) > 0) {
+      break;
+    }
+  }
+
+  // Stuff it, there's nothing within 50km of us. just get the top 15 polling places within 1000km
+  if(count($pollingPlaces) === 0) {
+    $distanceMetres = $distanceMetresMax; 
+    $pollingPlaces = fetchMatchingPollingPlaceByLocation($election["db_table_name"], $lat, $lon, $distanceMetres);
+  }
 
   usort($pollingPlaces, function ($item1, $item2) {
       return $item1['distance_metres'] <=> $item2['distance_metres'];
