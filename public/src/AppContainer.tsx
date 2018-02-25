@@ -30,6 +30,8 @@ import { setCurrentElection, IElection } from "./redux/modules/elections"
 import { IStore, IAppModule, ISnackbarsModule, IElections } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
+import { setDrawerOpen } from "material-ui-responsive-drawer"
+
 const muiTheme = getMuiTheme({
     palette: {
         primary1Color: deepPurple500, // AppBar and Tabs, Buttons, Active textfield et cetera
@@ -67,6 +69,7 @@ export interface IDispatchProps {
     handleSnackbarClose: Function
     toggleSidebar: Function
     onChangeElection: Function
+    onClickDrawerLink: Function
 }
 
 export interface IStateProps {}
@@ -102,6 +105,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             handleSnackbarClose,
             toggleSidebar,
             onChangeElection,
+            onClickDrawerLink,
             location,
             children,
             content,
@@ -130,6 +134,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     handleSnackbarClose={handleSnackbarClose}
                     toggleSidebar={toggleSidebar}
                     onChangeElection={onChangeElection}
+                    onClickDrawerLink={onClickDrawerLink}
                     locationPathName={location.pathname}
                     children={children}
                     content={content}
@@ -167,6 +172,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         onChangeElection: (event: any, index: number, electionId: string) => {
             dispatch(setCurrentElection(electionId))
+        },
+        onClickDrawerLink: () => {
+            dispatch(setDrawerOpen(false))
         },
     }
 }

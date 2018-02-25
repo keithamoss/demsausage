@@ -58,6 +58,7 @@ export interface IProps {
     handleSnackbarClose: any
     toggleSidebar: any
     onChangeElection: any
+    onClickDrawerLink: any
     locationPathName: string
     content: any
 }
@@ -71,6 +72,7 @@ class App extends React.Component<IProps, {}> {
             defaultBreakPoint,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
+            onClickDrawerLink,
             locationPathName,
             content,
         } = this.props
@@ -130,6 +132,7 @@ class App extends React.Component<IProps, {}> {
                             primaryText="About Us"
                             leftIcon={<ActionInfo />}
                             containerElement={<Link to={`/about`} />}
+                            onClick={onClickDrawerLink}
                             locationPathName={locationPathName}
                             locationPathNameMatch={"/about"}
                             muiThemePalette={muiThemePalette}
@@ -138,6 +141,7 @@ class App extends React.Component<IProps, {}> {
                             primaryText="Media"
                             leftIcon={<HardwareTv />}
                             containerElement={<Link to={`/media`} />}
+                            onClick={onClickDrawerLink}
                             locationPathName={locationPathName}
                             locationPathNameMatch={"/media"}
                             muiThemePalette={muiThemePalette}
