@@ -1,0 +1,82 @@
+stall_description,lon,has_run_out,has_nothing,has_caek,has_bbq,ess_stall_url,ess_stall_id,latest_report,first_report,stall_website,lat,stall_name,extra_info,source,has_other,polling_place_type,booth_info,opening_hours,address,premises,polling_place_name,division,state
+,149.069643,FALSE,FALSE,FALSE,FALSE,,,,,,-35.239009,,,,,,,,"Swanson Court (cnr Chandler St), Belconnen",Belconnen Community Centre,Belconnen,N/A,ACT
+,149.140724,FALSE,FALSE,FALSE,FALSE,,,,,,-35.1619287,,,,,,,,"Mabo Blvd, Bonner ACT 2914",Neville Bonner Primary School,Bonner,N/A,ACT
+,149.089668,FALSE,FALSE,FALSE,FALSE,,,,,,-35.253666,,,,,,,,"Haydon Dr, Bruce",Calvary Hospital,Bruce,N/A,ACT
+,149.101236,FALSE,FALSE,FALSE,FALSE,,,,,,-35.247128,,,,,,,,"Leverrier Cres, Bruce",Australian Institute of Sport,Bruce,N/A,ACT
+,149.155996,FALSE,FALSE,FALSE,FALSE,,,,,,-35.290126,,,,,,,,"Chauvel St, Campbell",Campbell Primary School,Campbell,N/A,ACT
+,149.129156,FALSE,FALSE,FALSE,FALSE,,,,,,-35.2769,,,,,,,,"69 Northbourne Ave, Canberra City",Pilgrim House,Canberra City,N/A,ACT
+,149.1320443,FALSE,FALSE,FALSE,FALSE,,,,,,-35.2815729,,,,,,,,197 London Circ Canberra City,Level 5 Eclipse House,Canberra City East,N/A,ACT
+,149.031043,FALSE,FALSE,FALSE,FALSE,,,,,,-35.205232,,,,,,,,"Lhotsky St, Charnwood",St Thomas Aquinas Primary School,Charnwood,N/A,ACT
+,149.036206,FALSE,FALSE,FALSE,FALSE,,,,,,-35.198563,,,,,,,,"Bettington Crct, Charnwood",Charnwood-Dunlop School,Charnwood,N/A,ACT
+,149.0406491,FALSE,FALSE,FALSE,FALSE,,,,,,-35.3206332,,,,,,,,"80 Woodberry Ave, Coombs ACT 2611",Charles Weston School,Coombs,N/A,ACT
+,149.0803568,FALSE,FALSE,FALSE,FALSE,,,,,,-35.3310901,,,,,,,,"Theodore St, Curtin",Curtin Primary School,Curtin,N/A,ACT
+,149.110681,FALSE,FALSE,FALSE,FALSE,,,,,,-35.312412,,,,,,,,"Grey St, Deakin",Canberra Girls Grammar -ÊJunior School,Deakin,N/A,ACT
+,149.1436851,FALSE,FALSE,FALSE,FALSE,,,,,,-35.2500342,,,,,,,," 2 Rosevear Pl, Dickson ACT 2602",Northside Community Centre,Dickson,N/A,ACT
+,149.032306,FALSE,FALSE,FALSE,FALSE,,,,,,-35.335209,,,,,,,,"Burrinjuck Cres, Duffy",Duffy Primary School,Duffy,N/A,ACT
+,149.1447292,FALSE,FALSE,FALSE,FALSE,,,,,,-35.2448672,,,,,,,,"Frencham Place, Downer ACT 2602",Downer Community Centre,Downer,N/A,ACT
+,149.066873,FALSE,FALSE,FALSE,FALSE,,,,,,-35.213042,,,,,,,,"Alderman St, Evatt",Miles Franklin Primary School,Evatt,N/A,ACT
+,149.07566,FALSE,FALSE,FALSE,FALSE,,,,,,-35.207178,,,,,,,,"Heydon Cres, Evatt",Evatt Primary School,Evatt,N/A,ACT
+,149.107436,FALSE,FALSE,FALSE,FALSE,,,,,,-35.378572,,,,,,,,"Lambrigg St, Farrer",Farrer Primary School,Farrer,N/A,ACT
+,149.043362,FALSE,FALSE,FALSE,FALSE,,,,,,-35.1920202,,,,,,,,"Tillyard Dr, Fraser",Fraser Primary School,Fraser,N/A,ACT
+,149.1447223,FALSE,FALSE,FALSE,FALSE,,,,,,-35.1965004,,,,,,,,"135 Oodgeroo Avenue, Franklin ACT 2913",Franklin Early Childhood School,Franklin,N/A,ACT
+,149.102812,FALSE,FALSE,FALSE,FALSE,,,,,,-35.3442716,,,,,,,,"Gilmore Cres, Garran",Garran Primary School,Garran,N/A,ACT
+,149.095437,FALSE,FALSE,FALSE,FALSE,,,,,,-35.214072,,,,,,,,"Atalumba Cl, Giralang",Giralang Primary School,Giralang,N/A,ACT
+,149.069377,FALSE,FALSE,FALSE,FALSE,,,,,,-35.168151,,,,,,,,"Palmer St, Hall ACT 2618",Hall Primary School Museum,Hall,N/A,ACT
+,149.020836,FALSE,FALSE,FALSE,FALSE,,,,,,-35.227712,,,,,,,,"Stark St, Holt",Kingsford Smith Primary School,Holt,N/A,ACT
+,149.117644,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 16:16:45.272875+00,2016-10-14 16:16:45.272875+00,,-35.440894,,,Pre-collated list kindly posted on Twitter,{},,,,"Casey Cres, Calwell",Calwell High School,Calwell,N/A,ACT
+,149.151539,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 00:13:10.722695+00,2016-10-15 00:13:10.722695+00,,-35.199206,,,Twitter,{},,,,"Wimmera St, Harrison",Harrison School,Harrison,N/A,ACT
+,149.098281,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 16:17:17.097625+00,2016-10-14 16:17:17.097625+00,,-35.464717,,,Pre-collated list kindly posted on Twitter,{},,,,"Tom Roberts Ave, Conder",Charles Conder Primary School,Conder,N/A,ACT
+,149.117823,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:17:29.853351+00,2016-10-14 16:17:29.853351+00,,-35.404283,,,Pre-collated list kindly posted on Twitter,{},,,,"Hanlon Cres, Fadden",Fadden Primary School,Fadden,N/A,ACT
+,149.086949,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:18:00.047663+00,2016-10-14 16:18:00.047663+00,,-35.455758,,,Pre-collated list kindly posted on Twitter,{},,,,"Knoke Ave, Gordon",Gordon Primary School,Gordon,N/A,ACT
+,149.110392,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:18:13.205812+00,2016-10-14 16:18:13.205812+00,,-35.413097,,,Pre-collated list kindly posted on Twitter,{},,,,"Jeffries St, Gowrie",Gowrie Primary School,Gowrie,N/A,ACT
+,149.080326,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 22:13:06.521897+00,2016-10-14 22:13:06.521897+00,,-35.255312,,,Twitter,{},,,,"Banambila St, Aranda",Aranda Primary School,Aranda,N/A,ACT
+,149.128686,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:53:41.516212+00,2016-10-14 23:53:41.516212+00,,-35.165152,,,,{},,,,"Katherine Ave, Amaroo",Amaroo Primary School,Amaroo,N/A,ACT
+,149.049885,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 22:32:56.546214+00,2016-10-14 22:32:56.546214+00,,-35.334173,,,Twitter,"{""has_coffee"":true,""has_bacon_and_eggs"":true}",,,,"Mulley St, Holder",St Judes Primary School,Holder,N/A,ACT
+,149.142752,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:05:12.722388+00,2016-10-14 23:05:12.722388+00,,-35.1708096,,,Twitter,{},,,,"Cnr Francis Forde Blvd & Hurrell St, Forde",Burgman Anglican School - Forde,Forde,N/A,ACT
+,149.042729,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 23:10:45.793747+00,2016-10-14 23:10:45.793747+00,,-35.356532,,,Twitter,{},,,,"Perry Dr, Chapman",Chapman Primary School,Chapman,N/A,ACT
+,149.0409069,FALSE,TRUE,FALSE,FALSE,,,2016-10-14 23:18:32.790098+00,2016-10-14 23:18:32.790098+00,,-35.2250965,,,Twitter,{},,,,"Barnard Crct, Florey",St Francis Xavier College,Florey,N/A,ACT
+,149.121816,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 23:59:00.834937+00,2016-10-14 16:17:00.51667+00,,-35.417888,,,Twitter,"{""has_bacon_and_eggs"":true}",,,,"Hambidge Cres, Chisholm",Chisholm Primary School,Chisholm,N/A,ACT
+,149.145727,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 00:19:26.391273+00,2016-10-15 00:19:26.391273+00,,-35.323276,,,Twitter,{},,,,"Canberra Ave, Griffith",St Edmund's College,Griffith,N/A,ACT
+,149.1312003,FALSE,TRUE,FALSE,FALSE,,,2016-10-15 05:22:02.058156+00,2016-10-15 05:22:02.058156+00,,-35.1850942,,,Twitter,{},,,,"Access via Hibberson St, Gungahlin",Gungahlin Library Conference Room 1,Gungahlin,N/A,ACT
+,149.0933424,FALSE,FALSE,FALSE,FALSE,,,,,,-35.3315977,,,,,,,,"Kent St, Hughes",Hughes Primary School,Hughes,N/A,ACT
+,149.113218,FALSE,FALSE,FALSE,FALSE,,,,,,-35.224646,,,,,,,,"Ashburton St, Kaleen",Kaleen Primary School,Kaleen,N/A,ACT
+,149.102771,FALSE,FALSE,FALSE,FALSE,,,,,,-35.235031,,,,,,,,"Alberga St, Kaleen",Maribyrnong Primary School,Kaleen,N/A,ACT
+,149.067344,FALSE,FALSE,FALSE,FALSE,,,,,,-35.392457,,,,,,,,"O'Halloran Crct, Kambah",Namadgi School,Kambah,N/A,ACT
+,149.034656,FALSE,FALSE,FALSE,FALSE,,,,,,-35.219835,,,,,,,,"O'Loghlen St, Latham",Latham Primary School,Latham,N/A,ACT
+,149.0765361,FALSE,FALSE,FALSE,FALSE,,,,,,-35.3415836,,,,,,,,"38 Tarraleah Cres, Lyons ACT 2606",Lyons Early Childhood School,Lyons,N/A,ACT
+,149.097685,FALSE,FALSE,FALSE,FALSE,,,,,,-35.358524,,,,,,,,"Ainsworth St, Mawson",Mawson Primary School,Mawson,N/A,ACT
+,149.230436,FALSE,FALSE,FALSE,FALSE,,,,,,-35.342225,,,,,,,,"2 William St, Oaks Estate",Oaks Estate Community Hall,Oaks Estate,N/A,ACT
+,149.042515,FALSE,FALSE,FALSE,FALSE,,,,,,-35.240289,,,,,,,,"Stutchbury St, Page",St Matthew's School,Page,N/A,ACT
+,149.088131,FALSE,FALSE,FALSE,FALSE,,,,,,-35.36298,,,,,,,,"Marr St, Pearce",Melrose High School,Pearce,N/A,ACT
+,149.0384031,FALSE,FALSE,FALSE,FALSE,,,,,,-35.2325569,,,,,,,,"Wirraway Cres, Scullin ACT 2614",Southern Cross Early Childhood School,Scullin,N/A,ACT
+,149.06732,FALSE,FALSE,FALSE,FALSE,,,,,,-35.508835,,,,,,,,"North St, Tharwa",Tharwa Public Hall,Tharwa,N/A,ACT
+,149.06868,FALSE,FALSE,FALSE,FALSE,,,,,,-35.416759,,,,,,,,"Cnr Anketell St & Reed St North, Tuggeranong",Salvation Army Hall,Tuggeranong,N/A,ACT
+,149.059169,FALSE,FALSE,FALSE,FALSE,,,,,,-35.35493,,,,,,,,"Nemarang Cres, Waramanga",Arawang Primary School,Waramanga,N/A,ACT
+,149.154942,FALSE,FALSE,FALSE,FALSE,,,,,,-35.238592,,,,,,,,"Knox St, Watson",Majura Primary School,Watson,N/A,ACT
+,149.055229,FALSE,FALSE,FALSE,FALSE,,,,,,-35.342564,,,,,,,,"Parkinson St, Weston",Weston Creek Community Centre,Weston,N/A,ACT
+"Egg and Bacon Rolls, Sausage Sizzle with Onion, Vegetarian Burgers, Lucky Dip for the Kids and Cakes Cakes Cakes!!!",149.059625,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 12:17:09.590135+00,2016-10-14 12:17:09.590135+00,www.macquarieps.act.edu.au,-35.251214,Macquarie Primary School,,User-submitted,"{""has_vego"":true,""has_halal"":true,""has_bacon_and_eggs"":true}",Public School,,,"Bennelong Cres, Macquarie",Macquarie Primary School,Macquarie,N/A,ACT
+"Sausages, kranskys, delicious cakes and homemade treats - all proceeds to Ainslie School P&C to contibute to outdoor grounds improvmernt and  90th birthday celebrations in 2017",149.1391633,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 12:17:44.208812+00,2016-10-14 12:17:44.208812+00,,-35.2731763,Ainslie School sausage sizzle and cake stall,,User-submitted,"{""has_vego"":true,""has_halal"":true}",Public School,,,"Elder St, Braddon",Ainslie Primary School,Braddon,N/A,ACT
+,149.125368,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:09:30.467276+00,2016-10-14 16:09:30.467276+00,,-35.25197,,,,{},,,,"Hall St, Lyneham",Lyneham Primary School,Lyneham,N/A,ACT
+,149.082525,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:16:05.691504+00,2016-10-14 16:14:37.934717+00,,-35.430942,,,Pre-collated list kindly posted on Twitter,{},,,,"Hurtle Ave, Bonython",Bonython Primary School,Bonython,N/A,ACT
+,149.089255,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:18:38.344749+00,2016-10-14 16:18:38.344749+00,,-35.414526,,,Pre-collated list kindly posted on Twitter,{},,,,"Corlette Cres, Monash",Monash Primary School,Monash,N/A,ACT
+,149.114261,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:18:50.194389+00,2016-10-14 16:18:50.194389+00,,-35.428739,,,Pre-collated list kindly posted on Twitter,{},,,,"May Gibbs Cl, Richardson",Richardson Primary School,Richardson,N/A,ACT
+,149.085344,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:19:46.11897+00,2016-10-14 16:19:46.11897+00,,-35.394672,,,Pre-collated list kindly posted on Twitter,{},,,,"Wheeler Cres, Wanniassa",Wanniassa High School,Wanniassa,N/A,ACT
+,149.1024973,FALSE,FALSE,TRUE,TRUE,,,2016-10-15 00:13:36.918007+00,2016-10-14 23:10:16.972523+00,,-35.3071927,,,Twitter,"{""has_coffee"":true}",,,,"6 Denman St, Yarralumla",Yarralumla Uniting Church,Yarralumla,N/A,ACT
+,149.126111,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 00:33:31.287148+00,2016-10-15 00:33:31.287148+00,,-35.265214,,,Twitter,{},,,,"Condamine St, Turner",Turner Primary School,Turner,N/A,ACT
+,149.047574,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 22:05:22.17643+00,2016-10-14 22:05:11.229577+00,,-35.25201,,,Twitter,{},,,,"Southwell St, Weetangera",Weetangera Primary School,Weetangera,N/A,ACT
+,149.132685,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 23:15:22.940165+00,2016-10-14 23:15:22.940165+00,,-35.339027,,,Twitter,{},,,,"Astrolabe St, Red Hill",Red Hill Primary School,Red Hill,N/A,ACT
+,149.120522,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:31:12.181612+00,2016-10-14 23:31:12.181612+00,,-35.197498,,,Twitter,{},,,,"Kosciusko Ave, Palmerston",Palmerston Primary School,Palmerston,N/A,ACT
+,149.055776,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:48:30.194956+00,2016-10-14 23:48:30.194956+00,,-35.208294,,,Twitter,"{""has_bacon_and_eggs"":true}",,,,"Alfred Hill Dr, Melba",Mt Rogers Community School Melba Campus,Melba,N/A,ACT
+,149.096124,FALSE,FALSE,TRUE,TRUE,,,2016-10-15 00:12:36.305564+00,2016-10-14 16:19:59.260314+00,,-35.392985,,,Twitter,"{""has_bacon_and_eggs"":true}",,,,"Langdon Ave, Wanniassa",Wanniassa Hills Primary School,Wanniassa,N/A,ACT
+,149.1117,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 00:34:44.233108+00,2016-10-15 00:34:44.233108+00,,-35.168818,,,Twitter,{},,,,"Unaipon Ave, Ngunnawalah",Ngunnawal Primary School,Ngunnawal,N/A,ACT
+,149.012265,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 00:37:06.369274+00,2016-10-15 00:37:06.369274+00,,-35.2129654,,,Twitter,{},,,,"Hirschfeld Cres, Macgre",Macgregor Primary School,Macgregor,N/A,ACT
+"Sausages, bacon rolls, some cakes.",149.053008,FALSE,FALSE,TRUE,TRUE,,,2016-10-15 00:53:11.644036+00,2016-10-15 00:53:11.644036+00,,-35.380648,Primary school sausage sizzle,,Website,"{""has_bacon_and_eggs"":true}",,,,"Boddington Cres, Kambah",St Thomas the Apostle Primary School,Kambah,N/A,ACT
+,149.1004026,FALSE,FALSE,FALSE,TRUE,,,2016-10-15 01:01:06.538871+00,2016-10-15 01:01:06.538871+00,,-35.1806005,,,Twitter,"{""has_bacon_and_eggs"":true}",,,,"Kelleway Ave, Nicholls",Gold Creek Primary School,Nicholls,N/A,ACT
+,149.135398,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:17:46.692673+00,2016-10-14 16:17:46.692673+00,,-35.419135,,,Pre-collated list kindly posted on Twitter,{},,,,"Heagney Cres, Gilmore",Gilmore Primary School,Gilmore,N/A,ACT
+,149.089126,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 16:18:26.558387+00,2016-10-14 16:18:26.558387+00,,-35.428636,,,Pre-collated list kindly posted on Twitter,{},,,,"Ellerston Ave, Isabella Plains",Isabella Plains Primary School,Isabella Plains,N/A,ACT
+,149.123563,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 16:19:29.733864+00,2016-10-14 16:19:29.733864+00,,-35.447544,,,Pre-collated list kindly posted on Twitter,{},,,,"Lawrence Wackett Cres, Theodore",Theodore Primary School,Theodore,N/A,ACT
+,149.1479127,FALSE,FALSE,TRUE,TRUE,,,2016-10-14 22:33:54.279309+00,2016-10-14 22:19:01.489811+00,,-35.2548974,,,Twitter,"{""has_coffee"":true,""has_bacon_and_eggs"":true}",,,,"Sherbrooke St, Ainslie",Ainslie North Primary School,Ainslie,N/A,ACT
+,149.133678,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:22:20.396237+00,2016-10-14 22:16:05.729496+00,,-35.313636,,,Twitter,{},,,,"New South Wales Cres, Barton",Telopea Park High School,Barton,N/A,ACT
+,149.150537,FALSE,FALSE,FALSE,TRUE,,,2016-10-14 23:23:45.616362+00,2016-10-14 23:23:45.616362+00,,-35.329027,,,Twitter,{},,,,"Kootara Cres, Narrabundah",Narrabundah Early Childhood School,Narrabundah,N/A,ACT
+Cakes only.,149.0639216,FALSE,FALSE,TRUE,FALSE,,,2016-10-15 00:52:52.069984+00,2016-10-15 00:52:52.069984+00,,-35.3784055,P&C Cake Stall,,Website,"{""has_vego"":false}",,,,"Marconi Cres, Kambah ACT 2902",Taylor Primary School,Kambah,N/A,ACT
+,149.0897727,FALSE,TRUE,FALSE,FALSE,,,2016-10-15 04:05:43.150201+00,2016-10-15 04:05:43.150201+00,,-35.3431524,,,Twitter,{},,,,"58 Easty St, Phillip ACT 2606",Callum Offices (Link between B1 & B2),Woden,N/A,ACT
