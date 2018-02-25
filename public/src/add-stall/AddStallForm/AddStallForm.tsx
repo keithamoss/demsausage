@@ -5,8 +5,8 @@ import { Field, reduxForm } from "redux-form"
 import { IElection, IStallLocationInfo } from "../../redux/modules/interfaces"
 // import "./AddStallForm.css"
 
-import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
-import StallLocationCard from "../StallLocationCard/StallLocationCard"
+import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
+import PollingPlaceAutocompleteListWithConfirm from "../../finder/PollingPlaceAutocomplete/PollingPlaceAutocompleteListWithConfirm"
 import { grey100, grey500 } from "material-ui/styles/colors"
 import { TextField, Toggle } from "redux-form-material-ui"
 import RaisedButton from "material-ui/RaisedButton"
@@ -24,12 +24,8 @@ const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4
 
 export interface IProps {
     election: IElection
-    // pollingPlace: IPollingPlace
-    locationChosen: boolean
-    stallLocationInfo: IStallLocationInfo
-    onChoosePlace: any
-    onCancelChosenLocation: any
     onConfirmChosenLocation: any
+    stallLocationInfo: IStallLocationInfo
     locationConfirmed: boolean
     formSubmitting: boolean
     onSubmit: any
@@ -82,16 +78,7 @@ const HiddenButton = styled.button`
 
 class AddStallForm extends React.PureComponent<IProps, {}> {
     render() {
-        const {
-            election,
-            locationChosen,
-            stallLocationInfo,
-            onChoosePlace,
-            onCancelChosenLocation,
-            onConfirmChosenLocation,
-            locationConfirmed,
-            formSubmitting,
-        } = this.props
+        const { election, onConfirmChosenLocation, locationConfirmed, formSubmitting } = this.props
         const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
 
         return (
@@ -99,24 +86,22 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                 <FormSection>
                     <FormSectionHeader>Stall location</FormSectionHeader>
                     <br />
-                    {locationConfirmed === false &&
-                        election.polling_places_loaded === false && (
-                            <div>
-                                <GooglePlacesAutocompleteList
-                                    componentRestrictions={{ country: "AU" }}
-                                    autoFocus={false}
-                                    hintText={"Where is your stall?"}
-                                    onChoosePlace={onChoosePlace}
-                                />
-                                <br />
-                            </div>
-                        )}
-                    {locationChosen && (
-                        <StallLocationCard
-                            stallLocationInfo={stallLocationInfo}
-                            showActions={locationConfirmed === false}
-                            onCancel={onCancelChosenLocation}
-                            onConfirm={onConfirmChosenLocation}
+                    {election.polling_places_loaded === false && (
+                        <GooglePlacesAutocompleteListWithConfirm
+                            election={election}
+                            onConfirmChosenLocation={onConfirmChosenLocation}
+                            componentRestrictions={{ country: "AU" }}
+                            autoFocus={false}
+                            hintText={"Where is your stall?"}
+                        />
+                    )}
+
+                    {election.polling_places_loaded === true && (
+                        <PollingPlaceAutocompleteListWithConfirm
+                            election={election}
+                            onConfirmChosenLocation={onConfirmChosenLocation}
+                            autoFocus={false}
+                            hintText={"Where is your stall?"}
                         />
                     )}
                 </FormSection>

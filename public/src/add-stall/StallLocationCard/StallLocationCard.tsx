@@ -19,8 +19,17 @@ export interface IProps {
 }
 
 class StallLocationCard extends React.PureComponent<IProps, {}> {
+    constructor(props: any) {
+        super(props)
+        this.onConfirm = this.onConfirm.bind(this)
+    }
+
+    onConfirm() {
+        this.props.onConfirm(this.props.stallLocationInfo)
+    }
+
     render() {
-        const { stallLocationInfo, showActions, onCancel, onConfirm } = this.props
+        const { stallLocationInfo, showActions, onCancel } = this.props
 
         return (
             <Paper>
@@ -41,7 +50,7 @@ class StallLocationCard extends React.PureComponent<IProps, {}> {
                         />
                         <CardActions>
                             <FlatButton label="No" onClick={onCancel} primary={true} />
-                            <FlatButton label="Yes" onClick={onConfirm} primary={true} />
+                            <FlatButton label="Yes" onClick={this.onConfirm} primary={true} />
                         </CardActions>
                     </Card>
                 )}
