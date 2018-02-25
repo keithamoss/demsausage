@@ -14,12 +14,13 @@ import * as Raven from "raven-js"
 import * as createRavenMiddleware from "raven-for-redux"
 import { responsiveStoreEnhancer } from "redux-responsive"
 import getRoutes from "./routes"
+import { getEnvironment, eAppEnv } from "./redux/modules/app"
 import { IStore } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 let Middleware: Array<any> = []
 
-if ("REACT_APP_RAVEN_URL" in process.env) {
+if (getEnvironment() === eAppEnv.PROD && "REACT_APP_RAVEN_URL" in process.env) {
     Raven.config(process.env.REACT_APP_RAVEN_URL!).install()
     Middleware.push(createRavenMiddleware(Raven))
 }
