@@ -38,6 +38,7 @@ class StallLocationCard extends React.PureComponent<IProps, {}> {
                         title={stallLocationInfo.polling_place_name}
                         subtitle={stallLocationInfo.address}
                         avatar={<Avatar icon={<ActionHome />} />}
+                        style={{ width: "80%" }} /* Hacky fix for Cards being wider than the screen on mobiles with smaller screens */
                     />
                 </Card>
 
@@ -47,6 +48,7 @@ class StallLocationCard extends React.PureComponent<IProps, {}> {
                             title={"Is this where your stall is?"}
                             titleStyle={{ paddingTop: 12 }}
                             avatar={<Avatar icon={<ActionQuestionAnswer />} />}
+                            style={{ width: "80%" }} /* Hacky fix for Cards being wider than the screen on mobiles with smaller screens */
                         />
                         <CardActions>
                             <FlatButton label="No" onClick={onCancel} primary={true} />
