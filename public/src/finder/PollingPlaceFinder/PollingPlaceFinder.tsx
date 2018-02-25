@@ -10,6 +10,12 @@ import { PollingPlaceCardMiniContainer } from "../PollingPlaceCardMini/PollingPl
 import { DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
 import { grey500 } from "material-ui/styles/colors"
 
+import Paper from "material-ui/Paper"
+import { ListItem } from "material-ui/List"
+import Avatar from "material-ui/Avatar"
+import { ActionInfo } from "material-ui/svg-icons"
+import { blue500 } from "material-ui/styles/colors"
+
 const FinderContainer = styled.div`
     padding-top: 15px;
     padding-left: 15px;
@@ -36,10 +42,22 @@ export interface IProps {
 
 class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
     render() {
-        const { locationSearched, nearbyPollingPlaces, onGeocoderResults } = this.props
+        const { election, locationSearched, nearbyPollingPlaces, onGeocoderResults } = this.props
 
         return (
             <FinderContainer>
+                {election.polling_places_loaded === false && (
+                    <Paper style={{ marginBottom: 15 }}>
+                        <ListItem
+                            leftAvatar={<Avatar icon={<ActionInfo />} backgroundColor={blue500} />}
+                            primaryText={"Polling places haven't been annonced yet"}
+                            secondaryText={"Until then we're only listing stalls reported by the community."}
+                            secondaryTextLines={2}
+                            disabled={true}
+                        />
+                    </Paper>
+                )}
+
                 <GooglePlacesAutocompleteList
                     componentRestrictions={{ country: "AU" }}
                     autoFocus={true}
