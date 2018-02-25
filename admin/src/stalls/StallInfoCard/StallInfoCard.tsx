@@ -41,6 +41,14 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                             disabled={true}
                         />
                         <ListItem
+                            primaryText="Address"
+                            secondaryText={
+                                stall.stall_location_info === null ? stall.polling_place_info.address : stall.stall_location_info.address
+                            }
+                            leftIcon={<MapsPlace />}
+                            disabled={true}
+                        />
+                        <ListItem
                             primaryText="Description"
                             secondaryText={stall.stall_description}
                             leftIcon={<ActionDescription />}
