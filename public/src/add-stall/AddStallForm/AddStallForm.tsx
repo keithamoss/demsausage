@@ -156,7 +156,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 name="contact_email"
                                 component={TextField}
                                 floatingLabelText={"Contact email"}
-                                hintText={"So we can contact you when we approve your stall"}
+                                hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
                                 fullWidth={true}
                                 validate={[required, email]}
                                 type={"email"}
