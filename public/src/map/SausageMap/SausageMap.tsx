@@ -46,6 +46,7 @@ const spriteBBQ = new ol.style.Style({
         size: [32, 32],
         src: "./icons/sprite.png",
     }),
+    zIndex: 1,
 })
 const spriteCake = new ol.style.Style({
     image: new ol.style.Icon({
@@ -53,6 +54,7 @@ const spriteCake = new ol.style.Style({
         size: [32, 32],
         src: "./icons/sprite.png",
     }),
+    zIndex: 1,
 })
 const spriteBBQCake = new ol.style.Style({
     image: new ol.style.Icon({
@@ -60,6 +62,7 @@ const spriteBBQCake = new ol.style.Style({
         size: [32, 29],
         src: "./icons/sprite.png",
     }),
+    zIndex: 1,
 })
 const spriteNowt = new ol.style.Style({
     image: new ol.style.Icon({
@@ -67,14 +70,16 @@ const spriteNowt = new ol.style.Style({
         size: [24, 24],
         src: "./icons/sprite.png",
     }),
+    zIndex: 1,
 })
 const spriteUnknown = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 117],
         size: [14, 14],
         src: "./icons/sprite.png",
-        opacity: 0.6,
+        opacity: 0.4,
     }),
+    zIndex: 0,
 })
 
 const styleFunctionSprite = function(feature: any) {
