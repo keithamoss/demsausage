@@ -86,7 +86,13 @@ export interface IPollingPlace {
     has_nothing: boolean
     has_caek: boolean
     has_run_out: boolean
-    has_other: object
+    has_other: {
+        has_coffee?: boolean
+        has_vego?: boolean
+        has_halal?: boolean
+        has_baconandeggs?: boolean
+        has_freetext?: string
+    }
     chance_of_sausage: number
     stall_name: string
     stall_description: string
@@ -205,4 +211,50 @@ export function fetchPollingPlaceTypes() {
             dispatch(loadPollingPlaceTypes(json))
         }
     }
+}
+
+export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
+    return (
+        pollingPlace.has_bbq === true ||
+        pollingPlace.has_caek === true ||
+        pollingPlace.has_nothing === true ||
+        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+    )
+}
+
+export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
+    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+}
+
+export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
+    if (pollingPlace.chance_of_sausage >= 0.7) {
+        return "HIGH"
+    } else if (pollingPlace.chance_of_sausage >= 4) {
+        return "MEDIUM"
+    } else {
+        return "LOW"
+    }
+}
+
+export function getFoodDescription(pollingPlace: IPollingPlace) {
+    const noms: Array<string> = []
+    if (pollingPlace.has_bbq) {
+        noms.push("sausage sizzle")
+    }
+    if (pollingPlace.has_caek) {
+        noms.push("cake stall")
+    }
+    if ("has_baconandeggs" in pollingPlace.has_other && pollingPlace.has_other.has_baconandeggs) {
+        noms.push("bacon and egg burgers")
+    }
+    if ("has_vego" in pollingPlace.has_other && pollingPlace.has_other.has_vego) {
+        noms.push("vegetarian options")
+    }
+    if ("has_halal" in pollingPlace.has_other && pollingPlace.has_other.has_halal) {
+        noms.push("halal options")
+    }
+    if ("has_coffee" in pollingPlace.has_other && pollingPlace.has_other.has_coffee) {
+        noms.push("coffee")
+    }
+    return noms.join(", ")
 }
