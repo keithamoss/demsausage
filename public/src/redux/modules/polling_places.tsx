@@ -233,12 +233,12 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
         pollingPlace.has_bbq === true ||
         pollingPlace.has_caek === true ||
         pollingPlace.has_nothing === true ||
-        Object.keys(pollingPlace.has_other).length > 0
+        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
     )
 }
 
 export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
-    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || Object.keys(pollingPlace.has_other).length > 0
+    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {

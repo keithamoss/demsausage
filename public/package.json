@@ -59,6 +59,7 @@
         "@types/recompose": "^0.24.4",
         "@types/redux-devtools-extension": "^2.13.2",
         "@types/redux-form": "^7.0.9",
-        "@types/redux-thunk": "^2.1.0"
+        "@types/redux-thunk": "^2.1.0",
+        "core-js": "^2.5.3"
     }
 }

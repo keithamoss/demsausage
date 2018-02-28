@@ -1,6 +1,7 @@
 import "es6-promise/auto"
 // import registerServiceWorker from "./registerServiceWorker"
 import "./index.css"
+import "./polyfills"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { createStore, applyMiddleware, Store } from "redux"

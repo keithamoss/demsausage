@@ -103,11 +103,11 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             <FlexboxIcons>
                                 {pollingPlace.has_bbq && <SausageIcon />}
                                 {pollingPlace.has_caek && <CakeIcon />}
-                                {"has_vego" in pollingPlace.has_other && <VegoIcon />}
+                                {pollingPlace.has_other !== null && "has_vego" in pollingPlace.has_other && <VegoIcon />}
                                 {pollingPlace.has_nothing && <RedCrossofShameIcon />}
-                                {"has_halal" in pollingPlace.has_other && <HalalIcon />}
-                                {"has_coffee" in pollingPlace.has_other && <CoffeeIcon />}
-                                {"has_baconandeggs" in pollingPlace.has_other && <BaconandEggsIcon />}
+                                {pollingPlace.has_other !== null && "has_halal" in pollingPlace.has_other && <HalalIcon />}
+                                {pollingPlace.has_other !== null && "has_coffee" in pollingPlace.has_other && <CoffeeIcon />}
+                                {pollingPlace.has_other !== null && "has_baconandeggs" in pollingPlace.has_other && <BaconandEggsIcon />}
                             </FlexboxIcons>
                             {"distance_metres" in pollingPlace && (
                                 <FlexboxDistance
@@ -116,9 +116,10 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 />
                             )}
                         </FlexboxContainer>
-                        {"has_freetext" in pollingPlace.has_other && (
-                            <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_freetext}`</HasOtherNoms>
-                        )}
+                        {pollingPlace.has_other !== null &&
+                            "has_freetext" in pollingPlace.has_other && (
+                                <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_freetext}`</HasOtherNoms>
+                            )}
                         {pollingPlace.has_run_out && (
                             <RunOutWarning
                                 secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
