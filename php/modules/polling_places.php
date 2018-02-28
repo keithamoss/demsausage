@@ -16,7 +16,7 @@ function translatePollingPlaceFromDB($row) {
     "has_caek" => (bool)$row["has_caek"],
     "has_nothing" => (bool)$row["has_nothing"],
     "has_run_out" => (bool)$row["has_run_out"],
-    "has_other" => ($row["has_other"] !== "") ? json_decode($row["has_other"]) : new stdClass(),
+    "has_other" => ($row["has_other"] !== "" && $row["has_other"] !== null) ? json_decode($row["has_other"]) : new stdClass(),
     "chance_of_sausage" => (float)$row["chance_of_sausage"],
     "stall_name" => $row["stall_name"],
     "stall_description" => $row["stall_description"],
