@@ -10,6 +10,7 @@ import {
 } from "../../redux/modules/interfaces"
 import { loadPollingPlaces } from "../../redux/modules/polling_places"
 import { setElectionTableName } from "../../redux/modules/elections"
+import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
 
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
@@ -81,7 +82,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
     return {
         election: elections.elections[ownProps.params.electionIdentifier],
-        pendingStallCount: stalls.pending.length,
+        pendingStallCount: getPendingStallsForCurrentElection(stalls, parseInt(ownProps.params.electionIdentifier, 10)).length
     }
 }
 

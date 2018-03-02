@@ -9,11 +9,11 @@ export interface IStoreProps {
     stalls: Array<IStall>
 }
 
-export interface IDispatchProps {}
+export interface IDispatchProps { }
 
-export interface IStateProps {}
+export interface IStateProps { }
 
-interface IRouteProps {}
+interface IRouteProps { }
 
 interface IOwnProps {
     params: IRouteProps
@@ -31,7 +31,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { stalls, elections } = state
 
     return {
-        stalls: getPendingStallsForCurrentElection(stalls, elections),
+        stalls: getPendingStallsForCurrentElection(stalls, elections.current_election_id),
     }
 }
 

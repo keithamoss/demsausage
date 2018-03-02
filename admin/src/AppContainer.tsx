@@ -71,7 +71,7 @@ export interface IDispatchProps {
     onChangeElection: Function
 }
 
-export interface IStateProps {}
+export interface IStateProps { }
 
 export interface IRouteProps {
     content: any
@@ -143,7 +143,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         snackbars: snackbars,
         elections: elections.elections,
         currentElection: elections.elections[elections.current_election_id],
-        pendingStallCount: getPendingStallsForCurrentElection(stalls, elections).length,
+        pendingStallCount: getPendingStallsForCurrentElection(stalls, elections.current_election_id).length,
     }
 }
 
