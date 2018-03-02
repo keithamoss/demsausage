@@ -18,15 +18,13 @@ const TableRowColumnWithIconButtons = styled(TableRowColumn)`
     overflow: visible !important;
 `
 
-const ElectionListItem = styled(ListItem)`
-    & div {
-        padding-left: 0px !important;
-    }
+const ElectionTableRowColumn = styled(TableRowColumn)`
+    padding-left: 0px !important;
 `
 
 export interface IProps {
-    elections: Array<IElection>;
-    onDownloadElection: any;
+    elections: Array<IElection>
+    onDownloadElection: any
 }
 
 class ElectionsManager extends React.PureComponent<IProps, {}> {
@@ -54,8 +52,8 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                     <TableBody displayRowCheckbox={false}>
                         {elections.map((election: IElection) => (
                             <TableRow key={election.id} selectable={false}>
-                                <TableRowColumn>
-                                    <ElectionListItem
+                                <ElectionTableRowColumn>
+                                    <ListItem
                                         primaryText={election.name}
                                         secondaryText={new Date(election.election_day).toLocaleDateString("en-AU", {
                                             weekday: "long",
@@ -65,7 +63,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                         })}
                                         onClick={this.onClickElection.bind(this, election)}
                                     />
-                                </TableRowColumn>
+                                </ElectionTableRowColumn>
                                 <TableRowColumnWithIconButtons>
                                     {election.is_active ? (
                                         <IconButton tooltip={"This election is live!"}>

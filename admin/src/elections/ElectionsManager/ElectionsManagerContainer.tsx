@@ -7,7 +7,7 @@ import { IElection } from "../../redux/modules/elections"
 import { getAPIBaseURL } from "../../redux/modules/app"
 
 export interface IStoreProps {
-    elections: IElections;
+    elections: IElections
 }
 
 export interface IDispatchProps { onDownloadElection: Function }
@@ -17,7 +17,7 @@ export interface IStateProps {}
 interface IRouteProps {}
 
 interface IOwnProps {
-    params: IRouteProps;
+    params: IRouteProps
 }
 
 export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
