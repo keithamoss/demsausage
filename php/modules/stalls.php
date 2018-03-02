@@ -144,6 +144,10 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
     $pollingPlace["stall_description"] = $stall["stall_description"];
     $pollingPlace["stall_website"] = $stall["stall_website"];
 
+    // Init timestamp fields
+    $pollingPlace["first_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+    $pollingPlace["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+
     $pollingPlaceId = addPollingPlace($pollingPlace, $election["db_table_name"]);
     if($pollingPlaceId === false) {
       failForAPI("Error adding polling place information.");

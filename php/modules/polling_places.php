@@ -68,10 +68,6 @@ function translatePollingPlaceToDB($row) {
 function addPollingPlace(array $params, string $pollingPlaceTableName) {
   global $file_db, $pollingPlacesAllowedFields;
 
-  // Init timestamp fields
-  $params["first_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
-  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
-
   $pollingPlace = translatePollingPlaceToDB($params);
   $insert = fieldsToInsertSQL($pollingPlaceTableName, $pollingPlacesAllowedFields, array_keys($pollingPlace), $pollingPlace);
   $stmt = $file_db->prepare($insert);
@@ -79,10 +75,12 @@ function addPollingPlace(array $params, string $pollingPlaceTableName) {
   return fieldsToStmntLastInsertId($stmt, $pollingPlacesAllowedFields, $pollingPlace);
 }
 
-function updatePollingPlace($id, array $params, string $electionId, $regenerateGeoJSON) {
+function updatePollingPlace($id, array $params, string $electionId, $regenerateGeoJSON, $updateTimestamp = true) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
 
-  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  if($updateTimestamp === true) {
+    $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  }
   
   $election = fetchElection($electionId);
   $pollingPlace = translatePollingPlaceToDB($params);
@@ -97,10 +95,12 @@ function updatePollingPlace($id, array $params, string $electionId, $regenerateG
   return $rowCount;
 }
 
-function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, $regenerateGeoJSON) {
+function updatePollingPlaceByElectionTableName($id, array $params, string $electionTableName, $regenerateGeoJSON, $updateTimestamp = true) {
   global $file_db, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields;
 
-  $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  if($updateTimestamp === true) {
+    $params["latest_report"] = "strftime('%Y-%m-%d %H:%M:%f','now') || '+00'";
+  }
   
   $pollingPlace = translatePollingPlaceToDB($params);
   $rowCount = updateTable($id, $pollingPlace, $electionTableName, $pollingPlacesPKeyFieldName, $pollingPlacesAllowedFields);
@@ -604,7 +604,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     $divisions = implode(", ", array_map(function($pollingPlace) {
       return $pollingPlace["division"];
     }, $pollingPlaces));
-    updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"], false);
+    updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"], false, false);
 
     // Remove the duplicate polling places
     foreach($pollingPlaces as $pollingPlace) {
@@ -677,7 +677,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
           "message" => "Polling Place '" . $pollingPlace["polling_place_name"] . "': Detected polling place type of '" . $detectedPollingPlaceType . "' is not valid.",
         ];
       } else {
-        updatePollingPlaceByElectionTableName($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"], false);
+        updatePollingPlaceByElectionTableName($pollingPlace["id"], ["polling_place_type" => $detectedPollingPlaceType], $response["table_name"], false, false);
       }
     }
 
@@ -688,7 +688,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     $score = array_sum($pollingPlaceScores);
     $chance = $score / count($historical);
 
-    updatePollingPlaceByElectionTableName($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"], false);
+    updatePollingPlaceByElectionTableName($pollingPlace["id"], ["chance_of_sausage" => $chance], $response["table_name"], false, false);
   }
 
   if($noHistoricalDataCount > 0) {
@@ -728,7 +728,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
         "ess_stall_id" => $pollingPlace["ess_stall_id"],
         "ess_stall_url" => $pollingPlace["ess_stall_url"],
       ];
-      updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false);
+      updatePollingPlaceByElectionTableName($newPollingPlaces[0]["id"], $stallRelatedFields, $response["table_name"], false, false);
 
       // If this is our first load of polling place info, log some CHECK-level
       // messages to compare the user-entered location info with the official
