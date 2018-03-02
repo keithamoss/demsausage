@@ -179,7 +179,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 <ListItem
                                     primaryText="Are there bacon and eggs?"
                                     leftIcon={<BaconandEggsIcon />}
-                                    rightToggle={<DeliciousnessToggle name="has_baconandeggs" />}
+                                    rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
                                 />
                             </List>
                         </FormSection>

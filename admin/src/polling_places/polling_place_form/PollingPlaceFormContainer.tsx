@@ -38,7 +38,7 @@ const toFormValues = (pollingPlace: IPollingPlace) => {
         has_coffee: "has_coffee" in hasOther && hasOther.has_coffee === true,
         has_vego: "has_vego" in hasOther && hasOther.has_vego === true,
         has_halal: "has_halal" in hasOther && hasOther.has_halal === true,
-        has_baconandeggs: "has_baconandeggs" in hasOther && hasOther.has_baconandeggs === true,
+        has_bacon_and_eggs: "has_bacon_and_eggs" in hasOther && hasOther.has_bacon_and_eggs === true,
         has_free_text: "has_free_text" in hasOther ? hasOther.has_free_text : "",
         stall_name: pollingPlace.stall_name,
         stall_description: pollingPlace.stall_description,
@@ -60,8 +60,8 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     if (formValues.has_halal === true) {
         hasOther.has_halal = formValues.has_halal
     }
-    if (formValues.has_baconandeggs === true) {
-        hasOther.has_baconandeggs = formValues.has_baconandeggs
+    if (formValues.has_bacon_and_eggs === true) {
+        hasOther.has_bacon_and_eggs = formValues.has_bacon_and_eggs
     }
     if (formValues.has_free_text === true) {
         hasOther.has_free_text = formValues.has_free_text
@@ -71,7 +71,7 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     delete formValuesCopy.has_coffee
     delete formValuesCopy.has_vego
     delete formValuesCopy.has_halal
-    delete formValuesCopy.has_baconandeggs
+    delete formValuesCopy.has_bacon_and_eggs
     delete formValuesCopy.has_free_text
 
     return {

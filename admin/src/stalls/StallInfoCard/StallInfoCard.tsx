@@ -93,7 +93,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                                 </IconButton>
                             )}
 
-                            {stall.has_baconandeggs && (
+                            {stall.has_bacon_and_eggs && (
                                 <IconButton tooltip="Bacon and Eggs" touch={true}>
                                     <BaconandEggsIcon />
                                 </IconButton>

@@ -107,7 +107,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 {pollingPlace.has_nothing && <RedCrossofShameIcon />}
                                 {pollingPlace.has_other !== null && "has_halal" in pollingPlace.has_other && <HalalIcon />}
                                 {pollingPlace.has_other !== null && "has_coffee" in pollingPlace.has_other && <CoffeeIcon />}
-                                {pollingPlace.has_other !== null && "has_baconandeggs" in pollingPlace.has_other && <BaconandEggsIcon />}
+                                {pollingPlace.has_other !== null && "has_bacon_and_eggs" in pollingPlace.has_other && <BaconandEggsIcon />}
                             </FlexboxIcons>
                             {"distance_metres" in pollingPlace && (
                                 <FlexboxDistance

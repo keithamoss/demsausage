@@ -99,7 +99,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             <ListItem
                                 primaryText="Are there bacon and eggs?"
                                 leftIcon={<BaconandEggsIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_baconandeggs" />}
+                                rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
                             />
                             <Divider />
                             <ListItem
@@ -137,7 +137,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                                 <DeliciousnessToggle name="has_halal" label={"Halal"} />
                             </DeliciousnessGridTile>
                             <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_baconandeggs" label={"Bacon & Eggs"} />
+                                <DeliciousnessToggle name="has_bacon_and_eggs" label={"Bacon & Eggs"} />
                             </DeliciousnessGridTile>
                         </DeliciousnessGrid> */}
 

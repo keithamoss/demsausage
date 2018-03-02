@@ -91,7 +91,7 @@ export interface IPollingPlace {
         has_coffee?: boolean
         has_vego?: boolean
         has_halal?: boolean
-        has_baconandeggs?: boolean
+        has_bacon_and_eggs?: boolean
         has_free_text?: string
     }
     chance_of_sausage: number
@@ -259,7 +259,7 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
     if (pollingPlace.has_caek) {
         noms.push("cake stall")
     }
-    if ("has_baconandeggs" in pollingPlace.has_other && pollingPlace.has_other.has_baconandeggs) {
+    if ("has_bacon_and_eggs" in pollingPlace.has_other && pollingPlace.has_other.has_bacon_and_eggs) {
         noms.push("bacon and egg burgers")
     }
     if ("has_vego" in pollingPlace.has_other && pollingPlace.has_other.has_vego) {
