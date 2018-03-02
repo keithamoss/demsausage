@@ -1,5 +1,5 @@
 <?php
-require_once "secrets.php";
+require_once "../secrets.php";
 
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");

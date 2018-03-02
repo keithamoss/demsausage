@@ -1,6 +1,6 @@
 <?php
 require_once "raven.php";
-require_once "secrets.php";
+require_once "../secrets.php";
 require_once "auth.php";
 require_once "db.php";
 

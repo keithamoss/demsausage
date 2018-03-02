@@ -2,7 +2,7 @@ README.dev.md
 /.vscode
 /admin/.env
 /public/.env
-/php/secrets.php
+secrets.php
 /php/elections/*.geojson
 /php/client_secrets.php
 /php/google-api-php-client-*
