@@ -185,6 +185,20 @@ if(stristr($_SERVER["QUERY_STRING"], "load-polling-places=1") !== false) {
   closeDb();
 }
 
+// Download election
+if(stristr($_SERVER["QUERY_STRING"], "download-election=1") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $response = downloadElection($_GET["electionId"]);
+  if($response !== true) {
+    failForAPI("Failed to download election. Oops.");
+  } else {
+    closeDb();
+  }
+}
+
 // Fetch polling place types
 if(stristr($_SERVER["QUERY_STRING"], "fetch-polling-place-types=1") !== false) {
   if(isAuthorisedUser("su") === false) {

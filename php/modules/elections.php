@@ -124,4 +124,60 @@ function isElectionDBTableValid($dbTableName) {
   $stmt->execute();
   return $stmt->fetchColumn() === "1";
 }
+
+// https://stackoverflow.com/a/28331477
+function array_splice_preserve_keys(&$input, $offset, $length=null, $replacement=array()) {
+  if (empty($replacement)) {
+      return array_splice($input, $offset, $length);
+  }
+
+  $part_before  = array_slice($input, 0, $offset, $preserve_keys=true);
+  $part_removed = array_slice($input, $offset, $length, $preserve_keys=true);
+  $part_after   = array_slice($input, $offset+$length, null, $preserve_keys=true);
+
+  $input = $part_before + $replacement + $part_after;
+
+  return $part_removed;
+}
+
+function downloadElection($id) {
+  global $pollingPlaceHasOtherAllowedFields;
+
+  $election = fetchElection($id);
+  $pollingPlaces = fetchAllPollingPlaces($id);
+
+  // Output array into CSV file
+  date_default_timezone_set("Australia/Perth");
+  $filename = getElectionTableBaseName($election) . "_" . date("YmdHIs").".csv";
+  header('Content-Type: text/csv');
+  header('Content-Disposition: attachment; filename="'.$filename.'"');
+  $fp = fopen('php://output', 'w');
+
+  if(count($pollingPlaces) > 0) {
+    // Add header row
+    $header = array_keys($pollingPlaces[0]);
+    array_splice($header, array_search("has_other", $header), 0, $pollingPlaceHasOtherAllowedFields);
+    array_splice($header, array_search("has_other", $header), 1);
+    fputcsv($fp, $header);
+
+    foreach($pollingPlaces as $ferow) {
+        // Fan out the contents of has_other into separate columns
+        $hasOtherFields = [];
+        foreach($pollingPlaceHasOtherAllowedFields as $fieldName) {
+          $hasOtherFields[$fieldName] = (isset($ferow["has_other"]->$fieldName)) ? $ferow["has_other"]->$fieldName : false;
+        }
+        // Insert our $hasOtherField array where has_other is
+        array_splice_preserve_keys($ferow, array_search("has_other", array_keys($ferow)), 0, $hasOtherFields);
+        // Nuke has_other
+        array_splice($ferow, array_search("has_other", array_keys($ferow)), 1);
+
+        fputcsv($fp, $ferow);
+    }
+
+  } else {
+    fputcsv($fp, array("Sorry, no data."));
+  }
+  
+  return true;
+}
 ?>
