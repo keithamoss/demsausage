@@ -3,7 +3,7 @@ require_once "modules/stalls.php";
 
 $pollingPlacesPKeyFieldName = "id";
 $pollingPlacesAllowedFields = array("stall_description", "lon", "has_run_out", "has_nothing", "has_caek", "has_bbq", "chance_of_sausage", "latest_report", "first_report", "stall_website", "lat", "stall_name", "extra_info", "source", "has_other", "wheelchairaccess", "entrancesdesc", "polling_place_type", "booth_info", "opening_hours", "premises", "address", "polling_place_name", "division", "state", "ess_stall_id", "ess_stall_url");
-$pollingPlaceHasOtherAllowedFields = array("has_vego", "has_halal", "has_coffee", "has_baconandeggs", "has_freetext");
+$pollingPlaceHasOtherAllowedFields = array("has_vego", "has_halal", "has_coffee", "has_baconandeggs", "has_free_text");
 $pollingPlacesRequiredFields = array("lon", "lat", "polling_place_name", "address", "state");
 $validStates = ["WA", "SA", "NT", "VIC", "NSW", "QLD", "TAS", "ACT", "Overseas"];
 $validPollingPlaceTypes = ["Child Care Centre", "Church", "Community Hall", "Other", "Pre-School", "Private School", "Public School", "Senior Citizens Centre", "Courthouse", "Hospital"];

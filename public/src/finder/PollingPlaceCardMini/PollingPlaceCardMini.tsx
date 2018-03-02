@@ -69,7 +69,7 @@ const ChanceOfSausageIndicator = styled.span`
 `
 
 export interface IProps {
-    pollingPlace: any // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
+    pollingPlace: any; // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
@@ -117,8 +117,8 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             )}
                         </FlexboxContainer>
                         {pollingPlace.has_other !== null &&
-                            "has_freetext" in pollingPlace.has_other && (
-                                <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_freetext}`</HasOtherNoms>
+                            "has_free_text" in pollingPlace.has_other && (
+                                <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_free_text}`</HasOtherNoms>
                             )}
                         {pollingPlace.has_run_out && (
                             <RunOutWarning

@@ -91,7 +91,7 @@ export interface IPollingPlace {
         has_vego?: boolean
         has_halal?: boolean
         has_baconandeggs?: boolean
-        has_freetext?: string
+        has_free_text?: string
     }
     chance_of_sausage: number
     stall_name: string

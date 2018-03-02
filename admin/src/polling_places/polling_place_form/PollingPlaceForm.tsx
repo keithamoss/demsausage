@@ -142,7 +142,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                         </DeliciousnessGrid> */}
 
                         <CustomField
-                            name="has_freetext"
+                            name="has_free_text"
                             component={TextField}
                             floatingLabelText={"What other types of delicious are here?"}
                             fullWidth={true}

@@ -39,7 +39,7 @@ const toFormValues = (pollingPlace: IPollingPlace) => {
         has_vego: "has_vego" in hasOther && hasOther.has_vego === true,
         has_halal: "has_halal" in hasOther && hasOther.has_halal === true,
         has_baconandeggs: "has_baconandeggs" in hasOther && hasOther.has_baconandeggs === true,
-        has_freetext: "has_freetext" in hasOther ? hasOther.has_freetext : "",
+        has_free_text: "has_free_text" in hasOther ? hasOther.has_free_text : "",
         stall_name: pollingPlace.stall_name,
         stall_description: pollingPlace.stall_description,
         stall_website: pollingPlace.stall_website,
@@ -63,8 +63,8 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     if (formValues.has_baconandeggs === true) {
         hasOther.has_baconandeggs = formValues.has_baconandeggs
     }
-    if (formValues.has_freetext === true) {
-        hasOther.has_freetext = formValues.has_freetext
+    if (formValues.has_free_text === true) {
+        hasOther.has_free_text = formValues.has_free_text
     }
 
     let formValuesCopy = cloneDeep(formValues)
@@ -72,7 +72,7 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     delete formValuesCopy.has_vego
     delete formValuesCopy.has_halal
     delete formValuesCopy.has_baconandeggs
-    delete formValuesCopy.has_freetext
+    delete formValuesCopy.has_free_text
 
     return {
         ...formValuesCopy,
