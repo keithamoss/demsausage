@@ -44,7 +44,7 @@ const spriteCake = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 0],
         size: [32, 32],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
     }),
     zIndex: 1,
 })
@@ -52,7 +52,7 @@ const spriteBBQCakeRunOut = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 32],
         size: [32, 29],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
     }),
     zIndex: 1,
 })
@@ -60,7 +60,7 @@ const spriteBBQCake = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 61],
         size: [32, 29],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
     }),
     zIndex: 1,
 })
@@ -68,7 +68,7 @@ const spriteBBQ = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 90],
         size: [32, 32],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
     }),
     zIndex: 1,
 })
@@ -76,7 +76,7 @@ const spriteNowt = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 122],
         size: [24, 24],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
     }),
     zIndex: 1,
 })
@@ -84,7 +84,7 @@ const spriteUnknown = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 146],
         size: [14, 14],
-        src: "./icons/sprite.png",
+        src: "./icons/sprite_v2.png",
         opacity: 0.4,
     }),
     zIndex: 0,
