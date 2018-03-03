@@ -1,9 +1,15 @@
 language: node_js
 node_js:
 - '9'
+sudo: required
 env:
   # Stop warnings causing build failures.
   - CI=false REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0 REACT_APP_GOOGLE_ANALYTICS_UA=UA-48888573-1 REACT_APP_MAPBOX_API_KEY=pk.eyJ1Ijoia2VpdGhtb3NzIiwiYSI6IjkxMTViNjcxN2U5ZDBjMTYzYzY2MzQwNTJkZjM1NGFkIn0.HS40UI-OD5lQWBxUCZOwZg REACT_APP_RAVEN_URL=https://8d31580cc3314ca0812ff9d72c4d996f@sentry.io/291819
+before_script:
+  - echo -e "deb https://s3.amazonaws.com/repo.deb.cyberduck.io stable main" | sudo tee /etc/apt/sources.list.d/cyberduck.list > /dev/null
+  - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE7097963FEFBE72
+  - apt-get update
+  - apt-get install duck
 script:
   - cd public
   - npm install .
@@ -12,6 +18,7 @@ script:
   - npm install .
   - npm run build
   - cd ../
+  - duck --help
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
@@ -34,4 +41,4 @@ deploy:
     on:
       branch: master
 after_deploy:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/"$CF_ZONE_ID"/purge_cache" -H "X-Auth-Email:"$CF_EMAIL"" -H "X-Auth-Key:"$CF_API_KEY"" -H "Content-Type:application/json" --data '{"purge_everything":true}'; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" -H "X-Auth-Email:$CF_EMAIL" -H "X-Auth-Key:$CF_API_KEY" -H "Content-Type:application/json" --data '{"purge_everything":true}'; fi
