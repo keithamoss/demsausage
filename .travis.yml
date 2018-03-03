@@ -17,10 +17,10 @@ script:
   # - cd ../admin
   # - npm install .
   # - npm run build
-  - cd ../php
+  - cd ../
   - pwd
   - ls
-  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --verbose --synchronize $FTP_PATH ./ --existing upload --parallel 6
+  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH ./php --existing upload --parallel 6
   - cd ../
 # deploy:
 #   - provider: s3
