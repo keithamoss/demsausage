@@ -16,3 +16,4 @@ secrets.php
 /sentry-php/
 /v3-test/*
 flatfilebaby/
+secret.txt
