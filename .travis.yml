@@ -18,7 +18,9 @@ script:
   # - npm install .
   # - npm run build
   - cd ../php
-  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --synchronize sftp://$FTP_PATH/php/ . --existing upload --parallel 6
+  - pwd
+  - ls
+  # - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --synchronize sftp://$FTP_PATH/php/ . --existing upload --parallel 6
   - cd ../
 # deploy:
 #   - provider: s3
