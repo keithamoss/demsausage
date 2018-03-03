@@ -2,7 +2,9 @@ language: node_js
 node_js:
 - '9'
 # sudo: required
-script: npm run build
+script:
+  - cd public
+  - npm run build
 deploy:
   on:
     branch: master
