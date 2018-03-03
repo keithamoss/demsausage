@@ -18,13 +18,10 @@ script:
   # - npm install .
   # - npm run build
   - cd ../
-after_success:
   - pwd
   - ls
-  - cd php
-  - pwd
-  - ls
-  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH . --existing upload --parallel 6
+  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH /home/travis/build/keithamoss/demsausage-v3/php/ --existing upload --parallel 6
+  - cd ../
 # deploy:
 #   - provider: s3
 #     access_key_id: $AWS_ACCESS_KEY_ID
