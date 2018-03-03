@@ -489,7 +489,7 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
   }
 
   // Check there are no pending stalls
-  if(count(fetchPendingStalls()) > 0) {
+  if(count(fetchPendingStallByElection($electionId)) > 0) {
     $response["error"] = true;
     $response["messages"][] = [
       "level" => "ERROR",
@@ -595,21 +595,26 @@ function loadPollingPlaces($electionId, $dryrun, $file) {
     // After that, we can rely on the later merge process to merge for us because we remove duplicates here.
     if(count($withData) > 0) {
       $pollingPlaceToKeep = $withData[0];
-    } elseif(count($withData) > 1) {
-      $response["error"] = true;
-      $response["messages"][] = [
-        "level" => "ERROR",
-        "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. This is a problem that shouldn't actually happen - we can't handle automatically marging these."
-      ];
     } else {
       $pollingPlaceToKeep = $pollingPlaces[0];
     }
 
     // Update the polling place we're keeping with all of the electoral divisions it represents
-    $divisions = implode(", ", array_map(function($pollingPlace) {
+    $divisions = array_map(function($pollingPlace) {
       return $pollingPlace["division"];
-    }, $pollingPlaces));
-    updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"], false, false);
+    }, $pollingPlaces);
+    $divisions = implode(", ", array_diff($divisions, [""])); // Handle elections / polling places with no division
+    if($divisions !== "") {
+      updatePollingPlaceByElectionTableName($pollingPlaceToKeep["id"], ["division" => $divisions], $response["table_name"], false, false);
+    }
+
+    if(count($withData) > 1) {
+      $response["error"] = true;
+      $response["messages"][] = [
+        "level" => "ERROR",
+        "message" => "Found " . $dupe["count"] . " duplicate polling places for '" . $dupe["address"] . "' (Divisions: " . $divisions . "). Of these, " . count((array)$withData) . " had data. This is a problem that shouldn't actually happen - we can't handle automatically marging these."
+      ];
+    }
 
     // Remove the duplicate polling places
     foreach($pollingPlaces as $pollingPlace) {
