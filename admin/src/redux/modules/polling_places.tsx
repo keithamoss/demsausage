@@ -213,6 +213,17 @@ export function fetchPollingPlaceTypes() {
     }
 }
 
+export function regenerateElectionGeoJSON(election: IElection) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = { "regenerate-geojson": 1, electionId: election.id }
+        const { response } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(sendSnackbarNotification("Polling place data regenerated! 🌭🎉"))
+        }
+    }
+}
+
 export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
     return (
         pollingPlace.has_bbq === true ||

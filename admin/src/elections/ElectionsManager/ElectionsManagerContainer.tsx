@@ -5,12 +5,13 @@ import ElectionsManager from "./ElectionsManager"
 import { IStore, IElections } from "../../redux/modules/interfaces"
 import { IElection } from "../../redux/modules/elections"
 import { getAPIBaseURL } from "../../redux/modules/app"
+import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
 
 export interface IStoreProps {
     elections: IElections
 }
 
-export interface IDispatchProps { onDownloadElection: Function }
+export interface IDispatchProps { onDownloadElection: Function; onRegenerateElectionGeoJSON: Function }
 
 export interface IStateProps {}
 
@@ -22,7 +23,7 @@ interface IOwnProps {
 
 export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { elections, onDownloadElection } = this.props
+        const { elections, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
         return (
             <ElectionsManager
@@ -30,6 +31,7 @@ export class ElectionsManagerContainer extends React.PureComponent<IStoreProps &
                     .map(k => elections[k])
                     .sort((a: IElection, b: IElection) => b.id - a.id)}
                 onDownloadElection={onDownloadElection}
+                onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
             />
         )
     }
@@ -47,6 +49,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onDownloadElection(election: IElection) {
             window.location.href = `${getAPIBaseURL()}/api.php?download-election=1&electionId=${election.id}`
+        },
+        onRegenerateElectionGeoJSON(election: IElection) {
+            dispatch(regenerateElectionGeoJSON(election))
         },
     }
 }

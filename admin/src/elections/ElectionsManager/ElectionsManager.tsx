@@ -9,7 +9,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table"
 import { ListItem } from "material-ui/List"
 import RaisedButton from "material-ui/RaisedButton"
 import IconButton from "material-ui/IconButton"
-import { FileFileUpload, FileCloudDownload, ActionCheckCircle, ImageRemoveRedEye } from "material-ui/svg-icons"
+import { FileFileUpload, FileCloudDownload, ActionCheckCircle, ImageRemoveRedEye, NavigationRefresh } from "material-ui/svg-icons"
 import { green500, red600 } from "material-ui/styles/colors"
 
 // Fixes issues with tooltips and tables
@@ -25,6 +25,7 @@ const ElectionTableRowColumn = styled(TableRowColumn)`
 export interface IProps {
     elections: Array<IElection>
     onDownloadElection: any
+    onRegenerateElectionGeoJSON: any
 }
 
 class ElectionsManager extends React.PureComponent<IProps, {}> {
@@ -41,8 +42,9 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
             browserHistory.push(`/election/${election.id}/load_polling_places/`)
         }
     }
+
     render() {
-        const { elections, onDownloadElection } = this.props
+        const { elections, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
         return (
             <div>
@@ -88,6 +90,12 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                         onClick={onDownloadElection.bind(this, election)}
                                     >
                                         <FileCloudDownload />
+                                    </IconButton>
+                                    <IconButton
+                                        tooltip="Refresh the map data for this election"
+                                        onClick={onRegenerateElectionGeoJSON.bind(this, election)}
+                                    >
+                                        <NavigationRefresh />
                                     </IconButton>
                                 </TableRowColumnWithIconButtons>
                             </TableRow>
