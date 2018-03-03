@@ -8,14 +8,26 @@ script:
   - cd public
   - npm install .
   - npm run build
+  - cd ../admin
+  - npm install .
+  - npm run build
+  - cd ../
 deploy:
   on:
     branch: master
-  provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  region: $AWS_DEFAULT_REGION
-  bucket: democracysausage.org
-  skip_cleanup: true
-  local_dir: build
-  cache_control: "max-age=21600"
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: democracysausage.org
+    skip_cleanup: true
+    local_dir: /public/build
+    cache_control: "max-age=21600"
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: admin.democracysausage.org
+    skip_cleanup: true
+    local_dir: /admin/build
+    cache_control: "max-age=21600"
