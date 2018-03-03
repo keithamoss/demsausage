@@ -17,7 +17,7 @@ script:
   # - npm install .
   # - npm run build
   - cd ../php
-  - find $TRAVIS_BUILD_DIR/php/elections/ '*.geojson'
+  - find $TRAVIS_BUILD_DIR/php/elections/ -name '*.geojson'
   - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
   - cd ../
 # deploy:
