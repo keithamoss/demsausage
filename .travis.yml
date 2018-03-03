@@ -11,35 +11,33 @@ before_script:
   - sudo apt-get install duck
 script:
   - cd public
-  # - npm install .
-  # - npm run build
-  # - cd ../admin
-  # - npm install .
-  # - npm run build
-  - cd ../
-  - printenv TRAVIS_BUILD_DIR
+  - npm install .
+  - npm run build
+  - cd ../admin
+  - npm install .
+  - npm run build
   - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
   - cd ../
-# deploy:
-#   - provider: s3
-#     access_key_id: $AWS_ACCESS_KEY_ID
-#     secret_access_key: $AWS_SECRET_ACCESS_KEY
-#     region: $AWS_DEFAULT_REGION
-#     bucket: democracysausage.org
-#     skip_cleanup: true
-#     local_dir: public/build
-#     cache_control: "no-cache"
-#     on:
-#       branch: master
-#   - provider: s3
-#     access_key_id: $AWS_ACCESS_KEY_ID
-#     secret_access_key: $AWS_SECRET_ACCESS_KEY
-#     region: $AWS_DEFAULT_REGION
-#     bucket: admin.democracysausage.org
-#     skip_cleanup: true
-#     local_dir: admin/build
-#     cache_control: "no-cache"
-#     on:
-#       branch: master
-# after_deploy:
-#   - if [ "$TRAVIS_BRANCH" == "master" ]; then curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" -H "X-Auth-Email:$CF_EMAIL" -H "X-Auth-Key:$CF_API_KEY" -H "Content-Type:application/json" --data '{"purge_everything":true}'; fi
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: democracysausage.org
+    skip_cleanup: true
+    local_dir: public/build
+    cache_control: "no-cache"
+    on:
+      branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: admin.democracysausage.org
+    skip_cleanup: true
+    local_dir: admin/build
+    cache_control: "no-cache"
+    on:
+      branch: master
+after_deploy:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" -H "X-Auth-Email:$CF_EMAIL" -H "X-Auth-Key:$CF_API_KEY" -H "Content-Type:application/json" --data '{"purge_everything":true}'; fi
