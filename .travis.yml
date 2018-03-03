@@ -20,7 +20,7 @@ deploy:
     bucket: democracysausage.org
     skip_cleanup: true
     local_dir: public/build
-    cache_control: "max-age=21600"
+    cache_control: "no-cache"
     on:
       branch: master
   - provider: s3
@@ -30,12 +30,12 @@ deploy:
     bucket: admin.democracysausage.org
     skip_cleanup: true
     local_dir: admin/build
-    cache_control: "max-age=21600"
+    cache_control: "no-cache"
     on:
       branch: master
 after_deploy:
   - |
-    curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+    curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
      -H "X-Auth-Email: ${CF_EMAIL}" \
      -H "X-Auth-Key: ${CF_API_KEY}" \
      -H "Content-Type: application/json" \
