@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - '9'
 env:
-  # Stop warnings causing build failures. Foo
+  # Stop warnings causing build failures.
   - CI=false REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0 REACT_APP_GOOGLE_ANALYTICS_UA=UA-48888573-1 REACT_APP_MAPBOX_API_KEY=pk.eyJ1Ijoia2VpdGhtb3NzIiwiYSI6IjkxMTViNjcxN2U5ZDBjMTYzYzY2MzQwNTJkZjM1NGFkIn0.HS40UI-OD5lQWBxUCZOwZg REACT_APP_RAVEN_URL=https://8d31580cc3314ca0812ff9d72c4d996f@sentry.io/291819
 script:
   - cd public
@@ -13,8 +13,6 @@ script:
   - npm run build
   - cd ../
 deploy:
-  on:
-    branch: master
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -23,6 +21,8 @@ deploy:
     skip_cleanup: true
     local_dir: /public/build
     cache_control: "max-age=21600"
+    on:
+      branch: master
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -31,3 +31,5 @@ deploy:
     skip_cleanup: true
     local_dir: /admin/build
     cache_control: "max-age=21600"
+    on:
+      branch: master
