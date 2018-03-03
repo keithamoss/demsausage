@@ -4,13 +4,14 @@ import { connect } from "react-redux"
 import PollingPlaceEditor from "./PollingPlaceEditor"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
+import { IStore, IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
 
 import CommunicationLocationOff from "material-ui/svg-icons/communication/location-off"
 
 export interface IProps {
     election: IElection
     pollingPlaceId: number | null
+    stall?: IStall
     showAutoComplete: boolean
     onPollingPlaceEdited: Function
 }
@@ -53,7 +54,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
     }
 
     render() {
-        const { election, showAutoComplete, onPollingPlaceEdited } = this.props
+        const { election, stall, showAutoComplete, onPollingPlaceEdited } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
         if (election.db_table_name === "" || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
@@ -64,6 +65,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
             <PollingPlaceEditor
                 election={election}
                 pollingPlace={pollingPlace}
+                stall={stall}
                 showAutoComplete={showAutoComplete}
                 onPollingPlaceEdited={onPollingPlaceEdited}
             />

@@ -5,11 +5,12 @@ import { isDirty, submit } from "redux-form"
 import { cloneDeep } from "lodash-es"
 
 import PollingPlaceForm from "./PollingPlaceForm"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
-import { updatePollingPlace } from "../../redux/modules/polling_places"
+import { IStore, IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
+import { updatePollingPlace, pollingPlaceHasReportsOfNoms } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
+    stall?: IStall
     pollingPlace: IPollingPlace
     onPollingPlaceEdited: Function
 }
@@ -26,7 +27,9 @@ export interface IStoreProps {
 
 export interface IStateProps {}
 
-interface IOwnProps {}
+interface IOwnProps {
+    
+}
 
 const toFormValues = (pollingPlace: IPollingPlace) => {
     const hasOther: any = pollingPlace.has_other
@@ -81,13 +84,35 @@ const fromFormValues = (formValues: any): IPollingPlace => {
 }
 
 export class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-    initialValues: object
+    initialValues: any
+
+    canStallPropsBeMerged() {
+        const { pollingPlace, stall } = this.props
+        return (stall !== undefined && pollingPlaceHasReportsOfNoms(pollingPlace) === false)
+    }
+
     componentWillMount() {
-        const { pollingPlace } = this.props
+        const { pollingPlace, stall } = this.props
 
         // Each layer mounts this component anew, so store their initial layer form values.
         // e.g. For use in resetting the form state (Undo/Discard Changes)
         this.initialValues = cloneDeep(toFormValues(pollingPlace))
+
+        // If there's no reports for this polling place yet then we can
+        // safely merge in the stall's props
+        if(stall !== undefined && this.canStallPropsBeMerged()) {
+            this.initialValues.has_bbq = stall.has_bbq
+            this.initialValues.has_caek = stall.has_caek
+            this.initialValues.has_coffee = stall.has_coffee
+            this.initialValues.has_halal = stall.has_halal
+            this.initialValues.has_vego = stall.has_vego
+            this.initialValues.has_bacon_and_eggs = stall.has_bacon_and_eggs
+            
+            this.initialValues.stall_name = stall.stall_name
+            this.initialValues.stall_description = stall.stall_description
+            this.initialValues.stall_website = stall.stall_website
+            this.initialValues.source = "Direct"
+        }
     }
     render() {
         const { election, pollingPlace, onPollingPlaceEdited, isDirty, pollingPlaceTypes, onFormSubmit, onSaveForm } = this.props
@@ -98,6 +123,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
                 pollingPlace={pollingPlace}
                 initialValues={this.initialValues}
                 isDirty={isDirty}
+                stallWasMerged={this.canStallPropsBeMerged()}
                 pollingPlaceTypes={pollingPlaceTypes}
                 onSubmit={(values: object, dispatch: Function, props: IProps) => {
                     onFormSubmit(values, election, pollingPlace, onPollingPlaceEdited)

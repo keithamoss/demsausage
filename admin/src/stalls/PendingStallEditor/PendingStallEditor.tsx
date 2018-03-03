@@ -42,6 +42,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                     <PollingPlaceEditorContainer
                         election={election}
                         pollingPlaceId={stall.polling_place_id}
+                        stall={stall}
                         showAutoComplete={false}
                         onPollingPlaceEdited={onPollingPlaceEdited}
                     />

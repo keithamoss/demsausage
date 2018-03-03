@@ -14,6 +14,9 @@ import MenuItem from "material-ui/MenuItem"
 import Divider from "material-ui/Divider"
 import RaisedButton from "material-ui/RaisedButton"
 import { List, ListItem } from "material-ui/List"
+import Avatar from "material-ui/Avatar"
+import { AlertWarning } from "material-ui/svg-icons"
+import { blue500 } from "material-ui/styles/colors"
 // import { Avatar } from "material-ui"
 // import { ActionHome, MapsPlace, ActionDescription, AvWeb, CommunicationEmail, ActionInfo, MapsLocalDining } from "material-ui/svg-icons"
 // import { ActionInfo, MapsLocalDining } from "material-ui/svg-icons"
@@ -31,6 +34,7 @@ import { yellow700 } from "material-ui/styles/colors"
 export interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
+    stallWasMerged: boolean
     pollingPlaceTypes: Array<string>
     onSubmit: any
     onSaveForm: any
@@ -63,10 +67,21 @@ const HiddenButton = styled.button`
 
 class PollingPlaceForm extends React.PureComponent<IProps, {}> {
     render() {
-        const { isDirty, pollingPlaceTypes, onSaveForm, handleSubmit, onSubmit } = this.props
+        const { isDirty, stallWasMerged, pollingPlaceTypes, onSaveForm, handleSubmit, onSubmit } = this.props
 
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
+                {stallWasMerged && <ListItem
+                    leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
+                    primaryText={"Stall information has already been automatically populated for you"}
+                    secondaryText={
+                        "This polling place had no reports yet, so just double check everything " +
+                        "and hit 'Save' if it's all OK."
+                    }
+                    secondaryTextLines={2}
+                    disabled={true}
+                />}
+                
                 <Card>
                     <FormCardTitle title={"Deliciousness"} />
                     <CardText>
