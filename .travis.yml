@@ -18,7 +18,7 @@ script:
   # - npm run build
   - cd ../
   - printenv TRAVIS_BUILD_DIR
-  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH /home/travis/build/keithamoss/demsausage-v3/php/ --existing upload --parallel 6
+  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
   - cd ../
 # deploy:
 #   - provider: s3
