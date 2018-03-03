@@ -19,7 +19,7 @@ deploy:
     region: $AWS_DEFAULT_REGION
     bucket: democracysausage.org
     skip_cleanup: true
-    local_dir: /public/build
+    local_dir: public/build
     cache_control: "max-age=21600"
     on:
       branch: master
@@ -29,7 +29,7 @@ deploy:
     region: $AWS_DEFAULT_REGION
     bucket: admin.democracysausage.org
     skip_cleanup: true
-    local_dir: /admin/build
+    local_dir: admin/build
     cache_control: "max-age=21600"
     on:
       branch: master
