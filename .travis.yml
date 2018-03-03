@@ -20,7 +20,7 @@ script:
   - cd ../php
   - pwd
   - ls
-  # - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --synchronize sftp://$FTP_PATH/php/ . --existing upload --parallel 6
+  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --synchronize $FTP_PATH ./ --existing upload --parallel 6
   - cd ../
 # deploy:
 #   - provider: s3
