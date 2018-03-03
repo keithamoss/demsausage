@@ -40,14 +40,6 @@ export interface IProps {
     onElectionAnnounceClose: any
 }
 
-const spriteBBQ = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 61],
-        size: [32, 32],
-        src: "./icons/sprite.png",
-    }),
-    zIndex: 1,
-})
 const spriteCake = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 0],
@@ -56,7 +48,7 @@ const spriteCake = new ol.style.Style({
     }),
     zIndex: 1,
 })
-const spriteBBQCake = new ol.style.Style({
+const spriteBBQCakeRunOut = new ol.style.Style({
     image: new ol.style.Icon({
         offset: [0, 32],
         size: [32, 29],
@@ -64,9 +56,25 @@ const spriteBBQCake = new ol.style.Style({
     }),
     zIndex: 1,
 })
+const spriteBBQCake = new ol.style.Style({
+    image: new ol.style.Icon({
+        offset: [0, 61],
+        size: [32, 29],
+        src: "./icons/sprite.png",
+    }),
+    zIndex: 1,
+})
+const spriteBBQ = new ol.style.Style({
+    image: new ol.style.Icon({
+        offset: [0, 90],
+        size: [32, 32],
+        src: "./icons/sprite.png",
+    }),
+    zIndex: 1,
+})
 const spriteNowt = new ol.style.Style({
     image: new ol.style.Icon({
-        offset: [0, 93],
+        offset: [0, 122],
         size: [24, 24],
         src: "./icons/sprite.png",
     }),
@@ -74,7 +82,7 @@ const spriteNowt = new ol.style.Style({
 })
 const spriteUnknown = new ol.style.Style({
     image: new ol.style.Icon({
-        offset: [0, 117],
+        offset: [0, 146],
         size: [14, 14],
         src: "./icons/sprite.png",
         opacity: 0.4,
@@ -85,6 +93,8 @@ const spriteUnknown = new ol.style.Style({
 const styleFunctionSprite = function(feature: any) {
     if (feature.get("has_bbq") === true && feature.get("has_caek") === true) {
         return spriteBBQCake
+    } else if ((feature.get("has_bbq") === true || feature.get("has_caek") === true) && feature.get("has_run_out") === true) {
+        return spriteBBQCakeRunOut
     } else if (feature.get("has_bbq") === true) {
         return spriteBBQ
     } else if (feature.get("has_caek") === true) {
