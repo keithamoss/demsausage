@@ -27,7 +27,7 @@ import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 import LinearProgress from "material-ui/LinearProgress"
 
 import { setCurrentElection, IElection } from "./redux/modules/elections"
-import { IStore, IAppModule, ISnackbarsModule, IElections } from "./redux/modules/interfaces"
+import { IStore, IAppModule, ISnackbarsModule } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 import { setDrawerOpen } from "material-ui-responsive-drawer"
@@ -58,7 +58,7 @@ export interface IStoreProps {
     // From Props
     app: IAppModule
     snackbars: ISnackbarsModule
-    elections: IElections
+    elections: Array<IElection>
     currentElection: IElection
     browser: any
     responsiveDrawer: any
@@ -151,7 +151,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         app: app,
         snackbars: snackbars,
         elections: elections.elections,
-        currentElection: elections.elections[elections.current_election_id],
+        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         browser: browser,
         responsiveDrawer: responsiveDrawer,
     }

@@ -2,7 +2,7 @@ export { IStore } from "./reducer"
 export { IEALGISApiClient, IHttpResponse, ICartoAPIResponse } from "../../shared/api/EALGISApiClient"
 export { IModule as IAppModule, eAppEnv } from "./app"
 export { IModule as ISnackbarsModule } from "./snackbars"
-export { IModule as IElectionsModule, IElections, IElection } from "./elections"
+export { IModule as IElectionsModule, IElection } from "./elections"
 export { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 export {
     IModule as IPollingPlacesModule,

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
 
-import { IStore, IElection, IGoogleGeocodeResult, IGoogleAddressSearchResult } from "../../../redux/modules/interfaces"
+import { IStore, IGoogleGeocodeResult, IGoogleAddressSearchResult } from "../../../redux/modules/interfaces"
 
 import GoogleMapLoader from "react-google-maps-loader"
 import GooglePlacesAutocomplete from "./GooglePlacesAutocomplete"
@@ -19,9 +19,7 @@ export interface IProps {
     hintText: string
     onRequestSearch?: Function
 }
-export interface IStoreProps {
-    currentElection: IElection
-}
+export interface IStoreProps {}
 
 export interface IDispatchProps {
     fetchGeocodedPlace: Function
@@ -100,11 +98,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
-
-    return {
-        currentElection: elections.elections[elections.current_election_id],
-    }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {

@@ -15,9 +15,7 @@ export interface IProps {
     hintText: string
     onRequestSearch?: Function
 }
-export interface IStoreProps {
-    currentElection: IElection
-}
+export interface IStoreProps {}
 
 export interface IDispatchProps {}
 
@@ -92,11 +90,7 @@ export class PollingPlaceAutocompleteListWithConfirm extends React.Component<IPr
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
-
-    return {
-        currentElection: elections.elections[elections.current_election_id],
-    }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {

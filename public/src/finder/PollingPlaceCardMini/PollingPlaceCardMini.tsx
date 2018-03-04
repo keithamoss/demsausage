@@ -69,7 +69,7 @@ const ChanceOfSausageIndicator = styled.span`
 `
 
 export interface IProps {
-    pollingPlace: any; // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
+    pollingPlace: any // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {

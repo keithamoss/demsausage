@@ -1,7 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import { browserHistory, Link } from "react-router"
-import { IAppModule, ISnackbarsModule, IElections, IElection } from "./redux/modules/interfaces"
+import { IAppModule, ISnackbarsModule, IElection } from "./redux/modules/interfaces"
 import "./App.css"
 
 import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
@@ -51,7 +51,7 @@ export interface IProps {
     muiThemePalette: any
     app: IAppModule
     snackbars: ISnackbarsModule
-    elections: IElections
+    elections: Array<IElection>
     currentElection: IElection
     defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean

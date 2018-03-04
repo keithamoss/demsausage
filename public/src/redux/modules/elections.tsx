@@ -9,7 +9,7 @@ const LOAD_ELECTION = "ealgis/elections/LOAD_ELECTION"
 const SET_CURRENT_ELECTION = "ealgis/elections/SET_CURRENT_ELECTION"
 
 const initialState: Partial<IModule> = {
-    elections: {} as IElections,
+    elections: [],
 }
 
 // Reducer
@@ -33,7 +33,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
 }
 
 // Action Creators
-export function loadElections(elections: IElections) {
+export function loadElections(elections: Array<IElection>) {
     return {
         type: LOAD_ELECTIONS,
         elections,
@@ -56,8 +56,8 @@ export function setCurrentElection(electionId: string) {
 
 // Models
 export interface IModule {
-    elections: IElections
-    current_election_id: string // election.id
+    elections: Array<IElection>
+    current_election_id: number // election.id
 }
 
 export interface IAction {
@@ -68,10 +68,6 @@ export interface IAction {
     meta?: {
         // analytics: IAnalyticsMeta
     }
-}
-
-export interface IElections {
-    [key: string]: IElection
 }
 
 export interface IElection {
@@ -94,12 +90,7 @@ export function fetchElections() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const { response, json } = await ealapi.dsAPIGet({ "fetch-all-elections": 1 }, dispatch)
         if (response.status === 200) {
-            // Map elections from an array of objects to a dict keyed by election id
-            const elections = Object.assign(
-                {},
-                ...json.map((election: IElection, index: number, array: Array<IElection>) => ({ [election.id]: election }))
-            )
-            dispatch(loadElections(elections))
+            dispatch(loadElections(json))
 
             const activeElection = json.find((election: IElection) => election.is_active)
             dispatch(setCurrentElection(activeElection.id))
