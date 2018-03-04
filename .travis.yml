@@ -10,13 +10,13 @@ before_script:
   - sudo apt-get update
   - sudo apt-get install duck
 script:
+  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
   - cd public
   - npm install .
   - npm run build
   - cd ../admin
   - npm install .
   - npm run build
-  - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
   - cd ../
 deploy:
   - provider: s3
