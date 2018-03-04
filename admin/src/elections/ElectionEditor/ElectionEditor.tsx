@@ -58,6 +58,14 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
                 />
 
                 <CustomField
+                    name="short_name"
+                    component={TextField}
+                    floatingLabelText={"A short name for this election (e.g. FED 2018)"}
+                    fullWidth={true}
+                    validate={[required]}
+                />
+
+                <CustomField
                     name="election_day"
                     component={DatePicker}
                     format={(value: any) => (value === "" ? null : value)}

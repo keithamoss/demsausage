@@ -39,6 +39,7 @@ const toFormValues = (election: IElection) => {
         lon: election.lon,
         lat: election.lat,
         name: election.name,
+        short_name: election.short_name,
         default_zoom_level: election.default_zoom_level,
         has_division_boundaries: election.has_division_boundaries,
         is_active: election.is_active,
