@@ -251,7 +251,7 @@ function fetchPendingStallById($id) {
 function fetchPendingStallByElection($election_id) {
   global $file_db;
 
-  $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE elections_id = :election_id");
+  $stmt = $file_db->query("SELECT * FROM pending_stalls WHERE elections_id = :election_id AND active = 1");
   $stmt->bindParam(":election_id", $election_id);
   $stmt->execute();
 
