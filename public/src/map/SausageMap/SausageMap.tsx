@@ -3,179 +3,123 @@ import styled from "styled-components"
 import { browserHistory, Link } from "react-router"
 // import "./SausageMap.css"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
-import { getAPIBaseURL } from "../../redux/modules/app"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
+import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
-import * as ol from "openlayers"
 import SearchBar from "material-ui-search-bar"
 // import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
 // import { grey500 } from "material-ui/styles/colors"
 import FlatButton from "material-ui/FlatButton"
+// import { GridList, GridTile } from "material-ui/GridList"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 // import Snackbar from "material-ui/Snackbar"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo } from "material-ui/svg-icons"
-import { blue500 } from "material-ui/styles/colors"
+import { ActionInfo, MapsLayers } from "material-ui/svg-icons"
+import { blue500, deepPurple300, deepPurple500, white } from "material-ui/styles/colors"
 
-const SearchBarContainer = styled.div`
+const FlexboxContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     position: relative;
-    display: block;
-    margin-top: 30px;
-    margin-left: 20px;
-    margin-right: 20px;
+    width: 80%;
+    left: 10%;
+`
+
+const SearchBarContainer = styled.div``
+
+const LayersContainer = styled.div`
+    margin-left: auto;
+    margin-top: 8px;
+
+    & button {
+        border-radius: 12px !important;
+    }
+
+    & span {
+        color: ${white};
+    }
 `
 
 const PollingPlaceCardWrapper = styled.div`
     padding: 10px;
 `
 
+const ElectionsFlexboxContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* Or do it all in one line with flex flow */
+    flex-flow: row wrap;
+    /* tweak where items line up on the row valid values are: 
+       flex-start, flex-end, space-between, space-around, stretch */
+    align-content: flex-end;
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+`
+
+const ElectionsFlexboxItem = styled.div`
+    width: 125px;
+    height: 125px;
+    margin: 6px;
+    position: relative;
+    cursor: ${props => (props.className === "selected" ? "auto" : "pointer")};
+
+    & img {
+        width: 125px;
+        height: 125px;
+    }
+`
+
+const ElectionTitle = styled.span`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: ${props => (props.className === "selected" ? "rgba(100, 181, 246, 0.6)" : "rgba(0, 0, 0, 0.4)")};
+    line-height: 24px;
+    text-align: center;
+    color: ${white};
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+`
+
 export interface IProps {
-    election: IElection
+    elections: Array<IElection>
+    currentElection: IElection
     queriedPollingPlaces: Array<IPollingPlace>
     hasSeenElectionAnnouncement: boolean
+    onClickElectionChooser: any
+    isElectionChooserOpen: boolean
+    onCloseElectionChooserDialog: any
+    onChooseElection: any
     onQueryMap: Function
     onCloseQueryMapDialog: any
     onElectionAnnounceClose: any
 }
 
-const spriteCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 0],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCakeRunOut = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 32],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 61],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQ = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 90],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteNowt = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 122],
-        size: [24, 24],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteUnknown = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 146],
-        size: [14, 14],
-        src: "./icons/sprite_v2.png",
-        opacity: 0.4,
-    }),
-    zIndex: 0,
-})
-
-const styleFunctionSprite = function(feature: any) {
-    if (feature.get("has_bbq") === true && feature.get("has_caek") === true) {
-        return spriteBBQCake
-    } else if ((feature.get("has_bbq") === true || feature.get("has_caek") === true) && feature.get("has_run_out") === true) {
-        return spriteBBQCakeRunOut
-    } else if (feature.get("has_bbq") === true) {
-        return spriteBBQ
-    } else if (feature.get("has_caek") === true) {
-        return spriteCake
-    } else if (feature.get("has_nothing") === true) {
-        return spriteNowt
-    } else {
-        return spriteUnknown
-    }
-}
+const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s/, "").replace("20", "")
 
 class SausageMap extends React.PureComponent<IProps, {}> {
-    componentDidMount() {
-        const { election, onQueryMap } = this.props
-
-        const vectorSource = new ol.source.Vector({
-            url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
-            format: new ol.format.GeoJSON(),
-        })
-
-        // Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
-        vectorSource.on("change", function(e: any) {
-            if (vectorSource.getState() === "ready") {
-                window.setTimeout(function() {
-                    map.getView().changed()
-                    let view = map.getView()
-                    let centre = view.getCenter()
-                    centre[0] -= 1
-                    view.setCenter(centre)
-                    map.setView(view)
-                }, 1000)
-            }
-        })
-
-        const vectorLayer = new ol.layer.Vector({
-            renderMode: "image",
-            source: vectorSource,
-            style: styleFunctionSprite,
-        } as any)
-
-        const map = new ol.Map({
-            renderer: ["canvas"],
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.XYZ({
-                        url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${
-                            process.env.REACT_APP_MAPBOX_API_KEY
-                        }`,
-                        crossOrigin: "anonymous",
-                    }),
-                }),
-            ],
-            target: "openlayers-map",
-            controls: [],
-            view: new ol.View({
-                center: ol.proj.transform([election.lon, election.lat], "EPSG:4326", "EPSG:3857"),
-                zoom: election.default_zoom_level,
-            }),
-        })
-
-        map.addLayer(vectorLayer)
-
-        map.on("singleclick", function(e: any) {
-            let features: Array<any> = []
-            map.forEachFeatureAtPixel(
-                e.pixel,
-                (feature: any, layer: any) => {
-                    features.push(feature.getProperties())
-                }
-                // { hitTolerance: 5 }
-            )
-            onQueryMap(features)
-        })
-    }
-
     render() {
-        const { queriedPollingPlaces, onCloseQueryMapDialog } = this.props
+        const {
+            elections,
+            currentElection,
+            queriedPollingPlaces,
+            onClickElectionChooser,
+            isElectionChooserOpen,
+            onCloseElectionChooserDialog,
+            onChooseElection,
+            onQueryMap,
+            onCloseQueryMapDialog,
+        } = this.props
 
         return (
             <div>
-                <div id="openlayers-map" className="openlayers-map" />
+                <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
 
                 {/* <Snackbar
                     open={hasSeenElectionAnnouncement === false}
@@ -185,20 +129,74 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                     onRequestClose={onElectionAnnounceClose}
                 /> */}
 
-                <SearchBarContainer>
-                    <SearchBar
-                        hintText={"Find polling places"}
-                        // tslint:disable-next-line:no-empty
-                        onChange={() => {}}
-                        onClick={() => browserHistory.push("/search")}
-                        onRequestSearch={() => console.log("onRequestSearch")}
-                        // searchIcon={<DeviceLocationSearching color={grey500} />}
-                        style={{
-                            margin: "0 auto",
-                            maxWidth: 800,
-                        }}
-                    />
-                </SearchBarContainer>
+                <FlexboxContainer>
+                    <SearchBarContainer>
+                        <SearchBar
+                            hintText={"Find polling places"}
+                            // tslint:disable-next-line:no-empty
+                            onChange={() => {}}
+                            onClick={() => browserHistory.push("/search")}
+                            onRequestSearch={() => console.log("onRequestSearch")}
+                            // searchIcon={<DeviceLocationSearching color={grey500} />}
+                            style={{
+                                margin: "0 auto",
+                                maxWidth: 800,
+                            }}
+                        />
+                    </SearchBarContainer>
+
+                    <LayersContainer>
+                        <FlatButton
+                            icon={<MapsLayers color={white} />}
+                            label={getElectionVeryShortName(currentElection)}
+                            backgroundColor={deepPurple500}
+                            hoverColor={deepPurple300}
+                            onClick={onClickElectionChooser}
+                        />
+                    </LayersContainer>
+                </FlexboxContainer>
+
+                <FullscreenDialog
+                    open={isElectionChooserOpen}
+                    onRequestClose={onCloseElectionChooserDialog}
+                    title={"Elections"}
+                    actionButton={<FlatButton label="Close" onClick={onCloseElectionChooserDialog} />}
+                    containerStyle={{ paddingBottom: 56 }} /* Height of BottomNav */
+                >
+                    <ElectionsFlexboxContainer>
+                        {elections.map((election: IElection) => (
+                            <ElectionsFlexboxItem
+                                key={election.id}
+                                onClick={() => onChooseElection(election)}
+                                className={election.id === currentElection.id ? "selected" : ""}
+                            >
+                                <img
+                                    src={`https://api.mapbox.com/styles/v1/mapbox/light-v9/static/${election.lon},${
+                                        election.lat
+                                    },${election.default_zoom_level - 0.2},0,0/600x600?access_token=${
+                                        process.env.REACT_APP_MAPBOX_API_KEY
+                                    }`}
+                                />
+                                <ElectionTitle className={election.id === currentElection.id ? "selected" : ""}>
+                                    {election.short_name}
+                                </ElectionTitle>
+                            </ElectionsFlexboxItem>
+                        ))}
+                    </ElectionsFlexboxContainer>
+                    {/* <GridList cellHeight={100} cols={4}>
+                        {elections.map((election: IElection) => (
+                            <GridTile key={election.id} style={{ width: 100 }} title={election.name}>
+                                <img
+                                    src={`https://api.mapbox.com/styles/v1/mapbox/light-v9/static/${election.lon},${
+                                        election.lat
+                                    },${election.default_zoom_level - 0.1},0,0/600x600?access_token=${
+                                        process.env.REACT_APP_MAPBOX_API_KEY
+                                    }`}
+                                />
+                            </GridTile>
+                        ))}
+                    </GridList> */}
+                </FullscreenDialog>
 
                 {queriedPollingPlaces.length > 0 && (
                     <FullscreenDialog

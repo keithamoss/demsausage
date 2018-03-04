@@ -26,7 +26,7 @@ import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 // import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 
-import { setCurrentElection, IElection } from "./redux/modules/elections"
+import { IElection } from "./redux/modules/elections"
 import { IStore, IAppModule, ISnackbarsModule } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
@@ -68,7 +68,6 @@ export interface IDispatchProps {
     fetchInitialAppState: Function
     handleSnackbarClose: Function
     toggleSidebar: Function
-    onChangeElection: Function
     onClickDrawerLink: Function
 }
 
@@ -104,7 +103,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             responsiveDrawer,
             handleSnackbarClose,
             toggleSidebar,
-            onChangeElection,
             onClickDrawerLink,
             location,
             children,
@@ -133,7 +131,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
                     toggleSidebar={toggleSidebar}
-                    onChangeElection={onChangeElection}
                     onClickDrawerLink={onClickDrawerLink}
                     locationPathName={location.pathname}
                     children={children}
@@ -169,9 +166,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         toggleSidebar: () => {
             dispatch(toggleSidebarState())
-        },
-        onChangeElection: (event: any, index: number, electionId: string) => {
-            dispatch(setCurrentElection(electionId))
         },
         onClickDrawerLink: () => {
             dispatch(setDrawerOpen(false))

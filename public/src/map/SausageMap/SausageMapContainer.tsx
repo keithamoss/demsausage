@@ -5,16 +5,20 @@ import SausageMap from "./SausageMap"
 import { IStore, IElection, IMapPollingPlace, IPollingPlace } from "../../redux/modules/interfaces"
 
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
+import { setCurrentElection } from "../../redux/modules/elections"
 
 export interface IStoreProps {
+    elections: Array<IElection>
     currentElection: IElection
 }
 
 export interface IDispatchProps {
+    onChooseElection: Function
     fetchQueriedPollingPlaces: Function
 }
 
 export interface IStateProps {
+    isElectionChooserOpen: boolean
     queriedPollingPlaces: Array<IPollingPlace>
     hasSeenElectionAnnouncement: boolean
 }
@@ -29,11 +33,21 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     constructor(props: any) {
         super(props)
 
-        this.state = { queriedPollingPlaces: [], hasSeenElectionAnnouncement: false }
+        this.state = { isElectionChooserOpen: false, queriedPollingPlaces: [], hasSeenElectionAnnouncement: false }
 
+        this.onClickElectionChooser = this.onClickElectionChooser.bind(this)
+        this.onCloseElectionChooserDialog = this.onCloseElectionChooserDialog.bind(this)
         this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
         this.onElectionAnnounceClose = this.onElectionAnnounceClose.bind(this)
+    }
+
+    onClickElectionChooser() {
+        this.setState(Object.assign(this.state, { isElectionChooserOpen: true }))
+    }
+
+    onCloseElectionChooserDialog() {
+        this.setState(Object.assign(this.state, { isElectionChooserOpen: false }))
     }
 
     onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
@@ -49,14 +63,22 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     render() {
-        const { currentElection, fetchQueriedPollingPlaces } = this.props
-        const { queriedPollingPlaces, hasSeenElectionAnnouncement } = this.state
+        const { elections, currentElection, fetchQueriedPollingPlaces, onChooseElection } = this.props
+        const { isElectionChooserOpen, queriedPollingPlaces, hasSeenElectionAnnouncement } = this.state
 
         return (
             <SausageMap
-                election={currentElection}
+                elections={elections}
+                currentElection={currentElection}
                 queriedPollingPlaces={queriedPollingPlaces}
                 hasSeenElectionAnnouncement={hasSeenElectionAnnouncement}
+                onClickElectionChooser={this.onClickElectionChooser}
+                isElectionChooserOpen={isElectionChooserOpen}
+                onCloseElectionChooserDialog={this.onCloseElectionChooserDialog}
+                onChooseElection={(election: IElection) => {
+                    this.onCloseElectionChooserDialog()
+                    onChooseElection(election)
+                }}
                 onQueryMap={async (features: Array<IMapPollingPlace>) => {
                     const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlace) => feature.id)
                     const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
@@ -73,12 +95,16 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections } = state
 
     return {
+        elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
     }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
+        onChooseElection(election: IElection) {
+            dispatch(setCurrentElection(election.id))
+        },
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             return await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
         },

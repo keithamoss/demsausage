@@ -57,7 +57,6 @@ export interface IProps {
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
     toggleSidebar: any
-    onChangeElection: any
     onClickDrawerLink: any
     locationPathName: string
     content: any
