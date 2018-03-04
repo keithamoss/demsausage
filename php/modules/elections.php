@@ -6,6 +6,10 @@ $electionPKeyFieldName = "id";
 $electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "short_name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
 
 function translateElectionFromDB($row) {
+  // Assume that polls close at 8PM
+  $endOfElectionDay = new DateTime($row["election_day"]); // 00:00 on election day
+  $endOfElectionDay->add(new DateInterval("PT20H"));
+
   return [
     "id" => (int)$row["id"],
     "lon" => (float)$row["lon"],
@@ -15,7 +19,7 @@ function translateElectionFromDB($row) {
     "short_name" => $row["short_name"],
     "has_division_boundaries" => (bool)$row["has_division_boundaries"],
     "db_table_name" => $row["db_table_name"],
-    "is_active" => ((bool)$row["is_active"] === true && new DateTime($row["election_day"]) >= new DateTime()),
+    "is_active" => ((bool)$row["is_active"] === true && new DateTime() <= $endOfElectionDay),
     "hidden" => (bool)$row["hidden"],
     "election_day" => $row["election_day"],
     "polling_places_loaded" => (bool)$row["polling_places_loaded"],
