@@ -18,19 +18,16 @@ export interface IDispatchProps {
 }
 
 export interface IStoreProps {
-    election: IElection
+    activeElections: Array<IElection>
     isDirty: boolean
 }
 
 export interface IStateProps {
+    chosenElection: IElection | null
     stallLocationInfo: IStallLocationInfo | null /* Actually IStallLocationInfo or IPollingPlace (depending on election.polling_places_loaded) */
     locationConfirmed: boolean
     formSubmitting: boolean
 }
-
-// interface IRouteProps {
-//     electionIdentifier: string
-// }
 
 interface IOwnProps {}
 
@@ -45,9 +42,15 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 
     constructor(props: any) {
         super(props)
-        this.state = { stallLocationInfo: null, locationConfirmed: false, formSubmitting: false }
+        this.state = {
+            chosenElection: props.activeElections.length === 1 ? props.activeElections[0] : null,
+            stallLocationInfo: null,
+            locationConfirmed: false,
+            formSubmitting: false,
+        }
 
         this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
+        this.onChooseElection = this.onChooseElection.bind(this)
     }
 
     onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
@@ -58,6 +61,17 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
             })
         )
     }
+
+    onChooseElection(event: any, election: IElection) {
+        this.setState(
+            Object.assign(this.state, {
+                chosenElection: election,
+                stallLocationInfo: null,
+                locationConfirmed: null,
+            })
+        )
+    }
+
     toggleFormSubmitting() {
         this.setState(
             Object.assign(this.state, {
@@ -76,21 +90,23 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     render() {
-        const { election, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
-        const { stallLocationInfo, locationConfirmed, formSubmitting } = this.state
+        const { activeElections, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { chosenElection, stallLocationInfo, locationConfirmed, formSubmitting } = this.state
 
         return (
             <AddStallForm
-                initialValues={this.initialValues}
-                election={election}
+                activeElections={activeElections}
+                onChooseElection={this.onChooseElection}
+                chosenElection={chosenElection}
                 onConfirmChosenLocation={this.onConfirmChosenLocation}
                 stallLocationInfo={stallLocationInfo}
                 locationConfirmed={locationConfirmed}
+                initialValues={this.initialValues}
                 formSubmitting={formSubmitting}
                 isDirty={isDirty}
                 onSubmit={async (values: object, dispatch: Function, props: IProps) => {
                     this.toggleFormSubmitting()
-                    await onFormSubmit(onStallAdded, values, election, stallLocationInfo)
+                    await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo)
                 }}
                 onSaveForm={() => {
                     onSaveForm(isDirty)
@@ -104,7 +120,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections } = state
 
     return {
-        election: elections.elections[elections.current_election_id],
+        activeElections: elections.elections.filter((election: IElection) => election.is_active),
         isDirty: isDirty("addStall")(state),
     }
 }

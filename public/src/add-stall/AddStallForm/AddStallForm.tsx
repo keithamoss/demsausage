@@ -11,6 +11,7 @@ import { grey100, grey500 } from "material-ui/styles/colors"
 import { TextField, Toggle } from "redux-form-material-ui"
 import RaisedButton from "material-ui/RaisedButton"
 import { List, ListItem } from "material-ui/List"
+import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
 
 import SausageIcon from "../../icons/sausage"
 import CakeIcon from "../../icons/cake"
@@ -23,7 +24,9 @@ const required = (value: any) => (value ? undefined : "Required")
 const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined)
 
 export interface IProps {
-    election: IElection
+    activeElections: Array<IElection>
+    onChooseElection: any
+    chosenElection: IElection
     onConfirmChosenLocation: any
     stallLocationInfo: IStallLocationInfo
     locationConfirmed: boolean
@@ -37,20 +40,13 @@ export interface IProps {
     isDirty: any
 }
 
-// Work around TypeScript issues with redux-form. There's a bunch of issues logged in DefinitelyTyped's issue tracker.
-class CustomField extends React.Component<any, any> {
-    render(): any {
-        return <Field autoComplete={"off"} {...this.props} />
-    }
-}
-
 class CustomTextField extends React.Component<any, any> {
     render(): any {
-        const { hintText, ...rest } = this.props
+        const { hintText, name, ...rest } = this.props
 
         return (
             <div>
-                <CustomField {...rest} />
+                <Field name={name} {...rest} />
                 <div style={{ color: grey500, fontSize: 12 }}>{hintText}</div>
             </div>
         )
@@ -59,7 +55,8 @@ class CustomTextField extends React.Component<any, any> {
 
 class DeliciousnessToggle extends React.Component<any, any> {
     render(): any {
-        return <CustomField component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...this.props} />
+        const { name, ...rest } = this.props
+        return <Field name={name} component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...rest} />
     }
 }
 
@@ -78,33 +75,50 @@ const HiddenButton = styled.button`
 
 class AddStallForm extends React.PureComponent<IProps, {}> {
     render() {
-        const { election, onConfirmChosenLocation, locationConfirmed, formSubmitting } = this.props
+        const { activeElections, onChooseElection, chosenElection, onConfirmChosenLocation, locationConfirmed, formSubmitting } = this.props
         const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
 
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormSection>
-                    <FormSectionHeader>Stall location</FormSectionHeader>
+                    <FormSectionHeader>Your election</FormSectionHeader>
                     <br />
-                    {election.polling_places_loaded === false && (
-                        <GooglePlacesAutocompleteListWithConfirm
-                            election={election}
-                            onConfirmChosenLocation={onConfirmChosenLocation}
-                            componentRestrictions={{ country: "AU" }}
-                            autoFocus={false}
-                            hintText={"Where is your stall?"}
-                        />
-                    )}
-
-                    {election.polling_places_loaded === true && (
-                        <PollingPlaceAutocompleteListWithConfirm
-                            election={election}
-                            onConfirmChosenLocation={onConfirmChosenLocation}
-                            autoFocus={false}
-                            hintText={"Where is your stall?"}
-                        />
-                    )}
+                    <RadioButtonGroup
+                        name="elections"
+                        onChange={onChooseElection}
+                        defaultSelected={activeElections.length === 1 ? activeElections[0] : null}
+                    >
+                        {activeElections.map((election: IElection) => (
+                            <RadioButton key={election.id} value={election} label={election.name} style={{ marginBottom: 16 }} />
+                        ))}
+                    </RadioButtonGroup>
                 </FormSection>
+
+                {chosenElection !== null && (
+                    <FormSection>
+                        <FormSectionHeader>Stall location</FormSectionHeader>
+                        <br />
+                        {chosenElection.polling_places_loaded === false && (
+                            <GooglePlacesAutocompleteListWithConfirm
+                                election={chosenElection}
+                                onConfirmChosenLocation={onConfirmChosenLocation}
+                                componentRestrictions={{ country: "AU" }}
+                                autoFocus={false}
+                                hintText={"Where is your stall?"}
+                            />
+                        )}
+
+                        {chosenElection.polling_places_loaded === true && (
+                            <PollingPlaceAutocompleteListWithConfirm
+                                key={chosenElection.id}
+                                election={chosenElection}
+                                onConfirmChosenLocation={onConfirmChosenLocation}
+                                autoFocus={false}
+                                hintText={"Where is your stall?"}
+                            />
+                        )}
+                    </FormSection>
+                )}
 
                 {locationConfirmed && (
                     <div>
