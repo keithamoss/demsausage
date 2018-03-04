@@ -3,7 +3,7 @@ require_once "db.php";
 require_once "modules/polling_places.php";
 
 $electionPKeyFieldName = "id";
-$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
+$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "short_name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
 
 function translateElectionFromDB($row) {
   return [
@@ -12,6 +12,7 @@ function translateElectionFromDB($row) {
     "lat" => (float)$row["lat"],
     "default_zoom_level" => (int)$row["default_zoom_level"],
     "name" => $row["name"],
+    "short_name" => $row["short_name"],
     "has_division_boundaries" => (bool)$row["has_division_boundaries"],
     "db_table_name" => $row["db_table_name"],
     "is_active" => (bool)$row["is_active"],

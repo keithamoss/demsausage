@@ -47,7 +47,7 @@ export function loadElection(election: Partial<IElection>) {
     }
 }
 
-export function setCurrentElection(electionId: string) {
+export function setCurrentElection(electionId: number) {
     return {
         type: SET_CURRENT_ELECTION,
         electionId,
@@ -75,6 +75,7 @@ export interface IElection {
     lon: number
     lat: number
     name: string
+    short_name: string
     default_zoom_level: number
     has_division_boundaries: boolean
     db_table_name: string
