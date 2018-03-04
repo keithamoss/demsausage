@@ -52,7 +52,6 @@ export interface IProps {
     app: IAppModule
     snackbars: ISnackbarsModule
     elections: Array<IElection>
-    currentElection: IElection
     defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any

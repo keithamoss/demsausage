@@ -59,7 +59,6 @@ export interface IStoreProps {
     app: IAppModule
     snackbars: ISnackbarsModule
     elections: Array<IElection>
-    currentElection: IElection
     browser: any
     responsiveDrawer: any
 }
@@ -98,7 +97,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             app,
             snackbars,
             elections,
-            currentElection,
             browser,
             responsiveDrawer,
             handleSnackbarClose,
@@ -126,7 +124,6 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     app={app}
                     snackbars={snackbars}
                     elections={elections}
-                    currentElection={currentElection}
                     defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
@@ -148,7 +145,6 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         app: app,
         snackbars: snackbars,
         elections: elections.elections,
-        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         browser: browser,
         responsiveDrawer: responsiveDrawer,
     }
