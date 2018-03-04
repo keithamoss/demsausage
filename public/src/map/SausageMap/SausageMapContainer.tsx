@@ -73,7 +73,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections } = state
 
     return {
-        currentElection: elections.elections[elections.current_election_id],
+        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
     }
 }
 
