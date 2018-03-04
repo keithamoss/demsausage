@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set("Australia/Perth");
+
 require_once "modules/elections.php";
 require_once "modules/polling_places.php";
 require_once "modules/stalls.php";

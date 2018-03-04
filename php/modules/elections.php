@@ -15,7 +15,7 @@ function translateElectionFromDB($row) {
     "short_name" => $row["short_name"],
     "has_division_boundaries" => (bool)$row["has_division_boundaries"],
     "db_table_name" => $row["db_table_name"],
-    "is_active" => (bool)$row["is_active"],
+    "is_active" => ((bool)$row["is_active"] === true && new DateTime($row["election_day"]) >= new DateTime()),
     "hidden" => (bool)$row["hidden"],
     "election_day" => $row["election_day"],
     "polling_places_loaded" => (bool)$row["polling_places_loaded"],
@@ -42,22 +42,23 @@ function fetchPublicElections() {
   global $file_db;
 
   $stmt = $file_db->query("SELECT * FROM elections WHERE hidden != 1 ORDER BY election_day DESC");
-  $stalls = [];
+  $elections = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $stalls[] = translateElectionFromDB($row);
+      $elections[] = translateElectionFromDB($row);
   }
-  return $stalls;
+  return $elections;
 }
 
 function fetchAllElections() {
   global $file_db;
 
   $stmt = $file_db->query("SELECT * FROM elections ORDER BY election_day DESC");
-  $stalls = [];
+  $elections = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $stalls[] = translateElectionFromDB($row);
+      $elections[] = translateElectionFromDB($row);
   }
-  return $stalls;
+
+  return $elections;
 }
 
 function fetchElection($id) {
@@ -148,7 +149,6 @@ function downloadElection($id) {
   $pollingPlaces = fetchAllPollingPlaces($id);
 
   // Output array into CSV file
-  date_default_timezone_set("Australia/Perth");
   $filename = getElectionTableBaseName($election) . "_" . date("YmdHIs").".csv";
   header('Content-Type: text/csv');
   header('Content-Disposition: attachment; filename="'.$filename.'"');

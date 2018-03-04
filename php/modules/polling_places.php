@@ -442,7 +442,6 @@ EOT
 }
 
 function createElectionTableName($election) {
-  date_default_timezone_set("Australia/Perth");
   return getElectionTableBaseName($election) . "_v" . date("YmdHis");
 }
 
