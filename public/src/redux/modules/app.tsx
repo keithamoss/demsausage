@@ -128,7 +128,7 @@ export function getEnvironment(): eAppEnv {
 }
 
 export function getAPIBaseURL(): string {
-    return getEnvironment() === eAppEnv.DEV ? "http://localhost:8000" : "http://api.democracysausage.org"
+    return getEnvironment() === eAppEnv.DEV ? "http://localhost:8000" : "https://api.democracysausage.org"
 }
 
 export function fetchInitialAppState() {
