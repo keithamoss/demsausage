@@ -24,13 +24,16 @@ const FlexboxContainer = styled.div`
     flex-direction: column;
     position: relative;
     width: 80%;
-    left: 10%;
+    margin: 0 auto;
 `
 
-const SearchBarContainer = styled.div``
+const FlexboxItem = styled.div``
 
 const LayersContainer = styled.div`
-    margin-left: auto;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
     margin-top: 8px;
 
     & button {
@@ -130,7 +133,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                 /> */}
 
                 <FlexboxContainer>
-                    <SearchBarContainer>
+                    <FlexboxItem>
                         <SearchBar
                             hintText={"Find polling places"}
                             // tslint:disable-next-line:no-empty
@@ -143,17 +146,19 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                                 maxWidth: 800,
                             }}
                         />
-                    </SearchBarContainer>
+                    </FlexboxItem>
 
-                    <LayersContainer>
-                        <FlatButton
-                            icon={<MapsLayers color={white} />}
-                            label={getElectionVeryShortName(currentElection)}
-                            backgroundColor={deepPurple500}
-                            hoverColor={deepPurple300}
-                            onClick={onClickElectionChooser}
-                        />
-                    </LayersContainer>
+                    <FlexboxItem>
+                        <LayersContainer>
+                            <FlatButton
+                                icon={<MapsLayers color={white} />}
+                                label={getElectionVeryShortName(currentElection)}
+                                backgroundColor={deepPurple500}
+                                hoverColor={deepPurple300}
+                                onClick={onClickElectionChooser}
+                            />
+                        </LayersContainer>
+                    </FlexboxItem>
                 </FlexboxContainer>
 
                 <FullscreenDialog
