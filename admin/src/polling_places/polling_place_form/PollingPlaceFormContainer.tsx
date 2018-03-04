@@ -27,9 +27,7 @@ export interface IStoreProps {
 
 export interface IStateProps {}
 
-interface IOwnProps {
-    
-}
+interface IOwnProps {}
 
 const toFormValues = (pollingPlace: IPollingPlace) => {
     const hasOther: any = pollingPlace.has_other
@@ -88,7 +86,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
 
     canStallPropsBeMerged() {
         const { pollingPlace, stall } = this.props
-        return (stall !== undefined && pollingPlaceHasReportsOfNoms(pollingPlace) === false)
+        return stall !== undefined && pollingPlaceHasReportsOfNoms(pollingPlace) === false
     }
 
     getInitialValues(pollingPlace: IPollingPlace, stall?: IStall) {
@@ -98,14 +96,14 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
 
         // If there's no reports for this polling place yet then we can
         // safely merge in the stall's props
-        if(stall !== undefined && this.canStallPropsBeMerged()) {
+        if (stall !== undefined && this.canStallPropsBeMerged()) {
             initialValues.has_bbq = stall.has_bbq
             initialValues.has_caek = stall.has_caek
             initialValues.has_coffee = stall.has_coffee
             initialValues.has_halal = stall.has_halal
             initialValues.has_vego = stall.has_vego
             initialValues.has_bacon_and_eggs = stall.has_bacon_and_eggs
-            
+
             initialValues.stall_name = stall.stall_name
             initialValues.stall_description = stall.stall_description
             initialValues.stall_website = stall.stall_website
@@ -116,7 +114,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
     }
 
     componentWillReceiveProps(nextProps: IProps & IStoreProps & IDispatchProps) {
-        if(this.props.pollingPlace.id !== nextProps.pollingPlace.id || this.props.election.id !== nextProps.election.id) {
+        if (this.props.pollingPlace.id !== nextProps.pollingPlace.id || this.props.election.id !== nextProps.election.id) {
             this.initialValues = this.getInitialValues(nextProps.pollingPlace, nextProps.stall)
         }
     }
@@ -151,8 +149,6 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { polling_places } = state
 
     return {
-        // election: elections.elections[ownProps.params.electionIdentifier],
-        // pollingPlaceId: ownProps.params.pollingPlaceId || null,
         isDirty: isDirty("pollingPlace")(state),
         pollingPlaceTypes: polling_places.types,
     }

@@ -3,7 +3,7 @@ export { IEALGISApiClient, IHttpResponse, ICartoAPIResponse } from "../../shared
 export { IModule as IAppModule, eAppEnv } from "./app"
 export { IModule as IUserModule, ISelf, IUser } from "./user"
 export { IModule as ISnackbarsModule } from "./snackbars"
-export { IModule as IElectionsModule, IElections, IElection } from "./elections"
+export { IModule as IElectionsModule, IElection } from "./elections"
 export {
     IModule as IPollingPlacesModule,
     IMapPollingPlace,

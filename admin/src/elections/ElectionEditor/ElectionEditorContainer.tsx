@@ -91,7 +91,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections } = state
 
     return {
-        election: elections.elections[ownProps.params.electionIdentifier],
+        election: elections.elections.find((election: IElection) => election.id === parseInt(ownProps.params.electionIdentifier, 10))!,
         isDirty: isDirty("election")(state),
     }
 }

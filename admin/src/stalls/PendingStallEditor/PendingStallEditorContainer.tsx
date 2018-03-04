@@ -57,17 +57,10 @@ export class PendingStallEditorContainer extends React.Component<IProps & IStore
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { stalls, elections } = state
 
-    // Sorry.
-    const filteredStall: Array<IStall> = stalls.pending.filter((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))
-    let election: any = null
-    if (filteredStall.length === 1) {
-        const filteredElection: Array<string> = Object.keys(elections.elections).filter(
-            (key: string) => elections.elections[key].id === filteredStall[0].elections_id
-        )
-        election = elections.elections[filteredElection[0]]
-    }
+    const stall: IStall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
+    const election: IElection = elections.elections.find((election: IElection) => election.id === stall.elections_id)!
 
-    return { stall: filteredStall[0], election: election }
+    return { stall: stall, election: election }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {

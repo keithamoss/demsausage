@@ -29,7 +29,7 @@ import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 import LinearProgress from "material-ui/LinearProgress"
 
 import { setCurrentElection, IElection } from "./redux/modules/elections"
-import { IStore, IAppModule, ISnackbarsModule, IUser, IElections } from "./redux/modules/interfaces"
+import { IStore, IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 const muiTheme = getMuiTheme({
@@ -59,7 +59,7 @@ export interface IStoreProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
-    elections: IElections
+    elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
 }
@@ -71,7 +71,7 @@ export interface IDispatchProps {
     onChangeElection: Function
 }
 
-export interface IStateProps { }
+export interface IStateProps {}
 
 export interface IRouteProps {
     content: any
@@ -142,7 +142,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         user: user.user,
         snackbars: snackbars,
         elections: elections.elections,
-        currentElection: elections.elections[elections.current_election_id],
+        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         pendingStallCount: getPendingStallsForCurrentElection(stalls, elections.current_election_id).length,
     }
 }
@@ -161,7 +161,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             dispatch(logoutUser())
         },
         onChangeElection: (event: any, index: number, electionId: string) => {
-            dispatch(setCurrentElection(electionId))
+            dispatch(setCurrentElection(parseInt(electionId, 10)))
         },
     }
 }

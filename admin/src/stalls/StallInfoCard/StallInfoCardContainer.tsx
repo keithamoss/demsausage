@@ -26,12 +26,7 @@ export class StallInfoCardContainer extends React.PureComponent<IProps & IDispat
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    // const { elections } = state
-
-    return {
-        // election: elections.elections[ownProps.params.electionIdentifier],
-        // pollingPlaceId: ownProps.params.pollingPlaceId || null,
-    }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {

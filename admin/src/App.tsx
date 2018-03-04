@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { Link } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import { IAppModule, ISnackbarsModule, IElections, IElection, IUser } from "./redux/modules/interfaces"
+import { IAppModule, ISnackbarsModule, IElection, IUser } from "./redux/modules/interfaces"
 import "./App.css"
 
 import SelectField from "material-ui/SelectField"
@@ -56,7 +56,7 @@ export interface IProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
-    elections: IElections
+    elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
     handleSnackbarClose: any

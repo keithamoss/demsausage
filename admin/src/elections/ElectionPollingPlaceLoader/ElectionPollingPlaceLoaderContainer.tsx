@@ -81,8 +81,8 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     const { elections, stalls } = state
 
     return {
-        election: elections.elections[ownProps.params.electionIdentifier],
-        pendingStallCount: getPendingStallsForCurrentElection(stalls, parseInt(ownProps.params.electionIdentifier, 10)).length
+        election: elections.elections.find((election: IElection) => election.id === parseInt(ownProps.params.electionIdentifier, 10))!,
+        pendingStallCount: getPendingStallsForCurrentElection(stalls, parseInt(ownProps.params.electionIdentifier, 10)).length,
     }
 }
 
