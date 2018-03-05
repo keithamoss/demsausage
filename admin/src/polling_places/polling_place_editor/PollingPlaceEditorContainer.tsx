@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 
 import PollingPlaceEditor from "./PollingPlaceEditor"
 import EmptyState from "../../shared/empty_state/EmptyState"
@@ -19,6 +20,7 @@ export interface IStoreProps {}
 
 export interface IDispatchProps {
     fetchRequiredState: Function
+    onElectionChanged: Function
 }
 
 export interface IStateProps {
@@ -28,8 +30,8 @@ export interface IStateProps {
 
 interface IOwnProps {}
 
-export class PollingPlaceEditorContainer extends React.Component<IProps & IDispatchProps, IStateProps> {
-    constructor(props: IProps & IDispatchProps) {
+export class PollingPlaceEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+    constructor(props: IProps & IStoreProps & IDispatchProps) {
         super(props)
 
         this.state = { pollingPlacesChecked: false }
@@ -54,7 +56,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
     }
 
     render() {
-        const { election, stall, showAutoComplete, onPollingPlaceEdited } = this.props
+        const { election, stall, showAutoComplete, onPollingPlaceEdited, onElectionChanged } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
         if (election.db_table_name === "" || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
@@ -68,14 +70,13 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IDispa
                 stall={stall}
                 showAutoComplete={showAutoComplete}
                 onPollingPlaceEdited={onPollingPlaceEdited}
+                onElectionChanged={onElectionChanged}
             />
         )
     }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    // const { elections } = state
-
     return {}
 }
 
@@ -88,6 +89,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             }
             // @TOOD Gracefully handle no polling place being returned
             return null
+        },
+        onElectionChanged: (electionId: number) => {
+            browserHistory.push(`/election/${electionId}/polling_places/`)
         },
     }
 }

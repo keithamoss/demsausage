@@ -7,23 +7,17 @@ import "./App.css"
 
 import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
 
-import SelectField from "material-ui/SelectField"
-// import MenuItem from "material-ui/MenuItem"
-
-// import AutoComplete from "material-ui/AutoComplete"
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
 import { List, ListItem } from "material-ui/List"
 import Badge from "material-ui/Badge"
 import Divider from "material-ui/Divider"
-import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace } from "material-ui/svg-icons"
 
-// import AppBar from "material-ui/AppBar"
 import { ToolbarGroup } from "material-ui/Toolbar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
-import MenuItem from "material-ui/MenuItem"
 import FlatButton from "material-ui/FlatButton"
+import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace } from "material-ui/svg-icons"
 
 // const logo = require("./logo.svg")
 
@@ -78,13 +72,11 @@ export interface IProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
-    elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
     defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
-    onChangeElection: any
     content: any
     onClickDrawerLink: any
     locationPathName: string
@@ -97,13 +89,11 @@ class App extends React.Component<IProps, {}> {
             app,
             user,
             snackbars,
-            elections,
             currentElection,
             pendingStallCount,
             defaultBreakPoint,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
-            onChangeElection,
             content,
             onClickDrawerLink,
             locationPathName,
@@ -149,18 +139,10 @@ class App extends React.Component<IProps, {}> {
                             onClick={onClickDrawerLink}
                         />
 
-                        <ListItem disabled={true} style={{ paddingLeft: 5, paddingRight: 5 }}>
-                            <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
-                                {elections.map((election: IElection) => (
-                                    <MenuItem key={election.id} value={election.id} primaryText={election.name} />
-                                ))}
-                            </SelectField>
-                        </ListItem>
-
                         {isResponsiveAndOverBreakPoint === true && (
                             <div>
                                 <MenuListItem
-                                    primaryText="Review Pending Stalls"
+                                    primaryText="Pending Stalls"
                                     leftIcon={<ContentSend />}
                                     rightIcon={<Badge badgeContent={pendingStallCount} secondary={true} />}
                                     containerElement={<Link to={`/stalls`} />}

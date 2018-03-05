@@ -27,8 +27,7 @@ import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 // import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 
-import { setCurrentElection, IElection } from "./redux/modules/elections"
-import { IStore, IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
+import { IStore, IAppModule, ISnackbarsModule, IUser, IElection } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
 import { setDrawerOpen } from "material-ui-responsive-drawer"
@@ -60,7 +59,6 @@ export interface IStoreProps {
     app: IAppModule
     user: IUser
     snackbars: ISnackbarsModule
-    elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
     browser: any
@@ -71,7 +69,6 @@ export interface IDispatchProps {
     fetchInitialAppState: Function
     handleSnackbarClose: Function
     doLogout: Function
-    onChangeElection: Function
     onClickDrawerLink: Function
 }
 
@@ -102,13 +99,11 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             app,
             user,
             snackbars,
-            elections,
             currentElection,
             pendingStallCount,
             browser,
             responsiveDrawer,
             handleSnackbarClose,
-            onChangeElection,
             onClickDrawerLink,
             children,
             content,
@@ -131,13 +126,11 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     app={app}
                     user={user}
                     snackbars={snackbars}
-                    elections={elections}
                     currentElection={currentElection}
                     pendingStallCount={pendingStallCount}
                     defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
-                    onChangeElection={onChangeElection}
                     children={children}
                     content={content}
                     onClickDrawerLink={onClickDrawerLink}
@@ -155,7 +148,6 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         app: app,
         user: user.user,
         snackbars: snackbars,
-        elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         pendingStallCount: stalls.pending.length,
         browser: browser,
@@ -175,9 +167,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         doLogout: () => {
             dispatch(logoutUser())
-        },
-        onChangeElection: (event: any, index: number, electionId: string) => {
-            dispatch(setCurrentElection(parseInt(electionId, 10)))
         },
         onClickDrawerLink: () => {
             dispatch(setDrawerOpen(false))
