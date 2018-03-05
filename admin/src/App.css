@@ -4,53 +4,21 @@ html,
 body,
 #root,
 .page {
-    height: 100%; /* needed for proper layout */
+    height: 100%;
     font-family: "Roboto", sans-serif;
-}
-
-body {
-    overflow: hidden;
-    margin: 0;
-}
-
-.page {
-    display: flex;
-    flex-direction: column;
-}
-
-.page-header {
-    flex: 0 0 auto;
-    background-color: #dcdcdc;
+    margin: 0px;
+    padding: 0px;
 }
 
 .page-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    margin-top: 60px; /* Height of ResponsiveAppBar + 10px */
+    margin-bottom: 56px; /* Height of BottomNav */
+    padding: 15px;
 }
 
-.page-nav {
-    order: -1;
-    overflow: auto;
-}
-
-@media (min-width: 768px) {
-    .page-content {
-        flex-direction: row;
-        flex: 1;
-    }
-    .page-main-content {
-        flex: 1;
-        padding-top: 10px;
-        padding-left: 10px;
-        padding-right: 20px;
-        overflow-y: scroll;
-    }
-    .page-main-content > div {
-        height: 100%;
-    }
-    .page-nav {
-        /* Third param is the width of the column */
-        flex: 0 0 24em;
-    }
+.page-footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 10;
 }

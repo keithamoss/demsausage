@@ -32,6 +32,8 @@ import { setCurrentElection, IElection } from "./redux/modules/elections"
 import { IStore, IAppModule, ISnackbarsModule, IUser } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
+import { setDrawerOpen } from "material-ui-responsive-drawer"
+
 const muiTheme = getMuiTheme({
     palette: {
         primary1Color: deepPurple500, // AppBar and Tabs, Buttons, Active textfield et cetera
@@ -62,6 +64,8 @@ export interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
+    browser: any
+    responsiveDrawer: any
 }
 
 export interface IDispatchProps {
@@ -69,6 +73,7 @@ export interface IDispatchProps {
     handleSnackbarClose: Function
     doLogout: Function
     onChangeElection: Function
+    onClickDrawerLink: Function
 }
 
 export interface IStateProps {}
@@ -76,6 +81,11 @@ export interface IStateProps {}
 export interface IRouteProps {
     content: any
     location: any
+}
+
+const DEFAULT_BREAK_POINT = "small"
+function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, breakPoint: any = DEFAULT_BREAK_POINT) {
+    return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
@@ -96,9 +106,11 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             elections,
             currentElection,
             pendingStallCount,
+            browser,
+            responsiveDrawer,
             handleSnackbarClose,
-            doLogout,
             onChangeElection,
+            onClickDrawerLink,
             children,
             content,
         } = this.props
@@ -116,18 +128,21 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <App
-                    muiThemePalette={!muiTheme.palette}
+                    muiThemePalette={muiTheme.palette}
                     app={app}
                     user={user}
                     snackbars={snackbars}
                     elections={elections}
                     currentElection={currentElection}
                     pendingStallCount={pendingStallCount}
+                    defaultBreakPoint={DEFAULT_BREAK_POINT}
+                    isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
-                    doLogout={doLogout}
                     onChangeElection={onChangeElection}
                     children={children}
                     content={content}
+                    onClickDrawerLink={onClickDrawerLink}
+                    locationPathName={location.pathname}
                 />
             </MuiThemeProvider>
         )
@@ -135,7 +150,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-    const { app, user, snackbars, elections, stalls } = state
+    const { app, user, snackbars, elections, stalls, browser, responsiveDrawer } = state
 
     return {
         app: app,
@@ -144,6 +159,8 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         pendingStallCount: getPendingStallsForCurrentElection(stalls, elections.current_election_id).length,
+        browser: browser,
+        responsiveDrawer: responsiveDrawer,
     }
 }
 
@@ -162,6 +179,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         onChangeElection: (event: any, index: number, electionId: string) => {
             dispatch(setCurrentElection(parseInt(electionId, 10)))
+        },
+        onClickDrawerLink: () => {
+            dispatch(setDrawerOpen(false))
         },
     }
 }

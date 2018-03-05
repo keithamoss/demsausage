@@ -12,7 +12,6 @@ const LOADED = "ealgis/app/LOADED"
 const BEGIN_FETCH = "ealgis/app/BEGIN_FETCH"
 const FINISH_FETCH = "ealgis/app/FINISH_FETCH"
 const SET_LAST_PAGE = "ealgis/app/SET_LAST_PAGE"
-const TOGGLE_SIDEBAR = "ealgis/app/TOGGLE_SIDEBAR"
 const TOGGLE_MODAL = "ealgis/app/TOGGLE_MODAL"
 
 export enum eAppEnv {
@@ -24,7 +23,6 @@ export enum eAppEnv {
 const initialState: IModule = {
     loading: true,
     requestsInProgress: 0,
-    sidebarOpen: true,
     previousPath: "",
     modals: new Map(),
 }
@@ -44,8 +42,6 @@ export default function reducer(state: IModule = initialState, action: IAction) 
             return dotProp.set(state, "requestsInProgress", --requestsInProgress)
         case SET_LAST_PAGE:
             return dotProp.set(state, "previousPath", action.previousPath)
-        case TOGGLE_SIDEBAR:
-            return dotProp.toggle(state, "sidebarOpen")
         case TOGGLE_MODAL:
             const modals = dotProp.get(state, "modals")
             modals.set(action.modalId, !modals.get(action.modalId))
@@ -87,17 +83,6 @@ export function setLastPage(previousPath: string): IAction {
     }
 }
 
-export function toggleSidebarState(): IAction {
-    return {
-        type: TOGGLE_SIDEBAR,
-        meta: {
-            analytics: {
-                category: "App",
-            },
-        },
-    }
-}
-
 export function toggleModalState(modalId: string): IAction {
     return {
         type: TOGGLE_MODAL,
@@ -109,7 +94,6 @@ export function toggleModalState(modalId: string): IAction {
 export interface IModule {
     loading: boolean
     requestsInProgress: number
-    sidebarOpen: boolean
     previousPath: string
     modals: Map<string, boolean>
 }

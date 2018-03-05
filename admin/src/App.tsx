@@ -1,31 +1,29 @@
 import * as React from "react"
 import styled from "styled-components"
-import { Link } from "react-router"
+import { Link, browserHistory } from "react-router"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
 import { IAppModule, ISnackbarsModule, IElection, IUser } from "./redux/modules/interfaces"
 import "./App.css"
+
+import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
 
 import SelectField from "material-ui/SelectField"
 // import MenuItem from "material-ui/MenuItem"
 
 // import AutoComplete from "material-ui/AutoComplete"
+import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
+import Paper from "material-ui/Paper"
 import { List, ListItem } from "material-ui/List"
 import Badge from "material-ui/Badge"
-import ContentInbox from "material-ui/svg-icons/content/inbox"
-import ActionGrade from "material-ui/svg-icons/action/grade"
-import ContentSend from "material-ui/svg-icons/content/send"
-import ContentDrafts from "material-ui/svg-icons/content/drafts"
+import Divider from "material-ui/Divider"
+import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace } from "material-ui/svg-icons"
 
-import AppBar from "material-ui/AppBar"
+// import AppBar from "material-ui/AppBar"
 import { ToolbarGroup } from "material-ui/Toolbar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
-import IconMenu from "material-ui/IconMenu"
 import MenuItem from "material-ui/MenuItem"
-import IconButton from "material-ui/IconButton"
 import FlatButton from "material-ui/FlatButton"
-import ActionFace from "material-ui/svg-icons/action/face"
-import ActionExitToApp from "material-ui/svg-icons/action/exit-to-app"
 
 // const logo = require("./logo.svg")
 
@@ -40,16 +38,22 @@ const TitleLogo = styled.img`
     margin-right: 10px;
 `
 
-const HiddenIconButton = styled(IconButton)`
-    width: 0px !important;
-    height: 0px !important;
-    padding: 0px !important;
-`
-
 const HeaderBarButton = styled(FlatButton)`
     color: #ffffff !important;
     margin: 4px 0px !important;
 `
+
+class MenuListItem extends React.Component<any, any> {
+    render(): any {
+        const { locationPathName, muiThemePalette, ...rest } = this.props
+
+        if (locationPathName === rest.containerElement.props.to) {
+            rest.style! = { color: muiThemePalette.accent1Color }
+            rest.leftIcon! = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
+        }
+        return <ListItem {...rest} />
+    }
+}
 
 export interface IProps {
     muiThemePalette: any
@@ -59,10 +63,13 @@ export interface IProps {
     elections: Array<IElection>
     currentElection: IElection
     pendingStallCount: number
+    defaultBreakPoint: string
+    isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
     onChangeElection: any
-    doLogout: any
     content: any
+    onClickDrawerLink: any
+    locationPathName: string
 }
 
 class App extends React.Component<IProps, {}> {
@@ -75,11 +82,23 @@ class App extends React.Component<IProps, {}> {
             elections,
             currentElection,
             pendingStallCount,
+            defaultBreakPoint,
+            isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
-            doLogout,
             onChangeElection,
             content,
+            onClickDrawerLink,
+            locationPathName,
         } = this.props
+
+        let bottomNavSelectedIndex: number = -1
+        if (locationPathName === "/") {
+            bottomNavSelectedIndex = 0
+        } else if (locationPathName === "/search") {
+            bottomNavSelectedIndex = 1
+        } else if (locationPathName === "/add-stall") {
+            bottomNavSelectedIndex = 2
+        }
 
         const styles: React.CSSProperties = {
             linearProgressStyle: {
@@ -90,70 +109,122 @@ class App extends React.Component<IProps, {}> {
             },
         }
 
+        let appBarProps: any = {}
+        if (isResponsiveAndOverBreakPoint === true && user !== null) {
+            appBarProps.iconElementRight = (
+                <ToolbarGroup>
+                    <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} disabled={true} />
+                </ToolbarGroup>
+            )
+        }
+
         return (
             <div className="page">
-                <div className="page-header">
+                <ResponsiveDrawer breakPoint={defaultBreakPoint} zDepth={1}>
+                    <List>
+                        <MenuListItem
+                            primaryText="Home"
+                            leftIcon={<ContentDrafts />}
+                            containerElement={<Link to={"/"} />}
+                            locationPathName={locationPathName}
+                            muiThemePalette={muiThemePalette}
+                            onClick={onClickDrawerLink}
+                        />
+
+                        <ListItem disabled={true} style={{ paddingLeft: 5, paddingRight: 5 }}>
+                            <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
+                                {elections.map((election: IElection) => (
+                                    <MenuItem key={election.id} value={election.id} primaryText={election.name} />
+                                ))}
+                            </SelectField>
+                        </ListItem>
+
+                        {isResponsiveAndOverBreakPoint === true && (
+                            <div>
+                                <MenuListItem
+                                    primaryText="Review Pending Stalls"
+                                    leftIcon={<ContentSend />}
+                                    rightIcon={<Badge badgeContent={pendingStallCount} secondary={true} />}
+                                    containerElement={<Link to={`/stalls`} />}
+                                    locationPathName={locationPathName}
+                                    muiThemePalette={muiThemePalette}
+                                    onClick={onClickDrawerLink}
+                                />
+                                <MenuListItem
+                                    primaryText="Edit Polling Places"
+                                    leftIcon={<ActionGrade />}
+                                    containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
+                                    locationPathName={locationPathName}
+                                    muiThemePalette={muiThemePalette}
+                                    onClick={onClickDrawerLink}
+                                />
+                            </div>
+                        )}
+
+                        <MenuListItem
+                            primaryText="Edit Polling Place Types"
+                            leftIcon={<ContentDrafts />}
+                            containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
+                            locationPathName={locationPathName}
+                            muiThemePalette={muiThemePalette}
+                            onClick={onClickDrawerLink}
+                        />
+                        <MenuListItem
+                            primaryText="Election Management"
+                            leftIcon={<ContentInbox />}
+                            containerElement={<Link to={`/elections`} />}
+                            locationPathName={locationPathName}
+                            muiThemePalette={muiThemePalette}
+                            onClick={onClickDrawerLink}
+                        />
+
+                        {isResponsiveAndOverBreakPoint === false && user !== null && <Divider />}
+                        {isResponsiveAndOverBreakPoint === false &&
+                            user !== null && <ListItem primaryText={user.email} leftIcon={<ActionFace />} disabled={true} />}
+                    </List>
+                </ResponsiveDrawer>
+
+                <BodyContainer breakPoint={defaultBreakPoint}>
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
-                    <AppBar
+
+                    <ResponsiveAppBar
+                        breakPoint={defaultBreakPoint}
                         title={
                             <TitleContainer>
-                                <TitleLogo src="/sausage+cake_big.png" /> Democracy Sausage Admin Console
+                                <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage Admin Console
                             </TitleContainer>
                         }
-                        iconElementRight={
-                            <ToolbarGroup>
-                                <HeaderBarButton label="Home" containerElement={<Link to={"/"} />} />
-                                {user !== null && <HeaderBarButton label={user.email} icon={<ActionFace color={"white"} />} />}
-                                {user !== null && (
-                                    <IconMenu iconButtonElement={<HiddenIconButton />}>
-                                        <MenuItem primaryText="Logout" leftIcon={<ActionExitToApp />} onClick={doLogout} />
-                                    </IconMenu>
-                                )}
-                            </ToolbarGroup>
-                        }
+                        {...appBarProps}
+                        zDepth={1}
                     />
-                </div>
-                <div className="page-content" style={{ display: app.sidebarOpen ? "flex" : "block" }}>
-                    <LoginDialog open={user === null} />
-                    <main className="page-main-content">{content || this.props.children}</main>
-                    <nav className="page-nav">
-                        <List>
-                            <ListItem disabled={true} leftIcon={<ContentInbox />}>
-                                <SelectField floatingLabelText="Elections" value={currentElection.id} onChange={onChangeElection}>
-                                    {Object.keys(elections)
-                                        .map(k => elections[k])
-                                        .sort((a: IElection, b: IElection) => b.id - a.id)
-                                        .map((election: IElection) => (
-                                            <MenuItem key={election.id} value={election.id} primaryText={election.name} />
-                                        ))}
-                                </SelectField>
-                            </ListItem>
 
-                            <ListItem
-                                primaryText="Review Pending Stalls"
-                                leftIcon={<ContentSend />}
-                                rightIcon={<Badge badgeContent={pendingStallCount} secondary={true} />}
-                                containerElement={<Link to={`/stalls`} />}
-                            />
-                            <ListItem
-                                primaryText="Edit Polling Places"
-                                leftIcon={<ActionGrade />}
-                                containerElement={<Link to={`/election/${currentElection.id}/polling_places/`} />}
-                            />
-                            <ListItem
-                                primaryText="Edit Polling Place Types"
-                                leftIcon={<ContentDrafts />}
-                                containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
-                            />
-                            <ListItem
-                                primaryText="Election Management"
-                                leftIcon={<ContentInbox />}
-                                containerElement={<Link to={`/elections`} />}
-                            />
-                            {/* <ListItem primaryText="User Management" leftIcon={<ContentInbox />} /> */}
-                        </List>
-                    </nav>
-                </div>
+                    <LoginDialog open={user === null} />
+
+                    <div className="page-content">{content || this.props.children}</div>
+
+                    {isResponsiveAndOverBreakPoint === false && (
+                        <Paper zDepth={1} className="page-footer">
+                            <BottomNavigation selectedIndex={bottomNavSelectedIndex}>
+                                <BottomNavigationItem
+                                    label="Elections"
+                                    icon={<ContentInbox />}
+                                    onClick={() => browserHistory.push("/elections")}
+                                />
+                                <BottomNavigationItem
+                                    label="Pending Stalls"
+                                    icon={<ContentSend />}
+                                    onClick={() => browserHistory.push("/stalls")}
+                                />
+                                <BottomNavigationItem
+                                    label="Polling Places"
+                                    icon={<ActionGrade />}
+                                    onClick={() => browserHistory.push(`/election/${currentElection.id}/polling_places/`)}
+                                />
+                            </BottomNavigation>
+                        </Paper>
+                    )}
+                </BodyContainer>
+
                 <Snackbar
                     open={snackbars.open}
                     message={snackbars.active.message}

@@ -30,9 +30,7 @@ export class ElectionsManagerContainer extends React.PureComponent<IStoreProps &
 
         return (
             <ElectionsManager
-                elections={Object.keys(elections)
-                    .map(k => elections[k])
-                    .sort((a: IElection, b: IElection) => b.id - a.id)}
+                elections={elections}
                 onDownloadElection={onDownloadElection}
                 onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
             />

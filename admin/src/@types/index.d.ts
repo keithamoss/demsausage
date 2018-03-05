@@ -12,4 +12,6 @@ declare module "react-svg"
 declare module "react-google-maps"
 declare module "react-string-replace"
 declare module "react-tiny-virtual-list"
+declare module "material-ui-responsive-drawer"
+declare module "redux-responsive"
 // declare function require(string: string): string
