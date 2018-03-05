@@ -34,7 +34,7 @@ const LayersContainer = styled.div`
     margin-top: 8px;
 
     & button {
-        border-radius: 12px !important;
+        border-radius: 24px !important;
     }
 
     & span {
