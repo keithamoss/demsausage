@@ -100,7 +100,7 @@ class App extends React.Component<IProps, {}> {
         } = this.props
 
         let bottomNavSelectedIndex: number = -1
-        if (locationPathName === "/") {
+        if (locationPathName === "/elections") {
             bottomNavSelectedIndex = 0
         } else if (locationPathName === "/stalls") {
             bottomNavSelectedIndex = 1
