@@ -1,8 +1,7 @@
 import "whatwg-fetch"
 import * as qs from "qs"
 import cookie from "react-cookie"
-// import * as Raven from "raven-js"
-import { iterate as iterateSnackbar, sendMessage as sendSnackbarMessage } from "../../redux/modules/snackbars"
+import * as Raven from "raven-js"
 import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
 
 export class EALGISApiClient {
@@ -164,22 +163,9 @@ export class EALGISApiClient {
 
     // Only handles fatal errors from the API
     // FIXME Refactor to be able to handle errors that the calling action can't handle
-    private handleError(error: Array<any>, url: string, dispatch: any) {
-        // Raven.captureException(error)
-        // Raven.showReportDialog({})
-
-        dispatch(
-            sendSnackbarMessage({
-                // message: `Error from ${url}`,
-                message: error[0].message,
-                // key: "SomeUID",
-                action: "OK",
-                autoHideDuration: 10000,
-                onActionTouchTap: () => {
-                    dispatch(iterateSnackbar())
-                },
-            })
-        )
+    private handleError(error: any, url: string, dispatch: any) {
+        Raven.captureException(error)
+        Raven.showReportDialog()
     }
 }
 
