@@ -3,11 +3,13 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 
 import PollingPlaceEditor from "./PollingPlaceEditor"
-import EmptyState from "../../shared/empty_state/EmptyState"
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
 import { IStore, IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
 
-import CommunicationLocationOff from "material-ui/svg-icons/communication/location-off"
+import { ListItem } from "material-ui/List"
+import Avatar from "material-ui/Avatar"
+import { CommunicationLocationOff } from "material-ui/svg-icons"
+import { blue500 } from "material-ui/styles/colors"
 
 export interface IProps {
     election: IElection
@@ -61,7 +63,15 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
         if (election.db_table_name === "" || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
-            return <EmptyState message={<div>No polling place found.</div>} icon={<CommunicationLocationOff />} />
+            return (
+                <ListItem
+                    leftAvatar={<Avatar icon={<CommunicationLocationOff />} backgroundColor={blue500} />}
+                    primaryText={"Notice"}
+                    secondaryText={"No polling place found"}
+                    secondaryTextLines={2}
+                    disabled={true}
+                />
+            )
         }
 
         return (
