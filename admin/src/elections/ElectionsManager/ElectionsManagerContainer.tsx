@@ -2,8 +2,8 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import ElectionsManager from "./ElectionsManager"
-import { IStore } from "../../redux/modules/interfaces"
-import { IElection } from "../../redux/modules/elections"
+import { IStore, IElection } from "../../redux/modules/interfaces"
+import { setPrimaryElection } from "../../redux/modules/elections"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
 
@@ -12,6 +12,7 @@ export interface IStoreProps {
 }
 
 export interface IDispatchProps {
+    onMakeElectionPrimary: Function
     onDownloadElection: Function
     onRegenerateElectionGeoJSON: Function
 }
@@ -26,11 +27,12 @@ interface IOwnProps {
 
 export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { elections, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
         return (
             <ElectionsManager
                 elections={elections}
+                onMakeElectionPrimary={onMakeElectionPrimary}
                 onDownloadElection={onDownloadElection}
                 onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
             />
@@ -48,6 +50,9 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
+        onMakeElectionPrimary(electionId: number) {
+            dispatch(setPrimaryElection(electionId))
+        },
         onDownloadElection(election: IElection) {
             window.location.href = `${getAPIBaseURL()}/api.php?download-election=1&electionId=${election.id}`
         },

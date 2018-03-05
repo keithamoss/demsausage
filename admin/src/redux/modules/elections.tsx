@@ -7,6 +7,7 @@ import { IEALGISApiClient } from "../../redux/modules/interfaces"
 const LOAD_ELECTIONS = "ealgis/elections/LOAD_ELECTIONS"
 const LOAD_ELECTION = "ealgis/elections/LOAD_ELECTION"
 const SET_CURRENT_ELECTION = "ealgis/elections/SET_CURRENT_ELECTION"
+const SET_PRIMARY_ELECTION = "ealgis/elections/SET_PRIMARY_ELECTION"
 
 const initialState: Partial<IModule> = {
     elections: [],
@@ -27,6 +28,11 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
             return dotProp.set(state, `elections.${action.election.id}`, election)
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)
+        case SET_PRIMARY_ELECTION:
+            state.elections!.map((election: IElection, index: number) => {
+                state = dotProp.set(state, `elections.${index}.is_primary`, election.id === action.electionId ? true : false)
+            })
+            return state
         default:
             return state
     }
@@ -54,6 +60,13 @@ export function setCurrentElection(electionId: number) {
     }
 }
 
+export function togglePrimaryElection(electionId: number) {
+    return {
+        type: SET_PRIMARY_ELECTION,
+        electionId,
+    }
+}
+
 // Models
 export interface IModule {
     elections: Array<IElection>
@@ -64,7 +77,7 @@ export interface IAction {
     type: string
     elections: Array<IElection>
     election: Partial<IElection>
-    electionId: string
+    electionId: number
     meta?: {
         // analytics: IAnalyticsMeta
     }
@@ -83,6 +96,7 @@ export interface IElection {
     hidden: boolean
     election_day: string // Datetime
     polling_places_loaded: boolean
+    is_primary: boolean
 }
 
 // Side effects, only as applicable
@@ -93,11 +107,27 @@ export function fetchElections() {
         if (response.status === 200) {
             dispatch(loadElections(json))
 
-            // If our route doesn't dictate that we're looking at an election, then just grab the
-            // first election that's active
+            // If our route doesn't dictate that we're looking at an election, then just
+            // grab the first election that's active
             if (getState().elections.current_election_id === undefined) {
-                const activeElection = json.find((election: IElection) => election.is_active)
-                dispatch(setCurrentElection(activeElection.id))
+                let activeElection: IElection | undefined = undefined
+
+                // If there's a primary election, that's our first choice
+                const primaryElection: IElection = json.find((election: IElection) => election.is_primary)
+                if (primaryElection !== undefined) {
+                    activeElection = primaryElection
+                } else {
+                    // Failing that, just the first active election
+                    const firstActiveElection = json.find((election: IElection) => election.is_active)
+                    if (firstActiveElection !== undefined) {
+                        activeElection = firstActiveElection
+                    } else {
+                        // If there are no active elections at all just grab the most recent one
+                        activeElection = json[0]
+                    }
+                }
+
+                dispatch(setCurrentElection(activeElection!.id))
             }
         }
     }
@@ -135,6 +165,22 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
             dispatch(loadElection(electionNew))
             dispatch(sendSnackbarNotification("Election updated! 🌭🎉"))
             return json
+        }
+    }
+}
+
+export function setPrimaryElection(electionId: number) {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const params = {
+            "set-primary-election": 1,
+            electionId: electionId,
+        }
+
+        const { response } = await ealapi.dsAPIGet(params, dispatch)
+
+        if (response.status === 200) {
+            dispatch(togglePrimaryElection(electionId))
+            dispatch(sendSnackbarNotification("Primary election changed! 🌟🎉"))
         }
     }
 }

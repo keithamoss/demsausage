@@ -83,6 +83,7 @@ export interface IElection {
     hidden: boolean
     election_day: string // Datetime
     polling_places_loaded: boolean
+    is_primary: boolean
 }
 
 // Side effects, only as applicable

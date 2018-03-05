@@ -9,8 +9,16 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table"
 import { ListItem } from "material-ui/List"
 import RaisedButton from "material-ui/RaisedButton"
 import IconButton from "material-ui/IconButton"
-import { FileFileUpload, FileCloudDownload, ActionCheckCircle, ImageRemoveRedEye, NavigationRefresh } from "material-ui/svg-icons"
-import { green500, red600 } from "material-ui/styles/colors"
+import {
+    FileFileUpload,
+    FileCloudDownload,
+    ImageRemoveRedEye,
+    NavigationRefresh,
+    ToggleStar,
+    ToggleStarBorder,
+    ActionPowerSettingsNew,
+} from "material-ui/svg-icons"
+import { green500, red600, yellow600 } from "material-ui/styles/colors"
 
 // Fixes issues with tooltips and tables
 // https://github.com/mui-org/material-ui/issues/5912
@@ -24,6 +32,7 @@ const ElectionTableRowColumn = styled(TableRowColumn)`
 
 export interface IProps {
     elections: Array<IElection>
+    onMakeElectionPrimary: any
     onDownloadElection: any
     onRegenerateElectionGeoJSON: any
 }
@@ -31,6 +40,7 @@ export interface IProps {
 class ElectionsManager extends React.PureComponent<IProps, {}> {
     onClickElection: Function
     onClickFileUpload: Function
+    onMakeElectionPrimary: Function
 
     constructor(props: any) {
         super(props)
@@ -40,6 +50,9 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
         }
         this.onClickFileUpload = (election: any) => {
             browserHistory.push(`/election/${election.id}/load_polling_places/`)
+        }
+        this.onMakeElectionPrimary = (election: any) => {
+            this.props.onMakeElectionPrimary(election.id)
         }
     }
 
@@ -67,9 +80,25 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                     />
                                 </ElectionTableRowColumn>
                                 <TableRowColumnWithIconButtons>
+                                    {election.is_primary === true && (
+                                        <IconButton
+                                            tooltip={"This election is the primary election"}
+                                            onClick={this.onMakeElectionPrimary.bind(this, election)}
+                                        >
+                                            <ToggleStar color={yellow600} />
+                                        </IconButton>
+                                    )}
+                                    {election.is_primary === false && (
+                                        <IconButton
+                                            tooltip={"Make this election the primary election"}
+                                            onClick={this.onMakeElectionPrimary.bind(this, election)}
+                                        >
+                                            <ToggleStarBorder hoverColor={yellow600} />
+                                        </IconButton>
+                                    )}
                                     {election.is_active ? (
                                         <IconButton tooltip={"This election is live!"}>
-                                            <ActionCheckCircle color={green500} />
+                                            <ActionPowerSettingsNew color={green500} />
                                         </IconButton>
                                     ) : null}
                                     {election.hidden ? (

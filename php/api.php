@@ -169,6 +169,21 @@ if(stristr($_SERVER["QUERY_STRING"], "update-election=1") !== false) {
   }
 }
 
+// Set primary election
+if(stristr($_SERVER["QUERY_STRING"], "set-primary-election=1") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  $rowCount = setPrimaryElection($_GET["electionId"]);
+  if($rowCount !== 1) {
+    failForAPI("Failed to set primary election. (Error: $rowCount)");
+  } else {
+    echo json_encode(["rows" => $rowCount]);
+    closeDb();
+  }
+}
+
 // Load polling places to election
 if(stristr($_SERVER["QUERY_STRING"], "load-polling-places=1") !== false) {
   if(isAuthorisedUser("su") === false) {

@@ -191,7 +191,7 @@ class App extends React.Component<IProps, {}> {
                         breakPoint={defaultBreakPoint}
                         title={
                             <TitleContainer>
-                                <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage Admin Console
+                                <TitleLogo src="/icons/sausage+cake_big.png" /> Admin Console
                             </TitleContainer>
                         }
                         {...appBarProps}

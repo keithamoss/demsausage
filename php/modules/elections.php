@@ -3,7 +3,7 @@ require_once "db.php";
 require_once "modules/polling_places.php";
 
 $electionPKeyFieldName = "id";
-$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "short_name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded");
+$electionAllowedFields = array("lon", "lat", "default_zoom_level", "name", "short_name", "has_division_boundaries", "db_table_name", "is_active", "hidden", "election_day", "polling_places_loaded", "is_primary");
 
 function translateElectionFromDB($row) {
   // Assume that polls close at 8PM
@@ -23,13 +23,14 @@ function translateElectionFromDB($row) {
     "hidden" => (bool)$row["hidden"],
     "election_day" => $row["election_day"],
     "polling_places_loaded" => (bool)$row["polling_places_loaded"],
+    "is_primary" => (bool)$row["is_primary"],
   ];
 }
 
 function translateElectionToDB($row) {
   $new = [];
   foreach($row as $key => $val) {
-    if(in_array($key, ["has_division_boundaries", "is_active", "hidden", "polling_places_loaded"])) {
+    if(in_array($key, ["has_division_boundaries", "is_active", "hidden", "polling_places_loaded", "is_primary"])) {
       $new[$key] = ($val === "false") ? false : true;
     } elseif(in_array($key, ["lon", "lat"])) {
       $new[$key] = (float)$val;
@@ -120,6 +121,19 @@ function updateElection($id, array $params) {
   $election = translateElectionToDB($params);
   
   return updateTable($id, $election, "elections", $electionPKeyFieldName, $electionAllowedFields);
+}
+
+function setPrimaryElection($id) {
+  global $file_db, $electionPKeyFieldName;
+
+  $stmt = $file_db->prepare("UPDATE elections SET is_primary = 0");
+  $stmt->execute();
+
+  $stmt = $file_db->prepare("UPDATE elections SET is_primary = 1 WHERE $electionPKeyFieldName == :id");
+  $stmt->bindParam(":id", $id);
+  $stmt->execute();
+
+  return $stmt->rowCount();
 }
 
 function isElectionDBTableValid($dbTableName) {
