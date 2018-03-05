@@ -19,13 +19,19 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
         case LOAD_ELECTIONS:
             return dotProp.set(state, "elections", action.elections)
         case LOAD_ELECTION:
-            let election: Partial<IElection>
-            if (action.election.id! in state.elections!) {
-                election = Object.assign({}, state.elections![action.election.id!], action.election)
+            const electionIndex: number = state.elections!.findIndex((election: IElection) => election.id === action.election.id)!
+
+            // Adding a new election at the top
+            if (electionIndex === -1) {
+                return dotProp.set(state, "elections", [action.election, ...state.elections!])
             } else {
-                election = Object.assign({}, action.election)
+                // Updating an existing election
+                return dotProp.set(
+                    state,
+                    `elections.${electionIndex}`,
+                    Object.assign(dotProp.get(state, `elections.${electionIndex}`), action.election)
+                )
             }
-            return dotProp.set(state, `elections.${action.election.id}`, election)
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)
         case SET_PRIMARY_ELECTION:
