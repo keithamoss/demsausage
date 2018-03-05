@@ -103,7 +103,7 @@ export interface IElection {
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsAPIGet({ "fetch-all-elections": 1 }, dispatch)
+        const { response, json } = await ealapi.dsAPIGet({ "fetch-elections": 1 }, dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 
