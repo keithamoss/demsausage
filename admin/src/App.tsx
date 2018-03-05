@@ -158,6 +158,14 @@ class App extends React.Component<IProps, {}> {
                                     muiThemePalette={muiThemePalette}
                                     onClick={onClickDrawerLink}
                                 />
+                                <MenuListItem
+                                    primaryText="Election Management"
+                                    leftIcon={<ContentInbox />}
+                                    containerElement={<Link to={`/elections`} />}
+                                    locationPathName={locationPathName}
+                                    muiThemePalette={muiThemePalette}
+                                    onClick={onClickDrawerLink}
+                                />
                             </div>
                         )}
 
@@ -165,14 +173,6 @@ class App extends React.Component<IProps, {}> {
                             primaryText="Edit Polling Place Types"
                             leftIcon={<ContentDrafts />}
                             containerElement={<Link to={`/election/${currentElection.id}/polling_place_types`} />}
-                            locationPathName={locationPathName}
-                            muiThemePalette={muiThemePalette}
-                            onClick={onClickDrawerLink}
-                        />
-                        <MenuListItem
-                            primaryText="Election Management"
-                            leftIcon={<ContentInbox />}
-                            containerElement={<Link to={`/elections`} />}
                             locationPathName={locationPathName}
                             muiThemePalette={muiThemePalette}
                             onClick={onClickDrawerLink}
