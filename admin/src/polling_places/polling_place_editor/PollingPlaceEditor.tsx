@@ -35,32 +35,46 @@ export interface IProps {
     pollingPlace?: IPollingPlace
     stall?: IStall
     showAutoComplete: boolean
+    showElectionChooser: boolean
     onPollingPlaceEdited: Function
     onElectionChanged: Function
 }
 
 class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
     render() {
-        const { election, pollingPlace, stall, showAutoComplete, onPollingPlaceEdited, onElectionChanged } = this.props
+        const { election, pollingPlace, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } = this.props
 
         return (
             <div>
-                <FlexboxContainer>
-                    <FlexboxItem>
-                        <ElectionChooser onElectionChanged={onElectionChanged} />
-                    </FlexboxItem>
-                    {showAutoComplete && (
-                        <FlexboxPollingPlaceAutocompleteContainer>
-                            <PollingPlaceAutocompleteContainer
-                                key={election.id}
-                                election={election}
-                                onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-                                    browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
-                                }}
-                            />
-                        </FlexboxPollingPlaceAutocompleteContainer>
+                {showElectionChooser === true && (
+                    <FlexboxContainer>
+                        <FlexboxItem>
+                            <ElectionChooser onElectionChanged={onElectionChanged} />
+                        </FlexboxItem>
+                        {showAutoComplete && (
+                            <FlexboxPollingPlaceAutocompleteContainer>
+                                <PollingPlaceAutocompleteContainer
+                                    key={election.id}
+                                    election={election}
+                                    onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+                                        browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
+                                    }}
+                                />
+                            </FlexboxPollingPlaceAutocompleteContainer>
+                        )}
+                    </FlexboxContainer>
+                )}
+
+                {showElectionChooser === false &&
+                    showAutoComplete === true && (
+                        <PollingPlaceAutocompleteContainer
+                            key={election.id}
+                            election={election}
+                            onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+                                browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
+                            }}
+                        />
                     )}
-                </FlexboxContainer>
 
                 {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
 

@@ -17,10 +17,19 @@ const FlexboxContainer = styled.div`
     display: -ms-flex;
     display: -webkit-flex;
     display: flex;
+    flex-direction: row;
+    align-items: left;
+    justify-content: left;
+    /* Or do it all in one line with flex flow */
+    flex-flow: row wrap;
+    /* tweak where items line up on the row valid values are: 
+       flex-start, flex-end, space-between, space-around, stretch */
+    align-content: flex-end;
 `
 
 const FlexboxColumn = styled.div`
-    width: 50%;
+    width: 40%;
+    min-width: 340px;
     padding: 10px;
 `
 
@@ -38,15 +47,6 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
 
         return (
             <FlexboxContainer>
-                <FlexboxColumn>
-                    <PollingPlaceEditorContainer
-                        election={election}
-                        pollingPlaceId={stall.polling_place_id}
-                        stall={stall}
-                        showAutoComplete={false}
-                        onPollingPlaceEdited={onPollingPlaceEdited}
-                    />
-                </FlexboxColumn>
                 <FlexboxColumn>
                     <StallInfoCardContainer
                         stall={stall}
@@ -73,6 +73,16 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
+                </FlexboxColumn>
+                <FlexboxColumn>
+                    <PollingPlaceEditorContainer
+                        election={election}
+                        pollingPlaceId={stall.polling_place_id}
+                        stall={stall}
+                        showAutoComplete={false}
+                        showElectionChooser={false}
+                        onPollingPlaceEdited={onPollingPlaceEdited}
+                    />
                 </FlexboxColumn>
             </FlexboxContainer>
         )

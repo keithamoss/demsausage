@@ -14,6 +14,7 @@ export interface IProps {
     pollingPlaceId: number | null
     stall?: IStall
     showAutoComplete: boolean
+    showElectionChooser: boolean
     onPollingPlaceEdited: Function
 }
 export interface IStoreProps {}
@@ -56,7 +57,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
     }
 
     render() {
-        const { election, stall, showAutoComplete, onPollingPlaceEdited, onElectionChanged } = this.props
+        const { election, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
         if (election.db_table_name === "" || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
@@ -69,6 +70,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
                 pollingPlace={pollingPlace}
                 stall={stall}
                 showAutoComplete={showAutoComplete}
+                showElectionChooser={showElectionChooser}
                 onPollingPlaceEdited={onPollingPlaceEdited}
                 onElectionChanged={onElectionChanged}
             />
