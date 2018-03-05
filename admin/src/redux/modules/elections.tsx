@@ -93,8 +93,12 @@ export function fetchElections() {
         if (response.status === 200) {
             dispatch(loadElections(json))
 
-            const activeElection = json.find((election: IElection) => election.is_active)
-            dispatch(setCurrentElection(activeElection.id))
+            // If our route doesn't dictate that we're looking at an election, then just grab the
+            // first election that's active
+            if (getState().elections.current_election_id === undefined) {
+                const activeElection = json.find((election: IElection) => election.is_active)
+                dispatch(setCurrentElection(activeElection.id))
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ import App from "./App"
 import { connect } from "react-redux"
 import { fetchInitialAppState } from "./redux/modules/app"
 import { logoutUser } from "./redux/modules/user"
+import { setCurrentElection } from "./redux/modules/elections"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 
 // import CircularProgress from "material-ui/CircularProgress"
@@ -66,6 +67,7 @@ export interface IStoreProps {
 }
 
 export interface IDispatchProps {
+    setElectionFromRoute: Function
     fetchInitialAppState: Function
     handleSnackbarClose: Function
     doLogout: Function
@@ -77,6 +79,9 @@ export interface IStateProps {}
 export interface IRouteProps {
     content: any
     location: any
+    params?: {
+        electionIdentifier?: string
+    }
 }
 
 const DEFAULT_BREAK_POINT = "small"
@@ -89,8 +94,14 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
         super(props)
     }
 
-    componentDidMount() {
-        const { fetchInitialAppState } = this.props
+    componentWillMount() {
+        const { setElectionFromRoute, fetchInitialAppState } = this.props
+
+        // If our route dictates that we're looking at a particular election then
+        // this becomes our default election
+        if ("params" in this.props && "electionIdentifier" in this.props.params!) {
+            setElectionFromRoute(parseInt(this.props.params!.electionIdentifier!, 10))
+        }
         fetchInitialAppState()
     }
 
@@ -157,6 +168,9 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
+        setElectionFromRoute: (electionId: number) => {
+            dispatch(setCurrentElection(electionId))
+        },
         fetchInitialAppState: () => {
             dispatch(fetchInitialAppState())
         },
