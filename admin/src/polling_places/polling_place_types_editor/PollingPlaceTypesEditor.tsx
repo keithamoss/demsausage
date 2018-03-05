@@ -5,9 +5,10 @@ import { default as VirtualList } from "react-tiny-virtual-list"
 import { IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceTypesEditor.css"
 
+import EmptyState from "../../shared/empty_state/EmptyState"
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
 import RaisedButton from "material-ui/RaisedButton"
-import ActionOpenInNew from "material-ui/svg-icons/action/open-in-new"
+import { ActionOpenInNew, ActionCheckCircle } from "material-ui/svg-icons"
 import { blueGrey50 } from "material-ui/styles/colors"
 
 const GridWrapper = styled.div`
@@ -56,7 +57,24 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
             radio: { display: "inline-block", width: "33%" },
         }
 
-        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.polling_place_type === "")
+        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.polling_place_type === null)
+
+        if (pollingPlaces.length === 0) {
+            return null
+        }
+
+        if (pollingPlacesSansType.length === 0) {
+            return (
+                <EmptyState
+                    message={
+                        <div>
+                            Good work, all of the polling<br /> places have types!
+                        </div>
+                    }
+                    icon={<ActionCheckCircle />}
+                />
+            )
+        }
 
         return (
             <GridWrapper>
