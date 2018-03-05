@@ -80,7 +80,7 @@ const HiddenButton = styled.button`
 
 class PollingPlaceForm extends React.PureComponent<IProps, {}> {
     render() {
-        const { isDirty, stallWasMerged, pollingPlaceTypes, onSaveForm, handleSubmit, onSubmit } = this.props
+        const { stallWasMerged, pollingPlaceTypes, onSaveForm, handleSubmit, onSubmit } = this.props
 
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -207,7 +207,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                         />
                     </FormCardText>
                     <CardActions>
-                        <RaisedButton label={"Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
+                        <RaisedButton label={"Save"} primary={true} onClick={onSaveForm} />
                         <HiddenButton type="submit" />
                     </CardActions>
                 </Card>
