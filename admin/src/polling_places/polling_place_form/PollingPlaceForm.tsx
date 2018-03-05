@@ -5,10 +5,8 @@ import { Field, reduxForm } from "redux-form"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceForm.css"
 
-// import Paper from "material-ui/Paper"
 import { Card, CardTitle, CardText, CardActions } from "material-ui/Card"
 import { grey100 } from "material-ui/styles/colors"
-// import { GridList, GridTile } from "material-ui/GridList"
 import { TextField, Toggle, SelectField } from "redux-form-material-ui"
 import MenuItem from "material-ui/MenuItem"
 import Divider from "material-ui/Divider"
@@ -17,9 +15,6 @@ import { List, ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
 import { AlertWarning } from "material-ui/svg-icons"
 import { blue500 } from "material-ui/styles/colors"
-// import { Avatar } from "material-ui"
-// import { ActionHome, MapsPlace, ActionDescription, AvWeb, CommunicationEmail, ActionInfo, MapsLocalDining } from "material-ui/svg-icons"
-// import { ActionInfo, MapsLocalDining } from "material-ui/svg-icons"
 import { ContentBlock } from "material-ui/svg-icons"
 
 import SausageIcon from "../../icons/sausage"
@@ -29,7 +24,7 @@ import HalalIcon from "../../icons/halal"
 import CoffeeIcon from "../../icons/coffee"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
-import { yellow700 } from "material-ui/styles/colors"
+import { yellow700, grey500 } from "material-ui/styles/colors"
 
 export interface IProps {
     election: IElection
@@ -51,6 +46,20 @@ class CustomField extends React.Component<any, any> {
         return <Field autoComplete={"off"} {...this.props} />
     }
 }
+
+class CustomTextField extends React.Component<any, any> {
+    render(): any {
+        const { hintText, name, ...rest } = this.props
+
+        return (
+            <div>
+                <Field name={name} {...rest} />
+                <div style={{ color: grey500, fontSize: 12 }}>{hintText}</div>
+            </div>
+        )
+    }
+}
+
 class DeliciousnessToggle extends React.Component<any, any> {
     render(): any {
         return <CustomField component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...this.props} />
@@ -59,6 +68,10 @@ class DeliciousnessToggle extends React.Component<any, any> {
 
 const FormCardTitle = styled(CardTitle)`
     padding-bottom: 0px !important;
+`
+
+const FormCardText = styled(CardText)`
+    padding-top: 0px !important;
 `
 
 const HiddenButton = styled.button`
@@ -71,20 +84,21 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
 
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
-                {stallWasMerged && <ListItem
-                    leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
-                    primaryText={"Stall information has already been automatically populated for you"}
-                    secondaryText={
-                        "This polling place had no reports yet, so just double check everything " +
-                        "and hit 'Save' if it's all OK."
-                    }
-                    secondaryTextLines={2}
-                    disabled={true}
-                />}
-                
+                {stallWasMerged && (
+                    <ListItem
+                        leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
+                        primaryText={"Stall information has already been automatically populated for you"}
+                        secondaryText={
+                            "This polling place had no reports yet, so just double check everything " + "and hit 'Save' if it's all OK."
+                        }
+                        secondaryTextLines={2}
+                        disabled={true}
+                    />
+                )}
+
                 <Card>
                     <FormCardTitle title={"Deliciousness"} />
-                    <CardText>
+                    <FormCardText>
                         <List>
                             <ListItem
                                 primaryText="Is there a sausage sizzle?"
@@ -129,69 +143,46 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             />
                         </List>
 
-                        {/* <DeliciousnessGrid cellHeight={"auto"} cols={3} padding={18}>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_bbq" label={"BBQ"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_caek" label={"Cake"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_nothing" label={"Nothing"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_run_out" label={"Run Out"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_coffee" label={"Coffee"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_vego" label={"Vego"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_halal" label={"Halal"} />
-                            </DeliciousnessGridTile>
-                            <DeliciousnessGridTile>
-                                <DeliciousnessToggle name="has_bacon_and_eggs" label={"Bacon & Eggs"} />
-                            </DeliciousnessGridTile>
-                        </DeliciousnessGrid> */}
-
-                        <CustomField
+                        <CustomTextField
                             name="has_free_text"
                             component={TextField}
-                            floatingLabelText={"What other types of delicious are here?"}
+                            floatingLabelText={"Anything else to add?"}
+                            hintText={"What other types of delicious are here?"}
                             fullWidth={true}
                         />
-                    </CardText>
+                    </FormCardText>
                 </Card>
 
                 <Card>
                     <FormCardTitle title={"Stall Information"} />
-                    <CardText>
-                        <CustomField
+                    <FormCardText>
+                        <CustomTextField
                             name="stall_name"
                             component={TextField}
-                            floatingLabelText={"The name of the stall that is here"}
+                            floatingLabelText={"Stall name"}
+                            hintText={"The name of the stall that is here"}
                             fullWidth={true}
                         />
-                        <CustomField
+                        <CustomTextField
                             name="stall_description"
                             component={TextField}
-                            floatingLabelText={"A brief description of the stall"}
+                            floatingLabelText={"Stall description"}
+                            hintText={"A brief description of the stall"}
                             fullWidth={true}
                         />
-                        <CustomField
+                        <CustomTextField
                             name="stall_website"
                             component={TextField}
-                            floatingLabelText={"A link to the website of the people organising the stall"}
+                            floatingLabelText={"Stall website"}
+                            hintText={"A link to the website of the people organising the stall"}
                             fullWidth={true}
                         />
-                    </CardText>
+                    </FormCardText>
                 </Card>
 
                 <Card>
                     <FormCardTitle title={"Polling Place Information"} />
-                    <CardText>
+                    <FormCardText>
                         <CustomField
                             name="polling_place_type"
                             component={SelectField}
@@ -200,19 +191,21 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                         >
                             {pollingPlaceTypes.map((type: string) => <MenuItem key={type} value={type} primaryText={type} />)}
                         </CustomField>
-                        <CustomField
+                        <CustomTextField
                             name="extra_info"
                             component={TextField}
-                            floatingLabelText={"Is there any extra information to add?"}
+                            floatingLabelText={"Extra info"}
+                            hintText={"Is there any extra information to add?"}
                             fullWidth={true}
                         />
-                        <CustomField
+                        <CustomTextField
                             name="source"
                             component={TextField}
-                            floatingLabelText={"What is the source? (e.g. Twitter, Facebook, School Newsletter)"}
+                            floatingLabelText={"Source of this report"}
+                            hintText={"What is the source? (e.g. Twitter, Facebook, School Newsletter)"}
                             fullWidth={true}
                         />
-                    </CardText>
+                    </FormCardText>
                     <CardActions>
                         <RaisedButton label={"Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
                         <HiddenButton type="submit" />
