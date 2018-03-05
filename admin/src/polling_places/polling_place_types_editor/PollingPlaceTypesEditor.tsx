@@ -6,6 +6,8 @@ import { IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceTypesEditor.css"
 
 import EmptyState from "../../shared/empty_state/EmptyState"
+import ElectionChooser from "../../elections/ElectionChooser/ElectionChooserContainer"
+
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
 import RaisedButton from "material-ui/RaisedButton"
 import { ActionOpenInNew, ActionCheckCircle } from "material-ui/svg-icons"
@@ -30,6 +32,7 @@ export interface IProps {
     pollingPlaces: Array<IPollingPlace>
     pollingPlaceTypes: Array<string>
     onChangeType: any
+    onElectionChanged: any
 }
 
 // Work around TypeScript not allowing us to pass <a> props to react-router's <Link>
@@ -51,7 +54,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
     }
 
     render() {
-        const { pollingPlaces, pollingPlaceTypes } = this.props
+        const { pollingPlaces, pollingPlaceTypes, onElectionChanged } = this.props
 
         const styles = {
             radio: { display: "inline-block", width: "33%" },
@@ -78,6 +81,8 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
 
         return (
             <GridWrapper>
+                <ElectionChooser onElectionChanged={onElectionChanged} />
+                <br />
                 <VirtualList
                     width="100%"
                     height={900}

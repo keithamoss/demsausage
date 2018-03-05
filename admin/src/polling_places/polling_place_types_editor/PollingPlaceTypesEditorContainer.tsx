@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 import EmptyState from "../../shared/empty_state/EmptyState"
@@ -17,6 +18,7 @@ export interface IStoreProps {
 export interface IDispatchProps {
     fetchInitialState: Function
     updatePollingPlaceType: Function
+    onElectionChanged: Function
 }
 
 export interface IStateProps {}
@@ -35,8 +37,15 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
         fetchInitialState(election)
     }
 
+    componentWillReceiveProps(nextProps: IStoreProps & IDispatchProps) {
+        const { fetchInitialState, election } = this.props
+        if (election.id !== nextProps.election.id) {
+            fetchInitialState(nextProps.election)
+        }
+    }
+
     render() {
-        const { pollingPlaces, pollingPlaceTypes, election, updatePollingPlaceType } = this.props
+        const { pollingPlaces, pollingPlaceTypes, election, updatePollingPlaceType, onElectionChanged } = this.props
 
         if (election.db_table_name === "") {
             return (
@@ -58,6 +67,7 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
                 onChangeType={(value: string, pollingPlace: IPollingPlace) => {
                     updatePollingPlaceType(election, pollingPlace, value)
                 }}
+                onElectionChanged={onElectionChanged}
             />
         )
     }
@@ -82,6 +92,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         updatePollingPlaceType: (election: IElection, pollingPlace: IPollingPlace, newType: string) => {
             dispatch(updatePollingPlace(election, pollingPlace, { polling_place_type: newType }))
+        },
+        onElectionChanged: (electionId: number) => {
+            browserHistory.push(`/election/${electionId}/polling_place_types/`)
         },
     }
 }
