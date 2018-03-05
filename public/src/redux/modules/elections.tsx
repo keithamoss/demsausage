@@ -127,7 +127,6 @@ export function fetchElections() {
                     }
                 }
 
-                console.log(activeElection)
                 dispatch(setCurrentElection(activeElection!.id))
             }
         }
