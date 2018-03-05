@@ -7,17 +7,14 @@ import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
 import SearchBar from "material-ui-search-bar"
-// import DeviceLocationSearching from "material-ui/svg-icons/device/location-searching"
-// import { grey500 } from "material-ui/styles/colors"
 import FlatButton from "material-ui/FlatButton"
-// import { GridList, GridTile } from "material-ui/GridList"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 // import Snackbar from "material-ui/Snackbar"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo, MapsLayers } from "material-ui/svg-icons"
-import { blue500, deepPurple300, deepPurple500, white } from "material-ui/styles/colors"
+import { ActionInfo, MapsLayers, ActionPowerSettingsNew } from "material-ui/svg-icons"
+import { blue500, deepPurple300, deepPurple500, white, green500 } from "material-ui/styles/colors"
 
 const FlexboxContainer = styled.div`
     display: flex;
@@ -69,6 +66,7 @@ const ElectionsFlexboxItem = styled.div`
     height: 125px;
     margin: 6px;
     position: relative;
+    border: ${props => (props.className === "selected" ? "1px solid rgba(100, 181, 246, 1)" : "")};
     cursor: ${props => (props.className === "selected" ? "auto" : "pointer")};
 
     & img {
@@ -88,6 +86,12 @@ const ElectionTitle = styled.span`
     color: ${white};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+`
+
+const ActiveElectionIndicator = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
 `
 
 export interface IProps {
@@ -185,22 +189,14 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                                 <ElectionTitle className={election.id === currentElection.id ? "selected" : ""}>
                                     {election.short_name}
                                 </ElectionTitle>
+                                {election.is_active && (
+                                    <ActiveElectionIndicator>
+                                        <ActionPowerSettingsNew color={green500} />
+                                    </ActiveElectionIndicator>
+                                )}
                             </ElectionsFlexboxItem>
                         ))}
                     </ElectionsFlexboxContainer>
-                    {/* <GridList cellHeight={100} cols={4}>
-                        {elections.map((election: IElection) => (
-                            <GridTile key={election.id} style={{ width: 100 }} title={election.name}>
-                                <img
-                                    src={`https://api.mapbox.com/styles/v1/mapbox/light-v9/static/${election.lon},${
-                                        election.lat
-                                    },${election.default_zoom_level - 0.1},0,0/600x600?access_token=${
-                                        process.env.REACT_APP_MAPBOX_API_KEY
-                                    }`}
-                                />
-                            </GridTile>
-                        ))}
-                    </GridList> */}
                 </FullscreenDialog>
 
                 {queriedPollingPlaces.length > 0 && (
