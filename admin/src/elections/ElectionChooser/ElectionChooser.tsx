@@ -16,7 +16,13 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
         const { elections, currentElectionId, onChangeElection } = this.props
 
         return (
-            <SelectField floatingLabelText="Election" style={{ width: "auto" }} value={currentElectionId} onChange={onChangeElection}>
+            <SelectField
+                floatingLabelText="Election"
+                style={{ width: "auto" }}
+                menuStyle={{ width: "275px" }}
+                value={currentElectionId}
+                onChange={onChangeElection}
+            >
                 {elections.map((election: IElection) => <MenuItem key={election.id} value={election.id} primaryText={election.name} />)}
             </SelectField>
         )
