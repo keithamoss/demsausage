@@ -46,7 +46,7 @@ function translateElectionToDB($row) {
 function fetchPublicElections() {
   global $file_db;
 
-  $stmt = $file_db->query("SELECT * FROM elections WHERE hidden != 1 ORDER BY election_day DESC");
+  $stmt = $file_db->query("SELECT * FROM elections WHERE hidden != 1 OR hidden IS NULL ORDER BY election_day DESC");
   $elections = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
       $elections[] = translateElectionFromDB($row);
