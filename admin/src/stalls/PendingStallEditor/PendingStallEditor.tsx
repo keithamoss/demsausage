@@ -59,6 +59,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                             </CardActions>
                         }
                     />
+                    <ListItem primaryText={election.name} />
                     {election.polling_places_loaded === false &&
                         stall.polling_place_id === 0 && (
                             <ListItem

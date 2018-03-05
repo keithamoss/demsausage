@@ -2,18 +2,18 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import PendingStallsManager from "./PendingStallsManager"
-import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
-import { IStore, IStall } from "../../redux/modules/interfaces"
+import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IStoreProps {
     stalls: Array<IStall>
+    elections: Array<IElection>
 }
 
-export interface IDispatchProps { }
+export interface IDispatchProps {}
 
-export interface IStateProps { }
+export interface IStateProps {}
 
-interface IRouteProps { }
+interface IRouteProps {}
 
 interface IOwnProps {
     params: IRouteProps
@@ -21,17 +21,18 @@ interface IOwnProps {
 
 export class PendingStallsManagerContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { stalls } = this.props
+        const { stalls, elections } = this.props
 
-        return <PendingStallsManager stalls={stalls} />
+        return <PendingStallsManager stalls={stalls} elections={elections} />
     }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { stalls, elections } = state
+    const { elections, stalls } = state
 
     return {
-        stalls: getPendingStallsForCurrentElection(stalls, elections.current_election_id),
+        stalls: stalls.pending,
+        elections: elections.elections,
     }
 }
 
