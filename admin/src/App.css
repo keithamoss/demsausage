@@ -12,7 +12,7 @@ body,
 
 .page-content {
     margin-top: 60px; /* Height of ResponsiveAppBar + 10px */
-    margin-bottom: 56px; /* Height of BottomNav */
+    padding-bottom: 56px; /* Height of BottomNav */
     padding-left: 15px;
     padding-right: 15px;
 }
