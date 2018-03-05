@@ -16,7 +16,7 @@ if(stristr($_SERVER["QUERY_STRING"], "fetch-elections=1") !== false) {
 
 // Regenerate Polling Place GeoJSON
 if(stristr($_SERVER["QUERY_STRING"], "regenerate-geojson=1") !== false) {
-  createPollingPlaceGeoJSON($_GET["electionId"]);
+  echo json_encode(createPollingPlaceGeoJSON($_GET["electionId"]));
   closeDb();
 }
 

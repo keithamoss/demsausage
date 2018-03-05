@@ -830,7 +830,7 @@ function createPollingPlaceGeoJSON($electionId) {
   file_put_contents($tmp, json_encode($geojsonFeatureCollection));
   rename($tmp, $existing);
 
-  echo json_encode(["status" => "OK"]);
+  return ["status" => "OK"];
 }
 
 function regeneratePollingPlaceGeoJSON($electionId) {
