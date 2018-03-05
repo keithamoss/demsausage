@@ -43,6 +43,24 @@ const HeaderBarButton = styled(FlatButton)`
     margin: 4px 0px !important;
 `
 
+const BottomNavBadgeWithIcon = styled(Badge)`
+    padding: 0px !important;
+    width: auto !important;
+
+    & svg {
+        width: 100% !important;
+        fill: ${(props: any) => props.color} !important;
+    }
+
+    & span {
+        top: -4px !important;
+        right: 28% !important;
+        font-size: 10px !important;
+        width: 18px !important;
+        height: 18px !important;
+    }
+`
+
 class MenuListItem extends React.Component<any, any> {
     render(): any {
         const { locationPathName, muiThemePalette, ...rest } = this.props
@@ -94,9 +112,9 @@ class App extends React.Component<IProps, {}> {
         let bottomNavSelectedIndex: number = -1
         if (locationPathName === "/") {
             bottomNavSelectedIndex = 0
-        } else if (locationPathName === "/search") {
+        } else if (locationPathName === "/stalls") {
             bottomNavSelectedIndex = 1
-        } else if (locationPathName === "/add-stall") {
+        } else if (locationPathName === `/election/${currentElection.id}/polling_places/`) {
             bottomNavSelectedIndex = 2
         }
 
@@ -212,7 +230,12 @@ class App extends React.Component<IProps, {}> {
                                 />
                                 <BottomNavigationItem
                                     label="Pending Stalls"
-                                    icon={<ContentSend />}
+                                    icon={
+                                        <BottomNavBadgeWithIcon badgeContent={pendingStallCount} secondary={true}>
+                                            <ContentSend />
+                                        </BottomNavBadgeWithIcon>
+                                        // tslint:disable-next-line:jsx-curly-spacing
+                                    }
                                     onClick={() => browserHistory.push("/stalls")}
                                 />
                                 <BottomNavigationItem
