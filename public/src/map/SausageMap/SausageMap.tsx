@@ -163,7 +163,11 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         return (
             <div>
                 {activeElections.length > 1 && (
-                    <ElectionTabs onChange={(electionId: number) => onChooseElectionTab(electionId)} value={currentElection.id}>
+                    <ElectionTabs
+                        onChange={(electionId: number) => onChooseElectionTab(electionId)}
+                        value={currentElection.id}
+                        inkBarStyle={{ backgroundColor: "#78C8AC" }}
+                    >
                         {activeElections.map((election: IElection) => (
                             <ElectionTabWrapper key={election.id} label={getElectionKindaShortName(election)} value={election.id} />
                         ))}
