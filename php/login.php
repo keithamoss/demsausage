@@ -27,6 +27,11 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     header('Location: https://admin.democracysausage.org');
   }
 } else {
-  $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+  if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
+    $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+  } else {
+    $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+  }
+
   header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 }
