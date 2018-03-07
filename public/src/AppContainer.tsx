@@ -37,7 +37,7 @@ const muiTheme = getMuiTheme({
         primary1Color: deepPurple500, // AppBar and Tabs, Buttons, Active textfield et cetera
         primary2Color: deepPurple400, // Used for the selected date in DatePicker
         primary3Color: deepPurple100, // Switch background
-        accent1Color: deepPurple500, // Active tab highlight colour
+        accent1Color: "#78C8AC", // Active tab highlight colour
         accent2Color: deepPurple400, // Toolbars and switch buttons
         accent3Color: deepPurple300, // Our app LinearProgress bar and Tabs
         textColor: fullBlack,

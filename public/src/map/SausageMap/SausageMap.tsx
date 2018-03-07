@@ -6,6 +6,7 @@ import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
+import { Tabs, Tab } from "material-ui/Tabs"
 import SearchBar from "material-ui-search-bar"
 import FlatButton from "material-ui/FlatButton"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
@@ -15,6 +16,29 @@ import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
 import { ActionInfo, MapsLayers, ActionPowerSettingsNew } from "material-ui/svg-icons"
 import { blue500, deepPurple300, deepPurple500, white, green500 } from "material-ui/styles/colors"
+
+const ElectionTabs = styled(Tabs)`
+    position: relative;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    z-index: 100;
+`
+
+const ElectionTab = styled(Tab)`
+    white-space: normal;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+` as any
+
+// 0_o Wtf Material UI?
+// https://github.com/mui-org/material-ui/issues/3622
+class ElectionTabWrapper extends React.Component<any, any> {
+    static muiName = "Tab"
+
+    render() {
+        return <ElectionTab {...this.props} />
+    }
+}
 
 const FlexboxContainer = styled.div`
     display: flex;
@@ -34,7 +58,8 @@ const LayersContainer = styled.div`
     margin-top: 8px;
 
     & button {
-        border-radius: 24px !important;
+        border-radius: 50% !important;
+        min-width: 36px !important; /* SVG width + 12px padding */
     }
 
     & span {
@@ -103,12 +128,20 @@ export interface IProps {
     isElectionChooserOpen: boolean
     onCloseElectionChooserDialog: any
     onChooseElection: any
+    onChooseElectionTab: any
     onQueryMap: Function
     onCloseQueryMapDialog: any
     onElectionAnnounceClose: any
 }
 
-const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s/, "").replace("20", "")
+// const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s/, "").replace("20", "")
+// Yeah, sorry. Replace with a field in the database if we ditch short_name in the longer term
+const getElectionKindaShortName: any = (election: IElection) =>
+    election.name
+        .replace("Election ", "")
+        .replace(/\s[0-9]{4}$/, "")
+        .replace(/ian$/, "ia")
+        .replace(/\sBy-election$/, "")
 
 class SausageMap extends React.PureComponent<IProps, {}> {
     render() {
@@ -120,12 +153,23 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             isElectionChooserOpen,
             onCloseElectionChooserDialog,
             onChooseElection,
+            onChooseElectionTab,
             onQueryMap,
             onCloseQueryMapDialog,
         } = this.props
 
+        const activeElections = elections.filter((election: IElection) => election.is_active)
+
         return (
             <div>
+                {activeElections.length > 1 && (
+                    <ElectionTabs onChange={(electionId: number) => onChooseElectionTab(electionId)} value={currentElection.id}>
+                        {activeElections.map((election: IElection) => (
+                            <ElectionTabWrapper key={election.id} label={getElectionKindaShortName(election)} value={election.id} />
+                        ))}
+                    </ElectionTabs>
+                )}
+
                 <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
 
                 {/* <Snackbar
@@ -156,7 +200,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         <LayersContainer>
                             <FlatButton
                                 icon={<MapsLayers color={white} />}
-                                label={getElectionVeryShortName(currentElection)}
+                                // label={getElectionVeryShortName(currentElection)}
                                 backgroundColor={deepPurple500}
                                 hoverColor={deepPurple300}
                                 onClick={onClickElectionChooser}

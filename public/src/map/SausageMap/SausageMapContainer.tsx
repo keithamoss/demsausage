@@ -79,6 +79,9 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                     this.onCloseElectionChooserDialog()
                     onChooseElection(election)
                 }}
+                onChooseElectionTab={(electionId: number) => {
+                    onChooseElection(elections.find((election: IElection) => election.id === electionId))
+                }}
                 onQueryMap={async (features: Array<IMapPollingPlace>) => {
                     const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlace) => feature.id)
                     const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
