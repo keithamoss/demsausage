@@ -24,7 +24,9 @@ if(getenv("SHELL") === "/bin/bash") {
       "subject" => "Reminder: There are $stallCount Democracy Sausage stalls waiting to be reviewed",
       "html" => file_get_contents(BASE_PATH . "/php/mail_templates/pending_stall_reminder.html"),
     );
-    sendMailgunEmail($body);
+    echo sendMailgunEmail($body);
+  } else {
+    echo "Eh, did nothing.";
   }
 
   // Tidy up
