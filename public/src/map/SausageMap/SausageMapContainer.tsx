@@ -151,5 +151,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
 }
 
 const SausageMapContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(SausageMapContainer)
+SausageMapContainerWrapped.displayName = "SausageMapContainer"
 
 export default SausageMapContainerWrapped

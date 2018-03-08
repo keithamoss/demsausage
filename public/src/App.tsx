@@ -40,7 +40,7 @@ class MenuListItem extends React.Component<any, any> {
         const { muiThemePalette, locationPathName, locationPathNameMatch, contentDisplayName, ...rest } = this.props
 
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
-        if (locationPathNameMatch === "/" && contentDisplayName === "Connect(SausageMapContainer)") {
+        if (locationPathNameMatch === "/" && contentDisplayName === "SausageMapContainer") {
             rest.style = { color: muiThemePalette.accent1Color }
             rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         } else if (locationPathNameMatch === locationPathName) {
@@ -81,7 +81,7 @@ class App extends React.Component<IProps, {}> {
 
         let bottomNavSelectedIndex: number = -1
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
-        if (content.type.displayName === "Connect(SausageMapContainer)") {
+        if (content.type.displayName === "SausageMapContainer") {
             bottomNavSelectedIndex = 0
         } else if (locationPathName === "/search") {
             bottomNavSelectedIndex = 1
