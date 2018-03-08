@@ -1,13 +1,9 @@
 <?php
 require_once "raven.php";
 require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
+require_once "session.php";
 
-if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-  session_set_cookie_params(86400 * 365 * 5, "/");
-} else {
-  session_set_cookie_params(86400 * 365 * 5, "/", ".democracysausage.org");
-}
-session_start();
+initSession();
 
 $client = new Google_Client();
 $client->setAuthConfigFile('client_secrets.php');
