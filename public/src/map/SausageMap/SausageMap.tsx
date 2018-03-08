@@ -14,8 +14,8 @@ import FullscreenDialog from "material-ui-fullscreen-dialog"
 // import Snackbar from "material-ui/Snackbar"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo, MapsLayers, ActionPowerSettingsNew } from "material-ui/svg-icons"
-import { blue500, deepPurple300, deepPurple500, white, green500 } from "material-ui/styles/colors"
+import { ActionInfo, MapsLayers } from "material-ui/svg-icons"
+import { blue500, deepPurple300, deepPurple500, white } from "material-ui/styles/colors"
 
 const ElectionTabs = styled(Tabs)`
     position: relative;
@@ -96,16 +96,16 @@ const ElectionsFlexboxContainer = styled.div`
 `
 
 const ElectionsFlexboxItem = styled.div`
-    width: 125px;
-    height: 125px;
+    width: 150px;
+    height: 150px;
     margin: 6px;
     position: relative;
-    border: ${props => (props.className === "selected" ? "1px solid rgba(100, 181, 246, 1)" : "")};
+    border: ${props => (props.className === "selected" ? "1px solid rgba(120, 200, 172, 1)" : "")};
     cursor: ${props => (props.className === "selected" ? "auto" : "pointer")};
 
     & img {
-        width: 125px;
-        height: 125px;
+        width: 150px;
+        height: 150px;
     }
 `
 
@@ -114,18 +114,12 @@ const ElectionTitle = styled.span`
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: ${props => (props.className === "selected" ? "rgba(100, 181, 246, 0.6)" : "rgba(0, 0, 0, 0.4)")};
+    background-color: ${props => (props.className === "selected" ? "rgba(120, 200, 172, 0.6)" : "rgba(0, 0, 0, 0.4)")};
     line-height: 24px;
     text-align: center;
     color: ${white};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-`
-
-const ActiveElectionIndicator = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
 `
 
 export interface IProps {
@@ -256,11 +250,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                                 <ElectionTitle className={election.id === currentElection.id ? "selected" : ""}>
                                     {election.short_name}
                                 </ElectionTitle>
-                                {election.is_active && (
-                                    <ActiveElectionIndicator>
-                                        <ActionPowerSettingsNew color={green500} />
-                                    </ActiveElectionIndicator>
-                                )}
                             </ElectionsFlexboxItem>
                         ))}
                     </ElectionsFlexboxContainer>
