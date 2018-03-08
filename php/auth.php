@@ -1,5 +1,8 @@
 <?php
 require_once "../secrets.php";
+require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
+
+define("SESSION_LIFETIME", 1800);
 
 header("Content-type: application/json");
 header("Access-Control-Allow-Credentials: true");
@@ -13,6 +16,14 @@ if(array_key_exists("HTTP_REFERER", $_SERVER)) {
   header("Access-Control-Allow-Origin: " . $cors);
 }
 
+// Move out of the default location for a little more security
+// and to avoid session GC from other PHPs hitting us
+session_save_path(session_save_path() . DIRECTORY_SEPARATOR . "ds");
+
+// Session garbage collection should happen well after our self-imposed session lifespan
+// https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes
+ini_set("session.gc_maxlifetime", SESSION_LIFETIME * 2);
+
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
   session_set_cookie_params(86400 * 365 * 5, "/");
 } else {
@@ -22,28 +33,14 @@ if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
 session_id($_COOKIE[session_name()]);
 session_start();
 
-// No auth check for allowing the public to add stalls
-// CartoDB seem to take care of SQL injection issues for us
-// if(isset($_GET['add-stall'])) {
-//   // Quick hack to prevent casual SQL injection because CartoDB doesn't do that for us =/
-//   if(substr($_GET["q"], 0, 1) === "(" && substr($_GET["q"], -1, 1) === ")"/* && stristr($_GET["q"], "delete") === false && stristr($_GET["q"], "update") === false*/) {
-//     do_request("INSERT INTO pending_stalls " . $_GET["q"]);
-//   }
-//   exit;
-// }
-
-// // Temporary and a horrid hack
-// if(stristr($_SERVER['HTTP_REFERER'], 'http://localhost:3000')) {
-//   do_request($_GET["q"]);
-//   exit;
-// }
-
-// if(stristr($_SERVER['HTTP_REFERER'], 'http://dev.democracysausage.org:5000/') !== false) {
-//   do_request($_GET["q"]);
-//   exit;
-// }
-
-require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
+// Regenerate session ids for a little bit more security
+if (!isset($_SESSION['CREATED'])) {
+    $_SESSION['CREATED'] = time();
+} else if (time() - $_SESSION['CREATED'] > SESSION_LIFETIME) {
+    // session started more than 30 minutes ago
+    session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
+    $_SESSION['CREATED'] = time();  // update creation time
+}
 
 function isAuthorisedUser($level = "su") {
   $client = new Google_Client();
