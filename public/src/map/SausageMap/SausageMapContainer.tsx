@@ -54,7 +54,6 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
 
     componentWillReceiveProps(nextProps: any) {
         const { params } = this.props
-        console.log("componentWillReceiveProps", params, nextProps.params)
 
         // Handle page navigate events between elections (Back/Forward)
         if (nextProps.params.electionName !== params.electionName) {

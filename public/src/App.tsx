@@ -37,9 +37,13 @@ const TitleLogo = styled.img`
 
 class MenuListItem extends React.Component<any, any> {
     render(): any {
-        const { muiThemePalette, locationPathName, locationPathNameMatch, ...rest } = this.props
+        const { muiThemePalette, locationPathName, locationPathNameMatch, contentDisplayName, ...rest } = this.props
 
-        if (locationPathNameMatch === locationPathName) {
+        // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
+        if (locationPathNameMatch === "/" && contentDisplayName === "Connect(SausageMapContainer)") {
+            rest.style = { color: muiThemePalette.accent1Color }
+            rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
+        } else if (locationPathNameMatch === locationPathName) {
             rest.style = { color: muiThemePalette.accent1Color }
             rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         }
@@ -76,7 +80,8 @@ class App extends React.Component<IProps, {}> {
         } = this.props
 
         let bottomNavSelectedIndex: number = -1
-        if (locationPathName === "/") {
+        // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
+        if (content.type.displayName === "Connect(SausageMapContainer)") {
             bottomNavSelectedIndex = 0
         } else if (locationPathName === "/search") {
             bottomNavSelectedIndex = 1
@@ -105,6 +110,7 @@ class App extends React.Component<IProps, {}> {
                                 locationPathName={locationPathName}
                                 locationPathNameMatch={"/"}
                                 muiThemePalette={muiThemePalette}
+                                contentDisplayName={content.type.displayName}
                             />
                             <MenuListItem
                                 primaryText="Find"
