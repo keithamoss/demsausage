@@ -56,14 +56,23 @@ const LayersContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-top: 8px;
+`
 
-    & button {
-        border-radius: 50% !important;
-        min-width: 36px !important; /* SVG width + 12px padding */
-    }
+const LayersButtonIconOnly = styled(FlatButton)`
+    border-radius: 50% !important;
+    min-width: 36px !important; /* SVG width + 12px padding */
 
     & span {
         color: ${white};
+    }
+`
+
+const LayersButtonIconAndLabel = styled(FlatButton)`
+    border-radius: 24px !important;
+
+    & span {
+        color: ${white};
+        vertical-align: baseline; /* Override 'middle' setting by MUI. In this case baseline is actually vertically centred. */
     }
 `
 
@@ -202,13 +211,23 @@ class SausageMap extends React.PureComponent<IProps, {}> {
 
                     <FlexboxItem>
                         <LayersContainer>
-                            <FlatButton
-                                icon={<MapsLayers color={white} />}
-                                // label={getElectionVeryShortName(currentElection)}
-                                backgroundColor={deepPurple500}
-                                hoverColor={deepPurple300}
-                                onClick={onClickElectionChooser}
-                            />
+                            {activeElections.length <= 1 && (
+                                <LayersButtonIconAndLabel
+                                    icon={<MapsLayers color={white} />}
+                                    label={"Elections"}
+                                    backgroundColor={deepPurple500}
+                                    hoverColor={deepPurple300}
+                                    onClick={onClickElectionChooser}
+                                />
+                            )}
+                            {activeElections.length > 1 && (
+                                <LayersButtonIconOnly
+                                    icon={<MapsLayers color={white} />}
+                                    backgroundColor={deepPurple500}
+                                    hoverColor={deepPurple300}
+                                    onClick={onClickElectionChooser}
+                                />
+                            )}
                         </LayersContainer>
                     </FlexboxItem>
                 </FlexboxContainer>
