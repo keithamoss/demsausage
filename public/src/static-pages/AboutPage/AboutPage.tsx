@@ -24,6 +24,10 @@ const PageWrapper = styled.div`
 `
 
 export class AboutPage extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+    componentDidMount() {
+        document.title = "Democracy Sausage | About us"
+    }
+
     render() {
         return (
             <PageWrapper>

@@ -94,6 +94,10 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
     componentDidMount() {
         const { fetchInitialAppState, params } = this.props
         fetchInitialAppState(params.electionName)
+
+        if (document.title !== "Democracy Sausage") {
+            document.title = "Democracy Sausage"
+        }
     }
 
     render() {

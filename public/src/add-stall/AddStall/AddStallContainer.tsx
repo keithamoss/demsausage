@@ -32,6 +32,10 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
         this.onStallAdded = this.onStallAdded.bind(this)
     }
 
+    componentDidMount() {
+        document.title = "Democracy Sausage | Report your sausage sizzle or cake stall"
+    }
+
     onStallAdded() {
         this.setState({ formSubmitted: true })
     }

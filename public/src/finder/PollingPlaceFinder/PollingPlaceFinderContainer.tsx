@@ -39,6 +39,10 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
         this.onReceiveNearbyPollingPlaces = this.onReceiveNearbyPollingPlaces.bind(this)
     }
 
+    componentDidMount() {
+        document.title = "Democracy Sausage | Find a polling place near you"
+    }
+
     async onReceiveNearbyPollingPlaces(pollingPlaces: Array<IPollingPlaceSearchResult>, locationSearched: IGoogleGeocodeResult) {
         this.setState({
             locationSearched: locationSearched,

@@ -43,6 +43,11 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
         this.onElectionAnnounceClose = this.onElectionAnnounceClose.bind(this)
     }
 
+    componentDidMount() {
+        const { currentElection } = this.props
+        document.title = `Democracy Sausage | ${currentElection.name}`
+    }
+
     onClickElectionChooser() {
         this.setState(Object.assign(this.state, { isElectionChooserOpen: true }))
     }

@@ -28,6 +28,9 @@ const PageWrapper = styled.div`
 `
 
 export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+    componentDidMount() {
+        document.title = "Democracy Sausage | Media"
+    }
     render() {
         return (
             <PageWrapper>
