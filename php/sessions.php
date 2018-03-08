@@ -4,7 +4,13 @@ define("SESSION_LIFETIME", 1800);
 function initSession() {
   // Move out of the default location for a little more security
   // and to avoid session GC from other PHPs hitting us
-  session_save_path(session_save_path() . DIRECTORY_SEPARATOR . "ds");
+  $sessionSavePath = session_save_path() . DIRECTORY_SEPARATOR . "ds";
+  if(strpos($_SERVER['HTTP_HOST'], "localhost:") === false) {
+    if(is_dir($sessionSavePath) === false) {
+      mkdir($dir);
+    }
+    session_save_path($sessionSavePath);
+  }
 
   // Session garbage collection should happen well after our self-imposed session lifespan
   // https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes

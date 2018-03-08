@@ -1,7 +1,7 @@
 <?php
 require_once "raven.php";
 require_once '../google-api-php-client-2.2.0/vendor/autoload.php';
-require_once "session.php";
+require_once "sessions.php";
 
 initSession();
 
