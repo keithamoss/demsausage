@@ -7,6 +7,7 @@ import { IEALGISApiClient } from "../../redux/modules/interfaces"
 const LOAD_ELECTIONS = "ealgis/elections/LOAD_ELECTIONS"
 const LOAD_ELECTION = "ealgis/elections/LOAD_ELECTION"
 const SET_CURRENT_ELECTION = "ealgis/elections/SET_CURRENT_ELECTION"
+const SET_DEFAULT_ELECTION = "ealgis/elections/SET_DEFAULT_ELECTION"
 const SET_PRIMARY_ELECTION = "ealgis/elections/SET_PRIMARY_ELECTION"
 
 const initialState: Partial<IModule> = {
@@ -34,6 +35,8 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
             }
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)
+        case SET_DEFAULT_ELECTION:
+            return dotProp.set(state, "default_election_id", action.electionId)
         case SET_PRIMARY_ELECTION:
             state.elections!.map((election: IElection, index: number) => {
                 state = dotProp.set(state, `elections.${index}.is_primary`, election.id === action.electionId ? true : false)
@@ -66,6 +69,13 @@ export function setCurrentElection(electionId: number) {
     }
 }
 
+export function setDefaultElection(electionId: number) {
+    return {
+        type: SET_DEFAULT_ELECTION,
+        electionId,
+    }
+}
+
 export function togglePrimaryElection(electionId: number) {
     return {
         type: SET_PRIMARY_ELECTION,
@@ -77,6 +87,7 @@ export function togglePrimaryElection(electionId: number) {
 export interface IModule {
     elections: Array<IElection>
     current_election_id: number // election.id
+    default_election_id: number // election.id
 }
 
 export interface IAction {
@@ -123,29 +134,36 @@ export function fetchElections(initialElectionName: string) {
                 }
             }
 
-            // Failing that, fallback to the most logical choice from amongst our list of elections
+            // Failing that, fallback to the most logical default choice from amongst our list of elections
+            const defaultElection = getDefaultElection(json)
+            dispatch(setDefaultElection(defaultElection!.id))
+
             if (initialElection === undefined) {
-                let activeElection: IElection | undefined = undefined
-
-                // If there's a primary election, that's our first choice
-                const primaryElection: IElection = json.find((election: IElection) => election.is_primary)
-                if (primaryElection !== undefined) {
-                    activeElection = primaryElection
-                } else {
-                    // Failing that, just the first active election
-                    const firstActiveElection = json.find((election: IElection) => election.is_active)
-                    if (firstActiveElection !== undefined) {
-                        activeElection = firstActiveElection
-                    } else {
-                        // If there are no active elections at all just grab the most recent one
-                        activeElection = json[0]
-                    }
-                }
-
-                dispatch(setCurrentElection(activeElection!.id))
+                dispatch(setCurrentElection(defaultElection!.id))
             }
         }
     }
+}
+
+export function getDefaultElection(elections: Array<IElection>) {
+    let defaultElection
+
+    // If there's a primary election, that's our first choice
+    const primaryElection = elections.find((election: IElection) => election.is_primary)
+    if (primaryElection !== undefined) {
+        defaultElection = primaryElection
+    } else {
+        // Failing that, just the first active election
+        const firstActiveElection = elections.find((election: IElection) => election.is_active)
+        if (firstActiveElection !== undefined) {
+            defaultElection = firstActiveElection
+        } else {
+            // If there are no active elections at all just grab the most recent one
+            defaultElection = elections[0]
+        }
+    }
+
+    return defaultElection
 }
 
 export function createElection(electionNew: Partial<IElection>) {

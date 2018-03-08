@@ -11,10 +11,12 @@ import { setCurrentElection, getURLSafeElectionName } from "../../redux/modules/
 export interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
+    defaultElection: IElection
 }
 
 export interface IDispatchProps {
     onChooseElection: Function
+    onChangeElection: Function
     fetchQueriedPollingPlaces: Function
 }
 
@@ -24,13 +26,15 @@ export interface IStateProps {
     hasSeenElectionAnnouncement: boolean
 }
 
-interface IRouteProps {}
+interface IRouteProps {
+    electionName: string
+}
 
 interface IOwnProps {
     params: IRouteProps
 }
 
-export class SausageMapContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
+export class SausageMapContainer extends React.Component<IStoreProps & IDispatchProps & IOwnProps, IStateProps> {
     constructor(props: any) {
         super(props)
 
@@ -46,6 +50,26 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     componentDidMount() {
         const { currentElection } = this.props
         document.title = `Democracy Sausage | ${currentElection.name}`
+    }
+
+    componentWillReceiveProps(nextProps: any) {
+        const { params } = this.props
+        console.log("componentWillReceiveProps", params, nextProps.params)
+
+        // Handle page navigate events between elections (Back/Forward)
+        if (nextProps.params.electionName !== params.electionName) {
+            const nextElection = nextProps.elections.find(
+                (election: IElection) => getURLSafeElectionName(election) === nextProps.params.electionName
+            )
+
+            // We've navigated to a specific election
+            if (nextElection !== undefined) {
+                nextProps.onChangeElection(nextElection)
+            } else {
+                // We've navigated back to the root i.e. https://democracysausage.org
+                nextProps.onChangeElection(nextProps.defaultElection)
+            }
+        }
     }
 
     onClickElectionChooser() {
@@ -106,6 +130,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     return {
         elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
+        defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
     }
 }
 
@@ -114,6 +139,11 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         onChooseElection(election: IElection) {
             dispatch(setCurrentElection(election.id))
             browserHistory.push(getURLSafeElectionName(election))
+            document.title = `Democracy Sausage | ${election.name}`
+        },
+        onChangeElection(election: IElection) {
+            dispatch(setCurrentElection(election.id))
+            document.title = `Democracy Sausage | ${election.name}`
         },
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             return await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
