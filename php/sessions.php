@@ -19,6 +19,10 @@ function initSession() {
   // https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes
   ini_set("session.gc_maxlifetime", SESSION_LIFETIME * 2);
 
+  // Avoid the session GC being too aggressive in its pruning by ensuring that
+  // each request by a user modifies their session
+  $_SESSION['LAST_ACTIVITY'] = time();
+
   if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
     session_set_cookie_params(86400 * 365 * 5, "/");
   } else {
