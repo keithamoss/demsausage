@@ -72,9 +72,17 @@ export interface IDispatchProps {
 
 export interface IStateProps {}
 
-export interface IRouteProps {
+export interface IRouterProps {
     content: any
     location: any
+}
+
+export interface IRouteProps {
+    electionName: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
 }
 
 const DEFAULT_BREAK_POINT = "small"
@@ -82,14 +90,10 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
     return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
-export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
-    constructor(props: IStoreProps & IDispatchProps & IRouteProps) {
-        super(props)
-    }
-
+export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouterProps & IOwnProps, IStateProps> {
     componentDidMount() {
-        const { fetchInitialAppState } = this.props
-        fetchInitialAppState()
+        const { fetchInitialAppState, params } = this.props
+        fetchInitialAppState(params.electionName)
     }
 
     render() {
@@ -152,8 +156,8 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        fetchInitialAppState: () => {
-            dispatch(fetchInitialAppState())
+        fetchInitialAppState: (initialElectionName: string) => {
+            dispatch(fetchInitialAppState(initialElectionName))
         },
         handleSnackbarClose: (reason: string) => {
             if (reason === "timeout") {

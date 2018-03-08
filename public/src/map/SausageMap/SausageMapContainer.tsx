@@ -1,11 +1,12 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 
 import SausageMap from "./SausageMap"
 import { IStore, IElection, IMapPollingPlace, IPollingPlace } from "../../redux/modules/interfaces"
 
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
-import { setCurrentElection } from "../../redux/modules/elections"
+import { setCurrentElection, getURLSafeElectionName } from "../../redux/modules/elections"
 
 export interface IStoreProps {
     elections: Array<IElection>
@@ -107,6 +108,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onChooseElection(election: IElection) {
             dispatch(setCurrentElection(election.id))
+            browserHistory.push(getURLSafeElectionName(election))
         },
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             return await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))

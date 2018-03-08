@@ -107,15 +107,24 @@ export interface IElection {
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
-export function fetchElections() {
+export function fetchElections(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const { response, json } = await ealapi.dsAPIGet({ "fetch-elections": 1 }, dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 
-            // If our route doesn't dictate that we're looking at an election, then just
-            // grab the first election that's active
-            if (getState().elections.current_election_id === undefined) {
+            // Let the page route dictate that we're looking at a specific election
+            // e.g. https://democracysausage.org/batman_by-election_2018
+            let initialElection
+            if (initialElectionName !== undefined) {
+                initialElection = json.find((election: IElection) => getURLSafeElectionName(election) === initialElectionName)
+                if (initialElection !== undefined) {
+                    dispatch(setCurrentElection(initialElection.id))
+                }
+            }
+
+            // Failing that, fallback to the most logical choice from amongst our list of elections
+            if (initialElection === undefined) {
                 let activeElection: IElection | undefined = undefined
 
                 // If there's a primary election, that's our first choice
@@ -200,4 +209,8 @@ export function setElectionTableName(election: IElection, newDBTableName: string
             })
         )
     }
+}
+
+export function getURLSafeElectionName(election: IElection) {
+    return encodeURI(election.name.replace(/\s/g, "_").toLowerCase())
 }

@@ -131,10 +131,14 @@ export function getAPIBaseURL(): string {
     return getEnvironment() === eAppEnv.DEV ? "http://localhost:8000" : "https://api.democracysausage.org"
 }
 
-export function fetchInitialAppState() {
+export function getBaseURL(): string {
+    return getEnvironment() === eAppEnv.DEV ? "http://localhost:3000" : "https://democracysausage.org"
+}
+
+export function fetchInitialAppState(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         dispatch(loading())
-        await Promise.all([dispatch(fetchElections())])
+        await Promise.all([dispatch(fetchElections(initialElectionName))])
         dispatch(loaded())
     }
 }
