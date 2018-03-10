@@ -17,7 +17,7 @@ import { ToolbarGroup } from "material-ui/Toolbar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
 import FlatButton from "material-ui/FlatButton"
-import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace } from "material-ui/svg-icons"
+import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace, ActionOpenInNew } from "material-ui/svg-icons"
 
 // const logo = require("./logo.svg")
 
@@ -176,6 +176,11 @@ class App extends React.Component<IProps, {}> {
                             locationPathName={locationPathName}
                             muiThemePalette={muiThemePalette}
                             onClick={onClickDrawerLink}
+                        />
+                        <ListItem
+                            primaryText="democracysausage.org"
+                            leftIcon={<ActionOpenInNew />}
+                            containerElement={<a href={"https://democracysausage.org"} target="_blank" />}
                         />
 
                         {isResponsiveAndOverBreakPoint === false && user !== null && <Divider />}
