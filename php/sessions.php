@@ -1,5 +1,5 @@
 <?php
-define("SESSION_LIFETIME", 1800);
+define("SESSION_LIFETIME", 86400);
 
 function initSession() {
   // Move out of the default location for a little more security
