@@ -45,7 +45,10 @@ const FlexboxDistance = styled(FlatButton)`
     color: ${grey500} !important;
 `
 
-const HasOtherNoms = styled.div``
+const HasFreeTextDeliciousness = styled.div`
+    color: ${grey500};
+    font-size: 12px;
+`
 
 const RunOutWarning = styled(ListItem)`
     margin-bottom: 10px !important;
@@ -118,7 +121,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         </FlexboxContainer>
                         {pollingPlace.has_other !== null &&
                             "has_free_text" in pollingPlace.has_other && (
-                                <HasOtherNoms>`This booth also has: ${pollingPlace.has_other.has_free_text}`</HasOtherNoms>
+                                <HasFreeTextDeliciousness>Also available: {pollingPlace.has_other.has_free_text}</HasFreeTextDeliciousness>
                             )}
                         {pollingPlace.has_run_out && (
                             <RunOutWarning
