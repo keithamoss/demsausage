@@ -87,7 +87,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     category: "Sausage",
                     action: "PollingPlaceFinder",
                     type: "findNearestPollingPlaces",
-                    payload: { length: results.length },
+                    value: { length: results.length },
                 })
 
                 if (results.length > 0) {

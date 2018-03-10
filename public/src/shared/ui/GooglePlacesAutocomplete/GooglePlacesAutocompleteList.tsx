@@ -113,7 +113,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     category: "Sausage",
                     action: "GooglePlacesAutocompleteList",
                     type: "fetchGeocodedPlace",
-                    payload: { length: results.length },
+                    value: { length: results.length },
                 })
 
                 if (results.length > 0) {

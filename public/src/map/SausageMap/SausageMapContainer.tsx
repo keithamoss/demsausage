@@ -7,6 +7,7 @@ import { IStore, IElection, IMapPollingPlace, IPollingPlace } from "../../redux/
 
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
 import { setCurrentElection, getURLSafeElectionName } from "../../redux/modules/elections"
+import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IStoreProps {
     elections: Array<IElection>
@@ -72,6 +73,11 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     onClickElectionChooser() {
+        gaTrack.event({
+            category: "Sausage",
+            action: "SausageMapContainer",
+            type: "onClickElectionChooser",
+        })
         this.setState(Object.assign(this.state, { isElectionChooserOpen: true }))
     }
 
@@ -145,7 +151,14 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             document.title = `Democracy Sausage | ${election.name}`
         },
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
-            return await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
+            const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
+            gaTrack.event({
+                category: "Sausage",
+                action: "SausageMapContainer",
+                type: "fetchQueriedPollingPlaces",
+                value: { length: results.length },
+            })
+            return results
         },
     }
 }
