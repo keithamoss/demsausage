@@ -64,7 +64,7 @@ const fromFormValues = (formValues: any): IPollingPlace => {
     if (formValues.has_bacon_and_eggs === true) {
         hasOther.has_bacon_and_eggs = formValues.has_bacon_and_eggs
     }
-    if (formValues.has_free_text === true) {
+    if (formValues.has_free_text !== "") {
         hasOther.has_free_text = formValues.has_free_text
     }
 
@@ -103,6 +103,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.has_halal = stall.has_halal
             initialValues.has_vego = stall.has_vego
             initialValues.has_bacon_and_eggs = stall.has_bacon_and_eggs
+            initialValues.has_free_text = stall.has_free_text
 
             initialValues.stall_name = stall.stall_name
             initialValues.stall_description = stall.stall_description

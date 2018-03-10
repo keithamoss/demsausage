@@ -1,5 +1,5 @@
 import * as React from "react"
-// import styled from "styled-components"
+import styled from "styled-components"
 import { IStall } from "../../redux/modules/interfaces"
 // import "./StallInfoCard.css"
 
@@ -8,6 +8,7 @@ import { Avatar } from "material-ui"
 import { ActionHome, MapsPlace, ActionDescription, AvWeb, CommunicationEmail, MapsLocalDining } from "material-ui/svg-icons"
 import { List, ListItem } from "material-ui/List"
 import IconButton from "material-ui/IconButton"
+import { grey500 } from "material-ui/styles/colors"
 
 import SausageIcon from "../../icons/sausage"
 import CakeIcon from "../../icons/cake"
@@ -20,6 +21,11 @@ export interface IProps {
     stall: IStall
     cardActions?: any
 }
+
+const HasFreeTextDeliciousness = styled.div`
+    color: ${grey500};
+    font-size: 12px;
+`
 
 class StallInfoCard extends React.PureComponent<IProps, {}> {
     render() {
@@ -97,6 +103,9 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                                 <IconButton tooltip="Bacon and Eggs" touch={true}>
                                     <BaconandEggsIcon />
                                 </IconButton>
+                            )}
+                            {stall.has_free_text !== "" && (
+                                <HasFreeTextDeliciousness>Also has: {stall.has_free_text}</HasFreeTextDeliciousness>
                             )}
                         </ListItem>
                     </List>

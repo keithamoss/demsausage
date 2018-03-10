@@ -135,8 +135,9 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                             <CustomTextField
                                 name="stall_description"
                                 component={TextField}
+                                multiLine={true}
                                 floatingLabelText={"Stall description"}
-                                hintText={"e.g. Sausages, bread rolls, drinks to fund the local cricket team"}
+                                hintText={"e.g. We're raising funds for the Year 7 school camp"}
                                 fullWidth={true}
                                 validate={[required]}
                             />
@@ -196,6 +197,14 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
                                 />
                             </List>
+
+                            <CustomTextField
+                                name="has_free_text"
+                                component={TextField}
+                                floatingLabelText={"Anything else?"}
+                                hintText={"e.g. We also have cold drinks and pony rides!"}
+                                fullWidth={true}
+                            />
                         </FormSection>
 
                         <RaisedButton label={"Submit Stall"} disabled={!isDirty || formSubmitting} primary={true} onClick={onSaveForm} />

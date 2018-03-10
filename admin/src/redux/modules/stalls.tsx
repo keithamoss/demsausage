@@ -87,6 +87,7 @@ export interface IStall {
     has_halal: boolean
     has_coffee: boolean
     has_bacon_and_eggs: boolean
+    has_free_text: string
     polling_place_id: number
     elections_id: number
     active: boolean

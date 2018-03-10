@@ -3,7 +3,7 @@ require_once "modules/mailgun.php";
 require_once "modules/polling_places.php";
 
 $pendingStallsPKeyFieldName = "id";
-$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_bacon_and_eggs", "polling_place_id", "elections_id", "active", "status", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
+$pendingStallsAllowedFields = array("stall_name", "stall_description", "stall_website", "stall_location_info", "contact_email", "has_bbq", "has_caek", "has_vego", "has_halal", "has_coffee", "has_bacon_and_eggs", "has_free_text", "polling_place_id", "elections_id", "active", "status", "mail_confirm_key", "mail_confirmed", "reported_timestamp");
 class StallStatusEnum {
   const PENDING = 0;
   const APPROVED = 1;
@@ -24,6 +24,7 @@ function translateStallFromDB($row) {
     "has_halal" => (bool)$row["has_halal"],
     "has_coffee" => (bool)$row["has_coffee"],
     "has_bacon_and_eggs" => (bool)$row["has_bacon_and_eggs"],
+    "has_free_text" => $row["has_free_text"],
     "polling_place_id" => (int)$row["polling_place_id"],
     "elections_id" => (int)$row["elections_id"],
     "active" => (bool)$row["active"],
@@ -136,6 +137,9 @@ function markPendingStallAsReadAndAddUnofficialPollingPlace($id) {
     }
     if($stall["has_bacon_and_eggs"] === true) {
       $hasOther->has_bacon_and_eggs = true;
+    }
+    if($stall["has_free_text"] !== "") {
+      $hasOther->has_free_text = $stall["has_free_text"];
     }
     $pollingPlace["has_other"] = json_encode($hasOther);
 

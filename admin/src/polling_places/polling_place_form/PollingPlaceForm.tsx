@@ -166,6 +166,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                         <CustomTextField
                             name="stall_description"
                             component={TextField}
+                            multiLine={true}
                             floatingLabelText={"Stall description"}
                             hintText={"A brief description of the stall"}
                             fullWidth={true}
