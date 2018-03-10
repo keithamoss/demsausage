@@ -71,6 +71,8 @@ const styleFunctionSprite = function(feature: any) {
         return spriteCake
     } else if (feature.get("has_nothing") === true) {
         return spriteNowt
+    } else if (feature.get("has_bbq") === false && feature.get("has_caek") === false && feature.get("has_other") === true) {
+        return spriteBBQ
     } else {
         return spriteUnknown
     }

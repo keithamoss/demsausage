@@ -816,6 +816,7 @@ function createPollingPlaceGeoJSON($electionId) {
       $feature->properties->has_caek = $row["has_caek"];
       $feature->properties->has_nothing = $row["has_nothing"];
       $feature->properties->has_run_out = $row["has_run_out"];
+      $feature->properties->has_other = ($row["has_other"] !== "" && $row["has_other"] !== null && $row["has_other"] != new stdClass());
 
       $geoJSONFeatures[] = $feature;
     }
