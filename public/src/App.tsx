@@ -218,6 +218,8 @@ class App extends React.Component<IProps, {}> {
                         }
                     }}
                     onRequestClose={handleSnackbarClose}
+                    /* Support multi-line Snackbars */
+                    bodyStyle={{ height: "auto", lineHeight: "22px", padding: 24, whiteSpace: "pre-line" }}
                 />
             </div>
         )
