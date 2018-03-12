@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient, IElection, IGoogleGeocodeResult } from "../../redux/modules/interfaces"
+import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -211,13 +211,13 @@ export function fetchPollingPlaceTypes() {
     }
 }
 
-export function fetchNearbyPollingPlaces(election: IElection, geocoderResult: IGoogleGeocodeResult) {
+export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         const params = {
             "fetch-nearby-polling-places": 1,
             electionId: election.id,
-            lat: geocoderResult.geometry.location.lat(),
-            lon: geocoderResult.geometry.location.lng(),
+            lat: lat,
+            lon: lon,
         }
 
         const { response, json } = await ealapi.dsAPIGet(params, dispatch)
@@ -238,7 +238,11 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
 }
 
 export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
-    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+    return (
+        pollingPlace.has_bbq === true ||
+        pollingPlace.has_caek === true ||
+        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+    )
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {

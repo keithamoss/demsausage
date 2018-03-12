@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { browserHistory, Link } from "react-router"
+import { Link } from "react-router"
 // import "./SausageMap.css"
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
@@ -8,20 +8,38 @@ import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
 import { Tabs, Tab } from "material-ui/Tabs"
 import SearchBar from "material-ui-search-bar"
+// import Dialog from "material-ui/Dialog"
+// import RaisedButton from "material-ui/RaisedButton"
 import FlatButton from "material-ui/FlatButton"
+import IconButton from "material-ui/IconButton"
+import AppBar from "material-ui/AppBar"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 // import Snackbar from "material-ui/Snackbar"
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo, MapsLayers } from "material-ui/svg-icons"
-import { blue500, deepPurple300, deepPurple500, white } from "material-ui/styles/colors"
+import {
+    ActionInfo,
+    MapsLayers,
+    DeviceLocationSearching,
+    NavigationMoreVert,
+    NavigationMoreHoriz,
+    HardwareKeyboardArrowLeft,
+} from "material-ui/svg-icons"
+import { blue500, deepPurple300, deepPurple500, white, grey500 } from "material-ui/styles/colors"
 
-const ElectionTabs = styled(Tabs)`
-    position: relative;
+const AppBarStyled = styled(AppBar)`
+    padding-left: 0px !important;
     margin-top: -10px;
     margin-bottom: 10px;
     z-index: 100;
+`
+
+const ElectionTabs = styled(Tabs)`
+    /* Modify the active tab div */
+    & div div {
+        margin-top: 0px !important;
+    }
 `
 
 const ElectionTab = styled(Tab)`
@@ -135,6 +153,8 @@ export interface IProps {
     onQueryMap: Function
     onCloseQueryMapDialog: any
     onElectionAnnounceClose: any
+    onOpenFinderForAddressSearch: any
+    onOpenFinderForGeolocation: any
 }
 
 // const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s/, "").replace("20", "")
@@ -159,6 +179,8 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             onChooseElectionTab,
             onQueryMap,
             onCloseQueryMapDialog,
+            onOpenFinderForAddressSearch,
+            onOpenFinderForGeolocation,
         } = this.props
 
         const activeElections = elections.filter((election: IElection) => election.is_active)
@@ -166,15 +188,35 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         return (
             <div>
                 {activeElections.length > 1 && (
-                    <ElectionTabs
-                        onChange={(electionId: number) => onChooseElectionTab(electionId)}
-                        value={currentElection.id}
-                        inkBarStyle={{ backgroundColor: "#78C8AC" }}
-                    >
-                        {activeElections.map((election: IElection) => (
-                            <ElectionTabWrapper key={election.id} label={getElectionKindaShortName(election)} value={election.id} />
-                        ))}
-                    </ElectionTabs>
+                    <AppBarStyled
+                        title={
+                            <ElectionTabs
+                                onChange={(electionId: number) => onChooseElectionTab(electionId)}
+                                value={currentElection.id}
+                                inkBarStyle={{ backgroundColor: "#78C8AC" }}
+                            >
+                                {activeElections.map((election: IElection) => (
+                                    <ElectionTabWrapper key={election.id} label={getElectionKindaShortName(election)} value={election.id} />
+                                ))}
+                            </ElectionTabs>
+                        }
+                        iconElementLeft={
+                            <IconButton>
+                                <HardwareKeyboardArrowLeft />
+                            </IconButton>
+                        }
+                        iconElementRight={
+                            <IconButton onClick={onClickElectionChooser}>
+                                {navigator.platform === "iPhone" ? (
+                                    <NavigationMoreHoriz color={"rgba(255, 255, 255, 0.7)"} />
+                                ) : (
+                                    <NavigationMoreVert color={"rgba(255, 255, 255, 0.7)"} />
+                                )}
+                            </IconButton>
+                            // tslint:disable-next-line:jsx-curly-spacing
+                        }
+                        zDepth={0}
+                    />
                 )}
 
                 <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
@@ -193,9 +235,9 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                             hintText={"Find polling places"}
                             // tslint:disable-next-line:no-empty
                             onChange={() => {}}
-                            onClick={() => browserHistory.push("/search")}
-                            onRequestSearch={() => console.log("onRequestSearch")}
-                            // searchIcon={<DeviceLocationSearching color={grey500} />}
+                            onClick={onOpenFinderForAddressSearch}
+                            onRequestSearch={onOpenFinderForGeolocation}
+                            searchIcon={<DeviceLocationSearching color={grey500} />}
                             style={{
                                 margin: "0 auto",
                                 maxWidth: 800,
@@ -284,6 +326,17 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         )}
                     </FullscreenDialog>
                 )}
+
+                {/* <Dialog
+                    title="Dialog With Actions"
+                    actions={[<FlatButton label="No Thanks" primary={true} />, <RaisedButton label="Yes Please" primary={true} />]}
+                    modal={false}
+                    open={true}
+                    contentStyle={{ position: "fixed", bottom: "63px", width: "100%" }}
+                    //   onRequestClose={this.handleClose}
+                >
+                    The actions in this window were passed in as an array of React objects.
+                </Dialog> */}
             </div>
         )
     }

@@ -11,11 +11,18 @@ const FINISH_FETCH = "ealgis/app/FINISH_FETCH"
 const SET_LAST_PAGE = "ealgis/app/SET_LAST_PAGE"
 const TOGGLE_SIDEBAR = "ealgis/app/TOGGLE_SIDEBAR"
 const TOGGLE_MODAL = "ealgis/app/TOGGLE_MODAL"
+const SET_POLLING_PLACE_FINDER_MODE = "ealgis/app/SET_POLLING_PLACE_FINDER_MODE"
 
 export enum eAppEnv {
     DEV = 1,
     TEST = 2,
     PROD = 3,
+}
+
+export enum ePollingPlaceFinderInit {
+    DO_NOTHING = 1,
+    FOCUS_INPUT = 2,
+    GEOLOCATION = 3,
 }
 
 const initialState: IModule = {
@@ -24,6 +31,8 @@ const initialState: IModule = {
     sidebarOpen: false,
     previousPath: "",
     modals: new Map(),
+    geolocationSupported: typeof navigator !== "undefined" && "geolocation" in navigator,
+    pollingPlaceFinderMode: ePollingPlaceFinderInit.DO_NOTHING,
 }
 
 // Reducer
@@ -47,6 +56,8 @@ export default function reducer(state: IModule = initialState, action: IAction) 
             const modals = dotProp.get(state, "modals")
             modals.set(action.modalId, !modals.get(action.modalId))
             return dotProp.set(state, "modals", modals)
+        case SET_POLLING_PLACE_FINDER_MODE:
+            return dotProp.set(state, "pollingPlaceFinderMode", action.pollingPlaceFinderMode)
         default:
             return state
     }
@@ -102,6 +113,13 @@ export function toggleModalState(modalId: string): IAction {
     }
 }
 
+export function setPollingPlaceFinderMode(mode: ePollingPlaceFinderInit): IAction {
+    return {
+        type: SET_POLLING_PLACE_FINDER_MODE,
+        pollingPlaceFinderMode: mode,
+    }
+}
+
 // Models
 export interface IModule {
     loading: boolean
@@ -109,6 +127,8 @@ export interface IModule {
     sidebarOpen: boolean
     previousPath: string
     modals: Map<string, boolean>
+    geolocationSupported: boolean
+    pollingPlaceFinderMode: ePollingPlaceFinderInit
 }
 
 export interface IAction {
@@ -116,6 +136,7 @@ export interface IAction {
     previousPath?: string
     modalId?: string
     open?: boolean
+    pollingPlaceFinderMode?: ePollingPlaceFinderInit
     meta?: {
         analytics: IAnalyticsMeta
     }

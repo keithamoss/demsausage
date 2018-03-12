@@ -16,6 +16,7 @@ export interface IProps {
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
     autoFocus: boolean
+    searchIcon: JSX.Element
     hintText: string
     onRequestSearch?: Function
 }
@@ -53,7 +54,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
     }
 
     render() {
-        const { onChoosePlace, fetchGeocodedPlace, componentRestrictions, autoFocus, hintText, onRequestSearch } = this.props
+        const { onChoosePlace, fetchGeocodedPlace, componentRestrictions, autoFocus, searchIcon, hintText, onRequestSearch } = this.props
         const { addressSearchResults } = this.state
 
         return (
@@ -70,6 +71,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
                                 componentRestrictions={componentRestrictions}
                                 hintText={hintText}
                                 autoFocus={autoFocus}
+                                searchIcon={searchIcon}
                                 // tslint:disable-next-line:no-empty
                                 onRequestSearch={onRequestSearch === undefined ? () => {} : onRequestSearch}
                             />

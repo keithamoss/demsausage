@@ -3,9 +3,10 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 
 import SausageMap from "./SausageMap"
-import { IStore, IElection, IMapPollingPlace, IPollingPlace } from "../../redux/modules/interfaces"
+import { IStore, IElection, IMapPollingPlace, IPollingPlace, ePollingPlaceFinderInit } from "../../redux/modules/interfaces"
 
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
+import { setPollingPlaceFinderMode } from "../../redux/modules/app"
 import { setCurrentElection, getURLSafeElectionName } from "../../redux/modules/elections"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
@@ -19,6 +20,8 @@ export interface IDispatchProps {
     onChooseElection: Function
     onChangeElection: Function
     fetchQueriedPollingPlaces: Function
+    onOpenFinderForAddressSearch: Function,
+    onOpenFinderForGeolocation: Function,
 }
 
 export interface IStateProps {
@@ -98,7 +101,7 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     render() {
-        const { elections, currentElection, fetchQueriedPollingPlaces, onChooseElection } = this.props
+        const { elections, currentElection, fetchQueriedPollingPlaces, onChooseElection, onOpenFinderForAddressSearch, onOpenFinderForGeolocation } = this.props
         const { isElectionChooserOpen, queriedPollingPlaces, hasSeenElectionAnnouncement } = this.state
 
         return (
@@ -124,6 +127,8 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                 }}
                 onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
                 onElectionAnnounceClose={() => this.onElectionAnnounceClose()}
+                onOpenFinderForAddressSearch={onOpenFinderForAddressSearch}
+                onOpenFinderForGeolocation={onOpenFinderForGeolocation}
             />
         )
     }
@@ -159,6 +164,14 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 value: { length: results.length },
             })
             return results
+        },
+        onOpenFinderForAddressSearch() {
+            dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
+            browserHistory.push("/search")
+        },
+        onOpenFinderForGeolocation() {
+            dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.GEOLOCATION))
+            browserHistory.push("/search")
         },
     }
 }

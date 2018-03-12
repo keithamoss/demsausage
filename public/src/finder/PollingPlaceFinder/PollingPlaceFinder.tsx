@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceFinder.css"
-import { IElection, IPollingPlaceSearchResult, IGoogleGeocodeResult } from "../../redux/modules/interfaces"
+import { IElection, IPollingPlaceSearchResult, ePollingPlaceFinderInit } from "../../redux/modules/interfaces"
 
 import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
 import EmptyState from "../../shared/empty_state/EmptyState"
@@ -34,15 +34,26 @@ const PollingPlaceCardWrapper = styled.div`
 `
 
 export interface IProps {
+    initMode: ePollingPlaceFinderInit
+    geolocationSupported: boolean
     election: IElection
-    locationSearched: IGoogleGeocodeResult | null
+    locationSearched: string | null
     nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
     onGeocoderResults: any
+    onRequestLocationPermissions: any
 }
 
 class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
     render() {
-        const { election, locationSearched, nearbyPollingPlaces, onGeocoderResults } = this.props
+        const {
+            initMode,
+            geolocationSupported,
+            election,
+            locationSearched,
+            nearbyPollingPlaces,
+            onGeocoderResults,
+            onRequestLocationPermissions,
+        } = this.props
 
         return (
             <FinderContainer>
@@ -60,9 +71,10 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
 
                 <GooglePlacesAutocompleteList
                     componentRestrictions={{ country: "AU" }}
-                    autoFocus={true}
-                    hintText={"Enter your address"}
-                    searchIcon={<DeviceLocationSearching color={grey500} />}
+                    autoFocus={initMode === ePollingPlaceFinderInit.FOCUS_INPUT}
+                    hintText={geolocationSupported === true ? "Enter your address or use GPS →" : "Enter your address"}
+                    searchIcon={geolocationSupported === true ? <DeviceLocationSearching color={grey500} /> : null}
+                    onRequestSearch={onRequestLocationPermissions}
                     style={{
                         margin: "0 auto",
                         maxWidth: 800,
@@ -76,7 +88,7 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                 {nearbyPollingPlaces !== null &&
                     nearbyPollingPlaces.length > 0 && (
                         <LocationSearched>
-                            Polling places near <em>{locationSearched!.formatted_address}</em>.
+                            Polling places near <em>{locationSearched}</em>.
                         </LocationSearched>
                     )}
 
