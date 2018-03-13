@@ -22,7 +22,7 @@ import { IStore } from "./redux/modules/interfaces"
 let Middleware: Array<any> = []
 
 if ("REACT_APP_RAVEN_URL" in process.env) {
-    Raven.config(process.env.REACT_APP_RAVEN_URL!).install()
+    Raven.config(process.env.REACT_APP_RAVEN_URL!, { environment: process.env.NODE_ENV }).install()
     Middleware.push(createRavenMiddleware(Raven))
 }
 
