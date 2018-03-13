@@ -13,8 +13,8 @@ import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo, DeviceLocationSearching } from "material-ui/svg-icons"
-import { blue500, grey500 } from "material-ui/styles/colors"
+import { ActionInfo, DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
+import { blue500 } from "material-ui/styles/colors"
 
 const FlexboxContainer = styled.div`
     display: flex;
@@ -33,10 +33,9 @@ const PollingPlaceCardWrapper = styled.div`
 export interface IProps {
     currentElection: IElection
     queriedPollingPlaces: Array<IPollingPlace>
-    hasSeenElectionAnnouncement: boolean
+    geolocationSupported: boolean
     onQueryMap: Function
     onCloseQueryMapDialog: any
-    onElectionAnnounceClose: any
     onOpenFinderForAddressSearch: any
     onOpenFinderForGeolocation: any
 }
@@ -46,7 +45,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         const {
             currentElection,
             queriedPollingPlaces,
-            // hasSeenElectionAnnouncement,
+            geolocationSupported,
             onQueryMap,
             onCloseQueryMapDialog,
             onOpenFinderForAddressSearch,
@@ -57,14 +56,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             <div>
                 <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
 
-                {/* <Snackbar
-                    open={hasSeenElectionAnnouncement === false}
-                    message="The Tasmania 2018 state election is now live!"
-                    style={{ marginBottom: 56 }}
-                    autoHideDuration={5000}
-                    onRequestClose={onElectionAnnounceClose}
-                /> */}
-
                 <FlexboxContainer>
                     <FlexboxItem>
                         <SearchBar
@@ -72,8 +63,8 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                             // tslint:disable-next-line:no-empty
                             onChange={() => {}}
                             onClick={onOpenFinderForAddressSearch}
-                            onRequestSearch={onOpenFinderForGeolocation}
-                            searchIcon={<DeviceLocationSearching color={grey500} />}
+                            onRequestSearch={geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch}
+                            searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}
                             style={{
                                 margin: "0 auto",
                                 maxWidth: 800,

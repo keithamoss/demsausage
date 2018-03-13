@@ -13,6 +13,7 @@ export interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
     defaultElection: IElection
+    geolocationSupported: boolean
 }
 
 export interface IDispatchProps {
@@ -23,7 +24,6 @@ export interface IDispatchProps {
 
 export interface IStateProps {
     queriedPollingPlaces: Array<IPollingPlace>
-    hasSeenElectionAnnouncement: boolean
 }
 
 interface IRouteProps {
@@ -42,11 +42,17 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     constructor(props: any) {
         super(props)
 
-        this.state = { queriedPollingPlaces: [], hasSeenElectionAnnouncement: false }
+        this.state = { queriedPollingPlaces: [] }
 
         this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
-        this.onElectionAnnounceClose = this.onElectionAnnounceClose.bind(this)
+
+        gaTrack.event({
+            category: "Sausage",
+            action: "SausageMapContainer",
+            type: "geolocationSupport",
+            value: props.geolocationSupported,
+        })
     }
 
     onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
@@ -57,26 +63,27 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
         this.setState(Object.assign(this.state, { queriedPollingPlaces: [] }))
     }
 
-    onElectionAnnounceClose() {
-        this.setState(Object.assign(this.state, { hasSeenElectionAnnouncement: true }))
-    }
-
     render() {
-        const { currentElection, fetchQueriedPollingPlaces, onOpenFinderForAddressSearch, onOpenFinderForGeolocation } = this.props
-        const { queriedPollingPlaces, hasSeenElectionAnnouncement } = this.state
+        const {
+            currentElection,
+            geolocationSupported,
+            fetchQueriedPollingPlaces,
+            onOpenFinderForAddressSearch,
+            onOpenFinderForGeolocation,
+        } = this.props
+        const { queriedPollingPlaces } = this.state
 
         return (
             <SausageMap
                 currentElection={currentElection}
                 queriedPollingPlaces={queriedPollingPlaces}
-                hasSeenElectionAnnouncement={hasSeenElectionAnnouncement}
+                geolocationSupported={geolocationSupported}
                 onQueryMap={async (features: Array<IMapPollingPlace>) => {
                     const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlace) => feature.id)
                     const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
                     this.onSetQueriedPollingPlaces(pollingPlaces)
                 }}
                 onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
-                onElectionAnnounceClose={() => this.onElectionAnnounceClose()}
                 onOpenFinderForAddressSearch={onOpenFinderForAddressSearch}
                 onOpenFinderForGeolocation={onOpenFinderForGeolocation}
             />
@@ -85,12 +92,13 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
+    const { app, elections } = state
 
     return {
         elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
+        geolocationSupported: app.geolocationSupported,
     }
 }
 

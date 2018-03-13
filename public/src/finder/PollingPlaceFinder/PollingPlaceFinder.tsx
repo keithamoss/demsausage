@@ -73,8 +73,8 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     componentRestrictions={{ country: "AU" }}
                     autoFocus={initMode === ePollingPlaceFinderInit.FOCUS_INPUT}
                     hintText={geolocationSupported === true ? "Enter your address or use GPS →" : "Enter your address"}
-                    searchIcon={geolocationSupported === true ? <DeviceLocationSearching color={grey500} /> : null}
-                    onRequestSearch={onRequestLocationPermissions}
+                    onRequestSearch={geolocationSupported === true ? onRequestLocationPermissions : undefined}
+                    searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}
                     style={{
                         margin: "0 auto",
                         maxWidth: 800,
