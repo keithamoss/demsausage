@@ -32,11 +32,13 @@ class PollingPlaceAutocomplete extends React.PureComponent<IProps, {}> {
                 {searchResults.length > 0 && (
                     <List>
                         {searchResults.map((pollingPlace: IPollingPlace, index: number) => {
-                            const primaryText = reactStringReplace(
-                                pollingPlace.polling_place_name,
-                                searchText,
-                                (match: string, i: number) => <HighlightedString key={i}>{match}</HighlightedString>
-                            )
+                            const primaryTextString =
+                                pollingPlace.polling_place_name === pollingPlace.premises
+                                    ? pollingPlace.polling_place_name
+                                    : `${pollingPlace.polling_place_name}, ${pollingPlace.premises}`
+                            const primaryText = reactStringReplace(primaryTextString, searchText, (match: string, i: number) => (
+                                <HighlightedString key={i}>{match}</HighlightedString>
+                            ))
                             const secondaryText = reactStringReplace(
                                 `${pollingPlace.address}, ${pollingPlace.state}`,
                                 searchText,

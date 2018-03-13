@@ -32,7 +32,11 @@ class App extends React.PureComponent<IProps, {}> {
         const { searchText, pollingPlaces, onPollingPlaceAutocompleteSelect, onChoosePollingPlace } = this.props
 
         const pollingPlaceResults: any = pollingPlaces.map((currentValue: IPollingPlace, index: any, array: any) => {
-            const primaryText = reactStringReplace(currentValue.polling_place_name, searchText, (match: string, i: number) => (
+            const primaryTextString =
+                currentValue.polling_place_name === currentValue.premises
+                    ? currentValue.polling_place_name
+                    : `${currentValue.polling_place_name}, ${currentValue.premises}`
+            const primaryText = reactStringReplace(primaryTextString, searchText, (match: string, i: number) => (
                 <HighlightedString key={i}>{match}</HighlightedString>
             ))
             const secondaryText = reactStringReplace(
