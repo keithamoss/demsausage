@@ -8,13 +8,9 @@ import "./App.css"
 import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
 import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
 
-// import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
 import LinearProgress from "material-ui/LinearProgress"
-
 import { MapsMap, MapsAddLocation, ActionSearch, ActionStore, ActionInfo, HardwareTv, CommunicationEmail } from "material-ui/svg-icons"
-
-// import Drawer from "material-ui/Drawer"
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Paper from "material-ui/Paper"
 import { List, ListItem } from "material-ui/List"
@@ -65,8 +61,9 @@ export interface IProps {
     defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
-    toggleSidebar: any
+    onOpenDrawer: any
     onClickDrawerLink: any
+    onClickOutboundDrawerLink: any
     locationPathName: string
     content: any
 }
@@ -81,13 +78,15 @@ class App extends React.Component<IProps, {}> {
             defaultBreakPoint,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
+            onOpenDrawer,
             onClickDrawerLink,
+            onClickOutboundDrawerLink,
             locationPathName,
             content,
         } = this.props
 
-        let bottomNavSelectedIndex: number = -1
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
+        let bottomNavSelectedIndex: number = -1
         if (content.type.muiName === "SausageMapContainer") {
             bottomNavSelectedIndex = 0
         } else if (content.type.muiName === "PollingPlaceFinderContainer") {
@@ -163,6 +162,7 @@ class App extends React.Component<IProps, {}> {
                         <ListItem
                             primaryText="Redbubble Store"
                             leftIcon={<ActionStore />}
+                            onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Redbubble Store")}
                             containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
                         />
                     </List>
@@ -172,16 +172,19 @@ class App extends React.Component<IProps, {}> {
                         <ListItem
                             primaryText="Email"
                             leftIcon={<CommunicationEmail />}
+                            onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Email")}
                             containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
                         />
                         <ListItem
                             primaryText="Twitter"
                             leftIcon={<TwitterIcon />}
+                            onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Twitter")}
                             containerElement={<a href={"https://twitter.com/DemSausage"} />}
                         />
                         <ListItem
                             primaryText="Facebook"
                             leftIcon={<FacebookIcon />}
+                            onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Facebook")}
                             containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
                         />
                     </List>
@@ -192,6 +195,7 @@ class App extends React.Component<IProps, {}> {
 
                     <ResponsiveAppBar
                         breakPoint={defaultBreakPoint}
+                        onLeftIconButtonTouchTap={onOpenDrawer}
                         title={
                             <TitleContainer>
                                 <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage

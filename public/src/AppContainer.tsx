@@ -20,18 +20,17 @@ import getMuiTheme from "material-ui/styles/getMuiTheme"
 
 import App from "./App"
 import { connect } from "react-redux"
-import { fetchInitialAppState, toggleSidebarState } from "./redux/modules/app"
+import { fetchInitialAppState } from "./redux/modules/app"
 import { getURLSafeElectionName, setCurrentElection } from "./redux/modules/elections"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 
-// import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 
 import { IElection } from "./redux/modules/elections"
 import { IStore, IAppModule, ISnackbarsModule } from "./redux/modules/interfaces"
 // const Config: IConfig = require("Config") as any
 
-import { setDrawerOpen } from "material-ui-responsive-drawer"
+import { setDrawerOpen, toggleDrawerOpen } from "material-ui-responsive-drawer"
 import { gaTrack } from "./shared/analytics/GoogleAnalytics"
 
 const muiTheme = getMuiTheme({
@@ -71,8 +70,9 @@ export interface IDispatchProps {
     fetchInitialAppState: Function
     setElectionFromRoute: Function
     handleSnackbarClose: Function
-    toggleSidebar: Function
+    onOpenDrawer: Function
     onClickDrawerLink: Function
+    onClickOutboundDrawerLink: Function
 }
 
 export interface IStateProps {}
@@ -132,8 +132,9 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             browser,
             responsiveDrawer,
             handleSnackbarClose,
-            toggleSidebar,
+            onOpenDrawer,
             onClickDrawerLink,
+            onClickOutboundDrawerLink,
             location,
             children,
             content,
@@ -160,8 +161,9 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
-                    toggleSidebar={toggleSidebar}
+                    onOpenDrawer={onOpenDrawer}
                     onClickDrawerLink={onClickDrawerLink}
+                    onClickOutboundDrawerLink={onClickOutboundDrawerLink}
                     locationPathName={location.pathname}
                     children={children}
                     content={content}
@@ -198,16 +200,24 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 dispatch(iterateSnackbar())
             }
         },
-        toggleSidebar: () => {
+        onOpenDrawer: () => {
             gaTrack.event({
                 category: "Sausage",
                 action: "AppContainer",
-                type: "onToggleSidebar",
+                type: "onOpenDrawer",
             })
-            dispatch(toggleSidebarState())
+            dispatch(toggleDrawerOpen())
         },
-        onClickDrawerLink: () => {
+        onClickDrawerLink: (e: React.MouseEvent<HTMLElement>) => {
             dispatch(setDrawerOpen(false))
+        },
+        onClickOutboundDrawerLink: (e: React.MouseEvent<HTMLElement>, linkName: string) => {
+            gaTrack.event({
+                category: "Sausage",
+                action: "AppContainer",
+                type: "onOutboundLinkClick",
+                value: linkName,
+            })
         },
     }
 }
