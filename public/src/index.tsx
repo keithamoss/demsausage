@@ -23,7 +23,13 @@ let Middleware: Array<any> = []
 
 if ("REACT_APP_RAVEN_URL" in process.env) {
     Raven.config(process.env.REACT_APP_RAVEN_URL!, { environment: process.env.NODE_ENV }).install()
-    Middleware.push(createRavenMiddleware(Raven))
+    Middleware.push(
+        createRavenMiddleware(Raven, {
+            breadcrumbDataFromAction: (action: any) => {
+                return JSON.stringify(action)
+            },
+        })
+    )
 }
 
 if ("REACT_APP_GOOGLE_ANALYTICS_UA" in process.env) {
