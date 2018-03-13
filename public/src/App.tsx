@@ -6,6 +6,7 @@ import { getURLSafeElectionName } from "./redux/modules/elections"
 import "./App.css"
 
 import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
+import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
 
 // import AppBar from "material-ui/AppBar"
 import Snackbar from "material-ui/Snackbar"
@@ -104,6 +105,8 @@ class App extends React.Component<IProps, {}> {
             },
         }
 
+        const showElectionChooser = "pageTitle" in content.type && "pageBaseURL" in content.type
+
         return (
             <div className="page">
                 <ResponsiveDrawer breakPoint={defaultBreakPoint}>
@@ -197,7 +200,13 @@ class App extends React.Component<IProps, {}> {
                         zDepth={0}
                     />
 
-                    <div className="page-content">{content || this.props.children}</div>
+                    {showElectionChooser === true && (
+                        <ElectionChooserContainer pageTitle={content.type.pageTitle} pageBaseURL={content.type.pageBaseURL} />
+                    )}
+
+                    <div className="page-content" style={{ marginTop: showElectionChooser === true ? "110px" : "60px" }}>
+                        {content || this.props.children}
+                    </div>
 
                     {isResponsiveAndOverBreakPoint === false && (
                         <Paper zDepth={1} className="page-footer">

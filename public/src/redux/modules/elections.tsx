@@ -127,6 +127,10 @@ export function fetchElections(initialElectionName: string) {
             // Choose a default election to use when the route doesn't specify one
             const defaultElection = getDefaultElection(json)
             dispatch(setDefaultElection(defaultElection!.id))
+
+            // Ensure there's always a current election set. Other components
+            // will set this properly when they mount if needs be.
+            dispatch(setCurrentElection(defaultElection!.id))
         }
     }
 }

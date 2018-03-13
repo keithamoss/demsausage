@@ -5,7 +5,6 @@ import { Link } from "react-router"
 
 import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import ElectionChooserContainer from "../../elections/ElectionChooser/ElectionChooserContainer"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
 import SearchBar from "material-ui-search-bar"
@@ -56,8 +55,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
 
         return (
             <div>
-                <ElectionChooserContainer pageTitle={"Democracy Sausage"} pageBaseURL={""} />
-
                 <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
 
                 {/* <Snackbar

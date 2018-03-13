@@ -38,6 +38,8 @@ interface IOwnProps {
 
 export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     static muiName = "PollingPlaceFinderContainer"
+    static pageTitle = "Democracy Sausage | Find a polling place near you"
+    static pageBaseURL = "/search"
     onRequestLocationPermissions: any
 
     constructor(props: IStoreProps & IDispatchProps) {

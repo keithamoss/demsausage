@@ -36,6 +36,8 @@ interface IOwnProps {
 
 export class SausageMapContainer extends React.Component<IStoreProps & IDispatchProps & IOwnProps, IStateProps> {
     static muiName = "SausageMapContainer"
+    static pageTitle = "Democracy Sausage"
+    static pageBaseURL = ""
 
     constructor(props: any) {
         super(props)

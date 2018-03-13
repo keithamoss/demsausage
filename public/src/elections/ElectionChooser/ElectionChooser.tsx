@@ -13,9 +13,10 @@ import { white } from "material-ui/styles/colors"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 
 const AppBarStyled = styled(AppBar)`
-    margin-top: -10px;
+    margin-top: 50px; /* Height of ResponsiveAppBar */
     margin-bottom: 10px;
     z-index: 100;
+    position: fixed !important;
 `
 
 const ElectionTabs = styled(Tabs)`
