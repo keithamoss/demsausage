@@ -2,6 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { browserHistory, Link } from "react-router"
 import { IAppModule, ISnackbarsModule, IElection } from "./redux/modules/interfaces"
+import { getURLSafeElectionName } from "./redux/modules/elections"
 import "./App.css"
 
 import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
@@ -37,10 +38,13 @@ const TitleLogo = styled.img`
 
 class MenuListItem extends React.Component<any, any> {
     render(): any {
-        const { muiThemePalette, locationPathName, locationPathNameMatch, contentDisplayName, ...rest } = this.props
+        const { muiThemePalette, locationPathName, locationPathNameMatch, contentMuiName, ...rest } = this.props
 
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
-        if (locationPathNameMatch === "/" && contentDisplayName === "SausageMapContainer") {
+        if (
+            (locationPathNameMatch === "/" && contentMuiName === "SausageMapContainer") ||
+            (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer")
+        ) {
             rest.style = { color: muiThemePalette.accent1Color }
             rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         } else if (locationPathNameMatch === locationPathName) {
@@ -56,6 +60,7 @@ export interface IProps {
     app: IAppModule
     snackbars: ISnackbarsModule
     elections: Array<IElection>
+    currentElection: IElection
     defaultBreakPoint: string
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
@@ -71,6 +76,7 @@ class App extends React.Component<IProps, {}> {
             muiThemePalette,
             app,
             snackbars,
+            currentElection,
             defaultBreakPoint,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
@@ -81,9 +87,9 @@ class App extends React.Component<IProps, {}> {
 
         let bottomNavSelectedIndex: number = -1
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
-        if (content.type.displayName === "SausageMapContainer") {
+        if (content.type.muiName === "SausageMapContainer") {
             bottomNavSelectedIndex = 0
-        } else if (locationPathName === "/search") {
+        } else if (content.type.muiName === "PollingPlaceFinderContainer") {
             bottomNavSelectedIndex = 1
         } else if (locationPathName === "/add-stall") {
             bottomNavSelectedIndex = 2
@@ -106,19 +112,20 @@ class App extends React.Component<IProps, {}> {
                             <MenuListItem
                                 primaryText="Map"
                                 leftIcon={<MapsMap />}
-                                containerElement={<Link to={`/`} />}
+                                containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
                                 locationPathName={locationPathName}
                                 locationPathNameMatch={"/"}
                                 muiThemePalette={muiThemePalette}
-                                contentDisplayName={content.type.displayName}
+                                contentMuiName={content.type.muiName}
                             />
                             <MenuListItem
                                 primaryText="Find"
                                 leftIcon={<ActionSearch />}
-                                containerElement={<Link to={`/search`} />}
+                                containerElement={<Link to={`/search/${getURLSafeElectionName(currentElection)}`} />}
                                 locationPathName={locationPathName}
                                 locationPathNameMatch={"/search"}
                                 muiThemePalette={muiThemePalette}
+                                contentMuiName={content.type.muiName}
                             />
                             <MenuListItem
                                 primaryText="Add Stall"
@@ -195,8 +202,16 @@ class App extends React.Component<IProps, {}> {
                     {isResponsiveAndOverBreakPoint === false && (
                         <Paper zDepth={1} className="page-footer">
                             <BottomNavigation selectedIndex={bottomNavSelectedIndex}>
-                                <BottomNavigationItem label="Map" icon={<MapsMap />} onClick={() => browserHistory.push("/")} />
-                                <BottomNavigationItem label="Find" icon={<ActionSearch />} onClick={() => browserHistory.push("/search")} />
+                                <BottomNavigationItem
+                                    label="Map"
+                                    icon={<MapsMap />}
+                                    onClick={() => browserHistory.push(`/${getURLSafeElectionName(currentElection)}`)}
+                                />
+                                <BottomNavigationItem
+                                    label="Find"
+                                    icon={<ActionSearch />}
+                                    onClick={() => browserHistory.push(`/search/${getURLSafeElectionName(currentElection)}`)}
+                                />
                                 <BottomNavigationItem
                                     label="Add Stall"
                                     icon={<MapsAddLocation />}

@@ -21,6 +21,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme"
 import App from "./App"
 import { connect } from "react-redux"
 import { fetchInitialAppState, toggleSidebarState } from "./redux/modules/app"
+import { getURLSafeElectionName, setCurrentElection } from "./redux/modules/elections"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
 
 // import CircularProgress from "material-ui/CircularProgress"
@@ -59,12 +60,15 @@ export interface IStoreProps {
     app: IAppModule
     snackbars: ISnackbarsModule
     elections: Array<IElection>
+    currentElection: IElection
+    defaultElection: IElection
     browser: any
     responsiveDrawer: any
 }
 
 export interface IDispatchProps {
     fetchInitialAppState: Function
+    setElectionFromRoute: Function
     handleSnackbarClose: Function
     toggleSidebar: Function
     onClickDrawerLink: Function
@@ -91,12 +95,30 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouterProps & IOwnProps, IStateProps> {
-    componentDidMount() {
+    async componentDidMount() {
         const { fetchInitialAppState, params } = this.props
-        fetchInitialAppState(params.electionName)
+        await fetchInitialAppState(params.electionName)
 
-        if (document.title !== "Democracy Sausage") {
-            document.title = "Democracy Sausage"
+        document.title = "Democracy Sausage"
+    }
+
+    componentWillReceiveProps(nextProps: IStoreProps & IDispatchProps & IRouterProps & IOwnProps) {
+        // Handle setting the currentElection in Redux based on route changes
+        if ("params" in nextProps && "electionName" in nextProps.params && nextProps.elections.length > 0) {
+            // Fallback to our default election if the route hasn't specified an election
+            if (nextProps.params.electionName === undefined) {
+                if (nextProps.defaultElection !== undefined) {
+                    nextProps.setElectionFromRoute(nextProps.defaultElection.id)
+                }
+            } else {
+                // Otherwise, set the election the route wants to use
+                const election = nextProps.elections.find(
+                    (election: IElection) => getURLSafeElectionName(election) === nextProps.params.electionName
+                )
+                if (election !== undefined) {
+                    nextProps.setElectionFromRoute(election.id)
+                }
+            }
         }
     }
 
@@ -105,6 +127,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             app,
             snackbars,
             elections,
+            currentElection,
             browser,
             responsiveDrawer,
             handleSnackbarClose,
@@ -132,6 +155,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     app={app}
                     snackbars={snackbars}
                     elections={elections}
+                    currentElection={currentElection}
                     defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
@@ -153,6 +177,8 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         app: app,
         snackbars: snackbars,
         elections: elections.elections,
+        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
+        defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
         browser: browser,
         responsiveDrawer: responsiveDrawer,
     }
@@ -162,6 +188,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchInitialAppState: (initialElectionName: string) => {
             dispatch(fetchInitialAppState(initialElectionName))
+        },
+        setElectionFromRoute: (electionId: number) => {
+            dispatch(setCurrentElection(electionId))
         },
         handleSnackbarClose: (reason: string) => {
             if (reason === "timeout") {

@@ -124,23 +124,9 @@ export function fetchElections(initialElectionName: string) {
         if (response.status === 200) {
             dispatch(loadElections(json))
 
-            // Let the page route dictate that we're looking at a specific election
-            // e.g. https://democracysausage.org/batman_by-election_2018
-            let initialElection
-            if (initialElectionName !== undefined) {
-                initialElection = json.find((election: IElection) => getURLSafeElectionName(election) === initialElectionName)
-                if (initialElection !== undefined) {
-                    dispatch(setCurrentElection(initialElection.id))
-                }
-            }
-
-            // Failing that, fallback to the most logical default choice from amongst our list of elections
+            // Choose a default election to use when the route doesn't specify one
             const defaultElection = getDefaultElection(json)
             dispatch(setDefaultElection(defaultElection!.id))
-
-            if (initialElection === undefined) {
-                dispatch(setCurrentElection(defaultElection!.id))
-            }
         }
     }
 }

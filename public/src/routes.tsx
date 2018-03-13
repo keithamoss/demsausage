@@ -11,7 +11,7 @@ import { IStore } from "./redux/modules/interfaces"
 export default (store: IStore) => {
     return (
         <Route component={AppContainer}>
-            <Route path="/search" components={{ content: PollingPlaceFinderContainer }} />
+            <Route path="/search(/:electionName)" components={{ content: PollingPlaceFinderContainer }} />
             <Route path="/add-stall" components={{ content: AddStallContainer }} />
             /* Static Pages */
             <Route path="/about" components={{ content: AboutPage }} />

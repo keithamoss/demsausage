@@ -37,8 +37,10 @@ interface IOwnProps {
 }
 
 export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+    static muiName = "PollingPlaceFinderContainer"
     onRequestLocationPermissions: any
-    constructor(props: any) {
+
+    constructor(props: IStoreProps & IDispatchProps) {
         super(props)
         this.state = { nearbyPollingPlaces: null, locationSearched: null }
 
@@ -59,8 +61,6 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
                 }
             }, 250)
         }
-
-        document.title = "Democracy Sausage | Find a polling place near you"
     }
 
     async onReceiveNearbyPollingPlaces(pollingPlaces: Array<IPollingPlaceSearchResult>, locationSearched: string) {
