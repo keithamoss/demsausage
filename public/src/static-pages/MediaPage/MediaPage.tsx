@@ -40,6 +40,7 @@ export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchP
                     <ListItem
                         primaryText="Media Contact"
                         secondaryText="ausdemocracysausage@gmail.com"
+                        secondaryTextLines={2}
                         leftIcon={<CommunicationEmail />}
                         disabled={true}
                     />

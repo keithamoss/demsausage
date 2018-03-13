@@ -23,6 +23,7 @@ export interface IStoreProps {
 }
 
 export interface IStateProps {
+    stepIndex: number
     chosenElection: IElection | null
     stallLocationInfo: IStallLocationInfo | null /* Actually IStallLocationInfo or IPollingPlace (depending on election.polling_places_loaded) */
     locationConfirmed: boolean
@@ -43,31 +44,34 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     constructor(props: any) {
         super(props)
         this.state = {
+            stepIndex: 0,
             chosenElection: props.activeElections.length === 1 ? props.activeElections[0] : null,
             stallLocationInfo: null,
             locationConfirmed: false,
             formSubmitting: false,
         }
 
-        this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
         this.onChooseElection = this.onChooseElection.bind(this)
-    }
-
-    onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
-        this.setState(
-            Object.assign(this.state, {
-                stallLocationInfo: stallLocationInfo,
-                locationConfirmed: true,
-            })
-        )
+        this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
     }
 
     onChooseElection(event: any, election: IElection) {
         this.setState(
             Object.assign(this.state, {
+                stepIndex: 1,
                 chosenElection: election,
                 stallLocationInfo: null,
-                locationConfirmed: null,
+                locationConfirmed: false,
+            })
+        )
+    }
+
+    onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
+        this.setState(
+            Object.assign(this.state, {
+                stepIndex: 2,
+                stallLocationInfo: stallLocationInfo,
+                locationConfirmed: true,
             })
         )
     }
@@ -91,11 +95,12 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 
     render() {
         const { activeElections, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
-        const { chosenElection, stallLocationInfo, locationConfirmed, formSubmitting } = this.state
+        const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting } = this.state
 
         return (
             <AddStallForm
                 activeElections={activeElections}
+                stepIndex={stepIndex}
                 onChooseElection={this.onChooseElection}
                 chosenElection={chosenElection}
                 onConfirmChosenLocation={this.onConfirmChosenLocation}

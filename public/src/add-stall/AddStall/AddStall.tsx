@@ -13,19 +13,21 @@ export interface IProps {
     onStallAdded: Function
 }
 
-const FormContainer = styled.div`
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 100px;
-`
+const FormContainer = styled.div``
 
 const FormSection = styled.div`
+    padding-left: 15px;
+    padding-right: 15px;
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 `
 
 const FormSectionHeader = styled.h2`
     margin-bottom: 0px;
+`
+
+const FormText = styled.p`
+    margin-top: 20px;
 `
 
 class AddStall extends React.PureComponent<IProps, {}> {
@@ -37,15 +39,14 @@ class AddStall extends React.PureComponent<IProps, {}> {
                 {showWelcome && (
                     <FormSection>
                         <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
-                        <br />
-                        Please complete the form below to add your stall to the map. Please do not submit entries that are offensive,
-                        political or do not relate to an election day stall. Please also make sure that you have authorisation to run your
-                        fundraising event at the polling place. All entries are moderated and subject to approval.<br />
-                        <br />
-                        Having trouble submitting a stall? Email us at{" "}
-                        <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>!
-                        <br />
-                        <br />
+                        <FormText>
+                            Please complete the form below to add your stall to the map. Please do not submit entries that are offensive,
+                            political or do not relate to an election day stall. Please also make sure that you have authorisation to run
+                            your fundraising event at the polling place. All entries are moderated and subject to approval.<br />
+                            <br />
+                            Having trouble submitting a stall? Email us at{" "}
+                            <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>!
+                        </FormText>
                     </FormSection>
                 )}
 
