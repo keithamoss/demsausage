@@ -5,15 +5,15 @@ import styled from "styled-components"
 import { IElection } from "../../redux/modules/interfaces"
 import { getMapboxAPIKey } from "../../redux/modules/app"
 
-import AppBar from "material-ui/AppBar"
 import { Tabs, Tab } from "material-ui/Tabs"
 import IconButton from "material-ui/IconButton"
 import FlatButton from "material-ui/FlatButton"
 import { NavigationMoreVert, NavigationMoreHoriz } from "material-ui/svg-icons"
 import { white } from "material-ui/styles/colors"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
+import { ResponsiveAppBar } from "material-ui-responsive-drawer"
 
-const AppBarStyled = styled(AppBar)`
+const AppBarStyled = styled(ResponsiveAppBar)`
     margin-top: 50px; /* Height of ResponsiveAppBar */
     margin-bottom: 10px;
     z-index: 100;
