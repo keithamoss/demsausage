@@ -95,20 +95,36 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
+            gaTrack.event({
+                category: "Sausage",
+                action: "SausageMapContainer",
+                type: "fetchQueriedPollingPlacesIds",
+                value: pollingPlaceIds.length,
+            })
             const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
             gaTrack.event({
                 category: "Sausage",
                 action: "SausageMapContainer",
-                type: "fetchQueriedPollingPlaces",
-                value: { length: results.length },
+                type: "fetchQueriedPollingPlacesResults",
+                value: results.length,
             })
             return results
         },
         onOpenFinderForAddressSearch() {
+            gaTrack.event({
+                category: "Sausage",
+                action: "SausageMapContainer",
+                type: "onOpenFinderForAddressSearch",
+            })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
             browserHistory.push("/search")
         },
         onOpenFinderForGeolocation() {
+            gaTrack.event({
+                category: "Sausage",
+                action: "SausageMapContainer",
+                type: "onOpenFinderForGeolocation",
+            })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.GEOLOCATION))
             browserHistory.push("/search")
         },

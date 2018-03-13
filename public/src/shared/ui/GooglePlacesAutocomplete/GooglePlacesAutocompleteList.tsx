@@ -42,7 +42,12 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
     }
 
     onReceiveAddressSearchResults(results: Array<IGoogleAddressSearchResult>) {
-        gaTrack.event({ category: "Sausage", action: "GooglePlacesAutocompleteList", type: "onReceiveAddressSearchResults" })
+        gaTrack.event({
+            category: "Sausage",
+            action: "GooglePlacesAutocompleteList",
+            type: "onReceiveAddressSearchResults",
+            value: results.length,
+        })
 
         this.setState({
             addressSearchResults: results,
@@ -111,16 +116,23 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: addressResult.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
-                gaTrack.event({
-                    category: "Sausage",
-                    action: "GooglePlacesAutocompleteList",
-                    type: "fetchGeocodedPlace",
-                    value: { length: results.length },
-                })
+                if (status === "OK" && results.length > 0) {
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "GooglePlacesAutocompleteList",
+                        type: "fetchGeocodedPlaceGeocodeResults",
+                        value: results.length,
+                    })
 
-                if (results.length > 0) {
                     onPlaceChosen()
                     onChoosePlace(addressResult, results[0])
+                } else {
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "GooglePlacesAutocompleteList",
+                        type: "fetchGeocodedPlaceGeocodeResultsError",
+                        value: status,
+                    })
                 }
             })
         },

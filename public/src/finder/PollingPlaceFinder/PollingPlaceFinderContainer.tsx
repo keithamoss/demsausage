@@ -103,23 +103,38 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         findNearestPollingPlaces: function(onReceiveNearbyPollingPlaces: Function, election: IElection, value: IGoogleAddressSearchResult) {
-            gaTrack.event({ category: "Sausage", action: "PollingPlaceFinder", type: "findNearestPollingPlaces" })
+            gaTrack.event({ category: "Sausage", action: "PollingPlaceFinderContainer", type: "findNearestPollingPlaces" })
 
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: value.place_id }, async (results: Array<IGoogleGeocodeResult>, status: string) => {
-                gaTrack.event({
-                    category: "Sausage",
-                    action: "PollingPlaceFinder",
-                    type: "findNearestPollingPlaces",
-                    value: { length: results.length },
-                })
+                if (status === "OK" && results.length > 0) {
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "PollingPlaceFinderContainer",
+                        type: "findNearestPollingPlacesAddressGeocodeResults",
+                        value: results.length,
+                    })
 
-                if (results.length > 0) {
                     const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(
                         fetchNearbyPollingPlaces(election, results[0].geometry.location.lat(), results[0].geometry.location.lng())
                     )
+
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "PollingPlaceFinderContainer",
+                        type: "findNearestPollingPlacesSearchResults",
+                        value: pollingPlaces.length,
+                    })
+
                     onReceiveNearbyPollingPlaces(pollingPlaces, results[0].formatted_address)
+                } else {
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "PollingPlaceFinderContainer",
+                        type: "findNearestPollingPlacesSearchResultsError",
+                        value: status,
+                    })
                 }
             })
         },
@@ -127,8 +142,20 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             const { currentElection, geolocationSupported } = this.props
 
             if (geolocationSupported === true) {
+                gaTrack.event({
+                    category: "Sausage",
+                    action: "PollingPlaceFinderContainer",
+                    type: "onRequestLocationPermissionsAsk",
+                })
+
                 navigator.geolocation.getCurrentPosition(
                     async (position: Position) => {
+                        gaTrack.event({
+                            category: "Sausage",
+                            action: "PollingPlaceFinderContainer",
+                            type: "onRequestLocationPermissionsGranted",
+                        })
+
                         let locationSearched = "your current location"
                         const google = window.google
                         const geocoder = new google.maps.Geocoder()
@@ -136,23 +163,52 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                         geocoder.geocode(
                             { location: { lat: position.coords.latitude, lng: position.coords.longitude } },
                             async (results: Array<any>, status: string) => {
-                                if (status === "OK" && results) {
+                                if (status === "OK" && results.length > 0) {
+                                    gaTrack.event({
+                                        category: "Sausage",
+                                        action: "PollingPlaceFinderContainer",
+                                        type: "onRequestLocationPermissionsGeocodeResults",
+                                        value: results.length,
+                                    })
+
                                     const streetAddressPlace = results.find(
                                         (place: IGoogleGeocodeResult) => place.types[0] === "street_address"
                                     )
                                     if (streetAddressPlace !== undefined) {
                                         locationSearched = streetAddressPlace.formatted_address
                                     }
-                                }
 
-                                const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(
-                                    fetchNearbyPollingPlaces(currentElection, position.coords.latitude, position.coords.longitude)
-                                )
-                                this.onReceiveNearbyPollingPlaces(pollingPlaces, locationSearched)
+                                    const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(
+                                        fetchNearbyPollingPlaces(currentElection, position.coords.latitude, position.coords.longitude)
+                                    )
+
+                                    gaTrack.event({
+                                        category: "Sausage",
+                                        action: "PollingPlaceFinderContainer",
+                                        type: "onRequestLocationPermissionsSearchResults",
+                                        value: pollingPlaces.length,
+                                    })
+
+                                    this.onReceiveNearbyPollingPlaces(pollingPlaces, locationSearched)
+                                } else {
+                                    gaTrack.event({
+                                        category: "Sausage",
+                                        action: "PollingPlaceFinderContainer",
+                                        type: "onRequestLocationPermissionsGeocodeResultsError",
+                                        value: status,
+                                    })
+                                }
                             }
                         )
                     },
                     (error: PositionError) => {
+                        gaTrack.event({
+                            category: "Sausage",
+                            action: "PollingPlaceFinderContainer",
+                            type: "onRequestLocationPermissionsError",
+                            value: error.message,
+                        })
+
                         let snackbarMessage
                         switch (error.code) {
                             case 1: // PERMISSION_DENIED

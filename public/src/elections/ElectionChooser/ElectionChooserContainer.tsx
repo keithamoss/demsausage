@@ -69,14 +69,29 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
                 onCloseElectionChooserDialog={this.onCloseElectionChooserDialog}
                 onChooseElection={(election: IElection) => {
                     this.onCloseElectionChooserDialog()
+                    gaTrack.event({
+                        category: "Sausage",
+                        action: "ElectionChooserContainer",
+                        type: "onChooseElectionFromDialog",
+                    })
                     onChooseElection(election, pageBaseURL)
                 }}
                 onChooseElectionTab={(electionId: number) => {
                     // Navigate to the Current Elections tab (and change our current election to the defaultElection)
                     if (electionId === -1) {
+                        gaTrack.event({
+                            category: "Sausage",
+                            action: "ElectionChooserContainer",
+                            type: "onChooseCurrentElectionsTab",
+                        })
                         browserHistory.push(pageBaseURL)
                     } else {
                         // Navigate to the election chosen by the user
+                        gaTrack.event({
+                            category: "Sausage",
+                            action: "ElectionChooserContainer",
+                            type: "onClickElectionTab",
+                        })
                         onChooseElection(elections.find((election: IElection) => election.id === electionId), pageBaseURL)
                     }
                 }}

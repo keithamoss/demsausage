@@ -32,6 +32,7 @@ import { IStore, IAppModule, ISnackbarsModule } from "./redux/modules/interfaces
 // const Config: IConfig = require("Config") as any
 
 import { setDrawerOpen } from "material-ui-responsive-drawer"
+import { gaTrack } from "./shared/analytics/GoogleAnalytics"
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -198,6 +199,11 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             }
         },
         toggleSidebar: () => {
+            gaTrack.event({
+                category: "Sausage",
+                action: "AppContainer",
+                type: "onToggleSidebar",
+            })
             dispatch(toggleSidebarState())
         },
         onClickDrawerLink: () => {

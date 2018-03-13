@@ -4,6 +4,7 @@ import { IElection } from "../../redux/modules/interfaces"
 import { getAPIBaseURL } from "../../redux/modules/app"
 
 import * as ol from "openlayers"
+import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
     election: IElection
@@ -130,14 +131,28 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         map.addLayer(vectorLayer)
 
         map.on("singleclick", function(e: any) {
+            gaTrack.event({
+                category: "Sausage",
+                action: "OpenLayersMap",
+                type: "onSingleClick",
+            })
+
             let features: Array<any> = []
             map.forEachFeatureAtPixel(
                 e.pixel,
                 (feature: any, layer: any) => {
                     features.push(feature.getProperties())
-                }
-                // { hitTolerance: 5 }
+                },
+                { hitTolerance: 3 }
             )
+
+            gaTrack.event({
+                category: "Sausage",
+                action: "OpenLayersMap",
+                type: "onSingleClickFeatures",
+                value: features.length,
+            })
+
             onQueryMap(features)
         })
     }
