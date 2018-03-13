@@ -7,6 +7,7 @@ import styled from "styled-components"
 import AddStallFormContainer from "../AddStallForm/AddStallFormContainer"
 
 export interface IProps {
+    showNoActiveElections: boolean
     showWelcome: boolean
     showThankYou: boolean
     showForm: boolean
@@ -32,10 +33,21 @@ const FormText = styled.p`
 
 class AddStall extends React.PureComponent<IProps, {}> {
     render() {
-        const { showWelcome, showThankYou, showForm, onStallAdded } = this.props
+        const { showNoActiveElections, showWelcome, showThankYou, showForm, onStallAdded } = this.props
 
         return (
             <FormContainer>
+                {showNoActiveElections && (
+                    <FormSection>
+                        <FormSectionHeader>There aren't any active elections at the moment</FormSectionHeader>
+                        <FormText>
+                            Thanks for your interest in submitting a stall, but there aren't any elections coming up that we're planning to
+                            cover. If you know of an election that you think we should cover, please get in touch with us at{" "}
+                            <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> and we'll consider adding it.
+                        </FormText>
+                    </FormSection>
+                )}
+
                 {showWelcome && (
                     <FormSection>
                         <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
@@ -53,10 +65,10 @@ class AddStall extends React.PureComponent<IProps, {}> {
                 {showThankYou && (
                     <FormSection>
                         <FormSectionHeader>Thank you</FormSectionHeader>
-                        <br />
-                        Thanks for letting us know about your stall! We'll let you know once it's approved and it's appearing on the map.
-                        <br />
-                        <br />
+                        <FormText>
+                            Thanks for letting us know about your stall! We'll let you know once it's approved and it's appearing on the
+                            map.
+                        </FormText>
                     </FormSection>
                 )}
 

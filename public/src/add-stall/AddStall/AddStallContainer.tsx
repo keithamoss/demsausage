@@ -2,13 +2,15 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import AddStall from "./AddStall"
-import { IStore } from "../../redux/modules/interfaces"
+import { IStore, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
 
 export interface IDispatchProps {}
 
-export interface IStoreProps {}
+export interface IStoreProps {
+    activeElections: Array<IElection>
+}
 
 export interface IStateProps {
     formSubmitted: boolean
@@ -41,13 +43,17 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     render() {
+        const { activeElections } = this.props
         const { formSubmitted } = this.state
+
+        const showNoActiveElections = activeElections.length === 0
 
         return (
             <AddStall
-                showWelcome={!formSubmitted}
-                showThankYou={formSubmitted}
-                showForm={!formSubmitted}
+                showNoActiveElections={showNoActiveElections}
+                showWelcome={!formSubmitted && !showNoActiveElections}
+                showThankYou={formSubmitted && !showNoActiveElections}
+                showForm={!formSubmitted && !showNoActiveElections}
                 onStallAdded={this.onStallAdded}
             />
         )
@@ -55,9 +61,11 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    // const { elections } = state
+    const { elections } = state
 
-    return {}
+    return {
+        activeElections: elections.elections.filter((election: IElection) => election.is_active),
+    }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
