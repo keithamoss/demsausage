@@ -156,6 +156,10 @@ export function getBaseURL(): string {
     return getEnvironment() === eAppEnv.DEV ? "http://localhost:3000" : "https://democracysausage.org"
 }
 
+export function getMapboxAPIKey(): any {
+    return getEnvironment() === eAppEnv.DEV ? process.env.REACT_APP_MAPBOX_API_KEY_DEV : process.env.REACT_APP_MAPBOX_API_KEY_PROD
+}
+
 export function fetchInitialAppState(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
         dispatch(loading())

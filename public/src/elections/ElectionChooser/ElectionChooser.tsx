@@ -3,6 +3,7 @@ import styled from "styled-components"
 // import "./ElectionChooser.css"
 
 import { IElection } from "../../redux/modules/interfaces"
+import { getMapboxAPIKey } from "../../redux/modules/app"
 
 import AppBar from "material-ui/AppBar"
 import { Tabs, Tab } from "material-ui/Tabs"
@@ -197,9 +198,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
                                 <img
                                     src={`https://api.mapbox.com/styles/v1/mapbox/light-v9/static/${election.lon},${
                                         election.lat
-                                    },${election.default_zoom_level - 0.2},0,0/600x600?access_token=${
-                                        process.env.REACT_APP_MAPBOX_API_KEY
-                                    }`}
+                                    },${election.default_zoom_level - 0.2},0,0/600x600?access_token=${getMapboxAPIKey()}`}
                                 />
                                 <ElectionTitle className={election.id === currentElection.id ? "selected" : ""}>
                                     {election.short_name}

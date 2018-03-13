@@ -1,7 +1,7 @@
 import * as React from "react"
 // import "./OpenLayersMap.css"
 import { IElection } from "../../redux/modules/interfaces"
-import { getAPIBaseURL } from "../../redux/modules/app"
+import { getAPIBaseURL, getMapboxAPIKey } from "../../redux/modules/app"
 
 import * as ol from "openlayers"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -113,9 +113,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             layers: [
                 new ol.layer.Tile({
                     source: new ol.source.XYZ({
-                        url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${
-                            process.env.REACT_APP_MAPBOX_API_KEY
-                        }`,
+                        url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
                         crossOrigin: "anonymous",
                     }),
                 }),
