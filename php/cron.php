@@ -1,6 +1,6 @@
 <?php
 /*
-0 19 * * * /usr/local/bin/ea-php71 /home/flyingbl/public_html/demsausage-v3/php/cron.php
+0 6 * * * /usr/local/bin/ea-php71 /home/flyingbl/public_html/demsausage-v3/php/cron.php
 */
 
 ini_set("display_errors", 1);
@@ -24,7 +24,7 @@ if(getenv("SHELL") === "/bin/bash") {
       "subject" => "Reminder: There are $stallCount Democracy Sausage stalls waiting to be reviewed",
       "html" => file_get_contents(BASE_PATH . "/php/mail_templates/pending_stall_reminder.html"),
     );
-    echo sendMailgunEmail($body);
+    sendMailgunEmail($body);
   } else {
     echo "Eh, did nothing.";
   }
