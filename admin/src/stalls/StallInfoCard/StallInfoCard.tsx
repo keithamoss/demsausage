@@ -104,7 +104,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                                     <BaconandEggsIcon />
                                 </IconButton>
                             )}
-                            {stall.has_free_text !== "" && (
+                            {stall.has_free_text !== null && (
                                 <HasFreeTextDeliciousness>Also has: {stall.has_free_text}</HasFreeTextDeliciousness>
                             )}
                         </ListItem>
