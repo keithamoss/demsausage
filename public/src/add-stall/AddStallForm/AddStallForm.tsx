@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 
 import { Field, reduxForm } from "redux-form"
-import { IElection, IStallLocationInfo } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/interfaces"
 // import "./AddStallForm.css"
 
 import { Step, Stepper, StepLabel, StepContent } from "material-ui/Stepper"
@@ -33,7 +33,7 @@ export interface IProps {
     onChooseElection: any
     chosenElection: IElection
     onConfirmChosenLocation: any
-    stallLocationInfo: IStallLocationInfo
+    stallLocationInfo: any // Bit of a hack around the issue of this being IStallLocationInfo OR IPollingPlace
     locationConfirmed: boolean
     formSubmitting: boolean
     onSubmit: any
@@ -100,6 +100,18 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
         } = this.props
         const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
 
+        let primaryTextString
+        if (stallLocationInfo !== null) {
+            if ("id" in stallLocationInfo) {
+                primaryTextString =
+                    stallLocationInfo.polling_place_name === stallLocationInfo.premises
+                        ? stallLocationInfo.polling_place_name
+                        : `${stallLocationInfo.polling_place_name}, ${stallLocationInfo.premises}`
+            } else {
+                primaryTextString = stallLocationInfo.polling_place_name
+            }
+        }
+
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stepper activeStep={stepIndex} orientation="vertical">
@@ -115,9 +127,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     </Step>
 
                     <Step>
-                        <StepLabel>
-                            {locationConfirmed === false ? "Stall location" : `Stall location: ${stallLocationInfo.polling_place_name}`}
-                        </StepLabel>
+                        <StepLabel>{locationConfirmed === false ? "Stall location" : `Stall location: ${primaryTextString}`}</StepLabel>
                         <StepContentStyled>
                             {chosenElection !== null &&
                                 chosenElection.polling_places_loaded === false && (
@@ -143,7 +153,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     </Step>
 
                     <Step>
-                        <StepLabel>Stalls details</StepLabel>
+                        <StepLabel>Stall details</StepLabel>
                         <StepContentStyled>
                             {/* <div> required here so that StepContentStyled works */}
                             <div>
