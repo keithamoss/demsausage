@@ -26,7 +26,7 @@ if(getenv("SHELL") === "/bin/bash") {
     );
     sendMailgunEmail($body);
   } else {
-    echo "Eh, did nothing.";
+    // echo "Eh, did nothing.";
   }
 
   // Tidy up
