@@ -48,6 +48,10 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
     }
 
     onCloseElectionChooserDialog() {
+        gaTrack.event({
+            category: "ElectionChooserContainer",
+            action: "onCloseElectionChooserDialog",
+        })
         this.setState({ isElectionChooserOpen: false })
     }
 
