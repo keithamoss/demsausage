@@ -8,6 +8,7 @@ secrets.php
 /php/google-api-php-client-*
 /php/v3-test/*
 /php/carto-dump/*
+/php/fix-old-election-has-other.php
 *.sqlite3*
 /python/*
 /db/*.sqlite3
