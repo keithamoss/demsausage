@@ -83,7 +83,7 @@ export interface IProps {
 
 export interface IState {
     data: Array<IGoogleAddressSearchResult>
-    searchText?: string
+    searchText: string
 }
 
 declare global {
@@ -147,19 +147,23 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         this.getLatLgn = this.getLatLgn.bind(this)
         this.getPlacePredictions = debounce(
             function(this: GooglePlacesAutocomplete) {
-                const outerScope = this
-                this.service.getPlacePredictions(
-                    {
-                        input: this.state.searchText,
-                        componentRestrictions: this.props.componentRestrictions,
-                        types: this.props.types,
-                    },
-                    (predictions: Array<any>) => {
-                        if (predictions) {
-                            outerScope.populateData(predictions)
+                if (this.state.searchText.length > 0) {
+                    const outerScope = this
+                    this.service.getPlacePredictions(
+                        {
+                            input: this.state.searchText,
+                            componentRestrictions: this.props.componentRestrictions,
+                            types: this.props.types,
+                        },
+                        (predictions: Array<any>) => {
+                            if (predictions) {
+                                outerScope.populateData(predictions)
+                            }
                         }
-                    }
-                )
+                    )
+                } else {
+                    this.populateData([])
+                }
             },
             750,
             { maxWait: 2000 }
@@ -177,14 +181,12 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     }
 
     updateInput(searchText: string) {
-        if (searchText.length > 0) {
-            this.setState(
-                {
-                    searchText,
-                },
-                this.getPlacePredictions
-            )
-        }
+        this.setState(
+            {
+                searchText,
+            },
+            this.getPlacePredictions
+        )
     }
 
     populateData(array: Array<IGoogleAddressSearchResult>) {
