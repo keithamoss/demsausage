@@ -41,9 +41,8 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
 
     onOpenElectionChooser() {
         gaTrack.event({
-            category: "Sausage",
-            action: "ElectionChooserContainer",
-            type: "onOpenElectionChooser",
+            category: "ElectionChooserContainer",
+            action: "onOpenElectionChooser",
         })
         this.setState({ isElectionChooserOpen: true })
     }
@@ -70,9 +69,8 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
                 onChooseElection={(election: IElection) => {
                     this.onCloseElectionChooserDialog()
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "ElectionChooserContainer",
-                        type: "onChooseElectionFromDialog",
+                        category: "ElectionChooserContainer",
+                        action: "onChooseElectionFromDialog",
                     })
                     onChooseElection(election, pageBaseURL)
                 }}
@@ -80,17 +78,17 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
                     // Navigate to the Current Elections tab (and change our current election to the defaultElection)
                     if (electionId === -1) {
                         gaTrack.event({
-                            category: "Sausage",
-                            action: "ElectionChooserContainer",
-                            type: "onChooseCurrentElectionsTab",
+                            category: "ElectionChooserContainer",
+                            action: "onChooseCurrentElectionsTab",
+                            label: "Go to Current Elections",
                         })
                         browserHistory.push(pageBaseURL)
                     } else {
                         // Navigate to the election chosen by the user
                         gaTrack.event({
-                            category: "Sausage",
-                            action: "ElectionChooserContainer",
-                            type: "onClickElectionTab",
+                            category: "ElectionChooserContainer",
+                            action: "onClickElectionTab",
+                            label: "Go to a specific election",
                         })
                         onChooseElection(elections.find((election: IElection) => election.id === electionId), pageBaseURL)
                     }

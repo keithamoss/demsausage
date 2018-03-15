@@ -105,16 +105,20 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         findNearestPollingPlaces: function(onReceiveNearbyPollingPlaces: Function, election: IElection, value: IGoogleAddressSearchResult) {
-            gaTrack.event({ category: "Sausage", action: "PollingPlaceFinderContainer", type: "findNearestPollingPlaces" })
+            gaTrack.event({
+                category: "PollingPlaceFinderContainer",
+                action: "findNearestPollingPlaces",
+                label: "Searched for polling places near an address",
+            })
 
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: value.place_id }, async (results: Array<IGoogleGeocodeResult>, status: string) => {
                 if (status === "OK" && results.length > 0) {
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "PollingPlaceFinderContainer",
-                        type: "findNearestPollingPlacesAddressGeocodeResults",
+                        category: "PollingPlaceFinderContainer",
+                        action: "findNearestPollingPlaces",
+                        label: "Number of geocoder results",
                         value: results.length,
                     })
 
@@ -123,19 +127,18 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     )
 
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "PollingPlaceFinderContainer",
-                        type: "findNearestPollingPlacesSearchResults",
+                        category: "PollingPlaceFinderContainer",
+                        action: "findNearestPollingPlaces",
+                        label: "Number of polling places found",
                         value: pollingPlaces.length,
                     })
 
                     onReceiveNearbyPollingPlaces(pollingPlaces, results[0].formatted_address)
                 } else {
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "PollingPlaceFinderContainer",
-                        type: "findNearestPollingPlacesSearchResultsError",
-                        value: status,
+                        category: "PollingPlaceFinderContainer",
+                        action: "findNearestPollingPlaces",
+                        label: "Got an error from the geocoder",
                     })
                 }
             })
@@ -145,17 +148,17 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
 
             if (geolocationSupported === true) {
                 gaTrack.event({
-                    category: "Sausage",
-                    action: "PollingPlaceFinderContainer",
-                    type: "onRequestLocationPermissionsAsk",
+                    category: "PollingPlaceFinderContainer",
+                    action: "onRequestLocationPermissions",
+                    label: "Clicked the geolocation button",
                 })
 
                 navigator.geolocation.getCurrentPosition(
                     async (position: Position) => {
                         gaTrack.event({
-                            category: "Sausage",
-                            action: "PollingPlaceFinderContainer",
-                            type: "onRequestLocationPermissionsGranted",
+                            category: "PollingPlaceFinderContainer",
+                            action: "onRequestLocationPermissions",
+                            label: "Granted geolocation permissions",
                         })
 
                         let locationSearched = "your current location"
@@ -167,9 +170,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                             async (results: Array<any>, status: string) => {
                                 if (status === "OK" && results.length > 0) {
                                     gaTrack.event({
-                                        category: "Sausage",
-                                        action: "PollingPlaceFinderContainer",
-                                        type: "onRequestLocationPermissionsGeocodeResults",
+                                        category: "PollingPlaceFinderContainer",
+                                        action: "onRequestLocationPermissions",
+                                        label: "Number of geocoder results",
                                         value: results.length,
                                     })
 
@@ -185,19 +188,18 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                                     )
 
                                     gaTrack.event({
-                                        category: "Sausage",
-                                        action: "PollingPlaceFinderContainer",
-                                        type: "onRequestLocationPermissionsSearchResults",
+                                        category: "PollingPlaceFinderContainer",
+                                        action: "onRequestLocationPermissions",
+                                        label: "Number of polling places found",
                                         value: pollingPlaces.length,
                                     })
 
                                     this.onReceiveNearbyPollingPlaces(pollingPlaces, locationSearched)
                                 } else {
                                     gaTrack.event({
-                                        category: "Sausage",
-                                        action: "PollingPlaceFinderContainer",
-                                        type: "onRequestLocationPermissionsGeocodeResultsError",
-                                        value: status,
+                                        category: "PollingPlaceFinderContainer",
+                                        action: "onRequestLocationPermissions",
+                                        label: "Got an error from the geocoder",
                                     })
                                 }
                             }
@@ -205,10 +207,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     },
                     (error: PositionError) => {
                         gaTrack.event({
-                            category: "Sausage",
-                            action: "PollingPlaceFinderContainer",
-                            type: "onRequestLocationPermissionsError",
-                            value: error.message,
+                            category: "PollingPlaceFinderContainer",
+                            action: "onRequestLocationPermissions",
+                            label: "Got an error when asking for permissions",
+                            value: error.code,
                         })
 
                         let snackbarMessage

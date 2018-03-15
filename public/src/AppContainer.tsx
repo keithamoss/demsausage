@@ -243,9 +243,8 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         onOpenDrawer: () => {
             gaTrack.event({
-                category: "Sausage",
-                action: "AppContainer",
-                type: "onOpenDrawer",
+                category: "AppContainer",
+                action: "onOpenDrawer",
             })
             dispatch(toggleDrawerOpen())
         },
@@ -254,10 +253,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         onClickOutboundDrawerLink: (e: React.MouseEvent<HTMLElement>, linkName: string) => {
             gaTrack.event({
-                category: "Sausage",
-                action: "AppContainer",
-                type: "onOutboundLinkClick",
-                value: linkName,
+                category: "AppContainer",
+                action: "onOutboundLinkClick",
+                label: linkName,
             })
         },
     }

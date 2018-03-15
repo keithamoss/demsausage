@@ -48,10 +48,9 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
 
         gaTrack.event({
-            category: "Sausage",
-            action: "SausageMapContainer",
-            type: "geolocationSupport",
-            value: props.geolocationSupported,
+            category: "SausageMapContainer",
+            action: "geolocationSupported",
+            value: props.geolocationSupported ? 1 : 0,
         })
     }
 
@@ -106,34 +105,32 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             gaTrack.event({
-                category: "Sausage",
-                action: "SausageMapContainer",
-                type: "fetchQueriedPollingPlacesIds",
+                category: "SausageMapContainer",
+                action: "fetchQueriedPollingPlaces",
+                label: "Polling Places Queried",
                 value: pollingPlaceIds.length,
             })
             const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
             gaTrack.event({
-                category: "Sausage",
-                action: "SausageMapContainer",
-                type: "fetchQueriedPollingPlacesResults",
+                category: "SausageMapContainer",
+                action: "fetchQueriedPollingPlaces",
+                label: "Polling Places Returned",
                 value: results.length,
             })
             return results
         },
         onOpenFinderForAddressSearch() {
             gaTrack.event({
-                category: "Sausage",
-                action: "SausageMapContainer",
-                type: "onOpenFinderForAddressSearch",
+                category: "SausageMapContainer",
+                action: "onOpenFinderForAddressSearch",
             })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
             browserHistory.push("/search")
         },
         onOpenFinderForGeolocation() {
             gaTrack.event({
-                category: "Sausage",
-                action: "SausageMapContainer",
-                type: "onOpenFinderForGeolocation",
+                category: "SausageMapContainer",
+                action: "onOpenFinderForGeolocation",
             })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.GEOLOCATION))
             browserHistory.push("/search")

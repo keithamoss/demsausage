@@ -137,9 +137,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         map.on("singleclick", function(e: any) {
             gaTrack.event({
-                category: "Sausage",
-                action: "OpenLayersMap",
-                type: "onSingleClick",
+                category: "OpenLayersMap",
+                action: "Query Features",
             })
 
             let features: Array<any> = []
@@ -152,9 +151,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             )
 
             gaTrack.event({
-                category: "Sausage",
-                action: "OpenLayersMap",
-                type: "onSingleClickFeatures",
+                category: "OpenLayersMap",
+                action: "Query Features",
+                label: "Number of Features",
                 value: features.length,
             })
 

@@ -43,9 +43,9 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
 
     onReceiveAddressSearchResults(results: Array<IGoogleAddressSearchResult>) {
         gaTrack.event({
-            category: "Sausage",
-            action: "GooglePlacesAutocompleteList",
-            type: "onReceiveAddressSearchResults",
+            category: "GooglePlacesAutocompleteList",
+            action: "onReceiveAddressSearchResults",
+            label: "Number of address search results from the geocoder",
             value: results.length,
         })
 
@@ -111,16 +111,16 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchGeocodedPlace: function(onChoosePlace: Function, addressResult: IGoogleAddressSearchResult, onPlaceChosen: Function) {
-            gaTrack.event({ category: "Sausage", action: "GooglePlacesAutocompleteList", type: "fetchGeocodedPlace" })
+            gaTrack.event({ category: "GooglePlacesAutocompleteList", action: "fetchGeocodedPlace", label: "Chose an address" })
 
             const google = window.google
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: addressResult.place_id }, (results: Array<IGoogleGeocodeResult>, status: string) => {
                 if (status === "OK" && results.length > 0) {
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "GooglePlacesAutocompleteList",
-                        type: "fetchGeocodedPlaceGeocodeResults",
+                        category: "GooglePlacesAutocompleteList",
+                        action: "fetchGeocodedPlace",
+                        label: "Number of geocoder results",
                         value: results.length,
                     })
 
@@ -128,10 +128,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     onChoosePlace(addressResult, results[0])
                 } else {
                     gaTrack.event({
-                        category: "Sausage",
-                        action: "GooglePlacesAutocompleteList",
-                        type: "fetchGeocodedPlaceGeocodeResultsError",
-                        value: status,
+                        category: "GooglePlacesAutocompleteList",
+                        action: "fetchGeocodedPlace",
+                        label: "Got an error from the geocoder",
                     })
                 }
             })
