@@ -271,7 +271,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
                     onRequestClose={onCloseElectionChooserDialog}
                     title={"Elections"}
                     actionButton={<FlatButton label="Close" onClick={onCloseElectionChooserDialog} />}
-                    containerStyle={{ padding: 10 }}
+                    containerStyle={{ padding: 10, paddingBottom: 56 }} /* Height of BottomNav */
                 >
                     {elections.map((election: IElection) => {
                         let sub

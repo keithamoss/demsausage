@@ -26,6 +26,7 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
+    isShowingPlaceAutocompleteResults: boolean
     locationSearched: string | null
     nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
 }
@@ -36,7 +37,7 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+export class PollingPlaceFinderContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
     static muiName = "PollingPlaceFinderContainer"
     static pageTitle = "Democracy Sausage | Find a polling place near you"
     static pageBaseURL = "/search"
@@ -44,9 +45,11 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
 
     constructor(props: IStoreProps & IDispatchProps) {
         super(props)
-        this.state = { nearbyPollingPlaces: null, locationSearched: null }
+        this.state = { isShowingPlaceAutocompleteResults: false, nearbyPollingPlaces: null, locationSearched: null }
 
         this.onReceiveNearbyPollingPlaces = this.onReceiveNearbyPollingPlaces.bind(this)
+        this.onShowPlaceAutocompleteResults = this.onShowPlaceAutocompleteResults.bind(this)
+        this.onChoosePlaceFromAutocomplete = this.onChoosePlaceFromAutocomplete.bind(this)
         this.onRequestLocationPermissions = props.onRequestLocationPermissions.bind(this)
     }
 
@@ -72,20 +75,31 @@ export class PollingPlaceFinderContainer extends React.PureComponent<IStoreProps
         })
     }
 
+    onShowPlaceAutocompleteResults() {
+        this.setState(Object.assign(this.state, { isShowingPlaceAutocompleteResults: true }))
+    }
+
+    onChoosePlaceFromAutocomplete() {
+        this.setState(Object.assign(this.state, { isShowingPlaceAutocompleteResults: false }))
+    }
+
     render() {
         const { initMode, geolocationSupported, currentElection, findNearestPollingPlaces } = this.props
-        const { locationSearched, nearbyPollingPlaces } = this.state
+        const { isShowingPlaceAutocompleteResults, locationSearched, nearbyPollingPlaces } = this.state
 
         return (
             <PollingPlaceFinder
                 initMode={initMode}
                 geolocationSupported={geolocationSupported}
                 election={currentElection}
+                isShowingPlaceAutocompleteResults={isShowingPlaceAutocompleteResults}
                 locationSearched={locationSearched}
                 nearbyPollingPlaces={nearbyPollingPlaces}
-                onGeocoderResults={(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) =>
+                onShowPlaceAutocompleteResults={this.onShowPlaceAutocompleteResults}
+                onGeocoderResults={(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) => {
+                    this.onChoosePlaceFromAutocomplete()
                     findNearestPollingPlaces(this.onReceiveNearbyPollingPlaces, currentElection, place)
-                }
+                }}
                 onRequestLocationPermissions={this.onRequestLocationPermissions}
             />
         )

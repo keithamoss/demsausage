@@ -7,7 +7,7 @@ import { IElection, IPollingPlaceSearchResult, ePollingPlaceFinderInit } from ".
 import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import { PollingPlaceCardMiniContainer } from "../PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import { DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
+import { DeviceLocationSearching, ActionSearch, NavigationClose } from "material-ui/svg-icons"
 import { grey500 } from "material-ui/styles/colors"
 
 import Paper from "material-ui/Paper"
@@ -37,8 +37,10 @@ export interface IProps {
     initMode: ePollingPlaceFinderInit
     geolocationSupported: boolean
     election: IElection
+    isShowingPlaceAutocompleteResults: boolean
     locationSearched: string | null
     nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
+    onShowPlaceAutocompleteResults: any
     onGeocoderResults: any
     onRequestLocationPermissions: any
 }
@@ -49,8 +51,10 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
             initMode,
             geolocationSupported,
             election,
+            isShowingPlaceAutocompleteResults,
             locationSearched,
             nearbyPollingPlaces,
+            onShowPlaceAutocompleteResults,
             onGeocoderResults,
             onRequestLocationPermissions,
         } = this.props
@@ -75,10 +79,12 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     hintText={geolocationSupported === true ? "Enter your address or use GPS →" : "Enter your address"}
                     onRequestSearch={geolocationSupported === true ? onRequestLocationPermissions : undefined}
                     searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}
+                    closeIcon={geolocationSupported === true ? null : <NavigationClose />}
                     style={{
                         margin: "0 auto",
                         maxWidth: 800,
                     }}
+                    onShowPlaceAutocompleteResults={onShowPlaceAutocompleteResults}
                     onChoosePlace={onGeocoderResults}
                 />
 
@@ -101,7 +107,8 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     ))}
 
                 {nearbyPollingPlaces !== null &&
-                    nearbyPollingPlaces.length === 0 && (
+                    nearbyPollingPlaces.length === 0 &&
+                    isShowingPlaceAutocompleteResults === false && (
                         <EmptyState
                             message={
                                 <div>

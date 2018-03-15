@@ -12,11 +12,13 @@ import MapsPlace from "material-ui/svg-icons/maps/place"
 import { gaTrack } from "../../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
+    onShowPlaceAutocompleteResults?: Function
     onChoosePlace: Function
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
     autoFocus: boolean
     searchIcon: JSX.Element
+    closeIcon?: JSX.Element
     hintText: string
     onRequestSearch?: Function
 }
@@ -52,6 +54,10 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
         this.setState({
             addressSearchResults: results,
         })
+
+        if (this.props.onShowPlaceAutocompleteResults !== undefined) {
+            this.props.onShowPlaceAutocompleteResults()
+        }
     }
 
     onPlaceChosen() {
@@ -59,7 +65,16 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
     }
 
     render() {
-        const { onChoosePlace, fetchGeocodedPlace, componentRestrictions, autoFocus, searchIcon, hintText, onRequestSearch } = this.props
+        const {
+            onChoosePlace,
+            fetchGeocodedPlace,
+            componentRestrictions,
+            autoFocus,
+            searchIcon,
+            closeIcon,
+            hintText,
+            onRequestSearch,
+        } = this.props
         const { addressSearchResults } = this.state
 
         return (
@@ -77,6 +92,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
                                 hintText={hintText}
                                 autoFocus={autoFocus}
                                 searchIcon={searchIcon}
+                                closeIcon={closeIcon}
                                 // tslint:disable-next-line:no-empty
                                 onRequestSearch={onRequestSearch === undefined ? () => {} : onRequestSearch}
                             />

@@ -74,6 +74,7 @@ export interface IProps {
     onReceiveSearchResults: any
     onRequestSearch?: any
     searchIcon?: any
+    closeIcon?: any
     autoFocus?: boolean
     // End Democracy Sausage customisation
     name?: string
