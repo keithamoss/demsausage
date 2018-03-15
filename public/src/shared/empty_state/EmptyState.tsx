@@ -1,30 +1,28 @@
 import * as React from "react"
 import styled from "styled-components"
 
-import { GridTile } from "material-ui/GridList"
-
-const EmptyStateContainer = styled.div`
-    max-width: 250px;
-    max-height: 250px;
-    opacity: 0.4;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+const FlexboxCentredContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 `
 
-const BigIcon = styled.div`
-    & > * {
+const FlexboxCentredBox = styled.div`
+    width: 70%;
+    max-width: 300px;
+    text-align: center;
+    align-items: start;
+    opacity: 0.5;
+
+    & > div:first-child > * {
         width: 125px !important;
         height: 125px !important;
-        margin: auto;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
+    }
+
+    & > div:last-child {
+        margin-top: -5px;
     }
 `
 
@@ -38,11 +36,12 @@ export class EmptyState extends React.PureComponent<IProps, {}> {
         const { message, icon } = this.props
 
         return (
-            <EmptyStateContainer>
-                <GridTile title={message} titleBackground={"rgb(255, 255, 255)"} titleStyle={{ color: "black", textAlign: "center" }}>
-                    <BigIcon>{icon}</BigIcon>
-                </GridTile>
-            </EmptyStateContainer>
+            <FlexboxCentredContainer>
+                <FlexboxCentredBox>
+                    <div>{icon}</div>
+                    <div>{message}</div>
+                </FlexboxCentredBox>
+            </FlexboxCentredContainer>
         )
     }
 }
