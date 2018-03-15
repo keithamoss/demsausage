@@ -114,6 +114,17 @@ export interface IElection {
     election_day: string // Datetime
     polling_places_loaded: boolean
     is_primary: boolean
+    // stats: {
+    //     ttl_booths: number
+    //     ttl_bbq: number
+    //     ttl_caek: number
+    //     ttl_shame: number
+    //     ttl_halal?: number
+    //     ttl_coffee?: number
+    //     ttl_bacon_and_eggs?: number
+    //     ttl_free_text?: number
+    //     ttl_vego?: number
+    // }
 }
 
 // Side effects, only as applicable
@@ -222,3 +233,33 @@ export function setElectionTableName(election: IElection, newDBTableName: string
 export function getURLSafeElectionName(election: IElection) {
     return encodeURI(election.name.replace(/\s/g, "_").toLowerCase())
 }
+
+// export function getElectionStatsDescription(election: IElection) {
+//     const description: Array<string> = []
+
+//     description.push(`Sausage Sizzles: ${election.stats.ttl_bbq}`)
+//     description.push(`Cake Stalls: ${election.stats.ttl_caek}`)
+//     description.push(`Red Crosses of Shame: ${election.stats.ttl_shame}`)
+
+//     if ("ttl_coffee" in election.stats) {
+//         description.push(`Coffee Vans: ${election.stats.ttl_coffee}`)
+//     }
+
+//     if ("ttl_bacon_and_eggs" in election.stats) {
+//         description.push(`Bacon and Egg Rolls: ${election.stats.ttl_bacon_and_eggs}`)
+//     }
+
+//     if ("ttl_halal" in election.stats) {
+//         description.push(`Halal Options: ${election.stats.ttl_halal}`)
+//     }
+
+//     if ("ttl_vego" in election.stats) {
+//         description.push(`Vegetarian Options: ${election.stats.ttl_vego}`)
+//     }
+
+//     if ("ttl_free_text" in election.stats) {
+//         description.push(`Drinks, icey poles, and other miscellaneous: ${election.stats.ttl_free_text}`)
+//     }
+
+//     return `${election.stats.ttl_booths} polling booths. ${description.join(", ")}`
+// }
