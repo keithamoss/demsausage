@@ -7,6 +7,7 @@ import { IStore, IElection, IMapPollingPlace, IPollingPlace, ePollingPlaceFinder
 
 import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
 import { setPollingPlaceFinderMode } from "../../redux/modules/app"
+import { getURLSafeElectionName } from "../../redux/modules/elections"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IStoreProps {
@@ -38,6 +39,8 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     static muiName = "SausageMapContainer"
     static pageTitle = "Democracy Sausage"
     static pageBaseURL = ""
+    onOpenFinderForAddressSearch: Function
+    onOpenFinderForGeolocation: Function
 
     constructor(props: any) {
         super(props)
@@ -46,6 +49,8 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
 
         this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
+        this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
+        this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
 
         gaTrack.event({
             category: "SausageMapContainer",
@@ -63,13 +68,7 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     render() {
-        const {
-            currentElection,
-            geolocationSupported,
-            fetchQueriedPollingPlaces,
-            onOpenFinderForAddressSearch,
-            onOpenFinderForGeolocation,
-        } = this.props
+        const { currentElection, geolocationSupported, fetchQueriedPollingPlaces } = this.props
         const { queriedPollingPlaces } = this.state
 
         return (
@@ -83,8 +82,8 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                     this.onSetQueriedPollingPlaces(pollingPlaces)
                 }}
                 onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
-                onOpenFinderForAddressSearch={onOpenFinderForAddressSearch}
-                onOpenFinderForGeolocation={onOpenFinderForGeolocation}
+                onOpenFinderForAddressSearch={this.onOpenFinderForAddressSearch}
+                onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
             />
         )
     }
@@ -119,21 +118,21 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             })
             return results
         },
-        onOpenFinderForAddressSearch() {
+        onOpenFinderForAddressSearch(this: SausageMapContainer) {
             gaTrack.event({
                 category: "SausageMapContainer",
                 action: "onOpenFinderForAddressSearch",
             })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
-            browserHistory.push("/search")
+            browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
         },
-        onOpenFinderForGeolocation() {
+        onOpenFinderForGeolocation(this: SausageMapContainer) {
             gaTrack.event({
                 category: "SausageMapContainer",
                 action: "onOpenFinderForGeolocation",
             })
             dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.GEOLOCATION))
-            browserHistory.push("/search")
+            browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
         },
     }
 }
