@@ -49,7 +49,10 @@ function fetchPublicElections() {
   $stmt = $file_db->query("SELECT * FROM elections WHERE hidden != 1 OR hidden IS NULL ORDER BY election_day DESC");
   $elections = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $elections[] = translateElectionFromDB($row);
+      $election = translateElectionFromDB($row);
+      // $election["stats"] = getElectionStats($election);
+
+      $elections[] = $election;
   }
   return $elections;
 }
@@ -198,5 +201,42 @@ function downloadElection($id) {
   }
   
   return true;
+}
+
+function getElectionStats($election) {
+  global $file_db;
+
+  // Gather initial overall stats
+  $ttlBoothsSQL = "SELECT COUNT(*) FROM " . $election["db_table_name"];
+  $ttlBBQSQL = "SELECT COUNT(*) FROM " . $election["db_table_name"] . " WHERE has_bbq = 1";
+  $ttlCaekSQL = "SELECT COUNT(*) FROM " . $election["db_table_name"] . " WHERE has_caek = 1";
+  $ttlShameSQL = "SELECT COUNT(*) FROM " . $election["db_table_name"] . " WHERE has_nothing = 1";
+
+  $stmt = $file_db->query("SELECT ($ttlBoothsSQL) AS ttl_booths, ($ttlBBQSQL) AS ttl_bbq, ($ttlCaekSQL) AS ttl_caek, ($ttlShameSQL) AS ttl_shame");
+  $stmt->execute();
+  $stats = $stmt->fetch(\PDO::FETCH_ASSOC);
+  
+  // Coerce to numbers
+  $stats["ttl_booths"] = (int)$stats["ttl_booths"];
+  $stats["ttl_bbq"] = (int)$stats["ttl_bbq"];
+  $stats["ttl_caek"] = (int)$stats["ttl_caek"];
+  $stats["ttl_shame"] = (int)$stats["ttl_shame"];
+
+  // Gather stats from has_other
+  $stmt = $file_db->query("SELECT * FROM " . $election["db_table_name"] . " WHERE has_other IS NOT NULL AND has_other != '' AND has_other != '{}' AND has_other != 0");
+  while ($pollingPlace = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+    foreach((array)json_decode($pollingPlace["has_other"]) as $fieldName => $fieldValue) {
+      $ttlFieldName = str_replace("has_", "ttl_", $fieldName);
+      if(array_key_exists($ttlFieldName, $stats) === false) {
+        $stats[$ttlFieldName] = 0;
+      }
+      
+      if(($fieldName !== "has_free_text" && $fieldValue === true) || ($fieldName === "has_free_text" && $fieldValue !== "")) {
+        $stats[$ttlFieldName]++;
+      }
+    }
+  }
+
+  return $stats;
 }
 ?>
