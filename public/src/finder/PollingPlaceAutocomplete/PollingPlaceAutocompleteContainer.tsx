@@ -35,7 +35,7 @@ export class PollingPlaceAutocompleteContainer extends React.PureComponent<IProp
 
     async onFieldChange(searchTerm: string, election: IElection, onPollingPlaceSearch: Function) {
         const json = await onPollingPlaceSearch(election, searchTerm)
-        this.setState({ searchText: searchTerm, searchResults: json.slice(0, 20) })
+        this.setState({ searchText: searchTerm, searchResults: json })
     }
 
     render() {

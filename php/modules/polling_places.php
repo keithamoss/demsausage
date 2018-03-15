@@ -118,9 +118,13 @@ function updatePollingPlaceByElectionTableName($id, array $params, string $elect
 function searchPollingPlaces($searchTerm, string $electionId) {
   global $file_db;
 
+  if($searchTerm === "") {
+    return [];
+  }
+
   $election = fetchElection($electionId);
 
-  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE premises LIKE LOWER(:searchTerm) OR polling_place_name LIKE LOWER(:searchTerm) OR address LIKE LOWER(:searchTerm)");
+  $stmt = $file_db->prepare("SELECT * FROM " . $election["db_table_name"] . " WHERE premises LIKE LOWER(:searchTerm) OR polling_place_name LIKE LOWER(:searchTerm) OR address LIKE LOWER(:searchTerm) LIMIT 20");
   $stmt->bindParam(":searchTerm", strtolower("%" . $searchTerm . "%"));
   $stmt->execute();
 
