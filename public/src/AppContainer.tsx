@@ -1,5 +1,6 @@
 import * as React from "react"
-// import styled from "styled-components"
+import styled from "styled-components"
+
 import {
     // deepPurple900,
     // deepPurple800,
@@ -54,6 +55,36 @@ const muiTheme = getMuiTheme({
         height: 50,
     },
 })
+
+const FlexboxCentredContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`
+
+const FlexboxCentredBox = styled.div`
+    width: 70%;
+    max-width: 300px;
+    text-align: center;
+    align-items: start;
+
+    & > div:last-child {
+        margin-top: -30px;
+    }
+
+    & img {
+        width: 100%;
+        height: 100%;
+        max-width: 200px;
+    }
+
+    & h1 {
+        font-size: 38px;
+        color: white;
+    }
+`
 
 export interface IStoreProps {
     // From Props
@@ -145,6 +176,16 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div style={{ backgroundColor: muiTheme.palette!.primary1Color, width: "100%", height: "100%" }}>
                         <LinearProgress mode="indeterminate" color={muiTheme.palette!.accent3Color} />
+                        <FlexboxCentredContainer>
+                            <FlexboxCentredBox>
+                                <div>
+                                    <img src="/icons/logo.jpg" />
+                                </div>
+                                <div>
+                                    <h1>Democracy Sausage</h1>
+                                </div>
+                            </FlexboxCentredBox>
+                        </FlexboxCentredContainer>
                     </div>
                 </MuiThemeProvider>
             )
