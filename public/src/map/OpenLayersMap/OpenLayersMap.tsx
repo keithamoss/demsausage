@@ -1,8 +1,7 @@
 import * as React from "react"
 // import "./OpenLayersMap.css"
 import { IElection } from "../../redux/modules/interfaces"
-import { getAPIBaseURL, getMapboxAPIKey } from "../../redux/modules/app"
-import { isItElectionDay } from "../../redux/modules/elections"
+import { getAPIBaseURL, getMapboxAPIKey, isUserABot } from "../../redux/modules/app"
 
 import * as ol from "openlayers"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -110,7 +109,29 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         } as any)
 
         const getBasemap = () => {
-            if (isItElectionDay(election) === true) {
+            // Bots get an OSM Basemap that doesn't cost us anything
+            if (isUserABot() === true) {
+                gaTrack.event({
+                    category: "OpenLayersMap",
+                    action: "Basemap Shown",
+                    label: "OSM",
+                })
+
+                return [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM({
+                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+                        }),
+                    }),
+                ]
+            } else {
+                // Everyone else gets the pretty Mapbox basemap
+                gaTrack.event({
+                    category: "OpenLayersMap",
+                    action: "Basemap Shown",
+                    label: "Mapbox",
+                })
+
                 return [
                     new ol.layer.Tile({
                         source: new ol.source.XYZ({
@@ -119,21 +140,22 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                         }),
                     }),
                 ]
-            } else {
-                return [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM({
-                            // https://carto.com/location-data-services/basemaps/
-                            url: "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                        }),
-                    }),
-                    // new ol.layer.Tile({
-                    //     source: new ol.source.OSM({
-                    //         attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                    //     }),
-                    // }),
-                ]
+
+                // gaTrack.event({
+                //     category: "OpenLayersMap",
+                //     action: "Basemap Shown",
+                //     label: "Carto",
+                // })
+
+                // return [
+                //     new ol.layer.Tile({
+                //         source: new ol.source.OSM({
+                //             // https://carto.com/location-data-services/basemaps/
+                //             url: "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                //             attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+                //         }),
+                //     }),
+                // ]
             }
         }
 
