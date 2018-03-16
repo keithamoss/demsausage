@@ -102,7 +102,7 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     nearbyPollingPlaces.length > 0 &&
                     nearbyPollingPlaces.map((value: IPollingPlaceSearchResult, index: number) => (
                         <PollingPlaceCardWrapper key={value.id}>
-                            <PollingPlaceCardMiniContainer pollingPlace={value} />
+                            <PollingPlaceCardMiniContainer pollingPlace={value} election={election} />
                         </PollingPlaceCardWrapper>
                     ))}
 

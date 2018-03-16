@@ -83,7 +83,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                     >
                         {queriedPollingPlaces.slice(0, 20).map((pollingPlace: IPollingPlace) => (
                             <PollingPlaceCardWrapper key={pollingPlace.id}>
-                                <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} />
+                                <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={currentElection} />
                             </PollingPlaceCardWrapper>
                         ))}
                         {queriedPollingPlaces.length > 20 && (

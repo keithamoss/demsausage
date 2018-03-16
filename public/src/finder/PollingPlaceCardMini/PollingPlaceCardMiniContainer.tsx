@@ -2,10 +2,11 @@ import * as React from "react"
 import { connect } from "react-redux"
 
 import PollingPlaceCardMini from "./PollingPlaceCardMini"
-import { IStore, IPollingPlace } from "../../redux/modules/interfaces"
+import { IStore, IPollingPlace, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {
     pollingPlace: IPollingPlace
+    election: IElection
 }
 
 export interface IStoreProps {}
@@ -22,9 +23,9 @@ interface IOwnProps {
 
 export class PollingPlaceCardMiniContainer extends React.PureComponent<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { pollingPlace } = this.props
+        const { pollingPlace, election } = this.props
 
-        return <PollingPlaceCardMini pollingPlace={pollingPlace} />
+        return <PollingPlaceCardMini pollingPlace={pollingPlace} election={election} />
     }
 }
 

@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
-// import { IPollingPlace } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/interfaces"
 import {
     pollingPlaceHasReports,
     pollingPlaceHasReportsOfNoms,
@@ -73,11 +73,12 @@ const ChanceOfSausageIndicator = styled.span`
 
 export interface IProps {
     pollingPlace: any // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
+    election: IElection
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
     render() {
-        const { pollingPlace } = this.props
+        const { pollingPlace, election } = this.props
 
         const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false
 
@@ -131,7 +132,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
-                        {pollingPlaceHasReports(pollingPlace) === false && (
+                        {election.is_active === true && pollingPlaceHasReports(pollingPlace) === false && (
                             <ChanceOfSausage
                                 primaryText={"We don't have any reports for this booth yet."}
                                 secondaryText={

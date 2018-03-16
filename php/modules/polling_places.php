@@ -27,7 +27,7 @@ function translatePollingPlaceFromDB($row) {
     "polling_place_name" => $row["polling_place_name"],
     "polling_place_type" => $row["polling_place_type"],
     "extra_info" => ($row["extra_info"] === "") ? null : $row["extra_info"],
-    "booth_info" => $row["booth_info"],
+    "booth_info" => ($row["booth_info"] === "") ? null : $row["booth_info"],
     "wheelchairaccess" => $row["wheelchairaccess"],
     "entrancesdesc" => $row["entrancesdesc"],
     "opening_hours" => $row["opening_hours"],
