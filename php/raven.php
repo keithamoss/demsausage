@@ -11,4 +11,13 @@ require_once "../sentry-php/lib/Raven/Autoloader.php";
 Raven_Autoloader::register();
 $client = new Raven_Client(RAVEN_URL, array("environment" => ENVIRONMENT));
 $client->install();
+
+// https://github.com/getsentry/sentry-php/blob/master/docs/usage.rst
+$client->setSendCallback(function($data) {
+  $ignore_values = array("Module 'timezonedb' already loaded");
+
+  if(isset($data["exception"]) && in_array($data["exception"]["values"][0]["value"], $ignore_values)) {
+    return false;
+  }
+});
 ?>
