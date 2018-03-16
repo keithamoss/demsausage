@@ -154,7 +154,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                         new ol.layer.Tile({
                             source: new ol.source.OSM({
                                 // https://carto.com/location-data-services/basemaps/
-                                url: "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                                url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
                                 attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
                             }),
                         }),
