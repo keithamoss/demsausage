@@ -263,3 +263,8 @@ export function getURLSafeElectionName(election: IElection) {
 
 //     return `${election.stats.ttl_booths} polling booths. ${description.join(", ")}`
 // }
+
+export function isItElectionDay(election: IElection) {
+    const now = new Date()
+    return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
+}

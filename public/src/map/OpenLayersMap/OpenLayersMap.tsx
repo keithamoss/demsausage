@@ -2,6 +2,7 @@ import * as React from "react"
 // import "./OpenLayersMap.css"
 import { IElection } from "../../redux/modules/interfaces"
 import { getAPIBaseURL, getMapboxAPIKey } from "../../redux/modules/app"
+import { isItElectionDay } from "../../redux/modules/elections"
 
 import * as ol from "openlayers"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -108,23 +109,37 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             style: styleFunctionSprite,
         } as any)
 
+        const getBasemap = () => {
+            if (isItElectionDay(election) === true) {
+                return [
+                    new ol.layer.Tile({
+                        source: new ol.source.XYZ({
+                            url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
+                            crossOrigin: "anonymous",
+                        }),
+                    }),
+                ]
+            } else {
+                return [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM({
+                            // https://carto.com/location-data-services/basemaps/
+                            url: "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+                        }),
+                    }),
+                    // new ol.layer.Tile({
+                    //     source: new ol.source.OSM({
+                    //         attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+                    //     }),
+                    // }),
+                ]
+            }
+        }
+
         const map = new ol.Map({
             renderer: ["canvas"],
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.XYZ({
-                        url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
-                        crossOrigin: "anonymous",
-                    }),
-                }),
-                // new ol.layer.Tile({
-                //     source: new ol.source.OSM({
-                //         // https://carto.com/location-data-services/basemaps/
-                //         // url: "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                //         attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                //     }),
-                // }),
-            ],
+            layers: getBasemap(),
             target: "openlayers-map",
             controls: [],
             view: new ol.View({
