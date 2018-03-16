@@ -15,7 +15,7 @@
  */
 
 import * as React from "react"
-import { isEqual } from "lodash-es"
+// import { isEqual } from "lodash-es"
 import { MenuItem } from "material-ui"
 import SearchBar from "material-ui-search-bar"
 import { debounce } from "lodash-es"
@@ -190,13 +190,17 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     }
 
     populateData(array: Array<IGoogleAddressSearchResult>) {
-        const currentPlaceIds: Array<string> = this.state.data.map((o: IGoogleAddressSearchResult) => o.place_id)
-        const newPlaceIds: Array<string> = array.map((o: IGoogleAddressSearchResult) => o.place_id)
+        // const currentPlaceIds: Array<string> = this.state.data.map((o: IGoogleAddressSearchResult) => o.place_id)
+        // const newPlaceIds: Array<string> = array.map((o: IGoogleAddressSearchResult) => o.place_id)
 
-        if (isEqual(currentPlaceIds, newPlaceIds) === false) {
-            this.props.onReceiveSearchResults(array)
-            this.setState({ data: array })
-        }
+        // Optimising this causes issues when the user changes the search term, but the
+        // geocder results don't actually chance.
+        // It appears to the user as if the search did nothing if they've already selected
+        // a polling place and then gone back and changed the search.
+        // if (isEqual(currentPlaceIds, newPlaceIds) === false) {
+        this.props.onReceiveSearchResults(array)
+        this.setState({ data: array })
+        // }
     }
 
     getPoweredByGoogleMenuItem() {
