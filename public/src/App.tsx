@@ -1,24 +1,21 @@
-import * as React from "react"
-import styled from "styled-components"
-import { browserHistory, Link } from "react-router"
-import { IAppModule, ISnackbarsModule, IElection } from "./redux/modules/interfaces"
-import { getURLSafeElectionName } from "./redux/modules/elections"
-import "./App.css"
-
-import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
-import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
-
-import Snackbar from "material-ui/Snackbar"
-import LinearProgress from "material-ui/LinearProgress"
-import { MapsMap, MapsAddLocation, ActionSearch, ActionStore, ActionInfo, HardwareTv, CommunicationEmail } from "material-ui/svg-icons"
+import { BodyContainer, ResponsiveAppBar, ResponsiveDrawer } from "material-ui-responsive-drawer"
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
-import Paper from "material-ui/Paper"
-import { List, ListItem } from "material-ui/List"
-import Subheader from "material-ui/Subheader"
 import Divider from "material-ui/Divider"
-
-import TwitterIcon from "./icons/fontawesome/twitter"
+import LinearProgress from "material-ui/LinearProgress"
+import { List, ListItem } from "material-ui/List"
+import Paper from "material-ui/Paper"
+import Snackbar from "material-ui/Snackbar"
+import Subheader from "material-ui/Subheader"
+import { ActionInfo, ActionSearch, ActionStore, CommunicationEmail, HardwareTv, MapsAddLocation, MapsMap } from "material-ui/svg-icons"
+import * as React from "react"
+import { Link, browserHistory } from "react-router"
+import styled from "styled-components"
+import "./App.css"
+import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
 import FacebookIcon from "./icons/fontawesome/facebook"
+import TwitterIcon from "./icons/fontawesome/twitter"
+import { getURLSafeElectionName } from "./redux/modules/elections"
+import { IAppModule, IElection, ISnackbarsModule } from "./redux/modules/interfaces"
 
 // const logo = require("./logo.svg")
 
@@ -137,6 +134,14 @@ class App extends React.Component<IProps, {}> {
                                 locationPathNameMatch={"/add-stall"}
                                 muiThemePalette={muiThemePalette}
                             />
+                            {/* <MenuListItem
+                                primaryText="Sausagelytics"
+                                leftIcon={<EditorInsertChart />}
+                                containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
+                                locationPathName={locationPathName}
+                                locationPathNameMatch={"/sausagelytics"}
+                                muiThemePalette={muiThemePalette}
+                            /> */}
                         </List>
                     )}
                     {isResponsiveAndOverBreakPoint === true && <Divider />}
@@ -230,6 +235,11 @@ class App extends React.Component<IProps, {}> {
                                     icon={<MapsAddLocation />}
                                     onClick={() => browserHistory.push("/add-stall")}
                                 />
+                                {/* <BottomNavigationItem
+                                    label="Sausagelytics"
+                                    icon={<EditorInsertChart />}
+                                    onClick={() => browserHistory.push(`/sausagelytics/${getURLSafeElectionName(currentElection)}`)}
+                                /> */}
                             </BottomNavigation>
                         </Paper>
                     )}

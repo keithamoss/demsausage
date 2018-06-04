@@ -17,4 +17,5 @@ declare module "material-ui-search-bar"
 declare module "material-ui-fullscreen-dialog"
 declare module "material-ui-responsive-drawer"
 declare module "redux-responsive"
+declare module "react-vis"
 // declare function require(string: string): string
