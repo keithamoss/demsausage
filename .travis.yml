@@ -45,5 +45,5 @@ deploy:
     local_dir: admin/build-tmp/
     upload-dir: builds
     detect_encoding: true
-# after_deploy:
-#   - 'curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token $TRAVIS_API_KEY" -d "{\"request\": {\"branch\": \"master\", \"message\": \"From Scremsong: $TRAVIS_COMMIT\"}}" https://api.travis-ci.org/repo/keithamoss%2Fdigitalocean-stack/requests'
+after_deploy:
+  - 'curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token $TRAVIS_API_KEY" -d "{\"request\": {\"branch\": \"master\", \"message\": \"From Scremsong: $TRAVIS_COMMIT\"}}" https://api.travis-ci.org/repo/keithamoss%2Fdigitalocean-stack/requests'
