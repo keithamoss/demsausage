@@ -1,9 +1,11 @@
 language: node_js
 node_js:
-- '9'
-env:
-  # Stop warnings causing build failures.
-  - CI=false REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0 REACT_APP_GOOGLE_ANALYTICS_UA=UA-48888573-1 REACT_APP_MAPBOX_API_KEY=pk.eyJ1Ijoia2VpdGhtb3NzIiwiYSI6IjkxMTViNjcxN2U5ZDBjMTYzYzY2MzQwNTJkZjM1NGFkIn0.HS40UI-OD5lQWBxUCZOwZg REACT_APP_RAVEN_URL=https://8d31580cc3314ca0812ff9d72c4d996f@sentry.io/291819
+  - 9
+before_install:
+  - openssl aes-256-cbc -K $encrypted_311506bff2df_key -iv $encrypted_311506bff2df_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar xvf secrets.tar
+  - source ./secrets/travis.env
+  - source ./secrets/demsausage-frontends.prod.env
 before_script:
   - echo -e "deb https://s3.amazonaws.com/repo.deb.cyberduck.io stable main" | sudo tee /etc/apt/sources.list.d/cyberduck.list > /dev/null
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE7097963FEFBE72
@@ -11,33 +13,37 @@ before_script:
   - sudo apt-get install duck
 script:
   - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
-  # - cd public
-  # - npm install .
-  # - npm run build
-  # - cd ../admin
-  # - npm install .
-  # - npm run build
-  # - cd ../
-# deploy:
-#   - provider: s3
-#     access_key_id: $AWS_ACCESS_KEY_ID
-#     secret_access_key: $AWS_SECRET_ACCESS_KEY
-#     region: $AWS_DEFAULT_REGION
-#     bucket: democracysausage.org
-#     skip_cleanup: true
-#     local_dir: public/build
-#     cache_control: "no-cache"
-#     on:
-#       branch: master
-#   - provider: s3
-#     access_key_id: $AWS_ACCESS_KEY_ID
-#     secret_access_key: $AWS_SECRET_ACCESS_KEY
-#     region: $AWS_DEFAULT_REGION
-#     bucket: admin.democracysausage.org
-#     skip_cleanup: true
-#     local_dir: admin/build
-#     cache_control: "no-cache"
-#     on:
-#       branch: master
+  - cd public
+  - npm install .
+  - npm run build
+  - tar -zcvf build.tar build/
+  - mkdir build-tmp
+  - mv build.tar build-tmp/demsausage-public.tar
+  - cd ../admin
+  - npm install .
+  - npm run build
+  - tar -zcvf build.tar build/
+  - mkdir build-tmp
+  - mv build.tar build-tmp/demsausage-admin.tar
+  - cd ../
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: digitalocean-stack
+    skip_cleanup: true
+    local_dir: public/build-tmp/
+    upload-dir: builds
+    detect_encoding: true
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    region: $AWS_DEFAULT_REGION
+    bucket: digitalocean-stack
+    skip_cleanup: true
+    local_dir: admin/build-tmp/
+    upload-dir: builds
+    detect_encoding: true
 # after_deploy:
-#   - if [ "$TRAVIS_BRANCH" == "master" ]; then curl --verbose -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" -H "X-Auth-Email:$CF_EMAIL" -H "X-Auth-Key:$CF_API_KEY" -H "Content-Type:application/json" --data '{"purge_everything":true}'; fi
+#   - 'curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token $TRAVIS_API_KEY" -d "{\"request\": {\"branch\": \"master\", \"message\": \"From Scremsong: $TRAVIS_COMMIT\"}}" https://api.travis-ci.org/repo/keithamoss%2Fdigitalocean-stack/requests'
