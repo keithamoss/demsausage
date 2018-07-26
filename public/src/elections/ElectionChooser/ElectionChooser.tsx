@@ -1,22 +1,20 @@
-import * as React from "react"
-import styled from "styled-components"
-// import "./ElectionChooser.css"
-
-import { IElection } from "../../redux/modules/interfaces"
-// import { getElectionStatsDescription } from "../../redux/modules/elections"
-// import { getMapboxAPIKey } from "../../redux/modules/app"
-
-import { Tabs, Tab } from "material-ui/Tabs"
-import IconButton from "material-ui/IconButton"
-import FlatButton from "material-ui/FlatButton"
-// import RaisedButton from "material-ui/RaisedButton"
-import Avatar from "material-ui/Avatar"
-import Subheader from "material-ui/Subheader"
-import { Card, CardHeader } from "material-ui/Card"
-import { NavigationMoreVert, NavigationMoreHoriz } from "material-ui/svg-icons"
 // import { white } from "material-ui/styles/colors"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 import { ResponsiveAppBar } from "material-ui-responsive-drawer"
+// import RaisedButton from "material-ui/RaisedButton"
+import Avatar from "material-ui/Avatar"
+import { Card, CardHeader } from "material-ui/Card"
+import FlatButton from "material-ui/FlatButton"
+import IconButton from "material-ui/IconButton"
+import Subheader from "material-ui/Subheader"
+import { NavigationMoreHoriz, NavigationMoreVert } from "material-ui/svg-icons"
+// import { getElectionStatsDescription } from "../../redux/modules/elections"
+// import { getMapboxAPIKey } from "../../redux/modules/app"
+import { Tab, Tabs } from "material-ui/Tabs"
+import * as React from "react"
+import styled from "styled-components"
+// import "./ElectionChooser.css"
+import { IElection } from "../../redux/modules/interfaces"
 
 // import SausageIcon from "../../icons/sausage"
 // import CakeIcon from "../../icons/cake"
@@ -126,6 +124,24 @@ const getElectionKindaNotSoShortName: any = (election: IElection) =>
 // "SA 2018" => "SA"
 const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s[0-9]{4}$/, "")
 
+const getElectionLabel: any = (
+    activeElectionCount: number,
+    election: IElection,
+    isHistoricalElectionShown: boolean,
+    browserBreakpoint: string
+) => {
+    if (isHistoricalElectionShown === false) {
+        // e.g. FREO
+        if (activeElectionCount > 3 && browserBreakpoint === "extraSmall") {
+            return getElectionVeryShortName(election)
+        }
+        // e.g. Fremantle
+        return getElectionKindaShortName(election)
+    }
+    // e.g. Fremantle 2018
+    getElectionKindaNotSoShortName(election)
+}
+
 // export function renderElectionStats(election: IElection) {
 //     const description: Array<any> = []
 
@@ -184,6 +200,7 @@ export interface IProps {
     elections: Array<IElection>
     currentElection: IElection
     isElectionChooserOpen: boolean
+    browserBreakpoint: string
     onOpenElectionChooser: any
     onCloseElectionChooserDialog: any
     onChooseElection: any
@@ -196,6 +213,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
             elections,
             currentElection,
             isElectionChooserOpen,
+            browserBreakpoint,
             onOpenElectionChooser,
             onCloseElectionChooserDialog,
             onChooseElection,
@@ -240,11 +258,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
                             {electionsToShowAsTabs.map((election: IElection) => (
                                 <ElectionTabWrapper
                                     key={election.id}
-                                    label={
-                                        isHistoricalElectionShown === false
-                                            ? getElectionKindaShortName(election)
-                                            : getElectionKindaNotSoShortName(election)
-                                    }
+                                    label={getElectionLabel(activeElections.length, election, isHistoricalElectionShown, browserBreakpoint)}
                                     value={election.id}
                                 />
                             ))}

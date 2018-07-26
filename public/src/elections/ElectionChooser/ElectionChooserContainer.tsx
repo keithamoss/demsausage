@@ -1,12 +1,10 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
-import ElectionChooser from "./ElectionChooser"
-import { IStore, IElection } from "../../redux/modules/interfaces"
-
 import { getURLSafeElectionName } from "../../redux/modules/elections"
+import { IElection, IStore } from "../../redux/modules/interfaces"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
+import ElectionChooser from "./ElectionChooser"
 
 export interface IProps {
     pageTitle: string
@@ -21,6 +19,7 @@ export interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
     defaultElection: IElection
+    browserBreakpoint: string
 }
 
 export interface IStateProps {
@@ -60,7 +59,7 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
     }
 
     render() {
-        const { pageBaseURL, elections, currentElection, onChooseElection } = this.props
+        const { pageBaseURL, elections, currentElection, browserBreakpoint, onChooseElection } = this.props
         const { isElectionChooserOpen } = this.state
 
         return (
@@ -68,6 +67,7 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
                 elections={elections}
                 currentElection={currentElection}
                 isElectionChooserOpen={isElectionChooserOpen}
+                browserBreakpoint={browserBreakpoint}
                 onOpenElectionChooser={this.onOpenElectionChooser}
                 onCloseElectionChooserDialog={this.onCloseElectionChooserDialog}
                 onChooseElection={(election: IElection) => {
@@ -103,12 +103,13 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-    const { elections } = state
+    const { elections, browser } = state
 
     return {
         elections: elections.elections,
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
+        browserBreakpoint: browser.mediaType,
     }
 }
 
@@ -120,8 +121,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionChooserContainerWrapped = connect<IStoreProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(
-    ElectionChooserContainer
-)
+const ElectionChooserContainerWrapped = connect<IStoreProps, IDispatchProps, IProps>(
+    mapStateToProps,
+    mapDispatchToProps
+)(ElectionChooserContainer)
 
 export default ElectionChooserContainerWrapped
