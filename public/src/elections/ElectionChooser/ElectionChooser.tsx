@@ -125,14 +125,14 @@ const getElectionKindaNotSoShortName: any = (election: IElection) =>
 const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s[0-9]{4}$/, "")
 
 const getElectionLabel: any = (
-    activeElectionCount: number,
+    numberOfElectionTabsShowing: number,
     election: IElection,
     isHistoricalElectionShown: boolean,
     browserBreakpoint: string
 ) => {
     if (isHistoricalElectionShown === false) {
         // e.g. FREO
-        if (activeElectionCount > 3 && browserBreakpoint === "extraSmall") {
+        if (numberOfElectionTabsShowing > 3 && browserBreakpoint === "extraSmall") {
             return getElectionVeryShortName(election)
         }
         // e.g. Fremantle
@@ -222,7 +222,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
 
         const activeElections = elections.filter((election: IElection) => election.is_active)
 
-        let electionsToShowAsTabs
+        let electionsToShowAsTabs: IElection[]
         // Show our active elections
         if (activeElections.length > 0) {
             electionsToShowAsTabs = activeElections
@@ -258,7 +258,12 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
                             {electionsToShowAsTabs.map((election: IElection) => (
                                 <ElectionTabWrapper
                                     key={election.id}
-                                    label={getElectionLabel(activeElections.length, election, isHistoricalElectionShown, browserBreakpoint)}
+                                    label={getElectionLabel(
+                                        electionsToShowAsTabs.length,
+                                        election,
+                                        isHistoricalElectionShown,
+                                        browserBreakpoint
+                                    )}
                                     value={election.id}
                                 />
                             ))}
