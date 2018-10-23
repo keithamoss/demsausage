@@ -134,12 +134,16 @@ const getElectionLabel: any = (
         // e.g. FREO
         if (numberOfElectionTabsShowing > 3 && browserBreakpoint === "extraSmall") {
             return getElectionVeryShortName(election)
+        } else if (numberOfElectionTabsShowing > 3) {
+            // e.g. Fremantle
+            return getElectionKindaShortName(election)
+        } else {
+            // e.g. Fremantle 2018
+            return getElectionKindaNotSoShortName(election)
         }
-        // e.g. Fremantle
-        return getElectionKindaShortName(election)
     }
     // e.g. Fremantle 2018
-    getElectionKindaNotSoShortName(election)
+    return getElectionKindaNotSoShortName(election)
 }
 
 // export function renderElectionStats(election: IElection) {

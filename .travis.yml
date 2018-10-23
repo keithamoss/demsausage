@@ -25,6 +25,7 @@ script:
   - tar -zcvf build.tar build/
   - mkdir build-tmp
   - mv build.tar build-tmp/demsausage-admin.tar
+  # Needed to prevent `local_dir` in the `deploy` tasks from getting confused
   - cd ../
 deploy:
   - provider: s3
