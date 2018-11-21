@@ -75,11 +75,6 @@ export class AboutPage extends React.Component<IProps & IStoreProps & IDispatchP
                         <li>
                             <a href="http://boothrev.net/">Booth Reviews</a>
                         </li>
-                        <li>
-                            <a href="https://www.facebook.com/AussieDemocracyonFacebook/app_596824103674208">
-                                Australian Democracy on Facebook - sausage sizzle ratings
-                            </a>
-                        </li>
                     </ul>
                 </p>
             </PageWrapper>
