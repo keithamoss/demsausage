@@ -1,12 +1,9 @@
+import { List, ListItem } from "material-ui/List"
+import { CommunicationEmail, FileFileDownload } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-import { Link } from "react-router"
-
 import { IStore } from "../../redux/modules/interfaces"
-
-import { List, ListItem } from "material-ui/List"
-import { CommunicationEmail, FileFileDownload } from "material-ui/svg-icons"
 
 export interface IProps {}
 
@@ -49,12 +46,12 @@ export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchP
                     <ListItem
                         primaryText="Federal Election 2016"
                         leftIcon={<FileFileDownload />}
-                        containerElement={<Link to={"/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"} />}
+                        containerElement={<a href={"/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"} />}
                     />
                     <ListItem
                         primaryText="Canning By-election"
                         leftIcon={<FileFileDownload />}
-                        containerElement={<Link to={"/media/Canning%20Press%20Release%20-%20DemSausage.pdf"} />}
+                        containerElement={<a href={"/media/Canning%20Press%20Release%20-%20DemSausage.pdf"} />}
                     />
                 </List>
             </PageWrapper>
@@ -72,6 +69,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AboutPageWrapped = connect(mapStateToProps, mapDispatchToProps)(MediaPage)
+const AboutPageWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MediaPage)
 
 export default AboutPageWrapped
