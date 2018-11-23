@@ -2,6 +2,12 @@
 
 ## Installing and building
 
+Requirements:
+
+-   TypeScript 2.5.3
+-   Node 9.11.2
+-   npm 5.6.0
+
 ### Extra files
 
 Copy `secrets.php.template` to `secrets.php` and replace every REPLACEME.
@@ -9,23 +15,24 @@ Copy `client_secrets.php.template` to `client_secrets.php` and replace every REP
 
 These files aren't in the repo. Contact the project maintainers.
 
-* Save `demsausage.sqlite3` to the `db` directory.
-* Save the `sentry-php` folder to the base directory.
-* Save the `google-api-php-client-2.2.0` to the base directory.
+-   Save `demsausage.sqlite3` to the `db` directory.
+-   Save the `sentry-php` folder to the base directory.
+-   Save the `google-api-php-client-2.2.0` to the base directory.
 
 ### Admin site
 
 cd admin
-yarn install
-(PORT=3001 yarn run start)
+npm install
+(PORT=3001 npm run start)
 
 ### Public site
 
 cd public
-yarn install
-(PORT=3000 yarn run start)
+npm install
+(PORT=3000 npm run start)
 
 ### PHP server
+
 cd php
 php -S localhost:8000 -c user.ini
 
