@@ -9,6 +9,7 @@ Copy `client_secrets.php.template` to `client_secrets.php` and replace every REP
 
 These files aren't in the repo. Contact the project maintainers.
 
+* Save `demsausage.sqlite3` to the `db` directory.
 * Save the `sentry-php` folder to the base directory.
 * Save the `google-api-php-client-2.2.0` to the base directory.
 
