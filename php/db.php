@@ -121,6 +121,6 @@ function updateTable($id, array $params, string $table_name, string $pkeyFieldNa
 }
 
 function getTimestampFields() {
-  return ["first_report", "latest_report", "election_day", "reported_timestamp"];
+  return ["first_report", "latest_report", "election_day", "reported_timestamp", "result_timestamp"];
 }
 ?>

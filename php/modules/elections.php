@@ -148,6 +148,14 @@ function isElectionDBTableValid($dbTableName) {
   return $stmt->fetchColumn() === "1";
 }
 
+function createElectionTableName($election) {
+  return getElectionTableBaseName($election) . "_v" . date("YmdHis");
+}
+
+function getElectionTableBaseName($election) {
+  return str_replace([" ", "-"], "_", strtolower($election["name"]));
+}
+
 // https://stackoverflow.com/a/28331477
 function array_splice_preserve_keys(&$input, $offset, $length=null, $replacement=array()) {
   if (empty($replacement)) {

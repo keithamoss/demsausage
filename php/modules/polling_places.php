@@ -1,5 +1,6 @@
 <?php
 require_once "modules/stalls.php";
+require_once "modules/elections.php";
 
 $pollingPlacesPKeyFieldName = "id";
 $pollingPlacesAllowedFields = array("stall_description", "lon", "has_run_out", "has_nothing", "has_caek", "has_bbq", "chance_of_sausage", "latest_report", "first_report", "stall_website", "lat", "stall_name", "extra_info", "source", "has_other", "wheelchairaccess", "entrancesdesc", "polling_place_type", "booth_info", "opening_hours", "premises", "address", "polling_place_name", "division", "state", "ess_stall_id", "ess_stall_url");
@@ -18,7 +19,7 @@ function translatePollingPlaceFromDB($row) {
     "has_nothing" => (bool)$row["has_nothing"],
     "has_run_out" => (bool)$row["has_run_out"],
     "has_other" => ($row["has_other"] !== "" && $row["has_other"] !== null) ? json_decode($row["has_other"]) : new stdClass(),
-    "chance_of_sausage" => (float)$row["chance_of_sausage"],
+    "chance_of_sausage" => $row["chance_of_sausage"],
     "stall_name" => $row["stall_name"],
     "stall_description" => $row["stall_description"],
     "stall_website" => $row["stall_website"],
@@ -359,17 +360,21 @@ function fetchMatchingPollingPlaceByLocation($electionTableName, $lat, $lon, $di
   $pollingPlaces = [];
   while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
     $tmp = translatePollingPlaceFromDB($row);
-    $tmp["distance_metres"] = round(haversineGreatCircleDistance($lat, $lon, $tmp["lat"], $tmp["lon"], $earthRadiusAt24S));
-    $pollingPlaces[] = $tmp;
+    $distanceFromOriginPointInMetres = round(haversineGreatCircleDistance($lat, $lon, $tmp["lat"], $tmp["lon"], $earthRadiusAt24S));
+
+    if($distanceFromOriginPointInMetres <= $distanceMetres) {
+      $tmp["distance_metres"] = $distanceFromOriginPointInMetres;
+      $pollingPlaces[] = $tmp;
+    }
   }
   return $pollingPlaces;
 }
 
-function fetchMatchingPollingPlaceByPollingPlace($electionTableName, $pollingPlace, $distanceMetres = 200) {
+function fetchMatchingPollingPlaceByPollingPlace($electionTableName, $pollingPlace, $distanceMetres = 500) {
   return fetchMatchingPollingPlaceByLocation($electionTableName, $pollingPlace["lat"], $pollingPlace["lon"], $distanceMetres);
 }
 
-function fetchHistoricalData($pollingPlace, $currentElection) {
+function fetchHistoricalData($pollingPlace, $currentElection, $distanceMetres = 500) {
   global $file_db;
 
   $results = [];
@@ -379,7 +384,7 @@ function fetchHistoricalData($pollingPlace, $currentElection) {
       continue;
     }
 
-    $pollingPlaces = fetchMatchingPollingPlaceByPollingPlace($election["db_table_name"], $pollingPlace);
+    $pollingPlaces = fetchMatchingPollingPlaceByPollingPlace($election["db_table_name"], $pollingPlace, $distanceMetres);
 
     if(count($pollingPlaces) > 0) {
       $results[] = [
@@ -443,14 +448,6 @@ EOT
   );
 
   return true;
-}
-
-function createElectionTableName($election) {
-  return getElectionTableBaseName($election) . "_v" . date("YmdHis");
-}
-
-function getElectionTableBaseName($election) {
-  return str_replace([" ", "-"], "_", strtolower($election["name"]));
 }
 
 function loadPollingPlaces($electionId, $dryrun, $file) {

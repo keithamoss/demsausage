@@ -213,6 +213,25 @@ EOT
   );
 }
 
+function createGeocoderResults() {
+  global $file_db;
+
+  $file_db->exec(<<<EOT
+    CREATE TABLE `geocoder_results` (
+      `id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+      `address`	TEXT,
+      `premises`	TEXT,
+      `state`	TEXT,
+      `suburb`	TEXT,
+      `postcode`	TEXT,
+      `result`	TEXT,
+      `result_timestamp`	TIMESTAMP,
+      `election_id`	NUMERIC,
+    );
+EOT
+  );
+}
+
 // ingestPendingStalls()
 // ingestPollingPlaces("qld_2017_polling_places");
 // ingestElections();
