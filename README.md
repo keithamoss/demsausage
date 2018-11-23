@@ -6,7 +6,7 @@ Requirements:
 
 -   TypeScript 2.5.3
 -   Node 9.11.2
--   NPM 5.6.0
+-   npm 5.6.0
 
 ### Extra files
 
