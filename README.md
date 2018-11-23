@@ -7,6 +7,14 @@ Requirements:
 -   TypeScript 2.5.3
 -   Node 9.11.2
 -   npm 5.6.0
+-   PHP 7.1.13
+
+### First Time
+
+If this is the first time you're running Democracy Sausage you'll need to:
+
+**Generate Map Data:**
+Load the Admin Site first, navigate to `Manage Elections`, and then trigger the "Refresh election data" action for each election. This generates `.geojson` files in `php/elections/` that are required for the Public Site to function.
 
 ### Extra files
 
