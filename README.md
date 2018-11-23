@@ -1,5 +1,33 @@
 # Democracy Sausage
 
+## Installing and building
+
+### Extra files
+
+Copy `secrets.php.template` to `secrets.php` and replace every REPLACEME.
+Copy `client_secrets.php.template` to `client_secrets.php` and replace every REPLACEME.
+
+These files aren't in the repo. Contact the project maintainers.
+
+* Save the `sentry-php` folder to the base directory.
+* Save the `google-api-php-client-2.2.0` to the base directory.
+
+### Admin site
+
+cd admin
+yarn install
+(PORT=3001 yarn run start)
+
+### Public site
+
+cd public
+yarn install
+(PORT=3000 yarn run start)
+
+### PHP server
+cd php
+php -S localhost:8000 -c user.ini
+
 ## Development
 
 [TypeScript-React-Starter](https://github.com/Microsoft/TypeScript-React-Starter)
