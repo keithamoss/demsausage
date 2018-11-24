@@ -1,10 +1,8 @@
+import * as ol from "openlayers"
 import * as React from "react"
+import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
 // import "./OpenLayersMap.css"
 import { IElection } from "../../redux/modules/interfaces"
-import { getAPIBaseURL, getMapboxAPIKey, isUserABot } from "../../redux/modules/app"
-import { isItElectionDay } from "../../redux/modules/elections"
-
-import * as ol from "openlayers"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
@@ -127,39 +125,39 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 ]
             } else {
                 // On election day everyone gets the pretty Mapbox basemap
-                if (isItElectionDay(election) === true) {
-                    gaTrack.event({
-                        category: "OpenLayersMap",
-                        action: "Basemap Shown",
-                        label: "Mapbox",
-                    })
+                // if (isItElectionDay(election) === true) {
+                //     gaTrack.event({
+                //         category: "OpenLayersMap",
+                //         action: "Basemap Shown",
+                //         label: "Mapbox",
+                //     })
 
-                    return [
-                        new ol.layer.Tile({
-                            source: new ol.source.XYZ({
-                                url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
-                                crossOrigin: "anonymous",
-                            }),
-                        }),
-                    ]
-                } else {
-                    // If it's not election day just show the free Carto basemap
-                    gaTrack.event({
-                        category: "OpenLayersMap",
-                        action: "Basemap Shown",
-                        label: "Carto",
-                    })
+                //     return [
+                //         new ol.layer.Tile({
+                //             source: new ol.source.XYZ({
+                //                 url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
+                //                 crossOrigin: "anonymous",
+                //             }),
+                //         }),
+                //     ]
+                // } else {
+                // If it's not election day just show the free Carto basemap
+                gaTrack.event({
+                    category: "OpenLayersMap",
+                    action: "Basemap Shown",
+                    label: "Carto",
+                })
 
-                    return [
-                        new ol.layer.Tile({
-                            source: new ol.source.OSM({
-                                // https://carto.com/location-data-services/basemaps/
-                                url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                                attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                            }),
+                return [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM({
+                            // https://carto.com/location-data-services/basemaps/
+                            url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
                         }),
-                    ]
-                }
+                    }),
+                ]
+                // }
             }
         }
 
