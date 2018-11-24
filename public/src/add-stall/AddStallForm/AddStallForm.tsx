@@ -1,28 +1,24 @@
-import * as React from "react"
-import styled from "styled-components"
-
-import { Field, reduxForm } from "redux-form"
-import { IElection } from "../../redux/modules/interfaces"
-// import "./AddStallForm.css"
-
-import { Step, Stepper, StepLabel, StepContent } from "material-ui/Stepper"
-// import RaisedButton from "material-ui/RaisedButton"
-// import FlatButton from "material-ui/FlatButton"
-
-import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
-import PollingPlaceAutocompleteListWithConfirm from "../../finder/PollingPlaceAutocomplete/PollingPlaceAutocompleteListWithConfirm"
-import { grey100, grey500 } from "material-ui/styles/colors"
-import { TextField, Toggle } from "redux-form-material-ui"
-import RaisedButton from "material-ui/RaisedButton"
 import { List, ListItem } from "material-ui/List"
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
-
-import SausageIcon from "../../icons/sausage"
-import CakeIcon from "../../icons/cake"
-import VegoIcon from "../../icons/vego"
-import HalalIcon from "../../icons/halal"
-import CoffeeIcon from "../../icons/coffee"
+import RaisedButton from "material-ui/RaisedButton"
+// import "./AddStallForm.css"
+import { Step, StepContent, StepLabel, Stepper } from "material-ui/Stepper"
+import { grey100, grey500 } from "material-ui/styles/colors"
+import * as React from "react"
+import { Field, reduxForm } from "redux-form"
+import { TextField, Toggle } from "redux-form-material-ui"
+import styled from "styled-components"
+import PollingPlaceAutocompleteListWithConfirm from "../../finder/PollingPlaceAutocomplete/PollingPlaceAutocompleteListWithConfirm"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+import CakeIcon from "../../icons/cake"
+import CoffeeIcon from "../../icons/coffee"
+import HalalIcon from "../../icons/halal"
+import SausageIcon from "../../icons/sausage"
+import VegoIcon from "../../icons/vego"
+import { IElection } from "../../redux/modules/interfaces"
+// import RaisedButton from "material-ui/RaisedButton"
+// import FlatButton from "material-ui/FlatButton"
+import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
 
 const required = (value: any) => (value ? undefined : "Required")
 const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined)
@@ -72,6 +68,11 @@ const FormSection = styled.div`
 
 const FormSectionHeader = styled.h2`
     margin-bottom: 0px;
+`
+
+// Fix that iOS Safari bug
+const RaisedButtonChunkyBottom = styled(RaisedButton)`
+    margin-bottom: 60px;
 `
 
 const HiddenButton = styled.button`
@@ -129,26 +130,24 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     <Step>
                         <StepLabel>{locationConfirmed === false ? "Stall location" : `Stall location: ${primaryTextString}`}</StepLabel>
                         <StepContentStyled>
-                            {chosenElection !== null &&
-                                chosenElection.polling_places_loaded === false && (
-                                    <GooglePlacesAutocompleteListWithConfirm
-                                        election={chosenElection}
-                                        onConfirmChosenLocation={onConfirmChosenLocation}
-                                        componentRestrictions={{ country: "AU" }}
-                                        autoFocus={false}
-                                        hintText={"Where is your stall?"}
-                                    />
-                                )}
-                            {chosenElection !== null &&
-                                chosenElection.polling_places_loaded === true && (
-                                    <PollingPlaceAutocompleteListWithConfirm
-                                        key={chosenElection.id}
-                                        election={chosenElection}
-                                        onConfirmChosenLocation={onConfirmChosenLocation}
-                                        autoFocus={false}
-                                        hintText={"Where is your stall?"}
-                                    />
-                                )}
+                            {chosenElection !== null && chosenElection.polling_places_loaded === false && (
+                                <GooglePlacesAutocompleteListWithConfirm
+                                    election={chosenElection}
+                                    onConfirmChosenLocation={onConfirmChosenLocation}
+                                    componentRestrictions={{ country: "AU" }}
+                                    autoFocus={false}
+                                    hintText={"Where is your stall?"}
+                                />
+                            )}
+                            {chosenElection !== null && chosenElection.polling_places_loaded === true && (
+                                <PollingPlaceAutocompleteListWithConfirm
+                                    key={chosenElection.id}
+                                    election={chosenElection}
+                                    onConfirmChosenLocation={onConfirmChosenLocation}
+                                    autoFocus={false}
+                                    hintText={"Where is your stall?"}
+                                />
+                            )}
                         </StepContentStyled>
                     </Step>
 
@@ -241,7 +240,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     />
                                 </FormSection>
 
-                                <RaisedButton
+                                <RaisedButtonChunkyBottom
                                     label={"Submit Stall"}
                                     disabled={!isDirty || formSubmitting}
                                     primary={true}
