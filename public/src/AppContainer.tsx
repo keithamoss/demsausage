@@ -1,42 +1,36 @@
-import * as React from "react"
-import styled from "styled-components"
-
+// const Config: IConfig = require("Config") as any
+import { setDrawerOpen, toggleDrawerOpen } from "material-ui-responsive-drawer"
+import LinearProgress from "material-ui/LinearProgress"
 import {
+    // deepPurple200,
+    deepPurple100,
+    deepPurple300,
+    deepPurple400,
     // deepPurple900,
     // deepPurple800,
     // deepPurple700,
     // deepPurple600,
     deepPurple500,
-    deepPurple400,
-    deepPurple300,
-    // deepPurple200,
-    deepPurple100,
-    white,
     fullBlack,
+    white,
     yellow500,
 } from "material-ui/styles/colors"
-import { fade } from "material-ui/utils/colorManipulator"
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import getMuiTheme from "material-ui/styles/getMuiTheme"
-
-import App from "./App"
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import { fade } from "material-ui/utils/colorManipulator"
+import * as React from "react"
 import { connect } from "react-redux"
+import styled from "styled-components"
+import App from "./App"
 import { fetchInitialAppState } from "./redux/modules/app"
-import { getURLSafeElectionName, setCurrentElection } from "./redux/modules/elections"
+import { getURLSafeElectionName, IElection, setCurrentElection } from "./redux/modules/elections"
+import { IAppModule, ISnackbarsModule, IStore } from "./redux/modules/interfaces"
 import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
-
-import LinearProgress from "material-ui/LinearProgress"
-
-import { IElection } from "./redux/modules/elections"
-import { IStore, IAppModule, ISnackbarsModule } from "./redux/modules/interfaces"
-// const Config: IConfig = require("Config") as any
-
-import { setDrawerOpen, toggleDrawerOpen } from "material-ui-responsive-drawer"
 import { gaTrack } from "./shared/analytics/GoogleAnalytics"
 
 const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: deepPurple500, // AppBar and Tabs, Buttons, Active textfield et cetera
+        primary1Color: "#6740b4", // AppBar and Tabs, Buttons, Active textfield et cetera
         primary2Color: deepPurple400, // Used for the selected date in DatePicker
         primary3Color: deepPurple100, // Switch background
         accent1Color: deepPurple500, // Active tab highlight colour
@@ -261,6 +255,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AppContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+const AppContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppContainer)
 
 export default AppContainerWrapped
