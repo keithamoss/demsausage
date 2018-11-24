@@ -1,14 +1,14 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
-import ElectionsManager from "./ElectionsManager"
-import { IStore, IElection } from "../../redux/modules/interfaces"
-import { setPrimaryElection } from "../../redux/modules/elections"
 import { getAPIBaseURL } from "../../redux/modules/app"
+import { IElectionStats, setPrimaryElection } from "../../redux/modules/elections"
+import { IElection, IStore } from "../../redux/modules/interfaces"
 import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
+import ElectionsManager from "./ElectionsManager"
 
 export interface IStoreProps {
     elections: Array<IElection>
+    stats: Array<IElectionStats>
 }
 
 export interface IDispatchProps {
@@ -27,11 +27,12 @@ interface IOwnProps {
 
 export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
     render() {
-        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, stats, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
         return (
             <ElectionsManager
                 elections={elections}
+                stats={stats}
                 onMakeElectionPrimary={onMakeElectionPrimary}
                 onDownloadElection={onDownloadElection}
                 onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
@@ -45,6 +46,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
     return {
         elections: elections.elections,
+        stats: elections.stats,
     }
 }
 
@@ -62,6 +64,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionsManagerContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionsManagerContainer)
+const ElectionsManagerContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ElectionsManagerContainer)
 
 export default ElectionsManagerContainerWrapped

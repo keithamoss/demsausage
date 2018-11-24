@@ -1,9 +1,9 @@
 import * as dotProp from "dot-prop-immutable"
 import { IEALGISApiClient } from "../../redux/modules/interfaces"
-import { fetchUser } from "./user"
-import { fetchElections } from "./elections"
-import { fetchPendingStalls } from "./stalls"
+import { fetchElections, fetchElectionStats } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
+import { fetchPendingStalls } from "./stalls"
+import { fetchUser } from "./user"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -132,6 +132,7 @@ export function fetchInitialAppState() {
             dispatch(fetchPendingStalls()),
             dispatch(fetchPollingPlaceTypes()),
         ])
+        await dispatch(fetchElectionStats())
 
         // const self: ISelf = await dispatch(fetchUser())
         // if (self && self.success) {

@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IEALGISApiClient } from "../../redux/modules/interfaces"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -8,9 +8,11 @@ const LOAD_ELECTIONS = "ealgis/elections/LOAD_ELECTIONS"
 const LOAD_ELECTION = "ealgis/elections/LOAD_ELECTION"
 const SET_CURRENT_ELECTION = "ealgis/elections/SET_CURRENT_ELECTION"
 const SET_PRIMARY_ELECTION = "ealgis/elections/SET_PRIMARY_ELECTION"
+const LOAD_ELECTION_STATS = "ealgis/elections/LOAD_ELECTION_STATS"
 
 const initialState: Partial<IModule> = {
     elections: [],
+    stats: [],
 }
 
 // Reducer
@@ -32,6 +34,8 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
                     Object.assign(dotProp.get(state, `elections.${electionIndex}`), action.election)
                 )
             }
+        case LOAD_ELECTION_STATS:
+            return dotProp.set(state, "stats", action.stats)
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)
         case SET_PRIMARY_ELECTION:
@@ -59,6 +63,13 @@ export function loadElection(election: Partial<IElection>) {
     }
 }
 
+export function loadElectionStats(stats: Array<IElectionStats>) {
+    return {
+        type: LOAD_ELECTION_STATS,
+        stats,
+    }
+}
+
 export function setCurrentElection(electionId: number) {
     return {
         type: SET_CURRENT_ELECTION,
@@ -76,12 +87,14 @@ export function togglePrimaryElection(electionId: number) {
 // Models
 export interface IModule {
     elections: Array<IElection>
+    stats: Array<IElectionStats>
     current_election_id: number // election.id
 }
 
 export interface IAction {
     type: string
     elections: Array<IElection>
+    stats: Array<IElectionStats>
     election: Partial<IElection>
     electionId: number
     meta?: {
@@ -116,6 +129,11 @@ export interface IElection {
     // }
 }
 
+export interface IElectionStats {
+    with_data: number
+    total: number
+}
+
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
@@ -146,6 +164,15 @@ export function fetchElections() {
 
                 dispatch(setCurrentElection(activeElection!.id))
             }
+        }
+    }
+}
+
+export function fetchElectionStats() {
+    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+        const { response, json } = await ealapi.dsAPIGet({ "fetch-election-stats": 1 }, dispatch)
+        if (response.status === 200) {
+            dispatch(loadElectionStats(json))
         }
     }
 }
