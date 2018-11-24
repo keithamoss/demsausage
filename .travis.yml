@@ -13,7 +13,7 @@ before_script:
     - echo -e "deb https://s3.amazonaws.com/repo.deb.cyberduck.io stable main" | sudo tee /etc/apt/sources.list.d/cyberduck.list > /dev/null
     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE7097963FEFBE72
     - sudo apt-get update
-    - sudo apt-get install duck=6.3.4
+    - sudo apt-get install duck
 script:
     - duck --version
     - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
