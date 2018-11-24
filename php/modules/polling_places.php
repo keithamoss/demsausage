@@ -405,6 +405,20 @@ function findDuplicatePollingPlaces($electionTableName) {
   return $dupePollingPlaces;
 }
 
+function getPollingPlaceStats($electionTableName) {
+  global $file_db;
+
+  $stmt = $file_db->prepare("SELECT COUNT(*) as count FROM $electionTableName WHERE latest_report IS NOT NULL");
+  $stmt->execute();
+  $withdata = $stmt->fetch();
+
+  $stmt = $file_db->prepare("SELECT COUNT(*) as count FROM $electionTableName");
+  $stmt->execute();
+  $total = $stmt->fetch();
+
+  return ["with_data" => (int)$withdata["count"], "total" => (int)$total["count"]];
+}
+
 function createPollingPlaceTable($tableName) {
   global $file_db;
 

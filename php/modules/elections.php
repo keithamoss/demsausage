@@ -57,6 +57,17 @@ function fetchPublicElections() {
   return $elections;
 }
 
+function fetchElectionStats() {
+  $stats = [];
+
+  foreach(fetchAllElections() as $election) {
+    $minmax = getPollingPlaceStats($election["db_table_name"]);
+    $stats[$election["id"]] = $minmax;
+  }
+
+  return $stats;
+}
+
 function fetchAllElections() {
   global $file_db;
 

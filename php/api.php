@@ -251,5 +251,15 @@ if(stristr($_SERVER["QUERY_STRING"], "update-polling-place=1") !== false) {
   }
 }
 
+// Fetch election stats
+if(stristr($_SERVER["QUERY_STRING"], "fetch-election-stats=1") !== false) {
+  if(isAuthorisedUser("su") === false) {
+    failForAuthReasons();
+  }
+  
+  echo json_encode(fetchElectionStats());
+  closeDb();
+}
+
 closeDb();
 ?>
