@@ -408,7 +408,7 @@ function findDuplicatePollingPlaces($electionTableName) {
 function getPollingPlaceStats($electionTableName) {
   global $file_db;
 
-  $stmt = $file_db->prepare("SELECT COUNT(*) as count FROM $electionTableName WHERE latest_report IS NOT NULL");
+  $stmt = $file_db->prepare("SELECT COUNT(*) as count FROM $electionTableName WHERE has_bbq = 1 OR has_caek = 1 OR has_nothing = 1 OR has_run_out = 1 OR has_other != ''");
   $stmt->execute();
   $withdata = $stmt->fetch();
 
