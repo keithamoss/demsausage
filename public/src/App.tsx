@@ -8,7 +8,7 @@ import Snackbar from "material-ui/Snackbar"
 import Subheader from "material-ui/Subheader"
 import { ActionInfo, ActionSearch, ActionStore, CommunicationEmail, HardwareTv, MapsAddLocation, MapsMap } from "material-ui/svg-icons"
 import * as React from "react"
-import { Link, browserHistory } from "react-router"
+import { browserHistory, Link } from "react-router"
 import styled from "styled-components"
 import "./App.css"
 import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
@@ -168,7 +168,7 @@ class App extends React.Component<IProps, {}> {
                             primaryText="Redbubble Store"
                             leftIcon={<ActionStore />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Redbubble Store")}
-                            containerElement={<a href={"http://www.redbubble.com/people/demsausage/"} />}
+                            containerElement={<a href={"https://www.redbubble.com/people/demsausage/shop"} />}
                         />
                     </List>
                     <Divider />
