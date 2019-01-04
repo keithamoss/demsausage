@@ -4,50 +4,50 @@ branches:
 language: node_js
 node_js:
     - 9
-before_install:
-    - openssl aes-256-cbc -K $encrypted_311506bff2df_key -iv $encrypted_311506bff2df_iv -in secrets.tar.enc -out secrets.tar -d
-    - tar xvf secrets.tar
-    - source ./secrets/travis.env
-    - source ./secrets/demsausage-frontends.prod.env
-before_script:
-    - echo -e "deb https://s3.amazonaws.com/repo.deb.cyberduck.io stable main" | sudo tee /etc/apt/sources.list.d/cyberduck.list > /dev/null
-    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE7097963FEFBE72
-    - sudo apt-get update
-    - sudo apt-get install duck
-script:
-    - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
-    - cd public
-    - npm install --silent .
-    - npm run build
-    - tar -zcvf build.tar build/
-    - mkdir build-tmp
-    - mv build.tar build-tmp/demsausage-public.tar
-    - cd ../admin
-    - npm install --silent .
-    - npm run build
-    - tar -zcvf build.tar build/
-    - mkdir build-tmp
-    - mv build.tar build-tmp/demsausage-admin.tar
-    # Needed to prevent `local_dir` in the `deploy` tasks from getting confused
-    - cd ../
-deploy:
-    - provider: s3
-      access_key_id: $AWS_ACCESS_KEY_ID
-      secret_access_key: $AWS_SECRET_ACCESS_KEY
-      region: $AWS_DEFAULT_REGION
-      bucket: digitalocean-stack
-      skip_cleanup: true
-      local_dir: public/build-tmp/
-      upload-dir: builds
-      detect_encoding: true
-    - provider: s3
-      access_key_id: $AWS_ACCESS_KEY_ID
-      secret_access_key: $AWS_SECRET_ACCESS_KEY
-      region: $AWS_DEFAULT_REGION
-      bucket: digitalocean-stack
-      skip_cleanup: true
-      local_dir: admin/build-tmp/
-      upload-dir: builds
-      detect_encoding: true
-after_success:
-    - 'curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token $TRAVIS_API_KEY" -d "{\"request\": {\"branch\": \"master\", \"message\": \"From Scremsong: $TRAVIS_COMMIT\"}}" https://api.travis-ci.org/repo/keithamoss%2Fdigitalocean-stack/requests'
+# before_install:
+#     - openssl aes-256-cbc -K $encrypted_311506bff2df_key -iv $encrypted_311506bff2df_iv -in secrets.tar.enc -out secrets.tar -d
+#     - tar xvf secrets.tar
+#     - source ./secrets/travis.env
+#     - source ./secrets/demsausage-frontends.prod.env
+# before_script:
+#     - echo -e "deb https://s3.amazonaws.com/repo.deb.cyberduck.io stable main" | sudo tee /etc/apt/sources.list.d/cyberduck.list > /dev/null
+#     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FE7097963FEFBE72
+#     - sudo apt-get update
+#     - sudo apt-get install duck
+# script:
+#     - duck --username $FTP_USERNAME --password $FTP_PASSWORD --assumeyes --nokeychain --synchronize $FTP_PATH $TRAVIS_BUILD_DIR/php/ --existing upload --parallel 6
+#     - cd public
+#     - npm install --silent .
+#     - npm run build
+#     - tar -zcvf build.tar build/
+#     - mkdir build-tmp
+#     - mv build.tar build-tmp/demsausage-public.tar
+#     - cd ../admin
+#     - npm install --silent .
+#     - npm run build
+#     - tar -zcvf build.tar build/
+#     - mkdir build-tmp
+#     - mv build.tar build-tmp/demsausage-admin.tar
+#     # Needed to prevent `local_dir` in the `deploy` tasks from getting confused
+#     - cd ../
+# deploy:
+#     - provider: s3
+#       access_key_id: $AWS_ACCESS_KEY_ID
+#       secret_access_key: $AWS_SECRET_ACCESS_KEY
+#       region: $AWS_DEFAULT_REGION
+#       bucket: digitalocean-stack
+#       skip_cleanup: true
+#       local_dir: public/build-tmp/
+#       upload-dir: builds
+#       detect_encoding: true
+#     - provider: s3
+#       access_key_id: $AWS_ACCESS_KEY_ID
+#       secret_access_key: $AWS_SECRET_ACCESS_KEY
+#       region: $AWS_DEFAULT_REGION
+#       bucket: digitalocean-stack
+#       skip_cleanup: true
+#       local_dir: admin/build-tmp/
+#       upload-dir: builds
+#       detect_encoding: true
+# after_success:
+#     - 'curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token $TRAVIS_API_KEY" -d "{\"request\": {\"branch\": \"master\", \"message\": \"From Scremsong: $TRAVIS_COMMIT\"}}" https://api.travis-ci.org/repo/keithamoss%2Fdigitalocean-stack/requests'
