@@ -16,6 +16,8 @@ export { IModule as IUserModule, ISelf, IUser } from "./user"
 
 export interface IEnvVars {
     NODE_ENV: string // development, test, production
+    REACT_APP_SITE_BASE_URL: string
+    REACT_APP_API_BASE_URL: string
     REACT_APP_GOOGLE_MAPS_API_KEY: string
     REACT_APP_GOOGLE_ANALYTICS_UA: string
     REACT_APP_CARTO_DB_API_KEY: string

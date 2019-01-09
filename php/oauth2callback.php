@@ -10,7 +10,7 @@ $client->setAccessType('offline');
 $client->setApprovalPrompt('force');
 $client->setAuthConfigFile('client_secrets.php');
 if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-  $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
+  $client->setRedirectUri('https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
 } else {
   $client->setRedirectUri('https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
 }

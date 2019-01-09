@@ -18,13 +18,13 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   $client->setAccessToken($_SESSION['access_token']);
 
   if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-    header('Location: http://localhost:3000');
+    header('Location: https://localhost');
   } else {
     header('Location: https://admin.democracysausage.org');
   }
 } else {
   if(strpos($_SERVER['HTTP_HOST'], "localhost:") === 0) {
-    $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+    $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
   } else {
     $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
   }

@@ -4,10 +4,8 @@
 
 Requirements:
 
--   TypeScript 2.5.3
--   Node 9.11.2
--   npm 5.6.0
--   PHP 7.1.13
+-   Docker 18.09.0+
+-   Docker Compose 1.23.2+
 
 ### First Time
 
@@ -18,7 +16,7 @@ Load the Admin Site first, navigate to `Manage Elections`, and then trigger the 
 
 ### Extra files
 
-Copy `secrets.php.template` to `secrets.php` and replace every REPLACEME.
+Copy `secrets.php.template` to `secrets/secrets.php` and replace every REPLACEME.
 Copy `client_secrets.php.template` to `client_secrets.php` and replace every REPLACEME.
 
 These files aren't in the repo. Contact the project maintainers.
@@ -27,22 +25,18 @@ These files aren't in the repo. Contact the project maintainers.
 -   Save the `sentry-php` folder to the base directory.
 -   Save the `google-api-php-client-2.2.0` to the base directory.
 
-### Admin site
+### Run both sites
 
-cd admin
-npm install
-(PORT=3001 npm run start)
+`docker-compose up`
+Then navigate to the URLs given below
 
 ### Public site
 
-cd public
-npm install
-(PORT=3000 npm run start)
+Navigate to https://localhost
 
-### PHP server
+### Admin site
 
-cd php
-php -S localhost:8000 -c user.ini
+Navigate to https://localhost:3001
 
 ## Development
 

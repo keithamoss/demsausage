@@ -115,11 +115,11 @@ export function getEnvironment(): eAppEnv {
 }
 
 export function getAPIBaseURL(): string {
-    return getEnvironment() === eAppEnv.DEV ? "http://localhost:8000" : "https://api.democracysausage.org"
+    return process.env.REACT_APP_API_BASE_URL!
 }
 
 export function getBaseURL(): string {
-    return getEnvironment() === eAppEnv.DEV ? "http://localhost:3000" : "https://democracysausage.org"
+    return process.env.REACT_APP_SITE_BASE_URL!
 }
 
 export function fetchInitialAppState() {

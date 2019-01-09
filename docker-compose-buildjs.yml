@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    frontend_public:
+        image: node:10.14.2-alpine
+        command: build
+        entrypoint: /app/docker-entrypoint.sh
+        volumes:
+            - ./public:/app:delegated
+            - ./build:/build:delegated
+        env_file:
+            - secrets/sausage-public-frontend.prod.env
+    frontend_admin:
+        image: node:10.14.2-alpine
+        command: build
+        entrypoint: /app/docker-entrypoint.sh
+        volumes:
+            - ./admin:/app:delegated
+            - ./build:/build:delegated
+        env_file:
+            - secrets/sausage-admin-frontend.prod.env

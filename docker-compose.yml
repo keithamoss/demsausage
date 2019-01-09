@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+    php_api:
+        image: php:7.1.25-cli-alpine3.8
+        entrypoint: /app/sausage_api/docker-entrypoint.sh
+        volumes:
+            - ./php:/app/sausage_api:delegated
+            - ./secrets/secrets.php:/app/secrets.php
+            - ./db:/app/db:delegated
+            - ./sentry-php:/app/sentry-php:delegated
+            - ./google-api-php-client-2.2.0:/app/google-api-php-client-2.2.0:delegated
+        environment:
+            - ENVIRONMENT=DEVELOPMENT
+    frontend_public:
+        image: node:10.14.2-alpine
+        entrypoint: /app/docker-entrypoint.sh
+        volumes:
+            - ./public:/app:delegated
+        env_file:
+            - secrets/sausage-public-frontend.dev.env
+    frontend_admin:
+        image: node:10.14.2-alpine
+        entrypoint: /app/docker-entrypoint.sh
+        volumes:
+            - ./admin:/app:delegated
+        environment:
+            - PORT=3001
+        env_file:
+            - secrets/sausage-admin-frontend.dev.env
+    # django:
+    #     build: django/
+    #     entrypoint: /app/docker-entrypoint.sh
+    #     volumes:
+    #         - ./django/:/app:delegated
+    #     ports:
+    #         - "8000:8000"
+    #     env_file:
+    #         - secrets/scremsong-web.dev.env
+    #         - secrets/scremsong-db.env
+    #     depends_on:
+    #         - db
+    #         - rabbitmq
+    #         - redis
+    nginx:
+        build: nginx/
+        volumes:
+            - ./nginx:/app
+            - ./nginx/nginx/docker.https.dev.conf:/etc/nginx/conf.d/nginx.conf
+            - ./keys/:/app/keys/:delegated
+        depends_on:
+            # - django
+            - php_api
+            - frontend_public
+            - frontend_admin
+        ports:
+            - "443:443"
+            - "3001:3001"
+            - "8000:8000"

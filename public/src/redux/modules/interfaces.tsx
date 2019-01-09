@@ -1,21 +1,23 @@
-export { IStore } from "./reducer"
-export { IEALGISApiClient, IHttpResponse, ICartoAPIResponse } from "../../shared/api/EALGISApiClient"
-export { IModule as IAppModule, eAppEnv, ePollingPlaceFinderInit } from "./app"
-export { IModule as ISnackbarsModule } from "./snackbars"
-export { IModule as IElectionsModule, IElection } from "./elections"
+export { ICartoAPIResponse, IEALGISApiClient, IHttpResponse } from "../../shared/api/EALGISApiClient"
 export { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
+export { eAppEnv, ePollingPlaceFinderInit, IModule as IAppModule } from "./app"
+export { IElection, IModule as IElectionsModule } from "./elections"
 export {
-    IModule as IPollingPlacesModule,
     IMapPollingPlace,
+    IModule as IPollingPlacesModule,
     IPollingPlace,
-    IPollingPlaceSearchResult,
     IPollingPlaceLoaderResponse,
     IPollingPlaceLoaderResponseMessage,
+    IPollingPlaceSearchResult,
 } from "./polling_places"
-export { IModule as IStallModule, IStallLocationInfo, IStallPollingPlacInfo, StallStatus, IStall } from "./stalls"
+export { IStore } from "./reducer"
+export { IModule as ISnackbarsModule } from "./snackbars"
+export { IModule as IStallModule, IStall, IStallLocationInfo, IStallPollingPlacInfo, StallStatus } from "./stalls"
 
 export interface IEnvVars {
     NODE_ENV: string // development, test, production
+    REACT_APP_SITE_BASE_URL: string
+    REACT_APP_API_BASE_URL: string
     REACT_APP_GOOGLE_MAPS_API_KEY: string
     REACT_APP_GOOGLE_ANALYTICS_UA: string
     REACT_APP_MAPBOX_API_KEY_DEV: string
