@@ -14,8 +14,9 @@ import "./App.css"
 import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
 import FacebookIcon from "./icons/fontawesome/facebook"
 import TwitterIcon from "./icons/fontawesome/twitter"
-import { getURLSafeElectionName } from "./redux/modules/elections"
-import { IAppModule, IElection, ISnackbarsModule } from "./redux/modules/interfaces"
+import { IModule as IAppModule } from "./redux/modules/app"
+import { getURLSafeElectionName, IElection } from "./redux/modules/elections"
+import { IModule as ISnackbarsModule } from "./redux/modules/snackbars"
 
 // const logo = require("./logo.svg")
 
@@ -39,10 +40,14 @@ class MenuListItem extends React.Component<any, any> {
             (locationPathNameMatch === "/" && contentMuiName === "SausageMapContainer") ||
             (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer")
         ) {
+            // @ts-ignore
             rest.style = { color: muiThemePalette.accent1Color }
+            // @ts-ignore
             rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         } else if (locationPathNameMatch === locationPathName) {
+            // @ts-ignore
             rest.style = { color: muiThemePalette.accent1Color }
+            // @ts-ignore
             rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         }
         return <ListItem {...rest} />
@@ -92,7 +97,7 @@ class App extends React.Component<IProps, {}> {
             bottomNavSelectedIndex = 2
         }
 
-        const styles: React.CSSProperties = {
+        const styles: any /*React.CSSProperties*/ = {
             linearProgressStyle: {
                 position: "fixed",
                 top: "0px",

@@ -1,22 +1,18 @@
-import * as React from "react"
-import styled from "styled-components"
-
-import { IElection } from "../../redux/modules/interfaces"
 // import "./SausagelyticsForm.css"
-
 import LinearProgress from "material-ui/LinearProgress"
 // import CircularProgress from "material-ui/CircularProgress"
 import { ActionHome } from "material-ui/svg-icons"
-
+import * as React from "react"
+import styled from "styled-components"
 // import PercentageCircle from "../../shared/viz/PercentageCircle/PercentageCircle"
 import { VictoryBar, VictoryLabel, VictoryPie } from "victory"
-
-import SausageIcon from "../../icons/sausage"
+import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CakeIcon from "../../icons/cake"
-import VegoIcon from "../../icons/vego"
 // import HalalIcon from "../../icons/halal"
 import CoffeeIcon from "../../icons/coffee"
-import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+import SausageIcon from "../../icons/sausage"
+import VegoIcon from "../../icons/vego"
+import { IElection } from "../../redux/modules/elections"
 
 export interface IProps {
     currentElection: IElection

@@ -1,13 +1,13 @@
 import * as React from "react"
 import { Route } from "react-router"
-import AppContainer from "./AppContainer"
-import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
-import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
 import AddStallContainer from "./add-stall/AddStall/AddStallContainer"
+import AppContainer from "./AppContainer"
+import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
+import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
+import { IStore } from "./redux/modules/reducer"
 import SausagelyticsContainer from "./sausagelytics/Sausagelytics/SausagelyticsContainer"
 import AboutPage from "./static-pages/AboutPage/AboutPage"
 import MediaPage from "./static-pages/MediaPage/MediaPage"
-import { IStore } from "./redux/modules/interfaces"
 
 export default (store: IStore) => {
     return (

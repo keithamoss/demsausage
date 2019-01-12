@@ -1,14 +1,12 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
-import SausageMap from "./SausageMap"
-import { IStore, IElection, IMapPollingPlace, IPollingPlace, ePollingPlaceFinderInit } from "../../redux/modules/interfaces"
-
-import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
-import { setPollingPlaceFinderMode } from "../../redux/modules/app"
-import { getURLSafeElectionName } from "../../redux/modules/elections"
+import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from "../../redux/modules/app"
+import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { fetchPollingPlacesByIds, IMapPollingPlace, IPollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
+import SausageMap from "./SausageMap"
 
 export interface IStoreProps {
     elections: Array<IElection>
@@ -137,6 +135,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const SausageMapContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(SausageMapContainer)
+const SausageMapContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SausageMapContainer)
 
 export default SausageMapContainerWrapped

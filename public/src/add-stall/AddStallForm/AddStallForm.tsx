@@ -15,7 +15,7 @@ import CoffeeIcon from "../../icons/coffee"
 import HalalIcon from "../../icons/halal"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
-import { IElection } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/elections"
 // import RaisedButton from "material-ui/RaisedButton"
 // import FlatButton from "material-ui/FlatButton"
 import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
@@ -57,7 +57,7 @@ class CustomTextField extends React.Component<any, any> {
 class DeliciousnessToggle extends React.Component<any, any> {
     render(): any {
         const { name, ...rest } = this.props
-        return <Field name={name} component={Toggle} thumbStyle={{ backgroundColor: grey100 }} {...rest} />
+        return <Field name={name} component={Toggle as any} thumbStyle={{ backgroundColor: grey100 }} {...rest} />
     }
 }
 

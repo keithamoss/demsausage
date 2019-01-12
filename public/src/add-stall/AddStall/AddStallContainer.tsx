@@ -1,8 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import AddStall from "./AddStall"
-import { IStore, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
 
@@ -25,8 +25,6 @@ interface IOwnProps {
 }
 
 export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-    initialValues: object
-
     constructor(props: any) {
         super(props)
         this.state = { formSubmitted: false }
@@ -72,6 +70,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AddStallFormContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AddStallFormContainer)
+const AddStallFormContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddStallFormContainer)
 
 export default AddStallFormContainerWrapped

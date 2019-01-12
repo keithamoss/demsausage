@@ -1,15 +1,14 @@
-import * as React from "react"
+// import { ListItem } from "material-ui/List"
+import Avatar from "material-ui/Avatar"
+import { Card, CardActions, CardHeader } from "material-ui/Card"
+import FlatButton from "material-ui/FlatButton"
 // import styled from "styled-components"
 // import { Link, browserHistory } from "react-router"
 // import "./StallLocationCard.css"
-import { IStallLocationInfo } from "../../redux/modules/interfaces"
-
 import Paper from "material-ui/Paper"
-import { Card, CardActions, CardHeader } from "material-ui/Card"
-import FlatButton from "material-ui/FlatButton"
-// import { ListItem } from "material-ui/List"
-import Avatar from "material-ui/Avatar"
 import { ActionHome, ActionQuestionAnswer } from "material-ui/svg-icons"
+import * as React from "react"
+import { IStallLocationInfo } from "../../redux/modules/stalls"
 
 export interface IProps {
     stallLocationInfo: IStallLocationInfo

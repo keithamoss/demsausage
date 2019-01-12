@@ -1,8 +1,8 @@
 import * as ol from "openlayers"
 import * as React from "react"
 import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
+import { IElection } from "../../redux/modules/elections"
 // import "./OpenLayersMap.css"
-import { IElection } from "../../redux/modules/interfaces"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {

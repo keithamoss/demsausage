@@ -1,10 +1,11 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
-import { IStore, IElection, IGoogleGeocodeResult, IGoogleAddressSearchResult, IStallLocationInfo } from "../../../redux/modules/interfaces"
-
-import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 import StallLocationCard from "../../../add-stall/StallLocationCard/StallLocationCard"
+import { IElection } from "../../../redux/modules/elections"
+import { IStore } from "../../../redux/modules/reducer"
+import { IStallLocationInfo } from "../../../redux/modules/stalls"
+import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
+import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 
 export interface IProps {
     election: IElection
@@ -84,18 +85,17 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
 
         return (
             <div>
-                {locationConfirmed === false &&
-                    election.polling_places_loaded === false && (
-                        <div>
-                            <GooglePlacesAutocompleteList
-                                componentRestrictions={componentRestrictions}
-                                autoFocus={autoFocus}
-                                hintText={hintText}
-                                onChoosePlace={this.onChoosePlace}
-                            />
-                            <br />
-                        </div>
-                    )}
+                {locationConfirmed === false && election.polling_places_loaded === false && (
+                    <div>
+                        <GooglePlacesAutocompleteList
+                            componentRestrictions={componentRestrictions}
+                            autoFocus={autoFocus}
+                            hintText={hintText}
+                            onChoosePlace={this.onChoosePlace}
+                        />
+                        <br />
+                    </div>
+                )}
 
                 {stallLocationInfo !== null && (
                     <StallLocationCard
@@ -118,6 +118,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const GooglePlacesAutocompleteListWithConfirmWrapped = connect(mapStateToProps, mapDispatchToProps)(GooglePlacesAutocompleteListWithConfirm)
+const GooglePlacesAutocompleteListWithConfirmWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(GooglePlacesAutocompleteListWithConfirm)
 
 export default GooglePlacesAutocompleteListWithConfirmWrapped as any

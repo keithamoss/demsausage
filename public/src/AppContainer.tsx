@@ -22,10 +22,10 @@ import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import App from "./App"
-import { fetchInitialAppState } from "./redux/modules/app"
+import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
 import { getURLSafeElectionName, IElection, setCurrentElection } from "./redux/modules/elections"
-import { IAppModule, ISnackbarsModule, IStore } from "./redux/modules/interfaces"
-import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
+import { IStore } from "./redux/modules/reducer"
+import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
 import { gaTrack } from "./shared/analytics/GoogleAnalytics"
 
 const muiTheme = getMuiTheme({

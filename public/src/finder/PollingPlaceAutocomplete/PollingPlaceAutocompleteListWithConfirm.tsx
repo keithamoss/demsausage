@@ -1,11 +1,10 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
-import { IStore, IElection } from "../../redux/modules/interfaces"
-
-import PollingPlaceAutocompleteContainer from "./PollingPlaceAutocompleteContainer"
 import StallLocationCard from "../../add-stall/StallLocationCard/StallLocationCard"
-import { IPollingPlace } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import PollingPlaceAutocompleteContainer from "./PollingPlaceAutocompleteContainer"
 
 export interface IProps {
     election: IElection
@@ -26,8 +25,9 @@ export interface IStateProps {
 
 interface IOwnProps {}
 
-export class PollingPlaceAutocompleteListWithConfirm extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-    constructor(props: any) {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class PollingPlaceAutocompleteListWithConfirm extends React.Component<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = { pollingPlaceInfo: null, locationConfirmed: false }
 
@@ -63,18 +63,17 @@ export class PollingPlaceAutocompleteListWithConfirm extends React.Component<IPr
 
         return (
             <div>
-                {locationConfirmed === false &&
-                    election.polling_places_loaded === true && (
-                        <div>
-                            <PollingPlaceAutocompleteContainer
-                                election={election}
-                                autoFocus={autoFocus}
-                                hintText={hintText}
-                                onPollingPlaceChosen={this.onChoosePlace}
-                            />
-                            <br />
-                        </div>
-                    )}
+                {locationConfirmed === false && election.polling_places_loaded === true && (
+                    <div>
+                        <PollingPlaceAutocompleteContainer
+                            election={election}
+                            autoFocus={autoFocus}
+                            hintText={hintText}
+                            onPollingPlaceChosen={this.onChoosePlace}
+                        />
+                        <br />
+                    </div>
+                )}
 
                 {pollingPlaceInfo !== null && (
                     <StallLocationCard
@@ -97,6 +96,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PollingPlaceAutocompleteListWithConfirmWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceAutocompleteListWithConfirm)
+const PollingPlaceAutocompleteListWithConfirmWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceAutocompleteListWithConfirm)
 
 export default PollingPlaceAutocompleteListWithConfirmWrapped as any

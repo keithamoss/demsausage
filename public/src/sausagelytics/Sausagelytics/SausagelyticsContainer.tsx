@@ -1,8 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import Sausagelytics from "./Sausagelytics"
-import { IStore, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
 
@@ -51,6 +51,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const SausagelyticsContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(SausagelyticsContainer)
+const SausagelyticsContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SausagelyticsContainer)
 
 export default SausagelyticsContainerWrapped

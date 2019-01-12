@@ -1,20 +1,18 @@
-import * as React from "react"
-import styled from "styled-components"
-import { Link } from "react-router"
-// import "./SausageMap.css"
-
-import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
-import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
-
-import SearchBar from "material-ui-search-bar"
-import FlatButton from "material-ui/FlatButton"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
-
-import { ListItem } from "material-ui/List"
+import SearchBar from "material-ui-search-bar"
 import Avatar from "material-ui/Avatar"
-import { ActionInfo, DeviceLocationSearching, ActionSearch } from "material-ui/svg-icons"
+import FlatButton from "material-ui/FlatButton"
+import { ListItem } from "material-ui/List"
 import { blue500 } from "material-ui/styles/colors"
+import { ActionInfo, ActionSearch, DeviceLocationSearching } from "material-ui/svg-icons"
+import * as React from "react"
+import { Link } from "react-router"
+import styled from "styled-components"
+// import "./SausageMap.css"
+import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
 const FlexboxContainer = styled.div`
     display: flex;

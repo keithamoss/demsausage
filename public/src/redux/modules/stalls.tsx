@@ -1,6 +1,7 @@
-import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
+import * as dotProp from "dot-prop-immutable";
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient";
+import { IElection } from "./elections";
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions

@@ -1,18 +1,14 @@
-import * as React from "react"
-import { connect } from "react-redux"
+import * as React from "react";
+import { connect } from "react-redux";
+import { ePollingPlaceFinderInit } from "../../redux/modules/app";
+import { IElection } from "../../redux/modules/elections";
+import { fetchNearbyPollingPlaces, IPollingPlaceSearchResult } from "../../redux/modules/polling_places";
+import { IStore } from "../../redux/modules/reducer";
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
+import { gaTrack } from "../../shared/analytics/GoogleAnalytics";
+import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete";
+import PollingPlaceFinder from "./PollingPlaceFinder";
 
-import PollingPlaceFinder from "./PollingPlaceFinder"
-import {
-    IStore,
-    IElection,
-    IGoogleGeocodeResult,
-    IGoogleAddressSearchResult,
-    IPollingPlaceSearchResult,
-    ePollingPlaceFinderInit,
-} from "../../redux/modules/interfaces"
-import { fetchNearbyPollingPlaces } from "../../redux/modules/polling_places"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IStoreProps {
     initMode: ePollingPlaceFinderInit

@@ -1,12 +1,11 @@
-import * as React from "react"
-import styled from "styled-components"
-import * as reactStringReplace from "react-string-replace"
-import { IPollingPlace } from "../../redux/modules/interfaces"
-
 import SearchBar from "material-ui-search-bar"
-import { List, ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
+import { List, ListItem } from "material-ui/List"
 import MapsPlace from "material-ui/svg-icons/maps/place"
+import * as React from "react"
+import * as reactStringReplace from "react-string-replace"
+import styled from "styled-components"
+import { IPollingPlace } from "../../redux/modules/polling_places"
 
 export interface IProps {
     onFieldChange: Function

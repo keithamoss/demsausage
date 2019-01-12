@@ -1,15 +1,12 @@
-import * as React from "react"
-import { connect } from "react-redux"
-
-import { IStore, IGoogleGeocodeResult, IGoogleAddressSearchResult } from "../../../redux/modules/interfaces"
-
-import GoogleMapLoader from "react-google-maps-loader"
-import GooglePlacesAutocomplete from "./GooglePlacesAutocomplete"
-import { List, ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
+import { List, ListItem } from "material-ui/List"
 import MapsPlace from "material-ui/svg-icons/maps/place"
-
+import * as React from "react"
+import GoogleMapLoader from "react-google-maps-loader"
+import { connect } from "react-redux"
+import { IStore } from "../../../redux/modules/reducer"
 import { gaTrack } from "../../../shared/analytics/GoogleAnalytics"
+import GooglePlacesAutocomplete, { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
 
 export interface IProps {
     onShowPlaceAutocompleteResults?: Function
@@ -154,6 +151,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const GooglePlacesAutocompleteListWrapped = connect(mapStateToProps, mapDispatchToProps)(GooglePlacesAutocompleteList)
+const GooglePlacesAutocompleteListWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(GooglePlacesAutocompleteList)
 
 export default GooglePlacesAutocompleteListWrapped as any

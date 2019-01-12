@@ -1,8 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-
-import { IStore } from "../../redux/modules/interfaces"
+import { IStore } from "../../redux/modules/reducer"
 
 export interface IProps {}
 
@@ -53,7 +52,8 @@ export class AboutPage extends React.Component<IProps & IStoreProps & IDispatchP
                             Images from <a href="http://openclipart.org">openclipart.org</a>; specifically:{" "}
                             <a href="http://openclipart.org/detail/7983/red-+-green-ok-not-ok-icons-by-tzeeniewheenie">
                                 these tick and cross icons
-                            </a>, <a href="http://openclipart.org/detail/6165/sausage-by-mcol">this sausage icon</a> and{" "}
+                            </a>
+                            , <a href="http://openclipart.org/detail/6165/sausage-by-mcol">this sausage icon</a> and{" "}
                             <a href="http://openclipart.org/detail/181486/cake-by-vectorsme-181486">this cake icon</a> (with our
                             acknowledgements and appreciation to the artists).
                         </li>
@@ -92,6 +92,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AboutPageWrapped = connect(mapStateToProps, mapDispatchToProps)(AboutPage)
+const AboutPageWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AboutPage)
 
 export default AboutPageWrapped

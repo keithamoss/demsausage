@@ -14,9 +14,9 @@ import HalalIcon from "../../icons/halal"
 import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
+import { IElection } from "../../redux/modules/elections"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
-import { IElection } from "../../redux/modules/interfaces"
 import {
     getFoodDescription,
     getSausageChanceDescription,

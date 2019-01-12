@@ -1,8 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-import { getURLSafeElectionName } from "../../redux/modules/elections"
-import { IElection, IStore } from "../../redux/modules/interfaces"
+import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import ElectionChooser from "./ElectionChooser"
 
@@ -122,6 +122,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
 }
 
 const ElectionChooserContainerWrapped = connect<IStoreProps, IDispatchProps, IProps>(
+    // @ts-ignore
     mapStateToProps,
     mapDispatchToProps
 )(ElectionChooserContainer)

@@ -2,11 +2,12 @@ import * as React from "react"
 import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import { createStall, IStall, IStallLocationInfo } from "../../redux/modules/stalls"
 // import { cloneDeep } from "lodash-es"
-
 import AddStallForm from "./AddStallForm"
-import { IStore, IElection, IStallLocationInfo, IStall, IPollingPlace } from "../../redux/modules/interfaces"
-import { createStall } from "../../redux/modules/stalls"
 
 export interface IProps {
     onStallAdded: Function
@@ -40,7 +41,6 @@ const fromFormValues = (formValues: any): IStall => {
 
 export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     initialValues: object
-
     constructor(props: any) {
         super(props)
         this.state = {
@@ -53,6 +53,8 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 
         this.onChooseElection = this.onChooseElection.bind(this)
         this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
+
+        this.initialValues = {}
     }
 
     onChooseElection(event: any, election: IElection) {
@@ -154,6 +156,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AddStallFormContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AddStallFormContainer) as any
+const AddStallFormContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddStallFormContainer) as any
 
 export default AddStallFormContainerWrapped

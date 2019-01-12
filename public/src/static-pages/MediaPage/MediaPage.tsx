@@ -3,7 +3,7 @@ import { CommunicationEmail, FileFileDownload } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-import { IStore } from "../../redux/modules/interfaces"
+import { IStore } from "../../redux/modules/reducer"
 
 export interface IProps {}
 
