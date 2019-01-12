@@ -1,30 +1,27 @@
-import "es6-promise/auto"
 // import registerServiceWorker from "./registerServiceWorker"
-import "./index.css"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import { createStore, applyMiddleware, Store } from "redux"
-import { composeWithDevTools } from "redux-devtools-extension"
 import { Provider } from "react-redux"
-import { Router, browserHistory } from "react-router"
+import { browserHistory, Router } from "react-router"
 import { syncHistoryWithStore } from "react-router-redux"
-import thunkMiddleware from "redux-thunk"
+import { applyMiddleware, createStore, Store } from "redux"
+import { composeWithDevTools } from "redux-devtools-extension"
 // import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
 import { responsiveStoreEnhancer } from "redux-responsive"
+import thunkMiddleware from "redux-thunk"
+import "./index.css"
+import "./polyfills"
+// if ("GOOGLE_ANALYTICS_UA" in Config) {
+//     Middleware.push(AnalyticsMiddleware as any)
+// }
+import reducers, { IStore } from "./redux/modules/reducer"
 import getRoutes from "./routes"
-import { IStore } from "./redux/modules/interfaces"
+import { EALGISApiClient } from "./shared/api/EALGISApiClient"
 // const Config: IConfig = require("Config") as any
 
 // declare var DEVELOPMENT: boolean
 let Middleware: Array<any> = []
 
-// if ("GOOGLE_ANALYTICS_UA" in Config) {
-//     Middleware.push(AnalyticsMiddleware as any)
-// }
-
-import reducers from "./redux/modules/reducer"
-
-import { EALGISApiClient } from "./shared/api/EALGISApiClient"
 const ealapi = new EALGISApiClient()
 
 const composeEnhancers = composeWithDevTools({

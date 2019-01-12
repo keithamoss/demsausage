@@ -1,9 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { getAPIBaseURL } from "../../redux/modules/app"
-import { IElectionStats, setPrimaryElection } from "../../redux/modules/elections"
-import { IElection, IStore } from "../../redux/modules/interfaces"
+import { IElection, IElectionStats, setPrimaryElection } from "../../redux/modules/elections"
 import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
 import ElectionsManager from "./ElectionsManager"
 
 export interface IStoreProps {

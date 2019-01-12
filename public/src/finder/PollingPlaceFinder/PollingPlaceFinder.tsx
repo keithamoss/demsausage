@@ -1,20 +1,23 @@
+import { Checkbox, DropDownMenu, Menu, MenuItem, Popover } from "material-ui"
+import Avatar from "material-ui/Avatar"
+import { ListItem } from "material-ui/List"
+import Paper from "material-ui/Paper"
+import { blue500, grey500 } from "material-ui/styles/colors"
+import { ActionInfo, ActionSearch, DeviceLocationSearching, NavigationClose } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
+import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+import CakeIcon from "../../icons/cake"
+import CoffeeIcon from "../../icons/coffee"
+import HalalIcon from "../../icons/halal"
+import SausageIcon from "../../icons/sausage"
+import VegoIcon from "../../icons/vego"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceFinder.css"
-import { IElection, IPollingPlaceSearchResult, ePollingPlaceFinderInit } from "../../redux/modules/interfaces"
-
-import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
+import { ePollingPlaceFinderInit, IElection, IPollingPlaceSearchResult } from "../../redux/modules/interfaces"
 import EmptyState from "../../shared/empty_state/EmptyState"
+import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
 import { PollingPlaceCardMiniContainer } from "../PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import { DeviceLocationSearching, ActionSearch, NavigationClose } from "material-ui/svg-icons"
-import { grey500 } from "material-ui/styles/colors"
-
-import Paper from "material-ui/Paper"
-import { ListItem } from "material-ui/List"
-import Avatar from "material-ui/Avatar"
-import { ActionInfo } from "material-ui/svg-icons"
-import { blue500 } from "material-ui/styles/colors"
 
 const FinderContainer = styled.div`
     padding-top: 15px;
@@ -88,15 +91,44 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     onChoosePlace={onGeocoderResults}
                 />
 
+                <Checkbox label={<SausageIcon />} />
+                <Checkbox label={<CakeIcon />} />
+                <Checkbox label={<VegoIcon />} />
+                <Checkbox label={<HalalIcon />} />
+                <Checkbox label={<CoffeeIcon />} />
+                <Checkbox label={<BaconandEggsIcon />} />
+
+                <DropDownMenu>
+                    <MenuItem value={1} primaryText={<SausageIcon />} />
+                    <MenuItem value={2} primaryText="Every Night" />
+                    <MenuItem value={3} primaryText="Weeknights" />
+                    <MenuItem value={4} primaryText="Weekends" />
+                    <MenuItem value={5} primaryText="Weekly" />
+                </DropDownMenu>
+
+                <Popover
+                    open={true}
+                    // anchorEl={this.state.anchorEl}
+                    // anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                    // targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                    // onRequestClose={this.handleRequestClose}
+                >
+                    <Menu>
+                        <MenuItem primaryText="Refresh" />
+                        <MenuItem primaryText="Help &amp; feedback" />
+                        <MenuItem primaryText="Settings" />
+                        <MenuItem primaryText="Sign out" />
+                    </Menu>
+                </Popover>
+
                 {/* {nearbyPollingPlaces === null &&
                     locationSearched === null && <EmptyState message={"Search for polling places"} icon={<ActionSearch />} />} */}
 
-                {nearbyPollingPlaces !== null &&
-                    nearbyPollingPlaces.length > 0 && (
-                        <LocationSearched>
-                            Polling places near <em>{locationSearched}</em>.
-                        </LocationSearched>
-                    )}
+                {nearbyPollingPlaces !== null && nearbyPollingPlaces.length > 0 && (
+                    <LocationSearched>
+                        Polling places near <em>{locationSearched}</em>.
+                    </LocationSearched>
+                )}
 
                 {nearbyPollingPlaces !== null &&
                     nearbyPollingPlaces.length > 0 &&
@@ -106,18 +138,18 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                         </PollingPlaceCardWrapper>
                     ))}
 
-                {nearbyPollingPlaces !== null &&
-                    nearbyPollingPlaces.length === 0 &&
-                    isShowingPlaceAutocompleteResults === false && (
-                        <EmptyState
-                            message={
-                                <div>
-                                    Sorry, we couldn't find any<br />polling places close to you
-                                </div>
-                            }
-                            icon={<ActionSearch />}
-                        />
-                    )}
+                {nearbyPollingPlaces !== null && nearbyPollingPlaces.length === 0 && isShowingPlaceAutocompleteResults === false && (
+                    <EmptyState
+                        message={
+                            <div>
+                                Sorry, we couldn't find any
+                                <br />
+                                polling places close to you
+                            </div>
+                        }
+                        icon={<ActionSearch />}
+                    />
+                )}
             </FinderContainer>
         )
     }

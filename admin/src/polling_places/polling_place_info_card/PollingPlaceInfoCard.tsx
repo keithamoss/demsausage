@@ -1,9 +1,9 @@
-import * as React from "react"
 // import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
-import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
 // import "./PollingPlaceInfoCard.css"
-
 import { Card, CardTitle } from "material-ui/Card"
+import * as React from "react"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 export interface IProps {

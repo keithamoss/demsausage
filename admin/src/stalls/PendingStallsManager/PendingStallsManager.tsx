@@ -1,13 +1,13 @@
-import * as React from "react"
 // import styled from "styled-components"
 import { groupBy } from "lodash-es"
-import { Link } from "react-router"
-import { IStall, IElection } from "../../redux/modules/interfaces"
 // import "./PendingStallsManager.css"
-
 import { List, ListItem } from "material-ui/List"
 import Subheader from "material-ui/Subheader"
 import { ActionHome } from "material-ui/svg-icons"
+import * as React from "react"
+import { Link } from "react-router"
+import { IElection } from "../../redux/modules/elections"
+import { IStall } from "../../redux/modules/stalls"
 
 export interface IProps {
     stalls: Array<IStall>

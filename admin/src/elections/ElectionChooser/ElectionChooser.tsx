@@ -1,9 +1,8 @@
-import * as React from "react"
-import { IElection } from "../../redux/modules/interfaces"
-// import "./ElectionChooser.css"
-
-import SelectField from "material-ui/SelectField"
 import MenuItem from "material-ui/MenuItem"
+// import "./ElectionChooser.css"
+import SelectField from "material-ui/SelectField"
+import * as React from "react"
+import { IElection } from "../../redux/modules/elections"
 
 export interface IProps {
     elections: Array<IElection>
@@ -23,7 +22,9 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
                 value={currentElectionId}
                 onChange={onChangeElection}
             >
-                {elections.map((election: IElection) => <MenuItem key={election.id} value={election.id} primaryText={election.name} />)}
+                {elections.map((election: IElection) => (
+                    <MenuItem key={election.id} value={election.id} primaryText={election.name} />
+                ))}
             </SelectField>
         )
     }

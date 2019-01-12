@@ -1,17 +1,15 @@
-import * as React from "react"
-import styled from "styled-components"
-import { Link } from "react-router"
-import { default as VirtualList } from "react-tiny-virtual-list"
-import { IPollingPlace } from "../../redux/modules/interfaces"
-// import "./PollingPlaceTypesEditor.css"
-
-import EmptyState from "../../shared/empty_state/EmptyState"
-import ElectionChooser from "../../elections/ElectionChooser/ElectionChooserContainer"
-
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
 import RaisedButton from "material-ui/RaisedButton"
-import { ActionOpenInNew, ActionCheckCircle } from "material-ui/svg-icons"
 import { blueGrey50 } from "material-ui/styles/colors"
+import { ActionCheckCircle, ActionOpenInNew } from "material-ui/svg-icons"
+import * as React from "react"
+import { Link } from "react-router"
+import { default as VirtualList } from "react-tiny-virtual-list"
+import styled from "styled-components"
+import ElectionChooser from "../../elections/ElectionChooser/ElectionChooserContainer"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+// import "./PollingPlaceTypesEditor.css"
+import EmptyState from "../../shared/empty_state/EmptyState"
 
 const GridWrapper = styled.div`
     width: 100%;
@@ -38,7 +36,7 @@ export interface IProps {
 // Work around TypeScript not allowing us to pass <a> props to react-router's <Link>
 class CustomLink extends React.Component<any, any> {
     render(): any {
-        return <Link {...this.props} />
+        return <Link to="something" {...this.props} />
     }
 }
 
@@ -71,7 +69,8 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                 <EmptyState
                     message={
                         <div>
-                            Good work, all of the polling<br /> places have types!
+                            Good work, all of the polling
+                            <br /> places have types!
                         </div>
                     }
                     icon={<ActionCheckCircle />}

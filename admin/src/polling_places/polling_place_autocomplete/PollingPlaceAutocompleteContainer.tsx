@@ -1,10 +1,10 @@
-import * as React from "react"
-import PollingPlaceAutocomplete from "./PollingPlaceAutocomplete"
-import { connect } from "react-redux"
 import { debounce } from "lodash-es"
-
-import { searchPollingPlaces } from "../../redux/modules/polling_places"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
+import * as React from "react"
+import { connect } from "react-redux"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace, searchPollingPlaces } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import PollingPlaceAutocomplete from "./PollingPlaceAutocomplete"
 
 export interface IProps {
     election: IElection
@@ -73,8 +73,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceAutocompleteContainerWrapped = connect<{}, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(
-    PollingPlaceAutocompleteContainer
-)
+const PollingPlaceAutocompleteContainerWrapped = connect<{}, IDispatchProps, IProps>(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceAutocompleteContainer)
 
 export default PollingPlaceAutocompleteContainerWrapped

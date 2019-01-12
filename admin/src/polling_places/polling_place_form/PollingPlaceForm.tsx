@@ -1,30 +1,25 @@
-import * as React from "react"
-import styled from "styled-components"
-
-import { Field, reduxForm } from "redux-form"
-import { IElection, IPollingPlace } from "../../redux/modules/interfaces"
-// import "./PollingPlaceForm.css"
-
-import { Card, CardTitle, CardText, CardActions } from "material-ui/Card"
-import { grey100 } from "material-ui/styles/colors"
-import { TextField, Toggle, SelectField } from "redux-form-material-ui"
-import MenuItem from "material-ui/MenuItem"
-import Divider from "material-ui/Divider"
-import RaisedButton from "material-ui/RaisedButton"
-import { List, ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
-import { AlertWarning } from "material-ui/svg-icons"
-import { blue500 } from "material-ui/styles/colors"
-import { ContentBlock } from "material-ui/svg-icons"
-
-import SausageIcon from "../../icons/sausage"
-import CakeIcon from "../../icons/cake"
-import VegoIcon from "../../icons/vego"
-import HalalIcon from "../../icons/halal"
-import CoffeeIcon from "../../icons/coffee"
+// import "./PollingPlaceForm.css"
+import { Card, CardActions, CardText, CardTitle } from "material-ui/Card"
+import Divider from "material-ui/Divider"
+import { List, ListItem } from "material-ui/List"
+import MenuItem from "material-ui/MenuItem"
+import RaisedButton from "material-ui/RaisedButton"
+import { blue500, grey100, grey500, yellow700 } from "material-ui/styles/colors"
+import { AlertWarning, ContentBlock } from "material-ui/svg-icons"
+import * as React from "react"
+import { Field, reduxForm } from "redux-form"
+import { SelectField, TextField, Toggle } from "redux-form-material-ui"
+import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+import CakeIcon from "../../icons/cake"
+import CoffeeIcon from "../../icons/coffee"
+import HalalIcon from "../../icons/halal"
 import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
-import { yellow700, grey500 } from "material-ui/styles/colors"
+import SausageIcon from "../../icons/sausage"
+import VegoIcon from "../../icons/vego"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
@@ -43,7 +38,7 @@ export interface IProps {
 // Work around TypeScript issues with redux-form. There's a bunch of issues logged in DefinitelyTyped's issue tracker.
 class CustomField extends React.Component<any, any> {
     render(): any {
-        return <Field autoComplete={"off"} {...this.props} />
+        return <Field name="something" autoComplete={"off"} {...this.props} />
     }
 }
 
@@ -190,7 +185,9 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             floatingLabelText={"What type of polling place is this?"}
                             fullWidth={true}
                         >
-                            {pollingPlaceTypes.map((type: string) => <MenuItem key={type} value={type} primaryText={type} />)}
+                            {pollingPlaceTypes.map((type: string) => (
+                                <MenuItem key={type} value={type} primaryText={type} />
+                            ))}
                         </CustomField>
                         <CustomTextField
                             name="extra_info"

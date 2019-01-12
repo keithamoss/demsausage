@@ -1,9 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
+import { IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceEditorContainer from "./PollingPlaceEditorContainer"
-import { IStore, IElection } from "../../redux/modules/interfaces"
 
 export interface IStoreProps {
     election: IElection
@@ -54,6 +54,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PollingPlaceEditorContainerRouteWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceEditorContainerRoute)
+const PollingPlaceEditorContainerRouteWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceEditorContainerRoute)
 
 export default PollingPlaceEditorContainerRouteWrapped

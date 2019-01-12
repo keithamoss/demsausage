@@ -1,12 +1,12 @@
-import * as React from "react"
-import styled from "styled-components"
-// import { Link } from "react-router"
-import * as reactStringReplace from "react-string-replace"
-import { IPollingPlace } from "../../redux/modules/interfaces"
-
+import { AutoCompleteProps } from "material-ui"
 import AutoComplete from "material-ui/AutoComplete"
 import { ListItem } from "material-ui/List"
 import MenuItem from "material-ui/MenuItem"
+import * as React from "react"
+// import { Link } from "react-router"
+import * as reactStringReplace from "react-string-replace"
+import styled from "styled-components"
+import { IPollingPlace } from "../../redux/modules/polling_places"
 
 export interface IProps {
     searchText: string
@@ -21,7 +21,11 @@ const HighlightedString = styled.span`
 `
 
 // Working around issues with onClick not being exposed and causing TS linting errors
-class CustomAutoComplete extends React.Component<any, any> {
+interface ICustomAutoCompleteProps extends AutoCompleteProps<any> {
+    floatingLabelText: string
+    onClick: any
+}
+class CustomAutoComplete extends React.Component<ICustomAutoCompleteProps, any> {
     render(): any {
         return <AutoComplete {...this.props} />
     }

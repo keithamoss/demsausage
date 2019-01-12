@@ -1,8 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceInfoCard from "./PollingPlaceInfoCard"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
 
 export interface IProps {
     election: IElection
@@ -33,6 +34,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PollingPlaceInfoCardContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceInfoCardContainer)
+const PollingPlaceInfoCardContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceInfoCardContainer)
 
 export default PollingPlaceInfoCardContainerWrapped

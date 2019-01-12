@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../redux/modules/interfaces"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions

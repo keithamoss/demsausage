@@ -1,23 +1,23 @@
-import * as React from "react"
-import styled from "styled-components"
-import { Link, browserHistory } from "react-router"
-import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import { IAppModule, ISnackbarsModule, IElection, IUser } from "./redux/modules/interfaces"
-import "./App.css"
-
-import { ResponsiveDrawer, BodyContainer, ResponsiveAppBar } from "material-ui-responsive-drawer"
-
-import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
-import Paper from "material-ui/Paper"
-import { List, ListItem } from "material-ui/List"
+import { BodyContainer, ResponsiveAppBar, ResponsiveDrawer } from "material-ui-responsive-drawer"
 import Badge from "material-ui/Badge"
+import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation"
 import Divider from "material-ui/Divider"
-
-import { ToolbarGroup } from "material-ui/Toolbar"
-import Snackbar from "material-ui/Snackbar"
-import LinearProgress from "material-ui/LinearProgress"
 import FlatButton from "material-ui/FlatButton"
-import { ContentInbox, ActionGrade, ContentSend, ContentDrafts, ActionFace, ActionOpenInNew } from "material-ui/svg-icons"
+import LinearProgress from "material-ui/LinearProgress"
+import { List, ListItem } from "material-ui/List"
+import Paper from "material-ui/Paper"
+import Snackbar from "material-ui/Snackbar"
+import { ActionFace, ActionGrade, ActionOpenInNew, ContentDrafts, ContentInbox, ContentSend } from "material-ui/svg-icons"
+import { ToolbarGroup } from "material-ui/Toolbar"
+import * as React from "react"
+import { browserHistory, Link } from "react-router"
+import styled from "styled-components"
+import "./App.css"
+import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
+import { IModule as IAppModule } from "./redux/modules/app"
+import { IElection } from "./redux/modules/elections"
+import { IModule as ISnackbarsModule } from "./redux/modules/snackbars"
+import { IUser } from "./redux/modules/user"
 
 // const logo = require("./logo.svg")
 
@@ -60,7 +60,9 @@ class MenuListItem extends React.Component<any, any> {
         const { locationPathName, muiThemePalette, ...rest } = this.props
 
         if (locationPathName === rest.containerElement.props.to) {
+            // @ts-ignore
             rest.style! = { color: muiThemePalette.accent1Color }
+            // @ts-ignore
             rest.leftIcon! = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
         }
         return <ListItem {...rest} />
@@ -108,7 +110,7 @@ class App extends React.Component<IProps, {}> {
             bottomNavSelectedIndex = 2
         }
 
-        const styles: React.CSSProperties = {
+        const styles: any /* React.CSSProperties */ = {
             linearProgressStyle: {
                 position: "fixed",
                 top: "0px",
@@ -184,8 +186,9 @@ class App extends React.Component<IProps, {}> {
                         />
 
                         {isResponsiveAndOverBreakPoint === false && user !== null && <Divider />}
-                        {isResponsiveAndOverBreakPoint === false &&
-                            user !== null && <ListItem primaryText={user.email} leftIcon={<ActionFace />} disabled={true} />}
+                        {isResponsiveAndOverBreakPoint === false && user !== null && (
+                            <ListItem primaryText={user.email} leftIcon={<ActionFace />} disabled={true} />
+                        )}
                     </List>
                 </ResponsiveDrawer>
 

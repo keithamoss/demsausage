@@ -1,12 +1,13 @@
+import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
-import { cloneDeep } from "lodash-es"
-
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace, pollingPlaceHasReportsOfNoms, updatePollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import { IStall } from "../../redux/modules/stalls"
 import PollingPlaceForm from "./PollingPlaceForm"
-import { IStore, IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
-import { updatePollingPlace, pollingPlaceHasReportsOfNoms } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
@@ -172,6 +173,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceFormContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceFormContainer)
+const PollingPlaceFormContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceFormContainer)
 
 export default PollingPlaceFormContainerWrapped

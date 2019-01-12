@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../redux/modules/interfaces"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
 import { fetchElections, fetchElectionStats } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
 import { fetchPendingStalls } from "./stalls"

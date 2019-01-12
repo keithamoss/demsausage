@@ -1,14 +1,12 @@
-import * as React from "react"
-import styled from "styled-components"
-
-import { Field, reduxForm } from "redux-form"
-import { IElection } from "../../redux/modules/interfaces"
-// import "./ElectionEditor.css"
-
-// import { grey100 } from "material-ui/styles/colors"
-import { TextField, SelectField, Checkbox, DatePicker } from "redux-form-material-ui"
 import MenuItem from "material-ui/MenuItem"
 import RaisedButton from "material-ui/RaisedButton"
+import * as React from "react"
+import { BaseFieldProps, Field, reduxForm } from "redux-form"
+// import "./ElectionEditor.css"
+// import { grey100 } from "material-ui/styles/colors"
+import { Checkbox, DatePicker, SelectField, TextField } from "redux-form-material-ui"
+import styled from "styled-components"
+import { IElection } from "../../redux/modules/elections"
 
 const required = (value: any) => (value ? undefined : "Required")
 
@@ -37,7 +35,15 @@ export interface IProps {
 }
 
 // Work around TypeScript issues with redux-form. There's a bunch of issues logged in DefinitelyTyped's issue tracker.
-class CustomField extends React.Component<any, any> {
+interface ICustomFieldProps extends BaseFieldProps<any> {
+    floatingLabelText?: string
+    fullWidth?: boolean
+    type?: string
+    mode?: string
+    required?: boolean
+    labelPosition?: string
+}
+class CustomField extends React.Component<ICustomFieldProps, any> {
     render(): any {
         return <Field autoComplete={"off"} {...this.props} />
     }

@@ -1,8 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IStore } from "../../redux/modules/reducer"
+import { IStall } from "../../redux/modules/stalls"
 import StallInfoCard from "./StallInfoCard"
-import { IStore, IStall } from "../../redux/modules/interfaces"
 
 export interface IProps {
     stall: IStall
@@ -33,6 +33,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const StallInfoCardContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(StallInfoCardContainer)
+const StallInfoCardContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(StallInfoCardContainer)
 
 export default StallInfoCardContainerWrapped

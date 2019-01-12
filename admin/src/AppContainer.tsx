@@ -1,37 +1,33 @@
-import * as React from "react"
+// const Config: IConfig = require("Config") as any
+import { setDrawerOpen } from "material-ui-responsive-drawer"
+// import CircularProgress from "material-ui/CircularProgress"
+import LinearProgress from "material-ui/LinearProgress"
 // import styled from "styled-components"
 import {
+    // deepPurple200,
+    deepPurple100,
+    deepPurple300,
+    deepPurple400,
     // deepPurple900,
     // deepPurple800,
     // deepPurple700,
     // deepPurple600,
     deepPurple500,
-    deepPurple400,
-    deepPurple300,
-    // deepPurple200,
-    deepPurple100,
-    white,
     fullBlack,
+    white,
     yellow500,
 } from "material-ui/styles/colors"
-import { fade } from "material-ui/utils/colorManipulator"
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import getMuiTheme from "material-ui/styles/getMuiTheme"
-
-import App from "./App"
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import { fade } from "material-ui/utils/colorManipulator"
+import * as React from "react"
 import { connect } from "react-redux"
-import { fetchInitialAppState } from "./redux/modules/app"
-import { logoutUser } from "./redux/modules/user"
-import { setCurrentElection } from "./redux/modules/elections"
-import { iterate as iterateSnackbar } from "./redux/modules/snackbars"
-
-// import CircularProgress from "material-ui/CircularProgress"
-import LinearProgress from "material-ui/LinearProgress"
-
-import { IStore, IAppModule, ISnackbarsModule, IUser, IElection } from "./redux/modules/interfaces"
-// const Config: IConfig = require("Config") as any
-
-import { setDrawerOpen } from "material-ui-responsive-drawer"
+import App from "./App"
+import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
+import { IElection, setCurrentElection } from "./redux/modules/elections"
+import { IStore } from "./redux/modules/reducer"
+import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
+import { IUser, logoutUser } from "./redux/modules/user"
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -188,6 +184,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AppContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+const AppContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppContainer)
 
 export default AppContainerWrapped

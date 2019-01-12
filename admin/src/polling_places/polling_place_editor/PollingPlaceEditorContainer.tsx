@@ -1,15 +1,15 @@
+import Avatar from "material-ui/Avatar"
+import { ListItem } from "material-ui/List"
+import { blue500 } from "material-ui/styles/colors"
+import { CommunicationLocationOff } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
-import PollingPlaceEditor from "./PollingPlaceEditor"
-import { fetchPollingPlacesByIds } from "../../redux/modules/polling_places"
-import { IStore, IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
-
-import { ListItem } from "material-ui/List"
-import Avatar from "material-ui/Avatar"
-import { CommunicationLocationOff } from "material-ui/svg-icons"
-import { blue500 } from "material-ui/styles/colors"
+import { IElection } from "../../redux/modules/elections"
+import { fetchPollingPlacesByIds, IPollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import { IStall } from "../../redux/modules/stalls"
+import { PollingPlaceEditor } from "./PollingPlaceEditor"
 
 export interface IProps {
     election: IElection
@@ -108,6 +108,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceEditorContainer)
+const PollingPlaceEditorContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceEditorContainer)
 
 export default PollingPlaceEditorContainerWrapped

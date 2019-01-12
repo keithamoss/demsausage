@@ -1,8 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
+import { IStall } from "../../redux/modules/stalls"
 import PendingStallsManager from "./PendingStallsManager"
-import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IStoreProps {
     stalls: Array<IStall>
@@ -40,6 +41,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PendingStallsManagerContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PendingStallsManagerContainer)
+const PendingStallsManagerContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PendingStallsManagerContainer)
 
 export default PendingStallsManagerContainerWrapped

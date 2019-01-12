@@ -1,6 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient, IElection } from "../../redux/modules/interfaces"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IElection } from "./elections"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -234,7 +235,11 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
 }
 
 export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
-    return pollingPlace.has_bbq === true || pollingPlace.has_caek === true || (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+    return (
+        pollingPlace.has_bbq === true ||
+        pollingPlace.has_caek === true ||
+        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
+    )
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {

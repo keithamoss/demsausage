@@ -1,13 +1,12 @@
+import CommunicationLocationOff from "material-ui/svg-icons/communication/location-off"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
-import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
+import { IElection } from "../../redux/modules/elections"
+import { fetchAllPollingPlaces, IPollingPlace, updatePollingPlace } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
-import { IStore, IElection, IPollingPlace } from "../../redux/modules/interfaces"
-import { fetchAllPollingPlaces, updatePollingPlace } from "../../redux/modules/polling_places"
-
-import CommunicationLocationOff from "material-ui/svg-icons/communication/location-off"
+import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 
 export interface IStoreProps {
     election: IElection
@@ -52,7 +51,9 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
                 <EmptyState
                     message={
                         <div>
-                            We don't have any polling<br />places for this election yet :(
+                            We don't have any polling
+                            <br />
+                            places for this election yet :(
                         </div>
                     }
                     icon={<CommunicationLocationOff />}
@@ -99,6 +100,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceTypesEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceTypesEditorContainer)
+const PollingPlaceTypesEditorContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceTypesEditorContainer)
 
 export default PollingPlaceTypesEditorContainerWrapped

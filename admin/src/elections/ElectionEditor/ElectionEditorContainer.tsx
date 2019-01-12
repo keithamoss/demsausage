@@ -1,13 +1,12 @@
+import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
-import { cloneDeep } from "lodash-es"
-
+import { IElection, updateElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import ElectionEditor from "./ElectionEditor"
-import { IStore, IElection } from "../../redux/modules/interfaces"
-import { updateElection } from "../../redux/modules/elections"
 
 export interface IProps {
     // election: IElection
@@ -113,6 +112,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionEditorContainer)
+const ElectionEditorContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ElectionEditorContainer)
 
 export default ElectionEditorContainerWrapped

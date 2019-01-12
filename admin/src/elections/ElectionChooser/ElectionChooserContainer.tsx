@@ -1,9 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
-
+import { IElection, setCurrentElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
 import ElectionChooser from "./ElectionChooser"
-import { IStore, IElection } from "../../redux/modules/interfaces"
-import { setCurrentElection } from "../../redux/modules/elections"
 
 export interface IProps {
     onElectionChanged: Function
@@ -52,6 +51,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionChooserContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionChooserContainer)
+const ElectionChooserContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ElectionChooserContainer)
 
 export default ElectionChooserContainerWrapped

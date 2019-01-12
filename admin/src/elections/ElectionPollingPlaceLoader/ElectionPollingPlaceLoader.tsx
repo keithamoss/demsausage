@@ -1,27 +1,23 @@
-import * as React from "react"
-import { Link } from "react-router"
-// import styled from "styled-components"
-import {
-    IElection,
-    IPollingPlaceLoaderResponseMessage as IMessage,
-    PollingPlaceLoaderResponseMessageStatus as MessageStatus,
-} from "../../redux/modules/interfaces"
-// import "./ElectionPollingPlaceLoader.css"
-
-import RaisedButton from "material-ui/RaisedButton"
 import { List, ListItem } from "material-ui/List"
-import { red500, greenA200 } from "material-ui/styles/colors"
-import FileFileUpload from "material-ui/svg-icons/file/file-upload"
-import EditorInsertDriveFile from "material-ui/svg-icons/editor/insert-drive-file"
+// import styled from "styled-components"
+// import "./ElectionPollingPlaceLoader.css"
+import RaisedButton from "material-ui/RaisedButton"
+import { greenA200, red500 } from "material-ui/styles/colors"
+import ActionInfo from "material-ui/svg-icons/action/info"
 import AlertError from "material-ui/svg-icons/alert/error"
 import AlertWarning from "material-ui/svg-icons/alert/warning"
-import ActionInfo from "material-ui/svg-icons/action/info"
+import EditorInsertDriveFile from "material-ui/svg-icons/editor/insert-drive-file"
+import FileFileUpload from "material-ui/svg-icons/file/file-upload"
+import * as React from "react"
+import { Link } from "react-router"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlaceLoaderResponseMessage, PollingPlaceLoaderResponseMessageStatus } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
     file: File | undefined
     error: boolean | undefined
-    messages: Array<IMessage>
+    messages: Array<IPollingPlaceLoaderResponseMessage>
     onFileUpload: any
 }
 
@@ -43,10 +39,18 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
     render() {
         const { election, file, error, messages } = this.props
 
-        const info: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.INFO)
-        const errors: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.ERROR)
-        const checks: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.CHECK)
-        const warnings: Array<IMessage> = messages.filter((value: IMessage) => value.level === MessageStatus.WARNING)
+        const info: Array<IPollingPlaceLoaderResponseMessage> = messages.filter(
+            (value: IPollingPlaceLoaderResponseMessage) => value.level === PollingPlaceLoaderResponseMessageStatus.INFO
+        )
+        const errors: Array<IPollingPlaceLoaderResponseMessage> = messages.filter(
+            (value: IPollingPlaceLoaderResponseMessage) => value.level === PollingPlaceLoaderResponseMessageStatus.ERROR
+        )
+        const checks: Array<IPollingPlaceLoaderResponseMessage> = messages.filter(
+            (value: IPollingPlaceLoaderResponseMessage) => value.level === PollingPlaceLoaderResponseMessageStatus.CHECK
+        )
+        const warnings: Array<IPollingPlaceLoaderResponseMessage> = messages.filter(
+            (value: IPollingPlaceLoaderResponseMessage) => value.level === PollingPlaceLoaderResponseMessageStatus.WARNING
+        )
 
         return (
             <div>
@@ -96,7 +100,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
                     <div>
                         <h2>Info</h2>
                         <List>
-                            {info.map((value: IMessage, index: number) => (
+                            {info.map((value: IPollingPlaceLoaderResponseMessage, index: number) => (
                                 <ListItem key={index} primaryText={value.message} leftIcon={<ActionInfo />} disabled={true} />
                             ))}
                         </List>
@@ -107,7 +111,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
                     <div>
                         <h2>Errors</h2>
                         <List>
-                            {errors.map((value: IMessage, index: number) => (
+                            {errors.map((value: IPollingPlaceLoaderResponseMessage, index: number) => (
                                 <ListItem key={index} primaryText={value.message} leftIcon={<AlertError />} disabled={true} />
                             ))}
                         </List>
@@ -118,7 +122,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
                     <div>
                         <h2>Hey you, check these!</h2>
                         <List>
-                            {checks.map((value: IMessage, index: number) => (
+                            {checks.map((value: IPollingPlaceLoaderResponseMessage, index: number) => (
                                 <ListItem key={index} primaryText={value.message} leftIcon={<AlertWarning />} disabled={true} />
                             ))}
                         </List>
@@ -129,7 +133,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
                     <div>
                         <h2>Warnings</h2>
                         <List>
-                            {warnings.map((value: IMessage, index: number) => (
+                            {warnings.map((value: IPollingPlaceLoaderResponseMessage, index: number) => (
                                 <ListItem key={index} primaryText={value.message} leftIcon={<AlertWarning />} disabled={true} />
                             ))}
                         </List>

@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient, IStallModule } from "../../redux/modules/interfaces"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -161,6 +161,6 @@ export function markStallAsDeclined(id: number) {
 }
 
 // TODO Use proper selectors
-export function getPendingStallsForCurrentElection(stalls: IStallModule, electionId: number) {
+export function getPendingStallsForCurrentElection(stalls: IModule, electionId: number) {
     return stalls.pending.filter((stall: IStall) => stall.elections_id === electionId)
 }

@@ -1,10 +1,10 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-
+import { IElection } from "../../redux/modules/elections"
+import { IStore } from "../../redux/modules/reducer"
+import { IStall, markStallAsDeclined, markStallAsRead, markStallAsReadAndAddPollingPlace } from "../../redux/modules/stalls"
 import PendingStallEditor from "./PendingStallEditor"
-import { markStallAsRead, markStallAsReadAndAddPollingPlace, markStallAsDeclined } from "../../redux/modules/stalls"
-import { IStore, IStall, IElection } from "../../redux/modules/interfaces"
 
 export interface IProps {}
 export interface IStoreProps {
@@ -86,6 +86,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PendingStallEditorContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PendingStallEditorContainer)
+const PendingStallEditorContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PendingStallEditorContainer)
 
 export default PendingStallEditorContainerWrapped

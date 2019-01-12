@@ -1,21 +1,14 @@
+import Avatar from "material-ui/Avatar"
+import { ListItem } from "material-ui/List"
+import { blue500 } from "material-ui/styles/colors"
+import { AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
-
-import ElectionPollingPlaceLoader from "./ElectionPollingPlaceLoader"
-import {
-    IStore,
-    IElection,
-    IPollingPlaceLoaderResponse,
-    IPollingPlaceLoaderResponseMessage as IMessage,
-} from "../../redux/modules/interfaces"
-import { loadPollingPlaces } from "../../redux/modules/polling_places"
-import { setElectionTableName } from "../../redux/modules/elections"
+import { IElection, setElectionTableName } from "../../redux/modules/elections"
+import { IPollingPlaceLoaderResponse, IPollingPlaceLoaderResponseMessage, loadPollingPlaces } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
 import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
-
-import { ListItem } from "material-ui/List"
-import Avatar from "material-ui/Avatar"
-import { AlertWarning } from "material-ui/svg-icons"
-import { blue500 } from "material-ui/styles/colors"
+import ElectionPollingPlaceLoader from "./ElectionPollingPlaceLoader"
 
 export interface IStoreProps {
     election: IElection
@@ -29,7 +22,7 @@ export interface IDispatchProps {
 export interface IStateProps {
     file: File | undefined
     error: boolean | undefined
-    messages: Array<IMessage>
+    messages: Array<IPollingPlaceLoaderResponseMessage>
 }
 
 interface IRouteProps {
@@ -98,6 +91,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionPollingPlaceLoaderContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(ElectionPollingPlaceLoaderContainer)
+const ElectionPollingPlaceLoaderContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ElectionPollingPlaceLoaderContainer)
 
 export default ElectionPollingPlaceLoaderContainerWrapped

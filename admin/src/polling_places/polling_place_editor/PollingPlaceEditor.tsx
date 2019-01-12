@@ -1,11 +1,13 @@
 import * as React from "react"
-import styled from "styled-components"
 import { browserHistory } from "react-router"
-import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
-import PollingPlaceInfoCardContainer from "../polling_place_info_card/PollingPlaceInfoCardContainer"
-import PollingPlaceFormContainer from "../polling_place_form/PollingPlaceFormContainer"
+import styled from "styled-components"
 import ElectionChooser from "../../elections/ElectionChooser/ElectionChooserContainer"
-import { IElection, IPollingPlace, IStall } from "../../redux/modules/interfaces"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IStall } from "../../redux/modules/stalls"
+import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
+import PollingPlaceFormContainer from "../polling_place_form/PollingPlaceFormContainer"
+import PollingPlaceInfoCardContainer from "../polling_place_info_card/PollingPlaceInfoCardContainer"
 // import "./PollingPlaceEditor.css"
 
 const FlexboxContainer = styled.div`
@@ -40,7 +42,7 @@ export interface IProps {
     onElectionChanged: Function
 }
 
-class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
+export class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
     render() {
         const { election, pollingPlace, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } = this.props
 
@@ -65,16 +67,15 @@ class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
                     </FlexboxContainer>
                 )}
 
-                {showElectionChooser === false &&
-                    showAutoComplete === true && (
-                        <PollingPlaceAutocompleteContainer
-                            key={election.id}
-                            election={election}
-                            onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
-                                browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
-                            }}
-                        />
-                    )}
+                {showElectionChooser === false && showAutoComplete === true && (
+                    <PollingPlaceAutocompleteContainer
+                        key={election.id}
+                        election={election}
+                        onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
+                            browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
+                        }}
+                    />
+                )}
 
                 {pollingPlace && <PollingPlaceInfoCardContainer election={election} pollingPlace={pollingPlace} />}
 
@@ -90,5 +91,3 @@ class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
         )
     }
 }
-
-export default PollingPlaceEditor

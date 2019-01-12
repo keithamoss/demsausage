@@ -17,7 +17,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table"
 import * as React from "react"
 import { browserHistory, Link } from "react-router"
 import styled from "styled-components"
-import { IElection, IElectionStats } from "../../redux/modules/interfaces"
+import { IElection, IElectionStats } from "../../redux/modules/elections"
 
 const TableRowNoBorder = styled(TableRow)`
     border-bottom: none !important;
