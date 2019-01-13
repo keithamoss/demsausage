@@ -4,7 +4,7 @@ command="$1"
 cd /app/sausage_api
 
 if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then
-  php -S 0.0.0.0:8000 -c user.ini
+  php -S 0.0.0.0:8002 -c user.ini
   exit 1
 fi
 

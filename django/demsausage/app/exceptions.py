@@ -1,0 +1,2 @@
+class DemSausageException(Exception):
+    pass
