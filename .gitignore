@@ -26,3 +26,4 @@ keys/
 db-pg/data/
 initial-data/
 *.pyc
+logs/

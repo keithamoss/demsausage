@@ -11,10 +11,16 @@ if [ x"$ver" = x ]; then
 fi
 
 # echo pushing prod nginx container
-# docker tag sausage/nginx:latest sausage/nginx-prod:"$ver"
-# docker push sausage/nginx:latest
-# docker push sausage/nginx:"$ver"
+# docker tag demsausage/nginx:latest demsausage/nginx-prod:"$ver"
+# docker push demsausage/nginx:latest
+# docker push demsausage/nginx:"$ver"
 
 echo versioning frontend assets
 mv build/frontend-public.tgz build/frontend-public-$ver.tgz
 mv build/frontend-admin.tgz build/frontend-admin-$ver.tgz
+
+echo pushing prod django container
+docker tag demsausage/django:latest keithmoss/demsausage-django:latest
+docker tag demsausage/django:latest keithmoss/demsausage-django:"$ver"
+docker push keithmoss/demsausage-django:latest
+docker push keithmoss/demsausage-django:"$ver"

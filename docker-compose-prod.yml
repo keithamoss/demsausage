@@ -1,22 +1,22 @@
 version: "3.7"
 services:
-    # db:
-    #     image: mdillon/postgis:10-alpine
-    #     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-    #     # ports:
-    #     #     - "5432:5432"
-    #     environment:
-    #         - POSTGRES_PASSWORD=postgres
-    #         - POSTGRES_DB=stack
-    #     volumes:
-    #         # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
-    #         - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
+    db:
+        image: mdillon/postgis:10-alpine
+        command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=stack
+        volumes:
+            # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
+            - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
 
-    #         # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
-    #         # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
+            # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
+            # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
 
-    #         # Enable this to store the PostgreSQL data on the host
-    #         - ./db/data:/var/lib/postgresql/data
+            # Enable this to store the PostgreSQL data on the host
+            - ./db-pg/data:/var/lib/postgresql/data
     php_api:
         image: php:7.1.25-cli-alpine3.8
         entrypoint: /app/sausage_api/docker-entrypoint.sh
@@ -28,8 +28,20 @@ services:
             - ./google-api-php-client-2.2.0:/app/google-api-php-client-2.2.0:delegated
         environment:
             - ENVIRONMENT=PRODUCTION
+    django:
+        image: demsausage/django:latest
+        command: supervisord
+        volumes:
+            - ./logs/django:/app/logs:delegated
+        # ports:
+        #     - "8000:8000"
+        env_file:
+            - secrets/sausage-web.prod-local.env
+            - secrets/sausage-db.env
+        depends_on:
+            - db
     nginx_prod:
-        image: sausage/nginx-prod:latest
+        image: demsausage/nginx-prod:latest
         volumes:
             - ./keys/:/app/keys/:delegated
             - ./logs/nginx:/var/log/nginx:delegated
@@ -38,7 +50,8 @@ services:
         ports:
             - "443:443"
             - "444:444"
-            - "8000:8000"
+            - "8001:8001"
+            - "8003:8003"
         environment:
             - HTTPS_ENABLED=TRUE
             - SERVER_NAME=localhost
