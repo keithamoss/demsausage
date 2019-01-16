@@ -23,3 +23,6 @@ demsausage-dev-deps-20181125\.zip
 build/
 secrets/
 keys/
+db-pg/
+django/
+initial-data/
