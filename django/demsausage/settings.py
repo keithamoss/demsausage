@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'social_django',
     'demsausage.app',
     'rest_framework',
@@ -189,9 +190,11 @@ TEMPLATES = [
 # DATABASES = {}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'OPTIONS': {
-            'options': '-c search_path={}'.format(get_env('DB_SCHEMA'))
+            # Assumes PostGIS was installed with defaults (i.e. its in the public schema)
+            # https://stackoverflow.com/a/26289219/7368493
+            'options': '-c search_path={},public,topology'.format(get_env('DB_SCHEMA'))
         },
         'NAME': get_env('DB_NAME'),
         'USER': get_env('DB_USERNAME'),

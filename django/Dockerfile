@@ -1,4 +1,4 @@
-FROM python:3.6-alpine3.8
+FROM odoku/geopython:3.6
 MAINTAINER Keith Moss <keithamoss@gmail.com>
 
 ENV PYTHONUNBUFFERED 1
