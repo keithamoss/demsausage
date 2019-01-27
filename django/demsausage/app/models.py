@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
 from demsausage.app.enums import ProfileSettings, StallStatus
 from demsausage.util import make_logger
 
@@ -73,6 +74,22 @@ class Elections(models.Model):
     election_day = models.DateTimeField()
 
 
+class PollingPlaceFacilityType(models.Model):
+    "Our list of known types of polling place (e.g. Community Hall, Public School, ..."
+
+    name = models.TextField()
+
+
+class IPAddressHistoricalModel(models.Model):
+    """
+    Abstract model for history models tracking the IP address.
+    """
+    ip_address = models.GenericIPAddressField()
+
+    class Meta:
+        abstract = True
+
+
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
@@ -85,17 +102,12 @@ class PollingPlaceNoms(models.Model):
     latest_report = models.DateTimeField(auto_now=True, null=True)
     chance_of_sausage = models.FloatField(null=True)
     source = models.TextField(blank=True)
+    history = HistoricalRecords()
 
     class Meta:
         indexes = [
             GinIndex(fields=['noms'])
         ]
-
-
-class PollingPlaceFacilityType(models.Model):
-    "Our list of known types of polling place (e.g. Community Hall, Public School, ..."
-
-    name = models.TextField()
 
 
 class PollingPlaces(models.Model):
@@ -115,6 +127,7 @@ class PollingPlaces(models.Model):
     entrances_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
+    history = HistoricalRecords()
 
 
 class Stalls(models.Model):
@@ -132,6 +145,7 @@ class Stalls(models.Model):
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
     mail_confirm_key = models.TextField(blank=True)
     mail_confirmed = models.BooleanField(default=False)
+    history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
 
 
 class MailgunEvents(models.Model):

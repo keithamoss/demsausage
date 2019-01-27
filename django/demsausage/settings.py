@@ -107,7 +107,8 @@ INSTALLED_APPS = [
     'demsausage.app',
     'rest_framework',
     'corsheaders',
-    'raven.contrib.django.raven_compat'
+    'raven.contrib.django.raven_compat',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
