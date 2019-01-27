@@ -6,6 +6,8 @@ from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
 from demsausage.app.enums import ProfileSettings, StallStatus
+from demsausage.app.schemas import NOMS_JSON_FIELD_SCHEMA
+from demsausage.app.validators import JSONSchemaValidator
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -80,20 +82,10 @@ class PollingPlaceFacilityType(models.Model):
     name = models.TextField()
 
 
-class IPAddressHistoricalModel(models.Model):
-    """
-    Abstract model for history models tracking the IP address.
-    """
-    ip_address = models.GenericIPAddressField()
-
-    class Meta:
-        abstract = True
-
-
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
-    noms = JSONField(default=None, blank=True)
+    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=NOMS_JSON_FIELD_SCHEMA)])
     stall_name = models.TextField(blank=True)
     stall_description = models.TextField(blank=True)
     stall_website = models.TextField(blank=True)
@@ -102,7 +94,9 @@ class PollingPlaceNoms(models.Model):
     latest_report = models.DateTimeField(auto_now=True, null=True)
     chance_of_sausage = models.FloatField(null=True)
     source = models.TextField(blank=True)
+
     history = HistoricalRecords()
+    tracker = FieldTracker()
 
     class Meta:
         indexes = [
@@ -127,12 +121,23 @@ class PollingPlaces(models.Model):
     entrances_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
+
     history = HistoricalRecords()
 
     class Meta:
         indexes = [
             models.Index(fields=["election"])
         ]
+
+
+class IPAddressHistoricalModel(models.Model):
+    """
+    Abstract model for history models tracking the IP address.
+    """
+    ip_address = models.GenericIPAddressField()
+
+    class Meta:
+        abstract = True
 
 
 class Stalls(models.Model):
@@ -143,14 +148,16 @@ class Stalls(models.Model):
     name = models.TextField(blank=True)
     description = models.TextField(blank=True)
     website = models.TextField(blank=True)
-    noms = JSONField(default=None, blank=True)
+    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=NOMS_JSON_FIELD_SCHEMA)])
     email = models.EmailField()
     polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT)
     reported_timestamp = models.DateTimeField(auto_now_add=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
     mail_confirm_key = models.TextField(blank=True)
     mail_confirmed = models.BooleanField(default=False)
+
     history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
+    tracker = FieldTracker()
 
 
 class MailgunEvents(models.Model):
