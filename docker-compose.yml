@@ -18,7 +18,7 @@ services:
             # Enable this to store the PostgreSQL data on the host
             - ./db-pg/data:/var/lib/postgresql/data
     memcached:
-        image: memcached:1.5-alpine
+        image: memcached
         expose:
             - "11211"
     django:
