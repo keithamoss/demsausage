@@ -1,4 +1,3 @@
-import { Checkbox, DropDownMenu, Menu, MenuItem, Popover } from "material-ui";
 import Avatar from "material-ui/Avatar";
 import { ListItem } from "material-ui/List";
 import Paper from "material-ui/Paper";
@@ -6,12 +5,6 @@ import { blue500, grey500 } from "material-ui/styles/colors";
 import { ActionInfo, ActionSearch, DeviceLocationSearching, NavigationClose } from "material-ui/svg-icons";
 import * as React from "react";
 import styled from "styled-components";
-import BaconandEggsIcon from "../../icons/bacon-and-eggs";
-import CakeIcon from "../../icons/cake";
-import CoffeeIcon from "../../icons/coffee";
-import HalalIcon from "../../icons/halal";
-import SausageIcon from "../../icons/sausage";
-import VegoIcon from "../../icons/vego";
 import { ePollingPlaceFinderInit } from "../../redux/modules/app";
 import { IElection } from "../../redux/modules/elections";
 import { IPollingPlaceSearchResult } from "../../redux/modules/polling_places";
@@ -93,7 +86,7 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     onChoosePlace={onGeocoderResults}
                 />
 
-                <Checkbox label={<SausageIcon />} />
+                {/* <Checkbox label={<SausageIcon />} />
                 <Checkbox label={<CakeIcon />} />
                 <Checkbox label={<VegoIcon />} />
                 <Checkbox label={<HalalIcon />} />
@@ -121,7 +114,7 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                         <MenuItem primaryText="Settings" />
                         <MenuItem primaryText="Sign out" />
                     </Menu>
-                </Popover>
+                </Popover> */}
 
                 {/* {nearbyPollingPlaces === null &&
                     locationSearched === null && <EmptyState message={"Search for polling places"} icon={<ActionSearch />} />} */}
