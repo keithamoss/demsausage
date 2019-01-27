@@ -17,6 +17,10 @@ services:
 
             # Enable this to store the PostgreSQL data on the host
             - ./db-pg/data:/var/lib/postgresql/data
+    memcached:
+        image: memcached:1.5-alpine
+        expose:
+            - "11211"
     django:
         build: django/
         entrypoint: /app/docker-entrypoint.sh
@@ -29,6 +33,7 @@ services:
             - secrets/sausage-db.env
         depends_on:
             - db
+            - memcached
     php_api:
         image: php:7.1.25-cli-alpine3.8
         entrypoint: /app/sausage_api/docker-entrypoint.sh

@@ -178,12 +178,17 @@ TEMPLATES = [
     },
 ]
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': 'memcached:11211',
-#     }
-# }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': get_env('MEMCACHED_LOCATION'),
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'KEY_PREFIX': 'demsausage_',
+            'SERVER_MAX_ITEM_LENGTH': 1024 * 1024 * 20,  # 20MB to accommodate the larger polling place GeoJSON objects
+        }
+    }
+}
 
 
 # Database

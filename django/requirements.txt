@@ -8,3 +8,4 @@ social-auth-core==2.0.0
 raven==6.10.0
 django-simple-history==2.7.0
 jsonschema==2.6.0
+python-memcached==1.59
