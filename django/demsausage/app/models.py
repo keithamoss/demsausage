@@ -66,7 +66,7 @@ class Elections(models.Model):
     "Our information about each election we've covered."
 
     old_id = models.IntegerField()
-    geom = models.PointField()
+    geom = models.PointField(geography=True)
     default_zoom_level = models.IntegerField()
     name = models.TextField()
     short_name = models.TextField()
@@ -111,7 +111,7 @@ class PollingPlaces(models.Model):
     old_id = models.IntegerField()
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
     noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True)
-    geom = models.PointField()
+    geom = models.PointField(geography=True)
     name = models.TextField()
     facility_type = models.ForeignKey(PollingPlaceFacilityType, on_delete=models.PROTECT, null=True)
     premises = models.TextField(blank=True)
