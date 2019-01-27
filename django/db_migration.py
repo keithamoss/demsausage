@@ -70,7 +70,7 @@ def get_polling_place_facility_type(polling_place_type):
     return None
 
 
-def get_polling_place_division(division):
+def get_polling_place_divisions(division):
     return [d.strip() for d in division.split(",")] if division is not None else []
 
 
@@ -148,9 +148,9 @@ def get_value_or_empty_string(value):
 
 #         # Polling Place
 #         polling_place_type_facility_type = get_polling_place_facility_type(polling_place["polling_place_type"])
-#         division = get_polling_place_division(polling_place["division"])
+#         divisions = get_polling_place_divisions(polling_place["division"])
 
-#         p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], division=division, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrances_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]))
+#         p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], divisions=divisions, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrance_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]))
 #         p.save()
 #         print(p.id)
 

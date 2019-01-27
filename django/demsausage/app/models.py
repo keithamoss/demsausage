@@ -116,10 +116,10 @@ class PollingPlaces(models.Model):
     facility_type = models.ForeignKey(PollingPlaceFacilityType, on_delete=models.PROTECT, null=True)
     premises = models.TextField(blank=True)
     address = models.TextField()
-    division = JSONField(default=list, blank=True)
+    divisions = JSONField(default=list, blank=True)
     state = models.CharField(max_length=8)
     wheelchair_access = models.TextField(blank=True)
-    entrances_desc = models.TextField(blank=True)
+    entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
 
