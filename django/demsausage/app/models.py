@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
-from demsausage.app.enums import ProfileSettings
+from demsausage.app.enums import ProfileSettings, StallStatus
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -60,18 +60,31 @@ class AllowedUsers(models.Model):
     email = models.EmailField(unique=True, blank=False)
 
 
+class Elections(models.Model):
+    "Our information about each election we've covered."
+
+    old_id = models.IntegerField()
+    geom = models.PointField()
+    default_zoom_level = models.IntegerField()
+    name = models.TextField()
+    is_active = models.BooleanField(default=False)
+    is_hidden = models.BooleanField(default=False)
+    polling_places_loaded = models.BooleanField(default=False)
+    election_day = models.DateTimeField()
+
+
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
     noms = JSONField(default=None, blank=True)
-    stall_name = models.TextField()
-    stall_description = models.TextField()
-    stall_website = models.TextField()
-    stall_extra_info = models.TextField()
-    first_report = models.DateTimeField(auto_now_add=True)
-    latest_report = models.DateTimeField(auto_now=True)
-    chance_of_sausage = models.FloatField()
-    source = models.TextField()
+    stall_name = models.TextField(blank=True)
+    stall_description = models.TextField(blank=True)
+    stall_website = models.TextField(blank=True)
+    stall_extra_info = models.TextField(blank=True)
+    first_report = models.DateTimeField(auto_now_add=True, null=True)
+    latest_report = models.DateTimeField(auto_now=True, null=True)
+    chance_of_sausage = models.FloatField(null=True)
+    source = models.TextField(blank=True)
 
     class Meta:
         indexes = [
@@ -89,31 +102,36 @@ class PollingPlaces(models.Model):
     "Our information about each polling place sauced from the relevant Electoral Commission."
 
     old_id = models.IntegerField()
-    noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT)
+    election = models.ForeignKey(Elections, on_delete=models.PROTECT)
+    noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True)
     geom = models.PointField()
     name = models.TextField()
-    facility_type = models.OneToOneField(PollingPlaceFacilityType, on_delete=models.PROTECT)
-    premises = models.TextField()
+    facility_type = models.ForeignKey(PollingPlaceFacilityType, on_delete=models.PROTECT, null=True)
+    premises = models.TextField(blank=True)
     address = models.TextField()
     division = JSONField(default=list, blank=True)
-    state = models.CharField(max_length=3)
-    wheelchair_access = models.TextField()
-    entrances_desc = models.TextField()
-    opening_hours = models.TextField()
-    booth_info = models.TextField()
+    state = models.CharField(max_length=8)
+    wheelchair_access = models.TextField(blank=True)
+    entrances_desc = models.TextField(blank=True)
+    opening_hours = models.TextField(blank=True)
+    booth_info = models.TextField(blank=True)
 
 
-class Elections(models.Model):
-    "Our information about each election we've covered."
+class Stalls(models.Model):
+    "Stalls submitted to us by users."
 
     old_id = models.IntegerField()
-    geom = models.PointField()
-    default_zoom_level = models.IntegerField()
-    name = models.TextField()
-    is_active = models.BooleanField(default=False)
-    is_hidden = models.BooleanField(default=False)
-    polling_places_loaded = models.BooleanField(default=False)
-    election_day = models.DateTimeField()
+    election = models.ForeignKey(Elections, on_delete=models.PROTECT)
+    name = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    website = models.TextField(blank=True)
+    noms = JSONField(default=None, blank=True)
+    email = models.EmailField()
+    polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT)
+    reported_timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
+    mail_confirm_key = models.TextField(blank=True)
+    mail_confirmed = models.BooleanField(default=False)
 
 
 class MailgunEvents(models.Model):

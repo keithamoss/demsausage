@@ -9,3 +9,12 @@ class EnumBase(Enum):
 
 class ProfileSettings(str, EnumBase):
     pass
+
+
+class StallStatus(str, EnumBase):
+    PENDING = "Pending"
+    APPROVED = "Approved"
+    DECLINED = "Declined"
+
+    def __str__(self):
+        return self.value
