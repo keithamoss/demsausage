@@ -129,6 +129,11 @@ class PollingPlaces(models.Model):
     booth_info = models.TextField(blank=True)
     history = HistoricalRecords()
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["election"])
+        ]
+
 
 class Stalls(models.Model):
     "Stalls submitted to us by users."
