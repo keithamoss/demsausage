@@ -7,6 +7,7 @@ from simple_history.models import HistoricalRecords
 from demsausage.app.enums import ProfileSettings, StallStatus
 from demsausage.app.schemas import NOMS_JSON_FIELD_SCHEMA
 from demsausage.app.validators import JSONSchemaValidator
+from demsausage.app.managers import PollingPlacesManager
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -124,6 +125,7 @@ class PollingPlaces(models.Model):
     booth_info = models.TextField(blank=True)
 
     history = HistoricalRecords()
+    objects = PollingPlacesManager()
 
     class Meta:
         indexes = [

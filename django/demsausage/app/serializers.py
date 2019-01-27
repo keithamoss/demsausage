@@ -66,3 +66,33 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
         geo_field = "geom"
 
         fields = ("id", "noms")
+
+
+class PollingPlacesSerializer(GeoFeatureModelSerializer):
+    noms = serializers.JSONField(source="noms.noms", allow_null=True)
+    chance_of_sausage = serializers.FloatField(source="noms.chance_of_sausage", allow_null=True)
+    stall_name = serializers.CharField(source="noms.stall_name", default="")
+    stall_description = serializers.CharField(source="noms.stall_description", default="")
+    stall_website = serializers.CharField(source="noms.stall_website", default="")
+    stall_extra_info = serializers.CharField(source="noms.stall_extra_info", default="")
+    first_report = serializers.DateTimeField(source="noms.first_report", allow_null=True)
+    latest_report = serializers.DateTimeField(source="noms.latest_report", allow_null=True)
+    source = serializers.CharField(source="noms.source", default="")
+
+    facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
+
+    class Meta:
+        model = PollingPlaces
+        geo_field = "geom"
+
+        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source")
+
+
+class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
+    distance_metres = serializers.CharField()
+
+    class Meta:
+        model = PollingPlaces
+        geo_field = "geom"
+
+        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source", "distance_metres")

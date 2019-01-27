@@ -8,7 +8,7 @@ class AnonymousOnlyList(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        if view.action == "list" or view.action == "polling_places":
+        if view.action == "list" or view.action == "polling_places" or view.action == "polling_places_nearby":
             return True
         return isinstance(request.user, User)
 

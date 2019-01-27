@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
-from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 
 from demsausage.app.serializers import UserSerializer
 from demsausage.app.models import Elections, PollingPlaces
-from demsausage.app.serializers import ElectionsSerializer, PollingPlacesGeoJSONSerializer
+from demsausage.app.serializers import ElectionsSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
 from demsausage.app.permissions import AnonymousOnlyList
 from demsausage.util import make_logger
 
@@ -97,6 +97,21 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         polling_places = PollingPlaces.objects.filter(election_id=election.id).all()
         polling_places_geojson = PollingPlacesGeoJSONSerializer(polling_places, many=True).data
         return Response(polling_places_geojson)
+
+    @detail_route(methods=['get'])
+    def polling_places_nearby(self, request, pk=None, format=None):
+        election = self.get_object()
+
+        qp = request.query_params
+        lat = float(qp["lat"]) if "lat" in qp else None
+        lon = float(qp["lon"]) if "lon" in qp else None
+        search_point = Point(lon, lat, srid=4326)
+
+        polling_places = PollingPlaces.objects.find_by_distance(election.id, search_point, distance_threshold_km=50, limit=15)
+        if polling_places.count() == 0:
+            polling_places = PollingPlaces.objects.find_by_distance(election.id, search_point, distance_threshold_km=1000, limit=15)
+
+        return Response(PollingPlaceSearchResultsSerializer(polling_places, many=True).data)
 
 
 class PollingPlacesViewSet(viewsets.ModelViewSet):
