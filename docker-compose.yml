@@ -21,6 +21,16 @@ services:
         image: memcached
         expose:
             - "11211"
+    memcached_gui:
+        # http://localhost/index.php (admin/admin)
+        image: bastienm/phpmemadmin
+        environment:
+            - MEMCACHED_HOST=memcached
+            - MEMCACHED_PORT=11211
+        depends_on:
+            - memcached
+        ports:
+            - "80:80"
     django:
         build: django/
         entrypoint: /app/docker-entrypoint.sh
