@@ -25,11 +25,11 @@ def get_payload(payload):
 
 # print(MailgunEvents.objects.all())
 
-cursor.execute("SELECT * FROM mailgun_events WHERE timestamp != 1")
-for event in cursor.fetchall():
-    e = MailgunEvents(timestamp=datetime.fromtimestamp(int(event["timestamp"]), tz=pytz.utc), event_type=event["type"], payload=get_payload(event["json"]))
-    e.save()
-    print(e.id)
+# cursor.execute("SELECT * FROM mailgun_events WHERE timestamp != 1")
+# for event in cursor.fetchall():
+#     e = MailgunEvents(timestamp=datetime.fromtimestamp(int(event["timestamp"]), tz=pytz.utc), event_type=event["type"], payload=get_payload(event["json"]))
+#     e.save()
+#     print(e.id)
 
 # Migrate elections
 from demsausage.app.models import Elections
@@ -37,12 +37,11 @@ from django.contrib.gis.geos import Point
 
 # print(Elections.objects.all())
 
-cursor.execute("SELECT * FROM elections")
-for election in cursor.fetchall():
-    e = Elections(old_id=election["id"], geom=Point(election["lon"], election["lat"], srid=4326), default_zoom_level=int(election["default_zoom_level"]), name=election["name"], is_active=bool(election["is_active"]), is_hidden=bool(election["hidden"]), polling_places_loaded=bool(election["polling_places_loaded"]), election_day=election["election_day"])
-    e.save()
-    print(e.id)
-
+# cursor.execute("SELECT * FROM elections")
+# for election in cursor.fetchall():
+#     e = Elections(old_id=election["id"], geom=Point(election["lon"], election["lat"], srid=4326), default_zoom_level=int(election["default_zoom_level"]), name=election["name"], short_name=election["short_name"], is_active=bool(election["is_active"]), is_hidden=bool(election["hidden"]), is_primary=bool(election["is_primary"]), polling_places_loaded=bool(election["polling_places_loaded"]), election_day=election["election_day"])
+#     e.save()
+#     print(e.id)
 
 # Migrate polling places
 from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaceFacilityType, PollingPlaces
@@ -107,53 +106,53 @@ def get_value_or_empty_string(value):
     return value if value is not None else ""
 
 
-cursor.execute("SELECT * FROM elections")
-for election in cursor.fetchall():
-    print("=========================")
-    print(election["name"])
+# cursor.execute("SELECT * FROM elections")
+# for election in cursor.fetchall():
+#     print("=========================")
+#     print(election["name"])
 
-    e = Elections.objects.filter(old_id=election["id"]).first()
+#     e = Elections.objects.filter(old_id=election["id"]).first()
 
-    cursor.execute("SELECT * FROM {}".format(election["db_table_name"]))
-    for polling_place in cursor.fetchall():
-        print(polling_place["id"])
+#     cursor.execute("SELECT * FROM {}".format(election["db_table_name"]))
+#     for polling_place in cursor.fetchall():
+#         print(polling_place["id"])
 
-        noms = {**{
-            "bbq": bool(polling_place["has_bbq"]),
-            "cake": bool(polling_place["has_caek"]),
-            "nothing": bool(polling_place["has_nothing"]),
-            "run_out": bool(polling_place["has_run_out"])
-        },
-            **get_other(polling_place["has_other"])
-        }
+#         noms = {**{
+#             "bbq": bool(polling_place["has_bbq"]),
+#             "cake": bool(polling_place["has_caek"]),
+#             "nothing": bool(polling_place["has_nothing"]),
+#             "run_out": bool(polling_place["has_run_out"])
+#         },
+#             **get_other(polling_place["has_other"])
+#         }
 
-        # Polling Place Noms
-        pn = None
-        if noms_has_value(noms) is True:
-            # Provide defaults for first and lastest report to migrate the older elections where we didn't track that
-            first_report = polling_place["first_report"]
-            if first_report == "":
-                first_report = None
+#         # Polling Place Noms
+#         pn = None
+#         if noms_has_value(noms) is True:
+#             # Provide defaults for first and lastest report to migrate the older elections where we didn't track that
+#             first_report = polling_place["first_report"]
+#             if first_report == "":
+#                 first_report = None
 
-            latest_report = polling_place["latest_report"]
-            if latest_report == "":
-                latest_report = None
+#             latest_report = polling_place["latest_report"]
+#             if latest_report == "":
+#                 latest_report = None
 
-            chance_of_sausage = float(polling_place["chance_of_sausage"]) if polling_place["chance_of_sausage"] is not None and polling_place["chance_of_sausage"] != "" else None
+#             chance_of_sausage = float(polling_place["chance_of_sausage"]) if polling_place["chance_of_sausage"] is not None and polling_place["chance_of_sausage"] != "" else None
 
-            pn = PollingPlaceNoms(noms=noms, stall_name=get_value_or_empty_string(polling_place["stall_name"]), stall_description=get_value_or_empty_string(polling_place["stall_description"]), stall_website=get_value_or_empty_string(polling_place["stall_website"]), stall_extra_info=get_value_or_empty_string(polling_place["extra_info"]), chance_of_sausage=chance_of_sausage, source=get_value_or_empty_string(polling_place["source"]))
-            pn.save()
+#             pn = PollingPlaceNoms(noms=noms, stall_name=get_value_or_empty_string(polling_place["stall_name"]), stall_description=get_value_or_empty_string(polling_place["stall_description"]), stall_website=get_value_or_empty_string(polling_place["stall_website"]), stall_extra_info=get_value_or_empty_string(polling_place["extra_info"]), chance_of_sausage=chance_of_sausage, source=get_value_or_empty_string(polling_place["source"]))
+#             pn.save()
 
-            # print(pn.id)
-            PollingPlaceNoms.objects.filter(id=pn.id).update(first_report=first_report, latest_report=latest_report)
+#             # print(pn.id)
+#             PollingPlaceNoms.objects.filter(id=pn.id).update(first_report=first_report, latest_report=latest_report)
 
-        # Polling Place
-        polling_place_type_facility_type = get_polling_place_facility_type(polling_place["polling_place_type"])
-        division = get_polling_place_division(polling_place["division"])
+#         # Polling Place
+#         polling_place_type_facility_type = get_polling_place_facility_type(polling_place["polling_place_type"])
+#         division = get_polling_place_division(polling_place["division"])
 
-        p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], division=division, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrances_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]))
-        p.save()
-        print(p.id)
+#         p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], division=division, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrances_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]))
+#         p.save()
+#         print(p.id)
 
 
 # Migrate stalls

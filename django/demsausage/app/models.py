@@ -69,8 +69,10 @@ class Elections(models.Model):
     geom = models.PointField()
     default_zoom_level = models.IntegerField()
     name = models.TextField()
+    short_name = models.TextField()
     is_active = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
+    is_primary = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
 
@@ -133,7 +135,7 @@ class IPAddressHistoricalModel(models.Model):
     """
     Abstract model for history models tracking the IP address.
     """
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(null=True)
 
     class Meta:
         abstract = True
