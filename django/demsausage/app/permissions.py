@@ -1,7 +1,16 @@
-# from django.contrib.auth.models import User, AnonymousUser
-# from rest_framework import permissions
-# from .models import MapDefinition
-# from .admin import is_private_site
+from django.contrib.auth.models import User
+from rest_framework import permissions
+
+
+class AnonymousOnlyList(permissions.BasePermission):
+    """
+    Custom permission to only read-only access to lists of objects for anonymous users.
+    """
+
+    def has_permission(self, request, view):
+        if view.action == "list" or view.action == "polling_places":
+            return True
+        return isinstance(request.user, User)
 
 
 # class AllowAnyIfPublicSite(permissions.AllowAny):

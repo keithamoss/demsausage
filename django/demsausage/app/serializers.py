@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from demsausage.app.models import Profile
+from demsausage.app.models import Profile, Elections, PollingPlaces
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,3 +41,28 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'groups',
             'is_approved',
             'settings')
+
+
+class ElectionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Elections
+        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_active", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+
+
+class NomsBooleanJSONField(serializers.JSONField):
+    """ Serializer for JSONField -- required to remove `free_text` for the GeoJSON response"""
+
+    def to_representation(self, value):
+        if "free_text" in value:
+            del value["free_text"]
+        return value
+
+
+class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
+    noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
+
+    class Meta:
+        model = PollingPlaces
+        geo_field = "geom"
+
+        fields = ("id", "noms")

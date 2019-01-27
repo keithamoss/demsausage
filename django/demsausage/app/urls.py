@@ -4,12 +4,16 @@ from .views import (
     ProfileViewSet,
     CurrentUserView,
     LogoutUserView,
+    ElectionsViewSet,
+    PollingPlacesViewSet,
     api_not_found)
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
+router.register(r'elections', ElectionsViewSet, 'ElectionsViewSet')
+router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
 
 # Need to set base_name because Reasons
 # http://www.django-rest-framework.org/api-guide/routers/#usage (see note re `base_name`)

@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'social_django',
     'demsausage.app',
     'rest_framework',
+    'rest_framework_gis',
     'corsheaders',
     'raven.contrib.django.raven_compat',
     'simple_history',
@@ -183,9 +184,9 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': get_env('MEMCACHED_LOCATION'),
         'TIMEOUT': None,
+        'KEY_PREFIX': 'demsausage_',
         'OPTIONS': {
-            'KEY_PREFIX': 'demsausage_',
-            'SERVER_MAX_ITEM_LENGTH': 1024 * 1024 * 20,  # 20MB to accommodate the larger polling place GeoJSON objects
+            'server_max_value_length': 1024 * 1024 * 20,  # 20MB to accommodate the larger polling place GeoJSON objects
         }
     }
 }
