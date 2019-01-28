@@ -1,7 +1,7 @@
-import * as dotProp from "dot-prop-immutable";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient";
-import { IElection } from "./elections";
+import * as dotProp from "dot-prop-immutable"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IElection } from "./elections"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -71,13 +71,10 @@ export interface IAction {
     }
 }
 
-export interface IMapPollingPlace {
-    id: number
-    geometry: any
-    has_bbq: boolean
-    has_nothing: boolean
-    has_caek: boolean
-    has_run_out: boolean
+// @FIXME Use the inbuilt OLFeature type when we upgrade
+export interface IMapPollingPlaceFeature {
+    getId: Function
+    getProperties: Function
 }
 
 export interface IPollingPlace {

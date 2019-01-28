@@ -1,6 +1,6 @@
 import * as ol from "openlayers"
 import * as React from "react"
-import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
+import { isUserABot } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
 // import "./OpenLayersMap.css"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -61,17 +61,17 @@ const spriteUnknown = new ol.style.Style({
 })
 
 const styleFunctionSprite = function(feature: any) {
-    if (feature.get("has_bbq") === true && feature.get("has_caek") === true) {
+    if (feature.get("bbq") === true && feature.get("cake") === true) {
         return spriteBBQCake
-    } else if ((feature.get("has_bbq") === true || feature.get("has_caek") === true) && feature.get("has_run_out") === true) {
+    } else if ((feature.get("bbq") === true || feature.get("cake") === true) && feature.get("run_out") === true) {
         return spriteBBQCakeRunOut
-    } else if (feature.get("has_bbq") === true) {
+    } else if (feature.get("bbq") === true) {
         return spriteBBQ
-    } else if (feature.get("has_caek") === true) {
+    } else if (feature.get("cake") === true) {
         return spriteCake
-    } else if (feature.get("has_nothing") === true) {
+    } else if (feature.get("nothing") === true) {
         return spriteNowt
-    } else if (feature.get("has_bbq") === false && feature.get("has_caek") === false && feature.get("has_other") === true) {
+    } else if (feature.get("bbq") === false && feature.get("cake") === false && feature.get("other") === true) {
         return spriteBBQ
     } else {
         return spriteUnknown
@@ -83,7 +83,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const { election, onQueryMap } = this.props
 
         const vectorSource = new ol.source.Vector({
-            url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
+            // url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
+            url: `https://localhost:8001/api/0.1/polling_places/geojson/?election_id=${election.id}&s=${Date.now()}`,
             format: new ol.format.GeoJSON(),
         })
 
@@ -184,7 +185,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             map.forEachFeatureAtPixel(
                 e.pixel,
                 (feature: any, layer: any) => {
-                    features.push(feature.getProperties())
+                    features.push(feature)
                 },
                 { hitTolerance: 3 }
             )
