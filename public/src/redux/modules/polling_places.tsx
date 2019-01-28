@@ -134,9 +134,10 @@ export interface IPollingPlaceLoaderResponseMessage {
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
-
+        const { response, json } = await ealapi.get("https://localhost:8001/api/0.1/polling_places/", dispatch, {
+            election_id: election.id,
+            search_term: searchTerm,
+        })
         if (response.status === 200) {
             return json
         }
