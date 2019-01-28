@@ -34,7 +34,7 @@ class StallLocationCard extends React.PureComponent<IProps, {}> {
             <Paper>
                 <Card>
                     <CardHeader
-                        title={stallLocationInfo.polling_place_name}
+                        title={stallLocationInfo.name}
                         subtitle={stallLocationInfo.address}
                         avatar={<Avatar icon={<ActionHome />} />}
                         textStyle={{

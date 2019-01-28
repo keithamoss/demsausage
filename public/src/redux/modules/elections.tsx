@@ -3,6 +3,7 @@ import { DateTime } from "luxon"
 import { createSelector } from "reselect"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IGeoJSONPoint } from "./interfaces"
 import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -111,11 +112,6 @@ export interface IAction {
     meta?: {
         // analytics: IAnalyticsMeta
     }
-}
-
-export interface IGeoJSONPoint {
-    type: string
-    coordinates: [number, number]
 }
 
 export interface IElection {

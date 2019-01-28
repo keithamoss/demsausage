@@ -70,7 +70,7 @@ class NomsBooleanJSONField(serializers.JSONField):
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
-    noms = serializers.JSONField(source="noms.noms", allow_null=True)
+    noms = serializers.JSONField(source="noms.noms", default={})
     chance_of_sausage = serializers.FloatField(source="noms.chance_of_sausage", allow_null=True)
     stall_name = serializers.CharField(source="noms.stall_name", default="")
     stall_description = serializers.CharField(source="noms.stall_description", default="")
@@ -109,11 +109,20 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
         return props
 
 
+class DistanceField(serializers.CharField):
+    """
+    Color objects are serialized into 'rgb(#, #, #)' notation.
+    """
+
+    def to_representation(self, value):
+        return round(float(value.km), 2)
+
+
 class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
-    distance_metres = serializers.CharField()
+    distance_km = DistanceField(source="distance")
 
     class Meta:
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source", "distance_metres")
+        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source", "distance_km", )

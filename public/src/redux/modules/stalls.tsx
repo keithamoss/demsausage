@@ -1,7 +1,8 @@
-import * as dotProp from "dot-prop-immutable";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient";
-import { IElection } from "./elections";
+import * as dotProp from "dot-prop-immutable"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IElection } from "./elections"
+import { IGeoJSONPoint } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -55,9 +56,8 @@ export interface IAction {
 }
 
 export interface IStallLocationInfo {
-    lon: number
-    lat: number
-    polling_place_name: string
+    geom: IGeoJSONPoint
+    name: string
     address: string
     state: string
 }
