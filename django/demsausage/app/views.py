@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
@@ -10,11 +11,15 @@ from rest_framework.views import APIView
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from rest_framework import generics
 
 from demsausage.app.serializers import UserSerializer
 from demsausage.app.models import Elections, PollingPlaces
-from demsausage.app.serializers import ElectionsSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
+from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
 from demsausage.app.permissions import AnonymousOnlyList
+from demsausage.app.filters import PollingPlacesFilter, PollingPlacesNearbyFilter
+from demsausage.app.renderers import PollingPlaceGeoJSONRenderer
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -90,34 +95,37 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     serializer_class = ElectionsSerializer
     permission_classes = (AnonymousOnlyList,)
 
-    @detail_route(methods=['get'])
-    @method_decorator(cache_page(None, key_prefix="polling_places_"))
-    def polling_places(self, request, pk=None, format=None):
-        election = self.get_object()
-        polling_places = PollingPlaces.objects.filter(election_id=election.id).all()
-        polling_places_geojson = PollingPlacesGeoJSONSerializer(polling_places, many=True).data
-        return Response(polling_places_geojson)
-
-    @detail_route(methods=['get'])
-    def polling_places_nearby(self, request, pk=None, format=None):
-        election = self.get_object()
-
-        qp = request.query_params
-        lat = float(qp["lat"]) if "lat" in qp else None
-        lon = float(qp["lon"]) if "lon" in qp else None
-        search_point = Point(lon, lat, srid=4326)
-
-        polling_places = PollingPlaces.objects.find_by_distance(election.id, search_point, distance_threshold_km=50, limit=15)
-        if polling_places.count() == 0:
-            polling_places = PollingPlaces.objects.find_by_distance(election.id, search_point, distance_threshold_km=1000, limit=15)
-
-        return Response(PollingPlaceSearchResultsSerializer(polling_places, many=True).data)
-
 
 class PollingPlacesViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows polling places to be viewed and edited.
     """
     queryset = PollingPlaces.objects.all().order_by("-id")
-    # serializer_class = PollingPlacesSerializer
+    serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
+    filter_class = PollingPlacesFilter
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, PollingPlaceGeoJSONRenderer, ]
+
+    def list(self, request, format=None):
+        cache_key = "election_{}_polling_places".format(self.request.query_params.get("election_id", None))
+        is_geojson_response = self.request.query_params.get("format", None) == "geojson"
+
+        if is_geojson_response is True and cache.get(cache_key) is not None:
+            return Response(cache.get(cache_key))
+
+        response = super(PollingPlacesViewSet, self).list(request, format)
+
+        if is_geojson_response is True and cache.get(cache_key) is None:
+            cache.set(cache_key, response.data)
+
+        return response
+
+
+class PollingPlacesNearbyViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows polling places to be viewed and edited.
+    """
+    queryset = PollingPlaces.objects
+    serializer_class = PollingPlaceSearchResultsSerializer
+    permission_classes = (AllowAny,)
+    filter_class = PollingPlacesFilter

@@ -10,3 +10,4 @@ django-simple-history==2.7.0
 jsonschema==2.6.0
 python-memcached==1.59
 djangorestframework-gis==0.14
+django-filter==2.1.0

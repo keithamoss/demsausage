@@ -58,17 +58,7 @@ class NomsBooleanJSONField(serializers.JSONField):
         return value
 
 
-class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
-    noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
-
-    class Meta:
-        model = PollingPlaces
-        geo_field = "geom"
-
-        fields = ("id", "noms")
-
-
-class PollingPlacesSerializer(GeoFeatureModelSerializer):
+class PollingPlacesSerializer(serializers.ModelSerializer):
     noms = serializers.JSONField(source="noms.noms", allow_null=True)
     chance_of_sausage = serializers.FloatField(source="noms.chance_of_sausage", allow_null=True)
     stall_name = serializers.CharField(source="noms.stall_name", default="")
@@ -85,7 +75,17 @@ class PollingPlacesSerializer(GeoFeatureModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source")
+
+
+class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
+    noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
+
+    class Meta:
+        model = PollingPlaces
+        geo_field = "geom"
+
+        fields = ("id", "noms")
 
 
 class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):

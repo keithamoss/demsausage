@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'raven.contrib.django.raven_compat',
     'simple_history',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -230,6 +231,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 
 
 # Internationalization
