@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django_filters import rest_framework as filters
 from rest_framework.exceptions import APIException
 
@@ -47,14 +48,24 @@ class LonLatFilter(filters.Filter):
         return qs
 
 
+class NamePremisesOrAddressFilter(filters.BaseCSVFilter, filters.CharFilter):
+    def filter(self, qs, value):
+        if value not in (None, ""):
+            for search_term in value:
+                qs = qs.filter(Q(name__icontains=search_term) | Q(premises__icontains=search_term) | Q(address__icontains=search_term))
+
+        return qs
+
+
 class PollingPlacesFilter(filters.FilterSet):
     election_id = filters.NumberFilter(field_name="election_id", required=True)
     ids = IntegerListFilter(field_name="id", lookup_expr="in")
+    search_term = NamePremisesOrAddressFilter()
     lonlat = LonLatFilter(field_name="lonlat")
 
     class Meta:
         model = PollingPlaces
-        fields = ("election_id", "ids", "lonlat", )
+        fields = ("election_id", "ids", "search_term", "lonlat", )
 
 
 class PollingPlacesNearbyFilter(PollingPlacesFilter):
