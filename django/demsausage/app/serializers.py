@@ -49,12 +49,24 @@ class ElectionsSerializer(serializers.ModelSerializer):
 
 
 class NomsBooleanJSONField(serializers.JSONField):
-    """ Serializer for JSONField -- required to remove `free_text` for the GeoJSON response"""
+    """ Serializer for JSONField -- required to create the `other` boolean flag for the GeoJSON response"""
 
     def to_representation(self, value):
-        if "free_text" in value:
-            del value["free_text"]
-        return value
+        def has_other(value):
+            for key, val in value.items():
+                if key not in core_fields:
+                    if key != "free_text":
+                        if val is True:
+                            return True
+                    else:
+                        if val != "":
+                            return True
+            return False
+
+        core_fields = ["bbq", "cake", "nothing", "run_out"]
+        new_value = {key: value[key] for key in core_fields}
+        new_value["other"] = has_other(value)
+        return new_value
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
