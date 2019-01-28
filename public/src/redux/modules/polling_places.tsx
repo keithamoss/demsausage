@@ -105,10 +105,10 @@ export interface IPollingPlace {
     state: string
     noms: INoms
     chance_of_sausage: number | null
-    stall_name: string
-    stall_description: string
-    stall_website: string
-    stall_extra_info: string
+    stall_name: string | null
+    stall_description: string | null
+    stall_website: string | null
+    stall_extra_info: string | null
     first_report: string | null // Datetime
     latest_report: string | null // Datetime
     source: string
@@ -215,14 +215,10 @@ export function fetchPollingPlaceTypes() {
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const params = {
-            "fetch-nearby-polling-places": 1,
-            electionId: election.id,
-            lat: lat,
-            lon: lon,
-        }
-
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await ealapi.get("https://localhost:8001/api/0.1/polling_places/nearby/", dispatch, {
+            election_id: election.id,
+            lonlat: `${lon},${lat}`,
+        })
 
         if (response.status === 200) {
             return json

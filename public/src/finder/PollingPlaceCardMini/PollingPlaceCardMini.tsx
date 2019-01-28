@@ -148,7 +148,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             />
                         )}
                         {pollingPlace.divisions.length > 0 && <Division>Division(s): {pollingPlace.divisions.join(", ")}</Division>}
-                        {pollingPlace.stall_extra_info.length > 0 && <Division>Extra Info: {pollingPlace.stall_extra_info}</Division>}
+                        {pollingPlace.stall_extra_info !== null && pollingPlace.stall_extra_info.length > 0 && (
+                            <Division>Extra Info: {pollingPlace.stall_extra_info}</Division>
+                        )}
                         {pollingPlace.booth_info.length > 0 && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
                     </CardText>
                     {isExpandable && (
