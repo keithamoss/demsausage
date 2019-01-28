@@ -57,20 +57,26 @@ class NamePremisesOrAddressFilter(filters.BaseCSVFilter, filters.CharFilter):
         return qs
 
 
-class PollingPlacesFilter(filters.FilterSet):
+class PollingPlacesBaseFilter(filters.FilterSet):
     election_id = filters.NumberFilter(field_name="election_id", required=True)
+
+    class Meta:
+        model = PollingPlaces
+        fields = ("election_id", )
+
+
+class PollingPlacesFilter(PollingPlacesBaseFilter):
     ids = IntegerListFilter(field_name="id", lookup_expr="in")
     search_term = NamePremisesOrAddressFilter()
+
+    class Meta:
+        model = PollingPlaces
+        fields = ("election_id", "ids", "search_term", )
+
+
+class PollingPlacesNearbyFilter(PollingPlacesBaseFilter):
     lonlat = LonLatFilter(field_name="lonlat")
 
     class Meta:
         model = PollingPlaces
-        fields = ("election_id", "ids", "search_term", "lonlat", )
-
-
-class PollingPlacesNearbyFilter(PollingPlacesFilter):
-    lonlat = LonLatFilter(field_name="lonlat")
-
-    class Meta:
-        model = PollingPlaces
-        fields = ("election_id", "ids", "lonlat", )
+        fields = ("election_id", "lonlat", )

@@ -7,6 +7,7 @@ from .views import (
     ElectionsViewSet,
     PollingPlacesViewSet,
     PollingPlacesNearbyViewSet,
+    PollingPlacesGeoJSONViewSet,
     api_not_found)
 from rest_framework import routers
 
@@ -23,6 +24,7 @@ router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
 
 urlpatterns = [
     url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
+    url(r'^api/0.1/polling_places/geojson/$', PollingPlacesGeoJSONViewSet.as_view(), name='api-polling-places-geojson'),
     url(r'^api/0.1/', include(router.urls)),
     url(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
     url(r'^api/0.1/logout$', LogoutUserView.as_view(), name='api-logout'),

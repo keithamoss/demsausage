@@ -1,22 +1,21 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
-from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
-from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import generics
 
 from demsausage.app.serializers import UserSerializer
 from demsausage.app.models import Elections, PollingPlaces
-from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlaceSearchResultsSerializer
+from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
 from demsausage.app.permissions import AnonymousOnlyList
-from demsausage.app.filters import PollingPlacesFilter
-from demsausage.app.renderers import PollingPlaceGeoJSONRenderer
+from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -101,21 +100,6 @@ class PollingPlacesViewSet(viewsets.ModelViewSet):
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesFilter
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, PollingPlaceGeoJSONRenderer, ]
-
-    def list(self, request, format=None):
-        cache_key = "election_{}_polling_places".format(self.request.query_params.get("election_id", None))
-        is_geojson_response = self.request.query_params.get("format", None) == "geojson"
-
-        if is_geojson_response is True and cache.get(cache_key) is not None:
-            return Response(cache.get(cache_key))
-
-        response = super(PollingPlacesViewSet, self).list(request, format)
-
-        if is_geojson_response is True and cache.get(cache_key) is None:
-            cache.set(cache_key, response.data)
-
-        return response
 
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
@@ -125,4 +109,18 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     queryset = PollingPlaces.objects
     serializer_class = PollingPlaceSearchResultsSerializer
     permission_classes = (AllowAny,)
-    filter_class = PollingPlacesFilter
+    filter_class = PollingPlacesNearbyFilter
+
+
+class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows polling places to be viewed and edited.
+    """
+    queryset = PollingPlaces.objects
+    serializer_class = PollingPlacesGeoJSONSerializer
+    permission_classes = (AllowAny,)
+    filter_class = PollingPlacesBaseFilter
+
+    @method_decorator(cache_page(None, key_prefix="polling_places_"))
+    def list(self, request, format=None):
+        return super(PollingPlacesGeoJSONViewSet, self).list(request, format)
