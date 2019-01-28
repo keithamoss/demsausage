@@ -1,6 +1,6 @@
+import * as Cookies from "js-cookie"
 import * as qs from "qs"
 import * as Raven from "raven-js"
-import cookie from "react-cookie"
 import "whatwg-fetch"
 import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
 
@@ -97,20 +97,15 @@ export class EALGISApiClient {
     private post(url: string, params: object, body: any, dispatch: any) {
         dispatch(beginFetch())
 
-        if (Object.keys(params).length > 0) {
-            // Yay, a library just to do query string operations for fetch()
-            // https://github.com/github/fetch/issues/256
-            url += "?" + qs.stringify(params)
-        }
-
         return fetch(url, {
             method: "POST",
+            mode: "cors",
             credentials: "include",
             headers: {
-                // "Content-Type": "application/json",
-                // "X-CSRFToken": cookie.load("csrftoken"),
+                "Content-Type": "application/json",
+                "X-CSRFToken": Cookies.get("csrftoken")!,
             },
-            body: body,
+            body: JSON.stringify(body),
         })
             .then((response: any) => {
                 dispatch(finishFetch())
@@ -127,10 +122,11 @@ export class EALGISApiClient {
 
         return fetch(url, {
             method: "PUT",
+            mode: "cors",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": cookie.load("csrftoken"),
+                "X-CSRFToken": Cookies.get("csrftoken")!,
             },
             body: JSON.stringify(body),
         })
@@ -149,9 +145,11 @@ export class EALGISApiClient {
 
         return fetch(url, {
             method: "DELETE",
+            mode: "cors",
             credentials: "include",
             headers: {
-                "X-CSRFToken": cookie.load("csrftoken"),
+                "Content-Type": "application/json",
+                "X-CSRFToken": Cookies.get("csrftoken")!,
             },
         })
             .then((response: any) => {
