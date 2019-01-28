@@ -25,7 +25,8 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
         const { elections, stats, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
@@ -41,7 +42,7 @@ export class ElectionsManagerContainer extends React.PureComponent<IStoreProps &
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { elections } = state
 
     return {

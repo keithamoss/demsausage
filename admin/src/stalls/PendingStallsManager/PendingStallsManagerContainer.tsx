@@ -14,13 +14,8 @@ export interface IDispatchProps {}
 
 export interface IStateProps {}
 
-interface IRouteProps {}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class PendingStallsManagerContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps
+export class PendingStallsManagerContainer extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { stalls, elections } = this.props
 
@@ -28,7 +23,7 @@ export class PendingStallsManagerContainer extends React.Component<IStoreProps &
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { elections, stalls } = state
 
     return {

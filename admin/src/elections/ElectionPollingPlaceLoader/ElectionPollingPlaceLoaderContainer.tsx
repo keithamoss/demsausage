@@ -33,7 +33,8 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponentProps, IStateProps> {
     constructor(props: any) {
         super(props)
 
@@ -70,7 +71,7 @@ export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<ISt
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { elections, stalls } = state
 
     return {

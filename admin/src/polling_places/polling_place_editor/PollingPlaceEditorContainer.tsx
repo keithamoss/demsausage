@@ -31,9 +31,8 @@ export interface IStateProps {
     pollingPlace?: IPollingPlace
 }
 
-interface IOwnProps {}
-
-export class PollingPlaceEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: IProps & IStoreProps & IDispatchProps) {
         super(props)
 
@@ -88,7 +87,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     return {}
 }
 

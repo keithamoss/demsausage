@@ -56,7 +56,8 @@ const fromFormValues = (formValues: any): IElection => {
     }
 }
 
-export class ElectionEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
+export class ElectionEditorContainer extends React.Component<TComponentProps, IStateProps> {
     initialValues: any
     componentWillMount() {
         const { election } = this.props
@@ -87,7 +88,7 @@ export class ElectionEditorContainer extends React.Component<IProps & IStoreProp
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { elections } = state
 
     return {

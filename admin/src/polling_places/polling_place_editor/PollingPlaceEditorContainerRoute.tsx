@@ -23,7 +23,8 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PollingPlaceEditorContainerRoute extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class PollingPlaceEditorContainerRoute extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { election, pollingPlaceId } = this.props
 

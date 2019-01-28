@@ -28,7 +28,8 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PendingStallEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
+export class PendingStallEditorContainer extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { stall, election, onPollingPlaceEdited, onApproveUnofficialStall, onDeclineUnofficialStall } = this.props
 
@@ -54,7 +55,7 @@ export class PendingStallEditorContainer extends React.Component<IProps & IStore
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { stalls, elections } = state
 
     const stall: IStall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!

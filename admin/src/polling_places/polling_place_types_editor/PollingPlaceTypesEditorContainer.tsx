@@ -30,13 +30,14 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentProps, IStateProps> {
     componentDidMount() {
         const { fetchInitialState, election } = this.props
         fetchInitialState(election)
     }
 
-    componentWillReceiveProps(nextProps: IStoreProps & IDispatchProps) {
+    componentWillReceiveProps(nextProps: TComponentProps) {
         const { fetchInitialState, election } = this.props
         if (election.id !== nextProps.election.id) {
             fetchInitialState(nextProps.election)
