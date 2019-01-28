@@ -243,9 +243,9 @@ class App extends React.Component<IProps, {}> {
                     message={snackbars.active.message}
                     action={snackbars.active.action}
                     autoHideDuration={snackbars.active.autoHideDuration}
-                    onActionTouchTap={() => {
-                        if ("onActionTouchTap" in snackbars.active) {
-                            snackbars.active.onActionTouchTap!()
+                    onActionClick={() => {
+                        if ("onActionClick" in snackbars.active) {
+                            snackbars.active.onActionClick!()
                         }
                     }}
                     onRequestClose={handleSnackbarClose}

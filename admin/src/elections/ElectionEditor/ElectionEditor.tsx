@@ -42,6 +42,7 @@ interface ICustomFieldProps extends BaseFieldProps<any> {
     mode?: string
     required?: boolean
     labelPosition?: string
+    label?: string
 }
 class CustomField extends React.Component<ICustomFieldProps, any> {
     render(): any {
