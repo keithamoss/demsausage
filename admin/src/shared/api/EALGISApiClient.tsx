@@ -82,7 +82,8 @@ export class EALGISApiClient {
                 dispatch(finishFetch())
                 return response.json().then((json: any) => {
                     if (json.error) {
-                        this.handleError(json.messages, url, dispatch)
+                        // @FIXME Re-enable once we've turned off the PHP API
+                        // this.handleError(json.messages, url, dispatch)
                     }
 
                     return {
