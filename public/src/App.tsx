@@ -205,7 +205,7 @@ class App extends React.Component<IProps, {}> {
 
                     <ResponsiveAppBar
                         breakPoint={defaultBreakPoint}
-                        onLeftIconButtonTouchTap={onOpenDrawer}
+                        onLeftIconButtonClick={onOpenDrawer}
                         title={
                             <TitleContainer>
                                 <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage
@@ -255,9 +255,9 @@ class App extends React.Component<IProps, {}> {
                     message={snackbars.active.message}
                     action={snackbars.active.action}
                     autoHideDuration={snackbars.active.autoHideDuration}
-                    onActionTouchTap={() => {
-                        if ("onActionTouchTap" in snackbars.active) {
-                            snackbars.active.onActionTouchTap!()
+                    onActionClick={() => {
+                        if ("onActionClick" in snackbars.active) {
+                            snackbars.active.onActionClick!()
                         }
                     }}
                     onRequestClose={handleSnackbarClose}
