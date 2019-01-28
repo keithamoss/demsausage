@@ -5,7 +5,7 @@ from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
 from demsausage.app.enums import ProfileSettings, StallStatus
-from demsausage.app.schemas import NOMS_JSON_FIELD_SCHEMA
+from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.util import make_logger
@@ -66,7 +66,7 @@ class AllowedUsers(models.Model):
 class Elections(models.Model):
     "Our information about each election we've covered."
 
-    old_id = models.IntegerField()
+    old_id = models.IntegerField(null=True)
     geom = models.PointField(geography=True)
     default_zoom_level = models.IntegerField()
     name = models.TextField()
@@ -86,7 +86,7 @@ class PollingPlaceFacilityType(models.Model):
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
-    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=NOMS_JSON_FIELD_SCHEMA)])
+    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=noms_schema)])
     stall_name = models.TextField(blank=True)
     stall_description = models.TextField(blank=True)
     stall_website = models.TextField(blank=True)
@@ -108,7 +108,7 @@ class PollingPlaceNoms(models.Model):
 class PollingPlaces(models.Model):
     "Our information about each polling place sauced from the relevant Electoral Commission."
 
-    old_id = models.IntegerField()
+    old_id = models.IntegerField(null=True)
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
     noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True)
     geom = models.PointField(geography=True)
@@ -145,14 +145,15 @@ class IPAddressHistoricalModel(models.Model):
 class Stalls(models.Model):
     "Stalls submitted to us by users."
 
-    old_id = models.IntegerField()
+    old_id = models.IntegerField(null=True)
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
-    name = models.TextField(blank=True)
-    description = models.TextField(blank=True)
+    name = models.TextField(blank=False)
+    description = models.TextField()
     website = models.TextField(blank=True)
-    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=NOMS_JSON_FIELD_SCHEMA)])
+    noms = JSONField(default=None, validators=[JSONSchemaValidator(limit_value=noms_schema)])
+    location_info = JSONField(default=None, null=True, validators=[JSONSchemaValidator(limit_value=stall_location_info_schema)])
     email = models.EmailField()
-    polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT)
+    polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT, null=True)
     reported_timestamp = models.DateTimeField(auto_now_add=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
     mail_confirm_key = models.TextField(blank=True)

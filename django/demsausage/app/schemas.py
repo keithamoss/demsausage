@@ -1,4 +1,4 @@
-NOMS_JSON_FIELD_SCHEMA = {
+noms_schema = {
     "type": "object",
     "schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
@@ -30,5 +30,37 @@ NOMS_JSON_FIELD_SCHEMA = {
             "type": "string"
         }
     },
-    "required": ["bbq", "cake", "nothing", "run_out"]
+    "additionalProperties": False
+}
+
+stall_location_info_schema = {
+    "type": "object",
+    "schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "address": {
+            "type": "string"
+        },
+        "state": {
+            "type": "string"
+        },
+        "geom": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    },
+    "required": ["name", "address", "state", "geom"],
+    "additionalProperties": False
 }

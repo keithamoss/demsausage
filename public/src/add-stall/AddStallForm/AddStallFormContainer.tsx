@@ -3,9 +3,9 @@ import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { getLiveElections, IElection } from "../../redux/modules/elections"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { INoms } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
-import { createStall, IStall, IStallLocationInfo } from "../../redux/modules/stalls"
+import { createStall, IStallLocationInfo } from "../../redux/modules/stalls"
 // import { cloneDeep } from "lodash-es"
 import AddStallForm from "./AddStallForm"
 
@@ -33,9 +33,41 @@ export interface IStateProps {
 
 interface IOwnProps {}
 
-const fromFormValues = (formValues: any): IStall => {
+export interface IStallFormInfo {
+    name: string
+    description: string
+    website: string
+    email: string
+    noms: Partial<INoms>
+    location_info?: IStallLocationInfo
+    election: number
+    polling_place: number
+}
+
+const fromFormValues = (formValues: any): Partial<IStallFormInfo> => {
+    const getNoms = () => {
+        const noms: Partial<INoms> = {}
+        const fields = ["bbq", "cake", "vego", "halal", "coffee", "bacon_and_eggs", "free_text"]
+        fields.forEach((fieldName: string) => {
+            if (fieldName !== "free_text") {
+                if (formValues[fieldName] === true) {
+                    noms[fieldName] = true
+                }
+            } else {
+                if (formValues[fieldName] !== undefined) {
+                    noms[fieldName] = formValues[fieldName]
+                }
+            }
+        })
+        return noms
+    }
+
     return {
-        ...formValues,
+        name: formValues.name,
+        description: formValues.description,
+        website: formValues.website,
+        email: formValues.email,
+        noms: getNoms(),
     }
 }
 
@@ -132,19 +164,18 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        async onFormSubmit(onStallAdded: Function, values: object, election: IElection, stallLocationInfo: Partial<IPollingPlace>) {
-            const stall: Partial<IStall> = fromFormValues(values)
-            stall.elections_id = election.id
+        async onFormSubmit(onStallAdded: Function, values: object, election: IElection, stallLocationInfo: IStallLocationInfo) {
+            const stall: Partial<IStallFormInfo> = fromFormValues(values)
+            stall.election = election.id
 
-            // FIXME
             if (election.polling_places_loaded === false) {
-                stall.stall_location_info = stallLocationInfo as IStallLocationInfo
+                stall.location_info = stallLocationInfo
             } else {
-                stall.polling_place_id = stallLocationInfo.id
+                stall.polling_place = stallLocationInfo.id
             }
 
-            const json = await dispatch(createStall(election, stall))
-            if (!("error" in json) && json.id > 0) {
+            const json = await dispatch(createStall(stall as IStallFormInfo))
+            if (json) {
                 onStallAdded()
             }
         },

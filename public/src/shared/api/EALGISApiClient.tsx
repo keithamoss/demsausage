@@ -50,14 +50,14 @@ export class EALGISApiClient {
     }
 
     public dsAPIPost(params: object = {}, body: any, dispatch: Function): Promise<void> {
-        return this.post(this.dsBaseURL + "/api.php", params, body, dispatch)
+        return this.post(this.dsBaseURL + "/api.php", body, dispatch)
     }
 
     public dsAPIPostFile(params: object = {}, file: File, dispatch: Function): Promise<void> {
         let data = new FormData()
         data.append("file", file)
 
-        return this.post(this.dsBaseURL + "/api.php", params, data, dispatch)
+        return this.post(this.dsBaseURL + "/api.php", data, dispatch)
     }
 
     public dsAPIPut(params: object = {}, dispatch: Function): Promise<void> {
@@ -94,7 +94,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private post(url: string, params: object, body: any, dispatch: any) {
+    private post(url: string, body: any, dispatch: any) {
         dispatch(beginFetch())
 
         return fetch(url, {

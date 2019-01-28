@@ -4,11 +4,22 @@ from rest_framework import permissions
 
 class AnonymousOnlyList(permissions.BasePermission):
     """
-    Custom permission to only read-only access to lists of objects for anonymous users.
+    Custom permission to allow read-only access to lists of objects for anonymous users.
     """
 
     def has_permission(self, request, view):
         if view.action == "list" or view.action == "polling_places" or view.action == "polling_places_nearby":
+            return True
+        return isinstance(request.user, User)
+
+
+class AnonymousOnlyCreate(permissions.BasePermission):
+    """
+    Custom permission to allow the public to create certain entities (e.g. stalls).
+    """
+
+    def has_permission(self, request, view):
+        if view.action == "create":
             return True
         return isinstance(request.user, User)
 

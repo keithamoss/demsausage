@@ -81,8 +81,8 @@ export interface IMapPollingPlaceFeature {
 export interface INoms {
     bbq: boolean
     cake: boolean
-    nothing: boolean
-    run_out: boolean
+    nothing?: boolean
+    run_out?: boolean
     bacon_and_eggs: boolean
     halal: boolean
     vego: boolean

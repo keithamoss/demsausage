@@ -105,11 +105,11 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
         if (stallLocationInfo !== null) {
             if ("id" in stallLocationInfo) {
                 primaryTextString =
-                    stallLocationInfo.polling_place_name === stallLocationInfo.premises
-                        ? stallLocationInfo.polling_place_name
-                        : `${stallLocationInfo.polling_place_name}, ${stallLocationInfo.premises}`
+                    stallLocationInfo.name === stallLocationInfo.premises
+                        ? stallLocationInfo.name
+                        : `${stallLocationInfo.name}, ${stallLocationInfo.premises}`
             } else {
-                primaryTextString = stallLocationInfo.polling_place_name
+                primaryTextString = `${stallLocationInfo.name}, ${stallLocationInfo.address}`
             }
         }
 
@@ -158,7 +158,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                             <div>
                                 <FormSection style={{ marginTop: 0 }}>
                                     <CustomTextField
-                                        name="stall_name"
+                                        name="name"
                                         component={TextField}
                                         floatingLabelText={"Stall name"}
                                         hintText={"e.g. Primary School Sausage Sizzle"}
@@ -166,7 +166,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         validate={[required]}
                                     />
                                     <CustomTextField
-                                        name="stall_description"
+                                        name="description"
                                         component={TextField}
                                         multiLine={true}
                                         floatingLabelText={"Stall description"}
@@ -175,7 +175,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         validate={[required]}
                                     />
                                     <CustomTextField
-                                        name="stall_website"
+                                        name="website"
                                         component={TextField}
                                         floatingLabelText={"Stall website"}
                                         hintText={"We'll include a link to your site as part of your stall's information"}
@@ -186,7 +186,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 <FormSection>
                                     <FormSectionHeader>Your details</FormSectionHeader>
                                     <CustomTextField
-                                        name="contact_email"
+                                        name="email"
                                         component={TextField}
                                         floatingLabelText={"Contact email"}
                                         hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
@@ -202,37 +202,37 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         <ListItem
                                             primaryText="Is there a sausage sizzle?"
                                             leftIcon={<SausageIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_bbq" />}
+                                            rightToggle={<DeliciousnessToggle name="bbq" />}
                                         />
                                         <ListItem
                                             primaryText="Is there a cake stall?"
                                             leftIcon={<CakeIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_caek" />}
+                                            rightToggle={<DeliciousnessToggle name="cake" />}
                                         />
                                         <ListItem
                                             primaryText="Are there vegetarian options?"
                                             leftIcon={<VegoIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_vego" />}
+                                            rightToggle={<DeliciousnessToggle name="vego" />}
                                         />
                                         <ListItem
                                             primaryText="Is there any food that's halal?"
                                             leftIcon={<HalalIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_halal" />}
+                                            rightToggle={<DeliciousnessToggle name="halal" />}
                                         />
                                         <ListItem
                                             primaryText="Do you have coffee?"
                                             leftIcon={<CoffeeIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_coffee" />}
+                                            rightToggle={<DeliciousnessToggle name="coffee" />}
                                         />
                                         <ListItem
                                             primaryText="Are there bacon and eggs?"
                                             leftIcon={<BaconandEggsIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
+                                            rightToggle={<DeliciousnessToggle name="bacon_and_eggs" />}
                                         />
                                     </List>
 
                                     <CustomTextField
-                                        name="has_free_text"
+                                        name="free_text"
                                         component={TextField}
                                         floatingLabelText={"Anything else?"}
                                         hintText={"e.g. We also have cold drinks and pony rides!"}

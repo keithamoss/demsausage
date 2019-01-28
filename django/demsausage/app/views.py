@@ -11,10 +11,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import generics
 
-from demsausage.app.serializers import UserSerializer
-from demsausage.app.models import Elections, PollingPlaces
-from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
-from demsausage.app.permissions import AnonymousOnlyList
+from demsausage.app.models import Elections, PollingPlaces, Stalls
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer
+from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.util import make_logger
 
@@ -87,7 +86,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
-    queryset = Elections.objects.all().order_by("-id")
+    queryset = Elections.objects.filter(is_hidden=False).all().order_by("-id")
     serializer_class = ElectionsSerializer
     permission_classes = (AnonymousOnlyList,)
 
@@ -104,7 +103,7 @@ class PollingPlacesViewSet(viewsets.ModelViewSet):
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
-    API endpoint that allows polling places to be viewed and edited.
+    API endpoint that allows polling places to be searched by a lat,lon coordinate pair.
     """
     queryset = PollingPlaces.objects
     serializer_class = PollingPlaceSearchResultsSerializer
@@ -114,7 +113,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
 
 class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     """
-    API endpoint that allows polling places to be viewed and edited.
+    API endpoint that allows polling places to be retrieved as GeoJSON.
     """
     queryset = PollingPlaces.objects
     serializer_class = PollingPlacesGeoJSONSerializer
@@ -124,3 +123,12 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     @method_decorator(cache_page(None, key_prefix="polling_places_"))
     def list(self, request, format=None):
         return super(PollingPlacesGeoJSONViewSet, self).list(request, format)
+
+
+class StallsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows stalls to be viewed and edited.
+    """
+    queryset = Stalls.objects
+    serializer_class = StallsSerializer
+    permission_classes = (AnonymousOnlyCreate,)

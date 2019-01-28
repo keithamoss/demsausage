@@ -2,7 +2,12 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from demsausage.app.models import Profile, Elections, PollingPlaces
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
+
+from demsausage.app.models import Profile, Elections, PollingPlaces, Stalls
+from demsausage.app.schemas import noms_schema, stall_location_info_schema
+from demsausage.util import get_or_none
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -69,8 +74,26 @@ class NomsBooleanJSONField(serializers.JSONField):
         return new_value
 
 
+class JSONSchemaField(serializers.JSONField):
+    # Custom field that validates incoming data against JSONSchema,
+    # Then, if successful, will store it as a string.
+    # https://stackoverflow.com/a/37769847
+
+    def __init__(self, schema, *args, **kwargs):
+        super(JSONSchemaField, self).__init__(*args, **kwargs)
+        self.schema = schema
+
+    def to_internal_value(self, data):
+        try:
+            validate(data, self.schema)
+        except JSONSchemaValidationError as e:
+            raise serializers.ValidationError(e.message)
+
+        return super(JSONSchemaField, self).to_internal_value(data)
+
+
 class PollingPlacesSerializer(serializers.ModelSerializer):
-    noms = serializers.JSONField(source="noms.noms", default={})
+    noms = JSONSchemaField(noms_schema, source="noms.noms", default=dict)
     chance_of_sausage = serializers.FloatField(source="noms.chance_of_sausage", allow_null=True)
     stall_name = serializers.CharField(source="noms.stall_name", default="")
     stall_description = serializers.CharField(source="noms.stall_description", default="")
@@ -126,3 +149,43 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
         geo_field = "geom"
 
         fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source", "distance_km", )
+
+
+class StallsSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True, allow_blank=False)
+    description = serializers.CharField(required=True, allow_blank=False)
+    website = serializers.CharField(allow_blank=True)
+    noms = JSONSchemaField(noms_schema, required=True)
+    location_info = JSONSchemaField(stall_location_info_schema, required=False)
+    email = serializers.EmailField(required=True, allow_blank=False)
+    election = serializers.PrimaryKeyRelatedField(queryset=Elections.objects)
+    polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects, required=False)
+
+    class Meta:
+        model = Stalls
+        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place")
+
+    def create(self, validated_data):
+        return Stalls.objects.create(**validated_data)
+
+    def validate_noms(self, value):
+        if len(value.keys()) == 0:
+            raise serializers.ValidationError("One or more food/drink options must be selected")
+        return value
+
+    def validate(self, data):
+        if isinstance(self.initial_data["election"], int):
+            election = get_or_none(Elections, id=self.initial_data["election"])
+            if election is not None:
+                if election.polling_places_loaded is True:
+                    if "location_info" in self.initial_data:
+                        raise serializers.ValidationError("Stall location information not required when polling places are loaded")
+
+                    if "polling_place" not in self.initial_data:
+                        raise serializers.ValidationError("Polling place information is required when polling places are loaded")
+
+                else:
+                    if "location_info" not in self.initial_data:
+                        raise serializers.ValidationError("Stall location information is required when polling places are loaded")
+
+        return data
