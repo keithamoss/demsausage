@@ -1,6 +1,9 @@
-import * as dotProp from "dot-prop-immutable";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient";
+import * as dotProp from "dot-prop-immutable"
+import { DateTime } from "luxon"
+import { createSelector } from "reselect"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -46,6 +49,16 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
             return state
     }
 }
+
+// Selectors
+const getElections = (state: IStore) => state.elections.elections
+
+export const getLiveElections = createSelector(
+    [getElections],
+    (elections: IElection[]): any => {
+        return elections.filter((election: IElection) => isElectionLive(election))
+    }
+)
 
 // Action Creators
 export function loadElections(elections: Array<IElection>) {
@@ -100,20 +113,21 @@ export interface IAction {
     }
 }
 
+export interface IGeoJSONPoint {
+    type: string
+    coordinates: [number, number]
+}
+
 export interface IElection {
     id: number
-    lon: number
-    lat: number
     name: string
     short_name: string
+    geom: IGeoJSONPoint
     default_zoom_level: number
-    has_division_boundaries: boolean
-    db_table_name: string
-    is_active: boolean
-    hidden: boolean
+    is_hidden: boolean
+    is_primary: boolean
     election_day: string // Datetime
     polling_places_loaded: boolean
-    is_primary: boolean
     // stats: {
     //     ttl_booths: number
     //     ttl_bbq: number
@@ -131,7 +145,7 @@ export interface IElection {
 // e.g. thunks, epics, et cetera
 export function fetchElections(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsAPIGet({ "fetch-elections": 1 }, dispatch)
+        const { response, json } = await ealapi.get("https://localhost:8001/api/0.1/elections/", dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 
@@ -155,9 +169,9 @@ export function getDefaultElection(elections: Array<IElection>) {
         defaultElection = primaryElection
     } else {
         // Failing that, just the first active election
-        const firstActiveElection = elections.find((election: IElection) => election.is_active)
-        if (firstActiveElection !== undefined) {
-            defaultElection = firstActiveElection
+        const firstLiveElection = elections.find((election: IElection) => isElectionLive(election))
+        if (firstLiveElection !== undefined) {
+            defaultElection = firstLiveElection
         } else {
             // If there are no active elections at all just grab the most recent one
             defaultElection = elections[0]
@@ -219,17 +233,18 @@ export function setPrimaryElection(electionId: number) {
     }
 }
 
-export function setElectionTableName(election: IElection, newDBTableName: string) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        dispatch(
-            loadElection({
-                id: election.id,
-                db_table_name: newDBTableName,
-            })
-        )
-    }
-}
+// export function setElectionTableName(election: IElection, newDBTableName: string) {
+//     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+//         dispatch(
+//             loadElection({
+//                 id: election.id,
+//                 db_table_name: newDBTableName,
+//             })
+//         )
+//     }
+// }
 
+// Utilities
 export function getURLSafeElectionName(election: IElection) {
     return encodeURI(election.name.replace(/\s/g, "_").toLowerCase())
 }
@@ -268,3 +283,5 @@ export function isItElectionDay(election: IElection) {
     const now = new Date()
     return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
 }
+
+export const isElectionLive = (election: IElection) => DateTime.local().plus({ hours: 20 }) <= DateTime.fromISO(election.election_day)

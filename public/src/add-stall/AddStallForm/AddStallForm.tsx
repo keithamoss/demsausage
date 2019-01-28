@@ -24,7 +24,7 @@ const required = (value: any) => (value ? undefined : "Required")
 const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined)
 
 export interface IProps {
-    activeElections: Array<IElection>
+    liveElections: Array<IElection>
     stepIndex: number
     onChooseElection: any
     chosenElection: IElection
@@ -90,7 +90,7 @@ const StepContentStyled = styled(StepContent)`
 class AddStallForm extends React.PureComponent<IProps, {}> {
     render() {
         const {
-            activeElections,
+            liveElections,
             stepIndex,
             onChooseElection,
             chosenElection,
@@ -120,7 +120,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                         <StepLabel>{chosenElection === null ? "Your election" : `Your election: ${chosenElection.name}`}</StepLabel>
                         <StepContentStyled>
                             <RadioButtonGroup name="elections" onChange={onChooseElection}>
-                                {activeElections.map((election: IElection) => (
+                                {liveElections.map((election: IElection) => (
                                     <RadioButton key={election.id} value={election} label={election.name} style={{ marginBottom: 16 }} />
                                 ))}
                             </RadioButtonGroup>

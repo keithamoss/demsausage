@@ -1,7 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { getLiveElections, getURLSafeElectionName, IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import ElectionChooser from "./ElectionChooser"
@@ -17,6 +17,7 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     elections: Array<IElection>
+    liveElections: Array<IElection>
     currentElection: IElection
     defaultElection: IElection
     browserBreakpoint: string
@@ -59,12 +60,13 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
     }
 
     render() {
-        const { pageBaseURL, elections, currentElection, browserBreakpoint, onChooseElection } = this.props
+        const { pageBaseURL, elections, liveElections, currentElection, browserBreakpoint, onChooseElection } = this.props
         const { isElectionChooserOpen } = this.state
 
         return (
             <ElectionChooser
                 elections={elections}
+                liveElections={liveElections}
                 currentElection={currentElection}
                 isElectionChooserOpen={isElectionChooserOpen}
                 browserBreakpoint={browserBreakpoint}
@@ -107,6 +109,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
     return {
         elections: elections.elections,
+        liveElections: getLiveElections(state),
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
         browserBreakpoint: browser.mediaType,

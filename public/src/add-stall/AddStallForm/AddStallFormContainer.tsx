@@ -2,7 +2,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
-import { IElection } from "../../redux/modules/elections"
+import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { createStall, IStall, IStallLocationInfo } from "../../redux/modules/stalls"
@@ -19,7 +19,7 @@ export interface IDispatchProps {
 }
 
 export interface IStoreProps {
-    activeElections: Array<IElection>
+    liveElections: Array<IElection>
     isDirty: boolean
 }
 
@@ -45,7 +45,7 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
         super(props)
         this.state = {
             stepIndex: 0,
-            chosenElection: props.activeElections.length === 1 ? props.activeElections[0] : null,
+            chosenElection: props.liveElections.length === 1 ? props.liveElections[0] : null,
             stallLocationInfo: null,
             locationConfirmed: false,
             formSubmitting: false,
@@ -96,12 +96,12 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     render() {
-        const { activeElections, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { liveElections, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
         const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting } = this.state
 
         return (
             <AddStallForm
-                activeElections={activeElections}
+                liveElections={liveElections}
                 stepIndex={stepIndex}
                 onChooseElection={this.onChooseElection}
                 chosenElection={chosenElection}
@@ -124,10 +124,8 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
-
     return {
-        activeElections: elections.elections.filter((election: IElection) => election.is_active),
+        liveElections: getLiveElections(state),
         isDirty: isDirty("addStall")(state),
     }
 }

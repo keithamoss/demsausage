@@ -39,7 +39,7 @@ from django.contrib.gis.geos import Point
 
 # cursor.execute("SELECT * FROM elections")
 # for election in cursor.fetchall():
-#     e = Elections(old_id=election["id"], geom=Point(election["lon"], election["lat"], srid=4326), default_zoom_level=int(election["default_zoom_level"]), name=election["name"], short_name=election["short_name"], is_active=bool(election["is_active"]), is_hidden=bool(election["hidden"]), is_primary=bool(election["is_primary"]), polling_places_loaded=bool(election["polling_places_loaded"]), election_day=election["election_day"])
+#     e = Elections(old_id=election["id"], geom=Point(election["lon"], election["lat"], srid=4326), default_zoom_level=int(election["default_zoom_level"]), name=election["name"], short_name=election["short_name"], is_hidden=bool(election["hidden"]), is_primary=bool(election["is_primary"]), polling_places_loaded=bool(election["polling_places_loaded"]), election_day=election["election_day"])
 #     e.save()
 #     print(e.id)
 

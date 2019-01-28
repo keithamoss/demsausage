@@ -167,7 +167,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             target: "openlayers-map",
             controls: [],
             view: new ol.View({
-                center: ol.proj.transform([election.lon, election.lat], "EPSG:4326", "EPSG:3857"),
+                center: ol.proj.transform(election.geom.coordinates, "EPSG:4326", "EPSG:3857"),
                 zoom: election.default_zoom_level,
             }),
         })

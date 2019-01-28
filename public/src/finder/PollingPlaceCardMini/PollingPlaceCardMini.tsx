@@ -14,7 +14,7 @@ import HalalIcon from "../../icons/halal"
 import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
-import { IElection } from "../../redux/modules/elections"
+import { IElection, isElectionLive } from "../../redux/modules/elections"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
 import {
@@ -133,7 +133,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
-                        {election.is_active === true && pollingPlaceHasReports(pollingPlace) === false && (
+                        {isElectionLive(election) && pollingPlaceHasReports(pollingPlace) === false && (
                             <ChanceOfSausage
                                 primaryText={"We don't have any reports for this booth yet."}
                                 secondaryText={

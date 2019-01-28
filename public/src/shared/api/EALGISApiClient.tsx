@@ -1,7 +1,7 @@
-import "whatwg-fetch"
 import * as qs from "qs"
-import cookie from "react-cookie"
 import * as Raven from "raven-js"
+import cookie from "react-cookie"
+import "whatwg-fetch"
 import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
 
 export class EALGISApiClient {
@@ -181,6 +181,7 @@ export interface IEALGISApiClient {
     paramsToSQL: Function
     cartoGetSQL: Function
     cartoBridgeGetSQL: Function
+    get: Function
     post: Function
     put: Function
     delete: Function

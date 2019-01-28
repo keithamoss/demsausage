@@ -71,7 +71,6 @@ class Elections(models.Model):
     default_zoom_level = models.IntegerField()
     name = models.TextField()
     short_name = models.TextField()
-    is_active = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)

@@ -36,7 +36,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'initials',
             'email',
             'is_staff',
-            'is_active',
             'date_joined',
             'groups',
             'is_approved',
@@ -46,7 +45,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ElectionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_active", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
 
 class NomsBooleanJSONField(serializers.JSONField):
