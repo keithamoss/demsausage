@@ -1,14 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django.core.cache import cache
-from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
@@ -16,9 +13,9 @@ from rest_framework import generics
 
 from demsausage.app.serializers import UserSerializer
 from demsausage.app.models import Elections, PollingPlaces
-from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer
+from demsausage.app.serializers import ElectionsSerializer, PollingPlacesSerializer, PollingPlaceSearchResultsSerializer
 from demsausage.app.permissions import AnonymousOnlyList
-from demsausage.app.filters import PollingPlacesFilter, PollingPlacesNearbyFilter
+from demsausage.app.filters import PollingPlacesFilter
 from demsausage.app.renderers import PollingPlaceGeoJSONRenderer
 from demsausage.util import make_logger
 
