@@ -13,18 +13,13 @@ export interface IStoreProps {}
 
 export interface IStateProps {}
 
-interface IRouteProps {}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 const PageWrapper = styled.div`
     padding-left: 15px;
     padding-right: 15px;
 `
 
-export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class MediaPage extends React.Component<TComponentProps, IStateProps> {
     componentDidMount() {
         document.title = "Democracy Sausage | Media"
     }
@@ -59,7 +54,7 @@ export class MediaPage extends React.Component<IProps & IStoreProps & IDispatchP
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     // const { elections } = state
 
     return {}

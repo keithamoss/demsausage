@@ -14,15 +14,8 @@ export interface IStoreProps {
 
 export interface IStateProps {}
 
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class SausagelyticsContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class SausagelyticsContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "SausagelyticsContainer"
     static pageTitle = "Democracy Sausage | Charts, graphs, and data!"
     static pageBaseURL = "/sausagelytics"
@@ -39,7 +32,7 @@ export class SausagelyticsContainer extends React.Component<IProps & IStoreProps
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { elections } = state
 
     return {

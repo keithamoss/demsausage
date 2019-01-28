@@ -16,15 +16,8 @@ export interface IStateProps {
     formSubmitted: boolean
 }
 
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: any) {
         super(props)
         this.state = { formSubmitted: false }
@@ -58,7 +51,7 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { elections } = state
 
     return {

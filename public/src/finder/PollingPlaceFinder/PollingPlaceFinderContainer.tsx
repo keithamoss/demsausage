@@ -1,14 +1,13 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { ePollingPlaceFinderInit } from "../../redux/modules/app";
-import { IElection } from "../../redux/modules/elections";
-import { fetchNearbyPollingPlaces, IPollingPlaceSearchResult } from "../../redux/modules/polling_places";
-import { IStore } from "../../redux/modules/reducer";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { gaTrack } from "../../shared/analytics/GoogleAnalytics";
-import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete";
-import PollingPlaceFinder from "./PollingPlaceFinder";
-
+import * as React from "react"
+import { connect } from "react-redux"
+import { ePollingPlaceFinderInit } from "../../redux/modules/app"
+import { IElection } from "../../redux/modules/elections"
+import { fetchNearbyPollingPlaces, IPollingPlaceSearchResult } from "../../redux/modules/polling_places"
+import { IStore } from "../../redux/modules/reducer"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
+import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
+import PollingPlaceFinder from "./PollingPlaceFinder"
 
 export interface IStoreProps {
     initMode: ePollingPlaceFinderInit
@@ -27,13 +26,8 @@ export interface IStateProps {
     nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
 }
 
-interface IRouteProps {}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class PollingPlaceFinderContainer extends React.Component<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps
+export class PollingPlaceFinderContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "PollingPlaceFinderContainer"
     static pageTitle = "Democracy Sausage | Find a polling place near you"
     static pageBaseURL = "/search"
@@ -102,7 +96,7 @@ export class PollingPlaceFinderContainer extends React.Component<IStoreProps & I
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { app, elections } = state
 
     return {
@@ -247,6 +241,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceFinderContainerWrapped = connect(mapStateToProps, mapDispatchToProps)(PollingPlaceFinderContainer)
+const PollingPlaceFinderContainerWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PollingPlaceFinderContainer)
 
 export default PollingPlaceFinderContainerWrapped
