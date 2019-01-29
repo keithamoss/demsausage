@@ -3,12 +3,14 @@ from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.db import transaction
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
+from rest_framework.exceptions import APIException
 from rest_framework import generics
 from rest_framework import mixins
 
@@ -56,9 +58,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (IsAdminUser,)
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    permission_classes = (IsAdminUser,)
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -88,19 +90,31 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
-    queryset = Elections.objects.order_by("-id")
+    queryset = Elections.objects
     serializer_class = ElectionsSerializer
     permission_classes = (AnonymousOnlyList,)
 
     def get_queryset(self):
         if self.request.user.is_anonymous is True:
-            return self.queryset.filter(is_hidden=False)
-        return self.queryset
+            return self.queryset.filter(is_hidden=False).order_by("-id")
+        return self.queryset.order_by("-id")
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous is True:
             return self.serializer_class
         return ElectionsStatsSerializer
+
+    @detail_route(methods=['post'], permission_classes=(IsAuthenticated,))
+    @transaction.atomic
+    def set_primary(self, request, pk=None, format=None):
+        self.get_queryset().filter(is_primary=True).update(is_primary=False)
+
+        serializer = ElectionsSerializer(self.get_object(), data={"is_primary": True}, partial=True)
+        if serializer.is_valid() is True:
+            serializer.save()
+            return Response()
+        else:
+            raise APIException(serializer.errors)
 
 
 class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

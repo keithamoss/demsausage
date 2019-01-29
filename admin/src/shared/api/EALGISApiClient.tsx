@@ -80,6 +80,7 @@ export class EALGISApiClient {
         return fetch(url, { ...{ credentials: "include" }, ...fetchOptions })
             .then((response: any) => {
                 dispatch(finishFetch())
+
                 return response.json().then((json: any) => {
                     if (json.error) {
                         // @FIXME Re-enable once we've turned off the PHP API
@@ -95,7 +96,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public post(url: string, body: any, dispatch: any): Promise<IApiResponse> {
+    public post(url: string, body: object = {}, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -110,6 +111,14 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
+
+                if (response.body.length === undefined) {
+                    return {
+                        response,
+                        json: undefined,
+                    }
+                }
+
                 return response.json().then((json: any) => ({
                     response: response,
                     json: json,
@@ -133,6 +142,14 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
+
+                if (response.body.length === undefined) {
+                    return {
+                        response,
+                        json: undefined,
+                    }
+                }
+
                 return response.json().then((json: any) => ({
                     response: response,
                     json: json,

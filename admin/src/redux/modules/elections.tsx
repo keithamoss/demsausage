@@ -138,6 +138,7 @@ export interface IElectionStats {
 export function fetchElections() {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/elections/", dispatch)
+
         if (response.status === 200) {
             dispatch(loadElections(json))
 
@@ -205,12 +206,7 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
 
 export function setPrimaryElection(electionId: number) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "set-primary-election": 1,
-            electionId: electionId,
-        }
-
-        const { response } = await api.dsAPIGet(params, dispatch)
+        const { response } = await api.post(`https://localhost:8001/api/0.1/elections/${electionId}/set_primary/`, {}, dispatch)
 
         if (response.status === 200) {
             dispatch(togglePrimaryElection(electionId))

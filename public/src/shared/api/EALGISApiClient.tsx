@@ -68,7 +68,7 @@ export class EALGISApiClient {
         return this.delete(this.dsBaseURL + "/api.php", dispatch)
     }
 
-    private get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<void> {
+    public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<void> {
         dispatch(beginFetch())
 
         if (Object.keys(params).length > 0) {
@@ -94,7 +94,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private post(url: string, body: any, dispatch: any) {
+    public post(url: string, body: object = {}, dispatch: any) {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -109,6 +109,14 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
+
+                if (response.body.length === undefined) {
+                    return {
+                        response,
+                        json: undefined,
+                    }
+                }
+
                 return response.json().then((json: any) => ({
                     response: response,
                     json: json,
@@ -117,7 +125,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private put(url: string, body: object, dispatch: any) {
+    public put(url: string, body: object, dispatch: any) {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -132,6 +140,14 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
+
+                if (response.body.length === undefined) {
+                    return {
+                        response,
+                        json: undefined,
+                    }
+                }
+
                 return response.json().then((json: any) => ({
                     response: response,
                     json: json,
@@ -140,7 +156,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private delete(url: string, dispatch: any) {
+    public delete(url: string, dispatch: any) {
         dispatch(beginFetch())
 
         return fetch(url, {
