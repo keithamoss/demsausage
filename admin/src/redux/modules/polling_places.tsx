@@ -76,15 +76,6 @@ export interface IPollingPlaceFacilityType {
     name: string
 }
 
-export interface IMapPollingPlace {
-    id: number
-    geometry: any
-    has_bbq: boolean
-    has_nothing: boolean
-    has_caek: boolean
-    has_run_out: boolean
-}
-
 export interface INoms {
     bbq: boolean
     cake: boolean
@@ -166,8 +157,10 @@ export function fetchAllPollingPlaces(election: IElection) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionId: election.id }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/", dispatch, {
+            election_id: election.id,
+            ids: pollingPlaceIds.join(","),
+        })
 
         if (response.status === 200) {
             return json

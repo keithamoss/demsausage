@@ -103,7 +103,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             <ListItem
                                 primaryText="Is there a cake stall?"
                                 leftIcon={<CakeIcon />}
-                                rightToggle={<DeliciousnessToggle name="caek" />}
+                                rightToggle={<DeliciousnessToggle name="cake" />}
                             />
                             <ListItem
                                 primaryText="Are there vegetarian options?"
