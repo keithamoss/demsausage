@@ -5,7 +5,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
-from demsausage.app.models import Profile, Elections, PollingPlaces, Stalls
+from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaces, Stalls
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none
 
@@ -104,6 +104,13 @@ class JSONSchemaField(serializers.JSONField):
             raise serializers.ValidationError(e.message)
 
         return super(JSONSchemaField, self).to_internal_value(data)
+
+
+class PollingPlaceFacilityTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PollingPlaceFacilityType
+
+        fields = ("name",)
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):

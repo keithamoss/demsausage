@@ -10,6 +10,7 @@ from .views import (
     PollingPlacesGeoJSONViewSet,
     PendingStallsViewSet,
     StallsViewSet,
+    PollingPlaceFacilityTypeViewSet,
     api_not_found)
 from rest_framework import routers
 
@@ -19,6 +20,7 @@ router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 router.register(r'elections', ElectionsViewSet, 'ElectionsViewSet')
 router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
 router.register(r'stalls', StallsViewSet, 'StallsViewSet')
+router.register(r'polling_places_facility_types', PollingPlaceFacilityTypeViewSet, 'PollingPlaceFacilityTypeViewSet')
 
 # Need to set base_name because Reasons
 # http://www.django-rest-framework.org/api-guide/routers/#usage (see note re `base_name`)

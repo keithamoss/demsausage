@@ -3,7 +3,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
-import { fetchAllPollingPlaces, IPollingPlace, updatePollingPlace } from "../../redux/modules/polling_places"
+import { fetchAllPollingPlaces, IPollingPlace, IPollingPlaceFacilityType, updatePollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
@@ -11,7 +11,7 @@ import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 export interface IStoreProps {
     election: IElection
     pollingPlaces: Array<IPollingPlace>
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
 export interface IDispatchProps {

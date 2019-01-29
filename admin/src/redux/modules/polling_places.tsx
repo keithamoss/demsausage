@@ -45,7 +45,7 @@ export function loadPollingPlacesForElection(election: IElection, pollingPlaces:
     }
 }
 
-export function loadPollingPlaceTypes(pollingPlaceTypes: Array<string>) {
+export function loadPollingPlaceTypes(pollingPlaceTypes: IPollingPlaceFacilityType[]) {
     return {
         type: LOAD_TYPES,
         pollingPlaceTypes,
@@ -54,7 +54,7 @@ export function loadPollingPlaceTypes(pollingPlaceTypes: Array<string>) {
 
 // Models
 export interface IModule {
-    types: Array<string>
+    types: IPollingPlaceFacilityType[]
     by_election: {
         [key: number]: Array<IPollingPlace>
     }
@@ -64,12 +64,17 @@ export interface IAction {
     type: string
     election: IElection
     pollingPlaces: Array<IPollingPlace>
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
     errors?: object
     meta?: {
         // analytics: IAnalyticsMeta
     }
 }
+
+export interface IPollingPlaceFacilityType {
+    name: string
+}
+
 export interface IMapPollingPlace {
     id: number
     geometry: any
@@ -221,8 +226,7 @@ export function loadPollingPlaces(election: IElection, file: File) {
 
 export function fetchPollingPlaceTypes() {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = { "fetch-polling-place-types": 1, electionId: null }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places_facility_types/", dispatch)
 
         if (response.status === 200) {
             dispatch(loadPollingPlaceTypes(json))

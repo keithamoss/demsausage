@@ -4,7 +4,12 @@ import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace, pollingPlaceHasReportsOfNoms, updatePollingPlace } from "../../redux/modules/polling_places"
+import {
+    IPollingPlace,
+    IPollingPlaceFacilityType,
+    pollingPlaceHasReportsOfNoms,
+    updatePollingPlace,
+} from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
 import PollingPlaceForm from "./PollingPlaceForm"
@@ -23,7 +28,7 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     isDirty: boolean
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
 export interface IStateProps {}

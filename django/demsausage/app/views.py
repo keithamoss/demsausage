@@ -10,9 +10,10 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import generics
+from rest_framework import mixins
 
-from demsausage.app.models import Elections, PollingPlaces, Stalls
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer
+from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
@@ -100,6 +101,15 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         if self.request.user.is_anonymous is True:
             return self.serializer_class
         return ElectionsStatsSerializer
+
+
+class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint that allows polling place facility types to be viewed.
+    """
+    queryset = PollingPlaceFacilityType.objects
+    serializer_class = PollingPlaceFacilityTypeSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class PollingPlacesViewSet(viewsets.ModelViewSet):

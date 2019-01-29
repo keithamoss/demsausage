@@ -19,13 +19,13 @@ import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
     stallWasMerged: boolean
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
     onSubmit: any
     onSaveForm: any
 
@@ -185,8 +185,8 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             floatingLabelText={"What type of polling place is this?"}
                             fullWidth={true}
                         >
-                            {pollingPlaceTypes.map((type: string) => (
-                                <MenuItem key={type} value={type} primaryText={type} />
+                            {pollingPlaceTypes.map((type: IPollingPlaceFacilityType) => (
+                                <MenuItem key={type.name} value={type.name} primaryText={type.name} />
                             ))}
                         </CustomField>
                         <CustomTextField
