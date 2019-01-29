@@ -2,7 +2,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection, setPrimaryElection } from "../../redux/modules/elections"
-import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
+import { regenerateMapDataForElection } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionsManager from "./ElectionsManager"
 
@@ -13,7 +13,7 @@ export interface IStoreProps {
 export interface IDispatchProps {
     onMakeElectionPrimary: Function
     onDownloadElection: Function
-    onRegenerateElectionGeoJSON: Function
+    onRegenerateMapDataForElection: Function
 }
 
 export interface IStateProps {}
@@ -27,14 +27,14 @@ interface IOwnProps {
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 export class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
-        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateMapDataForElection } = this.props
 
         return (
             <ElectionsManager
                 elections={elections}
                 onMakeElectionPrimary={onMakeElectionPrimary}
                 onDownloadElection={onDownloadElection}
-                onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
+                onRegenerateMapDataForElection={onRegenerateMapDataForElection}
             />
         )
     }
@@ -56,8 +56,8 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         onDownloadElection(election: IElection) {
             window.location.href = `${getAPIBaseURL()}/api.php?download-election=1&electionId=${election.id}`
         },
-        onRegenerateElectionGeoJSON(election: IElection) {
-            dispatch(regenerateElectionGeoJSON(election))
+        onRegenerateMapDataForElection(election: IElection) {
+            dispatch(regenerateMapDataForElection(election))
         },
     }
 }

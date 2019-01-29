@@ -40,7 +40,7 @@ export interface IProps {
     elections: Array<IElection>
     onMakeElectionPrimary: any
     onDownloadElection: any
-    onRegenerateElectionGeoJSON: any
+    onRegenerateMapDataForElection: any
 }
 
 class ElectionsManager extends React.PureComponent<IProps, {}> {
@@ -63,7 +63,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
     }
 
     render() {
-        const { elections, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onDownloadElection, onRegenerateMapDataForElection } = this.props
 
         return (
             <div>
@@ -140,7 +140,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                         </IconButton>
                                         <IconButton
                                             tooltip="Refresh the map data for this election"
-                                            onClick={onRegenerateElectionGeoJSON.bind(this, election)}
+                                            onClick={onRegenerateMapDataForElection.bind(this, election)}
                                         >
                                             <NavigationRefresh />
                                         </IconButton>

@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from django.db import transaction
 
 from rest_framework import viewsets
@@ -19,6 +18,7 @@ from demsausage.app.serializers import UserSerializer, ElectionsSerializer, Elec
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
+from demsausage.app.sausage.polling_places import get_cache_key
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -155,9 +155,19 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesBaseFilter
 
-    @method_decorator(cache_page(None, key_prefix="polling_places_"))
     def list(self, request, format=None):
-        return super(PollingPlacesGeoJSONViewSet, self).list(request, format)
+        regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
+        cache_key = get_cache_key(self.request.query_params.get("election_id"))
+
+        if regenerate_cache is False and cache_key in cache:
+            return Response(cache.get(cache_key))
+
+        response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
+        cache.set(cache_key, response.data)
+
+        if regenerate_cache is True:
+            return Response({})
+        return response
 
 
 class StallsViewSet(viewsets.ModelViewSet):

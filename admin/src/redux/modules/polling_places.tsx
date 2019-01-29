@@ -212,10 +212,12 @@ export function fetchPollingPlaceTypes() {
     }
 }
 
-export function regenerateElectionGeoJSON(election: IElection) {
+export function regenerateMapDataForElection(election: IElection) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = { "regenerate-geojson": 1, electionId: election.id }
-        const { response } = await api.dsAPIGet(params, dispatch)
+        const { response } = await api.get("https://localhost:8001/api/0.1/polling_places/geojson/", dispatch, {
+            election_id: election.id,
+            regenerate_cache: true,
+        })
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place data regenerated! 🌭🎉"))
