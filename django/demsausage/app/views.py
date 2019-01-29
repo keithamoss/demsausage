@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import generics
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.util import make_logger
@@ -86,9 +86,19 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
-    queryset = Elections.objects.filter(is_hidden=False).all().order_by("-id")
+    queryset = Elections.objects.order_by("-id")
     serializer_class = ElectionsSerializer
     permission_classes = (AnonymousOnlyList,)
+
+    def get_queryset(self):
+        if self.request.user.is_anonymous is True:
+            return self.queryset.filter(is_hidden=False)
+        return self.queryset
+
+    def get_serializer_class(self):
+        if self.request.user.is_anonymous is True:
+            return self.serializer_class
+        return ElectionsStatsSerializer
 
 
 class PollingPlacesViewSet(viewsets.ModelViewSet):

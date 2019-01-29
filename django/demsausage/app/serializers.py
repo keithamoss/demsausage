@@ -53,6 +53,20 @@ class ElectionsSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
 
+class ElectionsStatsSerializer(ElectionsSerializer):
+    stats = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Elections
+        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded", "stats")
+
+    def get_stats(self, obj):
+        return {
+            "with_data": PollingPlaces.objects.filter(election=obj.id).filter(noms__isnull=False).count(),
+            "total": PollingPlaces.objects.filter(election=obj.id).count(),
+        }
+
+
 class NomsBooleanJSONField(serializers.JSONField):
     """ Serializer for JSONField -- required to create the `other` boolean flag for the GeoJSON response"""
 

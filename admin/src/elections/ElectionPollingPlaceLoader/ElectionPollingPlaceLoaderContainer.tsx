@@ -4,7 +4,7 @@ import { blue500 } from "material-ui/styles/colors"
 import { AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
-import { IElection, setElectionTableName } from "../../redux/modules/elections"
+import { IElection } from "../../redux/modules/elections"
 import { IPollingPlaceLoaderResponse, IPollingPlaceLoaderResponseMessage, loadPollingPlaces } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
@@ -85,9 +85,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         loadPollingPlaces: async (election: IElection, file: File, that: ElectionPollingPlaceLoaderContainer) => {
             const response: IPollingPlaceLoaderResponse = await dispatch(loadPollingPlaces(election, file))
             that.setState({ error: response.error, messages: response.messages })
-            if (response.error === false) {
-                dispatch(setElectionTableName(election, response.table_name))
-            }
+            // if (response.error === false) {
+            //     dispatch(setElectionTableName(election, response.table_name))
+            // }
         },
     }
 }

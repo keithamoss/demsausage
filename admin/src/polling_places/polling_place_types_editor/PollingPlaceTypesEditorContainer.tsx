@@ -47,7 +47,7 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<TCompo
     render() {
         const { pollingPlaces, pollingPlaceTypes, election, updatePollingPlaceType, onElectionChanged } = this.props
 
-        if (election.db_table_name === "") {
+        if (election.polling_places_loaded === false) {
             return (
                 <EmptyState
                     message={
@@ -88,7 +88,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchInitialState: (election: IElection) => {
-            if (election.db_table_name !== "") {
+            if (election.polling_places_loaded === true) {
                 dispatch(fetchAllPollingPlaces(election))
             }
         },

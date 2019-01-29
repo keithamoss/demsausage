@@ -5,6 +5,7 @@ import { browserHistory } from "react-router"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { IElection, updateElection } from "../../redux/modules/elections"
+import { IGeoJSONPoint } from "../../redux/modules/interfaces"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionEditor from "./ElectionEditor"
 
@@ -33,26 +34,38 @@ interface IOwnProps {
     params: IRouteProps
 }
 
+export interface IElectionFormValues {
+    name: string
+    short_name: string
+    geom: IGeoJSONPoint
+    default_zoom_level: number
+    is_hidden: boolean
+    election_day: string // Datetime
+}
+
 const toFormValues = (election: IElection) => {
     return {
-        lon: election.lon,
-        lat: election.lat,
+        lon: election.geom.coordinates[0],
+        lat: election.geom.coordinates[1],
         name: election.name,
         short_name: election.short_name,
         default_zoom_level: election.default_zoom_level,
-        has_division_boundaries: election.has_division_boundaries,
-        is_active: election.is_active,
-        hidden: election.hidden,
+        is_hidden: election.is_hidden,
         election_day: new Date(election.election_day),
     }
 }
 
-const fromFormValues = (formValues: any): IElection => {
-    let formValuesCopy = cloneDeep(formValues)
+const fromFormValues = (formValues: any): IElectionFormValues => {
     return {
-        ...formValuesCopy,
-        lon: parseFloat(formValuesCopy.lon),
-        lat: parseFloat(formValuesCopy.lat),
+        name: formValues.name,
+        short_name: formValues.short_name,
+        default_zoom_level: formValues.default_zoom_level,
+        is_hidden: formValues.is_hidden,
+        election_day: formValues.election_day,
+        geom: {
+            type: "Point",
+            coordinates: [parseFloat(formValues.lon), parseFloat(formValues.lat)],
+        },
     }
 }
 

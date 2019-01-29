@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
-import { fetchElections, fetchElectionStats } from "./elections"
+import { fetchElections } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
 import { fetchPendingStalls } from "./stalls"
 import { fetchUser } from "./user"
@@ -132,7 +132,6 @@ export function fetchInitialAppState() {
             dispatch(fetchPendingStalls()),
             dispatch(fetchPollingPlaceTypes()),
         ])
-        await dispatch(fetchElectionStats())
 
         // const self: ISelf = await dispatch(fetchUser())
         // if (self && self.success) {

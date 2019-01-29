@@ -1,14 +1,13 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { getAPIBaseURL } from "../../redux/modules/app"
-import { IElection, IElectionStats, setPrimaryElection } from "../../redux/modules/elections"
+import { IElection, setPrimaryElection } from "../../redux/modules/elections"
 import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionsManager from "./ElectionsManager"
 
 export interface IStoreProps {
     elections: Array<IElection>
-    stats: Array<IElectionStats>
 }
 
 export interface IDispatchProps {
@@ -28,12 +27,11 @@ interface IOwnProps {
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 export class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
-        const { elections, stats, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
 
         return (
             <ElectionsManager
                 elections={elections}
-                stats={stats}
                 onMakeElectionPrimary={onMakeElectionPrimary}
                 onDownloadElection={onDownloadElection}
                 onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
@@ -47,7 +45,6 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
     return {
         elections: elections.elections,
-        stats: elections.stats,
     }
 }
 
