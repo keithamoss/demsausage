@@ -72,8 +72,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, onElectionCreated: Function) {
             const electionNew: Partial<IElection> = fromFormValues(values)
-            await dispatch(createElection(electionNew))
-            browserHistory.push("/elections/")
+            const json = await dispatch(createElection(electionNew))
+            if (json) {
+                browserHistory.push("/elections/")
+            }
         },
         onSaveForm: (isDirty: boolean) => {
             dispatch(submit("election"))

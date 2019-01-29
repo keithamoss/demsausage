@@ -110,13 +110,6 @@ export class EALGISApiClient {
             .then((response: any) => {
                 dispatch(finishFetch())
 
-                if (response.body.length === undefined) {
-                    return {
-                        response,
-                        json: undefined,
-                    }
-                }
-
                 return response.json().then((json: any) => ({
                     response: response,
                     json: json,
@@ -140,13 +133,6 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
-
-                if (response.body.length === undefined) {
-                    return {
-                        response,
-                        json: undefined,
-                    }
-                }
 
                 return response.json().then((json: any) => ({
                     response: response,

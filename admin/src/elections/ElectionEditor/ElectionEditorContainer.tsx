@@ -115,7 +115,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         async onFormSubmit(values: object, election: IElection, onElectionEdited: Function) {
             const electionNew: Partial<IElection> = fromFormValues(values)
             const json = await dispatch(updateElection(election, electionNew))
-            if (json.rows === 1) {
+            if (json) {
                 // onElectionEdited()
                 browserHistory.push("/elections/")
             }

@@ -170,14 +170,9 @@ export function fetchElections() {
 
 export function createElection(electionNew: Partial<IElection>) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "create-election": 1,
-            election: electionNew,
-        }
+        const { response, json } = await api.post("https://localhost:8001/api/0.1/elections/", electionNew, dispatch)
 
-        const { response, json } = await api.dsAPIGet(params, dispatch)
-
-        if (response.status === 200) {
+        if (response.status === 201) {
             dispatch(loadElection(json))
             dispatch(sendSnackbarNotification("Election created! 🌭🎉"))
             return json
@@ -187,17 +182,10 @@ export function createElection(electionNew: Partial<IElection>) {
 
 export function updateElection(election: IElection, electionNew: Partial<IElection>) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "update-election": 1,
-            electionId: election.id,
-            election: electionNew,
-        }
-
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.put(`https://localhost:8001/api/0.1/elections/${election.id}/`, electionNew, dispatch)
 
         if (response.status === 200) {
-            electionNew.id = election.id
-            dispatch(loadElection(electionNew))
+            dispatch(loadElection(json))
             dispatch(sendSnackbarNotification("Election updated! 🌭🎉"))
             return json
         }

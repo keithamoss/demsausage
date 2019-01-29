@@ -112,7 +112,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         serializer = ElectionsSerializer(self.get_object(), data={"is_primary": True}, partial=True)
         if serializer.is_valid() is True:
             serializer.save()
-            return Response()
+            return Response({})
         else:
             raise APIException(serializer.errors)
 

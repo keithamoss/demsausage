@@ -1,3 +1,6 @@
+from datetime import datetime
+import pytz
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
@@ -51,6 +54,11 @@ class ElectionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Elections
         fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+
+    def validate_election_day(self, value):
+        if value <= datetime.now(pytz.utc):
+            raise serializers.ValidationError("Election day must be a day in the future")
+        return value
 
 
 class ElectionsStatsSerializer(ElectionsSerializer):
