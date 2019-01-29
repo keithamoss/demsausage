@@ -173,6 +173,13 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             hintText={"A link to the website of the people organising the stall"}
                             fullWidth={true}
                         />
+                        <CustomTextField
+                            name="stall_extra_info"
+                            component={TextField}
+                            floatingLabelText={"Extra info"}
+                            hintText={"Is there any other information to add?"}
+                            fullWidth={true}
+                        />
                     </FormCardText>
                 </Card>
 
@@ -189,13 +196,6 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                                 <MenuItem key={type.name} value={type.name} primaryText={type.name} />
                             ))}
                         </CustomField>
-                        <CustomTextField
-                            name="extra_info"
-                            component={TextField}
-                            floatingLabelText={"Extra info"}
-                            hintText={"Is there any extra information to add?"}
-                            fullWidth={true}
-                        />
                         <CustomTextField
                             name="source"
                             component={TextField}
