@@ -22,14 +22,14 @@ import { EALGISApiClient } from "./shared/api/EALGISApiClient"
 // declare var DEVELOPMENT: boolean
 let Middleware: Array<any> = []
 
-const ealapi = new EALGISApiClient()
+const api = new EALGISApiClient()
 
 const composeEnhancers = composeWithDevTools({
     // Specify name here, actionsBlacklist, actionsCreators and other options if needed
 })
 const store: Store<IStore> = createStore(
     reducers,
-    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(ealapi), ...Middleware))
+    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(api), ...Middleware))
 )
 
 const history = syncHistoryWithStore(browserHistory as any, store)

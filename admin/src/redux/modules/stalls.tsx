@@ -1,6 +1,6 @@
-import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import * as dotProp from "dot-prop-immutable";
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient";
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -99,8 +99,8 @@ export interface IStall {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchPendingStalls() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsAPIGet({ "fetch-pending-stalls": 1 }, dispatch)
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+        const { response, json } = await api.dsAPIGet({ "fetch-pending-stalls": 1 }, dispatch)
 
         if (response.status === 200) {
             dispatch(loadPendingStalls(json))
@@ -110,12 +110,12 @@ export function fetchPendingStalls() {
 }
 
 export function markStallAsRead(id: number) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "mark-read-pending-stall": 1,
             id: id,
         }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
@@ -127,12 +127,12 @@ export function markStallAsRead(id: number) {
 }
 
 export function markStallAsReadAndAddPollingPlace(id: number) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "mark-read-pending-stall-and-add-polling-place": 1,
             id: id,
         }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated and new polling place added! 🍽🎉"))
@@ -144,12 +144,12 @@ export function markStallAsReadAndAddPollingPlace(id: number) {
 }
 
 export function markStallAsDeclined(id: number) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "mark-declined-pending-stall": 1,
             id: id,
         }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))

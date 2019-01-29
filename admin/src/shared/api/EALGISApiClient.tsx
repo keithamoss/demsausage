@@ -29,46 +29,46 @@ export class EALGISApiClient {
             .join(", ")
     }
 
-    public cartoGetSQL(sql: string, dispatch: Function): Promise<void> {
+    public cartoGetSQL(sql: string, dispatch: Function): Promise<IApiResponse> {
         const params: object = { q: sql }
         const fetchOptions: object = { credentials: "omit" }
         return this.get(this.cartoBaseURL, dispatch, params, fetchOptions)
     }
 
-    public cartoBridgeGetSQL(sql: string, dispatch: Function): Promise<void> {
+    public cartoBridgeGetSQL(sql: string, dispatch: Function): Promise<IApiResponse> {
         const params: object = { q: sql }
         const fetchOptions: object = { credentials: "omit" }
         return this.get(this.cartoBridgeBaseURL, dispatch, params, fetchOptions)
     }
 
-    public dsGet(url: string, dispatch: Function, params: object = {}): Promise<void> {
+    public dsGet(url: string, dispatch: Function, params: object = {}): Promise<IApiResponse> {
         return this.get(this.dsBaseURL + url, dispatch, params)
     }
 
-    public dsAPIGet(params: object = {}, dispatch: Function): Promise<void> {
+    public dsAPIGet(params: object = {}, dispatch: Function): Promise<IApiResponse> {
         return this.get(this.dsBaseURL + "/api.php", dispatch, params)
     }
 
-    public dsAPIPost(params: object = {}, body: any, dispatch: Function): Promise<void> {
+    public dsAPIPost(params: object = {}, body: any, dispatch: Function): Promise<IApiResponse> {
         return this.post(this.dsBaseURL + "/api.php", body, dispatch)
     }
 
-    public dsAPIPostFile(params: object = {}, file: File, dispatch: Function): Promise<void> {
+    public dsAPIPostFile(params: object = {}, file: File, dispatch: Function): Promise<IApiResponse> {
         let data = new FormData()
         data.append("file", file)
 
         return this.post(this.dsBaseURL + "/api.php", data, dispatch)
     }
 
-    public dsAPIPut(params: object = {}, dispatch: Function): Promise<void> {
+    public dsAPIPut(params: object = {}, dispatch: Function): Promise<IApiResponse> {
         return this.put(this.dsBaseURL + "/api.php", params, dispatch)
     }
 
-    public dsAPIDelete(dispatch: Function): Promise<void> {
+    public dsAPIDelete(dispatch: Function): Promise<IApiResponse> {
         return this.delete(this.dsBaseURL + "/api.php", dispatch)
     }
 
-    private get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<void> {
+    public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         if (Object.keys(params).length > 0) {
@@ -95,7 +95,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private post(url: string, body: any, dispatch: any) {
+    public post(url: string, body: any, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -118,7 +118,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private put(url: string, body: object, dispatch: any) {
+    public put(url: string, body: object, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -141,7 +141,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    private delete(url: string, dispatch: any) {
+    public delete(url: string, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -184,6 +184,11 @@ export interface IEALGISApiClient {
     post: Function
     put: Function
     delete: Function
+}
+
+export interface IApiResponse {
+    response: Response
+    json: any
 }
 
 export interface IHttpResponse {

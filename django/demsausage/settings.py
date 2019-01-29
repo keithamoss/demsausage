@@ -83,9 +83,11 @@ else:
     DEBUG = True
     CORS_ORIGIN_WHITELIST = (
         "localhost",
+        "localhost:3001",
     )
     CSRF_TRUSTED_ORIGINS = (
         "localhost",
+        "localhost:3001",
     )
     ALLOWED_HOSTS = ["localhost"]
     STATICFILES_DIRS = [

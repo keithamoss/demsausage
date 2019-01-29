@@ -1,6 +1,6 @@
-import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import * as dotProp from "dot-prop-immutable";
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient";
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -137,8 +137,8 @@ export interface IElectionStats {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsAPIGet({ "fetch-all-elections": 1 }, dispatch)
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+        const { response, json } = await api.dsAPIGet({ "fetch-all-elections": 1 }, dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 
@@ -169,8 +169,8 @@ export function fetchElections() {
 }
 
 export function fetchElectionStats() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsAPIGet({ "fetch-election-stats": 1 }, dispatch)
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+        const { response, json } = await api.dsAPIGet({ "fetch-election-stats": 1 }, dispatch)
         if (response.status === 200) {
             dispatch(loadElectionStats(json))
         }
@@ -178,13 +178,13 @@ export function fetchElectionStats() {
 }
 
 export function createElection(electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "create-election": 1,
             election: electionNew,
         }
 
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(loadElection(json))
@@ -195,14 +195,14 @@ export function createElection(electionNew: Partial<IElection>) {
 }
 
 export function updateElection(election: IElection, electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "update-election": 1,
             electionId: election.id,
             election: electionNew,
         }
 
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             electionNew.id = election.id
@@ -214,13 +214,13 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
 }
 
 export function setPrimaryElection(electionId: number) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "set-primary-election": 1,
             electionId: electionId,
         }
 
-        const { response } = await ealapi.dsAPIGet(params, dispatch)
+        const { response } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(togglePrimaryElection(electionId))
@@ -230,7 +230,7 @@ export function setPrimaryElection(electionId: number) {
 }
 
 export function setElectionTableName(election: IElection, newDBTableName: string) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         dispatch(
             loadElection({
                 id: election.id,

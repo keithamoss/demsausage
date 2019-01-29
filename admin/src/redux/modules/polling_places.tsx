@@ -1,7 +1,7 @@
-import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
-import { IElection } from "./elections"
+import * as dotProp from "dot-prop-immutable";
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient";
+import { IElection } from "./elections";
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -137,9 +137,9 @@ export interface IPollingPlaceLoaderResponseMessage {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = { "search-polling-places": 1, searchTerm: searchTerm, electionId: election.id }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             return json
@@ -148,9 +148,9 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 }
 
 export function fetchAllPollingPlaces(election: IElection) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = { "fetch-all-polling-places": 1, electionId: election.id }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(loadPollingPlacesForElection(election, json))
@@ -159,9 +159,9 @@ export function fetchAllPollingPlaces(election: IElection) {
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = { "fetch-polling-places": 1, pollingPlaceIds: pollingPlaceIds, electionId: election.id }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             return json
@@ -170,7 +170,7 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 }
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: Partial<IPollingPlace>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "update-polling-place": 1,
             pollingPlaceId: pollingPlace.id,
@@ -178,7 +178,7 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
             electionId: election.id,
         }
 
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
@@ -188,14 +188,14 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 }
 
 export function loadPollingPlaces(election: IElection, file: File) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = {
             "load-polling-places": 1,
             electionId: election.id,
             dryrun: false,
         }
 
-        const { response, json } = await ealapi.dsAPIPostFile(params, file, dispatch)
+        const { response, json } = await api.dsAPIPostFile(params, file, dispatch)
 
         if (response.status === 200) {
             return json
@@ -204,9 +204,9 @@ export function loadPollingPlaces(election: IElection, file: File) {
 }
 
 export function fetchPollingPlaceTypes() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = { "fetch-polling-place-types": 1, electionId: null }
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
+        const { response, json } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(loadPollingPlaceTypes(json))
@@ -215,9 +215,9 @@ export function fetchPollingPlaceTypes() {
 }
 
 export function regenerateElectionGeoJSON(election: IElection) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         const params = { "regenerate-geojson": 1, electionId: election.id }
-        const { response } = await ealapi.dsAPIGet(params, dispatch)
+        const { response } = await api.dsAPIGet(params, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place data regenerated! 🌭🎉"))

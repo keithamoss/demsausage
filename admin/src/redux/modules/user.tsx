@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -52,8 +52,8 @@ export interface IUser {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchUser() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.dsGet("/self.php", dispatch)
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/self", dispatch)
         if (response.status === 200) {
             dispatch(loadUser(json))
             return json
@@ -62,8 +62,8 @@ export function fetchUser() {
 }
 
 export function logoutUser() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        await ealapi.dsGet("/login.php?nuke_session=1", dispatch)
+    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+        await api.dsGet("/login.php?nuke_session=1", dispatch)
         window.location.reload()
     }
 }
