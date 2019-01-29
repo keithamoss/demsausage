@@ -93,7 +93,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             }
         },
         updatePollingPlaceType: (election: IElection, pollingPlace: IPollingPlace, newType: string) => {
-            dispatch(updatePollingPlace(election, pollingPlace, { polling_place_type: newType }))
+            dispatch(updatePollingPlace(election, pollingPlace, { facility_type: newType }))
         },
         onElectionChanged: (electionId: number) => {
             browserHistory.push(`/election/${electionId}/polling_place_types/`)

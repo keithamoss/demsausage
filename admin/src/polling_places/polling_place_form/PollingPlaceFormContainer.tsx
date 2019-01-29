@@ -46,11 +46,11 @@ const toFormValues = (pollingPlace: IPollingPlace) => {
         halal: pollingPlace.noms.halal,
         bacon_and_eggs: pollingPlace.noms.bacon_and_eggs,
         free_text: pollingPlace.noms.free_text,
-        name: pollingPlace.stall.name,
-        description: pollingPlace.stall.description,
-        website: pollingPlace.stall.website,
-        polling_place_type: pollingPlace.polling_place_type,
-        extra_info: pollingPlace.extra_info,
+        stall_name: pollingPlace.stall_name,
+        stall_description: pollingPlace.stall_description,
+        stall_website: pollingPlace.stall_website,
+        stall_extra_info: pollingPlace.stall_extra_info,
+        polling_place_type: pollingPlace.facility_type,
         source: pollingPlace.source,
     }
 }
@@ -82,9 +82,9 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.vego = stall.noms.vego
             initialValues.bacon_and_eggs = stall.noms.bacon_and_eggs
             initialValues.free_text = stall.noms.free_text
-            initialValues.name = stall.name
-            initialValues.description = stall.description
-            initialValues.website = stall.website
+            initialValues.stall_name = stall.name
+            initialValues.stall_description = stall.description
+            initialValues.stall_website = stall.website
             initialValues.source = "Direct"
         }
 

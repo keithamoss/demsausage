@@ -58,7 +58,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
             radio: { display: "inline-block", width: "33%" },
         }
 
-        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.polling_place_type === null)
+        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.facility_type === null)
 
         if (pollingPlaces.length === 0) {
             return null
@@ -91,7 +91,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                         <div key={index} style={style}>
                             <GridBox>
                                 <div>
-                                    <h3>{pollingPlacesSansType[index].polling_place_name}</h3>
+                                    <h3>{pollingPlacesSansType[index].name}</h3>
                                     <h4>{pollingPlacesSansType[index].premises}</h4>
                                 </div>
                                 <div>

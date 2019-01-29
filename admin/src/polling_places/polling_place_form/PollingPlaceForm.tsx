@@ -98,48 +98,48 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             <ListItem
                                 primaryText="Is there a sausage sizzle?"
                                 leftIcon={<SausageIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_bbq" />}
+                                rightToggle={<DeliciousnessToggle name="bbq" />}
                             />
                             <ListItem
                                 primaryText="Is there a cake stall?"
                                 leftIcon={<CakeIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_caek" />}
+                                rightToggle={<DeliciousnessToggle name="caek" />}
                             />
                             <ListItem
                                 primaryText="Are there vegetarian options?"
                                 leftIcon={<VegoIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_vego" />}
+                                rightToggle={<DeliciousnessToggle name="vego" />}
                             />
                             <ListItem
                                 primaryText="Is there any food that's halal?"
                                 leftIcon={<HalalIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_halal" />}
+                                rightToggle={<DeliciousnessToggle name="halal" />}
                             />
                             <ListItem
                                 primaryText="Do you have coffee?"
                                 leftIcon={<CoffeeIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_coffee" />}
+                                rightToggle={<DeliciousnessToggle name="coffee" />}
                             />
                             <ListItem
                                 primaryText="Are there bacon and eggs?"
                                 leftIcon={<BaconandEggsIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
+                                rightToggle={<DeliciousnessToggle name="bacon_and_eggs" />}
                             />
                             <Divider />
                             <ListItem
                                 primaryText="Red. Cross. Of. Shame."
                                 leftIcon={<RedCrossofShameIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_nothing" />}
+                                rightToggle={<DeliciousnessToggle name="nothing" />}
                             />
                             <ListItem
                                 primaryText="They've run out of food!"
                                 leftIcon={<ContentBlock color={yellow700} />}
-                                rightToggle={<DeliciousnessToggle name="has_run_out" />}
+                                rightToggle={<DeliciousnessToggle name="run_out" />}
                             />
                         </List>
 
                         <CustomTextField
-                            name="has_free_text"
+                            name="free_text"
                             component={TextField}
                             floatingLabelText={"Anything else to add?"}
                             hintText={"What other types of delicious are here?"}

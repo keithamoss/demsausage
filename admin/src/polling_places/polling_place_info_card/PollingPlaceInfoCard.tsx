@@ -3,7 +3,7 @@
 import { Card, CardTitle } from "material-ui/Card"
 import * as React from "react"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { getPollingPlaceLongName, IPollingPlace } from "../../redux/modules/polling_places"
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 export interface IProps {
@@ -23,11 +23,6 @@ class PollingPlaceInfoCard extends React.PureComponent<IProps, {}> {
         //     ))
         // )
 
-        const pollingPlaceNameDetails =
-            pollingPlace.premises !== null
-                ? `${pollingPlace.polling_place_name}, ${pollingPlace.premises}`
-                : pollingPlace.polling_place_name
-
         const pollingPlaceAddressDetails =
             pollingPlace.address === pollingPlace.premises ? pollingPlace.state : `${pollingPlace.address}, ${pollingPlace.state}`
 
@@ -42,7 +37,7 @@ class PollingPlaceInfoCard extends React.PureComponent<IProps, {}> {
                         mapElement={<div style={{ height: `100%` }} />}
                     />
                 </CardMedia> */}
-                <CardTitle title={pollingPlaceNameDetails} subtitle={pollingPlaceAddressDetails} />
+                <CardTitle title={getPollingPlaceLongName(pollingPlace)} subtitle={pollingPlaceAddressDetails} />
             </Card>
         )
     }

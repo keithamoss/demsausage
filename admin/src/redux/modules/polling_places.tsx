@@ -2,6 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
 import { IElection } from "./elections"
+import { IGeoJSONPoint } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -97,43 +98,27 @@ export interface INoms {
 }
 
 export interface IPollingPlace {
-    // FIXME
-    noms: any
-    stall: any
-
     id: number
-    lon: number
-    lat: number
-    has_bbq: boolean
-    has_nothing: boolean
-    has_caek: boolean
-    has_run_out: boolean
-    has_other: {
-        has_coffee?: boolean
-        has_vego?: boolean
-        has_halal?: boolean
-        has_bacon_and_eggs?: boolean
-        has_free_text?: string
-    }
-    chance_of_sausage: number
-    stall_name: string
-    stall_description: string
-    stall_website: string
-    first_report: string // Datetime
-    latest_report: string // Datetime
-    polling_place_name: string
-    polling_place_type: string
-    extra_info: string
+    name: string
+    geom: IGeoJSONPoint
+    facility_type: string | null
     booth_info: string
-    wheelchairaccess: string
+    wheelchair_access: string
+    entrance_desc: string
     opening_hours: string
     premises: string
     address: string
-    division: string
+    divisions: string[]
     state: string
+    noms: INoms
+    chance_of_sausage: number | null
+    stall_name: string | null
+    stall_description: string | null
+    stall_website: string | null
+    stall_extra_info: string | null
+    first_report: string | null // Datetime
+    latest_report: string | null // Datetime
     source: string
-    ess_stall_id: number
-    ess_stall_url: string
 }
 
 export interface IPollingPlaceLoaderResponse {
@@ -170,8 +155,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchAllPollingPlaces(election: IElection) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = { "fetch-all-polling-places": 1, electionId: election.id }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/", dispatch, { election_id: election.id })
 
         if (response.status === 200) {
             dispatch(loadPollingPlacesForElection(election, json))
@@ -245,25 +229,49 @@ export function regenerateElectionGeoJSON(election: IElection) {
     }
 }
 
+// Utilities
 export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
-    return (
-        pollingPlace.has_bbq === true ||
-        pollingPlace.has_caek === true ||
-        pollingPlace.has_nothing === true ||
-        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
-    )
+    for (const [key, value] of Object.entries(pollingPlace.noms)) {
+        if (key === "run_out") {
+            continue
+        }
+
+        if (key !== "free_text") {
+            if (value === true) {
+                return true
+            }
+        } else {
+            if (value !== "") {
+                return true
+            }
+        }
+    }
+    return false
 }
 
 export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
-    return (
-        pollingPlace.has_bbq === true ||
-        pollingPlace.has_caek === true ||
-        (pollingPlace.has_other !== null && Object.keys(pollingPlace.has_other).length > 0)
-    )
+    for (const [key, value] of Object.entries(pollingPlace.noms)) {
+        if (key === "run_out" || key === "nothing") {
+            continue
+        }
+
+        if (key !== "free_text") {
+            if (value === true) {
+                return true
+            }
+        } else {
+            if (value !== "") {
+                return true
+            }
+        }
+    }
+    return false
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
-    if (pollingPlace.chance_of_sausage >= 0.7) {
+    if (pollingPlace.chance_of_sausage === null) {
+        return "UNKNOWN"
+    } else if (pollingPlace.chance_of_sausage >= 0.7) {
         return "HIGH"
     } else if (pollingPlace.chance_of_sausage >= 4) {
         return "MEDIUM"
@@ -274,23 +282,30 @@ export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
 
 export function getFoodDescription(pollingPlace: IPollingPlace) {
     const noms: Array<string> = []
-    if (pollingPlace.has_bbq) {
+    if (pollingPlace.noms.bbq) {
         noms.push("sausage sizzle")
     }
-    if (pollingPlace.has_caek) {
+    if (pollingPlace.noms.cake) {
         noms.push("cake stall")
     }
-    if ("has_bacon_and_eggs" in pollingPlace.has_other && pollingPlace.has_other.has_bacon_and_eggs) {
+    if ("bacon_and_eggs" in pollingPlace.noms && pollingPlace.noms.bacon_and_eggs) {
         noms.push("bacon and egg burgers")
     }
-    if ("has_vego" in pollingPlace.has_other && pollingPlace.has_other.has_vego) {
+    if ("vego" in pollingPlace.noms && pollingPlace.noms.vego) {
         noms.push("vegetarian options")
     }
-    if ("has_halal" in pollingPlace.has_other && pollingPlace.has_other.has_halal) {
+    if ("halal" in pollingPlace.noms && pollingPlace.noms.halal) {
         noms.push("halal options")
     }
-    if ("has_coffee" in pollingPlace.has_other && pollingPlace.has_other.has_coffee) {
+    if ("coffee" in pollingPlace.noms && pollingPlace.noms.coffee) {
         noms.push("coffee")
     }
     return noms.join(", ")
+}
+
+export const getPollingPlaceLongName = (pollingPlace: IPollingPlace) => {
+    if (pollingPlace.name === pollingPlace.premises) {
+        return pollingPlace.name
+    }
+    return `${pollingPlace.name}, ${pollingPlace.premises}`
 }

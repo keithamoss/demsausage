@@ -77,14 +77,6 @@ export interface IStallLocationInfo {
     state: string
 }
 
-// export interface IStallLocationInfo {
-//     lon: number
-//     lat: number
-//     polling_place_name: string
-//     address: string
-//     state: string
-// }
-
 export interface IStallPollingPlaceInfo {
     id: number
     name: string

@@ -226,6 +226,7 @@ export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: 
     }
 }
 
+// Utilities
 export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
     for (const [key, value] of Object.entries(pollingPlace.noms)) {
         if (key === "run_out") {
