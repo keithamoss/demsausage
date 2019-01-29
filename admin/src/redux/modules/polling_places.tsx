@@ -1,7 +1,7 @@
-import * as dotProp from "dot-prop-immutable";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient";
-import { IElection } from "./elections";
+import * as dotProp from "dot-prop-immutable"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IElection } from "./elections"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -79,7 +79,23 @@ export interface IMapPollingPlace {
     has_run_out: boolean
 }
 
+export interface INoms {
+    bbq: boolean
+    cake: boolean
+    nothing?: boolean
+    run_out?: boolean
+    bacon_and_eggs: boolean
+    halal: boolean
+    vego: boolean
+    coffee: boolean
+    free_text: string
+}
+
 export interface IPollingPlace {
+    // FIXME
+    noms: any
+    stall: any
+
     id: number
     lon: number
     lat: number

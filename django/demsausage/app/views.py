@@ -12,9 +12,10 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import generics
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
+from demsausage.app.enums import StallStatus
 from demsausage.util import make_logger
 
 logger = make_logger(__name__)
@@ -142,3 +143,12 @@ class StallsViewSet(viewsets.ModelViewSet):
     queryset = Stalls.objects
     serializer_class = StallsSerializer
     permission_classes = (AnonymousOnlyCreate,)
+
+
+class PendingStallsViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows pending stalls to be viewed and edited.
+    """
+    queryset = Stalls.objects.filter(status=StallStatus.PENDING).order_by("-id")
+    serializer_class = PendingStallsSerializer
+    permission_classes = (IsAuthenticated,)

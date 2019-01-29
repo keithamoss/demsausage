@@ -1,6 +1,11 @@
-import * as dotProp from "dot-prop-immutable";
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars";
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient";
+import * as dotProp from "dot-prop-immutable"
+import { memoize } from "lodash-es"
+import { createSelector } from "reselect"
+import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IGeoJSONPoint } from "./interfaces"
+import { INoms } from "./polling_places"
+import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -23,6 +28,17 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
             return state
     }
 }
+
+// Selectors
+const getPendingStalls = (state: IStore) => state.stalls.pending
+
+export const getPendingStallsForCurrentElection = createSelector(
+    [getPendingStalls],
+    stalls =>
+        memoize((electionId: number) => {
+            return stalls.filter((stall: IStall) => stall.election_id === electionId)
+        })
+)
 
 // Action Creators
 export function loadPendingStalls(stalls: Array<IStall>) {
@@ -54,14 +70,23 @@ export interface IAction {
 }
 
 export interface IStallLocationInfo {
-    lon: number
-    lat: number
-    polling_place_name: string
+    id?: number // An id is present if election.polling_places_loaded is True
+    geom: IGeoJSONPoint
+    name: string
     address: string
     state: string
 }
 
-export interface IStallPollingPlacInfo {
+// export interface IStallLocationInfo {
+//     lon: number
+//     lat: number
+//     polling_place_name: string
+//     address: string
+//     state: string
+// }
+
+export interface IStallPollingPlaceInfo {
+    id: number
     name: string
     premises: string
     address: string
@@ -76,31 +101,21 @@ export enum StallStatus {
 
 export interface IStall {
     id: number
-    stall_description: string
-    stall_name: string
-    stall_website: string
-    stall_location_info: IStallLocationInfo | null
-    contact_email: string
-    has_bbq: boolean
-    has_caek: boolean
-    has_vego: boolean
-    has_halal: boolean
-    has_coffee: boolean
-    has_bacon_and_eggs: boolean
-    has_free_text: string
-    polling_place_id: number
-    elections_id: number
-    active: boolean
-    status: StallStatus
-    reported_timestamp: string // Datetime
-    polling_place_info: IStallPollingPlacInfo
+    name: string
+    description: string
+    website: string
+    noms: INoms
+    email: string
+    election_id: number
+    location_info: IStallLocationInfo | null
+    polling_place: IStallPollingPlaceInfo | null
 }
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchPendingStalls() {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const { response, json } = await api.dsAPIGet({ "fetch-pending-stalls": 1 }, dispatch)
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/stalls/pending/", dispatch)
 
         if (response.status === 200) {
             dispatch(loadPendingStalls(json))
@@ -120,7 +135,7 @@ export function markStallAsRead(id: number) {
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
             // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
@@ -137,7 +152,7 @@ export function markStallAsReadAndAddPollingPlace(id: number) {
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated and new polling place added! 🍽🎉"))
             // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
@@ -154,13 +169,32 @@ export function markStallAsDeclined(id: number) {
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))
             // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
 }
 
-// TODO Use proper selectors
-export function getPendingStallsForCurrentElection(stalls: IModule, electionId: number) {
-    return stalls.pending.filter((stall: IStall) => stall.elections_id === electionId)
+// Utilities
+export const getStallLocationName = (stall: IStall) => {
+    if (stall.polling_place !== null) {
+        return stall.polling_place.premises
+    }
+
+    if (stall.location_info !== null) {
+        return stall.location_info.name
+    }
+
+    return "Error: Couldn't get stall location name"
+}
+export const getStallLocationAddress = (stall: IStall) => {
+    if (stall.polling_place !== null) {
+        return stall.polling_place.address
+    }
+
+    if (stall.location_info !== null) {
+        return stall.location_info.address
+    }
+
+    return "Error: Couldn't get stall location address"
 }

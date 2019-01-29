@@ -59,7 +59,7 @@ const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps 
     const { stalls, elections } = state
 
     const stall: IStall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
-    const election: IElection = elections.elections.find((election: IElection) => election.id === stall.elections_id)!
+    const election: IElection = elections.elections.find((election: IElection) => election.id === stall.election_id)!
 
     return { stall: stall, election: election }
 }

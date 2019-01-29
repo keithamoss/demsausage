@@ -126,6 +126,12 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source")
 
 
+class PollingPlacesInfoSerializer(PollingPlacesSerializer):
+    class Meta:
+        model = PollingPlaces
+        fields = ("id", "name", "premises", "address", "state")
+
+
 class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
     noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
 
@@ -173,7 +179,7 @@ class StallsSerializer(serializers.ModelSerializer):
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
     email = serializers.EmailField(required=True, allow_blank=False)
     election = serializers.PrimaryKeyRelatedField(queryset=Elections.objects)
-    polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects, required=False)
+    # polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects, required=False)
 
     class Meta:
         model = Stalls
@@ -203,3 +209,11 @@ class StallsSerializer(serializers.ModelSerializer):
                         raise serializers.ValidationError("Stall location information is required when polling places are loaded")
 
         return data
+
+
+class PendingStallsSerializer(StallsSerializer):
+    polling_place = PollingPlacesInfoSerializer(read_only=True)
+
+    class Meta:
+        model = Stalls
+        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election_id", "polling_place")

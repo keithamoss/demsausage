@@ -52,7 +52,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                         stall={stall}
                         cardActions={
                             <CardActions>
-                                {stall.polling_place_id === 0 && (
+                                {stall.polling_place === null && (
                                     <FlatButton label="Approve" primary={true} onClick={onApproveUnofficialStall} />
                                 )}
                                 <FlatButton label="Decline" primary={true} onClick={onDeclineUnofficialStall} />
@@ -60,7 +60,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                         }
                     />
                     <ListItem primaryText={election.name} />
-                    {election.polling_places_loaded === false && stall.polling_place_id === 0 && (
+                    {election.polling_places_loaded === false && stall.polling_place === null && (
                         <ListItem
                             leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
                             primaryText={"Notice"}
@@ -76,7 +76,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
                 <FlexboxColumn>
                     <PollingPlaceEditorContainer
                         election={election}
-                        pollingPlaceId={stall.polling_place_id}
+                        pollingPlaceId={stall.polling_place !== null ? stall.polling_place.id : null}
                         stall={stall}
                         showAutoComplete={false}
                         showElectionChooser={false}

@@ -72,11 +72,14 @@ export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TCo
 }
 
 const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
-    const { elections, stalls } = state
+    const { elections } = state
+
+    const electionId = parseInt(ownProps.params.electionIdentifier, 10)
+    const getPendingStallsForCurrentElectionFilter = getPendingStallsForCurrentElection(state)
 
     return {
         election: elections.elections.find((election: IElection) => election.id === parseInt(ownProps.params.electionIdentifier, 10))!,
-        pendingStallCount: getPendingStallsForCurrentElection(stalls, parseInt(ownProps.params.electionIdentifier, 10)).length,
+        pendingStallCount: getPendingStallsForCurrentElectionFilter(electionId).length,
     }
 }
 
