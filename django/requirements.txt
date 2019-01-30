@@ -11,3 +11,4 @@ jsonschema==2.6.0
 python-memcached==1.59
 djangorestframework-gis==0.14
 django-filter==2.1.0
+djangorestframework-csv==2.1.0

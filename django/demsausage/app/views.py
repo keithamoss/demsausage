@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
@@ -12,6 +13,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.exceptions import APIException
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework.settings import api_settings
+from rest_framework_csv.renderers import CSVRenderer
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
 from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer
@@ -19,7 +22,10 @@ from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
 from demsausage.app.sausage.polling_places import get_cache_key
-from demsausage.util import make_logger
+from demsausage.util import make_logger, get_or_none, clean_filename
+
+import datetime
+import pytz
 
 logger = make_logger(__name__)
 
@@ -126,7 +132,7 @@ class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericVie
     permission_classes = (IsAuthenticated,)
 
 
-class PollingPlacesViewSet(viewsets.ModelViewSet):
+class PollingPlacesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     API endpoint that allows polling places to be viewed and edited.
     """
@@ -134,6 +140,21 @@ class PollingPlacesViewSet(viewsets.ModelViewSet):
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesFilter
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super(PollingPlacesViewSet, self).finalize_response(request, response, *args, **kwargs)
+
+        # Customise the filename for CSV downloads
+        if "text/csv" in response.accepted_media_type:
+            election = get_or_none(Elections, id=request.query_params.get("election_id", None))
+            if election is not None:
+                filename = clean_filename("{} - {}.csv".format(election.name, datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()))
+
+                response["Content-Type"] = "Content-Type: text/csv; name=\"{}\"".format(filename)
+                response["Content-Disposition"] = "attachment; filename={}".format(filename)
+
+        return response
 
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
