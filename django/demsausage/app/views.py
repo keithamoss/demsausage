@@ -81,16 +81,6 @@ class ProfileViewSet(viewsets.ViewSet):
         request.user.profile.save()
         return Response({"settings": request.user.profile.settings})
 
-    @list_route(methods=['get'])
-    def get_column_position(self, request, format=None):
-        qp = request.query_params
-        columnId = str(qp["id"]) if "id" in qp else None
-
-        if "column_positions" in request.user.profile.settings and columnId in request.user.profile.settings["column_positions"]:
-            return Response({"position": request.user.profile.settings["column_positions"][columnId]})
-        else:
-            return Response({"position": None})
-
 
 class ElectionsViewSet(viewsets.ModelViewSet):
     """
@@ -132,14 +122,13 @@ class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericVie
     permission_classes = (IsAuthenticated,)
 
 
-class PollingPlacesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class PollingPlacesViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     API endpoint that allows polling places to be viewed and edited.
     """
     queryset = PollingPlaces.objects.all().order_by("-id")
     serializer_class = PollingPlacesSerializer
-    permission_classes = (AllowAny,)
-    filter_class = PollingPlacesFilter
+    permission_classes = (IsAuthenticated,)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
 
     def finalize_response(self, request, response, *args, **kwargs):
@@ -155,6 +144,16 @@ class PollingPlacesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                 response["Content-Disposition"] = "attachment; filename={}".format(filename)
 
         return response
+
+
+class PollingPlacesSearchViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows polling places to be searched by their name or address.
+    """
+    queryset = PollingPlaces.objects
+    serializer_class = PollingPlacesSerializer
+    permission_classes = (AllowAny,)
+    filter_class = PollingPlacesFilter
 
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):

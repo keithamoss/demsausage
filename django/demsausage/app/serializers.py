@@ -8,7 +8,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
-from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaces, Stalls
+from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none
 
@@ -90,6 +90,9 @@ class NomsBooleanJSONField(serializers.JSONField):
                             return True
             return False
 
+        if len(value) == 0:
+            return value
+
         core_fields = ["bbq", "cake", "nothing", "run_out"]
         new_value = {key: value[key] for key in core_fields}
         new_value["other"] = has_other(value)
@@ -121,24 +124,74 @@ class PollingPlaceFacilityTypeSerializer(serializers.ModelSerializer):
         fields = ("name",)
 
 
-class PollingPlacesSerializer(serializers.ModelSerializer):
-    noms = JSONSchemaField(noms_schema, source="noms.noms", default=dict)
-    chance_of_sausage = serializers.FloatField(source="noms.chance_of_sausage", allow_null=True)
-    stall_name = serializers.CharField(source="noms.stall_name", default=None)
-    stall_description = serializers.CharField(source="noms.stall_description", default=None)
-    stall_website = serializers.CharField(source="noms.stall_website", default=None)
-    stall_extra_info = serializers.CharField(source="noms.stall_extra_info", default=None)
-    first_report = serializers.DateTimeField(source="noms.first_report", allow_null=True)
-    latest_report = serializers.DateTimeField(source="noms.latest_report", allow_null=True)
-    source = serializers.CharField(source="noms.source", default="")
+class PollingPlaceNomsSerializer(serializers.ModelSerializer):
+    noms = JSONSchemaField(noms_schema, default=dict)
+    chance_of_sausage = serializers.FloatField(allow_null=True, read_only=True)
+    name = serializers.CharField(default="", allow_blank=True)
+    description = serializers.CharField(default="", allow_blank=True)
+    website = serializers.CharField(default="", allow_blank=True)
+    extra_info = serializers.CharField(default="", allow_blank=True)
+    first_report = serializers.DateTimeField(allow_null=True, read_only=True)
+    latest_report = serializers.DateTimeField(allow_null=True, read_only=True)
+    source = serializers.CharField(default="", allow_blank=True)
 
+    class Meta:
+        model = PollingPlaceNoms
+
+        fields = ("noms", "chance_of_sausage", "name", "description", "website", "extra_info", "first_report", "latest_report", "source")
+
+
+class PollingPlacesSerializer(serializers.ModelSerializer):
     facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
+    stall = PollingPlaceNomsSerializer(source="noms")
 
     class Meta:
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type")
+
+    def _update_facility_type(self, instance, validated_data):
+        try:
+            if "facility_type" in validated_data:
+                return PollingPlaceFacilityType.objects.get(name=validated_data.pop("facility_type")["name"])
+        except Exception as e:
+            raise serializers.ValidationError("Polling place facility type validation error: {}".format(e))
+
+    def _update_or_create_stall(self, instance, validated_data):
+        try:
+            if "noms" in validated_data:
+                data = dict(validated_data.pop("noms"))
+                if instance is not None and instance.noms is not None:
+                    stall_serializer = PollingPlaceNomsSerializer(PollingPlaceNoms.objects.get(id=instance.noms.id), data=data)
+                else:
+                    stall_serializer = PollingPlaceNomsSerializer(data=data)
+
+                if stall_serializer.is_valid(raise_exception=True):
+                    stall_serializer.save()
+                    return stall_serializer.instance
+                else:
+                    raise serializers.ValidationError(stall_serializer.errors)
+        except Exception as e:
+            raise serializers.ValidationError("Polling place noms validation error: {}".format(e))
+
+    def update(self, instance, validated_data):
+        if "facility_type" in validated_data:
+            validated_data["facility_type"] = self._update_facility_type(instance, validated_data)
+
+        if "noms" in validated_data:
+            validated_data["noms"] = self._update_or_create_stall(instance, validated_data)
+
+        return super(PollingPlacesSerializer, self).update(instance, validated_data)
+
+    def create(self, instance, validated_data):
+        if "facility_type" in validated_data:
+            validated_data["facility_type"] = self._update_facility_type(instance, validated_data)
+
+        if "noms" in validated_data:
+            validated_data["noms"] = self._update_or_create_stall(None, validated_data)
+
+        return super(PollingPlacesSerializer, self).create(validated_data)
 
 
 class PollingPlacesInfoSerializer(PollingPlacesSerializer):
@@ -183,7 +236,7 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "noms", "chance_of_sausage", "stall_name", "stall_description", "stall_website", "stall_extra_info", "first_report", "latest_report", "source", "distance_km", )
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "distance_km")
 
 
 class StallsSerializer(serializers.ModelSerializer):

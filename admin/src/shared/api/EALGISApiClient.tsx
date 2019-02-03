@@ -144,6 +144,30 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
+    public patch(url: string, body: object = {}, dispatch: any): Promise<IApiResponse> {
+        dispatch(beginFetch())
+
+        return fetch(url, {
+            method: "PATCH",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": Cookies.get("csrftoken")!,
+            },
+            body: JSON.stringify(body),
+        })
+            .then((response: any) => {
+                dispatch(finishFetch())
+
+                return response.json().then((json: any) => ({
+                    response: response,
+                    json: json,
+                }))
+            })
+            .catch((error: any) => this.handleError(error, url, dispatch))
+    }
+
     public delete(url: string, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
@@ -186,6 +210,7 @@ export interface IEALGISApiClient {
     get: Function
     post: Function
     put: Function
+    patch: Function
     delete: Function
 }
 

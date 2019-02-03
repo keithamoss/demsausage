@@ -99,32 +99,34 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                     {/* <CardMedia overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}>
                     <img src="images/nature-600-337.jpg" alt="" />
                 </CardMedia> */}
-                    {pollingPlace.stall_name !== null && (
+                    {pollingPlace.stall !== null && (
                         <CardTitle
-                            title={pollingPlace.stall_name}
-                            subtitle={pollingPlace.stall_description}
+                            title={pollingPlace.stall.name}
+                            subtitle={pollingPlace.stall.description}
                             subtitleStyle={{ whiteSpace: "pre" }}
                         />
                     )}
                     <CardText>
                         <FlexboxContainer>
-                            <FlexboxIcons>
-                                {pollingPlace.noms.bbq && <SausageIcon />}
-                                {pollingPlace.noms.cake && <CakeIcon />}
-                                {pollingPlace.noms.vego && <VegoIcon />}
-                                {pollingPlace.noms.nothing && <RedCrossofShameIcon />}
-                                {pollingPlace.noms.halal && <HalalIcon />}
-                                {pollingPlace.noms.coffee && <CoffeeIcon />}
-                                {pollingPlace.noms.bacon_and_eggs && <BaconandEggsIcon />}
-                            </FlexboxIcons>
+                            {pollingPlace.stall !== null && (
+                                <FlexboxIcons>
+                                    {pollingPlace.stall.noms.bbq && <SausageIcon />}
+                                    {pollingPlace.stall.noms.cake && <CakeIcon />}
+                                    {pollingPlace.stall.noms.vego && <VegoIcon />}
+                                    {pollingPlace.stall.noms.nothing && <RedCrossofShameIcon />}
+                                    {pollingPlace.stall.noms.halal && <HalalIcon />}
+                                    {pollingPlace.stall.noms.coffee && <CoffeeIcon />}
+                                    {pollingPlace.stall.noms.bacon_and_eggs && <BaconandEggsIcon />}
+                                </FlexboxIcons>
+                            )}
                             {"distance_km" in pollingPlace && (
                                 <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
                             )}
                         </FlexboxContainer>
-                        {pollingPlace.noms.free_text && (
-                            <HasFreeTextDeliciousness>Also available: {pollingPlace.noms.free_text}</HasFreeTextDeliciousness>
+                        {pollingPlace.stall !== null && pollingPlace.stall.noms.free_text && (
+                            <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
                         )}
-                        {pollingPlace.noms.run_out && (
+                        {pollingPlace.stall !== null && pollingPlace.stall.noms.run_out && (
                             <RunOutWarning
                                 secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
                                 secondaryTextLines={2}
@@ -148,9 +150,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             />
                         )}
                         {pollingPlace.divisions.length > 0 && <Division>Division(s): {pollingPlace.divisions.join(", ")}</Division>}
-                        {pollingPlace.stall_extra_info !== null && pollingPlace.stall_extra_info.length > 0 && (
-                            <Division>Extra Info: {pollingPlace.stall_extra_info}</Division>
-                        )}
+                        {pollingPlace.stall !== null &&
+                            pollingPlace.stall.extra_info !== null &&
+                            pollingPlace.stall.extra_info.length > 0 && <Division>Extra Info: {pollingPlace.stall.extra_info}</Division>}
                         {pollingPlace.booth_info.length > 0 && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
                     </CardText>
                     {isExpandable && (

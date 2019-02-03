@@ -87,10 +87,10 @@ class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
     noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=noms_schema)])
-    stall_name = models.TextField(blank=True)
-    stall_description = models.TextField(blank=True)
-    stall_website = models.TextField(blank=True)
-    stall_extra_info = models.TextField(blank=True)
+    name = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    website = models.TextField(blank=True)
+    extra_info = models.TextField(blank=True)
     first_report = models.DateTimeField(auto_now_add=True, null=True)
     latest_report = models.DateTimeField(auto_now=True, null=True)
     chance_of_sausage = models.FloatField(null=True)

@@ -152,14 +152,14 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     <FormCardTitle title={"Stall Information"} />
                     <FormCardText>
                         <CustomTextField
-                            name="stall_name"
+                            name="name"
                             component={TextField}
                             floatingLabelText={"Stall name"}
                             hintText={"The name of the stall that is here"}
                             fullWidth={true}
                         />
                         <CustomTextField
-                            name="stall_description"
+                            name="description"
                             component={TextField}
                             multiLine={true}
                             floatingLabelText={"Stall description"}
@@ -167,14 +167,14 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             fullWidth={true}
                         />
                         <CustomTextField
-                            name="stall_website"
+                            name="website"
                             component={TextField}
                             floatingLabelText={"Stall website"}
                             hintText={"A link to the website of the people organising the stall"}
                             fullWidth={true}
                         />
                         <CustomTextField
-                            name="stall_extra_info"
+                            name="extra_info"
                             component={TextField}
                             floatingLabelText={"Extra info"}
                             hintText={"Is there any other information to add?"}
@@ -187,7 +187,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     <FormCardTitle title={"Polling Place Information"} />
                     <FormCardText>
                         <CustomField
-                            name="polling_place_type"
+                            name="facility_type"
                             component={SelectField}
                             floatingLabelText={"What type of polling place is this?"}
                             fullWidth={true}

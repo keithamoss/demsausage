@@ -182,7 +182,7 @@ export function createElection(electionNew: Partial<IElection>) {
 
 export function updateElection(election: IElection, electionNew: Partial<IElection>) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const { response, json } = await api.put(`https://localhost:8001/api/0.1/elections/${election.id}/`, electionNew, dispatch)
+        const { response, json } = await api.patch(`https://localhost:8001/api/0.1/elections/${election.id}/`, electionNew, dispatch)
 
         if (response.status === 200) {
             dispatch(loadElection(json))

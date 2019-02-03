@@ -5,6 +5,7 @@ import { connect } from "react-redux"
 import { isDirty, submit } from "redux-form"
 import { IElection } from "../../redux/modules/elections"
 import {
+    buildNomsObject,
     IPollingPlace,
     IPollingPlaceFacilityType,
     pollingPlaceHasReportsOfNoms,
@@ -12,6 +13,7 @@ import {
 } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
+import { deepValue } from "../../utils"
 import PollingPlaceForm from "./PollingPlaceForm"
 
 export interface IProps {
@@ -35,28 +37,30 @@ export interface IStateProps {}
 
 interface IOwnProps {}
 
-const toFormValues = (pollingPlace: IPollingPlace) => {
+const toFormValues = (pollingPlace: IPollingPlace): any => {
     return {
-        bbq: pollingPlace.noms.bbq,
-        cake: pollingPlace.noms.cake,
-        nothing: pollingPlace.noms.nothing,
-        run_out: pollingPlace.noms.run_out,
-        coffee: pollingPlace.noms.coffee,
-        vego: pollingPlace.noms.vego,
-        halal: pollingPlace.noms.halal,
-        bacon_and_eggs: pollingPlace.noms.bacon_and_eggs,
-        free_text: pollingPlace.noms.free_text,
-        stall_name: pollingPlace.stall_name,
-        stall_description: pollingPlace.stall_description,
-        stall_website: pollingPlace.stall_website,
-        stall_extra_info: pollingPlace.stall_extra_info,
-        polling_place_type: pollingPlace.facility_type,
-        source: pollingPlace.source,
+        ...buildNomsObject(pollingPlace.stall !== null ? pollingPlace.stall.noms : null),
+        name: deepValue(pollingPlace, "stall.name"),
+        description: deepValue(pollingPlace, "stall.description"),
+        website: deepValue(pollingPlace, "stall.website"),
+        extra_info: deepValue(pollingPlace, "stall.extra_info"),
+        source: deepValue(pollingPlace, "stall.source"),
+        facility_type: deepValue(pollingPlace, "facility_type"),
     }
 }
 
-const fromFormValues = (formValues: any): IPollingPlace => {
-    return cloneDeep(formValues)
+const fromFormValues = (formValues: any) => {
+    return {
+        stall: {
+            noms: buildNomsObject(formValues),
+            name: formValues.name,
+            description: formValues.description,
+            website: formValues.website,
+            extra_info: formValues.extra_info,
+            source: formValues.source,
+        },
+        facility_type: formValues.facility_type,
+    }
 }
 
 export class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
@@ -82,9 +86,9 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.vego = stall.noms.vego
             initialValues.bacon_and_eggs = stall.noms.bacon_and_eggs
             initialValues.free_text = stall.noms.free_text
-            initialValues.stall_name = stall.name
-            initialValues.stall_description = stall.description
-            initialValues.stall_website = stall.website
+            initialValues.name = stall.name
+            initialValues.description = stall.description
+            initialValues.website = stall.website
             initialValues.source = "Direct"
         }
 
@@ -135,10 +139,10 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, election: IElection, pollingPlace: IPollingPlace, onPollingPlaceEdited: Function) {
-            const pollingPlaceNew: Partial<IPollingPlace> = fromFormValues(values)
+            const pollingPlaceNew /* Partial<IPollingPlace> */ = fromFormValues(values)
 
             const json = await dispatch(updatePollingPlace(election, pollingPlace, pollingPlaceNew))
-            if (json.rows === 1) {
+            if (json) {
                 onPollingPlaceEdited()
             }
             // dispatch(initialize("layerForm", layerFormValues, false))

@@ -77,15 +77,27 @@ export interface IPollingPlaceFacilityType {
 }
 
 export interface INoms {
-    bbq: boolean
-    cake: boolean
+    bbq?: boolean
+    cake?: boolean
     nothing?: boolean
     run_out?: boolean
-    bacon_and_eggs: boolean
-    halal: boolean
-    vego: boolean
-    coffee: boolean
-    free_text: string
+    bacon_and_eggs?: boolean
+    halal?: boolean
+    vego?: boolean
+    coffee?: boolean
+    free_text?: string
+}
+
+export interface IPollingPlaceStall {
+    noms: INoms
+    chance_of_sausage: number | null
+    name: string
+    description: string
+    website: string
+    extra_info: string
+    first_report: string | null // Datetime
+    latest_report: string | null // Datetime
+    source: string
 }
 
 export interface IPollingPlace {
@@ -101,15 +113,7 @@ export interface IPollingPlace {
     address: string
     divisions: string[]
     state: string
-    noms: INoms
-    chance_of_sausage: number | null
-    stall_name: string | null
-    stall_description: string | null
-    stall_website: string | null
-    stall_extra_info: string | null
-    first_report: string | null // Datetime
-    latest_report: string | null // Datetime
-    source: string
+    stall: IPollingPlaceStall | null
 }
 
 export interface IPollingPlaceLoaderResponse {
@@ -135,7 +139,7 @@ export interface IPollingPlaceLoaderResponseMessage {
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/", dispatch, {
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             search_term: searchTerm,
         })
@@ -147,7 +151,9 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchAllPollingPlaces(election: IElection) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/", dispatch, { election_id: election.id })
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
+            election_id: election.id,
+        })
 
         if (response.status === 200) {
             dispatch(loadPollingPlacesForElection(election, json))
@@ -157,7 +163,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/", dispatch, {
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             ids: pollingPlaceIds.join(","),
         })
@@ -168,16 +174,13 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
     }
 }
 
-export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: Partial<IPollingPlace>) {
+export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: any /* Partial<IPollingPlace> */) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "update-polling-place": 1,
-            pollingPlaceId: pollingPlace.id,
-            pollingPlace: pollingPlaceNew,
-            electionId: election.id,
-        }
-
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.patch(
+            `https://localhost:8001/api/0.1/polling_places/${pollingPlace.id}/`,
+            pollingPlaceNew,
+            dispatch
+        )
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
@@ -226,8 +229,37 @@ export function regenerateMapDataForElection(election: IElection) {
 }
 
 // Utilities
+export function buildNomsObject(stallNoms: INoms | null) {
+    if (stallNoms === null) {
+        return {}
+    }
+
+    const noms = {}
+    const keys = ["bbq", "cake", "nothing", "run_out", "coffee", "vego", "halal", "bacon_and_eggs", "free_text"]
+
+    keys.forEach((key: string) => {
+        const value = stallNoms[key]
+
+        if (key !== "free_text") {
+            if (value === true) {
+                noms[key] = value
+            }
+        } else {
+            if (value !== "") {
+                noms[key] = value
+            }
+        }
+    })
+
+    return noms
+}
+
 export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
-    for (const [key, value] of Object.entries(pollingPlace.noms)) {
+    if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
+        return false
+    }
+
+    for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
         if (key === "run_out") {
             continue
         }
@@ -246,7 +278,11 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
 }
 
 export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
-    for (const [key, value] of Object.entries(pollingPlace.noms)) {
+    if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
+        return false
+    }
+
+    for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
         if (key === "run_out" || key === "nothing") {
             continue
         }
@@ -265,11 +301,11 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
-    if (pollingPlace.chance_of_sausage === null) {
+    if (pollingPlace.stall === null || pollingPlace.stall.chance_of_sausage === null) {
         return "UNKNOWN"
-    } else if (pollingPlace.chance_of_sausage >= 0.7) {
+    } else if (pollingPlace.stall.chance_of_sausage >= 0.7) {
         return "HIGH"
-    } else if (pollingPlace.chance_of_sausage >= 4) {
+    } else if (pollingPlace.stall.chance_of_sausage >= 4) {
         return "MEDIUM"
     } else {
         return "LOW"
@@ -277,23 +313,27 @@ export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
 }
 
 export function getFoodDescription(pollingPlace: IPollingPlace) {
+    if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
+        return ""
+    }
+
     const noms: Array<string> = []
-    if (pollingPlace.noms.bbq) {
+    if (pollingPlace.stall.noms.bbq) {
         noms.push("sausage sizzle")
     }
-    if (pollingPlace.noms.cake) {
+    if (pollingPlace.stall.noms.cake) {
         noms.push("cake stall")
     }
-    if ("bacon_and_eggs" in pollingPlace.noms && pollingPlace.noms.bacon_and_eggs) {
+    if ("bacon_and_eggs" in pollingPlace.stall.noms && pollingPlace.stall.noms.bacon_and_eggs) {
         noms.push("bacon and egg burgers")
     }
-    if ("vego" in pollingPlace.noms && pollingPlace.noms.vego) {
+    if ("vego" in pollingPlace.stall.noms && pollingPlace.stall.noms.vego) {
         noms.push("vegetarian options")
     }
-    if ("halal" in pollingPlace.noms && pollingPlace.noms.halal) {
+    if ("halal" in pollingPlace.stall.noms && pollingPlace.stall.noms.halal) {
         noms.push("halal options")
     }
-    if ("coffee" in pollingPlace.noms && pollingPlace.noms.coffee) {
+    if ("coffee" in pollingPlace.stall.noms && pollingPlace.stall.noms.coffee) {
         noms.push("coffee")
     }
     return noms.join(", ")

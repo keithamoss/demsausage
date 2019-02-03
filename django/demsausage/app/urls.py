@@ -6,6 +6,7 @@ from .views import (
     LogoutUserView,
     ElectionsViewSet,
     PollingPlacesViewSet,
+    PollingPlacesSearchViewSet,
     PollingPlacesNearbyViewSet,
     PollingPlacesGeoJSONViewSet,
     PendingStallsViewSet,
@@ -28,6 +29,7 @@ router.register(r'polling_places_facility_types', PollingPlaceFacilityTypeViewSe
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
 urlpatterns = [
+    url(r'^api/0.1/polling_places/search/$', PollingPlacesSearchViewSet.as_view(), name='api-polling-places-search'),
     url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
     url(r'^api/0.1/polling_places/geojson/$', PollingPlacesGeoJSONViewSet.as_view(), name='api-polling-places-geojson'),
     url(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),
