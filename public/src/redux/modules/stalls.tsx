@@ -39,7 +39,10 @@ export interface IStallLocationInfo {
 // e.g. thunks, epics, et cetera
 export function createStall(stall: IStallFormInfo) {
     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { json } = await ealapi.post("https://localhost:8001/api/0.1/stalls/", stall, dispatch)
-        return json
+        const { response, json } = await ealapi.post("https://localhost:8001/api/0.1/stalls/", stall, dispatch)
+
+        if (response.status === 201) {
+            return json
+        }
     }
 }

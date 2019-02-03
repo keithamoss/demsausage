@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
-import { IStall, markStallAsDeclined, markStallAsRead, markStallAsReadAndAddPollingPlace } from "../../redux/modules/stalls"
+import { approveStall, approveStallAndAddUnofficialPollingPlace, declineStall, IStall } from "../../redux/modules/stalls"
 import PendingStallEditor from "./PendingStallEditor"
 
 export interface IProps {}
@@ -67,20 +67,20 @@ const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onPollingPlaceEdited: async (id: number) => {
-            const json = await dispatch(markStallAsRead(id))
-            if (json.rows === 1) {
+            const json = await dispatch(approveStall(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },
         onApproveUnofficialStall: async (id: number) => {
-            const json = await dispatch(markStallAsReadAndAddPollingPlace(id))
-            if (json.rows === 1) {
+            const json = await dispatch(approveStallAndAddUnofficialPollingPlace(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },
         onDeclineUnofficialStall: async (id: number) => {
-            const json = await dispatch(markStallAsDeclined(id))
-            if (json.rows === 1) {
+            const json = await dispatch(declineStall(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },

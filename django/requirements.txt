@@ -12,3 +12,4 @@ python-memcached==1.59
 djangorestframework-gis==0.14
 django-filter==2.1.0
 djangorestframework-csv==2.1.0
+requests==2.21.0

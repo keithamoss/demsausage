@@ -2,7 +2,7 @@ import * as Cookies from "js-cookie"
 import * as qs from "qs"
 import * as Raven from "raven-js"
 import "whatwg-fetch"
-import { beginFetch, finishFetch, getAPIBaseURL } from "../../redux/modules/app"
+import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
 
 export class EALGISApiClient {
     dsBaseURL: string
@@ -188,8 +188,13 @@ export class EALGISApiClient {
     // Only handles fatal errors from the API
     // FIXME Refactor to be able to handle errors that the calling action can't handle
     private handleError(error: any, url: string, dispatch: any) {
-        Raven.captureException(error)
-        Raven.showReportDialog()
+        if (isDevelopment() === true) {
+            // tslint:disable-next-line:no-console
+            console.error(error)
+        } else {
+            Raven.captureException(error)
+            Raven.showReportDialog()
+        }
     }
 }
 

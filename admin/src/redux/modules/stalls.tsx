@@ -86,9 +86,9 @@ export interface IStallPollingPlaceInfo {
 }
 
 export enum StallStatus {
-    PENDING = 0,
-    APPROVED = 1,
-    DECLINED = 2,
+    PENDING = "Pending",
+    APPROVED = "Approved",
+    DECLINED = "Declined",
 }
 
 export interface IStall {
@@ -116,52 +116,44 @@ export function fetchPendingStalls() {
     }
 }
 
-export function markStallAsRead(id: number) {
+export function approveStall(id: number) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "mark-read-pending-stall": 1,
-            id: id,
-        }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.patch(`https://localhost:8001/api/0.1/stalls/${id}/approve/`, {}, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
-            // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(removePendingStall(id))
+            // dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
 }
 
-export function markStallAsReadAndAddPollingPlace(id: number) {
+export function approveStallAndAddUnofficialPollingPlace(id: number) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "mark-read-pending-stall-and-add-polling-place": 1,
-            id: id,
-        }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.patch(`https://localhost:8001/api/0.1/stalls/${id}/approve_and_add/`, {}, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated and new polling place added! 🍽🎉"))
-            // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(removePendingStall(id))
+            // dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }
 }
 
-export function markStallAsDeclined(id: number) {
+export function declineStall(id: number) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "mark-declined-pending-stall": 1,
-            id: id,
-        }
-        const { response, json } = await api.dsAPIGet(params, dispatch)
+        const { response, json } = await api.patch(
+            `https://localhost:8001/api/0.1/stalls/${id}/`,
+            { status: StallStatus.DECLINED },
+            dispatch
+        )
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))
-            // dispatch(removePendingStall(id))
-            dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
+            dispatch(removePendingStall(id))
+            // dispatch(fetchPendingStalls()) // @FIXME Deal with dupes in the queue of unofficial polling places. Backend fakes the polling_place_id.
             return json
         }
     }

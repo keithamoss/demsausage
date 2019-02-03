@@ -148,6 +148,10 @@ export function getEnvironment(): eAppEnv {
     return process.env.NODE_ENV === "development" ? eAppEnv.DEV : eAppEnv.PROD
 }
 
+export function isDevelopment(): boolean {
+    return getEnvironment() !== eAppEnv.PROD
+}
+
 export function getAPIBaseURL(): string {
     return process.env.REACT_APP_API_BASE_URL!
 }

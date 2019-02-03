@@ -8,6 +8,7 @@ from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import list_route, detail_route
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.exceptions import APIException
@@ -17,11 +18,12 @@ from rest_framework.settings import api_settings
 from rest_framework_csv.renderers import CSVRenderer
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
 from demsausage.app.sausage.polling_places import get_cache_key
+from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
@@ -38,7 +40,7 @@ class CurrentUserView(APIView):
     def get(self, request):
         if request.user.is_authenticated:
             serializer = UserSerializer(
-                request.user, context={'request': request}
+                request.user, context={"request": request}
             )
 
             return Response({
@@ -64,7 +66,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
     permission_classes = (IsAdminUser,)
 
@@ -75,7 +77,7 @@ class ProfileViewSet(viewsets.ViewSet):
     """
     permission_classes = (IsAuthenticated,)
 
-    @list_route(methods=['post'])
+    @list_route(methods=["post"])
     def update_settings(self, request):
         request.user.profile.merge_settings(request.data)
         request.user.profile.save()
@@ -100,7 +102,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             return self.serializer_class
         return ElectionsStatsSerializer
 
-    @detail_route(methods=['post'], permission_classes=(IsAuthenticated,))
+    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def set_primary(self, request, pk=None, format=None):
         self.get_queryset().filter(is_primary=True).update(is_primary=False)
@@ -197,6 +199,73 @@ class StallsViewSet(viewsets.ModelViewSet):
     queryset = Stalls.objects
     serializer_class = StallsSerializer
     permission_classes = (AnonymousOnlyCreate,)
+
+    def create(self, request, format=None):
+        serializer = StallsManagementSerializer(data=request.data)
+        if serializer.is_valid() is True:
+            serializer.save()
+
+            send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
+            return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            raise APIException(serializer.errors)
+
+    @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
+    @transaction.atomic
+    def approve(self, request, pk=None, format=None):
+        stall = self.get_object()
+        if stall.status != StallStatus.PENDING:
+            raise APIException("Stall is not pending")
+
+        serializer = StallsManagementSerializer(self.get_object(), data={"status": StallStatus.APPROVED}, partial=True)
+        if serializer.is_valid() is True:
+            serializer.save()
+
+            send_stall_approved_email(Stalls.objects.get(id=stall.id))
+            return Response({})
+        else:
+            raise APIException(serializer.errors)
+
+    @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
+    @transaction.atomic
+    def approve_and_add(self, request, pk=None, format=None):
+        stall = self.get_object()
+        if stall.status != StallStatus.PENDING:
+            raise APIException("Stall is not pending")
+
+        if stall.election.polling_places_loaded is True:
+            raise APIException("Election polling places already loaded")
+
+        # Create polling place based on user-submitted location info
+        pollingPlaceSerializer = PollingPlacesManagementSerializer(data={
+            "stall": {
+                "noms": stall.noms,
+                "name": stall.name,
+                "description": stall.description,
+                "website": stall.website,
+            },
+            "geom": stall.location_info["geom"],
+            "name": stall.location_info["name"],
+            "address": stall.location_info["address"],
+            "state": stall.location_info["state"],
+            "facility_type": None,
+            "election": stall.election.id,
+        })
+
+        if pollingPlaceSerializer.is_valid() is True:
+            pollingPlaceSerializer.save()
+        else:
+            raise APIException(pollingPlaceSerializer.errors)
+
+        # Approve stall and link it to the new unofficial polling place we just added
+        serializer = StallsManagementSerializer(stall, data={"status": StallStatus.APPROVED, "polling_place": pollingPlaceSerializer.instance.id}, partial=True)
+        if serializer.is_valid() is True:
+            serializer.save()
+
+            send_stall_approved_email(Stalls.objects.get(id=stall.id))
+            return Response({})
+        else:
+            raise APIException(serializer.errors)
 
 
 class PendingStallsViewSet(generics.ListAPIView):

@@ -260,10 +260,6 @@ export function pollingPlaceHasReports(pollingPlace: IPollingPlace) {
     }
 
     for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
-        if (key === "run_out") {
-            continue
-        }
-
         if (key !== "free_text") {
             if (value === true) {
                 return true

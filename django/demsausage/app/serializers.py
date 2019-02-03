@@ -151,9 +151,9 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
 
         fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type")
 
-    def _update_facility_type(self, instance, validated_data):
+    def _update_facility_type(self, validated_data):
         try:
-            if "facility_type" in validated_data:
+            if "facility_type" in validated_data and validated_data["facility_type"]["name"] is not None:
                 return PollingPlaceFacilityType.objects.get(name=validated_data.pop("facility_type")["name"])
         except Exception as e:
             raise serializers.ValidationError("Polling place facility type validation error: {}".format(e))
@@ -177,21 +177,29 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if "facility_type" in validated_data:
-            validated_data["facility_type"] = self._update_facility_type(instance, validated_data)
+            validated_data["facility_type"] = self._update_facility_type(validated_data)
 
         if "noms" in validated_data:
             validated_data["noms"] = self._update_or_create_stall(instance, validated_data)
 
         return super(PollingPlacesSerializer, self).update(instance, validated_data)
 
-    def create(self, instance, validated_data):
+    def create(self, validated_data):
         if "facility_type" in validated_data:
-            validated_data["facility_type"] = self._update_facility_type(instance, validated_data)
+            validated_data["facility_type"] = self._update_facility_type(validated_data)
 
         if "noms" in validated_data:
             validated_data["noms"] = self._update_or_create_stall(None, validated_data)
 
         return super(PollingPlacesSerializer, self).create(validated_data)
+
+
+class PollingPlacesManagementSerializer(PollingPlacesSerializer):
+    class Meta:
+        model = PollingPlaces
+        geo_field = "geom"
+
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "election")
 
 
 class PollingPlacesInfoSerializer(PollingPlacesSerializer):
@@ -262,7 +270,7 @@ class StallsSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        if isinstance(self.initial_data["election"], int):
+        if "election" in self.initial_data and isinstance(self.initial_data["election"], int):
             election = get_or_none(Elections, id=self.initial_data["election"])
             if election is not None:
                 if election.polling_places_loaded is True:
@@ -277,6 +285,12 @@ class StallsSerializer(serializers.ModelSerializer):
                         raise serializers.ValidationError("Stall location information is required when polling places are loaded")
 
         return data
+
+
+class StallsManagementSerializer(StallsSerializer):
+    class Meta:
+        model = Stalls
+        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
 
 class PendingStallsSerializer(StallsSerializer):

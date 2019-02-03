@@ -8,7 +8,7 @@ import {
     buildNomsObject,
     IPollingPlace,
     IPollingPlaceFacilityType,
-    pollingPlaceHasReportsOfNoms,
+    pollingPlaceHasReports,
     updatePollingPlace,
 } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
@@ -68,7 +68,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
 
     canStallPropsBeMerged() {
         const { pollingPlace, stall } = this.props
-        return stall !== undefined && pollingPlaceHasReportsOfNoms(pollingPlace) === false
+        return stall !== undefined && pollingPlaceHasReports(pollingPlace) === false
     }
 
     getInitialValues(pollingPlace: IPollingPlace, stall?: IStall) {
