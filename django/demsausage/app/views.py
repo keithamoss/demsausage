@@ -128,7 +128,7 @@ class PollingPlacesViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, m
     """
     API endpoint that allows polling places to be viewed and edited.
     """
-    queryset = PollingPlaces.objects.all().order_by("-id")
+    queryset = PollingPlaces.objects.select_related("noms").all().order_by("-id")
     serializer_class = PollingPlacesSerializer
     permission_classes = (IsAuthenticated,)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
@@ -152,7 +152,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be searched by their name or address.
     """
-    queryset = PollingPlaces.objects
+    queryset = PollingPlaces.objects.select_related("noms")
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesFilter
@@ -162,7 +162,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be searched by a lat,lon coordinate pair.
     """
-    queryset = PollingPlaces.objects
+    queryset = PollingPlaces.objects.select_related("noms")
     serializer_class = PollingPlaceSearchResultsSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesNearbyFilter
@@ -172,7 +172,7 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be retrieved as GeoJSON.
     """
-    queryset = PollingPlaces.objects
+    queryset = PollingPlaces.objects.select_related("noms")
     serializer_class = PollingPlacesGeoJSONSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesBaseFilter
