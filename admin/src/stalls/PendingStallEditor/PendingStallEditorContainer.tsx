@@ -8,8 +8,8 @@ import PendingStallEditor from "./PendingStallEditor"
 
 export interface IProps {}
 export interface IStoreProps {
-    stall: IStall
-    election: IElection
+    stall: IStall | null
+    election: IElection | null
 }
 
 export interface IDispatchProps {
@@ -58,8 +58,8 @@ export class PendingStallEditorContainer extends React.Component<TComponentProps
 const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { stalls, elections } = state
 
-    const stall: IStall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
-    const election: IElection = elections.elections.find((election: IElection) => election.id === stall.election_id)!
+    const stall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
+    const election = stall !== undefined ? elections.elections.find((election: IElection) => election.id === stall.election_id)! : null
 
     return { stall: stall, election: election }
 }

@@ -18,12 +18,12 @@ from rest_framework.settings import api_settings
 from rest_framework_csv.renderers import CSVRenderer
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
 from demsausage.app.sausage.polling_places import get_cache_key
-from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email
+from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
@@ -275,3 +275,50 @@ class PendingStallsViewSet(generics.ListAPIView):
     queryset = Stalls.objects.filter(status=StallStatus.PENDING).order_by("-id")
     serializer_class = PendingStallsSerializer
     permission_classes = (IsAuthenticated,)
+
+
+class MailManagementViewSet(viewsets.ViewSet):
+    @list_route(methods=["get"])
+    def opt_out(self, request, format=None):
+        confirm_key = request.query_params.get("confirm_key", None)
+
+        if confirm_key is None:
+            raise APIException("Confirm key required")
+
+        stall = get_or_none(Stalls, mail_confirm_key=confirm_key)
+
+        if stall is None:
+            raise APIException("Invalid confirm key")
+
+        if stall.mail_confirmed is True:
+            if check_confirmation_hash(stall.email, stall.id, confirm_key) is False:
+                raise APIException("Confirmation key has expired")
+            else:
+                stall.mail_confirmed = False
+                stall.save()
+
+        return Response("No worries, we've removed you from our mailing list :)", content_type="text/html")
+
+    @list_route(methods=["get"])
+    def mailgun_webhook(self, request, format=None):
+        token = request.data.get("token", None)
+        timestamp = request.data.get("timestamp", None)
+        signature = request.data.get("signature", None)
+        event_type = request.data.get("event", None)
+
+        if token is None or timestamp is None or signature is None:
+            return Response({}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        if verify_webhook(token, timestamp, signature) is False:
+            return Response({}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        serializer = MailgunEventsSerializer(data={
+            "timestamp": timestamp,
+            "event_type": event_type,
+            "data": request.data,
+        })
+        if serializer.is_valid() is True:
+            serializer.save()
+            return Response({})
+        else:
+            raise APIException(serializer.errors)

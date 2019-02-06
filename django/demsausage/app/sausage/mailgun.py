@@ -1,6 +1,7 @@
 import requests
 from rest_framework.exceptions import APIException
 
+from demsausage.app.models import Stalls
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env
 
@@ -59,16 +60,32 @@ def send_stall_submitted_email(stall):
     })
 
 
+def has_confirmed_mail(email):
+    return Stalls.objects.filter(email=email).filter(mail_confirmed=True).count() > 0
+
+
 def send_stall_approved_email(stall):
-    html = get_mail_template("stall_approved", {
+    template_name = "stall_approved"
+    params = {
         "POLLING_PLACE_NAME": stall.polling_place.name,
         "POLLING_PLACE_ADDRESS": stall.polling_place.address,
         "STALL_NAME": stall.name,
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
-        "CONFIRM_OPTOUT_URL": get_env("API_BASE_URL") + "/foobar/?confirm_key=" + make_confirmation_hash(stall.email, stall.id),
-    })
+    }
+
+    if has_confirmed_mail(stall.email) is False:
+        confirm_key = make_confirmation_hash(stall.email, stall.id)
+
+        stall.mail_confirmed = True
+        stall.mail_confirm_key = confirm_key
+        stall.save()
+
+        template_name = "stall_approved_with_mail_optout"
+        params["CONFIRM_OPTOUT_URL"] = get_env("API_BASE_URL") + "/api/0.1/mail/opt_out/?confirm_key=" + confirm_key
+
+    html = get_mail_template(template_name, params)
 
     return send({
         "to": stall.email,
@@ -78,12 +95,12 @@ def send_stall_approved_email(stall):
 
 
 # https://documentation.mailgun.com/en/latest/user_manual.html#webhooks
-def verify_webhook(api_key, token, timestamp, signature):
+def verify_webhook(token, timestamp, signature):
     # Check if the timestamp is fresh
     if abs(time.time() - timestamp) > 15:
         return False
 
-    return generate_signature(api_key, "{}{}".format(timestamp, token)) == signature
+    return generate_signature(get_env("MAILGUN_API_KEY"), "{}{}".format(timestamp, token)) == signature
 
 
 def make_confirmation_hash(email, stall_id):
