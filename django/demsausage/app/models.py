@@ -110,7 +110,7 @@ class PollingPlaces(models.Model):
 
     old_id = models.IntegerField(null=True)
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
-    noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True)
+    noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True, related_name="polling_place")
     geom = models.PointField(geography=True)
     name = models.TextField()
     facility_type = models.ForeignKey(PollingPlaceFacilityType, on_delete=models.PROTECT, null=True)

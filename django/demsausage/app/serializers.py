@@ -94,7 +94,12 @@ class NomsBooleanJSONField(serializers.JSONField):
             return value
 
         core_fields = ["bbq", "cake", "nothing", "run_out"]
-        new_value = {key: value[key] for key in core_fields}
+        new_value = {
+            "bbq": True if "bbq" in value and value["bbq"] is True else False,
+            "cake": True if "cake" in value and value["cake"] is True else False,
+            "nothing": True if "nothing" in value and value["nothing"] is True else False,
+            "run_out": True if "run_out" in value and value["run_out"] is True else False,
+        }
         new_value["other"] = has_other(value)
         return new_value
 

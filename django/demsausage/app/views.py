@@ -22,8 +22,8 @@ from demsausage.app.serializers import UserSerializer, ElectionsSerializer, Elec
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus
-from demsausage.app.sausage.polling_places import get_cache_key
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
+from demsausage.app.sausage.elections import get_cache_key
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime

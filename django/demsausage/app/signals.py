@@ -1,15 +1,21 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from demsausage.app.models import Profile
-# from .mailgun import send_new_user_welcome_mail, send_new_user_signed_up_admin_mail, send_new_user_welcome_awaiting_approval_mail, send_new_user_admin_awaiting_approval_mail, send_new_user_approved_mail
+
+from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms
+from demsausage.app.sausage.elections import regenerate_election_geojson
 
 
-# @receiver(pre_save, sender=Profile)
-# def approve_user(sender, instance, **kwargs):
-#     if is_private_site():
-#         if instance.tracker.has_changed("is_approved") and instance.is_approved is True:
-#             send_new_user_approved_mail(instance.user)
+@receiver(post_save, sender=PollingPlaceNoms)
+def regenerate_geojson_for_noms_change(sender, instance, **kwargs):
+    if instance.tracker.has_changed("noms") is True:
+        regenerate_election_geojson(instance.polling_place.election_id)
+
+
+@receiver(post_save, sender=PollingPlaces)
+def regenerate_geojson_for_new_polling_place(sender, instance, created, **kwargs):
+    if created is True:
+        regenerate_election_geojson(instance.election_id)
 
 
 @receiver(post_save, sender=User)
