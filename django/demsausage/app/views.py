@@ -124,7 +124,7 @@ class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericVie
     permission_classes = (IsAuthenticated,)
 
 
-class PollingPlacesViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     API endpoint that allows polling places to be viewed and edited.
     """
@@ -132,6 +132,10 @@ class PollingPlacesViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, m
     serializer_class = PollingPlacesSerializer
     permission_classes = (IsAuthenticated,)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
+
+    def list(self, request, *args, **kwargs):
+        self.filter_class = PollingPlacesFilter
+        return super(PollingPlacesViewSet, self).list(request, *args, **kwargs)
 
     def finalize_response(self, request, response, *args, **kwargs):
         response = super(PollingPlacesViewSet, self).finalize_response(request, response, *args, **kwargs)
