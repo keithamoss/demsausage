@@ -3,7 +3,11 @@ from django.contrib.gis.db.models.functions import Distance
 
 
 def find_by_distance(search_point, distance_threshold_km, limit, qs):
-    return qs.filter(geom__distance_lte=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")[:limit]
+    queryset_spatial = qs.filter(geom__distance_lte=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")
+    if limit is not None:
+        return queryset_spatial[:limit]
+    else:
+        return queryset_spatial
 
 
 def getFoodDescription(stall):
@@ -25,3 +29,12 @@ def getFoodDescription(stall):
     if "free_text" in stall.noms and stall.noms["free_text"] is not None and len(stall.noms["free_text"]) > 0:
         noms.append("and additional options: {}".format(stall.noms["free_text"]))
     return ", ".join(noms)
+
+
+def is_noms_item_true(noms, item):
+    if noms is not None:
+        if item in noms:
+            if type(noms[item]) == bool:
+                if noms[item] is True:
+                    return True
+    return False

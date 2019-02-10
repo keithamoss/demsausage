@@ -10,6 +10,7 @@ from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
 from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
+from demsausage.app.enums import PollingPlaceStatus
 from demsausage.util import get_or_none
 
 
@@ -70,8 +71,8 @@ class ElectionsStatsSerializer(ElectionsSerializer):
 
     def get_stats(self, obj):
         return {
-            "with_data": PollingPlaces.objects.filter(election=obj.id).filter(noms__isnull=False).count(),
-            "total": PollingPlaces.objects.filter(election=obj.id).count(),
+            "with_data": PollingPlaces.objects.filter(election=obj.id, status=PollingPlaceStatus.ACTIVE).filter(noms__isnull=False).count(),
+            "total": PollingPlaces.objects.filter(election=obj.id, status=PollingPlaceStatus.ACTIVE).count(),
         }
 
 
@@ -148,7 +149,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
     facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
-    stall = PollingPlaceNomsSerializer(source="noms")
+    stall = PollingPlaceNomsSerializer(source="noms", required=False)
 
     class Meta:
         model = PollingPlaces
@@ -204,7 +205,7 @@ class PollingPlacesManagementSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "election")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "status", "election")
 
 
 class PollingPlacesInfoSerializer(PollingPlacesSerializer):
@@ -260,7 +261,7 @@ class StallsSerializer(serializers.ModelSerializer):
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
     email = serializers.EmailField(required=True, allow_blank=False)
     election = serializers.PrimaryKeyRelatedField(queryset=Elections.objects)
-    # polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects, required=False)
+    # polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE), required=False)
 
     class Meta:
         model = Stalls

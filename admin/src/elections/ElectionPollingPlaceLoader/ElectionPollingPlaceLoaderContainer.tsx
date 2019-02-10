@@ -5,7 +5,7 @@ import { AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlaceLoaderResponse, IPollingPlaceLoaderResponseMessage, loadPollingPlaces } from "../../redux/modules/polling_places"
+import { IPollingPlaceLoaderResponseMessage, loadPollingPlaces } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
 import ElectionPollingPlaceLoader from "./ElectionPollingPlaceLoader"
@@ -86,8 +86,8 @@ const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         loadPollingPlaces: async (election: IElection, file: File, that: ElectionPollingPlaceLoaderContainer) => {
-            const response: IPollingPlaceLoaderResponse = await dispatch(loadPollingPlaces(election, file))
-            that.setState({ error: response.error, messages: response.messages })
+            await dispatch(loadPollingPlaces(election, file))
+            // that.setState({ error: response.error, messages: response.messages })
             // if (response.error === false) {
             //     dispatch(setElectionTableName(election, response.table_name))
             // }

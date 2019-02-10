@@ -12,6 +12,8 @@ cursor = conn.cursor()
 
 # Migrate Mailgun Events
 from demsausage.app.models import MailgunEvents
+from demsausage.app.enums import PollingPlaceStatus
+
 import json
 from datetime import datetime
 import pytz
@@ -150,7 +152,7 @@ def get_value_or_empty_string(value):
 #         polling_place_type_facility_type = get_polling_place_facility_type(polling_place["polling_place_type"])
 #         divisions = get_polling_place_divisions(polling_place["division"])
 
-#         p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], divisions=divisions, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrance_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]))
+#         p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], divisions=divisions, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrance_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]), status=PollingPlaceStatus.ACTIVE)
 #         p.save()
 #         print(p.id)
 
@@ -173,7 +175,7 @@ def get_status(status):
 
 print(Stalls.objects.all())
 
-cursor.execute("SELECT * FROM pending_stalls WHERE contact_email != '' AND polling_place_id IS NOT NULL")
+cursor.execute("SELECT * FROM pending_stalls WHERE contact_email != '' AND polling_place_id IS NOT NULL AND status != 2")
 for stall in cursor.fetchall():
     noms = {
         "bbq": bool(stall["has_bbq"]),
@@ -189,6 +191,9 @@ for stall in cursor.fetchall():
     polling_place = PollingPlaces.objects.filter(old_id=stall["polling_place_id"]).filter(election=e).first()
 
     if noms_has_value(noms) is True:
-        s = Stalls(old_id=stall["id"], election=e, name=get_value_or_empty_string(stall["stall_name"]), description=get_value_or_empty_string(stall["stall_description"]), website=get_value_or_empty_string(stall["stall_website"]), noms=noms, email=stall["contact_email"], polling_place=polling_place, reported_timestamp=stall["reported_timestamp"], status=get_status(stall["status"]), mail_confirm_key=stall["mail_confirm_key"], mail_confirmed=stall["mail_confirmed"])
-        s.save()
-        print(s.id)
+        if polling_place.noms is not None:
+            s = Stalls(old_id=stall["id"], election=e, name=get_value_or_empty_string(stall["stall_name"]), description=get_value_or_empty_string(stall["stall_description"]), website=get_value_or_empty_string(stall["stall_website"]), noms=noms, email=stall["contact_email"], polling_place=polling_place, reported_timestamp=stall["reported_timestamp"], status=get_status(stall["status"]), mail_confirm_key=stall["mail_confirm_key"], mail_confirmed=stall["mail_confirmed"])
+            s.save()
+            print(s.id)
+        else:
+            print("Skipping stall {} (election_id={}). Polling place has no noms.".format(stall["id"], e.id))

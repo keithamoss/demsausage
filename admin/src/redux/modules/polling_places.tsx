@@ -191,13 +191,16 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 
 export function loadPollingPlaces(election: IElection, file: File) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-        const params = {
-            "load-polling-places": 1,
-            electionId: election.id,
-            dryrun: false,
-        }
+        let data = new FormData()
+        data.append("file", file)
+        data.append("dry_run", "0")
 
-        const { response, json } = await api.dsAPIPostFile(params, file, dispatch)
+        const { response, json } = await api.put(
+            `https://localhost:8001/api/0.1/elections/${election.id}/polling_places/`,
+            data,
+            { "Content-Disposition": "attachment; filename=polling_places.csv" },
+            dispatch
+        )
 
         if (response.status === 200) {
             return json

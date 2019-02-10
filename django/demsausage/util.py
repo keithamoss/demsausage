@@ -5,14 +5,25 @@ import unicodedata
 import string
 
 
-def make_logger(name):
+def make_logger(name, handler=logging.StreamHandler(), formatter=None):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler()
-    fmt = logging.Formatter("%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)")
+    # handler = logging.StreamHandler()
+    if formatter is None:
+        fmt = logging.Formatter("%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)")
+    else:
+        fmt = formatter
     handler.setFormatter(fmt)
     logger.addHandler(handler)
     return logger
+
+
+class LogLevelFilter(object):
+    def __init__(self, level):
+        self.level = level
+
+    def filter(self, record):
+        return record.levelno != self.level
 
 
 def deepupdate(original, update):

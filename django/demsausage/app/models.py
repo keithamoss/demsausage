@@ -4,7 +4,7 @@ from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
-from demsausage.app.enums import ProfileSettings, StallStatus
+from demsausage.app.enums import ProfileSettings, StallStatus, PollingPlaceStatus
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.app.managers import PollingPlacesManager
@@ -96,7 +96,6 @@ class PollingPlaceNoms(models.Model):
     chance_of_sausage = models.FloatField(null=True)
     source = models.TextField(blank=True)
 
-    history = HistoricalRecords()
     tracker = FieldTracker()
 
     class Meta:
@@ -122,8 +121,8 @@ class PollingPlaces(models.Model):
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
+    status = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceStatus], default=PollingPlaceStatus.DRAFT)
 
-    history = HistoricalRecords()
     objects = PollingPlacesManager()
 
     class Meta:

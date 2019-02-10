@@ -11,6 +11,15 @@ class ProfileSettings(str, EnumBase):
     pass
 
 
+class PollingPlaceStatus(str, EnumBase):
+    ARCHIVED = "Archived"
+    ACTIVE = "Active"
+    DRAFT = "Draft"
+
+    def __str__(self):
+        return self.value
+
+
 class StallStatus(str, EnumBase):
     PENDING = "Pending"
     APPROVED = "Approved"

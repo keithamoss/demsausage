@@ -16,14 +16,15 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.settings import api_settings
 from rest_framework_csv.renderers import CSVRenderer
+from rest_framework.parsers import MultiPartParser
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
 from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
-from demsausage.app.enums import StallStatus
+from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
-from demsausage.app.sausage.elections import get_cache_key
+from demsausage.app.sausage.elections import get_cache_key, LoadPollingPlaces, RollbackPollingPlaces
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
@@ -114,6 +115,48 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         else:
             raise APIException(serializer.errors)
 
+    @detail_route(methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
+    @transaction.atomic
+    def polling_places(self, request, pk=None, format=None):
+        election = self.get_object()
+        dry_run = True if request.data.get("dry_run", None) == "1" else False
+        config = {
+            "address_fields": [
+                "Property Name",
+                "Flat Number",
+                "Street Number",
+                "Street Name",
+                "Street Type",
+                "Locality",
+                "Postcode",
+                "Melway/Vicroads Ref"
+            ],
+            "address_format": "{Property Name}, {Flat Number} {Street Number} {Street Name} {Street Type}, {Locality} {Postcode}, {Melway/Vicroads Ref}",
+            "division_fields": ["Electorate 1", "Electorate 2"]
+        }
+
+        loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
+        loader.run()
+
+        if loader.is_dry_run() is False:
+            raise APIException({"message": "Rollback", "logs": loader.collects_logs()})
+        raise APIException("Foo!")
+        return Response({"message": "Done", "logs": loader.collects_logs()})
+
+    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
+    @transaction.atomic
+    def polling_places_rollback(self, request, pk=None, format=None):
+        election = self.get_object()
+        dry_run = True if request.data.get("dry_run", None) == "1" else False
+
+        rollback = RollbackPollingPlaces(election, dry_run)
+        rollback.run()
+
+        if rollback.is_dry_run() is False:
+            raise APIException({"message": "Rollback", "logs": rollback.collects_logs()})
+        raise APIException("Foo!")
+        return Response({})
+
 
 class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
@@ -128,7 +171,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     """
     API endpoint that allows polling places to be viewed and edited.
     """
-    queryset = PollingPlaces.objects.select_related("noms").all().order_by("-id")
+    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE).all().order_by("-id")
     serializer_class = PollingPlacesSerializer
     permission_classes = (IsAuthenticated,)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
@@ -156,7 +199,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be searched by their name or address.
     """
-    queryset = PollingPlaces.objects.select_related("noms")
+    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesFilter
@@ -166,7 +209,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be searched by a lat,lon coordinate pair.
     """
-    queryset = PollingPlaces.objects.select_related("noms")
+    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlaceSearchResultsSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesNearbyFilter
@@ -176,7 +219,7 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     """
     API endpoint that allows polling places to be retrieved as GeoJSON.
     """
-    queryset = PollingPlaces.objects.select_related("noms")
+    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlacesGeoJSONSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesBaseFilter

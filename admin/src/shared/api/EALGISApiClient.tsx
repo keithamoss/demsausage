@@ -61,7 +61,7 @@ export class EALGISApiClient {
     }
 
     public dsAPIPut(params: object = {}, dispatch: Function): Promise<IApiResponse> {
-        return this.put(this.dsBaseURL + "/api.php", params, dispatch)
+        return this.put(this.dsBaseURL + "/api.php", params, {}, dispatch)
     }
 
     public dsAPIDelete(dispatch: Function): Promise<IApiResponse> {
@@ -120,18 +120,15 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public put(url: string, body: object, dispatch: any): Promise<IApiResponse> {
+    public put(url: string, body: any, headers: object = {}, dispatch: any): Promise<IApiResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
             method: "PUT",
             mode: "cors",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": Cookies.get("csrftoken")!,
-            },
-            body: JSON.stringify(body),
+            headers: { "X-CSRFToken": Cookies.get("csrftoken")!, ...headers },
+            body: body,
         })
             .then((response: any) => {
                 dispatch(finishFetch())
