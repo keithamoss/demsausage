@@ -23,6 +23,7 @@ from demsausage.app.serializers import UserSerializer, ElectionsSerializer, Elec
 from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
+from demsausage.app.exceptions import BadRequest
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_cache_key, LoadPollingPlaces, RollbackPollingPlaces
 from demsausage.util import make_logger, get_or_none, clean_filename
@@ -114,7 +115,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response({})
         else:
-            raise APIException(serializer.errors)
+            raise BadRequest(serializer.errors)
 
     @detail_route(methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
     @transaction.atomic
@@ -126,13 +127,13 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             if config is not None and len(config) > 0:
                 config = json.loads(config)
         except ValueError as e:
-            raise APIException("Could not parse config: {}".format(e))
+            raise BadRequest("Could not parse config: {}".format(e))
 
         loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
         loader.run()
 
         if loader.is_dry_run() is False:
-            raise APIException({"message": "Rollback", "logs": loader.collects_logs()})
+            raise BadRequest({"message": "Rollback", "logs": loader.collects_logs()})
         return Response({"message": "Done", "logs": loader.collects_logs()})
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
@@ -145,7 +146,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         rollback.run()
 
         if rollback.is_dry_run() is False:
-            raise APIException({"message": "Rollback", "logs": rollback.collects_logs()})
+            raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
         return Response({})
 
 
@@ -246,14 +247,14 @@ class StallsViewSet(viewsets.ModelViewSet):
             send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
             return Response({}, status=status.HTTP_201_CREATED)
         else:
-            raise APIException(serializer.errors)
+            raise BadRequest(serializer.errors)
 
     @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
         stall = self.get_object()
         if stall.status != StallStatus.PENDING:
-            raise APIException("Stall is not pending")
+            raise BadRequest("Stall is not pending")
 
         serializer = StallsManagementSerializer(self.get_object(), data={"status": StallStatus.APPROVED}, partial=True)
         if serializer.is_valid() is True:
@@ -262,17 +263,17 @@ class StallsViewSet(viewsets.ModelViewSet):
             send_stall_approved_email(Stalls.objects.get(id=stall.id))
             return Response({})
         else:
-            raise APIException(serializer.errors)
+            raise BadRequest(serializer.errors)
 
     @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve_and_add(self, request, pk=None, format=None):
         stall = self.get_object()
         if stall.status != StallStatus.PENDING:
-            raise APIException("Stall is not pending")
+            raise BadRequest("Stall is not pending")
 
         if stall.election.polling_places_loaded is True:
-            raise APIException("Election polling places already loaded")
+            raise BadRequest("Election polling places already loaded")
 
         # Create polling place based on user-submitted location info
         pollingPlaceSerializer = PollingPlacesManagementSerializer(data={
@@ -293,7 +294,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         if pollingPlaceSerializer.is_valid() is True:
             pollingPlaceSerializer.save()
         else:
-            raise APIException(pollingPlaceSerializer.errors)
+            raise BadRequest(pollingPlaceSerializer.errors)
 
         # Approve stall and link it to the new unofficial polling place we just added
         serializer = StallsManagementSerializer(stall, data={"status": StallStatus.APPROVED, "polling_place": pollingPlaceSerializer.instance.id}, partial=True)
@@ -303,7 +304,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             send_stall_approved_email(Stalls.objects.get(id=stall.id))
             return Response({})
         else:
-            raise APIException(serializer.errors)
+            raise BadRequest(serializer.errors)
 
 
 class PendingStallsViewSet(generics.ListAPIView):

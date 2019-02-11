@@ -1,8 +1,8 @@
 from django.db.models import Q
 from django_filters import rest_framework as filters
-from rest_framework.exceptions import APIException
 
 from demsausage.app.models import PollingPlaces
+from demsausage.app.exceptions import BadRequest
 
 
 class IntegerListFilter(filters.Filter):
@@ -17,7 +17,7 @@ class IntegerListFilter(filters.Filter):
             try:
                 integers = [int(v) for v in value[0:1000].split(",")]
             except Exception as e:
-                raise APIException(e)
+                raise BadRequest(e)
 
             return super(IntegerListFilter, self).filter(qs, integers)
         return qs
@@ -39,7 +39,7 @@ class LonLatFilter(filters.Filter):
                 lon, lat = [float(v) for v in value[0:1000].split(",")]
                 search_point = Point(float(lon), float(lat), srid=4326)
             except Exception as e:
-                raise APIException(e)
+                raise BadRequest(e)
 
             polling_places_filter = find_by_distance(search_point, distance_threshold_km=50, limit=15, qs=qs)
             if polling_places_filter.count() == 0:

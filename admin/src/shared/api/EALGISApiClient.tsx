@@ -3,6 +3,7 @@ import * as qs from "qs"
 import * as Raven from "raven-js"
 import "whatwg-fetch"
 import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
+import { sendNotification } from "../../redux/modules/snackbars"
 
 export class EALGISApiClient {
     dsBaseURL: string
@@ -68,6 +69,29 @@ export class EALGISApiClient {
         return this.delete(this.dsBaseURL + "/api.php", dispatch)
     }
 
+    public handleResponse(url: string, response: any, dispatch: any) {
+        if (response.status >= 401) {
+            return response.json().then((json: any) => {
+                this.handleError(json, url, dispatch)
+                return {
+                    response: response,
+                    json: json,
+                }
+            })
+        }
+
+        return response.json().then((json: any) => {
+            if (response.status === 400) {
+                dispatch(sendNotification("Sorry about this, but there's been an error handling your request."))
+            }
+
+            return {
+                response: response,
+                json: json,
+            }
+        })
+    }
+
     public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IApiResponse> {
         dispatch(beginFetch())
 
@@ -80,18 +104,7 @@ export class EALGISApiClient {
         return fetch(url, { ...{ credentials: "include" }, ...fetchOptions })
             .then((response: any) => {
                 dispatch(finishFetch())
-
-                return response.json().then((json: any) => {
-                    if (json.error) {
-                        // @FIXME Re-enable once we've turned off the PHP API
-                        // this.handleError(json.messages, url, dispatch)
-                    }
-
-                    return {
-                        response: response,
-                        json: json,
-                    }
-                })
+                return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
@@ -111,11 +124,7 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
-
-                return response.json().then((json: any) => ({
-                    response: response,
-                    json: json,
-                }))
+                return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
@@ -132,11 +141,7 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
-
-                return response.json().then((json: any) => ({
-                    response: response,
-                    json: json,
-                }))
+                return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
@@ -156,11 +161,7 @@ export class EALGISApiClient {
         })
             .then((response: any) => {
                 dispatch(finishFetch())
-
-                return response.json().then((json: any) => ({
-                    response: response,
-                    json: json,
-                }))
+                return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
@@ -184,8 +185,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    // Only handles fatal errors from the API
-    // FIXME Refactor to be able to handle errors that the calling action can't handle
+    // Handles fatal errors from the API
     private handleError(error: any, url: string, dispatch: any) {
         if (isDevelopment() === true) {
             // tslint:disable-next-line:no-console

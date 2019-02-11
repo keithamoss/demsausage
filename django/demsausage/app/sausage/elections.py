@@ -6,10 +6,10 @@ import chardet
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
-from rest_framework.exceptions import APIException
 
 from demsausage.app.models import PollingPlaces, Stalls
 from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer
+from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
 
@@ -53,7 +53,7 @@ class PollingPlacesIngestBase():
 
     def raise_exception_if_errors(self):
         if self.has_errors_messages() is True:
-            raise APIException({"message": "Oh dear, looks like we hit a snag (get it - snag?!)", "logs": self.collects_logs()})
+            raise BadRequest({"message": "Oh dear, looks like we hit a snag (get it - snag?!)", "logs": self.collects_logs()})
 
     def is_dry_run(self):
         return self.dry_run
