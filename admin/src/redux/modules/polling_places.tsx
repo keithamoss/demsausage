@@ -116,13 +116,6 @@ export interface IPollingPlace {
     stall: IPollingPlaceStall | null
 }
 
-export interface IPollingPlaceLoaderResponse {
-    error: boolean
-    messages: Array<IPollingPlaceLoaderResponseMessage>
-    table_name: string
-    dryrun: boolean
-}
-
 export enum PollingPlaceLoaderResponseMessageStatus {
     ERROR = "ERROR",
     CHECK = "CHECK",
@@ -130,9 +123,13 @@ export enum PollingPlaceLoaderResponseMessageStatus {
     WARNING = "WARNING",
 }
 
-export interface IPollingPlaceLoaderResponseMessage {
-    level: PollingPlaceLoaderResponseMessageStatus
+export interface IPollingPlaceLoaderResponseMessages {
     message: string
+    logs: {
+        errors: Array<string>
+        warnings: Array<string>
+        info: Array<string>
+    }
 }
 
 // Side effects, only as applicable
@@ -189,22 +186,23 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
     }
 }
 
-export function loadPollingPlaces(election: IElection, file: File) {
+export function loadPollingPlaces(election: IElection, file: File, config: string | undefined, dryRun: boolean) {
     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
         let data = new FormData()
         data.append("file", file)
-        data.append("dry_run", "0")
+        data.append("dry_run", dryRun === true ? "1" : "0")
+        if (config !== undefined) {
+            data.append("config", config)
+        }
 
-        const { response, json } = await api.put(
+        const { json } = await api.put(
             `https://localhost:8001/api/0.1/elections/${election.id}/polling_places/`,
             data,
             { "Content-Disposition": "attachment; filename=polling_places.csv" },
             dispatch
         )
 
-        if (response.status === 200) {
-            return json
-        }
+        return json
     }
 }
 

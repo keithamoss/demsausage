@@ -53,7 +53,7 @@ class PollingPlacesIngestBase():
 
     def raise_exception_if_errors(self):
         if self.has_errors_messages() is True:
-            raise APIException(self.collects_logs())
+            raise APIException({"message": "Oh dear, looks like we hit a snag (get it - snag?!)", "logs": self.collects_logs()})
 
     def is_dry_run(self):
         return self.dry_run
@@ -81,25 +81,28 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
     def __init__(self, election, file, dry_run, config):
         def check_config_is_valid(config):
-            allowed_fields = ["address_fields", "address_format", "division_fields"]
-            for field in config.keys():
-                if field not in allowed_fields:
-                    self.logger.error("Config: Invalid field '{}' in config".format(field))
+            if config is not None:
+                allowed_fields = ["address_fields", "address_format", "division_fields"]
+                for field in config.keys():
+                    if field not in allowed_fields:
+                        self.logger.error("Config: Invalid field '{}' in config".format(field))
 
-            if "address_fields" in config and "address_format" not in config:
-                self.logger.error("Config: address_format required if address_fields provided")
-            if "address_fields" not in config and "address_format" in config:
-                self.logger.error("Config: address_fields required if address_format provided")
+                if "address_fields" in config and "address_format" not in config:
+                    self.logger.error("Config: address_format required if address_fields provided")
+                if "address_fields" not in config and "address_format" in config:
+                    self.logger.error("Config: address_fields required if address_format provided")
+
+                return True
 
         self.election = election
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
-        check_config_is_valid(config)
+        self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
-        self.address_fields = config["address_fields"]
-        self.address_format = config["address_format"]
-        self.division_fields = config["division_fields"]
+        self.address_fields = config["address_fields"] if self.has_config is True else None
+        self.address_format = config["address_format"] if self.has_config is True else None
+        self.division_fields = config["division_fields"] if self.has_config is True else None
 
         self.file = file
         file_body = self.file.read()
@@ -167,7 +170,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
     def check_file_validity(self):
         def check_file_header_validity(reader):
-            allowable_field_names = [f.name for f in PollingPlaces._meta.get_fields()] + ["lat", "lon"] + self.address_fields + self.division_fields
+            allowable_field_names = [f.name for f in PollingPlaces._meta.get_fields()] + ["lat", "lon"]
+            if self.address_fields is not None:
+                allowable_field_names += self.address_fields
+            if self.division_fields is not None:
+                allowable_field_names += self.division_fields
+
             required_model_field_names = [f.name for f in PollingPlaces._meta.get_fields() if hasattr(f, "blank") and f.blank is False and hasattr(f, "null") and f.null is False and f.name not in ("geom", "election", "status")] + ["lat", "lon"]
 
             # We're doing on-the-fly address merging in prepare_polling_place(). This will attach an address field for us.

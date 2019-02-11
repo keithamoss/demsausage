@@ -29,6 +29,7 @@ from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
 import pytz
+import json
 
 logger = make_logger(__name__)
 
@@ -120,27 +121,18 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def polling_places(self, request, pk=None, format=None):
         election = self.get_object()
         dry_run = True if request.data.get("dry_run", None) == "1" else False
-        config = {
-            "address_fields": [
-                "Property Name",
-                "Flat Number",
-                "Street Number",
-                "Street Name",
-                "Street Type",
-                "Locality",
-                "Postcode",
-                "Melway/Vicroads Ref"
-            ],
-            "address_format": "{Property Name}, {Flat Number} {Street Number} {Street Name} {Street Type}, {Locality} {Postcode}, {Melway/Vicroads Ref}",
-            "division_fields": ["Electorate 1", "Electorate 2"]
-        }
+        config = request.data.get("config", None)
+        try:
+            if config is not None and len(config) > 0:
+                config = json.loads(config)
+        except ValueError as e:
+            raise APIException("Could not parse config: {}".format(e))
 
         loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
         loader.run()
 
         if loader.is_dry_run() is False:
             raise APIException({"message": "Rollback", "logs": loader.collects_logs()})
-        raise APIException("Foo!")
         return Response({"message": "Done", "logs": loader.collects_logs()})
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
@@ -154,7 +146,6 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
         if rollback.is_dry_run() is False:
             raise APIException({"message": "Rollback", "logs": rollback.collects_logs()})
-        raise APIException("Foo!")
         return Response({})
 
 
