@@ -65,7 +65,7 @@ class PollingPlacesIngestBase():
         results = find_by_distance(*args, **kwargs)
         count = results.count()
         if count >= 2:
-            self.logger.error("Find by distance [{}]: Found {} polling places spatially near each other. Polling places: {}".format(label, count, "; ".join(["{}/{}/{}".format(pp.name, pp.premises, pp.address) for pp in results])))
+            self.logger.error("Find by distance [{}]: Found {} existing polling places spatially near each other. Polling places: {}".format(label, count, "; ".join(["{}/{}/{}".format(pp.name, pp.premises, pp.address) for pp in results])))
 
         return results
 
