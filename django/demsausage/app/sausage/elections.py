@@ -160,7 +160,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         del polling_place["lon"]
         del polling_place["lat"]
 
-        polling_place["facility_type"] = None
+        if "facility_type" not in polling_place or polling_place["facility_type"] == "":
+            polling_place["facility_type"] = None
         polling_place["status"] = PollingPlaceStatus.DRAFT
         polling_place["election"] = self.election.id
         polling_place = get_or_merge_address_fields(polling_place)
@@ -313,7 +314,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 if self.election.polling_places_loaded is False:
                     self.logger.warning("Noms Migration: User-added polling place '{}' ({}) has been merged successfully into the official polling place '{}' ({}). Is this correct?".format(polling_place.name, polling_place.address, matching_polling_places[0].name, matching_polling_places[0].address))
 
-        self.logger.info("Noms Migration: Migrated {} polling places and stalls".format(queryset.count()))
+        self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         count = queryset.count()
@@ -332,7 +333,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def detect_facility_type(self):
         update_count = 0
 
-        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT)
+        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, facility_type__isnull=True)
         for polling_place in queryset:
             most_recent_facility_type = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.only("facility_type").filter(status=PollingPlaceStatus.ACTIVE, facility_type__isnull=False)).order_by("election_id").last()
 
@@ -342,7 +343,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                 update_count += 1
 
-        self.logger.info("Facility types detected: {}".format(update_count))
+        self.logger.info("Facility types detected from historical data: {}".format(update_count))
 
     def calculate_chance_of_sausage(self):
         def calculate_score(polling_place):
