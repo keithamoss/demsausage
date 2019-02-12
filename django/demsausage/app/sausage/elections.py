@@ -154,7 +154,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                 return polling_place
 
-            self.logger.error("Division merging: No divisions or division fields found for polling place '{}'".format(polling_place["name"]))
+            return polling_place
 
         polling_place["geom"] = Point(float(polling_place["lon"]), float(polling_place["lat"]), srid=4326)
         del polling_place["lon"]
@@ -225,7 +225,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         def get_key(polling_place):
             return "{},{}".format(polling_place["geom"].x, polling_place["geom"].y)
 
-        # Group by address and merge divisions to accommodate multi-division polling places
+        # Group by lon,lat to detect and merge multi-division polling places
         polling_places_group_by = {}
 
         for polling_place in self.polling_places:
@@ -234,25 +234,35 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 polling_places_group_by[key] = []
             polling_places_group_by[key].append(polling_place)
 
+        indexes_to_remove = []
         for polling_places in [i for i in polling_places_group_by.values() if len(i) >= 2]:
             # Try to ensure that the group polling places are actually the same place
             unique_keys = list(set(["{}/{}".format(pp["name"], pp["premises"]) for pp in polling_places]))
             if len(unique_keys) > 1:
                 self.logger.error("Deduping: Found multiple unique polling places sharing the same location: {}".format(", ".join(unique_keys)))
 
-            divisions = []
-            for pp in polling_places:
-                divisions += pp["divisions"]
-            divisions = list(set(divisions))
-
             key = get_key(polling_places[0])
             indexes = [i for i, pp in enumerate(self.polling_places) if get_key(pp) == key]
-            for index in indexes[1:]:
-                del self.polling_places[index]
 
-            self.polling_places[indexes[0]]["divisions"] = divisions
+            # Merge divisions for duplicate polling places
+            # Divisions are optional - not all states use them
+            if "divisions" in polling_places[0]:
+                divisions = []
+                for pp in polling_places:
+                    divisions += pp["divisions"]
+                divisions = list(set(divisions))
 
-            self.logger.info("Deduping: Merged divisions for {} polling places with the same location ({}). Divisions: {}. Polling Places: {}".format(len(indexes), key, divisions, "; ".join(["{}/{}/{}".format(pp["name"], pp["premises"], pp["address"]) for pp in polling_places])))
+                self.polling_places[indexes[0]]["divisions"] = divisions
+
+                self.logger.info("Deduping: Merged divisions for {} polling places with the same location ({}). Divisions: {}. Polling Places: {}".format(len(indexes), key, divisions, "; ".join(["{}/{}/{}".format(pp["name"], pp["premises"], pp["address"]) for pp in polling_places])))
+            else:
+                self.logger.info("Deduping: Discarded {} duplicate polling places with the same location ({}). No divisions were present. Polling Places: {}".format(len(indexes) - 1, key, "; ".join(["{}/{}/{}".format(pp["name"], pp["premises"], pp["address"]) for pp in polling_places])))
+
+            # We can safely remove all bar the first polling place
+            indexes_to_remove += indexes[1:]
+
+        # Remove deduplicate polling places
+        self.polling_places = [polling_place for idx, polling_place in enumerate(self.polling_places) if idx not in indexes_to_remove]
 
         # To be extra sure - group by name and bail out if there are dupes
         polling_places_group_by = {}
