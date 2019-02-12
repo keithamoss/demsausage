@@ -47,7 +47,7 @@ def get_avatar(strategy, backend, uid, response, details, user, social, *args, *
     if backend.name == 'twitter':
         url = response.get('profile_image_url', '').replace('_normal', '')
     if backend.name == 'google-oauth2':
-        url = response['image'].get('url')
+        url = response['picture']
 
     if url is not None:
         user.profile.profile_image_url = url
