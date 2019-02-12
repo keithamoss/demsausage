@@ -26,6 +26,18 @@ waitfordb()
 
 CMD="$1"
 
+waitfordb
+>&2 echo "Starting crond in the background"
+# Add our cronjob
+crontab -l > mycron
+cat /app/demsausage/app/sausage/cron/crontab.txt >> mycron
+crontab mycron
+rm mycron
+
+# Start crond
+chmod 755 /app/demsausage/app/sausage/cron/cron.sh
+crond
+
 if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then
   waitfordb
   django-admin migrate

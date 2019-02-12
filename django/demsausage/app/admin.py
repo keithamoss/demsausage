@@ -9,7 +9,7 @@ admin.register(Profile)(admin.ModelAdmin)
 
 
 def get_admins():
-    if "auth_users" in connection.introspection.table_names():
+    if "auth_user" in connection.introspection.table_names():
         return User.objects.filter(is_staff=True, is_superuser=True, is_active=True).all()
     else:
         return []

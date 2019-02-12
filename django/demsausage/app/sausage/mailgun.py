@@ -3,6 +3,7 @@ from rest_framework.exceptions import APIException
 
 from demsausage.app.models import Stalls
 from demsausage.app.sausage.polling_places import getFoodDescription
+from demsausage.app.admin import get_admins
 from demsausage.util import get_env
 
 import hmac
@@ -33,8 +34,8 @@ def send(body):
     return True
 
 
-def get_mail_template(template_name, params):
-    with open(os.path.join("demsausage", "app", "sausage", "mail_templates", "{}.html".format(template_name))) as f:
+def get_mail_template(template_name, params=None):
+    with open("/app/demsausage/app/sausage/mail_templates/{}.html".format(template_name)) as f:
         return f.read().format_map(params)
 
 
@@ -92,6 +93,17 @@ def send_stall_approved_email(stall):
         "subject": "Your Democracy Sausage stall has been approved!",
         "html": html,
     })
+
+
+def send_pending_stall_reminder_email(pending_stall_count):
+    admin_emails = [u.email for u in get_admins()]
+
+    if len(admin_emails) > 0:
+        return send({
+            "to": ", ".join(admin_emails),
+            "subject": "Reminder: There are {} Democracy Sausage stalls waiting to be reviewed".format(pending_stall_count),
+            "html": get_mail_template("pending_stall_reminder"),
+        })
 
 
 # https://documentation.mailgun.com/en/latest/user_manual.html#webhooks
