@@ -277,24 +277,32 @@ class StallsViewSet(viewsets.ModelViewSet):
 
         # Create polling place based on user-submitted location info
         pollingPlaceSerializer = PollingPlacesManagementSerializer(data={
-            "stall": {
-                "noms": stall.noms,
-                "name": stall.name,
-                "description": stall.description,
-                "website": stall.website,
-            },
             "geom": stall.location_info["geom"],
             "name": stall.location_info["name"],
             "address": stall.location_info["address"],
             "state": stall.location_info["state"],
             "facility_type": None,
             "election": stall.election.id,
+            "status": PollingPlaceStatus.ACTIVE,
         })
 
         if pollingPlaceSerializer.is_valid() is True:
             pollingPlaceSerializer.save()
         else:
             raise BadRequest(pollingPlaceSerializer.errors)
+
+        # Now that we have a polling place, add noms
+        pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(pollingPlaceSerializer.instance, data={"stall": {
+            "noms": stall.noms,
+            "name": stall.name,
+            "description": stall.description,
+            "website": stall.website,
+        }, }, partial=True)
+
+        if pollingPlaceWithNomsSerializer.is_valid() is True:
+            pollingPlaceWithNomsSerializer.save()
+        else:
+            raise BadRequest(pollingPlaceWithNomsSerializer.errors)
 
         # Approve stall and link it to the new unofficial polling place we just added
         serializer = StallsManagementSerializer(stall, data={"status": StallStatus.APPROVED, "polling_place": pollingPlaceSerializer.instance.id}, partial=True)

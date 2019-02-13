@@ -123,6 +123,7 @@ class PollingPlaces(models.Model):
     booth_info = models.TextField(blank=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceStatus], default=PollingPlaceStatus.DRAFT)
 
+    tracker = FieldTracker(fields=["noms"])
     objects = PollingPlacesManager()
 
     class Meta:

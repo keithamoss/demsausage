@@ -144,7 +144,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceNoms
 
-        fields = ("noms", "chance_of_sausage", "name", "description", "website", "extra_info", "first_report", "latest_report", "source")
+        fields = ("noms", "chance_of_sausage", "name", "description", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
@@ -167,10 +167,13 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
     def _update_or_create_stall(self, instance, validated_data):
         try:
             if "noms" in validated_data:
-                data = dict(validated_data.pop("noms"))
-                if instance is not None and instance.noms is not None:
+                data = {**dict(validated_data.pop("noms")), **{"polling_place": instance.id}}
+
+                # A polling place with an existing noms record that's changing
+                if instance.noms is not None:
                     stall_serializer = PollingPlaceNomsSerializer(PollingPlaceNoms.objects.get(id=instance.noms.id), data=data)
                 else:
+                    # A polling place that's adding a new noms record
                     stall_serializer = PollingPlaceNomsSerializer(data=data)
 
                 if stall_serializer.is_valid(raise_exception=True):
@@ -265,7 +268,7 @@ class StallsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place")
+        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
     def create(self, validated_data):
         return Stalls.objects.create(**validated_data)

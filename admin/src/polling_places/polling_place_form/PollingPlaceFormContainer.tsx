@@ -90,6 +90,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.description = stall.description
             initialValues.website = stall.website
             initialValues.source = "Direct"
+            initialValues.extra_info = ""
         }
 
         return initialValues
