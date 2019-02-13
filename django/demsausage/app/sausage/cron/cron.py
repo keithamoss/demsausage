@@ -4,9 +4,9 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-from demsausage.app.models import Stalls
-from demsausage.app.enums import StallStatus
-from demsausage.app.sausage.mailgun import send_pending_stall_reminder_email
+from demsausage.app.models import Stalls  # noqa: E402
+from demsausage.app.enums import StallStatus  # noqa: E402
+from demsausage.app.sausage.mailgun import send_pending_stall_reminder_email  # noqa: E402
 
 pending_stall_count = Stalls.objects.filter(status=StallStatus.PENDING).count()
 

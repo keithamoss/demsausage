@@ -10,7 +10,6 @@ import requests
 import hmac
 import hashlib
 import time
-import os
 
 
 class MailgunException(APIException):
