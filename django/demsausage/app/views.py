@@ -25,7 +25,7 @@ from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter,
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
-from demsausage.app.sausage.elections import get_cache_key, LoadPollingPlaces, RollbackPollingPlaces
+from demsausage.app.sausage.elections import get_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
@@ -133,6 +133,8 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         loader.run()
 
         if loader.is_dry_run() is False:
+            # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
+            regenerate_election_geojson(election.id)
             raise BadRequest({"message": "Rollback", "logs": loader.collects_logs()})
         return Response({"message": "Done", "logs": loader.collects_logs()})
 
@@ -146,6 +148,8 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         rollback.run()
 
         if rollback.is_dry_run() is False:
+            # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
+            regenerate_election_geojson(election.id)
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
         return Response({})
 
