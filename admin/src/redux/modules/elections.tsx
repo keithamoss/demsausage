@@ -2,7 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { DateTime } from "luxon"
 import { createSelector } from "reselect"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { IGeoJSONPoint } from "./interfaces"
 import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
@@ -136,7 +136,7 @@ export interface IElectionStats {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/elections/", dispatch)
 
         if (response.status === 200) {
@@ -169,7 +169,7 @@ export function fetchElections() {
 }
 
 export function createElection(electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.post("https://localhost:8001/api/0.1/elections/", electionNew, dispatch)
 
         if (response.status === 201) {
@@ -181,7 +181,7 @@ export function createElection(electionNew: Partial<IElection>) {
 }
 
 export function updateElection(election: IElection, electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(`https://localhost:8001/api/0.1/elections/${election.id}/`, electionNew, dispatch)
 
         if (response.status === 200) {
@@ -193,7 +193,7 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
 }
 
 export function setPrimaryElection(electionId: number) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response } = await api.post(`https://localhost:8001/api/0.1/elections/${electionId}/set_primary/`, {}, dispatch)
 
         if (response.status === 200) {
@@ -204,8 +204,8 @@ export function setPrimaryElection(electionId: number) {
 }
 
 // export function setElectionTableName(election: IElection, newDBTableName: string) {
-//     return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
-//         dispatch(
+//     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+// dispatch(
 //             loadElection({
 //                 id: election.id,
 //                 db_table_name: newDBTableName,

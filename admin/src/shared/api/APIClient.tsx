@@ -2,73 +2,10 @@ import * as Cookies from "js-cookie"
 import * as qs from "qs"
 import * as Raven from "raven-js"
 import "whatwg-fetch"
-import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
+import { beginFetch, finishFetch, isDevelopment } from "../../redux/modules/app"
 import { sendNotification } from "../../redux/modules/snackbars"
 
-export class EALGISApiClient {
-    dsBaseURL: string
-    cartoBaseURL: string
-    cartoBridgeBaseURL: string
-
-    constructor() {
-        this.dsBaseURL = getAPIBaseURL()
-        this.cartoBaseURL = "https://democracy-sausage.cartodb.com/api/v2/sql"
-        this.cartoBridgeBaseURL = `${this.dsBaseURL}/cartodb-api-bridge.php`
-    }
-
-    public paramsToSQL(params: object = {}): string {
-        return Object.keys(params)
-            .map((key: string) => {
-                // Booleans
-                if (key === "has_bbq" || key === "has_caek" || key === "has_nothing" || key === "has_run_out") {
-                    return `${key} = ${params[key]}`
-                } else if (key === "cartodb_id") {
-                    return null
-                }
-                return `${key} = '${params[key].replace(/'/, "\\'")}'`
-            })
-            .join(", ")
-    }
-
-    public cartoGetSQL(sql: string, dispatch: Function): Promise<IApiResponse> {
-        const params: object = { q: sql }
-        const fetchOptions: object = { credentials: "omit" }
-        return this.get(this.cartoBaseURL, dispatch, params, fetchOptions)
-    }
-
-    public cartoBridgeGetSQL(sql: string, dispatch: Function): Promise<IApiResponse> {
-        const params: object = { q: sql }
-        const fetchOptions: object = { credentials: "omit" }
-        return this.get(this.cartoBridgeBaseURL, dispatch, params, fetchOptions)
-    }
-
-    public dsGet(url: string, dispatch: Function, params: object = {}): Promise<IApiResponse> {
-        return this.get(this.dsBaseURL + url, dispatch, params)
-    }
-
-    public dsAPIGet(params: object = {}, dispatch: Function): Promise<IApiResponse> {
-        return this.get(this.dsBaseURL + "/api.php", dispatch, params)
-    }
-
-    public dsAPIPost(params: object = {}, body: any, dispatch: Function): Promise<IApiResponse> {
-        return this.post(this.dsBaseURL + "/api.php", body, dispatch)
-    }
-
-    public dsAPIPostFile(params: object = {}, file: File, dispatch: Function): Promise<IApiResponse> {
-        let data = new FormData()
-        data.append("file", file)
-
-        return this.post(this.dsBaseURL + "/api.php", data, dispatch)
-    }
-
-    public dsAPIPut(params: object = {}, dispatch: Function): Promise<IApiResponse> {
-        return this.put(this.dsBaseURL + "/api.php", params, {}, dispatch)
-    }
-
-    public dsAPIDelete(dispatch: Function): Promise<IApiResponse> {
-        return this.delete(this.dsBaseURL + "/api.php", dispatch)
-    }
-
+export class APIClient {
     public handleResponse(url: string, response: any, dispatch: any) {
         if (response.status >= 401) {
             return response.json().then((json: any) => {
@@ -92,7 +29,7 @@ export class EALGISApiClient {
         })
     }
 
-    public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IApiResponse> {
+    public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         if (Object.keys(params).length > 0) {
@@ -109,7 +46,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public post(url: string, body: object = {}, dispatch: any): Promise<IApiResponse> {
+    public post(url: string, body: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -129,7 +66,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public put(url: string, body: any, headers: object = {}, dispatch: any): Promise<IApiResponse> {
+    public put(url: string, body: any, headers: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -146,7 +83,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public patch(url: string, body: object = {}, dispatch: any): Promise<IApiResponse> {
+    public patch(url: string, body: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -166,7 +103,7 @@ export class EALGISApiClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public delete(url: string, dispatch: any): Promise<IApiResponse> {
+    public delete(url: string, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         return fetch(url, {
@@ -198,17 +135,7 @@ export class EALGISApiClient {
 }
 
 // Models
-export interface IEALGISApiClient {
-    handleError: Function
-    dsGet: Function
-    dsAPIGet: Function
-    dsAPIPost: Function
-    dsAPIPostFile: Function
-    dsAPIPut: Function
-    dsAPIDelete: Function
-    paramsToSQL: Function
-    cartoGetSQL: Function
-    cartoBridgeGetSQL: Function
+export interface IAPIClient {
     get: Function
     post: Function
     put: Function
@@ -216,22 +143,11 @@ export interface IEALGISApiClient {
     delete: Function
 }
 
-export interface IApiResponse {
+export interface IAPIResponse {
     response: Response
     json: any
 }
 
-export interface IHttpResponse {
+export interface IHTTPResponse {
     status: number
-}
-
-export interface ICartoAPIResponse {
-    // rows: Array<object>
-    time: number
-    fields: {
-        [key: string]: {
-            type: string
-        }
-    }
-    total_rows: number
 }

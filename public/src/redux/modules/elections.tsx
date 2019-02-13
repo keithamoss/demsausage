@@ -1,8 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
 import { DateTime } from "luxon"
 import { createSelector } from "reselect"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { IGeoJSONPoint } from "./interfaces"
 import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
@@ -140,8 +139,8 @@ export interface IElection {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections(initialElectionName: string) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.get("https://localhost:8001/api/0.1/elections/", dispatch)
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("https://localhost:8001/api/0.1/elections/", dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 
@@ -177,60 +176,8 @@ export function getDefaultElection(elections: Array<IElection>) {
     return defaultElection
 }
 
-export function createElection(electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const params = {
-            "create-election": 1,
-            election: electionNew,
-        }
-
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
-
-        if (response.status === 200) {
-            dispatch(loadElection(json))
-            dispatch(sendSnackbarNotification("Election created! 🌭🎉"))
-            return json
-        }
-    }
-}
-
-export function updateElection(election: IElection, electionNew: Partial<IElection>) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const params = {
-            "update-election": 1,
-            electionId: election.id,
-            election: electionNew,
-        }
-
-        const { response, json } = await ealapi.dsAPIGet(params, dispatch)
-
-        if (response.status === 200) {
-            electionNew.id = election.id
-            dispatch(loadElection(electionNew))
-            dispatch(sendSnackbarNotification("Election updated! 🌭🎉"))
-            return json
-        }
-    }
-}
-
-export function setPrimaryElection(electionId: number) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const params = {
-            "set-primary-election": 1,
-            electionId: electionId,
-        }
-
-        const { response } = await ealapi.dsAPIGet(params, dispatch)
-
-        if (response.status === 200) {
-            dispatch(togglePrimaryElection(electionId))
-            dispatch(sendSnackbarNotification("Primary election changed! 🌟🎉"))
-        }
-    }
-}
-
 // export function setElectionTableName(election: IElection, newDBTableName: string) {
-//     return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+//     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
 //         dispatch(
 //             loadElection({
 //                 id: election.id,

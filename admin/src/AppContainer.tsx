@@ -27,7 +27,7 @@ import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app
 import { IElection, setCurrentElection } from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
-import { IUser, logoutUser } from "./redux/modules/user"
+import { IUser } from "./redux/modules/user"
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -66,7 +66,6 @@ export interface IDispatchProps {
     setElectionFromRoute: Function
     fetchInitialAppState: Function
     handleSnackbarClose: Function
-    doLogout: Function
     onClickDrawerLink: Function
 }
 
@@ -174,9 +173,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             if (reason === "timeout") {
                 dispatch(iterateSnackbar())
             }
-        },
-        doLogout: () => {
-            dispatch(logoutUser())
         },
         onClickDrawerLink: () => {
             dispatch(setDrawerOpen(false))

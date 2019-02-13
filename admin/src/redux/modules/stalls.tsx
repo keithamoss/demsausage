@@ -2,7 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { memoize } from "lodash-es"
 import { createSelector } from "reselect"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { IGeoJSONPoint } from "./interfaces"
 import { INoms } from "./polling_places"
 import { IStore } from "./reducer"
@@ -106,7 +106,7 @@ export interface IStall {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchPendingStalls() {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/stalls/pending/", dispatch)
 
         if (response.status === 200) {
@@ -117,7 +117,7 @@ export function fetchPendingStalls() {
 }
 
 export function approveStall(id: number) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(`https://localhost:8001/api/0.1/stalls/${id}/approve/`, {}, dispatch)
 
         if (response.status === 200) {
@@ -130,7 +130,7 @@ export function approveStall(id: number) {
 }
 
 export function approveStallAndAddUnofficialPollingPlace(id: number) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(`https://localhost:8001/api/0.1/stalls/${id}/approve_and_add/`, {}, dispatch)
 
         if (response.status === 200) {
@@ -143,7 +143,7 @@ export function approveStallAndAddUnofficialPollingPlace(id: number) {
 }
 
 export function declineStall(id: number) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(
             `https://localhost:8001/api/0.1/stalls/${id}/`,
             { status: StallStatus.DECLINED },

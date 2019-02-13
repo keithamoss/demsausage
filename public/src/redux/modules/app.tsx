@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { fetchElections } from "./elections"
 
 // Actions
@@ -165,7 +165,7 @@ export function getMapboxAPIKey(): any {
 }
 
 export function fetchInitialAppState(initialElectionName: string) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())
         await Promise.all([dispatch(fetchElections(initialElectionName))])
         dispatch(loaded())

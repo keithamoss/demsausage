@@ -1,5 +1,5 @@
 import { IStallFormInfo } from "../../add-stall/AddStallForm/AddStallFormContainer"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { IGeoJSONPoint } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -38,8 +38,8 @@ export interface IStallLocationInfo {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function createStall(stall: IStallFormInfo) {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
-        const { response, json } = await ealapi.post("https://localhost:8001/api/0.1/stalls/", stall, dispatch)
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.post("https://localhost:8001/api/0.1/stalls/", stall, dispatch)
 
         if (response.status === 201) {
             return json

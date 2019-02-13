@@ -1,6 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { IElection } from "./elections"
 import { IGeoJSONPoint } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
@@ -135,7 +135,7 @@ export interface IPollingPlaceLoaderResponseMessages {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             search_term: searchTerm,
@@ -147,7 +147,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 }
 
 export function fetchAllPollingPlaces(election: IElection) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
         })
@@ -159,7 +159,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             ids: pollingPlaceIds.join(","),
@@ -172,7 +172,7 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 }
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: any /* Partial<IPollingPlace> */) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(
             `https://localhost:8001/api/0.1/polling_places/${pollingPlace.id}/`,
             pollingPlaceNew,
@@ -187,7 +187,7 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 }
 
 export function loadPollingPlaces(election: IElection, file: File, config: string | undefined, dryRun: boolean) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         let data = new FormData()
         data.append("file", file)
         data.append("dry_run", dryRun === true ? "1" : "0")
@@ -207,7 +207,7 @@ export function loadPollingPlaces(election: IElection, file: File, config: strin
 }
 
 export function fetchPollingPlaceTypes() {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places_facility_types/", dispatch)
 
         if (response.status === 200) {
@@ -217,7 +217,7 @@ export function fetchPollingPlaceTypes() {
 }
 
 export function regenerateMapDataForElection(election: IElection) {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response } = await api.get("https://localhost:8001/api/0.1/polling_places/geojson/", dispatch, {
             election_id: election.id,
             regenerate_cache: true,

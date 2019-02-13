@@ -3,3 +3,6 @@
 
 # misc
 .DS_Store
+
+# app-specific
+demsausage/app/sausage/cron/output.log

@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { EALGISApiClient } from "../../shared/api/EALGISApiClient"
+import { IAPIClient } from "../../shared/api/APIClient"
 import { fetchElections } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
 import { fetchPendingStalls } from "./stalls"
@@ -127,7 +127,7 @@ export function getBaseURL(): string {
 }
 
 export function fetchInitialAppState() {
-    return async (dispatch: Function, getState: Function, api: EALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())
 
         await Promise.all([

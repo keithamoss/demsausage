@@ -18,7 +18,7 @@ import "./polyfills"
 // }
 import reducers, { IStore } from "./redux/modules/reducer"
 import getRoutes from "./routes"
-import { EALGISApiClient } from "./shared/api/EALGISApiClient"
+import { APIClient } from "./shared/api/APIClient"
 // const Config: IConfig = require("Config") as any
 
 // declare var DEVELOPMENT: boolean
@@ -39,14 +39,12 @@ if ("REACT_APP_RAVEN_URL" in process.env) {
     )
 }
 
-const api = new EALGISApiClient()
-
 const composeEnhancers = composeWithDevTools({
     // Specify name here, actionsBlacklist, actionsCreators and other options if needed
 })
 const store: Store<IStore> = createStore(
     reducers,
-    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(api), ...Middleware))
+    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(new APIClient()), ...Middleware))
 )
 
 const history = syncHistoryWithStore(browserHistory as any, store)
