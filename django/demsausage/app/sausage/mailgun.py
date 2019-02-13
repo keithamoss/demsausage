@@ -1,11 +1,12 @@
-import requests
 from rest_framework.exceptions import APIException
+from django.forms.models import model_to_dict
 
 from demsausage.app.models import Stalls
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.app.admin import get_admins
 from demsausage.util import get_env
 
+import requests
 import hmac
 import hashlib
 import time
@@ -43,7 +44,7 @@ def send_stall_submitted_email(stall):
     if stall.election.polling_places_loaded is False:
         location_info = stall.location_info
     else:
-        location_info = dict(stall.polling_place)
+        location_info = model_to_dict(stall.polling_place)
 
     html = get_mail_template("stall_submitted", {
         "POLLING_PLACE_NAME": location_info["name"],

@@ -256,7 +256,7 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
 class StallsSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, allow_blank=False)
     description = serializers.CharField(required=True, allow_blank=False)
-    website = serializers.CharField(allow_blank=True)
+    website = serializers.CharField(required=False, allow_blank=True)
     noms = JSONSchemaField(noms_schema, required=True)
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
     email = serializers.EmailField(required=True, allow_blank=False)
