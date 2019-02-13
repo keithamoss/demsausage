@@ -37,23 +37,15 @@ export class PollingPlaceAutocompleteListWithConfirm extends React.Component<TCo
     }
 
     onChoosePlace(pollingPlaceInfo: IPollingPlace) {
-        this.setState(
-            Object.assign(this.state, {
-                pollingPlaceInfo: pollingPlaceInfo,
-            })
-        )
+        this.setState({ ...this.state, pollingPlaceInfo: pollingPlaceInfo })
     }
 
     onCancelChosenLocation() {
-        this.setState(Object.assign(this.state, { pollingPlaceInfo: null, locationConfirmed: false }))
+        this.setState({ ...this.state, pollingPlaceInfo: null, locationConfirmed: false })
     }
 
     onConfirmChosenLocation(pollingPlaceInfo: IPollingPlace) {
-        this.setState(
-            Object.assign(this.state, {
-                locationConfirmed: true,
-            })
-        )
+        this.setState({ ...this.state, locationConfirmed: true })
         this.props.onConfirmChosenLocation(this.state.pollingPlaceInfo!)
     }
 

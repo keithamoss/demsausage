@@ -30,11 +30,10 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
                 return dotProp.set(state, "elections", [action.election, ...state.elections!])
             } else {
                 // Updating an existing election
-                return dotProp.set(
-                    state,
-                    `elections.${electionIndex}`,
-                    Object.assign(dotProp.get(state, `elections.${electionIndex}`), action.election)
-                )
+                return dotProp.set(state, `elections.${electionIndex}`, {
+                    ...dotProp.get(state, `elections.${electionIndex}`),
+                    ...action.election,
+                })
             }
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)

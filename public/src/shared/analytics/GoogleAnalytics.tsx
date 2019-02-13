@@ -41,7 +41,7 @@ const gaTrack = new GATracker()
 
 const AnalyticsMiddleware = (store: IStore) => (next: Function) => (action: any) => {
     if ("meta" in action && "analytics" in action.meta) {
-        gaTrack.event(Object.assign(action.meta.analytics, { type: action.type }))
+        gaTrack.event({ ...action.meta.analytics, type: action.type })
     }
 
     let result = next(action)

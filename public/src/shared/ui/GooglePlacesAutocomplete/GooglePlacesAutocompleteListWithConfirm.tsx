@@ -42,27 +42,20 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
     }
 
     onChoosePlace(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) {
-        this.setState(
-            Object.assign(this.state, {
-                addressResult: addressResult,
-                geocodedPlace: place,
-                stallLocationInfo: this.getPollingPlaceInfo(addressResult, place),
-            })
-        )
+        this.setState({
+            ...this.state,
+            addressResult: addressResult,
+            geocodedPlace: place,
+            stallLocationInfo: this.getPollingPlaceInfo(addressResult, place),
+        })
     }
 
     onCancelChosenLocation() {
-        this.setState(
-            Object.assign(this.state, { addressResult: null, geocodedPlace: null, stallLocationInfo: null, locationConfirmed: false })
-        )
+        this.setState({ ...this.state, addressResult: null, geocodedPlace: null, stallLocationInfo: null, locationConfirmed: false })
     }
 
     onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
-        this.setState(
-            Object.assign(this.state, {
-                locationConfirmed: true,
-            })
-        )
+        this.setState({ ...this.state, locationConfirmed: true })
         this.props.onConfirmChosenLocation(this.state.stallLocationInfo!)
     }
 

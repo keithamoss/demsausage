@@ -66,11 +66,11 @@ export class PollingPlaceFinderContainer extends React.Component<TComponentProps
     }
 
     onShowPlaceAutocompleteResults() {
-        this.setState(Object.assign(this.state, { isShowingPlaceAutocompleteResults: true }))
+        this.setState({ ...this.state, isShowingPlaceAutocompleteResults: true })
     }
 
     onChoosePlaceFromAutocomplete() {
-        this.setState(Object.assign(this.state, { isShowingPlaceAutocompleteResults: false }))
+        this.setState({ ...this.state, isShowingPlaceAutocompleteResults: false })
     }
 
     render() {

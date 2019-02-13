@@ -58,11 +58,11 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
-        this.setState(Object.assign(this.state, { queriedPollingPlaces: pollingPlaces }))
+        this.setState({ ...this.state, queriedPollingPlaces: pollingPlaces })
     }
 
     onClearQueriedPollingPlaces() {
-        this.setState(Object.assign(this.state, { queriedPollingPlaces: [] }))
+        this.setState({ ...this.state, queriedPollingPlaces: [] })
     }
 
     render() {
