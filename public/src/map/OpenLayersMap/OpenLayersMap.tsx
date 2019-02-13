@@ -1,6 +1,6 @@
 import * as ol from "openlayers"
 import * as React from "react"
-import { isUserABot } from "../../redux/modules/app"
+import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
 // import "./OpenLayersMap.css"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -84,7 +84,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         const vectorSource = new ol.source.Vector({
             // url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
-            url: `https://localhost:8001/api/0.1/polling_places/geojson/?election_id=${election.id}&s=${Date.now()}`,
+            url: `${getAPIBaseURL()}/api/0.1/polling_places/geojson/?election_id=${election.id}&s=${Date.now()}`,
             format: new ol.format.GeoJSON(),
         })
 

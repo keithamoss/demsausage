@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection, setPrimaryElection } from "../../redux/modules/elections"
 import { regenerateMapDataForElection } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
@@ -53,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             dispatch(setPrimaryElection(electionId))
         },
         onDownloadElection(election: IElection) {
-            window.location.href = `https://localhost:8001/api/0.1/polling_places/?format=csv&election_id=${election.id}`
+            window.location.href = `${getAPIBaseURL()}/api/0.1/polling_places/?format=csv&election_id=${election.id}`
         },
         onRegenerateMapDataForElection(election: IElection) {
             dispatch(regenerateMapDataForElection(election))

@@ -140,7 +140,7 @@ export interface IElection {
 // e.g. thunks, epics, et cetera
 export function fetchElections(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/elections/", dispatch)
+        const { response, json } = await api.get("/api/0.1/elections/", dispatch)
         if (response.status === 200) {
             dispatch(loadElections(json))
 

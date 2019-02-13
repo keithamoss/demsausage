@@ -136,7 +136,7 @@ export interface IPollingPlaceLoaderResponseMessages {
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             search_term: searchTerm,
         })
@@ -148,7 +148,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchAllPollingPlaces(election: IElection) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
         })
 
@@ -160,7 +160,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             ids: pollingPlaceIds.join(","),
         })
@@ -173,11 +173,7 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: any /* Partial<IPollingPlace> */) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.patch(
-            `https://localhost:8001/api/0.1/polling_places/${pollingPlace.id}/`,
-            pollingPlaceNew,
-            dispatch
-        )
+        const { response, json } = await api.patch(`/api/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
@@ -196,7 +192,7 @@ export function loadPollingPlaces(election: IElection, file: File, config: strin
         }
 
         const { json } = await api.put(
-            `https://localhost:8001/api/0.1/elections/${election.id}/polling_places/`,
+            `/api/0.1/elections/${election.id}/polling_places/`,
             data,
             { "Content-Disposition": "attachment; filename=polling_places.csv" },
             dispatch
@@ -208,7 +204,7 @@ export function loadPollingPlaces(election: IElection, file: File, config: strin
 
 export function fetchPollingPlaceTypes() {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("https://localhost:8001/api/0.1/polling_places_facility_types/", dispatch)
+        const { response, json } = await api.get("/api/0.1/polling_places_facility_types/", dispatch)
 
         if (response.status === 200) {
             dispatch(loadPollingPlaceTypes(json))
@@ -218,7 +214,7 @@ export function fetchPollingPlaceTypes() {
 
 export function regenerateMapDataForElection(election: IElection) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response } = await api.get("https://localhost:8001/api/0.1/polling_places/geojson/", dispatch, {
+        const { response } = await api.get("/api/0.1/polling_places/geojson/", dispatch, {
             election_id: election.id,
             regenerate_cache: true,
         })

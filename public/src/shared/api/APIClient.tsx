@@ -2,10 +2,16 @@ import * as Cookies from "js-cookie"
 import * as qs from "qs"
 import * as Raven from "raven-js"
 import "whatwg-fetch"
-import { beginFetch, finishFetch, isDevelopment } from "../../redux/modules/app"
+import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
 import { sendNotification } from "../../redux/modules/snackbars"
 
 export class APIClient {
+    private baseURL: string
+
+    constructor() {
+        this.baseURL = getAPIBaseURL()
+    }
+
     public handleResponse(url: string, response: any, dispatch: any) {
         if (response.status >= 401) {
             return response.json().then((json: any) => {
@@ -38,7 +44,7 @@ export class APIClient {
             url += "?" + qs.stringify(params)
         }
 
-        return fetch(url, { ...{ credentials: "include" }, ...fetchOptions })
+        return fetch(this.baseURL + url, { ...{ credentials: "include" }, ...fetchOptions })
             .then((response: any) => {
                 dispatch(finishFetch())
                 return this.handleResponse(url, response, dispatch)
@@ -49,7 +55,7 @@ export class APIClient {
     public post(url: string, body: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
-        return fetch(url, {
+        return fetch(this.baseURL + url, {
             method: "POST",
             mode: "cors",
             credentials: "include",
@@ -69,7 +75,7 @@ export class APIClient {
     public put(url: string, body: any, headers: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
-        return fetch(url, {
+        return fetch(this.baseURL + url, {
             method: "PUT",
             mode: "cors",
             credentials: "include",
@@ -86,7 +92,7 @@ export class APIClient {
     public patch(url: string, body: object = {}, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
-        return fetch(url, {
+        return fetch(this.baseURL + url, {
             method: "PATCH",
             mode: "cors",
             credentials: "include",
@@ -106,7 +112,7 @@ export class APIClient {
     public delete(url: string, dispatch: any): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
-        return fetch(url, {
+        return fetch(this.baseURL + url, {
             method: "DELETE",
             mode: "cors",
             credentials: "include",
