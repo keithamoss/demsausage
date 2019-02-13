@@ -11,19 +11,20 @@ Requirements:
 
 If this is the first time you're running Democracy Sausage you'll need to:
 
-**Generate Map Data:**
-Load the Admin Site first, navigate to `Manage Elections`, and then trigger the "Refresh election data" action for each election. This generates `.geojson` files in `php/elections/` that are required for the Public Site to function.
+#### .env files
 
-### Extra files
+Use the template .env files in `secrets-tmpl` to create corresponding files under `secrets/` for:
 
-Copy `secrets.php.template` to `secrets/secrets.php` and replace every REPLACEME.
-Copy `client_secrets.php.template` to `client_secrets.php` and replace every REPLACEME.
+1. `sausage-web.dev.env`
+2. `sausage-db.env`
+3. `sausage-public-frontend.dev.env`
+4. `sausage-admin-frontend.dev.env`
 
-These files aren't in the repo. Contact the project maintainers.
+#### Admin Site
 
--   Save `demsausage.sqlite3` to the `db` directory.
--   Save the `sentry-php` folder to the base directory.
--   Save the `google-api-php-client-2.2.0` to the base directory.
+1. Add yourself to the `app_allowedusers` table before trying to login
+2. Load `initial_data/polling_place_facility_types.csv into`app_pollingplacefacilitytype`
+3. Create a test election for yourself and load some polling places into it via the UI (contact the project maintainers for a sample)
 
 ### Run both sites
 

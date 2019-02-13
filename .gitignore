@@ -24,7 +24,7 @@ build/
 secrets/
 keys/
 db-pg/data/
-initial-data/
+initial-data/emails.csv
 *.pyc
 logs/
 /php copy/
