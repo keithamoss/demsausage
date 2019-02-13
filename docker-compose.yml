@@ -44,17 +44,6 @@ services:
         depends_on:
             - db
             - memcached
-    php_api:
-        image: php:7.1.25-cli-alpine3.8
-        entrypoint: /app/sausage_api/docker-entrypoint.sh
-        volumes:
-            - ./php:/app/sausage_api:delegated
-            - ./secrets/secrets.php:/app/secrets.php
-            - ./db:/app/db:delegated
-            - ./sentry-php:/app/sentry-php:delegated
-            - ./google-api-php-client-2.2.0:/app/google-api-php-client-2.2.0:delegated
-        environment:
-            - ENVIRONMENT=DEVELOPMENT
     frontend_public:
         image: node:10.14.2-alpine
         entrypoint: /app/docker-entrypoint.sh
@@ -79,11 +68,9 @@ services:
             - ./keys/:/app/keys/:delegated
         depends_on:
             - django
-            - php_api
             - frontend_public
             - frontend_admin
         ports:
             - "443:443"
             - "3001:3001"
             - "8001:8001"
-            - "8003:8003"

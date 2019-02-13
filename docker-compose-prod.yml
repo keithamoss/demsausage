@@ -17,17 +17,6 @@ services:
 
             # Enable this to store the PostgreSQL data on the host
             - ./db-pg/data:/var/lib/postgresql/data
-    php_api:
-        image: php:7.1.25-cli-alpine3.8
-        entrypoint: /app/sausage_api/docker-entrypoint.sh
-        volumes:
-            - ./php:/app/sausage_api:delegated
-            - ./secrets/secrets.php:/app/secrets.php
-            - ./db:/app/db:delegated
-            - ./sentry-php:/app/sentry-php:delegated
-            - ./google-api-php-client-2.2.0:/app/google-api-php-client-2.2.0:delegated
-        environment:
-            - ENVIRONMENT=PRODUCTION
     django:
         image: demsausage/django:latest
         command: supervisord
@@ -51,7 +40,6 @@ services:
             - "443:443"
             - "444:444"
             - "8001:8001"
-            - "8003:8003"
         environment:
             - HTTPS_ENABLED=TRUE
             - SERVER_NAME=localhost

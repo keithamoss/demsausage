@@ -27,3 +27,4 @@ db-pg/data/
 initial-data/
 *.pyc
 logs/
+/php copy/
