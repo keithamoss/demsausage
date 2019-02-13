@@ -16,6 +16,7 @@ import HalalIcon from "../../icons/halal"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
+import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 // import RaisedButton from "material-ui/RaisedButton"
 // import FlatButton from "material-ui/FlatButton"
 import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
@@ -32,13 +33,14 @@ export interface IProps {
     stallLocationInfo: any // Bit of a hack around the issue of this being IStallLocationInfo OR IPollingPlace
     locationConfirmed: boolean
     formSubmitting: boolean
+    errors: IDjangoAPIError | undefined
     onSubmit: any
     onSaveForm: any
 
     // From redux-form
     initialValues: any
     handleSubmit: any
-    isDirty: any
+    isValid: any
 }
 
 class CustomTextField extends React.Component<any, any> {
@@ -98,8 +100,9 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
             stallLocationInfo,
             locationConfirmed,
             formSubmitting,
+            errors,
         } = this.props
-        const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
+        const { isValid, onSaveForm, handleSubmit, onSubmit } = this.props
 
         let primaryTextString
         if (stallLocationInfo !== null) {
@@ -240,9 +243,11 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     />
                                 </FormSection>
 
+                                <DjangoAPIErrorUI errors={errors} />
+
                                 <RaisedButtonChunkyBottom
                                     label={"Submit Stall"}
-                                    disabled={!isDirty || formSubmitting}
+                                    disabled={!isValid || formSubmitting}
                                     primary={true}
                                     onClick={onSaveForm}
                                 />

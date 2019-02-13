@@ -1,11 +1,11 @@
 import * as React from "react"
 import { connect } from "react-redux"
-// import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
-import { isDirty, submit } from "redux-form"
+import { isValid, submit } from "redux-form"
 import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { INoms } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { createStall, IStallLocationInfo } from "../../redux/modules/stalls"
+import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 // import { cloneDeep } from "lodash-es"
 import AddStallForm from "./AddStallForm"
 
@@ -20,7 +20,7 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     liveElections: Array<IElection>
-    isDirty: boolean
+    isValid: boolean
 }
 
 export interface IStateProps {
@@ -29,6 +29,7 @@ export interface IStateProps {
     stallLocationInfo: IStallLocationInfo | null /* Actually IStallLocationInfo or IPollingPlace (depending on election.polling_places_loaded) */
     locationConfirmed: boolean
     formSubmitting: boolean
+    errors: IDjangoAPIError | undefined
 }
 
 interface IOwnProps {}
@@ -71,7 +72,8 @@ const fromFormValues = (formValues: any): Partial<IStallFormInfo> => {
     }
 }
 
-export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
     initialValues: object
     constructor(props: any) {
         super(props)
@@ -81,6 +83,7 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
             stallLocationInfo: null,
             locationConfirmed: false,
             formSubmitting: false,
+            errors: undefined,
         }
 
         this.onChooseElection = this.onChooseElection.bind(this)
@@ -90,32 +93,15 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     onChooseElection(event: any, election: IElection) {
-        this.setState(
-            Object.assign(this.state, {
-                stepIndex: 1,
-                chosenElection: election,
-                stallLocationInfo: null,
-                locationConfirmed: false,
-            })
-        )
+        this.setState({ ...this.state, stepIndex: 1, chosenElection: election, stallLocationInfo: null, locationConfirmed: false })
     }
 
     onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
-        this.setState(
-            Object.assign(this.state, {
-                stepIndex: 2,
-                stallLocationInfo: stallLocationInfo,
-                locationConfirmed: true,
-            })
-        )
+        this.setState({ ...this.state, stepIndex: 2, stallLocationInfo: stallLocationInfo, locationConfirmed: true })
     }
 
     toggleFormSubmitting() {
-        this.setState(
-            Object.assign(this.state, {
-                formSubmitting: !this.state.formSubmitting,
-            })
-        )
+        this.setState({ ...this.state, formSubmitting: !this.state.formSubmitting })
     }
 
     componentWillMount() {
@@ -128,8 +114,8 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     render() {
-        const { liveElections, isDirty, onFormSubmit, onSaveForm, onStallAdded } = this.props
-        const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting } = this.state
+        const { liveElections, isValid, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting, errors } = this.state
 
         return (
             <AddStallForm
@@ -142,13 +128,14 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
                 locationConfirmed={locationConfirmed}
                 initialValues={this.initialValues}
                 formSubmitting={formSubmitting}
-                isDirty={isDirty}
+                errors={errors}
+                isValid={isValid}
                 onSubmit={async (values: object, dispatch: Function, props: IProps) => {
                     this.toggleFormSubmitting()
-                    await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo)
+                    await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo, this)
                 }}
                 onSaveForm={() => {
-                    onSaveForm(isDirty)
+                    onSaveForm()
                 }}
             />
         )
@@ -158,13 +145,19 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     return {
         liveElections: getLiveElections(state),
-        isDirty: isDirty("addStall")(state),
+        isValid: isValid("addStall")(state),
     }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        async onFormSubmit(onStallAdded: Function, values: object, election: IElection, stallLocationInfo: IStallLocationInfo) {
+        async onFormSubmit(
+            onStallAdded: Function,
+            values: object,
+            election: IElection,
+            stallLocationInfo: IStallLocationInfo,
+            that: AddStallFormContainer
+        ) {
             const stall: Partial<IStallFormInfo> = fromFormValues(values)
             stall.election = election.id
 
@@ -174,12 +167,14 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 stall.polling_place = stallLocationInfo.id
             }
 
-            const json = await dispatch(createStall(stall as IStallFormInfo))
-            if (json) {
+            const { response, json } = await dispatch(createStall(stall as IStallFormInfo))
+            if (response.status === 201) {
                 onStallAdded()
+            } else if (response.status === 400) {
+                that.setState({ ...that.state, errors: json }, () => that.toggleFormSubmitting())
             }
         },
-        onSaveForm: (isDirty: boolean) => {
+        onSaveForm: () => {
             dispatch(submit("addStall"))
         },
     }
