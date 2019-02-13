@@ -123,7 +123,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
                             )}
                         </FlexboxContainer>
-                        {pollingPlace.stall !== null && pollingPlace.stall.noms.free_text && (
+                        {pollingPlace.stall !== null && "free_text" in pollingPlace.stall.noms && (
                             <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
                         )}
                         {pollingPlace.stall !== null && pollingPlace.stall.noms.run_out && (
