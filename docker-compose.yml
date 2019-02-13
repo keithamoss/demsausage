@@ -5,9 +5,8 @@ services:
         command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
         ports:
             - "5432:5432"
-        environment:
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=stack
+        env_file:
+            - secrets/sausage-db.env
         volumes:
             # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
             - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
@@ -40,7 +39,7 @@ services:
             - "8000:8000"
         env_file:
             - secrets/sausage-web.dev.env
-            - secrets/sausage-db.env
+            - secrets/sausage-web-db.env
         depends_on:
             - db
             - memcached
