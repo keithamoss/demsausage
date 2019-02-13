@@ -3,12 +3,6 @@ README.dev.md
 /admin/.env
 /public/.env
 secrets.php
-/php/elections/*.geojson
-/php/client_secrets.php
-/php/google-api-php-client-*
-/php/v3-test/*
-/php/carto-dump/*
-/php/fix-old-election-has-other.php
 *.sqlite3*
 /python/*
 /db/*.sqlite3
@@ -27,4 +21,4 @@ db-pg/data/
 initial-data/emails.csv
 *.pyc
 logs/
-/php copy/
+/php/
