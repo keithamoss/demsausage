@@ -16,9 +16,10 @@ If this is the first time you're running Democracy Sausage you'll need to:
 Use the template .env files in `secrets-tmpl` to create corresponding files under `secrets/` for:
 
 1. `sausage-web.dev.env`
-2. `sausage-db.env`
-3. `sausage-public-frontend.dev.env`
-4. `sausage-admin-frontend.dev.env`
+2. `sausage-web-db.dev.env`
+3. `sausage-db.dev.env`
+4. `sausage-public-frontend.dev.env`
+5. `sausage-admin-frontend.dev.env`
 
 #### Admin Site
 
