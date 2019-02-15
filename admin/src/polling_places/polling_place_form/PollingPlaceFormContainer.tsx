@@ -53,11 +53,11 @@ const fromFormValues = (formValues: any) => {
     return {
         stall: {
             noms: buildNomsObject(formValues),
-            name: formValues.name,
-            description: formValues.description,
-            website: formValues.website,
-            extra_info: formValues.extra_info,
-            source: formValues.source,
+            name: formValues.name || "",
+            description: formValues.description || "",
+            website: formValues.website || "",
+            extra_info: formValues.extra_info || "",
+            source: formValues.source || "",
         },
         facility_type: formValues.facility_type,
     }
