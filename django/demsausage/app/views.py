@@ -96,9 +96,9 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     permission_classes = (AnonymousOnlyList,)
 
     def get_queryset(self):
-        if self.request.user.is_anonymous is True:
-            return self.queryset.filter(is_hidden=False).order_by("-id")
-        return self.queryset.order_by("-id")
+        if self.request.query_params.get("includeHidden", None) == "true" and self.request.user.is_anonymous is False:
+            return self.queryset.order_by("-id")
+        return self.queryset.filter(is_hidden=False).order_by("-id")
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous is True:

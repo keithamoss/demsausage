@@ -167,7 +167,7 @@ export function getMapboxAPIKey(): any {
 export function fetchInitialAppState(initialElectionName: string) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())
-        await Promise.all([dispatch(fetchElections(initialElectionName))])
+        await Promise.all([dispatch(fetchElections())])
         dispatch(loaded())
     }
 }

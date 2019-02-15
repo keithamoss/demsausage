@@ -132,7 +132,7 @@ export function fetchInitialAppState() {
 
         await Promise.all([
             dispatch(fetchUser()),
-            dispatch(fetchElections()),
+            dispatch(fetchElections(true)),
             dispatch(fetchPendingStalls()),
             dispatch(fetchPollingPlaceTypes()),
         ])
