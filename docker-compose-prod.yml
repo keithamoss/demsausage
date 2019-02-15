@@ -17,6 +17,10 @@ services:
 
             # Enable this to store the PostgreSQL data on the host
             - ./db-pg/data:/var/lib/postgresql/data
+    memcached:
+        image: memcached
+        expose:
+            - "11211"
     django:
         image: demsausage/django:latest
         command: supervisord
@@ -26,7 +30,7 @@ services:
         #     - "8000:8000"
         env_file:
             - secrets/sausage-web.prod-local.env
-            - secrets/sausage-db.env
+            - secrets/sausage-db.dev.env
         depends_on:
             - db
     nginx_prod:

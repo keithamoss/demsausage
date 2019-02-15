@@ -27,7 +27,7 @@ services:
             - ./build/:/build:delegated
             # - ./frontend:/frontend:delegated
         env_file:
-            - secrets/scremsong-web.prod-local.env
-            - secrets/scremsong-db.env
+            - secrets/sausage-web.prod-local.env
+            - secrets/sausage-db.env
         # depends_on:
         #     - db

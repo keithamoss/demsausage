@@ -18,9 +18,9 @@ docker-compose -f docker-compose-buildpy.yml stop
 cp build/frontend-public.tgz build/frontend-admin.tgz build/django.tgz nginx-prod/build # this is horrible, fixme
 
 # For local testing with docker-compose-prod.yml only
-# echo building prod nginx container
-# (cd nginx-prod && docker build -t demsausage/nginx-prod:latest .)
-# (cd nginx-prod && docker build --no-cache -t demsausage/nginx-prod:latest . && cd ..)
+echo building prod nginx container
+(cd nginx-prod && docker build -t demsausage/nginx-prod:latest .)
+(cd nginx-prod && docker build --no-cache -t demsausage/nginx-prod:latest . && cd ..)
 
 # build the frontend assets (this takes quite a while due to minification)
 # (cd public && npm run build && cd build && tar czvf ../../build/frontend-public.tgz .)
@@ -28,5 +28,5 @@ cp build/frontend-public.tgz build/frontend-admin.tgz build/django.tgz nginx-pro
 
 echo building prod django container
 (cd django && docker build -t demsausage/django:latest .)
-# (cd django && docker build --no-cache -t demsausage/django:latest . && cd ..)
+(cd django && docker build --no-cache -t demsausage/django:latest . && cd ..)
 # rm django/demsausage/ealfront/templates/index.html
