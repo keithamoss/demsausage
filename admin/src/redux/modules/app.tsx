@@ -3,7 +3,7 @@ import { IAPIClient } from "../../shared/api/APIClient"
 import { fetchElections } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
 import { fetchPendingStalls } from "./stalls"
-import { fetchUser } from "./user"
+import { fetchUser, ISelf } from "./user"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -130,24 +130,12 @@ export function fetchInitialAppState() {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())
 
-        await Promise.all([
-            dispatch(fetchUser()),
-            dispatch(fetchElections(true)),
-            dispatch(fetchPendingStalls()),
-            dispatch(fetchPollingPlaceTypes()),
-        ])
-
-        // const self: ISelf = await dispatch(fetchUser())
-        // if (self && self.success) {
-        //     await Promise.all([
-        //         dispatch(fetchElections()),
-        //         //     dispatch(fetchGeomInfo()),
-        //         //     dispatch(fetchColourInfo()),
-        //         //     dispatch(fetchSchemaInfo()),
-        //         //     dispatch(fetchTablesIfUncached([...self.user.favourite_tables, ...self.user.recent_tables])),
-        //     ])
-        //     // await dispatch(fetchColumnsForMaps())
-        // }
+        const self: ISelf = await dispatch(fetchUser())
+        if (self && self.success) {
+            await Promise.all([dispatch(fetchElections(true)), dispatch(fetchPendingStalls()), dispatch(fetchPollingPlaceTypes())])
+        } else {
+            await dispatch(fetchElections(true))
+        }
 
         dispatch(loaded())
     }
