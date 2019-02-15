@@ -13,6 +13,7 @@ now=`date '+%Y_%m_%d__%H_%M_%S'`
 
 DB_NAME="scratch"
 
+# psql --username=$DB_USERNAME --dbname=$DB_NAME --command='DROP SCHEMA IF EXISTS "'"$DB_SCHEMA"'_bak";'
 # psql --username=$DB_USERNAME --dbname=$DB_NAME --command='ALTER SCHEMA "'"$DB_SCHEMA"'" RENAME TO "'"$DB_SCHEMA"'_bak";'
 
 # pg_restore --username=$DB_USERNAME --dbname=$DB_NAME --single-transaction "${BASE_DIR}/demsausage_2019_02_13__13_10_18.dump"
