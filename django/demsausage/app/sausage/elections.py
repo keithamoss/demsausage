@@ -16,11 +16,19 @@ from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item
 
 def regenerate_election_geojson(election_id):
     polling_places = PollingPlacesGeoJSONSerializer(PollingPlaces.objects.select_related("noms").filter(election_id=election_id, status=PollingPlaceStatus.ACTIVE), many=True)
-    cache.set(get_cache_key(election_id), polling_places.data)
+    cache.set(get_polling_place_geojson_cache_key(election_id), polling_places.data)
 
 
-def get_cache_key(electionId):
+def clear_elections_cache():
+    cache.delete_many([get_elections_cache_key(True), get_elections_cache_key(False)])
+
+
+def get_polling_place_geojson_cache_key(electionId):
     return "election_{}_polling_places_geojson".format(electionId)
+
+
+def get_elections_cache_key(includeHidden):
+    return "elections_{}".format("with_hidden" if includeHidden is True else "without_hidden")
 
 
 class PollingPlacesIngestBase():

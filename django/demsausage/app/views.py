@@ -25,7 +25,7 @@ from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter,
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
-from demsausage.app.sausage.elections import get_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
+from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 import datetime
@@ -96,14 +96,29 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     permission_classes = (AnonymousOnlyList,)
 
     def get_queryset(self):
-        if self.request.query_params.get("includeHidden", None) == "true" and self.request.user.is_anonymous is False:
-            return self.queryset.order_by("-id")
-        return self.queryset.filter(is_hidden=False).order_by("-id")
+        if self.request.query_params.get("includeHidden", None) == "false" or self.request.user.is_anonymous is True:
+            return self.queryset.filter(is_hidden=False).order_by("-id")
+        return self.queryset.order_by("-id")
 
     def get_serializer_class(self):
         if self.request.user.is_anonymous is True:
             return self.serializer_class
         return ElectionsStatsSerializer
+
+    def list(self, request, format=None):
+        regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
+        includeHidden = True if self.request.query_params.get("includeHidden", None) == "true" else False
+        cache_key = get_elections_cache_key(includeHidden)
+
+        if regenerate_cache is False and cache_key in cache:
+            return Response(cache.get(cache_key))
+
+        response = super(ElectionsViewSet, self).list(request, format)
+        cache.set(cache_key, response.data)
+
+        if regenerate_cache is True:
+            return Response({})
+        return response
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
@@ -222,7 +237,7 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
 
     def list(self, request, format=None):
         regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
-        cache_key = get_cache_key(self.request.query_params.get("election_id"))
+        cache_key = get_polling_place_geojson_cache_key(self.request.query_params.get("election_id"))
 
         if regenerate_cache is False and cache_key in cache:
             return Response(cache.get(cache_key))

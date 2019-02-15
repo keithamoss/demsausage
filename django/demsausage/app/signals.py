@@ -2,8 +2,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
-from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms
-from demsausage.app.sausage.elections import regenerate_election_geojson
+from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections
+from demsausage.app.sausage.elections import regenerate_election_geojson, clear_elections_cache
 from demsausage.app.enums import PollingPlaceStatus
 
 
@@ -21,6 +21,11 @@ def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, crea
     if instance.status == PollingPlaceStatus.ACTIVE:
         if created is True or instance.tracker.has_changed("noms") is True:
             regenerate_election_geojson(instance.election_id)
+
+
+@receiver(post_save, sender=Elections)
+def clear_elections_json(sender, instance, created, **kwargs):
+    clear_elections_cache()
 
 
 @receiver(post_save, sender=User)
