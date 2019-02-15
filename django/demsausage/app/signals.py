@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import User
 
 from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections
@@ -8,6 +8,7 @@ from demsausage.app.enums import PollingPlaceStatus
 
 
 @receiver(post_save, sender=PollingPlaceNoms)
+@receiver(post_delete, sender=PollingPlaceNoms)
 def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
     # We only need to update when the "noms" field of an existing noms record changes
     # The other post_save() signal below takes care of regenerating GeoJSON for
@@ -17,6 +18,7 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=PollingPlaces)
+@receiver(post_delete, sender=PollingPlaces)
 def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, created, **kwargs):
     if instance.status == PollingPlaceStatus.ACTIVE:
         if created is True or instance.tracker.has_changed("noms") is True:
@@ -24,6 +26,7 @@ def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, crea
 
 
 @receiver(post_save, sender=Elections)
+@receiver(post_delete, sender=Elections)
 def clear_elections_json(sender, instance, created, **kwargs):
     clear_elections_cache()
 
