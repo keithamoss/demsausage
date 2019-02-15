@@ -5,18 +5,17 @@ services:
     #     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     #     ports:
     #         - "5432:5432"
-    #     environment:
-    #         - POSTGRES_PASSWORD=postgres
-    #         - POSTGRES_DB=stack
+    #     env_file:
+    #         - secrets/sausage-db.dev.env
     #     volumes:
     #         # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
-    #         - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
+    #         - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
 
     #         # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
     #         # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
 
     #         # Enable this to store the PostgreSQL data on the host
-    #         - ./db/data:/var/lib/postgresql/data
+    #         - ./db-pg/data:/var/lib/postgresql/data
     django:
         build: django/
         entrypoint: /app/docker-entrypoint.sh
@@ -26,8 +25,9 @@ services:
             # - ./django/:/app:delegated
             - ./build/:/build:delegated
             # - ./frontend:/frontend:delegated
+            - ./logs/django:/app/logs:delegated
         env_file:
             - secrets/sausage-web.prod-local.env
-            - secrets/sausage-db.env
+            - secrets/sausage-db.dev.env
         # depends_on:
         #     - db

@@ -26,7 +26,7 @@ waitfordb()
 
 CMD="$1"
 
-if [ "$ENVIRONMENT" != "DEVELOPMENT" ]; then
+if [ "$ENVIRONMENT" != "DEVELOPMENT" ] && [ "$CMD" != "build" ]; then
   waitfordb
   >&2 echo "Starting crond in the background"
   # Add our cronjob
@@ -69,11 +69,11 @@ fi
 # fi
 
 if [ "$CMD" = "supervisord" ]; then
-   waitfordb
-   export ENVIRONMENT=PRODUCTION
-   django-admin migrate
-   /usr/bin/supervisord -c /app/supervisord.conf
-   exit
+  waitfordb
+  export ENVIRONMENT=PRODUCTION
+  django-admin migrate
+  /usr/bin/supervisord -c /app/supervisord.conf
+  exit
 fi
 
 exec "$@"
