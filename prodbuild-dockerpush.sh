@@ -11,7 +11,7 @@ if [ x"$ver" = x ]; then
 fi
 
 # echo pushing prod nginx container
-# docker tag demsausage/nginx:latest demsausage/nginx-prod:"$ver"
+docker tag demsausage/nginx-prod:latest demsausage/nginx-prod:"$ver"
 # docker push demsausage/nginx:latest
 # docker push demsausage/nginx:"$ver"
 
