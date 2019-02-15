@@ -20,15 +20,15 @@ def regenerate_election_geojson(election_id):
 
 
 def clear_elections_cache():
-    cache.delete_many([get_elections_cache_key(True), get_elections_cache_key(False)])
+    cache.delete(get_elections_cache_key())
 
 
 def get_polling_place_geojson_cache_key(electionId):
     return "election_{}_polling_places_geojson".format(electionId)
 
 
-def get_elections_cache_key(includeHidden):
-    return "elections_{}".format("with_hidden" if includeHidden is True else "without_hidden")
+def get_elections_cache_key():
+    return "elections_list"
 
 
 class PollingPlacesIngestBase():

@@ -91,34 +91,24 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
-    queryset = Elections.objects
-    serializer_class = ElectionsSerializer
+    queryset = Elections.objects.order_by("-id")
+    serializer_class = ElectionsStatsSerializer
     permission_classes = (AnonymousOnlyList,)
 
-    def get_queryset(self):
-        if self.request.query_params.get("includeHidden", None) == "false" or self.request.user.is_anonymous is True:
-            return self.queryset.filter(is_hidden=False).order_by("-id")
-        return self.queryset.order_by("-id")
-
-    def get_serializer_class(self):
-        if self.request.user.is_anonymous is True:
-            return self.serializer_class
-        return ElectionsStatsSerializer
-
-    def list(self, request, format=None):
+    @list_route(methods=["get"])
+    def public(self, request, format=None):
         regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
-        includeHidden = True if self.request.query_params.get("includeHidden", None) == "true" else False
-        cache_key = get_elections_cache_key(includeHidden)
+        cache_key = get_elections_cache_key()
 
         if regenerate_cache is False and cache_key in cache:
             return Response(cache.get(cache_key))
 
-        response = super(ElectionsViewSet, self).list(request, format)
-        cache.set(cache_key, response.data)
+        serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
+        cache.set(cache_key, serializer.data)
 
         if regenerate_cache is True:
             return Response({})
-        return response
+        return Response(serializer.data)
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic

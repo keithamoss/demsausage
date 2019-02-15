@@ -134,9 +134,9 @@ export interface IElectionStats {
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
-export function fetchElections(includeHidden: boolean = false) {
+export function fetchElections() {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/elections/", dispatch, { includeHidden: includeHidden })
+        const { response, json } = await api.get("/api/0.1/elections/", dispatch)
 
         if (response.status === 200) {
             dispatch(loadElections(json))

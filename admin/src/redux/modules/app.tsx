@@ -132,9 +132,9 @@ export function fetchInitialAppState() {
 
         const self: ISelf = await dispatch(fetchUser())
         if (self && self.success) {
-            await Promise.all([dispatch(fetchElections(true)), dispatch(fetchPendingStalls()), dispatch(fetchPollingPlaceTypes())])
+            await Promise.all([dispatch(fetchElections()), dispatch(fetchPendingStalls()), dispatch(fetchPollingPlaceTypes())])
         } else {
-            await dispatch(fetchElections(true))
+            await dispatch(fetchElections())
         }
 
         dispatch(loaded())
