@@ -61,8 +61,8 @@ def send_stall_submitted_email(stall):
     })
 
 
-def has_confirmed_mail(email):
-    return Stalls.objects.filter(email=email).filter(mail_confirmed=True).count() > 0
+def has_submitted_stall_previously(email):
+    return Stalls.objects.filter(email=email).count() > 0
 
 
 def send_stall_approved_email(stall):
@@ -76,7 +76,7 @@ def send_stall_approved_email(stall):
         "DELICIOUSNESS": getFoodDescription(stall),
     }
 
-    if has_confirmed_mail(stall.email) is False:
+    if has_submitted_stall_previously(stall.email) is False:
         confirm_key = make_confirmation_hash(stall.email, stall.id)
 
         stall.mail_confirmed = True
