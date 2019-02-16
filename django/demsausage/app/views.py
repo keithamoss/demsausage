@@ -357,24 +357,32 @@ class MailManagementViewSet(viewsets.ViewSet):
 
     @list_route(methods=["post"])
     def mailgun_webhook(self, request, format=None):
-        token = request.data.get("token", None)
-        timestamp = request.data.get("timestamp", None)
-        signature = request.data.get("signature", None)
-        event_type = request.data.get("event", None)
+        with open("mailgun.debug", "w") as f:
+            f.write(str(request.data))
 
-        if token is None or timestamp is None or signature is None:
-            return Response({}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        signature_data = request.data.get("signature", None)
+        if signature_data is not None:
+            timestamp = int(signature_data["timestamp"])
+            token = signature_data["token"]
+            signature = signature_data["signature"]
+
+        event_data = request.data.get("event-data", None)
+        if event_data is not None:
+            event_type = event_data["event"]
+
+        if timestamp is None or token is None or signature is None:
+            return Response({"status": 1}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         if verify_webhook(token, timestamp, signature) is False:
-            return Response({}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({"status": 2}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         serializer = MailgunEventsSerializer(data={
-            "timestamp": timestamp,
+            "timestamp": datetime.datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%dT%H:%M:%S"),
             "event_type": event_type,
-            "data": request.data,
+            "payload": event_data,
         })
         if serializer.is_valid() is True:
             serializer.save()
-            return Response({})
+            return Response({"status": "OK"})
         else:
             raise APIException(serializer.errors)

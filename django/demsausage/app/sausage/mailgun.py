@@ -109,7 +109,7 @@ def send_pending_stall_reminder_email(pending_stall_count):
 # https://documentation.mailgun.com/en/latest/user_manual.html#webhooks
 def verify_webhook(token, timestamp, signature):
     # Check if the timestamp is fresh
-    if abs(time.time() - timestamp) > 15:
+    if abs(time.time() - timestamp) > 30:  # seconds
         return False
 
     return generate_signature(get_env("MAILGUN_API_KEY"), "{}{}".format(timestamp, token)) == signature
