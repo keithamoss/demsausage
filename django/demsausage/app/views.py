@@ -357,9 +357,6 @@ class MailManagementViewSet(viewsets.ViewSet):
 
     @list_route(methods=["post"])
     def mailgun_webhook(self, request, format=None):
-        with open("mailgun.debug", "w") as f:
-            f.write(str(request.data))
-
         signature_data = request.data.get("signature", None)
         if signature_data is not None:
             timestamp = int(signature_data["timestamp"])
