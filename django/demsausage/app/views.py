@@ -95,7 +95,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     serializer_class = ElectionsStatsSerializer
     permission_classes = (AnonymousOnlyList,)
 
-    @list_route(methods=["get"])
+    @list_route(methods=["get"], permission_classes=(AllowAny,))
     def public(self, request, format=None):
         regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
         cache_key = get_elections_cache_key()
