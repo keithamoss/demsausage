@@ -18,6 +18,7 @@ docker tag demsausage/nginx-prod:latest demsausage/nginx-prod:"$ver"
 echo versioning frontend assets
 mv build/frontend-public.tgz build/frontend-public-$ver.tgz
 mv build/frontend-admin.tgz build/frontend-admin-$ver.tgz
+mv build/django.tgz build/django-$ver.tgz
 
 echo pushing prod django container
 docker tag demsausage/django:latest keithmoss/demsausage-django:latest
