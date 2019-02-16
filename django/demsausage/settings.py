@@ -53,7 +53,6 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
         "democracysausage.org",
         "admin.democracysausage.org",
         "api.democracysausage.org",
-        "api2.democracysausage.org",
     ]
 
     SESSION_COOKIE_DOMAIN = ".democracysausage.org"
