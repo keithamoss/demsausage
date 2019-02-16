@@ -137,7 +137,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
         loader.run()
 
-        if loader.is_dry_run() is False:
+        if loader.is_dry_run() is True:
             # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
             regenerate_election_geojson(election.id)
             raise BadRequest({"message": "Rollback", "logs": loader.collects_logs()})
@@ -152,7 +152,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         rollback = RollbackPollingPlaces(election, dry_run)
         rollback.run()
 
-        if rollback.is_dry_run() is False:
+        if rollback.is_dry_run() is True:
             # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
             regenerate_election_geojson(election.id)
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
