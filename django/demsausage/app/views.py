@@ -355,7 +355,7 @@ class MailManagementViewSet(viewsets.ViewSet):
 
         return Response("No worries, we've removed you from our mailing list :)", content_type="text/html")
 
-    @list_route(methods=["get"])
+    @list_route(methods=["post"])
     def mailgun_webhook(self, request, format=None):
         token = request.data.get("token", None)
         timestamp = request.data.get("timestamp", None)
