@@ -1,19 +1,9 @@
-DB_HOST=db
-DB_PORT=5432
-DB_NAME=stack
-DB_SCHEMA=demsausage
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
-
-BASE_DIR="/var/lib/postgresql/scripts"
 now=`date '+%Y_%m_%d__%H_%M_%S'`
 
-# pg_dump --username=$DB_USERNAME --schema=$DB_SCHEMA --table="$DB_SCHEMA.app_*" --format=custom $DB_NAME > "$BASE_DIR/${DB_SCHEMA}_app_${now}.dump"
-# pg_dump --username=$DB_USERNAME --schema=$DB_SCHEMA --format=custom $DB_NAME > "$BASE_DIR/${DB_SCHEMA}_${now}.dump"
+echo "Dump development database"
+export $(xargs < secrets/sausage-dev-db.env)
+echo "${DB_HOST}:${DB_PORT}:${DB_NAME}:${DB_USERNAME}:${DB_PASSWORD}" > ~/.pgpass
+chmod 600 ~/.pgpass
 
-DB_NAME="scratch"
-
-# psql --username=$DB_USERNAME --dbname=$DB_NAME --command='DROP SCHEMA IF EXISTS "'"$DB_SCHEMA"'_bak";'
-# psql --username=$DB_USERNAME --dbname=$DB_NAME --command='ALTER SCHEMA "'"$DB_SCHEMA"'" RENAME TO "'"$DB_SCHEMA"'_bak";'
-
-# pg_restore --username=$DB_USERNAME --dbname=$DB_NAME --single-transaction "${BASE_DIR}/demsausage_2019_02_13__13_10_18.dump"
+dev_db_dump_file="local_dev_db_${DB_SCHEMA}_${now}.dump"
+pg_dump --host=$DB_HOST --username=$DB_USERNAME --format=custom --schema=$DB_SCHEMA $DB_NAME > $dev_db_dump_file
