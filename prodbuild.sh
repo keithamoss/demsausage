@@ -22,11 +22,6 @@ echo building prod nginx container
 (cd nginx-prod && docker build -t demsausage/nginx-prod:latest .)
 # (cd nginx-prod && docker build --no-cache -t demsausage/nginx-prod:latest . && cd ..)
 
-# build the frontend assets (this takes quite a while due to minification)
-# (cd public && npm run build && cd build && tar czvf ../../build/frontend-public.tgz .)
-# (cd admin && npm run build && cd build && tar czvf ../../build/frontend-admin.tgz .)
-
-# echo building prod django container
+echo building prod django container
 (cd django && docker build -t demsausage/django:latest .)
 # (cd django && docker build --no-cache -t demsausage/django:latest . && cd ..)
-# rm django/demsausage/ealfront/templates/index.html
