@@ -395,7 +395,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         # Update election if necessary
         if self.election.polling_places_loaded is False:
             self.election.polling_places_loaded = True
-            self.election.polling_places_loaded.save()
+            self.election.save()
 
     def run(self):
         if self.can_loading_begin() is False:
