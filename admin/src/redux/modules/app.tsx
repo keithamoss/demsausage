@@ -131,7 +131,7 @@ export function fetchInitialAppState() {
         dispatch(loading())
 
         const self: ISelf = await dispatch(fetchUser())
-        if (self && self.success) {
+        if (self && self.is_logged_in) {
             await Promise.all([dispatch(fetchElections()), dispatch(fetchPendingStalls()), dispatch(fetchPollingPlaceTypes())])
         } else {
             await dispatch(fetchElections())

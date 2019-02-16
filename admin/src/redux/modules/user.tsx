@@ -41,7 +41,7 @@ export interface IAction {
 }
 
 export interface ISelf {
-    success: boolean
+    is_logged_in: boolean
     user: IUser
 }
 
