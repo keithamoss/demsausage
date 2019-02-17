@@ -93,7 +93,6 @@ class PollingPlaceNoms(models.Model):
     extra_info = models.TextField(blank=True)
     first_report = models.DateTimeField(auto_now_add=True, null=True)
     latest_report = models.DateTimeField(auto_now=True, null=True)
-    chance_of_sausage = models.FloatField(null=True)
     source = models.TextField(blank=True)
 
     tracker = FieldTracker()
@@ -122,6 +121,7 @@ class PollingPlaces(models.Model):
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceStatus], default=PollingPlaceStatus.DRAFT)
+    chance_of_sausage = models.FloatField(null=True)
 
     tracker = FieldTracker(fields=["noms"])
     objects = PollingPlacesManager()

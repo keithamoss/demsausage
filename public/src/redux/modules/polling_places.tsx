@@ -92,7 +92,6 @@ export interface INoms {
 
 export interface IPollingPlaceStall {
     noms: INoms
-    chance_of_sausage: number | null
     name: string
     description: string
     website: string
@@ -115,6 +114,7 @@ export interface IPollingPlace {
     address: string
     divisions: string[]
     state: string
+    chance_of_sausage: number | null
     stall: IPollingPlaceStall | null
 }
 
@@ -265,11 +265,11 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
-    if (pollingPlace.stall === null || pollingPlace.stall.chance_of_sausage === null) {
+    if (pollingPlace.chance_of_sausage === null) {
         return "UNKNOWN"
-    } else if (pollingPlace.stall.chance_of_sausage >= 0.7) {
+    } else if (pollingPlace.chance_of_sausage >= 0.7) {
         return "HIGH"
-    } else if (pollingPlace.stall.chance_of_sausage >= 4) {
+    } else if (pollingPlace.chance_of_sausage >= 4) {
         return "MEDIUM"
     } else {
         return "LOW"

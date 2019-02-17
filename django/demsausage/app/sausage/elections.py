@@ -363,14 +363,14 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             return 0
         update_count = 0
 
-        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=False)
+        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=True)
         for polling_place in queryset:
             matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE)).order_by("election_id")
 
             if len(matching_polling_places) > 0:
                 scores = [calculate_score(pp) for pp in matching_polling_places]
 
-                polling_place.noms.chance_of_sausage = sum(scores) / len(matching_polling_places)
+                polling_place.chance_of_sausage = sum(scores) / len(matching_polling_places)
                 polling_place.save()
 
                 update_count += 1

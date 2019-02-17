@@ -141,9 +141,7 @@ for election in cursor.fetchall():
             if latest_report == "":
                 latest_report = None
 
-            chance_of_sausage = float(polling_place["chance_of_sausage"]) if polling_place["chance_of_sausage"] is not None and polling_place["chance_of_sausage"] != "" else None
-
-            pn = PollingPlaceNoms(noms=noms, name=get_value_or_empty_string(polling_place["stall_name"]), description=get_value_or_empty_string(polling_place["stall_description"]), website=get_value_or_empty_string(polling_place["stall_website"]), extra_info=get_value_or_empty_string(polling_place["extra_info"]), chance_of_sausage=chance_of_sausage, source=get_value_or_empty_string(polling_place["source"]))
+            pn = PollingPlaceNoms(noms=noms, name=get_value_or_empty_string(polling_place["stall_name"]), description=get_value_or_empty_string(polling_place["stall_description"]), website=get_value_or_empty_string(polling_place["stall_website"]), extra_info=get_value_or_empty_string(polling_place["extra_info"]), source=get_value_or_empty_string(polling_place["source"]))
             pn.save()
 
             # print(pn.id)
@@ -152,8 +150,9 @@ for election in cursor.fetchall():
         # Polling Place
         polling_place_type_facility_type = get_polling_place_facility_type(polling_place["polling_place_type"])
         divisions = get_polling_place_divisions(polling_place["division"])
+        chance_of_sausage = float(polling_place["chance_of_sausage"]) if polling_place["chance_of_sausage"] is not None and polling_place["chance_of_sausage"] != "" else None
 
-        p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], divisions=divisions, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrance_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]), status=PollingPlaceStatus.DRAFT)
+        p = PollingPlaces(old_id=polling_place["id"], election=e, noms=pn, geom=Point(polling_place["lon"], polling_place["lat"], srid=4326), name=polling_place["polling_place_name"], facility_type=polling_place_type_facility_type, premises=get_value_or_empty_string(polling_place["premises"]), address=polling_place["address"], divisions=divisions, state=polling_place["state"], wheelchair_access=get_value_or_empty_string(polling_place["wheelchairaccess"]), entrance_desc=get_value_or_empty_string(polling_place["entrancesdesc"]), opening_hours=get_value_or_empty_string(polling_place["opening_hours"]), booth_info=get_value_or_empty_string(polling_place["booth_info"]), status=PollingPlaceStatus.DRAFT, chance_of_sausage=chance_of_sausage)
         p.save()
         print(p.id)
 

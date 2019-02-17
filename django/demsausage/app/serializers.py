@@ -132,7 +132,6 @@ class PollingPlaceFacilityTypeSerializer(serializers.ModelSerializer):
 
 class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     noms = JSONSchemaField(noms_schema, default=dict)
-    chance_of_sausage = serializers.FloatField(allow_null=True, read_only=True)
     name = serializers.CharField(default="", allow_blank=True)
     description = serializers.CharField(default="", allow_blank=True)
     website = serializers.CharField(default="", allow_blank=True)
@@ -144,10 +143,11 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceNoms
 
-        fields = ("noms", "chance_of_sausage", "name", "description", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
+        fields = ("noms", "name", "description", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
+    chance_of_sausage = serializers.FloatField(allow_null=True, read_only=True)
     facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
 
@@ -155,7 +155,7 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type")
 
     def _update_facility_type(self, validated_data):
         try:
