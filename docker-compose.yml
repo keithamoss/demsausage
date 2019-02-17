@@ -36,6 +36,7 @@ services:
         entrypoint: /app/docker-entrypoint.sh
         volumes:
             - ./django/:/app:delegated
+            - ./scrapers/:/scrapers:delegated
         ports:
             - "8000:8000"
         env_file:
