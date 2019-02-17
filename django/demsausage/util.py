@@ -3,6 +3,10 @@ import os
 import time
 import unicodedata
 import string
+import datetime
+import pytz
+
+from django.conf import settings
 
 
 def make_logger(name, handler=logging.StreamHandler(), formatter=None):
@@ -67,6 +71,12 @@ def get_or_none(classmodel, **kwargs):
         return classmodel.objects.get(**kwargs)
     except classmodel.DoesNotExist:
         return None
+
+
+def add_datetime_to_filename(filename):
+    filename, file_extension = os.path.splitext(filename)
+    datetime_str = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()
+    return clean_filename("{filename}_{datetime}.{ext}".format(filename=filename, datetime=datetime_str, ext=file_extension[1:]))
 
 
 def clean_filename(filename, whitelist=None, replace=" "):
