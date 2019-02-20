@@ -269,7 +269,7 @@ export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
         return "UNKNOWN"
     } else if (pollingPlace.chance_of_sausage >= 0.7) {
         return "HIGH"
-    } else if (pollingPlace.chance_of_sausage >= 4) {
+    } else if (pollingPlace.chance_of_sausage >= 0.4) {
         return "MEDIUM"
     } else {
         return "LOW"
