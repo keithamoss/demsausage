@@ -56,7 +56,7 @@ def send_stall_submitted_email(stall):
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall has been received!",
+        "subject": "Your Democracy Sausage stall for {} has been received!".format(location_info["name"]),
         "html": html,
     })
 
@@ -66,6 +66,11 @@ def has_submitted_stall_previously(email, currentStallId):
 
 
 def send_stall_approved_email(stall):
+    if stall.election.polling_places_loaded is False:
+        location_info = stall.location_info
+    else:
+        location_info = model_to_dict(stall.polling_place)
+
     template_name = "stall_approved"
     params = {
         "POLLING_PLACE_NAME": stall.polling_place.name,
@@ -90,7 +95,7 @@ def send_stall_approved_email(stall):
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall has been approved!",
+        "subject": "Your Democracy Sausage stall for {} has been approved!".format(location_info["name"]),
         "html": html,
     })
 
