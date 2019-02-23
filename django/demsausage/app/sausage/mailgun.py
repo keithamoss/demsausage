@@ -89,7 +89,7 @@ def send_stall_approved_email(stall):
         stall.save()
 
         template_name = "stall_approved_with_mail_optout"
-        params["CONFIRM_OPTOUT_URL"] = get_env("API_BASE_URL") + "/0.1/mail/opt_out/?format=json&confirm_key=" + confirm_key
+        params["CONFIRM_OPTOUT_URL"] = get_env("PUBLIC_API_BASE_URL") + "/0.1/mail/opt_out/?format=json&confirm_key=" + confirm_key
 
     html = get_mail_template(template_name, params)
 
