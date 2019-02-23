@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
@@ -136,7 +137,7 @@ class IPAddressHistoricalModel(models.Model):
     """
     Abstract model for history models tracking the IP address.
     """
-    ip_address = models.GenericIPAddressField(null=True)
+    ip_address = models.GenericIPAddressField(_('IP address'), null=True)
 
     class Meta:
         abstract = True

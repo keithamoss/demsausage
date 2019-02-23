@@ -1,8 +1,10 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import User
+from simple_history.signals import pre_create_historical_record
+from simple_history.models import HistoricalRecords
 
-from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections
+from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections, Stalls
 from demsausage.app.sausage.elections import regenerate_election_geojson, clear_elections_cache
 from demsausage.app.enums import PollingPlaceStatus
 
@@ -41,3 +43,9 @@ def create_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+@receiver(pre_create_historical_record)
+def pre_create_historical_record_callback(sender, **kwargs):
+    history_instance = kwargs["history_instance"]
+    history_instance.ip_address = HistoricalRecords.thread.request.META["HTTP_X_FORWARDED_FOR"]
