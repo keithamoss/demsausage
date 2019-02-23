@@ -300,7 +300,7 @@ class StallsSerializer(serializers.ModelSerializer):
 class StallsManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on")
 
 
 class PendingStallsSerializer(StallsSerializer):

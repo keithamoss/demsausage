@@ -155,9 +155,9 @@ class Stalls(models.Model):
     email = models.EmailField()
     polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT, null=True)
     reported_timestamp = models.DateTimeField(auto_now_add=True)
+    approved_on = models.DateTimeField(null=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
-    mail_confirm_key = models.TextField(blank=True)
-    mail_confirmed = models.BooleanField(default=False)
+    mail_confirmed = models.BooleanField(default=True)
 
     history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
     tracker = FieldTracker()

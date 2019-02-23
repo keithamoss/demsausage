@@ -24,11 +24,11 @@ from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, check_confirmation_hash, verify_webhook
+from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
 from demsausage.util import make_logger, get_or_none, clean_filename
 
-import datetime
+from datetime import datetime
 import pytz
 import json
 
@@ -186,7 +186,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         if "text/csv" in response.accepted_media_type:
             election = get_or_none(Elections, id=request.query_params.get("election_id", None))
             if election is not None:
-                filename = clean_filename("{} - {}.csv".format(election.name, datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()))
+                filename = clean_filename("{} - {}.csv".format(election.name, datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()))
 
                 response["Content-Type"] = "Content-Type: text/csv; name=\"{}\"".format(filename)
                 response["Content-Disposition"] = "attachment; filename={}".format(filename)
@@ -261,7 +261,10 @@ class StallsViewSet(viewsets.ModelViewSet):
         if stall.status != StallStatus.PENDING:
             raise BadRequest("Stall is not pending")
 
-        serializer = StallsManagementSerializer(self.get_object(), data={"status": StallStatus.APPROVED}, partial=True)
+        serializer = StallsManagementSerializer(self.get_object(), data={
+            "status": StallStatus.APPROVED,
+            "approved_on": datetime.now()
+        }, partial=True)
         if serializer.is_valid() is True:
             serializer.save()
 
@@ -310,7 +313,11 @@ class StallsViewSet(viewsets.ModelViewSet):
             raise BadRequest(pollingPlaceWithNomsSerializer.errors)
 
         # Approve stall and link it to the new unofficial polling place we just added
-        serializer = StallsManagementSerializer(stall, data={"status": StallStatus.APPROVED, "polling_place": pollingPlaceSerializer.instance.id}, partial=True)
+        serializer = StallsManagementSerializer(stall, data={
+            "status": StallStatus.APPROVED,
+            "approved_on": datetime.now(),
+            "polling_place": pollingPlaceSerializer.instance.id
+        }, partial=True)
         if serializer.is_valid() is True:
             serializer.save()
 
@@ -332,19 +339,18 @@ class PendingStallsViewSet(generics.ListAPIView):
 class MailManagementViewSet(viewsets.ViewSet):
     @list_route(methods=["get"])
     def opt_out(self, request, format=None):
-        confirm_key = request.query_params.get("confirm_key", None)
+        stall_id = request.query_params.get("stall_id", None)
+        token = request.query_params.get("token", None)
+        signature = request.query_params.get("signature", None)
 
-        if confirm_key is None:
-            raise APIException("Confirm key required")
-
-        stall = get_or_none(Stalls, mail_confirm_key=confirm_key)
+        stall = get_or_none(Stalls, id=stall_id)
 
         if stall is None:
-            raise APIException("Invalid confirm key")
+            raise APIException("Invalid confirmation key")
 
         if stall.mail_confirmed is True:
-            if check_confirmation_hash(stall.email, stall.id, confirm_key) is False:
-                raise APIException("Confirmation key has expired")
+            if make_confirmation_hash(stall.id, token) != signature:
+                raise APIException("Invalid confirmation key")
             else:
                 stall.mail_confirmed = False
                 stall.save()
@@ -370,7 +376,7 @@ class MailManagementViewSet(viewsets.ViewSet):
             return Response({"status": 2}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         serializer = MailgunEventsSerializer(data={
-            "timestamp": datetime.datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%dT%H:%M:%S"),
+            "timestamp": datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%dT%H:%M:%S"),
             "event_type": event_type,
             "payload": event_data,
         })

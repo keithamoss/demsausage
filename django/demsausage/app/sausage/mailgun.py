@@ -9,6 +9,7 @@ from demsausage.util import get_env
 import requests
 import hmac
 import hashlib
+from random import getrandbits
 import time
 
 
@@ -61,37 +62,24 @@ def send_stall_submitted_email(stall):
     })
 
 
-def has_submitted_stall_previously(email, currentStallId):
-    return Stalls.objects.filter(email=email).exclude(id=currentStallId).count() > 0
-
-
 def send_stall_approved_email(stall):
     if stall.election.polling_places_loaded is False:
         location_info = stall.location_info
     else:
         location_info = model_to_dict(stall.polling_place)
 
-    template_name = "stall_approved"
-    params = {
+    token = str(getrandbits(128))
+    signature = make_confirmation_hash(stall.id, token)
+
+    html = get_mail_template("stall_approved_with_mail_optout", {
         "POLLING_PLACE_NAME": stall.polling_place.name,
         "POLLING_PLACE_ADDRESS": stall.polling_place.address,
         "STALL_NAME": stall.name,
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
-    }
-
-    if has_submitted_stall_previously(stall.email, stall.id) is False:
-        confirm_key = make_confirmation_hash(stall.email, stall.id)
-
-        stall.mail_confirmed = True
-        stall.mail_confirm_key = confirm_key
-        stall.save()
-
-        template_name = "stall_approved_with_mail_optout"
-        params["CONFIRM_OPTOUT_URL"] = get_env("PUBLIC_API_BASE_URL") + "/0.1/mail/opt_out/?format=json&confirm_key=" + confirm_key
-
-    html = get_mail_template(template_name, params)
+        "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
+    })
 
     return send({
         "to": stall.email,
@@ -111,6 +99,10 @@ def send_pending_stall_reminder_email(pending_stall_count):
         })
 
 
+def generate_signature(key, msg):
+    return hmac.new(bytes(key, "latin-1"), bytes(msg, "latin-1"), hashlib.sha256).hexdigest()
+
+
 # https://documentation.mailgun.com/en/latest/user_manual.html#webhooks
 def verify_webhook(token, timestamp, signature):
     # Check if the timestamp is fresh
@@ -120,13 +112,5 @@ def verify_webhook(token, timestamp, signature):
     return generate_signature(get_env("MAILGUN_API_KEY"), "{}{}".format(timestamp, token)) == signature
 
 
-def make_confirmation_hash(email, stall_id):
-    return generate_signature(get_env("MAILGUN_HMAC_KEY"), "{}{}{}".format(email, stall_id, get_env("MAILGUN_CONFIRM_SECRET")))
-
-
-def generate_signature(key, msg):
-    return hmac.new(bytes(key, "latin-1"), bytes(msg, "latin-1"), hashlib.sha256).hexdigest()
-
-
-def check_confirmation_hash(email, stall_id, confirm_code):
-    return make_confirmation_hash(email, stall_id) == confirm_code
+def make_confirmation_hash(stall_id, token):
+    return generate_signature(get_env("SECRET_KEY"), "{}{}".format(stall_id, token))
