@@ -93,7 +93,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     queryset = Elections.objects.order_by("-id")
     serializer_class = ElectionsStatsSerializer
-    permission_classes = (AnonymousOnlyList,)
+    permission_classes = (IsAuthenticated,)
 
     @list_route(methods=["get"], permission_classes=(AllowAny,))
     def public(self, request, format=None):
