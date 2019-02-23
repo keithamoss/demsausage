@@ -219,4 +219,4 @@ export function isItElectionDay(election: IElection) {
     return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
 }
 
-export const isElectionLive = (election: IElection) => DateTime.local().plus({ hours: 20 }) <= DateTime.fromISO(election.election_day)
+export const isElectionLive = (election: IElection) => DateTime.local().endOf("day") <= DateTime.fromISO(election.election_day).endOf("day")

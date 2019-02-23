@@ -1,4 +1,5 @@
 import { cloneDeep } from "lodash-es"
+import { DateTime } from "luxon"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
@@ -56,12 +57,15 @@ const toFormValues = (election: IElection) => {
 }
 
 const fromFormValues = (formValues: any): IElectionFormValues => {
+    const electionDayInLocal = DateTime.fromJSDate(formValues.election_day)
+    const electionDayInUTC = DateTime.utc(electionDayInLocal.get("year"), electionDayInLocal.get("month"), electionDayInLocal.get("day"))
+
     return {
         name: formValues.name,
         short_name: formValues.short_name,
         default_zoom_level: formValues.default_zoom_level,
         is_hidden: formValues.is_hidden,
-        election_day: formValues.election_day,
+        election_day: electionDayInUTC.toISO(),
         geom: {
             type: "Point",
             coordinates: [parseFloat(formValues.lon), parseFloat(formValues.lat)],

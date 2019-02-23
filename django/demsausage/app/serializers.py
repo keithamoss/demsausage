@@ -57,8 +57,9 @@ class ElectionsSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
     def validate_election_day(self, value):
-        if value <= datetime.now(pytz.utc):
-            raise serializers.ValidationError("Election day must be a day in the future")
+        # FIXME
+        # if value <= datetime.now(pytz.utc):
+        #     raise serializers.ValidationError("Election day must be a day in the future")
         return value
 
 
