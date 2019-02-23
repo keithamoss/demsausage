@@ -39,6 +39,6 @@ export interface IStallLocationInfo {
 // e.g. thunks, epics, et cetera
 export function createStall(stall: IStallFormInfo) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        return await api.post("/api/0.1/stalls/", stall, dispatch)
+        return await api.post("/0.1/stalls/", stall, dispatch)
     }
 }

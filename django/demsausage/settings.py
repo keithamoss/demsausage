@@ -55,8 +55,8 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
         "api.democracysausage.org",
     ]
 
-    SESSION_COOKIE_DOMAIN = ".democracysausage.org"
-    CSRF_COOKIE_DOMAIN = ".democracysausage.org"
+    SESSION_COOKIE_DOMAIN = "admin.democracysausage.org"
+    CSRF_COOKIE_DOMAIN = "admin.democracysausage.org"
 
     STATIC_ROOT = "/app/static"
 
@@ -95,6 +95,10 @@ else:
         "localhost:3001",
     )
     ALLOWED_HOSTS = ["localhost"]
+
+    SESSION_COOKIE_DOMAIN = "localhost"
+    CSRF_COOKIE_DOMAIN = "localhost"
+
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "static")
     ]
@@ -262,7 +266,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/api/static/'
 
 
 # Project-specific settings

@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             dispatch(setPrimaryElection(electionId))
         },
         onDownloadElection(election: IElection) {
-            window.location.href = `${getAPIBaseURL()}/api/0.1/polling_places/?format=csv&election_id=${election.id}`
+            window.location.href = `${getAPIBaseURL()}/0.1/polling_places/?format=csv&election_id=${election.id}`
         },
         onRegenerateMapDataForElection(election: IElection) {
             dispatch(regenerateMapDataForElection(election))

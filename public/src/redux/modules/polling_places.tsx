@@ -138,7 +138,7 @@ export interface IPollingPlaceLoaderResponseMessage {
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             search_term: searchTerm,
         })
@@ -150,7 +150,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchAllPollingPlaces(election: IElection) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
         })
 
@@ -162,7 +162,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/polling_places/search/", dispatch, {
+        const { response, json } = await api.get("/0.1/polling_places/search/", dispatch, {
             election_id: election.id,
             ids: pollingPlaceIds.join(","),
         })
@@ -175,7 +175,7 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: any /* Partial<IPollingPlace> */) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.patch(`/api/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
+        const { response, json } = await api.patch(`/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Polling place updated! 🌭🎉"))
@@ -186,7 +186,7 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/polling_places/nearby/", dispatch, {
+        const { response, json } = await api.get("/0.1/polling_places/nearby/", dispatch, {
             election_id: election.id,
             lonlat: `${lon},${lat}`,
         })

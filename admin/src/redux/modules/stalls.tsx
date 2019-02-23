@@ -107,7 +107,7 @@ export interface IStall {
 // e.g. thunks, epics, et cetera
 export function fetchPendingStalls() {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/api/0.1/stalls/pending/", dispatch)
+        const { response, json } = await api.get("/0.1/stalls/pending/", dispatch)
 
         if (response.status === 200) {
             dispatch(loadPendingStalls(json))
@@ -118,7 +118,7 @@ export function fetchPendingStalls() {
 
 export function approveStall(id: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.patch(`/api/0.1/stalls/${id}/approve/`, {}, dispatch)
+        const { response, json } = await api.patch(`/0.1/stalls/${id}/approve/`, {}, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated! 🍽🎉"))
@@ -131,7 +131,7 @@ export function approveStall(id: number) {
 
 export function approveStallAndAddUnofficialPollingPlace(id: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.patch(`/api/0.1/stalls/${id}/approve_and_add/`, {}, dispatch)
+        const { response, json } = await api.patch(`/0.1/stalls/${id}/approve_and_add/`, {}, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall updated and new polling place added! 🍽🎉"))
@@ -144,7 +144,7 @@ export function approveStallAndAddUnofficialPollingPlace(id: number) {
 
 export function declineStall(id: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.patch(`/api/0.1/stalls/${id}/`, { status: StallStatus.DECLINED }, dispatch)
+        const { response, json } = await api.patch(`/0.1/stalls/${id}/`, { status: StallStatus.DECLINED }, dispatch)
 
         if (response.status === 200) {
             dispatch(sendSnackbarNotification("Pending stall declined! 🍽🎉"))
