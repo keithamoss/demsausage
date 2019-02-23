@@ -106,8 +106,6 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
         cache.set(cache_key, serializer.data)
 
-        if regenerate_cache is True:
-            return Response({})
         return Response(serializer.data)
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
@@ -235,8 +233,6 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
         response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
         cache.set(cache_key, response.data)
 
-        if regenerate_cache is True:
-            return Response({})
         return response
 
 
