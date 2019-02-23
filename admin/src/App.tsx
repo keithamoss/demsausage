@@ -13,7 +13,6 @@ import * as React from "react"
 import { browserHistory, Link } from "react-router"
 import styled from "styled-components"
 import "./App.css"
-import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
 import { IModule as IAppModule } from "./redux/modules/app"
 import { IElection } from "./redux/modules/elections"
 import { IModule as ISnackbarsModule } from "./redux/modules/snackbars"
@@ -205,8 +204,6 @@ class App extends React.Component<IProps, {}> {
                         {...appBarProps}
                         zDepth={1}
                     />
-
-                    <LoginDialog open={user === null} />
 
                     <div className="page-content">{content || this.props.children}</div>
 
