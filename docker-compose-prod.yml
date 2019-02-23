@@ -45,5 +45,4 @@ services:
             - "8001:8001"
         environment:
             - HTTPS_ENABLED=TRUE
-            - SERVER_NAME=localhost
             - DJANGO_LOCATION=django:8000

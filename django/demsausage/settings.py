@@ -41,6 +41,7 @@ CORS_ALLOW_HEADERS = default_headers + (
 if get_env("ENVIRONMENT") == "PRODUCTION":
     DEBUG = False
     CONN_MAX_AGE = 50  # Half our max number of PostgreSQL connections
+
     CORS_ORIGIN_WHITELIST = (
         "democracysausage.org",
         "admin.democracysausage.org"
@@ -51,12 +52,11 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
     )
     ALLOWED_HOSTS = [
         "democracysausage.org",
-        "admin.democracysausage.org",
-        "api.democracysausage.org",
+        "admin.democracysausage.org"
     ]
 
     SESSION_COOKIE_DOMAIN = "admin.democracysausage.org"
-    CSRF_COOKIE_DOMAIN = "admin.democracysausage.org"
+    CSRF_COOKIE_DOMAIN = ".democracysausage.org"
 
     STATIC_ROOT = "/app/static"
 
@@ -86,18 +86,18 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
     }
 else:
     DEBUG = True
+    CONN_MAX_AGE = 50  # Half our max number of PostgreSQL connections
+
     CORS_ORIGIN_WHITELIST = (
-        "localhost",
-        "localhost:3001",
+        "test.democracysausage.org", "admin.test.democracysausage.org"
     )
     CSRF_TRUSTED_ORIGINS = (
-        "localhost",
-        "localhost:3001",
+        "test.democracysausage.org", "admin.test.democracysausage.org"
     )
-    ALLOWED_HOSTS = ["localhost"]
+    ALLOWED_HOSTS = ["test.democracysausage.org", "admin.test.democracysausage.org"]
 
-    SESSION_COOKIE_DOMAIN = "localhost"
-    CSRF_COOKIE_DOMAIN = "localhost"
+    SESSION_COOKIE_DOMAIN = "admin.test.democracysausage.org"
+    CSRF_COOKIE_DOMAIN = ".test.democracysausage.org"
 
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "static")

@@ -11,6 +11,15 @@ Requirements:
 
 If this is the first time you're running Democracy Sausage you'll need to:
 
+#### Hosts file
+
+Add the following to your [hosts file](<https://en.wikipedia.org/wiki/Hosts_(file)>).
+
+```
+127.0.0.1 test.democracysausage.org
+127.0.0.1 admin.test.democracysausage.org
+```
+
 #### .env files
 
 Use the template .env files in `secrets-tmpl` to create corresponding files under `secrets/` for:
@@ -34,11 +43,11 @@ Then navigate to the URLs given below
 
 ### Public site
 
-Navigate to https://localhost
+Navigate to https://test.democracysausage.org
 
 ### Admin site
 
-Navigate to https://localhost:3001
+Navigate to https://admin.test.democracysausage.org
 
 ## Development
 
