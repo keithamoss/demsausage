@@ -295,7 +295,7 @@ class StallsViewSet(viewsets.ModelViewSet):
 
         serializer = StallsManagementSerializer(self.get_object(), data={
             "status": StallStatus.APPROVED,
-            "approved_on": datetime.now()
+            "approved_on": datetime.now(pytz.utc)
         }, partial=True)
         if serializer.is_valid() is True:
             serializer.save()
@@ -347,7 +347,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         # Approve stall and link it to the new unofficial polling place we just added
         serializer = StallsManagementSerializer(stall, data={
             "status": StallStatus.APPROVED,
-            "approved_on": datetime.now(),
+            "approved_on": datetime.now(pytz.utc),
             "polling_place": pollingPlaceSerializer.instance.id
         }, partial=True)
         if serializer.is_valid() is True:
