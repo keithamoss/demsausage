@@ -46,6 +46,9 @@ def send_stall_submitted_email(stall):
     else:
         location_info = model_to_dict(stall.polling_place)
 
+    token = str(getrandbits(128))
+    signature = make_confirmation_hash(stall.id, token)
+
     html = get_mail_template("stall_submitted", {
         "POLLING_PLACE_NAME": location_info["name"],
         "POLLING_PLACE_ADDRESS": location_info["address"],
@@ -53,6 +56,7 @@ def send_stall_submitted_email(stall):
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 
     return send({
@@ -78,12 +82,39 @@ def send_stall_approved_email(stall):
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
         "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 
     return send({
         "to": stall.email,
         "subject": "Your Democracy Sausage stall for {} has been approved!".format(location_info["name"]),
+        "html": html,
+    })
+
+
+def send_stall_edited_email(stall):
+    if stall.election.polling_places_loaded is False:
+        location_info = stall.location_info
+    else:
+        location_info = model_to_dict(stall.polling_place)
+
+    token = str(getrandbits(128))
+    signature = make_confirmation_hash(stall.id, token)
+
+    html = get_mail_template("stall_edited", {
+        "POLLING_PLACE_NAME": stall.polling_place.name,
+        "POLLING_PLACE_ADDRESS": stall.polling_place.address,
+        "STALL_NAME": stall.name,
+        "STALL_DESCRIPTION": stall.description,
+        "STALL_WEBSITE": stall.website,
+        "DELICIOUSNESS": getFoodDescription(stall),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+    })
+
+    return send({
+        "to": stall.email,
+        "subject": "Your changes to your Democracy Sausage stall for {} have been received!".format(location_info["name"]),
         "html": html,
     })
 

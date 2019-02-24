@@ -19,16 +19,17 @@ from rest_framework_csv.renderers import CSVRenderer
 from rest_framework.parsers import MultiPartParser
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
-from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate
+from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsUserEditSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
+from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate, StallEditingPermissions
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, make_confirmation_hash, verify_webhook
+from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
 from demsausage.util import make_logger, get_or_none, clean_filename
 
 from datetime import datetime
+from copy import deepcopy
 import pytz
 import json
 
@@ -242,7 +243,7 @@ class StallsViewSet(viewsets.ModelViewSet):
     """
     queryset = Stalls.objects
     serializer_class = StallsSerializer
-    permission_classes = (AnonymousOnlyCreate,)
+    permission_classes = (StallEditingPermissions,)
 
     def create(self, request, format=None):
         serializer = StallsManagementSerializer(data=request.data)
@@ -251,6 +252,37 @@ class StallsViewSet(viewsets.ModelViewSet):
 
             send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
             return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            raise BadRequest(serializer.errors)
+
+    def retrieve(self, request, *args, **kwargs):
+        stall = self.get_object()
+
+        if stall.election.is_active() is False:
+            raise BadRequest("The {election_name} election has already finished.".format(election_name=stall.election.name))
+
+        return super(StallsViewSet, self).retrieve(request, *args, **kwargs)
+
+    @detail_route(methods=["patch"])
+    @transaction.atomic
+    def update_and_resubmit(self, request, pk=None, format=None):
+        stall = self.get_object()
+
+        if stall.election.is_active() is False:
+            raise BadRequest("The {election_name} election has already finished.".format(election_name=stall.election.name))
+
+        data = deepcopy(request.data)
+        del data["token"]
+        del data["signature"]
+        if stall.status == StallStatus.APPROVED or stall.status == StallStatus.DECLINED:
+            data["status"] = StallStatus.PENDING
+
+        serializer = StallsUserEditSerializer(stall, data, partial=True)
+        if serializer.is_valid() is True:
+            serializer.save()
+
+            send_stall_edited_email(Stalls.objects.get(id=stall.id))
+            return Response({})
         else:
             raise BadRequest(serializer.errors)
 

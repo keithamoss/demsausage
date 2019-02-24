@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import permissions
 
+from demsausage.app.sausage.mailgun import make_confirmation_hash
+
 
 class AnonymousOnlyList(permissions.BasePermission):
     """
@@ -21,6 +23,29 @@ class AnonymousOnlyCreate(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action == "create":
             return True
+        return isinstance(request.user, User)
+
+
+class StallEditingPermissions(permissions.BasePermission):
+    """
+    Custom permission to allow the public to retrieve and update the stalls they submitted.
+    """
+
+    def has_permission(self, request, view):
+        if view.action == "create":
+            return True
+        elif view.action == "retrieve":
+            stall = view.get_object()
+            token = request.query_params.get("token", None)
+            signature = request.query_params.get("signature", None)
+
+            return make_confirmation_hash(stall.id, token) == signature
+        elif view.action == "update_and_resubmit":
+            stall = view.get_object()
+            token = request.data.get("token", None)
+            signature = request.data.get("signature", None)
+
+            return make_confirmation_hash(stall.id, token) == signature
         return isinstance(request.user, User)
 
 

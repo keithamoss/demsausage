@@ -10,7 +10,7 @@ from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
 from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.app.enums import PollingPlaceStatus
+from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.util import get_or_none
 
 
@@ -57,9 +57,8 @@ class ElectionsSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
     def validate_election_day(self, value):
-        # FIXME
-        # if value <= datetime.now(pytz.utc):
-        #     raise serializers.ValidationError("Election day must be a day in the future")
+        if value.date() <= datetime.now(pytz.utc).date():
+            raise serializers.ValidationError("Election day must be a day in the future")
         return value
 
 
@@ -265,11 +264,11 @@ class StallsSerializer(serializers.ModelSerializer):
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
     email = serializers.EmailField(required=True, allow_blank=False)
     election = serializers.PrimaryKeyRelatedField(queryset=Elections.objects)
-    # polling_place = serializers.PrimaryKeyRelatedField(queryset=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE), required=False)
+    polling_place = PollingPlacesInfoSerializer(read_only=True)
 
     class Meta:
         model = Stalls
-        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
     def create(self, validated_data):
         return Stalls.objects.create(**validated_data)
@@ -295,6 +294,12 @@ class StallsSerializer(serializers.ModelSerializer):
                         raise serializers.ValidationError("Stall location information is required when polling places are loaded")
 
         return data
+
+
+class StallsUserEditSerializer(StallsSerializer):
+    class Meta:
+        model = Stalls
+        fields = ("name", "description", "website", "noms", "email", "status")
 
 
 class StallsManagementSerializer(StallsSerializer):

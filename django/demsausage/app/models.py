@@ -5,11 +5,15 @@ from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
+
 from demsausage.app.enums import ProfileSettings, StallStatus, PollingPlaceStatus
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.util import make_logger
+
+from datetime import datetime
+import pytz
 
 logger = make_logger(__name__)
 
@@ -76,6 +80,9 @@ class Elections(models.Model):
     is_primary = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
+
+    def is_active(self):
+        return datetime.now(pytz.utc).date() <= self.election_day.date()
 
 
 class PollingPlaceFacilityType(models.Model):
