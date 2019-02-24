@@ -245,6 +245,12 @@ class StallsViewSet(viewsets.ModelViewSet):
     serializer_class = StallsSerializer
     permission_classes = (StallEditingPermissions,)
 
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return StallsUserEditSerializer
+        return super(StallsViewSet, self).get_serializer_class()
+
+    @transaction.atomic
     def create(self, request, format=None):
         serializer = StallsManagementSerializer(data=request.data)
         if serializer.is_valid() is True:
