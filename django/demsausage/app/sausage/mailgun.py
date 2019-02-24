@@ -56,7 +56,7 @@ def send_stall_submitted_email(stall):
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
-        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 
     return send({
@@ -76,13 +76,13 @@ def send_stall_approved_email(stall):
     signature = make_confirmation_hash(stall.id, token)
 
     html = get_mail_template("stall_approved_with_mail_optout", {
-        "POLLING_PLACE_NAME": stall.polling_place.name,
-        "POLLING_PLACE_ADDRESS": stall.polling_place.address,
+        "POLLING_PLACE_NAME": location_info["name"],
+        "POLLING_PLACE_ADDRESS": location_info["address"],
         "STALL_NAME": stall.name,
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
-        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
         "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 
@@ -103,13 +103,13 @@ def send_stall_edited_email(stall):
     signature = make_confirmation_hash(stall.id, token)
 
     html = get_mail_template("stall_edited", {
-        "POLLING_PLACE_NAME": stall.polling_place.name,
-        "POLLING_PLACE_ADDRESS": stall.polling_place.address,
+        "POLLING_PLACE_NAME": location_info["name"],
+        "POLLING_PLACE_ADDRESS": location_info["address"],
         "STALL_NAME": stall.name,
         "STALL_DESCRIPTION": stall.description,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
-        "STALL_EDIT_URL": "{site_url}/edit-stall?&stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+        "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 
     return send({
