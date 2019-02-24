@@ -3,13 +3,13 @@ import { CardActions } from "material-ui/Card"
 import FlatButton from "material-ui/FlatButton"
 // import "./PendingStallEditor.css"
 import { ListItem } from "material-ui/List"
-import { blue500 } from "material-ui/styles/colors"
+import { blue500, lightBlue100, orange300 } from "material-ui/styles/colors"
 import { AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
 import PollingPlaceEditorContainer from "../../polling_places/polling_place_editor/PollingPlaceEditorContainer"
 import { IElection } from "../../redux/modules/elections"
-import { IStall } from "../../redux/modules/stalls"
+import { IPendingStall } from "../../redux/modules/stalls"
 // import { Link } from "react-router"
 import { StallInfoCardContainer } from "../StallInfoCard/StallInfoCardContainer"
 
@@ -35,7 +35,7 @@ const FlexboxColumn = styled.div`
 
 export interface IProps {
     election: IElection
-    stall: IStall
+    stall: IPendingStall
     onPollingPlaceEdited: Function
     onApproveUnofficialStall: any
     onDeclineUnofficialStall: any
@@ -48,6 +48,14 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
         return (
             <FlexboxContainer>
                 <FlexboxColumn>
+                    {stall.diff !== null && (
+                        <ListItem
+                            primaryText="This stall has been edited since it was first approved"
+                            secondaryText="Changes are highlighted below"
+                            leftIcon={<AlertWarning color={orange300} />}
+                            style={{ backgroundColor: lightBlue100, marginBottom: 10 }}
+                        />
+                    )}
                     <StallInfoCardContainer
                         stall={stall}
                         cardActions={

@@ -13,7 +13,7 @@ const LOAD_PENDING = "ealgis/stalls/LOAD_PENDING"
 const REMOVE = "ealgis/stalls/REMOVE"
 
 const initialState: Partial<IModule> = {
-    pending: [] as Array<IStall>,
+    pending: [] as Array<IPendingStall>,
 }
 
 // Reducer
@@ -22,7 +22,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
         case LOAD_PENDING:
             return dotProp.set(state, "pending", action.stalls)
         case REMOVE:
-            const pending = state.pending!.filter((stall: IStall) => stall.id !== action.stallId)
+            const pending = state.pending!.filter((stall: IPendingStall) => stall.id !== action.stallId)
             return dotProp.set(state, "pending", pending)
         default:
             return state
@@ -36,12 +36,12 @@ export const getPendingStallsForCurrentElection = createSelector(
     [getPendingStalls],
     stalls =>
         memoize((electionId: number) => {
-            return stalls.filter((stall: IStall) => stall.election_id === electionId)
+            return stalls.filter((stall: IPendingStall) => stall.election_id === electionId)
         })
 )
 
 // Action Creators
-export function loadPendingStalls(stalls: Array<IStall>) {
+export function loadPendingStalls(stalls: Array<IPendingStall>) {
     return {
         type: LOAD_PENDING,
         stalls,
@@ -56,12 +56,12 @@ export function removePendingStall(stallId: number) {
 
 // Models
 export interface IModule {
-    pending: Array<IStall>
+    pending: Array<IPendingStall>
 }
 
 export interface IAction {
     type: string
-    stalls: Array<IStall>
+    stalls: Array<IPendingStall>
     stallId: number
     errors?: object
     meta?: {
@@ -101,6 +101,16 @@ export interface IStall {
     election_id: number
     location_info: IStallLocationInfo | null
     polling_place: IStallPollingPlaceInfo | null
+}
+
+export interface IStallDiff {
+    field: string
+    old: any
+    new: any
+}
+
+export interface IPendingStall extends IStall {
+    diff: IStallDiff[] | null
 }
 
 // Side effects, only as applicable

@@ -3,12 +3,12 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
-import { approveStall, approveStallAndAddUnofficialPollingPlace, declineStall, IStall } from "../../redux/modules/stalls"
+import { approveStall, approveStallAndAddUnofficialPollingPlace, declineStall, IPendingStall } from "../../redux/modules/stalls"
 import PendingStallEditor from "./PendingStallEditor"
 
 export interface IProps {}
 export interface IStoreProps {
-    stall: IStall | null
+    stall: IPendingStall | null
     election: IElection | null
 }
 
@@ -58,7 +58,7 @@ export class PendingStallEditorContainer extends React.Component<TComponentProps
 const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { stalls, elections } = state
 
-    const stall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
+    const stall = stalls.pending.find((stall: IPendingStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
     const election = stall !== undefined ? elections.elections.find((election: IElection) => election.id === stall.election_id)! : null
 
     return { stall: stall, election: election }

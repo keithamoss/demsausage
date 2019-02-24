@@ -60,8 +60,8 @@ class EditStall extends React.PureComponent<IProps, {}> {
                     <React.Fragment>
                         <SectionHeader>Thank you</SectionHeader>
                         <BodyText>
-                            Thanks for letting us know about the changes your stall! We'll let you know once they've been approved and the
-                            map has been updated.
+                            Thanks for letting us know about the changes to your stall! We'll let you know once they've been approved and
+                            the map has been updated.
                         </BodyText>
                     </React.Fragment>
                 )}

@@ -3,8 +3,8 @@ import { Avatar } from "material-ui"
 import { Card, CardHeader, CardText } from "material-ui/Card"
 import IconButton from "material-ui/IconButton"
 import { List, ListItem } from "material-ui/List"
-import { grey500 } from "material-ui/styles/colors"
-import { ActionDescription, ActionHome, AvWeb, CommunicationEmail, MapsLocalDining, MapsPlace } from "material-ui/svg-icons"
+import { grey500, lightBlue100 } from "material-ui/styles/colors"
+import { ActionDescription, ActionHome, ActionLabel, AvWeb, CommunicationEmail, MapsLocalDining, MapsPlace } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
@@ -13,10 +13,10 @@ import CoffeeIcon from "../../icons/coffee"
 import HalalIcon from "../../icons/halal"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
-import { getStallLocationAddress, getStallLocationName, IStall } from "../../redux/modules/stalls"
+import { getStallLocationAddress, getStallLocationName, IPendingStall, IStallDiff } from "../../redux/modules/stalls"
 
 export interface IProps {
-    stall: IStall
+    stall: IPendingStall
     cardActions?: any
 }
 
@@ -28,6 +28,13 @@ const HasFreeTextDeliciousness = styled.div`
 class StallInfoCard extends React.PureComponent<IProps, {}> {
     render() {
         const { stall, cardActions } = this.props
+
+        let changedFields: string[] = []
+        if (stall.diff !== null) {
+            changedFields = stall.diff.map((d: IStallDiff) => d.field)
+        }
+
+        const getFieldStyle = (fieldName: string) => (changedFields.includes(fieldName) ? { backgroundColor: lightBlue100 } : undefined)
 
         return (
             <Card>
@@ -47,14 +54,34 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                             disabled={true}
                         />
                         <ListItem
+                            primaryText="Name"
+                            secondaryText={stall.name}
+                            leftIcon={<ActionLabel />}
+                            disabled={true}
+                            style={getFieldStyle("name")}
+                        />
+                        <ListItem
                             primaryText="Description"
                             secondaryText={stall.description}
                             leftIcon={<ActionDescription />}
                             disabled={true}
+                            style={getFieldStyle("description")}
                         />
-                        <ListItem primaryText="Website" secondaryText={stall.website} leftIcon={<AvWeb />} disabled={true} />
-                        <ListItem primaryText="Email" secondaryText={stall.email} leftIcon={<CommunicationEmail />} disabled={true} />
-                        <ListItem leftIcon={<MapsLocalDining />} disabled={true}>
+                        <ListItem
+                            primaryText="Website"
+                            secondaryText={stall.website}
+                            leftIcon={<AvWeb />}
+                            disabled={true}
+                            style={getFieldStyle("website")}
+                        />
+                        <ListItem
+                            primaryText="Email"
+                            secondaryText={stall.email}
+                            leftIcon={<CommunicationEmail />}
+                            disabled={true}
+                            style={getFieldStyle("email")}
+                        />
+                        <ListItem leftIcon={<MapsLocalDining />} disabled={true} style={getFieldStyle("noms")}>
                             <div>Deliciousness</div>
                             {stall.noms.bbq && (
                                 <IconButton tooltip="Sausage Sizzle" touch={true}>

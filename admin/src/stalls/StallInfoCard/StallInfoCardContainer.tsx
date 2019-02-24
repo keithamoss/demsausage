@@ -1,11 +1,11 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { IStore } from "../../redux/modules/reducer"
-import { IStall } from "../../redux/modules/stalls"
+import { IPendingStall } from "../../redux/modules/stalls"
 import StallInfoCard from "./StallInfoCard"
 
 export interface IProps {
-    stall: IStall
+    stall: IPendingStall
     cardActions?: any
 }
 
