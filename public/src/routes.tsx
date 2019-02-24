@@ -2,6 +2,7 @@ import * as React from "react"
 import { Route } from "react-router"
 import AddStallContainer from "./add-stall/AddStall/AddStallContainer"
 import AppContainer from "./AppContainer"
+import EditStallContainer from "./edit-stall/EditStall/EditStallContainer"
 import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
 import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
 import { IStore } from "./redux/modules/reducer"
@@ -15,6 +16,7 @@ export default (store: IStore) => {
             <Route path="/search(/:electionName)" components={{ content: PollingPlaceFinderContainer }} />
             <Route path="/sausagelytics(/:electionName)" components={{ content: SausagelyticsContainer }} />
             <Route path="/add-stall" components={{ content: AddStallContainer }} />
+            <Route path="/edit-stall" components={{ content: EditStallContainer }} />
             <Route path="/about" components={{ content: AboutPage }} />
             <Route path="/media" components={{ content: MediaPage }} />
             <Route path="/(:electionName)" components={{ content: SausageMapContainer }} />

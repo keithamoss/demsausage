@@ -43,7 +43,7 @@ export interface IProps {
     isValid: any
 }
 
-class CustomTextField extends React.Component<any, any> {
+export class CustomTextField extends React.Component<any, any> {
     render(): any {
         const { hintText, name, ...rest } = this.props
 
@@ -56,7 +56,7 @@ class CustomTextField extends React.Component<any, any> {
     }
 }
 
-class DeliciousnessToggle extends React.Component<any, any> {
+export class DeliciousnessToggle extends React.Component<any, any> {
     render(): any {
         const { name, ...rest } = this.props
         return <Field name={name} component={Toggle as any} thumbStyle={{ backgroundColor: grey100 }} {...rest} />
