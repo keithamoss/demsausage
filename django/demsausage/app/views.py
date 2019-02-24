@@ -26,7 +26,7 @@ from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
-from demsausage.util import make_logger, get_or_none, clean_filename
+from demsausage.util import make_logger, get_or_none, add_datetime_to_filename
 
 from datetime import datetime
 from copy import deepcopy
@@ -187,7 +187,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         if "text/csv" in response.accepted_media_type:
             election = get_or_none(Elections, id=request.query_params.get("election_id", None))
             if election is not None:
-                filename = clean_filename("{} - {}.csv".format(election.name, datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()))
+                filename = add_datetime_to_filename("{}.csv".format(election.name))
 
                 response["Content-Type"] = "Content-Type: text/csv; name=\"{}\"".format(filename)
                 response["Content-Disposition"] = "attachment; filename={}".format(filename)
