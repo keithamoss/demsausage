@@ -1,5 +1,3 @@
-from datetime import datetime
-import pytz
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
@@ -12,6 +10,9 @@ from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, 
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.util import get_or_none
+
+from datetime import datetime, timedelta
+import pytz
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -239,7 +240,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
 
 class DistanceField(serializers.CharField):
     """
-    Color objects are serialized into 'rgb(#, #, #)' notation.
+    Make the result of the distance calculation friendlier for humans to read. 
     """
 
     def to_representation(self, value):
@@ -264,7 +265,6 @@ class StallsSerializer(serializers.ModelSerializer):
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
     email = serializers.EmailField(required=True, allow_blank=False)
     election = serializers.PrimaryKeyRelatedField(queryset=Elections.objects)
-    polling_place = PollingPlacesInfoSerializer(read_only=True)
 
     class Meta:
         model = Stalls
@@ -297,9 +297,15 @@ class StallsSerializer(serializers.ModelSerializer):
 
 
 class StallsUserEditSerializer(StallsSerializer):
+    id = serializers.IntegerField(read_only=True)
+    location_info = JSONSchemaField(stall_location_info_schema, read_only=True)
+    election = serializers.PrimaryKeyRelatedField(read_only=True)
+    polling_place = PollingPlacesInfoSerializer(read_only=True)
+    status = serializers.CharField()
+
     class Meta:
         model = Stalls
-        fields = ("name", "description", "website", "noms", "email", "status")
+        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
 
 class StallsManagementSerializer(StallsSerializer):
@@ -310,10 +316,27 @@ class StallsManagementSerializer(StallsSerializer):
 
 class PendingStallsSerializer(StallsSerializer):
     polling_place = PollingPlacesInfoSerializer(read_only=True)
+    diff = serializers.SerializerMethodField()
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election_id", "polling_place")
+        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "diff")
+
+    def get_diff(self, obj):
+        fields_to_include_in_diff = ("name", "description", "website", "noms", "email")
+
+        if obj.approved_on is not None:
+            filter = obj.history.all().filter(history_date__gt=obj.approved_on)
+            most_recent = filter.first()
+            least_recent = filter.last()
+
+            delta = most_recent.diff_against(least_recent)
+
+            return [{
+                "field": c.field,
+                "old": c.old,
+                "new": c.new,
+            } for c in delta.changes if c.field in fields_to_include_in_diff]
 
 
 class MailgunEventsSerializer(serializers.ModelSerializer):
