@@ -42,7 +42,7 @@ export class PollingPlaceEditorContainer extends React.Component<TComponentProps
     async componentWillMount() {
         const { fetchRequiredState, election, pollingPlaceId } = this.props
 
-        if (pollingPlaceId !== null && election.polling_places_loaded === true) {
+        if (pollingPlaceId !== null /* && election.polling_places_loaded === true*/) {
             this.setState({ pollingPlacesChecked: true, pollingPlace: await fetchRequiredState(election, pollingPlaceId) })
         }
     }
@@ -61,7 +61,7 @@ export class PollingPlaceEditorContainer extends React.Component<TComponentProps
         const { election, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
-        if (election.polling_places_loaded === false || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
+        if (/*election.polling_places_loaded === false || */ this.state.pollingPlacesChecked && this.state.pollingPlace === null) {
             return (
                 <ListItem
                     leftAvatar={<Avatar icon={<CommunicationLocationOff />} backgroundColor={blue500} />}
