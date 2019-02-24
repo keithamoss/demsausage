@@ -2,6 +2,7 @@ import { ListItem } from "material-ui"
 import { ActionHome } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
+import { IElection } from "../../redux/modules/elections"
 import { getStallLocationAddress, getStallLocationName, IStall } from "../../redux/modules/stalls"
 import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 import EditStallFormContainer from "../EditStallForm/EditStallFormContainer"
@@ -13,6 +14,7 @@ export interface IProps {
     showThankYou: boolean
     showForm: boolean
     stall: IStall | null
+    election: IElection | null
     errors: IDjangoAPIError | undefined
     credentials: IStallEditCredentials
     onStallUpdated: any
@@ -35,7 +37,7 @@ const BodyText = styled.p`
 
 class EditStall extends React.PureComponent<IProps, {}> {
     render() {
-        const { showAPIErrors, showWelcome, showThankYou, showForm, stall, errors, credentials, onStallUpdated } = this.props
+        const { showAPIErrors, showWelcome, showThankYou, showForm, stall, election, errors, credentials, onStallUpdated } = this.props
 
         return (
             <EditStallUIContainer>
@@ -63,9 +65,9 @@ class EditStall extends React.PureComponent<IProps, {}> {
                         </BodyText>
                     </React.Fragment>
                 )}
-                {showForm === true && stall !== undefined && stall != null && (
+                {showForm === true && stall !== undefined && stall != null && election !== null && (
                     <React.Fragment>
-                        <SectionHeader>Polling place</SectionHeader>
+                        <SectionHeader>Polling place - {election.name}</SectionHeader>
                         <ListItem
                             primaryText={getStallLocationName(stall)}
                             secondaryText={getStallLocationAddress(stall)}

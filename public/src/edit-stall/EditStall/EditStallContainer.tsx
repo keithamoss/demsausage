@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import { fetchStallWithCredentials, IStall } from "../../redux/modules/stalls"
 import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
@@ -13,10 +14,13 @@ export interface IDispatchProps {
     fetchStall: Function
 }
 
-export interface IStoreProps {}
+export interface IStoreProps {
+    elections: IElection[]
+}
 
 export interface IStateProps {
     stall: IStall | undefined | null
+    election: IElection | undefined
     errors: IDjangoAPIError | undefined
     formSubmitted: boolean
 }
@@ -44,6 +48,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
         super(props)
         this.state = {
             stall: undefined,
+            election: undefined,
             errors: undefined,
             formSubmitted: false,
         }
@@ -63,20 +68,20 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     async componentDidMount() {
         document.title = "Democracy Sausage | Update your sausage sizzle or cake stall"
 
-        const { fetchStall, location } = this.props
+        const { fetchStall, location, elections } = this.props
         const { response, json } = await fetchStall(location.query.stall_id, location.query.token, location.query.signature)
 
         if (response.status === 200) {
-            this.setState({ ...this.state, stall: json })
+            this.setState({ ...this.state, stall: json, election: elections.find((e: IElection) => e.id === json.election) })
         } else if (response.status >= 400) {
             this.setState({ ...this.state, stall: null, errors: json })
         }
     }
 
     render() {
-        const { stall, formSubmitted, errors } = this.state
+        const { stall, election, formSubmitted, errors } = this.state
 
-        if (stall === undefined) {
+        if (stall === undefined || election === undefined) {
             return null
         }
 
@@ -87,6 +92,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
                 showThankYou={formSubmitted && errors === undefined}
                 showForm={!formSubmitted && errors === undefined}
                 stall={stall}
+                election={election}
                 errors={errors}
                 credentials={this.getCredentials()}
                 onStallUpdated={this.onStallUpdated}
@@ -96,7 +102,8 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
 }
 
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    return {}
+    const { elections } = state
+    return { elections: elections.elections }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
