@@ -44,14 +44,17 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
 
     CORS_ORIGIN_WHITELIST = (
         "democracysausage.org",
+        "www.democracysausage.org",
         "admin.democracysausage.org"
     )
     CSRF_TRUSTED_ORIGINS = (
         "democracysausage.org",
+        "www.democracysausage.org",
         "admin.democracysausage.org"
     )
     ALLOWED_HOSTS = [
         "democracysausage.org",
+        "www.democracysausage.org",
         "admin.democracysausage.org"
     ]
 
