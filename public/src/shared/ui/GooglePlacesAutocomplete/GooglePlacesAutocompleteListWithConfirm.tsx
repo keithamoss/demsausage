@@ -42,27 +42,20 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
     }
 
     onChoosePlace(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) {
-        this.setState(
-            Object.assign(this.state, {
-                addressResult: addressResult,
-                geocodedPlace: place,
-                stallLocationInfo: this.getPollingPlaceInfo(addressResult, place),
-            })
-        )
+        this.setState({
+            ...this.state,
+            addressResult: addressResult,
+            geocodedPlace: place,
+            stallLocationInfo: this.getPollingPlaceInfo(addressResult, place),
+        })
     }
 
     onCancelChosenLocation() {
-        this.setState(
-            Object.assign(this.state, { addressResult: null, geocodedPlace: null, stallLocationInfo: null, locationConfirmed: false })
-        )
+        this.setState({ ...this.state, addressResult: null, geocodedPlace: null, stallLocationInfo: null, locationConfirmed: false })
     }
 
     onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
-        this.setState(
-            Object.assign(this.state, {
-                locationConfirmed: true,
-            })
-        )
+        this.setState({ ...this.state, locationConfirmed: true })
         this.props.onConfirmChosenLocation(this.state.stallLocationInfo!)
     }
 
@@ -71,9 +64,11 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
             (o: any) => o.types.includes("administrative_area_level_1") && o.types.includes("political")
         )
         return {
-            lon: geocodedPlace.geometry.location.lng(),
-            lat: geocodedPlace.geometry.location.lat(),
-            polling_place_name: addressResult.structured_formatting.main_text,
+            geom: {
+                type: "Point",
+                coordinates: [geocodedPlace.geometry.location.lng(), geocodedPlace.geometry.location.lat()],
+            },
+            name: addressResult.structured_formatting.main_text,
             address: geocodedPlace.formatted_address,
             state: stateComponent !== undefined ? stateComponent.short_name : null,
         }

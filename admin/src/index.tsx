@@ -1,4 +1,6 @@
 // import registerServiceWorker from "./registerServiceWorker"
+import * as createRavenMiddleware from "raven-for-redux"
+import * as Raven from "raven-js"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { Provider } from "react-redux"
@@ -16,20 +18,33 @@ import "./polyfills"
 // }
 import reducers, { IStore } from "./redux/modules/reducer"
 import getRoutes from "./routes"
-import { EALGISApiClient } from "./shared/api/EALGISApiClient"
+import { APIClient } from "./shared/api/APIClient"
 // const Config: IConfig = require("Config") as any
 
 // declare var DEVELOPMENT: boolean
 let Middleware: Array<any> = []
 
-const ealapi = new EALGISApiClient()
+if ("REACT_APP_RAVEN_URL" in process.env) {
+    Raven.config(process.env.REACT_APP_RAVEN_URL!, {
+        environment: process.env.NODE_ENV,
+        // @ts-ignore
+        site: process.env.REACT_APP_RAVEN_SITE_NAME!,
+    }).install()
+    Middleware.push(
+        createRavenMiddleware(Raven, {
+            breadcrumbDataFromAction: (action: any) => {
+                return JSON.stringify(action)
+            },
+        })
+    )
+}
 
 const composeEnhancers = composeWithDevTools({
     // Specify name here, actionsBlacklist, actionsCreators and other options if needed
 })
 const store: Store<IStore> = createStore(
     reducers,
-    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(ealapi), ...Middleware))
+    composeEnhancers(responsiveStoreEnhancer, applyMiddleware(thunkMiddleware.withExtraArgument(new APIClient()), ...Middleware))
 )
 
 const history = syncHistoryWithStore(browserHistory as any, store)

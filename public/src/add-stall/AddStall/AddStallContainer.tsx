@@ -1,6 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { IElection } from "../../redux/modules/elections"
+import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import AddStall from "./AddStall"
 
@@ -9,22 +9,15 @@ export interface IProps {}
 export interface IDispatchProps {}
 
 export interface IStoreProps {
-    activeElections: Array<IElection>
+    liveElections: Array<IElection>
 }
 
 export interface IStateProps {
     formSubmitted: boolean
 }
 
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class AddStallFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: any) {
         super(props)
         this.state = { formSubmitted: false }
@@ -41,28 +34,26 @@ export class AddStallFormContainer extends React.Component<IProps & IStoreProps 
     }
 
     render() {
-        const { activeElections } = this.props
+        const { liveElections } = this.props
         const { formSubmitted } = this.state
 
-        const showNoActiveElections = activeElections.length === 0
+        const showNoLiveElections = liveElections.length === 0
 
         return (
             <AddStall
-                showNoActiveElections={showNoActiveElections}
-                showWelcome={!formSubmitted && !showNoActiveElections}
-                showThankYou={formSubmitted && !showNoActiveElections}
-                showForm={!formSubmitted && !showNoActiveElections}
+                showNoLiveElections={showNoLiveElections}
+                showWelcome={!formSubmitted && !showNoLiveElections}
+                showThankYou={formSubmitted && !showNoLiveElections}
+                showForm={!formSubmitted && !showNoLiveElections}
                 onStallAdded={this.onStallAdded}
             />
         )
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections } = state
-
+const mapStateToProps = (state: IStore): IStoreProps => {
     return {
-        activeElections: elections.elections.filter((election: IElection) => election.is_active),
+        liveElections: getLiveElections(state),
     }
 }
 

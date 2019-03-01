@@ -42,6 +42,7 @@ interface ICustomFieldProps extends BaseFieldProps<any> {
     mode?: string
     required?: boolean
     labelPosition?: string
+    label?: string
 }
 class CustomField extends React.Component<ICustomFieldProps, any> {
     render(): any {
@@ -119,9 +120,7 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
                     <MenuItem value={14} primaryText="14" />
                 </CustomField>
 
-                <CustomField name="is_active" component={PaddedCheckbox} label="Is this an active election?" labelPosition="right" />
-
-                <CustomField name="hidden" component={PaddedCheckbox} label="Hide election?" labelPosition="right" />
+                <CustomField name="is_hidden" component={PaddedCheckbox} label="Hide election?" labelPosition="right" />
 
                 <PaddedButton label={election === null ? "Create" : "Save"} disabled={!isDirty} primary={true} onClick={onSaveForm} />
                 <PaddedButton label={"Cancel"} primary={false} onClick={onCancelForm} />

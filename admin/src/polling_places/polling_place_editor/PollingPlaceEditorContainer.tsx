@@ -31,9 +31,8 @@ export interface IStateProps {
     pollingPlace?: IPollingPlace
 }
 
-interface IOwnProps {}
-
-export class PollingPlaceEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: IProps & IStoreProps & IDispatchProps) {
         super(props)
 
@@ -43,7 +42,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
     async componentWillMount() {
         const { fetchRequiredState, election, pollingPlaceId } = this.props
 
-        if (pollingPlaceId !== null && election.db_table_name !== "") {
+        if (pollingPlaceId !== null /* && election.polling_places_loaded === true*/) {
             this.setState({ pollingPlacesChecked: true, pollingPlace: await fetchRequiredState(election, pollingPlaceId) })
         }
     }
@@ -62,7 +61,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
         const { election, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } = this.props
         const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
-        if (election.db_table_name === "" || (this.state.pollingPlacesChecked && this.state.pollingPlace === null)) {
+        if (/*election.polling_places_loaded === false || */ this.state.pollingPlacesChecked && this.state.pollingPlace === null) {
             return (
                 <ListItem
                     leftAvatar={<Avatar icon={<CommunicationLocationOff />} backgroundColor={blue500} />}
@@ -88,7 +87,7 @@ export class PollingPlaceEditorContainer extends React.Component<IProps & IStore
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     return {}
 }
 

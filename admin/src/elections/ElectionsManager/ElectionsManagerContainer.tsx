@@ -1,20 +1,19 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { getAPIBaseURL } from "../../redux/modules/app"
-import { IElection, IElectionStats, setPrimaryElection } from "../../redux/modules/elections"
-import { regenerateElectionGeoJSON } from "../../redux/modules/polling_places"
+import { IElection, setPrimaryElection } from "../../redux/modules/elections"
+import { regenerateMapDataForElection } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionsManager from "./ElectionsManager"
 
 export interface IStoreProps {
     elections: Array<IElection>
-    stats: Array<IElectionStats>
 }
 
 export interface IDispatchProps {
     onMakeElectionPrimary: Function
     onDownloadElection: Function
-    onRegenerateElectionGeoJSON: Function
+    onRegenerateMapDataForElection: Function
 }
 
 export interface IStateProps {}
@@ -25,28 +24,27 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class ElectionsManagerContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
-        const { elections, stats, onMakeElectionPrimary, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateMapDataForElection } = this.props
 
         return (
             <ElectionsManager
                 elections={elections}
-                stats={stats}
                 onMakeElectionPrimary={onMakeElectionPrimary}
                 onDownloadElection={onDownloadElection}
-                onRegenerateElectionGeoJSON={onRegenerateElectionGeoJSON}
+                onRegenerateMapDataForElection={onRegenerateMapDataForElection}
             />
         )
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     const { elections } = state
 
     return {
         elections: elections.elections,
-        stats: elections.stats,
     }
 }
 
@@ -56,10 +54,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             dispatch(setPrimaryElection(electionId))
         },
         onDownloadElection(election: IElection) {
-            window.location.href = `${getAPIBaseURL()}/api.php?download-election=1&electionId=${election.id}`
+            window.location.href = `${getAPIBaseURL()}/0.1/polling_places/?format=csv&election_id=${election.id}`
         },
-        onRegenerateElectionGeoJSON(election: IElection) {
-            dispatch(regenerateElectionGeoJSON(election))
+        onRegenerateMapDataForElection(election: IElection) {
+            dispatch(regenerateMapDataForElection(election))
         },
     }
 }

@@ -1,0 +1,3 @@
+SELECT long as lon, lat, ppname as polling_place_name, address1 || ', ' || advlocality || ', ' || postcode as address, stateab as state, premisesname as premises, wheelchairaccess, entrancesdesc, divname as division FROM polling_places_aec_july_2018 WHERE divname = 'Longman' and status IN ('Current', 'Appointment');
+
+SELECT ST_X(ST_Centroid(ST_Collect(ST_MakePoint(long::double precision, lat::double precision)))), ST_Y(ST_Centroid(ST_Collect(ST_MakePoint(long::double precision, lat::double precision)))) FROM polling_places_aec_july_2018 WHERE divname = 'Longman' and status IN ('Current', 'Appointment');

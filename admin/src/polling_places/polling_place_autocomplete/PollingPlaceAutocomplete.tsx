@@ -6,7 +6,7 @@ import * as React from "react"
 // import { Link } from "react-router"
 import * as reactStringReplace from "react-string-replace"
 import styled from "styled-components"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { getPollingPlaceLongName, IPollingPlace } from "../../redux/modules/polling_places"
 
 export interface IProps {
     searchText: string
@@ -36,11 +36,7 @@ class App extends React.PureComponent<IProps, {}> {
         const { searchText, pollingPlaces, onPollingPlaceAutocompleteSelect, onChoosePollingPlace } = this.props
 
         const pollingPlaceResults: any = pollingPlaces.map((currentValue: IPollingPlace, index: any, array: any) => {
-            const primaryTextString =
-                currentValue.polling_place_name === currentValue.premises
-                    ? currentValue.polling_place_name
-                    : `${currentValue.polling_place_name}, ${currentValue.premises}`
-            const primaryText = reactStringReplace(primaryTextString, searchText, (match: string, i: number) => (
+            const primaryText = reactStringReplace(getPollingPlaceLongName(currentValue), searchText, (match: string, i: number) => (
                 <HighlightedString key={i}>{match}</HighlightedString>
             ))
             const secondaryText = reactStringReplace(
@@ -50,7 +46,7 @@ class App extends React.PureComponent<IProps, {}> {
             )
 
             return {
-                text: `${currentValue.polling_place_name}, ${currentValue.address}`,
+                text: `${currentValue.name}, ${currentValue.address}`,
                 value: (
                     <MenuItem
                         children={<ListItem primaryText={primaryText} secondaryText={secondaryText} disabled={true} />}

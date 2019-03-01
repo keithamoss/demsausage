@@ -3,7 +3,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
-import { fetchAllPollingPlaces, IPollingPlace, updatePollingPlace } from "../../redux/modules/polling_places"
+import { fetchAllPollingPlaces, IPollingPlace, IPollingPlaceFacilityType, updatePollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
@@ -11,7 +11,7 @@ import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 export interface IStoreProps {
     election: IElection
     pollingPlaces: Array<IPollingPlace>
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
 export interface IDispatchProps {
@@ -30,13 +30,14 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentProps, IStateProps> {
     componentDidMount() {
         const { fetchInitialState, election } = this.props
         fetchInitialState(election)
     }
 
-    componentWillReceiveProps(nextProps: IStoreProps & IDispatchProps) {
+    componentWillReceiveProps(nextProps: TComponentProps) {
         const { fetchInitialState, election } = this.props
         if (election.id !== nextProps.election.id) {
             fetchInitialState(nextProps.election)
@@ -46,7 +47,7 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<IStore
     render() {
         const { pollingPlaces, pollingPlaceTypes, election, updatePollingPlaceType, onElectionChanged } = this.props
 
-        if (election.db_table_name === "") {
+        if (election.polling_places_loaded === false) {
             return (
                 <EmptyState
                     message={
@@ -87,12 +88,12 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchInitialState: (election: IElection) => {
-            if (election.db_table_name !== "") {
+            if (election.polling_places_loaded === true) {
                 dispatch(fetchAllPollingPlaces(election))
             }
         },
         updatePollingPlaceType: (election: IElection, pollingPlace: IPollingPlace, newType: string) => {
-            dispatch(updatePollingPlace(election, pollingPlace, { polling_place_type: newType }))
+            dispatch(updatePollingPlace(election, pollingPlace, { facility_type: newType }))
         },
         onElectionChanged: (electionId: number) => {
             browserHistory.push(`/election/${electionId}/polling_place_types/`)

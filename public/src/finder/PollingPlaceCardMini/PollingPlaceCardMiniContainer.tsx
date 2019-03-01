@@ -16,13 +16,8 @@ export interface IDispatchProps {}
 
 export interface IStateProps {}
 
-interface IRouteProps {}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-export class PollingPlaceCardMiniContainer extends React.PureComponent<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+export class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
         const { pollingPlace, election } = this.props
 
@@ -30,7 +25,7 @@ export class PollingPlaceCardMiniContainer extends React.PureComponent<IProps & 
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     return {}
 }
 

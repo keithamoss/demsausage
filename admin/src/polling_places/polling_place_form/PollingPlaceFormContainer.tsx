@@ -4,9 +4,16 @@ import { connect } from "react-redux"
 // import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace, pollingPlaceHasReportsOfNoms, updatePollingPlace } from "../../redux/modules/polling_places"
+import {
+    buildNomsObject,
+    IPollingPlace,
+    IPollingPlaceFacilityType,
+    pollingPlaceHasReports,
+    updatePollingPlace,
+} from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
+import { deepValue } from "../../utils"
 import PollingPlaceForm from "./PollingPlaceForm"
 
 export interface IProps {
@@ -23,62 +30,36 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     isDirty: boolean
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
 export interface IStateProps {}
 
 interface IOwnProps {}
 
-const toFormValues = (pollingPlace: IPollingPlace) => {
-    const hasOther: any = pollingPlace.has_other
+const toFormValues = (pollingPlace: IPollingPlace): any => {
     return {
-        has_bbq: pollingPlace.has_bbq,
-        has_caek: pollingPlace.has_caek,
-        has_nothing: pollingPlace.has_nothing,
-        has_run_out: pollingPlace.has_run_out,
-        has_coffee: "has_coffee" in hasOther && hasOther.has_coffee === true,
-        has_vego: "has_vego" in hasOther && hasOther.has_vego === true,
-        has_halal: "has_halal" in hasOther && hasOther.has_halal === true,
-        has_bacon_and_eggs: "has_bacon_and_eggs" in hasOther && hasOther.has_bacon_and_eggs === true,
-        has_free_text: "has_free_text" in hasOther ? hasOther.has_free_text : "",
-        stall_name: pollingPlace.stall_name,
-        stall_description: pollingPlace.stall_description,
-        stall_website: pollingPlace.stall_website,
-        polling_place_type: pollingPlace.polling_place_type,
-        extra_info: pollingPlace.extra_info,
-        source: pollingPlace.source,
+        ...buildNomsObject(pollingPlace.stall !== null ? pollingPlace.stall.noms : null),
+        name: deepValue(pollingPlace, "stall.name"),
+        description: deepValue(pollingPlace, "stall.description"),
+        website: deepValue(pollingPlace, "stall.website"),
+        extra_info: deepValue(pollingPlace, "stall.extra_info"),
+        source: deepValue(pollingPlace, "stall.source"),
+        facility_type: deepValue(pollingPlace, "facility_type"),
     }
 }
 
-const fromFormValues = (formValues: any): IPollingPlace => {
-    let hasOther: any = {}
-    if (formValues.has_coffee === true) {
-        hasOther.has_coffee = formValues.has_coffee
-    }
-    if (formValues.has_vego === true) {
-        hasOther.has_vego = formValues.has_vego
-    }
-    if (formValues.has_halal === true) {
-        hasOther.has_halal = formValues.has_halal
-    }
-    if (formValues.has_bacon_and_eggs === true) {
-        hasOther.has_bacon_and_eggs = formValues.has_bacon_and_eggs
-    }
-    if (formValues.has_free_text !== "") {
-        hasOther.has_free_text = formValues.has_free_text
-    }
-
-    let formValuesCopy = cloneDeep(formValues)
-    delete formValuesCopy.has_coffee
-    delete formValuesCopy.has_vego
-    delete formValuesCopy.has_halal
-    delete formValuesCopy.has_bacon_and_eggs
-    delete formValuesCopy.has_free_text
-
+const fromFormValues = (formValues: any) => {
     return {
-        ...formValuesCopy,
-        has_other: JSON.stringify(hasOther),
+        stall: {
+            noms: buildNomsObject(formValues),
+            name: formValues.name || "",
+            description: formValues.description || "",
+            website: formValues.website || "",
+            extra_info: formValues.extra_info || "",
+            source: formValues.source || "",
+        },
+        facility_type: formValues.facility_type,
     }
 }
 
@@ -87,7 +68,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
 
     canStallPropsBeMerged() {
         const { pollingPlace, stall } = this.props
-        return stall !== undefined && pollingPlaceHasReportsOfNoms(pollingPlace) === false
+        return stall !== undefined && pollingPlaceHasReports(pollingPlace) === false
     }
 
     getInitialValues(pollingPlace: IPollingPlace, stall?: IStall) {
@@ -98,18 +79,18 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
         // If there's no reports for this polling place yet then we can
         // safely merge in the stall's props
         if (stall !== undefined && this.canStallPropsBeMerged()) {
-            initialValues.has_bbq = stall.has_bbq
-            initialValues.has_caek = stall.has_caek
-            initialValues.has_coffee = stall.has_coffee
-            initialValues.has_halal = stall.has_halal
-            initialValues.has_vego = stall.has_vego
-            initialValues.has_bacon_and_eggs = stall.has_bacon_and_eggs
-            initialValues.has_free_text = stall.has_free_text
-
-            initialValues.stall_name = stall.stall_name
-            initialValues.stall_description = stall.stall_description
-            initialValues.stall_website = stall.stall_website
+            initialValues.bbq = stall.noms.bbq
+            initialValues.cake = stall.noms.cake
+            initialValues.coffee = stall.noms.coffee
+            initialValues.halal = stall.noms.halal
+            initialValues.vego = stall.noms.vego
+            initialValues.bacon_and_eggs = stall.noms.bacon_and_eggs
+            initialValues.free_text = stall.noms.free_text
+            initialValues.name = stall.name
+            initialValues.description = stall.description
+            initialValues.website = stall.website
             initialValues.source = "Direct"
+            initialValues.extra_info = ""
         }
 
         return initialValues
@@ -159,10 +140,10 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, election: IElection, pollingPlace: IPollingPlace, onPollingPlaceEdited: Function) {
-            const pollingPlaceNew: Partial<IPollingPlace> = fromFormValues(values)
+            const pollingPlaceNew /* Partial<IPollingPlace> */ = fromFormValues(values)
 
             const json = await dispatch(updatePollingPlace(election, pollingPlace, pollingPlaceNew))
-            if (json.rows === 1) {
+            if (json) {
                 onPollingPlaceEdited()
             }
             // dispatch(initialize("layerForm", layerFormValues, false))

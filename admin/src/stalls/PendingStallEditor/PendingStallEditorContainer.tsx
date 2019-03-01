@@ -3,13 +3,13 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
-import { IStall, markStallAsDeclined, markStallAsRead, markStallAsReadAndAddPollingPlace } from "../../redux/modules/stalls"
+import { approveStall, approveStallAndAddUnofficialPollingPlace, declineStall, IPendingStall } from "../../redux/modules/stalls"
 import PendingStallEditor from "./PendingStallEditor"
 
 export interface IProps {}
 export interface IStoreProps {
-    stall: IStall
-    election: IElection
+    stall: IPendingStall | null
+    election: IElection | null
 }
 
 export interface IDispatchProps {
@@ -28,7 +28,8 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class PendingStallEditorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
+export class PendingStallEditorContainer extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { stall, election, onPollingPlaceEdited, onApproveUnofficialStall, onDeclineUnofficialStall } = this.props
 
@@ -54,11 +55,11 @@ export class PendingStallEditorContainer extends React.Component<IProps & IStore
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
     const { stalls, elections } = state
 
-    const stall: IStall = stalls.pending.find((stall: IStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
-    const election: IElection = elections.elections.find((election: IElection) => election.id === stall.elections_id)!
+    const stall = stalls.pending.find((stall: IPendingStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
+    const election = stall !== undefined ? elections.elections.find((election: IElection) => election.id === stall.election_id)! : null
 
     return { stall: stall, election: election }
 }
@@ -66,20 +67,20 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onPollingPlaceEdited: async (id: number) => {
-            const json = await dispatch(markStallAsRead(id))
-            if (json.rows === 1) {
+            const json = await dispatch(approveStall(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },
         onApproveUnofficialStall: async (id: number) => {
-            const json = await dispatch(markStallAsReadAndAddPollingPlace(id))
-            if (json.rows === 1) {
+            const json = await dispatch(approveStallAndAddUnofficialPollingPlace(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },
         onDeclineUnofficialStall: async (id: number) => {
-            const json = await dispatch(markStallAsDeclined(id))
-            if (json.rows === 1) {
+            const json = await dispatch(declineStall(id))
+            if (json) {
                 browserHistory.push("/stalls")
             }
         },

@@ -19,13 +19,13 @@ import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
     stallWasMerged: boolean
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
     onSubmit: any
     onSaveForm: any
 
@@ -98,48 +98,48 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             <ListItem
                                 primaryText="Is there a sausage sizzle?"
                                 leftIcon={<SausageIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_bbq" />}
+                                rightToggle={<DeliciousnessToggle name="bbq" />}
                             />
                             <ListItem
                                 primaryText="Is there a cake stall?"
                                 leftIcon={<CakeIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_caek" />}
+                                rightToggle={<DeliciousnessToggle name="cake" />}
                             />
                             <ListItem
                                 primaryText="Are there vegetarian options?"
                                 leftIcon={<VegoIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_vego" />}
+                                rightToggle={<DeliciousnessToggle name="vego" />}
                             />
                             <ListItem
                                 primaryText="Is there any food that's halal?"
                                 leftIcon={<HalalIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_halal" />}
+                                rightToggle={<DeliciousnessToggle name="halal" />}
                             />
                             <ListItem
                                 primaryText="Do you have coffee?"
                                 leftIcon={<CoffeeIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_coffee" />}
+                                rightToggle={<DeliciousnessToggle name="coffee" />}
                             />
                             <ListItem
                                 primaryText="Are there bacon and eggs?"
                                 leftIcon={<BaconandEggsIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
+                                rightToggle={<DeliciousnessToggle name="bacon_and_eggs" />}
                             />
                             <Divider />
                             <ListItem
                                 primaryText="Red. Cross. Of. Shame."
                                 leftIcon={<RedCrossofShameIcon />}
-                                rightToggle={<DeliciousnessToggle name="has_nothing" />}
+                                rightToggle={<DeliciousnessToggle name="nothing" />}
                             />
                             <ListItem
                                 primaryText="They've run out of food!"
                                 leftIcon={<ContentBlock color={yellow700} />}
-                                rightToggle={<DeliciousnessToggle name="has_run_out" />}
+                                rightToggle={<DeliciousnessToggle name="run_out" />}
                             />
                         </List>
 
                         <CustomTextField
-                            name="has_free_text"
+                            name="free_text"
                             component={TextField}
                             floatingLabelText={"Anything else to add?"}
                             hintText={"What other types of delicious are here?"}
@@ -152,14 +152,14 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     <FormCardTitle title={"Stall Information"} />
                     <FormCardText>
                         <CustomTextField
-                            name="stall_name"
+                            name="name"
                             component={TextField}
                             floatingLabelText={"Stall name"}
                             hintText={"The name of the stall that is here"}
                             fullWidth={true}
                         />
                         <CustomTextField
-                            name="stall_description"
+                            name="description"
                             component={TextField}
                             multiLine={true}
                             floatingLabelText={"Stall description"}
@@ -167,10 +167,17 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             fullWidth={true}
                         />
                         <CustomTextField
-                            name="stall_website"
+                            name="website"
                             component={TextField}
                             floatingLabelText={"Stall website"}
                             hintText={"A link to the website of the people organising the stall"}
+                            fullWidth={true}
+                        />
+                        <CustomTextField
+                            name="extra_info"
+                            component={TextField}
+                            floatingLabelText={"Extra info"}
+                            hintText={"Is there any other information to add?"}
                             fullWidth={true}
                         />
                     </FormCardText>
@@ -180,22 +187,15 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     <FormCardTitle title={"Polling Place Information"} />
                     <FormCardText>
                         <CustomField
-                            name="polling_place_type"
+                            name="facility_type"
                             component={SelectField}
                             floatingLabelText={"What type of polling place is this?"}
                             fullWidth={true}
                         >
-                            {pollingPlaceTypes.map((type: string) => (
-                                <MenuItem key={type} value={type} primaryText={type} />
+                            {pollingPlaceTypes.map((type: IPollingPlaceFacilityType) => (
+                                <MenuItem key={type.name} value={type.name} primaryText={type.name} />
                             ))}
                         </CustomField>
-                        <CustomTextField
-                            name="extra_info"
-                            component={TextField}
-                            floatingLabelText={"Extra info"}
-                            hintText={"Is there any extra information to add?"}
-                            fullWidth={true}
-                        />
                         <CustomTextField
                             name="source"
                             component={TextField}

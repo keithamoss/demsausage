@@ -7,7 +7,7 @@ import { Link } from "react-router"
 import { default as VirtualList } from "react-tiny-virtual-list"
 import styled from "styled-components"
 import ElectionChooser from "../../elections/ElectionChooser/ElectionChooserContainer"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 // import "./PollingPlaceTypesEditor.css"
 import EmptyState from "../../shared/empty_state/EmptyState"
 
@@ -28,7 +28,7 @@ const GridBox = styled.div`
 
 export interface IProps {
     pollingPlaces: Array<IPollingPlace>
-    pollingPlaceTypes: Array<string>
+    pollingPlaceTypes: IPollingPlaceFacilityType[]
     onChangeType: any
     onElectionChanged: any
 }
@@ -58,7 +58,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
             radio: { display: "inline-block", width: "33%" },
         }
 
-        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.polling_place_type === null)
+        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.facility_type === null)
 
         if (pollingPlaces.length === 0) {
             return null
@@ -91,7 +91,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                         <div key={index} style={style}>
                             <GridBox>
                                 <div>
-                                    <h3>{pollingPlacesSansType[index].polling_place_name}</h3>
+                                    <h3>{pollingPlacesSansType[index].name}</h3>
                                     <h4>{pollingPlacesSansType[index].premises}</h4>
                                 </div>
                                 <div>
@@ -99,8 +99,8 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                                         name={`pollingPlaceTypes-${pollingPlacesSansType[index].id}`}
                                         onChange={this.onChangeType.bind(this, pollingPlacesSansType[index])}
                                     >
-                                        {pollingPlaceTypes.map((type: string) => (
-                                            <RadioButton key={type} value={type} label={type} style={styles.radio} />
+                                        {pollingPlaceTypes.map((type: IPollingPlaceFacilityType) => (
+                                            <RadioButton key={type.name} value={type.name} label={type.name} style={styles.radio} />
                                         ))}
                                     </RadioButtonGroup>
                                 </div>

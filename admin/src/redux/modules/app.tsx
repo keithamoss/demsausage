@@ -1,9 +1,9 @@
 import * as dotProp from "dot-prop-immutable"
-import { IEALGISApiClient } from "../../shared/api/EALGISApiClient"
-import { fetchElections, fetchElectionStats } from "./elections"
+import { IAPIClient } from "../../shared/api/APIClient"
+import { fetchElections } from "./elections"
 import { fetchPollingPlaceTypes } from "./polling_places"
 import { fetchPendingStalls } from "./stalls"
-import { fetchUser } from "./user"
+import { fetchUser, ISelf } from "./user"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -114,6 +114,10 @@ export function getEnvironment(): eAppEnv {
     return process.env.NODE_ENV === "development" ? eAppEnv.DEV : eAppEnv.PROD
 }
 
+export function isDevelopment(): boolean {
+    return getEnvironment() !== eAppEnv.PROD
+}
+
 export function getAPIBaseURL(): string {
     return process.env.REACT_APP_API_BASE_URL!
 }
@@ -123,28 +127,13 @@ export function getBaseURL(): string {
 }
 
 export function fetchInitialAppState() {
-    return async (dispatch: Function, getState: Function, ealapi: IEALGISApiClient) => {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())
 
-        await Promise.all([
-            dispatch(fetchUser()),
-            dispatch(fetchElections()),
-            dispatch(fetchPendingStalls()),
-            dispatch(fetchPollingPlaceTypes()),
-        ])
-        await dispatch(fetchElectionStats())
-
-        // const self: ISelf = await dispatch(fetchUser())
-        // if (self && self.success) {
-        //     await Promise.all([
-        //         dispatch(fetchElections()),
-        //         //     dispatch(fetchGeomInfo()),
-        //         //     dispatch(fetchColourInfo()),
-        //         //     dispatch(fetchSchemaInfo()),
-        //         //     dispatch(fetchTablesIfUncached([...self.user.favourite_tables, ...self.user.recent_tables])),
-        //     ])
-        //     // await dispatch(fetchColumnsForMaps())
-        // }
+        const self: ISelf = await dispatch(fetchUser())
+        if (self && self.is_logged_in) {
+            await Promise.all([dispatch(fetchElections()), dispatch(fetchPendingStalls()), dispatch(fetchPollingPlaceTypes())])
+        }
 
         dispatch(loaded())
     }

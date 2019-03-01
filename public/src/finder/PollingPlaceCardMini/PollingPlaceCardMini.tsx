@@ -14,12 +14,14 @@ import HalalIcon from "../../icons/halal"
 import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
-import { IElection } from "../../redux/modules/elections"
+import { IElection, isElectionLive } from "../../redux/modules/elections"
 // import { Link, browserHistory } from "react-router"
 // import "./PollingPlaceCardMini.css"
 import {
     getFoodDescription,
     getSausageChanceDescription,
+    IPollingPlace,
+    IPollingPlaceSearchResult,
     pollingPlaceHasReports,
     pollingPlaceHasReportsOfNoms,
 } from "../../redux/modules/polling_places"
@@ -70,7 +72,7 @@ const ChanceOfSausageIndicator = styled.span`
 `
 
 export interface IProps {
-    pollingPlace: any // FIXME - Due to this component accepting IPollingPlaceSearchResult and IPollingPlace from different parent components
+    pollingPlace: IPollingPlace | IPollingPlaceSearchResult
     election: IElection
 }
 
@@ -80,9 +82,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
 
         const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false
 
-        let title = `${pollingPlace.polling_place_name}`
+        let title = `${pollingPlace.name}`
         if (pollingPlace.premises !== null) {
-            title = `${pollingPlace.polling_place_name}, ${pollingPlace.premises}`
+            title = `${pollingPlace.name}, ${pollingPlace.premises}`
         }
 
         return (
@@ -97,35 +99,34 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                     {/* <CardMedia overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}>
                     <img src="images/nature-600-337.jpg" alt="" />
                 </CardMedia> */}
-                    {pollingPlace.stall_name !== null && (
+                    {pollingPlace.stall !== null && (
                         <CardTitle
-                            title={pollingPlace.stall_name}
-                            subtitle={pollingPlace.stall_description}
+                            title={pollingPlace.stall.name}
+                            subtitle={pollingPlace.stall.description}
                             subtitleStyle={{ whiteSpace: "pre" }}
                         />
                     )}
                     <CardText>
                         <FlexboxContainer>
-                            <FlexboxIcons>
-                                {pollingPlace.has_bbq && <SausageIcon />}
-                                {pollingPlace.has_caek && <CakeIcon />}
-                                {pollingPlace.has_other !== null && "has_vego" in pollingPlace.has_other && <VegoIcon />}
-                                {pollingPlace.has_nothing && <RedCrossofShameIcon />}
-                                {pollingPlace.has_other !== null && "has_halal" in pollingPlace.has_other && <HalalIcon />}
-                                {pollingPlace.has_other !== null && "has_coffee" in pollingPlace.has_other && <CoffeeIcon />}
-                                {pollingPlace.has_other !== null && "has_bacon_and_eggs" in pollingPlace.has_other && <BaconandEggsIcon />}
-                            </FlexboxIcons>
-                            {"distance_metres" in pollingPlace && (
-                                <FlexboxDistance
-                                    label={`${(pollingPlace.distance_metres / 1000).toFixed(2)}km`}
-                                    icon={<MapsNavigation color={grey500} />}
-                                />
+                            {pollingPlace.stall !== null && (
+                                <FlexboxIcons>
+                                    {pollingPlace.stall.noms.bbq && <SausageIcon />}
+                                    {pollingPlace.stall.noms.cake && <CakeIcon />}
+                                    {pollingPlace.stall.noms.vego && <VegoIcon />}
+                                    {pollingPlace.stall.noms.nothing && <RedCrossofShameIcon />}
+                                    {pollingPlace.stall.noms.halal && <HalalIcon />}
+                                    {pollingPlace.stall.noms.coffee && <CoffeeIcon />}
+                                    {pollingPlace.stall.noms.bacon_and_eggs && <BaconandEggsIcon />}
+                                </FlexboxIcons>
+                            )}
+                            {"distance_km" in pollingPlace && (
+                                <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
                             )}
                         </FlexboxContainer>
-                        {pollingPlace.has_other !== null && "has_free_text" in pollingPlace.has_other && (
-                            <HasFreeTextDeliciousness>Also available: {pollingPlace.has_other.has_free_text}</HasFreeTextDeliciousness>
+                        {pollingPlace.stall !== null && "free_text" in pollingPlace.stall.noms && (
+                            <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
                         )}
-                        {pollingPlace.has_run_out && (
+                        {pollingPlace.stall !== null && pollingPlace.stall.noms.run_out && (
                             <RunOutWarning
                                 secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
                                 secondaryTextLines={2}
@@ -133,7 +134,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
-                        {election.is_active === true && pollingPlaceHasReports(pollingPlace) === false && (
+                        {isElectionLive(election) && pollingPlaceHasReports(pollingPlace) === false && (
                             <ChanceOfSausage
                                 primaryText={"We don't have any reports for this booth yet."}
                                 secondaryText={
@@ -148,9 +149,11 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
-                        {pollingPlace.division !== null && <Division>Division(s): {pollingPlace.division}</Division>}
-                        {pollingPlace.extra_info !== null && <Division>Extra Info: {pollingPlace.extra_info}</Division>}
-                        {pollingPlace.booth_info !== null && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
+                        {pollingPlace.divisions.length > 0 && <Division>Division(s): {pollingPlace.divisions.join(", ")}</Division>}
+                        {pollingPlace.stall !== null &&
+                            pollingPlace.stall.extra_info !== null &&
+                            pollingPlace.stall.extra_info.length > 0 && <Division>Extra Info: {pollingPlace.stall.extra_info}</Division>}
+                        {pollingPlace.booth_info.length > 0 && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
                     </CardText>
                     {isExpandable && (
                         <CardText expandable={isExpandable}>

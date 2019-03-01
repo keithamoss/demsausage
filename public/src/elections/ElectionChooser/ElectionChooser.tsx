@@ -202,6 +202,7 @@ const getElectionLabel: any = (
 
 export interface IProps {
     elections: Array<IElection>
+    liveElections: Array<IElection>
     currentElection: IElection
     isElectionChooserOpen: boolean
     browserBreakpoint: string
@@ -215,6 +216,7 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
     render() {
         const {
             elections,
+            liveElections,
             currentElection,
             isElectionChooserOpen,
             browserBreakpoint,
@@ -224,12 +226,10 @@ class ElectionChooser extends React.PureComponent<IProps, {}> {
             onChooseElectionTab,
         } = this.props
 
-        const activeElections = elections.filter((election: IElection) => election.is_active)
-
         let electionsToShowAsTabs: IElection[]
         // Show our active elections
-        if (activeElections.length > 0) {
-            electionsToShowAsTabs = activeElections
+        if (liveElections.length > 0) {
+            electionsToShowAsTabs = liveElections
         } else {
             // Show recent elections i.e. The last set of election(s) we did - may be weeks or months in the past
             electionsToShowAsTabs = elections.filter(

@@ -1,0 +1,36 @@
+state,division,polling_place_name,premises,address,entrancesdesc,lat,lon,wheelchairaccess
+NSW,Wentworth,Bellevue Hill,Bellevue Hill Public School,"163A Victoria Rd, BELLEVUE HILL, 2023",3 gated entrances from Victoria Rd(which is off Birriga Rd) & 1 gated entrance from Bellevue Park Rd,-33.8867,151.26,Assisted
+NSW,Wentworth,Bellevue Hill South,Cooper Park Community Hall,"12 Cooper Park Rd, BELLEVUE HILL, 2023",Enter from Cooper Park Rd only northern end of park,-33.8859,151.253,Assisted
+NSW,Wentworth,Bondi,Bondi Public School,"5 Wellington St, BONDI, 2026",3 gated entrances from Wellington St & 1 gated entrance from Henderson St,-33.8927191,151.2647377,Assisted
+NSW,Wentworth,Bondi Beach,Bondi Beach Public School,"Campbell Pde, BONDI BEACH, 2026",2 main gated entrances from Campbell Pde 3 gated entrances from Warners St,-33.8885,151.278,Assisted
+NSW,Wentworth,Bondi Beach East,Wairoa Public School,"Brighton Blvd, BONDI BEACH, 2026",,-33.8865709,151.2784537,Assisted
+NSW,Wentworth,Bondi Junction,Mill Hill Centre,"31-33 Spring St, BONDI JUNCTION, 2022",Enter from Spring Street only,-33.8926,151.246,Assisted
+NSW,Wentworth,Bondi Junction North,Church in the Market Place,"400 Oxford Mall, BONDI JUNCTION, 2022",,-33.8916233,151.247723,Assisted
+NSW,Wentworth,Bondi North,"Margaret Whitlam Recreation Centre, Community Room","Waverley Park, Bondi Rd, BONDI JUNCTION, 2022",,-33.8937517,151.2581563,Assisted
+NSW,Wentworth,Bondi South,St Patrick's Hall,"2 Wellington St, BONDI, 2026",Enter from Castlefield St,-33.8938312,151.2639065,Assisted
+NSW,Wentworth,Bondi Surf,Bondi Surf Bathers Life Saving Club,"Queen Elizabeth Dr, BONDI BEACH, 2026",Enter from Queen Elizabeth Dr,-33.8901,151.277,Assisted
+NSW,Wentworth,Bronte,Bronte Public School,"Hewlett St, BRONTE, 2024",Enter from Hewlett St only,-33.9008,151.262,Assisted
+NSW,Wentworth,Clovelly,Clovelly Public School,"1 Arden St, BRONTE, 2024",2 gated entrances from Inverness St,-33.9071,151.26,Assisted
+NSW,Wentworth,Clovelly Beach,Surf Life Saving Club,"Clovelly Rd, CLOVELLY, 2031",,-33.915,151.267,None
+NSW,Wentworth,Clovelly North,St Luke's Anglican Church,"69 Varna St, CLOVELLY, 2031",Enter from Varna St,-33.908,151.259,None
+NSW,Wentworth,Darling Point,St Mark's Church,"1 Greenoaks Ave, DARLING POINT, 2027",Enter from Greenoaks Ave,-33.8747,151.236,Assisted
+NSW,Wentworth,Darlinghurst East,Darlinghurst Public School,"Womerah Ave, DARLINGHURST, 2010",,-33.8787,151.223,None
+NSW,Wentworth,Double Bay,Double Bay Public School,"William St, DOUBLE BAY, 2028",1 gated entrance from William St 1 gated entrance from Cross st,-33.8748,151.241,Assisted
+NSW,Wentworth,Double Bay East,Sherbrook Hall,"512 New South Head Rd, DOUBLE BAY, 2028",,-33.8749113,151.2464477,Assisted
+NSW,Wentworth,Dover Heights,Rose Bay Secondary Clge (Dover Heights Campus),"34A Hardy St, DOVER HEIGHTS, 2030",Enter through gates from Hardy St only,-33.8788,151.277,Assisted
+NSW,Wentworth,Edgecliff,St Joseph's Parish Centre,"12 Albert St, EDGECLIFF, 2027",Main entrance from Albert St,-33.8809,151.239,Assisted
+NSW,Wentworth,Elizabeth Bay,Reginald Murphy Activity Centre,"19 Greenknowe Ave, ELIZABETH BAY, 2011",Main entrance from Greenknowe Ave,-33.8719,151.227,Assisted
+NSW,Wentworth,Kings Cross Central,St Canice's Church Hall,"28 Roslyn St, POTTS POINT, 2011",via Roslyn St,-33.8753,151.226,None
+NSW,Wentworth,Paddington Central,St George's Anglican Church,"245 Glenmore Rd, PADDINGTON, 2021",Enter through driveway from Glenmore Rd,-33.8823,151.229,None
+NSW,Wentworth,Paddington North,Paddington Public School,"399-435 Oxford St, PADDINGTON, 2021",,-33.8875854,151.2301736,Assisted
+NSW,Wentworth,Paddington South,St Matthias' Anglican Church,"471-475 Oxford St, PADDINGTON, 2021",,-33.8893114,151.2323296,Assisted
+NSW,Wentworth,Randwick North,Randwick Literary Institute,"60 Clovelly Rd, RANDWICK, 2031",Enter through doors from Market St only,-33.9057,151.247,None
+NSW,Wentworth,Rose Bay,Rose Bay Public School,"Wilberforce Ave, ROSE BAY, 2029",1 gated entrance from Albemarle Ave 1 gated entrance from cnr Albermarle La and Wilberforce St.,-33.873,151.271,Assisted
+NSW,Wentworth,Rose Bay Central,St Andrew's Scots Church Hall,"cnr Dover Rd & Carlisle St, ROSE BAY, 2029",Enter from Carlisle St only,-33.8709,151.271,None
+NSW,Wentworth,Vaucluse,St Michael's Anglican Church,"cnr Vaucluse Rd & Gilliver Ave, VAUCLUSE, 2030",Main entrance from driveway in Gilliver Ave. Additional entrance via steps from New South Head Rd,-33.8612,151.271,None
+NSW,Wentworth,Vaucluse East,Vaucluse Bowling Club,"80 New South Head Rd, VAUCLUSE, 2030",Enter from New South Head Rd,-33.8577,151.279,None
+NSW,Wentworth,Watsons Bay,Gunyah Scout Hall,"335 Old South Head Rd, WATSONS BAY, 2030",Enter from Old South Head Rd via car park,-33.8459,151.284,Assisted
+NSW,Wentworth,Waverley,Waverley Public School,"155 Bronte Rd, WAVERLEY, 2024",Enter through gates from Bronte Rd,-33.8983,151.252,Assisted
+NSW,Wentworth,Waverley North,Waverley College Hall,"131 Birrell St, WAVERLEY, 2024",The Grange Entrance Carrington Rd,-33.8969,151.256,None
+NSW,Wentworth,Woollahra,Woollahra Public School,"Forth St, WOOLLAHRA, 2025",Enter via Forth St gate or gate off Osborne La,-33.8865,151.242,Assisted
+NSW,Wentworth,Woollahra South,Holdsworth Community Centre,"64 Holdsworth St, WOOLLAHRA, 2025",1 gated entrance from Morrell St 1 gated entrance from Spicer La,-33.8863,151.238,Assisted

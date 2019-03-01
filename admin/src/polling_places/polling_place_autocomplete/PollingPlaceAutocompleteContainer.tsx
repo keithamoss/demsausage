@@ -6,6 +6,8 @@ import { IPollingPlace, searchPollingPlaces } from "../../redux/modules/polling_
 import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceAutocomplete from "./PollingPlaceAutocomplete"
 
+export interface IStoreProps {}
+
 export interface IProps {
     election: IElection
     onPollingPlaceChosen: Function
@@ -20,7 +22,8 @@ export interface IStateProps {
     searchResults: Array<IPollingPlace>
 }
 
-export class PollingPlaceAutocompleteContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
+type TComponentProps = IProps & IDispatchProps
+export class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentProps, IStateProps> {
     onFieldChangeDebounced: Function
 
     constructor(props: IProps & IDispatchProps) {
@@ -61,7 +64,7 @@ export class PollingPlaceAutocompleteContainer extends React.PureComponent<IProp
     }
 }
 
-const mapStateToProps = (state: IStore): any => {
+const mapStateToProps = (state: IStore): IStoreProps => {
     return {}
 }
 
@@ -73,7 +76,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceAutocompleteContainerWrapped = connect<{}, IDispatchProps, IProps>(
+const PollingPlaceAutocompleteContainerWrapped = connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceAutocompleteContainer)

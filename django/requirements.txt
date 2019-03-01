@@ -1,0 +1,16 @@
+Django==2.1.7
+psycopg2-binary==2.7.7
+djangorestframework==3.9.1
+django-cors-headers==2.4.0
+django-model-utils==3.1.2
+social-auth-app-django==3.1.0
+social-auth-core==3.0.0
+raven==6.10.0
+django-simple-history==2.7.0
+jsonschema==2.6.0
+python-memcached==1.59
+djangorestframework-gis==0.14
+django-filter==2.1.0
+djangorestframework-csv==2.1.0
+requests==2.21.0
+chardet==3.0.4

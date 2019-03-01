@@ -23,11 +23,12 @@ import { fade } from "material-ui/utils/colorManipulator"
 import * as React from "react"
 import { connect } from "react-redux"
 import App from "./App"
+import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
 import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
 import { IElection, setCurrentElection } from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
-import { IUser, logoutUser } from "./redux/modules/user"
+import { IUser } from "./redux/modules/user"
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -66,7 +67,6 @@ export interface IDispatchProps {
     setElectionFromRoute: Function
     fetchInitialAppState: Function
     handleSnackbarClose: Function
-    doLogout: Function
     onClickDrawerLink: Function
 }
 
@@ -126,6 +126,14 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             )
         }
 
+        if (user === null) {
+            return (
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <LoginDialog open={true} />
+                </MuiThemeProvider>
+            )
+        }
+
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <App
@@ -174,9 +182,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             if (reason === "timeout") {
                 dispatch(iterateSnackbar())
             }
-        },
-        doLogout: () => {
-            dispatch(logoutUser())
         },
         onClickDrawerLink: () => {
             dispatch(setDrawerOpen(false))

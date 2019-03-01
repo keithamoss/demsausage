@@ -4,8 +4,8 @@ import { blue500 } from "material-ui/styles/colors"
 import { AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
-import { IElection, setElectionTableName } from "../../redux/modules/elections"
-import { IPollingPlaceLoaderResponse, IPollingPlaceLoaderResponseMessage, loadPollingPlaces } from "../../redux/modules/polling_places"
+import { IElection } from "../../redux/modules/elections"
+import { IPollingPlaceLoaderResponseMessages, loadPollingPlaces } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
 import ElectionPollingPlaceLoader from "./ElectionPollingPlaceLoader"
@@ -21,8 +21,10 @@ export interface IDispatchProps {
 
 export interface IStateProps {
     file: File | undefined
+    config: string | undefined
+    dryRun: boolean
     error: boolean | undefined
-    messages: Array<IPollingPlaceLoaderResponseMessage>
+    messages: IPollingPlaceLoaderResponseMessages | undefined
 }
 
 interface IRouteProps {
@@ -33,11 +35,12 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<IStoreProps & IDispatchProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponentProps, IStateProps> {
     constructor(props: any) {
         super(props)
 
-        this.state = { file: undefined, error: undefined, messages: [] }
+        this.state = { file: undefined, config: undefined, dryRun: false, error: undefined, messages: undefined }
     }
 
     render() {
@@ -62,31 +65,49 @@ export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<ISt
                 error={this.state.error}
                 messages={this.state.messages}
                 onFileUpload={(file: File) => {
-                    this.setState({ file: file })
-                    loadPollingPlaces(election, file, this)
+                    this.setState({ ...this.state, file: file })
+                    loadPollingPlaces(election, file, this.state.config, this.state.dryRun, this)
+                }}
+                onConfigChange={(event: any, config: string) => {
+                    try {
+                        JSON.parse(config)
+                        this.setState({ ...this.state, config: config })
+                    } catch (e) {
+                        // tslint:disable-next-line: no-console
+                        console.error(e)
+                    }
+                }}
+                onCheckDryRun={(event: any, isInputChecked: boolean) => {
+                    this.setState({ ...this.state, dryRun: isInputChecked })
                 }}
             />
         )
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
-    const { elections, stalls } = state
+const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
+    const { elections } = state
+
+    const electionId = parseInt(ownProps.params.electionIdentifier, 10)
+    const getPendingStallsForCurrentElectionFilter = getPendingStallsForCurrentElection(state)
 
     return {
         election: elections.elections.find((election: IElection) => election.id === parseInt(ownProps.params.electionIdentifier, 10))!,
-        pendingStallCount: getPendingStallsForCurrentElection(stalls, parseInt(ownProps.params.electionIdentifier, 10)).length,
+        pendingStallCount: getPendingStallsForCurrentElectionFilter(electionId).length,
     }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        loadPollingPlaces: async (election: IElection, file: File, that: ElectionPollingPlaceLoaderContainer) => {
-            const response: IPollingPlaceLoaderResponse = await dispatch(loadPollingPlaces(election, file))
-            that.setState({ error: response.error, messages: response.messages })
-            if (response.error === false) {
-                dispatch(setElectionTableName(election, response.table_name))
-            }
+        loadPollingPlaces: async (
+            election: IElection,
+            file: File,
+            config: any,
+            dryRun: boolean,
+            that: ElectionPollingPlaceLoaderContainer
+        ) => {
+            const json = await dispatch(loadPollingPlaces(election, file, config, dryRun))
+            that.setState({ ...that.state, error: "errors" in json.logs && json.logs.errors.length > 0 ? true : false, messages: json })
         },
     }
 }

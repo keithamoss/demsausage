@@ -16,6 +16,7 @@ import HalalIcon from "../../icons/halal"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
+import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 // import RaisedButton from "material-ui/RaisedButton"
 // import FlatButton from "material-ui/FlatButton"
 import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
@@ -24,7 +25,7 @@ const required = (value: any) => (value ? undefined : "Required")
 const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined)
 
 export interface IProps {
-    activeElections: Array<IElection>
+    liveElections: Array<IElection>
     stepIndex: number
     onChooseElection: any
     chosenElection: IElection
@@ -32,16 +33,17 @@ export interface IProps {
     stallLocationInfo: any // Bit of a hack around the issue of this being IStallLocationInfo OR IPollingPlace
     locationConfirmed: boolean
     formSubmitting: boolean
+    errors: IDjangoAPIError | undefined
     onSubmit: any
     onSaveForm: any
 
     // From redux-form
     initialValues: any
     handleSubmit: any
-    isDirty: any
+    isValid: any
 }
 
-class CustomTextField extends React.Component<any, any> {
+export class CustomTextField extends React.Component<any, any> {
     render(): any {
         const { hintText, name, ...rest } = this.props
 
@@ -54,7 +56,7 @@ class CustomTextField extends React.Component<any, any> {
     }
 }
 
-class DeliciousnessToggle extends React.Component<any, any> {
+export class DeliciousnessToggle extends React.Component<any, any> {
     render(): any {
         const { name, ...rest } = this.props
         return <Field name={name} component={Toggle as any} thumbStyle={{ backgroundColor: grey100 }} {...rest} />
@@ -90,7 +92,7 @@ const StepContentStyled = styled(StepContent)`
 class AddStallForm extends React.PureComponent<IProps, {}> {
     render() {
         const {
-            activeElections,
+            liveElections,
             stepIndex,
             onChooseElection,
             chosenElection,
@@ -98,18 +100,19 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
             stallLocationInfo,
             locationConfirmed,
             formSubmitting,
+            errors,
         } = this.props
-        const { isDirty, onSaveForm, handleSubmit, onSubmit } = this.props
+        const { isValid, onSaveForm, handleSubmit, onSubmit } = this.props
 
         let primaryTextString
         if (stallLocationInfo !== null) {
             if ("id" in stallLocationInfo) {
                 primaryTextString =
-                    stallLocationInfo.polling_place_name === stallLocationInfo.premises
-                        ? stallLocationInfo.polling_place_name
-                        : `${stallLocationInfo.polling_place_name}, ${stallLocationInfo.premises}`
+                    stallLocationInfo.name === stallLocationInfo.premises
+                        ? stallLocationInfo.name
+                        : `${stallLocationInfo.name}, ${stallLocationInfo.premises}`
             } else {
-                primaryTextString = stallLocationInfo.polling_place_name
+                primaryTextString = `${stallLocationInfo.name}, ${stallLocationInfo.address}`
             }
         }
 
@@ -120,7 +123,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                         <StepLabel>{chosenElection === null ? "Your election" : `Your election: ${chosenElection.name}`}</StepLabel>
                         <StepContentStyled>
                             <RadioButtonGroup name="elections" onChange={onChooseElection}>
-                                {activeElections.map((election: IElection) => (
+                                {liveElections.map((election: IElection) => (
                                     <RadioButton key={election.id} value={election} label={election.name} style={{ marginBottom: 16 }} />
                                 ))}
                             </RadioButtonGroup>
@@ -158,7 +161,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                             <div>
                                 <FormSection style={{ marginTop: 0 }}>
                                     <CustomTextField
-                                        name="stall_name"
+                                        name="name"
                                         component={TextField}
                                         floatingLabelText={"Stall name"}
                                         hintText={"e.g. Primary School Sausage Sizzle"}
@@ -166,7 +169,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         validate={[required]}
                                     />
                                     <CustomTextField
-                                        name="stall_description"
+                                        name="description"
                                         component={TextField}
                                         multiLine={true}
                                         floatingLabelText={"Stall description"}
@@ -175,7 +178,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         validate={[required]}
                                     />
                                     <CustomTextField
-                                        name="stall_website"
+                                        name="website"
                                         component={TextField}
                                         floatingLabelText={"Stall website"}
                                         hintText={"We'll include a link to your site as part of your stall's information"}
@@ -186,7 +189,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 <FormSection>
                                     <FormSectionHeader>Your details</FormSectionHeader>
                                     <CustomTextField
-                                        name="contact_email"
+                                        name="email"
                                         component={TextField}
                                         floatingLabelText={"Contact email"}
                                         hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
@@ -202,37 +205,37 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         <ListItem
                                             primaryText="Is there a sausage sizzle?"
                                             leftIcon={<SausageIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_bbq" />}
+                                            rightToggle={<DeliciousnessToggle name="bbq" />}
                                         />
                                         <ListItem
                                             primaryText="Is there a cake stall?"
                                             leftIcon={<CakeIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_caek" />}
+                                            rightToggle={<DeliciousnessToggle name="cake" />}
                                         />
                                         <ListItem
                                             primaryText="Are there vegetarian options?"
                                             leftIcon={<VegoIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_vego" />}
+                                            rightToggle={<DeliciousnessToggle name="vego" />}
                                         />
                                         <ListItem
                                             primaryText="Is there any food that's halal?"
                                             leftIcon={<HalalIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_halal" />}
+                                            rightToggle={<DeliciousnessToggle name="halal" />}
                                         />
                                         <ListItem
                                             primaryText="Do you have coffee?"
                                             leftIcon={<CoffeeIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_coffee" />}
+                                            rightToggle={<DeliciousnessToggle name="coffee" />}
                                         />
                                         <ListItem
                                             primaryText="Are there bacon and eggs?"
                                             leftIcon={<BaconandEggsIcon />}
-                                            rightToggle={<DeliciousnessToggle name="has_bacon_and_eggs" />}
+                                            rightToggle={<DeliciousnessToggle name="bacon_and_eggs" />}
                                         />
                                     </List>
 
                                     <CustomTextField
-                                        name="has_free_text"
+                                        name="free_text"
                                         component={TextField}
                                         floatingLabelText={"Anything else?"}
                                         hintText={"e.g. We also have cold drinks and pony rides!"}
@@ -240,9 +243,11 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     />
                                 </FormSection>
 
+                                <DjangoAPIErrorUI errors={errors} />
+
                                 <RaisedButtonChunkyBottom
                                     label={"Submit Stall"}
-                                    disabled={!isDirty || formSubmitting}
+                                    disabled={!isValid || formSubmitting}
                                     primary={true}
                                     onClick={onSaveForm}
                                 />

@@ -2,9 +2,8 @@ import IconButton from "material-ui/IconButton"
 import LinearProgress from "material-ui/LinearProgress"
 import { ListItem } from "material-ui/List"
 import RaisedButton from "material-ui/RaisedButton"
-import { green500, red600, yellow600 } from "material-ui/styles/colors"
+import { red600, yellow600 } from "material-ui/styles/colors"
 import {
-    ActionPowerSettingsNew,
     FileCloudDownload,
     FileFileUpload,
     ImageRemoveRedEye,
@@ -17,7 +16,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table"
 import * as React from "react"
 import { browserHistory, Link } from "react-router"
 import styled from "styled-components"
-import { IElection, IElectionStats } from "../../redux/modules/elections"
+import { IElection } from "../../redux/modules/elections"
 
 const TableRowNoBorder = styled(TableRow)`
     border-bottom: none !important;
@@ -39,10 +38,9 @@ const LinearProgressChunky = styled(LinearProgress)`
 
 export interface IProps {
     elections: Array<IElection>
-    stats: Array<IElectionStats>
     onMakeElectionPrimary: any
     onDownloadElection: any
-    onRegenerateElectionGeoJSON: any
+    onRegenerateMapDataForElection: any
 }
 
 class ElectionsManager extends React.PureComponent<IProps, {}> {
@@ -65,7 +63,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
     }
 
     render() {
-        const { elections, stats, onDownloadElection, onRegenerateElectionGeoJSON } = this.props
+        const { elections, onDownloadElection, onRegenerateMapDataForElection } = this.props
 
         return (
             <div>
@@ -74,8 +72,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                 <Table selectable={false}>
                     <TableBody displayRowCheckbox={false}>
                         {elections.map((election: IElection) => {
-                            const electionStats = stats[election.id]
-                            const withDataPercentage = (electionStats.with_data / electionStats.total) * 100
+                            const withDataPercentage = (election.stats.with_data / election.stats.total) * 100
 
                             return (
                                 <TableRowNoBorder key={election.id} selectable={false}>
@@ -90,13 +87,15 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                             })}
                                             onClick={this.onClickElection.bind(this, election)}
                                         />
-                                        <div
-                                            title={`${electionStats.with_data} of ${
-                                                electionStats.total
-                                            } polling places have data (${Math.round(withDataPercentage)}%)`}
-                                        >
-                                            <LinearProgressChunky mode="determinate" value={withDataPercentage} />
-                                        </div>
+                                        {election.polling_places_loaded === true && (
+                                            <div
+                                                title={`${election.stats.with_data} of ${
+                                                    election.stats.total
+                                                } polling places have data (${Math.round(withDataPercentage)}%)`}
+                                            >
+                                                <LinearProgressChunky mode="determinate" value={withDataPercentage} />
+                                            </div>
+                                        )}
                                     </ElectionTableRowColumn>
                                     <TableRowColumnWithIconButtons>
                                         {election.is_primary === true && (
@@ -115,12 +114,12 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                                 <ToggleStarBorder hoverColor={yellow600} />
                                             </IconButton>
                                         )}
-                                        {election.is_active ? (
+                                        {/* {election.is_active ? (
                                             <IconButton tooltip={"This election is live!"}>
                                                 <ActionPowerSettingsNew color={green500} />
                                             </IconButton>
-                                        ) : null}
-                                        {election.hidden ? (
+                                        ) : null} */}
+                                        {election.is_hidden ? (
                                             <IconButton tooltip={"This election is hidden - only admins can see it"}>
                                                 <ImageRemoveRedEye color={red600} />
                                             </IconButton>
@@ -141,7 +140,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                                         </IconButton>
                                         <IconButton
                                             tooltip="Refresh the map data for this election"
-                                            onClick={onRegenerateElectionGeoJSON.bind(this, election)}
+                                            onClick={onRegenerateMapDataForElection.bind(this, election)}
                                         >
                                             <NavigationRefresh />
                                         </IconButton>

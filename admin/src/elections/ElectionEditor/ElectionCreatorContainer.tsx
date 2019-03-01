@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
@@ -7,6 +6,7 @@ import { isDirty, submit } from "redux-form"
 import { createElection, IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionEditor from "./ElectionEditor"
+import { IElectionFormValues } from "./ElectionEditorContainer"
 
 export interface IProps {
     onElectionCreated: Function
@@ -25,12 +25,17 @@ export interface IStateProps {}
 
 interface IOwnProps {}
 
-const fromFormValues = (formValues: any): IElection => {
-    let formValuesCopy = cloneDeep(formValues)
+const fromFormValues = (formValues: any): IElectionFormValues => {
     return {
-        ...formValuesCopy,
-        lon: parseFloat(formValuesCopy.lon),
-        lat: parseFloat(formValuesCopy.lat),
+        name: formValues.name,
+        short_name: formValues.short_name,
+        default_zoom_level: formValues.default_zoom_level,
+        is_hidden: formValues.is_hidden,
+        election_day: formValues.election_day,
+        geom: {
+            type: "Point",
+            coordinates: [parseFloat(formValues.lon), parseFloat(formValues.lat)],
+        },
     }
 }
 
@@ -67,8 +72,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, onElectionCreated: Function) {
             const electionNew: Partial<IElection> = fromFormValues(values)
-            await dispatch(createElection(electionNew))
-            browserHistory.push("/elections/")
+            const json = await dispatch(createElection(electionNew))
+            if (json) {
+                browserHistory.push("/elections/")
+            }
         },
         onSaveForm: (isDirty: boolean) => {
             dispatch(submit("election"))

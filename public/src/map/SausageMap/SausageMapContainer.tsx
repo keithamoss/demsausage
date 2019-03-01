@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from "../../redux/modules/app"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
-import { fetchPollingPlacesByIds, IMapPollingPlace, IPollingPlace } from "../../redux/modules/polling_places"
+import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import SausageMap from "./SausageMap"
@@ -58,11 +58,11 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     }
 
     onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
-        this.setState(Object.assign(this.state, { queriedPollingPlaces: pollingPlaces }))
+        this.setState({ ...this.state, queriedPollingPlaces: pollingPlaces })
     }
 
     onClearQueriedPollingPlaces() {
-        this.setState(Object.assign(this.state, { queriedPollingPlaces: [] }))
+        this.setState({ ...this.state, queriedPollingPlaces: [] })
     }
 
     render() {
@@ -74,8 +74,8 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                 currentElection={currentElection}
                 queriedPollingPlaces={queriedPollingPlaces}
                 geolocationSupported={geolocationSupported}
-                onQueryMap={async (features: Array<IMapPollingPlace>) => {
-                    const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlace) => feature.id)
+                onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
+                    const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
                     const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
                     this.onSetQueriedPollingPlaces(pollingPlaces)
                 }}
@@ -107,13 +107,16 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 label: "Polling Places Queried",
                 value: pollingPlaceIds.length,
             })
+
             const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
+
             gaTrack.event({
                 category: "SausageMapContainer",
                 action: "fetchQueriedPollingPlaces",
                 label: "Polling Places Returned",
                 value: results.length,
             })
+
             return results
         },
         onOpenFinderForAddressSearch(this: SausageMapContainer) {

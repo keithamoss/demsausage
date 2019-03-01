@@ -1,13 +1,12 @@
 {
     "short_name": "Democracy Sausage Admin",
     "name": "Democracy Sausage Admin Console",
-    "description":
-        "A real-time crowd-sourced map of sausage and cake availability at Australian elections. It's practically part of the Australian Constitution. Or something. #demsausage",
+    "description": "A real-time crowd-sourced map of sausage and cake availability at Australian elections. It's practically part of the Australian Constitution. Or something. #demsausage",
     "icons": [
         {
             "src": "favicon.ico",
-            "sizes": "192x192",
-            "type": "image/png"
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
         }
     ],
     "start_url": "./index.html",

@@ -1,7 +1,7 @@
-import * as React from "react"
-import { SocialLoginButton } from "../social-login-button/SocialLoginButton"
-import { getAPIBaseURL } from "../../redux/modules/app"
 import Dialog from "material-ui/Dialog"
+import * as React from "react"
+import { getAPIBaseURL } from "../../redux/modules/app"
+import { SocialLoginButton } from "../social-login-button/SocialLoginButton"
 
 export interface ILoginDialogProps {
     open: boolean
@@ -14,7 +14,7 @@ export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialog
 
         return (
             <Dialog title="Please login to access Democracy Sausage" modal={true} open={open}>
-                <SocialLoginButton providerName="Google" providerUrl={`${getAPIBaseURL()}/login.php`} colour={"#DD4B39"} />
+                <SocialLoginButton providerName="Google" providerUrl={`${getAPIBaseURL()}/login/google-oauth2/`} colour={"#DD4B39"} />
             </Dialog>
         )
     }
