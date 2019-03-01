@@ -23,6 +23,6 @@ docker-compose up
 Then run your chosen scraper.
 
 ```
-docker exec -it demsausage-v3_django_1 pip install -r /scrapers/requirements.txt
-docker exec -it demsausage-v3_django_1 python /scrapers/nsw/scrape.py
+docker exec -it demsausage_django_1 pip install -r /scrapers/requirements.txt
+docker exec -it demsausage_django_1 python /scrapers/nsw/scrape.py
 ```
