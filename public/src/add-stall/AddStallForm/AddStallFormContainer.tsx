@@ -158,6 +158,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             stallLocationInfo: IStallLocationInfo,
             that: AddStallFormContainer
         ) {
+            if (stallLocationInfo === null) {
+                return
+            }
+
             const stall: Partial<IStallFormInfo> = fromFormValues(values)
             stall.election = election.id
 
