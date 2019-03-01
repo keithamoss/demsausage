@@ -177,3 +177,10 @@ class MailgunEvents(models.Model):
     timestamp = models.DateTimeField()
     event_type = models.TextField()
     payload = JSONField(default=None, blank=True)
+
+
+class PollingPlaceLoaderEvents(models.Model):
+    "Logs from the polling place loader."
+
+    timestamp = models.DateTimeField()
+    payload = JSONField(default=None, blank=True)

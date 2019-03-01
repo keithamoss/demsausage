@@ -155,6 +155,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
             regenerate_election_geojson(election.id)
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
+        rollback.collects_logs()
         return Response({})
 
 

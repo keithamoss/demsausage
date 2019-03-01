@@ -6,7 +6,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
-from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents
+from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents, PollingPlaceLoaderEvents
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.util import get_or_none
@@ -343,3 +343,10 @@ class MailgunEventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MailgunEvents
         fields = ("id", "timestamp", "event_type", "payload")
+
+
+class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PollingPlaceLoaderEvents
+        fields = ("id", "timestamp", "payload")
+

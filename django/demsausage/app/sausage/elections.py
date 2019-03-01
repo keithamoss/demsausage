@@ -3,12 +3,13 @@ from io import StringIO
 import logging
 import re
 import chardet
+from datetime import datetime
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
 
 from demsausage.app.models import PollingPlaces, Stalls
-from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer
+from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer, PollingPlaceLoaderEventsSerializer
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
@@ -53,11 +54,25 @@ class PollingPlacesIngestBase():
 
     def collects_logs(self):
         log_msgs = self.log_msgs.getvalue().split("\n")
-        return {
+        logs = {
             "errors": [msg.replace("[ERROR] ", "") for msg in log_msgs if msg.startswith("[ERROR] ")],
             "warnings": [msg.replace("[WARNING] ", "") for msg in log_msgs if msg.startswith("[WARNING] ")],
             "info": [msg.replace("[INFO] ", "") for msg in log_msgs if msg.startswith("[INFO] ")],
         }
+
+        self.save_logs(logs)
+        return logs
+
+    def save_logs(self, logs):
+        serializer = PollingPlaceLoaderEventsSerializer(data={
+            "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+            "payload": logs
+        })
+
+        if serializer.is_valid() is True:
+            serializer.save()
+        else:
+            raise BadRequest("Error saving logs :(")
 
     def raise_exception_if_errors(self):
         if self.has_errors_messages() is True:
