@@ -1,0 +1,14 @@
+{
+    "address_fields": [
+        "Property Name",
+        "Flat Number",
+        "Street Number",
+        "Street Name",
+        "Street Type",
+        "Locality",
+        "Postcode",
+        "Melway/Vicroads Ref"
+    ],
+    "address_format": "{Property Name}, {Flat Number} {Street Number} {Street Name} {Street Type}, {Locality} {Postcode}, {Melway/Vicroads Ref}",
+    "division_fields": ["Electorate 1", "Electorate 2"]
+}
