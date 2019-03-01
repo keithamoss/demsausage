@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
@@ -20,7 +19,7 @@ from rest_framework.parsers import MultiPartParser
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
 from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsUserEditSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
-from demsausage.app.permissions import AnonymousOnlyList, AnonymousOnlyCreate, StallEditingPermissions
+from demsausage.app.permissions import StallEditingPermissions
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest

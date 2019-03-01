@@ -8,10 +8,10 @@ from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 
 from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents, PollingPlaceLoaderEvents
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import PollingPlaceStatus
 from demsausage.util import get_or_none
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 
 
@@ -240,7 +240,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
 
 class DistanceField(serializers.CharField):
     """
-    Make the result of the distance calculation friendlier for humans to read. 
+    Make the result of the distance calculation friendlier for humans to read.
     """
 
     def to_representation(self, value):
@@ -349,4 +349,3 @@ class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceLoaderEvents
         fields = ("id", "timestamp", "payload")
-

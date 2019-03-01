@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from simple_history.signals import pre_create_historical_record
 from simple_history.models import HistoricalRecords
 
-from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections, Stalls
+from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections
 from demsausage.app.sausage.elections import regenerate_election_geojson, clear_elections_cache
 from demsausage.app.enums import PollingPlaceStatus
 
