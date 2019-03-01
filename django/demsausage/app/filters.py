@@ -20,6 +20,8 @@ class IntegerListFilter(filters.Filter):
                 raise BadRequest(e)
 
             return super(IntegerListFilter, self).filter(qs, integers)
+        elif value == "":
+            raise BadRequest("Must supply at least one polling place to search for")
         return qs
 
 
@@ -72,6 +74,12 @@ class PollingPlacesFilter(PollingPlacesBaseFilter):
     class Meta:
         model = PollingPlaces
         fields = ("election_id", "ids", "search_term", )
+
+    def is_valid(self):
+        qp = self.request.query_params
+        if "ids" not in qp and "search_term" not in qp:
+            return False
+        return super(PollingPlacesFilter, self).is_valid()
 
 
 class PollingPlacesNearbyFilter(PollingPlacesBaseFilter):

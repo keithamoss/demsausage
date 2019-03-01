@@ -107,13 +107,16 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 label: "Polling Places Queried",
                 value: pollingPlaceIds.length,
             })
+
             const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
+
             gaTrack.event({
                 category: "SausageMapContainer",
                 action: "fetchQueriedPollingPlaces",
                 label: "Polling Places Returned",
                 value: results.length,
             })
+
             return results
         },
         onOpenFinderForAddressSearch(this: SausageMapContainer) {
