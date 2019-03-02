@@ -214,13 +214,13 @@ export function fetchPollingPlaceTypes() {
 
 export function regenerateMapDataForElection(election: IElection) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response_clear } = await api.delete("/0.1/polling_places/geojson/clear_cache/", dispatch, {
+        const response = await api.delete("/0.1/polling_places/geojson/clear_cache/", dispatch, {
             election_id: election.id,
         })
 
-        if (response_clear.status !== 200) {
+        if (response.status !== 200) {
             dispatch(sendSnackbarNotification("Error clearing polling place data cache"))
-        } else if (response_clear.status === 200) {
+        } else if (response.status === 200) {
             const { response } = await api.get("/0.1/polling_places/geojson/", dispatch, {
                 election_id: election.id,
             })

@@ -2,7 +2,7 @@ import * as Cookies from "js-cookie"
 import * as qs from "qs"
 import * as Raven from "raven-js"
 import "whatwg-fetch"
-import { beginFetch, finishFetch, isDevelopment, getAPIBaseURL } from "../../redux/modules/app"
+import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
 import { sendNotification } from "../../redux/modules/snackbars"
 
 export class APIClient {
@@ -109,8 +109,14 @@ export class APIClient {
             .catch((error: any) => this.handleError(error, url, dispatch))
     }
 
-    public delete(url: string, dispatch: any): Promise<IAPIResponse> {
+    public delete(url: string, dispatch: any, params: object = {}): Promise<IAPIResponse> {
         dispatch(beginFetch())
+
+        if (Object.keys(params).length > 0) {
+            // Yay, a library just to do query string operations for fetch()
+            // https://github.com/github/fetch/issues/256
+            url += "?" + qs.stringify(params)
+        }
 
         return fetch(this.baseURL + url, {
             method: "DELETE",

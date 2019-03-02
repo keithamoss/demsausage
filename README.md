@@ -51,7 +51,28 @@ Navigate to https://admin.test.democracysausage.org
 
 ## Development
 
-[TypeScript-React-Starter](https://github.com/Microsoft/TypeScript-React-Starter)
+### Memcached
+
+Memcached is used to cache public-facing API endpoints to lighten the load on the backend Django service. For debugging purposes we can retrieve a list of currently set memcached key by:
+
+```
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' demsausage_memcached_1
+
+telnet 172.27.0.5 11211
+
+> Show general stats
+stats
+
+> Show all of the "slabs" in memcached (groups of keys)
+stats slabs
+STAT 18:chunk_size 4544
+STAT 18:chunks_per_page 230
+...
+
+> Dump a list of all items stored in a given slab (in this case, slab 18)
+stats cachedump 18 0
+ITEM demsausage_:1:elections_list [4321 b; 0 s]
+```
 
 ## Deploy
 
