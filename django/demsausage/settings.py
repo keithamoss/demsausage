@@ -199,7 +199,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': get_env('MEMCACHED_LOCATION'),
         'TIMEOUT': None,
-        'KEY_PREFIX': 'demsausage_',
+        'KEY_PREFIX': 'demsausage',
         'OPTIONS': {
             'server_max_value_length': 1024 * 1024 * 20,  # 20MB to accommodate the larger polling place GeoJSON objects
         }

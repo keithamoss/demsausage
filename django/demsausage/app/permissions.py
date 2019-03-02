@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from rest_framework import permissions
 
 from demsausage.app.sausage.mailgun import make_confirmation_hash
@@ -24,6 +24,19 @@ class AnonymousOnlyCreate(permissions.BasePermission):
         if view.action == "create":
             return True
         return isinstance(request.user, User)
+
+
+class AnonymousOnlyGET(permissions.BasePermission):
+    """
+    Custom permission to allow anonymous users to only make GET requests.
+    """
+
+    def has_permission(self, request, view):
+        if request.method == "GET":
+            return True
+        elif isinstance(request.user, AnonymousUser) is False:
+            return True
+        return False
 
 
 class StallEditingPermissions(permissions.BasePermission):

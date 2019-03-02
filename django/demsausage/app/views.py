@@ -19,7 +19,7 @@ from rest_framework.parsers import MultiPartParser
 
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
 from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsUserEditSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
-from demsausage.app.permissions import StallEditingPermissions
+from demsausage.app.permissions import StallEditingPermissions, AnonymousOnlyGET
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
@@ -95,18 +95,22 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
 
-    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    @list_route(methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,))
     def public(self, request, format=None):
-        regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
         cache_key = get_elections_cache_key()
 
-        if regenerate_cache is False and cache_key in cache:
-            return Response(cache.get(cache_key))
+        if request.method == "GET":
+            if cache_key in cache:
+                return Response(cache.get(cache_key))
 
-        serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
-        cache.set(cache_key, serializer.data)
+            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
 
-        return Response(serializer.data)
+            cache.set(cache_key, json.dumps(serializer.data))
+            return Response(serializer.data)
+
+        elif request.method == "DELETE":
+            cache.delete(cache_key)
+            return Response()
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
@@ -215,7 +219,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     filter_class = PollingPlacesNearbyFilter
 
 
-class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
+class PollingPlacesGeoJSONViewSet(viewsets.ViewSet, generics.ListAPIView):
     """
     API endpoint that allows polling places to be retrieved as GeoJSON.
     """
@@ -225,16 +229,20 @@ class PollingPlacesGeoJSONViewSet(generics.ListAPIView):
     filter_class = PollingPlacesBaseFilter
 
     def list(self, request, format=None):
-        regenerate_cache = True if self.request.query_params.get("regenerate_cache", None) is not None else False
-        cache_key = get_polling_place_geojson_cache_key(self.request.query_params.get("election_id"))
+        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
 
-        if regenerate_cache is False and cache_key in cache:
+        if cache_key in cache:
             return Response(cache.get(cache_key))
 
         response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
-        cache.set(cache_key, response.data)
-
+        cache.set(cache_key, json.dumps(response.data))
         return response
+
+    @list_route(methods=["delete"], permission_classes=(IsAuthenticated,))
+    def clear_cache(self, request, format=None):
+        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
+        cache.delete(cache_key)
+        return Response({})
 
 
 class StallsViewSet(viewsets.ModelViewSet):
