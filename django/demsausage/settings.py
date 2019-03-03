@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'simple_history',
     'django_filters',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -270,6 +271,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/api/static/'
+
+# Swagger
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': False,
+    'USE_SESSION_AUTH': False,
+    'APIS_SORTER': 'alpha',
+    'DOC_EXPANSION': 'list',
+    'OPERATIONS_SORTER': 'alpha',
+}
 
 
 # Project-specific settings

@@ -6,7 +6,7 @@ from django.db import transaction
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import list_route, detail_route, action
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -40,6 +40,8 @@ def api_not_found(request):
 
 
 class CurrentUserView(APIView):
+    schema = None
+
     def get(self, request):
         if request.user.is_authenticated:
             serializer = UserSerializer(
@@ -95,14 +97,14 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
 
-    @list_route(methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,))
+    @list_route(methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,), serializer_class=ElectionsSerializer)
     def public(self, request, format=None):
+        """
+        Retrieve a list of all publicly visible elections that have been, or will be, available.
+        """
         cache_key = get_elections_cache_key()
 
         if request.method == "GET":
-            if cache_key in cache:
-                return Response(cache.get(cache_key))
-
             serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
 
             cache.set(cache_key, json.dumps(serializer.data))
@@ -112,7 +114,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             cache.delete(cache_key)
             return Response()
 
-    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
+    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,), serializer_class=ElectionsSerializer)
     @transaction.atomic
     def set_primary(self, request, pk=None, format=None):
         self.get_queryset().filter(is_primary=True).update(is_primary=False)
@@ -201,7 +203,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
-    API endpoint that allows polling places to be searched by their name or address.
+    Retrieve a list of all polling places where the name or address matches a given search term.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlacesSerializer
@@ -211,7 +213,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
-    API endpoint that allows polling places to be searched by a lat,lon coordinate pair.
+    Retrieve a list of all polling places that are close to a given latitude, longitude coordinate pair.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlaceSearchResultsSerializer
@@ -219,9 +221,9 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     filter_class = PollingPlacesNearbyFilter
 
 
-class PollingPlacesGeoJSONViewSet(viewsets.ViewSet, generics.ListAPIView):
+class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    API endpoint that allows polling places to be retrieved as GeoJSON.
+    Retrieve a list of all polling places and their food stall attributes for a given election in GeoJSON format.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlacesGeoJSONSerializer
@@ -229,16 +231,13 @@ class PollingPlacesGeoJSONViewSet(viewsets.ViewSet, generics.ListAPIView):
     filter_class = PollingPlacesBaseFilter
 
     def list(self, request, format=None):
-        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
-
-        if cache_key in cache:
-            return Response(cache.get(cache_key))
-
         response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
+
+        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
         cache.set(cache_key, json.dumps(response.data))
         return response
 
-    @list_route(methods=["delete"], permission_classes=(IsAuthenticated,))
+    @action(methods=["delete"], permission_classes=(IsAuthenticated,), detail=False)
     def clear_cache(self, request, format=None):
         cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
         cache.delete(cache_key)
@@ -383,6 +382,8 @@ class PendingStallsViewSet(generics.ListAPIView):
 
 
 class MailManagementViewSet(viewsets.ViewSet):
+    schema = None
+
     @list_route(methods=["get"])
     def opt_out(self, request, format=None):
         stall_id = request.query_params.get("stall_id", None)

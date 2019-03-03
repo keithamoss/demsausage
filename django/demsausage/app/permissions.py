@@ -48,17 +48,21 @@ class StallEditingPermissions(permissions.BasePermission):
         if view.action == "create":
             return True
         elif view.action == "retrieve":
-            stall = view.get_object()
-            token = request.query_params.get("token", None)
-            signature = request.query_params.get("signature", None)
+            # Stops django-rest-swagger triggering "there's no PK!" errors
+            if "pk" in view.kwargs:
+                stall = view.get_object()
+                token = request.query_params.get("token", None)
+                signature = request.query_params.get("signature", None)
 
-            return make_confirmation_hash(stall.id, token) == signature
+                return make_confirmation_hash(stall.id, token) == signature
         elif view.action == "update_and_resubmit":
-            stall = view.get_object()
-            token = request.data.get("token", None)
-            signature = request.data.get("signature", None)
+            # Stops django-rest-swagger triggering "there's no PK!" errors
+            if "pk" in view.kwargs:
+                stall = view.get_object()
+                token = request.data.get("token", None)
+                signature = request.data.get("signature", None)
 
-            return make_confirmation_hash(stall.id, token) == signature
+                return make_confirmation_hash(stall.id, token) == signature
         return isinstance(request.user, User)
 
 

@@ -84,7 +84,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         const vectorSource = new ol.source.Vector({
             // url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
-            url: `${getAPIBaseURL()}/0.1/polling_places/geojson/?election_id=${election.id}&s=${Date.now()}`,
+            url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
             format: new ol.format.GeoJSON(),
         })
 

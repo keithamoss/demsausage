@@ -15,12 +15,14 @@ from .views import (
     PollingPlaceFacilityTypeViewSet,
     api_not_found)
 from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 router.register(r'elections', ElectionsViewSet, 'ElectionsViewSet')
 router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
+router.register(r'map', PollingPlacesGeoJSONViewSet, 'PollingPlacesViewSet')
 router.register(r'stalls', StallsViewSet, 'StallsViewSet')
 router.register(r'polling_places_facility_types', PollingPlaceFacilityTypeViewSet, 'PollingPlaceFacilityTypeViewSet')
 router.register(r'mail', MailManagementViewSet, 'MailManagementViewSet')
@@ -30,11 +32,13 @@ router.register(r'mail', MailManagementViewSet, 'MailManagementViewSet')
 # http://stackoverflow.com/questions/22083090/what-base-name-parameter-do-i-need-in-my-route-to-make-this-django-api-work
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
+schema_view = get_swagger_view(title="Democracy Sausage API")
+schema_view.cls.schema = None
+
 urlpatterns = [
+    url(r'^api/0.1/swagger/$', schema_view),
     url(r'^api/0.1/polling_places/search/$', PollingPlacesSearchViewSet.as_view(), name='api-polling-places-search'),
     url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
-    url(r'^api/0.1/polling_places/geojson/$', PollingPlacesGeoJSONViewSet.as_view({'get': 'list'}), name='api-polling-places-geojson'),
-    url(r'^api/0.1/polling_places/geojson/clear_cache/$', PollingPlacesGeoJSONViewSet.as_view({'delete': 'clear_cache'}), name='api-polling-places-geojson-clear-cache'),
     url(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),
     url(r'^api/0.1/', include(router.urls)),
     url(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
