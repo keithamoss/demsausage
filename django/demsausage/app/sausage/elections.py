@@ -4,6 +4,7 @@ import logging
 import re
 import chardet
 from datetime import datetime
+import json
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
@@ -17,7 +18,7 @@ from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item
 
 def regenerate_election_geojson(election_id):
     polling_places = PollingPlacesGeoJSONSerializer(PollingPlaces.objects.select_related("noms").filter(election_id=election_id, status=PollingPlaceStatus.ACTIVE), many=True)
-    cache.set(get_polling_place_geojson_cache_key(election_id), polling_places.data)
+    cache.set(get_polling_place_geojson_cache_key(election_id), json.dumps(polling_places.data))
 
 
 def clear_elections_cache():
