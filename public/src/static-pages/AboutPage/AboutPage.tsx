@@ -1,3 +1,4 @@
+import { grey300, grey800 } from "material-ui/styles/colors"
 import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
@@ -16,27 +17,42 @@ const PageWrapper = styled.div`
     padding-right: 15px;
 `
 
+const Question = styled.h3`
+    margin-bottom: 5px;
+    border-bottom: 1px solid ${grey300};
+    padding-bottom: 5px;
+`
+
+const Answer = styled.div`
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 24px;
+    color: ${grey800};
+    width: 75%;
+`
+
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 export class AboutPage extends React.Component<TComponentProps, IStateProps> {
     componentDidMount() {
-        document.title = "Democracy Sausage | About us"
+        document.title = "Democracy Sausage | FAQs and About Us"
     }
 
     render() {
         return (
             <PageWrapper>
-                <h1>About Us</h1>
-                <h2>What?</h2>
-                <p>A map of sausage and cake availability on election day.</p>
-                <h2>Why?</h2>
-                <p>It's practically part of the Australian Constitution. Or something.</p>
-                <h2>How?</h2>
-                <p>
-                    We crowdsource (or is it crowdsauce?) data from Twitter and Facebook. To let us know about sausage and cake availability
-                    (or the absence thereof), tweet using the hashtag{" "}
+                <Question>What's is this?</Question>
+                <Answer>A map of sausage and cake availability on election day.</Answer>
+                <Question>I still don't understand</Question>
+                <Answer>It's practically part of the Australian Constitution. Or something.</Answer>
+                <Question>But how do you get all of the sausage sizzles?</Question>
+                <Answer>
+                    We crowdsource (or is it crowdsauce?) data from Twitter, Facebook, and Instagram and from the stalls that people submit
+                    to us on this here website.
+                    <br />
+                    To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{" "}
                     <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a>. We'll be watching.
-                </p>{" "}
-                <p>
+                </Answer>
+                <Answer>
                     To make this work, we've also used:
                     <ul>
                         <li>
@@ -53,25 +69,35 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             acknowledgements and appreciation to the artists).
                         </li>
                     </ul>
-                </p>
-                <h2>Who?</h2>
-                <p>
-                    We're just an ordinary group of democracy sausage enthusiasts. Find us on Twitter:{" "}
-                    <a href="http://twitter.com/DemSausage">@DemSausage</a>. You can also email us at{" "}
-                    <a href="mailto: ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
-                </p>
-                <h2>Who else?</h2>
-                <p>
-                    We know of three other groups with similar (and possibly more organised) ambitions:
-                    <ul>
-                        <li>
-                            <a href="http://www.electionsausagesizzle.com.au/">Snag Votes Election Sausage Sizzle Map</a>
-                        </li>
-                        <li>
-                            <a href="http://boothrev.net/">Booth Reviews</a>
-                        </li>
-                    </ul>
-                </p>
+                </Answer>
+                <Question>Who are you?</Question>
+                <Answer>
+                    We're 6 people, a baby, and some parrots.
+                    <br />
+                    We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can find us on Twitter
+                    at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{" "}
+                    <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
+                </Answer>
+                <Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
+                <Answer>
+                    Well your school, first of all (but you knew that already). Beyond that, your local government may require you to get a
+                    permit to run a temporary food stall - so give them a call to find out. There's also some pretty basic food safety
+                    regulations you'll need to abide by - check out foodstandards.gov.au{" "}
+                    <a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
+                        for more information
+                    </a>
+                    .
+                </Answer>
+                <Question>Are you part of any political parties?</Question>
+                <Answer>Nope! Democracy Sausage is 100% non-partisan, organic, hormone free, and grass fed.</Answer>
+                <Question>Will you share my info with others?</Question>
+                <Answer>
+                    If you submit a stall to us, we won't share any personal information about you - such as your email address, Twitter
+                    handle, et cetera.
+                    <br />
+                    We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them information
+                    about the stalls and locations and polling booths.
+                </Answer>
             </PageWrapper>
         )
     }

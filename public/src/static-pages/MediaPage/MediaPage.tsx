@@ -26,7 +26,7 @@ export class MediaPage extends React.Component<TComponentProps, IStateProps> {
     render() {
         return (
             <PageWrapper>
-                <h1>Media</h1>
+                <h2>Media</h2>
                 Do you love sausage? We do!
                 <List>
                     <ListItem
@@ -37,7 +37,7 @@ export class MediaPage extends React.Component<TComponentProps, IStateProps> {
                         disabled={true}
                     />
 
-                    <h2>Media Releases</h2>
+                    <h3>Media Releases</h3>
                     <ListItem
                         primaryText="Federal Election 2016"
                         leftIcon={<FileFileDownload />}

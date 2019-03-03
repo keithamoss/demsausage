@@ -152,7 +152,7 @@ class App extends React.Component<IProps, {}> {
                     {isResponsiveAndOverBreakPoint === true && <Divider />}
                     <List>
                         <MenuListItem
-                            primaryText="About Us"
+                            primaryText="FAQs and About Us"
                             leftIcon={<ActionInfo />}
                             containerElement={<Link to={`/about`} />}
                             onClick={onClickDrawerLink}
