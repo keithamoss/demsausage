@@ -40,6 +40,7 @@ def api_not_found(request):
 
 
 class CurrentUserView(APIView):
+    permission_classes = (AllowAny,)
     schema = None
 
     def get(self, request):
