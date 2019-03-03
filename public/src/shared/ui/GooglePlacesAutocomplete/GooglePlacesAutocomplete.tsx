@@ -14,11 +14,11 @@
  * instead of Material UI's Autocomplete.
  */
 
-import * as React from "react"
+import { debounce } from "lodash-es"
 // import { isEqual } from "lodash-es"
 import { MenuItem } from "material-ui"
 import SearchBar from "material-ui-search-bar"
-import { debounce } from "lodash-es"
+import * as React from "react"
 
 // const styles: React.CSSProperties = {
 //     menuItem: {
@@ -147,7 +147,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         this.getLatLgn = this.getLatLgn.bind(this)
         this.getPlacePredictions = debounce(
             function(this: GooglePlacesAutocomplete) {
-                if (this.state.searchText.length > 0) {
+                if (this.state.searchText.length >= 3) {
                     const outerScope = this
                     this.service.getPlacePredictions(
                         {
@@ -165,8 +165,8 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                     this.populateData([])
                 }
             },
-            750,
-            { maxWait: 2000 }
+            1000
+            // { maxWait: 5000 },
         )
     }
 
