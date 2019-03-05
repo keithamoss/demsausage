@@ -245,6 +245,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Django REST Framework
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',

@@ -72,7 +72,12 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                 </Answer>
                 <Question>Who are you?</Question>
                 <Answer>
-                    We're 6 people, a baby, and some parrots.
+                    We're six people, a baby, and some parrots.
+                    <br />
+                    <br />
+                    Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with crowdsaucing
+                    sausage sizzle locations.
+                    <br />
                     <br />
                     We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can find us on Twitter
                     at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{" "}
