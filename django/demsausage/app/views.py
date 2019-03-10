@@ -384,6 +384,7 @@ class PendingStallsViewSet(generics.ListAPIView):
 
 class MailManagementViewSet(viewsets.ViewSet):
     schema = None
+    permission_classes = (AllowAny,)
 
     @list_route(methods=["get"])
     def opt_out(self, request, format=None):
