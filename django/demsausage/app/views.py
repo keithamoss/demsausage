@@ -184,7 +184,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
 
     def list(self, request, *args, **kwargs):
-        self.filter_class = PollingPlacesFilter
+        self.filter_class = PollingPlacesBaseFilter
         return super(PollingPlacesViewSet, self).list(request, *args, **kwargs)
 
     def finalize_response(self, request, response, *args, **kwargs):

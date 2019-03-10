@@ -73,7 +73,7 @@ class PollingPlacesFilter(PollingPlacesBaseFilter):
 
     class Meta:
         model = PollingPlaces
-        fields = ("election_id", "ids", "search_term", )
+        fields = ("ids", "search_term", )
 
     def is_valid(self):
         qp = self.request.query_params
