@@ -1,1 +1,2 @@
 0 12 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/demsausage/app/sausage/cron/output.log
+0 0 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/demsausage/app/sausage/cron/output.log
