@@ -1,7 +1,7 @@
 version: "3.7"
 services:
     frontend_public:
-        image: node:10.14.2-alpine
+        image: node:11.11.0-alpine
         command: build
         entrypoint: /app/docker-entrypoint.sh
         volumes:
@@ -10,7 +10,7 @@ services:
         env_file:
             - secrets/sausage-public-frontend.prod.env
     frontend_admin:
-        image: node:10.14.2-alpine
+        image: node:11.11.0-alpine
         command: build
         entrypoint: /app/docker-entrypoint.sh
         volumes:
