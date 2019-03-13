@@ -312,7 +312,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def migrate_noms(self):
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         for polling_place in queryset:
-            matching_polling_places = self.safe_find_by_distance("Noms Migration", polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+            matching_polling_places = self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
             if len(matching_polling_places) != 1:
                 self.logger.error("Noms Migration: {} matching polling places found in new data: '{}' ({})".format(len(matching_polling_places), polling_place.name, polling_place.address))
