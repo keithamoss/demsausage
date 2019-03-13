@@ -33,8 +33,9 @@ class scraper():
     def __get_cookies(self):
         # REPLACE THESE
         jar = requests.cookies.RequestsCookieJar()
-        jar.set("incap_ses_435_143128", "bpUaFr3YlxS0xTNLem8JBvY8aVwAAAAAo95xhclEwlC22kYeL4t7WQ==", domain=".elections.nsw.gov.au", path="/")
-        jar.set("visid_incap_143128", "THkSwroSTxuDEtdyfG3wpzYnaVwAAAAAQUIPAAAAAABCp0HkxzhWw7mIzQ9AXsKZ", domain=".elections.nsw.gov.au", path="/")
+        jar.set("incap_ses_435_143128", "aQA7P1yyVhQAG2CVim8JBt/wiFwAAAAAvtCoHVHzLQIcH1+RE80iCg==", domain=".elections.nsw.gov.au", path="/")
+        jar.set("incap_ses_973_143128", "WqLGBrT7jEwylS766sqADQnyiFwAAAAAaccU8ZPJWLPcYnjlfvBPdQ==", domain=".elections.nsw.gov.au", path="/")
+        jar.set("visid_incap_143128", "s53vfKc9QJGfqKixn0kM2N/wiFwAAAAAQUIPAAAAAABe0XujrkikzGaVjW3p/WhC", domain=".elections.nsw.gov.au", path="/")
         return jar
 
     def __get_page_content_from_har(self):
@@ -54,8 +55,9 @@ class scraper():
         return ids
 
     def __get_polling_place_json(self, id):
-        print(id)
-        r = requests.get(self.placemark_api.format(ID=id), cookies=self.cookie_jar)
+        url = self.placemark_api.format(ID=id)
+        print(id, url)
+        r = requests.get(url, cookies=self.cookie_jar, headers={"Referer": url})
         json = r.json()
 
         if r.status_code == 200 and json is not None:
