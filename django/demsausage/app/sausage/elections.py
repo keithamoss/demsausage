@@ -310,6 +310,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.logger.error("Polling place invalid: {}".format(serialiser.errors))
 
     def migrate_noms(self):
+        # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         for polling_place in queryset:
             matching_polling_places = self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
@@ -340,6 +341,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
+        # Migrate any leftover declined stalls
+        queryset = Stalls.objects.filter(election=self.election, status=StallStatus.DECLINED, polling_place__status=PollingPlaceStatus.ACTIVE)
+        for stall in queryset:
+            matching_polling_places = self.safe_find_by_distance("Declined Stall Migration", stall.polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+
+            if len(matching_polling_places) != 1:
+                self.logger.error("Declined Stall Migration: {} matching polling places found in new data: '{}' ({})".format(len(matching_polling_places), stall.polling_place.name, stall.polling_place.address))
+
+            else:
+                # Repoint stall
+                stall.polling_place_id = matching_polling_places[0].id
+                stall.save()
+
+                self.logger.info("Declined Stall Migration: Stall {} updated to point to polling place '{}' ({})".format(stall.id, matching_polling_places[0].name, matching_polling_places[0].address))
+
+        self.logger.info("Noms Migration: Migrated {} declined stalls".format(queryset.count()))
+
+        # Validate that we've actually migrated all stalls and polling places
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         count = queryset.count()
         if count > 0:
