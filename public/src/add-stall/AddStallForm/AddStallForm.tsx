@@ -3,7 +3,8 @@ import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
 import RaisedButton from "material-ui/RaisedButton"
 // import "./AddStallForm.css"
 import { Step, StepContent, StepLabel, Stepper } from "material-ui/Stepper"
-import { grey100, grey500 } from "material-ui/styles/colors"
+import { grey100, grey500, grey800 } from "material-ui/styles/colors"
+import { HardwareSecurity } from "material-ui/svg-icons"
 import * as React from "react"
 import { Field, reduxForm } from "redux-form"
 import { TextField, Toggle } from "redux-form-material-ui"
@@ -17,8 +18,6 @@ import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
-// import RaisedButton from "material-ui/RaisedButton"
-// import FlatButton from "material-ui/FlatButton"
 import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
 
 const required = (value: any) => (value ? undefined : "Required")
@@ -63,30 +62,47 @@ export class DeliciousnessToggle extends React.Component<any, any> {
     }
 }
 
-const FormSection = styled.div`
-    margin-top: 30px;
-    margin-bottom: 30px;
-`
-
-const FormSectionHeader = styled.h2`
-    margin-bottom: 0px;
-`
-
-// Fix that iOS Safari bug
-const RaisedButtonChunkyBottom = styled(RaisedButton)`
-    margin-bottom: 60px;
-`
-
-const HiddenButton = styled.button`
-    display: none;
-`
-
 const StepContentStyled = styled(StepContent)`
     /* Give the contents of StepContent some breathing room so components
     using <Paper /> don't look cut off */
     & > div > div > div > div > div {
         padding: 5px;
     }
+`
+
+const FormSection = styled.div`
+    margin-top: 35px;
+    margin-bottom: 35px;
+`
+
+const FormSectionHeader = styled.h2`
+    margin-bottom: 0px;
+`
+
+const PrivacySection = styled.div`
+    margin-top: 30px;
+`
+
+const PrivacySectionHeader = styled.h4`
+    margin-top: 20px;
+    margin-bottom: 10px;
+`
+
+const Privacy = styled.div`
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 24px;
+    color: ${grey800};
+    width: 75%;
+`
+
+const HiddenButton = styled.button`
+    display: none;
+`
+
+// Fix that iOS Safari bug
+const StupidFormPadderToFixiOSBugs = styled.div`
+    margin-bottom: 60px;
 `
 
 class AddStallForm extends React.PureComponent<IProps, {}> {
@@ -160,11 +176,12 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                             {/* <div> required here so that StepContentStyled works */}
                             <div>
                                 <FormSection style={{ marginTop: 0 }}>
+                                    <FormSectionHeader>Tell us about your stall</FormSectionHeader>
                                     <CustomTextField
                                         name="name"
                                         component={TextField}
-                                        floatingLabelText={"Stall name"}
-                                        hintText={"e.g. Primary School Sausage Sizzle"}
+                                        floatingLabelText={"What is your stall going to be called?"}
+                                        hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                                         fullWidth={true}
                                         validate={[required]}
                                     />
@@ -172,30 +189,19 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         name="description"
                                         component={TextField}
                                         multiLine={true}
-                                        floatingLabelText={"Stall description"}
-                                        hintText={"e.g. We're raising funds for the Year 7 school camp"}
+                                        floatingLabelText={"Describe your stall"}
+                                        hintText={
+                                            "Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
+                                        }
                                         fullWidth={true}
                                         validate={[required]}
                                     />
                                     <CustomTextField
                                         name="website"
                                         component={TextField}
-                                        floatingLabelText={"Stall website"}
+                                        floatingLabelText={"Does your stall have a website?"}
                                         hintText={"We'll include a link to your site as part of your stall's information"}
                                         fullWidth={true}
-                                    />
-                                </FormSection>
-
-                                <FormSection>
-                                    <FormSectionHeader>Your details</FormSectionHeader>
-                                    <CustomTextField
-                                        name="email"
-                                        component={TextField}
-                                        floatingLabelText={"Contact email"}
-                                        hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
-                                        fullWidth={true}
-                                        validate={[required, email]}
-                                        type={"email"}
                                     />
                                 </FormSection>
 
@@ -243,15 +249,68 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     />
                                 </FormSection>
 
+                                <FormSection>
+                                    <FormSectionHeader>Your details</FormSectionHeader>
+                                    <CustomTextField
+                                        name="email"
+                                        component={TextField}
+                                        floatingLabelText={"What's your email address?"}
+                                        hintText={"So we can let you know when we've approved your stall"}
+                                        fullWidth={true}
+                                        validate={[required, email]}
+                                        type={"email"}
+                                    />
+                                </FormSection>
+
                                 <DjangoAPIErrorUI errors={errors} />
 
-                                <RaisedButtonChunkyBottom
+                                <RaisedButton
                                     label={"Submit Stall"}
                                     disabled={!isValid || formSubmitting}
                                     primary={true}
                                     onClick={onSaveForm}
                                 />
                                 <HiddenButton type="submit" />
+
+                                <PrivacySection>
+                                    <PrivacySectionHeader>
+                                        <HardwareSecurity /> A word about privacy
+                                    </PrivacySectionHeader>
+                                    <Privacy>
+                                        Democracy Sausage loves open data, but we also love privacy and not sharing your data with anyone
+                                        who shouldn't have it. Without access to open (i.e. publicly available, reusable, and free) polling
+                                        place data from the electoral commissions Democracy Sausage wouldn't exist, so where we can we like
+                                        to share the data we crowdsauce as open data for others to use.
+                                        <br />
+                                        <br />
+                                        For some elections we'll allow third parties to display information submitted to Democracy Sausage
+                                        on their websites - e.g. local media outlets who want to show a map of sausage sizzles, other
+                                        election sausage sizzle mapping sites, or companies and political parties running "Where to vote"
+                                        websites who want to show people where to find sausage sizzles. Democracy Sausage is 100%
+                                        volunteer-run because we love the idea of mapping sausage sizzles - we <strong>never</strong>{" "}
+                                        benefit financially or personally from these arrangements.
+                                        <br />
+                                        <br />
+                                        We'll allow these third parties to use information about your stall (
+                                        <strong>its name, a description of it, and any website address</strong>) and what you have on offer
+                                        (<strong>whether there's a sausage sizzle, cake stall, et cetera</strong>). We{" "}
+                                        <strong>won't</strong> tell these third parties anything about you (the person who is submitting
+                                        this stall), this includes{" "}
+                                        <strong>
+                                            your email, IP address, and any other personally identifiable information that your phone or
+                                            laptop transmits to us
+                                        </strong>
+                                        . All of the information about where your stall actually is comes from the electoral commissions and
+                                        is already publicly available.
+                                        <br />
+                                        <br />
+                                        Got questions or concerns about any of this? Just get in touch with us at{" "}
+                                        <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> - we're very happy
+                                        to discuss.
+                                    </Privacy>
+                                </PrivacySection>
+
+                                <StupidFormPadderToFixiOSBugs />
                             </div>
                         </StepContentStyled>
                     </Step>
