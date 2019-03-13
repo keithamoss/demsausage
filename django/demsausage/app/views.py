@@ -252,6 +252,7 @@ class StallsViewSet(viewsets.ModelViewSet):
     queryset = Stalls.objects
     serializer_class = StallsSerializer
     permission_classes = (StallEditingPermissions,)
+    schema = None
 
     def get_serializer_class(self):
         if self.action == "retrieve":
