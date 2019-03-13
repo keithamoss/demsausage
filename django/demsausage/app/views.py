@@ -20,7 +20,7 @@ from rest_framework.parsers import MultiPartParser
 from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
 from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsUserEditSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
 from demsausage.app.permissions import StallEditingPermissions, AnonymousOnlyGET
-from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesFilter, PollingPlacesNearbyFilter
+from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesSearchFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
@@ -204,12 +204,12 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
-    Retrieve a list of all polling places where the name or address matches a given search term.
+    Search the polling places for an election.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
-    filter_class = PollingPlacesFilter
+    filter_class = PollingPlacesSearchFilter
 
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):

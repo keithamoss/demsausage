@@ -3,25 +3,32 @@ from django_filters import rest_framework as filters
 
 from demsausage.app.models import PollingPlaces
 from demsausage.app.exceptions import BadRequest
+from demsausage.util import is_one_of_these_things_in_this_other_thing
 
 
-class IntegerListFilter(filters.Filter):
-    """
-    Accept comma separated string of integers as value and convert it to list.
-
-    Useful for __in lookups.
-    """
-
+class ValueInFilter(filters.BaseInFilter):
     def filter(self, qs, value):
-        if value not in (None, ""):
-            try:
-                integers = [int(v) for v in value[0:1000].split(",")]
-            except Exception as e:
-                raise BadRequest(e)
+        if value == []:
+            raise BadRequest("Please supply at least one value to filter by")
+        else:
+            return super(ValueInFilter, self).filter(qs, value)
 
-            return super(IntegerListFilter, self).filter(qs, integers)
-        elif value == "":
-            raise BadRequest("Must supply at least one polling place to search for")
+
+class NumberInFilter(ValueInFilter, filters.NumberFilter):
+    pass
+
+
+class StringInFilter(ValueInFilter, filters.CharFilter):
+    pass
+
+
+class NamePremisesOrAddressFilter(filters.BaseCSVFilter, filters.CharFilter):
+    def filter(self, qs, value):
+        if value == []:
+            raise BadRequest("Please supply at least one value to filter by")
+        elif value is not None:
+            for search_term in value:
+                qs = qs.filter(Q(name__icontains=search_term) | Q(premises__icontains=search_term) | Q(address__icontains=search_term))
         return qs
 
 
@@ -50,15 +57,6 @@ class LonLatFilter(filters.Filter):
         return qs
 
 
-class NamePremisesOrAddressFilter(filters.BaseCSVFilter, filters.CharFilter):
-    def filter(self, qs, value):
-        if value not in (None, ""):
-            for search_term in value:
-                qs = qs.filter(Q(name__icontains=search_term) | Q(premises__icontains=search_term) | Q(address__icontains=search_term))
-
-        return qs
-
-
 class PollingPlacesBaseFilter(filters.FilterSet):
     election_id = filters.NumberFilter(field_name="election_id", required=True)
 
@@ -67,19 +65,22 @@ class PollingPlacesBaseFilter(filters.FilterSet):
         fields = ("election_id", )
 
 
-class PollingPlacesFilter(PollingPlacesBaseFilter):
-    ids = IntegerListFilter(field_name="id", lookup_expr="in")
+class PollingPlacesSearchFilter(PollingPlacesBaseFilter):
+    ids = NumberInFilter(field_name="id", lookup_expr="in")
     search_term = NamePremisesOrAddressFilter()
+    polling_place_names = StringInFilter(field_name="name", lookup_expr="in")
 
     class Meta:
         model = PollingPlaces
-        fields = ("ids", "search_term", )
+        fields = ("ids", "search_term", "polling_place_names", )
 
     def is_valid(self):
-        qp = self.request.query_params
-        if "ids" not in qp and "search_term" not in qp:
-            return False
-        return super(PollingPlacesFilter, self).is_valid()
+        searchParams = list(self.get_fields().keys())
+        queryParams = list(self.request.query_params.keys())
+
+        if is_one_of_these_things_in_this_other_thing(searchParams, queryParams) is False:
+            raise BadRequest("Please supply a filter criteria: {}".format(", ".join(searchParams)))
+        return super(PollingPlacesSearchFilter, self).is_valid()
 
 
 class PollingPlacesNearbyFilter(PollingPlacesBaseFilter):

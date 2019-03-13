@@ -66,6 +66,10 @@ def timeit(method):
     return timed
 
 
+def is_one_of_these_things_in_this_other_thing(a, b):
+    return not set(a).isdisjoint(b)
+
+
 def get_or_none(classmodel, **kwargs):
     try:
         return classmodel.objects.get(**kwargs)
