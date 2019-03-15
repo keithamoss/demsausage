@@ -8,7 +8,7 @@ social-auth-core==3.0.0
 sentry-sdk==0.7.6
 django-simple-history==2.7.0
 jsonschema==2.6.0
-python-memcached==1.59
+pylibmc==1.6.0
 djangorestframework-gis==0.14
 django-filter==2.1.0
 djangorestframework-csv==2.1.0

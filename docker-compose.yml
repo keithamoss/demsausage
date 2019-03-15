@@ -21,6 +21,9 @@ services:
         image: memcached
         expose:
             - "11211"
+        command:
+            # 5mb to accommodate the larger polling place GeoJSON objects
+            - '--max-item-size=5242880'
     # memcached_gui:
     #     # http://localhost/index.php (admin/admin)
     #     image: jacksoncage/phpmemcachedadmin
