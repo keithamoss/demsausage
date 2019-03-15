@@ -2,6 +2,7 @@ import * as ol from "openlayers"
 import * as React from "react"
 import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
+import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 // import "./OpenLayersMap.css"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
@@ -60,24 +61,27 @@ const spriteUnknown = new ol.style.Style({
     zIndex: 0,
 })
 
-const styleFunctionSprite = function(feature: any) {
-    if (feature.get("bbq") === true && feature.get("cake") === true) {
-        return spriteBBQCake
-    } else if ((feature.get("bbq") === true || feature.get("cake") === true) && feature.get("run_out") === true) {
-        return spriteBBQCakeRunOut
-    } else if (feature.get("bbq") === true) {
-        return spriteBBQ
-    } else if (feature.get("cake") === true) {
-        return spriteCake
-    } else if (feature.get("nothing") === true) {
-        return spriteNowt
-    } else if (feature.get("bbq") === false && feature.get("cake") === false && feature.get("other") === true) {
-        return spriteBBQ
-    } else {
-        return spriteUnknown
-    }
-}
+const styleFunctionSprite = function(feature: IMapPollingPlaceFeature) {
+    const noms: IMapPollingGeoJSONNoms = feature.get("noms")
 
+    if (noms !== null) {
+        if (noms.bbq === true && noms.cake === true) {
+            return spriteBBQCake
+        } else if ((noms.bbq === true || noms.cake === true) && noms.run_out === true) {
+            return spriteBBQCakeRunOut
+        } else if (noms.bbq === true) {
+            return spriteBBQ
+        } else if (noms.cake === true) {
+            return spriteCake
+        } else if (noms.nothing === true) {
+            return spriteNowt
+        } else if (noms.bbq === false && noms.cake === false && noms.other === true) {
+            return spriteBBQ
+        }
+    }
+
+    return spriteUnknown
+}
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
     componentDidMount() {
         const { election, onQueryMap } = this.props

@@ -33,6 +33,38 @@ noms_schema = {
     "additionalProperties": False
 }
 
+geojson_schema = {
+    "type": "object",
+    "schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "noms": {
+            "type": ["object", "null"],
+            "properties": {
+                "bbq": {
+                    "type": "boolean"
+                },
+                "cake": {
+                    "type": "boolean"
+                },
+                "nothing": {
+                    "type": "boolean"
+                },
+                "run_out": {
+                    "type": "boolean"
+                },
+                "other": {
+                    "type": "boolean"
+                },
+            }
+        },
+        "name": {
+            "type": "string"
+        }
+    },
+    "required": ["noms", "name"],
+    "additionalProperties": False
+}
+
 stall_location_info_schema = {
     "type": "object",
     "schema": "http://json-schema.org/draft-07/schema#",

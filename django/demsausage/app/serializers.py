@@ -225,14 +225,14 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "noms", )
+        fields = ("id", "noms", "name", )
 
     def get_properties(self, instance, fields):
-        props = {}
+        props = {"noms": None}
         for field in fields:
             if field.source == "noms.noms":
                 if instance.noms is not None:
-                    props = {**props, **field.to_representation(instance.noms.noms)}
+                    props = {**props, "noms": field.to_representation(instance.noms.noms)}
             else:
                 props = {**props, **{field.source: field.to_representation(getattr(instance, field.source))}}
         return props

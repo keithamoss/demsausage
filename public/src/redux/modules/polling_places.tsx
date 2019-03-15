@@ -76,6 +76,20 @@ export interface IAction {
 export interface IMapPollingPlaceFeature {
     getId: Function
     getProperties: Function
+    get: Function
+}
+
+export interface IMapPollingPlaceGeoJSONProperties {
+    noms: IMapPollingGeoJSONNoms | null
+    name: string
+}
+
+export interface IMapPollingGeoJSONNoms {
+    bbq: boolean
+    cake: boolean
+    nothing: boolean
+    run_out: boolean
+    other: boolean
 }
 
 export interface INoms {
