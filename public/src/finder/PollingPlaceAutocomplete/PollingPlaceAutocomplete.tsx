@@ -10,7 +10,7 @@ import { IPollingPlace } from "../../redux/modules/polling_places"
 export interface IProps {
     onFieldChange: Function
     searchText: string
-    searchResults: Array<IPollingPlace>
+    searchResults: Array<IPollingPlace> | undefined
     onChoosePollingPlace: any
 }
 
@@ -28,7 +28,7 @@ class PollingPlaceAutocomplete extends React.PureComponent<IProps, {}> {
             <div>
                 <SearchBar onRequestSearch={() => undefined} onChange={onFieldChange} hintText={"Where is your stall?"} />
 
-                {searchResults.length > 0 && (
+                {searchResults !== undefined && searchResults.length > 0 && (
                     <List>
                         {searchResults.map((pollingPlace: IPollingPlace, index: number) => {
                             const primaryTextString =
