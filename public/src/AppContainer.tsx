@@ -165,7 +165,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             content,
         } = this.props
 
-        if (app.loading === true) {
+        if (app.loading === true || elections.length === 0) {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div style={{ backgroundColor: muiTheme.palette!.primary1Color, width: "100%", height: "100%" }}>

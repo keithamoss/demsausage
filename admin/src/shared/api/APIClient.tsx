@@ -35,7 +35,7 @@ export class APIClient {
         })
     }
 
-    public get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IAPIResponse> {
+    public async get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
         if (Object.keys(params).length > 0) {
@@ -44,12 +44,22 @@ export class APIClient {
             url += "?" + qs.stringify(params)
         }
 
-        return fetch(this.baseURL + url, { ...{ credentials: "include" }, ...fetchOptions })
+        const promise = await fetch(this.baseURL + url, { ...{ credentials: "include" }, ...fetchOptions })
             .then((response: any) => {
                 dispatch(finishFetch())
                 return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
+
+        if (promise !== undefined) {
+            return promise
+        }
+
+        this.handleError({ error: "Fetch promise is undefined", url }, url, dispatch)
+
+        return new Promise(resolve => {
+            return resolve({ response: new Response(null, { status: 499, statusText: "Client Closed Request" }), json: null })
+        })
     }
 
     public post(url: string, body: object = {}, dispatch: any): Promise<IAPIResponse> {
@@ -139,10 +149,10 @@ export class APIClient {
         if (isDevelopment() === true) {
             // tslint:disable-next-line:no-console
             console.error(error)
-        } else {
-            Raven.captureException(error)
-            Raven.showReportDialog()
         }
+
+        Raven.captureException(error)
+        Raven.showReportDialog()
     }
 }
 
