@@ -165,7 +165,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                     this.populateData([])
                 }
             },
-            1000
+            1500
             // { maxWait: 5000 },
         )
     }
