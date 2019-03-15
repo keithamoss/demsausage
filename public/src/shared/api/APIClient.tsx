@@ -55,7 +55,7 @@ export class APIClient {
             return promise
         }
 
-        this.handleError({ error: "Fetch promise is undefined", url }, url, dispatch)
+        this.handleError(`Fetch promise is undefined for: ${url}`, url, dispatch)
 
         return new Promise(resolve => {
             return resolve({ response: new Response(null, { status: 499, statusText: "Client Closed Request" }), json: null })
