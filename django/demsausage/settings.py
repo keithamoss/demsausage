@@ -11,8 +11,12 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from demsausage.util import get_env
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from corsheaders.defaults import default_headers
+
+from demsausage.util import get_env
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,7 +123,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'corsheaders',
-    'raven.contrib.django.raven_compat',
     'simple_history',
     'django_filters',
     'rest_framework_swagger',
@@ -284,6 +287,19 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'list',
     'OPERATIONS_SORTER': 'alpha',
 }
+
+# Sentry SDK
+
+sentry_sdk.init(
+    dsn=get_env("RAVEN_URL"),
+    integrations=[DjangoIntegration()],
+    send_default_pii=True,
+    environment=get_env("ENVIRONMENT")
+)
+
+with sentry_sdk.configure_scope() as scope:
+    scope.level = "warning"
+    scope.set_extra("site", get_env("RAVEN_SITE_NAME"))
 
 
 # Project-specific settings
