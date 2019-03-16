@@ -3,24 +3,30 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { IElection } from "../../redux/modules/elections"
-import { fetchAllPollingPlaces, IPollingPlace, IPollingPlaceFacilityType, updatePollingPlace } from "../../redux/modules/polling_places"
+import {
+    fetchPollingPlacesWithoutFacilityTypes,
+    IPollingPlace,
+    IPollingPlaceFacilityType,
+    updatePollingPlace,
+} from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 
 export interface IStoreProps {
     election: IElection
-    pollingPlaces: Array<IPollingPlace>
     pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
 export interface IDispatchProps {
-    fetchInitialState: Function
+    fetchPollingPlaces: Function
     updatePollingPlaceType: Function
     onElectionChanged: Function
 }
 
-export interface IStateProps {}
+export interface IStateProps {
+    pollingPlaces: IPollingPlace[] | null
+}
 
 interface IRouteProps {
     electionIdentifier: string
@@ -32,20 +38,29 @@ interface IOwnProps {
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 export class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentProps, IStateProps> {
-    componentDidMount() {
-        const { fetchInitialState, election } = this.props
-        fetchInitialState(election)
+    public constructor(props: TComponentProps) {
+        super(props)
+
+        this.state = {
+            pollingPlaces: null,
+        }
     }
 
-    componentWillReceiveProps(nextProps: TComponentProps) {
-        const { fetchInitialState, election } = this.props
+    async componentDidMount() {
+        const { fetchPollingPlaces, election } = this.props
+        this.setState({ pollingPlaces: await fetchPollingPlaces(election) })
+    }
+
+    async componentWillReceiveProps(nextProps: TComponentProps) {
+        const { election } = this.props
         if (election.id !== nextProps.election.id) {
-            fetchInitialState(nextProps.election)
+            this.setState({ pollingPlaces: await nextProps.fetchPollingPlaces(nextProps.election) })
         }
     }
 
     render() {
-        const { pollingPlaces, pollingPlaceTypes, election, updatePollingPlaceType, onElectionChanged } = this.props
+        const { pollingPlaceTypes, election, updatePollingPlaceType, onElectionChanged } = this.props
+        const { pollingPlaces } = this.state
 
         if (election.polling_places_loaded === false) {
             return (
@@ -60,6 +75,10 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<TCompo
                     icon={<CommunicationLocationOff />}
                 />
             )
+        }
+
+        if (pollingPlaces === null) {
+            return null
         }
 
         return (
@@ -80,17 +99,17 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 
     return {
         election: elections.elections.find((election: IElection) => election.id === parseInt(ownProps.params.electionIdentifier, 10))!,
-        pollingPlaces: polling_places.by_election[ownProps.params.electionIdentifier] || [],
         pollingPlaceTypes: polling_places.types,
     }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        fetchInitialState: (election: IElection) => {
+        fetchPollingPlaces: async (election: IElection) => {
             if (election.polling_places_loaded === true) {
-                dispatch(fetchAllPollingPlaces(election))
+                return await dispatch(fetchPollingPlacesWithoutFacilityTypes(election))
             }
+            return null
         },
         updatePollingPlaceType: (election: IElection, pollingPlace: IPollingPlace, newType: string) => {
             dispatch(updatePollingPlace(election, pollingPlace, { facility_type: newType }))

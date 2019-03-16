@@ -201,6 +201,15 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
         return response
 
+    @list_route(methods=["get"])
+    def without_facility_type(self, request, format=None):
+        election_id = request.query_params.get("election_id", None)
+        if election_id is not None:
+            serializer = self.serializer_class(self.queryset.filter(election_id=election_id).filter(facility_type__isnull=True), many=True)
+            return Response(serializer.data)
+        else:
+            raise BadRequest("No election_id provided.")
+
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """

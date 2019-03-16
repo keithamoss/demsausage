@@ -27,7 +27,7 @@ const GridBox = styled.div`
 `
 
 export interface IProps {
-    pollingPlaces: Array<IPollingPlace>
+    pollingPlaces: IPollingPlace[]
     pollingPlaceTypes: IPollingPlaceFacilityType[]
     onChangeType: any
     onElectionChanged: any
@@ -58,13 +58,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
             radio: { display: "inline-block", width: "33%" },
         }
 
-        const pollingPlacesSansType = pollingPlaces.filter((pollingPlace: IPollingPlace) => pollingPlace.facility_type === null)
-
         if (pollingPlaces.length === 0) {
-            return null
-        }
-
-        if (pollingPlacesSansType.length === 0) {
             return (
                 <EmptyState
                     message={
@@ -85,19 +79,19 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                 <VirtualList
                     width="100%"
                     height={900}
-                    itemCount={pollingPlacesSansType.length}
+                    itemCount={pollingPlaces.length}
                     itemSize={122.25}
                     renderItem={({ index, style }: any) => (
                         <div key={index} style={style}>
                             <GridBox>
                                 <div>
-                                    <h3>{pollingPlacesSansType[index].name}</h3>
-                                    <h4>{pollingPlacesSansType[index].premises}</h4>
+                                    <h3>{pollingPlaces[index].name}</h3>
+                                    <h4>{pollingPlaces[index].premises}</h4>
                                 </div>
                                 <div>
                                     <RadioButtonGroup
-                                        name={`pollingPlaceTypes-${pollingPlacesSansType[index].id}`}
-                                        onChange={this.onChangeType.bind(this, pollingPlacesSansType[index])}
+                                        name={`pollingPlaceTypes-${pollingPlaces[index].id}`}
+                                        onChange={this.onChangeType.bind(this, pollingPlaces[index])}
                                     >
                                         {pollingPlaceTypes.map((type: IPollingPlaceFacilityType) => (
                                             <RadioButton key={type.name} value={type.name} label={type.name} style={styles.radio} />
@@ -111,7 +105,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                                         icon={<ActionOpenInNew />}
                                         containerElement={
                                             <CustomLink
-                                                to={`https://www.google.com.au/search?q=${pollingPlacesSansType[index].premises}`}
+                                                to={`https://www.google.com.au/search?q=${pollingPlaces[index].premises}`}
                                                 target="_blank"
                                             />
                                         }
