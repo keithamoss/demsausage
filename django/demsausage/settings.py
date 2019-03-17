@@ -48,11 +48,11 @@ if get_env("ENVIRONMENT") == "PRODUCTION":
 
     CORS_ORIGIN_WHITELIST = (
         "democracysausage.org",
-        "admin.democracysausage.org"
+        "admin.democracysausage.org",
     )
     CSRF_TRUSTED_ORIGINS = (
         "democracysausage.org",
-        "admin.democracysausage.org"
+        "admin.democracysausage.org",
     )
     ALLOWED_HOSTS = [
         "democracysausage.org",
@@ -93,10 +93,10 @@ else:
     CONN_MAX_AGE = 50  # Half our max number of PostgreSQL connections
 
     CORS_ORIGIN_WHITELIST = (
-        "test.democracysausage.org", "admin.test.democracysausage.org"
+        "test.democracysausage.org", "admin.test.democracysausage.org",
     )
     CSRF_TRUSTED_ORIGINS = (
-        "test.democracysausage.org", "admin.test.democracysausage.org"
+        "test.democracysausage.org", "admin.test.democracysausage.org",
     )
     ALLOWED_HOSTS = ["test.democracysausage.org", "admin.test.democracysausage.org"]
 
