@@ -30,3 +30,9 @@ body,
     height: 100% !important;
     min-width: auto !important;
 }
+
+@media (max-width: 768px) {
+    .openlayers-map .ol-attribution.ol-uncollapsible {
+        bottom: 56px !important;
+    }
+}

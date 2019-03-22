@@ -1,9 +1,9 @@
 import * as ol from "openlayers"
+import "openlayers/css/ol.css"
 import * as React from "react"
 import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
-// import "./OpenLayersMap.css"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
@@ -170,7 +170,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             renderer: ["canvas"],
             layers: getBasemap(),
             target: "openlayers-map",
-            controls: [],
+            controls: [
+                new ol.control.Attribution({
+                    collapsible: false,
+                }),
+            ],
             view: new ol.View({
                 center: ol.proj.transform(election.geom.coordinates, "EPSG:4326", "EPSG:3857"),
                 zoom: election.default_zoom_level,
