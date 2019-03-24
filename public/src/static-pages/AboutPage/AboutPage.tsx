@@ -50,7 +50,8 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                     to us on this here website.
                     <br />
                     To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{" "}
-                    <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a>. We'll be watching.
+                    <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a Direct Message.
+                    We'll be keeping an eye out.
                 </Answer>
                 <Answer>
                     To make this work, we've also used:
