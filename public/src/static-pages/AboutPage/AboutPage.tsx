@@ -56,10 +56,7 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                 <Answer>
                     To make this work, we've also used:
                     <ul>
-                        <li>
-                            <a href="http://www.aec.gov.au/election/downloads.htm">AEC polling place data</a> (as well as from the various
-                            state electoral commissions);
-                        </li>
+                        <li>Australian Electoral Commission polling place data (likewise from the various state electoral commissions);</li>
                         <li>
                             Images from <a href="http://openclipart.org">openclipart.org</a>; specifically:{" "}
                             <a href="http://openclipart.org/detail/7983/red-+-green-ok-not-ok-icons-by-tzeeniewheenie">
