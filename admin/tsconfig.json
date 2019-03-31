@@ -22,7 +22,8 @@
         "noUnusedLocals": true,
         "sourceMap": true,
         "outDir": "build/dist",
-        "rootDir": "src"
+        "rootDir": "src",
+        "incremental": true
     },
     "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "webpack", "jest", "src/setupTests.ts"],
     "typeRoots": ["../node_modules/@types", "../@types"],

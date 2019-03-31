@@ -69,10 +69,10 @@
         "core-js": "^2.6.1",
         "react-scripts": "^2.1.8",
         "redux-devtools-extension": "^2.13.7",
-        "tslint": "^5.12.1",
+        "tslint": "5.14.0",
         "tslint-config-prettier": "^1.17.0",
-        "tslint-react": "^3.6.0",
-        "typescript": "^3.3.3333"
+        "tslint-react": "4.0.0",
+        "typescript": "3.4.1"
     },
     "browserslist": [
         ">0.2%",
