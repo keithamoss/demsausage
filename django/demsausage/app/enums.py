@@ -20,6 +20,17 @@ class PollingPlaceStatus(str, EnumBase):
         return self.value
 
 
+class PollingPlaceChanceOfSausage(int, EnumBase):
+    NO_IDEA = 0
+    UNLIKELY = 1
+    MIXED = 2
+    FAIR = 3
+    STRONG = 4
+
+    def __int__(self):
+        return self.value
+
+
 class StallStatus(str, EnumBase):
     PENDING = "Pending"
     APPROVED = "Approved"

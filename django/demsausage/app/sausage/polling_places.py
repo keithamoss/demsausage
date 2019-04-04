@@ -31,10 +31,10 @@ def getFoodDescription(stall):
     return ", ".join(noms)
 
 
-def is_noms_item_true(noms, item):
-    if noms is not None:
-        if item in noms:
-            if type(noms[item]) == bool:
-                if noms[item] is True:
+def is_noms_item_true(polling_place, item):
+    if polling_place.noms is not None and polling_place.noms.noms is not None:
+        if item in polling_place.noms.noms:
+            if type(polling_place.noms.noms[item]) == bool:
+                if polling_place.noms.noms[item] is True:
                     return True
     return False

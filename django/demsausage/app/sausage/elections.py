@@ -13,7 +13,7 @@ from django.contrib.gis.geos import Point
 from demsausage.app.models import PollingPlaces, Stalls
 from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer, PollingPlaceLoaderEventsSerializer
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.enums import StallStatus, PollingPlaceStatus
+from demsausage.app.enums import StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
 
 
@@ -516,11 +516,57 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.logger.info("Facility types detected from historical data: {}".format(update_count))
 
     def calculate_chance_of_sausage(self):
-        def calculate_score(polling_place):
-            if polling_place.noms is not None and polling_place.noms.noms is not None:
-                if is_noms_item_true(polling_place.noms.noms, "bbq") or is_noms_item_true(polling_place.noms.noms, "cake"):
-                    return 1
-            return 0
+        def calculate_score(polling_places):
+            def _is_a_positive_report(polling_place):
+                return is_noms_item_true(polling_place, "bbq") or is_noms_item_true(polling_place, "cake")
+
+            def _has_multiple_positive_reports(polling_places):
+                count = 0
+                for polling_place in polling_places:
+                    if _is_a_positive_report(polling_place) is True:
+                        count += 1
+
+                        if count >= 2:
+                            return True
+                return False
+
+            def _has_one_positive_report(polling_places):
+                for polling_place in polling_places:
+                    if _is_a_positive_report(polling_place) is True:
+                        return True
+                return False
+
+            def _has_a_red_cross_of_shame(polling_places):
+                for polling_place in polling_places:
+                    if is_noms_item_true(polling_place, "nothing") is True:
+                        return True
+                return False
+
+            def _has_multiple_red_crosses_of_shame(polling_places):
+                count = 0
+                for polling_place in polling_places:
+                    if is_noms_item_true(polling_place, "nothing") is True:
+                        count += 1
+
+                        if count >= 2:
+                            return True
+                return False
+
+            if _has_multiple_red_crosses_of_shame(polling_places) is True:
+                if _has_one_positive_report(polling_places) is True:
+                    return PollingPlaceChanceOfSausage.MIXED
+                return PollingPlaceChanceOfSausage.UNLIKELY
+            elif _has_multiple_positive_reports(polling_places) is True:
+                if _has_a_red_cross_of_shame(polling_places) is True:
+                    return PollingPlaceChanceOfSausage.MIXED
+                return PollingPlaceChanceOfSausage.STRONG
+            elif _has_one_positive_report(polling_places) is True:
+                if _has_a_red_cross_of_shame(polling_places) is True:
+                    return PollingPlaceChanceOfSausage.MIXED
+                return PollingPlaceChanceOfSausage.FAIR
+            else:
+                return PollingPlaceChanceOfSausage.NO_IDEA
+
         update_count = 0
 
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=True)
@@ -528,9 +574,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE)).order_by("election_id")
 
             if len(matching_polling_places) > 0:
-                scores = [calculate_score(pp) for pp in matching_polling_places]
-
-                polling_place.chance_of_sausage = sum(scores) / len(matching_polling_places)
+                polling_place.chance_of_sausage = calculate_score(matching_polling_places)
                 polling_place.save()
 
                 update_count += 1

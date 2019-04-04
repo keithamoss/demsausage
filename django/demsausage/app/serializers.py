@@ -148,7 +148,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
-    chance_of_sausage = serializers.FloatField(allow_null=True, read_only=True)
+    chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
     facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
 

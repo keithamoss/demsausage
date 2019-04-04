@@ -99,6 +99,14 @@ export interface IPollingPlaceStall {
     source: string
 }
 
+export enum PollingPlaceChanceOfSausage {
+    NO_IDEA = 0,
+    UNLIKELY = 1,
+    MIXED = 2,
+    FAIR = 3,
+    STRONG = 4,
+}
+
 export interface IPollingPlace {
     id: number
     name: string
@@ -112,7 +120,7 @@ export interface IPollingPlace {
     address: string
     divisions: string[]
     state: string
-    chance_of_sausage: number | null
+    chance_of_sausage: PollingPlaceChanceOfSausage | null
     stall: IPollingPlaceStall | null
 }
 
@@ -314,14 +322,19 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
 }
 
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
-    if (pollingPlace.chance_of_sausage === null) {
-        return "UNKNOWN"
-    } else if (pollingPlace.chance_of_sausage >= 0.7) {
-        return "HIGH"
-    } else if (pollingPlace.chance_of_sausage >= 4) {
-        return "MEDIUM"
-    } else {
-        return "LOW"
+    switch (pollingPlace.chance_of_sausage) {
+        case PollingPlaceChanceOfSausage.STRONG:
+            return "Based on past elections this booth has a STRONG chance of having food."
+        case PollingPlaceChanceOfSausage.FAIR:
+            return "Based on past elections this booth has a FAIR chance of having food."
+        case PollingPlaceChanceOfSausage.MIXED:
+            return "Based on past elections this booth has a MIXED chance of having food."
+        case PollingPlaceChanceOfSausage.UNLIKELY:
+            return "Based on past elections this booth is UNLIKELY to have food."
+        case PollingPlaceChanceOfSausage.NO_IDEA:
+            return "We have never had reports from this booth. Let us know what you find!"
+        default:
+            return "We have never had reports from this booth. Let us know what you find!"
     }
 }
 

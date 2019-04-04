@@ -67,10 +67,6 @@ const ChanceOfSausage = styled(ListItem)`
     }
 `
 
-const ChanceOfSausageIndicator = styled.span`
-    color: black;
-`
-
 export interface IProps {
     pollingPlace: IPollingPlace | IPollingPlaceSearchResult
     election: IElection
@@ -137,13 +133,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         {isElectionLive(election) && pollingPlaceHasReports(pollingPlace) === false && (
                             <ChanceOfSausage
                                 primaryText={"We don't have any reports for this booth yet."}
-                                secondaryText={
-                                    <span>
-                                        Based on past elections this booth has a{" "}
-                                        <ChanceOfSausageIndicator>{getSausageChanceDescription(pollingPlace)}</ChanceOfSausageIndicator>{" "}
-                                        chance of having food.
-                                    </span>
-                                }
+                                secondaryText={<span>{getSausageChanceDescription(pollingPlace)}</span>}
                                 secondaryTextLines={2}
                                 leftAvatar={<Avatar icon={<ActionHelpOutline />} />}
                                 disabled={true}
