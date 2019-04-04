@@ -22,6 +22,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import App from "./App"
+import { ReactComponent as Logo } from "./demsausage_logo.svg"
 import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
 import { getURLSafeElectionName, IElection, setCurrentElection } from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
@@ -59,7 +60,7 @@ const FlexboxCentredContainer = styled.div`
 `
 
 const FlexboxCentredBox = styled.div`
-    width: 70%;
+    width: 60%;
     max-width: 300px;
     text-align: center;
     align-items: start;
@@ -173,7 +174,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                         <FlexboxCentredContainer>
                             <FlexboxCentredBox>
                                 <div>
-                                    <img src="/icons/logo.jpg" />
+                                    <Logo />
                                 </div>
                                 <div>
                                     <h1>Democracy Sausage</h1>
