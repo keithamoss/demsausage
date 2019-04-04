@@ -234,7 +234,8 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
                 if instance.noms is not None:
                     props = {**props, "noms": field.to_representation(instance.noms.noms)}
             else:
-                props = {**props, **{field.source: field.to_representation(getattr(instance, field.source))}}
+                value = getattr(instance, field.source)
+                props = {**props, **{field.source: field.to_representation(value) if value is not None else None}}
         return props
 
 
