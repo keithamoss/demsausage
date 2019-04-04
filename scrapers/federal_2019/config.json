@@ -1,0 +1,40 @@
+{
+    "filters": [
+        {
+            "column": "Status",
+            "type": "is_exactly",
+            "matches": ["Current"]
+        }
+    ],
+    "exclude_columns": [
+        "StateCo",
+        "DivId",
+        "DivCo",
+        "Status",
+        "AdvPremisesName",
+        "AdvAddress",
+        "AdvLocality",
+        "AdvBoothLocation",
+        "AdvGateAccess"
+    ],
+    "rename_columns": {
+        "StateAb": "state",
+        "DivName": "divisions",
+        "PPName": "name",
+        "PremisesName": "premises",
+        "EntrancesDesc": "entrance_desc",
+        "WheelchairAccess": "booth_info",
+        "Lat": "lat",
+        "Long": "lon",
+        "PPId": "ec_id"
+    },
+    "extras_fields": ["CCD", "OrdVoteEst", "DecVoteEst", "NoOrdIssuingOff", "NoOfDecIssuingOff"],
+    "cleaning_regexes": [
+        {
+            "field": "name",
+            "regex": "^(?P<main>[A-z-'\\s]+)(\\([A-z-\\s]+\\))?$"
+        }
+    ],
+    "address_fields": ["Address1", "Address2", "Address3", "Locality", "AddrStateAb", "Postcode"],
+    "address_format": "{Address1}, {Address2}, {Address3}, {Locality}, {AddrStateAb} {Postcode}"
+}
