@@ -3,7 +3,7 @@
         {
             "column": "Status",
             "type": "is_exactly",
-            "matches": ["Current"]
+            "matches": ["Current", "Appointment"]
         }
     ],
     "exclude_columns": [
