@@ -130,6 +130,8 @@ class PollingPlaces(models.Model):
     booth_info = models.TextField(blank=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceStatus], default=PollingPlaceStatus.DRAFT)
     chance_of_sausage = models.FloatField(null=True)
+    extras = JSONField(default=dict, blank=True)
+    ec_id = models.IntegerField(null=True)
 
     tracker = FieldTracker(fields=["noms"])
     objects = PollingPlacesManager()

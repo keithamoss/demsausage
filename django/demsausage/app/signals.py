@@ -20,7 +20,6 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=PollingPlaces)
-@receiver(post_delete, sender=PollingPlaces)
 def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, created, **kwargs):
     if instance.status == PollingPlaceStatus.ACTIVE:
         if created is True or instance.tracker.has_changed("noms") is True:

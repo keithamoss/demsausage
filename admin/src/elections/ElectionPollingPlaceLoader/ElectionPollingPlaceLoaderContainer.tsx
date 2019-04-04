@@ -40,7 +40,7 @@ export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TCo
     constructor(props: any) {
         super(props)
 
-        this.state = { file: undefined, config: undefined, dryRun: false, error: undefined, messages: undefined }
+        this.state = { file: undefined, config: undefined, dryRun: true, error: undefined, messages: undefined }
     }
 
     render() {

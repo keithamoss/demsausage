@@ -131,7 +131,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def polling_places(self, request, pk=None, format=None):
         election = self.get_object()
-        dry_run = True if request.data.get("dry_run", None) == "1" else False
+        dry_run = True if str(request.data.get("dry_run", 0)) == "1" else False
         config = request.data.get("config", None)
         try:
             if config is not None and len(config) > 0:
