@@ -3,135 +3,32 @@ import "openlayers/css/ol.css"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
-import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
+import { IMapSearchResults, MapMode, styleFunctionSprite } from "../../redux/modules/map"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
     election: IElection
+    mapMode: MapMode | null
+    mapSearchResults: IMapSearchResults | null
     onQueryMap: Function
+    onEmptySearchResults: Function
 }
 
-const spriteCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 0],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCakeRunOut = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 32],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 61],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQ = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 90],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteNowt = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 122],
-        size: [24, 24],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteUnknown = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 146],
-        size: [14, 14],
-        src: "./icons/sprite_v2.png",
-        opacity: 0.4,
-    }),
-    zIndex: 0,
-})
+class OpenLayersMap extends React.PureComponent<IProps, {}> {
+    private map: ol.Map | null
 
-const styleFunctionSprite = function(feature: IMapPollingPlaceFeature) {
-    const noms: IMapPollingGeoJSONNoms = feature.get("noms")
+    constructor(props: IProps) {
+        super(props)
 
-    if (noms !== null) {
-        if (noms.bbq === true && noms.cake === true) {
-            return spriteBBQCake
-        } else if ((noms.bbq === true || noms.cake === true) && noms.run_out === true) {
-            return spriteBBQCakeRunOut
-        } else if (noms.bbq === true) {
-            return spriteBBQ
-        } else if (noms.cake === true) {
-            return spriteCake
-        } else if (noms.nothing === true) {
-            return spriteNowt
-        } else if (noms.bbq === false && noms.cake === false && noms.other === true) {
-            return spriteBBQ
-        }
+        this.map = null
     }
 
-    return spriteUnknown
-}
-class OpenLayersMap extends React.PureComponent<IProps, {}> {
     componentDidMount() {
-        const { election, onQueryMap } = this.props
+        const { election, mapMode, mapSearchResults, onQueryMap } = this.props
 
-        const vectorSource = new ol.source.Vector({
-            url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
-            format: new ol.format.GeoJSON(),
-        })
-
-        // Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
-        vectorSource.on("change", function(e: any) {
-            if (vectorSource.getState() === "ready") {
-                window.setTimeout(function() {
-                    map.getView().changed()
-                    let view = map.getView()
-                    let centre = view.getCenter()
-                    centre[0] -= 1
-                    view.setCenter(centre)
-                    map.setView(view)
-                }, 1000)
-            }
-        })
-
-        const vectorLayer = new ol.layer.Vector({
-            renderMode: "image",
-            source: vectorSource,
-            style: styleFunctionSprite,
-        } as any)
-
-        const getBasemap = () => {
-            gaTrack.event({
-                category: "OpenLayersMap",
-                action: "Basemap Shown",
-                label: "Carto",
-            })
-
-            return [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM({
-                        // https://carto.com/location-data-services/basemaps/
-                        url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                        attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                    }),
-                }),
-            ]
-        }
-
-        const map = new ol.Map({
+        this.map = new ol.Map({
             renderer: ["canvas"],
-            layers: getBasemap(),
+            layers: this.getBasemap(),
             target: "openlayers-map",
             controls: [
                 new ol.control.Attribution({
@@ -144,9 +41,17 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             }),
         })
 
-        map.addLayer(vectorLayer)
+        this.map.addLayer(this.getVectorLayer(this.map))
 
-        map.on("singleclick", function(e: any) {
+        if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
+            const layer = this.getYourLocationVectorLayer(this.map)
+            if (layer !== null) {
+                this.map.addLayer(layer)
+            }
+        }
+
+        const map = this.map
+        this.map.on("singleclick", function(e: any) {
             gaTrack.event({
                 category: "OpenLayersMap",
                 action: "Query Features",
@@ -158,7 +63,16 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 (feature: any, layer: any) => {
                     features.push(feature)
                 },
-                { hitTolerance: 3 }
+                {
+                    hitTolerance: 3,
+                    layerFilter: (layer: ol.layer.Base) => {
+                        const props = layer.getProperties()
+                        if ("isSausageLayer" in props && props.isSausageLayer === true) {
+                            return true
+                        }
+                        return false
+                    },
+                }
             )
 
             gaTrack.event({
@@ -175,8 +89,136 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         })
     }
 
+    componentDidUpdate(prevProps: IProps) {
+        if (this.map !== null && prevProps.mapMode !== this.props.mapMode) {
+            const layersToRemove: any = []
+            this.map.getLayers().forEach((layer: ol.layer.Base) => {
+                if (layer instanceof ol.layer.Vector && this.map !== null) {
+                    layersToRemove.push(layer)
+                }
+            })
+
+            layersToRemove.forEach((layer: ol.layer.Base) => {
+                if (this.map !== null) {
+                    this.map.removeLayer(layer)
+                }
+            })
+
+            this.map.addLayer(this.getVectorLayer(this.map))
+        }
+    }
+
     render() {
         return <div id="openlayers-map" className="openlayers-map" />
+    }
+
+    private getVectorLayer(map: ol.Map) {
+        const { election, mapMode, mapSearchResults, onEmptySearchResults } = this.props
+
+        const vectorSource = new ol.source.Vector({
+            url: () => {
+                if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
+                    return `${getAPIBaseURL()}/0.1/polling_places/nearby/?election_id=${election.id}&lonlat=${mapSearchResults.lon},${
+                        mapSearchResults.lat
+                    }`
+                }
+                return `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
+            },
+            format: new ol.format.GeoJSON(),
+        })
+
+        // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
+        vectorSource.on("change", function(e: any) {
+            if (vectorSource.getState() === "ready") {
+                window.setTimeout(function() {
+                    map.getView().changed()
+                    let view = map.getView()
+
+                    if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
+                        if (vectorSource.getFeatures().length > 0) {
+                            view.fit(vectorSource.getExtent(), {
+                                size: map.getSize(),
+                                duration: 750,
+                                padding: [85, 0, 20, 0],
+                                callback: (completed: boolean) => {
+                                    if (completed === true) {
+                                        let centre = view.getCenter()
+                                        centre[0] -= 1
+                                        view.setCenter(centre)
+                                    }
+                                },
+                            })
+                        } else {
+                            onEmptySearchResults()
+                        }
+                    } else {
+                        let centre = view.getCenter()
+                        centre[0] -= 1
+                        view.setCenter(centre)
+                    }
+
+                    map.setView(view)
+                }, 500)
+            }
+        })
+
+        const vectorLayer = new ol.layer.Vector({
+            renderMode: "image",
+            source: vectorSource,
+            style: styleFunctionSprite,
+        } as any)
+
+        vectorLayer.setProperties({ isSausageLayer: true })
+
+        return vectorLayer
+    }
+
+    private getYourLocationVectorLayer(map: ol.Map) {
+        const { mapMode, mapSearchResults } = this.props
+
+        if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
+            const iconFeature = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.transform([mapSearchResults.lon, mapSearchResults.lat], "EPSG:4326", "EPSG:3857")),
+            })
+
+            iconFeature.setStyle(
+                new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        fill: new ol.style.Fill({ color: "#6740b4" }),
+                        stroke: new ol.style.Stroke({ color: "black", width: 2 }),
+                        points: 5,
+                        radius: 10,
+                        radius2: 4,
+                        angle: 0,
+                    }),
+                })
+            )
+
+            return new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [iconFeature],
+                }),
+            })
+        }
+        return null
+    }
+
+    private getBasemap() {
+        gaTrack.event({
+            category: "OpenLayersMap",
+            action: "Basemap Shown",
+            label: "Carto",
+        })
+
+        return [
+            new ol.layer.Tile({
+                source: new ol.source.OSM({
+                    // https://carto.com/location-data-services/basemaps/
+                    url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                    attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+                }),
+            }),
+        ]
     }
 }
 

@@ -1,8 +1,9 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { browserHistory } from "react-router"
 import { ePollingPlaceFinderInit } from "../../redux/modules/app"
-import { IElection } from "../../redux/modules/elections"
-import { fetchNearbyPollingPlaces, IPollingPlaceSearchResult } from "../../redux/modules/polling_places"
+import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { setMapToSearch } from "../../redux/modules/map"
 import { IStore } from "../../redux/modules/reducer"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -20,11 +21,7 @@ export interface IDispatchProps {
     onRequestLocationPermissions: Function
 }
 
-export interface IStateProps {
-    isShowingPlaceAutocompleteResults: boolean
-    locationSearched: string | null
-    nearbyPollingPlaces: Array<IPollingPlaceSearchResult> | null
-}
+export interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps
 export class PollingPlaceFinderContainer extends React.Component<TComponentProps, IStateProps> {
@@ -35,11 +32,7 @@ export class PollingPlaceFinderContainer extends React.Component<TComponentProps
 
     constructor(props: IStoreProps & IDispatchProps) {
         super(props)
-        this.state = { isShowingPlaceAutocompleteResults: false, nearbyPollingPlaces: null, locationSearched: null }
 
-        this.onReceiveNearbyPollingPlaces = this.onReceiveNearbyPollingPlaces.bind(this)
-        this.onShowPlaceAutocompleteResults = this.onShowPlaceAutocompleteResults.bind(this)
-        this.onChoosePlaceFromAutocomplete = this.onChoosePlaceFromAutocomplete.bind(this)
         this.onRequestLocationPermissions = props.onRequestLocationPermissions.bind(this)
     }
 
@@ -58,37 +51,16 @@ export class PollingPlaceFinderContainer extends React.Component<TComponentProps
         }
     }
 
-    async onReceiveNearbyPollingPlaces(pollingPlaces: Array<IPollingPlaceSearchResult>, locationSearched: string) {
-        this.setState({
-            locationSearched: locationSearched,
-            nearbyPollingPlaces: pollingPlaces,
-        })
-    }
-
-    onShowPlaceAutocompleteResults() {
-        this.setState({ ...this.state, isShowingPlaceAutocompleteResults: true })
-    }
-
-    onChoosePlaceFromAutocomplete() {
-        this.setState({ ...this.state, isShowingPlaceAutocompleteResults: false })
-    }
-
     render() {
         const { initMode, geolocationSupported, currentElection, findNearestPollingPlaces } = this.props
-        const { isShowingPlaceAutocompleteResults, locationSearched, nearbyPollingPlaces } = this.state
 
         return (
             <PollingPlaceFinder
                 initMode={initMode}
                 geolocationSupported={geolocationSupported}
                 election={currentElection}
-                isShowingPlaceAutocompleteResults={isShowingPlaceAutocompleteResults}
-                locationSearched={locationSearched}
-                nearbyPollingPlaces={nearbyPollingPlaces}
-                onShowPlaceAutocompleteResults={this.onShowPlaceAutocompleteResults}
                 onGeocoderResults={(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) => {
-                    this.onChoosePlaceFromAutocomplete()
-                    findNearestPollingPlaces(this.onReceiveNearbyPollingPlaces, currentElection, place)
+                    findNearestPollingPlaces(currentElection, place)
                 }}
                 onRequestLocationPermissions={this.onRequestLocationPermissions}
             />
@@ -108,7 +80,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
-        findNearestPollingPlaces: function(onReceiveNearbyPollingPlaces: Function, election: IElection, value: IGoogleAddressSearchResult) {
+        findNearestPollingPlaces: function(election: IElection, value: IGoogleAddressSearchResult) {
             gaTrack.event({
                 category: "PollingPlaceFinderContainer",
                 action: "findNearestPollingPlaces",
@@ -119,25 +91,14 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             const geocoder = new google.maps.Geocoder()
             geocoder.geocode({ placeId: value.place_id }, async (results: Array<IGoogleGeocodeResult>, status: string) => {
                 if (status === "OK" && results.length > 0) {
-                    gaTrack.event({
-                        category: "PollingPlaceFinderContainer",
-                        action: "findNearestPollingPlaces",
-                        label: "Number of geocoder results",
-                        value: results.length,
-                    })
-
-                    const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(
-                        fetchNearbyPollingPlaces(election, results[0].geometry.location.lat(), results[0].geometry.location.lng())
+                    dispatch(
+                        setMapToSearch({
+                            lon: results[0].geometry.location.lng(),
+                            lat: results[0].geometry.location.lat(),
+                            formattedAddress: results[0].formatted_address,
+                        })
                     )
-
-                    gaTrack.event({
-                        category: "PollingPlaceFinderContainer",
-                        action: "findNearestPollingPlaces",
-                        label: "Number of polling places found",
-                        value: pollingPlaces.length,
-                    })
-
-                    onReceiveNearbyPollingPlaces(pollingPlaces, results[0].formatted_address)
+                    browserHistory.push(`/${getURLSafeElectionName(election)}`)
                 } else {
                     gaTrack.event({
                         category: "PollingPlaceFinderContainer",
@@ -173,13 +134,6 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                             { location: { lat: position.coords.latitude, lng: position.coords.longitude } },
                             async (results: Array<any>, status: string) => {
                                 if (status === "OK" && results.length > 0) {
-                                    gaTrack.event({
-                                        category: "PollingPlaceFinderContainer",
-                                        action: "onRequestLocationPermissions",
-                                        label: "Number of geocoder results",
-                                        value: results.length,
-                                    })
-
                                     const streetAddressPlace = results.find(
                                         (place: IGoogleGeocodeResult) => place.types[0] === "street_address"
                                     )
@@ -187,18 +141,14 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                                         locationSearched = streetAddressPlace.formatted_address
                                     }
 
-                                    const pollingPlaces: Array<IPollingPlaceSearchResult> = await dispatch(
-                                        fetchNearbyPollingPlaces(currentElection, position.coords.latitude, position.coords.longitude)
+                                    dispatch(
+                                        setMapToSearch({
+                                            lon: position.coords.longitude,
+                                            lat: position.coords.latitude,
+                                            formattedAddress: locationSearched,
+                                        })
                                     )
-
-                                    gaTrack.event({
-                                        category: "PollingPlaceFinderContainer",
-                                        action: "onRequestLocationPermissions",
-                                        label: "Number of polling places found",
-                                        value: pollingPlaces.length,
-                                    })
-
-                                    this.onReceiveNearbyPollingPlaces(pollingPlaces, locationSearched)
+                                    browserHistory.push(`/${getURLSafeElectionName(currentElection)}`)
                                 } else {
                                     gaTrack.event({
                                         category: "PollingPlaceFinderContainer",

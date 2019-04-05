@@ -11,6 +11,7 @@ import styled from "styled-components"
 // import "./SausageMap.css"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
 import { IElection } from "../../redux/modules/elections"
+import { IMapSearchResults, MapMode } from "../../redux/modules/map"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 
@@ -32,10 +33,14 @@ export interface IProps {
     currentElection: IElection
     queriedPollingPlaces: Array<IPollingPlace>
     geolocationSupported: boolean
+    mapMode: MapMode | null
+    mapSearchResults: IMapSearchResults | null
     onQueryMap: Function
     onCloseQueryMapDialog: any
     onOpenFinderForAddressSearch: any
     onOpenFinderForGeolocation: any
+    onClearMapSearch: any
+    onEmptySearchResults: any
 }
 
 class SausageMap extends React.PureComponent<IProps, {}> {
@@ -44,22 +49,41 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             currentElection,
             queriedPollingPlaces,
             geolocationSupported,
+            mapMode,
+            mapSearchResults,
             onQueryMap,
             onCloseQueryMapDialog,
             onOpenFinderForAddressSearch,
             onOpenFinderForGeolocation,
+            onClearMapSearch,
+            onEmptySearchResults,
         } = this.props
 
         return (
             <div>
-                <OpenLayersMap key={currentElection.id} election={currentElection} onQueryMap={onQueryMap} />
+                <OpenLayersMap
+                    key={currentElection.id}
+                    election={currentElection}
+                    mapMode={mapMode}
+                    mapSearchResults={mapSearchResults}
+                    onQueryMap={onQueryMap}
+                    onEmptySearchResults={onEmptySearchResults}
+                />
 
                 <FlexboxContainer>
                     <FlexboxItem>
                         <SearchBar
                             hintText={"Find polling places"}
-                            // tslint:disable-next-line:no-empty
-                            onChange={() => {}}
+                            value={
+                                mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null
+                                    ? mapSearchResults.formattedAddress
+                                    : undefined
+                            }
+                            onChange={(value: string) => {
+                                if (value === "") {
+                                    onClearMapSearch()
+                                }
+                            }}
                             onClick={onOpenFinderForAddressSearch}
                             onRequestSearch={geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch}
                             searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}

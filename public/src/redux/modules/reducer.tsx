@@ -5,6 +5,7 @@ import { reducer as form } from "redux-form"
 import { responsiveStateReducer } from "redux-responsive"
 import { default as app, IModule as IAppModule } from "./app"
 import { default as elections, IModule as IElectionsModule } from "./elections"
+import { default as map, IModule as IMapModule } from "./map"
 import { default as polling_places, IModule as IPollingPlacesModule, reduxFormReducer as pollingPlaceFormReducer } from "./polling_places"
 import { default as snackbars, IModule as ISnackbarsModule } from "./snackbars"
 import { default as stalls, IModule as IStallsModule } from "./stalls"
@@ -17,6 +18,7 @@ export interface IStore {
     elections: IElectionsModule
     polling_places: IPollingPlacesModule
     stalls: IStallsModule
+    map: IMapModule
     form: any
     browser: any
     responsiveDrawer: any
@@ -28,6 +30,7 @@ const rootReducer: Redux.Reducer<IStore> = Redux.combineReducers<IStore>({
     elections,
     polling_places,
     stalls,
+    map,
     routing: routerReducer,
     form: formReducer.plugin({ pollingPlace: pollingPlaceFormReducer }),
     browser: responsiveStateReducer,
