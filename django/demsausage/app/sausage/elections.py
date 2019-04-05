@@ -224,8 +224,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 else:
                     skipped_polling_places.append("{} ({})".format(polling_place["name"], polling_place["premises"]))
 
-            self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(self.extras_fields), "; ".join(skipped_polling_places)))
             self.polling_places = processed_polling_places
+            
+            if len(skipped_polling_places) > 0:
+                self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(skipped_polling_places), ", ".join(skipped_polling_places)))
 
         def _run_regexes():
             def _apply_regexes(polling_place):
@@ -567,19 +569,23 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             else:
                 return PollingPlaceChanceOfSausage.NO_IDEA
 
-        update_count = 0
+        if self.is_dry_run() is False:
+            update_count = 0
 
-        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=True)
-        for polling_place in queryset:
-            matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE)).order_by("election_id")
+            queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=True)
+            for polling_place in queryset:
+                matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE)).order_by("election_id")
 
-            if len(matching_polling_places) > 0:
-                polling_place.chance_of_sausage = calculate_score(matching_polling_places)
-                polling_place.save()
+                if len(matching_polling_places) > 0:
+                    polling_place.chance_of_sausage = calculate_score(matching_polling_places)
+                    polling_place.save()
 
-                update_count += 1
+                    update_count += 1
 
-        self.logger.info("Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(queryset.count(), update_count))
+            self.logger.info("Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(queryset.count(), update_count))
+
+        else:
+            self.logger.info("Skipping Chance of Sausage calculations whilst in dry run mode")
 
     def cleanup(self):
         # Migrate to new polling places
