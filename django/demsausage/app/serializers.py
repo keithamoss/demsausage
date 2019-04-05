@@ -248,8 +248,9 @@ class DistanceField(serializers.CharField):
         return round(float(value.km), 2)
 
 
-class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
+class PollingPlaceSearchResultsSerializer(PollingPlacesGeoJSONSerializer):
     distance_km = DistanceField(source="distance")
+    stall = PollingPlaceNomsSerializer(source="noms", required=False)
 
     class Meta:
         model = PollingPlaces
