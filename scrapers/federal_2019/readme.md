@@ -2,8 +2,8 @@
 
 ## Wrong location (AEC notified; fixed by-hand)
 
-1. Charleville High School: -26.395960, 146.259221
-2. Mile End: -34.923374, 138.570222
+1. Charleville High School (PPID=6131): -26.395960, 146.259221 (was -26.40316, 146.24092)
+2. Mile End (PPID=7079): -34.923374, 138.570222 (was -34.91979, 138.53797)
 
 ## Duplicate polling places (temporarily renamed by-hand)
 
