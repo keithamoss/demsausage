@@ -1,7 +1,7 @@
 import * as ol from "openlayers"
 import "openlayers/css/ol.css"
 import * as React from "react"
-import { getAPIBaseURL, isUserABot } from "../../redux/modules/app"
+import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
@@ -87,7 +87,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const { election, onQueryMap } = this.props
 
         const vectorSource = new ol.source.Vector({
-            // url: `${getAPIBaseURL()}/elections/election.php?id=${election.id}&s=${Date.now()}`,
             url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
             format: new ol.format.GeoJSON(),
         })
@@ -113,57 +112,21 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         } as any)
 
         const getBasemap = () => {
-            // Bots get an OSM Basemap that doesn't cost us anything
-            if (isUserABot() === true) {
-                gaTrack.event({
-                    category: "OpenLayersMap",
-                    action: "Basemap Shown",
-                    label: "OSM",
-                })
+            gaTrack.event({
+                category: "OpenLayersMap",
+                action: "Basemap Shown",
+                label: "Carto",
+            })
 
-                return [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM({
-                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                        }),
+            return [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM({
+                        // https://carto.com/location-data-services/basemaps/
+                        url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                        attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
                     }),
-                ]
-            } else {
-                // On election day everyone gets the pretty Mapbox basemap
-                // if (isItElectionDay(election) === true) {
-                //     gaTrack.event({
-                //         category: "OpenLayersMap",
-                //         action: "Basemap Shown",
-                //         label: "Mapbox",
-                //     })
-
-                //     return [
-                //         new ol.layer.Tile({
-                //             source: new ol.source.XYZ({
-                //                 url: `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${getMapboxAPIKey()}`,
-                //                 crossOrigin: "anonymous",
-                //             }),
-                //         }),
-                //     ]
-                // } else {
-                // If it's not election day just show the free Carto basemap
-                gaTrack.event({
-                    category: "OpenLayersMap",
-                    action: "Basemap Shown",
-                    label: "Carto",
-                })
-
-                return [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM({
-                            // https://carto.com/location-data-services/basemaps/
-                            url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                            attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-                        }),
-                    }),
-                ]
-                // }
-            }
+                }),
+            ]
         }
 
         const map = new ol.Map({
@@ -205,8 +168,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 value: features.length,
             })
 
-            // SausageMap.queriedPollingPlaces displays a "Too many polling places - try to zoom/find" if we have more than 20
             if (features.length > 0) {
+                // SausageMap.queriedPollingPlaces displays a "Too many polling places - try to zoom/find" if we have more than 20
                 onQueryMap(features.slice(0, 21))
             }
         })

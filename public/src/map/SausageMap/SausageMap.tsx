@@ -100,20 +100,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         )}
                     </FullscreenDialog>
                 )}
-
-                {/* <Dialog
-                    title="Dialog With Actions"
-                    actions={[
-                        <FlatButton key={1} label="No Thanks" primary={true} />,
-                        <RaisedButton key={2} label="Yes Please" primary={true} />,
-                    ]}
-                    modal={false}
-                    open={true}
-                    contentStyle={{ position: "fixed", bottom: "63px", width: "100%" }}
-                    //   onRequestClose={this.handleClose}
-                >
-                    The actions in this window were passed in as an array of React objects.
-                </Dialog> */}
             </div>
         )
     }
