@@ -23,7 +23,7 @@
         "PPName": "name",
         "PremisesName": "premises",
         "EntrancesDesc": "entrance_desc",
-        "WheelchairAccess": "booth_info",
+        "WheelchairAccess": "wheelchair_access",
         "Lat": "lat",
         "Long": "lon",
         "PPId": "ec_id"
