@@ -105,6 +105,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             })
 
             this.map.addLayer(this.getVectorLayer(this.map))
+
+            if (this.props.mapMode === MapMode.SHOW_SEARCH_RESULTS && this.props.mapSearchResults !== null) {
+                const layer = this.getYourLocationVectorLayer(this.map)
+                if (layer !== null) {
+                    this.map.addLayer(layer)
+                }
+            }
         }
     }
 

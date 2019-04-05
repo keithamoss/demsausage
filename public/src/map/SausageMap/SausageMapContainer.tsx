@@ -8,6 +8,7 @@ import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from 
 import { IStore } from "../../redux/modules/reducer"
 import { sendNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
+import { searchPollingPlacesByGeolocation } from "../../shared/geolocation/geo"
 import SausageMap from "./SausageMap"
 
 export interface IStoreProps {
@@ -28,6 +29,7 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
+    waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
 }
 
@@ -49,10 +51,12 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     constructor(props: any) {
         super(props)
 
-        this.state = { queriedPollingPlaces: [] }
+        this.state = { waitingForGeolocation: false, queriedPollingPlaces: [] }
 
         this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
+        this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
+        this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
         this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
         this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
 
@@ -71,6 +75,14 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
         this.setState({ ...this.state, queriedPollingPlaces: [] })
     }
 
+    onWaitForGeolocation() {
+        this.setState({ ...this.state, waitingForGeolocation: true })
+    }
+
+    onGeolocationComplete() {
+        this.setState({ ...this.state, waitingForGeolocation: false })
+    }
+
     render() {
         const {
             currentElection,
@@ -81,11 +93,12 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
             onClearMapSearch,
             onEmptySearchResults,
         } = this.props
-        const { queriedPollingPlaces } = this.state
+        const { waitingForGeolocation, queriedPollingPlaces } = this.state
 
         return (
             <SausageMap
                 currentElection={currentElection}
+                waitingForGeolocation={waitingForGeolocation}
                 queriedPollingPlaces={queriedPollingPlaces}
                 geolocationSupported={geolocationSupported}
                 mapMode={mapMode}
@@ -118,7 +131,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function, ownProps: IOwnProps): IDispatchProps => {
     return {
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             gaTrack.event({
@@ -148,12 +161,18 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
         },
         onOpenFinderForGeolocation(this: SausageMapContainer) {
-            gaTrack.event({
-                category: "SausageMapContainer",
-                action: "onOpenFinderForGeolocation",
-            })
-            dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.GEOLOCATION))
-            browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
+            const { geolocationSupported, currentElection } = this.props
+
+            if (geolocationSupported === true) {
+                gaTrack.event({
+                    category: "SausageMapContainer",
+                    action: "onOpenFinderForGeolocation",
+                    label: "Clicked the geolocation button",
+                })
+
+                this.onWaitForGeolocation()
+                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete)
+            }
         },
         onClearMapSearch() {
             dispatch(clearMapToSearch())

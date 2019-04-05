@@ -6,6 +6,7 @@ import { ListItem } from "material-ui/List"
 import { blue500 } from "material-ui/styles/colors"
 import { ActionInfo, ActionSearch, DeviceLocationSearching } from "material-ui/svg-icons"
 import * as React from "react"
+import GoogleMapLoader from "react-google-maps-loader"
 import { Link } from "react-router"
 import styled from "styled-components"
 // import "./SausageMap.css"
@@ -31,6 +32,7 @@ const PollingPlaceCardWrapper = styled.div`
 
 export interface IProps {
     currentElection: IElection
+    waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
     geolocationSupported: boolean
     mapMode: MapMode | null
@@ -47,6 +49,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
     render() {
         const {
             currentElection,
+            waitingForGeolocation,
             queriedPollingPlaces,
             geolocationSupported,
             mapMode,
@@ -72,25 +75,47 @@ class SausageMap extends React.PureComponent<IProps, {}> {
 
                 <FlexboxContainer>
                     <FlexboxItem>
-                        <SearchBar
-                            hintText={"Find polling places"}
-                            value={
-                                mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null
-                                    ? mapSearchResults.formattedAddress
-                                    : undefined
+                        <GoogleMapLoader
+                            params={{
+                                key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+                                libraries: "places",
+                            }}
+                            render={(googleMaps: any) =>
+                                googleMaps && (
+                                    <SearchBar
+                                        hintText={waitingForGeolocation === false ? "Find polling places" : "Fetching your location..."}
+                                        value={
+                                            mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null
+                                                ? mapSearchResults.formattedAddress
+                                                : undefined
+                                        }
+                                        onChange={(value: string) => {
+                                            if (value === "") {
+                                                onClearMapSearch()
+                                            }
+                                        }}
+                                        onClick={onOpenFinderForAddressSearch}
+                                        onRequestSearch={
+                                            geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch
+                                        }
+                                        searchIcon={
+                                            geolocationSupported === true ? (
+                                                waitingForGeolocation === false ? (
+                                                    <DeviceLocationSearching />
+                                                ) : (
+                                                    <DeviceLocationSearching className="spin" />
+                                                )
+                                            ) : (
+                                                <ActionSearch />
+                                            )
+                                        }
+                                        style={{
+                                            margin: "0 auto",
+                                            maxWidth: 800,
+                                        }}
+                                    />
+                                )
                             }
-                            onChange={(value: string) => {
-                                if (value === "") {
-                                    onClearMapSearch()
-                                }
-                            }}
-                            onClick={onOpenFinderForAddressSearch}
-                            onRequestSearch={geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch}
-                            searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}
-                            style={{
-                                margin: "0 auto",
-                                maxWidth: 800,
-                            }}
                         />
                     </FlexboxItem>
                 </FlexboxContainer>

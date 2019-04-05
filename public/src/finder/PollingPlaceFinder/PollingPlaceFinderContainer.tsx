@@ -5,8 +5,8 @@ import { ePollingPlaceFinderInit } from "../../redux/modules/app"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
 import { setMapToSearch } from "../../redux/modules/map"
 import { IStore } from "../../redux/modules/reducer"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
+import { searchPollingPlacesByGeolocation } from "../../shared/geolocation/geo"
 import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 import PollingPlaceFinder from "./PollingPlaceFinder"
 
@@ -21,7 +21,9 @@ export interface IDispatchProps {
     onRequestLocationPermissions: Function
 }
 
-export interface IStateProps {}
+export interface IStateProps {
+    waitingForGeolocation: boolean
+}
 
 type TComponentProps = IStoreProps & IDispatchProps
 export class PollingPlaceFinderContainer extends React.Component<TComponentProps, IStateProps> {
@@ -33,7 +35,19 @@ export class PollingPlaceFinderContainer extends React.Component<TComponentProps
     constructor(props: IStoreProps & IDispatchProps) {
         super(props)
 
+        this.state = { waitingForGeolocation: false }
+
+        this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
+        this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
         this.onRequestLocationPermissions = props.onRequestLocationPermissions.bind(this)
+    }
+
+    onWaitForGeolocation() {
+        this.setState({ ...this.state, waitingForGeolocation: true })
+    }
+
+    onGeolocationComplete() {
+        this.setState({ ...this.state, waitingForGeolocation: false })
     }
 
     componentDidMount() {
@@ -53,11 +67,13 @@ export class PollingPlaceFinderContainer extends React.Component<TComponentProps
 
     render() {
         const { initMode, geolocationSupported, currentElection, findNearestPollingPlaces } = this.props
+        const { waitingForGeolocation } = this.state
 
         return (
             <PollingPlaceFinder
                 initMode={initMode}
                 geolocationSupported={geolocationSupported}
+                waitingForGeolocation={waitingForGeolocation}
                 election={currentElection}
                 onGeocoderResults={(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) => {
                     findNearestPollingPlaces(currentElection, place)
@@ -118,74 +134,8 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                     label: "Clicked the geolocation button",
                 })
 
-                navigator.geolocation.getCurrentPosition(
-                    async (position: Position) => {
-                        gaTrack.event({
-                            category: "PollingPlaceFinderContainer",
-                            action: "onRequestLocationPermissions",
-                            label: "Granted geolocation permissions",
-                        })
-
-                        let locationSearched = "your current location"
-                        const google = window.google
-                        const geocoder = new google.maps.Geocoder()
-
-                        geocoder.geocode(
-                            { location: { lat: position.coords.latitude, lng: position.coords.longitude } },
-                            async (results: Array<any>, status: string) => {
-                                if (status === "OK" && results.length > 0) {
-                                    const streetAddressPlace = results.find(
-                                        (place: IGoogleGeocodeResult) => place.types[0] === "street_address"
-                                    )
-                                    if (streetAddressPlace !== undefined) {
-                                        locationSearched = streetAddressPlace.formatted_address
-                                    }
-
-                                    dispatch(
-                                        setMapToSearch({
-                                            lon: position.coords.longitude,
-                                            lat: position.coords.latitude,
-                                            formattedAddress: locationSearched,
-                                        })
-                                    )
-                                    browserHistory.push(`/${getURLSafeElectionName(currentElection)}`)
-                                } else {
-                                    gaTrack.event({
-                                        category: "PollingPlaceFinderContainer",
-                                        action: "onRequestLocationPermissions",
-                                        label: "Got an error from the geocoder",
-                                    })
-                                }
-                            }
-                        )
-                    },
-                    (error: PositionError) => {
-                        gaTrack.event({
-                            category: "PollingPlaceFinderContainer",
-                            action: "onRequestLocationPermissions",
-                            label: "Got an error when asking for permissions",
-                            value: error.code,
-                        })
-
-                        let snackbarMessage
-                        switch (error.code) {
-                            case 1: // PERMISSION_DENIED
-                                snackbarMessage = "Sorry, we couldn't use GPS to fetch your location because you've blocked access."
-                                break
-                            case 2: // POSITION_UNAVAILABLE
-                                snackbarMessage =
-                                    "Sorry, we received an error from the GPS sensor on your device and couldn't fetch your location."
-                                break
-                            case 3: // TIMEOUT
-                                snackbarMessage = "Sorry, we didn't receive a location fix from your device in time."
-                                break
-                            default:
-                                snackbarMessage = "Sorry, we couldn't use GPS to fetch your location for an unknown reason."
-                        }
-                        dispatch(sendSnackbarNotification(snackbarMessage))
-                    },
-                    { maximumAge: 60 * 5 * 1000, timeout: 10000 }
-                )
+                this.onWaitForGeolocation()
+                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete)
             }
         },
     }

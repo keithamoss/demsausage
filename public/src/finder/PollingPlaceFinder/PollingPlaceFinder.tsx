@@ -18,6 +18,7 @@ const FinderContainer = styled.div`
 export interface IProps {
     initMode: ePollingPlaceFinderInit
     geolocationSupported: boolean
+    waitingForGeolocation: boolean
     election: IElection
     onGeocoderResults: any
     onRequestLocationPermissions: any
@@ -25,7 +26,14 @@ export interface IProps {
 
 class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
     render() {
-        const { initMode, geolocationSupported, election, onGeocoderResults, onRequestLocationPermissions } = this.props
+        const {
+            initMode,
+            geolocationSupported,
+            waitingForGeolocation,
+            election,
+            onGeocoderResults,
+            onRequestLocationPermissions,
+        } = this.props
 
         return (
             <FinderContainer>
@@ -44,9 +52,25 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                 <GooglePlacesAutocompleteList
                     componentRestrictions={{ country: "AU" }}
                     autoFocus={initMode === ePollingPlaceFinderInit.FOCUS_INPUT}
-                    hintText={geolocationSupported === true ? "Enter your address or use GPS →" : "Enter your address"}
+                    hintText={
+                        geolocationSupported === true
+                            ? waitingForGeolocation === false
+                                ? "Enter your address or use GPS →"
+                                : "Fetching your location..."
+                            : "Enter your address"
+                    }
                     onRequestSearch={geolocationSupported === true ? onRequestLocationPermissions : undefined}
-                    searchIcon={geolocationSupported === true ? <DeviceLocationSearching /> : <ActionSearch />}
+                    searchIcon={
+                        geolocationSupported === true ? (
+                            waitingForGeolocation === false ? (
+                                <DeviceLocationSearching />
+                            ) : (
+                                <DeviceLocationSearching className="spin" />
+                            )
+                        ) : (
+                            <ActionSearch />
+                        )
+                    }
                     closeIcon={geolocationSupported === true ? null : <NavigationClose />}
                     style={{
                         margin: "0 auto",
