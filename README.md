@@ -20,6 +20,18 @@ Add the following to your [hosts file](<https://en.wikipedia.org/wiki/Hosts_(fil
 127.0.0.1 admin.test.democracysausage.org
 ```
 
+#### Generate self-signed SSL certs
+
+1. Download [generate-ssl-certs-for-local-development](https://github.com/kingkool68/generate-ssl-certs-for-local-development) from GitHub
+2. Add the following to options.conf and run the script per the documentation
+
+```
+DNS.4 = test.democracysausage.org
+DNS.5 = admin.test.democracysausage.org
+```
+
+3. Add the resulting `.crt`, `.key`, and `.pem` files to `keys` folder in the root of this repository.
+
 #### .env files
 
 Use the template .env files in `secrets-tmpl` to create corresponding files under `secrets/` for:
