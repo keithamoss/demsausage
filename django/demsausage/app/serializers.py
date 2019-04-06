@@ -81,28 +81,16 @@ class NomsBooleanJSONField(serializers.JSONField):
     """ Serializer for JSONField -- required to create the `other` boolean flag for the GeoJSON response"""
 
     def to_representation(self, value):
-        def has_other(value):
-            for key, val in value.items():
-                if key not in core_fields:
-                    if key != "free_text":
-                        if val is True:
-                            return True
-                    else:
-                        if val != "":
-                            return True
-            return False
-
         if len(value) == 0:
             return value
 
-        core_fields = ["bbq", "cake", "nothing", "run_out"]
-        new_value = {
-            "bbq": True if "bbq" in value and value["bbq"] is True else False,
-            "cake": True if "cake" in value and value["cake"] is True else False,
-            "nothing": True if "nothing" in value and value["nothing"] is True else False,
-            "run_out": True if "run_out" in value and value["run_out"] is True else False,
-        }
-        new_value["other"] = has_other(value)
+        # Filter out "no data" reports (i.e. For the purposes of the map we don't care that a polling place doesn't have sausage, only that it does)
+        new_value = {}
+        for key, val in value.items():
+            if key == "free_text":
+                new_value[key] = True
+            elif val is True:
+                new_value[key] = val
         return new_value
 
 

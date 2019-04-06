@@ -46,19 +46,34 @@ geojson_schema = {
                 "cake": {
                     "type": "boolean"
                 },
+                "bacon_and_eggs": {
+                    "type": "boolean"
+                },
+                "halal": {
+                    "type": "boolean"
+                },
+                "vego": {
+                    "type": "boolean"
+                },
+                "coffee": {
+                    "type": "boolean"
+                },
                 "nothing": {
                     "type": "boolean"
                 },
                 "run_out": {
                     "type": "boolean"
                 },
-                "other": {
+                "free_text": {
                     "type": "boolean"
-                },
+                }
             }
         },
         "name": {
             "type": "string"
+        },
+        "ec_id": {
+            "type": ["number", "null"]
         }
     },
     "required": ["noms", "name"],
