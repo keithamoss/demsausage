@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from "../../redux/modules/app"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
-import { clearMapToSearch, IMapSearchResults, MapMode } from "../../redux/modules/map"
+import { clearMapToSearch, IMapFilterOptions, IMapSearchResults, MapMode } from "../../redux/modules/map"
 import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { sendNotification } from "../../redux/modules/snackbars"
@@ -31,6 +31,7 @@ export interface IDispatchProps {
 export interface IStateProps {
     waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
+    mapFilterOptions: IMapFilterOptions
 }
 
 interface IRouteProps {
@@ -51,12 +52,13 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
     constructor(props: any) {
         super(props)
 
-        this.state = { waitingForGeolocation: false, queriedPollingPlaces: [] }
+        this.state = { waitingForGeolocation: false, queriedPollingPlaces: [], mapFilterOptions: {} }
 
         this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
         this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
         this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
+        this.onClickMapFilterOption = this.onClickMapFilterOption.bind(this)
         this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
         this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
 
@@ -83,6 +85,11 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
         this.setState({ ...this.state, waitingForGeolocation: false })
     }
 
+    onClickMapFilterOption(option: string) {
+        const state = option in this.state.mapFilterOptions && this.state.mapFilterOptions[option] === true ? false : true
+        this.setState({ ...this.state, mapFilterOptions: { ...this.state.mapFilterOptions, [option]: state } })
+    }
+
     render() {
         const {
             currentElection,
@@ -93,7 +100,7 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
             onClearMapSearch,
             onEmptySearchResults,
         } = this.props
-        const { waitingForGeolocation, queriedPollingPlaces } = this.state
+        const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
 
         return (
             <SausageMap
@@ -103,6 +110,7 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                 geolocationSupported={geolocationSupported}
                 mapMode={mapMode}
                 mapSearchResults={mapSearchResults}
+                mapFilterOptions={mapFilterOptions}
                 onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
                     const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
                     const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
@@ -113,6 +121,7 @@ export class SausageMapContainer extends React.Component<IStoreProps & IDispatch
                 onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
                 onClearMapSearch={onClearMapSearch}
                 onEmptySearchResults={onEmptySearchResults}
+                onClickMapFilterOption={this.onClickMapFilterOption}
             />
         )
     }

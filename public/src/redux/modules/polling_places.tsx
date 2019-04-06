@@ -85,11 +85,15 @@ export interface IMapPollingPlaceGeoJSONProperties {
 }
 
 export interface IMapPollingGeoJSONNoms {
-    bbq: boolean
-    cake: boolean
-    nothing: boolean
-    run_out: boolean
-    other: boolean
+    bbq?: boolean
+    cake?: boolean
+    nothing?: boolean
+    run_out?: boolean
+    bacon_and_eggs?: boolean
+    halal?: boolean
+    vego?: boolean
+    coffee?: boolean
+    free_text?: boolean
 }
 
 export interface INoms {

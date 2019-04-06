@@ -3,13 +3,15 @@ import "openlayers/css/ol.css"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
-import { IMapSearchResults, MapMode, styleFunctionSprite } from "../../redux/modules/map"
+import { IMapFilterOptions, IMapSearchResults, MapMode, olStyleFunction } from "../../redux/modules/map"
+import { IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
     election: IElection
     mapMode: MapMode | null
     mapSearchResults: IMapSearchResults | null
+    mapFilterOptions: IMapFilterOptions
     onQueryMap: Function
     onEmptySearchResults: Function
 }
@@ -112,6 +114,14 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                     this.map.addLayer(layer)
                 }
             }
+        } else if (this.map !== null && JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
+            const sausageLayer = this.getSausageLayer(this.map)
+            if (sausageLayer !== null) {
+                // @ts-ignore
+                sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
+                    olStyleFunction(feature, resolution, this.props.mapFilterOptions)
+                )
+            }
         }
     }
 
@@ -120,7 +130,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     private getVectorLayer(map: ol.Map) {
-        const { election, mapMode, mapSearchResults, onEmptySearchResults } = this.props
+        const { election, mapMode, mapSearchResults, mapFilterOptions, onEmptySearchResults } = this.props
 
         const vectorSource = new ol.source.Vector({
             url: () => {
@@ -169,15 +179,29 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             }
         })
 
+        const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
+            olStyleFunction(feature, resolution, mapFilterOptions)
+
         const vectorLayer = new ol.layer.Vector({
             renderMode: "image",
             source: vectorSource,
-            style: styleFunctionSprite,
+            style: styleFunction,
         } as any)
 
         vectorLayer.setProperties({ isSausageLayer: true })
 
         return vectorLayer
+    }
+
+    private getSausageLayer(map: ol.Map): ol.layer.Vector | null {
+        let layer = null
+        map.getLayers().forEach((l: ol.layer.Base) => {
+            const props = l.getProperties()
+            if ("isSausageLayer" in props && props.isSausageLayer === true) {
+                layer = l
+            }
+        })
+        return layer !== null ? layer : null
     }
 
     private getYourLocationVectorLayer(map: ol.Map) {

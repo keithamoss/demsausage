@@ -57,6 +57,13 @@ export interface IMapSearchResults {
     formattedAddress: string
 }
 
+export interface IMapFilterOptions {
+    vego?: boolean
+    halal?: boolean
+    coffee?: boolean
+    bacon_and_eggs?: boolean
+}
+
 export interface IAction {
     type: string
     searchParams?: IMapSearchResults
@@ -120,10 +127,34 @@ const spriteUnknown = new ol.style.Style({
     zIndex: 0,
 })
 
-export const styleFunctionSprite = function(feature: IMapPollingPlaceFeature) {
+export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
+    Object.values(mapFilterOptions).filter((value: boolean) => value === true).length > 0
+
+export const isFilterEnabled = (option: string, mapFilterOptions: IMapFilterOptions) =>
+    option in mapFilterOptions && mapFilterOptions[option] === true
+
+export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOptions: IMapFilterOptions) => {
+    if (hasFilterOptions(mapFilterOptions)) {
+        let satisfied = false
+        Object.keys(noms).forEach((option: string) => {
+            if (isFilterEnabled(option, mapFilterOptions) === true) {
+                satisfied = true
+            }
+        })
+        return satisfied
+    }
+
+    return true
+}
+
+export const olStyleFunction = function(feature: IMapPollingPlaceFeature, resolution: number, mapFilterOptions: IMapFilterOptions) {
     const noms: IMapPollingGeoJSONNoms = feature.get("noms")
 
     if (noms !== null) {
+        if (hasFilterOptions(mapFilterOptions) === true && satisfiesMapFilter(noms, mapFilterOptions) === false) {
+            return null
+        }
+
         if (noms.bbq === true && noms.cake === true) {
             return spriteBBQCake
         } else if ((noms.bbq === true || noms.cake === true) && noms.run_out === true) {
@@ -134,10 +165,10 @@ export const styleFunctionSprite = function(feature: IMapPollingPlaceFeature) {
             return spriteCake
         } else if (noms.nothing === true) {
             return spriteNowt
-        } else if (noms.bbq === false && noms.cake === false && noms.other === true) {
+        } else if (noms.bbq === false && noms.cake === false && Object.keys(noms).length > 0) {
             return spriteBBQ
         }
     }
 
-    return spriteUnknown
+    return hasFilterOptions(mapFilterOptions) === false ? spriteUnknown : null
 }
