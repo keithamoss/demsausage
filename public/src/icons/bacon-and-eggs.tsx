@@ -1,11 +1,11 @@
 // tslint:disable:max-line-length
 
+import SvgIcon from "material-ui/SvgIcon"
 import * as React from "react"
 import { pure } from "recompose"
-import SvgIcon from "material-ui/SvgIcon"
 
 let svg = (props: any) => (
-    <SvgIcon {...props}>
+    <SvgIcon {...props} className={"disabled" in props && props.disabled === true ? "greyscale" : undefined}>
         <svg
             viewBox="0 0 65 46"
             xmlns="http://www.w3.org/2000/svg"
