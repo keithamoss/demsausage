@@ -15,9 +15,15 @@ body,
     overflow: scroll;
 }
 
-.openlayers-map {
+.openlayers-map-container {
+    position: relative;
     flex-grow: 1;
     overflow: hidden;
+}
+
+.openlayers-map {
+    width: 100%;
+    height: 100%;
 }
 
 .ol-attribution {

@@ -1,11 +1,11 @@
-import { IconButton, Toolbar, ToolbarGroup, ToolbarSeparator } from "material-ui"
+import { FloatingActionButton, IconButton, Toolbar, ToolbarGroup, ToolbarSeparator } from "material-ui"
 import FullscreenDialog from "material-ui-fullscreen-dialog"
 import SearchBar from "material-ui-search-bar"
 import Avatar from "material-ui/Avatar"
 import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import { blue500, grey600 } from "material-ui/styles/colors"
-import { ActionInfo, ActionSearch, DeviceLocationSearching, MapsRestaurantMenu } from "material-ui/svg-icons"
+import { ActionInfo, ActionSearch, DeviceLocationSearching, MapsAddLocation, MapsRestaurantMenu } from "material-ui/svg-icons"
 import * as React from "react"
 import GoogleMapLoader from "react-google-maps-loader"
 import { Link } from "react-router"
@@ -34,6 +34,12 @@ const SearchBarContainer = styled.div`
     margin-top: 10px;
     margin-left: 7.5%;
     margin-right: 7.5%;
+`
+
+const AddStallFABContainer = styled.div`
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
 `
 
 const PollingPlaceFilterToolbar = styled(Toolbar)`
@@ -99,15 +105,22 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         return (
             <React.Fragment>
                 <FlexboxMapContainer>
-                    <OpenLayersMap
-                        key={currentElection.id}
-                        election={currentElection}
-                        mapMode={mapMode}
-                        mapSearchResults={mapSearchResults}
-                        mapFilterOptions={mapFilterOptions}
-                        onQueryMap={onQueryMap}
-                        onEmptySearchResults={onEmptySearchResults}
-                    />
+                    <div className="openlayers-map-container">
+                        <OpenLayersMap
+                            key={currentElection.id}
+                            election={currentElection}
+                            mapMode={mapMode}
+                            mapSearchResults={mapSearchResults}
+                            mapFilterOptions={mapFilterOptions}
+                            onQueryMap={onQueryMap}
+                            onEmptySearchResults={onEmptySearchResults}
+                        />
+                        <AddStallFABContainer>
+                            <FloatingActionButton containerElement={<Link to={"/add-stall"} />}>
+                                <MapsAddLocation />
+                            </FloatingActionButton>
+                        </AddStallFABContainer>
+                    </div>
 
                     <SearchBarContainer>
                         <GoogleMapLoader
