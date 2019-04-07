@@ -3,6 +3,9 @@ from django.contrib.auth import logout
 from django.http import HttpResponseNotFound
 from django.core.cache import cache
 from django.db import transaction
+from django.db.models import Func
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models import Extent
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -23,8 +26,10 @@ from demsausage.app.permissions import StallEditingPermissions, AnonymousOnlyGET
 from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesSearchFilter, PollingPlacesNearbyFilter
 from demsausage.app.enums import StallStatus, PollingPlaceStatus
 from demsausage.app.exceptions import BadRequest
+from demsausage.app.filters import LonLatFilter
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
+from demsausage.app.sausage.polling_places import find_by_distance
 from demsausage.util import make_logger, get_or_none, add_datetime_to_filename
 
 from datetime import datetime
@@ -210,6 +215,27 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No election_id provided.")
 
+    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    def nearby_bbox(self, request, format=None):
+        """
+        Retrieve the bounding box of the 15 polling places closest to a given latitude, longitude.
+
+        Uses the same parameters as /polling_places/nearby/
+        """
+        election_id = request.query_params.get("election_id", None)
+        lonlat = request.query_params.get("lonlat", None)
+
+        if election_id is None or election_id == "":
+            raise BadRequest("No election_id provided.")
+
+        if lonlat is None or lonlat == "":
+            raise BadRequest("No lonlat provided.")
+
+        polling_places_filter = LonLatFilter().filter(PollingPlaces.objects.filter(election_id=election_id).filter(status=PollingPlaceStatus.ACTIVE), lonlat)
+        extent = polling_places_filter.annotate(geom_as_geometry=Func("geom", template="geom::geometry")).aggregate(Extent("geom_as_geometry"))
+
+        return Response({"extent_wgs84": extent["geom_as_geometry__extent"]})
+
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
@@ -223,7 +249,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
-    Retrieve a list of all polling places that are close to a given latitude, longitude coordinate in GeoJSON format.
+    Retrieve a list of all polling places that are close to a given latitude, longitude in GeoJSON format.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlaceSearchResultsSerializer
