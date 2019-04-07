@@ -5,13 +5,14 @@ import { sendNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../analytics/GoogleAnalytics"
 import { IGoogleGeocodeResult } from "../ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 
-export function searchPollingPlacesByGeolocation(dispatch: Function, election: IElection, geolocationComplete: any = null) {
+export function searchPollingPlacesByGeolocation(
+    dispatch: Function,
+    election: IElection,
+    geolocationComplete: any = null,
+    navigateToElection: boolean = false
+) {
     navigator.geolocation.getCurrentPosition(
         async (position: Position) => {
-            if (geolocationComplete !== null) {
-                geolocationComplete()
-            }
-
             gaTrack.event({
                 category: "PollingPlaceFinderContainer",
                 action: "onRequestLocationPermissions",
@@ -31,6 +32,10 @@ export function searchPollingPlacesByGeolocation(dispatch: Function, election: I
                             locationSearched = streetAddressPlace.formatted_address
                         }
 
+                        if (geolocationComplete !== null) {
+                            geolocationComplete()
+                        }
+
                         dispatch(
                             setMapToSearch({
                                 lon: position.coords.longitude,
@@ -38,13 +43,19 @@ export function searchPollingPlacesByGeolocation(dispatch: Function, election: I
                                 formattedAddress: locationSearched,
                             })
                         )
-                        browserHistory.push(`/${getURLSafeElectionName(election)}`)
+                        if (navigateToElection === true) {
+                            browserHistory.push(`/${getURLSafeElectionName(election)}`)
+                        }
                     } else {
                         gaTrack.event({
                             category: "PollingPlaceFinderContainer",
                             action: "onRequestLocationPermissions",
                             label: "Got an error from the geocoder",
                         })
+
+                        if (geolocationComplete !== null) {
+                            geolocationComplete()
+                        }
                     }
                 }
             )

@@ -10,33 +10,30 @@ import * as React from "react"
 import GoogleMapLoader from "react-google-maps-loader"
 import { Link } from "react-router"
 import styled from "styled-components"
-// import "./SausageMap.css"
 import { PollingPlaceCardMiniContainer } from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CoffeeIcon from "../../icons/coffee"
 import HalalIcon from "../../icons/halal"
 import VegoIcon from "../../icons/vego"
-// import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 import { IMapFilterOptions, IMapSearchResults, isFilterEnabled, MapMode } from "../../redux/modules/map"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
+// import "./SausageMap.css"
 
-const FlexboxContainer = styled.div`
+const FlexboxMapContainer = styled.div`
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
-    width: 85%;
-    margin: 0 auto;
 `
 
-const FlexboxItem = styled.div``
-
-const PollingPlaceFilterWrapper = styled.div`
-    position: fixed;
-    bottom: 56px;
-    width: 100%;
-    z-index: 10;
+const SearchBarContainer = styled.div`
+    position: absolute;
+    width: 85%;
+    margin-top: 10px;
+    margin-left: 7.5%;
+    margin-right: 7.5%;
 `
 
 const PollingPlaceFilterToolbar = styled(Toolbar)`
@@ -49,7 +46,7 @@ const PollingPlaceFilterToolbarGroup = styled(ToolbarGroup)`
 `
 
 const PollingPlaceFilterToolbarSeparator = styled(ToolbarSeparator)`
-    margin-left: 12px;
+    margin-left: 12px !important;
 `
 
 const PollingPlaceCardWrapper = styled.div`
@@ -100,19 +97,19 @@ class SausageMap extends React.PureComponent<IProps, {}> {
         } = this.props
 
         return (
-            <div>
-                <OpenLayersMap
-                    key={currentElection.id}
-                    election={currentElection}
-                    mapMode={mapMode}
-                    mapSearchResults={mapSearchResults}
-                    mapFilterOptions={mapFilterOptions}
-                    onQueryMap={onQueryMap}
-                    onEmptySearchResults={onEmptySearchResults}
-                />
+            <React.Fragment>
+                <FlexboxMapContainer>
+                    <OpenLayersMap
+                        key={currentElection.id}
+                        election={currentElection}
+                        mapMode={mapMode}
+                        mapSearchResults={mapSearchResults}
+                        mapFilterOptions={mapFilterOptions}
+                        onQueryMap={onQueryMap}
+                        onEmptySearchResults={onEmptySearchResults}
+                    />
 
-                <FlexboxContainer>
-                    <FlexboxItem>
+                    <SearchBarContainer>
                         <GoogleMapLoader
                             params={{
                                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -157,10 +154,8 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                                 )
                             }
                         />
-                    </FlexboxItem>
-                </FlexboxContainer>
+                    </SearchBarContainer>
 
-                <PollingPlaceFilterWrapper>
                     <PollingPlaceFilterToolbar>
                         <PollingPlaceFilterToolbarGroup>
                             <MapsRestaurantMenu color={grey600} />
@@ -179,7 +174,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                             </IconButton>
                         </PollingPlaceFilterToolbarGroup>
                     </PollingPlaceFilterToolbar>
-                </PollingPlaceFilterWrapper>
+                </FlexboxMapContainer>
 
                 {queriedPollingPlaces.length > 0 && (
                     <FullscreenDialog
@@ -210,7 +205,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         )}
                     </FullscreenDialog>
                 )}
-            </div>
+            </React.Fragment>
         )
     }
 }

@@ -135,7 +135,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 })
 
                 this.onWaitForGeolocation()
-                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete)
+                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete, true)
             }
         },
     }

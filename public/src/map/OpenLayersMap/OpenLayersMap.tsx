@@ -43,6 +43,15 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             }),
         })
 
+        // Account for the ElectionAppBar being added/removed and changing the size of our map div
+        window.setTimeout(
+            (map: ol.Map) => {
+                map.updateSize()
+            },
+            1,
+            this.map
+        )
+
         this.map.addLayer(this.getVectorLayer(this.map))
 
         if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {

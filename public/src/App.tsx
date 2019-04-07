@@ -6,19 +6,34 @@ import { List, ListItem } from "material-ui/List"
 import Paper from "material-ui/Paper"
 import Snackbar from "material-ui/Snackbar"
 import Subheader from "material-ui/Subheader"
-import { ActionInfo, ActionSearch, ActionStore, CommunicationEmail, HardwareTv, MapsAddLocation, MapsMap } from "material-ui/svg-icons"
+import {
+    ActionInfo,
+    ActionSearch,
+    ActionStore,
+    CommunicationEmail,
+    HardwareTv,
+    MapsAddLocation,
+    MapsLayers,
+    MapsMap,
+} from "material-ui/svg-icons"
 import * as React from "react"
 import { browserHistory, Link } from "react-router"
 import styled from "styled-components"
 import "./App.css"
-import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
+import ElectionAppBarContainer from "./elections/ElectionAppBar/ElectionAppBarContainer"
 import FacebookIcon from "./icons/fontawesome/facebook"
+import InstagramIcon from "./icons/fontawesome/instagram"
 import TwitterIcon from "./icons/fontawesome/twitter"
 import { IModule as IAppModule } from "./redux/modules/app"
 import { getURLSafeElectionName, IElection } from "./redux/modules/elections"
 import { IModule as ISnackbarsModule } from "./redux/modules/snackbars"
 
-// const logo = require("./logo.svg")
+const PageContainer = styled.div`
+    font-family: "Roboto", sans-serif;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+`
 
 const TitleContainer = styled.div`
     display: flex;
@@ -37,7 +52,7 @@ class MenuListItem extends React.Component<any, any> {
 
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
         if (
-            (locationPathNameMatch === "/" && contentMuiName === "SausageMapContainer") ||
+            contentMuiName === "SausageMapContainer" ||
             (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer")
         ) {
             // @ts-ignore
@@ -61,6 +76,8 @@ export interface IProps {
     elections: Array<IElection>
     currentElection: IElection
     defaultBreakPoint: string
+    showElectionAppBar: boolean
+    showFooterNavBar: boolean
     isResponsiveAndOverBreakPoint: boolean
     handleSnackbarClose: any
     onOpenDrawer: any
@@ -78,6 +95,8 @@ class App extends React.Component<IProps, {}> {
             snackbars,
             currentElection,
             defaultBreakPoint,
+            showElectionAppBar,
+            showFooterNavBar,
             isResponsiveAndOverBreakPoint,
             handleSnackbarClose,
             onOpenDrawer,
@@ -97,7 +116,7 @@ class App extends React.Component<IProps, {}> {
             bottomNavSelectedIndex = 2
         }
 
-        const styles: any /*React.CSSProperties*/ = {
+        const styles: any /* React.CSSProperties */ = {
             linearProgressStyle: {
                 position: "fixed",
                 top: "0px",
@@ -106,10 +125,8 @@ class App extends React.Component<IProps, {}> {
             },
         }
 
-        const showElectionChooser = "pageTitle" in content.type && "pageBaseURL" in content.type
-
         return (
-            <div className="page">
+            <PageContainer>
                 <ResponsiveDrawer breakPoint={defaultBreakPoint}>
                     {isResponsiveAndOverBreakPoint === true && (
                         <List>
@@ -134,10 +151,11 @@ class App extends React.Component<IProps, {}> {
                             <MenuListItem
                                 primaryText="Add Stall"
                                 leftIcon={<MapsAddLocation />}
-                                containerElement={<Link to={`/add-stall`} />}
+                                containerElement={<Link to={"/add-stall"} />}
                                 locationPathName={locationPathName}
                                 locationPathNameMatch={"/add-stall"}
                                 muiThemePalette={muiThemePalette}
+                                contentMuiName={content.type.muiName}
                             />
                             {/* <MenuListItem
                                 primaryText="Sausagelytics"
@@ -149,8 +167,42 @@ class App extends React.Component<IProps, {}> {
                             /> */}
                         </List>
                     )}
+
                     {isResponsiveAndOverBreakPoint === true && <Divider />}
+
                     <List>
+                        {isResponsiveAndOverBreakPoint === false && (
+                            <React.Fragment>
+                                <MenuListItem
+                                    primaryText="Map"
+                                    leftIcon={<MapsMap />}
+                                    containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
+                                    onClick={onClickDrawerLink}
+                                    locationPathName={locationPathName}
+                                    locationPathNameMatch={"/"}
+                                    muiThemePalette={muiThemePalette}
+                                    contentMuiName={content.type.muiName}
+                                />
+                                <MenuListItem
+                                    primaryText="Add Stall"
+                                    leftIcon={<MapsAddLocation />}
+                                    containerElement={<Link to={`/add-stall`} />}
+                                    onClick={onClickDrawerLink}
+                                    locationPathName={locationPathName}
+                                    locationPathNameMatch={"/add-stall"}
+                                    muiThemePalette={muiThemePalette}
+                                />
+                            </React.Fragment>
+                        )}
+                        <MenuListItem
+                            primaryText="Elections"
+                            leftIcon={<MapsLayers />}
+                            containerElement={<Link to={`/elections`} />}
+                            onClick={onClickDrawerLink}
+                            locationPathName={locationPathName}
+                            locationPathNameMatch={"/elections"}
+                            muiThemePalette={muiThemePalette}
+                        />
                         <MenuListItem
                             primaryText="FAQs and About Us"
                             leftIcon={<ActionInfo />}
@@ -197,10 +249,25 @@ class App extends React.Component<IProps, {}> {
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Facebook")}
                             containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
                         />
+                        <ListItem
+                            primaryText="Instagram"
+                            leftIcon={<InstagramIcon />}
+                            onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Instagram")}
+                            containerElement={<a href={"https://www.instagram.com/ausdemocracysausage/"} />}
+                        />
                     </List>
                 </ResponsiveDrawer>
 
-                <BodyContainer breakPoint={defaultBreakPoint}>
+                {/* <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+                    <div style={{ backgroundColor: "purple" }}>Header</div>
+                    <div style={{ backgroundColor: "green" }}>AppBar</div>
+                    <div className="page-content" style={{ backgroundColor: "orange" }}>
+                        Map & Content
+                    </div>
+                    <div style={{ backgroundColor: "blue" }}>Footer</div>
+                </div> */}
+
+                <BodyContainer breakPoint={defaultBreakPoint} style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                     <LinearProgress mode="indeterminate" color={muiThemePalette.accent3Color} style={styles.linearProgressStyle} />
 
                     <ResponsiveAppBar
@@ -212,17 +279,20 @@ class App extends React.Component<IProps, {}> {
                             </TitleContainer>
                         }
                         zDepth={0}
+                        style={{ position: "relative", left: isResponsiveAndOverBreakPoint === true ? "0px !important" : undefined }}
                     />
 
-                    {showElectionChooser === true && (
-                        <ElectionChooserContainer pageTitle={content.type.pageTitle} pageBaseURL={content.type.pageBaseURL} />
+                    {showElectionAppBar === true && (
+                        <ElectionAppBarContainer
+                            isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint}
+                            pageTitle={content.type.pageTitle}
+                            pageBaseURL={content.type.pageBaseURL}
+                        />
                     )}
 
-                    <div className="page-content" style={{ marginTop: showElectionChooser === true ? "110px" : "60px" }}>
-                        {content || this.props.children}
-                    </div>
+                    <div className="page-content">{content || this.props.children}</div>
 
-                    {isResponsiveAndOverBreakPoint === false && (
+                    {isResponsiveAndOverBreakPoint === false && showFooterNavBar === true && (
                         <Paper zDepth={1} className="page-footer">
                             <BottomNavigation selectedIndex={bottomNavSelectedIndex}>
                                 <BottomNavigationItem
@@ -264,7 +334,7 @@ class App extends React.Component<IProps, {}> {
                     /* Support multi-line Snackbars */
                     bodyStyle={{ height: "auto", lineHeight: "22px", padding: 24, whiteSpace: "pre-line" }}
                 />
-            </div>
+            </PageContainer>
         )
     }
 }

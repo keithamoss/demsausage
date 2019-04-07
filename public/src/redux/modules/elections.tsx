@@ -192,6 +192,76 @@ export function getURLSafeElectionName(election: IElection) {
     return encodeURI(election.name.replace(/\s/g, "_").toLowerCase())
 }
 
+// Yeah, sorry. Replace with fields in the database if we ditch short_name in the longer term
+// "South Australian Election 2018" => "South Australia"
+export const getElectionKindaShortName: any = (election: IElection) =>
+    election.name
+        .replace("Election ", "")
+        .replace(/\s[0-9]{4}$/, "")
+        .replace(/ian$/, "ia")
+        .replace(/\sBy-election$/, "")
+
+// "South Australian Election 2018" => "South Australia 2018"
+export const getElectionKindaNotSoShortName: any = (election: IElection) =>
+    election.name
+        .replace("Election ", "")
+        .replace(/ian\s/, "ia ")
+        .replace(/\sBy-election\s/, " ")
+
+// "SA 2018" => "SA"
+export const getElectionVeryShortName: any = (election: IElection) => election.short_name.replace(/\s[0-9]{4}$/, "")
+
+export const getElectionLabel: any = (
+    numberOfElectionTabsShowing: number,
+    election: IElection,
+    isHistoricalElectionShown: boolean,
+    browserBreakpoint: string
+) => {
+    if (isHistoricalElectionShown === false) {
+        // e.g. FREO
+        if (numberOfElectionTabsShowing > 3 && browserBreakpoint === "extraSmall") {
+            return getElectionVeryShortName(election)
+        } else if (numberOfElectionTabsShowing > 3) {
+            // e.g. Fremantle
+            return getElectionKindaShortName(election)
+        } else {
+            // e.g. Fremantle 2018
+            return getElectionKindaNotSoShortName(election)
+        }
+    }
+    // e.g. Fremantle 2018
+    return getElectionKindaNotSoShortName(election)
+}
+
+export function isItElectionDay(election: IElection) {
+    const now = new Date()
+    return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
+}
+
+export const isElectionLive = (election: IElection) => DateTime.local().endOf("day") <= DateTime.fromISO(election.election_day).endOf("day")
+
+export const getElectionsToShowInAppBar = (elections: IElection[], liveElections: IElection[], currentElection: IElection) => {
+    let electionsToShow: IElection[]
+    // Show our active elections
+    if (liveElections.length > 0) {
+        electionsToShow = liveElections
+    } else {
+        // Show recent elections i.e. The last set of election(s) we did - may be weeks or months in the past
+        electionsToShow = elections.filter(
+            (election: IElection) => election.election_day === elections[0].election_day || election.is_primary
+        )
+    }
+
+    // or show an historical election
+    let isHistoricalElectionShown = false
+    if (electionsToShow.includes(currentElection) === false) {
+        isHistoricalElectionShown = true
+        electionsToShow = [currentElection]
+    }
+
+    return { electionsToShow, isHistoricalElectionShown }
+}
+
 // export function getElectionStatsDescription(election: IElection) {
 //     const description: Array<string> = []
 
@@ -222,9 +292,56 @@ export function getURLSafeElectionName(election: IElection) {
 //     return `${election.stats.ttl_booths} polling booths. ${description.join(", ")}`
 // }
 
-export function isItElectionDay(election: IElection) {
-    const now = new Date()
-    return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
-}
+// export function renderElectionStats(election: IElection) {
+//     const description: Array<any> = []
 
-export const isElectionLive = (election: IElection) => DateTime.local().endOf("day") <= DateTime.fromISO(election.election_day).endOf("day")
+//     description.push(<FlatButton key={"booths"} label={`${election.stats.ttl_booths}`} icon={<ActionHome />} />)
+//     description.push(<FlatButton key={"bbq"} label={`${election.stats.ttl_bbq}`} icon={<SausageIcon />} />)
+//     description.push(<FlatButton key={"caek"} label={`${election.stats.ttl_caek}`} icon={<CakeIcon />} />)
+//     description.push(<FlatButton key={"shame"} label={`${election.stats.ttl_shame}`} icon={<RedCrossofShameIcon />} />)
+
+//     if ("ttl_coffee" in election.stats) {
+//         description.push(<FlatButton key={"coffee"} label={`${election.stats.ttl_coffee}`} icon={<CoffeeIcon />} />)
+//     }
+
+//     if ("ttl_bacon_and_eggs" in election.stats) {
+//         description.push(<FlatButton key={"baconandeggs"} label={`${election.stats.ttl_bacon_and_eggs}`} icon={<BaconandEggsIcon />} />)
+//     }
+
+//     if ("ttl_halal" in election.stats) {
+//         description.push(<FlatButton key={"halal"} label={`${election.stats.ttl_halal}`} icon={<HalalIcon />} />)
+//     }
+
+//     if ("ttl_vego" in election.stats) {
+//         description.push(<FlatButton key={"vego"} label={`${election.stats.ttl_vego}`} icon={<VegoIcon />} />)
+//     }
+
+//     if ("ttl_free_text" in election.stats) {
+//         description.push(<FlatButton key={"free_text"} label={`${election.stats.ttl_free_text}`} icon={<MapsLocalDining />} />)
+//     }
+
+//     return description
+// }
+
+// https://en.wikipedia.org/wiki/Australian_state_colours
+// export function getElectionColours(election: IElection) {
+//     if (election.short_name.startsWith("SA ") === true) {
+//         return { backgroundColor: "#FF0000", color: "white" }
+//     } else if (election.short_name.startsWith("VIC ") === true || election.short_name.startsWith("BAT ") === true) {
+//         return { backgroundColor: "#000075", color: "white" }
+//     } else if (election.short_name.startsWith("WA ") === true) {
+//         return { backgroundColor: "#FFD104", color: "white" }
+//     } else if (election.short_name.startsWith("TAS ") === true) {
+//         return { backgroundColor: "#005F45", color: "white" }
+//     } else if (election.short_name.startsWith("QLD ") === true) {
+//         return { backgroundColor: "#750000", color: "white" }
+//     } else if (election.short_name.startsWith("NSW ") === true) {
+//         return { backgroundColor: "#7CC7E8", color: "white" }
+//     } else if (election.short_name.startsWith("ACT ") === true) {
+//         return { backgroundColor: "#FFD104", color: "white" }
+//     } else if (election.short_name.startsWith("NT ") === true) {
+//         return { backgroundColor: "#E34F00", color: "white" }
+//     }
+
+//     return { backgroundColor: "#000000", color: "white" }
+// }

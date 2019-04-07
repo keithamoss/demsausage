@@ -1,20 +1,6 @@
-// const Config: IConfig = require("Config") as any
 import { setDrawerOpen, toggleDrawerOpen } from "material-ui-responsive-drawer"
 import LinearProgress from "material-ui/LinearProgress"
-import {
-    // deepPurple200,
-    deepPurple100,
-    deepPurple300,
-    deepPurple400,
-    // deepPurple900,
-    // deepPurple800,
-    // deepPurple700,
-    // deepPurple600,
-    deepPurple500,
-    fullBlack,
-    white,
-    yellow500,
-} from "material-ui/styles/colors"
+import { deepPurple100, deepPurple300, deepPurple400, deepPurple500, fullBlack, white, yellow500 } from "material-ui/styles/colors"
 import getMuiTheme from "material-ui/styles/getMuiTheme"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 import { fade } from "material-ui/utils/colorManipulator"
@@ -24,7 +10,13 @@ import styled from "styled-components"
 import App from "./App"
 import { ReactComponent as Logo } from "./demsausage_logo.svg"
 import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
-import { getURLSafeElectionName, IElection, setCurrentElection } from "./redux/modules/elections"
+import {
+    getElectionsToShowInAppBar,
+    getLiveElections,
+    getURLSafeElectionName,
+    IElection,
+    setCurrentElection,
+} from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
 import { gaTrack } from "./shared/analytics/GoogleAnalytics"
@@ -53,32 +45,21 @@ const muiTheme = getMuiTheme({
 
 const FlexboxCentredContainer = styled.div`
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 100%;
+    width: 100%;
 `
 
-const FlexboxCentredBox = styled.div`
-    width: 60%;
-    max-width: 300px;
+const LogoContainer = styled.div`
     text-align: center;
-    align-items: start;
+`
 
-    & > div:last-child {
-        margin-top: -30px;
-    }
-
-    & img {
-        width: 100%;
-        height: 100%;
-        max-width: 200px;
-    }
-
-    & h1 {
-        font-size: 38px;
-        color: white;
-    }
+const DemocracySausageTitle = styled.h1`
+    margin-top: 0px;
+    font-size: 38px;
+    font-size: 6vmin;
+    color: white;
 `
 
 export interface IStoreProps {
@@ -86,6 +67,7 @@ export interface IStoreProps {
     app: IAppModule
     snackbars: ISnackbarsModule
     elections: Array<IElection>
+    liveElections: Array<IElection>
     currentElection: IElection
     defaultElection: IElection
     browser: any
@@ -121,7 +103,16 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
     return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
-export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouterProps & IOwnProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps
+export class AppContainer extends React.Component<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
+        super(props)
+
+        if (props.currentElection !== undefined) {
+            document.title = `Democracy Sausage | ${props.currentElection.name}`
+        }
+    }
+
     async componentDidMount() {
         const { fetchInitialAppState, params } = this.props
         await fetchInitialAppState(params.electionName)
@@ -129,7 +120,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
         document.title = "Democracy Sausage"
     }
 
-    componentWillReceiveProps(nextProps: IStoreProps & IDispatchProps & IRouterProps & IOwnProps) {
+    componentWillReceiveProps(nextProps: TComponentProps) {
         // Handle setting the currentElection in Redux based on route changes
         if ("params" in nextProps && "electionName" in nextProps.params && nextProps.elections.length > 0) {
             // Fallback to our default election if the route hasn't specified an election
@@ -149,11 +140,18 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
         }
     }
 
+    componentWillUpdate(nextProps: TComponentProps) {
+        if (nextProps.currentElection !== undefined) {
+            document.title = `Democracy Sausage | ${nextProps.currentElection.name}`
+        }
+    }
+
     render() {
         const {
             app,
             snackbars,
             elections,
+            liveElections,
             currentElection,
             browser,
             responsiveDrawer,
@@ -172,19 +170,23 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     <div style={{ backgroundColor: muiTheme.palette!.primary1Color, width: "100%", height: "100%" }}>
                         <LinearProgress mode="indeterminate" color={muiTheme.palette!.accent3Color} />
                         <FlexboxCentredContainer>
-                            <FlexboxCentredBox>
-                                <div>
-                                    <Logo />
-                                </div>
-                                <div>
-                                    <h1>Democracy Sausage</h1>
-                                </div>
-                            </FlexboxCentredBox>
+                            <LogoContainer>
+                                <Logo />
+                                <DemocracySausageTitle>Democracy Sausage</DemocracySausageTitle>
+                            </LogoContainer>
                         </FlexboxCentredContainer>
                     </div>
                 </MuiThemeProvider>
             )
         }
+
+        const { electionsToShow, isHistoricalElectionShown } = getElectionsToShowInAppBar(elections, liveElections, currentElection)
+        const showElectionAppBar =
+            "pageTitle" in content.type &&
+            (!("muiName" in content.type) || content.type.muiName !== "ElectionChooserContainer") &&
+            (isHistoricalElectionShown === true || (isHistoricalElectionShown === false && electionsToShow.length > 1))
+
+        const showFooterNavBar = !("muiName" in content.type) || content.type.muiName !== "SausageMapContainer"
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
@@ -194,6 +196,8 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
                     snackbars={snackbars}
                     elections={elections}
                     currentElection={currentElection}
+                    showElectionAppBar={showElectionAppBar}
+                    showFooterNavBar={showFooterNavBar}
                     defaultBreakPoint={DEFAULT_BREAK_POINT}
                     isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
                     handleSnackbarClose={handleSnackbarClose}
@@ -216,6 +220,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
         app: app,
         snackbars: snackbars,
         elections: elections.elections,
+        liveElections: getLiveElections(state),
         currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
         defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
         browser: browser,

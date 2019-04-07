@@ -55,9 +55,9 @@ class PollingPlaceFinder extends React.PureComponent<IProps, {}> {
                     hintText={
                         geolocationSupported === true
                             ? waitingForGeolocation === false
-                                ? "Enter your address or use GPS →"
+                                ? "Search here or use GPS →"
                                 : "Fetching your location..."
-                            : "Enter your address"
+                            : "Search here"
                     }
                     onRequestSearch={geolocationSupported === true ? onRequestLocationPermissions : undefined}
                     searchIcon={

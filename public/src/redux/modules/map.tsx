@@ -128,20 +128,21 @@ const spriteUnknown = new ol.style.Style({
 })
 
 export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
-    Object.values(mapFilterOptions).filter((value: boolean) => value === true).length > 0
+    Object.values(mapFilterOptions).filter((enabled: boolean) => enabled === true).length > 0
 
 export const isFilterEnabled = (option: string, mapFilterOptions: IMapFilterOptions) =>
     option in mapFilterOptions && mapFilterOptions[option] === true
 
+export const hasNomsOption = (option: string, noms: IMapPollingGeoJSONNoms) => option in noms && noms[option] === true
+
 export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOptions: IMapFilterOptions) => {
-    if (hasFilterOptions(mapFilterOptions)) {
-        let satisfied = false
-        Object.keys(noms).forEach((option: string) => {
-            if (isFilterEnabled(option, mapFilterOptions) === true) {
-                satisfied = true
+    if (hasFilterOptions(mapFilterOptions) && noms !== null) {
+        for (const [option, enabled] of Object.entries(mapFilterOptions)) {
+            if (enabled === true && hasNomsOption(option, noms) === false) {
+                return false
             }
-        })
-        return satisfied
+        }
+        return true
     }
 
     return true

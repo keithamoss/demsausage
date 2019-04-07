@@ -4,37 +4,24 @@ html,
 body,
 #root,
 .page {
-    height: 100%;
     font-family: "Roboto", sans-serif;
+    height: 100%;
     margin: 0px;
     padding: 0px;
 }
 
 .page-content {
-    margin-top: 60px; /* Height of ResponsiveAppBar + 10px */
-    margin-bottom: 66px; /* Height of BottomNav + 10px */
-}
-
-.page-footer {
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-    z-index: 10;
+    flex-grow: 1;
+    overflow: scroll;
 }
 
 .openlayers-map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: auto !important;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
-@media (max-width: 768px) {
-    .openlayers-map .ol-attribution.ol-uncollapsible {
-        bottom: 56px !important;
-    }
+.ol-attribution {
+    opacity: 0.6;
 }
 
 .spin {

@@ -29,6 +29,15 @@ const Answer = styled.div`
     line-height: 24px;
     color: ${grey800};
     width: 75%;
+
+    & > p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    & li {
+        margin-bottom: 5px;
+    }
 `
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
@@ -40,21 +49,22 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
     render() {
         return (
             <PageWrapper>
-                <Question>What's is this?</Question>
+                <Question>What is this?</Question>
                 <Answer>A map of sausage and cake availability on election day.</Answer>
                 <Question>I still don't understand</Question>
                 <Answer>It's practically part of the Australian Constitution. Or something.</Answer>
                 <Question>But how do you get all of the sausage sizzles?</Question>
                 <Answer>
-                    We crowdsource (or is it crowdsauce?) data from Twitter, Facebook, and Instagram and from the stalls that people submit
-                    to us on this here website.
-                    <br />
-                    To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{" "}
-                    <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a Direct Message.
-                    We'll be keeping an eye out.
-                </Answer>
-                <Answer>
-                    To make this work, we've also used:
+                    <p>
+                        We crowdsource (or is it crowdsauce?) data from Twitter, Facebook, and Instagram and from the stalls that people
+                        submit to us on this here website.
+                    </p>
+                    <p>
+                        To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{" "}
+                        <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a Direct
+                        Message. We'll be keeping an eye out.
+                    </p>
+                    <p>To make this work, we've also used:</p>
                     <ul>
                         <li>Australian Electoral Commission polling place data (likewise from the various state electoral commissions);</li>
                         <li>
@@ -66,20 +76,24 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             <a href="http://openclipart.org/detail/181486/cake-by-vectorsme-181486">this cake icon</a> (with our
                             acknowledgements and appreciation to the artists).
                         </li>
+                        <li>
+                            Social media icons from <a href="https://fontawesome.com">fontawesome.com</a> under a{" "}
+                            <a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
+                        </li>
                     </ul>
                 </Answer>
                 <Question>Who are you?</Question>
                 <Answer>
-                    We're six people, a baby, and some parrots.
-                    <br />
-                    <br />
-                    Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with crowdsaucing
-                    sausage sizzle locations.
-                    <br />
-                    <br />
-                    We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can find us on Twitter
-                    at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{" "}
-                    <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
+                    <p>We're six people, a baby, and some parrots.</p>
+                    <p>
+                        Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
+                        crowdsaucing sausage sizzle locations.
+                    </p>
+                    <p>
+                        We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can find us on
+                        Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{" "}
+                        <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
+                    </p>
                 </Answer>
                 <Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
                 <Answer>
@@ -95,11 +109,14 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                 <Answer>Nope! Democracy Sausage is 100% non-partisan, organic, hormone free, and grass fed.</Answer>
                 <Question>Will you share my info with others?</Question>
                 <Answer>
-                    If you submit a stall to us, we won't share any personal information about you - such as your email address, Twitter
-                    handle, et cetera.
-                    <br />
-                    We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them information
-                    about the stalls and locations and polling booths.
+                    <p>
+                        If you submit a stall to us, we won't share any personal information about you - such as your email address, Twitter
+                        handle, et cetera.
+                    </p>
+                    <p>
+                        We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them
+                        information about the stalls and locations and polling booths.
+                    </p>
                 </Answer>
             </PageWrapper>
         )
