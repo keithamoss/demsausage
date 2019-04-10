@@ -71,7 +71,9 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         onPollingPlaceSearch: async (election: IElection, searchTerm: string) => {
-            return await dispatch(searchPollingPlaces(election, searchTerm))
+            if (searchTerm.length > 0) {
+                return await dispatch(searchPollingPlaces(election, searchTerm))
+            }
         },
     }
 }
