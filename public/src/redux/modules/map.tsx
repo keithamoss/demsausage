@@ -68,55 +68,32 @@ export interface IAction {
 // e.g. thunks, epics, et cetera
 
 // Utilities
+const spriteIconConfig = [
+    { name: "cake-plus", position: [1, 0], width: 80, height: 73, zIndex: 2, scale: 0.5 },
+    { name: "cake-run-out", position: [1, 74], width: 80, height: 73, zIndex: 1, scale: 0.5 },
+    { name: "sausage-and-cake", position: [1, 148], width: 80, height: 70, zIndex: 1, scale: 0.5 },
+    { name: "sausage-and-cake-plus", position: [1, 219], width: 80, height: 70, zIndex: 2, scale: 0.5 },
+    { name: "sausage-and-cake-run-out", position: [1, 290], width: 80, height: 70, zIndex: 1, scale: 0.5 },
+    { name: "red-cross-of-shame", position: [1, 361], width: 64, height: 63, zIndex: 1, scale: 0.4 },
+    { name: "sausage", position: [1, 425], width: 64, height: 59, zIndex: 1, scale: 0.5 },
+    { name: "sausage-plus", position: [1, 485], width: 64, height: 59, zIndex: 2, scale: 0.5 },
+    { name: "sausage-run-out", position: [1, 545], width: 64, height: 59, zIndex: 1, scale: 0.5 },
+    { name: "cake", position: [1, 605], width: 55, height: 64, zIndex: 1, scale: 0.5 },
+    { name: "unknown", position: [1, 670], width: 32, height: 32, zIndex: 0, scale: 0.4, opacity: 0.35 },
+]
 
-const spriteCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 0],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCakeRunOut = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 32],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQCake = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 61],
-        size: [32, 29],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteBBQ = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 90],
-        size: [32, 32],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteNowt = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 122],
-        size: [24, 24],
-        src: "./icons/sprite_v2.png",
-    }),
-    zIndex: 1,
-})
-const spriteUnknown = new ol.style.Style({
-    image: new ol.style.Icon({
-        offset: [0, 146],
-        size: [14, 14],
-        src: "./icons/sprite_v2.png",
-        opacity: 0.4,
-    }),
-    zIndex: 0,
+let spriteIcons = {}
+spriteIconConfig.forEach((config: any) => {
+    spriteIcons[config.name] = new ol.style.Style({
+        image: new ol.style.Icon({
+            src: "./icons/sprite_v3.png",
+            offset: config.position,
+            size: [config.width, config.height],
+            scale: config.scale,
+            opacity: "opacity" in config ? config.opacity : undefined,
+        }),
+        zIndex: config.zIndex,
+    })
 })
 
 export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
@@ -140,6 +117,37 @@ export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOption
     return true
 }
 
+export const getIconForNoms = (noms: IMapPollingGeoJSONNoms) => {
+    const hasMoreOptions = (noms: IMapPollingGeoJSONNoms) => Object.keys(noms).length > ("run_out" in noms ? 3 : 2)
+
+    if (noms.nothing === true) {
+        return spriteIcons["red-cross-of-shame"]
+    } else if (noms.bbq === true && noms.cake === true) {
+        if (noms.run_out === true) {
+            return spriteIcons["sausage-and-cake-run-out"]
+        } else if (hasMoreOptions(noms) === true) {
+            return spriteIcons["sausage-and-cake-plus"]
+        }
+        return spriteIcons["sausage-and-cake"]
+    } else if (noms.bbq === true) {
+        if (noms.run_out === true) {
+            return spriteIcons["sausage-run-out"]
+        } else if (hasMoreOptions(noms) === true) {
+            return spriteIcons["sausage-plus"]
+        }
+        return spriteIcons["sausage"]
+    } else if (noms.cake === true) {
+        if (noms.run_out === true) {
+            return spriteIcons["cake-run-out"]
+        } else if (hasMoreOptions(noms) === true) {
+            return spriteIcons["cake-plus"]
+        }
+        return spriteIcons["cake"]
+    }
+
+    return null
+}
+
 export const olStyleFunction = function(feature: IMapPollingPlaceFeature, resolution: number, mapFilterOptions: IMapFilterOptions) {
     const noms: IMapPollingGeoJSONNoms = feature.get("noms")
 
@@ -148,20 +156,8 @@ export const olStyleFunction = function(feature: IMapPollingPlaceFeature, resolu
             return null
         }
 
-        if (noms.bbq === true && noms.cake === true) {
-            return spriteBBQCake
-        } else if ((noms.bbq === true || noms.cake === true) && noms.run_out === true) {
-            return spriteBBQCakeRunOut
-        } else if (noms.bbq === true) {
-            return spriteBBQ
-        } else if (noms.cake === true) {
-            return spriteCake
-        } else if (noms.nothing === true) {
-            return spriteNowt
-        } else if (noms.bbq === false && noms.cake === false && Object.keys(noms).length > 0) {
-            return spriteBBQ
-        }
+        return getIconForNoms(noms)
     }
 
-    return hasFilterOptions(mapFilterOptions) === false ? spriteUnknown : null
+    return hasFilterOptions(mapFilterOptions) === false ? spriteIcons["unknown"] : null
 }
