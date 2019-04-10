@@ -10,9 +10,10 @@ import { IElection } from "../../redux/modules/elections"
 import GooglePlacesAutocompleteList from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteList"
 
 const FinderContainer = styled.div`
-    padding-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+    width: 85%;
+    margin-top: 10px;
+    margin-left: 7.5%;
+    margin-right: 7.5%;
 `
 
 export interface IProps {
