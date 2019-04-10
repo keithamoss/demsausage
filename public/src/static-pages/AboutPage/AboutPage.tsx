@@ -77,6 +77,13 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             acknowledgements and appreciation to the artists).
                         </li>
                         <li>
+                            Additional icons from <a href="https://www.flaticon.com/">flaticon.com</a>; specifically the{" "}
+                            <a href="https://www.flaticon.com/free-icon/question-mark-on-a-circular-black-background_25400">
+                                question mark (by Dave Gandy)
+                            </a>{" "}
+                            and <a href="https://www.flaticon.com/free-icon/remove_189690">run out</a> (by Roundicons) icons.
+                        </li>
+                        <li>
                             Social media icons from <a href="https://fontawesome.com">fontawesome.com</a> under a{" "}
                             <a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
                         </li>
