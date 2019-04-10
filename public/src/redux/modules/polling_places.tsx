@@ -1,5 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
-import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
+import { sendNotification, sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IAPIClient } from "../../shared/api/APIClient"
 import { IElection } from "./elections"
 import { IGeoJSONPoint } from "./interfaces"
@@ -212,13 +212,18 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
-        const { response, json } = await api.get("/0.1/polling_places/nearby/", dispatch, {
+        const { response, json } = await api.get("/0.1/polling_places/nearby_bbox/", dispatch, {
             election_id: election.id,
             lonlat: `${lon},${lat}`,
         })
 
         if (response.status === 200) {
-            return json
+            if (json.extent_wgs84 !== null) {
+                return json.extent_wgs84
+            } else {
+                dispatch(sendNotification("There aren't any polling places near here :("))
+                return null
+            }
         }
     }
 }

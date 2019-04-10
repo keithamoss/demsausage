@@ -16,7 +16,7 @@ import CoffeeIcon from "../../icons/coffee"
 import HalalIcon from "../../icons/halal"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
-import { IMapFilterOptions, IMapSearchResults, isFilterEnabled, MapMode } from "../../redux/modules/map"
+import { IMapFilterOptions, IMapSearchResults, isFilterEnabled } from "../../redux/modules/map"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 // import "./SausageMap.css"
@@ -64,7 +64,6 @@ export interface IProps {
     waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
     geolocationSupported: boolean
-    mapMode: MapMode | null
     mapSearchResults: IMapSearchResults | null
     mapFilterOptions: IMapFilterOptions
     onQueryMap: Function
@@ -72,7 +71,6 @@ export interface IProps {
     onOpenFinderForAddressSearch: any
     onOpenFinderForGeolocation: any
     onClearMapSearch: any
-    onEmptySearchResults: any
     onClickMapFilterOption: any
 }
 
@@ -91,7 +89,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             waitingForGeolocation,
             queriedPollingPlaces,
             geolocationSupported,
-            mapMode,
             mapSearchResults,
             mapFilterOptions,
             onQueryMap,
@@ -99,7 +96,6 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             onOpenFinderForAddressSearch,
             onOpenFinderForGeolocation,
             onClearMapSearch,
-            onEmptySearchResults,
         } = this.props
 
         return (
@@ -109,11 +105,9 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                         <OpenLayersMap
                             key={currentElection.id}
                             election={currentElection}
-                            mapMode={mapMode}
                             mapSearchResults={mapSearchResults}
                             mapFilterOptions={mapFilterOptions}
                             onQueryMap={onQueryMap}
-                            onEmptySearchResults={onEmptySearchResults}
                         />
                         <AddStallFABContainer>
                             <FloatingActionButton containerElement={<Link to={"/add-stall"} />}>
@@ -134,11 +128,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                                         hintText={
                                             waitingForGeolocation === false ? "Search here or use GPS →" : "Fetching your location..."
                                         }
-                                        value={
-                                            mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null
-                                                ? mapSearchResults.formattedAddress
-                                                : undefined
-                                        }
+                                        value={mapSearchResults !== null ? mapSearchResults.formattedAddress : undefined}
                                         onChange={(value: string) => {
                                             if (value === "") {
                                                 onClearMapSearch()

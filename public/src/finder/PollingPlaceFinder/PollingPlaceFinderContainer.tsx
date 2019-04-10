@@ -4,6 +4,7 @@ import { browserHistory } from "react-router"
 import { ePollingPlaceFinderInit } from "../../redux/modules/app"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
 import { setMapToSearch } from "../../redux/modules/map"
+import { fetchNearbyPollingPlaces } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import { searchPollingPlacesByGeolocation } from "../../shared/geolocation/geo"
@@ -111,6 +112,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                         setMapToSearch({
                             lon: results[0].geometry.location.lng(),
                             lat: results[0].geometry.location.lat(),
+                            extent: await dispatch(
+                                fetchNearbyPollingPlaces(election, results[0].geometry.location.lat(), results[0].geometry.location.lng())
+                            ),
                             formattedAddress: results[0].formatted_address,
                         })
                     )

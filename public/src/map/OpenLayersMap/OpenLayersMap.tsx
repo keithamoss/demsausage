@@ -3,17 +3,15 @@ import "openlayers/css/ol.css"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
-import { IMapFilterOptions, IMapSearchResults, MapMode, olStyleFunction } from "../../redux/modules/map"
+import { IMapFilterOptions, IMapSearchResults, olStyleFunction } from "../../redux/modules/map"
 import { IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
     election: IElection
-    mapMode: MapMode | null
     mapSearchResults: IMapSearchResults | null
     mapFilterOptions: IMapFilterOptions
     onQueryMap: Function
-    onEmptySearchResults: Function
 }
 
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
@@ -26,7 +24,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     componentDidMount() {
-        const { election, mapMode, mapSearchResults, onQueryMap } = this.props
+        const { election, mapSearchResults, onQueryMap } = this.props
 
         this.map = new ol.Map({
             renderer: ["canvas"],
@@ -43,7 +41,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             }),
         })
 
-        // Account for the ElectionAppBar being added/removed and changing the size of our map div
+        // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
         window.setTimeout(
             (map: ol.Map) => {
                 map.updateSize()
@@ -52,10 +50,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             this.map
         )
 
-        this.map.addLayer(this.getVectorLayer(this.map))
+        this.map.addLayer(this.getMapDataVectorLayer(this.map))
 
-        if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
-            const layer = this.getYourLocationVectorLayer(this.map)
+        if (mapSearchResults !== null) {
+            const layer = this.getSearchResultsVectorLayer(this.map)
             if (layer !== null) {
                 this.map.addLayer(layer)
             }
@@ -101,30 +99,26 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        if (this.map !== null && prevProps.mapMode !== this.props.mapMode) {
-            const layersToRemove: any = []
-            this.map.getLayers().forEach((layer: ol.layer.Base) => {
-                if (layer instanceof ol.layer.Vector && this.map !== null) {
-                    layersToRemove.push(layer)
-                }
-            })
+        if (this.map !== null && prevProps.mapSearchResults !== this.props.mapSearchResults) {
+            const { mapSearchResults } = this.props
 
-            layersToRemove.forEach((layer: ol.layer.Base) => {
-                if (this.map !== null) {
-                    this.map.removeLayer(layer)
-                }
-            })
+            // Show the user where their searched/geolocation is using a custom vector layer
+            const searchResultsVectorLayer = this.getLayerByProperties(this.map, "isSearchResultsLayer", true)
+            if (searchResultsVectorLayer !== null) {
+                this.map.removeLayer(searchResultsVectorLayer)
+            }
 
-            this.map.addLayer(this.getVectorLayer(this.map))
+            const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(this.map)
+            if (searchResultsVectorLayerNew !== null) {
+                this.map.addLayer(searchResultsVectorLayerNew)
+            }
 
-            if (this.props.mapMode === MapMode.SHOW_SEARCH_RESULTS && this.props.mapSearchResults !== null) {
-                const layer = this.getYourLocationVectorLayer(this.map)
-                if (layer !== null) {
-                    this.map.addLayer(layer)
-                }
+            // Zoom the user down to the bounding box of the polling places that are near their search area
+            if (mapSearchResults !== null) {
+                this.zoomMapToSearchResults(this.map)
             }
         } else if (this.map !== null && JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
-            const sausageLayer = this.getSausageLayer(this.map)
+            const sausageLayer = this.getLayerByProperties(this.map, "isSausageLayer", true)
             if (sausageLayer !== null) {
                 // @ts-ignore
                 sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
@@ -138,45 +132,24 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return <div id="openlayers-map" className="openlayers-map" />
     }
 
-    private getVectorLayer(map: ol.Map) {
-        const { election, mapMode, mapSearchResults, mapFilterOptions, onEmptySearchResults } = this.props
+    private getMapDataVectorLayer(map: ol.Map) {
+        const { election, mapSearchResults, mapFilterOptions } = this.props
 
         const vectorSource = new ol.source.Vector({
-            url: () => {
-                if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
-                    return `${getAPIBaseURL()}/0.1/polling_places/nearby/?election_id=${election.id}&lonlat=${mapSearchResults.lon},${
-                        mapSearchResults.lat
-                    }`
-                }
-                return `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
-            },
+            url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
             format: new ol.format.GeoJSON(),
         })
 
         // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
+        const that = this
         vectorSource.on("change", function(e: any) {
             if (vectorSource.getState() === "ready") {
                 window.setTimeout(function() {
                     map.getView().changed()
                     let view = map.getView()
 
-                    if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
-                        if (vectorSource.getFeatures().length > 0) {
-                            view.fit(vectorSource.getExtent(), {
-                                size: map.getSize(),
-                                duration: 750,
-                                padding: [85, 0, 20, 0],
-                                callback: (completed: boolean) => {
-                                    if (completed === true) {
-                                        let centre = view.getCenter()
-                                        centre[0] -= 1
-                                        view.setCenter(centre)
-                                    }
-                                },
-                            })
-                        } else {
-                            onEmptySearchResults()
-                        }
+                    if (mapSearchResults !== null) {
+                        that.zoomMapToSearchResults(map)
                     } else {
                         let centre = view.getCenter()
                         centre[0] -= 1
@@ -202,21 +175,21 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return vectorLayer
     }
 
-    private getSausageLayer(map: ol.Map): ol.layer.Vector | null {
+    private getLayerByProperties(map: ol.Map, propName: string, propValue: any): ol.layer.Vector | null {
         let layer = null
         map.getLayers().forEach((l: ol.layer.Base) => {
             const props = l.getProperties()
-            if ("isSausageLayer" in props && props.isSausageLayer === true) {
+            if (propName in props && props[propName] === propValue) {
                 layer = l
             }
         })
-        return layer !== null ? layer : null
+        return layer
     }
 
-    private getYourLocationVectorLayer(map: ol.Map) {
-        const { mapMode, mapSearchResults } = this.props
+    private getSearchResultsVectorLayer(map: ol.Map) {
+        const { mapSearchResults } = this.props
 
-        if (mapMode === MapMode.SHOW_SEARCH_RESULTS && mapSearchResults !== null) {
+        if (mapSearchResults !== null) {
             const iconFeature = new ol.Feature({
                 geometry: new ol.geom.Point(ol.proj.transform([mapSearchResults.lon, mapSearchResults.lat], "EPSG:4326", "EPSG:3857")),
             })
@@ -234,13 +207,37 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 })
             )
 
-            return new ol.layer.Vector({
+            const vectorLayer = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: [iconFeature],
                 }),
             })
+
+            vectorLayer.setProperties({ isSearchResultsLayer: true })
+
+            return vectorLayer
         }
         return null
+    }
+
+    private zoomMapToSearchResults(map: ol.Map) {
+        const { mapSearchResults } = this.props
+
+        if (mapSearchResults !== null && mapSearchResults.extent !== null) {
+            let view = map.getView()
+            view.fit(ol.proj.transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
+                size: map.getSize(),
+                duration: 750,
+                padding: [85, 0, 20, 0],
+                callback: (completed: boolean) => {
+                    if (completed === true) {
+                        let centre = view.getCenter()
+                        centre[0] -= 1
+                        view.setCenter(centre)
+                    }
+                },
+            })
+        }
     }
 
     private getBasemap() {

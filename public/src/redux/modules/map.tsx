@@ -7,13 +7,7 @@ import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_place
 const SEARCH_MAP = "ealgis/map/SEARCH_MAP"
 const CLEAR_MAP_SEARCH = "ealgis/map/CLEAR_MAP_SEARCH"
 
-export enum MapMode {
-    SHOW_ELECTION = 0,
-    SHOW_SEARCH_RESULTS = 1,
-}
-
 const initialState: Partial<IModule> = {
-    mode: MapMode.SHOW_ELECTION,
     search: null,
 }
 
@@ -21,10 +15,8 @@ const initialState: Partial<IModule> = {
 export default function reducer(state: Partial<IModule> = initialState, action: IAction) {
     switch (action.type) {
         case SEARCH_MAP:
-            state = dotProp.set(state, "mode", MapMode.SHOW_SEARCH_RESULTS)
             return dotProp.set(state, "search", action.searchParams)
         case CLEAR_MAP_SEARCH:
-            state = dotProp.set(state, "mode", MapMode.SHOW_ELECTION)
             return dotProp.set(state, "search", null)
         default:
             return state
@@ -47,13 +39,13 @@ export function clearMapToSearch() {
 
 // Models
 export interface IModule {
-    mode: MapMode
     search: IMapSearchResults | null
 }
 
 export interface IMapSearchResults {
     lon: number
     lat: number
+    extent: [number, number, number, number] | null
     formattedAddress: string
 }
 
