@@ -88,7 +88,8 @@ class NomsBooleanJSONField(serializers.JSONField):
         new_value = {}
         for key, val in value.items():
             if key == "free_text":
-                new_value[key] = True
+                if val is not None:
+                    new_value[key] = True
             elif val is True:
                 new_value[key] = val
         return new_value

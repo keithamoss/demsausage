@@ -105,7 +105,7 @@ export interface INoms {
     halal: boolean
     vego: boolean
     coffee: boolean
-    free_text: string
+    free_text: string | null
 }
 
 export interface IPollingPlaceStall {
