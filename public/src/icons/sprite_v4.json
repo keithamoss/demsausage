@@ -1,0 +1,307 @@
+{
+    "frames": [
+        {
+            "filename": "sausage_and_cake_tick.png",
+            "frame": {
+                "x": -1,
+                "y": -1,
+                "w": 80,
+                "h": 69
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -1,
+                "y": -1,
+                "w": 80,
+                "h": 69
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 69
+            }
+        },
+        {
+            "filename": "sausage_and_cake_run_out.png",
+            "frame": {
+                "x": -83,
+                "y": -1,
+                "w": 80,
+                "h": 69
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -83,
+                "y": -1,
+                "w": 80,
+                "h": 69
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 69
+            }
+        },
+        {
+            "filename": "sausage_and_cake_plus.png",
+            "frame": {
+                "x": -1,
+                "y": -72,
+                "w": 80,
+                "h": 69
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -1,
+                "y": -72,
+                "w": 80,
+                "h": 69
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 69
+            }
+        },
+        {
+            "filename": "sausage_and_cake.png",
+            "frame": {
+                "x": -83,
+                "y": -72,
+                "w": 80,
+                "h": 69
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -83,
+                "y": -72,
+                "w": 80,
+                "h": 69
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 69
+            }
+        },
+        {
+            "filename": "cake_tick.png",
+            "frame": {
+                "x": -165,
+                "y": -1,
+                "w": 80,
+                "h": 73
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -165,
+                "y": -1,
+                "w": 80,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 73
+            }
+        },
+        {
+            "filename": "cake_run_out.png",
+            "frame": {
+                "x": -1,
+                "y": -143,
+                "w": 80,
+                "h": 73
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -1,
+                "y": -143,
+                "w": 80,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 73
+            }
+        },
+        {
+            "filename": "cake_plus.png",
+            "frame": {
+                "x": -83,
+                "y": -143,
+                "w": 80,
+                "h": 73
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -83,
+                "y": -143,
+                "w": 80,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 73
+            }
+        },
+        {
+            "filename": "cake.png",
+            "frame": {
+                "x": -165,
+                "y": -143,
+                "w": 60,
+                "h": 70
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -165,
+                "y": -143,
+                "w": 60,
+                "h": 70
+            },
+            "sourceSize": {
+                "w": 80,
+                "h": 73
+            }
+        },
+        {
+            "filename": "sausage_tick.png",
+            "frame": {
+                "x": -165,
+                "y": -76,
+                "w": 64,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -165,
+                "y": -76,
+                "w": 64,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 59
+            }
+        },
+        {
+            "filename": "sausage_run_out.png",
+            "frame": {
+                "x": -247,
+                "y": -1,
+                "w": 64,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -247,
+                "y": -1,
+                "w": 64,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 59
+            }
+        },
+        {
+            "filename": "sausage_plus.png",
+            "frame": {
+                "x": -247,
+                "y": -62,
+                "w": 64,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -247,
+                "y": -62,
+                "w": 64,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 59
+            }
+        },
+        {
+            "filename": "sausage.png",
+            "frame": {
+                "x": -247,
+                "y": -123,
+                "w": 64,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -247,
+                "y": -123,
+                "w": 64,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 59
+            }
+        },
+        {
+            "filename": "red-cross-of-shame.png",
+            "frame": {
+                "x": -1,
+                "y": -218,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -1,
+                "y": -218,
+                "w": 64,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 64
+            }
+        },
+        {
+            "filename": "unknown.png",
+            "frame": {
+                "x": -247,
+                "y": -184,
+                "w": 32,
+                "h": 32
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -247,
+                "y": -184,
+                "w": 32,
+                "h": 32
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 32
+            }
+        }
+    ],
+    "meta": {
+        "version": "0.13",
+        "hash": "89ce875485",
+        "name": "png",
+        "sprite_path": "png.png",
+        "sprite_filename": "png.png",
+        "width": 312,
+        "height": 283
+    }
+}

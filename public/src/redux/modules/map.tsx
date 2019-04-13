@@ -1,5 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
 import * as ol from "openlayers"
+import * as sprite from "../../icons/sprite_v4.json"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_places"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -68,32 +69,39 @@ export interface IAction {
 // e.g. thunks, epics, et cetera
 
 // Utilities
-const spriteIconConfig = [
-    { name: "cake-plus", position: [1, 0], width: 80, height: 73, zIndex: 2, scale: 0.5 },
-    { name: "cake-run-out", position: [1, 74], width: 80, height: 73, zIndex: 1, scale: 0.5 },
-    { name: "sausage-and-cake", position: [1, 148], width: 80, height: 70, zIndex: 1, scale: 0.5 },
-    { name: "sausage-and-cake-plus", position: [1, 219], width: 80, height: 70, zIndex: 2, scale: 0.5 },
-    { name: "sausage-and-cake-run-out", position: [1, 290], width: 80, height: 70, zIndex: 1, scale: 0.5 },
-    { name: "red-cross-of-shame", position: [1, 361], width: 64, height: 63, zIndex: 1, scale: 0.4 },
-    { name: "sausage", position: [1, 425], width: 64, height: 59, zIndex: 1, scale: 0.5 },
-    { name: "sausage-plus", position: [1, 485], width: 64, height: 59, zIndex: 2, scale: 0.5 },
-    { name: "sausage-run-out", position: [1, 545], width: 64, height: 59, zIndex: 1, scale: 0.5 },
-    { name: "cake", position: [1, 605], width: 55, height: 64, zIndex: 1, scale: 0.5 },
-    { name: "unknown", position: [1, 670], width: 32, height: 32, zIndex: 0, scale: 0.4, opacity: 0.35 },
-]
+const spriteIconConfig = {
+    cake: { zIndex: 2, scale: 0.5 },
+    cake_plus: { zIndex: 3, scale: 0.5 },
+    cake_run_out: { zIndex: 1, scale: 0.5 },
+    cake_tick: { zIndex: 3, scale: 0.5 },
+    sausage_and_cake: { zIndex: 2, scale: 0.5 },
+    sausage_and_cake_plus: { zIndex: 3, scale: 0.5 },
+    sausage_and_cake_run_out: { zIndex: 1, scale: 0.5 },
+    sausage_and_cake_tick: { zIndex: 3, scale: 0.5 },
+    sausage: { zIndex: 2, scale: 0.5 },
+    sausage_plus: { zIndex: 3, scale: 0.5 },
+    sausage_run_out: { zIndex: 1, scale: 0.5 },
+    sausage_tick: { zIndex: 3, scale: 0.5 },
+    "red-cross-of-shame": { zIndex: 2, scale: 0.4 },
+    unknown: { zIndex: 0, scale: 0.4, opacity: 0.35 },
+}
 
 let spriteIcons = {}
-spriteIconConfig.forEach((config: any) => {
-    spriteIcons[config.name] = new ol.style.Style({
-        image: new ol.style.Icon({
-            src: "./icons/sprite_v3.png",
-            offset: config.position,
-            size: [config.width, config.height],
-            scale: config.scale,
-            opacity: "opacity" in config ? config.opacity : undefined,
-        }),
-        zIndex: config.zIndex,
-    })
+Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
+    const spriteConfig = sprite.frames.find((config: any) => config.filename === `${iconName}.png`)
+
+    if (spriteConfig !== undefined) {
+        spriteIcons[iconName] = new ol.style.Style({
+            image: new ol.style.Icon({
+                src: "./icons/sprite_v4.png",
+                offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
+                size: [spriteConfig.sourceSize.w, spriteConfig.sourceSize.h],
+                scale: iconConfig.scale,
+                opacity: "opacity" in iconConfig ? iconConfig.opacity : undefined,
+            }),
+            zIndex: iconConfig.zIndex,
+        })
+    }
 })
 
 export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
@@ -124,23 +132,23 @@ export const getIconForNoms = (noms: IMapPollingGeoJSONNoms) => {
         return spriteIcons["red-cross-of-shame"]
     } else if (noms.bbq === true && noms.cake === true) {
         if (noms.run_out === true) {
-            return spriteIcons["sausage-and-cake-run-out"]
+            return spriteIcons["sausage_and_cake_run_out"]
         } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["sausage-and-cake-plus"]
+            return spriteIcons["sausage_and_cake_plus"]
         }
-        return spriteIcons["sausage-and-cake"]
+        return spriteIcons["sausage_and_cake"]
     } else if (noms.bbq === true) {
         if (noms.run_out === true) {
-            return spriteIcons["sausage-run-out"]
+            return spriteIcons["sausage_run_out"]
         } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["sausage-plus"]
+            return spriteIcons["sausage_plus"]
         }
         return spriteIcons["sausage"]
     } else if (noms.cake === true) {
         if (noms.run_out === true) {
-            return spriteIcons["cake-run-out"]
+            return spriteIcons["cake_run_out"]
         } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["cake-plus"]
+            return spriteIcons["cake_plus"]
         }
         return spriteIcons["cake"]
     }
