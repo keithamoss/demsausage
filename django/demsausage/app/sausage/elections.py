@@ -95,6 +95,7 @@ class PollingPlacesIngestBase():
         return results
 
     def invoke_and_bail_if_errors(self, method_name):
+        print("Calling {}".format(method_name))
         start = timer()
         getattr(self, method_name)()
         end = timer()
@@ -111,7 +112,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def __init__(self, election, file, dry_run, config):
         def check_config_is_valid(config):
             if config is not None:
-                allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields"]
+                allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_field_values"]
                 for field in config.keys():
                     if field not in allowed_fields:
                         self.logger.error("Config: Invalid field '{}' in config".format(field))
@@ -137,6 +138,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.address_fields = config["address_fields"] if self.has_config is True and "address_fields" in config else None
         self.address_format = config["address_format"] if self.has_config is True and "address_format" in config else None
         self.division_fields = config["division_fields"] if self.has_config is True and "division_fields" in config else None
+        self.fix_field_values = config["fix_field_values"] if self.has_config is True and "fix_field_values" in config else None
 
         self.file = file
         file_body = self.file.read()
@@ -225,7 +227,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     skipped_polling_places.append("{} ({})".format(polling_place["name"], polling_place["premises"]))
 
             self.polling_places = processed_polling_places
-            
+
             if len(skipped_polling_places) > 0:
                 self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(skipped_polling_places), ", ".join(skipped_polling_places)))
 
@@ -257,6 +259,39 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         _create_extras()
         _skip_blank_coordinates()
         _run_regexes()
+
+        self.raise_exception_if_errors()
+
+    def fix_fields(self):
+        def _fix():
+            def _apply_fix(config, polling_place):
+                fixed_polling_place = polling_place
+                for defn in config["overwrite"]:
+                    if defn["field"] in polling_place:
+                        # self.logger.info("Setting {} to {} for {} = {} for '{}'".format(defn["field"], defn["value"], config["field"], config["value"], polling_place["premises"]))
+                        polling_place[defn["field"]] = defn["value"]
+                return fixed_polling_place
+
+            def _fix_matching_polling_places(config, polling_places):
+                processed_polling_places = []
+
+                for polling_place in polling_places:
+                    if config["field"] in polling_place and str(polling_place[config["field"]]) == str(config["value"]):
+                        processed_polling_places.append(_apply_fix(config, polling_place))
+                    else:
+                        processed_polling_places.append(polling_place)
+
+                return processed_polling_places
+
+            if self.fix_field_values is not None:
+                processed_polling_places = self.polling_places
+                for config in self.fix_field_values:
+                    processed_polling_places = _fix_matching_polling_places(config, processed_polling_places)
+
+                self.logger.info("Ran {} field fixers".format(len(self.fix_field_values)))
+                self.polling_places = processed_polling_places
+
+        _fix()
 
         self.raise_exception_if_errors()
 
@@ -612,6 +647,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             self.logger.error("Loading can't begin. There's probably pending stalls.")
         else:
             self.invoke_and_bail_if_errors("convert_to_demsausage_schema")
+            self.invoke_and_bail_if_errors("fix_fields")
             self.invoke_and_bail_if_errors("check_file_validity")
             self.invoke_and_bail_if_errors("dedupe_polling_places")
             self.invoke_and_bail_if_errors("write_draft_polling_places")
