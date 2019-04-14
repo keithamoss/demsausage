@@ -316,7 +316,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 blank_ec_id_counter = 0
 
                 for polling_place in self.polling_places:
-                    if polling_place["ec_id"] is None:
+                    if polling_place["ec_id"] is None or polling_place["ec_id"] == "":
                         blank_ec_id_counter += 1
                     else:
                         if polling_place["ec_id"] in ec_id_tracker:
@@ -326,7 +326,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 
                 # We only care about blanks if any polling place have an ec_id (not all Electoral Commissions deliver ec_ids)
                 if blank_ec_id_counter > 0 and len(ec_id_tracker) > 0:
-                    self.logger.error("[EC_ID Checker] {} polling places have blank ec_ids".format(blank_ec_id_counter))
+                    self.logger.warning("[EC_ID Checker] {} polling places have blank ec_ids".format(blank_ec_id_counter))
 
 
         # Ensure we have all of the required fields and no unknown/excess fields
@@ -392,6 +392,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 polling_place["facility_type"] = None
             polling_place["status"] = PollingPlaceStatus.DRAFT
             polling_place["election"] = self.election.id
+            polling_place["ec_id"] = polling_place["ec_id"] if polling_place["ec_id"] != "" else None
             polling_place = get_or_merge_address_fields(polling_place)
             polling_place = get_or_merge_divisions_fields(polling_place)
 
