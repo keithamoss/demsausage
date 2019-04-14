@@ -2,6 +2,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { clearMapToSearch } from "../../redux/modules/map"
 import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import ElectionChooser from "./ElectionChooser"
@@ -61,6 +62,8 @@ const mapDispatchToProps = (dispatch: Function, ownProps: TComponentProps): IDis
                 category: "ElectionChooserContainer",
                 action: "onChooseElectionFromList",
             })
+
+            dispatch(clearMapToSearch())
 
             browserHistory.push(`/${getURLSafeElectionName(election)}`)
         },
