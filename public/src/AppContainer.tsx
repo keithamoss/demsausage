@@ -53,6 +53,11 @@ const FlexboxCentredContainer = styled.div`
 
 const LogoContainer = styled.div`
     text-align: center;
+
+    & > svg {
+        max-width: 70vw;
+        max-height: 60vh;
+    }
 `
 
 const DemocracySausageTitle = styled.h1`
