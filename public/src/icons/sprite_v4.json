@@ -278,26 +278,26 @@
             "frame": {
                 "x": -247,
                 "y": -184,
-                "w": 32,
-                "h": 32
+                "w": 14,
+                "h": 14
             },
             "rotated": false,
             "trimmed": false,
             "spriteSourceSize": {
                 "x": -247,
                 "y": -184,
-                "w": 32,
-                "h": 32
+                "w": 14,
+                "h": 14
             },
             "sourceSize": {
-                "w": 32,
-                "h": 32
+                "w": 14,
+                "h": 14
             }
         }
     ],
     "meta": {
         "version": "0.13",
-        "hash": "89ce875485",
+        "hash": "10401770fa",
         "name": "png",
         "sprite_path": "png.png",
         "sprite_filename": "png.png",
