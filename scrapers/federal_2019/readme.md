@@ -1,6 +1,6 @@
 # Data Quality Issues
 
-Source: [https://www.aec.gov.au/about_aec/cea-notices/election-pp.htm](Commonwealth Electoral Act 1918 (CEA) notices – Expected election day polling places)
+Source: [Commonwealth Electoral Act 1918 (CEA) notices – Expected election day polling places](https://www.aec.gov.au/about_aec/cea-notices/election-pp.htm)
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
