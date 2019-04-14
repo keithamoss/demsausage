@@ -143,6 +143,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
         const that = this
         vectorSource.on("change", function(e: any) {
+            // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
             if (vectorSource.getState() === "ready") {
                 window.setTimeout(function() {
                     map.getView().changed()
@@ -157,7 +158,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                     }
 
                     map.setView(view)
-                }, 500)
+                }, 750)
             }
         })
 
