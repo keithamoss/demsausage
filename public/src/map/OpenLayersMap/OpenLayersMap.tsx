@@ -24,7 +24,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     componentDidMount() {
-        const { election, mapSearchResults, onQueryMap } = this.props
+        const { election, onQueryMap } = this.props
 
         this.map = new ol.Map({
             renderer: ["canvas"],
@@ -51,13 +51,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         )
 
         this.map.addLayer(this.getMapDataVectorLayer(this.map))
-
-        if (mapSearchResults !== null) {
-            const layer = this.getSearchResultsVectorLayer(this.map)
-            if (layer !== null) {
-                this.map.addLayer(layer)
-            }
-        }
 
         const map = this.map
         this.map.on("singleclick", function(e: any) {
@@ -101,17 +94,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     componentDidUpdate(prevProps: IProps) {
         if (this.map !== null && prevProps.mapSearchResults !== this.props.mapSearchResults) {
             const { mapSearchResults } = this.props
-
-            // Show the user where their searched/geolocation is using a custom vector layer
-            const searchResultsVectorLayer = this.getLayerByProperties(this.map, "isSearchResultsLayer", true)
-            if (searchResultsVectorLayer !== null) {
-                this.map.removeLayer(searchResultsVectorLayer)
-            }
-
-            const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(this.map)
-            if (searchResultsVectorLayerNew !== null) {
-                this.map.addLayer(searchResultsVectorLayerNew)
-            }
 
             // Zoom the user down to the bounding box of the polling places that are near their search area
             if (mapSearchResults !== null) {
@@ -214,7 +196,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 }),
             })
 
-            vectorLayer.setProperties({ isSearchResultsLayer: true })
+            vectorLayer.setProperties({ isSearchIndicatorLayer: true })
 
             return vectorLayer
         }
@@ -225,6 +207,12 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const { mapSearchResults } = this.props
 
         if (mapSearchResults !== null && mapSearchResults.extent !== null) {
+            // Remove any existing search indicator layer
+            const searchResultsVectorLayer = this.getLayerByProperties(map, "isSearchIndicatorLayer", true)
+            if (searchResultsVectorLayer !== null) {
+                map.removeLayer(searchResultsVectorLayer)
+            }
+
             let view = map.getView()
             view.fit(ol.proj.transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
                 size: map.getSize(),
@@ -235,6 +223,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                         let centre = view.getCenter()
                         centre[0] -= 1
                         view.setCenter(centre)
+
+                        const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map)
+                        if (searchResultsVectorLayerNew !== null) {
+                            map.addLayer(searchResultsVectorLayerNew)
+                        }
                     }
                 },
             })
