@@ -9,12 +9,14 @@ import json
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
+import googlemaps
 
 from demsausage.app.models import PollingPlaces, Stalls
 from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer, PollingPlaceLoaderEventsSerializer
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
+from demsausage.util import get_env
 
 
 def regenerate_election_geojson(election_id):
@@ -110,9 +112,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     """
 
     def __init__(self, election, file, dry_run, config):
+        def _get_config_or_none(param_name, config):
+            return config[param_name] if self.has_config is True and param_name in config else None
+
         def check_config_is_valid(config):
             if config is not None:
-                allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_field_values"]
+                allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding"]
                 for field in config.keys():
                     if field not in allowed_fields:
                         self.logger.error("Config: Invalid field '{}' in config".format(field))
@@ -130,15 +135,19 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
-        self.filters = config["filters"] if self.has_config is True and "filters" in config else None
-        self.exclude_columns = config["exclude_columns"] if self.has_config is True and "exclude_columns" in config else None
-        self.rename_columns = config["rename_columns"] if self.has_config is True and "rename_columns" in config else None
-        self.extras_fields = config["extras_fields"] if self.has_config is True and "extras_fields" in config else None
-        self.cleaning_regexes = config["cleaning_regexes"] if self.has_config is True and "cleaning_regexes" in config else None
-        self.address_fields = config["address_fields"] if self.has_config is True and "address_fields" in config else None
-        self.address_format = config["address_format"] if self.has_config is True and "address_format" in config else None
-        self.division_fields = config["division_fields"] if self.has_config is True and "division_fields" in config else None
-        self.fix_field_values = config["fix_field_values"] if self.has_config is True and "fix_field_values" in config else None
+        self.filters = _get_config_or_none("filters", config)
+        self.exclude_columns = _get_config_or_none("exclude_columns", config)
+        self.rename_columns = _get_config_or_none("rename_columns", config)
+        self.extras_fields = _get_config_or_none("extras_fields", config)
+        self.cleaning_regexes = _get_config_or_none("cleaning_regexes", config)
+        self.address_fields = _get_config_or_none("address_fields", config)
+        self.address_format = _get_config_or_none("address_format", config)
+        self.division_fields = _get_config_or_none("division_fields", config)
+        self.fix_data_issues = _get_config_or_none("fix_data_issues", config)
+        self.geocoding = _get_config_or_none("geocoding", config)
+
+        if self.geocoding is not None and self.geocoding["enabled"] is True:
+            self.gmaps = googlemaps.Client(key=get_env("GOOGLE_GEOCODING_API_KEY"))
 
         self.file = file
         file_body = self.file.read()
@@ -214,22 +223,22 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.logger.info("Created extras field from {} columns".format(len(self.extras_fields)))
                 self.polling_places = processed_polling_places
 
-        def _skip_blank_coordinates():
-            def _has_blank_coordinates(polling_place):
-                return len(polling_place["lon"]) == 0 or len(polling_place["lat"]) == 0
+        # def _skip_blank_coordinates():
+        #     def _has_blank_coordinates(polling_place):
+        #         return len(polling_place["lon"].strip()) == 0 or len(polling_place["lat"].strip()) == 0
 
-            processed_polling_places = []
-            skipped_polling_places = []
-            for polling_place in self.polling_places:
-                if _has_blank_coordinates(polling_place) is False:
-                    processed_polling_places.append(polling_place)
-                else:
-                    skipped_polling_places.append("{} ({})".format(polling_place["name"], polling_place["premises"]))
+        #     processed_polling_places = []
+        #     skipped_polling_places = []
+        #     for polling_place in self.polling_places:
+        #         if _has_blank_coordinates(polling_place) is False:
+        #             processed_polling_places.append(polling_place)
+        #         else:
+        #             skipped_polling_places.append("{} ({})".format(polling_place["name"], polling_place["premises"]))
 
-            self.polling_places = processed_polling_places
+        #     self.polling_places = processed_polling_places
 
-            if len(skipped_polling_places) > 0:
-                self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(skipped_polling_places), ", ".join(skipped_polling_places)))
+        #     if len(skipped_polling_places) > 0:
+        #         self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(skipped_polling_places), ", ".join(skipped_polling_places)))
 
         def _run_regexes():
             def _apply_regexes(polling_place):
@@ -257,97 +266,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         _exclude_columns()
         _rename_columns()
         _create_extras()
-        _skip_blank_coordinates()
+        # _skip_blank_coordinates()
         _run_regexes()
 
         self.raise_exception_if_errors()
-
-    def fix_fields(self):
-        def _fix():
-            def _apply_fix(config, polling_place):
-                fixed_polling_place = polling_place
-                for defn in config["overwrite"]:
-                    if defn["field"] in polling_place:
-                        # self.logger.info("Setting {} to {} for {} = {} for '{}'".format(defn["field"], defn["value"], config["field"], config["value"], polling_place["premises"]))
-                        polling_place[defn["field"]] = defn["value"]
-                return fixed_polling_place
-
-            def _fix_matching_polling_places(config, polling_places):
-                processed_polling_places = []
-
-                for polling_place in polling_places:
-                    if config["field"] in polling_place and str(polling_place[config["field"]]) == str(config["value"]):
-                        processed_polling_places.append(_apply_fix(config, polling_place))
-                    else:
-                        processed_polling_places.append(polling_place)
-
-                return processed_polling_places
-
-            if self.fix_field_values is not None:
-                processed_polling_places = self.polling_places
-                for config in self.fix_field_values:
-                    processed_polling_places = _fix_matching_polling_places(config, processed_polling_places)
-
-                self.logger.info("Ran {} field fixers".format(len(self.fix_field_values)))
-                self.polling_places = processed_polling_places
-
-        _fix()
-
-        self.raise_exception_if_errors()
-
-    def prepare_polling_place(self, polling_place):
-        def get_or_merge_address_fields(polling_place):
-            if "address" in polling_place:
-                return polling_place
-
-            if self.address_format is not None:
-                address_data = {key: value.strip() for (key, value) in dict(polling_place).items() if key in self.address_fields}
-                address = self.address_format.format(**address_data)
-
-                # Handle missing address components
-                address = re.sub(r"\s{2,}", " ", address)
-                address = address.replace(", ,", ",").replace(" , ", ", ").replace(",, ", ", ")
-                if address.startswith(", ") is True:
-                    address = address[2:]
-
-                polling_place["address"] = address
-
-                # Trim now merged polling place address component fields
-                for field in self.address_fields:
-                    del polling_place[field]
-
-                return polling_place
-
-            self.logger.error("Address merging: No address or address fields found for polling place '{}'".format(polling_place["name"]))
-
-        def get_or_merge_divisions_fields(polling_place):
-            if "divisions" in polling_place:
-                polling_place["divisions"] = [d.strip() for d in polling_place["divisions"].split(",")]
-                return polling_place
-
-            if self.division_fields is not None:
-                polling_place["divisions"] = [value.strip() for (key, value) in dict(polling_place).items() if key in self.division_fields and value.strip() != ""]
-
-                # Trim the now merged divisions fields
-                for field in self.division_fields:
-                    del polling_place[field]
-
-                return polling_place
-
-            return polling_place
-
-        polling_place["geom"] = Point(float(polling_place["lon"]), float(polling_place["lat"]), srid=4326)
-        del polling_place["lon"]
-        del polling_place["lat"]
-
-        if "facility_type" not in polling_place or polling_place["facility_type"] == "":
-            polling_place["facility_type"] = None
-        polling_place["status"] = PollingPlaceStatus.DRAFT
-        polling_place["election"] = self.election.id
-        polling_place = get_or_merge_address_fields(polling_place)
-        polling_place = get_or_merge_divisions_fields(polling_place)
-
-        return polling_place
 
     def check_file_validity(self):
         def _get_header():
@@ -362,7 +284,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             required_model_field_names = [f.name for f in PollingPlaces._meta.get_fields() if hasattr(f, "blank") and f.blank is False and hasattr(f, "null") and f.null is False and f.name not in ("geom", "election", "status")] + ["lat", "lon"]
 
-            # We're doing on-the-fly address merging in prepare_polling_place(). This will attach an address field for us.
+            # We're doing on-the-fly address merging in prepare_polling_places(). This will attach an address field for us.
             if self.address_fields is not None:
                 del required_model_field_names[required_model_field_names.index("address")]
 
@@ -388,16 +310,207 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     if field not in header:
                         self.logger.error("Required division field missing in header: {}".format(field))
 
-        def is_polling_place_valid(polling_place):
-            serialiser = PollingPlacesManagementSerializer(data=self.prepare_polling_place(polling_place))
-            if serialiser.is_valid() is True:
-                return True
-            return serialiser.errors
-
         # Ensure we have all of the required fields and no unknown/excess fields
         check_file_header_validity(_get_header())
 
         self.raise_exception_if_errors()
+
+    def prepare_polling_places(self):
+        def _prepare_polling_place(polling_place):
+            def get_or_merge_address_fields(polling_place):
+                if "address" in polling_place:
+                    return polling_place
+
+                if self.address_format is not None:
+                    address_data = {key: value.strip() for (key, value) in dict(polling_place).items() if key in self.address_fields}
+                    address = self.address_format.format(**address_data)
+
+                    # Handle missing address components
+                    address = re.sub(r"\s{2,}", " ", address)
+                    address = address.replace(", ,", ",").replace(" , ", ", ").replace(",, ", ", ")
+                    if address.startswith(", ") is True:
+                        address = address[2:]
+
+                    polling_place["address"] = address
+
+                    # Trim now merged polling place address component fields
+                    for field in self.address_fields:
+                        del polling_place[field]
+
+                    return polling_place
+
+                self.logger.error("Address merging: No address or address fields found for polling place '{}'".format(polling_place["name"]))
+
+            def get_or_merge_divisions_fields(polling_place):
+                if "divisions" in polling_place:
+                    polling_place["divisions"] = [d.strip() for d in polling_place["divisions"].split(",")]
+                    return polling_place
+
+                if self.division_fields is not None:
+                    polling_place["divisions"] = [value.strip() for (key, value) in dict(polling_place).items() if key in self.division_fields and value.strip() != ""]
+
+                    # Trim the now merged divisions fields
+                    for field in self.division_fields:
+                        del polling_place[field]
+
+                    return polling_place
+
+                return polling_place
+
+            def _has_blank_coordinates(polling_place):
+                return len(str(polling_place["lon"]).strip()) == 0 or len(str(polling_place["lat"]).strip()) == 0
+
+            # Blanks will be filled in by the next step (geocode_missing_locations)
+            if _has_blank_coordinates(polling_place) is False:
+                polling_place["geom"] = Point(float(polling_place["lon"]), float(polling_place["lat"]), srid=4326)
+                del polling_place["lon"]
+                del polling_place["lat"]
+
+            if "facility_type" not in polling_place or polling_place["facility_type"] == "":
+                polling_place["facility_type"] = None
+            polling_place["status"] = PollingPlaceStatus.DRAFT
+            polling_place["election"] = self.election.id
+            polling_place = get_or_merge_address_fields(polling_place)
+            polling_place = get_or_merge_divisions_fields(polling_place)
+
+            return polling_place
+
+        # Prepare each polling place for ingest by merging addresses, merging by division, et cetera
+        processed_polling_places = []
+        for polling_place in self.polling_places:
+            processed_polling_places.append(_prepare_polling_place(polling_place))
+        self.polling_places = processed_polling_places
+
+        self.raise_exception_if_errors()
+
+    def geocode_missing_locations(self):
+        def _geocode_polling_places():
+            def _has_blank_coordinates(polling_place):
+                return "geom" not in polling_place
+
+            def _geocode(polling_place):
+                def _do_geocode(term):
+                    def _is_good_result(geocode_result):
+                        if len(geocode_result) == 0:
+                            return False
+                        elif len(geocode_result) > 1:
+                            return False
+                        else:
+                            return True
+
+                    
+                    geocode_result = self.gmaps.geocode(term, components=self.geocoding["components"])
+
+                    if _is_good_result(geocode_result) is False:
+                        return None
+                    return geocode_result[0]
+
+                def _get_best_result(polling_place):
+                    geocode_result = _do_geocode("{}, {}".format(polling_place["premises"], polling_place["address"]))
+
+                    if geocode_result is None:
+                        geocode_result = _do_geocode(polling_place["premises"])
+
+                        if geocode_result is None:
+                            geocode_result = _do_geocode(polling_place["address"])
+
+                            if geocode_result is None:
+                                self.logger.warning("[Geocoding Skipping - No good results found] {} ({})".format(polling_place["premises"], polling_place["address"]))
+                    
+                    return geocode_result
+
+                def _is_geocoding_accurate_enough(geocode_result):
+                    # https://stackoverflow.com/a/32038696
+                    if "partial_match" in geocode_result and geocode_result["partial_match"] is True:
+                        if geocode_result["geometry"]["location_type"] == "ROOFTOP":
+                            return True
+                        return False
+
+                    return True
+
+                geocode_result = _get_best_result(polling_place)
+
+                if geocode_result is not None:
+                    if _is_geocoding_accurate_enough(geocode_result) is True:
+                        polling_place["geom"] = Point(float(geocode_result["geometry"]["location"]["lng"]), float(geocode_result["geometry"]["location"]["lat"]), srid=4326)
+                        del polling_place["lon"]
+                        del polling_place["lat"]
+
+                        return polling_place
+                    else:
+                        self.logger.warning("[Geocoding Skipping - Not accurate enough] {} ({}) {}".format(polling_place["premises"], polling_place["address"], geocode_result))
+
+                return None
+
+            processed_polling_places = []
+            skipped_polling_places = []
+            geocoding_success_counter = 0
+            geocoding_skipped_counter = 0
+
+            for polling_place in self.polling_places:
+                if _has_blank_coordinates(polling_place) is False:
+                    processed_polling_places.append(polling_place)
+                else:
+                    if self.geocoding is not None and self.geocoding["enabled"] is True:
+                        new_polling_place = _geocode(polling_place)
+                        if new_polling_place is not None:
+                            geocoding_success_counter += 1
+                            processed_polling_places.append(new_polling_place)
+                        else:
+                            geocoding_skipped_counter += 1
+                    
+                    else:
+                        geocoding_skipped_counter += 1
+                        self.logger.warning("[Geocoding Skipping - Not enabled] {} ({})".format(polling_place["premises"], polling_place["address"]))
+
+            self.polling_places = processed_polling_places
+
+            self.logger.info("Geocoded {} polling places successfully".format(geocoding_success_counter))
+            self.logger.info("Geocoded skipped {} polling places".format(geocoding_skipped_counter))
+
+        _geocode_polling_places()
+
+        self.raise_exception_if_errors()
+
+    def fix_polling_places(self):
+        def _fix():
+            def _apply_fix(config, polling_place):
+                fixed_polling_place = polling_place
+                for defn in config["overwrite"]:
+                    if defn["field"] in polling_place:
+                        # self.logger.info("Setting {} to {} for {} = {} for '{}'".format(defn["field"], defn["value"], config["field"], config["value"], polling_place["premises"]))
+                        polling_place[defn["field"]] = defn["value"]
+                return fixed_polling_place
+
+            def _fix_matching_polling_places(config, polling_places):
+                processed_polling_places = []
+
+                for polling_place in polling_places:
+                    if config["field"] in polling_place and str(polling_place[config["field"]]) == str(config["value"]):
+                        processed_polling_places.append(_apply_fix(config, polling_place))
+                    else:
+                        processed_polling_places.append(polling_place)
+
+                return processed_polling_places
+
+            if self.fix_data_issues is not None:
+                processed_polling_places = self.polling_places
+                for config in self.fix_data_issues:
+                    processed_polling_places = _fix_matching_polling_places(config, processed_polling_places)
+
+                self.logger.info("Ran {} field fixers".format(len(self.fix_data_issues)))
+                self.polling_places = processed_polling_places
+
+        _fix()
+
+        self.raise_exception_if_errors()
+
+    def check_polling_place_validity(self):
+        def is_polling_place_valid(polling_place):
+            serialiser = PollingPlacesManagementSerializer(data=polling_place)
+            if serialiser.is_valid() is True:
+                return True
+            return serialiser.errors
 
         # Ensure each polling place is valid
         for polling_place in self.polling_places:
@@ -647,8 +760,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             self.logger.error("Loading can't begin. There's probably pending stalls.")
         else:
             self.invoke_and_bail_if_errors("convert_to_demsausage_schema")
-            self.invoke_and_bail_if_errors("fix_fields")
             self.invoke_and_bail_if_errors("check_file_validity")
+            self.invoke_and_bail_if_errors("fix_polling_places")
+            self.invoke_and_bail_if_errors("prepare_polling_places")
+            self.invoke_and_bail_if_errors("geocode_missing_locations")
+            self.invoke_and_bail_if_errors("check_polling_place_validity")
             self.invoke_and_bail_if_errors("dedupe_polling_places")
             self.invoke_and_bail_if_errors("write_draft_polling_places")
             self.invoke_and_bail_if_errors("migrate_noms")
