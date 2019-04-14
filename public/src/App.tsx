@@ -52,7 +52,7 @@ class MenuListItem extends React.Component<any, any> {
 
         // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
         if (
-            contentMuiName === "SausageMapContainer" ||
+            (locationPathNameMatch === "/" && contentMuiName === "SausageMapContainer") ||
             (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer")
         ) {
             // @ts-ignore
