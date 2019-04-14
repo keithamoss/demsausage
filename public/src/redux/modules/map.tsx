@@ -83,7 +83,7 @@ const spriteIconConfig = {
     sausage_run_out: { zIndex: 1, scale: 0.5 },
     sausage_tick: { zIndex: 3, scale: 0.5 },
     "red-cross-of-shame": { zIndex: 2, scale: 0.4 },
-    unknown: { zIndex: 0, scale: 0.4, opacity: 0.35 },
+    unknown: { zIndex: 0, scale: 0.4, opacity: 0.45 },
 }
 
 let spriteIcons = {}
