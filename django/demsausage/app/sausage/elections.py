@@ -347,9 +347,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     # Handle missing address components
                     address = re.sub(r"\s{2,}", " ", address)
-                    address = address.replace(", ,", ",").replace(" , ", ", ").replace(",, ", ", ")
-                    if address.startswith(", ") is True:
-                        address = address[2:]
+                    address = address.replace(", ,", ",").replace(" , ", ", ").replace(",, ", ", ").strip()
+                    if address.startswith(",") is True:
+                        address = address[1:]
+                    if address.endswith(",") is True:
+                        address = address[:-1]
 
                     polling_place["address"] = address
 
