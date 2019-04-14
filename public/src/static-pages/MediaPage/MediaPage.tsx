@@ -39,6 +39,11 @@ export class MediaPage extends React.Component<TComponentProps, IStateProps> {
 
                     <h3>Media Releases</h3>
                     <ListItem
+                        primaryText="Federal Election 2019"
+                        leftIcon={<FileFileDownload />}
+                        containerElement={<a href={"/media/2019%20Fed%20-%20Media%20Release.pdf"} />}
+                    />
+                    <ListItem
                         primaryText="Federal Election 2016"
                         leftIcon={<FileFileDownload />}
                         containerElement={<a href={"/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"} />}
