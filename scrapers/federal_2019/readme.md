@@ -12,6 +12,7 @@ The dates listed in this file reflect the date the data was last refreshed by th
 2. Mile End (PPID=7079): -34.923374, 138.570222 (was -34.91979, 138.53797). Incorrectly located at Lockleys North Primary School.
 3. Birchgrove East (PPID=83735): -33.852539, 151.179686 (was -33.8536276, 151.1770286). Incorrectly located at Birchgrove Public School.
 4. Burwood West (PPID=3919): -37.850043, 145.064442 (was -37.9084765, 145.076949). Incorrectly located close to Coatesville Uniting Church.
+5. Cairns City (PPID=5934): -16.914821, 145.767187 (was 33.9501998, -83.3802341). Incorrectly located in Athens, Georgia, United States.
 
 See `config.json` for machine-readable fixes.
 

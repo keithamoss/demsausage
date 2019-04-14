@@ -48,6 +48,11 @@
             "field": "ec_id",
             "value": 3919,
             "overwrite": [{ "field": "lat", "value": -37.850043 }, { "field": "lon", "value": 145.064442 }]
+        },
+        {
+            "field": "ec_id",
+            "value": 5934,
+            "overwrite": [{ "field": "lat", "value": -16.914821 }, { "field": "lon", "value": 145.767187 }]
         }
     ],
     "geocoding": {
