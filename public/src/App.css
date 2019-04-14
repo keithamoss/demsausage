@@ -10,14 +10,20 @@ body,
     padding: 0px;
 }
 
+/*
+    Safari: Need to provide flex-basis: 0; if using flex-grow: 1;
+    https://stackoverflow.com/a/47395740
+*/
 .page-content {
     flex-grow: 1;
+    flex-basis: 0;
     overflow: scroll;
 }
 
 .openlayers-map-container {
     position: relative;
     flex-grow: 1;
+    flex-basis: 0;
     overflow: hidden;
 }
 
