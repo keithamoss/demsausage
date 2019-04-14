@@ -309,9 +309,29 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for field in self.division_fields:
                     if field not in header:
                         self.logger.error("Required division field missing in header: {}".format(field))
+        
+        def check_ec_id_is_unique():
+            if "ec_id" in self.polling_places[0]:
+                ec_id_tracker = []
+                blank_ec_id_counter = 0
+
+                for polling_place in self.polling_places:
+                    if polling_place["ec_id"] is None:
+                        blank_ec_id_counter += 1
+                    else:
+                        if polling_place["ec_id"] in ec_id_tracker:
+                            self.logger.error("[EC_ID Checker] Polling place {} ({}) has a non-unique ec_id of {}".format(polling_place["name"], polling_place["premises"], polling_place["ec_id"]))
+
+                        ec_id_tracker.append(polling_place["ec_id"])
+                
+                # We only care about blanks if any polling place have an ec_id (not all Electoral Commissions deliver ec_ids)
+                if blank_ec_id_counter > 0 and len(ec_id_tracker) > 0:
+                    self.logger.error("[EC_ID Checker] {} polling places have blank ec_ids".format(blank_ec_id_counter))
+
 
         # Ensure we have all of the required fields and no unknown/excess fields
         check_file_header_validity(_get_header())
+        check_ec_id_is_unique()
 
         self.raise_exception_if_errors()
 
