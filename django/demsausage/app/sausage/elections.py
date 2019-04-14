@@ -652,9 +652,21 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         update_count = 0
 
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, facility_type__isnull=True)
+        facility_type_this_election_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE, election_id=self.election.id, facility_type__isnull=False)
         facility_type_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE, facility_type__isnull=False)
 
         for polling_place in queryset:
+            # Check if its current active polling place in this election already has a facility type
+            most_recent_facility_type_this_election = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_this_election_queryset).last()
+
+            if most_recent_facility_type_this_election is not None:
+                polling_place.facility_type = most_recent_facility_type_this_election.facility_type
+                polling_place.save()
+
+                update_count += 1
+                continue
+
+            # Failing that, try to find any historical polling places that match
             most_recent_facility_type = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_queryset).order_by("election_id").last()
 
             if most_recent_facility_type is not None:
