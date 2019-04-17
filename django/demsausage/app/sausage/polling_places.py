@@ -3,7 +3,8 @@ from django.contrib.gis.db.models.functions import Distance
 
 
 def find_by_distance(search_point, distance_threshold_km, limit, qs):
-    queryset_spatial = qs.filter(geom__distance_lte=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")
+    queryset_spatial = qs.filter(geom__dwithin=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")
+
     if limit is not None:
         return queryset_spatial[:limit]
     else:
