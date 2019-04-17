@@ -133,7 +133,6 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             raise BadRequest(serializer.errors)
 
     @detail_route(methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
-    @transaction.atomic
     def polling_places(self, request, pk=None, format=None):
         election = self.get_object()
         dry_run = True if str(request.data.get("dry_run", 0)) == "1" else False
@@ -147,10 +146,6 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
         loader.run()
 
-        if loader.is_dry_run() is True:
-            # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
-            regenerate_election_geojson(election.id)
-            raise BadRequest({"message": "Rollback", "logs": loader.collects_logs()})
         return Response({"message": "Done", "logs": loader.collects_logs()})
 
     @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))

@@ -9,6 +9,7 @@ import json
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
+from django.db import transaction
 import googlemaps
 
 from demsausage.app.models import PollingPlaces, Stalls
@@ -68,6 +69,9 @@ class PollingPlacesIngestBase():
         return logs
 
     def save_logs(self, logs):
+        with open("/app/logs/pollingplaceloader-{}.json".format(datetime.now().strftime("%Y-%m-%dT%H:%M:%S")), "w") as f:
+            json.dump(logs, f)
+
         serializer = PollingPlaceLoaderEventsSerializer(data={
             "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             "payload": logs
@@ -671,23 +675,43 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             for stall in queryset:
                 self.logger.error("Stall: {}; Polling Place: {}".format(stall.id, stall.polling_place.id))
 
+    def migrate(self):
+        # Migrate to new polling places
+        old_archived_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ARCHIVED)
+        old_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE)
+        new_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT)
+
+        self.logger.info("Loaded {} new polling places (previous set = {}, previous archived = {})".format(new_polling_places_queryset.count(), old_polling_places_queryset.count(), old_archived_polling_places_queryset.count()))
+
+        old_archived_polling_places_queryset.delete()
+        old_polling_places_queryset.update(status=PollingPlaceStatus.ARCHIVED)
+        new_polling_places_queryset.update(status=PollingPlaceStatus.ACTIVE)
+
+        # Update GeoJSON
+        regenerate_election_geojson(self.election.id)
+
+        # Update election if necessary
+        if self.election.polling_places_loaded is False:
+            self.election.polling_places_loaded = True
+            self.election.save()
+
     def detect_facility_type(self):
         update_count = 0
 
-        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, facility_type__isnull=True)
-        facility_type_this_election_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE, election_id=self.election.id, facility_type__isnull=False)
-        facility_type_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE, facility_type__isnull=False)
+        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, facility_type__isnull=True)
+        # facility_type_this_election_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ARCHIVED, election_id=self.election.id, facility_type__isnull=False)
+        facility_type_queryset = PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE, facility_type__isnull=False).exclude(election=self.election)
 
         for polling_place in queryset:
-            # Check if its current active polling place in this election already has a facility type
-            most_recent_facility_type_this_election = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_this_election_queryset).last()
+            # # Check if its current active polling place in this election already has a facility type
+            # most_recent_facility_type_this_election = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_this_election_queryset).last()
 
-            if most_recent_facility_type_this_election is not None:
-                polling_place.facility_type = most_recent_facility_type_this_election.facility_type
-                polling_place.save()
+            # if most_recent_facility_type_this_election is not None:
+            #     polling_place.facility_type = most_recent_facility_type_this_election.facility_type
+            #     polling_place.save()
 
-                update_count += 1
-                continue
+            #     update_count += 1
+            #     continue
 
             # Failing that, try to find any historical polling places that match
             most_recent_facility_type = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_queryset).order_by("election_id").last()
@@ -752,12 +776,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             else:
                 return PollingPlaceChanceOfSausage.NO_IDEA
 
-        if self.is_dry_run() is False:
+        if self.is_dry_run() is False or self.is_dry_run() is True:
             update_count = 0
 
-            queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT, noms__isnull=True)
+            queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=True)
             for polling_place in queryset:
-                matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE)).order_by("election_id")
+                matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE).exclude(election=self.election)).order_by("election_id")
 
                 if len(matching_polling_places) > 0:
                     polling_place.chance_of_sausage = calculate_score(matching_polling_places)
@@ -771,24 +795,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             self.logger.info("Skipping Chance of Sausage calculations whilst in dry run mode")
 
     def cleanup(self):
-        # Migrate to new polling places
-        old_archived_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ARCHIVED)
-        old_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE)
-        new_polling_places_queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT)
-
-        self.logger.info("Loaded {} new polling places (previous set = {}, previous archived = {})".format(new_polling_places_queryset.count(), old_polling_places_queryset.count(), old_archived_polling_places_queryset.count()))
-
-        old_archived_polling_places_queryset.delete()
-        old_polling_places_queryset.update(status=PollingPlaceStatus.ARCHIVED)
-        new_polling_places_queryset.update(status=PollingPlaceStatus.ACTIVE)
-
         # Update GeoJSON
         regenerate_election_geojson(self.election.id)
-
-        # Update election if necessary
-        if self.election.polling_places_loaded is False:
-            self.election.polling_places_loaded = True
-            self.election.save()
 
     def run(self):
         if self.can_loading_begin() is False:
@@ -801,11 +809,23 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             self.invoke_and_bail_if_errors("geocode_missing_locations")
             self.invoke_and_bail_if_errors("check_polling_place_validity")
             self.invoke_and_bail_if_errors("dedupe_polling_places")
-            self.invoke_and_bail_if_errors("write_draft_polling_places")
-            self.invoke_and_bail_if_errors("migrate_noms")
-            self.invoke_and_bail_if_errors("detect_facility_type")
-            self.invoke_and_bail_if_errors("calculate_chance_of_sausage")
-            self.invoke_and_bail_if_errors("cleanup")
+
+            with transaction.atomic():
+                self.invoke_and_bail_if_errors("write_draft_polling_places")
+                self.invoke_and_bail_if_errors("migrate_noms")
+                self.invoke_and_bail_if_errors("migrate")
+
+                if self.is_dry_run() is True:
+                    # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
+                    regenerate_election_geojson(self.election.id)
+                    raise BadRequest({"message": "Rollback", "logs": self.collects_logs()})
+            
+            if self.is_dry_run() is False:
+                self.invoke_and_bail_if_errors("detect_facility_type")
+                self.invoke_and_bail_if_errors("calculate_chance_of_sausage")
+                self.invoke_and_bail_if_errors("cleanup")
+            
+            print("All done with loading")
 
 
 class RollbackPollingPlaces(PollingPlacesIngestBase):
@@ -889,7 +909,8 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
 
     def run(self):
         if self.can_loading_begin() is False:
-            self.logger.error("Loading can't begin. There's probably pending stalls or draft polling places left over.")
+            self.logger.error("Rollback can't begin. There's probably pending stalls or draft polling places left over.")
         else:
             self.invoke_and_bail_if_errors("rollback_noms")
             self.invoke_and_bail_if_errors("cleanup")
+            print("All done with rollback")
