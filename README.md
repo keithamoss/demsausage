@@ -63,6 +63,12 @@ Navigate to https://admin.test.democracysausage.org
 
 ## Development
 
+### Browser Testing
+
+Cross browser testing thanks to BrowserStack.
+
+[<img src="assets/browserstack/Browserstack-logo@2x.png" width="300" height="65" alt="BrowserStack logo" />](https://www.browserstack.com)
+
 ### Memcached
 
 Memcached is used to cache public-facing API endpoints to lighten the load on the backend Django service. For debugging purposes we can retrieve a list of currently set memcached key by:
