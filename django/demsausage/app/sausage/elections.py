@@ -615,6 +615,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def migrate_noms(self):
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
+        polling_places_to_update = []
+        
         for polling_place in queryset:
             start = timer()
 
@@ -628,10 +630,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 noms_id = polling_place.noms
 
                 polling_place.noms = None
-                polling_place.save()
+                polling_places_to_update.append(polling_place)
 
                 matching_polling_places[0].noms = noms_id
-                matching_polling_places[0].save()
+                polling_places_to_update.append(matching_polling_places[0])
 
                 # Repoint stalls table
                 stalls_updated = Stalls.objects.filter(election_id=self.election.id, polling_place=polling_place.id).update(polling_place=matching_polling_places[0].id)
@@ -646,6 +648,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             
             end = timer()
             self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
+
+        # Update polling place noms en masse
+        PollingPlaces.objects.bulk_update(polling_places_to_update, ["noms"])
 
         self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
@@ -712,7 +717,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             most_recent_facility_type = find_by_distance(polling_place.geom, 0.2, limit=None, qs=facility_type_queryset).order_by("election_id").last()
 
             if most_recent_facility_type is not None:
-                polling_place.facility_type = most_recent_facility_type.facility_type
+                polling_place.facility_type_id = most_recent_facility_type.facility_type_id
                 polling_place.save()
 
                 update_count += 1
@@ -771,23 +776,19 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             else:
                 return PollingPlaceChanceOfSausage.NO_IDEA
 
-        if self.is_dry_run() is False or self.is_dry_run() is True:
-            update_count = 0
+        update_count = 0
+        queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=True)
 
-            queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=True)
-            for polling_place in queryset:
-                matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE).exclude(election=self.election)).order_by("election_id")
+        for polling_place in queryset:
+            matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=PollingPlaces.objects.filter(status=PollingPlaceStatus.ACTIVE).exclude(election=self.election)).order_by("election_id")
 
-                if len(matching_polling_places) > 0:
-                    polling_place.chance_of_sausage = calculate_score(matching_polling_places)
-                    polling_place.save()
+            if len(matching_polling_places) > 0:
+                polling_place.chance_of_sausage = calculate_score(matching_polling_places)
+                polling_place.save()
 
-                    update_count += 1
+                update_count += 1
 
-            self.logger.info("Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(queryset.count(), update_count))
-
-        else:
-            self.logger.info("Skipping Chance of Sausage calculations whilst in dry run mode")
+        self.logger.info("Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(queryset.count(), update_count))
 
     def cleanup(self):
         # Update GeoJSON
@@ -816,9 +817,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     raise BadRequest({"message": "Rollback", "logs": self.collects_logs()})
             
             if self.is_dry_run() is False:
-                self.invoke_and_bail_if_errors("detect_facility_type")
-                self.invoke_and_bail_if_errors("calculate_chance_of_sausage")
-                self.invoke_and_bail_if_errors("cleanup")
+                # Use a transaction to speed up all of the update calls in here
+                with transaction.atomic():
+                    self.invoke_and_bail_if_errors("detect_facility_type")
+                    self.invoke_and_bail_if_errors("calculate_chance_of_sausage")
+                    self.invoke_and_bail_if_errors("cleanup")
             
             print("All done with loading")
 
