@@ -616,6 +616,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         for polling_place in queryset:
+            start = timer()
+
             matching_polling_places = self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
             if len(matching_polling_places) != 1:
@@ -641,10 +643,14 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # location info. This is a poke for us to pick up any discrepancies.
                 if self.election.polling_places_loaded is False:
                     self.logger.warning("Noms Migration: User-added polling place '{}' ({}) has been merged successfully into the official polling place '{}' ({}). Is this correct?".format(polling_place.name, polling_place.address, matching_polling_places[0].name, matching_polling_places[0].address))
+            
+            end = timer()
+            self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
 
         self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
         # Migrate any leftover declined stalls
+        start = timer()
         queryset = Stalls.objects.filter(election=self.election, status=StallStatus.DECLINED, polling_place__status=PollingPlaceStatus.ACTIVE)
         for stall in queryset:
             matching_polling_places = self.safe_find_by_distance("Declined Stall Migration", stall.polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
