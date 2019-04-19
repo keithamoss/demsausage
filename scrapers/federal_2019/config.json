@@ -33,26 +33,6 @@
             "field": "ec_id",
             "value": 6131,
             "overwrite": [{ "field": "lat", "value": -26.39596 }, { "field": "lon", "value": 146.259221 }]
-        },
-        {
-            "field": "ec_id",
-            "value": 7079,
-            "overwrite": [{ "field": "lat", "value": -34.923374 }, { "field": "lon", "value": 138.570222 }]
-        },
-        {
-            "field": "ec_id",
-            "value": 83735,
-            "overwrite": [{ "field": "lat", "value": -33.852539 }, { "field": "lon", "value": 151.179686 }]
-        },
-        {
-            "field": "ec_id",
-            "value": 3919,
-            "overwrite": [{ "field": "lat", "value": -37.850043 }, { "field": "lon", "value": 145.064442 }]
-        },
-        {
-            "field": "ec_id",
-            "value": 5934,
-            "overwrite": [{ "field": "lat", "value": -16.914821 }, { "field": "lon", "value": 145.767187 }]
         }
     ],
     "geocoding": {

@@ -4,6 +4,18 @@ Source: [Commonwealth Electoral Act 1918 (CEA) notices – Expected election day
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
+## April 19th 2019
+
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Charleville North (PPID=6131): -26.395960, 146.259221 (was -26.40316, 146.24092). Incorrectly located at Charleville Town Hall.
+
+See `config.json` for machine-readable fixes.
+
+### Wrong address (AEC notified; polling places skipped)
+
+1. Tansey (PPID=6625) has an address and premises that doesn't match the location and division provided. "Tansey Hall, 35 Tansey Hall Rd" is in Tansey (Postcode 4601). The location provided is in Tin Can Bay (Postcode 4580) in the division of "Wide Bay". The latitude/longitude provided is close to "Regis Care Queensland" - this may be the correct polling place?
+
 ## April 12th 2019
 
 ### Wrong location (AEC notified; fixed at ingest)
