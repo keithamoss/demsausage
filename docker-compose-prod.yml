@@ -16,10 +16,14 @@ services:
 
             # Enable this to store the PostgreSQL data on the host
             - ./db-pg/data:/var/lib/postgresql/data
+            - ./db-pg/scripts:/var/lib/postgresql/scripts
     memcached:
         image: memcached
         expose:
             - "11211"
+        command:
+            # 5mb to accommodate the larger polling place GeoJSON objects
+            - "--max-item-size=5242880"
     django:
         image: demsausage/django:latest
         command: supervisord

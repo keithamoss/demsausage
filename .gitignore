@@ -4,7 +4,7 @@
 build/
 secrets/
 keys/
-db-pg/data/
+db-pg/data*/
 logs/
 *.pyc
 initial-data/emails.csv
