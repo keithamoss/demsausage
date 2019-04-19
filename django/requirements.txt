@@ -4,6 +4,9 @@ djangorestframework==3.9.1
 django-cors-headers==2.4.0
 django-model-utils==3.1.2
 googlemaps==3.0.2
+gunicorn==19.9.0
+gevent==1.4.0
+greenlet==0.4.15
 social-auth-app-django==3.1.0
 social-auth-core==3.0.0
 sentry-sdk==0.7.6
