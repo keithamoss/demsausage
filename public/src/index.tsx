@@ -1,3 +1,6 @@
+// This must be the first line in src/index.js
+import "./polyfills"
+
 // import registerServiceWorker from "./registerServiceWorker"
 import * as createRavenMiddleware from "raven-for-redux"
 import * as Raven from "raven-js"
@@ -11,7 +14,6 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import { responsiveStoreEnhancer } from "redux-responsive"
 import thunkMiddleware from "redux-thunk"
 import "./index.css"
-import "./polyfills"
 // import { getEnvironment, eAppEnv } from "./redux/modules/app"
 import reducers, { IStore } from "./redux/modules/reducer"
 import getRoutes from "./routes"

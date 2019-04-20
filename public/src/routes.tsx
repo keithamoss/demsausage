@@ -7,7 +7,7 @@ import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChoose
 import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
 import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
 import { IStore } from "./redux/modules/reducer"
-import SausagelyticsContainer from "./sausagelytics/Sausagelytics/SausagelyticsContainer"
+// import SausagelyticsContainer from "./sausagelytics/Sausagelytics/SausagelyticsContainer"
 import AboutPage from "./static-pages/AboutPage/AboutPage"
 import MediaPage from "./static-pages/MediaPage/MediaPage"
 
@@ -16,7 +16,7 @@ export default (store: IStore) => {
         <Route component={AppContainer}>
             <Route path="/elections" components={{ content: ElectionChooserContainer }} />
             <Route path="/search(/:electionName)" components={{ content: PollingPlaceFinderContainer }} />
-            <Route path="/sausagelytics(/:electionName)" components={{ content: SausagelyticsContainer }} />
+            {/* <Route path="/sausagelytics(/:electionName)" components={{ content: SausagelyticsContainer }} /> */}
             <Route path="/add-stall" components={{ content: AddStallContainer }} />
             <Route path="/edit-stall" components={{ content: EditStallContainer }} />
             <Route path="/about" components={{ content: AboutPage }} />
