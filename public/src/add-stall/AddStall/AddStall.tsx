@@ -1,5 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
+import { isIE11 } from "../../utils"
 // import { IElection, IStallLocationInfo } from "../../redux/modules/interfaces"
 // import "./AddStallForm.css"
 import AddStallFormContainer from "../AddStallForm/AddStallFormContainer"
@@ -46,7 +47,7 @@ class AddStall extends React.PureComponent<IProps, {}> {
                     </FormSection>
                 )}
 
-                {showWelcome && (
+                {showWelcome && isIE11 === false && (
                     <FormSection>
                         <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
                         <FormText>
@@ -61,6 +62,19 @@ class AddStall extends React.PureComponent<IProps, {}> {
                     </FormSection>
                 )}
 
+                {showWelcome && isIE11 === true && (
+                    <FormSection>
+                        <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
+                        <FormText>
+                            You can submit your stall by emailing us at{" "}
+                            <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>. Please do not submit entries
+                            that are offensive, political or do not relate to an election day stall. Please also make sure that you have
+                            authorisation to run your fundraising event at the polling place. All entries are moderated and subject to
+                            approval.
+                        </FormText>
+                    </FormSection>
+                )}
+
                 {showThankYou && (
                     <FormSection>
                         <FormSectionHeader>Thank you</FormSectionHeader>
@@ -71,7 +85,7 @@ class AddStall extends React.PureComponent<IProps, {}> {
                     </FormSection>
                 )}
 
-                {showForm && <AddStallFormContainer onStallAdded={onStallAdded} />}
+                {showForm && isIE11 === false && <AddStallFormContainer onStallAdded={onStallAdded} />}
             </FormContainer>
         )
     }

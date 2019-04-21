@@ -12,3 +12,6 @@ export const deepValue = function(obj: object, searchPath: string) {
     }
     return obj
 }
+
+// @ts-ignore
+export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
