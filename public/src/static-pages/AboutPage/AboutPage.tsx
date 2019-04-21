@@ -77,11 +77,18 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             acknowledgements and appreciation to the artists).
                         </li>
                         <li>
-                            Additional icons from <a href="https://www.flaticon.com/">flaticon.com</a>; specifically the{" "}
-                            <a href="https://www.flaticon.com/free-icon/question-mark-on-a-circular-black-background_25400">
-                                question mark (by Dave Gandy)
+                            Additional icons from <a href="https://www.flaticon.com/">flaticon.com</a> under a{" "}
+                            <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">
+                                CC 3.0 BY
                             </a>{" "}
-                            and <a href="https://www.flaticon.com/free-icon/remove_189690">run out</a> (by Roundicons) icons.
+                            license; specifically{" "}
+                            <a href="https://www.flaticon.com/free-icon/question-mark-on-a-circular-black-background_25400">
+                                Question mark (by Dave Gandy)
+                            </a>
+                            , <a href="https://www.flaticon.com/free-icon/remove_189690">Run out (by Roundicons)</a>,{" "}
+                            <a href="https://www.flaticon.com/free-icon/vegetables_498229">Vegetables in crate (by Freepik)</a>,{" "}
+                            <a href="https://www.flaticon.com/free-icon/coffee_1585293">Coffee cup (by Freepik)</a>, and{" "}
+                            <a href="https://www.flaticon.com/free-icon/egg-and-bacon_648653">Eggs and bacons (by Freepik)</a>.
                         </li>
                         <li>
                             Social media icons from <a href="https://fontawesome.com">fontawesome.com</a> under a{" "}
