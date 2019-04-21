@@ -1,5 +1,6 @@
 import * as dotProp from "dot-prop-immutable"
-import * as ol from "openlayers"
+import Icon from "ol/style/Icon"
+import Style from "ol/style/Style"
 import * as sprite from "../../icons/sprite_v4.json"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_places"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
@@ -91,8 +92,8 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
     const spriteConfig = sprite.frames.find((config: any) => config.filename === `${iconName}.png`)
 
     if (spriteConfig !== undefined) {
-        spriteIcons[iconName] = new ol.style.Style({
-            image: new ol.style.Icon({
+        spriteIcons[iconName] = new Style({
+            image: new Icon({
                 src: "./icons/sprite_v4.png",
                 offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
                 size: [spriteConfig.sourceSize.w, spriteConfig.sourceSize.h],

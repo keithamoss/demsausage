@@ -1,5 +1,22 @@
-import * as ol from "openlayers"
-import "openlayers/css/ol.css"
+import Attribution from "ol/control/Attribution"
+import Feature from "ol/Feature"
+import GeoJSON from "ol/format/GeoJSON"
+import Point from "ol/geom/Point"
+import BaseLayer from "ol/layer/Base"
+import TileLayer from "ol/layer/Tile"
+import VectorLayer from "ol/layer/Vector"
+import Map from "ol/Map"
+import "ol/ol.css"
+// c.f. Re proj import https://github.com/openlayers/openlayers/issues/8037
+// @ts-ignore
+import { transform, transformExtent } from "ol/proj.js"
+import OSM from "ol/source/OSM"
+import VectorSource from "ol/source/Vector"
+import Fill from "ol/style/Fill"
+import RegularShape from "ol/style/RegularShape"
+import Stroke from "ol/style/Stroke"
+import Style from "ol/style/Style"
+import View from "ol/View"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
@@ -15,7 +32,7 @@ export interface IProps {
 }
 
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
-    private map: ol.Map | null
+    private map: Map | null
 
     constructor(props: IProps) {
         super(props)
@@ -26,24 +43,19 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     componentDidMount() {
         const { election, onQueryMap } = this.props
 
-        this.map = new ol.Map({
-            renderer: ["canvas"],
+        this.map = new Map({
             layers: this.getBasemap(),
             target: "openlayers-map",
-            controls: [
-                new ol.control.Attribution({
-                    collapsible: false,
-                }),
-            ],
-            view: new ol.View({
-                center: ol.proj.transform(election.geom.coordinates, "EPSG:4326", "EPSG:3857"),
+            controls: [new Attribution()],
+            view: new View({
+                center: transform(election.geom.coordinates, "EPSG:4326", "EPSG:3857"),
                 zoom: election.default_zoom_level,
             }),
         })
 
         // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
         window.setTimeout(
-            (map: ol.Map) => {
+            (map: Map) => {
                 map.updateSize()
             },
             1,
@@ -67,7 +79,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 },
                 {
                     hitTolerance: 3,
-                    layerFilter: (layer: ol.layer.Base) => {
+                    layerFilter: (layer: BaseLayer) => {
                         const props = layer.getProperties()
                         if ("isSausageLayer" in props && props.isSausageLayer === true) {
                             return true
@@ -114,12 +126,12 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return <div id="openlayers-map" className="openlayers-map" />
     }
 
-    private getMapDataVectorLayer(map: ol.Map) {
+    private getMapDataVectorLayer(map: Map) {
         const { election, mapSearchResults, mapFilterOptions } = this.props
 
-        const vectorSource = new ol.source.Vector({
+        const vectorSource = new VectorSource({
             url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
-            format: new ol.format.GeoJSON(),
+            format: new GeoJSON(),
         })
 
         // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
@@ -147,7 +159,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
             olStyleFunction(feature, resolution, mapFilterOptions)
 
-        const vectorLayer = new ol.layer.Vector({
+        const vectorLayer = new VectorLayer({
             renderMode: "image",
             source: vectorSource,
             style: styleFunction,
@@ -158,9 +170,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return vectorLayer
     }
 
-    private getLayerByProperties(map: ol.Map, propName: string, propValue: any): ol.layer.Vector | null {
+    private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer | null {
         let layer = null
-        map.getLayers().forEach((l: ol.layer.Base) => {
+        map.getLayers().forEach((l: BaseLayer) => {
             const props = l.getProperties()
             if (propName in props && props[propName] === propValue) {
                 layer = l
@@ -169,19 +181,19 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return layer
     }
 
-    private getSearchResultsVectorLayer(map: ol.Map) {
+    private getSearchResultsVectorLayer(map: Map) {
         const { mapSearchResults } = this.props
 
         if (mapSearchResults !== null) {
-            const iconFeature = new ol.Feature({
-                geometry: new ol.geom.Point(ol.proj.transform([mapSearchResults.lon, mapSearchResults.lat], "EPSG:4326", "EPSG:3857")),
+            const iconFeature = new Feature({
+                geometry: new Point(transform([mapSearchResults.lon, mapSearchResults.lat], "EPSG:4326", "EPSG:3857")),
             })
 
             iconFeature.setStyle(
-                new ol.style.Style({
-                    image: new ol.style.RegularShape({
-                        fill: new ol.style.Fill({ color: "#6740b4" }),
-                        stroke: new ol.style.Stroke({ color: "black", width: 2 }),
+                new Style({
+                    image: new RegularShape({
+                        fill: new Fill({ color: "#6740b4" }),
+                        stroke: new Stroke({ color: "black", width: 2 }),
                         points: 5,
                         radius: 10,
                         radius2: 4,
@@ -190,8 +202,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 })
             )
 
-            const vectorLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
+            const vectorLayer = new VectorLayer({
+                source: new VectorSource({
                     features: [iconFeature],
                 }),
             })
@@ -203,7 +215,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return null
     }
 
-    private zoomMapToSearchResults(map: ol.Map) {
+    private zoomMapToSearchResults(map: Map) {
         const { mapSearchResults } = this.props
 
         if (mapSearchResults !== null && mapSearchResults.extent !== null) {
@@ -214,7 +226,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             }
 
             let view = map.getView()
-            view.fit(ol.proj.transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
+            view.fit(transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
                 size: map.getSize(),
                 duration: 750,
                 padding: [85, 0, 20, 0],
@@ -242,8 +254,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         })
 
         return [
-            new ol.layer.Tile({
-                source: new ol.source.OSM({
+            new TileLayer({
+                source: new OSM({
                     // https://carto.com/location-data-services/basemaps/
                     url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
                     attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
