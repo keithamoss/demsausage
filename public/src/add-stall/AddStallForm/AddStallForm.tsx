@@ -1,5 +1,5 @@
 import { List, ListItem } from "material-ui/List"
-import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton"
+import { RadioButton } from "material-ui/RadioButton"
 import RaisedButton from "material-ui/RaisedButton"
 // import "./AddStallForm.css"
 import { Step, StepContent, StepLabel, Stepper } from "material-ui/Stepper"
@@ -7,7 +7,7 @@ import { grey100, grey500, grey800 } from "material-ui/styles/colors"
 import { HardwareSecurity } from "material-ui/svg-icons"
 import * as React from "react"
 import { Field, reduxForm } from "redux-form"
-import { TextField, Toggle } from "redux-form-material-ui"
+import { RadioButtonGroup, TextField, Toggle } from "redux-form-material-ui"
 import styled from "styled-components"
 import PollingPlaceAutocompleteListWithConfirm from "../../finder/PollingPlaceAutocomplete/PollingPlaceAutocompleteListWithConfirm"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
@@ -140,7 +140,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                         <StepContentStyled>
                             <RadioButtonGroup name="elections" onChange={onChooseElection}>
                                 {liveElections.map((election: IElection) => (
-                                    <RadioButton key={election.id} value={election} label={election.name} style={{ marginBottom: 16 }} />
+                                    <RadioButton key={election.id} value={election.id} label={election.name} style={{ marginBottom: 16 }} />
                                 ))}
                             </RadioButtonGroup>
                         </StepContentStyled>

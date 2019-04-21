@@ -92,7 +92,8 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
         this.initialValues = {}
     }
 
-    onChooseElection(event: any, election: IElection) {
+    onChooseElection(event: any, electionId: number) {
+        const election = this.props.liveElections.find((e: IElection) => String(e.id) === String(electionId))!
         this.setState({ ...this.state, stepIndex: 1, chosenElection: election, stallLocationInfo: null, locationConfirmed: false })
     }
 
