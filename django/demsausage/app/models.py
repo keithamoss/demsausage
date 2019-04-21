@@ -72,8 +72,7 @@ class Elections(models.Model):
     "Our information about each election we've covered."
 
     old_id = models.IntegerField(null=True)
-    geom = models.PointField(geography=True)
-    default_zoom_level = models.IntegerField()
+    geom = models.PolygonField(null=True)
     name = models.TextField(unique=True)
     short_name = models.TextField(unique=True)
     is_hidden = models.BooleanField(default=False)

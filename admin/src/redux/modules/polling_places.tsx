@@ -2,7 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IAPIClient } from "../../shared/api/APIClient"
 import { IElection } from "./elections"
-import { IGeoJSONPoint } from "./interfaces"
+import { IGeoJSON } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -110,7 +110,7 @@ export enum PollingPlaceChanceOfSausage {
 export interface IPollingPlace {
     id: number
     name: string
-    geom: IGeoJSONPoint
+    geom: IGeoJSON
     facility_type: string | null
     booth_info: string
     wheelchair_access: string

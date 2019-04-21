@@ -27,15 +27,11 @@ interface IOwnProps {}
 
 const fromFormValues = (formValues: any): IElectionFormValues => {
     return {
+        geom: formValues.geom,
         name: formValues.name,
         short_name: formValues.short_name,
-        default_zoom_level: formValues.default_zoom_level,
         is_hidden: formValues.is_hidden,
         election_day: formValues.election_day,
-        geom: {
-            type: "Point",
-            coordinates: [parseFloat(formValues.lon), parseFloat(formValues.lat)],
-        },
     }
 }
 

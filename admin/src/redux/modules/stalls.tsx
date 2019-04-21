@@ -3,7 +3,7 @@ import { memoize } from "lodash-es"
 import { createSelector } from "reselect"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IAPIClient } from "../../shared/api/APIClient"
-import { IGeoJSONPoint } from "./interfaces"
+import { IGeoJSON } from "./interfaces"
 import { INoms } from "./polling_places"
 import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
@@ -71,7 +71,7 @@ export interface IAction {
 
 export interface IStallLocationInfo {
     id?: number // An id is present if election.polling_places_loaded is True
-    geom: IGeoJSONPoint
+    geom: IGeoJSON
     name: string
     address: string
     state: string

@@ -1,12 +1,11 @@
-import MenuItem from "material-ui/MenuItem"
 import RaisedButton from "material-ui/RaisedButton"
 import * as React from "react"
 import { BaseFieldProps, Field, reduxForm } from "redux-form"
-// import "./ElectionEditor.css"
-// import { grey100 } from "material-ui/styles/colors"
-import { Checkbox, DatePicker, SelectField, TextField } from "redux-form-material-ui"
+import { Checkbox, DatePicker, TextField } from "redux-form-material-ui"
 import styled from "styled-components"
 import { IElection } from "../../redux/modules/elections"
+import { IGeoJSON } from "../../redux/modules/interfaces"
+import MapExtentChooserContainer from "../MapExtentChooser/MapExtentChooserContainer"
 
 const required = (value: any) => (value ? undefined : "Required")
 
@@ -82,43 +81,15 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
                     required={true}
                 />
 
-                <CustomField
-                    name="lon"
-                    component={TextField}
-                    floatingLabelText={"Longitude"}
-                    fullWidth={true}
-                    type="number"
-                    validate={[required]}
+                <Field
+                    name="geom"
+                    component={(props: any) => (
+                        <MapExtentChooserContainer
+                            value={props.input.value !== "" ? props.input.value : undefined}
+                            onChange={(geojson: IGeoJSON) => props.input.onChange(geojson)}
+                        />
+                    )}
                 />
-
-                <CustomField
-                    name="lat"
-                    component={TextField}
-                    floatingLabelText={"Latitude"}
-                    fullWidth={true}
-                    type="number"
-                    validate={[required]}
-                />
-
-                <CustomField
-                    name="default_zoom_level"
-                    component={SelectField}
-                    floatingLabelText={"Default map zoom level"}
-                    fullWidth={true}
-                    validate={[required]}
-                >
-                    <MenuItem value={4} primaryText="4 (The whole country)" />
-                    <MenuItem value={5} primaryText="5 (Larger states and territories)" />
-                    <MenuItem value={6} primaryText="6 (Smaller states and territories)" />
-                    <MenuItem value={7} primaryText="7" />
-                    <MenuItem value={8} primaryText="8" />
-                    <MenuItem value={9} primaryText="9" />
-                    <MenuItem value={10} primaryText="10 (Really small states and territories)" />
-                    <MenuItem value={11} primaryText="11" />
-                    <MenuItem value={12} primaryText="12" />
-                    <MenuItem value={13} primaryText="13" />
-                    <MenuItem value={14} primaryText="14" />
-                </CustomField>
 
                 <CustomField name="is_hidden" component={PaddedCheckbox} label="Hide election?" labelPosition="right" />
 

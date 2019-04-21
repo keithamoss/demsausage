@@ -55,12 +55,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ElectionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
-    def validate_election_day(self, value):
-        if value.date() <= datetime.now(pytz.utc).date():
-            raise serializers.ValidationError("Election day must be a day in the future")
-        return value
+    # Prevents us from editing existing elections (e.g. When we were setting the new bounding boxes)
+    # def validate_election_day(self, value):
+    #     if value.date() <= datetime.now(pytz.utc).date():
+    #         raise serializers.ValidationError("Election day must be a day in the future")
+    #     return value
 
 
 class ElectionsStatsSerializer(ElectionsSerializer):
@@ -68,7 +69,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
 
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "default_zoom_level", "is_hidden", "is_primary", "election_day", "polling_places_loaded", "stats")
+        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded", "stats")
 
     def get_stats(self, obj):
         return {

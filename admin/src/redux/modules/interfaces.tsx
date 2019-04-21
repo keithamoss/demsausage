@@ -26,7 +26,7 @@ export interface IMUIThemeProps {
     muiTheme: IMUITheme
 }
 
-export interface IGeoJSONPoint {
+export interface IGeoJSON {
     type: string
     coordinates: [number, number]
 }
