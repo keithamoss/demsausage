@@ -1,6 +1,6 @@
 import * as Cookies from "js-cookie"
 import * as qs from "qs"
-import * as Raven from "raven-js"
+import * as Sentry from "@sentry/browser"
 import "whatwg-fetch"
 import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
 import { sendNotification } from "../../redux/modules/snackbars"
@@ -145,8 +145,8 @@ export class APIClient {
             console.error(error)
         }
 
-        Raven.captureException(error)
-        Raven.showReportDialog()
+        Sentry.captureException(error)
+        Sentry.showReportDialog()
     }
 }
 

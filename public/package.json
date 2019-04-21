@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@sentry/browser": "5.1.0",
         "dot-prop-immutable": "^1.4.0",
         "js-cookie": "^2.2.0",
         "lodash-es": "^4.17.4",
@@ -14,8 +15,6 @@
         "material-ui-search-bar": "^0.4.1",
         "openlayers": "^4.6.4",
         "qs": "^6.5.1",
-        "raven-for-redux": "^1.2.0",
-        "raven-js": "^3.22.3",
         "react": "16.3.2",
         "react-custom-scrollbars": "^4.2.1",
         "react-dom": "16.3.2",
