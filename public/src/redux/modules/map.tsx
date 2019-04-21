@@ -1,7 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
 import Icon from "ol/style/Icon"
 import Style from "ol/style/Style"
-import * as sprite from "../../icons/sprite_v4.json"
+import * as sprite from "../../icons/sprite_v5.json"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_places"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -85,6 +85,11 @@ const spriteIconConfig = {
     sausage_tick: { zIndex: 3, scale: 0.5 },
     "red-cross-of-shame": { zIndex: 2, scale: 0.4 },
     unknown: { zIndex: 0, scale: 1, opacity: 0.4 },
+
+    // Unused
+    vegetables: { zIndex: 0, scale: 0.5 },
+    "egg-and-bacon": { zIndex: 0, scale: 0.5 },
+    coffee: { zIndex: 0, scale: 0.5 },
 }
 
 let spriteIcons = {}
@@ -94,7 +99,7 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
     if (spriteConfig !== undefined) {
         spriteIcons[iconName] = new Style({
             image: new Icon({
-                src: "./icons/sprite_v4.png",
+                src: "./icons/sprite_v5.png",
                 offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
                 size: [spriteConfig.sourceSize.w, spriteConfig.sourceSize.h],
                 scale: iconConfig.scale,
