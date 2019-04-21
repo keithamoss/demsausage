@@ -2,6 +2,7 @@ import Attribution from "ol/control/Attribution"
 import Feature from "ol/Feature"
 import GeoJSON from "ol/format/GeoJSON"
 import Point from "ol/geom/Point"
+import Polygon from "ol/geom/Polygon"
 import BaseLayer from "ol/layer/Base"
 import TileLayer from "ol/layer/Tile"
 import VectorLayer from "ol/layer/Vector"
@@ -16,7 +17,6 @@ import Fill from "ol/style/Fill"
 import RegularShape from "ol/style/RegularShape"
 import Stroke from "ol/style/Stroke"
 import Style from "ol/style/Style"
-import View from "ol/View"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
@@ -47,10 +47,22 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             layers: this.getBasemap(),
             target: "openlayers-map",
             controls: [new Attribution()],
-            view: new View({
-                center: transform(election.geom.coordinates, "EPSG:4326", "EPSG:3857"),
-                zoom: election.default_zoom_level,
-            }),
+        })
+
+        let view = this.map.getView()
+        // @ts-ignore
+        const polygon = new Polygon(election.geom.coordinates).transform("EPSG:4326", "EPSG:3857")
+        // @ts-ignore
+        view.fit(polygon, {
+            size: this.map.getSize(),
+            // padding: [1, 1, 1, 1],
+            callback: (completed: boolean) => {
+                if (completed === true) {
+                    let centre = view.getCenter()
+                    centre[0] -= 1
+                    view.setCenter(centre)
+                }
+            },
         })
 
         // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div

@@ -2,7 +2,7 @@ import * as dotProp from "dot-prop-immutable"
 import { DateTime } from "luxon"
 import { createSelector } from "reselect"
 import { IAPIClient } from "../../shared/api/APIClient"
-import { IGeoJSONPoint } from "./interfaces"
+import { IGeoJSON } from "./interfaces"
 import { IStore } from "./reducer"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -114,10 +114,9 @@ export interface IAction {
 
 export interface IElection {
     id: number
+    geom: IGeoJSON
     name: string
     short_name: string
-    geom: IGeoJSONPoint
-    default_zoom_level: number
     is_hidden: boolean
     is_primary: boolean
     election_day: string // Datetime
