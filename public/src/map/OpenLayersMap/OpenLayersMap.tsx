@@ -116,20 +116,27 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        if (this.map !== null && prevProps.mapSearchResults !== this.props.mapSearchResults) {
-            const { mapSearchResults } = this.props
+        if (this.map !== null) {
+            if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
+                // The user has performed a search by location
+                const { mapSearchResults } = this.props
 
-            // Zoom the user down to the bounding box of the polling places that are near their search area
-            if (mapSearchResults !== null) {
-                this.zoomMapToSearchResults(this.map)
-            }
-        } else if (this.map !== null && JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
-            const sausageLayer = this.getLayerByProperties(this.map, "isSausageLayer", true)
-            if (sausageLayer !== null) {
-                // @ts-ignore
-                sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-                    olStyleFunction(feature, resolution, this.props.mapFilterOptions)
-                )
+                // Zoom the user down to the bounding box of the polling places that are near their search area
+                if (mapSearchResults !== null) {
+                    this.zoomMapToSearchResults(this.map)
+                } else {
+                    // Remove any existing search indicator layer
+                    this.clearSearchResultsVectorLayer(this.map)
+                }
+            } else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
+                // The user has changed the noms filter options
+                const sausageLayer = this.getLayerByProperties(this.map, "isSausageLayer", true)
+                if (sausageLayer !== null) {
+                    // @ts-ignore
+                    sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
+                        olStyleFunction(feature, resolution, this.props.mapFilterOptions)
+                    )
+                }
             }
         }
     }
@@ -227,15 +234,19 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return null
     }
 
+    private clearSearchResultsVectorLayer(map: Map) {
+        const searchResultsVectorLayer = this.getLayerByProperties(map, "isSearchIndicatorLayer", true)
+        if (searchResultsVectorLayer !== null) {
+            map.removeLayer(searchResultsVectorLayer)
+        }
+    }
+
     private zoomMapToSearchResults(map: Map) {
         const { mapSearchResults } = this.props
 
         if (mapSearchResults !== null && mapSearchResults.extent !== null) {
             // Remove any existing search indicator layer
-            const searchResultsVectorLayer = this.getLayerByProperties(map, "isSearchIndicatorLayer", true)
-            if (searchResultsVectorLayer !== null) {
-                map.removeLayer(searchResultsVectorLayer)
-            }
+            this.clearSearchResultsVectorLayer(map)
 
             let view = map.getView()
             view.fit(transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
