@@ -11,8 +11,8 @@ Vegetables: 64x64
 Coffee: 64x64
 Eggs and Bacon: 64x64
 
-Install [https://glue.readthedocs.io/en/latest/](Glue).
+Install [https://glue.readthedocs.io/en/latest/](Glue) and [https://www.imagemagick.org/](ImageMagick).
 
 ```
-glue png sprite --crop --margin=1 --json
+. regenerate.sh
 ```
