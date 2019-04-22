@@ -15,8 +15,6 @@ import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection, isElectionLive } from "../../redux/modules/elections"
-// import { Link, browserHistory } from "react-router"
-// import "./PollingPlaceCardMini.css"
 import {
     getFoodDescription,
     getSausageChanceDescription,
@@ -92,14 +90,11 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         actAsExpander={isExpandable}
                         showExpandableButton={isExpandable}
                     />
-                    {/* <CardMedia overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}>
-                    <img src="images/nature-600-337.jpg" alt="" />
-                </CardMedia> */}
                     {pollingPlace.stall !== null && (
                         <CardTitle
                             title={pollingPlace.stall.name}
                             subtitle={pollingPlace.stall.description}
-                            subtitleStyle={{ whiteSpace: "pre" }}
+                            subtitleStyle={{ whiteSpace: "pre-wrap" }}
                         />
                     )}
                     <CardText>
@@ -119,9 +114,11 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
                             )}
                         </FlexboxContainer>
-                        {pollingPlace.stall !== null && "free_text" in pollingPlace.stall.noms && pollingPlace.stall.noms.free_text !== null && (
-                            <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
-                        )}
+                        {pollingPlace.stall !== null &&
+                            "free_text" in pollingPlace.stall.noms &&
+                            pollingPlace.stall.noms.free_text !== null && (
+                                <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
+                            )}
                         {pollingPlace.stall !== null && pollingPlace.stall.noms.run_out && (
                             <RunOutWarning
                                 secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
@@ -151,9 +148,6 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 `This polling place has ${getFoodDescription(pollingPlace)}.`}
                         </CardText>
                     )}
-                    {/* <CardActions>
-                        <RaisedButton primary={true} label="Report" icon={<MapsAddLocation />} />
-                    </CardActions> */}
                 </Card>
             </Paper>
         )
