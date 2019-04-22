@@ -360,10 +360,10 @@
     ],
     "meta": {
         "version": "0.13",
-        "hash": "033cb513bc",
-        "name": "png",
-        "sprite_path": "png.png",
-        "sprite_filename": "png.png",
+        "hash": "af03c675b6",
+        "name": "sprite_v5",
+        "sprite_path": "sprite_v5.png",
+        "sprite_filename": "sprite_v5.png",
         "width": 378,
         "height": 278
     }

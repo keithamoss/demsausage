@@ -1,0 +1,149 @@
+/* glue: 0.13 hash: 1cf39ae1eb */
+        .sprite_05-sausage_and_cake_tick,
+.sprite_05-sausage_and_cake_run_out,
+.sprite_05-sausage_and_cake_plus,
+.sprite_05-sausage_and_cake,
+.sprite_05-cake_tick,
+.sprite_05-cake_run_out,
+.sprite_05-cake_plus,
+.sprite_05-cake,
+.sprite_05-vegetables,
+.sprite_05-sausage_tick,
+.sprite_05-sausage_run_out,
+.sprite_05-sausage_plus,
+.sprite_05-sausage,
+.sprite_05-red-cross-of-shame,
+.sprite_05-egg-and-bacon,
+.sprite_05-coffee,
+.sprite_05-unknown {
+            background-image: url('sprite@0.5_v5.png');
+            background-repeat: no-repeat;
+        }
+        
+        .sprite_05-sausage_and_cake_tick {
+            background-position: -1px -1px;
+            width: 40px;
+            height: 35px;
+        }
+        
+        .sprite_05-sausage_and_cake_run_out {
+            background-position: -43px -1px;
+            width: 40px;
+            height: 35px;
+        }
+        
+        .sprite_05-sausage_and_cake_plus {
+            background-position: -1px -38px;
+            width: 40px;
+            height: 35px;
+        }
+        
+        .sprite_05-sausage_and_cake {
+            background-position: -43px -38px;
+            width: 40px;
+            height: 35px;
+        }
+        
+        .sprite_05-cake_tick {
+            background-position: -85px -1px;
+            width: 40px;
+            height: 37px;
+        }
+        
+        .sprite_05-cake_run_out {
+            background-position: -1px -75px;
+            width: 40px;
+            height: 37px;
+        }
+        
+        .sprite_05-cake_plus {
+            background-position: -43px -75px;
+            width: 40px;
+            height: 37px;
+        }
+        
+        .sprite_05-cake {
+            background-position: -85px -75px;
+            width: 31px;
+            height: 36px;
+        }
+        
+        .sprite_05-vegetables {
+            background-position: -85px -40px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .sprite_05-sausage_tick {
+            background-position: -127px -1px;
+            width: 32px;
+            height: 30px;
+        }
+        
+        .sprite_05-sausage_run_out {
+            background-position: -127px -33px;
+            width: 32px;
+            height: 30px;
+        }
+        
+        .sprite_05-sausage_plus {
+            background-position: -127px -65px;
+            width: 32px;
+            height: 30px;
+        }
+        
+        .sprite_05-sausage {
+            background-position: -1px -114px;
+            width: 32px;
+            height: 30px;
+        }
+        
+        .sprite_05-red-cross-of-shame {
+            background-position: -161px -1px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .sprite_05-egg-and-bacon {
+            background-position: -161px -35px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .sprite_05-coffee {
+            background-position: -161px -69px;
+            width: 28px;
+            height: 32px;
+        }
+        
+        .sprite_05-unknown {
+            background-position: -161px -103px;
+            width: 7px;
+            height: 7px;
+        }
+        
+        @media screen and (-webkit-min-device-pixel-ratio: 1.0), screen and (min--moz-device-pixel-ratio: 1.0), screen and (-o-min-device-pixel-ratio: 100/100), screen and (min-device-pixel-ratio: 1.0), screen and (min-resolution: 1.0dppx) {
+            .sprite_05-sausage_and_cake_tick,
+    .sprite_05-sausage_and_cake_run_out,
+    .sprite_05-sausage_and_cake_plus,
+    .sprite_05-sausage_and_cake,
+    .sprite_05-cake_tick,
+    .sprite_05-cake_run_out,
+    .sprite_05-cake_plus,
+    .sprite_05-cake,
+    .sprite_05-vegetables,
+    .sprite_05-sausage_tick,
+    .sprite_05-sausage_run_out,
+    .sprite_05-sausage_plus,
+    .sprite_05-sausage,
+    .sprite_05-red-cross-of-shame,
+    .sprite_05-egg-and-bacon,
+    .sprite_05-coffee,
+    .sprite_05-unknown {
+                background-image: url('sprite@0.5_v5.png');
+                -webkit-background-size: 194px 145px;
+                -moz-background-size: 194px 145px;
+                background-size: 194px 145px;
+            }
+        }
+        
