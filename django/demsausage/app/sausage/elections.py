@@ -122,7 +122,6 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         def check_config_is_valid(config):
             if config is not None:
-                allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding"]
                 for field in config.keys():
                     if field not in allowed_fields:
                         self.logger.error("Config: Invalid field '{}' in config".format(field))
@@ -138,18 +137,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
+        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation"]
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
-        self.filters = _get_config_or_none("filters", config)
-        self.exclude_columns = _get_config_or_none("exclude_columns", config)
-        self.rename_columns = _get_config_or_none("rename_columns", config)
-        self.extras_fields = _get_config_or_none("extras_fields", config)
-        self.cleaning_regexes = _get_config_or_none("cleaning_regexes", config)
-        self.address_fields = _get_config_or_none("address_fields", config)
-        self.address_format = _get_config_or_none("address_format", config)
-        self.division_fields = _get_config_or_none("division_fields", config)
-        self.fix_data_issues = _get_config_or_none("fix_data_issues", config)
-        self.geocoding = _get_config_or_none("geocoding", config)
+        for field_name in allowed_fields:
+            setattr(self, field_name, _get_config_or_none(field_name, config))
 
         if self.geocoding is not None and self.geocoding["enabled"] is True:
             self.gmaps = googlemaps.Client(key=get_env("GOOGLE_GEOCODING_API_KEY"))
@@ -539,12 +531,22 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             if serialiser.is_valid() is True:
                 return True
             return serialiser.errors
+        
+        def is_polling_place_within_election_geom(polling_place):
+            return polling_place["geom"].within(self.election.geom)
 
         # Ensure each polling place is valid
         for polling_place in self.polling_places:
             validation = is_polling_place_valid(polling_place)
             if validation is not True:
                 self.logger.error("Polling place {} ({}) invalid: {}".format(polling_place["name"], polling_place["premises"], validation))
+            
+            if polling_place["state"] != "Overseas":
+                if is_polling_place_within_election_geom(polling_place) is False:
+                    if self.bbox_validation is not None and polling_place["name"] not in self.bbox_validation["ignore"]:
+                        self.logger.error("Polling place {} ({}) fall outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
+                    else:
+                        self.logger.warning("Polling place {} ({}) fall outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
 
         self.raise_exception_if_errors()
 
