@@ -159,9 +159,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         vectorSource.on("change", function(e: any) {
             // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
             if (vectorSource.getState() === "ready") {
-                that.props.onMapLoaded()
-
                 window.setTimeout(function() {
+                    // Wait a bit to allow time for OpenLayers to parse and render the data
+                    that.props.onMapLoaded()
+
                     map.getView().changed()
                     let view = map.getView()
 

@@ -18,6 +18,7 @@ import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 import { IMapFilterOptions, IMapSearchResults, isFilterEnabled } from "../../redux/modules/map"
 import { IPollingPlace } from "../../redux/modules/polling_places"
+import SausageLoader from "../../shared/loader/SausageLoader"
 import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
 // import "./SausageMap.css"
 
@@ -34,6 +35,23 @@ const SearchBarContainer = styled.div`
     margin-top: 10px;
     margin-left: 7.5%;
     margin-right: 7.5%;
+`
+
+const MapLoadingContainer = styled.div`
+    position: absolute;
+    height: calc(100% - 80px); /* Height of PollingPlaceFilterToolbar */
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+`
+
+const MapLoaderBar = styled.div`
+    height: 100px;
+    width: 100%;
+    background-color: rgba(103, 64, 180, 0.8);
 `
 
 const AddStallFABContainer = styled.div`
@@ -74,12 +92,20 @@ export interface IProps {
     onClickMapFilterOption: any
 }
 
-class SausageMap extends React.PureComponent<IProps, {}> {
+export interface IState {
+    mapLoading: boolean
+}
+
+class SausageMap extends React.PureComponent<IProps, IState> {
+    private onMapLoaded: Function
     private onClickMapFilterOption: Function
 
     constructor(props: IProps) {
         super(props)
 
+        this.state = { mapLoading: true }
+
+        this.onMapLoaded = () => this.setState({ mapLoading: false })
         this.onClickMapFilterOption = (option: string) => (event: React.MouseEvent<HTMLElement>) => props.onClickMapFilterOption(option)
     }
 
@@ -97,6 +123,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
             onOpenFinderForGeolocation,
             onClearMapSearch,
         } = this.props
+        const { mapLoading } = this.state
 
         return (
             <React.Fragment>
@@ -107,6 +134,7 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                             election={currentElection}
                             mapSearchResults={mapSearchResults}
                             mapFilterOptions={mapFilterOptions}
+                            onMapLoaded={this.onMapLoaded}
                             onQueryMap={onQueryMap}
                         />
                         <AddStallFABContainer>
@@ -115,6 +143,14 @@ class SausageMap extends React.PureComponent<IProps, {}> {
                             </FloatingActionButton>
                         </AddStallFABContainer>
                     </div>
+
+                    {mapLoading === true && (
+                        <MapLoadingContainer>
+                            <MapLoaderBar>
+                                <SausageLoader />
+                            </MapLoaderBar>
+                        </MapLoadingContainer>
+                    )}
 
                     <SearchBarContainer>
                         <GoogleMapLoader
