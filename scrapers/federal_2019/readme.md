@@ -9,6 +9,7 @@ The dates listed in this file reflect the date the data was last refreshed by th
 ### Wrong location (AEC notified; fixed at ingest)
 
 1. Charleville North (PPID=6131): -26.395960, 146.259221 (was -26.40316, 146.24092). Incorrectly located at Charleville Town Hall.
+2. Injune (PPID=6174): -25.84702, 148.56491 (was -25.84702, 158.56491). Incorrectly located in the Coral Sea.
 
 See `config.json` for machine-readable fixes.
 
