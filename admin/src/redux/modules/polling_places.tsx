@@ -371,3 +371,10 @@ export const getPollingPlaceLongName = (pollingPlace: IPollingPlace) => {
     }
     return `${pollingPlace.name}, ${pollingPlace.premises}`
 }
+
+export function getWheelchairAccessDescription(pollingPlace: IPollingPlace) {
+    if (pollingPlace.wheelchair_access === "" || pollingPlace.wheelchair_access === null) {
+        return "None"
+    }
+    return pollingPlace.wheelchair_access
+}

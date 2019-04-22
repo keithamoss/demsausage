@@ -1,10 +1,9 @@
 import Avatar from "material-ui/Avatar"
 import { Card, CardHeader, CardText, CardTitle } from "material-ui/Card"
-import FlatButton from "material-ui/FlatButton"
 import { ListItem } from "material-ui/List"
 import Paper from "material-ui/Paper"
 import { grey500, yellow600 } from "material-ui/styles/colors"
-import { ActionHelpOutline /*, MapsAddLocation*/, AlertWarning, MapsNavigation } from "material-ui/svg-icons"
+import { ActionAccessible, ActionHelpOutline, AlertWarning } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
@@ -18,6 +17,7 @@ import { IElection, isElectionLive } from "../../redux/modules/elections"
 import {
     getFoodDescription,
     getSausageChanceDescription,
+    getWheelchairAccessDescription,
     IPollingPlace,
     IPollingPlaceSearchResult,
     pollingPlaceHasReports,
@@ -39,9 +39,9 @@ const FlexboxIcons = styled.div`
     }
 `
 
-const FlexboxDistance = styled(FlatButton)`
-    color: ${grey500} !important;
-`
+// const FlexboxDistance = styled(FlatButton)`
+//     color: ${grey500} !important;
+// `
 
 const HasFreeTextDeliciousness = styled.div`
     color: ${grey500};
@@ -54,6 +54,12 @@ const RunOutWarning = styled(ListItem)`
 
 const Division = styled.div`
     color: ${grey500};
+    padding-top: 10px;
+`
+
+const WheelchairAccess = styled.div`
+    color: ${grey500};
+    padding-top: 10px;
 `
 
 const ChanceOfSausage = styled(ListItem)`
@@ -110,9 +116,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                     {pollingPlace.stall.noms.bacon_and_eggs && <BaconandEggsIcon />}
                                 </FlexboxIcons>
                             )}
-                            {"distance_km" in pollingPlace && (
+                            {/* {"distance_km" in pollingPlace && (
                                 <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
-                            )}
+                            )} */}
                         </FlexboxContainer>
                         {pollingPlace.stall !== null &&
                             "free_text" in pollingPlace.stall.noms &&
@@ -136,6 +142,9 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 disabled={true}
                             />
                         )}
+                        <WheelchairAccess>
+                            <ActionAccessible /> Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}
+                        </WheelchairAccess>
                         {pollingPlace.divisions.length > 0 && <Division>Division(s): {pollingPlace.divisions.join(", ")}</Division>}
                         {pollingPlace.stall !== null &&
                             pollingPlace.stall.extra_info !== null &&

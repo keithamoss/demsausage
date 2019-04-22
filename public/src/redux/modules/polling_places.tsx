@@ -338,3 +338,10 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
     }
     return noms.join(", ")
 }
+
+export function getWheelchairAccessDescription(pollingPlace: IPollingPlace) {
+    if (pollingPlace.wheelchair_access === "" || pollingPlace.wheelchair_access === null) {
+        return "None"
+    }
+    return pollingPlace.wheelchair_access
+}
