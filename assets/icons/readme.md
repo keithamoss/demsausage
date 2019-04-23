@@ -10,6 +10,7 @@ Unknown: 32x32
 Vegetables: 64x64
 Coffee: 64x64
 Eggs and Bacon: 64x64
+Halal: 64x64
 
 Install [https://glue.readthedocs.io/en/latest/](Glue) and [https://www.imagemagick.org/](ImageMagick).
 
