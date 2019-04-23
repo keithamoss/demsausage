@@ -1,4 +1,4 @@
-/* glue: 0.13 hash: 1cf39ae1eb */
+/* glue: 0.13 hash: 96ef1612ac */
         .sprite_05-sausage_and_cake_tick,
 .sprite_05-sausage_and_cake_run_out,
 .sprite_05-sausage_and_cake_plus,
@@ -13,10 +13,11 @@
 .sprite_05-sausage_plus,
 .sprite_05-sausage,
 .sprite_05-red-cross-of-shame,
+.sprite_05-halal,
 .sprite_05-egg-and-bacon,
 .sprite_05-coffee,
 .sprite_05-unknown {
-            background-image: url('sprite@0.5_v5.png');
+            background-image: url('sprite@0.5_96ef1612ac.png');
             background-repeat: no-repeat;
         }
         
@@ -104,20 +105,26 @@
             height: 32px;
         }
         
-        .sprite_05-egg-and-bacon {
+        .sprite_05-halal {
             background-position: -161px -35px;
             width: 32px;
             height: 32px;
         }
         
-        .sprite_05-coffee {
+        .sprite_05-egg-and-bacon {
             background-position: -161px -69px;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .sprite_05-coffee {
+            background-position: -161px -103px;
             width: 28px;
             height: 32px;
         }
         
         .sprite_05-unknown {
-            background-position: -161px -103px;
+            background-position: -161px -137px;
             width: 7px;
             height: 7px;
         }
@@ -137,10 +144,11 @@
     .sprite_05-sausage_plus,
     .sprite_05-sausage,
     .sprite_05-red-cross-of-shame,
+    .sprite_05-halal,
     .sprite_05-egg-and-bacon,
     .sprite_05-coffee,
     .sprite_05-unknown {
-                background-image: url('sprite@0.5_v5.png');
+                background-image: url('sprite@0.5_96ef1612ac.png');
                 -webkit-background-size: 194px 145px;
                 -moz-background-size: 194px 145px;
                 background-size: 194px 145px;

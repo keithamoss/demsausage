@@ -169,18 +169,39 @@
             }
         },
         {
-            "filename": "sausage_tick.png",
+            "filename": "vegetables.png",
             "frame": {
                 "x": -165,
                 "y": -76,
                 "w": 64,
-                "h": 59
+                "h": 64
             },
             "rotated": false,
             "trimmed": false,
             "spriteSourceSize": {
                 "x": -165,
                 "y": -76,
+                "w": 64,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 64
+            }
+        },
+        {
+            "filename": "sausage_tick.png",
+            "frame": {
+                "x": -247,
+                "y": -1,
+                "w": 64,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -247,
+                "y": -1,
                 "w": 64,
                 "h": 59
             },
@@ -193,7 +214,7 @@
             "filename": "sausage_run_out.png",
             "frame": {
                 "x": -247,
-                "y": -1,
+                "y": -62,
                 "w": 64,
                 "h": 59
             },
@@ -201,7 +222,7 @@
             "trimmed": false,
             "spriteSourceSize": {
                 "x": -247,
-                "y": -1,
+                "y": -62,
                 "w": 64,
                 "h": 59
             },
@@ -214,7 +235,7 @@
             "filename": "sausage_plus.png",
             "frame": {
                 "x": -247,
-                "y": -62,
+                "y": -123,
                 "w": 64,
                 "h": 59
             },
@@ -222,7 +243,7 @@
             "trimmed": false,
             "spriteSourceSize": {
                 "x": -247,
-                "y": -62,
+                "y": -123,
                 "w": 64,
                 "h": 59
             },
@@ -234,16 +255,16 @@
         {
             "filename": "sausage.png",
             "frame": {
-                "x": -247,
-                "y": -123,
+                "x": -1,
+                "y": -218,
                 "w": 64,
                 "h": 59
             },
             "rotated": false,
             "trimmed": false,
             "spriteSourceSize": {
-                "x": -247,
-                "y": -123,
+                "x": -1,
+                "y": -218,
                 "w": 64,
                 "h": 59
             },
@@ -255,17 +276,80 @@
         {
             "filename": "red-cross-of-shame.png",
             "frame": {
-                "x": -1,
-                "y": -218,
+                "x": -313,
+                "y": -1,
                 "w": 64,
                 "h": 64
             },
             "rotated": false,
             "trimmed": false,
             "spriteSourceSize": {
-                "x": -1,
-                "y": -218,
+                "x": -313,
+                "y": -1,
                 "w": 64,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 64
+            }
+        },
+        {
+            "filename": "halal.png",
+            "frame": {
+                "x": -313,
+                "y": -67,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -313,
+                "y": -67,
+                "w": 64,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 64
+            }
+        },
+        {
+            "filename": "egg-and-bacon.png",
+            "frame": {
+                "x": -313,
+                "y": -133,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -313,
+                "y": -133,
+                "w": 64,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 64,
+                "h": 64
+            }
+        },
+        {
+            "filename": "coffee.png",
+            "frame": {
+                "x": -313,
+                "y": -199,
+                "w": 54,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": -313,
+                "y": -199,
+                "w": 54,
                 "h": 64
             },
             "sourceSize": {
@@ -297,11 +381,11 @@
     ],
     "meta": {
         "version": "0.13",
-        "hash": "10401770fa",
-        "name": "png",
-        "sprite_path": "png.png",
-        "sprite_filename": "png.png",
-        "width": 312,
-        "height": 283
+        "hash": "b2e8ba9e33",
+        "name": "sprite",
+        "sprite_path": "sprite_b2e8ba9e33.png",
+        "sprite_filename": "sprite_b2e8ba9e33.png",
+        "width": 378,
+        "height": 278
     }
 }

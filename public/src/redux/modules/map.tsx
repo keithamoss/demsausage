@@ -1,7 +1,7 @@
 import * as dotProp from "dot-prop-immutable"
 import Icon from "ol/style/Icon"
 import Style from "ol/style/Style"
-import * as sprite from "../../icons/sprite_v5.json"
+import * as sprite from "../../icons/sprite.json"
 import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_places"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -99,7 +99,7 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
     if (spriteConfig !== undefined) {
         spriteIcons[iconName] = new Style({
             image: new Icon({
-                src: "./icons/sprite_v5.png",
+                src: `./icons/sprite_${sprite.meta.hash}.png`,
                 offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
                 size: [spriteConfig.sourceSize.w, spriteConfig.sourceSize.h],
                 scale: iconConfig.scale,
