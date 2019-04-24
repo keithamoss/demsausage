@@ -11,6 +11,9 @@ Vegetables: 64x64
 Coffee: 64x64
 Eggs and Bacon: 64x64
 Halal: 64x64
+Tick: 64x64
+Plus: 64x64
+Run Out: 64x64
 
 Install [https://glue.readthedocs.io/en/latest/](Glue) and [https://www.imagemagick.org/](ImageMagick).
 
