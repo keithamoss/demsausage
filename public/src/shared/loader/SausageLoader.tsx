@@ -5,7 +5,7 @@ export interface IProps {}
 
 class SausageLoader extends React.PureComponent<IProps, {}> {
     private intervalId: number
-    private icons = ["sausage", "cake", "coffee", "egg-and-bacon", "vegetables"]
+    private icons = ["bbq", "cake", "coffee", "bacon_and_eggs", "vego"]
     private messages = ["Sizzling snags", "Icing the cupcakes", "Grinding the beans", "Lighting the BBQ", "Shearing the kale"]
 
     constructor(props: IProps) {
