@@ -55,7 +55,7 @@ class SausageLoader extends React.PureComponent<IProps, {}> {
         return (
             <div className="loader">
                 <div className="image">
-                    <div id="loaderImage" className="sprite_05-sausage_and_cake_tick" />
+                    <div id="loaderImage" className="sprite_05-bbq_and_cake_tick" />
                 </div>
 
                 <span id="loaderMessage">Loading map...</span>

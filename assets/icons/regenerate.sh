@@ -12,7 +12,7 @@ sprite_dir_name=sprite
 rm -rf $sprite_dir_name
 cp -R png/ $sprite_dir_name
 
-glue $sprite_dir_name tmp --cachebuster-filename --crop --margin=1 --json
+glue $sprite_dir_name tmp --cachebuster-filename --margin=1 --json
 mv tmp/sprite.json ../../public/src/icons/sprite.json
 mv tmp/*.png ../../public/public/icons/
 
