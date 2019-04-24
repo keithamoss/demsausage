@@ -5,6 +5,7 @@ import "react-app-polyfill/ie11"
 // Import any specific polyfills required for legacy browsers
 import "core-js/modules/es6.array.find"
 import "core-js/modules/es6.array.find-index"
+import "core-js/modules/es7.array.includes"
 import "core-js/modules/es6.function.name"
 import "core-js/modules/es6.math.sign"
 import "core-js/modules/es6.math.trunc"

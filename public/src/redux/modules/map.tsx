@@ -132,7 +132,7 @@ export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOption
 }
 
 export const getIconForNoms = (noms: IMapPollingGeoJSONNoms) => {
-    const hasMoreOptions = (noms: IMapPollingGeoJSONNoms) => Object.keys(noms).length > ("run_out" in noms ? 3 : 2)
+    const hasMoreOptions = (noms: IMapPollingGeoJSONNoms) => Object.keys(noms).filter((noms_name: string) => ["bbq", "cake", "nothing", "run_out"].includes(noms_name) === false).length > 0
 
     if (noms.nothing === true) {
         return spriteIcons["red-cross-of-shame"]
