@@ -214,6 +214,19 @@ export function updatePollingPlace(election: IElection, pollingPlace: IPollingPl
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("/0.1/polling_places/nearby/", dispatch, {
+            election_id: election.id,
+            lonlat: `${lon},${lat}`,
+        })
+
+        if (response.status === 200) {
+            return json
+        }
+    }
+}
+
+export function fetchNearbyPollingPlacesBBOX(election: IElection, lat: number, lon: number) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.get("/0.1/polling_places/nearby_bbox/", dispatch, {
             election_id: election.id,
             lonlat: `${lon},${lat}`,

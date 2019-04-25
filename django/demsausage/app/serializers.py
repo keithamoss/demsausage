@@ -214,7 +214,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PollingPlaces
         geo_field = "geom"
-        
+
         fields = ("id", "noms", "name", "premises", "ec_id")
 
     def get_properties(self, instance, fields):
@@ -238,7 +238,7 @@ class DistanceField(serializers.CharField):
         return round(float(value.km), 2)
 
 
-class PollingPlaceSearchResultsSerializer(PollingPlacesGeoJSONSerializer):
+class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
     distance_km = DistanceField(source="distance")
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
 

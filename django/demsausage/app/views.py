@@ -244,7 +244,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
 
 class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
-    Retrieve a list of all polling places that are close to a given latitude, longitude in GeoJSON format.
+    Retrieve a list of all polling places that are close to a given latitude, longitude.
     """
     queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
     serializer_class = PollingPlaceSearchResultsSerializer

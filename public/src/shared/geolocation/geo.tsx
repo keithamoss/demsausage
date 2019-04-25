@@ -1,7 +1,7 @@
 import { browserHistory } from "react-router"
 import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
 import { setMapToSearch } from "../../redux/modules/map"
-import { fetchNearbyPollingPlaces } from "../../redux/modules/polling_places"
+import { fetchNearbyPollingPlacesBBOX } from "../../redux/modules/polling_places"
 import { sendNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../analytics/GoogleAnalytics"
 import { IGoogleGeocodeResult } from "../ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
@@ -42,7 +42,7 @@ export function searchPollingPlacesByGeolocation(
                                 lon: position.coords.longitude,
                                 lat: position.coords.latitude,
                                 extent: await dispatch(
-                                    fetchNearbyPollingPlaces(election, position.coords.latitude, position.coords.longitude)
+                                    fetchNearbyPollingPlacesBBOX(election, position.coords.latitude, position.coords.longitude)
                                 ),
                                 formattedAddress: locationSearched,
                             })
