@@ -214,8 +214,8 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PollingPlaces
         geo_field = "geom"
-
-        fields = ("id", "noms", "name", "ec_id", )
+        
+        fields = ("id", "noms", "name", "premises", "ec_id")
 
     def get_properties(self, instance, fields):
         props = {"noms": None}

@@ -2,8 +2,9 @@ import * as dotProp from "dot-prop-immutable"
 import Icon from "ol/style/Icon"
 import Style from "ol/style/Style"
 import * as sprite from "../../icons/sprite.json"
-import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./polling_places"
-// import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
+import { NomsReader } from "../../sausage/noms"
+import { IMapPollingPlaceFeature } from "./polling_places"
+// import { IAnalytisMeta } from "../../shared/analytics/GoogleAalytics"
 
 // Actions
 const SEARCH_MAP = "ealgis/map/SEARCH_MAP"
@@ -71,41 +72,57 @@ export interface IAction {
 
 // Utilities
 const spriteIconConfig = {
+    // Core icons
     cake: { zIndex: 2, scale: 0.5 },
     cake_plus: { zIndex: 3, scale: 0.5 },
     cake_run_out: { zIndex: 1, scale: 0.5 },
     cake_tick: { zIndex: 3, scale: 0.5 },
-    sausage_and_cake: { zIndex: 2, scale: 0.5 },
-    sausage_and_cake_plus: { zIndex: 3, scale: 0.5 },
-    sausage_and_cake_run_out: { zIndex: 1, scale: 0.5 },
-    sausage_and_cake_tick: { zIndex: 3, scale: 0.5 },
-    sausage: { zIndex: 2, scale: 0.5 },
-    sausage_plus: { zIndex: 3, scale: 0.5 },
-    sausage_run_out: { zIndex: 1, scale: 0.5 },
-    sausage_tick: { zIndex: 3, scale: 0.5 },
-    "red-cross-of-shame": { zIndex: 2, scale: 0.4 },
+    bbq_and_cake: { zIndex: 2, scale: 0.5 },
+    bbq_and_cake_plus: { zIndex: 3, scale: 0.5 },
+    bbq_and_cake_run_out: { zIndex: 1, scale: 0.5 },
+    bbq_and_cake_tick: { zIndex: 3, scale: 0.5 },
+    bbq: { zIndex: 2, scale: 0.5 },
+    bbq_plus: { zIndex: 3, scale: 0.5 },
+    bbq_run_out: { zIndex: 1, scale: 0.5 },
+    bbq_tick: { zIndex: 3, scale: 0.5 },
+
+    // Other icons
     unknown: { zIndex: 0, scale: 1, opacity: 0.4 },
 
-    // Unused
-    vegetables: { zIndex: 0, scale: 0.5 },
-    "egg-and-bacon": { zIndex: 0, scale: 0.5 },
+    // Additional info icons
+    tick: { zIndex: 2, scale: 0.5 },
+    plus: { zIndex: 2, scale: 0.5 },
+    run_out: { zIndex: 2, scale: 0.5 },
+    red_cross_of_shame: { zIndex: 1, scale: 0.4 },
+
+    // Other noms icons
+    vego: { zIndex: 0, scale: 0.5 },
+    bacon_and_eggs: { zIndex: 0, scale: 0.5 },
     coffee: { zIndex: 0, scale: 0.5 },
+    halal: { zIndex: 0, scale: 0.5 },
 }
 
 let spriteIcons = {}
+let spriteIconsDetailed = {}
 Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
     const spriteConfig = sprite.frames.find((config: any) => config.filename === `${iconName}.png`)
 
     if (spriteConfig !== undefined) {
+        const iconAttributes = {
+            src: `./icons/sprite_${sprite.meta.hash}.png`,
+            offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
+            size: [spriteConfig.spriteSourceSize.w, spriteConfig.spriteSourceSize.h],
+            scale: iconConfig.scale,
+            opacity: "opacity" in iconConfig ? iconConfig.opacity : undefined,
+        } as any /* IconOptions */
+
         spriteIcons[iconName] = new Style({
-            image: new Icon({
-                src: `./icons/sprite_${sprite.meta.hash}.png`,
-                offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
-                size: [spriteConfig.sourceSize.w, spriteConfig.sourceSize.h],
-                scale: iconConfig.scale,
-                opacity: "opacity" in iconConfig ? iconConfig.opacity : undefined,
-            }),
+            image: new Icon(iconAttributes),
             zIndex: iconConfig.zIndex,
+        })
+        spriteIconsDetailed[iconName] = new Style({
+            image: new Icon({ ...iconAttributes, anchorXUnits: "pixels", anchorYUnits: "pixels" }),
+            zIndex: 1,
         })
     }
 })
@@ -116,12 +133,10 @@ export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
 export const isFilterEnabled = (option: string, mapFilterOptions: IMapFilterOptions) =>
     option in mapFilterOptions && mapFilterOptions[option] === true
 
-export const hasNomsOption = (option: string, noms: IMapPollingGeoJSONNoms) => option in noms && noms[option] === true
-
-export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOptions: IMapFilterOptions) => {
-    if (hasFilterOptions(mapFilterOptions) && noms !== null) {
+export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilterOptions) => {
+    if (hasFilterOptions(mapFilterOptions) && noms.hasAnyNoms() === true) {
         for (const [option, enabled] of Object.entries(mapFilterOptions)) {
-            if (enabled === true && hasNomsOption(option, noms) === false) {
+            if (enabled === true && noms.hasNomsOption(option) === false) {
                 return false
             }
         }
@@ -131,46 +146,17 @@ export const satisfiesMapFilter = (noms: IMapPollingGeoJSONNoms, mapFilterOption
     return true
 }
 
-export const getIconForNoms = (noms: IMapPollingGeoJSONNoms) => {
-    const hasMoreOptions = (noms: IMapPollingGeoJSONNoms) => Object.keys(noms).filter((noms_name: string) => ["bbq", "cake", "nothing", "run_out"].includes(noms_name) === false).length > 0
-
-    if (noms.nothing === true) {
-        return spriteIcons["red-cross-of-shame"]
-    } else if (noms.bbq === true && noms.cake === true) {
-        if (noms.run_out === true) {
-            return spriteIcons["sausage_and_cake_run_out"]
-        } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["sausage_and_cake_plus"]
-        }
-        return spriteIcons["sausage_and_cake"]
-    } else if (noms.bbq === true) {
-        if (noms.run_out === true) {
-            return spriteIcons["sausage_run_out"]
-        } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["sausage_plus"]
-        }
-        return spriteIcons["sausage"]
-    } else if (noms.cake === true) {
-        if (noms.run_out === true) {
-            return spriteIcons["cake_run_out"]
-        } else if (hasMoreOptions(noms) === true) {
-            return spriteIcons["cake_plus"]
-        }
-        return spriteIcons["cake"]
-    }
-
-    return null
-}
-
 export const olStyleFunction = function(feature: IMapPollingPlaceFeature, resolution: number, mapFilterOptions: IMapFilterOptions) {
-    const noms: IMapPollingGeoJSONNoms = feature.get("noms")
+    const nomsReader = new NomsReader(feature.get("noms"))
 
-    if (noms !== null) {
-        if (hasFilterOptions(mapFilterOptions) === true && satisfiesMapFilter(noms, mapFilterOptions) === false) {
+    if (nomsReader.hasAnyNoms() === true) {
+        if (hasFilterOptions(mapFilterOptions) === true && satisfiesMapFilter(nomsReader, mapFilterOptions) === false) {
             return null
         }
 
-        return getIconForNoms(noms)
+        return resolution > 7
+            ? nomsReader.getIconForNoms(spriteIcons)
+            : nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature, resolution)
     }
 
     return hasFilterOptions(mapFilterOptions) === false ? spriteIcons["unknown"] : null

@@ -80,8 +80,10 @@ export interface IMapPollingPlaceFeature {
 }
 
 export interface IMapPollingPlaceGeoJSONProperties {
-    noms: IMapPollingGeoJSONNoms | null
     name: string
+    premises: string
+    noms: IMapPollingGeoJSONNoms | null
+    ec_id: number | null
 }
 
 export interface IMapPollingGeoJSONNoms {
