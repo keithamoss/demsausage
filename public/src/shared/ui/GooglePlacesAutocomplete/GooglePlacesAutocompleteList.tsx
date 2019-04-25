@@ -11,6 +11,7 @@ import GooglePlacesAutocomplete, { IGoogleAddressSearchResult, IGoogleGeocodeRes
 export interface IProps {
     onShowPlaceAutocompleteResults?: Function
     onChoosePlace: Function
+    onCancelSearch?: Function
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
     autoFocus: boolean
@@ -64,6 +65,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
     render() {
         const {
             onChoosePlace,
+            onCancelSearch,
             fetchGeocodedPlace,
             componentRestrictions,
             autoFocus,
@@ -92,6 +94,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
                                 closeIcon={closeIcon}
                                 // tslint:disable-next-line:no-empty
                                 onRequestSearch={onRequestSearch === undefined ? () => {} : onRequestSearch}
+                                onCancelSearch={onCancelSearch}
                             />
                         )
                     }
@@ -105,6 +108,7 @@ export class GooglePlacesAutocompleteList extends React.PureComponent<IProps & I
                                 leftAvatar={<Avatar icon={<MapsPlace />} />}
                                 primaryText={value.structured_formatting.main_text}
                                 secondaryText={value.structured_formatting.secondary_text}
+                                secondaryTextLines={2}
                                 onClick={(event: any) => {
                                     fetchGeocodedPlace(onChoosePlace, value, this.onPlaceChosen)
                                 }}

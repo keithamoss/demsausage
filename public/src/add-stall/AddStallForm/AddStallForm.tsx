@@ -9,7 +9,6 @@ import * as React from "react"
 import { Field, reduxForm } from "redux-form"
 import { RadioButtonGroup, TextField, Toggle } from "redux-form-material-ui"
 import styled from "styled-components"
-import PollingPlaceAutocompleteListWithConfirm from "../../finder/PollingPlaceAutocomplete/PollingPlaceAutocompleteListWithConfirm"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CakeIcon from "../../icons/cake"
 import CoffeeIcon from "../../icons/coffee"
@@ -18,6 +17,7 @@ import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
+import GooglePlacesAndPollingPlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAndPollingPlacesAutocompleteListWithConfirm"
 import GooglePlacesAutocompleteListWithConfirm from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocompleteListWithConfirm"
 
 const required = (value: any) => (value ? undefined : "Required")
@@ -147,7 +147,9 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     </Step>
 
                     <Step>
-                        <StepLabel>{locationConfirmed === false ? "Stall location" : `Stall location: ${primaryTextString}`}</StepLabel>
+                        <StepLabel>
+                            {locationConfirmed === false ? "Where is your stall?" : `Stall location: ${primaryTextString}`}
+                        </StepLabel>
                         <StepContentStyled>
                             {chosenElection !== null && chosenElection.polling_places_loaded === false && (
                                 <GooglePlacesAutocompleteListWithConfirm
@@ -159,10 +161,10 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 />
                             )}
                             {chosenElection !== null && chosenElection.polling_places_loaded === true && (
-                                <PollingPlaceAutocompleteListWithConfirm
-                                    key={chosenElection.id}
+                                <GooglePlacesAndPollingPlacesAutocompleteListWithConfirm
                                     election={chosenElection}
                                     onConfirmChosenLocation={onConfirmChosenLocation}
+                                    componentRestrictions={{ country: "AU" }}
                                     autoFocus={false}
                                     hintText={"Where is your stall?"}
                                 />
@@ -180,7 +182,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     <CustomTextField
                                         name="name"
                                         component={TextField}
-                                        floatingLabelText={"What is your stall going to be called?"}
+                                        floatingLabelText={"What is your stall called?"}
                                         hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                                         fullWidth={true}
                                         validate={[required]}

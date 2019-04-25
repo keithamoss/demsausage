@@ -55,6 +55,7 @@ export interface IProps {
     menuProps?: object
     menuStyle?: object
     onClose?: Function
+    onCancelSearch?: Function
     onNewRequest?: Function
     onUpdateInput?: Function
     open?: boolean
@@ -181,6 +182,12 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     }
 
     updateInput(searchText: string) {
+        // v0.4x of material-ui-search-bar doesn't implement onCancelSearch
+        // So let's hack around that here.
+        if (searchText === "" && this.props.onCancelSearch !== undefined) {
+            this.props.onCancelSearch()
+        }
+
         this.setState(
             {
                 searchText,
@@ -229,7 +236,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
 
     render() {
         // https://github.com/callemall/material-ui/pull/6231
-        const { componentRestrictions, onReceiveSearchResults, ...autocompleteProps } = this.props
+        const { componentRestrictions, onReceiveSearchResults, onCancelSearch, ...autocompleteProps } = this.props
 
         return (
             <SearchBar
