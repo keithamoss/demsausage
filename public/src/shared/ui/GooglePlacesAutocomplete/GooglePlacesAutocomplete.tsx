@@ -137,6 +137,10 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
         const google = window.google
         this.geocoder = new google.maps.Geocoder()
 
+        const sw = new google.maps.LatLng(-44.2422476272383, 112.568664550781)
+        const ne = new google.maps.LatLng(-10.1135419412474, 154.092864990234)
+        const extentOfAustralia = new google.maps.LatLngBounds(sw, ne)
+
         // Documentation for AutocompleteService
         // https://developers.google.com/maps/documentation/javascript/places-autocomplete#place_autocomplete_service
         this.service = new google.maps.places.AutocompleteService(null)
@@ -153,7 +157,13 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
                     this.service.getPlacePredictions(
                         {
                             input: this.state.searchText,
-                            componentRestrictions: this.props.componentRestrictions,
+                            // componentRestrictions: this.props.componentRestrictions,
+                            // Couldn't get admin area suggestions to work (didn't dig deep, tho - and we could always filter on our side)
+                            // componentRestrictions: {
+                            //     administrative_area: "Perth",
+                            // },
+                            region: "au",
+                            bounds: extentOfAustralia,
                             types: this.props.types,
                         },
                         (predictions: Array<any>) => {
