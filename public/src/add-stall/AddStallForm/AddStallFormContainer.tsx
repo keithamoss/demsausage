@@ -1,6 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { isValid, submit } from "redux-form"
+import { getFormSyncErrors, hasSubmitFailed, submit } from "redux-form"
 import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { INoms } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
@@ -20,7 +20,8 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     liveElections: Array<IElection>
-    isValid: boolean
+    formSyncErrors: any
+    formHasSubmitFailed: boolean
 }
 
 export interface IStateProps {
@@ -115,7 +116,7 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
     }
 
     render() {
-        const { liveElections, isValid, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { liveElections, formSyncErrors, formHasSubmitFailed, onFormSubmit, onSaveForm, onStallAdded } = this.props
         const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting, errors } = this.state
 
         return (
@@ -129,8 +130,9 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
                 locationConfirmed={locationConfirmed}
                 initialValues={this.initialValues}
                 formSubmitting={formSubmitting}
+                formSyncErrors={formSyncErrors}
+                formHasSubmitFailed={formHasSubmitFailed}
                 errors={errors}
-                isValid={isValid}
                 onSubmit={async (values: object, dispatch: Function, props: IProps) => {
                     this.toggleFormSubmitting()
                     await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo, this)
@@ -146,7 +148,8 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     return {
         liveElections: getLiveElections(state),
-        isValid: isValid("addStall")(state),
+        formSyncErrors: getFormSyncErrors("addStall")(state),
+        formHasSubmitFailed: hasSubmitFailed("addStall")(state),
     }
 }
 

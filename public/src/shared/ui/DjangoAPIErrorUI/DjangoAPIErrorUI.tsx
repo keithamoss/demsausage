@@ -1,3 +1,4 @@
+import { capitalize } from "lodash-es"
 import * as React from "react"
 
 export interface IProps {
@@ -5,7 +6,7 @@ export interface IProps {
 }
 
 export interface IDjangoAPIError {
-    [key: string]: string[]
+    [key: string]: string[] | string
 }
 
 export default class DjangoAPIErrorUI extends React.PureComponent<IProps, {}> {
@@ -29,7 +30,8 @@ export default class DjangoAPIErrorUI extends React.PureComponent<IProps, {}> {
                         {Object.keys(errors).map((key: string) => {
                             return (
                                 <li key={key}>
-                                    <strong>{key}:</strong> {errors[key].join("; ")}
+                                    <strong>{capitalize(key)}:</strong>{" "}
+                                    {Array.isArray(errors[key]) === true ? (errors[key] as string[]).join("; ") : errors[key]}
                                 </li>
                             )
                         })}

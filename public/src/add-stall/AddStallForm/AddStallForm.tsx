@@ -32,6 +32,8 @@ export interface IProps {
     stallLocationInfo: any // Bit of a hack around the issue of this being IStallLocationInfo OR IPollingPlace
     locationConfirmed: boolean
     formSubmitting: boolean
+    formSyncErrors: any
+    formHasSubmitFailed: boolean
     errors: IDjangoAPIError | undefined
     onSubmit: any
     onSaveForm: any
@@ -39,7 +41,6 @@ export interface IProps {
     // From redux-form
     initialValues: any
     handleSubmit: any
-    isValid: any
 }
 
 export class CustomTextField extends React.Component<any, any> {
@@ -116,9 +117,11 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
             stallLocationInfo,
             locationConfirmed,
             formSubmitting,
+            formSyncErrors,
+            formHasSubmitFailed,
             errors,
         } = this.props
-        const { isValid, onSaveForm, handleSubmit, onSubmit } = this.props
+        const { onSaveForm, handleSubmit, onSubmit } = this.props
 
         let primaryTextString
         if (stallLocationInfo !== null) {
@@ -263,12 +266,11 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
 
                                 <DjangoAPIErrorUI errors={errors} />
 
-                                <RaisedButton
-                                    label={"Submit Stall"}
-                                    disabled={!isValid || formSubmitting}
-                                    primary={true}
-                                    onClick={onSaveForm}
-                                />
+                                {formHasSubmitFailed === true && Object.keys(formSyncErrors).length > 0 && (
+                                    <DjangoAPIErrorUI errors={formSyncErrors} />
+                                )}
+
+                                <RaisedButton label={"Submit Stall"} disabled={formSubmitting} primary={true} onClick={onSaveForm} />
                                 <HiddenButton type="submit" />
 
                                 <PrivacySection>
