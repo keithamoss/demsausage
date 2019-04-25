@@ -39,14 +39,15 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export class SausageMapContainer extends React.Component<IStoreProps & IDispatchProps & IOwnProps, IStateProps> {
+type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
+export class SausageMapContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "SausageMapContainer"
     static pageTitle = "Democracy Sausage"
     static pageBaseURL = ""
     onOpenFinderForAddressSearch: Function
     onOpenFinderForGeolocation: Function
 
-    constructor(props: any) {
+    constructor(props: TComponentProps) {
         super(props)
 
         this.state = { waitingForGeolocation: false, queriedPollingPlaces: [], mapFilterOptions: {} }
@@ -126,7 +127,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function, ownProps: IOwnProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
             gaTrack.event({

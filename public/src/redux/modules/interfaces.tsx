@@ -27,6 +27,18 @@ export interface IMUIThemeProps {
     muiTheme: IMUITheme
 }
 
+export interface IGeoJSONFeatureCollection {
+    type: string
+    features: IGeoJSON[]
+}
+
+export interface IGeoJSONFeature {
+    id: number
+    type: string
+    geometry: IGeoJSON
+    properties: any
+}
+
 export interface IGeoJSON {
     type: string
     coordinates: [number, number]

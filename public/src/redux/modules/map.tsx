@@ -3,20 +3,25 @@ import Icon from "ol/style/Icon"
 import Style from "ol/style/Style"
 import * as sprite from "../../icons/sprite.json"
 import { NomsReader } from "../../sausage/noms"
+import { IGeoJSONFeatureCollection } from "./interfaces.jsx"
 import { IMapPollingPlaceFeature } from "./polling_places"
 // import { IAnalytisMeta } from "../../shared/analytics/GoogleAalytics"
 
 // Actions
+const STORE_MAP_DATA = "ealgis/map/STORE_MAP_DATA"
 const SEARCH_MAP = "ealgis/map/SEARCH_MAP"
 const CLEAR_MAP_SEARCH = "ealgis/map/CLEAR_MAP_SEARCH"
 
 const initialState: Partial<IModule> = {
     search: null,
+    geojson: {},
 }
 
 // Reducer
 export default function reducer(state: Partial<IModule> = initialState, action: IAction) {
     switch (action.type) {
+        case STORE_MAP_DATA:
+            return dotProp.set(state, `geojson.${action.electionId}`, action.geojson)
         case SEARCH_MAP:
             return dotProp.set(state, "search", action.searchParams)
         case CLEAR_MAP_SEARCH:
@@ -34,15 +39,29 @@ export function setMapToSearch(searchParams: IMapSearchResults) {
         searchParams,
     }
 }
+
 export function clearMapToSearch() {
     return {
         type: CLEAR_MAP_SEARCH,
     }
 }
 
+export function storeMapData(electionId: number, geojson: IGeoJSONFeatureCollection) {
+    return {
+        type: STORE_MAP_DATA,
+        electionId,
+        geojson,
+    }
+}
+
 // Models
 export interface IModule {
     search: IMapSearchResults | null
+    geojson: IMapGeoJSONStore
+}
+
+export interface IMapGeoJSONStore {
+    [key: number]: IGeoJSONFeatureCollection
 }
 
 export interface IMapSearchResults {
@@ -62,6 +81,8 @@ export interface IMapFilterOptions {
 export interface IAction {
     type: string
     searchParams?: IMapSearchResults
+    electionId?: number
+    geojson?: IGeoJSONFeatureCollection
     meta?: {
         // analytics: IAnalyticsMeta
     }

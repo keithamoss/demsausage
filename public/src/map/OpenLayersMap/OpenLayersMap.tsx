@@ -2,6 +2,8 @@ import Attribution from "ol/control/Attribution"
 import Control from "ol/control/Control"
 import Event from "ol/events/Event"
 import Feature from "ol/Feature"
+// @ts-ignore
+import { xhr } from "ol/featureloader.js"
 import GeoJSON from "ol/format/GeoJSON"
 import Point from "ol/geom/Point"
 import Polygon from "ol/geom/Polygon"
@@ -24,14 +26,18 @@ import Style from "ol/style/Style"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
+import { IGeoJSONFeatureCollection } from "../../redux/modules/interfaces"
 import { IMapFilterOptions, IMapSearchResults, olStyleFunction } from "../../redux/modules/map"
 import { IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
 export interface IProps {
     election: IElection
+    geojson: IGeoJSONFeatureCollection | undefined
     mapSearchResults: IMapSearchResults | null
     mapFilterOptions: IMapFilterOptions
+    onMapBeginLoading: Function
+    onMapDataLoaded: Function
     onMapLoaded: Function
     onQueryMap: Function
 }
@@ -203,11 +209,16 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     private onVectorSourceChanged(event: Event) {
-        const { mapSearchResults, onMapLoaded } = this.props
+        const { geojson, mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props
         const vectorSource = event.target
 
         // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
         if (vectorSource.getState() === "ready") {
+            if (geojson === undefined) {
+                const writer = new GeoJSON()
+                onMapDataLoaded(writer.writeFeaturesObject(vectorSource.getFeatures()))
+            }
+
             const timeoutId = window.setTimeout(
                 function(this: OpenLayersMap) {
                     if (this.map !== null) {
@@ -237,14 +248,26 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     private getMapDataVectorLayer(map: Map) {
-        const { election, mapFilterOptions } = this.props
+        const { election, geojson, mapFilterOptions, onMapBeginLoading, onMapLoaded } = this.props
 
         const vectorSource = new VectorSource({
-            url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
             format: new GeoJSON(),
+            loader: async function(this: VectorSource, extent: any, resolution: number, projection: any) {
+                if (geojson === undefined) {
+                    onMapBeginLoading()
+                    const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
+                    xhr(url, this.getFormat()).call(this, extent, resolution, projection)
+                } else {
+                    this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson))
+                    onMapLoaded()
+                }
+            },
         })
 
-        this.vectorSourceChangedEventKey = vectorSource.on("change", this.onVectorSourceChanged.bind(this))
+        // When loading remotely we want to display the fancy map loading indicator
+        if (geojson === undefined) {
+            this.vectorSourceChangedEventKey = vectorSource.once("change", this.onVectorSourceChanged.bind(this))
+        }
 
         const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
             olStyleFunction(feature, resolution, mapFilterOptions)

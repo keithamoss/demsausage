@@ -19,7 +19,7 @@ import { IElection } from "../../redux/modules/elections"
 import { IMapFilterOptions, IMapSearchResults, isFilterEnabled } from "../../redux/modules/map"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import SausageLoader from "../../shared/loader/SausageLoader"
-import { default as OpenLayersMap } from "../OpenLayersMap/OpenLayersMap"
+import OpenLayersMapContainer from "../OpenLayersMap/OpenLayersMapContainer"
 // import "./SausageMap.css"
 
 const FlexboxMapContainer = styled.div`
@@ -97,6 +97,7 @@ export interface IState {
 }
 
 class SausageMap extends React.PureComponent<IProps, IState> {
+    private onMapBeginLoading: Function
     private onMapLoaded: Function
     private onClickMapFilterOption: Function
 
@@ -105,6 +106,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
 
         this.state = { mapLoading: true }
 
+        this.onMapBeginLoading = () => this.setState({ mapLoading: true })
         this.onMapLoaded = () => this.setState({ mapLoading: false })
         this.onClickMapFilterOption = (option: string) => (event: React.MouseEvent<HTMLElement>) => props.onClickMapFilterOption(option)
     }
@@ -129,11 +131,12 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             <React.Fragment>
                 <FlexboxMapContainer>
                     <div className="openlayers-map-container">
-                        <OpenLayersMap
+                        <OpenLayersMapContainer
                             key={currentElection.id}
                             election={currentElection}
                             mapSearchResults={mapSearchResults}
                             mapFilterOptions={mapFilterOptions}
+                            onMapBeginLoading={this.onMapBeginLoading}
                             onMapLoaded={this.onMapLoaded}
                             onQueryMap={onQueryMap}
                         />
