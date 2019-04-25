@@ -93,7 +93,7 @@ export interface IProps {
 }
 
 export interface IState {
-    mapLoading: boolean
+    mapLoading: boolean | undefined
 }
 
 class SausageMap extends React.PureComponent<IProps, IState> {
@@ -104,7 +104,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props)
 
-        this.state = { mapLoading: true }
+        this.state = { mapLoading: undefined }
 
         this.onMapBeginLoading = () => this.setState({ mapLoading: true })
         this.onMapLoaded = () => this.setState({ mapLoading: false })

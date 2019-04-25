@@ -1,3 +1,5 @@
+// @ts-ignore
+import { MapBrowserEvent } from "ol.js"
 import Attribution from "ol/control/Attribution"
 import Control from "ol/control/Control"
 import Event from "ol/events/Event"
@@ -23,6 +25,7 @@ import Fill from "ol/style/Fill"
 import RegularShape from "ol/style/RegularShape"
 import Stroke from "ol/style/Stroke"
 import Style from "ol/style/Style"
+import View from "ol/View"
 import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { IElection } from "../../redux/modules/elections"
@@ -55,7 +58,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
 
     componentDidMount() {
-        const { election, onQueryMap } = this.props
+        const { election } = this.props
 
         this.map = new Map({
             layers: this.getBasemap(),
@@ -91,43 +94,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         this.map.addLayer(this.getMapDataVectorLayer(this.map))
 
-        const map = this.map
-        this.map.on("singleclick", function(e: any) {
-            gaTrack.event({
-                category: "OpenLayersMap",
-                action: "Query Features",
-            })
-
-            let features: Array<any> = []
-            map.forEachFeatureAtPixel(
-                e.pixel,
-                (feature: any, layer: any) => {
-                    features.push(feature)
-                },
-                {
-                    hitTolerance: 3,
-                    layerFilter: (layer: BaseLayer) => {
-                        const props = layer.getProperties()
-                        if ("isSausageLayer" in props && props.isSausageLayer === true) {
-                            return true
-                        }
-                        return false
-                    },
-                }
-            )
-
-            gaTrack.event({
-                category: "OpenLayersMap",
-                action: "Query Features",
-                label: "Number of Features",
-                value: features.length,
-            })
-
-            if (features.length > 0) {
-                // SausageMap.queriedPollingPlaces displays a "Too many polling places - try to zoom/find" if we have more than 20
-                onQueryMap(features.slice(0, 21))
-            }
-        })
+        this.map.on("singleclick", this.onClickMap.bind(this))
     }
 
     componentDidUpdate(prevProps: IProps) {
@@ -212,32 +179,26 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const { geojson, mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props
         const vectorSource = event.target
 
-        // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
         if (vectorSource.getState() === "ready") {
+            // Cache GeoJSON features in the local Redux store for recycling if the user navigates back
             if (geojson === undefined) {
                 const writer = new GeoJSON()
                 onMapDataLoaded(writer.writeFeaturesObject(vectorSource.getFeatures()))
             }
 
+            // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections).
+            // Wait for a bit before doing map onLoad things like zooming to search results.
+            // If we don't wait then OpenLayers seems to stop rendering when the zoom starts, so the user sees nothing.
             const timeoutId = window.setTimeout(
                 function(this: OpenLayersMap) {
                     if (this.map !== null) {
-                        // Wait a bit to allow time for OpenLayers to parse and render the data
                         onMapLoaded()
-
-                        this.map.getView().changed()
-                        let view = this.map.getView()
 
                         if (mapSearchResults !== null) {
                             this.zoomMapToSearchResults(this.map)
                         } else {
-                            // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
-                            let centre = view.getCenter()
-                            centre[0] -= 1
-                            view.setCenter(centre)
+                            this.workaroundOLRenderingBug(this.map.getView())
                         }
-
-                        this.map.setView(view)
                     }
                 }.bind(this),
                 750
@@ -247,27 +208,33 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         }
     }
 
+    private workaroundOLRenderingBug(view: View) {
+        // @TODO Hacky fix for the GeoJSON loading, but not rendering until the map view changes.
+        // const centre = view.getCenter()
+        // centre[0] -= 1
+        // view.setCenter(centre)
+        // view.changed()
+    }
+
     private getMapDataVectorLayer(map: Map) {
-        const { election, geojson, mapFilterOptions, onMapBeginLoading, onMapLoaded } = this.props
+        const { election, geojson, mapFilterOptions, onMapBeginLoading } = this.props
 
         const vectorSource = new VectorSource({
             format: new GeoJSON(),
             loader: async function(this: VectorSource, extent: any, resolution: number, projection: any) {
                 if (geojson === undefined) {
+                    // Fetch GeoJSON from remote
                     onMapBeginLoading()
                     const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
                     xhr(url, this.getFormat()).call(this, extent, resolution, projection)
                 } else {
+                    // Load GeoJSON from local Redux store
                     this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson))
-                    onMapLoaded()
                 }
             },
         })
 
-        // When loading remotely we want to display the fancy map loading indicator
-        if (geojson === undefined) {
-            this.vectorSourceChangedEventKey = vectorSource.once("change", this.onVectorSourceChanged.bind(this))
-        }
+        this.vectorSourceChangedEventKey = vectorSource.once("change", this.onVectorSourceChanged.bind(this))
 
         const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
             olStyleFunction(feature, resolution, mapFilterOptions)
@@ -281,17 +248,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         vectorLayer.setProperties({ isSausageLayer: true })
 
         return vectorLayer
-    }
-
-    private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer | null {
-        let layer = null
-        map.getLayers().forEach((l: BaseLayer) => {
-            const props = l.getProperties()
-            if (propName in props && props[propName] === propValue) {
-                layer = l
-            }
-        })
-        return layer
     }
 
     private getSearchResultsVectorLayer(map: Map) {
@@ -328,6 +284,15 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         return null
     }
 
+    private addSearchResultsVectorLayer(map: Map) {
+        this.workaroundOLRenderingBug(map.getView())
+
+        const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map)
+        if (searchResultsVectorLayerNew !== null) {
+            map.addLayer(searchResultsVectorLayerNew)
+        }
+    }
+
     private clearSearchResultsVectorLayer(map: Map) {
         const searchResultsVectorLayer = this.getLayerByProperties(map, "isSearchIndicatorLayer", true)
         if (searchResultsVectorLayer !== null) {
@@ -337,6 +302,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
     private zoomMapToSearchResults(map: Map) {
         const { mapSearchResults } = this.props
+        const that = this
 
         if (mapSearchResults !== null && mapSearchResults.extent !== null) {
             // Remove any existing search indicator layer
@@ -349,18 +315,63 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
                 padding: [85, 0, 20, 0],
                 callback: (completed: boolean) => {
                     if (completed === true) {
-                        let centre = view.getCenter()
-                        centre[0] -= 1
-                        view.setCenter(centre)
-
-                        const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map)
-                        if (searchResultsVectorLayerNew !== null) {
-                            map.addLayer(searchResultsVectorLayerNew)
-                        }
+                        that.addSearchResultsVectorLayer(map)
                     }
                 },
             })
         }
+    }
+
+    private onClickMap(event: MapBrowserEvent) {
+        const { onQueryMap } = this.props
+
+        if (this.map !== null) {
+            gaTrack.event({
+                category: "OpenLayersMap",
+                action: "Query Features",
+            })
+
+            let features: Array<any> = []
+            this.map.forEachFeatureAtPixel(
+                event.pixel,
+                (feature: any, layer: any) => {
+                    features.push(feature)
+                },
+                {
+                    hitTolerance: 3,
+                    layerFilter: (layer: BaseLayer) => {
+                        const props = layer.getProperties()
+                        if ("isSausageLayer" in props && props.isSausageLayer === true) {
+                            return true
+                        }
+                        return false
+                    },
+                }
+            )
+
+            gaTrack.event({
+                category: "OpenLayersMap",
+                action: "Query Features",
+                label: "Number of Features",
+                value: features.length,
+            })
+
+            if (features.length > 0) {
+                // SausageMap.queriedPollingPlaces displays a "Too many polling places - try to zoom/find" if we have more than 20
+                onQueryMap(features.slice(0, 21))
+            }
+        }
+    }
+
+    private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer | null {
+        let layer = null
+        map.getLayers().forEach((l: BaseLayer) => {
+            const props = l.getProperties()
+            if (propName in props && props[propName] === propValue) {
+                layer = l
+            }
+        })
+        return layer
     }
 
     private getBasemap() {
