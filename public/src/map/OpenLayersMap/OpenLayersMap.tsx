@@ -1,12 +1,16 @@
 import Attribution from "ol/control/Attribution"
+import Control from "ol/control/Control"
+import Event from "ol/events/Event"
 import Feature from "ol/Feature"
 import GeoJSON from "ol/format/GeoJSON"
 import Point from "ol/geom/Point"
 import Polygon from "ol/geom/Polygon"
+import Interaction from "ol/interaction/Interaction"
 import BaseLayer from "ol/layer/Base"
 import TileLayer from "ol/layer/Tile"
 import VectorLayer from "ol/layer/Vector"
 import Map from "ol/Map"
+import * as Observable from "ol/Observable"
 import "ol/ol.css"
 // c.f. Re proj import https://github.com/openlayers/openlayers/issues/8037
 // @ts-ignore
@@ -34,11 +38,14 @@ export interface IProps {
 
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
     private map: Map | null
+    private vectorSourceChangedEventKey: any | undefined /* ol.EventsKey */
+    private timeoutIds: number[]
 
     constructor(props: IProps) {
         super(props)
 
         this.map = null
+        this.timeoutIds = []
     }
 
     componentDidMount() {
@@ -67,13 +74,14 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         })
 
         // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
-        window.setTimeout(
+        const timeoutId = window.setTimeout(
             (map: Map) => {
                 map.updateSize()
             },
             1,
             this.map
         )
+        this.timeoutIds.push(timeoutId)
 
         this.map.addLayer(this.getMapDataVectorLayer(this.map))
 
@@ -142,42 +150,101 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         }
     }
 
+    componentWillUnmount() {
+        // 1. Remove the "on data loaded" change event
+        // This doesn't work - presumably because of .bind(this)
+        // l.getSource().un("changed", this.onVectorSourceChanged.bind(this))
+
+        // ... So we use Observable.unByKey
+        // https://gis.stackexchange.com/a/241531
+        if (this.vectorSourceChangedEventKey !== undefined) {
+            // @ts-ignore
+            Observable.unByKey(this.vectorSourceChangedEventKey)
+        }
+
+        // 2. Cancel any window.setTimeout() calls that may be running
+        this.timeoutIds.forEach((timeoutId: number) => window.clearTimeout(timeoutId))
+
+        // 3. Remove all layers, controls, and interactions on the map
+        if (this.map !== null) {
+            const layers = [...this.map.getLayers().getArray()]
+            layers.forEach((l: BaseLayer | VectorLayer) => {
+                if (this.map !== null) {
+                    this.map.removeLayer(l)
+                }
+            })
+
+            const controls = [...this.map.getControls().getArray()]
+            controls.forEach((c: Control) => {
+                if (this.map !== null) {
+                    this.map.removeControl(c)
+                }
+            })
+
+            const interactions = [...this.map.getInteractions().getArray()]
+            interactions.forEach((i: Interaction) => {
+                if (this.map !== null) {
+                    this.map.removeInteraction(i)
+                }
+            })
+        }
+
+        // 4. And finally clean up the map object itself
+        // https://stackoverflow.com/a/25997026
+        if (this.map !== null) {
+            // @ts-ignore
+            this.map.setTarget(null)
+            this.map = null
+        }
+    }
+
     render() {
         return <div id="openlayers-map" className="openlayers-map" />
     }
 
+    private onVectorSourceChanged(event: Event) {
+        const { mapSearchResults, onMapLoaded } = this.props
+        const vectorSource = event.target
+
+        // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
+        if (vectorSource.getState() === "ready") {
+            const timeoutId = window.setTimeout(
+                function(this: OpenLayersMap) {
+                    if (this.map !== null) {
+                        // Wait a bit to allow time for OpenLayers to parse and render the data
+                        onMapLoaded()
+
+                        this.map.getView().changed()
+                        let view = this.map.getView()
+
+                        if (mapSearchResults !== null) {
+                            this.zoomMapToSearchResults(this.map)
+                        } else {
+                            // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
+                            let centre = view.getCenter()
+                            centre[0] -= 1
+                            view.setCenter(centre)
+                        }
+
+                        this.map.setView(view)
+                    }
+                }.bind(this),
+                750
+            )
+
+            this.timeoutIds.push(timeoutId)
+        }
+    }
+
     private getMapDataVectorLayer(map: Map) {
-        const { election, mapSearchResults, mapFilterOptions } = this.props
+        const { election, mapFilterOptions } = this.props
 
         const vectorSource = new VectorSource({
             url: `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`,
             format: new GeoJSON(),
         })
 
-        // @TODO Hacky fix for the GeoJSON loading, but not rendering until the user interacts with the map
-        const that = this
-        vectorSource.on("change", function(e: any) {
-            // OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections). Wait for a bit before zooming to give it time.
-            if (vectorSource.getState() === "ready") {
-                window.setTimeout(function() {
-                    // Wait a bit to allow time for OpenLayers to parse and render the data
-                    that.props.onMapLoaded()
-
-                    map.getView().changed()
-                    let view = map.getView()
-
-                    if (mapSearchResults !== null) {
-                        that.zoomMapToSearchResults(map)
-                    } else {
-                        let centre = view.getCenter()
-                        centre[0] -= 1
-                        view.setCenter(centre)
-                    }
-
-                    map.setView(view)
-                }, 750)
-            }
-        })
+        this.vectorSourceChangedEventKey = vectorSource.on("change", this.onVectorSourceChanged.bind(this))
 
         const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
             olStyleFunction(feature, resolution, mapFilterOptions)
