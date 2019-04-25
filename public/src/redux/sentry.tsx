@@ -7,11 +7,16 @@ import { IStore } from "./modules/reducer"
 
 const sentry = (store: MiddlewareAPI<IStore>) => {
     Sentry.addGlobalEventProcessor((event: Event) => {
+        const stateCopy = JSON.parse(JSON.stringify(store.getState()))
+        if ("map" in stateCopy && "geojson" in stateCopy.map) {
+            stateCopy.map.geojson = Object.keys(stateCopy.map.geojson)
+        }
+
         return {
             ...event,
             extra: {
                 ...event.extra,
-                "redux:state": store.getState(),
+                "redux:state": stateCopy,
             },
         }
     })
