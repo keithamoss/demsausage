@@ -136,7 +136,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stepper activeStep={stepIndex} orientation="vertical">
                     <Step>
-                        <StepLabel>{chosenElection === null ? "Your election" : `Your election: ${chosenElection.name}`}</StepLabel>
+                        <StepLabel>{chosenElection === null ? "Choose an election" : chosenElection.name}</StepLabel>
                         <StepContentStyled>
                             <RadioButtonGroup name="elections" onChange={onChooseElection}>
                                 {liveElections.map((election: IElection) => (

@@ -78,7 +78,7 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
     constructor(props: any) {
         super(props)
         this.state = {
-            stepIndex: 0,
+            stepIndex: props.liveElections.length === 1 ? 1 : 0,
             chosenElection: props.liveElections.length === 1 ? props.liveElections[0] : null,
             stallLocationInfo: null,
             locationConfirmed: false,

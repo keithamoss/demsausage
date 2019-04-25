@@ -1,9 +1,8 @@
 import * as React from "react"
 import styled from "styled-components"
 import { isIE11 } from "../../utils"
-// import { IElection, IStallLocationInfo } from "../../redux/modules/interfaces"
-// import "./AddStallForm.css"
 import AddStallFormContainer from "../AddStallForm/AddStallFormContainer"
+// import "./AddStallForm.css"
 
 export interface IProps {
     showNoLiveElections: boolean
@@ -18,8 +17,8 @@ const FormContainer = styled.div``
 const FormSection = styled.div`
     padding-left: 15px;
     padding-right: 15px;
-    margin-top: 30px;
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 `
 
 const FormSectionHeader = styled.h2`
