@@ -147,9 +147,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     </Step>
 
                     <Step>
-                        <StepLabel>
-                            {locationConfirmed === false ? "Where is your stall?" : `Stall location: ${primaryTextString}`}
-                        </StepLabel>
+                        <StepLabel>{locationConfirmed === false ? "Where is your stall?" : primaryTextString}</StepLabel>
                         <StepContentStyled>
                             {chosenElection !== null && chosenElection.polling_places_loaded === false && (
                                 <GooglePlacesAutocompleteListWithConfirm
@@ -173,16 +171,15 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                     </Step>
 
                     <Step>
-                        <StepLabel>Stall details</StepLabel>
+                        <StepLabel>Tell us about your stall</StepLabel>
                         <StepContentStyled>
                             {/* <div> required here so that StepContentStyled works */}
                             <div>
                                 <FormSection style={{ marginTop: 0 }}>
-                                    <FormSectionHeader>Tell us about your stall</FormSectionHeader>
                                     <CustomTextField
                                         name="name"
                                         component={TextField}
-                                        floatingLabelText={"What is your stall called?"}
+                                        floatingLabelText={"What should we call your stall?"}
                                         hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                                         fullWidth={true}
                                         validate={[required]}
@@ -201,7 +198,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     <CustomTextField
                                         name="website"
                                         component={TextField}
-                                        floatingLabelText={"Does your stall have a website?"}
+                                        floatingLabelText={"Stall website (optional)"}
                                         hintText={"We'll include a link to your site as part of your stall's information"}
                                         fullWidth={true}
                                     />
@@ -246,7 +243,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         name="free_text"
                                         component={TextField}
                                         floatingLabelText={"Anything else?"}
-                                        hintText={"e.g. We also have cold drinks and pony rides!"}
+                                        hintText={"e.g. We also have yummy gluten free sausage rolls, cold drinks, and pony rides!"}
                                         fullWidth={true}
                                     />
                                 </FormSection>
