@@ -86,10 +86,6 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
-    constructor(props: IStoreProps & IDispatchProps & IRouteProps) {
-        super(props)
-    }
-
     componentWillMount() {
         const { setElectionFromRoute, fetchInitialAppState } = this.props
 
@@ -112,6 +108,7 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             responsiveDrawer,
             handleSnackbarClose,
             onClickDrawerLink,
+            location,
             children,
             content,
         } = this.props

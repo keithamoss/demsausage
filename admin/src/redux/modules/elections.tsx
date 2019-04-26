@@ -38,7 +38,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
         case SET_CURRENT_ELECTION:
             return dotProp.set(state, "current_election_id", action.electionId)
         case SET_PRIMARY_ELECTION:
-            state.elections!.map((election: IElection, index: number) => {
+            state.elections!.forEach((election: IElection, index: number) => {
                 state = dotProp.set(state, `elections.${index}.is_primary`, election.id === action.electionId ? true : false)
             })
             return state

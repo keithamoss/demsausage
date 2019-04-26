@@ -181,6 +181,7 @@ class App extends React.Component<IProps, {}> {
                         <ListItem
                             primaryText="democracysausage.org"
                             leftIcon={<ActionOpenInNew />}
+                            // eslint-disable-next-line
                             containerElement={<a href={"https://democracysausage.org"} target="_blank" />}
                         />
 

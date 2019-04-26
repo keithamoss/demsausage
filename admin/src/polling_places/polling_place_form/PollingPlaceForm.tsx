@@ -84,7 +84,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                         leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
                         primaryText={"Stall information has already been automatically populated for you"}
                         secondaryText={
-                            "This polling place had no reports yet, so just double check everything " + "and hit 'Save' if it's all OK."
+                            "This polling place had no reports yet, so just double check everything and hit 'Save' if it's all OK."
                         }
                         secondaryTextLines={2}
                         disabled={true}
