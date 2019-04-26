@@ -1,10 +1,19 @@
+import { FlatButton } from "material-ui"
 import Avatar from "material-ui/Avatar"
-import { Card, CardHeader, CardText, CardTitle } from "material-ui/Card"
+import { Card, CardActions, CardHeader, CardText, CardTitle } from "material-ui/Card"
 import { ListItem } from "material-ui/List"
 import Paper from "material-ui/Paper"
 import { grey500, yellow600 } from "material-ui/styles/colors"
-import { ActionAccessible, ActionHelpOutline, AlertWarning, DeviceAccessTime } from "material-ui/svg-icons"
+import {
+    ActionAccessible,
+    ActionHelpOutline,
+    AlertWarning,
+    ContentContentCopy,
+    DeviceAccessTime,
+    EditorFormatListBulleted,
+} from "material-ui/svg-icons"
 import * as React from "react"
+import CopyToClipboard from "react-copy-to-clipboard"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CakeIcon from "../../icons/cake"
@@ -16,6 +25,7 @@ import VegoIcon from "../../icons/vego"
 import { IElection, isElectionLive } from "../../redux/modules/elections"
 import {
     getFoodDescription,
+    getPollingPlacePermalink,
     getSausageChanceDescription,
     getWheelchairAccessDescription,
     IPollingPlace,
@@ -52,7 +62,7 @@ const RunOutWarning = styled(ListItem)`
     margin-bottom: 10px !important;
 `
 
-const Division = styled.div`
+const Divisions = styled.div`
     color: ${grey500};
     padding-top: 10px;
 `
@@ -79,11 +89,13 @@ const ChanceOfSausage = styled(ListItem)`
 export interface IProps {
     pollingPlace: IPollingPlace | IPollingPlaceSearchResult
     election: IElection
+    copyLinkEnabled: boolean
+    onClickCopyLink: any
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
     render() {
-        const { pollingPlace, election } = this.props
+        const { pollingPlace, election, copyLinkEnabled, onClickCopyLink } = this.props
 
         const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false
 
@@ -155,17 +167,28 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                         <WheelchairAccess>
                             <ActionAccessible /> Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}
                         </WheelchairAccess>
-                        {pollingPlace.divisions.length > 0 && <Division>Division(s): {pollingPlace.divisions.join(", ")}</Division>}
+                        {pollingPlace.divisions.length > 0 && (
+                            <Divisions>
+                                <EditorFormatListBulleted /> Division(s): {pollingPlace.divisions.join(", ")}
+                            </Divisions>
+                        )}
                         {pollingPlace.stall !== null &&
                             pollingPlace.stall.extra_info !== null &&
-                            pollingPlace.stall.extra_info.length > 0 && <Division>Extra Info: {pollingPlace.stall.extra_info}</Division>}
-                        {pollingPlace.booth_info.length > 0 && <Division>Booth Info: {pollingPlace.booth_info}</Division>}
+                            pollingPlace.stall.extra_info.length > 0 && <Divisions>Extra Info: {pollingPlace.stall.extra_info}</Divisions>}
+                        {pollingPlace.booth_info.length > 0 && <Divisions>Booth Info: {pollingPlace.booth_info}</Divisions>}
                     </CardText>
                     {isExpandable && (
                         <CardText expandable={isExpandable}>
                             {pollingPlaceHasReportsOfNoms(pollingPlace) === true &&
                                 `This polling place has ${getFoodDescription(pollingPlace)}.`}
                         </CardText>
+                    )}
+                    {copyLinkEnabled === true && (
+                        <CardActions>
+                            <CopyToClipboard text={getPollingPlacePermalink(election, pollingPlace)} onCopy={onClickCopyLink}>
+                                <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} />
+                            </CopyToClipboard>
+                        </CardActions>
                     )}
                 </Card>
             </Paper>
