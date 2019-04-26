@@ -381,6 +381,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             "noms": stall.noms,
             "name": stall.name,
             "description": stall.description,
+            "opening_hours": stall.opening_hours,
             "website": stall.website,
         }, }, partial=True)
 

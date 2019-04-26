@@ -125,6 +125,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     noms = JSONSchemaField(noms_schema, default=dict)
     name = serializers.CharField(default="", allow_blank=True)
     description = serializers.CharField(default="", allow_blank=True)
+    opening_hours = serializers.CharField(default="", allow_blank=True)
     website = serializers.CharField(default="", allow_blank=True)
     extra_info = serializers.CharField(default="", allow_blank=True)
     first_report = serializers.DateTimeField(allow_null=True, read_only=True)
@@ -134,7 +135,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceNoms
 
-        fields = ("noms", "name", "description", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
+        fields = ("noms", "name", "description", "opening_hours", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
@@ -252,6 +253,7 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
 class StallsSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, allow_blank=False)
     description = serializers.CharField(required=True, allow_blank=False)
+    opening_hours = serializers.CharField(required=False, allow_blank=True)
     website = serializers.CharField(required=False, allow_blank=True)
     noms = JSONSchemaField(noms_schema, required=True)
     location_info = JSONSchemaField(stall_location_info_schema, required=False)
@@ -260,7 +262,7 @@ class StallsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
     def create(self, validated_data):
         return Stalls.objects.create(**validated_data)
@@ -297,13 +299,13 @@ class StallsUserEditSerializer(StallsSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status")
 
 
 class StallsManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("name", "description", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on")
+        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on")
 
 
 class PendingStallsSerializer(StallsSerializer):
@@ -312,10 +314,10 @@ class PendingStallsSerializer(StallsSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "diff")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "diff")
 
     def get_diff(self, obj):
-        fields_to_include_in_diff = ("name", "description", "website", "noms", "email")
+        fields_to_include_in_diff = ("name", "description", "opening_hours", "website", "noms", "email")
 
         if obj.approved_on is not None:
             filter = obj.history.all().filter(history_date__gt=obj.approved_on)
