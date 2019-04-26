@@ -60,17 +60,23 @@
         "@types/redux-thunk": "^2.1.0",
         "@types/reselect": "^2.2.0",
         "core-js": "^2.6.1",
-        "react-scripts": "^2.1.8",
+        "react-scripts": "3.0.0",
         "redux-devtools-extension": "^2.13.7",
         "tslint": "5.14.0",
         "tslint-config-prettier": "^1.17.0",
         "tslint-react": "4.0.0",
         "typescript": "3.4.1"
     },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }
