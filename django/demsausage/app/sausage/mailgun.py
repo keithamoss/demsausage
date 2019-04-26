@@ -2,6 +2,7 @@ from rest_framework.exceptions import APIException
 from django.forms.models import model_to_dict
 
 from demsausage.app.sausage.polling_places import getFoodDescription
+from demsausage.app.sausage.elections import get_url_safe_election_name
 from demsausage.app.admin import get_admins
 from demsausage.util import get_env
 
@@ -87,6 +88,7 @@ def send_stall_approved_email(stall):
         "STALL_OPENING_HOURS": stall.opening_hours,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
+        "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
         "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
         "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
@@ -117,6 +119,7 @@ def send_stall_edited_email(stall):
         "STALL_OPENING_HOURS": stall.opening_hours,
         "STALL_WEBSITE": stall.website,
         "DELICIOUSNESS": getFoodDescription(stall),
+        "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
         "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
     })
 

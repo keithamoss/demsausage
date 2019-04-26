@@ -6,6 +6,7 @@ import chardet
 from datetime import datetime
 from timeit import default_timer as timer
 import json
+from urllib.parse import quote
 
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
@@ -35,6 +36,10 @@ def get_polling_place_geojson_cache_key(electionId):
 
 def get_elections_cache_key():
     return "elections_list"
+
+
+def get_url_safe_election_name(election):
+    return quote(election.name.lower().replace(" ", "_"))
 
 
 class PollingPlacesIngestBase():
