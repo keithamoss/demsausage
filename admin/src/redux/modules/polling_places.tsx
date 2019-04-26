@@ -93,6 +93,7 @@ export interface IPollingPlaceStall {
     name: string
     description: string
     opening_hours: string
+    favourited: boolean
     website: string
     extra_info: string
     first_report: string | null // Datetime

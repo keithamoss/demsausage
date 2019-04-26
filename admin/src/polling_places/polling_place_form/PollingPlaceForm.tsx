@@ -1,15 +1,14 @@
 import Avatar from "material-ui/Avatar"
-// import "./PollingPlaceForm.css"
 import { Card, CardActions, CardText, CardTitle } from "material-ui/Card"
 import Divider from "material-ui/Divider"
 import { List, ListItem } from "material-ui/List"
 import MenuItem from "material-ui/MenuItem"
 import RaisedButton from "material-ui/RaisedButton"
 import { blue500, grey100, grey500, yellow700 } from "material-ui/styles/colors"
-import { AlertWarning, ContentBlock } from "material-ui/svg-icons"
+import { AlertWarning, ContentBlock, ToggleStar, ToggleStarBorder } from "material-ui/svg-icons"
 import * as React from "react"
 import { Field, reduxForm } from "redux-form"
-import { SelectField, TextField, Toggle } from "redux-form-material-ui"
+import { Checkbox, SelectField, TextField, Toggle } from "redux-form-material-ui"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CakeIcon from "../../icons/cake"
@@ -211,6 +210,19 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             fullWidth={true}
                         />
                     </FormCardText>
+                    <ListItem
+                        primaryText="Favourite this polling place"
+                        secondaryText="This adds the polling place to the list of booths we can feature on social media."
+                        secondaryTextLines={2}
+                        leftCheckbox={
+                            <Field
+                                name="favourited"
+                                component={Checkbox}
+                                checkedIcon={<ToggleStar />}
+                                uncheckedIcon={<ToggleStarBorder />}
+                            />
+                        }
+                    />
                     <CardActions>
                         <RaisedButton label={"Save"} primary={true} onClick={onSaveForm} />
                         <HiddenButton type="submit" />

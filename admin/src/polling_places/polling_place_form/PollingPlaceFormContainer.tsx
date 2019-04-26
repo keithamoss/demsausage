@@ -1,7 +1,6 @@
 import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
-// import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { IElection } from "../../redux/modules/elections"
 import {
@@ -43,6 +42,7 @@ const toFormValues = (pollingPlace: IPollingPlace): any => {
         name: deepValue(pollingPlace, "stall.name"),
         description: deepValue(pollingPlace, "stall.description"),
         opening_hours: deepValue(pollingPlace, "stall.opening_hours"),
+        favourited: deepValue(pollingPlace, "stall.favourited"),
         website: deepValue(pollingPlace, "stall.website"),
         extra_info: deepValue(pollingPlace, "stall.extra_info"),
         source: deepValue(pollingPlace, "stall.source"),
@@ -57,6 +57,7 @@ const fromFormValues = (formValues: any) => {
             name: formValues.name || "",
             description: formValues.description || "",
             opening_hours: formValues.opening_hours || "",
+            favourited: formValues.favourited,
             website: formValues.website || "",
             extra_info: formValues.extra_info || "",
             source: formValues.source || "",
@@ -94,6 +95,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.website = stall.website
             initialValues.source = "Direct"
             initialValues.extra_info = ""
+            initialValues.favourited = false
         }
 
         return initialValues
