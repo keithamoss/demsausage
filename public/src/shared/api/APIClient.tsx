@@ -1,6 +1,6 @@
+import * as Sentry from "@sentry/browser"
 import * as Cookies from "js-cookie"
 import * as qs from "qs"
-import * as Sentry from "@sentry/browser"
 import "whatwg-fetch"
 import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from "../../redux/modules/app"
 import { sendNotification } from "../../redux/modules/snackbars"
@@ -14,13 +14,21 @@ export class APIClient {
 
     public handleResponse(url: string, response: any, dispatch: any) {
         if (response.status >= 401) {
-            return response.json().then((json: any) => {
-                this.handleError(json, url, dispatch)
-                return {
-                    response: response,
-                    json: json,
-                }
-            })
+            return response
+                .json()
+                .then((json: any) => {
+                    this.handleError(json, url, dispatch)
+                    return {
+                        response: response,
+                        json: json,
+                    }
+                })
+                .catch((error: any) => {
+                    return {
+                        response: response,
+                        json: null,
+                    }
+                })
         }
 
         return response.json().then((json: any) => {
