@@ -1,6 +1,15 @@
 from django.contrib.gis import measure
 from django.contrib.gis.db.models.functions import Distance
 
+from demsausage.util import get_or_none
+
+
+def get_active_polling_place_queryset():
+    from demsausage.app.models import PollingPlaces
+    from demsausage.app.enums import PollingPlaceStatus
+
+    return PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
+
 
 def find_by_distance(search_point, distance_threshold_km, limit, qs):
     queryset_spatial = qs.filter(geom__dwithin=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")
@@ -9,6 +18,35 @@ def find_by_distance(search_point, distance_threshold_km, limit, qs):
         return queryset_spatial[:limit]
     else:
         return queryset_spatial
+
+
+def find_by_lookup_terms(election_id, lookup_terms, queryset):
+    queryset = queryset.filter(election_id=election_id)
+
+    # 1. First, try to match a numeric lookup term against the ec_id (if this election has them)
+    if lookup_terms["ec_id"] is not None and lookup_terms["ec_id"].isdigit() is True:
+        qs = queryset.filter(ec_id=lookup_terms["ec_id"])
+        if qs.count() == 1:
+            return qs.first()
+
+    # 2. Secondly, try to match on name, premises, and state
+    if lookup_terms["name"] is not None and lookup_terms["premises"] is not None and lookup_terms["state"] is not None:
+        qs = queryset.filter(name__iexact=lookup_terms["name"], premises__iexact=lookup_terms["premises"], state__iexact=lookup_terms["state"])
+        if qs.count() == 1:
+            return qs.first()
+
+    return None
+
+
+def find_by_stall(stall_id, queryset):
+    from demsausage.app.models import Stalls
+
+    if stall_id.isdigit() is True:
+        stall = get_or_none(Stalls, id=stall_id)
+        if stall is not None:
+            return queryset.filter(id=stall.polling_place_id).first()
+
+    return None
 
 
 def getFoodDescription(stall):

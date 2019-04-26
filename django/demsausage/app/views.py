@@ -29,7 +29,7 @@ from demsausage.app.exceptions import BadRequest
 from demsausage.app.filters import LonLatFilter
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
-from demsausage.app.sausage.polling_places import find_by_distance
+from demsausage.app.sausage.polling_places import find_by_distance, find_by_lookup_terms, find_by_stall, get_active_polling_place_queryset
 from demsausage.util import make_logger, get_or_none, add_datetime_to_filename
 
 from datetime import datetime
@@ -178,7 +178,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     """
     API endpoint that allows polling places to be viewed and edited.
     """
-    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE).all().order_by("-id")
+    queryset = get_active_polling_place_queryset().all().order_by("-id")
     serializer_class = PollingPlacesSerializer
     permission_classes = (IsAuthenticated,)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
@@ -191,7 +191,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         response = super(PollingPlacesViewSet, self).finalize_response(request, response, *args, **kwargs)
 
         # Customise the filename for CSV downloads
-        if "text/csv" in response.accepted_media_type:
+        if response.status_code == 200 and "text/csv" in response.accepted_media_type:
             election = get_or_none(Elections, id=request.query_params.get("election_id", None))
             if election is not None:
                 filename = add_datetime_to_filename("{}.csv".format(election.name))
@@ -220,6 +220,36 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             raise BadRequest("No election_id provided.")
 
     @list_route(methods=["get"], permission_classes=(AllowAny,))
+    def lookup(self, request, format=None):
+        election_id = request.query_params.get("election_id", None)
+        lookup_terms = {
+            "ec_id": request.query_params.get("ec_id", None),
+            "name": request.query_params.get("name", None),
+            "premises": request.query_params.get("premises", None),
+            "state": request.query_params.get("state", None),
+        }
+
+        if election_id is not None:
+            pollingPlace = find_by_lookup_terms(election_id, lookup_terms, self.queryset)
+            if pollingPlace is not None:
+                return Response(self.serializer_class(pollingPlace).data)
+            return HttpResponseNotFound()
+        else:
+            raise BadRequest("No election_id provided.")
+
+    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    def stall_lookup(self, request, format=None):
+        stall_id = request.query_params.get("stall_id", None)
+
+        if stall_id is not None:
+            pollingPlace = find_by_stall(stall_id, self.queryset)
+            if pollingPlace is not None:
+                return Response(self.serializer_class(pollingPlace).data)
+            return HttpResponseNotFound()
+        else:
+            raise BadRequest("No stall_id provided.")
+
+    @list_route(methods=["get"], permission_classes=(AllowAny,))
     def nearby_bbox(self, request, format=None):
         """
         Retrieve the bounding box of the 15 polling places closest to a given latitude, longitude.
@@ -245,7 +275,7 @@ class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
     Search the polling places for an election.
     """
-    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
+    queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesSearchFilter
@@ -255,7 +285,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
     Retrieve a list of all polling places that are close to a given latitude, longitude.
     """
-    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
+    queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlaceSearchResultsSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesNearbyFilter
@@ -265,7 +295,7 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
     """
     Retrieve a list of all polling places and their food stall attributes for a given election in GeoJSON format.
     """
-    queryset = PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
+    queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlacesGeoJSONSerializer
     permission_classes = (AllowAny,)
     filter_class = PollingPlacesBaseFilter
