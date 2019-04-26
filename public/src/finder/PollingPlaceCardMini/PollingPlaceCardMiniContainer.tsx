@@ -17,7 +17,7 @@ export interface IDispatchProps {}
 export interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {
+class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
         const { pollingPlace, election } = this.props
 

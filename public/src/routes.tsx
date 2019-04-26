@@ -6,6 +6,7 @@ import EditStallContainer from "./edit-stall/EditStall/EditStallContainer"
 import ElectionChooserContainer from "./elections/ElectionChooser/ElectionChooserContainer"
 import PollingPlaceFinderContainer from "./finder/PollingPlaceFinder/PollingPlaceFinderContainer"
 import SausageMapContainer from "./map/SausageMap/SausageMapContainer"
+import PollingPlacePermalinkContainer from "./polling_places/PollingPlacePermalink/PollingPlacePermalinkContainer"
 import { IStore } from "./redux/modules/reducer"
 // import SausagelyticsContainer from "./sausagelytics/Sausagelytics/SausagelyticsContainer"
 import AboutPage from "./static-pages/AboutPage/AboutPage"
@@ -21,6 +22,12 @@ export default (store: IStore) => {
             <Route path="/edit-stall" components={{ content: EditStallContainer }} />
             <Route path="/about" components={{ content: AboutPage }} />
             <Route path="/media" components={{ content: MediaPage }} />
+            <Route path="/(:electionName)/stalls/(:stallId)" components={{ content: PollingPlacePermalinkContainer }} />
+            <Route path="/(:electionName)/polling_places/(:ecId)" components={{ content: PollingPlacePermalinkContainer }} />
+            <Route
+                path="/(:electionName)/polling_places/(:name)/(:premises)/(:state)"
+                components={{ content: PollingPlacePermalinkContainer }}
+            />
             <Route path="/(:electionName)" components={{ content: SausageMapContainer }} />
         </Route>
     )

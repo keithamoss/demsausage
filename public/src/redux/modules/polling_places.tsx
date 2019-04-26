@@ -245,6 +245,47 @@ export function fetchNearbyPollingPlacesBBOX(election: IElection, lat: number, l
     }
 }
 
+export function lookupPollingPlaces(election: IElection, name: string, premises: string, state: string) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("/0.1/polling_places/lookup/", dispatch, {
+            election_id: election.id,
+            name,
+            premises,
+            state,
+        })
+
+        if (response.status === 200) {
+            return json
+        }
+    }
+}
+
+export function lookupPollingPlacesByECId(election: IElection, ecId: string) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("/0.1/polling_places/lookup/", dispatch, {
+            election_id: election.id,
+            ec_id: ecId,
+        })
+
+        if (response.status === 200) {
+            return json
+        }
+    }
+}
+
+export function lookupPollingPlacesByStallId(election: IElection, stallId: string) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("/0.1/polling_places/stall_lookup/", dispatch, {
+            election_id: election.id,
+            stall_id: stallId,
+        })
+
+        if (response.status === 200) {
+            return json
+        }
+    }
+}
+
 // Utilities
 export function buildNomsObject(stallNoms: INoms | null) {
     if (stallNoms === null) {

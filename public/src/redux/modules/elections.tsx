@@ -1,4 +1,5 @@
 import * as dotProp from "dot-prop-immutable"
+import { memoize } from "lodash-es"
 import { DateTime } from "luxon"
 import { createSelector } from "reselect"
 import { IAPIClient } from "../../shared/api/APIClient"
@@ -57,6 +58,14 @@ export const getLiveElections = createSelector(
     (elections: IElection[]): any => {
         return elections.filter((election: IElection) => isElectionLive(election))
     }
+)
+
+export const getElectionByURLSafeName = createSelector(
+    [getElections],
+    elections =>
+        memoize((electionName: string) => {
+            return elections.find((election: IElection) => getURLSafeElectionName(election) === electionName)
+        })
 )
 
 // Action Creators
