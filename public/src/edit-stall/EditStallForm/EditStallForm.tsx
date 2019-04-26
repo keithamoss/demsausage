@@ -58,8 +58,8 @@ class EditStallForm extends React.PureComponent<IProps, {}> {
                     <CustomTextField
                         name="name"
                         component={TextField}
-                        floatingLabelText={"Stall name"}
-                        hintText={"e.g. Primary School Sausage Sizzle"}
+                        floatingLabelText={"What should we call your stall?"}
+                        hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                         fullWidth={true}
                         validate={[required]}
                     />
@@ -67,30 +67,26 @@ class EditStallForm extends React.PureComponent<IProps, {}> {
                         name="description"
                         component={TextField}
                         multiLine={true}
-                        floatingLabelText={"Stall description"}
-                        hintText={"e.g. We're raising funds for the Year 7 school camp"}
+                        floatingLabelText={"Describe your stall"}
+                        hintText={
+                            "Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
+                        }
                         fullWidth={true}
                         validate={[required]}
                     />
                     <CustomTextField
-                        name="website"
+                        name="opening_hours"
                         component={TextField}
-                        floatingLabelText={"Stall website"}
-                        hintText={"We'll include a link to your site as part of your stall's information"}
+                        floatingLabelText={"Stall opening hours (optional)"}
+                        hintText={"e.g. 8AM - 2PM"}
                         fullWidth={true}
                     />
-                </FormSection>
-
-                <FormSection>
-                    <FormSectionHeader>Your details</FormSectionHeader>
                     <CustomTextField
-                        name="email"
+                        name="website"
                         component={TextField}
-                        floatingLabelText={"Contact email"}
-                        hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
+                        floatingLabelText={"Stall website (optional)"}
+                        hintText={"We'll include a link to your site as part of your stall's information"}
                         fullWidth={true}
-                        validate={[required, email]}
-                        type={"email"}
                     />
                 </FormSection>
 
@@ -135,6 +131,19 @@ class EditStallForm extends React.PureComponent<IProps, {}> {
                         floatingLabelText={"Anything else?"}
                         hintText={"e.g. We also have cold drinks and pony rides!"}
                         fullWidth={true}
+                    />
+                </FormSection>
+
+                <FormSection>
+                    <FormSectionHeader>Your details</FormSectionHeader>
+                    <CustomTextField
+                        name="email"
+                        component={TextField}
+                        floatingLabelText={"Contact email"}
+                        hintText={"So we can contact you when we approve your stall (Don't worry - we won't spam you.)"}
+                        fullWidth={true}
+                        validate={[required, email]}
+                        type={"email"}
                     />
                 </FormSection>
 

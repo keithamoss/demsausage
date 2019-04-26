@@ -6,7 +6,6 @@ import { INoms } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { createStall, IStallLocationInfo } from "../../redux/modules/stalls"
 import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
-// import { cloneDeep } from "lodash-es"
 import AddStallForm from "./AddStallForm"
 
 export interface IProps {
@@ -38,6 +37,7 @@ interface IOwnProps {}
 export interface IStallFormInfo {
     name: string
     description: string
+    opening_hours: string
     website: string
     email: string
     noms: Partial<INoms>
@@ -46,7 +46,7 @@ export interface IStallFormInfo {
     polling_place: number
 }
 
-const fromFormValues = (formValues: any): Partial<IStallFormInfo> => {
+export const fromStallFormValues = (formValues: any): Partial<IStallFormInfo> => {
     const getNoms = () => {
         const noms: Partial<INoms> = {}
         const fields = ["bbq", "cake", "vego", "halal", "coffee", "bacon_and_eggs", "free_text"]
@@ -67,6 +67,7 @@ const fromFormValues = (formValues: any): Partial<IStallFormInfo> => {
     return {
         name: formValues.name,
         description: formValues.description,
+        opening_hours: formValues.opening_hours,
         website: formValues.website,
         email: formValues.email,
         noms: getNoms(),
@@ -166,7 +167,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 return
             }
 
-            const stall: Partial<IStallFormInfo> = fromFormValues(values)
+            const stall: Partial<IStallFormInfo> = fromStallFormValues(values)
             stall.election = election.id
 
             if (election.polling_places_loaded === false) {

@@ -199,6 +199,13 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         validate={[required]}
                                     />
                                     <CustomTextField
+                                        name="opening_hours"
+                                        component={TextField}
+                                        floatingLabelText={"Stall opening hours (optional)"}
+                                        hintText={"e.g. 8AM - 2PM"}
+                                        fullWidth={true}
+                                    />
+                                    <CustomTextField
                                         name="website"
                                         component={TextField}
                                         floatingLabelText={"Stall website (optional)"}

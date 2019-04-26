@@ -2,8 +2,8 @@ import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
 import { isValid, submit } from "redux-form"
-import { IStallFormInfo } from "../../add-stall/AddStallForm/AddStallFormContainer"
-import { buildNomsObject, INoms } from "../../redux/modules/polling_places"
+import { fromStallFormValues, IStallFormInfo } from "../../add-stall/AddStallForm/AddStallFormContainer"
+import { buildNomsObject } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { IStall, updateStallWithCredentials } from "../../redux/modules/stalls"
 import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
@@ -36,33 +36,6 @@ const toFormValues = (stall: IStallFormInfo): any => {
     return {
         ...buildNomsObject(stall.noms as any),
         ...cloneDeep(stall),
-    }
-}
-
-const fromFormValues = (formValues: any): Partial<IStallFormInfo> => {
-    const getNoms = () => {
-        const noms: Partial<INoms> = {}
-        const fields = ["bbq", "cake", "vego", "halal", "coffee", "bacon_and_eggs", "free_text"]
-        fields.forEach((fieldName: string) => {
-            if (fieldName !== "free_text") {
-                if (formValues[fieldName] === true) {
-                    noms[fieldName] = true
-                }
-            } else {
-                if (formValues[fieldName] !== undefined) {
-                    noms[fieldName] = formValues[fieldName]
-                }
-            }
-        })
-        return noms
-    }
-
-    return {
-        name: formValues.name,
-        description: formValues.description,
-        website: formValues.website,
-        email: formValues.email,
-        noms: getNoms(),
     }
 }
 
@@ -114,7 +87,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {
         async onFormSubmit(values: object, that: EditStallFormContainer) {
-            const stallFormFields: Partial<IStallFormInfo> = fromFormValues(values)
+            const stallFormFields: Partial<IStallFormInfo> = fromStallFormValues(values)
 
             const { stall, credentials, onStallUpdated } = that.props
 

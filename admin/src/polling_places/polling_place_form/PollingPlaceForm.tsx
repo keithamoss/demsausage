@@ -167,6 +167,13 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                             fullWidth={true}
                         />
                         <CustomTextField
+                            name="opening_hours"
+                            component={TextField}
+                            floatingLabelText={"Opening hours"}
+                            hintText={"e.g. 8AM - 2PM"}
+                            fullWidth={true}
+                        />
+                        <CustomTextField
                             name="website"
                             component={TextField}
                             floatingLabelText={"Stall website"}

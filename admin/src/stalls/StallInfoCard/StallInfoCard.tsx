@@ -4,7 +4,16 @@ import { Card, CardHeader, CardText } from "material-ui/Card"
 import IconButton from "material-ui/IconButton"
 import { List, ListItem } from "material-ui/List"
 import { grey500, lightBlue100 } from "material-ui/styles/colors"
-import { ActionDescription, ActionHome, ActionLabel, AvWeb, CommunicationEmail, MapsLocalDining, MapsPlace } from "material-ui/svg-icons"
+import {
+    ActionDescription,
+    ActionHome,
+    ActionLabel,
+    AvWeb,
+    CommunicationEmail,
+    DeviceAccessTime,
+    MapsLocalDining,
+    MapsPlace,
+} from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
@@ -66,6 +75,13 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                             leftIcon={<ActionDescription />}
                             disabled={true}
                             style={getFieldStyle("description")}
+                        />
+                        <ListItem
+                            primaryText="Opening hours"
+                            secondaryText={stall.opening_hours}
+                            leftIcon={<DeviceAccessTime />}
+                            disabled={true}
+                            style={getFieldStyle("opening_hours")}
                         />
                         <ListItem
                             primaryText="Website"

@@ -54,6 +54,7 @@ export interface IStall {
     id: number
     name: string
     description: string
+    opening_hours: string
     website: string
     noms: INoms
     email: string

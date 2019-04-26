@@ -114,6 +114,7 @@ export interface IPollingPlaceStall {
     noms: INoms
     name: string
     description: string
+    opening_hours: string
     website: string
     extra_info: string
     first_report: string | null // Datetime

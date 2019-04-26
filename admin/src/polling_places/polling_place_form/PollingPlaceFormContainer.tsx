@@ -42,6 +42,7 @@ const toFormValues = (pollingPlace: IPollingPlace): any => {
         ...buildNomsObject(pollingPlace.stall !== null ? pollingPlace.stall.noms : null),
         name: deepValue(pollingPlace, "stall.name"),
         description: deepValue(pollingPlace, "stall.description"),
+        opening_hours: deepValue(pollingPlace, "stall.opening_hours"),
         website: deepValue(pollingPlace, "stall.website"),
         extra_info: deepValue(pollingPlace, "stall.extra_info"),
         source: deepValue(pollingPlace, "stall.source"),
@@ -55,6 +56,7 @@ const fromFormValues = (formValues: any) => {
             noms: buildNomsObject(formValues),
             name: formValues.name || "",
             description: formValues.description || "",
+            opening_hours: formValues.opening_hours || "",
             website: formValues.website || "",
             extra_info: formValues.extra_info || "",
             source: formValues.source || "",
@@ -88,6 +90,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
             initialValues.free_text = stall.noms.free_text
             initialValues.name = stall.name
             initialValues.description = stall.description
+            initialValues.opening_hours = stall.opening_hours
             initialValues.website = stall.website
             initialValues.source = "Direct"
             initialValues.extra_info = ""

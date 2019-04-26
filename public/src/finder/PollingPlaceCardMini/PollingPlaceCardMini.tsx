@@ -3,7 +3,7 @@ import { Card, CardHeader, CardText, CardTitle } from "material-ui/Card"
 import { ListItem } from "material-ui/List"
 import Paper from "material-ui/Paper"
 import { grey500, yellow600 } from "material-ui/styles/colors"
-import { ActionAccessible, ActionHelpOutline, AlertWarning } from "material-ui/svg-icons"
+import { ActionAccessible, ActionHelpOutline, AlertWarning, DeviceAccessTime } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
@@ -53,6 +53,11 @@ const RunOutWarning = styled(ListItem)`
 `
 
 const Division = styled.div`
+    color: ${grey500};
+    padding-top: 10px;
+`
+
+const StallOpeningHours = styled.div`
     color: ${grey500};
     padding-top: 10px;
 `
@@ -141,6 +146,11 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 leftAvatar={<Avatar icon={<ActionHelpOutline />} />}
                                 disabled={true}
                             />
+                        )}
+                        {pollingPlace.stall !== null && pollingPlace.stall.opening_hours !== "" && (
+                            <StallOpeningHours>
+                                <DeviceAccessTime /> Stall Opening Hours: {pollingPlace.stall.opening_hours}
+                            </StallOpeningHours>
                         )}
                         <WheelchairAccess>
                             <ActionAccessible /> Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}
