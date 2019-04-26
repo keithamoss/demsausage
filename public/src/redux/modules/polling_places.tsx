@@ -257,6 +257,7 @@ export function lookupPollingPlaces(election: IElection, name: string, premises:
         if (response.status === 200) {
             return json
         }
+        return null
     }
 }
 
@@ -270,6 +271,7 @@ export function lookupPollingPlacesByECId(election: IElection, ecId: string) {
         if (response.status === 200) {
             return json
         }
+        return null
     }
 }
 
@@ -283,6 +285,7 @@ export function lookupPollingPlacesByStallId(election: IElection, stallId: strin
         if (response.status === 200) {
             return json
         }
+        return null
     }
 }
 

@@ -1,9 +1,9 @@
 import { ActionSearch } from "material-ui/svg-icons"
 import * as React from "react"
 import { connect } from "react-redux"
-import styled from "styled-components"
-import PollingPlaceCardMiniContainer from "../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer"
-import { getElectionByURLSafeName, IElection } from "../../redux/modules/elections"
+import { browserHistory } from "react-router"
+import { getElectionByURLSafeName, getURLSafeElectionName, IElection } from "../../redux/modules/elections"
+import { setMapToSearch } from "../../redux/modules/map"
 import {
     IPollingPlace,
     lookupPollingPlaces,
@@ -12,10 +12,7 @@ import {
 } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
-
-const Container = styled.div`
-    padding: 20px;
-`
+import PollingPlacePermalink from "./PollingPlacePermalink"
 
 export interface IProps {}
 
@@ -25,10 +22,11 @@ export interface IStoreProps {
 
 export interface IDispatchProps {
     fetchPollingPlace: Function
+    onViewOnMap: Function
 }
 
 export interface IStateProps {
-    pollingPlace: IPollingPlace | undefined
+    pollingPlace: IPollingPlace | null | undefined
 }
 
 interface IRouteParams {
@@ -65,10 +63,14 @@ class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IS
     }
 
     render() {
-        const { election } = this.props
+        const { election, onViewOnMap } = this.props
         const { pollingPlace } = this.state
 
         if (election === undefined || pollingPlace === undefined) {
+            return null
+        }
+
+        if (pollingPlace === null) {
             return (
                 <EmptyState
                     message={
@@ -83,11 +85,7 @@ class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IS
             )
         }
 
-        return (
-            <Container>
-                <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} />
-            </Container>
-        )
+        return <PollingPlacePermalink pollingPlace={pollingPlace} election={election} onViewOnMap={onViewOnMap} />
     }
 }
 
@@ -112,6 +110,18 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IOwnProps): IDispatchP
             } else if ("name" in routeParams && "premises" in routeParams && "state" in routeParams) {
                 return await dispatch(lookupPollingPlaces(election, routeParams.name!, routeParams.premises!, routeParams.state!))
             }
+            return null
+        },
+        onViewOnMap(election: IElection, pollingPlace: IPollingPlace) {
+            dispatch(
+                setMapToSearch({
+                    lon: pollingPlace.geom.coordinates[0],
+                    lat: pollingPlace.geom.coordinates[1],
+                    extent: null,
+                    formattedAddress: "",
+                })
+            )
+            browserHistory.push(`/${getURLSafeElectionName(election)}`)
         },
     }
 }

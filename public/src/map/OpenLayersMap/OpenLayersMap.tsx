@@ -304,21 +304,30 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         const { mapSearchResults } = this.props
         const that = this
 
-        if (mapSearchResults !== null && mapSearchResults.extent !== null) {
-            // Remove any existing search indicator layer
-            this.clearSearchResultsVectorLayer(map)
-
+        if (mapSearchResults !== null) {
             let view = map.getView()
-            view.fit(transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
-                size: map.getSize(),
-                duration: 750,
-                padding: [85, 0, 20, 0],
-                callback: (completed: boolean) => {
-                    if (completed === true) {
-                        that.addSearchResultsVectorLayer(map)
-                    }
-                },
-            })
+
+            if (mapSearchResults.extent !== null) {
+                // Remove any existing search indicator layer
+                this.clearSearchResultsVectorLayer(map)
+
+                view.fit(transformExtent(mapSearchResults.extent, "EPSG:4326", "EPSG:3857"), {
+                    size: map.getSize(),
+                    duration: 750,
+                    padding: [85, 0, 20, 0],
+                    callback: (completed: boolean) => {
+                        if (completed === true) {
+                            that.addSearchResultsVectorLayer(map)
+                        }
+                    },
+                })
+            } else if (mapSearchResults.lat !== null && mapSearchResults.lon !== null) {
+                view.fit(new Point(transform([mapSearchResults.lon, mapSearchResults.lat], "EPSG:4326", "EPSG:3857")), {
+                    minResolution: 4,
+                    size: map.getSize(),
+                    duration: 750,
+                })
+            }
         }
     }
 

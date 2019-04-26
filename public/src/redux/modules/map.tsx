@@ -175,7 +175,7 @@ export const olStyleFunction = function(feature: IMapPollingPlaceFeature, resolu
             return null
         }
 
-        return resolution > 7
+        return resolution >= 7
             ? nomsReader.getIconForNoms(spriteIcons)
             : nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature, resolution)
     }
