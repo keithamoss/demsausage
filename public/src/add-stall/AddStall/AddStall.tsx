@@ -63,13 +63,14 @@ class AddStall extends React.PureComponent<IProps, {}> {
 
                 {showWelcome && isIE11 === true && (
                     <FormSection>
-                        <FormSectionHeader>Add your sausage sizzle or cake stall</FormSectionHeader>
+                        <FormSectionHeader>Send in your sausage sizzle or cake stall</FormSectionHeader>
                         <FormText>
                             You can submit your stall by emailing us at{" "}
-                            <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>. Please do not submit entries
-                            that are offensive, political or do not relate to an election day stall. Please also make sure that you have
-                            authorisation to run your fundraising event at the polling place. All entries are moderated and subject to
-                            approval.
+                            <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.<br />
+                            <br />
+                            Please do not submit entries that are offensive, political or do not relate to an election day stall. Please
+                            also make sure that you have authorisation to run your fundraising event at the polling place. All entries are
+                            moderated and subject to approval.
                         </FormText>
                     </FormSection>
                 )}
