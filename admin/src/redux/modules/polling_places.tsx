@@ -194,6 +194,19 @@ export function fetchPollingPlacesWithoutFacilityTypes(election: IElection) {
     }
 }
 
+export function fetchFavouritedPollingPlaces(election: IElection) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get("/0.1/polling_places/favourited/", dispatch, {
+            election_id: election.id,
+        })
+
+        if (response.status === 200) {
+            return json
+        }
+        return null
+    }
+}
+
 export function updatePollingPlace(election: IElection, pollingPlace: IPollingPlace, pollingPlaceNew: any /* Partial<IPollingPlace> */) {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         const { response, json } = await api.patch(`/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)

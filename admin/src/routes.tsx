@@ -6,6 +6,7 @@ import ElectionCreatorContainer from "./elections/ElectionEditor/ElectionCreator
 import ElectionEditorContainer from "./elections/ElectionEditor/ElectionEditorContainer"
 import ElectionPollingPlaceLoaderContainer from "./elections/ElectionPollingPlaceLoader/ElectionPollingPlaceLoaderContainer"
 import ElectionsManagerContainer from "./elections/ElectionsManager/ElectionsManagerContainer"
+import FavouritedPollingPlacesContainer from "./polling_places/favourited_polling_places/FavouritedPollingPlacesContainer"
 import PollingPlaceEditorContainerRoute from "./polling_places/polling_place_editor/PollingPlaceEditorContainerRoute"
 import PollingPlaceTypesEditorContainer from "./polling_places/polling_place_types_editor/PollingPlaceTypesEditorContainer"
 import { IStore } from "./redux/modules/reducer"
@@ -28,6 +29,10 @@ export default (store: IStore) => {
             <Route
                 path="/election/:electionIdentifier/polling_places(/:pollingPlaceId)(/edit)"
                 components={{ content: PollingPlaceEditorContainerRoute }}
+            />
+            <Route
+                path="/election/:electionIdentifier/favourited_polling_places"
+                components={{ content: FavouritedPollingPlacesContainer }}
             />
             <Route path="/election/:electionIdentifier/polling_place_types" components={{ content: PollingPlaceTypesEditorContainer }} />
 

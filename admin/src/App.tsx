@@ -7,7 +7,7 @@ import LinearProgress from "material-ui/LinearProgress"
 import { List, ListItem } from "material-ui/List"
 import Paper from "material-ui/Paper"
 import Snackbar from "material-ui/Snackbar"
-import { ActionFace, ActionGrade, ActionOpenInNew, ContentDrafts, ContentInbox, ContentSend } from "material-ui/svg-icons"
+import { ActionFace, ActionGrade, ActionOpenInNew, ContentDrafts, ContentInbox, ContentSend, ToggleStar } from "material-ui/svg-icons"
 import { ToolbarGroup } from "material-ui/Toolbar"
 import * as React from "react"
 import { browserHistory, Link } from "react-router"
@@ -171,7 +171,14 @@ class App extends React.Component<IProps, {}> {
                                 />
                             </div>
                         )}
-
+                        <MenuListItem
+                            primaryText="Favourited Polling Places"
+                            leftIcon={<ToggleStar />}
+                            containerElement={<Link to={`/election/${currentElection.id}/favourited_polling_places`} />}
+                            locationPathName={locationPathName}
+                            muiThemePalette={muiThemePalette}
+                            onClick={onClickDrawerLink}
+                        />
                         <MenuListItem
                             primaryText="Edit Polling Place Types"
                             leftIcon={<ContentDrafts />}
