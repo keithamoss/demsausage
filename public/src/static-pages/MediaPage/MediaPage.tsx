@@ -41,16 +41,19 @@ export class MediaPage extends React.Component<TComponentProps, IStateProps> {
                     <ListItem
                         primaryText="Federal Election 2019"
                         leftIcon={<FileFileDownload />}
+                        // eslint-disable-next-line
                         containerElement={<a href={"/media/2019%20Fed%20-%20Media%20Release.pdf"} />}
                     />
                     <ListItem
                         primaryText="Federal Election 2016"
                         leftIcon={<FileFileDownload />}
+                        // eslint-disable-next-line
                         containerElement={<a href={"/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"} />}
                     />
                     <ListItem
                         primaryText="Canning By-election"
                         leftIcon={<FileFileDownload />}
+                        // eslint-disable-next-line
                         containerElement={<a href={"/media/Canning%20Press%20Release%20-%20DemSausage.pdf"} />}
                     />
                 </List>

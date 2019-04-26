@@ -225,6 +225,7 @@ class App extends React.Component<IProps, {}> {
                             primaryText="Redbubble Store"
                             leftIcon={<ActionStore />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Redbubble Store")}
+                            // eslint-disable-next-line
                             containerElement={<a href={"https://www.redbubble.com/people/demsausage/shop"} />}
                         />
                     </List>
@@ -235,24 +236,28 @@ class App extends React.Component<IProps, {}> {
                             primaryText="Email"
                             leftIcon={<CommunicationEmail />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Email")}
+                            // eslint-disable-next-line
                             containerElement={<a href={"mailto:ausdemocracysausage@gmail.com"} />}
                         />
                         <ListItem
                             primaryText="Twitter"
                             leftIcon={<TwitterIcon />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Twitter")}
+                            // eslint-disable-next-line
                             containerElement={<a href={"https://twitter.com/DemSausage"} />}
                         />
                         <ListItem
                             primaryText="Facebook"
                             leftIcon={<FacebookIcon />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Facebook")}
+                            // eslint-disable-next-line
                             containerElement={<a href={"https://www.facebook.com/AusDemocracySausage"} />}
                         />
                         <ListItem
                             primaryText="Instagram"
                             leftIcon={<InstagramIcon />}
                             onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, "Instagram")}
+                            // eslint-disable-next-line
                             containerElement={<a href={"https://www.instagram.com/ausdemocracysausage/"} />}
                         />
                     </List>

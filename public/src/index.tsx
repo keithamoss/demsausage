@@ -3,16 +3,6 @@ import "./polyfills"
 
 import * as Sentry from "@sentry/browser"
 
-// This should be run as soon as possible
-if ("REACT_APP_RAVEN_URL" in process.env) {
-    Sentry.init({
-        dsn: process.env.REACT_APP_RAVEN_URL,
-        environment: process.env.REACT_APP_ENVIRONMENT,
-        // @ts-ignore
-        site: process.env.REACT_APP_RAVEN_SITE_NAME,
-    })
-}
-
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { Provider } from "react-redux"
@@ -23,7 +13,6 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import { responsiveStoreEnhancer } from "redux-responsive"
 import thunkMiddleware from "redux-thunk"
 import "./index.css"
-// import { getEnvironment, eAppEnv } from "./redux/modules/app"
 import reducers, { IStore } from "./redux/modules/reducer"
 import getRoutes from "./routes"
 import { AnalyticsMiddleware, fireAnalyticsTracking } from "./shared/analytics/GoogleAnalytics"
@@ -33,7 +22,14 @@ import sentry from "./redux/sentry"
 
 let Middleware: Array<any> = []
 
+// This should be run as soon as possible
 if ("REACT_APP_RAVEN_URL" in process.env) {
+    Sentry.init({
+        dsn: process.env.REACT_APP_RAVEN_URL,
+        environment: process.env.REACT_APP_ENVIRONMENT,
+        // @ts-ignore
+        site: process.env.REACT_APP_RAVEN_SITE_NAME,
+    })
     Middleware.push(sentry)
 }
 

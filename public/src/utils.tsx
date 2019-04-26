@@ -20,12 +20,12 @@ export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
 export function stringDivider(str: string, width: number, spaceReplacer: string, replaceCount: number = 0): [string, number] {
     if (str.length > width) {
         var p = width
-        while (p > 0 && (str[p] != " " && str[p] != "-")) {
+        while (p > 0 && (str[p] !== " " && str[p] !== "-")) {
             p--
         }
         if (p > 0) {
             var left
-            if (str.substring(p, p + 1) == "-") {
+            if (str.substring(p, p + 1) === "-") {
                 left = str.substring(0, p + 1)
             } else {
                 left = str.substring(0, p)
