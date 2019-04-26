@@ -42,8 +42,10 @@ def get_mail_template(template_name, params=None):
 def send_stall_submitted_email(stall):
     if stall.election.polling_places_loaded is False:
         location_info = stall.location_info
+        stall_name = location_info["name"]
     else:
         location_info = model_to_dict(stall.polling_place)
+        stall_name = location_info["premises"]
 
     token = str(getrandbits(128))
     signature = make_confirmation_hash(stall.id, token)
@@ -61,7 +63,7 @@ def send_stall_submitted_email(stall):
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall for {} has been received!".format(location_info["name"]),
+        "subject": "Your Democracy Sausage stall for {} has been received!".format(stall_name),
         "html": html,
     })
 
@@ -69,8 +71,10 @@ def send_stall_submitted_email(stall):
 def send_stall_approved_email(stall):
     if stall.election.polling_places_loaded is False:
         location_info = stall.location_info
+        stall_name = location_info["name"]
     else:
         location_info = model_to_dict(stall.polling_place)
+        stall_name = location_info["premises"]
 
     token = str(getrandbits(128))
     signature = make_confirmation_hash(stall.id, token)
@@ -89,7 +93,7 @@ def send_stall_approved_email(stall):
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall for {} has been approved!".format(location_info["name"]),
+        "subject": "Your Democracy Sausage stall for {} has been approved!".format(stall_name),
         "html": html,
     })
 
@@ -97,8 +101,10 @@ def send_stall_approved_email(stall):
 def send_stall_edited_email(stall):
     if stall.election.polling_places_loaded is False:
         location_info = stall.location_info
+        stall_name = location_info["name"]
     else:
         location_info = model_to_dict(stall.polling_place)
+        stall_name = location_info["premises"]
 
     token = str(getrandbits(128))
     signature = make_confirmation_hash(stall.id, token)
@@ -116,7 +122,7 @@ def send_stall_edited_email(stall):
 
     return send({
         "to": stall.email,
-        "subject": "Your changes to your Democracy Sausage stall for {} have been received!".format(location_info["name"]),
+        "subject": "Your changes to your Democracy Sausage stall for {} have been received!".format(stall_name),
         "html": html,
     })
 
