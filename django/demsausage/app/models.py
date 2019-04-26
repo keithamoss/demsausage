@@ -97,6 +97,7 @@ class PollingPlaceNoms(models.Model):
     name = models.TextField(blank=True)
     description = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
+    favourited = models.BooleanField(default=False)
     website = models.TextField(blank=True)
     extra_info = models.TextField(blank=True)
     first_report = models.DateTimeField(auto_now_add=True, null=True)

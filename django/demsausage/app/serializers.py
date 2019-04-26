@@ -126,6 +126,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     name = serializers.CharField(default="", allow_blank=True)
     description = serializers.CharField(default="", allow_blank=True)
     opening_hours = serializers.CharField(default="", allow_blank=True)
+    favourited = serializers.BooleanField()
     website = serializers.CharField(default="", allow_blank=True)
     extra_info = serializers.CharField(default="", allow_blank=True)
     first_report = serializers.DateTimeField(allow_null=True, read_only=True)
@@ -135,7 +136,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceNoms
 
-        fields = ("noms", "name", "description", "opening_hours", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
+        fields = ("noms", "name", "description", "opening_hours", "favourited", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
