@@ -145,7 +145,9 @@ class App extends React.Component<IProps, {}> {
                                 <MenuListItem
                                     primaryText="Pending Stalls"
                                     leftIcon={<ContentSend />}
-                                    rightIcon={<Badge badgeContent={pendingStallCount} secondary={true} />}
+                                    rightIcon={
+                                        pendingStallCount > 0 ? <Badge badgeContent={pendingStallCount} secondary={true} /> : undefined
+                                    }
                                     containerElement={<Link to={`/stalls`} />}
                                     locationPathName={locationPathName}
                                     muiThemePalette={muiThemePalette}

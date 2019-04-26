@@ -35,8 +35,16 @@ export class APIClient {
         })
     }
 
-    public async get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IAPIResponse> {
-        dispatch(beginFetch())
+    public async get(
+        url: string,
+        dispatch: Function,
+        params: object = {},
+        quiet: boolean = false,
+        fetchOptions: object = {}
+    ): Promise<IAPIResponse> {
+        if (dispatch !== null && quiet === false) {
+            dispatch(beginFetch())
+        }
 
         if (Object.keys(params).length > 0) {
             // Yay, a library just to do query string operations for fetch()
@@ -46,7 +54,10 @@ export class APIClient {
 
         const promise = await fetch(this.baseURL + url, { ...{ credentials: "include" }, ...fetchOptions })
             .then((response: any) => {
-                dispatch(finishFetch())
+                if (dispatch !== null && quiet === false) {
+                    dispatch(finishFetch())
+                }
+
                 return this.handleResponse(url, response, dispatch)
             })
             .catch((error: any) => this.handleError(error, url, dispatch))

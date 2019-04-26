@@ -1,8 +1,5 @@
-// const Config: IConfig = require("Config") as any
 import { setDrawerOpen } from "material-ui-responsive-drawer"
-// import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
-// import styled from "styled-components"
 import {
     // deepPurple200,
     deepPurple100,
@@ -28,6 +25,7 @@ import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app
 import { IElection, setCurrentElection } from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
+import { fetchPendingStalls } from "./redux/modules/stalls"
 import { IUser } from "./redux/modules/user"
 
 const muiTheme = getMuiTheme({
@@ -66,6 +64,7 @@ export interface IStoreProps {
 export interface IDispatchProps {
     setElectionFromRoute: Function
     fetchInitialAppState: Function
+    refreshPendingStalls: Function
     handleSnackbarClose: Function
     onClickDrawerLink: Function
 }
@@ -86,6 +85,8 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 }
 
 export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
+    private intervalId: number | undefined
+
     componentWillMount() {
         const { setElectionFromRoute, fetchInitialAppState } = this.props
 
@@ -95,6 +96,18 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
             setElectionFromRoute(parseInt(this.props.params!.electionIdentifier!, 10))
         }
         fetchInitialAppState()
+    }
+
+    componentDidMount() {
+        this.intervalId = window.setInterval(() => {
+            this.props.refreshPendingStalls()
+        }, 30000)
+    }
+
+    componentWillUnmount() {
+        if (this.intervalId !== undefined) {
+            window.clearInterval(this.intervalId)
+        }
     }
 
     render() {
@@ -156,6 +169,12 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
 const mapStateToProps = (state: IStore): IStoreProps => {
     const { app, user, snackbars, elections, stalls, browser, responsiveDrawer } = state
 
+    if (stalls.pending.length > 0) {
+        document.title = `(${stalls.pending.length}) Democracy Sausage Admin Console`
+    } else {
+        document.title = "Democracy Sausage Admin Console"
+    }
+
     return {
         app: app,
         user: user.user,
@@ -174,6 +193,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         fetchInitialAppState: () => {
             dispatch(fetchInitialAppState())
+        },
+        refreshPendingStalls: () => {
+            dispatch(fetchPendingStalls(true))
         },
         handleSnackbarClose: (reason: string) => {
             if (reason === "timeout") {
