@@ -210,6 +210,15 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No election_id provided.")
 
+    @list_route(methods=["get"])
+    def favourited(self, request, format=None):
+        election_id = request.query_params.get("election_id", None)
+        if election_id is not None:
+            serializer = self.serializer_class(self.queryset.filter(election_id=election_id).filter(noms__isnull=False, noms__favourited=True).order_by("-noms__id"), many=True)
+            return Response(serializer.data)
+        else:
+            raise BadRequest("No election_id provided.")
+
     @list_route(methods=["get"], permission_classes=(AllowAny,))
     def nearby_bbox(self, request, format=None):
         """
