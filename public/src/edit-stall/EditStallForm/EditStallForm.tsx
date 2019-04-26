@@ -84,7 +84,7 @@ class EditStallForm extends React.PureComponent<IProps, {}> {
                     <CustomTextField
                         name="website"
                         component={TextField}
-                        floatingLabelText={"Stall website (optional)"}
+                        floatingLabelText={"Stall website or social media page (optional)"}
                         hintText={"We'll include a link to your site as part of your stall's information"}
                         fullWidth={true}
                     />
