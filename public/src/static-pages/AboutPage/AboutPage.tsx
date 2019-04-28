@@ -1,7 +1,14 @@
+import { List, ListItem } from "material-ui"
 import { grey300, grey800 } from "material-ui/styles/colors"
 import * as React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import BaconandEggsIcon from "../../icons/bacon-and-eggs"
+import CakeIcon from "../../icons/cake"
+import CoffeeIcon from "../../icons/coffee"
+import HalalIcon from "../../icons/halal"
+import SausageIcon from "../../icons/sausage"
+import VegoIcon from "../../icons/vego"
 import { IStore } from "../../redux/modules/reducer"
 
 export interface IProps {}
@@ -100,6 +107,17 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             <a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
                         </li>
                     </ul>
+                </Answer>
+                <Question>What do the all of the icons mean?</Question>
+                <Answer>
+                    <List>
+                        <ListItem disabled={true} primaryText="There's a sausage sizzle here" leftIcon={<SausageIcon />} />
+                        <ListItem disabled={true} primaryText="There's a cake stall here" leftIcon={<CakeIcon />} />
+                        <ListItem disabled={true} primaryText="This booth has vegetarian options" leftIcon={<VegoIcon />} />
+                        <ListItem disabled={true} primaryText="This booth has halal food" leftIcon={<HalalIcon />} />
+                        <ListItem disabled={true} primaryText="There's coffee available" leftIcon={<CoffeeIcon />} />
+                        <ListItem disabled={true} primaryText="There's bacon and egg rolls/sandwiches" leftIcon={<BaconandEggsIcon />} />
+                    </List>
                 </Answer>
                 <Question>Who are you?</Question>
                 <Answer>
