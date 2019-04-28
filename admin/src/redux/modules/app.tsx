@@ -126,6 +126,10 @@ export function getBaseURL(): string {
     return process.env.REACT_APP_SITE_BASE_URL!
 }
 
+export function getPublicSiteBaseURL(): string {
+    return process.env.REACT_APP_PUBLIC_SITE_BASE_URL!
+}
+
 export function fetchInitialAppState() {
     return async (dispatch: Function, getState: Function, api: IAPIClient) => {
         dispatch(loading())

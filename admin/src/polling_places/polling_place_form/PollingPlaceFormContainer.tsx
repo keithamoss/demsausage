@@ -11,6 +11,7 @@ import {
     updatePollingPlace,
 } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
+import { sendNotification } from "../../redux/modules/snackbars"
 import { IStall } from "../../redux/modules/stalls"
 import { deepValue } from "../../utils"
 import PollingPlaceForm from "./PollingPlaceForm"
@@ -25,6 +26,7 @@ export interface IProps {
 export interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
+    onClickCopyLink: Function
 }
 
 export interface IStoreProps {
@@ -112,7 +114,16 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
     }
 
     render() {
-        const { election, pollingPlace, onPollingPlaceEdited, isDirty, pollingPlaceTypes, onFormSubmit, onSaveForm } = this.props
+        const {
+            election,
+            pollingPlace,
+            onPollingPlaceEdited,
+            isDirty,
+            pollingPlaceTypes,
+            onFormSubmit,
+            onSaveForm,
+            onClickCopyLink,
+        } = this.props
 
         return (
             <PollingPlaceForm
@@ -128,6 +139,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
                 onSaveForm={() => {
                     onSaveForm(pollingPlace, isDirty)
                 }}
+                onClickCopyLink={onClickCopyLink}
             />
         )
     }
@@ -155,6 +167,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         },
         onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {
             dispatch(submit("pollingPlace"))
+        },
+        onClickCopyLink() {
+            dispatch(sendNotification(`Polling place link copied to clipboard.`))
         },
     }
 }

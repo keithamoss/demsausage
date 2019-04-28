@@ -213,6 +213,10 @@ export function setPrimaryElection(electionId: number) {
 // }
 
 // Utilities
+export function getURLSafeElectionName(election: IElection) {
+    return encodeURI(election.name.replace(/\s/g, "_").toLowerCase())
+}
+
 export function isItElectionDay(election: IElection) {
     const now = new Date()
     return now >= new Date(election.election_day) && now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)

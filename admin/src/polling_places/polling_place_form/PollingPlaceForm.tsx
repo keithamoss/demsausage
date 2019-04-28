@@ -1,12 +1,14 @@
 import Avatar from "material-ui/Avatar"
 import { Card, CardActions, CardText, CardTitle } from "material-ui/Card"
 import Divider from "material-ui/Divider"
+import FlatButton from "material-ui/FlatButton"
 import { List, ListItem } from "material-ui/List"
 import MenuItem from "material-ui/MenuItem"
 import RaisedButton from "material-ui/RaisedButton"
 import { blue500, grey100, grey500, yellow700 } from "material-ui/styles/colors"
-import { AlertWarning, ContentBlock, ToggleStar, ToggleStarBorder } from "material-ui/svg-icons"
+import { AlertWarning, ContentBlock, ContentContentCopy, ToggleStar, ToggleStarBorder } from "material-ui/svg-icons"
 import * as React from "react"
+import CopyToClipboard from "react-copy-to-clipboard"
 import { Field, reduxForm } from "redux-form"
 import { Checkbox, SelectField, TextField, Toggle } from "redux-form-material-ui"
 import styled from "styled-components"
@@ -18,7 +20,7 @@ import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
+import { getPollingPlacePermalink, IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 
 export interface IProps {
     election: IElection
@@ -27,6 +29,7 @@ export interface IProps {
     pollingPlaceTypes: IPollingPlaceFacilityType[]
     onSubmit: any
     onSaveForm: any
+    onClickCopyLink: any
 
     // From redux-form
     initialValues: any
@@ -74,7 +77,16 @@ const HiddenButton = styled.button`
 
 class PollingPlaceForm extends React.PureComponent<IProps, {}> {
     render() {
-        const { stallWasMerged, pollingPlaceTypes, onSaveForm, handleSubmit, onSubmit } = this.props
+        const {
+            election,
+            pollingPlace,
+            stallWasMerged,
+            pollingPlaceTypes,
+            onSaveForm,
+            onClickCopyLink,
+            handleSubmit,
+            onSubmit,
+        } = this.props
 
         return (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -225,6 +237,9 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     />
                     <CardActions>
                         <RaisedButton label={"Save"} primary={true} onClick={onSaveForm} />
+                        <CopyToClipboard text={getPollingPlacePermalink(election, pollingPlace)} onCopy={onClickCopyLink}>
+                            <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} />
+                        </CopyToClipboard>
                         <HiddenButton type="submit" />
                     </CardActions>
                 </Card>

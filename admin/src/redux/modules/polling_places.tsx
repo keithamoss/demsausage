@@ -1,7 +1,8 @@
 import * as dotProp from "dot-prop-immutable"
 import { sendNotification as sendSnackbarNotification } from "../../redux/modules/snackbars"
 import { IAPIClient } from "../../shared/api/APIClient"
-import { IElection } from "./elections"
+import { getPublicSiteBaseURL } from "./app"
+import { getURLSafeElectionName, IElection } from "./elections"
 import { IGeoJSON } from "./interfaces"
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -269,6 +270,11 @@ export function regenerateMapDataForElection(election: IElection) {
 }
 
 // Utilities
+export const getPollingPlacePermalink = (election: IElection, pollingPlace: IPollingPlace) =>
+    `${getPublicSiteBaseURL()}/${getURLSafeElectionName(election)}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${
+        pollingPlace.state
+    }/`
+
 export function buildNomsObject(stallNoms: INoms | null) {
     if (stallNoms === null) {
         return {}
