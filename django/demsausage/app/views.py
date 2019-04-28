@@ -221,6 +221,9 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
     @list_route(methods=["get"], permission_classes=(AllowAny,))
     def lookup(self, request, format=None):
+        """
+        Lookup the details for an individual polling place by its name + premises + state or its ec_id field.
+        """
         election_id = request.query_params.get("election_id", None)
         lookup_terms = {
             "ec_id": request.query_params.get("ec_id", None),
@@ -239,6 +242,9 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
     @list_route(methods=["get"], permission_classes=(AllowAny,))
     def stall_lookup(self, request, format=None):
+        """
+        Lookup the details for an individual polling place by the id of the stall attached to it.
+        """
         stall_id = request.query_params.get("stall_id", None)
 
         if stall_id is not None:
