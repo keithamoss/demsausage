@@ -271,9 +271,11 @@ export function regenerateMapDataForElection(election: IElection) {
 
 // Utilities
 export const getPollingPlacePermalink = (election: IElection, pollingPlace: IPollingPlace) =>
-    `${getPublicSiteBaseURL()}/${getURLSafeElectionName(election)}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${
-        pollingPlace.state
-    }/`
+    encodeURI(
+        `${getPublicSiteBaseURL()}/${getURLSafeElectionName(election)}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${
+            pollingPlace.state
+        }/`.replace(/\s/g, "_")
+    )
 
 export function buildNomsObject(stallNoms: INoms | null) {
     if (stallNoms === null) {

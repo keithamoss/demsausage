@@ -292,9 +292,11 @@ export function lookupPollingPlacesByStallId(election: IElection, stallId: strin
 
 // Utilities
 export const getPollingPlacePermalink = (election: IElection, pollingPlace: IPollingPlace) =>
-    `${getBaseURL()}/${getURLSafeElectionName(election)}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${
-        pollingPlace.state
-    }/`
+    encodeURI(
+        `${getBaseURL()}/${getURLSafeElectionName(election)}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${
+            pollingPlace.state
+        }/`.replace(/\s/g, "_")
+    )
 
 export function buildNomsObject(stallNoms: INoms | null) {
     if (stallNoms === null) {

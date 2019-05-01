@@ -31,7 +31,7 @@ def find_by_lookup_terms(election_id, lookup_terms, queryset):
 
     # 2. Secondly, try to match on name, premises, and state
     if lookup_terms["name"] is not None and lookup_terms["premises"] is not None and lookup_terms["state"] is not None:
-        qs = queryset.filter(name__iexact=lookup_terms["name"], premises__iexact=lookup_terms["premises"], state__iexact=lookup_terms["state"])
+        qs = queryset.filter(name__iexact=lookup_terms["name"].replace("_", " "), premises__iexact=lookup_terms["premises"].replace("_", " "), state__iexact=lookup_terms["state"].replace("_", " "))
         if qs.count() == 1:
             return qs.first()
 
