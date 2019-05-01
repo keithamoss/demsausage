@@ -126,7 +126,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     name = serializers.CharField(default="", allow_blank=True)
     description = serializers.CharField(default="", allow_blank=True)
     opening_hours = serializers.CharField(default="", allow_blank=True)
-    favourited = serializers.BooleanField()
+    favourited = serializers.BooleanField(required=False, default=False)
     website = serializers.CharField(default="", allow_blank=True)
     extra_info = serializers.CharField(default="", allow_blank=True)
     first_report = serializers.DateTimeField(allow_null=True, read_only=True)

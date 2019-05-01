@@ -44,7 +44,7 @@ const toFormValues = (pollingPlace: IPollingPlace): any => {
         name: deepValue(pollingPlace, "stall.name"),
         description: deepValue(pollingPlace, "stall.description"),
         opening_hours: deepValue(pollingPlace, "stall.opening_hours"),
-        favourited: deepValue(pollingPlace, "stall.favourited"),
+        favourited: deepValue(pollingPlace, "stall.favourited", false),
         website: deepValue(pollingPlace, "stall.website"),
         extra_info: deepValue(pollingPlace, "stall.extra_info"),
         source: deepValue(pollingPlace, "stall.source"),
