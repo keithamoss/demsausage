@@ -82,15 +82,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             },
         })
 
+        // Accommodate the window resizing
+        window.onresize = this.onMapContainerResize.bind(this)
+
         // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
-        const timeoutId = window.setTimeout(
-            (map: Map) => {
-                map.updateSize()
-            },
-            1,
-            this.map
-        )
-        this.timeoutIds.push(timeoutId)
+        this.onMapContainerResize()
 
         this.map.addLayer(this.getMapDataVectorLayer(this.map))
 
@@ -173,6 +169,21 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
     render() {
         return <div id="openlayers-map" className="openlayers-map" />
+    }
+
+    private onMapContainerResize() {
+        // Potted history of responding to window/container resize events in OpenLayers
+        // https://gis.stackexchange.com/questions/31409/openlayers-redrawing-map-after-container-resize
+
+        const timeoutId = setTimeout(
+            (map: Map) => {
+                map.updateSize()
+            },
+            200,
+            this.map
+        )
+
+        this.timeoutIds.push(timeoutId)
     }
 
     private onVectorSourceChanged(event: Event) {
