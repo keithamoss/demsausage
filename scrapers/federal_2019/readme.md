@@ -1,8 +1,22 @@
+# Data Source
+
+[Commonwealth Electoral Act 1918 (CEA) notices – Expected election day polling places](https://www.aec.gov.au/about_aec/cea-notices/election-pp.htm)
+
+# Usage Instructions
+
+We need to merge the official AEC data with an unofficial list of overseas polling booths.
+
+1. Add a `booth_info` column as the far right most column.
+2. Paste the contents of `./data/overseas_polling_places_2019.csv` (minus the header) at the bottom of the file.
+3. Load the polling place data per normal whilst applying `config.json`.
+
 # Data Quality Issues
 
-Source: [Commonwealth Electoral Act 1918 (CEA) notices – Expected election day polling places](https://www.aec.gov.au/about_aec/cea-notices/election-pp.htm)
-
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
+
+## May 2nd 2019
+
+No data quality issues detected. Issues previously noted have all been resolved. 🎉
 
 ## April 19th 2019
 
