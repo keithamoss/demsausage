@@ -29,6 +29,7 @@ if ("REACT_APP_RAVEN_URL" in process.env) {
         environment: process.env.REACT_APP_ENVIRONMENT,
         // @ts-ignore
         site: process.env.REACT_APP_RAVEN_SITE_NAME,
+        attachStacktrace: true,
     })
     Middleware.push(sentry)
 }
