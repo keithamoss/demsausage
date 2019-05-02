@@ -21,7 +21,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import App from "./App"
 import { LoginDialog } from "./authentication/login-dialog/LoginDialog"
-import { fetchInitialAppState, IModule as IAppModule } from "./redux/modules/app"
+import { fetchInitialAppState, IModule as IAppModule, isDevelopment } from "./redux/modules/app"
 import { IElection, setCurrentElection } from "./redux/modules/elections"
 import { IStore } from "./redux/modules/reducer"
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from "./redux/modules/snackbars"
@@ -99,9 +99,12 @@ export class AppContainer extends React.Component<IStoreProps & IDispatchProps &
     }
 
     componentDidMount() {
-        this.intervalId = window.setInterval(() => {
-            this.props.refreshPendingStalls()
-        }, 30000)
+        this.intervalId = window.setInterval(
+            () => {
+                this.props.refreshPendingStalls()
+            },
+            isDevelopment() === true ? 300000 : 30000
+        )
     }
 
     componentWillUnmount() {
