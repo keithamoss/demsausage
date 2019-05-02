@@ -491,7 +491,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             self.polling_places = processed_polling_places
 
             self.logger.info("Geocoded {} polling places successfully".format(geocoding_success_counter))
-            self.logger.info("Geocoded skipped {} polling places".format(geocoding_skipped_counter))
+            self.logger.info("Geocoding skipped {} polling places".format(geocoding_skipped_counter))
 
         _geocode_polling_places()
 
@@ -620,14 +620,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.logger.error("Polling place invalid: {}".format(serialiser.errors))
 
     def migrate_noms(self):
+        def _fetch_matching(polling_place):
+            if polling_place.ec_id is not None:
+                results = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT).filter(ec_id=polling_place.ec_id)
+                count = results.count()
+                if count >= 2:
+                    self.logger.error("Find by ec_id [{}]: Found {} existing polling places with that id.".format(polling_place.ec_id, count))
+                return results
+            else:
+                return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         polling_places_to_update = []
         
         for polling_place in queryset:
-            start = timer()
+            # start = timer()
 
-            matching_polling_places = self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+            matching_polling_places = _fetch_matching(polling_place)
 
             if len(matching_polling_places) != 1:
                 self.logger.error("Noms Migration: {} matching polling places found in new data: '{}' ({})".format(len(matching_polling_places), polling_place.name, polling_place.address))
@@ -653,8 +663,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 if self.election.polling_places_loaded is False:
                     self.logger.warning("Noms Migration: User-added polling place '{}' ({}) has been merged successfully into the official polling place '{}' ({}). Is this correct?".format(polling_place.name, polling_place.address, matching_polling_places[0].name, matching_polling_places[0].address))
             
-            end = timer()
-            self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
+            # end = timer()
+            # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
 
         # Update polling place noms en masse
         PollingPlaces.objects.bulk_update(polling_places_to_update, ["noms"])
