@@ -55,6 +55,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         this.map = null
         this.timeoutIds = []
+
+        this.onMapContainerResize = this.onMapContainerResize.bind(this)
     }
 
     componentDidMount() {
@@ -83,7 +85,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         })
 
         // Accommodate the window resizing
-        window.onresize = this.onMapContainerResize.bind(this)
+        window.addEventListener("resize", this.onMapContainerResize)
 
         // Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
         this.onMapContainerResize()
@@ -134,7 +136,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         // 2. Cancel any window.setTimeout() calls that may be running
         this.timeoutIds.forEach((timeoutId: number) => window.clearTimeout(timeoutId))
 
-        // 3. Remove all layers, controls, and interactions on the map
+        // 3. Remove the window.onresize event that lets the map know to update its size when the viewport changes
+        window.removeEventListener("resize", this.onMapContainerResize)
+
+        // 4. Remove all layers, controls, and interactions on the map
         if (this.map !== null) {
             const layers = [...this.map.getLayers().getArray()]
             layers.forEach((l: BaseLayer | VectorLayer) => {
@@ -158,7 +163,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
             })
         }
 
-        // 4. And finally clean up the map object itself
+        // 5. And finally clean up the map object itself
         // https://stackoverflow.com/a/25997026
         if (this.map !== null) {
             // @ts-ignore
