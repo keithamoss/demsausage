@@ -16,7 +16,9 @@ The dates listed in this file reflect the date the data was last refreshed by th
 
 ## May 2nd 2019
 
-No data quality issues detected. Issues previously noted have all been resolved. 🎉
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Taylor (PPID=97559): -35.152135, 149.113586 (was -35.1695542 149.1055413). Incorrectly located in a nearby neighbourhood.
 
 ## April 19th 2019
 

@@ -28,6 +28,13 @@
         "Long": "lon",
         "PPId": "ec_id"
     },
+    "fix_data_issues": [
+        {
+            "field": "ec_id",
+            "value": 97559,
+            "overwrite": [{ "field": "lat", "value": -35.152135 }, { "field": "lon", "value": 149.113586 }]
+        }
+    ],
     "geocoding": {
         "enabled": true,
         "components": { "country": "AU" }
