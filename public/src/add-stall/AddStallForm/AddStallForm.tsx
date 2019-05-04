@@ -182,7 +182,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     <CustomTextField
                                         name="name"
                                         component={TextField}
-                                        floatingLabelText={"What should we call your stall?"}
+                                        floatingLabelText={"Give your stall a name!"}
                                         hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                                         fullWidth={true}
                                         validate={[required]}
