@@ -43,6 +43,18 @@ export class APIClient {
         })
     }
 
+    // Handles fatal errors from the API
+    public handleError(error: any, url: string, dispatch: any) {
+        if (isDevelopment() === true) {
+            // tslint:disable-next-line:no-console
+            console.error(error)
+        }
+
+        Sentry.captureException(`${error} For ${url}`)
+        Sentry.captureException(error)
+        Sentry.showReportDialog()
+    }
+
     public async get(url: string, dispatch: Function, params: object = {}, fetchOptions: object = {}): Promise<IAPIResponse> {
         dispatch(beginFetch())
 
@@ -63,7 +75,7 @@ export class APIClient {
             return promise
         }
 
-        this.handleError(`Fetch promise is undefined for: ${url}`, url, dispatch)
+        // this.handleError(`Fetch promise is undefined for: ${url}`, url, dispatch)
 
         return new Promise(resolve => {
             return resolve({ response: new Response(null, { status: 499, statusText: "Client Closed Request" }), json: null })
@@ -144,17 +156,6 @@ export class APIClient {
                 return response
             })
             .catch((error: any) => this.handleError(error, url, dispatch))
-    }
-
-    // Handles fatal errors from the API
-    private handleError(error: any, url: string, dispatch: any) {
-        if (isDevelopment() === true) {
-            // tslint:disable-next-line:no-console
-            console.error(error)
-        }
-
-        Sentry.captureException(error)
-        Sentry.showReportDialog()
     }
 }
 
