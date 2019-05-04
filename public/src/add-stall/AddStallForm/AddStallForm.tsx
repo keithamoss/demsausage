@@ -31,7 +31,7 @@ export interface IProps {
     onConfirmChosenLocation: any
     stallLocationInfo: any // Bit of a hack around the issue of this being IStallLocationInfo OR IPollingPlace
     locationConfirmed: boolean
-    formSubmitting: boolean
+    formIsSubmitting: boolean
     formSyncErrors: any
     formHasSubmitFailed: boolean
     errors: IDjangoAPIError | undefined
@@ -116,7 +116,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
             onConfirmChosenLocation,
             stallLocationInfo,
             locationConfirmed,
-            formSubmitting,
+            formIsSubmitting,
             formSyncErrors,
             formHasSubmitFailed,
             errors,
@@ -136,46 +136,46 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
         }
 
         return (
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Stepper activeStep={stepIndex} orientation="vertical">
-                    <Step>
-                        <StepLabel>{chosenElection === null ? "Choose an election" : chosenElection.name}</StepLabel>
-                        <StepContentStyled>
-                            <RadioButtonGroup name="elections" onChange={onChooseElection}>
-                                {liveElections.map((election: IElection) => (
-                                    <RadioButton key={election.id} value={election.id} label={election.name} style={{ marginBottom: 16 }} />
-                                ))}
-                            </RadioButtonGroup>
-                        </StepContentStyled>
-                    </Step>
+            <Stepper activeStep={stepIndex} orientation="vertical">
+                <Step>
+                    <StepLabel>{chosenElection === null ? "Choose an election" : chosenElection.name}</StepLabel>
+                    <StepContentStyled>
+                        <RadioButtonGroup name="elections" onChange={onChooseElection}>
+                            {liveElections.map((election: IElection) => (
+                                <RadioButton key={election.id} value={election.id} label={election.name} style={{ marginBottom: 16 }} />
+                            ))}
+                        </RadioButtonGroup>
+                    </StepContentStyled>
+                </Step>
 
-                    <Step>
-                        <StepLabel>{locationConfirmed === false ? "Where is your stall?" : primaryTextString}</StepLabel>
-                        <StepContentStyled>
-                            {chosenElection !== null && chosenElection.polling_places_loaded === false && (
-                                <GooglePlacesAutocompleteListWithConfirm
-                                    election={chosenElection}
-                                    onConfirmChosenLocation={onConfirmChosenLocation}
-                                    componentRestrictions={{ country: "AU" }}
-                                    autoFocus={false}
-                                    hintText={"Where is your stall?"}
-                                />
-                            )}
-                            {chosenElection !== null && chosenElection.polling_places_loaded === true && (
-                                <GooglePlacesAndPollingPlacesAutocompleteListWithConfirm
-                                    election={chosenElection}
-                                    onConfirmChosenLocation={onConfirmChosenLocation}
-                                    componentRestrictions={{ country: "AU" }}
-                                    autoFocus={false}
-                                    hintText={"Where is your stall?"}
-                                />
-                            )}
-                        </StepContentStyled>
-                    </Step>
+                <Step>
+                    <StepLabel>{locationConfirmed === false ? "Where is your stall?" : primaryTextString}</StepLabel>
+                    <StepContentStyled>
+                        {chosenElection !== null && chosenElection.polling_places_loaded === false && (
+                            <GooglePlacesAutocompleteListWithConfirm
+                                election={chosenElection}
+                                onConfirmChosenLocation={onConfirmChosenLocation}
+                                componentRestrictions={{ country: "AU" }}
+                                autoFocus={false}
+                                hintText={"Where is your stall?"}
+                            />
+                        )}
+                        {chosenElection !== null && chosenElection.polling_places_loaded === true && (
+                            <GooglePlacesAndPollingPlacesAutocompleteListWithConfirm
+                                election={chosenElection}
+                                onConfirmChosenLocation={onConfirmChosenLocation}
+                                componentRestrictions={{ country: "AU" }}
+                                autoFocus={false}
+                                hintText={"Where is your stall?"}
+                            />
+                        )}
+                    </StepContentStyled>
+                </Step>
 
-                    <Step>
-                        <StepLabel>Tell us about your stall</StepLabel>
-                        <StepContentStyled>
+                <Step>
+                    <StepLabel>Tell us about your stall</StepLabel>
+                    <StepContentStyled>
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             {/* <div> required here so that StepContentStyled works */}
                             <div>
                                 <FormSection style={{ marginTop: 0 }}>
@@ -277,7 +277,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                     <DjangoAPIErrorUI errors={formSyncErrors} />
                                 )}
 
-                                <RaisedButton label={"Submit Stall"} disabled={formSubmitting} primary={true} onClick={onSaveForm} />
+                                <RaisedButton label={"Submit Stall"} disabled={formIsSubmitting} primary={true} onClick={onSaveForm} />
                                 <HiddenButton type="submit" />
 
                                 <PrivacySection>
@@ -320,10 +320,10 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
 
                                 <StupidFormPadderToFixiOSBugs />
                             </div>
-                        </StepContentStyled>
-                    </Step>
-                </Stepper>
-            </form>
+                        </form>
+                    </StepContentStyled>
+                </Step>
+            </Stepper>
         )
     }
 }

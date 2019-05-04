@@ -1,6 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { getFormSyncErrors, hasSubmitFailed, submit } from "redux-form"
+import { getFormSyncErrors, hasSubmitFailed, isSubmitting, submit } from "redux-form"
 import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { INoms } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
@@ -19,6 +19,7 @@ export interface IDispatchProps {
 
 export interface IStoreProps {
     liveElections: Array<IElection>
+    formIsSubmitting: boolean
     formSyncErrors: any
     formHasSubmitFailed: boolean
 }
@@ -28,7 +29,6 @@ export interface IStateProps {
     chosenElection: IElection | null
     stallLocationInfo: IStallLocationInfo | null /* Actually IStallLocationInfo or IPollingPlace (depending on election.polling_places_loaded) */
     locationConfirmed: boolean
-    formSubmitting: boolean
     errors: IDjangoAPIError | undefined
 }
 
@@ -84,7 +84,6 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
             chosenElection: props.liveElections.length === 1 ? props.liveElections[0] : null,
             stallLocationInfo: null,
             locationConfirmed: false,
-            formSubmitting: false,
             errors: undefined,
         }
 
@@ -103,10 +102,6 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
         this.setState({ ...this.state, stepIndex: 2, stallLocationInfo: stallLocationInfo, locationConfirmed: true })
     }
 
-    toggleFormSubmitting() {
-        this.setState({ ...this.state, formSubmitting: !this.state.formSubmitting })
-    }
-
     componentWillMount() {
         // const { pollingPlace } = this.props
 
@@ -117,8 +112,8 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
     }
 
     render() {
-        const { liveElections, formSyncErrors, formHasSubmitFailed, onFormSubmit, onSaveForm, onStallAdded } = this.props
-        const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, formSubmitting, errors } = this.state
+        const { liveElections, formIsSubmitting, formSyncErrors, formHasSubmitFailed, onFormSubmit, onSaveForm, onStallAdded } = this.props
+        const { stepIndex, chosenElection, stallLocationInfo, locationConfirmed, errors } = this.state
 
         return (
             <AddStallForm
@@ -130,12 +125,11 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
                 stallLocationInfo={stallLocationInfo}
                 locationConfirmed={locationConfirmed}
                 initialValues={this.initialValues}
-                formSubmitting={formSubmitting}
+                formIsSubmitting={formIsSubmitting}
                 formSyncErrors={formSyncErrors}
                 formHasSubmitFailed={formHasSubmitFailed}
                 errors={errors}
                 onSubmit={async (values: object, dispatch: Function, props: IProps) => {
-                    this.toggleFormSubmitting()
                     await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo, this)
                 }}
                 onSaveForm={() => {
@@ -149,6 +143,7 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
 const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     return {
         liveElections: getLiveElections(state),
+        formIsSubmitting: isSubmitting("addStall")(state),
         formSyncErrors: getFormSyncErrors("addStall")(state),
         formHasSubmitFailed: hasSubmitFailed("addStall")(state),
     }
@@ -180,7 +175,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             if (response.status === 201) {
                 onStallAdded()
             } else if (response.status === 400) {
-                that.setState({ ...that.state, errors: json }, () => that.toggleFormSubmitting())
+                that.setState({ ...that.state, errors: json })
             }
         },
         onSaveForm: () => {
