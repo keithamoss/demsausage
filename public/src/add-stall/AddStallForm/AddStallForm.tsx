@@ -186,6 +186,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         hintText={"e.g. Smith Hill Primary School Sausage Sizzle"}
                                         fullWidth={true}
                                         validate={[required]}
+                                        autoComplete="no"
                                     />
                                     <CustomTextField
                                         name="description"
@@ -197,6 +198,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         }
                                         fullWidth={true}
                                         validate={[required]}
+                                        autoComplete="no"
                                     />
                                     <CustomTextField
                                         name="opening_hours"
@@ -204,6 +206,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         floatingLabelText={"Stall opening hours (optional)"}
                                         hintText={"e.g. 8AM - 2PM"}
                                         fullWidth={true}
+                                        autoComplete="no"
                                     />
                                     <CustomTextField
                                         name="website"
@@ -211,6 +214,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         floatingLabelText={"Stall website or social media page (optional)"}
                                         hintText={"We'll include a link to your site as part of your stall's information"}
                                         fullWidth={true}
+                                        autoComplete="no"
                                     />
                                 </FormSection>
 
@@ -255,6 +259,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         floatingLabelText={"Anything else?"}
                                         hintText={"e.g. We also have yummy gluten free sausage rolls, cold drinks, and pony rides!"}
                                         fullWidth={true}
+                                        autoComplete="no"
                                     />
                                 </FormSection>
 
@@ -268,6 +273,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                         fullWidth={true}
                                         validate={[required, email]}
                                         type={"email"}
+                                        autoComplete="email"
                                     />
                                 </FormSection>
 
