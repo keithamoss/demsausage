@@ -14,7 +14,7 @@ import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 
-export interface IProps {
+interface IProps {
     currentElection: IElection
 }
 

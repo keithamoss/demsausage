@@ -52,7 +52,7 @@ const muiTheme = getMuiTheme({
 
 interface IProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     // From Props
     app: IAppModule
     user: IUser
@@ -63,7 +63,7 @@ export interface IStoreProps {
     responsiveDrawer: any
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     setElectionFromRoute: Function
     fetchInitialAppState: Function
     refreshPendingStalls: Function
@@ -71,9 +71,9 @@ export interface IDispatchProps {
     onClickDrawerLink: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
-export interface IRouteProps {
+interface IRouteProps {
     content: any
     location: any
     params?: {

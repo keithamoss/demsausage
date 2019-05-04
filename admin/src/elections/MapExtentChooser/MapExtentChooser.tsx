@@ -13,7 +13,7 @@ import View from "ol/View"
 import * as React from "react"
 import { IGeoJSON } from "../../redux/modules/interfaces"
 
-export interface IProps {
+interface IProps {
     value: IGeoJSON | undefined
     onChange: (geojson: IGeoJSON) => void
 }

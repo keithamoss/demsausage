@@ -3,7 +3,7 @@ import * as React from "react"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 import PollingPlaceAutocompleteList from "./PollingPlaceAutocompleteList"
 
-export interface IProps {
+interface IProps {
     onFieldChange: Function
     searchText: string
     searchResults: Array<IPollingPlace> | undefined

@@ -17,22 +17,22 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export interface IProps extends IOwnProps {
+interface IProps extends IOwnProps {
     // election: IElection
     onElectionEdited: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection
     isDirty: boolean
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 export interface IElectionFormValues {
     geom: IGeoJSON

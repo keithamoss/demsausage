@@ -12,7 +12,7 @@ import { Link } from "react-router"
 import { IElection } from "../../redux/modules/elections"
 import { IPollingPlaceLoaderResponseMessages } from "../../redux/modules/polling_places"
 
-export interface IProps {
+interface IProps {
     election: IElection
     file: File | undefined
     error: boolean | undefined

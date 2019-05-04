@@ -54,7 +54,7 @@ const WheelchairAccess = styled.div`
     padding-top: 10px;
 `
 
-export interface IProps {
+interface IProps {
     pollingPlace: IPollingPlace
 }
 

@@ -33,7 +33,7 @@ class ElectionTabWrapper extends React.Component<any, any> {
     }
 }
 
-export interface IProps {
+interface IProps {
     electionsToShow: Array<IElection>
     isHistoricalElectionShown: boolean
     currentElection: IElection

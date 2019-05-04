@@ -77,7 +77,7 @@ const PollingPlaceCardWrapper = styled.div`
     padding: 10px;
 `
 
-export interface IProps {
+interface IProps {
     currentElection: IElection
     waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
@@ -92,7 +92,7 @@ export interface IProps {
     onClickMapFilterOption: any
 }
 
-export interface IState {
+interface IState {
     mapLoading: boolean | undefined
 }
 

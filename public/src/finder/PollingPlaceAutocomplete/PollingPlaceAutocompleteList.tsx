@@ -6,7 +6,7 @@ import * as reactStringReplace from "react-string-replace"
 import styled from "styled-components"
 import { IPollingPlace } from "../../redux/modules/polling_places"
 
-export interface IProps {
+interface IProps {
     searchText?: string
     searchResults: Array<IPollingPlace> | undefined
     onChoosePollingPlace: any

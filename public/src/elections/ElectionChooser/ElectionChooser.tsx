@@ -20,7 +20,7 @@ const ElectionCard = styled(Card)`
     max-width: 400px;
 `
 
-export interface IProps {
+interface IProps {
     elections: Array<IElection>
     onChooseElection: any
 }

@@ -4,15 +4,15 @@ import { getLiveElections, IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import AddStall from "./AddStall"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     liveElections: Array<IElection>
 }
 
-export interface IStateProps {
+interface IStateProps {
     formSubmitted: boolean
 }
 

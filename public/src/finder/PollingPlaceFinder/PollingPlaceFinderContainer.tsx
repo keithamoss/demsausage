@@ -9,17 +9,17 @@ import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import { IGoogleGeocodeResult } from "../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 import PollingPlaceFinder from "./PollingPlaceFinder"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     currentElection: IElection
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     findNearestPollingPlaces: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps
 class PollingPlaceFinderContainer extends React.Component<TComponentProps, IStateProps> {

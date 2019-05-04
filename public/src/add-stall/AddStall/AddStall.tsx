@@ -4,7 +4,7 @@ import { isIE11 } from "../../utils"
 import AddStallFormContainer from "../AddStallForm/AddStallFormContainer"
 // import "./AddStallForm.css"
 
-export interface IProps {
+interface IProps {
     showNoLiveElections: boolean
     showWelcome: boolean
     showThankYou: boolean

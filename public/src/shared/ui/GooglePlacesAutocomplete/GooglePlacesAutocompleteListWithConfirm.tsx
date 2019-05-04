@@ -7,7 +7,7 @@ import { IStallLocationInfo } from "../../../redux/modules/stalls"
 import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
 import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 
-export interface IProps {
+interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
 
@@ -16,11 +16,11 @@ export interface IProps {
     autoFocus: boolean
     hintText: string
 }
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStateProps {
+interface IStateProps {
     addressResult: IGoogleAddressSearchResult | null
     geocodedPlace: IGoogleGeocodeResult | null
     stallLocationInfo: IStallLocationInfo | null

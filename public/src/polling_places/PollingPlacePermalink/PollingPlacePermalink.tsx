@@ -13,7 +13,7 @@ const RaisedButtonPadded = styled(RaisedButton)`
     margin-top: 20px;
 `
 
-export interface IProps {
+interface IProps {
     pollingPlace: IPollingPlace
     election: IElection
     onViewOnMap: any

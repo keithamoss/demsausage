@@ -10,22 +10,22 @@ import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIError
 import { IStallEditCredentials } from "../EditStall/EditStallContainer"
 import EditStallForm from "./EditStallForm"
 
-export interface IProps {
+interface IProps {
     stall: IStall
     credentials: IStallEditCredentials
     onStallUpdated: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     isValid: boolean
 }
 
-export interface IStateProps {
+interface IStateProps {
     formSubmitting: boolean
     errors: IDjangoAPIError | undefined
 }

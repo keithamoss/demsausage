@@ -23,18 +23,18 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection
     pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchPollingPlaces: Function
     updatePollingPlaceType: Function
     onElectionChanged: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     pollingPlaces: IPollingPlace[] | null
 }
 

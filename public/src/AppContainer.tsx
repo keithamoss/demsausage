@@ -67,12 +67,12 @@ const DemocracySausageTitle = styled.h1`
     color: white;
 `
 
-export interface IRouterProps {
+interface IRouterProps {
     content: any
     location: any
 }
 
-export interface IRouteProps {
+interface IRouteProps {
     electionName: string
 }
 
@@ -82,7 +82,7 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     // From Props
     app: IAppModule
     snackbars: ISnackbarsModule
@@ -94,7 +94,7 @@ export interface IStoreProps {
     responsiveDrawer: any
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchInitialAppState: Function
     setElectionFromRoute: Function
     handleSnackbarClose: Function
@@ -103,7 +103,7 @@ export interface IDispatchProps {
     onClickOutboundDrawerLink: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 const DEFAULT_BREAK_POINT = "small"
 function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, breakPoint: any = DEFAULT_BREAK_POINT) {

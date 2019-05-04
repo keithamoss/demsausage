@@ -4,16 +4,16 @@ import { IStore } from "../../redux/modules/reducer"
 import { IPendingStall } from "../../redux/modules/stalls"
 import StallInfoCard from "./StallInfoCard"
 
-export interface IProps {
+interface IProps {
     stall: IPendingStall
     cardActions?: any
 }
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 class StallInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
     render() {

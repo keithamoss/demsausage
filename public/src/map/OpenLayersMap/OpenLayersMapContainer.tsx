@@ -6,7 +6,7 @@ import { IMapFilterOptions, IMapSearchResults, storeMapData } from "../../redux/
 import { IStore } from "../../redux/modules/reducer"
 import OpenLayersMap from "./OpenLayersMap"
 
-export interface IProps {
+interface IProps {
     election: IElection
     mapSearchResults: IMapSearchResults | null
     mapFilterOptions: IMapFilterOptions
@@ -15,15 +15,15 @@ export interface IProps {
     onQueryMap: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     geojson: IGeoJSONFeatureCollection | undefined
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     stashMapData: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class OpenLayersMapContainer extends React.Component<TComponentProps, IStateProps> {

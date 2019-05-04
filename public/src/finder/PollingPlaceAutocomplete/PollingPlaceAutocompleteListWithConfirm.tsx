@@ -6,18 +6,18 @@ import { IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceAutocompleteContainer from "./PollingPlaceAutocompleteContainer"
 
-export interface IProps {
+interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
     autoFocus: boolean
     hintText: string
     onRequestSearch?: Function
 }
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStateProps {
+interface IStateProps {
     pollingPlaceInfo: IPollingPlace | null
     locationConfirmed: boolean
 }

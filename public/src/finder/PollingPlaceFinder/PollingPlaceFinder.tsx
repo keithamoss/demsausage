@@ -15,7 +15,7 @@ const FinderContainer = styled.div`
     margin-right: 7.5%;
 `
 
-export interface IProps {
+interface IProps {
     election: IElection
     onGeocoderResults: any
 }

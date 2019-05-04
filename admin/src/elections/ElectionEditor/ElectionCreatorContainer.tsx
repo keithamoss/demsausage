@@ -7,20 +7,20 @@ import { IStore } from "../../redux/modules/reducer"
 import ElectionEditor from "./ElectionEditor"
 import { IElectionFormValues } from "./ElectionEditorContainer"
 
-export interface IProps {
+interface IProps {
     onElectionCreated: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     isDirty: boolean
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 const fromFormValues = (formValues: any): IElectionFormValues => {
     return {

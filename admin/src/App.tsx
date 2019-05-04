@@ -68,7 +68,7 @@ class MenuListItem extends React.Component<any, any> {
     }
 }
 
-export interface IProps {
+interface IProps {
     muiThemePalette: any
     app: IAppModule
     user: IUser

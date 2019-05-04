@@ -12,7 +12,7 @@ import { IStore } from "../../../redux/modules/reducer"
 import { IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
 import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 
-export interface IProps {
+interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
 
@@ -21,13 +21,13 @@ export interface IProps {
     autoFocus: boolean
     hintText: string
 }
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchPollingPlaces: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     geocodedPlace: IGoogleGeocodeResult | null
     matchedPollingPlaces?: IPollingPlace[]
 }

@@ -20,7 +20,7 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
     defaultElection: IElection
@@ -28,14 +28,14 @@ export interface IStoreProps {
     mapSearchResults: IMapSearchResults | null
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchQueriedPollingPlaces: Function
     onOpenFinderForAddressSearch: Function
     onOpenFinderForGeolocation: Function
     onClearMapSearch: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     waitingForGeolocation: boolean
     queriedPollingPlaces: Array<IPollingPlace>
     mapFilterOptions: IMapFilterOptions

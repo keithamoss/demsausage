@@ -14,17 +14,17 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     elections: Array<IElection>
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onMakeElectionPrimary: Function
     onDownloadElection: Function
     onRegenerateMapDataForElection: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {

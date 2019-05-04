@@ -20,16 +20,16 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection
     pendingStallCount: number
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     loadPollingPlaces: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     file: File | undefined
     config: string | undefined
     dryRun: boolean

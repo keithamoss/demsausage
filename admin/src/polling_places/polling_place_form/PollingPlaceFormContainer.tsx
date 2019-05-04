@@ -16,25 +16,25 @@ import { IStall } from "../../redux/modules/stalls"
 import { deepValue } from "../../utils"
 import PollingPlaceForm from "./PollingPlaceForm"
 
-export interface IProps {
+interface IProps {
     election: IElection
     stall?: IStall
     pollingPlace: IPollingPlace
     onPollingPlaceEdited: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
     onClickCopyLink: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     isDirty: boolean
     pollingPlaceTypes: IPollingPlaceFacilityType[]
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 const toFormValues = (pollingPlace: IPollingPlace): any => {
     return {

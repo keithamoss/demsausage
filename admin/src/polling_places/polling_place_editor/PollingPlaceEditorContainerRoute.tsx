@@ -16,14 +16,14 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection
     pollingPlaceId: number | null
 }
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 class PollingPlaceEditorContainerRoute extends React.Component<TComponentProps, IStateProps> {

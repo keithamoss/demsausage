@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./SausageLoader.css"
 
-export interface IProps {}
+interface IProps {}
 
 class SausageLoader extends React.PureComponent<IProps, {}> {
     private intervalId: number

@@ -1,10 +1,10 @@
 import * as React from "react"
 import Dialog from "material-ui/Dialog"
 
-export interface NotApprovedDialogProps {
+interface NotApprovedDialogProps {
     open: boolean
 }
-export interface NotApprovedDialogState {}
+interface NotApprovedDialogState {}
 
 export class NotApprovedDialog extends React.Component<NotApprovedDialogProps, NotApprovedDialogState> {
     render() {

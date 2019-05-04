@@ -14,20 +14,20 @@ interface IOwnProps {
     params: IRouteProps
 }
 
-export interface IProps extends IOwnProps {}
+interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     stall: IPendingStall | null
     election: IElection | null
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onPollingPlaceEdited: Function
     onApproveUnofficialStall: Function
     onDeclineUnofficialStall: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
 class PendingStallEditorContainer extends React.Component<TComponentProps, IStateProps> {

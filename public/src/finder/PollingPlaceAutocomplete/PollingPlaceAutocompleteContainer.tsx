@@ -6,20 +6,20 @@ import { IPollingPlace, searchPollingPlaces } from "../../redux/modules/polling_
 import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceAutocomplete from "./PollingPlaceAutocomplete"
 
-export interface IProps {
+interface IProps {
     election: IElection
     autoFocus: boolean
     hintText: string
     onPollingPlaceChosen: Function
 }
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onPollingPlaceSearch: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     searchText: string
     searchResults: Array<IPollingPlace>
 }

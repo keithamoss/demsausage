@@ -8,23 +8,23 @@ import { createStall, IStallLocationInfo } from "../../redux/modules/stalls"
 import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 import AddStallForm from "./AddStallForm"
 
-export interface IProps {
+interface IProps {
     onStallAdded: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onFormSubmit: Function
     onSaveForm: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     liveElections: Array<IElection>
     formIsSubmitting: boolean
     formSyncErrors: any
     formHasSubmitFailed: boolean
 }
 
-export interface IStateProps {
+interface IStateProps {
     stepIndex: number
     chosenElection: IElection | null
     stallLocationInfo: IStallLocationInfo | null /* Actually IStallLocationInfo or IPollingPlace (depending on election.polling_places_loaded) */

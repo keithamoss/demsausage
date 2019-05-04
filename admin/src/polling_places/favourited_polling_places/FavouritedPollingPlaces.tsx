@@ -5,7 +5,7 @@ import { IPollingPlace } from "../../redux/modules/polling_places"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlaceInfoCardMiniContainer from "../polling_place_info_card_mini/PollingPlaceInfoCardMiniContainer"
 
-export interface IProps {
+interface IProps {
     pollingPlaces: IPollingPlace[]
     onElectionChanged: any
 }

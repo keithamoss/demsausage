@@ -22,7 +22,7 @@ import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
 import { getPollingPlacePermalink, IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 
-export interface IProps {
+interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
     stallWasMerged: boolean

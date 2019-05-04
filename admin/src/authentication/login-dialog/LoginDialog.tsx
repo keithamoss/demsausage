@@ -3,10 +3,10 @@ import * as React from "react"
 import { getAPIBaseURL } from "../../redux/modules/app"
 import { SocialLoginButton } from "../social-login-button/SocialLoginButton"
 
-export interface ILoginDialogProps {
+interface ILoginDialogProps {
     open: boolean
 }
-export interface ILoginDialogState {}
+interface ILoginDialogState {}
 
 export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialogState> {
     render() {

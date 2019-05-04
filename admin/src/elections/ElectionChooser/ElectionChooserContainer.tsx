@@ -4,19 +4,19 @@ import { IElection, setCurrentElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionChooser from "./ElectionChooser"
 
-export interface IProps {
+interface IProps {
     onElectionChanged: Function
 }
-export interface IStoreProps {
+interface IStoreProps {
     elections: Array<IElection>
     currentElectionId: number
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onChangeElection: Function
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 class ElectionChooserContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {

@@ -6,17 +6,17 @@ import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import ElectionAppBar from "./ElectionAppBar"
 
-export interface IProps {
+interface IProps {
     isResponsiveAndOverBreakPoint: boolean
     pageTitle: string
     pageBaseURL: string
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onChooseElection: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     elections: Array<IElection>
     liveElections: Array<IElection>
     currentElection: IElection
@@ -24,7 +24,7 @@ export interface IStoreProps {
     browserBreakpoint: string
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 class ElectionAppBarContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {

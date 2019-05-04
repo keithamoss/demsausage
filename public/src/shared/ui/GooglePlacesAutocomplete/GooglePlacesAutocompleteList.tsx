@@ -11,7 +11,7 @@ import { gaTrack } from "../../../shared/analytics/GoogleAnalytics"
 import { askForGeolocationPermissions } from "../../geolocation/geo"
 import GooglePlacesAutocomplete, { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
 
-export interface IProps {
+interface IProps {
     gps?: boolean
     onShowPlaceAutocompleteResults?: Function
     onChoosePlace: (place: IGoogleGeocodeResult, addressResult?: IGoogleAddressSearchResult) => void
@@ -22,17 +22,17 @@ export interface IProps {
     hintText: string
     style?: any
 }
-export interface IStoreProps {
+interface IStoreProps {
     initMode: ePollingPlaceFinderInit
     geolocationSupported: boolean
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onRequestLocationPermissions: Function
     fetchLocationFromGeocoder: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     waitingForGeolocation: boolean
     addressSearchResults: Array<IGoogleAddressSearchResult>
 }

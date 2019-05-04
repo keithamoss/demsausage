@@ -7,21 +7,21 @@ import { IStore } from "../../redux/modules/reducer"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import ElectionChooser from "./ElectionChooser"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onChooseElection: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     elections: Array<IElection>
 }
 
-export interface IStateProps {
+interface IStateProps {
     isElectionChooserOpen: boolean
 }
 
-export interface IRouterProps {
+interface IRouterProps {
     content: any
     location: any
 }

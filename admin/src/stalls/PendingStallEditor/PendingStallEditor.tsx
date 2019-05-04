@@ -32,7 +32,7 @@ const FlexboxColumn = styled.div`
     padding: 10px;
 `
 
-export interface IProps {
+interface IProps {
     election: IElection
     stall: IPendingStall
     onPollingPlaceEdited: Function

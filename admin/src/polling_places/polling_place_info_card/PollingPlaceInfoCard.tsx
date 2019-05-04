@@ -5,7 +5,7 @@ import { IElection } from "../../redux/modules/elections"
 import { getPollingPlaceLongName, IPollingPlace } from "../../redux/modules/polling_places"
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-export interface IProps {
+interface IProps {
     election: IElection
     pollingPlace: IPollingPlace
 }

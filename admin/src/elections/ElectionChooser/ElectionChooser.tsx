@@ -4,7 +4,7 @@ import SelectField from "material-ui/SelectField"
 import * as React from "react"
 import { IElection } from "../../redux/modules/elections"
 
-export interface IProps {
+interface IProps {
     elections: Array<IElection>
     currentElectionId: number
     onChangeElection: any

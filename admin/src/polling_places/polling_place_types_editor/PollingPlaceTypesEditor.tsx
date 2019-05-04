@@ -26,7 +26,7 @@ const GridBox = styled.div`
     border-bottom: 1px solid ${blueGrey50};
 `
 
-export interface IProps {
+interface IProps {
     pollingPlaces: IPollingPlace[]
     pollingPlaceTypes: IPollingPlaceFacilityType[]
     onChangeType: any

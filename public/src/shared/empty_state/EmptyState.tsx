@@ -26,7 +26,7 @@ const FlexboxCentredBox = styled.div`
     }
 `
 
-export interface IProps {
+interface IProps {
     message: any
     icon: any
 }

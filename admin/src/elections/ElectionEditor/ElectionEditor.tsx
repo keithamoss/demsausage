@@ -21,7 +21,7 @@ const HiddenButton = styled.button`
     display: none;
 `
 
-export interface IProps {
+interface IProps {
     election: IElection | null
     onSubmit: any
     onSaveForm: any

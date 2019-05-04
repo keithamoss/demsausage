@@ -4,15 +4,15 @@ import { IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import PollingPlaceInfoCardMini from "./PollingPlaceInfoCardMini"
 
-export interface IProps {
+interface IProps {
     pollingPlace: IPollingPlace
 }
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 class PollingPlaceInfoCardMiniContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
     render() {

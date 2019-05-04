@@ -6,26 +6,26 @@ import { fetchStallWithCredentials, IStall } from "../../redux/modules/stalls"
 import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
 import EditStall from "./EditStall"
 
-export interface IProps {
+interface IProps {
     onStallAdded: Function
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchStall: Function
 }
 
-export interface IStoreProps {
+interface IStoreProps {
     elections: IElection[]
 }
 
-export interface IStateProps {
+interface IStateProps {
     stall: IStall | undefined | null
     election: IElection | undefined
     errors: IDjangoAPIError | undefined
     formSubmitted: boolean
 }
 
-export interface IRouteProps {
+interface IRouteProps {
     location: {
         query: {
             stall_id: string

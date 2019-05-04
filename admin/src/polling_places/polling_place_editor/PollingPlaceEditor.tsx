@@ -32,7 +32,7 @@ const FlexboxPollingPlaceAutocompleteContainer = styled.div`
     width: 100%;
 `
 
-export interface IProps {
+interface IProps {
     election: IElection
     pollingPlace?: IPollingPlace
     stall?: IStall

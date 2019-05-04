@@ -8,7 +8,7 @@ import { Link } from "react-router"
 import { IElection } from "../../redux/modules/elections"
 import { getStallLocationName, IStall } from "../../redux/modules/stalls"
 
-export interface IProps {
+interface IProps {
     stalls: Array<IStall>
     elections: Array<IElection>
 }

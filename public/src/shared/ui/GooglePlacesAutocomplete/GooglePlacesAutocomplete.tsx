@@ -35,7 +35,7 @@ import * as React from "react"
 //     },
 // }
 
-export interface IProps {
+interface IProps {
     // Google componentRestrictions
     componentRestrictions?: object
     types?: Array<any>
@@ -81,7 +81,7 @@ export interface IProps {
     // Internals
 }
 
-export interface IState {
+interface IState {
     data: Array<IGoogleAddressSearchResult>
     searchText: string
 }

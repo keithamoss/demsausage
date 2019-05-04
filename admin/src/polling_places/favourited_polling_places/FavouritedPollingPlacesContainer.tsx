@@ -16,16 +16,16 @@ interface IOwnProps {
 
 interface IProps extends IOwnProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchPollingPlaces: Function
     onElectionChanged: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     pollingPlaces: IPollingPlace[] | null
 }
 

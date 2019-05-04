@@ -11,7 +11,7 @@ import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
 import { PollingPlaceEditor } from "./PollingPlaceEditor"
 
-export interface IProps {
+interface IProps {
     election: IElection
     pollingPlaceId: number | null
     stall?: IStall
@@ -19,14 +19,14 @@ export interface IProps {
     showElectionChooser: boolean
     onPollingPlaceEdited: Function
 }
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchRequiredState: Function
     onElectionChanged: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     pollingPlacesChecked: boolean
     pollingPlace?: IPollingPlace
 }

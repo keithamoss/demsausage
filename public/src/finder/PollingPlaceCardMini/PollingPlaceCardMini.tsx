@@ -86,7 +86,7 @@ const ChanceOfSausage = styled(ListItem)`
     }
 `
 
-export interface IProps {
+interface IProps {
     pollingPlace: IPollingPlace | IPollingPlaceSearchResult
     election: IElection
     copyLinkEnabled: boolean

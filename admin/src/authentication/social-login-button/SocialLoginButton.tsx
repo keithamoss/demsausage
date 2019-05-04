@@ -1,12 +1,12 @@
 import * as React from "react"
 import RaisedButton from "material-ui/RaisedButton"
 
-export interface ISocialLoginButtonProps {
+interface ISocialLoginButtonProps {
     providerName: string
     providerUrl: string
     colour: string
 }
-export interface ISocialLoginButtonState {}
+interface ISocialLoginButtonState {}
 
 export class SocialLoginButton extends React.Component<ISocialLoginButtonProps, ISocialLoginButtonState> {
     handleClick = () => {

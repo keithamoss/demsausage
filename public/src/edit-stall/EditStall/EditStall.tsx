@@ -8,7 +8,7 @@ import DjangoAPIErrorUI, { IDjangoAPIError } from "../../shared/ui/DjangoAPIErro
 import EditStallFormContainer from "../EditStallForm/EditStallFormContainer"
 import { IStallEditCredentials } from "./EditStallContainer"
 
-export interface IProps {
+interface IProps {
     showAPIErrors: boolean
     showWelcome: boolean
     showThankYou: boolean

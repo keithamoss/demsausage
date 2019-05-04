@@ -1,7 +1,7 @@
 import { capitalize } from "lodash-es"
 import * as React from "react"
 
-export interface IProps {
+interface IProps {
     errors: IDjangoAPIError | undefined
 }
 

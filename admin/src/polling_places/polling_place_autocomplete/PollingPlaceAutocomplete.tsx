@@ -7,7 +7,7 @@ import * as reactStringReplace from "react-string-replace"
 import styled from "styled-components"
 import { getPollingPlaceLongName, IPollingPlace } from "../../redux/modules/polling_places"
 
-export interface IProps {
+interface IProps {
     searchText: string
     pollingPlaces: Array<IPollingPlace>
     onPollingPlaceAutocompleteSelect: any

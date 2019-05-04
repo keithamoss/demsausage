@@ -5,16 +5,16 @@ import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
 import PendingStallsManager from "./PendingStallsManager"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     stalls: Array<IStall>
     elections: Array<IElection>
 }
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps
 class PendingStallsManagerContainer extends React.Component<TComponentProps, IStateProps> {

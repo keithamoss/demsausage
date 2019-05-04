@@ -4,15 +4,15 @@ import { IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import Sausagelytics from "./Sausagelytics"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     currentElection: IElection
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class SausagelyticsContainer extends React.Component<TComponentProps, IStateProps> {

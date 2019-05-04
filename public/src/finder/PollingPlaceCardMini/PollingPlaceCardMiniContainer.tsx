@@ -6,19 +6,19 @@ import { IStore } from "../../redux/modules/reducer"
 import { sendNotification } from "../../redux/modules/snackbars"
 import PollingPlaceCardMini from "./PollingPlaceCardMini"
 
-export interface IProps {
+interface IProps {
     pollingPlace: IPollingPlace
     election: IElection
     copyLinkEnabled?: boolean
 }
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IDispatchProps {
+interface IDispatchProps {
     onClickCopyLink: Function | undefined
 }
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {

@@ -34,7 +34,7 @@ import { IMapFilterOptions, IMapSearchResults, olStyleFunction } from "../../red
 import { IMapPollingPlaceFeature } from "../../redux/modules/polling_places"
 import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 
-export interface IProps {
+interface IProps {
     election: IElection
     geojson: IGeoJSONFeatureCollection | undefined
     mapSearchResults: IMapSearchResults | null

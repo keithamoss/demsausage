@@ -11,13 +11,13 @@ import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IStore } from "../../redux/modules/reducer"
 
-export interface IProps {}
+interface IProps {}
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 const PageWrapper = styled.div`
     padding-left: 15px;

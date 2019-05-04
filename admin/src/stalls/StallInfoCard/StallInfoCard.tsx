@@ -24,7 +24,7 @@ import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { getStallLocationAddress, getStallLocationName, IPendingStall, IStallDiff } from "../../redux/modules/stalls"
 
-export interface IProps {
+interface IProps {
     stall: IPendingStall
     cardActions?: any
 }

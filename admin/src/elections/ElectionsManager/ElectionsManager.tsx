@@ -36,7 +36,7 @@ const LinearProgressChunky = styled(LinearProgress)`
     height: 10px !important;
 `
 
-export interface IProps {
+interface IProps {
     elections: Array<IElection>
     onMakeElectionPrimary: any
     onDownloadElection: any

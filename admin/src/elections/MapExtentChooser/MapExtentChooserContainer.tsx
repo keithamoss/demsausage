@@ -4,16 +4,16 @@ import { IGeoJSON } from "../../redux/modules/interfaces"
 import { IStore } from "../../redux/modules/reducer"
 import MapExtentChooser from "./MapExtentChooser"
 
-export interface IProps {
+interface IProps {
     value: IGeoJSON | undefined
     onChange: (geojson: IGeoJSON) => void
 }
 
-export interface IDispatchProps {}
+interface IDispatchProps {}
 
-export interface IStoreProps {}
+interface IStoreProps {}
 
-export interface IStateProps {}
+interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class MapExtentChooserContainer extends React.Component<TComponentProps, IStateProps> {

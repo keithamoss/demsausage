@@ -18,18 +18,18 @@ interface IRouteProps {
     routeParams: IRouteParams
 }
 
-export interface IProps extends IRouteProps {}
+interface IProps extends IRouteProps {}
 
-export interface IStoreProps {
+interface IStoreProps {
     election: IElection | undefined
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
     fetchPollingPlace: Function
     onViewOnMap: Function
 }
 
-export interface IStateProps {
+interface IStateProps {
     pollingPlace: IPollingPlace | null | undefined
 }
 

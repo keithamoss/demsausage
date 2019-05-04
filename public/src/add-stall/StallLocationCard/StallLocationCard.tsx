@@ -7,7 +7,7 @@ import { ActionHome, ActionQuestionAnswer } from "material-ui/svg-icons"
 import * as React from "react"
 import { IStallLocationInfo } from "../../redux/modules/stalls"
 
-export interface IProps {
+interface IProps {
     stallLocationInfo: IStallLocationInfo
     showActions: boolean
     onCancel: any
