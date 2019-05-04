@@ -118,6 +118,11 @@ export interface IGoogleGeocodeResult {
         location_type: string
         viewport: any
     }
+    place_id: string
+    plus_code: {
+        compound_code: string
+        global_code: string
+    }
     types: Array<string>
 }
 

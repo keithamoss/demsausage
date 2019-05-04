@@ -56,6 +56,7 @@ export class SausageMapContainer extends React.Component<TComponentProps, IState
         this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
         this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
         this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
+        this.onGeolocationError = this.onGeolocationError.bind(this)
         this.onClickMapFilterOption = this.onClickMapFilterOption.bind(this)
         this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
         this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
@@ -80,6 +81,10 @@ export class SausageMapContainer extends React.Component<TComponentProps, IState
     }
 
     onGeolocationComplete() {
+        this.setState({ ...this.state, waitingForGeolocation: false })
+    }
+
+    onGeolocationError() {
         this.setState({ ...this.state, waitingForGeolocation: false })
     }
 
@@ -167,7 +172,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
                 })
 
                 this.onWaitForGeolocation()
-                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete)
+                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete, this.onGeolocationError)
             }
         },
         onClearMapSearch() {

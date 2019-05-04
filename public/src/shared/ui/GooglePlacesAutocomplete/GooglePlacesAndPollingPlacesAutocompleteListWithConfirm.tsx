@@ -9,19 +9,19 @@ import PollingPlaceAutocompleteList from "../../../finder/PollingPlaceAutocomple
 import { IElection } from "../../../redux/modules/elections"
 import { fetchNearbyPollingPlaces, IPollingPlace } from "../../../redux/modules/polling_places"
 import { IStore } from "../../../redux/modules/reducer"
-import { IGoogleAddressSearchResult, IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
+import { IGoogleGeocodeResult } from "./GooglePlacesAutocomplete"
 import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 
 export interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
     onChoosePlace: Function
+    gps: boolean
 
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
     autoFocus: boolean
     hintText: string
-    onRequestSearch?: Function
 }
 export interface IStoreProps {}
 
@@ -30,7 +30,6 @@ export interface IDispatchProps {
 }
 
 export interface IStateProps {
-    addressResult: IGoogleAddressSearchResult | null
     geocodedPlace: IGoogleGeocodeResult | null
     matchedPollingPlaces?: IPollingPlace[]
 }
@@ -44,29 +43,28 @@ const ChosenAddressHeading = styled.h5`
 class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     constructor(props: any) {
         super(props)
-        this.state = { addressResult: null, geocodedPlace: null }
+        this.state = { geocodedPlace: null }
 
         this.onChoosePlace = this.onChoosePlace.bind(this)
         this.onCancelChosenLocation = this.onCancelChosenLocation.bind(this)
     }
 
-    async onChoosePlace(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) {
+    async onChoosePlace(place: IGoogleGeocodeResult) {
         const { fetchPollingPlaces } = this.props
 
         this.setState({
             ...this.state,
-            addressResult: addressResult,
             geocodedPlace: place,
             matchedPollingPlaces: await fetchPollingPlaces(place.geometry.location.lat(), place.geometry.location.lng()),
         })
     }
 
     onCancelChosenLocation() {
-        this.setState({ ...this.state, addressResult: null, geocodedPlace: null, matchedPollingPlaces: undefined })
+        this.setState({ ...this.state, geocodedPlace: null, matchedPollingPlaces: undefined })
     }
 
     render() {
-        const { election, onConfirmChosenLocation, componentRestrictions, autoFocus, hintText } = this.props
+        const { election, onConfirmChosenLocation, componentRestrictions, autoFocus, hintText, gps } = this.props
         const { geocodedPlace, matchedPollingPlaces } = this.state
 
         return (
@@ -77,8 +75,10 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
                             componentRestrictions={componentRestrictions}
                             autoFocus={autoFocus}
                             hintText={hintText}
+                            onShowPlaceAutocompleteResults={this.onCancelChosenLocation}
                             onChoosePlace={this.onChoosePlace}
                             onCancelSearch={this.onCancelChosenLocation}
+                            gps={gps}
                         />
                         <br />
                     </div>

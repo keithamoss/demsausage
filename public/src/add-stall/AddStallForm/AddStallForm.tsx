@@ -157,7 +157,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 onConfirmChosenLocation={onConfirmChosenLocation}
                                 componentRestrictions={{ country: "AU" }}
                                 autoFocus={false}
-                                hintText={"Where is your stall?"}
+                                hintText={"Type an address"}
                             />
                         )}
                         {chosenElection !== null && chosenElection.polling_places_loaded === true && (
@@ -166,7 +166,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                 onConfirmChosenLocation={onConfirmChosenLocation}
                                 componentRestrictions={{ country: "AU" }}
                                 autoFocus={false}
-                                hintText={"Where is your stall?"}
+                                hintText={"Type an address"}
                             />
                         )}
                     </StepContentStyled>

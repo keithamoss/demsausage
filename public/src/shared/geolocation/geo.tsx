@@ -6,16 +6,11 @@ import { sendNotification } from "../../redux/modules/snackbars"
 import { gaTrack } from "../analytics/GoogleAnalytics"
 import { IGoogleGeocodeResult } from "../ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete"
 
-export function searchPollingPlacesByGeolocation(
-    dispatch: Function,
-    election: IElection,
-    geolocationComplete: any = null,
-    navigateToElection: boolean = false
-) {
+export function askForGeolocationPermissions(dispatch: Function, onGeolocationComplete?: Function, onGeolocationError?: Function) {
     navigator.geolocation.getCurrentPosition(
         async (position: Position) => {
             gaTrack.event({
-                category: "PollingPlaceFinderContainer",
+                category: "Geolocation",
                 action: "onRequestLocationPermissions",
                 label: "Granted geolocation permissions",
             })
@@ -33,44 +28,33 @@ export function searchPollingPlacesByGeolocation(
                             locationSearched = streetAddressPlace.formatted_address
                         }
 
-                        if (geolocationComplete !== null) {
-                            geolocationComplete()
-                        }
-
-                        dispatch(
-                            setMapToSearch({
-                                lon: position.coords.longitude,
-                                lat: position.coords.latitude,
-                                extent: await dispatch(
-                                    fetchNearbyPollingPlacesBBOX(election, position.coords.latitude, position.coords.longitude)
-                                ),
-                                formattedAddress: locationSearched,
-                            })
-                        )
-                        if (navigateToElection === true) {
-                            browserHistory.push(`/${getURLSafeElectionName(election)}`)
+                        if (onGeolocationComplete !== undefined) {
+                            onGeolocationComplete(position, streetAddressPlace, locationSearched)
                         }
                     } else {
                         gaTrack.event({
-                            category: "PollingPlaceFinderContainer",
+                            category: "Geolocation",
                             action: "onRequestLocationPermissions",
                             label: "Got an error from the geocoder",
                         })
 
-                        if (geolocationComplete !== null) {
-                            geolocationComplete()
+                        dispatch(sendNotification("Sorry, we encountered an error trying to fetch your location"))
+
+                        if (onGeolocationError !== undefined) {
+                            locationSearched = "error fetching location"
+                            onGeolocationError()
                         }
                     }
                 }
             )
         },
         (error: PositionError) => {
-            if (geolocationComplete !== null) {
-                geolocationComplete()
+            if (onGeolocationError !== undefined) {
+                onGeolocationError()
             }
 
             gaTrack.event({
-                category: "PollingPlaceFinderContainer",
+                category: "Geolocation",
                 action: "onRequestLocationPermissions",
                 label: "Got an error when asking for permissions",
                 value: error.code,
@@ -93,5 +77,36 @@ export function searchPollingPlacesByGeolocation(
             dispatch(sendNotification(snackbarMessage))
         },
         { maximumAge: 60 * 5 * 1000, timeout: 10000 }
+    )
+}
+
+export function searchPollingPlacesByGeolocation(
+    dispatch: Function,
+    election: IElection,
+    onGeolocationComplete: Function,
+    onGeolocationError: Function,
+    navigateToElection: boolean = false
+) {
+    askForGeolocationPermissions(
+        dispatch,
+        async (position: Position, place: IGoogleGeocodeResult, locationSearched: string) => {
+            if (onGeolocationComplete !== undefined) {
+                onGeolocationComplete()
+            }
+
+            dispatch(
+                setMapToSearch({
+                    lon: position.coords.longitude,
+                    lat: position.coords.latitude,
+                    extent: await dispatch(fetchNearbyPollingPlacesBBOX(election, position.coords.latitude, position.coords.longitude)),
+                    formattedAddress: locationSearched,
+                })
+            )
+
+            if (navigateToElection === true) {
+                browserHistory.push(`/${getURLSafeElectionName(election)}`)
+            }
+        },
+        onGeolocationError
     )
 }

@@ -16,7 +16,6 @@ export interface IProps {
     componentRestrictions: object
     autoFocus: boolean
     hintText: string
-    onRequestSearch?: Function
 }
 export interface IStoreProps {}
 
@@ -41,12 +40,12 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
         this.onConfirmChosenLocation = this.onConfirmChosenLocation.bind(this)
     }
 
-    onChoosePlace(addressResult: IGoogleAddressSearchResult, place: IGoogleGeocodeResult) {
+    onChoosePlace(place: IGoogleGeocodeResult, addressResult?: IGoogleAddressSearchResult) {
         this.setState({
             ...this.state,
-            addressResult: addressResult,
+            addressResult: addressResult!,
             geocodedPlace: place,
-            stallLocationInfo: this.getPollingPlaceInfo(addressResult, place),
+            stallLocationInfo: this.getPollingPlaceInfo(place, addressResult!),
         })
     }
 
@@ -59,17 +58,18 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
         this.props.onConfirmChosenLocation(this.state.stallLocationInfo!)
     }
 
-    getPollingPlaceInfo(addressResult: IGoogleAddressSearchResult, geocodedPlace: IGoogleGeocodeResult): IStallLocationInfo {
-        const stateComponent: any = geocodedPlace.address_components.find(
+    getPollingPlaceInfo(place: IGoogleGeocodeResult, addressResult: IGoogleAddressSearchResult): IStallLocationInfo {
+        const stateComponent: any = place.address_components.find(
             (o: any) => o.types.includes("administrative_area_level_1") && o.types.includes("political")
         )
+
         return {
             geom: {
                 type: "Point",
-                coordinates: [geocodedPlace.geometry.location.lng(), geocodedPlace.geometry.location.lat()],
+                coordinates: [place.geometry.location.lng(), place.geometry.location.lat()],
             },
             name: addressResult.structured_formatting.main_text,
-            address: geocodedPlace.formatted_address,
+            address: place.formatted_address,
             state: stateComponent !== undefined ? stateComponent.short_name : null,
         }
     }
@@ -87,6 +87,8 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
                             autoFocus={autoFocus}
                             hintText={hintText}
                             onChoosePlace={this.onChoosePlace}
+                            /* Off because GPS makes no sense in the context of an election with no polling places loaded */
+                            gps={false}
                         />
                         <br />
                     </div>
