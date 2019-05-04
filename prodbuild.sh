@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CMD="$1"
+PUSH="$2"
 
 if [ x"$CMD" = x ]; then
     echo "provide a command!"
@@ -35,4 +36,8 @@ if [ "$CMD" = "django" ] || [ "$CMD" = "all" ]; then
     echo building prod django container
     (cd django && docker build -t demsausage/django:latest .)
     # (cd django && docker build --no-cache -t demsausage/django:latest . && cd ..)
+fi
+
+if [ "$PUSH" = "push" ]; then
+    ./prodbuild-dockerpush.sh "$CMD"
 fi
