@@ -17,8 +17,8 @@ export interface IStateProps {
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
-    constructor(props: any) {
+class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = { formSubmitted: false }
 
@@ -61,9 +61,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AddStallFormContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(AddStallFormContainer)
-
-export default AddStallFormContainerWrapped

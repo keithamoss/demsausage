@@ -6,6 +6,16 @@ import { fetchFavouritedPollingPlaces, IPollingPlace } from "../../redux/modules
 import { IStore } from "../../redux/modules/reducer"
 import FavouritedPollingPlaces from "./FavouritedPollingPlaces"
 
+interface IRouteProps {
+    electionIdentifier: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     election: IElection
 }
@@ -17,14 +27,6 @@ export interface IDispatchProps {
 
 export interface IStateProps {
     pollingPlaces: IPollingPlace[] | null
-}
-
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
 }
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
@@ -61,7 +63,7 @@ class FavouritedPollingPlacesContainer extends React.PureComponent<TComponentPro
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections } = state
 
     return {
@@ -80,9 +82,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const FavouritedPollingPlacesContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(FavouritedPollingPlacesContainer)
-
-export default FavouritedPollingPlacesContainerWrapped

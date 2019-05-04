@@ -37,8 +37,6 @@ export interface IStateProps {
     addressSearchResults: Array<IGoogleAddressSearchResult>
 }
 
-interface IOwnProps {}
-
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, IStateProps> {
     onRequestLocationPermissions: any
@@ -193,7 +191,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { app } = state
 
     return {
@@ -248,9 +246,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const GooglePlacesAutocompleteListWrapped = connect<IStoreProps, IDispatchProps, IProps, IStore>(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(GooglePlacesAutocompleteList)
-
-export default GooglePlacesAutocompleteListWrapped

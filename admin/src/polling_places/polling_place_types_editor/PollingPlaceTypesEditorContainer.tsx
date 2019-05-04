@@ -13,6 +13,16 @@ import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlaceTypesEditor from "./PollingPlaceTypesEditor"
 
+interface IRouteProps {
+    electionIdentifier: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     election: IElection
     pollingPlaceTypes: IPollingPlaceFacilityType[]
@@ -28,16 +38,8 @@ export interface IStateProps {
     pollingPlaces: IPollingPlace[] | null
 }
 
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
-type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
-export class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentProps, IStateProps> {
+type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
+class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentProps, IStateProps> {
     public constructor(props: TComponentProps) {
         super(props)
 
@@ -94,7 +96,7 @@ export class PollingPlaceTypesEditorContainer extends React.PureComponent<TCompo
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections, polling_places } = state
 
     return {
@@ -120,9 +122,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceTypesEditorContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceTypesEditorContainer)
-
-export default PollingPlaceTypesEditorContainerWrapped

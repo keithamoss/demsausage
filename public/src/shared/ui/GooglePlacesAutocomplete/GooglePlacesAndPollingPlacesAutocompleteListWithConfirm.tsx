@@ -15,8 +15,6 @@ import GooglePlacesAutocompleteList from "./GooglePlacesAutocompleteList"
 export interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
-    onChoosePlace: Function
-    gps: boolean
 
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
@@ -40,8 +38,9 @@ const ChosenAddressHeading = styled.h5`
     font-weight: normal;
 `
 
-class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-    constructor(props: any) {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Component<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = { geocodedPlace: null }
 
@@ -64,7 +63,7 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
     }
 
     render() {
-        const { election, onConfirmChosenLocation, componentRestrictions, autoFocus, hintText, gps } = this.props
+        const { election, onConfirmChosenLocation, componentRestrictions, autoFocus, hintText } = this.props
         const { geocodedPlace, matchedPollingPlaces } = this.state
 
         return (
@@ -78,7 +77,6 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
                             onShowPlaceAutocompleteResults={this.onCancelChosenLocation}
                             onChoosePlace={this.onChoosePlace}
                             onCancelSearch={this.onCancelChosenLocation}
-                            gps={gps}
                         />
                         <br />
                     </div>
@@ -129,9 +127,7 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
     }
 }
 
-const GooglePlacesAndPollingPlacesAutocompleteListWithConfirmWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(GooglePlacesAndPollingPlacesAutocompleteListWithConfirm)
-
-export default GooglePlacesAndPollingPlacesAutocompleteListWithConfirmWrapped as any

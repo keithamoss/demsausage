@@ -43,7 +43,7 @@ class CustomLink extends React.Component<any, any> {
 class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
     onChangeType: Function
 
-    constructor(props: any) {
+    constructor(props: IProps) {
         super(props)
 
         this.onChangeType = (pollingPlace: IPollingPlace, e: any, value: string) => {

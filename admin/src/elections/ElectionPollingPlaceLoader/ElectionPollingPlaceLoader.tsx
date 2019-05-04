@@ -1,6 +1,5 @@
 import { Checkbox, List, TextField } from "material-ui"
 import { ListItem } from "material-ui/List"
-// import styled from "styled-components"
 // import "./ElectionPollingPlaceLoader.css"
 import RaisedButton from "material-ui/RaisedButton"
 import { greenA200, red500 } from "material-ui/styles/colors"
@@ -28,7 +27,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
     onConfigChange: any
     onCheckDryRun: any
 
-    constructor(props: any) {
+    constructor(props: IProps) {
         super(props)
 
         this.onFileChange = this.uploadFile.bind(this)

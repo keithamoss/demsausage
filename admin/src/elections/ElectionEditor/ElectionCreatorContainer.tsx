@@ -1,7 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-// import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { createElection, IElection } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
@@ -23,8 +22,6 @@ export interface IStoreProps {
 
 export interface IStateProps {}
 
-interface IOwnProps {}
-
 const fromFormValues = (formValues: any): IElectionFormValues => {
     return {
         geom: formValues.geom,
@@ -35,7 +32,7 @@ const fromFormValues = (formValues: any): IElectionFormValues => {
     }
 }
 
-export class ElectionCreatorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+class ElectionCreatorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
         const { onElectionCreated, isDirty, onFormSubmit, onSaveForm } = this.props
 
@@ -58,7 +55,7 @@ export class ElectionCreatorContainer extends React.Component<IProps & IStorePro
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {
         isDirty: isDirty("election")(state),
     }
@@ -79,9 +76,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionCreatorContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionCreatorContainer)
-
-export default ElectionCreatorContainerWrapped

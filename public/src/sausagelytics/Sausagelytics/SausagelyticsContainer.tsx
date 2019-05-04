@@ -15,12 +15,12 @@ export interface IStoreProps {
 export interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class SausagelyticsContainer extends React.Component<TComponentProps, IStateProps> {
+class SausagelyticsContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "SausagelyticsContainer"
     static pageTitle = "Democracy Sausage | Charts, graphs, and data!"
     static pageBaseURL = "/sausagelytics"
 
-    constructor(props: any) {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = {}
     }
@@ -44,9 +44,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const SausagelyticsContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(SausagelyticsContainer)
-
-export default SausagelyticsContainerWrapped

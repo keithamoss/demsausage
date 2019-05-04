@@ -48,9 +48,7 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
     }
 }
 
-const PollingPlaceCardMiniContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceCardMiniContainer)
-
-export default PollingPlaceCardMiniContainerWrapped

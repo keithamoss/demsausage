@@ -23,7 +23,7 @@ export interface IStateProps {
 }
 
 type TComponentProps = IProps & IDispatchProps
-export class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentProps, IStateProps> {
+class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentProps, IStateProps> {
     onFieldChangeDebounced: Function
 
     constructor(props: IProps & IDispatchProps) {
@@ -78,9 +78,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceAutocompleteContainerWrapped = connect<IStoreProps, IDispatchProps, IProps, IStore>(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceAutocompleteContainer)
-
-export default PollingPlaceAutocompleteContainerWrapped

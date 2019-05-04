@@ -19,10 +19,11 @@ const PageWrapper = styled.div`
 `
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class MediaPage extends React.Component<TComponentProps, IStateProps> {
+class MediaPage extends React.Component<TComponentProps, IStateProps> {
     componentDidMount() {
         document.title = "Democracy Sausage | Media"
     }
+
     render() {
         return (
             <PageWrapper>
@@ -63,8 +64,6 @@ export class MediaPage extends React.Component<TComponentProps, IStateProps> {
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-    // const { elections } = state
-
     return {}
 }
 
@@ -72,9 +71,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AboutPageWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(MediaPage)
-
-export default AboutPageWrapped

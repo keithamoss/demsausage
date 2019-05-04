@@ -3,14 +3,21 @@ import { DateTime } from "luxon"
 import * as React from "react"
 import { connect } from "react-redux"
 import { browserHistory } from "react-router"
-// import { formValueSelector, getFormValues, isDirty, initialize, submit, change } from "redux-form"
 import { isDirty, submit } from "redux-form"
 import { IElection, updateElection } from "../../redux/modules/elections"
 import { IGeoJSON } from "../../redux/modules/interfaces"
 import { IStore } from "../../redux/modules/reducer"
 import ElectionEditor from "./ElectionEditor"
 
-export interface IProps {
+interface IRouteProps {
+    electionIdentifier: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+export interface IProps extends IOwnProps {
     // election: IElection
     onElectionEdited: Function
 }
@@ -26,14 +33,6 @@ export interface IStoreProps {
 }
 
 export interface IStateProps {}
-
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
 
 export interface IElectionFormValues {
     geom: IGeoJSON
@@ -67,7 +66,7 @@ const fromFormValues = (formValues: any): IElectionFormValues => {
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
-export class ElectionEditorContainer extends React.Component<TComponentProps, IStateProps> {
+class ElectionEditorContainer extends React.Component<TComponentProps, IStateProps> {
     initialValues: any
     componentWillMount() {
         const { election } = this.props
@@ -98,7 +97,7 @@ export class ElectionEditorContainer extends React.Component<TComponentProps, IS
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections } = state
 
     return {
@@ -123,9 +122,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionEditorContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionEditorContainer)
-
-export default ElectionEditorContainerWrapped

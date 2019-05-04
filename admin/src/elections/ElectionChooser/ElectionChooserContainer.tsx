@@ -18,9 +18,7 @@ export interface IDispatchProps {
 
 export interface IStateProps {}
 
-interface IOwnProps {}
-
-export class ElectionChooserContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+class ElectionChooserContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     render() {
         const { elections, currentElectionId, onChangeElection, onElectionChanged } = this.props
 
@@ -36,7 +34,7 @@ export class ElectionChooserContainer extends React.Component<IProps & IStorePro
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections } = state
 
     return { elections: elections.elections, currentElectionId: elections.current_election_id }
@@ -51,9 +49,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionChooserContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionChooserContainer)
-
-export default ElectionChooserContainerWrapped

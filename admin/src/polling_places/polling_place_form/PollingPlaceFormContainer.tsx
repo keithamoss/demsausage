@@ -36,8 +36,6 @@ export interface IStoreProps {
 
 export interface IStateProps {}
 
-interface IOwnProps {}
-
 const toFormValues = (pollingPlace: IPollingPlace): any => {
     return {
         ...buildNomsObject(pollingPlace.stall !== null ? pollingPlace.stall.noms : null),
@@ -68,7 +66,7 @@ const fromFormValues = (formValues: any) => {
     }
 }
 
-export class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
+class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
     initialValues: any
 
     canStallPropsBeMerged() {
@@ -145,7 +143,7 @@ export class PollingPlaceFormContainer extends React.Component<IProps & IStorePr
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { polling_places } = state
 
     return {
@@ -174,9 +172,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceFormContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceFormContainer)
-
-export default PollingPlaceFormContainerWrapped

@@ -48,7 +48,7 @@ const Answer = styled.div`
 `
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class AboutPage extends React.Component<TComponentProps, IStateProps> {
+class AboutPage extends React.Component<TComponentProps, IStateProps> {
     componentDidMount() {
         document.title = "Democracy Sausage | FAQs and About Us"
     }
@@ -161,8 +161,6 @@ export class AboutPage extends React.Component<TComponentProps, IStateProps> {
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-    // const { elections } = state
-
     return {}
 }
 
@@ -170,9 +168,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const AboutPageWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(AboutPage)
-
-export default AboutPageWrapped

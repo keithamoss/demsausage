@@ -6,6 +6,14 @@ import { regenerateMapDataForElection } from "../../redux/modules/polling_places
 import { IStore } from "../../redux/modules/reducer"
 import ElectionsManager from "./ElectionsManager"
 
+interface IRouteProps {}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     elections: Array<IElection>
 }
@@ -18,14 +26,8 @@ export interface IDispatchProps {
 
 export interface IStateProps {}
 
-interface IRouteProps {}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
-export class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
+class ElectionsManagerContainer extends React.PureComponent<TComponentProps, IStateProps> {
     render() {
         const { elections, onMakeElectionPrimary, onDownloadElection, onRegenerateMapDataForElection } = this.props
 
@@ -62,9 +64,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionsManagerContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionsManagerContainer)
-
-export default ElectionsManagerContainerWrapped

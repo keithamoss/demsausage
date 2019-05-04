@@ -10,6 +10,16 @@ import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
 import { searchPollingPlacesByGeolocation } from "../../shared/geolocation/geo"
 import SausageMap from "./SausageMap"
 
+interface IRouteProps {
+    electionName: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     elections: Array<IElection>
     currentElection: IElection
@@ -31,16 +41,8 @@ export interface IStateProps {
     mapFilterOptions: IMapFilterOptions
 }
 
-interface IRouteProps {
-    electionName: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
-export class SausageMapContainer extends React.Component<TComponentProps, IStateProps> {
+class SausageMapContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "SausageMapContainer"
     static pageTitle = "Democracy Sausage"
     static pageBaseURL = ""
@@ -120,7 +122,7 @@ export class SausageMapContainer extends React.Component<TComponentProps, IState
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { app, elections, map } = state
 
     return {
@@ -181,9 +183,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const SausageMapContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(SausageMapContainer)
-
-export default SausageMapContainerWrapped

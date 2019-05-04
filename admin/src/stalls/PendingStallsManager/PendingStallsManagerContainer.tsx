@@ -5,6 +5,8 @@ import { IStore } from "../../redux/modules/reducer"
 import { IStall } from "../../redux/modules/stalls"
 import PendingStallsManager from "./PendingStallsManager"
 
+export interface IProps {}
+
 export interface IStoreProps {
     stalls: Array<IStall>
     elections: Array<IElection>
@@ -15,7 +17,7 @@ export interface IDispatchProps {}
 export interface IStateProps {}
 
 type TComponentProps = IStoreProps & IDispatchProps
-export class PendingStallsManagerContainer extends React.Component<TComponentProps, IStateProps> {
+class PendingStallsManagerContainer extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { stalls, elections } = this.props
 
@@ -36,9 +38,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PendingStallsManagerContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PendingStallsManagerContainer)
-
-export default PendingStallsManagerContainerWrapped

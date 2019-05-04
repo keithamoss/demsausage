@@ -1,4 +1,3 @@
-// import styled from "styled-components"
 import { groupBy } from "lodash-es"
 // import "./PendingStallsManager.css"
 import { List, ListItem } from "material-ui/List"

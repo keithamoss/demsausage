@@ -15,7 +15,6 @@
  */
 
 import { debounce } from "lodash-es"
-// import { isEqual } from "lodash-es"
 import { MenuItem } from "material-ui"
 import SearchBar from "material-ui-search-bar"
 import * as React from "react"

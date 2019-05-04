@@ -11,7 +11,6 @@ export interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
 
-    onChoosePlace: Function
     // From SearchBar via GooglePlacesAutocomplete
     componentRestrictions: object
     autoFocus: boolean
@@ -28,10 +27,9 @@ export interface IStateProps {
     locationConfirmed: boolean
 }
 
-interface IOwnProps {}
-
-export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
-    constructor(props: any) {
+type TComponentProps = IProps & IStoreProps & IDispatchProps
+class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = { addressResult: null, geocodedPlace: null, stallLocationInfo: null, locationConfirmed: false }
 
@@ -107,7 +105,7 @@ export class GooglePlacesAutocompleteListWithConfirm extends React.Component<IPr
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {}
 }
 
@@ -115,9 +113,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const GooglePlacesAutocompleteListWithConfirmWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(GooglePlacesAutocompleteListWithConfirm)
-
-export default GooglePlacesAutocompleteListWithConfirmWrapped as any

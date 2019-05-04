@@ -50,6 +50,8 @@ const muiTheme = getMuiTheme({
     },
 })
 
+interface IProps {}
+
 export interface IStoreProps {
     // From Props
     app: IAppModule
@@ -84,7 +86,7 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
     return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
-export class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
+class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
     private intervalId: number | undefined
 
     componentWillMount() {
@@ -211,9 +213,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AppContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(AppContainer)
-
-export default AppContainerWrapped

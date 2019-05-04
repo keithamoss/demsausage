@@ -15,9 +15,7 @@ export interface IStoreProps {}
 
 export interface IStateProps {}
 
-interface IOwnProps {}
-
-export class StallInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
+class StallInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
     render() {
         const { stall, cardActions } = this.props
 
@@ -25,7 +23,7 @@ export class StallInfoCardContainer extends React.PureComponent<IProps & IDispat
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {}
 }
 
@@ -33,9 +31,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const StallInfoCardContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(StallInfoCardContainer)
-
-export default StallInfoCardContainerWrapped

@@ -1,9 +1,6 @@
-// import { ListItem } from "material-ui/List"
 import Avatar from "material-ui/Avatar"
 import { Card, CardActions, CardHeader } from "material-ui/Card"
 import FlatButton from "material-ui/FlatButton"
-// import styled from "styled-components"
-// import { Link, browserHistory } from "react-router"
 // import "./StallLocationCard.css"
 import Paper from "material-ui/Paper"
 import { ActionHome, ActionQuestionAnswer } from "material-ui/svg-icons"
@@ -18,7 +15,7 @@ export interface IProps {
 }
 
 class StallLocationCard extends React.PureComponent<IProps, {}> {
-    constructor(props: any) {
+    constructor(props: IProps) {
         super(props)
         this.onConfirm = this.onConfirm.bind(this)
     }

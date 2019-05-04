@@ -71,9 +71,7 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
     }
 }
 
-const OpenLayersMapContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(OpenLayersMapContainer)
-
-export default OpenLayersMapContainerWrapped

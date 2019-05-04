@@ -1,4 +1,3 @@
-// import PollingPlaceAutocompleteContainer from "../polling_place_autocomplete/PollingPlaceAutocompleteContainer"
 // import "./PollingPlaceInfoCard.css"
 import { Card, CardTitle } from "material-ui/Card"
 import * as React from "react"

@@ -24,7 +24,7 @@ class MapExtentChooserContainer extends React.Component<TComponentProps, IStateP
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {}
 }
 
@@ -32,9 +32,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const MapExtentChooserContainerWrapped = connect<IStoreProps, IDispatchProps, IProps, IStore>(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(MapExtentChooserContainer)
-
-export default MapExtentChooserContainerWrapped

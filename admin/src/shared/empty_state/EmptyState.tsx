@@ -31,7 +31,7 @@ export interface IProps {
     icon: any
 }
 
-export class EmptyState extends React.PureComponent<IProps, {}> {
+export default class EmptyState extends React.PureComponent<IProps, {}> {
     render() {
         const { message, icon } = this.props
 
@@ -45,5 +45,3 @@ export class EmptyState extends React.PureComponent<IProps, {}> {
         )
     }
 }
-
-export default EmptyState

@@ -6,7 +6,16 @@ import { IStore } from "../../redux/modules/reducer"
 import { approveStall, approveStallAndAddUnofficialPollingPlace, declineStall, IPendingStall } from "../../redux/modules/stalls"
 import PendingStallEditor from "./PendingStallEditor"
 
-export interface IProps {}
+interface IRouteProps {
+    stallId: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+export interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     stall: IPendingStall | null
     election: IElection | null
@@ -20,16 +29,8 @@ export interface IDispatchProps {
 
 export interface IStateProps {}
 
-interface IRouteProps {
-    stallId: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
-export class PendingStallEditorContainer extends React.Component<TComponentProps, IStateProps> {
+class PendingStallEditorContainer extends React.Component<TComponentProps, IStateProps> {
     render() {
         const { stall, election, onPollingPlaceEdited, onApproveUnofficialStall, onDeclineUnofficialStall } = this.props
 
@@ -55,7 +56,7 @@ export class PendingStallEditorContainer extends React.Component<TComponentProps
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { stalls, elections } = state
 
     const stall = stalls.pending.find((stall: IPendingStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
@@ -87,9 +88,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PendingStallEditorContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PendingStallEditorContainer)
-
-export default PendingStallEditorContainerWrapped

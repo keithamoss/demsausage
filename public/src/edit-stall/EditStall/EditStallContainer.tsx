@@ -25,8 +25,6 @@ export interface IStateProps {
     formSubmitted: boolean
 }
 
-interface IOwnProps {}
-
 export interface IRouteProps {
     location: {
         query: {
@@ -44,8 +42,9 @@ export interface IStallEditCredentials {
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps & IRouteProps
 class EditStallFormContainer extends React.Component<TComponentProps, IStateProps> {
-    constructor(props: any) {
+    constructor(props: TComponentProps) {
         super(props)
+
         this.state = {
             stall: undefined,
             election: undefined,
@@ -101,7 +100,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections } = state
     return { elections: elections.elections }
 }
@@ -114,9 +113,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const EditStallFormContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
-)(EditStallFormContainer) as any
-
-export default EditStallFormContainerWrapped
+)(EditStallFormContainer)

@@ -55,7 +55,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function, ownProps: TComponentProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProps => {
     return {
         onChooseElection(election: IElection) {
             gaTrack.event({
@@ -70,10 +70,7 @@ const mapDispatchToProps = (dispatch: Function, ownProps: TComponentProps): IDis
     }
 }
 
-const ElectionChooserContainerWrapped = connect<IStoreProps, IDispatchProps, IProps>(
-    // @ts-ignore
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionChooserContainer)
-
-export default ElectionChooserContainerWrapped

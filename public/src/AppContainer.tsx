@@ -67,6 +67,21 @@ const DemocracySausageTitle = styled.h1`
     color: white;
 `
 
+export interface IRouterProps {
+    content: any
+    location: any
+}
+
+export interface IRouteProps {
+    electionName: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     // From Props
     app: IAppModule
@@ -90,26 +105,13 @@ export interface IDispatchProps {
 
 export interface IStateProps {}
 
-export interface IRouterProps {
-    content: any
-    location: any
-}
-
-export interface IRouteProps {
-    electionName: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 const DEFAULT_BREAK_POINT = "small"
 function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, breakPoint: any = DEFAULT_BREAK_POINT) {
     return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
 type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps
-export class AppContainer extends React.Component<TComponentProps, IStateProps> {
+class AppContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: TComponentProps) {
         super(props)
 
@@ -266,9 +268,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AppContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(AppContainer)
-
-export default AppContainerWrapped

@@ -32,8 +32,6 @@ export interface IStateProps {
     errors: IDjangoAPIError | undefined
 }
 
-interface IOwnProps {}
-
 export interface IStallFormInfo {
     name: string
     description: string
@@ -75,9 +73,9 @@ export const fromStallFormValues = (formValues: any): Partial<IStallFormInfo> =>
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
+class AddStallFormContainer extends React.Component<TComponentProps, IStateProps> {
     initialValues: object
-    constructor(props: any) {
+    constructor(props: TComponentProps) {
         super(props)
         this.state = {
             stepIndex: props.liveElections.length === 1 ? 1 : 0,
@@ -140,7 +138,7 @@ export class AddStallFormContainer extends React.Component<TComponentProps, ISta
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {
         liveElections: getLiveElections(state),
         formIsSubmitting: isSubmitting("addStall")(state),
@@ -184,9 +182,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const AddStallFormContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
-)(AddStallFormContainer) as any
-
-export default AddStallFormContainerWrapped
+)(AddStallFormContainer)

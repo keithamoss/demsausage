@@ -14,7 +14,11 @@ import { IStore } from "../../redux/modules/reducer"
 import EmptyState from "../../shared/empty_state/EmptyState"
 import PollingPlacePermalink from "./PollingPlacePermalink"
 
-export interface IProps {}
+interface IRouteProps {
+    routeParams: IRouteParams
+}
+
+export interface IProps extends IRouteProps {}
 
 export interface IStoreProps {
     election: IElection | undefined
@@ -38,11 +42,7 @@ interface IRouteParams {
     state?: string
 }
 
-interface IOwnProps {
-    routeParams: IRouteParams
-}
-
-type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
+type TComponentProps = IProps & IStoreProps & IDispatchProps
 class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IStateProps> {
     private fetchPollingPlace: Function
 
@@ -89,7 +89,7 @@ class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IS
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const getElectionByURLSafeNameFilter = getElectionByURLSafeName(state)
 
     return {
@@ -97,7 +97,7 @@ const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function, ownProps: IOwnProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProps => {
     return {
         fetchPollingPlace: async (election: IElection) => {
             const { routeParams } = ownProps
@@ -126,9 +126,7 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IOwnProps): IDispatchP
     }
 }
 
-const PollingPlacePermalinkContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlacePermalinkContainer)
-
-export default PollingPlacePermalinkContainerWrapped

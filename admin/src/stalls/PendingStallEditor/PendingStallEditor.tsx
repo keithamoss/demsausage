@@ -10,8 +10,7 @@ import styled from "styled-components"
 import PollingPlaceEditorContainer from "../../polling_places/polling_place_editor/PollingPlaceEditorContainer"
 import { IElection } from "../../redux/modules/elections"
 import { IPendingStall } from "../../redux/modules/stalls"
-// import { Link } from "react-router"
-import { StallInfoCardContainer } from "../StallInfoCard/StallInfoCardContainer"
+import StallInfoCardContainer from "../StallInfoCard/StallInfoCardContainer"
 
 const FlexboxContainer = styled.div`
     display: -ms-flex;

@@ -10,6 +10,16 @@ import { IStore } from "../../redux/modules/reducer"
 import { getPendingStallsForCurrentElection } from "../../redux/modules/stalls"
 import ElectionPollingPlaceLoader from "./ElectionPollingPlaceLoader"
 
+interface IRouteProps {
+    electionIdentifier: string
+}
+
+interface IOwnProps {
+    params: IRouteProps
+}
+
+interface IProps extends IOwnProps {}
+
 export interface IStoreProps {
     election: IElection
     pendingStallCount: number
@@ -27,17 +37,9 @@ export interface IStateProps {
     messages: IPollingPlaceLoaderResponseMessages | undefined
 }
 
-interface IRouteProps {
-    electionIdentifier: string
-}
-
-interface IOwnProps {
-    params: IRouteProps
-}
-
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
-export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponentProps, IStateProps> {
-    constructor(props: any) {
+class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponentProps, IStateProps> {
+    constructor(props: TComponentProps) {
         super(props)
 
         this.state = { file: undefined, config: undefined, dryRun: true, error: undefined, messages: undefined }
@@ -85,7 +87,7 @@ export class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TCo
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: TComponentProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     const { elections } = state
 
     const electionId = parseInt(ownProps.params.electionIdentifier, 10)
@@ -112,9 +114,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionPollingPlaceLoaderContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionPollingPlaceLoaderContainer)
-
-export default ElectionPollingPlaceLoaderContainerWrapped

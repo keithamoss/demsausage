@@ -48,7 +48,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
     onClickFileUpload: Function
     onMakeElectionPrimary: Function
 
-    constructor(props: any) {
+    constructor(props: IProps) {
         super(props)
 
         this.onClickElection = (election: any) => {

@@ -9,7 +9,6 @@ import PollingPlaceAutocompleteContainer from "./PollingPlaceAutocompleteContain
 export interface IProps {
     election: IElection
     onConfirmChosenLocation: Function
-    onChoosePlace: Function
     autoFocus: boolean
     hintText: string
     onRequestSearch?: Function
@@ -23,10 +22,8 @@ export interface IStateProps {
     locationConfirmed: boolean
 }
 
-interface IOwnProps {}
-
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class PollingPlaceAutocompleteListWithConfirm extends React.Component<TComponentProps, IStateProps> {
+class PollingPlaceAutocompleteListWithConfirm extends React.Component<TComponentProps, IStateProps> {
     constructor(props: TComponentProps) {
         super(props)
         this.state = { pollingPlaceInfo: null, locationConfirmed: false }
@@ -80,7 +77,7 @@ export class PollingPlaceAutocompleteListWithConfirm extends React.Component<TCo
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {}
 }
 
@@ -88,9 +85,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PollingPlaceAutocompleteListWithConfirmWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceAutocompleteListWithConfirm)
-
-export default PollingPlaceAutocompleteListWithConfirmWrapped as any

@@ -16,9 +16,7 @@ export interface IStoreProps {}
 
 export interface IStateProps {}
 
-interface IOwnProps {}
-
-export class PollingPlaceInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
+class PollingPlaceInfoCardContainer extends React.PureComponent<IProps & IDispatchProps, IStateProps> {
     render() {
         const { election, pollingPlace } = this.props
 
@@ -26,7 +24,7 @@ export class PollingPlaceInfoCardContainer extends React.PureComponent<IProps & 
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {}
 }
 
@@ -34,9 +32,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     return {}
 }
 
-const PollingPlaceInfoCardContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceInfoCardContainer)
-
-export default PollingPlaceInfoCardContainerWrapped

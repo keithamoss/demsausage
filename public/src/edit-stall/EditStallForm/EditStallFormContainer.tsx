@@ -30,9 +30,7 @@ export interface IStateProps {
     errors: IDjangoAPIError | undefined
 }
 
-interface IOwnProps {}
-
-const toFormValues = (stall: IStallFormInfo): any => {
+const toFormValues = (stall: IStall): any => {
     return {
         ...buildNomsObject(stall.noms as any),
         ...cloneDeep(stall),
@@ -42,8 +40,9 @@ const toFormValues = (stall: IStallFormInfo): any => {
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class EditStallFormContainer extends React.Component<TComponentProps, IStateProps> {
     initialValues: object | undefined
-    constructor(props: any) {
+    constructor(props: TComponentProps) {
         super(props)
+
         this.state = {
             formSubmitting: false,
             errors: undefined,
@@ -78,7 +77,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IOwnProps): IStoreProps => {
+const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     return {
         isValid: isValid("editStall")(state),
     }
@@ -106,9 +105,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const EditStallFormContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
-)(EditStallFormContainer) as any
-
-export default EditStallFormContainerWrapped
+)(EditStallFormContainer)

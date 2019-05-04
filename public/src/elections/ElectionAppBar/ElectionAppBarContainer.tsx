@@ -91,10 +91,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const ElectionAppBarContainerWrapped = connect<IStoreProps, IDispatchProps, IProps>(
-    // @ts-ignore
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(ElectionAppBarContainer)
-
-export default ElectionAppBarContainerWrapped

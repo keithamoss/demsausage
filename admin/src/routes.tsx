@@ -1,5 +1,4 @@
 import * as React from "react"
-// import { IndexRoute, Route } from "react-router"
 import { Route } from "react-router"
 import AppContainer from "./AppContainer"
 import ElectionCreatorContainer from "./elections/ElectionEditor/ElectionCreatorContainer"

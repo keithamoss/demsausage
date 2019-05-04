@@ -32,7 +32,7 @@ export interface IStateProps {
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-export class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStateProps> {
+class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStateProps> {
     constructor(props: IProps & IStoreProps & IDispatchProps) {
         super(props)
 
@@ -107,9 +107,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     }
 }
 
-const PollingPlaceEditorContainerWrapped = connect(
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
     mapStateToProps,
     mapDispatchToProps
 )(PollingPlaceEditorContainer)
-
-export default PollingPlaceEditorContainerWrapped
