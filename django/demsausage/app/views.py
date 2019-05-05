@@ -30,6 +30,7 @@ from demsausage.app.filters import LonLatFilter
 from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
 from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
 from demsausage.app.sausage.polling_places import find_by_distance, find_by_lookup_terms, find_by_stall, get_active_polling_place_queryset
+from demsausage.app.sausage.sausagelytics import FederalSausagelytics
 from demsausage.util import make_logger, get_or_none, add_datetime_to_filename
 
 from datetime import datetime
@@ -163,6 +164,16 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
         rollback.collects_logs()
         return Response({})
+
+    @detail_route(methods=["get"], permission_classes=(AllowAny,))
+    def stats(self, request, pk=None, format=None):
+        election = self.get_object()
+
+        if election.id != 27:
+            return HttpResponseNotFound()
+
+        stats = FederalSausagelytics(election)
+        return Response(stats.get_stats())
 
 
 class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
