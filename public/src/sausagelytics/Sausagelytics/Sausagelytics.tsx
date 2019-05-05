@@ -1,46 +1,18 @@
-// import "./SausagelyticsForm.css"
-import LinearProgress from "material-ui/LinearProgress"
-// import CircularProgress from "material-ui/CircularProgress"
-import { ActionHome } from "material-ui/svg-icons"
 import * as React from "react"
 import styled from "styled-components"
-// import PercentageCircle from "../../shared/viz/PercentageCircle/PercentageCircle"
-import { VictoryBar, VictoryLabel, VictoryPie } from "victory"
-import BaconandEggsIcon from "../../icons/bacon-and-eggs"
-import CakeIcon from "../../icons/cake"
-// import HalalIcon from "../../icons/halal"
-import CoffeeIcon from "../../icons/coffee"
-import SausageIcon from "../../icons/sausage"
-import VegoIcon from "../../icons/vego"
-import { IElection } from "../../redux/modules/elections"
+import { VictoryPie } from "victory"
+import { IElection, IElectionStats, ISausagelyticsStats } from "../../redux/modules/elections"
+import { theme } from "../../shared/sausagelytics/Victory"
 
 interface IProps {
-    currentElection: IElection
+    election: IElection
+    stats: ISausagelyticsStats
 }
 
 const SausagelyticsContainer = styled.div`
+    padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
-`
-
-const FlexboxContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    justify-content: left;
-    /* Or do it all in one line with flex flow */
-    flex-flow: row wrap;
-    /* tweak where items line up on the row valid values are: 
-       flex-start, flex-end, space-between, space-around, stretch */
-    align-content: flex-end;
-    /* margin-bottom: -4px; */
-`
-
-const FlexboxContainerVictoryCircle = styled(FlexboxContainer)`
-    background-color: rgb(61, 61, 61);
-    color: white;
-    padding: 10px;
-    margin-bottom: 3px;
 `
 
 const FlexboxItemVictoryPieOverlay = styled.div`
@@ -52,40 +24,13 @@ const FlexboxItemVictoryPieOverlay = styled.div`
     transform: translate(-50%, -50%);
     font-size: 18px;
     margin-top: -3px;
-`
+    text-align: center;
 
-const FlexboxItemCircleGap = styled.div`
-    width: 10%;
-`
-
-const FlexboxItemCircleTitle = styled.div`
-    /* max-width: 500px; */
-    width: 60%;
-
-    & h5 {
-        margin-top: 5px;
-        text-transform: uppercase;
-    }
-
-    & h2 {
-        margin-bottom: 5px;
-    }
-`
-
-// const FlexboxItemPie = styled.div`
-//     /* max-width: 500px; */
-//     /* width: 60%; */
-//     /* margin-right: 10px; */
-// `
-
-const FlexboxItemBar = styled.div`
-    max-width: 500px;
-    width: 80%;
-    margin-right: 10px;
-`
-
-const FlexboxItemIcon = styled.div`
-    /* margin-right: 10px; */
+    background-color: #e8bb3c;
+    color: #292336;
+    padding: 10px 10%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
 `
 
 const FlexboxContainerCols = styled.div`
@@ -101,211 +46,89 @@ const FlexboxContainerCols = styled.div`
     /* margin-bottom: 20px; */
 `
 
-const FlexboxItemTitle = styled.div`
+const FlexboxItemTitle = styled.h2`
+    margin-top: 0px;
     margin-bottom: 20px;
-    font-weight: bold;
+    background-color: #e8bb3c;
+    color: #292336;
+    padding: 20px 10%;
 `
 
 const FlexboxItemCircle = styled.div`
     position: relative;
 `
 
-const FlexboxItemCircleOverlay = styled.div`
-    /* text-align: center; */
-    /* align-items: start; */
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 28px;
-    color: #fbc02d;
+const FlexboxWrapContainer = styled.div`
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 100%;
+    min-width: 30%;
+    max-width: 70%;
+    justify-content: center;
 `
+
+const FlexboxWrapContainerChild = styled.div`
+    position: relative;
+    min-width: 280px;
+    max-width: 300px;
+    max-height: 200px;
+    margin: 10px;
+`
+
+const getPie = (stats: IElectionStats, style: any = undefined) => {
+    const data = [stats.data.all_booths, stats.data.all_booths_with_bbq]
+    const total = stats.data.all_booths.expected_voters
+    const percentage = stats.data.all_booths_with_bbq.expected_voters / total
+
+    return (
+        <React.Fragment>
+            <VictoryPie
+                data={data}
+                x={"count"}
+                y={"expected_voters"}
+                padding={20}
+                innerRadius={150}
+                startAngle={90}
+                endAngle={-90}
+                // style={{
+                //     data: {
+                //         fill: d => d.fill,
+                //     },
+                // }}
+                style={{ parent: { maxHeight: "300px" } }}
+                theme={theme}
+                // labelPosition="endAngle"
+                labels={[""]}
+            />
+            <FlexboxItemVictoryPieOverlay style={style}>
+                <strong>{stats.domain}</strong>
+                <br />
+                {new Intl.NumberFormat("en-AU").format(total)} (
+                {new Intl.NumberFormat("en-AU", { style: "percent", minimumFractionDigits: 2 }).format(percentage)})
+            </FlexboxItemVictoryPieOverlay>
+        </React.Fragment>
+    )
+}
 
 class Sausagelytics extends React.PureComponent<IProps, {}> {
     render() {
-        const { currentElection } = this.props
-
-        console.log(currentElection)
-        const sampleData = [
-            { x: 1, y: 2, width: 25 },
-            { x: 2, y: 3, width: 25 },
-            { x: 3, y: 5, width: 25 },
-            { x: 4, y: 4, width: 25 },
-            { x: 5, y: 6, width: 25 },
-        ]
-        const sampleDataPie = [{ x: 1, y: 3.1 }, { x: 2, y: 6.9 }]
+        const { stats } = this.props
 
         return (
             <SausagelyticsContainer>
                 <FlexboxContainerCols>
-                    <FlexboxItemTitle>Booths Reported</FlexboxItemTitle>
-                    <FlexboxItemCircle>
-                        <svg viewBox="0 0 120 120" style={{ width: 120, height: 120, position: "relative", transform: "rotate(0.75turn)" }}>
-                            <circle
-                                cx="60"
-                                cy="60"
-                                r="57.5"
-                                fill="none"
-                                strokeWidth="5"
-                                strokeMiterlimit="20"
-                                style={{
-                                    stroke: "#FBC02D",
-                                    strokeLinecap: "round",
-                                    transition: "all 0.3s linear 0ms",
-                                    strokeDasharray: "110.993, 361.283",
-                                }}
-                            />
-                        </svg>
-                        <FlexboxItemCircleOverlay>351</FlexboxItemCircleOverlay>
+                    <FlexboxItemTitle>Expected % of voters with access to #democracysausage</FlexboxItemTitle>
+                    <FlexboxItemCircle style={{ minWidth: "30%", maxWidth: "500px" }}>
+                        {getPie(stats.australia, { borderTopLeftRadius: "unset", borderTopRightRadius: "unset", top: "70%" })}
                     </FlexboxItemCircle>
+
+                    <FlexboxWrapContainer>
+                        {stats.states.map((stats: IElectionStats) => (
+                            <FlexboxWrapContainerChild key={stats.domain}>{getPie(stats)}</FlexboxWrapContainerChild>
+                        ))}
+                    </FlexboxWrapContainer>
                 </FlexboxContainerCols>
-
-                <VictoryBar
-                    style={{ data: { fill: "#c43a31" }, labels: { fill: "white" } }}
-                    data={sampleData}
-                    labels={d => d.y}
-                    labelComponent={<VictoryLabel dy={30}>CoffeeIcon</VictoryLabel>}
-                />
-
-                <FlexboxContainerVictoryCircle>
-                    <FlexboxItemCircleTitle>
-                        <h5>Sausage Sizzles</h5>
-                        <h2>35.2%</h2>
-                        <LinearProgress
-                            mode="determinate"
-                            value={350}
-                            max={651}
-                            color={"#62c175"}
-                            style={{ backgroundColor: "rgb(43, 43, 43)", height: "2px" }}
-                        />
-                    </FlexboxItemCircleTitle>
-                    <FlexboxItemCircleGap />
-                    <FlexboxItemCircle style={{ width: "30%" }}>
-                        <VictoryPie
-                            innerRadius={140}
-                            padAngle={3}
-                            data={sampleDataPie}
-                            colorScale={["#62c175", "rgb(43, 43, 43)"]}
-                            // labelRadius={90}
-                            padding={10}
-                        />
-                        <FlexboxItemVictoryPieOverlay>351</FlexboxItemVictoryPieOverlay>
-                    </FlexboxItemCircle>
-
-                    {/* </FlexboxItemPie> */}
-                </FlexboxContainerVictoryCircle>
-
-                <FlexboxContainerVictoryCircle>
-                    <FlexboxItemCircleTitle>
-                        <h5>Cake Stalls</h5>
-                        <h2>35.2%</h2>
-                        <LinearProgress
-                            mode="determinate"
-                            value={350}
-                            max={651}
-                            color={"#62c175"}
-                            style={{ backgroundColor: "rgb(43, 43, 43)", height: "2px" }}
-                        />
-                        {/* <SausageIcon /> */}
-                    </FlexboxItemCircleTitle>
-                    <FlexboxItemCircleGap />
-                    <FlexboxItemCircle style={{ width: "30%" }}>
-                        <VictoryPie
-                            innerRadius={140}
-                            padAngle={3}
-                            data={sampleDataPie}
-                            colorScale={["#62c175", "rgb(43, 43, 43)"]}
-                            padding={10}
-                            // labelRadius={90}
-                        />
-                        <FlexboxItemVictoryPieOverlay>351</FlexboxItemVictoryPieOverlay>
-                    </FlexboxItemCircle>
-
-                    {/* </FlexboxItemPie> */}
-                </FlexboxContainerVictoryCircle>
-                <br />
-                <br />
-
-                <FlexboxContainerCols>
-                    <FlexboxItemTitle>Cake Stalls</FlexboxItemTitle>
-                    <FlexboxItemCircle>
-                        <svg viewBox="0 0 120 120" style={{ width: 120, height: 120, position: "relative", transform: "rotate(0.75turn)" }}>
-                            <circle
-                                cx="60"
-                                cy="60"
-                                r="57.5"
-                                fill="none"
-                                strokeWidth="5"
-                                strokeMiterlimit="20"
-                                style={{
-                                    stroke: "#FBC02D",
-                                    strokeLinecap: "round",
-                                    transition: "all 0.3s linear 0ms",
-                                    strokeDasharray: "110.993, 361.283",
-                                }}
-                            />
-                        </svg>
-                        <FlexboxItemCircleOverlay>
-                            <CakeIcon />
-                        </FlexboxItemCircleOverlay>
-                    </FlexboxItemCircle>
-                </FlexboxContainerCols>
-
-                <br />
-
-                <FlexboxContainer style={{ marginBottom: 10 }}>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={350} max={651} style={{ height: 50 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <ActionHome style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
-
-                <FlexboxContainer>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={340} max={651} style={{ height: 30 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <SausageIcon style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
-
-                <FlexboxContainer>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={220} max={651} style={{ height: 30 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <CakeIcon style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
-
-                <FlexboxContainer>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={110} max={651} style={{ height: 30 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <BaconandEggsIcon style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
-
-                <FlexboxContainer>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={75} max={651} style={{ height: 30 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <CoffeeIcon style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
-
-                <FlexboxContainer>
-                    <FlexboxItemBar>
-                        <LinearProgress mode="determinate" value={45} max={651} style={{ height: 30 }} />
-                    </FlexboxItemBar>
-                    <FlexboxItemIcon>
-                        <VegoIcon style={{ width: 30, height: 30 }} />
-                    </FlexboxItemIcon>
-                </FlexboxContainer>
             </SausagelyticsContainer>
         )
     }

@@ -132,6 +132,27 @@ export interface IElection {
     polling_places_loaded: boolean
 }
 
+export interface ISausagelyticsStats {
+    australia: IElectionStats
+    states: IElectionStats[]
+}
+
+export interface IElectionStats {
+    domain: string
+    data: IElectionStatsData
+}
+
+export interface IElectionStatsData {
+    all_booths: {
+        count: number
+        expected_voters: number
+    }
+    all_booths_with_bbq: {
+        count: number
+        expected_voters: number
+    }
+}
+
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
@@ -171,6 +192,17 @@ export function getDefaultElection(elections: Array<IElection>) {
     }
 
     return defaultElection
+}
+
+export function fetchElectionStats(election: IElection) {
+    return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+        const { response, json } = await api.get(`/0.1/elections/${election.id}/stats/`, dispatch, {})
+
+        if (response.status === 200) {
+            return json
+        }
+        return null
+    }
 }
 
 // export function setElectionTableName(election: IElection, newDBTableName: string) {

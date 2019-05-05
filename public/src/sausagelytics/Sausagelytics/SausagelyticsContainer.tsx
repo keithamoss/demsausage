@@ -1,34 +1,55 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { IElection } from "../../redux/modules/elections"
+import { fetchElectionStats, IElection, ISausagelyticsStats } from "../../redux/modules/elections"
 import { IStore } from "../../redux/modules/reducer"
 import Sausagelytics from "./Sausagelytics"
 
 interface IProps {}
 
-interface IDispatchProps {}
+interface IDispatchProps {
+    fetchStats: Function
+}
 
 interface IStoreProps {
     currentElection: IElection
 }
 
-interface IStateProps {}
+interface IStateProps {
+    stats: ISausagelyticsStats | undefined
+}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class SausagelyticsContainer extends React.Component<TComponentProps, IStateProps> {
     static muiName = "SausagelyticsContainer"
     static pageTitle = "Democracy Sausage | Charts, graphs, and data!"
     static pageBaseURL = "/sausagelytics"
+    private fetchStats: Function
 
     constructor(props: TComponentProps) {
         super(props)
-        this.state = {}
+
+        this.state = { stats: undefined }
+
+        this.fetchStats = (election: IElection) => props.fetchStats(election)
+    }
+
+    async componentWillMount() {
+        const { currentElection } = this.props
+
+        if (currentElection !== undefined) {
+            this.setState({ stats: await this.fetchStats(currentElection) })
+        }
     }
 
     render() {
         const { currentElection } = this.props
+        const { stats } = this.state
 
-        return <Sausagelytics currentElection={currentElection} />
+        if (stats === undefined) {
+            return null
+        }
+
+        return <Sausagelytics election={currentElection} stats={stats} />
     }
 }
 
@@ -41,7 +62,11 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-    return {}
+    return {
+        fetchStats: async (election: IElection) => {
+            return await dispatch(fetchElectionStats(election))
+        },
+    }
 }
 
 export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
