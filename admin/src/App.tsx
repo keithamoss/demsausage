@@ -228,10 +228,13 @@ class App extends React.Component<IProps, {}> {
                                 <BottomNavigationItem
                                     label="Pending Stalls"
                                     icon={
-                                        <BottomNavBadgeWithIcon badgeContent={pendingStallCount} secondary={true}>
+                                        pendingStallCount > 0 ? (
+                                            <BottomNavBadgeWithIcon badgeContent={pendingStallCount} secondary={true}>
+                                                <ContentSend />
+                                            </BottomNavBadgeWithIcon>
+                                        ) : (
                                             <ContentSend />
-                                        </BottomNavBadgeWithIcon>
-                                        // tslint:disable-next-line:jsx-curly-spacing
+                                        )
                                     }
                                     onClick={() => browserHistory.push("/stalls")}
                                 />
