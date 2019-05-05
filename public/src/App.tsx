@@ -11,6 +11,7 @@ import {
     ActionSearch,
     ActionStore,
     CommunicationEmail,
+    EditorInsertChart,
     HardwareTv,
     MapsAddLocation,
     MapsLayers,
@@ -50,10 +51,11 @@ class MenuListItem extends React.Component<any, any> {
     render(): any {
         const { muiThemePalette, locationPathName, locationPathNameMatch, contentMuiName, ...rest } = this.props
 
-        // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
+        // Ugh - For making /, /<election-1-name>, /<election-2-name> URLs match properly
         if (
             (locationPathNameMatch === "/" && contentMuiName === "SausageMapContainer") ||
-            (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer")
+            (locationPathNameMatch === "/search" && contentMuiName === "PollingPlaceFinderContainer") ||
+            (locationPathNameMatch === "/sausagelytics" && contentMuiName === "SausagelyticsContainer")
         ) {
             // @ts-ignore
             rest.style = { color: muiThemePalette.accent1Color }
@@ -114,6 +116,8 @@ class App extends React.Component<IProps, {}> {
             bottomNavSelectedIndex = 1
         } else if (locationPathName === "/add-stall") {
             bottomNavSelectedIndex = 2
+        } else if (content.type.muiName === "SausagelyticsContainer") {
+            bottomNavSelectedIndex = 3
         }
 
         const styles: any /* React.CSSProperties */ = {
@@ -157,14 +161,15 @@ class App extends React.Component<IProps, {}> {
                                 muiThemePalette={muiThemePalette}
                                 contentMuiName={content.type.muiName}
                             />
-                            {/* <MenuListItem
-                                primaryText="Sausagelytics"
+                            <MenuListItem
+                                primaryText="Stats"
                                 leftIcon={<EditorInsertChart />}
                                 containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
                                 locationPathName={locationPathName}
                                 locationPathNameMatch={"/sausagelytics"}
                                 muiThemePalette={muiThemePalette}
-                            /> */}
+                                contentMuiName={content.type.muiName}
+                            />
                         </List>
                     )}
 
@@ -315,11 +320,11 @@ class App extends React.Component<IProps, {}> {
                                     icon={<MapsAddLocation />}
                                     onClick={() => browserHistory.push("/add-stall")}
                                 />
-                                {/* <BottomNavigationItem
-                                    label="Sausagelytics"
+                                <BottomNavigationItem
+                                    label="Stats"
                                     icon={<EditorInsertChart />}
                                     onClick={() => browserHistory.push(`/sausagelytics/${getURLSafeElectionName(currentElection)}`)}
-                                /> */}
+                                />
                             </BottomNavigation>
                         </Paper>
                     )}

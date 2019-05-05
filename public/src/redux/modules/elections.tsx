@@ -130,17 +130,6 @@ export interface IElection {
     is_primary: boolean
     election_day: string // Datetime
     polling_places_loaded: boolean
-    // stats: {
-    //     ttl_booths: number
-    //     ttl_bbq: number
-    //     ttl_caek: number
-    //     ttl_shame: number
-    //     ttl_halal?: number
-    //     ttl_coffee?: number
-    //     ttl_bacon_and_eggs?: number
-    //     ttl_free_text?: number
-    //     ttl_vego?: number
-    // }
 }
 
 // Side effects, only as applicable

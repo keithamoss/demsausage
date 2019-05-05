@@ -34,7 +34,8 @@
         "redux-responsive": "^4.3.5",
         "redux-thunk": "^2.2.0",
         "reselect": "^4.0.0",
-        "styled-components": "^2.2.3"
+        "styled-components": "^2.2.3",
+        "victory": "^32.2.2"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -66,7 +67,7 @@
         "@types/redux-form": "^7.0.9",
         "@types/redux-thunk": "^2.1.0",
         "@types/reselect": "^2.2.0",
-        "@types/victory": "^0.9.15",
+        "@types/victory": "^31.0.17",
         "core-js": "^2.6.1",
         "raf": "^3.4.1",
         "react-app-polyfill": "^0.2.2",
