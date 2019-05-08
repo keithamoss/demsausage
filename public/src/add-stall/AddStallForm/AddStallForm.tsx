@@ -4,7 +4,7 @@ import RaisedButton from "material-ui/RaisedButton"
 // import "./AddStallForm.css"
 import { Step, StepContent, StepLabel, Stepper } from "material-ui/Stepper"
 import { grey100, grey500, grey800 } from "material-ui/styles/colors"
-import { HardwareSecurity } from "material-ui/svg-icons"
+import { ActionInfo, HardwareSecurity } from "material-ui/svg-icons"
 import * as React from "react"
 import { Field, reduxForm } from "redux-form"
 import { RadioButtonGroup, TextField, Toggle } from "redux-form-material-ui"
@@ -104,6 +104,19 @@ const HiddenButton = styled.button`
 // Fix that iOS Safari bug
 const StupidFormPadderToFixiOSBugs = styled.div`
     margin-bottom: 60px;
+`
+
+const HalalNotice = styled.div``
+
+const HalalNoticeIcon = styled(ActionInfo)`
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+`
+
+const HalalNoticeText = styled.span`
+    vertical-align: middle;
+    font-size: 12px;
 `
 
 class AddStallForm extends React.PureComponent<IProps, {}> {
@@ -252,6 +265,14 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
                                             rightToggle={<DeliciousnessToggle name="bacon_and_eggs" />}
                                         />
                                     </List>
+
+                                    <HalalNotice>
+                                        <HalalNoticeIcon />{" "}
+                                        <HalalNoticeText>
+                                            Team Democracy Sausage acknowledges that the Federal election falls during Ramadan. Halal
+                                            options are included here for consistency with other elections.
+                                        </HalalNoticeText>
+                                    </HalalNotice>
 
                                     <CustomTextField
                                         name="free_text"

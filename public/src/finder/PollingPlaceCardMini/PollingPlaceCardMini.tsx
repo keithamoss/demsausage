@@ -7,6 +7,7 @@ import { grey500, yellow600 } from "material-ui/styles/colors"
 import {
     ActionAccessible,
     ActionHelpOutline,
+    ActionInfo,
     AlertWarning,
     ContentContentCopy,
     DeviceAccessTime,
@@ -62,19 +63,17 @@ const RunOutWarning = styled(ListItem)`
     margin-bottom: 10px !important;
 `
 
-const Divisions = styled.div`
+const MoreInfoRow = styled.div`
     color: ${grey500};
     padding-top: 10px;
-`
 
-const StallOpeningHours = styled.div`
-    color: ${grey500};
-    padding-top: 10px;
-`
+    & > svg {
+        vertical-align: middle;
+    }
 
-const WheelchairAccess = styled.div`
-    color: ${grey500};
-    padding-top: 10px;
+    & > span {
+        vertical-align: middle;
+    }
 `
 
 const ChanceOfSausage = styled(ListItem)`
@@ -137,6 +136,15 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                                 <FlexboxDistance label={`${pollingPlace.distance_km}km`} icon={<MapsNavigation color={grey500} />} />
                             )} */}
                         </FlexboxContainer>
+                        {pollingPlace.stall !== null && pollingPlace.stall.noms.halal === true && (
+                            <MoreInfoRow style={{ marginBottom: "10px", fontSize: "12px" }}>
+                                <ActionInfo />{" "}
+                                <span>
+                                    Team Democracy Sausage acknowledges that the Federal election falls during Ramadan. Halal options are
+                                    included here for consistency with other elections.
+                                </span>
+                            </MoreInfoRow>
+                        )}
                         {pollingPlace.stall !== null &&
                             "free_text" in pollingPlace.stall.noms &&
                             pollingPlace.stall.noms.free_text !== null && (
@@ -160,22 +168,27 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             />
                         )}
                         {pollingPlace.stall !== null && pollingPlace.stall.opening_hours !== "" && (
-                            <StallOpeningHours>
-                                <DeviceAccessTime /> Stall Opening Hours: {pollingPlace.stall.opening_hours}
-                            </StallOpeningHours>
+                            <MoreInfoRow>
+                                <DeviceAccessTime /> <span>Stall Opening Hours: {pollingPlace.stall.opening_hours}</span>
+                            </MoreInfoRow>
                         )}
-                        <WheelchairAccess>
-                            <ActionAccessible /> Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}
-                        </WheelchairAccess>
+                        <MoreInfoRow>
+                            <ActionAccessible /> <span>Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}</span>
+                        </MoreInfoRow>
                         {pollingPlace.divisions.length > 0 && (
-                            <Divisions>
-                                <EditorFormatListBulleted /> Division(s): {pollingPlace.divisions.join(", ")}
-                            </Divisions>
+                            <MoreInfoRow>
+                                <EditorFormatListBulleted />{" "}
+                                <span>
+                                    Division{pollingPlace.divisions.length > 1 ? "s" : ""}: {pollingPlace.divisions.join(", ")}
+                                </span>
+                            </MoreInfoRow>
                         )}
                         {pollingPlace.stall !== null &&
                             pollingPlace.stall.extra_info !== null &&
-                            pollingPlace.stall.extra_info.length > 0 && <Divisions>Extra Info: {pollingPlace.stall.extra_info}</Divisions>}
-                        {pollingPlace.booth_info.length > 0 && <Divisions>Booth Info: {pollingPlace.booth_info}</Divisions>}
+                            pollingPlace.stall.extra_info.length > 0 && (
+                                <MoreInfoRow>Extra Info: {pollingPlace.stall.extra_info}</MoreInfoRow>
+                            )}
+                        {pollingPlace.booth_info.length > 0 && <MoreInfoRow>Booth Info: {pollingPlace.booth_info}</MoreInfoRow>}
                     </CardText>
                     {isExpandable && (
                         <CardText expandable={isExpandable}>
