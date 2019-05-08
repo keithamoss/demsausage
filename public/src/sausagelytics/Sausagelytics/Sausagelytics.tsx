@@ -78,8 +78,7 @@ const FlexboxWrapContainerChild = styled.div`
 
 const getPie = (stats: IElectionStats, style: any = undefined) => {
     const data = [stats.data.all_booths, stats.data.all_booths_with_bbq]
-    const total = stats.data.all_booths.expected_voters
-    const percentage = stats.data.all_booths_with_bbq.expected_voters / total
+    const percentage = stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
 
     return (
         <React.Fragment>
@@ -104,7 +103,7 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
             <FlexboxItemVictoryPieOverlay style={style}>
                 <strong>{stats.domain}</strong>
                 <br />
-                {new Intl.NumberFormat("en-AU").format(total)} (
+                {new Intl.NumberFormat("en-AU").format(stats.data.all_booths_with_bbq.expected_voters)} (
                 {new Intl.NumberFormat("en-AU", { style: "percent", minimumFractionDigits: 2 }).format(percentage)})
             </FlexboxItemVictoryPieOverlay>
         </React.Fragment>
