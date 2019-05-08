@@ -77,3 +77,47 @@ def is_noms_item_true(polling_place, item):
                 if polling_place.noms.noms[item] is True:
                     return True
     return False
+
+
+def data_quality(election):
+    def _does_string_partially_iexist(subject, matches):
+        for match in matches:
+            if subject.lower() in match.lower():
+                return True
+        return False
+
+    queryset = get_active_polling_place_queryset().exclude(state="Overseas")
+
+    report = []
+    for polling_place in queryset.filter(election_id=election.id)[:5]:
+        matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=queryset.exclude(election_id=election.id)).order_by("election_id")
+
+        premiseses = list(set(matching_polling_places.values_list("premises", flat=True)))
+        names = list(set(matching_polling_places.values_list("name", flat=True)))
+
+        matching = []
+        for pp in matching_polling_places:
+            matching.append({
+                "name": pp.name,
+                "address": pp.address,
+                "premises": pp.premises,
+                "election_id": pp.election_id,
+                "lon": pp.geom.x,
+                "lat": pp.geom.y,
+                "distance_m": float(pp.distance.m),
+            })
+
+        if (len(matching_polling_places) <= 2 and _does_string_partially_iexist(polling_place.premises, premiseses + names) is False) or _does_string_partially_iexist(polling_place.premises, premiseses + names) is False:
+            report.append({
+                "name": polling_place.name,
+                "address": polling_place.address,
+                "premises": polling_place.premises,
+                "lon": polling_place.geom.x,
+                "lat": polling_place.geom.y,
+                "count": len(matching_polling_places),
+                "matching": matching,
+                "matching_premiseses": premiseses,
+                "matching_names": names,
+            })
+
+    return report
