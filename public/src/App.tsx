@@ -161,15 +161,6 @@ class App extends React.Component<IProps, {}> {
                                 muiThemePalette={muiThemePalette}
                                 contentMuiName={content.type.muiName}
                             />
-                            <MenuListItem
-                                primaryText="Stats"
-                                leftIcon={<EditorInsertChart />}
-                                containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
-                                locationPathName={locationPathName}
-                                locationPathNameMatch={"/sausagelytics"}
-                                muiThemePalette={muiThemePalette}
-                                contentMuiName={content.type.muiName}
-                            />
                         </List>
                     )}
 
@@ -207,6 +198,16 @@ class App extends React.Component<IProps, {}> {
                             locationPathName={locationPathName}
                             locationPathNameMatch={"/elections"}
                             muiThemePalette={muiThemePalette}
+                        />
+                        <MenuListItem
+                            primaryText="Stats"
+                            leftIcon={<EditorInsertChart />}
+                            containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
+                            onClick={onClickDrawerLink}
+                            locationPathName={locationPathName}
+                            locationPathNameMatch={"/sausagelytics"}
+                            muiThemePalette={muiThemePalette}
+                            contentMuiName={content.type.muiName}
                         />
                         <MenuListItem
                             primaryText="FAQs and About Us"
