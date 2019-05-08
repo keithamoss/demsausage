@@ -135,20 +135,28 @@ export interface IElection {
 export interface ISausagelyticsStats {
     australia: IElectionStats
     states: IElectionStats[]
+    divisions: {
+        top: IElectionStats[]
+        bottom: IElectionStats[]
+    }
 }
 
 export interface IElectionStats {
     domain: string
+    metadata?: {
+        state?: string
+        rank?: number
+    }
     data: IElectionStatsData
 }
 
 export interface IElectionStatsData {
     all_booths: {
-        count: number
+        booth_count: number
         expected_voters: number
     }
     all_booths_with_bbq: {
-        count: number
+        booth_count: number
         expected_voters: number
     }
 }

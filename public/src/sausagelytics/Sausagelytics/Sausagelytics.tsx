@@ -1,3 +1,4 @@
+import { Table, TableBody, TableRow, TableRowColumn } from "material-ui"
 import * as React from "react"
 import styled from "styled-components"
 import { VictoryPie } from "victory"
@@ -54,6 +55,10 @@ const FlexboxItemTitle = styled.h2`
     padding: 20px 10%;
 `
 
+const FlexboxItemSubtitle = styled(FlexboxItemTitle)`
+    padding: 5px 5%;
+`
+
 const FlexboxItemCircle = styled.div`
     position: relative;
 `
@@ -84,7 +89,7 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
         <React.Fragment>
             <VictoryPie
                 data={data}
-                x={"count"}
+                x={"booth_count"}
                 y={"expected_voters"}
                 padding={20}
                 innerRadius={150}
@@ -104,7 +109,7 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
                 <strong>{stats.domain}</strong>
                 <br />
                 {new Intl.NumberFormat("en-AU").format(stats.data.all_booths_with_bbq.expected_voters)} (
-                {new Intl.NumberFormat("en-AU", { style: "percent", minimumFractionDigits: 2 }).format(percentage)})
+                {new Intl.NumberFormat("en-AU", { style: "percent", minimumFractionDigits: 1 }).format(percentage)})
             </FlexboxItemVictoryPieOverlay>
         </React.Fragment>
     )
@@ -126,6 +131,56 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                         {stats.states.map((stats: IElectionStats) => (
                             <FlexboxWrapContainerChild key={stats.domain}>{getPie(stats)}</FlexboxWrapContainerChild>
                         ))}
+                    </FlexboxWrapContainer>
+                </FlexboxContainerCols>
+
+                <FlexboxContainerCols>
+                    <FlexboxItemTitle>By electorate - Expected % of voters with access to #democracysausage</FlexboxItemTitle>
+
+                    <FlexboxItemSubtitle>Leaders of the Sizzling Award for commitment to #democracysausage</FlexboxItemSubtitle>
+                    <FlexboxWrapContainer>
+                        <Table selectable={false} style={{ maxWidth: "600px", marginBottom: "40px" }}>
+                            <TableBody displayRowCheckbox={false}>
+                                {stats.divisions.top.map((stats: IElectionStats) => (
+                                    <TableRow key={stats.domain}>
+                                        <TableRowColumn style={{ width: "40px" }}>{stats.metadata!.rank!}.</TableRowColumn>
+                                        <TableRowColumn>{stats.domain}</TableRowColumn>
+                                        <TableRowColumn>{stats.metadata!.state!}</TableRowColumn>
+                                        <TableRowColumn>
+                                            {new Intl.NumberFormat("en-AU", {
+                                                style: "percent",
+                                                minimumFractionDigits: 1,
+                                            }).format(
+                                                stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
+                                            )}
+                                        </TableRowColumn>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </FlexboxWrapContainer>
+
+                    <FlexboxItemSubtitle>The Wurst</FlexboxItemSubtitle>
+                    <FlexboxWrapContainer>
+                        <Table selectable={false} style={{ maxWidth: "600px" }}>
+                            <TableBody displayRowCheckbox={false}>
+                                {stats.divisions.bottom.map((stats: IElectionStats) => (
+                                    <TableRow key={stats.domain}>
+                                        <TableRowColumn style={{ width: "40px" }}>{stats.metadata!.rank!}.</TableRowColumn>
+                                        <TableRowColumn>{stats.domain}</TableRowColumn>
+                                        <TableRowColumn>{stats.metadata!.state!}</TableRowColumn>
+                                        <TableRowColumn>
+                                            {new Intl.NumberFormat("en-AU", {
+                                                style: "percent",
+                                                minimumFractionDigits: 1,
+                                            }).format(
+                                                stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
+                                            )}
+                                        </TableRowColumn>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </FlexboxWrapContainer>
                 </FlexboxContainerCols>
             </SausagelyticsContainer>

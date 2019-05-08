@@ -1,4 +1,4 @@
-from django.db.models import F, Sum, Count, BigIntegerField
+from django.db.models import OuterRef, Subquery, F, Sum, Count, BigIntegerField
 from django.db.models.functions import Cast
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
 
@@ -18,46 +18,145 @@ class SausagelyticsBase():
 
 class FederalSausagelytics(SausagelyticsBase):
     def get_stats(self):
-        queryset = self.get_queryset()
-        states = []
-        for state in self._get_states():
-            state_queryset = queryset.filter(state__exact=state)
-            states.append({"domain": state, "data": self._get_aggregate_stats_for_bbq(state_queryset)})
-
         return {
-            "australia": {"domain": "Australia", "data": self._get_aggregate_stats_for_bbq(queryset)},
-            "states": states
+            "australia": self._get_stats_for_australia(),
+            "states": self._get_stats_by_state(),
+            "divisions": self._get_stats_by_division(),
         }
 
     def get_queryset(self):
         return super(FederalSausagelytics, self).get_queryset().exclude(state__exact="Overseas")
 
-    def _get_aggregate_stats_for_bbq(self, queryset):
-        def _fix_ordvoteest(qs):
-            # http://www.cannonade.net/blog.php?id=1803
-            # https://stackoverflow.com/a/47433663
-            return qs.filter(extras__has_key="OrdVoteEst").exclude(extras__OrdVoteEst__isnull=True).exclude(extras__OrdVoteEst__exact="").annotate(ordvoteest=Cast(KeyTextTransform("OrdVoteEst", "extras"), BigIntegerField())).filter(ordvoteest__gte=0)
-
-        def _fix_decvoteest(qs):
-            # http://www.cannonade.net/blog.php?id=1803
-            # https://stackoverflow.com/a/47433663
-            return qs.filter(extras__has_key="DecVoteEst").exclude(extras__DecVoteEst__isnull=True).exclude(extras__DecVoteEst__exact="").annotate(decvoteest=Cast(KeyTextTransform("DecVoteEst", "extras"), BigIntegerField())).filter(decvoteest__gte=0)
-
+    def _get_stats_for_australia(self):
         # @TODO Fix names
         # @TODO Fix extras values in elections.py (so we store numbers as numbers, not strings)
-        queryset_sum_ordvoteest = _fix_ordvoteest(queryset)
-        queryset_sum_ordvoteest = _fix_decvoteest(queryset_sum_ordvoteest).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+        queryset = self.get_queryset()
+        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
+        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+
         queryset_with_bbq = queryset.filter(noms__isnull=False).filter(noms__noms__bbq=True)
-        queryset_sum_ordvoteest_with_bbq = _fix_ordvoteest(queryset_with_bbq)
-        queryset_sum_ordvoteest_with_bbq = _fix_decvoteest(queryset_sum_ordvoteest_with_bbq).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
+        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
 
         return {
-            "all_booths": {
-                "count": queryset.count(),
-                "expected_voters": queryset_sum_ordvoteest["total"],
+            "domain": "Australia",
+            "data": {
+                "all_booths": {
+                    "booth_count": queryset.count(),
+                    "expected_voters": queryset_sum_ordvoteest["total"],
+                },
+                "all_booths_with_bbq": {
+                    "booth_count": queryset_with_bbq.count(),
+                    "expected_voters": queryset_sum_ordvoteest_with_bbq["total"]
+                }
             },
-            "all_booths_with_bbq": {
-                "count": queryset_with_bbq.count(),
-                "expected_voters": queryset_sum_ordvoteest_with_bbq["total"]
-            }
         }
+
+    def _get_stats_by_state(self):
+        data = {}
+
+        # Calculate stats for all booths in each state
+        queryset = self.get_queryset()
+        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
+        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest)
+        queryset_stats_by_state = queryset_sum_ordvoteest.values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state")).order_by("-expected_voters")
+
+        for stats in queryset_stats_by_state:
+            data[stats["state"]] = {
+                "domain": stats["state"],
+                "data": {
+                    "all_booths": {
+                        "booth_count": stats["booth_count"],
+                        "expected_voters": stats["expected_voters"],
+                    },
+                    "all_booths_with_bbq": {
+                        "booth_count": 0,
+                        "expected_voters": 0,
+                    }
+                }
+            }
+
+        # Calculate stats for booths with sausage sizzles in each state
+        queryset_with_bbq = self.get_queryset().filter(noms__isnull=False).filter(noms__noms__bbq=True)
+        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
+        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq)
+        queryset_stats_by_state_with_bbq = queryset_sum_ordvoteest_with_bbq.values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state"))
+
+        for stats in queryset_stats_by_state_with_bbq:
+            data[stats["state"]]["data"]["all_booths_with_bbq"] = {
+                "booth_count": stats["booth_count"],
+                "expected_voters": stats["expected_voters"],
+            }
+
+        # Find the top and bottom five by % of voters with access to sausage sizzles
+        data_sorted = reversed(sorted(data.values(), key=lambda x: x["data"]["all_booths_with_bbq"]["expected_voters"] / x["data"]["all_booths"]["expected_voters"]))
+
+        return data_sorted
+
+    def _get_stats_by_division(self):
+        data = {}
+        n_to_fetch = 5
+
+        # Calculate stats for all booths in each division
+        queryset = self.get_queryset()
+        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
+        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest)
+        queryset_stats_by_division = queryset_sum_ordvoteest.values("divisions__0", "state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0")).order_by("-expected_voters")
+
+        for stats in queryset_stats_by_division:
+            data[stats["divisions__0"]] = {
+                "domain": stats["divisions__0"],
+                "metadata": {
+                    "state": stats["state"],
+                },
+                "data": {
+                    "all_booths": {
+                        "booth_count": stats["booth_count"],
+                        "expected_voters": stats["expected_voters"],
+                    },
+                    "all_booths_with_bbq": {
+                        "booth_count": 0,
+                        "expected_voters": 0,
+                    }
+                }
+            }
+
+        # Calculate stats for booths with sausage sizzles in each divisions
+        queryset_with_bbq = self.get_queryset().filter(noms__isnull=False).filter(noms__noms__bbq=True)
+        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
+        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq)
+        queryset_stats_by_division_with_bbq = queryset_sum_ordvoteest_with_bbq.values("divisions__0").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0"))
+
+        for stats in queryset_stats_by_division_with_bbq:
+            data[stats["divisions__0"]]["data"]["all_booths_with_bbq"] = {
+                "booth_count": stats["booth_count"],
+                "expected_voters": stats["expected_voters"],
+            }
+
+        # Find the top and bottom five by % of voters with access to sausage sizzles
+        data_sorted = sorted(data.values(), key=lambda x: x["data"]["all_booths_with_bbq"]["expected_voters"] / x["data"]["all_booths"]["expected_voters"])
+
+        def _rank(item, rank_by_list_idx):
+            item["metadata"]["rank"] = rank_by_list_idx + 1
+            return item
+
+        top = reversed(data_sorted[-n_to_fetch:])
+        top = [_rank(v, k) for (k, v) in enumerate(top)]
+
+        bottom = data_sorted[:n_to_fetch]
+        bottom = [_rank(v, len(data_sorted) - n_to_fetch + k) for (k, v) in enumerate(bottom)]
+
+        return {
+            "top": top,
+            "bottom": bottom,
+        }
+
+    def _fix_ordvoteest(self, qs):
+        # http://www.cannonade.net/blog.php?id=1803
+        # https://stackoverflow.com/a/47433663
+        return qs.filter(extras__has_key="OrdVoteEst").exclude(extras__OrdVoteEst__isnull=True).exclude(extras__OrdVoteEst__exact="").annotate(ordvoteest=Cast(KeyTextTransform("OrdVoteEst", "extras"), BigIntegerField())).filter(ordvoteest__gte=0)
+
+    def _fix_decvoteest(self, qs):
+        # http://www.cannonade.net/blog.php?id=1803
+        # https://stackoverflow.com/a/47433663
+        return qs.filter(extras__has_key="DecVoteEst").exclude(extras__DecVoteEst__isnull=True).exclude(extras__DecVoteEst__exact="").annotate(decvoteest=Cast(KeyTextTransform("DecVoteEst", "extras"), BigIntegerField())).filter(decvoteest__gte=0)
