@@ -80,6 +80,7 @@ def is_noms_item_true(polling_place, item):
 
 
 def data_quality(election):
+    # @TODO This assumes historical locations are accurate. That's a big assumption and isn't always true! (See Millers Point)
     def _does_string_partially_iexist(subject, matches):
         for match in matches:
             if subject.lower() in match.lower():

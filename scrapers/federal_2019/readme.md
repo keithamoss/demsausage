@@ -14,6 +14,12 @@ We need to merge the official AEC data with an unofficial list of overseas polli
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
+## May XX 2019
+
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Millers Point (PPID=2756): -33.858773, 151.204282 (was -33.8589 151.208). Incorrectly located at a nearby pub.
+
 ## May 2nd 2019
 
 ### Wrong location (AEC notified; fixed at ingest)
