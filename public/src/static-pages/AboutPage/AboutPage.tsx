@@ -107,6 +107,8 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
                             <a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
                         </li>
                     </ul>
+                    Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){" "}
+                    {new Date().getFullYear()}
                 </Answer>
                 <Question>What do the all of the icons mean?</Question>
                 <Answer>
