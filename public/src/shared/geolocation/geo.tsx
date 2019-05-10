@@ -23,6 +23,12 @@ export function askForGeolocationPermissions(dispatch: Function, onGeolocationCo
                 { location: { lat: position.coords.latitude, lng: position.coords.longitude } },
                 async (results: Array<any>, status: string) => {
                     if (status === "OK" && results.length > 0) {
+                        gaTrack.event({
+                            category: "Geolocation",
+                            action: "geocoder.geocode",
+                            label: `Success for ${window.location.href}`,
+                        })
+
                         const streetAddressPlace = results.find((place: IGoogleGeocodeResult) => place.types[0] === "street_address")
                         if (streetAddressPlace !== undefined) {
                             locationSearched = streetAddressPlace.formatted_address
@@ -34,7 +40,7 @@ export function askForGeolocationPermissions(dispatch: Function, onGeolocationCo
                     } else {
                         gaTrack.event({
                             category: "Geolocation",
-                            action: "onRequestLocationPermissions",
+                            action: "geocoder.geocode",
                             label: "Got an error from the geocoder",
                         })
 
