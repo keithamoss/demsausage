@@ -69,7 +69,7 @@ const FlexboxWrapContainer = styled.div`
     flex-wrap: wrap;
     height: 100%;
     min-width: 30%;
-    max-width: 70%;
+    max-width: 600px;
     justify-content: center;
 `
 
@@ -79,6 +79,15 @@ const FlexboxWrapContainerChild = styled.div`
     max-width: 300px;
     max-height: 200px;
     margin: 10px;
+`
+
+const SausagelyticsTable = styled(Table)`
+    max-width: 600px;
+    margin-bottom: 40px;
+
+    & td {
+        text-overflow: clip !important;
+    }
 `
 
 const getPie = (stats: IElectionStats, style: any = undefined) => {
@@ -139,7 +148,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
 
                     <FlexboxItemSubtitle>Leaders of the Sizzling Award for commitment to #democracysausage</FlexboxItemSubtitle>
                     <FlexboxWrapContainer>
-                        <Table selectable={false} style={{ maxWidth: "600px", marginBottom: "40px" }}>
+                        <SausagelyticsTable selectable={false}>
                             <TableBody displayRowCheckbox={false}>
                                 {stats.divisions.top.map((stats: IElectionStats) => (
                                     <TableRow key={stats.domain}>
@@ -157,12 +166,12 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
+                        </SausagelyticsTable>
                     </FlexboxWrapContainer>
 
                     <FlexboxItemSubtitle>The Wurst</FlexboxItemSubtitle>
                     <FlexboxWrapContainer>
-                        <Table selectable={false} style={{ maxWidth: "600px" }}>
+                        <SausagelyticsTable selectable={false}>
                             <TableBody displayRowCheckbox={false}>
                                 {stats.divisions.bottom.map((stats: IElectionStats) => (
                                     <TableRow key={stats.domain}>
@@ -180,7 +189,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
+                        </SausagelyticsTable>
                     </FlexboxWrapContainer>
                 </FlexboxContainerCols>
             </SausagelyticsContainer>
