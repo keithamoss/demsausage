@@ -14,7 +14,6 @@ import {
     EditorFormatListBulleted,
 } from "material-ui/svg-icons"
 import * as React from "react"
-import CopyToClipboard from "react-copy-to-clipboard"
 import styled from "styled-components"
 import BaconandEggsIcon from "../../icons/bacon-and-eggs"
 import CakeIcon from "../../icons/cake"
@@ -26,7 +25,6 @@ import VegoIcon from "../../icons/vego"
 import { IElection, isElectionLive } from "../../redux/modules/elections"
 import {
     getFoodDescription,
-    getPollingPlacePermalink,
     getSausageChanceDescription,
     getWheelchairAccessDescription,
     IPollingPlace,
@@ -198,9 +196,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                     )}
                     {copyLinkEnabled === true && (
                         <CardActions>
-                            <CopyToClipboard text={getPollingPlacePermalink(election, pollingPlace)} onCopy={onClickCopyLink}>
-                                <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} />
-                            </CopyToClipboard>
+                            <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} onClick={onClickCopyLink} />
                         </CardActions>
                     )}
                 </Card>

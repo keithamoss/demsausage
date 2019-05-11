@@ -1,3 +1,4 @@
+import copy from "copy-to-clipboard"
 import { cloneDeep } from "lodash-es"
 import * as React from "react"
 import { connect } from "react-redux"
@@ -5,6 +6,7 @@ import { isDirty, submit } from "redux-form"
 import { IElection } from "../../redux/modules/elections"
 import {
     buildNomsObject,
+    getPollingPlacePermalink,
     IPollingPlace,
     IPollingPlaceFacilityType,
     pollingPlaceHasReports,
@@ -152,7 +154,7 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProps => {
     return {
         async onFormSubmit(values: object, election: IElection, pollingPlace: IPollingPlace, onPollingPlaceEdited: Function) {
             const pollingPlaceNew /* Partial<IPollingPlace> */ = fromFormValues(values)
@@ -167,6 +169,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             dispatch(submit("pollingPlace"))
         },
         onClickCopyLink() {
+            copy(getPollingPlacePermalink(ownProps.election, ownProps.pollingPlace), {
+                format: "text/plain",
+            })
             dispatch(sendNotification(`Polling place link copied to clipboard.`))
         },
     }

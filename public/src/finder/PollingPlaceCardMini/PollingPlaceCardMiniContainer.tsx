@@ -1,7 +1,8 @@
+import copy from "copy-to-clipboard"
 import * as React from "react"
 import { connect } from "react-redux"
 import { IElection } from "../../redux/modules/elections"
-import { IPollingPlace } from "../../redux/modules/polling_places"
+import { getPollingPlacePermalink, IPollingPlace } from "../../redux/modules/polling_places"
 import { IStore } from "../../redux/modules/reducer"
 import { sendNotification } from "../../redux/modules/snackbars"
 import PollingPlaceCardMini from "./PollingPlaceCardMini"
@@ -43,6 +44,9 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProps => {
     return {
         onClickCopyLink() {
+            copy(getPollingPlacePermalink(ownProps.election, ownProps.pollingPlace), {
+                format: "text/plain",
+            })
             dispatch(sendNotification(`Polling place link copied to clipboard.`))
         },
     }

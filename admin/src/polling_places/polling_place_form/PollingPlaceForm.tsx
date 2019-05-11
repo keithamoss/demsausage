@@ -8,7 +8,6 @@ import RaisedButton from "material-ui/RaisedButton"
 import { blue500, grey100, grey500, yellow700 } from "material-ui/styles/colors"
 import { AlertWarning, ContentBlock, ContentContentCopy, ToggleStar, ToggleStarBorder } from "material-ui/svg-icons"
 import * as React from "react"
-import CopyToClipboard from "react-copy-to-clipboard"
 import { Field, reduxForm } from "redux-form"
 import { Checkbox, SelectField, TextField, Toggle } from "redux-form-material-ui"
 import styled from "styled-components"
@@ -20,7 +19,7 @@ import RedCrossofShameIcon from "../../icons/red-cross-of-shame"
 import SausageIcon from "../../icons/sausage"
 import VegoIcon from "../../icons/vego"
 import { IElection } from "../../redux/modules/elections"
-import { getPollingPlacePermalink, IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
+import { IPollingPlace, IPollingPlaceFacilityType } from "../../redux/modules/polling_places"
 
 interface IProps {
     election: IElection
@@ -78,8 +77,6 @@ const HiddenButton = styled.button`
 class PollingPlaceForm extends React.PureComponent<IProps, {}> {
     render() {
         const {
-            election,
-            pollingPlace,
             stallWasMerged,
             pollingPlaceTypes,
             onSaveForm,
@@ -237,9 +234,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                     />
                     <CardActions>
                         <RaisedButton label={"Save"} primary={true} onClick={onSaveForm} />
-                        <CopyToClipboard text={getPollingPlacePermalink(election, pollingPlace)} onCopy={onClickCopyLink}>
-                            <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} />
-                        </CopyToClipboard>
+                        <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} onClick={onClickCopyLink} />
                         <HiddenButton type="submit" />
                     </CardActions>
                 </Card>

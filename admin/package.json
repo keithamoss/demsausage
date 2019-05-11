@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "copy-to-clipboard": "3.2.0",
         "dot-prop-immutable": "^1.4.0",
         "js-cookie": "^2.2.0",
         "lodash-es": "^4.17.11",
@@ -14,7 +15,6 @@
         "raven-for-redux": "^1.4.0",
         "raven-js": "^3.27.0",
         "react": "16.3.2",
-        "react-copy-to-clipboard": "^5.0.1",
         "react-dom": "16.3.2",
         "react-google-maps": "^9.2.2",
         "react-redux": "^5.0.6",
