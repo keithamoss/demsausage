@@ -23,7 +23,7 @@ services:
             - "11211"
         command:
             # 5mb to accommodate the larger polling place GeoJSON objects
-            - '--max-item-size=5242880'
+            - "--max-item-size=5242880"
     # memcached_gui:
     #     # http://localhost/index.php (admin/admin)
     #     image: jacksoncage/phpmemcachedadmin
@@ -50,6 +50,7 @@ services:
         volumes:
             - ./django/:/app:delegated
             - ./scrapers/:/scrapers:delegated
+            - ./data/:/data:delegated
         ports:
             - "8000:8000"
         env_file:

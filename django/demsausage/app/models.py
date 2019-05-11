@@ -188,3 +188,18 @@ class PollingPlaceLoaderEvents(models.Model):
 
     timestamp = models.DateTimeField()
     payload = JSONField(default=None, blank=True)
+
+
+class ElectoralBoundaries(models.Model):
+    "Federal and state electoral boundaries"
+
+    loader_id = models.TextField()
+    geom = models.MultiPolygonField(null=False)
+    election_ids = JSONField(default=list, blank=True)
+    division_name = models.TextField(unique=True)
+    state = models.CharField(max_length=8)
+    extras = JSONField(default=dict, blank=True)
+    loaded = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("division_name", "loader_id")
