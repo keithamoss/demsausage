@@ -50,5 +50,8 @@
     "address_format": "{Address1}, {Address2}, {Address3}, {Locality}, {AddrStateAb} {Postcode}",
     "bbox_validation": {
         "ignore": ["Lord Howe Island", "Norfolk Island"]
+    },
+    "multiple_division_handling": {
+        "determine_home_division": "USE_ELECTORAL_BOUNDARIES"
     }
 }

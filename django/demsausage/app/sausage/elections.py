@@ -13,7 +13,7 @@ from django.contrib.gis.geos import Point
 from django.db import transaction
 import googlemaps
 
-from demsausage.app.models import PollingPlaces, Stalls
+from demsausage.app.models import PollingPlaces, Stalls, ElectoralBoundaries
 from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPlacesManagementSerializer, PollingPlaceLoaderEventsSerializer
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
@@ -142,7 +142,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
-        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation"]
+        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
         for field_name in allowed_fields:
@@ -556,6 +556,52 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.raise_exception_if_errors()
 
     def dedupe_polling_places(self):
+        def _find_home_division(polling_places):
+            if self.multiple_division_handling is not None and self.multiple_division_handling["determine_home_division"] is not None:
+                if self.multiple_division_handling["determine_home_division"] == "USE_ELECTORAL_BOUNDARIES":
+                    matching_boundaries = ElectoralBoundaries.objects.filter(election_ids__contains=self.election.id).filter(geom__contains=polling_places[0]["geom"])
+
+                    if len(matching_boundaries) > 1:
+                        self.logger.error("[Find Home Division] Found more than one matching division for {}: {}".format(polling_places[0]["name"], list(matching_boundaries.values_list("division_name", flat=True))))
+                        return None
+                    elif len(matching_boundaries) == 0:
+                        self.logger.error("[Find Home Division] Found no matching division for {}".format(polling_places[0]["name"]))
+                        return None
+                    else:
+                        eb_division_name = matching_boundaries[0].division_name
+
+                        try:
+                            # We pull the matching division name in the polling place data because they're usually capitalised correctly
+                            # (The electoral boundary division names aren't)
+                            polling_place_divisions = [division for divisions in [pp["divisions"] for pp in polling_places] for division in divisions]
+                            polling_place_divisions_lower = [division.lower() for division in polling_place_divisions]
+
+                            idx = polling_place_divisions_lower.index(eb_division_name.lower())
+                            return polling_place_divisions[idx]
+                        except ValueError:
+                            self.logger.error("[Find Home Division] Could not find electoral boundary division '{}' in polling places divisions list: {}".format(eb_division_name, ", ".join(polling_place_divisions)))
+                            return None
+
+            # We'll just use the first one - it'll probably be wrong but whatever
+            return polling_places[0]["divisions"]
+        
+        def _merge_divisions(polling_places):
+            home_division = _find_home_division(polling_places)
+
+            if home_division is None:
+                self.logger.error("[Find Home Division] Got 'None' for home division lookup for {}".format(polling_places[0]["name"]))
+                return []
+
+            # Flatten and dedupe
+            divisions = []
+            for pp in polling_places:
+                divisions += pp["divisions"]
+            divisions = list(set(divisions))
+            
+            divisions.sort()
+            divisions = [home_division] + [div for div in divisions if div != home_division]
+            return divisions
+
         def get_key(polling_place):
             return "{},{}".format(polling_place["geom"].x, polling_place["geom"].y)
 
@@ -586,7 +632,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     divisions += pp["divisions"]
                 divisions = list(set(divisions))
 
-                self.polling_places[indexes[0]]["divisions"] = divisions
+                self.polling_places[indexes[0]]["divisions"] = _merge_divisions(polling_places)
 
                 # self.logger.info("Deduping: Merged divisions for {} polling places with the same location ({}). Divisions: {}. Polling Places: {}".format(len(indexes), key, divisions, "; ".join(["{}/{}/{}".format(pp["name"], pp["premises"], pp["address"]) for pp in polling_places])))
             else:
@@ -610,6 +656,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         for polling_places in [i for i in polling_places_group_by.values() if len(i) >= 2]:
             self.logger.error("Deduping: Found {} polling places sharing the same name ({})".format(len(polling_places), polling_places[0]["name"]))
+
+        self.raise_exception_if_errors()
 
     def write_draft_polling_places(self):
         for polling_place in self.polling_places:

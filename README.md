@@ -42,6 +42,10 @@ Use the template .env files in `secrets-tmpl` to create corresponding files unde
 4. `sausage-public-frontend.dev.env`
 5. `sausage-admin-frontend.dev.env`
 
+#### Load electoral boundaries data
+
+Follow the instructions in `data/federal_2019/electoral_boundaries/README.md` to load in the 2019 Federal electoral boundaries.
+
 #### Admin Site
 
 1. Add yourself to the `app_allowedusers` table before trying to login
