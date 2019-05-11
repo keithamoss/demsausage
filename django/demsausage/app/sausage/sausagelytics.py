@@ -1,4 +1,4 @@
-from django.db.models import OuterRef, Subquery, F, Sum, Count, BigIntegerField
+from django.db.models import F, Sum, Count, IntegerField
 from django.db.models.functions import Cast
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
 
@@ -28,26 +28,22 @@ class FederalSausagelytics(SausagelyticsBase):
         return super(FederalSausagelytics, self).get_queryset().exclude(state__exact="Overseas")
 
     def _get_stats_for_australia(self):
-        # @TODO Fix names
-        # @TODO Fix extras values in elections.py (so we store numbers as numbers, not strings)
-        queryset = self.get_queryset()
-        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
-        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+        queryset_all_booths = self.get_queryset()
+        queryset_all_booths_sum_expected_voters = self._cast_vote_counts_to_numbers(queryset_all_booths).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
 
-        queryset_with_bbq = queryset.filter(noms__isnull=False).filter(noms__noms__bbq=True)
-        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
-        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+        queryset_with_bbq = queryset_all_booths.filter(noms__isnull=False).filter(noms__noms__bbq=True)
+        queryset_with_bbq_sum_expected_voters = self._cast_vote_counts_to_numbers(queryset_with_bbq).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
 
         return {
             "domain": "Australia",
             "data": {
                 "all_booths": {
-                    "booth_count": queryset.count(),
-                    "expected_voters": queryset_sum_ordvoteest["total"],
+                    "booth_count": queryset_all_booths.count(),
+                    "expected_voters": queryset_all_booths_sum_expected_voters["total"],
                 },
                 "all_booths_with_bbq": {
                     "booth_count": queryset_with_bbq.count(),
-                    "expected_voters": queryset_sum_ordvoteest_with_bbq["total"]
+                    "expected_voters": queryset_with_bbq_sum_expected_voters["total"]
                 }
             },
         }
@@ -56,10 +52,8 @@ class FederalSausagelytics(SausagelyticsBase):
         data = {}
 
         # Calculate stats for all booths in each state
-        queryset = self.get_queryset()
-        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
-        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest)
-        queryset_stats_by_state = queryset_sum_ordvoteest.values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state")).order_by("-expected_voters")
+        queryset_all_booths = self.get_queryset()
+        queryset_stats_by_state = self._cast_vote_counts_to_numbers(queryset_all_booths).values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state")).order_by("-expected_voters")
 
         for stats in queryset_stats_by_state:
             data[stats["state"]] = {
@@ -77,10 +71,8 @@ class FederalSausagelytics(SausagelyticsBase):
             }
 
         # Calculate stats for booths with sausage sizzles in each state
-        queryset_with_bbq = self.get_queryset().filter(noms__isnull=False).filter(noms__noms__bbq=True)
-        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
-        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq)
-        queryset_stats_by_state_with_bbq = queryset_sum_ordvoteest_with_bbq.values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state"))
+        queryset_with_bbq = queryset_all_booths.filter(noms__isnull=False).filter(noms__noms__bbq=True)
+        queryset_stats_by_state_with_bbq = self._cast_vote_counts_to_numbers(queryset_with_bbq).values("state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("state"))
 
         for stats in queryset_stats_by_state_with_bbq:
             data[stats["state"]]["data"]["all_booths_with_bbq"] = {
@@ -98,10 +90,8 @@ class FederalSausagelytics(SausagelyticsBase):
         n_to_fetch = 5
 
         # Calculate stats for all booths in each division
-        queryset = self.get_queryset()
-        queryset_sum_ordvoteest = self._fix_ordvoteest(queryset)
-        queryset_sum_ordvoteest = self._fix_decvoteest(queryset_sum_ordvoteest)
-        queryset_stats_by_division = queryset_sum_ordvoteest.values("divisions__0", "state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0")).order_by("-expected_voters")
+        queryset_all_booths = self.get_queryset()
+        queryset_stats_by_division = self._cast_vote_counts_to_numbers(queryset_all_booths).values("divisions__0", "state").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0")).order_by("-expected_voters")
 
         for stats in queryset_stats_by_division:
             data[stats["divisions__0"]] = {
@@ -122,10 +112,8 @@ class FederalSausagelytics(SausagelyticsBase):
             }
 
         # Calculate stats for booths with sausage sizzles in each divisions
-        queryset_with_bbq = self.get_queryset().filter(noms__isnull=False).filter(noms__noms__bbq=True)
-        queryset_sum_ordvoteest_with_bbq = self._fix_ordvoteest(queryset_with_bbq)
-        queryset_sum_ordvoteest_with_bbq = self._fix_decvoteest(queryset_sum_ordvoteest_with_bbq)
-        queryset_stats_by_division_with_bbq = queryset_sum_ordvoteest_with_bbq.values("divisions__0").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0"))
+        queryset_with_bbq = queryset_all_booths.filter(noms__isnull=False).filter(noms__noms__bbq=True)
+        queryset_stats_by_division_with_bbq = self._cast_vote_counts_to_numbers(queryset_with_bbq).values("divisions__0").annotate(expected_voters=Sum(F("ordvoteest") + F("decvoteest"))).annotate(booth_count=Count("divisions__0"))
 
         for stats in queryset_stats_by_division_with_bbq:
             data[stats["divisions__0"]]["data"]["all_booths_with_bbq"] = {
@@ -151,12 +139,7 @@ class FederalSausagelytics(SausagelyticsBase):
             "bottom": bottom,
         }
 
-    def _fix_ordvoteest(self, qs):
+    def _cast_vote_counts_to_numbers(self, queryset):
         # http://www.cannonade.net/blog.php?id=1803
         # https://stackoverflow.com/a/47433663
-        return qs.filter(extras__has_key="OrdVoteEst").exclude(extras__OrdVoteEst__isnull=True).exclude(extras__OrdVoteEst__exact="").annotate(ordvoteest=Cast(KeyTextTransform("OrdVoteEst", "extras"), BigIntegerField())).filter(ordvoteest__gte=0)
-
-    def _fix_decvoteest(self, qs):
-        # http://www.cannonade.net/blog.php?id=1803
-        # https://stackoverflow.com/a/47433663
-        return qs.filter(extras__has_key="DecVoteEst").exclude(extras__DecVoteEst__isnull=True).exclude(extras__DecVoteEst__exact="").annotate(decvoteest=Cast(KeyTextTransform("DecVoteEst", "extras"), BigIntegerField())).filter(decvoteest__gte=0)
+        return queryset.exclude(extras__OrdVoteEst__exact="").exclude(extras__DecVoteEst__exact="").annotate(ordvoteest=Cast(KeyTextTransform("OrdVoteEst", "extras"), IntegerField())).annotate(decvoteest=Cast(KeyTextTransform("DecVoteEst", "extras"), IntegerField()))
