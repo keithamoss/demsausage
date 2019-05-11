@@ -128,3 +128,50 @@ def is_int(string):
         return True
     except ValueError:
         return False
+
+
+def is_numeric(subject):
+    return is_float(subject) is True or is_int(subject) is True
+
+
+def convert_string_to_number(subject):
+    if is_int(subject) is True:
+        return int(subject)
+    elif is_float(subject) is True:
+        return float(subject)
+    else:
+        raise Exception("Failed try to convert '{}' to a number".format(subject))
+
+
+def merge_and_sum_dicts(dict_list):
+    merged_dict = {}
+
+    for d in dict_list:
+        for key, value in d.items():
+            if key not in merged_dict:
+                if value is None or isinstance(value, bool):
+                    merged_dict[key] = value
+                elif is_numeric(value) is True:
+                    merged_dict[key] = convert_string_to_number(value)
+                elif isinstance(value, str):
+                    merged_dict[key] = [value]
+                else:
+                    print("{} is {}".format(key, type(key)))
+                    merged_dict[key] = value
+
+            else:
+                if value is None or isinstance(value, bool):
+                    merged_dict[key] = value
+                elif is_numeric(value) is True:
+                    merged_dict[key] = merged_dict[key] + convert_string_to_number(value)
+                elif isinstance(value, str):
+                    merged_dict[key].append(value)
+                else:
+                    merged_dict[key] = value
+
+    # Concatenate any lists of strings together
+    for key, value in merged_dict.items():
+        if isinstance(value, list):
+            merged_dict[key] = ", ".join(merged_dict[key])
+
+    return merged_dict

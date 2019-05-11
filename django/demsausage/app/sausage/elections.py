@@ -18,7 +18,7 @@ from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPl
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
-from demsausage.util import get_env, is_float, is_int
+from demsausage.util import get_env, is_numeric, convert_string_to_number, merge_and_sum_dicts
 
 
 def regenerate_election_geojson(election_id):
@@ -211,11 +211,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             def _create(polling_place):
                 extras = {}
                 for field_name in self.extras["fields"]:
-                    if is_int(polling_place[field_name]) is True:
-                        extras[field_name] = int(polling_place[field_name])
-                    elif is_float(polling_place[field_name]) is True:
-                        extras[field_name] = float(polling_place[field_name])
-                    else:
+                    if is_numeric(polling_place[field_name]) is True:
+                        extras[field_name] = convert_string_to_number(polling_place[field_name])
+                    elif polling_place[field_name] is not None:
                         extras[field_name] = polling_place[field_name]
                     del polling_place[field_name]
 
@@ -606,6 +604,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             divisions.sort()
             divisions = [home_division] + [div for div in divisions if div != home_division]
             return divisions
+        
+        def _merge_and_sum_extras(polling_places):
+            extras = [pp["extras"] for pp in polling_places]
+            return merge_and_sum_dicts(extras)
 
         def get_key(polling_place):
             return "{},{}".format(polling_place["geom"].x, polling_place["geom"].y)
@@ -638,6 +640,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 divisions = list(set(divisions))
 
                 self.polling_places[indexes[0]]["divisions"] = _merge_divisions(polling_places)
+                self.polling_places[indexes[0]]["extras"] = _merge_and_sum_extras(polling_places)
 
                 # self.logger.info("Deduping: Merged divisions for {} polling places with the same location ({}). Divisions: {}. Polling Places: {}".format(len(indexes), key, divisions, "; ".join(["{}/{}/{}".format(pp["name"], pp["premises"], pp["address"]) for pp in polling_places])))
             else:
