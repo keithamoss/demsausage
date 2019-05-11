@@ -39,7 +39,9 @@
         "enabled": true,
         "components": { "country": "AU" }
     },
-    "extras_fields": ["CCD", "OrdVoteEst", "DecVoteEst", "NoOrdIssuingOff", "NoOfDecIssuingOff"],
+    "extras": {
+        "fields": ["CCD", "OrdVoteEst", "DecVoteEst", "NoOrdIssuingOff", "NoOfDecIssuingOff"]
+    },
     "cleaning_regexes": [
         {
             "field": "name",

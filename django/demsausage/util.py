@@ -104,3 +104,27 @@ def clean_filename(filename, whitelist=None, replace=" "):
         print("Warning, filename truncated because it was over {}. Filenames may no longer be unique".format(char_limit))
 
     return cleaned_filename[:char_limit]
+
+
+def is_float(string):
+    """
+    Here be dragons.
+    https://stackoverflow.com/a/20929983
+    """
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_int(string):
+    """
+    Here be dragons.
+    https://stackoverflow.com/a/20929983
+    """
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False

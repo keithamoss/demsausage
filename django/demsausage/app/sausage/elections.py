@@ -18,7 +18,7 @@ from demsausage.app.serializers import PollingPlacesGeoJSONSerializer, PollingPl
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.enums import StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
-from demsausage.util import get_env
+from demsausage.util import get_env, is_float, is_int
 
 
 def regenerate_election_geojson(election_id):
@@ -142,7 +142,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
-        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras_fields", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
+        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
         for field_name in allowed_fields:
@@ -210,19 +210,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         def _create_extras():
             def _create(polling_place):
                 extras = {}
-                for field_name in self.extras_fields:
-                    extras[field_name] = polling_place[field_name]
+                for field_name in self.extras["fields"]:
+                    if is_int(polling_place[field_name]) is True:
+                        extras[field_name] = int(polling_place[field_name])
+                    elif is_float(polling_place[field_name]) is True:
+                        extras[field_name] = float(polling_place[field_name])
+                    else:
+                        extras[field_name] = polling_place[field_name]
                     del polling_place[field_name]
 
                 polling_place["extras"] = extras
                 return polling_place
 
-            if self.extras_fields is not None:
+            if self.extras is not None:
                 processed_polling_places = []
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_create(polling_place))
 
-                self.logger.info("Created extras field from {} columns".format(len(self.extras_fields)))
+                self.logger.info("Created extras field from {} columns".format(len(self.extras["fields"])))
                 self.polling_places = processed_polling_places
 
         # def _skip_blank_coordinates():
