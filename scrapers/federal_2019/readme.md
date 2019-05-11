@@ -14,7 +14,7 @@ We need to merge the official AEC data with an unofficial list of overseas polli
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
-## May XX 2019
+## May 11th 2019
 
 ### Wrong location (AEC notified; fixed at ingest)
 
