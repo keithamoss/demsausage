@@ -16,6 +16,44 @@ const SausagelyticsContainer = styled.div`
     padding-right: 10px;
 `
 
+const FlexboxWrapContainer = styled.div`
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 100%;
+    min-width: 30%;
+    max-width: 600px;
+    justify-content: center;
+`
+
+const BoothsWithSausageSizzlesContainer = styled(FlexboxWrapContainer)`
+    margin-bottom: 20px;
+    align-items: stretch;
+`
+
+const BoothsWithSausageSizzlesLabel = styled.div`
+    width: 30%;
+    vertical-align: middle;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 22px;
+`
+
+const BoothsWithSausageSizzlesBigNumberContainer = styled.div`
+    width: 30%;
+    background-color: #e8bb3c;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+`
+
+const BoothsWithSausageSizzlesBigNumber = styled.h2`
+    font-size: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+`
+
 const FlexboxItemVictoryPieOverlay = styled.div`
     /* text-align: center; */
     /* align-items: start; */
@@ -61,16 +99,6 @@ const FlexboxItemSubtitle = styled(FlexboxItemTitle)`
 
 const FlexboxItemCircle = styled.div`
     position: relative;
-`
-
-const FlexboxWrapContainer = styled.div`
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    height: 100%;
-    min-width: 30%;
-    max-width: 600px;
-    justify-content: center;
 `
 
 const FlexboxWrapContainerChild = styled.div`
@@ -130,6 +158,17 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
 
         return (
             <SausagelyticsContainer>
+                <FlexboxContainerCols>
+                    <BoothsWithSausageSizzlesContainer>
+                        <BoothsWithSausageSizzlesLabel>Polling booths with sausage sizzles</BoothsWithSausageSizzlesLabel>
+                        <BoothsWithSausageSizzlesBigNumberContainer>
+                            <BoothsWithSausageSizzlesBigNumber>
+                                {stats.australia.data.all_booths_with_bbq.booth_count}
+                            </BoothsWithSausageSizzlesBigNumber>
+                        </BoothsWithSausageSizzlesBigNumberContainer>
+                    </BoothsWithSausageSizzlesContainer>
+                </FlexboxContainerCols>
+
                 <FlexboxContainerCols>
                     <FlexboxItemTitle>Expected % of voters with access to #democracysausage</FlexboxItemTitle>
                     <FlexboxItemCircle style={{ minWidth: "30%", maxWidth: "500px" }}>
