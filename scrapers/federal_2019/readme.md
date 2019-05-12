@@ -14,6 +14,12 @@ We need to merge the official AEC data with an unofficial list of overseas polli
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
+## May XXXX 2019
+
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Doubleview North (PPID=83305): -31.893911, 115.780173 (was -31.8984508 115.7776616). Incorrectly located at a nearby school.
+
 ## May 11th 2019
 
 ### Wrong location (AEC notified; fixed at ingest)
