@@ -1,4 +1,4 @@
-from django.db.models import F, Sum, Count, IntegerField
+from django.db.models import F, Sum, Count, IntegerField, Q
 from django.db.models.functions import Cast
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
 
@@ -34,6 +34,9 @@ class FederalSausagelytics(SausagelyticsBase):
         queryset_with_bbq = queryset_all_booths.filter(noms__isnull=False).filter(noms__noms__bbq=True)
         queryset_with_bbq_sum_expected_voters = self._cast_vote_counts_to_numbers(queryset_with_bbq).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
 
+        # queryset_with_bbq_or_strong_chance = queryset_all_booths.filter((Q(noms__isnull=False) & Q(noms__noms__bbq=True)) | Q(chance_of_sausage__gte=3))
+        # queryset_with_bbq_or_strong_chance_sum_expected_voters = self._cast_vote_counts_to_numbers(queryset_with_bbq_or_strong_chance).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
+
         return {
             "domain": "Australia",
             "data": {
@@ -44,7 +47,11 @@ class FederalSausagelytics(SausagelyticsBase):
                 "all_booths_with_bbq": {
                     "booth_count": queryset_with_bbq.count(),
                     "expected_voters": queryset_with_bbq_sum_expected_voters["total"]
-                }
+                },
+                # "all_booths_with_bbq_or_strong_chance": {
+                #     "booth_count": queryset_with_bbq_or_strong_chance.count(),
+                #     "expected_voters": queryset_with_bbq_or_strong_chance_sum_expected_voters["total"]
+                # }
             },
         }
 
