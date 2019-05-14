@@ -29,6 +29,13 @@ interface IProps {
     cardActions?: any
 }
 
+const ListItemWithBigSecondaryText = styled(ListItem)`
+    & div:last-child {
+        height: auto !important;
+        white-space: normal !important;
+    }
+`
+
 const HasFreeTextDeliciousness = styled.div`
     color: ${grey500};
     font-size: 12px;
@@ -69,7 +76,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
                             disabled={true}
                             style={getFieldStyle("name")}
                         />
-                        <ListItem
+                        <ListItemWithBigSecondaryText
                             primaryText="Description"
                             secondaryText={stall.description}
                             leftIcon={<ActionDescription />}
