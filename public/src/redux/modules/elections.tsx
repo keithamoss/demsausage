@@ -155,10 +155,14 @@ export interface IElectionStatsData {
         booth_count: number
         expected_voters: number
     }
-    all_booths_with_bbq: {
-        booth_count: number
-        expected_voters: number
+    all_booths_by_noms: {
+        [key: string]: IElectionStatsNoms
     }
+}
+
+export interface IElectionStatsNoms {
+    booth_count: number
+    expected_voters: number
 }
 
 // Side effects, only as applicable

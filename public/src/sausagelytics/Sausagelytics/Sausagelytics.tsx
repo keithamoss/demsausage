@@ -1,7 +1,7 @@
 import { Table, TableBody, TableRow, TableRowColumn } from "material-ui"
 import * as React from "react"
 import styled from "styled-components"
-import { VictoryPie } from "victory"
+import { VictoryBar, VictoryChart, VictoryGroup, VictoryLabel, VictoryPie } from "victory"
 import { IElection, IElectionStats, ISausagelyticsStats } from "../../redux/modules/elections"
 import { theme } from "../../shared/sausagelytics/Victory"
 
@@ -119,8 +119,8 @@ const SausagelyticsTable = styled(Table)`
 `
 
 const getPie = (stats: IElectionStats, style: any = undefined) => {
-    const data = [stats.data.all_booths, stats.data.all_booths_with_bbq]
-    const percentage = stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
+    const data = [stats.data.all_booths, stats.data.all_booths_by_noms.bbq]
+    const percentage = stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
 
     return (
         <React.Fragment>
@@ -145,7 +145,7 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
             <FlexboxItemVictoryPieOverlay style={style}>
                 <strong>{stats.domain}</strong>
                 <br />
-                {new Intl.NumberFormat("en-AU").format(stats.data.all_booths_with_bbq.expected_voters)} (
+                {new Intl.NumberFormat("en-AU").format(stats.data.all_booths_by_noms.bbq.expected_voters)} (
                 {new Intl.NumberFormat("en-AU", { style: "percent", minimumFractionDigits: 1 }).format(percentage)})
             </FlexboxItemVictoryPieOverlay>
         </React.Fragment>
@@ -156,6 +156,8 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
     render() {
         const { stats } = this.props
 
+        const nomsByState = this.groupStateStatsByNoms()
+
         return (
             <SausagelyticsContainer>
                 <FlexboxContainerCols>
@@ -163,7 +165,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                         <BoothsWithSausageSizzlesLabel>Polling booths with sausage sizzles</BoothsWithSausageSizzlesLabel>
                         <BoothsWithSausageSizzlesBigNumberContainer>
                             <BoothsWithSausageSizzlesBigNumber>
-                                {stats.australia.data.all_booths_with_bbq.booth_count}
+                                {stats.australia.data.all_booths_by_noms.bbq.booth_count}
                             </BoothsWithSausageSizzlesBigNumber>
                         </BoothsWithSausageSizzlesBigNumberContainer>
                     </BoothsWithSausageSizzlesContainer>
@@ -199,7 +201,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                                                 style: "percent",
                                                 minimumFractionDigits: 1,
                                             }).format(
-                                                stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
+                                                stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
                                             )}
                                         </TableRowColumn>
                                     </TableRow>
@@ -222,7 +224,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                                                 style: "percent",
                                                 minimumFractionDigits: 1,
                                             }).format(
-                                                stats.data.all_booths_with_bbq.expected_voters / stats.data.all_booths.expected_voters
+                                                stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
                                             )}
                                         </TableRowColumn>
                                     </TableRow>
@@ -231,8 +233,49 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                         </SausagelyticsTable>
                     </FlexboxWrapContainer>
                 </FlexboxContainerCols>
+
+                <FlexboxContainerCols>
+                    <FlexboxItemTitle>By state - Who's got what stalls</FlexboxItemTitle>
+
+                    <FlexboxWrapContainer>
+                        <VictoryChart height={1400}>
+                            <VictoryGroup offset={20} padding={50} horizontal={true} colorScale={"qualitative"}>
+                                {Object.keys(nomsByState).map((nomsName: string) => (
+                                    <VictoryBar
+                                        key={`byNomsByState-${nomsName}`}
+                                        data={nomsByState[nomsName]}
+                                        barWidth={20}
+                                        labels={d => `${d.y} ${nomsName.replace(/_/g, " ")}`}
+                                        style={{ labels: { fill: "black" } }}
+                                        labelComponent={<VictoryLabel />}
+                                    />
+                                ))}
+                            </VictoryGroup>
+                        </VictoryChart>
+                    </FlexboxWrapContainer>
+                </FlexboxContainerCols>
             </SausagelyticsContainer>
         )
+    }
+
+    private groupStateStatsByNoms() {
+        const { stats } = this.props
+        const statsGrouped: any = []
+
+        stats.states.forEach((stateStats: IElectionStats) => {
+            for (const [nomsName, nomsStats] of Object.entries(stateStats.data.all_booths_by_noms)) {
+                if (!(nomsName in statsGrouped)) {
+                    statsGrouped[nomsName] = []
+                }
+
+                statsGrouped[nomsName].push({
+                    x: stateStats.domain,
+                    y: nomsStats.booth_count,
+                })
+            }
+        })
+
+        return statsGrouped
     }
 }
 
