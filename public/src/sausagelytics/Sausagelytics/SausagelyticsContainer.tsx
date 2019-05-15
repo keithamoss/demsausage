@@ -45,7 +45,7 @@ class SausagelyticsContainer extends React.Component<TComponentProps, IStateProp
         const { currentElection } = this.props
         const { stats } = this.state
 
-        if (stats === undefined) {
+        if (stats === undefined || stats === null) {
             return null
         }
 
