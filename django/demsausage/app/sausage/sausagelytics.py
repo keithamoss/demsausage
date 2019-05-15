@@ -29,7 +29,7 @@ class FederalSausagelytics(SausagelyticsBase):
         return super(FederalSausagelytics, self).get_queryset().exclude(state__exact="Overseas")
 
     def _get_stats_for_australia(self):
-        queryset_all_booths = self.get_queryset()
+        queryset_all_booths = super(FederalSausagelytics, self).get_queryset()
         queryset_all_booths_sum_expected_voters = self._cast_vote_counts_to_numbers(queryset_all_booths).aggregate(total=Sum(F("ordvoteest") + F("decvoteest")))
 
         queryset_with_bbq = queryset_all_booths.filter(noms__isnull=False).filter(noms__noms__bbq=True)
