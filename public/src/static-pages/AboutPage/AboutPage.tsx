@@ -121,6 +121,20 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
                         <ListItem disabled={true} primaryText="There's bacon and egg rolls/sandwiches" leftIcon={<BaconandEggsIcon />} />
                     </List>
                 </Answer>
+                <Question>What does the halal symbol indicate?</Question>
+                <Answer>
+                    Firstly, it's important to note that our site can't actually provide halal certification, and we display the symbol
+                    based on information submitted to us by the folks running the stalls themselves.
+                    <br />
+                    <br />
+                    The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is just one of
+                    a variation of halal seals / stamps that are used in Australia - though we're happy to be corrected on that). For the
+                    curious, the ABC's Bush Telegraph has more in their segment{" "}
+                    <a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
+                        What's the big fuss about Halal certification?
+                    </a>
+                    .
+                </Answer>
                 <Question>Who are you?</Question>
                 <Answer>
                     <p>We're six people, a baby, and some parrots.</p>
