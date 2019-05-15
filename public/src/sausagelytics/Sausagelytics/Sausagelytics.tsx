@@ -118,6 +118,11 @@ const SausagelyticsTable = styled(Table)`
     }
 `
 
+const Metadata = styled.div`
+    font-size: 12px;
+    margin: 10px;
+`
+
 const getPie = (stats: IElectionStats, style: any = undefined) => {
     const data = [stats.data.all_booths, stats.data.all_booths_by_noms.bbq]
     const percentage = stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
@@ -254,6 +259,20 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                         </VictoryChart>
                     </FlexboxWrapContainer>
                 </FlexboxContainerCols>
+
+                <Metadata>
+                    <strong>Note on expected percentage of voters:</strong>
+                    <br />
+                    The expected percentage of voters with access to sausage is calculated by comparing the number of expected voters at
+                    polling places which have sausage with the overall expected voters for that state/territory.
+                    <br />
+                    Expected voters comes from AEC Expected election day polling places data, available{" "}
+                    <a href="https://www.aec.gov.au/About_AEC/cea-notices/election-pp.htm">here</a>.<br />
+                    As the expected voters relate to election day polling places, pre-poll and postal voters are excluded from the expected
+                    voters total calculation.
+                    <br />
+                    For polling places with multiple divisions, the expected voters count towards the 'home' division.
+                </Metadata>
             </SausagelyticsContainer>
         )
     }
