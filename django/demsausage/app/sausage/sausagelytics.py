@@ -138,7 +138,7 @@ class FederalSausagelytics(SausagelyticsBase):
         top = reversed(data_sorted[-n_to_fetch:])
         top = [_rank(v, k) for (k, v) in enumerate(top)]
 
-        bottom = data_sorted[:n_to_fetch]
+        bottom = reversed(data_sorted[:n_to_fetch])
         bottom = [_rank(v, len(data_sorted) - n_to_fetch + k) for (k, v) in enumerate(bottom)]
 
         return {
