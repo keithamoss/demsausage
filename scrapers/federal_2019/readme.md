@@ -14,11 +14,18 @@ We need to merge the official AEC data with an unofficial list of overseas polli
 
 The dates listed in this file reflect the date the data was last refreshed by the AEC, not the date we downloaded it loaded it onto the map.
 
-## May XXXX 2019
+## May 16th 2019
 
 ### Wrong location (AEC notified; fixed at ingest)
 
-1. Doubleview North (PPID=83305): -31.893911, 115.780173 (was -31.8984508 115.7776616). Incorrectly located at a nearby school.
+1. Millers Point (PPID=2756): -33.858773, 151.204282 (was -33.8589 151.208). Incorrectly located at a nearby pub.
+2. Doubleview North (PPID=83305): -31.893911, 115.780173 (was -31.8984508 115.7776616). Incorrectly located at a nearby school.
+3. Featherbrook (PPID=92007 & 82883): -37.901565, 144.727718 (was -37.8955501 144.7261772).
+4. Balcatta Central (PPID=8175): -31.864823, 115.814878 (was: -31.8742 115.812).
+
+### Bulk geocoding fixes
+
+We've also run a short manual geocoding exercise and fixed the locations of another ~250 booths. Refer to `/data/federal_2019/data_quality/data/fed2019_updated_locations_for_ingest.json`.
 
 ## May 11th 2019
 
