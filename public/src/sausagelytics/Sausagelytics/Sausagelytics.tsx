@@ -102,7 +102,8 @@ const NavLink = styled.h3`
     display: inline-block;
     color: white;
 
-    & a, a:visited {
+    & a,
+    a:visited {
         color: black;
     }
 `
@@ -147,7 +148,7 @@ const Metadata = styled.div`
 
 const getPie = (stats: IElectionStats, style: any = undefined) => {
     const percentage = stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
-    const data = [{x: "without_sausage_access", y: 1-percentage}, {x: "with_sausage_access", y: percentage}]
+    const data = [{ x: "without_sausage_access", y: 1 - percentage }, { x: "with_sausage_access", y: percentage }]
 
     return (
         <React.Fragment>
@@ -194,7 +195,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                         </NavLink>
                     </NavLinksContainer>
                 </FlexboxContainerCols>
-                
+
                 <FlexboxContainerCols>
                     <BoothsWithSausageSizzlesContainer>
                         <BoothsWithSausageSizzlesLabel>Polling booths with sausage sizzles</BoothsWithSausageSizzlesLabel>
@@ -220,7 +221,9 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                 </FlexboxContainerCols>
 
                 <FlexboxContainerCols>
-                    <FlexboxItemTitle id="the_best_and_wurst">By electorate - Expected % of voters with access to #democracysausage</FlexboxItemTitle>
+                    <FlexboxItemTitle id="the_best_and_wurst">
+                        By electorate - Expected % of voters with access to #democracysausage
+                    </FlexboxItemTitle>
 
                     <FlexboxItemSubtitle>Leaders of the Sizzling Award for commitment to #democracysausage</FlexboxItemSubtitle>
                     <FlexboxWrapContainer>
@@ -273,12 +276,15 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                     <FlexboxItemTitle id="whos_got_what_by_state">By state - Who's got what stalls</FlexboxItemTitle>
 
                     <FlexboxWrapContainer>
-                        <VictoryChart height={1400} domainPadding={{x: 60, y: 50}}>
+                        <VictoryChart height={1400} domainPadding={{ x: 60, y: 50 }}>
                             <VictoryGroup offset={20} padding={50} horizontal={true} colorScale={"qualitative"}>
                                 {Object.keys(nomsByState).map((nomsName: string) => (
                                     <VictoryBar
                                         key={`byNomsByState-${nomsName}`}
                                         data={nomsByState[nomsName]}
+                                        categories={{
+                                            x: ["ACT", "NT", "TAS", "WA", "SA", "QLD", "VIC", "NSW"],
+                                        }}
                                         barWidth={20}
                                         labels={d => `${d.y} ${nomsName.replace(/_/g, " ")}`}
                                         style={{ labels: { fill: "black" } }}
