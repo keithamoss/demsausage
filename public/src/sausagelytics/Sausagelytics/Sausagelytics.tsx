@@ -40,7 +40,6 @@ const BoothsWithSausageSizzlesLabel = styled.div`
 `
 
 const BoothsWithSausageSizzlesBigNumberContainer = styled.div`
-    width: 30%;
     background-color: #e8bb3c;
     text-align: center;
     align-items: center;
@@ -52,6 +51,8 @@ const BoothsWithSausageSizzlesBigNumber = styled.h2`
     font-size: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 `
 
 const FlexboxItemVictoryPieOverlay = styled.div`
