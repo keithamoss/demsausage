@@ -146,15 +146,13 @@ const Metadata = styled.div`
 `
 
 const getPie = (stats: IElectionStats, style: any = undefined) => {
-    const data = [stats.data.all_booths, stats.data.all_booths_by_noms.bbq]
     const percentage = stats.data.all_booths_by_noms.bbq.expected_voters / stats.data.all_booths.expected_voters
+    const data = [{x: "without_sausage_access", y: 1-percentage}, {x: "with_sausage_access", y: percentage}]
 
     return (
         <React.Fragment>
             <VictoryPie
                 data={data}
-                x={"booth_count"}
-                y={"expected_voters"}
                 padding={20}
                 innerRadius={150}
                 startAngle={90}
