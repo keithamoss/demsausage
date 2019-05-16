@@ -11,6 +11,7 @@ from urllib.parse import quote
 from django.core.cache import cache
 from django.contrib.gis.geos import Point
 from django.db import transaction
+from django.db.models import Q
 import googlemaps
 
 from demsausage.app.models import PollingPlaces, Stalls, ElectoralBoundaries
@@ -158,8 +159,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.polling_places = list(self.reader)
 
     def can_loading_begin(self):
-        if self.has_pending_stalls() is True:
-            return False
+        # if self.has_pending_stalls() is True:
+        #     return False
         return True
 
     def convert_to_demsausage_schema(self):
@@ -727,23 +728,23 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
-        # Migrate any leftover declined stalls
+        # Migrate any leftover declined or pending stalls
         start = timer()
-        queryset = Stalls.objects.filter(election=self.election, status=StallStatus.DECLINED, polling_place__status=PollingPlaceStatus.ACTIVE)
+        queryset = Stalls.objects.filter(election=self.election).filter(Q(status=StallStatus.DECLINED) | Q(status=StallStatus.PENDING)).filter(polling_place__status=PollingPlaceStatus.ACTIVE)
         for stall in queryset:
-            matching_polling_places = self.safe_find_by_distance("Declined Stall Migration", stall.polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+            matching_polling_places = self.safe_find_by_distance("Declined/Pending Stall Migration", stall.polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
             if len(matching_polling_places) != 1:
-                self.logger.error("Declined Stall Migration: {} matching polling places found in new data: '{}' ({})".format(len(matching_polling_places), stall.polling_place.name, stall.polling_place.address))
+                self.logger.error("Declined/Pending Stall Migration: {} matching polling places found in new data: '{}' ({})".format(len(matching_polling_places), stall.polling_place.name, stall.polling_place.address))
 
             else:
                 # Repoint stall
                 stall.polling_place_id = matching_polling_places[0].id
                 stall.save()
 
-                self.logger.info("Declined Stall Migration: Stall {} updated to point to polling place '{}' ({})".format(stall.id, matching_polling_places[0].name, matching_polling_places[0].address))
+                self.logger.info("Declined/Pending Stall Migration: Stall {} updated to point to polling place '{}' ({})".format(stall.id, matching_polling_places[0].name, matching_polling_places[0].address))
 
-        self.logger.info("Noms Migration: Migrated {} declined stalls".format(queryset.count()))
+        self.logger.info("Noms Migration: Migrated {} declined/pending stalls".format(queryset.count()))
 
         # Validate that we've actually migrated all stalls and polling places
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
