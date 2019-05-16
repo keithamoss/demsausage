@@ -243,7 +243,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                     <FlexboxItemTitle>By state - Who's got what stalls</FlexboxItemTitle>
 
                     <FlexboxWrapContainer>
-                        <VictoryChart height={1400}>
+                        <VictoryChart height={1400} domainPadding={{x: 60, y: 50}}>
                             <VictoryGroup offset={20} padding={50} horizontal={true} colorScale={"qualitative"}>
                                 {Object.keys(nomsByState).map((nomsName: string) => (
                                     <VictoryBar
