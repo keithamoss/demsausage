@@ -85,6 +85,27 @@ const FlexboxContainerCols = styled.div`
     /* margin-bottom: 20px; */
 `
 
+const NavLinksContainer = styled(FlexboxWrapContainer)`
+    margin-bottom: 20px;
+    align-items: stretch;
+    background-color: #e8bb3c;
+    color: #292336;
+    max-width: 100%;
+    margin-bottom: 20px;
+`
+
+const NavLink = styled.h3`
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 20px;
+    display: inline-block;
+    color: white;
+
+    & a, a:visited {
+        color: black;
+    }
+`
+
 const FlexboxItemTitle = styled.h2`
     margin-top: 0px;
     margin-bottom: 20px;
@@ -166,6 +187,16 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
         return (
             <SausagelyticsContainer>
                 <FlexboxContainerCols>
+                    <NavLinksContainer>
+                        <NavLink>
+                            <a href="#expected_sausage_access">Voters with access to #demsausage</a> |{" "}
+                            <a href="#the_best_and_wurst">Best & Wurst electorates with #demsausage on offer</a> |{" "}
+                            <a href="#whos_got_what_by_state">Who's got what by state</a>
+                        </NavLink>
+                    </NavLinksContainer>
+                </FlexboxContainerCols>
+                
+                <FlexboxContainerCols>
                     <BoothsWithSausageSizzlesContainer>
                         <BoothsWithSausageSizzlesLabel>Polling booths with sausage sizzles</BoothsWithSausageSizzlesLabel>
                         <BoothsWithSausageSizzlesBigNumberContainer>
@@ -177,7 +208,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                 </FlexboxContainerCols>
 
                 <FlexboxContainerCols>
-                    <FlexboxItemTitle>Expected % of voters with access to #democracysausage</FlexboxItemTitle>
+                    <FlexboxItemTitle id="expected_sausage_access">Expected % of voters with access to #democracysausage</FlexboxItemTitle>
                     <FlexboxItemCircle style={{ minWidth: "30%", maxWidth: "500px" }}>
                         {getPie(stats.australia, { borderTopLeftRadius: "unset", borderTopRightRadius: "unset", top: "70%" })}
                     </FlexboxItemCircle>
@@ -190,7 +221,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                 </FlexboxContainerCols>
 
                 <FlexboxContainerCols>
-                    <FlexboxItemTitle>By electorate - Expected % of voters with access to #democracysausage</FlexboxItemTitle>
+                    <FlexboxItemTitle id="the_best_and_wurst">By electorate - Expected % of voters with access to #democracysausage</FlexboxItemTitle>
 
                     <FlexboxItemSubtitle>Leaders of the Sizzling Award for commitment to #democracysausage</FlexboxItemSubtitle>
                     <FlexboxWrapContainer>
@@ -240,7 +271,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                 </FlexboxContainerCols>
 
                 <FlexboxContainerCols>
-                    <FlexboxItemTitle>By state - Who's got what stalls</FlexboxItemTitle>
+                    <FlexboxItemTitle id="whos_got_what_by_state">By state - Who's got what stalls</FlexboxItemTitle>
 
                     <FlexboxWrapContainer>
                         <VictoryChart height={1400} domainPadding={{x: 60, y: 50}}>
