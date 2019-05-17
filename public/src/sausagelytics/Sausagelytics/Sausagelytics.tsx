@@ -189,8 +189,8 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
                 <FlexboxContainerCols>
                     <NavLinksContainer>
                         <NavLink>
-                            <a href="#expected_sausage_access">Voters with access to #demsausage</a> |{" "}
-                            <a href="#the_best_and_wurst">Best & Wurst electorates with #demsausage on offer</a> |{" "}
+                            <a href="#expected_sausage_access">Voters with access to #democracysausage</a> |{" "}
+                            <a href="#the_best_and_wurst">Best & Wurst electorates with #democracysausage on offer</a> |{" "}
                             <a href="#whos_got_what_by_state">Who's got what by state</a>
                         </NavLink>
                     </NavLinksContainer>
