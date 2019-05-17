@@ -19,11 +19,16 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed
     for_fix_data_issues = []
 
     for fixed_booth in fixed_booths:
-        if "distance_shift_m" in fixed_booth:
-            print(fixed_booth["distance_shift_m"])
+        if "distance_shift_m" in fixed_booth and fixed_booth["distance_shift_m"] > 1000:
+            print("{} (PPID={})".format(fixed_booth["name"], fixed_booth["ec_id"]))
+            print("{}, {}".format(fixed_booth["premises"], fixed_booth["address"]))
+            # print("AEC Location: {}, {}".format(fixed_booth["lat_new"], fixed_booth["lon_new"]))
+            # print("New Location: {}, {}".format(fixed_booth["lat_new"], fixed_booth["lon_new"]))
+            print("{}km shift".format(round(fixed_booth["distance_shift_m"] / 1000, 2)))
+            print()
             for_fix_data_issues.append(fixed_booth)
 
-    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed2019_updated_locations_linked_only_with_distance_shift.json"), "w") as nf:
+    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed2019_updated_locations_linked_only_with_distance_shift_huge_shifts.json"), "w") as nf:
         nf.write(json.dumps(for_fix_data_issues))
 
 
