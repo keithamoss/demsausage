@@ -60,14 +60,6 @@
         "distance_shift_m": 76.10997569
     },
     {
-        "name": "Bemboka",
-        "address": "35-45 Kameruka St, BEMBOKA, NSW 2550",
-        "premises": "Bemboka Public School",
-        "state": "NSW",
-        "lon_new": 149.571079,
-        "lat_new": -36.631198
-    },
-    {
         "name": "Ben Lomond",
         "address": "1227-1239 Ben Lomond Rd, BEN LOMOND, NSW 2365",
         "premises": "Ben Lomond War Memorial Hall",
@@ -678,14 +670,6 @@
         "distance_shift_m": 117.83543951
     },
     {
-        "name": "Robertson",
-        "address": "Caalong St, ROBERTSON, NSW 2577",
-        "premises": "Robertson Community Centre",
-        "state": "NSW",
-        "lon_new": 150.591895,
-        "lat_new": -34.5879
-    },
-    {
         "name": "Rutherford West",
         "address": "75 Regiment Rd, RUTHERFORD, NSW 2320",
         "premises": "Playtime Preschool",
@@ -814,94 +798,6 @@
         "lat_new": -34.671183,
         "ec_id": 976,
         "distance_shift_m": 0.05755907
-    },
-    {
-        "name": "Alice Springs",
-        "address": "93 Todd Street, ALICE SPRINGS, NT 0870",
-        "premises": "Alice Springs Town Council",
-        "state": "NT",
-        "lon_new": 133.882014,
-        "lat_new": -23.701757
-    },
-    {
-        "name": "Berrimah",
-        "address": "1 Berrimah Rd, BERRIMAH, NT 0828",
-        "premises": "Haileybury Rendall School",
-        "state": "NT",
-        "lon_new": 130.922892,
-        "lat_new": -12.443259
-    },
-    {
-        "name": "Driver",
-        "address": "10 Tilston Ave, DRIVER, NT 0830",
-        "premises": "Palmerston College Years 10-12 Campus",
-        "state": "NT",
-        "lon_new": 130.972872,
-        "lat_new": -12.495116
-    },
-    {
-        "name": "Howard Springs",
-        "address": "295 Whitewood Rd, HOWARD SPRINGS, NT 0835",
-        "premises": "Howard Springs Primary School",
-        "state": "NT",
-        "lon_new": 131.045188,
-        "lat_new": -12.495394
-    },
-    {
-        "name": "Johnston",
-        "address": "285 Farrar Blvd, JOHNSTON, NT 0832",
-        "premises": "MacKillop Catholic College",
-        "state": "NT",
-        "lon_new": 131.008343,
-        "lat_new": -12.49747
-    },
-    {
-        "name": "Katherine",
-        "address": "101 Giles Street, KATHERINE, NT 0850",
-        "premises": "Clyde Fenton School",
-        "state": "NT",
-        "lon_new": 132.269939,
-        "lat_new": -14.451315
-    },
-    {
-        "name": "Moil",
-        "address": "37 Lanyon Tce, MOIL, NT 0810",
-        "premises": "Moil Primary School",
-        "state": "NT",
-        "lon_new": 130.881086,
-        "lat_new": -12.387766
-    },
-    {
-        "name": "Nightcliff",
-        "address": "9 Cunjevoi Crescent, NIGHTCLIFF, NT 0810",
-        "premises": "Nightcliff Primary School",
-        "state": "NT",
-        "lon_new": 130.850077,
-        "lat_new": -12.380517
-    },
-    {
-        "name": "Parap",
-        "address": "52 Parap Rd, PARAP, NT 0820",
-        "premises": "Parap School - After School Care",
-        "state": "NT",
-        "lon_new": 130.844,
-        "lat_new": -12.4298
-    },
-    {
-        "name": "Parap East",
-        "address": "Urquhart Street, PARAP, NT 0820",
-        "premises": "Parap School - Staff Room",
-        "state": "NT",
-        "lon_new": 130.844328,
-        "lat_new": -12.429844
-    },
-    {
-        "name": "Rosebery",
-        "address": "185 Forrest Pde, ROSEBERY, NT 0832",
-        "premises": "Palmerston College Years 7-9 Campus",
-        "state": "NT",
-        "lon_new": 130.991531,
-        "lat_new": -12.510527
     },
     {
         "name": "Alton Downs",
@@ -1254,14 +1150,6 @@
         "distance_shift_m": 582.47959688
     },
     {
-        "name": "Kybong",
-        "address": "TBC, KYBONG, QLD 4570",
-        "premises": "TBA - Kybong",
-        "state": "QLD",
-        "lon_new": 152.711067,
-        "lat_new": -26.293896
-    },
-    {
         "name": "Macalister",
         "address": "20649 Warrego Hwy, MACALISTER, QLD 4352",
         "premises": "Macalister QCWA Hall",
@@ -1300,14 +1188,6 @@
         "lat_new": -27.430849,
         "ec_id": 31483,
         "distance_shift_m": 0.02426762
-    },
-    {
-        "name": "Miriam Vale",
-        "address": "TBC, MIRIAM VALE, QLD 4677",
-        "premises": "TBA - Miriam Vale",
-        "state": "QLD",
-        "lon_new": 151.559245,
-        "lat_new": -24.327699
     },
     {
         "name": "Moonie",
@@ -1700,14 +1580,6 @@
         "distance_shift_m": 0.032818
     },
     {
-        "name": "Woorabinda",
-        "address": "TBC, WOORABINDA, QLD 4702",
-        "premises": "TBA - Woorabinda",
-        "state": "QLD",
-        "lon_new": 149.456709,
-        "lat_new": -24.132651
-    },
-    {
         "name": "Yeppoon",
         "address": "11 James St, YEPPOON, QLD 4703",
         "premises": "11 James St",
@@ -1836,14 +1708,6 @@
         "lat_new": -33.829134,
         "ec_id": 7354,
         "distance_shift_m": 81.12857112
-    },
-    {
-        "name": "Frances",
-        "address": "37 Railway Tce, FRANCES, SA 5262",
-        "premises": "Frances Memorial Hall",
-        "state": "SA",
-        "lon_new": 140.954063,
-        "lat_new": -36.712867
     },
     {
         "name": "Jervois",
@@ -2016,14 +1880,6 @@
         "distance_shift_m": 71.53708456
     },
     {
-        "name": "Palmer",
-        "address": "Olive Grove Rd, PALMER, SA 5237",
-        "premises": "Palmer Collier Park",
-        "state": "SA",
-        "lon_new": 139.162283,
-        "lat_new": -34.854685
-    },
-    {
         "name": "Penola",
         "address": "Young St, PENOLA, SA 5277",
         "premises": "Penola Primary School Gymnasium",
@@ -2142,14 +1998,6 @@
         "lat_new": -37.5676,
         "ec_id": 6793,
         "distance_shift_m": 0.0
-    },
-    {
-        "name": "Tanunda",
-        "address": "16 Maria St, TANUNDA, SA 5352",
-        "premises": "Tanunda Lutheran School",
-        "state": "SA",
-        "lon_new": 138.953919,
-        "lat_new": -34.525866
     },
     {
         "name": "Tintinara",
@@ -3092,14 +2940,6 @@
         "distance_shift_m": 0.01424469
     },
     {
-        "name": "Wodonga",
-        "address": "170 High St, WODONGA, VIC 3690",
-        "premises": "ANZ Bank Wodonga",
-        "state": "VIC",
-        "lon_new": 146.887948,
-        "lat_new": -36.122038
-    },
-    {
         "name": "Woodend East",
         "address": "146 High St, WOODEND, VIC 3442",
         "premises": "Woodend Primary School",
@@ -3340,14 +3180,6 @@
         "distance_shift_m": 106.49888649
     },
     {
-        "name": "Byford West",
-        "address": "Kardan Blvd, BYFORD, WA 6122",
-        "premises": "West Byford Primary School",
-        "state": "WA",
-        "lon_new": 115.979106,
-        "lat_new": -32.214924
-    },
-    {
         "name": "Capel",
         "address": "21 Barlee Rd, CAPEL, WA 6271",
         "premises": "Capel Primary School",
@@ -3456,14 +3288,6 @@
         "lat_new": -32.609764,
         "ec_id": 7482,
         "distance_shift_m": 0.04360683
-    },
-    {
-        "name": "Dianella Central",
-        "address": "43 Chester Ave, DIANELLA, WA 6059",
-        "premises": "Our Lady's Assumption School",
-        "state": "WA",
-        "lon_new": 115.87272,
-        "lat_new": -31.89691
     },
     {
         "name": "Djugun",
@@ -3656,14 +3480,6 @@
         "distance_shift_m": 273.65744371
     },
     {
-        "name": "Manjimup East",
-        "address": "12 Hospital Ave, MANJIMUP, WA 6258",
-        "premises": "St John Ambulance",
-        "state": "WA",
-        "lon_new": 116.151291,
-        "lat_new": -34.239914
-    },
-    {
         "name": "Marangaroo Central",
         "address": "46 Highclere Blvd, MARANGAROO, WA 6064",
         "premises": "The Hepburn Centre",
@@ -3804,14 +3620,6 @@
         "distance_shift_m": 35.82068375
     },
     {
-        "name": "South Perth Central",
-        "address": "97 Hensman St, SOUTH PERTH, WA 6151",
-        "premises": "John McGrath Pavilion and Hall",
-        "state": "WA",
-        "lon_new": 115.866598,
-        "lat_new": -31.985615
-    },
-    {
         "name": "South Perth South",
         "address": "9 Ridge St, SOUTH PERTH, WA 6151",
         "premises": "Church of St Mary The Virgin",
@@ -3940,14 +3748,6 @@
         "lat_new": -31.83868,
         "ec_id": 7588,
         "distance_shift_m": 0.0
-    },
-    {
-        "name": "Wellard",
-        "address": "Wellard Casuarina Hall, 11 Baker Rd, WELLARD, WA 6170",
-        "premises": "Wellard Casuarina Hall",
-        "state": "WA",
-        "lon_new": 115.872555,
-        "lat_new": -32.255972
     },
     {
         "name": "Wembley Central",
