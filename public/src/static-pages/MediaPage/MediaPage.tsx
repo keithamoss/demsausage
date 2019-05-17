@@ -40,7 +40,13 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
 
                     <h3>Media Releases</h3>
                     <ListItem
-                        primaryText="Federal Election 2019"
+                        primaryText="Federal Election 2019 - May 17th"
+                        leftIcon={<FileFileDownload />}
+                        // eslint-disable-next-line
+                        containerElement={<a href={"/media/2019%20Federal%20Election%20Media%20Release%20-%2017%20May.pdf"} />}
+                    />
+                    <ListItem
+                        primaryText="Federal Election 2019 - April 13th"
                         leftIcon={<FileFileDownload />}
                         // eslint-disable-next-line
                         containerElement={<a href={"/media/2019%20Fed%20-%20Media%20Release.pdf"} />}
