@@ -71,12 +71,12 @@
         "core-js": "^2.6.1",
         "raf": "^3.4.1",
         "react-app-polyfill": "^0.2.2",
-        "react-scripts": "3.0.0",
+        "react-scripts": "^3.4.1",
         "redux-devtools-extension": "^2.13.7",
         "tslint": "5.14.0",
         "tslint-config-prettier": "^1.17.0",
         "tslint-react": "4.0.0",
-        "typescript": "3.4.4"
+        "typescript": "^3.9.2"
     },
     "browserslist": [
         ">0.2%",
