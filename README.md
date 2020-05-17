@@ -49,7 +49,7 @@ Follow the instructions in `data/federal_2019/electoral_boundaries/README.md` to
 #### Admin Site
 
 1. Add yourself to the `app_allowedusers` table before trying to login
-2. Load `initial_data/polling_place_facility_types.csv into`app_pollingplacefacilitytype`
+2. Load `initial_data/polling_place_facility_types.csv` into `app_pollingplacefacilitytype`
 3. Create a test election for yourself and load some polling places into it via the UI (contact the project maintainers for a sample)
 
 ### Run both sites
