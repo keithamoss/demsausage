@@ -17,7 +17,7 @@ WORKDIR /app
 
 # Upgrade SetupTools from 28.8 to latest due to a bug installing python-memcached on Python 3.6
 # c.f. https://github.com/pypa/setuptools/issues/866
-RUN pip3 install -U setuptools
+RUN pip3 install --upgrade setuptools wheel
 
 # psycopg2 requires pg_config to be available.
 # Installing pg_config takes a little more work on Alpine images.
