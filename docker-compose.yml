@@ -1,91 +1,91 @@
 version: "3.7"
 services:
-    db:
-        image: mdillon/postgis:10-alpine
-        command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-        ports:
-            - "5432:5432"
-        env_file:
-            - secrets/sausage-db.dev.env
-        volumes:
-            # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
-            - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
+  db:
+    image: mdillon/postgis:10-alpine
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    ports:
+      - "5432:5432"
+    env_file:
+      - secrets/sausage-db.dev.env
+    volumes:
+      # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
+      - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
 
-            # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
-            # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
+      # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
+      # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
 
-            # Enable this to store the PostgreSQL data on the host
-            - ./db-pg/data:/var/lib/postgresql/data
-            - ./db-pg/scripts:/var/lib/postgresql/scripts
-    memcached:
-        image: memcached
-        expose:
-            - "11211"
-        command:
-            # 5mb to accommodate the larger polling place GeoJSON objects
-            - "--max-item-size=5242880"
-    # memcached_gui:
-    #     # http://localhost/index.php (admin/admin)
-    #     image: jacksoncage/phpmemcachedadmin
-    #     # environment:
-    #     #     - MEMCACHED_HOST=localhost
-    #     #     - MEMCACHED_PORT=11211
-    #     depends_on:
-    #         - memcached
-    #     ports:
-    #         - "80:80"
-    # memcached_gui:
-    #     # http://localhost/index.php (admin/admin)
-    #     image: bastienm/phpmemadmin
-    #     environment:
-    #         - MEMCACHED_HOST=memcached
-    #         - MEMCACHED_PORT=11211
-    #     depends_on:
-    #         - memcached
-    #     ports:
-    #         - "80:80"
-    django:
-        build: django/
-        entrypoint: /app/docker-entrypoint.sh
-        volumes:
-            - ./django/:/app:delegated
-            - ./scrapers/:/scrapers:delegated
-            - ./data/:/data:delegated
-        ports:
-            - "8000:8000"
-        env_file:
-            - secrets/sausage-web.dev.env
-            - secrets/sausage-web-db.dev.env
-        depends_on:
-            - db
-            - memcached
-    frontend_public:
-        image: node:11.11.0-alpine
-        entrypoint: /app/docker-entrypoint.sh
-        volumes:
-            - ./public:/app:delegated
-        env_file:
-            - secrets/sausage-public-frontend.dev.env
-    frontend_admin:
-        image: node:11.11.0-alpine
-        entrypoint: /app/docker-entrypoint.sh
-        volumes:
-            - ./admin:/app:delegated
-        environment:
-            - PORT=3001
-        env_file:
-            - secrets/sausage-admin-frontend.dev.env
-    nginx:
-        build: nginx/
-        volumes:
-            - ./nginx:/app
-            - ./nginx/nginx/docker.https.dev.conf:/etc/nginx/conf.d/nginx.conf
+      # Enable this to store the PostgreSQL data on the host
+      - ./db-pg/data:/var/lib/postgresql/data
+      - ./db-pg/scripts:/var/lib/postgresql/scripts
+  memcached:
+    image: memcached
+    expose:
+      - "11211"
+    command:
+      # 5mb to accommodate the larger polling place GeoJSON objects
+      - "--max-item-size=5242880"
+  # memcached_gui:
+  #     # http://localhost/index.php (admin/admin)
+  #     image: jacksoncage/phpmemcachedadmin
+  #     # environment:
+  #     #     - MEMCACHED_HOST=localhost
+  #     #     - MEMCACHED_PORT=11211
+  #     depends_on:
+  #         - memcached
+  #     ports:
+  #         - "80:80"
+  # memcached_gui:
+  #     # http://localhost/index.php (admin/admin)
+  #     image: bastienm/phpmemadmin
+  #     environment:
+  #         - MEMCACHED_HOST=memcached
+  #         - MEMCACHED_PORT=11211
+  #     depends_on:
+  #         - memcached
+  #     ports:
+  #         - "80:80"
+  django:
+    build: django/
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./django/:/app:delegated
+      - ./scrapers/:/scrapers:delegated
+      - ./data/:/data:delegated
+    ports:
+      - "8000:8000"
+    env_file:
+      - secrets/sausage-web.dev.env
+      - secrets/sausage-web-db.dev.env
+    depends_on:
+      - db
+      - memcached
+  frontend_public:
+    image: node:11.11.0-alpine
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./public:/app:delegated
+    env_file:
+      - secrets/sausage-public-frontend.dev.env
+  frontend_admin:
+    image: node:11.11.0-alpine
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./admin:/app:delegated
+    environment:
+      - PORT=3001
+    env_file:
+      - secrets/sausage-admin-frontend.dev.env
+  nginx:
+    build: nginx/
+    volumes:
+      - ./nginx:/app
+      - ./nginx/nginx/docker.https.dev.conf:/etc/nginx/conf.d/nginx.conf
             - ./keys/:/app/keys/:delegated
-        depends_on:
-            - django
-            - frontend_public
-            - frontend_admin
-        ports:
-            - "443:443"
-            - "3001:3001"
-            - "8001:8001"
+    depends_on:
+      - django
+      - frontend_public
+      - frontend_admin
+    ports:
+      - "443:443"
+      - "3001:3001"
+      - "8001:8001"
