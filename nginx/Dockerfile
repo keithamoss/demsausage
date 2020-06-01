@@ -1,4 +1,4 @@
-FROM nginx:1.15.7-alpine
+FROM nginx:1.18.0-alpine
 MAINTAINER Keith Moss <keithamoss@gmail.com>
 
 # Copy our local nginx config in
