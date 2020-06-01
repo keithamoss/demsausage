@@ -45,9 +45,25 @@ Use the template .env files in `secrets-tmpl` to create corresponding files unde
 4. `sausage-public-frontend.dev.env`
 5. `sausage-admin-frontend.dev.env`
 
-#### Load electoral boundaries data
+#### Load data
+
+If you're starting from scratch:
+
+##### Load electoral boundaries data
 
 Follow the instructions in `data/federal_2019/electoral_boundaries/README.md` to load in the 2019 Federal electoral boundaries.
+
+##### Load production database dump
+
+Alternatively, if you have access to the production database you can use the scripts in this repo to initialise your environment with its current state.
+
+```
+docker-compose up db
+
+docker exec -i -t demsausage_db_1 /bin/bash
+cd /var/lib/postgresql/scripts
+./replace-dev-with-prod.sh
+```
 
 #### Admin Site
 
