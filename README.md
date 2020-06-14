@@ -16,7 +16,7 @@ If this is the first time you're running Democracy Sausage you'll need to:
 Add the following to your [hosts file](<https://en.wikipedia.org/wiki/Hosts_(file)>).
 
 ```
-127.0.0.1 test.democracysausage.org
+127.0.0.1 public.test.democracysausage.org
 127.0.0.1 admin.test.democracysausage.org
 ```
 
@@ -31,7 +31,7 @@ mkcert -install
 
 ```
 mkdir keys && cd $_
-mkcert test.democracysausage.org
+mkcert public.test.democracysausage.org
 mkcert admin.test.democracysausage.org
 ```
 
