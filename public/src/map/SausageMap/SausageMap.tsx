@@ -1,4 +1,5 @@
 import {
+  Dialog,
   FloatingActionButton,
   IconButton,
   Toolbar,
@@ -110,23 +111,26 @@ interface IProps {
 
 interface IState {
   mapLoading: boolean | undefined;
+  nt2020DialogOpen: boolean;
 }
 
 class SausageMap extends React.PureComponent<IProps, IState> {
   private onMapBeginLoading: Function;
   private onMapLoaded: Function;
   private onClickMapFilterOption: Function;
+  private onCloseNT2020Dialog: any;
 
   constructor(props: IProps) {
     super(props);
 
-    this.state = { mapLoading: undefined };
+    this.state = { mapLoading: undefined, nt2020DialogOpen: true };
 
     this.onMapBeginLoading = () => this.setState({ mapLoading: true });
     this.onMapLoaded = () => this.setState({ mapLoading: false });
     this.onClickMapFilterOption = (option: string) => (
       event: React.MouseEvent<HTMLElement>
     ) => props.onClickMapFilterOption(option);
+    this.onCloseNT2020Dialog = () => this.setState({ nt2020DialogOpen: false });
   }
 
   render() {
@@ -143,7 +147,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
       onOpenFinderForGeolocation,
       onClearMapSearch,
     } = this.props;
-    const { mapLoading } = this.state;
+    const { mapLoading, nt2020DialogOpen } = this.state;
 
     return (
       <React.Fragment>
@@ -271,6 +275,106 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             </PollingPlaceFilterToolbarGroup>
           </PollingPlaceFilterToolbar>
         </FlexboxMapContainer>
+
+        {currentElection.name === "Northern Territory Election 2020" && (
+          <Dialog
+            title="G'day Territorians"
+            open={nt2020DialogOpen}
+            onRequestClose={this.onCloseNT2020Dialog}
+            autoScrollBodyContent={true}
+            titleStyle={{
+              backgroundColor: "rgba(255, 255, 255, 1)",
+            }}
+            bodyStyle={{
+              backgroundColor: "rgba(255, 255, 255, 0.75)",
+            }}
+            paperProps={{
+              style: { backgroundColor: "rgba(255, 255, 255, 0)" },
+            }}
+            contentStyle={{
+              width: "80%",
+              maxWidth: "none",
+              backgroundImage: "url(images/ntvotes_2020.png)",
+              backgroundSize: "50%",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center top 80px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et
+              magna tortor. Nulla et nisi porttitor, iaculis dui convallis,
+              mattis ipsum. Nullam porta vestibulum erat at laoreet. Aliquam eu
+              libero tortor. Donec auctor tincidunt lectus sed laoreet. Donec
+              venenatis arcu eget dictum commodo. Donec eu ultricies ante, quis
+              gravida metus. Phasellus et quam ante. Sed dapibus tincidunt
+              ipsum, interdum vestibulum justo suscipit a. Class aptent taciti
+              sociosqu ad litora torquent per conubia nostra, per inceptos
+              himenaeos.
+            </p>
+
+            <p>
+              Nunc et magna vitae ante euismod volutpat vitae non erat. Morbi
+              feugiat dolor sed dictum imperdiet. Maecenas condimentum justo ac
+              commodo egestas. Donec quis diam quam. Duis cursus, odio sed
+              elementum maximus, ligula tellus vulputate mauris, vel cursus
+              dolor tortor id libero. Duis eleifend molestie interdum. Mauris ac
+              commodo mauris. Suspendisse id bibendum justo, id hendrerit dolor.
+              Vivamus a nibh diam. In ac lectus vel dui accumsan pretium at in
+              sem.
+            </p>
+
+            <p>
+              Vestibulum commodo malesuada vestibulum. Aenean congue dictum
+              consequat. In pellentesque suscipit ante, ut fringilla ex rhoncus
+              nec. Praesent velit dui, pharetra eu feugiat quis, egestas vel
+              lorem. Fusce vel tortor vitae sem feugiat pulvinar nec sed dui.
+              Nulla et libero sagittis, dapibus nisl sed, auctor justo. Donec at
+              lectus ut nibh accumsan imperdiet eu nec tellus. Morbi tempor
+              mauris enim, vitae eleifend ante vestibulum et. Cras accumsan nisl
+              ac ante placerat tempor.
+            </p>
+
+            <h2>List of charities</h2>
+
+            <ul>
+              <li style={{ marginBottom: 10 }}>
+                <strong>Charity name</strong>: Charity description.{" "}
+                <strong>
+                  <a href="#">Donate</a>
+                </strong>
+                .
+              </li>
+              <li style={{ marginBottom: 10 }}>
+                <strong>Charity name</strong>: Charity description.{" "}
+                <strong>
+                  <a href="#">Donate</a>
+                </strong>
+                .
+              </li>
+              <li style={{ marginBottom: 10 }}>
+                <strong>Charity name</strong>: Charity description.{" "}
+                <strong>
+                  <a href="#">Donate</a>
+                </strong>
+                .
+              </li>
+              <li style={{ marginBottom: 10 }}>
+                <strong>Charity name</strong>: Charity description.{" "}
+                <strong>
+                  <a href="#">Donate</a>
+                </strong>
+                .
+              </li>
+              <li style={{ marginBottom: 10 }}>
+                <strong>Charity name</strong>: Charity description.{" "}
+                <strong>
+                  <a href="#">Donate</a>
+                </strong>
+                .
+              </li>
+            </ul>
+          </Dialog>
+        )}
 
         {queriedPollingPlaces.length > 0 && (
           <FullscreenDialog
