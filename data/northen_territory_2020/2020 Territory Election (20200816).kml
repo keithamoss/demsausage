@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2020 Territory Election</name>
+    <description>2020 Territory Election: Election day voting centres</description>
+    <Style id="icon-102-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/102-pink.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-102-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/102-pink.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-102">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-102-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-102-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-112-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/112-purple.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-112-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/112-purple.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-112">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-112-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-112-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-158-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/158-yellow.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-158-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/158-yellow.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-158">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-158-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-158-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-009D57-normal">
+      <IconStyle>
+        <color>ff579d00</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-009D57-highlight">
+      <IconStyle>
+        <color>ff579d00</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-009D57">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-009D57-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-009D57-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-0BA9CC-normal">
+      <IconStyle>
+        <color>ffcca90b</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-0BA9CC-highlight">
+      <IconStyle>
+        <color>ffcca90b</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-0BA9CC">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-0BA9CC-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-0BA9CC-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-795046-normal">
+      <IconStyle>
+        <color>ff465079</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-795046-highlight">
+      <IconStyle>
+        <color>ff465079</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-795046">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-795046-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-795046-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-A61B4A-normal">
+      <IconStyle>
+        <color>ff4a1ba6</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-A61B4A-highlight">
+      <IconStyle>
+        <color>ff4a1ba6</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-A61B4A">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-A61B4A-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-A61B4A-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-FAD199-normal">
+      <IconStyle>
+        <color>ff99d1fa</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-FAD199-highlight">
+      <IconStyle>
+        <color>ff99d1fa</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-FAD199">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-FAD199-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-FAD199-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Election day voting locations 2020 Territory Election</name>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Alice Springs Town Council<br>93 Todd St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.882038,-23.701797,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Braitling Primary School<br>80 Head St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.867,-23.6788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Centralian Senior College<br>Grevillea Dr<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.895702,-23.697872,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Desert Knowledge Australia<br>475 South Stuart Highway<br>KILGARIFF<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.874591,-23.761227,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Gillen Primary School<br>55 Milner Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.868,-23.7084,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALICE SPRINGS</name>
+        <description><![CDATA[Living Waters Lutheran School<br>Albrecht Dr<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-795046</styleUrl>
+        <Point>
+          <coordinates>
+            133.833064,-23.697782,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ALYANGULA</name>
+        <description><![CDATA[Community Hall<br>NB: Voting hours - 8:00am to 1:00pm]]></description>
+        <styleUrl>#icon-503-0BA9CC</styleUrl>
+        <Point>
+          <coordinates>
+            136.4197314,-13.8470904,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>BAKEWELL</name>
+        <description><![CDATA[Primary School<br>5 Hutchison Tce<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-112</styleUrl>
+        <Point>
+          <coordinates>
+            130.994029,-12.493617,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>BEES CREEK</name>
+        <description><![CDATA[Primary School<br>20 Sattler Cres<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            131.0534,-12.540983,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>BERRIMAH</name>
+        <description><![CDATA[Haileybury Rendall School<br>6057 Berrimah Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            130.92238,-12.442959,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>BERRY SPRINGS</name>
+        <description><![CDATA[Primary School<br>1150 Cox Peninsula Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            130.987693,-12.715519,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>CASUARINA</name>
+        <description><![CDATA[Library<br>17 Bradshaw Tce<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.8799,-12.3742,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>COOLALINGA</name>
+        <description><![CDATA[Coolalinga Central Shopping Centre<br>425 Stuart Hwy<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            131.038795,-12.52106,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DARWIN</name>
+        <description><![CDATA[BCC Cinema<br>cnr Mitchell St & Mott Ct<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.84005,-12.459662,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DURACK</name>
+        <description><![CDATA[Primary School <br>50 Woodlake Blvd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-112</styleUrl>
+        <Point>
+          <coordinates>
+            130.974,-12.4757,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>HOWARD SPRINGS</name>
+        <description><![CDATA[Whitewood Hall<br>Howard Park Reserve<br>310 Whitewood Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            131.047336,-12.495295,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>HUMPTY DOO</name>
+        <description><![CDATA[Taminmin College<br>70 Challoner Crct<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-009D57</styleUrl>
+        <Point>
+          <coordinates>
+            131.101514,-12.57986,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>JABIRU</name>
+        <description><![CDATA[Jabiru Community Hall<br>Leichhardt St<br>NB: Voting hours - 8:00am to 1:00pm]]></description>
+        <styleUrl>#icon-503-FAD199</styleUrl>
+        <Point>
+          <coordinates>
+            132.8319804,-12.667949,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>KARAMA</name>
+        <description><![CDATA[O'Loughlin Catholic College<br>70 Mueller Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.912,-12.3931,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>KATHERINE</name>
+        <description><![CDATA[Civic Centre<br>Stuart Hwy<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-102</styleUrl>
+        <Point>
+          <coordinates>
+            132.257098,-14.45979,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>KATHERINE EAST</name>
+        <description><![CDATA[MacFarlane Pre-School<br>Grevillea Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-102</styleUrl>
+        <Point>
+          <coordinates>
+            132.282,-14.4632,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>LEANYER</name>
+        <description><![CDATA[Primary School<br>114 Leanyer Dr<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.9,-12.3744,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>LUDMILLA</name>
+        <description><![CDATA[Primary School<br>41 Bagot Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.855,-12.4245,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MALAK</name>
+        <description><![CDATA[Sanderson Middle School<br>Matthews Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.899,-12.3887,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MATARANKA</name>
+        <description><![CDATA[Community Hall<br>NB: Voting hours - 8:00am to 12:00pm]]></description>
+        <styleUrl>#icon-102</styleUrl>
+        <Point>
+          <coordinates>
+            133.0663796,-14.923397,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MILLNER</name>
+        <description><![CDATA[Primary School<br>41 Sabine Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.859282,-12.391255,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MOIL</name>
+        <description><![CDATA[Primary School<br>Moil Cres<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.881212,-12.387869,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>NIGHTCLIFF</name>
+        <description><![CDATA[Middle School<br>90 Aralia St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.852,-12.3788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>NHULUNBUY</name>
+        <description><![CDATA[Regional Training Centre<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-0BA9CC</styleUrl>
+        <Point>
+          <coordinates>
+            136.781944,-12.1825,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>PARAP</name>
+        <description><![CDATA[Primary School<br>Urquhart St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.844622,-12.429732,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ROSEBERY</name>
+        <description><![CDATA[Palmerston College<br>185 Forrest Parade (7-9 campus)<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-112</styleUrl>
+        <Point>
+          <coordinates>
+            130.99093,-12.509162,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>STUART PARK</name>
+        <description><![CDATA[Primary School<br>Cnr Nudl & Ashley Sts<br>STUART PARK]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.845,-12.4407,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TENNANT CREEK</name>
+        <description><![CDATA[Civic Hall<br>Peko Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-A61B4A</styleUrl>
+        <Point>
+          <coordinates>
+            134.196088,-19.645556,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TINDAL</name>
+        <description><![CDATA[Community Hall<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-102</styleUrl>
+        <Point>
+          <coordinates>
+            132.394,-14.5024,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TIWI</name>
+        <description><![CDATA[Dripstone Middle School<br>10 Delamere St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            130.883,-12.3671,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>WAGAIT BEACH</name>
+        <description><![CDATA[Community Centre<br>142 Wagait Tower Rd<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-503-0BA9CC</styleUrl>
+        <Point>
+          <coordinates>
+            130.748051,-12.43345,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>WOODROFFE</name>
+        <description><![CDATA[Sacred Heart Primary School<br>34 Emery Ave<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-112</styleUrl>
+        <Point>
+          <coordinates>
+            130.979214,-12.495925,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ZUCCOLI</name>
+        <description><![CDATA[Primary School<br>cnr Zuccoli Pde and Peaflower St<br>NB: Voting hours - 8:00am to 6:00pm]]></description>
+        <styleUrl>#icon-112</styleUrl>
+        <Point>
+          <coordinates>
+            131.005383,-12.512417,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
