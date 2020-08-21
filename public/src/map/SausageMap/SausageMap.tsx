@@ -330,8 +330,8 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             </h3>
 
             <p>
-              The Northern Territory election on Saturday 22nd May 2020 will be
-              the first major Australian election since the beginning of the
+              The Northern Territory election on Saturday 22nd August 2020 will
+              be the first major Australian election since the beginning of the
               COVID-19 pandemic, and one of several that will be held over the
               coming year.
             </p>
