@@ -283,96 +283,184 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             onRequestClose={this.onCloseNT2020Dialog}
             autoScrollBodyContent={true}
             titleStyle={{
-              backgroundColor: "rgba(255, 255, 255, 1)",
+              // backgroundColor: "rgba(255, 255, 255, 1)",
+              textAlign: "left",
             }}
-            bodyStyle={{
-              backgroundColor: "rgba(255, 255, 255, 0.75)",
-            }}
-            paperProps={{
-              style: { backgroundColor: "rgba(255, 255, 255, 0)" },
-            }}
+            // bodyStyle={{
+            //   backgroundColor: "rgba(255, 255, 255, 0.75)",
+            // }}
+            // paperProps={{
+            //   style: { backgroundColor: "rgba(255, 255, 255, 0)" },
+            // }}
             contentStyle={{
-              width: "80%",
+              width: "60%",
+              minWidth: "300px",
               maxWidth: "none",
-              backgroundImage: "url(images/ntvotes_2020.png)",
-              backgroundSize: "50%",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center top 80px",
+              // backgroundImage: "url(images/ntvotes_2020.png)",
+              // backgroundSize: "50%",
+              // backgroundRepeat: "no-repeat",
+              // backgroundPosition: "center top 80px",
+              textAlign: "justify",
+              color: "rgb(0, 0, 0)",
             }}
           >
+            <img
+              src="images/media_release_demsausage_logo.png"
+              alt="The Democracy Sausage logo in the style of the Australian coat of arms. A kangaroo and an emu are standing on either side of a BBQ."
+              style={{
+                width: "50%",
+                minWidth: "150px",
+                maxWidth: "250px",
+                // textAlign: "center",
+                display: "block",
+                margin: "0 auto",
+              }}
+            />
+            <h3 style={{ marginTop: 10, marginBottom: 0, textAlign: "center" }}>
+              DEMOCRACY SAUSAGE
+            </h3>
+            <h3 style={{ marginTop: 10, marginBottom: 0, textAlign: "center" }}>
+              MEDIA STATEMENT: 18 August 2020
+            </h3>
+            <br />
+
+            <h3 style={{ marginTop: 10, marginBottom: 0, textAlign: "center" }}>
+              Supporting community fundraising during the Northern Territory
+              election
+            </h3>
+
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et
-              magna tortor. Nulla et nisi porttitor, iaculis dui convallis,
-              mattis ipsum. Nullam porta vestibulum erat at laoreet. Aliquam eu
-              libero tortor. Donec auctor tincidunt lectus sed laoreet. Donec
-              venenatis arcu eget dictum commodo. Donec eu ultricies ante, quis
-              gravida metus. Phasellus et quam ante. Sed dapibus tincidunt
-              ipsum, interdum vestibulum justo suscipit a. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos
-              himenaeos.
+              The Northern Territory election on Saturday 22nd May 2020 will be
+              the first major Australian election since the beginning of the
+              COVID-19 pandemic, and one of several that will be held over the
+              coming year.
             </p>
 
             <p>
-              Nunc et magna vitae ante euismod volutpat vitae non erat. Morbi
-              feugiat dolor sed dictum imperdiet. Maecenas condimentum justo ac
-              commodo egestas. Donec quis diam quam. Duis cursus, odio sed
-              elementum maximus, ligula tellus vulputate mauris, vel cursus
-              dolor tortor id libero. Duis eleifend molestie interdum. Mauris ac
-              commodo mauris. Suspendisse id bibendum justo, id hendrerit dolor.
-              Vivamus a nibh diam. In ac lectus vel dui accumsan pretium at in
-              sem.
+              For those who need to vote in person, your local electoral
+              commission’s priority will be to make the experience as fast and
+              safe as possible, minimising the time voters spend at a polling
+              place.
             </p>
 
             <p>
-              Vestibulum commodo malesuada vestibulum. Aenean congue dictum
-              consequat. In pellentesque suscipit ante, ut fringilla ex rhoncus
-              nec. Praesent velit dui, pharetra eu feugiat quis, egestas vel
-              lorem. Fusce vel tortor vitae sem feugiat pulvinar nec sed dui.
-              Nulla et libero sagittis, dapibus nisl sed, auctor justo. Donec at
-              lectus ut nibh accumsan imperdiet eu nec tellus. Morbi tempor
-              mauris enim, vitae eleifend ante vestibulum et. Cras accumsan nisl
-              ac ante placerat tempor.
+              Postal voting will reduce attendance at polling places, and in
+              many locations, fundraising will be limited or prohibited.
             </p>
 
-            <h2>List of charities</h2>
+            <p>
+              Election day sausage sizzles and bake sales have traditionally
+              provided a welcome boost in funding for local schools and
+              community groups - one that will be greatly missed this year.
+            </p>
 
-            <ul>
+            <p>
+              We encourage Northern Territorians who would normally buy a
+              Democracy Sausage or cupcake to consider making a small donation,
+              either to a local cause or one of the following registered
+              charities:
+            </p>
+
+            <ul style={{ textAlign: "left" }}>
               <li style={{ marginBottom: 10 }}>
-                <strong>Charity name</strong>: Charity description.{" "}
                 <strong>
-                  <a href="#">Donate</a>
+                  Katherine Isolated Children's Service:{" "}
+                  <a href="https://www.kics.org.au">Donate</a>
                 </strong>
-                .
+                <p>
+                  The Katherine Isolated Children’s Service provides play based
+                  learning opportunities for children and families who are
+                  socially and geographically isolated living on pastoral
+                  properties, in Indigenous communities, and in the small towns
+                  of Mataranka, Timber Creek and Elliott.
+                </p>
               </li>
               <li style={{ marginBottom: 10 }}>
-                <strong>Charity name</strong>: Charity description.{" "}
                 <strong>
-                  <a href="#">Donate</a>
+                  Corrugated Iron Youth Arts:{" "}
+                  <a href="https://www.corrugatediron.org.au">Donate</a>
                 </strong>
-                .
+                <p>
+                  Corrugated Iron empowers young people through dynamic creative
+                  arts and is the premier youth arts organisation in the Top End
+                  of the Northern Territory. For more than 30 years, we have
+                  provided innovative and challenging performing arts
+                  experiences that express the diversity of young people living
+                  in the Northern Territory.
+                </p>
               </li>
               <li style={{ marginBottom: 10 }}>
-                <strong>Charity name</strong>: Charity description.{" "}
                 <strong>
-                  <a href="#">Donate</a>
+                  Children’s Ground:{" "}
+                  <a href="https://childrensground.org.au">Donate</a>
                 </strong>
-                .
+                <p>
+                  Children’s Ground partners with whole communities. Every child
+                  born today should experience a lifetime of opportunity,
+                  entering adulthood strong in their identity and culture,
+                  connected to their local and global world, and economically
+                  independent. If all children can experience this basic right,
+                  then whole communities will enjoy wellbeing.
+                </p>
               </li>
               <li style={{ marginBottom: 10 }}>
-                <strong>Charity name</strong>: Charity description.{" "}
                 <strong>
-                  <a href="#">Donate</a>
+                  Watarrka Foundation:{" "}
+                  <a href="http://www.watarrkafoundation.org.au">Donate</a>
                 </strong>
-                .
+                <p>
+                  The Watarrka Foundation is committed to the creation of
+                  thriving, independent and self-reliant aboriginal communities
+                  living on their ancestral land. Focussed on young people, we
+                  deliver programs that support a sustainable environment,
+                  education, healthy lifestyles and independent livelihoods for
+                  Aboriginal communities in the Watarrka region.
+                </p>
               </li>
               <li style={{ marginBottom: 10 }}>
-                <strong>Charity name</strong>: Charity description.{" "}
                 <strong>
-                  <a href="#">Donate</a>
+                  Stars Foundation:{" "}
+                  <a href="https://starsfoundation.org.au/">Donate</a>
                 </strong>
-                .
+                <p>
+                  Stars supports Indigenous girls and young women to attend
+                  school, complete Year 12 and move into full-time work or
+                  further study. Our full-time Mentors provide a diverse range
+                  of activities to support our Stars to develop the self-esteem,
+                  confidence and life skills they need to successfully
+                  participate in school and transition into a positive and
+                  independent future.
+                </p>
               </li>
             </ul>
+
+            <p>
+              For individual schools and community groups accepting online
+              donations in lieu of a sizzle, we’re asking them to get in touch
+              via <a href="https://twitter.com/demsausage">Twitter</a>,{" "}
+              <a href="https://www.facebook.com/AusDemocracySausage/">
+                Facebook
+              </a>
+              ,{" "}
+              <a href="https://www.instagram.com/ausdemocracysausage/">
+                Instagram
+              </a>
+              , or <a href="mailto:ausdemocracysausage@gmail.com">email</a> so
+              we can help get the word out.
+            </p>
+
+            <p>
+              We’d also love to see some photographs and videos from hungry
+              voters who are celebrating election day by making their own
+              Democracy Sausage at home.
+            </p>
+
+            <p>
+              Finally, for Democracy Sausage enthusiasts voting in person on
+              Saturday, remember to be considerate of your fellow voters and
+              election staff, and to take care of yourselves and your
+              communities.
+            </p>
           </Dialog>
         )}
 
