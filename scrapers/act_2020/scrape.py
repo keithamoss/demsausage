@@ -17,6 +17,7 @@ for placemark in kml_soup.find_all("Placemark"):
 
     d = {
         "state": "ACT",
+        "ec_id": "",
     }
 
     for item in placemark.find("ExtendedData").find_all("Data"):

@@ -37,6 +37,7 @@ for item in r.json()["features"]:
         raise Exception("Unnknown 'DisabledAccessType' found.")
 
     polling_place = {
+        "ec_id": "",
         "name": props["VenueName"],
         "premises": props["BuildingName"],
         "address": props["BuildingAddress"],
