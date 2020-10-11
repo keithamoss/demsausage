@@ -17,6 +17,7 @@ import {
   ActionSearch,
   DeviceLocationSearching,
   MapsAddLocation,
+  MapsLocalHospital,
   MapsRestaurantMenu,
 } from "material-ui/svg-icons";
 import * as React from "react";
@@ -92,6 +93,16 @@ const PollingPlaceFilterToolbarSeparator = styled(ToolbarSeparator)`
 
 const PollingPlaceCardWrapper = styled.div`
   padding: 10px;
+`;
+
+const COVIDSafeToolbar = styled(Toolbar)`
+  background-color: white !important;
+`;
+
+const COVIDSafeFlatButton = styled(FlatButton)`
+  & span {
+    text-transform: none !important;
+  }
 `;
 
 interface IProps {
@@ -229,6 +240,24 @@ class SausageMap extends React.PureComponent<IProps, IState> {
               }
             />
           </SearchBarContainer>
+
+          <COVIDSafeToolbar>
+            <ToolbarGroup firstChild={true}>
+              <COVIDSafeFlatButton
+                label="COVID-19 and #democracysausage"
+                fullWidth={true}
+                icon={<MapsLocalHospital color="red" />}
+                containerElement={
+                  // eslint-disable-next-line
+                  <a
+                    href={
+                      "/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf"
+                    }
+                  />
+                }
+              />
+            </ToolbarGroup>
+          </COVIDSafeToolbar>
 
           <PollingPlaceFilterToolbar>
             <PollingPlaceFilterToolbarGroup>
