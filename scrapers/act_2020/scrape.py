@@ -15,18 +15,24 @@ for placemark in kml_soup.find_all("Placemark"):
     if polling_place_type == "Early Voting Centre":
         continue
 
-    d = {}
+    d = {
+        "state": "ACT",
+    }
+
     for item in placemark.find("ExtendedData").find_all("Data"):
         if item["name"] == "Coordinates":
             coords = item.find("value").text.replace("Ing", "lng")
             lat, lng = coords.replace("lat: ", "").replace("lng: ", "").split(", ")
             d["lat"] = lat
-            d["lng"] = lng
+            d["lon"] = lng
 
         elif item["name"] == "Name":
             name = item.find("value").text
             # Brandon is misnamed as Ainslie (08/10/2020)
             d["name"] = name if name != "Brandon" else placemark.find("name").text
+
+        elif item["name"] in ["Postcode", "Polling area"]:
+            continue
 
         else:
             d[item["name"].lower()] = item.find("value").text
