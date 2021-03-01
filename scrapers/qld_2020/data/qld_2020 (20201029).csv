@@ -1,0 +1,1181 @@
+ec_id,name,premises,address,lat,lon,state,wheelchair_access
+,Boonah,"Heritage Room, Boonah Cultural Centre","3 High Street, Boonah, QLD Australia 4310",-27.998542,152.681999,QLD,Full Access
+,Acacia Ridge,Acacia Ridge State School - Sports Hall,"Nyngam Street, ACACIA RIDGE, QLD Australia 4110",-27.5791894,153.01408589,QLD,Full Access
+,Agnes Water,Agnes Water Community Centre,"71 Springs Road, Agnes Water, QLD Australia 4677",-24.21136009,151.90994238,QLD,Assisted Access
+,Airlie Beach,PCYC Whitsunday,"2489 Shute Harbour Road, AIRLIE BEACH, QLD Australia 4802",-20.27749503,148.72713804,QLD,Full Access
+,Aitkenvale,Aitkenvale State School,"67-85 Wotton Street, AITKENVALE, QLD Australia 4814",-19.29609662,146.76270425,QLD,Assisted Access
+,Albany Creek North,Albany Creek State School,"696 Albany Creek Road, ALBANY CREEK, QLD Australia 4035",-27.34620641,152.97049999,QLD,Full Access
+,Albany Creek South,Albany Creek State High School,"2-14 Albany Forest Drive, ALBANY CREEK, QLD Australia 4035",-27.357459,152.969198,QLD,Assisted Access
+,Albany Hills,Albany Hills State School,"Cnr Keong & Old Northern Roads, ALBANY CREEK, QLD Australia 4035",-27.359800999999997,152.973842,QLD,Full Access
+,Alberton,St Peter's Lutheran Church Hall,"187 Alberton Road, ALBERTON, QLD Australia 4207",-27.70320459,153.25669169,QLD,Assisted Access
+,Alderley,Alderley Kindergarten & Preschool,"76 South Pine Road, ALDERLEY, QLD Australia 4051",-27.42287137,152.99956709,QLD,Assisted Access
+,Diwan,Alexandra Bay State School,"1630 Cape Tribulation Road, DIWAN, QLD Australia 4873",-16.21416464,145.4225117,QLD,Full Access
+,Alexandra Hills,Alexandra Hills State School,"12 Princeton Avenue, ALEXANDRA HILLS, QLD Australia 4161",-27.518457689999998,153.22097272,QLD,Assisted Access
+,Algester,Algester State School,"Endiandra Street (access via Ridgewood Road), ALGESTER, QLD Australia 4115",-27.61484037,153.03023815,QLD,Full Access
+,Allenstown,Allenstown State School Assembly Hall,"Caroline Street, ALLENSTOWN, QLD Australia 4700",-23.391609,150.503684,QLD,Full Access
+,Alligator Creek,Alligator Creek State School,"50 Grasstree Road, ALLIGATOR CREEK, QLD Australia 4740",-21.32880599,149.21081543,QLD,Full Access
+,Allora,Allora Senior Citizens Building,"18 Drayton Street, ALLORA, QLD Australia 4362",-28.03325466828005,151.9827604339673,QLD,Full Access
+,Aloomba,Aloomba State School,"Nielsen Street, ALOOMBA, QLD Australia 4871",-17.10993867,145.8316505,QLD,Full Access
+,Alpha,Alpha State School,"11 Milton Street, ALPHA, QLD Australia 4724",-23.650297,146.642369,QLD,Full Access
+,Alton Downs,Alton Downs Hall,"1569 Ridgelands Road, ALTON DOWNS, QLD Australia 4702",-23.30286254,150.35608507,QLD,Full Access
+,Ambrose,Ambrose State School,"39 Gentle Annie Road, AMBROSE, QLD Australia 4695",-23.78686552,150.92210636,QLD,Full Access
+,Amiens,Amiens State School - Community Discovery Centre,"1337 Amiens Road, AMIENS, QLD Australia 4352",-28.59466071,151.81227922,QLD,Assisted Access
+,Amity Point,Amity Point Community Hall,"18 Ballow St, Amity Point, QLD Australia 4183",-27.3956815,153.4409726,QLD,Full Access
+,Andergrove,Andergrove State School,"Fernleigh Avenue, ANDERGROVE, QLD Australia 4740",-21.08596662,149.18753922,QLD,Full Access
+,Annandale,Annandale State School,"Cnr Oleander Street & Yolanda Drive, ANNANDALE, QLD Australia 4814",-19.314451,146.777577,QLD,Full Access
+,Annerley,Junction Park State School Hall,"50 Waldheim Street, ANNERLEY, QLD Australia 4103",-27.50971782,153.03543627,QLD,Full Access
+,Annerley Junction,Annerley Church of Christ Hall,"459 Annerley Road, ANNERLEY, QLD Australia 4103",-27.50927533,153.0323571,QLD,Full Access
+,Annerley South,Our Lady's Catholic College,"15 Chester Road, ANNERLEY, QLD Australia 4103",-27.5155529,153.0314904,QLD,Full Access
+,Apple Tree Creek,Apple Tree Community Hall,"29394 Bruce Highway, APPLE TREE CREEK, QLD Australia 4660",-25.21668648,152.23748446,QLD,Full Access
+,Applethorpe,Applethorpe State School,"25576 New England Highway, APPLETHORPE, QLD Australia 4378",-28.61257408,151.95486546,QLD,Assisted Access
+,Aramac,Aramac State School,"69 Porter Street, ARAMAC, QLD Australia 4726",-22.97452474,145.24306118,QLD,Assisted Access
+,Arana,Hills District PCYC,"135a Olearia St W, Everton Hills, QLD Australia 4053",-27.3956326,152.9634829,QLD,Full Access
+,Aratula,Aratula State School,"41 Elizabeth Street, ARATULA, QLD Australia 4309",-27.9811976,152.54380228,QLD,Assisted Access
+,Arcadia,Magnetic Island Bowls Club,"18 Marine Parade, ARCADIA, QLD Australia 4819",-19.15102637,146.86360896,QLD,Full Access
+,Arundel,Arundel State School,"185 Napper Road, ARUNDEL, QLD Australia 4214",-27.94485788,153.36605608,QLD,No Access
+,Arundel East,Arundel Presbyterian Church,"132 Allied Drive, Arundel, QLD Australia 4214",-27.938692999999997,153.386011,QLD,Full Access
+,Ascot,Ascot State School,"Massey Street, ASCOT, QLD Australia 4007",-27.432955,153.056407,QLD,No Access
+,Ashgrove,St Finbarr's Hall,"Beth Eden Terrace, ASHGROVE, QLD Australia 4060",-27.445933,152.994129,QLD,Full Access
+,Ashgrove West,Ashgrove State School Hall,"31 Glory Street, ASHGROVE, QLD Australia 4060",-27.44800038,152.9762587,QLD,Full Access
+,Ashmore,Ashmore State School,"Currumburra Road, ASHMORE, QLD Australia 4214",-27.9888498,153.38077605,QLD,Assisted Access
+,Ashmore West,Trinity Lutheran College - Cotlew Street Campus,"251 Cotlew Street, ASHMORE, QLD Australia 4214",-27.98353003,153.3722198,QLD,Assisted Access
+,Aspley,Aspley Special School Hall,"751 Zillmere Road, Aspley, QLD Australia 4034",-27.35676975,153.02166581,QLD,Full Access
+,Aspley East,"Aspley East State School, Multi Purpose Activity Centre","31 Helena St, Aspley, QLD Australia 4034",-27.3620327,153.0241446,QLD,Full Access
+,Aspley West,Aspley State School Hall,"Horn Road, ASPLEY, QLD Australia 4034",-27.369124,153.014373,QLD,Assisted Access
+,Atherton North,Atherton State High School,"Maunds Road, ATHERTON, QLD Australia 4883",-17.26003238,145.48812658,QLD,Full Access
+,Auchenflower,Queensland Scout Centre,"32 Dixon Street, AUCHENFLOWER, QLD Australia 4066",-27.47741,152.994819,QLD,Full Access
+,Augathella,Augathella State School,"Cavanagh Street, AUGATHELLA, QLD Australia 4477",-25.79735557,146.58343077,QLD,Full Access
+,Avoca,Bundaberg Church of Christ,"76 Twyford Street, AVOCA, QLD Australia 4670",-24.8885913,152.3148363,QLD,Assisted Access
+,Avondale,Avondale State School,"371 Avondale Road, AVONDALE, QLD Australia 4670",-24.73615189,152.1607089,QLD,Full Access
+,Ayr,PCYC Burdekin,"164 MacMillan Street, AYR, QLD Australia 4807",-19.582476,147.401396,QLD,Full Access
+,Babinda,Babinda RSL Memorial Hall,"26 School St, Babinda, QLD Australia 4861",-17.3433938,145.9211668,QLD,Full Access
+,Baffle Creek,Wartburg State School,"585 Coast Road, BAFFLE CREEK, QLD Australia 4674",-24.5022928,151.9311339,QLD,Full Access
+,Bajool,Bajool State School,"Toonda Street, BAJOOL, QLD Australia 4699",-23.6525368275,150.64704678310002,QLD,Full Access
+,Mooroobool,Balaclava State School,"418 Mulgrave Road, WESTCOURT CAIRNS, QLD Australia 4870",-16.93807438,145.74461281,QLD,Full Access
+,Bald Hills,Bald Hills State School Hall,"2156 Gympie Road, BALD HILLS, QLD Australia 4036",-27.32000097,153.00654888,QLD,Full Access
+,Ballandean,Ballandean State School,"7 Bents Road, BALLANDEAN, QLD Australia 4382",-28.79912242,151.84118421,QLD,Assisted Access
+,Balmoral,Balmoral State High School,"259 Thynne Road, MORNINGSIDE, QLD Australia 4170",-27.455835,153.073392,QLD,No Access
+,Banana,Banana State School,"32 Bramston Street, BANANA, QLD Australia 4702",-24.470187549999192,150.13025691454163,QLD,Assisted Access
+,Banksia Beach,Banksia Beach State School,"133 Sunderland Drive, BANKSIA BEACH, QLD Australia 4507",-27.04613578,153.14853966,QLD,Assisted Access
+,Banyo,St Oswald's Anglican Church Hall,"9 Froude Street, BANYO, QLD Australia 4014",-27.37472083,153.07579815,QLD,Full Access
+,Banyo East,Earnshaw State College,"Cnr Earnshaw and Tufnell Roads, NUDGEE, QLD Australia 4014",-27.378269,153.081467,QLD,Full Access
+,Baralaba,Baralaba State School,"1 Power Street, BARALABA, QLD Australia 4702",-24.181313,149.808848,QLD,Full Access
+,Barcaldine,Barcaldine State School,"Gidyea Street, Barcaldine, QLD Australia 4725",-23.5588339,145.29482245,QLD,Assisted Access
+,Bardon,St Joseph's Church Hall,"41 The Drive, BARDON, QLD Australia 4065",-27.458586,152.980265,QLD,Full Access
+,Baree,Baree School of Arts,"18 Creek St, Baree, QLD Australia 4714",-23.6205946,150.3906646,QLD,Full Access
+,Soldiers Hill,Barkly Highway State School,"3-17 Bougainville Street, SOLDIERS HILL, QLD Australia 4825",-20.70807,139.489813,QLD,Assisted Access
+,Bauple,Bauple State School,"8 Forestry Road, BAUPLE, QLD Australia 4650",-25.8123965,152.6229018,QLD,Assisted Access
+,Bayview Heights,St Mary's Catholic College,"58-63 Anderson Road, WOREE, QLD Australia 4868",-16.96767176,145.74029446,QLD,Full Access
+,Beachmere,Beachmere State School,"James Road, Beachmere, QLD Australia 4510",-27.13064654,153.0483216,QLD,Full Access
+,Beaudesert,St Mary's Catholic Primary School,"1 Bromelton Street, BEAUDESERT, QLD Australia 4285",-27.990637999999997,152.99184233,QLD,Full Access
+,Beechmont,Beechmont State School,"1922 Beechmont Road, BEECHMONT, QLD Australia 4211",-28.124972,153.18577399999998,QLD,Full Access
+,Beenleigh,Beenleigh State School,"22 James Street, BEENLEIGH, QLD Australia 4207",-27.71900174475573,153.2012494615158,QLD,Full Access
+,Beenleigh Central,Beenleigh State High School,"40 Alamein Street, BEENLEIGH, QLD Australia 4207",-27.7152961,153.20447177,QLD,Assisted Access
+,Beerburrum,Beerburrum School of Arts Hall,"7 Anzac Avenue, BEERBURRUM, QLD Australia 4517",-26.959229,152.95707199999998,QLD,Full Access
+,Beerwah,Beerwah & District Community Hall,"25 Peachester Road, BEERWAH, QLD Australia 4519",-26.8576862,152.9552865,QLD,Full Access
+,Belgian Gardens,Belgian Gardens State School,"43 Potts Street, BELGIAN GARDENS, QLD Australia 4810",-19.2509304,146.79327875,QLD,Full Access
+,Bell,Bell State School,"90 Dennis Street, BELL, QLD Australia 4408",-26.93964861,151.4526701,QLD,Full Access
+,Bell Hilltop,Aldridge State High School,"68 Boys Avenue, MARYBOROUGH, QLD Australia 4650",-25.51556604,152.68846035,QLD,Full Access
+,Bellara,Bribie Island Volunteer Marine Rescue,"4 Marine Parade, BELLARA, QLD Australia 4507",-27.062991999999998,153.144283,QLD,Full Access
+,Belmont,Belmont State School Hall,"1275 Old Cleveland Road, CARINDALE, QLD Australia 4152",-27.503956,153.113823,QLD,Full Access
+,Benaraby,Benaraby State School,"17 O'Connor Road, BENARABY, QLD Australia 4680",-24.00394948,151.3239187,QLD,Full Access
+,Benowa,Benowa State High School,"Mediterranean Drive, BENOWA, QLD Australia 4217",-28.00503943,153.38845789,QLD,Assisted Access
+,Berrinba East,Berrinba East State School,"165 Bardon Road, BERRINBA, QLD Australia 4117",-27.652210999999998,153.097489,QLD,Assisted Access
+,Berserker,Berserker Street State School,"128-140 Berserker Street, BERSERKER, QLD Australia 4701",-23.366138,150.530124,QLD,Full Access
+,Bethania,Bethania Community Centre,"88-118 Station Road, BETHANIA, QLD Australia 4205",-27.68618349,153.15724611,QLD,Full Access
+,Biboohra,Biboohra State School,"2 Petersen Street, BIBOOHRA, QLD Australia 4880",-16.916204999999998,145.418715,QLD,Full Access
+,Nerang,Nerang Bicentennial Centre Auditorium,"833 Southport-Nerang Road, NERANG, QLD Australia 4211",-27.984088,153.339376,QLD,Full Access
+,Biddeston,Biddeston State School,"2425 Toowoomba-Cecil Plains Road, BIDDESTON, QLD Australia 4401",-27.555045,151.69752599999998,QLD,Full Access
+,Biggenden,Biggenden State School,"9 Frederick Street, BIGGENDEN, QLD Australia 4621",-25.51107815,152.0479247,QLD,Assisted Access
+,Biggera Waters,Biggera Waters State School Activities Centre,"Coombabah Road, BIGGERA WATERS, QLD Australia 4216",-27.927597,153.396775,QLD,Full Access
+,Birkdale,Birkdale State School,"74 Agnes Street, BIRKDALE, QLD Australia 4159",-27.491515999999997,153.216328,QLD,Assisted Access
+,Birkdale South,Birkdale South State School,"451 Old Cleveland Road, BIRKDALE, QLD Australia 4159",-27.506057,153.21262,QLD,Assisted Access
+,Blackall,Blackall Cultural Centre,"17 Hawthorn Street, Blackall, QLD Australia 4472",-24.426475999999997,145.468288,QLD,Full Access
+,Blackbutt,Blackbutt State School,"25 Crofton Street, BLACKBUTT, QLD Australia 4306",-26.89031563,152.10357785,QLD,Full Access
+,Blackwater,Blackwater State School,"43 Wey Street, BLACKWATER, QLD Australia 4717",-23.58419486,148.87768507,QLD,Assisted Access
+,Blenheim,Blenheim State School,"81 Blenheim Road, BLENHEIM, QLD Australia 4341",-27.65031342,152.33158708,QLD,Full Access
+,Bli Bli,Bli Bli State School,"12-38 School Road, BLI BLI, QLD Australia 4560",-26.613877,153.03216398,QLD,Full Access
+,Bloomsbury,Bloomsbury State School,"8545 Bruce Highway, BLOOMSBURY, QLD Australia 4799",-20.70267131,148.59528065,QLD,Assisted Access
+,Bluewater,Bluewater State School,"Buckby Street, BLUEWATER, QLD Australia 4818",-19.175134,146.555846,QLD,Full Access
+,Bluff,Bluff State School,"32 Main Street, BLUFF, QLD Australia 4702",-23.58210048,149.06894267,QLD,Assisted Access
+,Bollon,Bollon State School,"60 Main Street, BOLLON, QLD Australia 4488",-28.03169209,147.47594655,QLD,Assisted Access
+,Bonogin,St Benedict's Catholic Church,"2A Wallaby Drive, MUDGEERABA, QLD Australia 4213",-28.0977502,153.35612655,QLD,No Access
+,Boondall,Boondall State School,"Sandgate Road (access via Roscommon Road), Boondall, QLD Australia 4034",-27.34808377,153.05925429,QLD,Full Access
+,Durong,Durong Community Hall,"8940 Chinchilla Wondai Road, DURONG SOUTH, QLD Australia 4610",-26.395604,151.244911,QLD,Assisted Access
+,Booyal,Booyal Central State School,"31620 Bruce Highway, BOOYAL, QLD Australia 4671",-25.20959816,152.03286141,QLD,Full Access
+,Boreen Point,Lake Cootharaba Sailing Club,"24 Boreen Parade, BOREEN POINT, QLD Australia 4565",-26.2845822,152.99790412,QLD,Assisted Access
+,Boronia Heights,Boronia Heights State School,"194 Middle Road, BORONIA HEIGHTS, QLD Australia 4124",-27.6838036,153.01867783,QLD,Full Access
+,Bororen,Bororen State School,"1 Kent Street, BOROREN, QLD Australia 4678",-24.24432328,151.49142265,QLD,Assisted Access
+,Bouldercombe,Bouldercombe State School,"52599 Burnett Highway, BOULDERCOMBE, QLD Australia 4702",-23.56413464,150.4714644,QLD,Full Access
+,Boulia,Boulia State School,"Templeton Street, BOULIA, QLD Australia 4829",-22.908227999999998,139.911088,QLD,Assisted Access
+,Bowen,Bowen PCYC,"Cnr Queens Road & Hays Street, BOWEN, QLD Australia 4805",-20.00919788,148.25011765,QLD,Full Access
+,Bowenville,Bowenville State School,"2 Irvingdale Road, BOWENVILLE, QLD Australia 4404",-27.3043,151.49428,QLD,Assisted Access
+,Boyne Island,"Boyne Island Community Centre, Mt Larcom Room","Cnr Wyndham and Hayes Avenues, BOYNE ISLAND, QLD Australia 4680",-23.94584598,151.35373414,QLD,Full Access
+,Bracken Ridge East,Bracken Ridge State School,"Denham Street, BRACKEN RIDGE, QLD Australia 4017",-27.324475,153.042044,QLD,Full Access
+,Bracken Ridge,Bracken Ridge Uniting Church,"7 Pellinore Road, BRACKEN RIDGE, QLD Australia 4017",-27.31665515,153.03827405,QLD,Full Access
+,Bracken Ridge West,Norris Road State School Hall,"Pritchard Place, BRACKEN RIDGE, QLD Australia 4017",-27.317349999999998,153.025541,QLD,Full Access
+,Brandon,Brandon State School,"2-20 Drysdale Street, BRANDON, QLD Australia 4808",-19.55323892,147.34871864,QLD,Full Access
+,Branyan,Branyan Road State School,"430 Branyan Drive, BUNDABERG, QLD Australia 4670",-24.89263113,152.29396105,QLD,Assisted Access
+,Brassall North,Ipswich State High School Hall,"1 Hunter Street, BRASSALL, QLD Australia 4305",-27.589229999999997,152.745293,QLD,Assisted Access
+,Brassall,Brassall Congregational Church Hall,"3 Jellicoe Street, BRASSALL, QLD Australia 4305",-27.59478427,152.74000168,QLD,Full Access
+,Bray Park,Bray Park State School,"5 Hopetoun Street, BRAY PARK, QLD Australia 4500",-27.29228766,152.97540843,QLD,Full Access
+,Bray Park West,Bray Park State High School,"27-37 Lavarack Road, BRAY PARK, QLD Australia 4500",-27.300608,152.961843,QLD,Full Access
+,Bridgeman Downs,Church of the Resurrection Hall,"30 Ridley Road, BRIDGEMAN DOWNS, QLD Australia 4035",-27.352311999999998,153.003794,QLD,Full Access
+,Brigalow,Brigalow State School,"24409 Warrego Highway, BRIGALOW, QLD Australia 4412",-26.8365681,150.7790145,QLD,Assisted Access
+,Brighton,Brighton State School Sports Hall,"2 North Road, BRIGHTON, QLD Australia 4017",-27.294332999999998,153.052225,QLD,Full Access
+,Brighton South,Nashville State School Hall,"Douglas Street, NASHVILLE, QLD Australia 4017",-27.30724151,153.05085361,QLD,Full Access
+,Brinsmead,Brinsmead Community Hall,"85 Loridan Drive, BRINSMEAD, QLD Australia 4870",-16.897761,145.714471,QLD,Full Access
+,Brisbane CBD,"Brisbane City Hall, Sandgate Room.","64 Adelaide Street, BRISBANE, QLD Australia 4000",-27.468719296746347,153.02328071838534,QLD,No Access
+,Broadbeach,Broadbeach State School,"1-19 Alexandra Avenue, BROADBEACH, QLD Australia 4218",-28.035114999999998,153.434353,QLD,Assisted Access
+,Broadwater,Broadwater State School,"638 Texas Road, STANTHORPE, QLD Australia 4380",-28.6550355,151.8784056,QLD,Assisted Access
+,Brookfield,Brookfield State School,"18 Boscombe Road, BROOKFIELD, QLD Australia 4069",-27.49516727,152.91352987,QLD,Full Access
+,Brooklands,Brooklands Rural Fire Brigade,"Lord Street, Brooklands, QLD Australia 4615",-26.74308576,151.81834638,QLD,Full Access
+,Brookstead,Brookstead State School,"30 Ware Road, BROOKSTEAD, QLD Australia 4364",-27.7598678,151.44481659,QLD,Full Access
+,Brooweena,Brooweena State School,"Lahey Street, BROOWEENA, QLD Australia 4620",-25.59888348,152.26154923,QLD,Full Access
+,Browns Plains,Browns Plains State School,"1-29 Mayfair Drive, BROWNS PLAINS, QLD Australia 4118",-27.668314,153.053888,QLD,Full Access
+,Bucasia,Bucasia State School,"76 Kemp Street, BUCASIA, QLD Australia 4750",-21.031354,149.157732,QLD,Full Access
+,Buddina,Kawana Community Hall,"30 Nanyima Street, Buddina, QLD Australia 4575",-26.6997696,153.13242294,QLD,Full Access
+,Buderim,Buderim Mountain State School Hall,"8-42 Main Street, BUDERIM, QLD Australia 4556",-26.68455349,153.0535841,QLD,Full Access
+,Buderim North,Lakeshore Community Church of Christ Hall,"1 Lakeshore Avenue, BUDERIM, QLD Australia 4556",-26.66656369,153.06359679,QLD,Full Access
+,Buderim East,Gumnuts Childcare Centre,"58-60 Buderim Pines Drive, BUDERIM, QLD Australia 4556",-26.688862,153.085424,QLD,Assisted Access
+,Buderim South,Fusion Alcooringa Centre,"176 Ballinger Road, BUDERIM, QLD Australia 4556",-26.701392,153.06645,QLD,Full Access
+,Bulimba,St John the Baptist Anglican Church Hall,"171 Oxford Street, BULIMBA, QLD Australia 4171",-27.451689,153.059802,QLD,Full Access
+,Bullyard,Bullyard State School,"2359 Bucca Road, BULLYARD, QLD Australia 4671",-24.94996425,152.06083417,QLD,Full Access
+,Bundaberg,Christ Church Bundaberg Hall,"59 Woongarra Street, BUNDABERG CENTRAL, QLD Australia 4670",-24.8674607,152.3472358,QLD,Full Access
+,Bundaberg East,Bundaberg East State School,"33 Scotland Street, BUNDABERG EAST, QLD Australia 4670",-24.861659,152.373055,QLD,Full Access
+,Bundaberg North,Bundaberg North State School,"Mt Perry Road, BUNDABERG NORTH, QLD Australia 4670",-24.85201237,152.34030962,QLD,Full Access
+,Bundaberg South,Bundaberg South State School,"Walla Street, BUNDABERG, QLD Australia 4670",-24.870659,152.360856,QLD,Full Access
+,Bundaberg West,Bundaberg West State School,"Steffensen Street, BUNDABERG WEST, QLD Australia 4670",-24.875833333333002,152.332999999999,QLD,Full Access
+,Bundamba South,Bundamba State School,"221 Brisbane Road, BUNDAMBA, QLD Australia 4304",-27.612139,152.80503299999998,QLD,Full Access
+,Westbrook,Bunkers Hill State School,"315 Bunkers Hill School Road, WESTBROOK, QLD Australia 4350",-27.60627217,151.83375299,QLD,Full Access
+,Everton Hills,Hills Church,"79 Queens Road, EVERTON HILLS, QLD Australia 4053",-27.38534919,152.98154771,QLD,Full Access
+,Burleigh Heads,Burleigh Heads State School,"1750 Lower Gold Coast Highway, BURLEIGH HEADS, QLD Australia 4220",-28.08723948,153.44902217,QLD,Full Access
+,Burleigh North,Burleigh Heads RSL Hall,"8 Sixth Avenue, BURLEIGH HEADS, QLD Australia 4220",-28.076849,153.446204,QLD,Assisted Access
+,Burnett Heads,Burnett Heads State School,"52 Burnett Heads Road, BURNETT HEADS, QLD Australia 4670",-24.77182104,152.41497159,QLD,Full Access
+,Burnside,Burnside State School,"51 Blaxland Road, Burnside, QLD Australia 4560",-26.630449,152.948245,QLD,Full Access
+,Burpengary West,Burpengary State School,"35 Station Road, BURPENGARY, QLD Australia 4505",-27.15806121,152.95908988,QLD,Assisted Access
+,Burpengary East,The Artisans' Guild,"Cnr Old Bay & Maitland Roads, BURPENGARY EAST, QLD Australia 4505",-27.1577796,152.99001575,QLD,Full Access
+,Burpengary,Burpengary Community Complex,"111 Station Road, BURPENGARY, QLD Australia 4505",-27.1563105,152.9661901,QLD,Assisted Access
+,Burpengary South,Burpengary State Secondary College,"196 Pitt Road, BURPENGARY, QLD Australia 4505",-27.17060871,152.97736645,QLD,Full Access
+,Burrowes,Burrowes State School,"41-69 Third Avenue, MARSDEN, QLD Australia 4132",-27.676033,153.090721,QLD,Full Access
+,Burrum Heads,Burrum Heads Community Hall,"45 Howard Street, BURRUM HEADS, QLD Australia 4659",-25.1855779,152.6134619,QLD,Full Access
+,Buxton,Buxton Community Hall,"49 Powers Street, BUXTON, QLD Australia 4660",-25.19549797,152.53395975,QLD,Assisted Access
+,Caboolture,Caboolture Memorial Hall,"65 King Street, CABOOLTURE, QLD Australia 4510",-27.08441112,152.95014739,QLD,Full Access
+,Caboolture East,Caboolture State High School,"1-57 Lee Street, CABOOLTURE, QLD Australia 4510",-27.083358999999998,152.961409,QLD,Full Access
+,Caboolture West,Tullawong State High School,"22-70 Del Rosso Road, CABOOLTURE, QLD Australia 4510",-27.070249,152.929325,QLD,Full Access
+,Cairns City,Cairns State High School,"Cnr Sheridan & Upward Streets, Cairns North, QLD Australia 4870",-16.916422309180845,145.76805229695896,QLD,Full Access
+,Calamvale,Calamvale Community College,"11 Hamish Street, CALAMVALE, QLD Australia 4116",-27.627031,153.043004,QLD,Full Access
+,Calen,Calen District State College,"38 Mcintyre Street, CALEN, QLD Australia 4798",-20.89875379,148.77003729,QLD,Full Access
+,Calliope,Calliope State School,"Dawson Highway, CALLIOPE, QLD Australia 4680",-24.004638999999997,151.202633,QLD,Full Access
+,Caloundra,CCSA Hall,"1 Nutley Street, CALOUNDRA, QLD Australia 4551",-26.802833,153.129637,QLD,Full Access
+,Cambooya,Cambooya State School,"6 Harrow Street, CAMBOOYA, QLD Australia 4358",-27.70906529,151.8669802,QLD,Full Access
+,Camira,Camira State School Hall,"184-202 Old Logan Road, CAMIRA, QLD Australia 4300",-27.622889999999998,152.915123,QLD,Full Access
+,Burleigh Waters,Caningeraba State School,"Whistler Drive, BURLEIGH WATERS, QLD Australia 4220",-28.08548838,153.43077779,QLD,Full Access
+,Cannon Hill,St Oliver Plunkett Church,"21 Beauvardia Street, CANNON HILL, QLD Australia 4170",-27.469905999999998,153.084488,QLD,Full Access
+,Cannonvale Beach,Whitsunday Christian College,"26 Paluma Road, Cannonvale, QLD Australia 4802",-20.28896748,148.67481619,QLD,Full Access
+,Canungra,Canungra State School,"5-9 Christie Street, Canungra, QLD Australia 4275",-28.01802097,153.16590428,QLD,Assisted Access
+,Capalaba West,Capalaba State College Junior Campus,"150 Mt Cotton Road, CAPALABA, QLD Australia 4157",-27.53617794,153.19027483,QLD,Assisted Access
+,Capalaba,Capalaba State College Senior Campus,"59 School Road, CAPALABA, QLD Australia 4157",-27.535811,153.195632,QLD,Assisted Access
+,Capella,Capella State High School,"35-45 Gordon Street, CAPELLA, QLD Australia 4702",-23.08750918,148.02987099,QLD,Assisted Access
+,Carbrook,Carbrook State School,"Cnr Kruger & Beenleigh-Redland Bay Roads, CARBROOK, QLD Australia 4130",-27.67807931,153.2353574,QLD,Full Access
+,Cardwell,Cardwell State School,"43 Victoria Street, CARDWELL, QLD Australia 4816",-18.26866137,146.03056312,QLD,Full Access
+,Carindale,Carina State School,"1413 Creek Road (access via Cuthred Street), CARINA, QLD Australia 4152",-27.49491031,153.10189605,QLD,Full Access
+,Carina Central,Carina & Districts Senior Citizens Centre,"1 Edmond Street, CARINA, QLD Australia 4152",-27.493004,153.09170899999998,QLD,Full Access
+,Carmila,Carmila State School,"6A Carmila West Road, CARMILA, QLD Australia 4739",-21.91270984,149.40391302,QLD,Full Access
+,Carole Park,Carole Park State School,"260 Waterford Road, CAROLE PARK, QLD Australia 4300",-27.60732511,152.93376446,QLD,Full Access
+,Carrara,Emmanuel College,"17 Birmingham Road, CARRARA, QLD Australia 4211",-28.01690571,153.37041736,QLD,Full Access
+,Cawarral,Cawarral State School,"125 Annie Drive, CAWARRAL, QLD Australia 4702",-23.25327399,150.67551076,QLD,Full Access
+,Cecil Plains,Cecil Plains State School,"41-47 Taylor Street, CECIL PLAINS, QLD Australia 4407",-27.53183496,151.19298935,QLD,Full Access
+,Cedar Creek,Cedar Creek State School,"1368 Beaudesert-Beenleigh Road, CEDAR CREEK, QLD Australia 4207",-27.828110991237214,153.17837154973756,QLD,Full Access
+,Centenary Heights North,Centenary Heights State High School,"60 Ramsay Street, CENTENARY HEIGHTS, QLD Australia 4350",-27.57980754,151.96561575,QLD,Full Access
+,Mount Isa,Mount Isa Central State School,"49 Miles Street, MOUNT ISA, QLD Australia 4825",-20.722922999999998,139.491795,QLD,Assisted Access
+,Chanel,"Chanel College, Marian Centre","11 Paterson Street, GLADSTONE, QLD Australia 4680",-23.86652046086485,151.24297499650817,QLD,Full Access
+,Chapel Hill,Chapel Hill State School,"20 Ironbark Road, CHAPEL HILL, QLD Australia 4069",-27.49932612,152.94484735,QLD,Full Access
+,Chapel Hill South,Chapel Hill Uniting Church,"Cnr Moggill & Chapel Hill Roads, CHAPEL HILL, QLD Australia 4069",-27.507734,152.953247,QLD,Full Access
+,Charleville,Charleville Town Hall,"Wills Street, Charleville, QLD Australia 4470",-26.40321205,146.24089926,QLD,Full Access
+,Wellcamp,Wellcamp State School Community Hall,"609 Drayton-Wellcamp Road, WELLCAMP, QLD Australia 4350",-27.554035,151.850813,QLD,Full Access
+,Charters Towers,Charters Towers Regional Council Chambers,"12-14 Mosman Street, CHARTERS TOWERS, QLD Australia 4820",-20.072551999999998,146.257885,QLD,Assisted Access
+,Charters Towers Central,Charters Towers Central State School,"39-47 High Street, CHARTERS TOWERS, QLD Australia 4820",-20.079750999999998,146.263856,QLD,Full Access
+,Charters Towers East,Goldfields Cricket Club,"12 York Street, CHARTERS TOWERS, QLD Australia 4820",-20.08011713,146.2703848,QLD,Assisted Access
+,Charters Towers North,Richmond Hill State School,"36-42 Baker Street, CHARTERS TOWERS, QLD Australia 4820",-20.061888,146.264241,QLD,Full Access
+,Chatswood Hills,Chatswood Hills State School,"21-35 Raleigh Street, SPRINGWOOD, QLD Australia 4127",-27.628303,153.138044,QLD,Assisted Access
+,Chatsworth,Chatsworth State School,"15 Rammutt Road, CHATSWORTH, QLD Australia 4570",-26.14261944,152.61505365,QLD,Assisted Access
+,Chelmer,Milpera State High School,"2 Parker Street, CHELMER, QLD Australia 4068",-27.51350978,152.97728062,QLD,Full Access
+,Chelona,Chelona State School,"Dunrock Road, CHELONA, QLD Australia 4740",-21.26054109,149.14577723,QLD,Full Access
+,Cherbourg,Cherbourg Town Hall,"22 Barambah Avenue, CHERBOURG, QLD Australia 4605",-26.2907801,151.9560354,QLD,Assisted Access
+,Chermside,Wheller on the Park - UHL Memorial Hall,"930 Gympie Road, Chermside, QLD Australia 4032",-27.3820867,153.0278532,QLD,Full Access
+,Chermside East,Centrepoint Church Hall,"Cnr Pfingst & Hamilton Roads, CHERMSIDE, QLD Australia 4032",-27.388157,153.043155,QLD,Full Access
+,Chermside West,Craigslea State High School Auditorium,"685 Hamilton Road, WEST CHERMSIDE, QLD Australia 4035",-27.38273547,153.01515877,QLD,Full Access
+,Bellevue Park,Bellevue Park State School,"20-24 Sapium Road, ASHMORE, QLD Australia 4214",-27.99523271,153.39637041,QLD,Full Access
+,Chillagoe,Chillagoe State School,"9 Cathedral Street, CHILLAGOE, QLD Australia 4871",-17.155497999999998,144.52092199999998,QLD,Assisted Access
+,Chinchilla,Our Lady Help of Christians Church Hall,"74 Middle Street, CHINCHILLA, QLD Australia 4413",-26.7438,150.627,QLD,Assisted Access
+,Churchill,Churchill State School Hall,"Brisbane Street (off Warwick Road), CHURCHILL, QLD Australia 4305",-27.642875,152.75138099999998,QLD,Assisted Access
+,Clare,Clare State School,"Larkin Street, CLAREDALE, QLD Australia 4807",-19.78346314,147.22640991,QLD,Full Access
+,Clayfield East,Bar-Jai Community Centre,"178 Alexandra Road, CLAYFIELD, QLD Australia 4011",-27.418962,153.058262,QLD,Full Access
+,Clayfield West,Clayfield Uniting Church Hall,"170 Bonney Avenue, CLAYFIELD, QLD Australia 4011",-27.418286,153.047417,QLD,Full Access
+,Clermont,Clermont State School,"Francis St, Clermont, QLD Australia 4721",-22.83622226554409,147.6329839767212,QLD,Full Access
+,Cleveland Central,Cleveland State School,"85-103 Queen Street, CLEVELAND, QLD Australia 4163",-27.529085,153.270007,QLD,Full Access
+,Cleveland,Cleveland District State High School,"Russell Street, CLEVELAND, QLD Australia 4163",-27.530780999999998,153.260893,QLD,Assisted Access
+,Clifton,Clifton State School,"1 Tooth Street, CLIFTON, QLD Australia 4361",-27.93091507,151.90465987,QLD,Full Access
+,Clifton Beach,"Clifton Beach Tennis Club, Edward Mann Park","13 Clifton Beach Road, CLIFTON BEACH, QLD Australia 4879",-16.768818282868082,145.6757587387619,QLD,Full Access
+,Clifton Hill,St George Ethiopian Orthodox Church,"15 Eric Crescent, ANNERLEY, QLD Australia 4103",-27.52345771,153.02939057,QLD,Assisted Access
+,Clinton,Clinton State School,"224 Harvey Road, CLINTON, QLD Australia 4680",-23.879669,151.22187,QLD,Assisted Access
+,Clontarf,Clontarf Beach State School Hall,"91 Elizabeth Avenue, CLONTARF, QLD Australia 4019",-27.25429814,153.08086216,QLD,Full Access
+,Closeburn,Cedar Creek Public Hall,"2 Andrew Road, CLOSEBURN, QLD Australia 4520",-27.32571294,152.86490142,QLD,No Access
+,Cloyna,Cloyna State School,"8 William Webber Road, CLOYNA, QLD Australia 4605",-26.10775865,151.84609652,QLD,Full Access
+,Forest Lake East,Forest Lake State High School,"High Street, FOREST LAKE, QLD Australia 4078",-27.623893,152.972019,QLD,Full Access
+,Collingwood Park,Collingwood Park State School Hall,"12-16 Burrel Street, COLLINGWOOD PARK, QLD Australia 4301",-27.61519211,152.86330283,QLD,Full Access
+,Collinsville,Collinsville State School Parade Room,"Hamilton Street, COLLINSVILLE, QLD Australia 4804",-20.547643,147.84483,QLD,Assisted Access
+,Condamine,Condamine State School,"Kennedy Street, CONDAMINE, QLD Australia 4416",-26.92514059,150.13485789,QLD,Assisted Access
+,Condon,Thuringowa State High School,"Vickers Road, CONDON, QLD Australia 4815",-19.336659,146.719098,QLD,Full Access
+,Coningsby,Coningsby State School,"1312 Bruce Highway, CONINGSBY, QLD Australia 4740",-21.09226306,149.06888098,QLD,Full Access
+,Conondale,Conondale State School,"1700 Maleny-Kenilworth Road, CONONDALE, QLD Australia 4552",-26.72906999,152.71868885,QLD,Assisted Access
+,Coochiemudlo Island,Coochiemudlo Island Community Hall,"346 Victoria Parade S, Coochiemudlo Island, QLD Australia 4184",-27.5742379,153.3233318,QLD,Full Access
+,Taranganba,Taranganba State School Hall,"61-81 Taranganba Rd, Yeppoon, QLD Australia 4703",-23.154878,150.7545402,QLD,Full Access
+,Coolabunia,Coolabunia State School,"Cnr D'Aguilar Highway and Mary Street, COOLABUNIA, QLD Australia 4610",-26.58977439,151.90280914,QLD,Full Access
+,Coolangatta,Coolangatta Senior Citizens Centre,"2 Gerrard Street, COOLANGATTA, QLD Australia 4225",-28.169646,153.540108,QLD,Full Access
+,Kirra,Coolangatta State School,"Stapylton Street, KIRRA, QLD Australia 4225",-28.17153524,153.52912903,QLD,Full Access
+,Coolnwynpin,Coolnwynpin State School,"Callaghan Way, CAPALABA, QLD Australia 4157",-27.547222222222,153.204166666666,QLD,Assisted Access
+,Coolum Beach,Coolum State School,"School Road, COOLUM BEACH, QLD Australia 4573",-26.53486384,153.07818532,QLD,Assisted Access
+,Coombabah,Coombabah State School Activities Centre,"164-172 Oxley Drive, COOMBABAH, QLD Australia 4216",-27.894295999999997,153.387692,QLD,Full Access
+,Coombabah South,Coombabah State High School,"550 Pine Ridge Road, COOMBABAH, QLD Australia 4216",-27.923665999999997,153.378244,QLD,Full Access
+,Coomera,Coomera State School,"Beattie Road, COOMERA, QLD Australia 4209",-27.867715999999998,153.31643400000002,QLD,Full Access
+,Coominya,Coominya State School,"7 Cornhill Street, COOMINYA, QLD Australia 4311",-27.39166879,152.50049114,QLD,Full Access
+,Coopers Plains,Coopers Plains State School,"61 Orange Grove Road, COOPERS PLAINS, QLD Australia 4108",-27.567722999999997,153.03960999999998,QLD,Full Access
+,Cooran,Cooran State School,"31 James Street, COORAN, QLD Australia 4569",-26.34063611,152.82473534,QLD,Full Access
+,Cooroy,Noosa District State High School,"2 Tulip Street, COOROY, QLD Australia 4563",-26.42479577,152.91016638,QLD,Full Access
+,Coorparoo,Coorparoo State School,"327 Old Cleveland Road, COORPAROO, QLD Australia 4151",-27.49431549,153.06074023,QLD,Assisted Access
+,Coorparoo Central,Coorparoo Uniting Church Hall,"260 Cavendish Rd, Coorparoo, QLD Australia 4151",-27.4993187,153.0625236,QLD,Full Access
+,Cooyar,Cooyar State School,"16 Gracey Street, COOYAR, QLD Australia 4402",-26.9853106,151.8321117,QLD,No Access
+,Cordalba,Cordalba State School,"1A Cemetery Road, CORDALBA, QLD Australia 4660",-25.15917212,152.21210003,QLD,Full Access
+,Corinda,St Joseph's Catholic Primary School,"28 Clewley Street, CORINDA, QLD Australia 4075",-27.53778261995751,152.9834500271225,QLD,Full Access
+,Corinda South,Corinda State School,"330 Cliveden Avenue, CORINDA, QLD Australia 4075",-27.54921537,152.9822427,QLD,Assisted Access
+,Cornubia,Chisholm Catholic College,"204 California Creek Road, CORNUBIA, QLD Australia 4130",-27.666271,153.204117,QLD,Full Access
+,Cranbrook,Cranbrook State School,"20 Alice Street, CRANBROOK, QLD Australia 4814",-19.308421,146.753884,QLD,Assisted Access
+,West Rockhampton,Crescent Lagoon State School,"99-109 North Street Ext, WEST ROCKHAMPTON, QLD Australia 4700",-23.3835088,150.4881425,QLD,Full Access
+,Crestmead,Crestmead State School,"27-61 Augusta Street, CRESTMEAD, QLD Australia 4132",-27.688105,153.090355,QLD,Full Access
+,Crows Nest,Crows Nest State School,"1 Littleton Street, Crows Nest, QLD Australia 4355",-27.2652918,152.0510216,QLD,Full Access
+,Croydon,Croydon State School,"49 Brown Street, CROYDON, QLD Australia 4871",-18.20363952,142.24927067,QLD,Full Access
+,Cungulla,Cungulla Community Hall,"15A Frank Randell Drive, CUNGULLA, QLD Australia 4816",-19.39597551,147.1073252,QLD,Assisted Access
+,Cunnamulla,Paroo Shire Hall,"5 Stockyard Street, CUNNAMULLA, QLD Australia 4490",-28.0689565,145.6822126,QLD,Full Access
+,Currajong,Currajong State School,"140 Palmerston Street, CURRAJONG, QLD Australia 4812",-19.2805219,146.77381396,QLD,Full Access
+,Currimundi,Currimundi State School,"17 Buderim Street, CALOUNDRA, QLD Australia 4551",-26.77682098,153.13548803,QLD,Full Access
+,Currimundi West,Talara Primary College - Performance Centre,"24 Talara Street, CURRIMUNDI, QLD Australia 4551",-26.772416999999997,153.11692399999998,QLD,Full Access
+,Currumbin,Currumbin State School,"6 Philip Street, CURRUMBIN, QLD Australia 4223",-28.13847722,153.47778618,QLD,Assisted Access
+,Currumbin Valley,Currumbin Valley State School,"1223 Currumbin Creek Road, CURRUMBIN VALLEY, QLD Australia 4223",-28.20663003,153.3944875,QLD,Assisted Access
+,Currumbin Waters,Elanora Community Centre,"26 Galleon Way, CURRUMBIN WATERS, QLD Australia 4223",-28.1427818,153.46044838,QLD,Full Access
+,Cutheringa,St Peter's Anglican Church Hall,"Cnr Ralston & Leigh Streets, WEST END, QLD Australia 4810",-19.262625999999997,146.792403,QLD,Full Access
+,Daintree,Daintree State School,"3-7 Osborne Street, DAINTREE, QLD Australia 4873",-16.2497949028,145.3207441328,QLD,Full Access
+,Dakabin,Dakabin State High School,"255-267 Marsden Road, DAKABIN, QLD Australia 4503",-27.23022941,152.97972679,QLD,Full Access
+,Dalby,"Dalby State School, Kavney Hall","Jimbour Street, DALBY, QLD Australia 4405",-27.18563139,151.26401424,QLD,Full Access
+,Dalby North,Our Lady of the Southern Cross College,"2 Nicholson Street, DALBY, QLD Australia 4405",-27.170420999999997,151.268786,QLD,Full Access
+,Dalby South,Dalby South State School,"Cnr Bunya & Hogan Streets, DALBY, QLD Australia 4405",-27.195731,151.270369,QLD,Full Access
+,Dalby West,Church of Christ Hall,"Cnr Nicholson & Moreton Streets, DALBY, QLD Australia 4405",-27.1848345,151.25142395,QLD,Full Access
+,Darling Heights,Darling Heights State School,"45 Wuth Street, TOOWOOMBA, QLD Australia 4350",-27.59737052,151.93278015,QLD,Full Access
+,Darra,"Darra State School, Community Hall","Scotts Road, DARRA, QLD Australia 4076",-27.570833333333002,152.953611111111,QLD,Full Access
+,Rockhampton Range,St Peter's Catholic Primary School,"170 Upper Dawson Road, The Range, QLD Australia 4700",-23.39860481,150.50093651,QLD,Assisted Access
+,Dayboro,Dayboro State School,"58 Mckenzie Street, DAYBORO, QLD Australia 4521",-27.19414399,152.82026947,QLD,Assisted Access
+,Deagon,Sandgate District State High School Hall,"41 Braun Street, DEAGON, QLD Australia 4017",-27.330163,153.05516699999998,QLD,Full Access
+,Deception Bay,Deception Bay State School,"King Street, DECEPTION BAY, QLD Australia 4508",-27.19082778,153.02836597,QLD,Assisted Access
+,Deception Bay West,Deception Bay North State School,"Old Bay Road, DECEPTION BAY, QLD Australia 4508",-27.181925999999997,153.015453,QLD,Assisted Access
+,Deception Bay South,Deception Bay State High School,"Government Street, DECEPTION BAY, QLD Australia 4508",-27.200946,153.030124,QLD,Assisted Access
+,Deeragun,"St. Anthony's Catholic College, Assisi Campus","Joanne Street, DEERAGUN, QLD Australia 4818",-19.243989,146.654292,QLD,Full Access
+,Diddillibah,Diddillibah Community Hall,"658 Diddillibah Road, DIDDILLIBAH, QLD Australia 4558",-26.64723815,153.02428901,QLD,Full Access
+,Dimbulah,Dimbulah State School,"48-50 Kennedy Street, Dimbulah, QLD Australia 4872",-17.14896642,145.11337638,QLD,Full Access
+,Dingo Beach,Dingo Beach Community Centre,"Dingo Beach Road, DINGO BEACH, QLD Australia 4800",-20.09339762,148.49656463,QLD,Full Access
+,Donnybrook,Donnybrook Community Hall,"Cnr Alice & Edith Streets, DONNYBROOK, QLD Australia 4510",-27.004036,153.068957,QLD,Assisted Access
+,Doomadgee,Doomadgee PCYC,"515 Goodeedawa Road, DOOMADGEE, QLD Australia 4830",-17.939536,138.8299551,QLD,Full Access
+,Dorrington,Oakleigh State School,"Buxton Street, ASHGROVE, QLD Australia 4060",-27.435917,152.985657,QLD,Full Access
+,Drayton,Drayton State School,"55 Brisbane St, Drayton, QLD Australia 4350",-27.6023748,151.9114772,QLD,Full Access
+,Drillham,Drillham State School,"13 Jardine Street, DRILLHAM, QLD Australia 4424",-26.64455792,149.98147845,QLD,Assisted Access
+,Duaringa,Duaringa State School,"1 Charlotte Street, DUARINGA, QLD Australia 4702",-23.71616171,149.66825008,QLD,Assisted Access
+,Dulacca,Dulacca State School,"North Road, DULACCA, QLD Australia 4425",-26.64232834,149.7563982,QLD,Full Access
+,Yarrilee,Yarrilee State School,"15 Scrub Hill Road, DUNDOWRAN, QLD Australia 4655",-25.28866537,152.80470997,QLD,Full Access
+,Bakers Creek,Dundula State School,"1 Main Street, BAKERS CREEK, QLD Australia 4740",-21.20168232,149.1489476,QLD,Full Access
+,Dunwich,Dunwich State School,"37 Bingle Road, DUNWICH, QLD Australia 4183",-27.496288,153.404401,QLD,Assisted Access
+,Durack,Durack State School,"69 Inala Avenue, INALA, QLD Australia 4077",-27.59705199,152.98186183,QLD,Full Access
+,Dutton Park,Dutton Park State School Hall,"112 Annerley Road, DUTTON PARK, QLD Australia 4102",-27.49393005,153.02881122,QLD,Full Access
+,Dysart,Dysart State School,"4 Garnham Dr, Dysart, QLD Australia 4745",-22.5868758,148.3466092,QLD,Assisted Access
+,Eagleby,Eagleby State School,"Cnr Herses & Fryar Roads, EAGLEBY, QLD Australia 4207",-27.694087,153.213706,QLD,Full Access
+,Eagleby South,Eagleby South State School,"Cnr River Hills & Fryar Roads, EAGLEBY, QLD Australia 4207",-27.703457,153.214103,QLD,Assisted Access
+,Earlville,Our Lady Help of Christians School,"18 Balaclava Road, EARLVILLE, QLD Australia 4870",-16.94275957,145.73736548,QLD,Full Access
+,Ayr East,East Ayr State School,"43 Ross Street, AYR, QLD Australia 4807",-19.563532,147.416064,QLD,Assisted Access
+,East Ipswich,Ipswich East State School,"18 Jacaranda Street, EAST IPSWICH, QLD Australia 4305",-27.60673565,152.77682304,QLD,Assisted Access
+,East Palmerston,East Palmerston and Nerada Progress Association Hall,"Palmerston Highway, EAST PALMERSTON, QLD Australia 4860",-17.6037276087,145.84717044730002,QLD,Full Access
+,Eatons Hill,Eatons Hill State School,"Apex Grove, EATONS HILL, QLD Australia 4037",-27.33654271,152.95960486,QLD,Full Access
+,Edens Landing,Edens Landing State School,"Jamie Nicolson Avenue, EDENS LANDING, QLD Australia 4207",-27.705783,153.169899,QLD,Full Access
+,Edge Hill,Edge Hill State School,"254 Pease Street, EDGE HILL, QLD Australia 4870",-16.906409,145.742807,QLD,Assisted Access
+,Bentley Park,St Therese's School,"135 Robert Road, BENTLEY PARK, QLD Australia 4868",-17.00698574,145.73199034,QLD,Full Access
+,Eidsvold,Eidsvold Community Hall,"54 Moreton Street, EIDSVOLD, QLD Australia 4627",-25.37001882,151.12241507,QLD,Assisted Access
+,Eight Mile Plains,Eight Mile Plains State School,"480 Underwood Road, EIGHT MILE PLAINS, QLD Australia 4113",-27.593044,153.108891,QLD,Assisted Access
+,Ekibin,St Luke's Anglican Church Hall,"193 Ekibin Rd E, Ekibin, QLD Australia 4121",-27.5159854,153.0382599,QLD,Full Access
+,El Arish,El Arish State School,"28 Chauvel Street, EL ARISH, QLD Australia 4855",-17.80808524,146.0031563,QLD,Assisted Access
+,Elanora,Elanora State School,"K P McGrath Drive, ELANORA, QLD Australia 4221",-28.129641,153.465347,QLD,Full Access
+,Elanora West,Elanora State High School,"Cnr Avocado Street and Nineteenth Avenue, ELANORA, QLD Australia 4221",-28.12915793,153.45013261,QLD,Full Access
+,Elimbah,Elimbah State School,"10-20 School Road, ELIMBAH, QLD Australia 4516",-27.012826999999998,152.942193,QLD,Full Access
+,Alloway,Alloway State School,"4334 Goodwood Road, ALLOWAY, QLD Australia 4670",-24.95207512,152.37865448,QLD,Full Access
+,Elliott Heads,Elliott Heads State School,"143 Breusch Road, ELLIOTT HEADS, QLD Australia 4670",-24.90759334,152.47560024,QLD,Full Access
+,Emerald North,Emerald North State School,"Campbell Street, EMERALD, QLD Australia 4720",-23.51219,148.164694,QLD,Full Access
+,Emerald South,Denison State School,"16 Gray Street, EMERALD, QLD Australia 4720",-23.53597,148.158517,QLD,Full Access
+,Mount Pleasant,Northview State School,"54 Pioneer Street, Mount Pleasant, QLD Australia 4740",-21.109893911649532,149.15108214945985,QLD,Full Access
+,Emmaus,Emmaus College Hall,"362 Yaamba Road, NORMAN GARDENS, QLD Australia 4701",-23.347510999999997,150.52373699999998,QLD,Full Access
+,Emu Creek,Emu Creek State School,"14534 New England Highway, GREENMOUNT EAST, QLD Australia 4359",-27.78371419,151.94476962,QLD,Assisted Access
+,Emu Park,Emu Park State School - The Hall,"26 Fountain Street, EMU PARK, QLD Australia 4710",-23.258157999999998,150.820586,QLD,Full Access
+,Enoggera,Enoggera State School,"235 South Pine Road, ENOGGERA, QLD Australia 4051",-27.417346,152.99381499999998,QLD,Full Access
+,Enoggera South,St John's Anglican Church Hall,"187 Wardell Street, ENOGGERA, QLD Australia 4051",-27.429502,152.989759,QLD,Full Access
+,Red Hill,Ithaca Community Hall,"80 Enoggera Terrace, RED HILL, QLD Australia 4059",-27.455783999999998,153.002627,QLD,Assisted Access
+,Esk,Esk State School,"49 East Street, ESK, QLD Australia 4312",-27.24762867,152.42616713,QLD,Assisted Access
+,Eton,Eton State School,"10 Prospect Street, ETON, QLD Australia 4741",-21.26455549,148.97624016,QLD,Assisted Access
+,Eumundi,Eumundi State School,"22 Caplick Way, EUMUNDI, QLD Australia 4562",-26.47377353,152.95206517,QLD,Full Access
+,Eungella,Eungella State School,"36 Eungella Dam Road, EUNGELLA, QLD Australia 4757",-21.13452939,148.49160254,QLD,Full Access
+,Evandale,Gold Coast City Council Chambers,"135 Bundall Road, Bundall, QLD Australia 4217",-28.002152,153.416529,QLD,Full Access
+,Everton Park North,Everton Park State School,"15 Deakin Street, EVERTON PARK, QLD Australia 4053",-27.39827007,152.98582613,QLD,Full Access
+,Fairfield,Christian Family Church Hall,"Cnr Cross & Sunbeam Streets, FAIRFIELD, QLD Australia 4103",-27.512126,153.02345,QLD,Full Access
+,Fairview Heights,Fairview Heights State School,"75 McDougall Street, TOOWOOMBA, QLD Australia 4350",-27.53469383,151.91138685,QLD,Full Access
+,Farleigh,Farleigh State School,"1 Chidlow Street, FARLEIGH, QLD Australia 4741",-21.10644659,149.10184801,QLD,No Access
+,Farnborough,Farnborough State School Hall,"8 Hinz Avenue, FARNBOROUGH, QLD Australia 4703",-23.07663251,150.73774338,QLD,Full Access
+,Federal,Federal State School,"40 Middle Creek Road, FEDERAL, QLD Australia 4568",-26.39303255,152.7940321,QLD,Full Access
+,Fernvale,Fernvale State School,"1605 Brisbane Valley Highway, FERNVALE, QLD Australia 4306",-27.44758145,152.64434338,QLD,Assisted Access
+,Ferny Grove,Ferny Grove State School Hall,"Finvoy Street, FERNY GROVE, QLD Australia 4055",-27.403813,152.92981,QLD,Full Access
+,Ferny Grove West,St Andrew's Primary School,"89 Hogarth Road, FERNY GROVE, QLD Australia 4055",-27.40894274,152.92596996,QLD,Assisted Access
+,Ferny Hills,Ferny Hills State School,"Illuta Avenue, FERNY HILLS, QLD Australia 4055",-27.401391999999998,152.944254,QLD,Full Access
+,Fig Tree Pocket,Fig Tree Pocket State School,"72 Cubberla Street, FIG TREE POCKET, QLD Australia 4069",-27.52648,152.965778,QLD,Full Access
+,Finch Hatton,Finch Hatton State School,"86 Mackay Eungella Road, FINCH HATTON, QLD Australia 4756",-21.13988813,148.63889337,QLD,Assisted Access
+,Mount Pleasant East,Fitzgerald State School,"54 Norris Road, NORTH MACKAY, QLD Australia 4740",-21.115018,149.16861,QLD,Full Access
+,Flagstone,Flagstone State Community College,"Cnr Homestead & Poinciana Drives, FLAGSTONE, QLD Australia 4280",-27.807816,152.957413,QLD,Full Access
+,Flagstone Creek,Flagstone Creek State School,"56 Flagstone School Road, FLAGSTONE CREEK, QLD Australia 4344",-27.61516835,152.11476803,QLD,Assisted Access
+,Flinders View,Cityhope Church,"7 Rex Hills Dr, Ripley, QLD Australia 4306",-27.6572189,152.7794545,QLD,Full Access
+,Forest Glen,Sunshine Coast Grammar School,"372 Mons Road, FOREST GLEN, QLD Australia 4556",-26.684372,153.008058,QLD,Full Access
+,Forest Hill,Forest Hill State School,"15 Church Street, FOREST HILL, QLD Australia 4342",-27.5906949,152.3542696,QLD,Full Access
+,Forest Lake,Forest Lake State School,"8 Kauri Place, FOREST LAKE, QLD Australia 4078",-27.613343999999998,152.958548,QLD,Full Access
+,Forrest Beach,Forrest Beach State School,"40 Pandanus Street, ALLINGHAM, QLD Australia 4850",-18.7118418,146.29438519,QLD,Assisted Access
+,Fortitude Valley,Trinity Church Hall,"9 Church Street, Fortitude Valley, QLD Australia 4006",-27.454158999999997,153.038127,QLD,Assisted Access
+,Frawley,Australian Trade College North Brisbane,"294 Scarborough Road, SCARBOROUGH, QLD Australia 4020",-27.205505,153.110146,QLD,Assisted Access
+,Frenchville,Frenchville State School - Activities Centre,"225-237 Frenchville Road, FRENCHVILLE, QLD Australia 4701",-23.341944444444003,150.54500000000002,QLD,Full Access
+,Freshwater,Freshwater State School,"10 Corkill Street, FRESHWATER, QLD Australia 4870",-16.88030684,145.71424752,QLD,Full Access
+,Gabbinbar,Gabbinbar State School,"189 Stenner Street, TOOWOOMBA, QLD Australia 4350",-27.59560912,151.96889609,QLD,Assisted Access
+,Gailes,Karate Hall,"83 Old Logan Road, CAMIRA, QLD Australia 4300",-27.61292239,152.91582048,QLD,Full Access
+,Garbutt,Garbutt State School,"76 Chandler Street, GARBUTT, QLD Australia 4814",-19.26215792,146.7755574,QLD,Full Access
+,Gargett,Gargett State School,"Tom Lynch Street, GARGETT, QLD Australia 4741",-21.15539788,148.74087095,QLD,Full Access
+,Garradunga,Garradunga Community Hall,"197 Garradunga Road, GARRADUNGA, QLD Australia 4860",-17.46171569,145.99564075,QLD,Assisted Access
+,Gatton,Gatton State School,"26 William Street, GATTON, QLD Australia 4343",-27.5601445,152.27859199,QLD,Full Access
+,Gatton South,Lockyer District High School Assembly Hall,"100 William Street, GATTON, QLD Australia 4343",-27.567470999999998,152.277162,QLD,Full Access
+,Studio Village,Gaven State School,"212 Universal Street, OXENFORD, QLD Australia 4210",-27.91940213,153.30544889,QLD,Full Access
+,Gayndah,Gayndah State School,"33 Meson Street, GAYNDAH, QLD Australia 4625",-25.62397478,151.60593152,QLD,Full Access
+,Gaythorne,Mitchelton & District Senior Citizens Centre,"30 Tel-El-Kebir Street, Mitchelton, QLD Australia 4053",-27.4166514,152.9783359,QLD,Full Access
+,Geebung,"Geebung State School, Activities Hall","250 Newman Road, Geebung, QLD Australia 4034",-27.375104999999998,153.04594600000001,QLD,Assisted Access
+,Geham,Geham State School,"9625 New England Highway, GEHAM, QLD Australia 4352",-27.40691401,151.99644506,QLD,Full Access
+,Georgetown,Georgetown State School,"20 High Street, GEORGETOWN, QLD Australia 4871",-18.2945626,143.54713261,QLD,Assisted Access
+,Gilston,Gilston State School,"588 Worongary Road, GILSTON, QLD Australia 4211",-28.0395947,153.31149459,QLD,Full Access
+,Gin Gin,Gin Gin State School,"13 May Street, GIN GIN, QLD Australia 4671",-24.99253695,151.9550854,QLD,Full Access
+,Giru,Giru CWA Hall,"9 Carey Street, GIRU, QLD Australia 4809",-19.515093999999998,147.10454643,QLD,Full Access
+,Gladstone Central,Gladstone Central State School,"74 Auckland Street, GLADSTONE, QLD Australia 4680",-23.8416633,151.25820726,QLD,Assisted Access
+,Gladstone South,Gladstone South State School,"153 Toolooa Street, GLADSTONE, QLD Australia 4680",-23.861807,151.269633,QLD,Assisted Access
+,Gladstone West,Gladstone West State School,"Cnr Boles & Breslin Streets, GLADSTONE WEST, QLD Australia 4680",-23.859306999999998,151.251574,QLD,Assisted Access
+,Glamorgan Vale,Glamorgan Vale State School,"750 Glamorgan Vale Road, GLAMORGAN VALE, QLD Australia 4306",-27.51500845,152.63186574,QLD,Assisted Access
+,Glass House Mountains,Glass House Mountains State School Hall,"58 Coonowrin Road, Glass House Mountains, QLD Australia 4518",-26.9052844,152.9499614,QLD,Assisted Access
+,Newtown Ipswich,Glebe Road Community Kindergarten & Pre-School,"52 Glebe Road, NEWTOWN, QLD Australia 4305",-27.615797999999998,152.777287,QLD,Assisted Access
+,Glen Aplin,Glen Aplin State School,"54 Mount Stirling Road, GLEN APLIN, QLD Australia 4381",-28.73840649,151.87273622,QLD,Assisted Access
+,Glenden,Glenden State School,"48 Gillham Terrace, GLENDEN, QLD Australia 4743",-21.35397872,148.11663508,QLD,Full Access
+,Glenella,Glenella State School Hall,"35 - 55 Hill End Road, GLENELLA, QLD Australia 4740",-21.12065379,149.14865255,QLD,Full Access
+,Glenmore,Glenmore State High School,"261 Farm Street, KAWANA, QLD Australia 4701",-23.336457251992915,150.5157033254089,QLD,Full Access
+,Glenore Grove,Glenore Grove Hall,"11 Brightview Road, GLENORE GROVE, QLD Australia 4342",-27.5300474,152.4093238,QLD,Full Access
+,Glenvale,Glenvale State School,"224 Glenvale Road, TOOWOOMBA, QLD Australia 4350",-27.56304068,151.90300763,QLD,Full Access
+,Glenview,Glenview State School,"6 Leeding Road, GLENVIEW, QLD Australia 4551",-26.76589,153.014205,QLD,Assisted Access
+,Golden Beach,Golden Beach State School,"34 Gregory Street, GOLDEN BEACH, QLD Australia 4551",-26.81394064,153.11611176,QLD,Full Access
+,Gooburrum,Gooburrum State School,"14 Gooburrum Road, GOOBURRUM, QLD Australia 4670",-24.82304158,152.3059988,QLD,Full Access
+,Goodna,St Francis Xavier Catholic Primary School Hall,"6 Church Street, GOODNA, QLD Australia 4300",-27.61139416,152.89954484,QLD,Full Access
+,Goodwood,Goodwood State School,"1802 Goodwood Road, GOODWOOD, QLD Australia 4660",-25.14569737,152.38492548,QLD,Full Access
+,Goomboorian,Goomboorian Memorial Hall,"5 Ross Road, GOOMBOORIAN, QLD Australia 4570",-26.0770024,152.7793926,QLD,Full Access
+,Goombungee,Goombungee State School,"52 Mocatta Street, GOOMBUNGEE, QLD Australia 4354",-27.30214112,151.85281277,QLD,Assisted Access
+,Goomburra,Goomburra Town Hall,"17 Inverramsay Road, GOOMBURRA, QLD Australia 4362",-28.0421668,152.120506,QLD,Full Access
+,Goomeri,Goomeri State School,"Munro Street, Goomeri, QLD Australia 4601",-26.179782,152.065881,QLD,Full Access
+,Goondi,Innisfail Tigers Soccer Club,"2 Leichhardt Street, GOONDI, QLD Australia 4860",-17.52352624,146.01410508,QLD,Assisted Access
+,Goondiwindi,St Mary's Parish School,"14 Brisbane Street, GOONDIWINDI, QLD Australia 4390",-28.54470995,150.30657828,QLD,Full Access
+,Gordon Park,St Carthage's Church Hall,"Cnr Aberdeen Terrace & Beaconsfield Street, GORDON PARK, QLD Australia 4031",-27.41763346,153.02505612,QLD,No Access
+,Gordonvale,Gordonvale State School Hall,"28 George Street, GORDONVALE, QLD Australia 4865",-17.090163,145.784135,QLD,Full Access
+,Gowrie,Gowrie State School,"22 Old Homebush Road, GOWRIE, QLD Australia 4352",-27.490573711448057,151.89257887937623,QLD,Assisted Access
+,Gracemere South,Waraburra State School,"55 Johnson Road, GRACEMERE, QLD Australia 4702",-23.44869945,150.45175552,QLD,Full Access
+,Graceville,Graceville State School,"23 Acacia Avenue, GRACEVILLE, QLD Australia 4075",-27.518071,152.978972,QLD,Full Access
+,Graceville West,Graceville Presbyterian Church,"12 Bank Road, Graceville, QLD Australia 4075",-27.521976,152.975585,QLD,Full Access
+,Forest Lake South,Grand Avenue State School,"Cnr Grand Avenue & Centennial Way, FOREST LAKE, QLD Australia 4078",-27.626313,152.959315,QLD,Full Access
+,Grandchester,Grandchester State School,"35 School Road, GRANDCHESTER, QLD Australia 4340",-27.66612146,152.4652791,QLD,Full Access
+,Grange,Wilston Scout Hall,"72 Sellheim St, Grange, QLD Australia 4051",-27.4248618,153.018414,QLD,No Access
+,Grantham,Grantham State School,"15 Victor Street, GRANTHAM, QLD Australia 4347",-27.57411109,152.20214903,QLD,Full Access
+,Greenbank,Greenbank State School Assembly Hall,"24 Goodna Road, GREENBANK, QLD Australia 4124",-27.710929999999998,152.977235,QLD,Assisted Access
+,Greenslopes,Greenslopes Baptist Church Hall,"39 Dunellan St, Greenslopes, QLD Australia 4120",-27.506753,153.0481674,QLD,Assisted Access
+,Ipswich Central,Ipswich Central State School Hall,"2A Griffith Road, IPSWICH, QLD Australia 4305",-27.62163,152.769177,QLD,Full Access
+,Grovely,Grovely State School,"200 Dawson Parade, GROVELY, QLD Australia 4054",-27.401602999999998,152.96112399999998,QLD,Assisted Access
+,Gumdale,Gumdale State School,"677 New Cleveland Road (access via Tilley Road), GUMDALE, QLD Australia 4154",-27.49161737,153.1522572,QLD,Full Access
+,Gunalda,Gunalda State School,"King Street, GUNALDA, QLD Australia 4570",-25.99242926,152.56031513,QLD,Assisted Access
+,Gympie City,The Gympie Senior Citizens Centre,"40 Mellor Street, GYMPIE, QLD Australia 4570",-26.18782471,152.66732991,QLD,Full Access
+,Gympie East,Gympie East State School,"219 Cedar Pocket Road, GYMPIE, QLD Australia 4570",-26.17968434,152.73281336,QLD,Full Access
+,Gympie South,Gympie South State School,"50 Exhibition Road, GYMPIE, QLD Australia 4570",-26.19907396,152.64570594,QLD,Full Access
+,Habana,Habana Community Shed,"1091 Mackay-Habana Road (Cnr Moohin's Road), HABANA, QLD Australia 4740",-21.04216945,149.07809973,QLD,Assisted Access
+,Haden,Haden State School,"1520 Haden-Crows Nest Road, HADEN, QLD Australia 4352",-27.22373738,151.88940346,QLD,Assisted Access
+,Haigslea,Haigslea State School,"760 Thagoona Haigslea Road, HAIGSLEA, QLD Australia 4306",-27.5716717,152.62954295,QLD,Full Access
+,Halifax,Halifax State School,"17 Victoria Terrace, HALIFAX, QLD Australia 4850",-18.58388755,146.28500819,QLD,Assisted Access
+,Edmonton,PCYC Edmonton,"10-20 Walker Rd, Edmonton, QLD Australia 4869",-17.016738420120472,145.72511379098512,QLD,Full Access
+,Hamilton,St Augustine's Anglican Church Hall,"56 Racecourse Road, HAMILTON, QLD Australia 4007",-27.43651259,153.06447923,QLD,Full Access
+,Hamilton Island,Hamilton Island Resort,"HAMILTON ISLAND, QLD Australia 4803",-20.34576698,148.95559768,QLD,Assisted Access
+,Happy Valley,Happy Valley State School,"25-31 Brilliant Street, MOUNT ISA, QLD Australia 4825",-20.74516801,139.49108005,QLD,Assisted Access
+,Harlaxton,Harlaxton State School,"110 Ruthven Street, TOOWOOMBA, QLD Australia 4350",-27.54007364,151.95473135,QLD,Assisted Access
+,Harlaxton North,Harlaxton Neighbourhood Centre,"17D Coonan Street, TOOWOOMBA, QLD Australia 4350",-27.5262213,151.9559134,QLD,Assisted Access
+,Harley Park,Labrador Senior Citizens Hall,"370 Marine Parade, LABRADOR, QLD Australia 4215",-27.940672,153.407483,QLD,Full Access
+,Harristown,Harristown State High School,"341 - 367 South Street, TOOWOOMBA, QLD Australia 4350",-27.57357852,151.93322539,QLD,Assisted Access
+,Harrisville,Harrisville State School,"17 Hall Street, HARRISVILLE, QLD Australia 4307",-27.812710590000002,152.66725749,QLD,Full Access
+,Hatton Vale,Hatton Vale State School,"27-35 Hannant Road, HATTON VALE, QLD Australia 4341",-27.54344123,152.47066498,QLD,Full Access
+,Morningside West,Morningside State School,"67 Pashen Street, MORNINGSIDE, QLD Australia 4171",-27.464323999999998,153.0659,QLD,Assisted Access
+,Healy,"Healy State School, Murrijunda Room","5-9 Thomson Road, MOUNT ISA, QLD Australia 4825",-20.74162624,139.49993134,QLD,Assisted Access
+,Heatley,Heatley State School,"Cnr Mill Drive & Fullham Road, HEATLEY, QLD Australia 4814",-19.293726,146.749905,QLD,Assisted Access
+,Helensvale,Helensvale State School,"8 Lindfield Road, HELENSVALE, QLD Australia 4210",-27.915422999999997,153.329086,QLD,Full Access
+,Helensvale North,Helensvale State High School,"243 Discovery Drive, HELENSVALE, QLD Australia 4210",-27.896901999999997,153.326793,QLD,Assisted Access
+,Helidon,Helidon State School,"16 School Street, HELIDON, QLD Australia 4344",-27.55491787,152.12590456,QLD,Full Access
+,Hemmant,Hemmant Scout Hall,"cnr Doughboy Parade & Boonoo Street, HEMMANT, QLD Australia 4174",-27.449444444444,153.125,QLD,Assisted Access
+,Hendra,St John's Anglican Church Hall,"12 Burilda Street, HENDRA, QLD Australia 4011",-27.42196904,153.06778774,QLD,Full Access
+,Hendra East,Hendra East State School,"309 Nudgee Road, HENDRA, QLD Australia 4011",-27.421487,153.074036,QLD,Full Access
+,Herberton,Herberton Hall,"Cnr Grace and William Streets, Herberton, QLD Australia 4887",-17.38317515,145.38560182,QLD,Full Access
+,Hermit Park,Hermit Park State School,"Cnr Surrey & Sussex Streets, HYDE PARK, QLD Australia 4812",-19.279432,146.796916,QLD,Assisted Access
+,Highfields,Highfields State School,"10459 New England Highway, HIGHFIELDS, QLD Australia 4352",-27.46321403,151.95584178,QLD,Assisted Access
+,The Gap West,Hilder Road State School,"Kaloma Road, THE GAP, QLD Australia 4061",-27.43698869,152.93716818,QLD,Full Access
+,Hilliard,Hilliard State School Hall,"106-110 Hanover Drive, ALEXANDRA HILLS, QLD Australia 4161",-27.542219,153.230768,QLD,Assisted Access
+,Holland Park,Holland Park State School,"59 Abbotsleigh Street, HOLLAND PARK, QLD Australia 4121",-27.51323,153.062037,QLD,Full Access
+,Holloways Beach,Holloways Beach Community Hall,"65 Oleander Street, HOLLOWAYS BEACH, QLD Australia 4878",-16.84291872,145.73882461,QLD,Full Access
+,Home Hill,St Colman's School,"94 - 100 Eleventh Avenue, HOME HILL, QLD Australia 4806",-19.65919,147.41554,QLD,Full Access
+,Homebush,Homebush State School,"1181 Homebush Road, HOMEBUSH, QLD Australia 4740",-21.27587821,149.05061245,QLD,Full Access
+,Hope Island,Banksia Park Hall,"27 Crescent Avenue, HOPE ISLAND, QLD Australia 4212",-27.87386923,153.37545455,QLD,Full Access
+,Horseshoe Bend,Gympie Church Of Christ Hall,"10 Tucker Street, GYMPIE, QLD Australia 4570",-26.182572,152.67095,QLD,Assisted Access
+,Howard,Burrum District Community Centre,"56 Steley Street, HOWARD, QLD Australia 4659",-25.31853196,152.5626862,QLD,Full Access
+,Hughenden,Hughenden RSL Hall,"17 Flinders Street, HUGHENDEN, QLD Australia 4821",-20.84356197,144.20306146,QLD,Full Access
+,Margate,Humpybong State School Hall,"Ernest Street, MARGATE, QLD Australia 4019",-27.246209,153.10947199999998,QLD,Full Access
+,Ilfracombe,Ilfracombe State School,"20 McMaster Drive, ILFRACOMBE, QLD Australia 4727",-23.48903898,144.50459003,QLD,Assisted Access
+,Imbil,Mary Valley State College,"15 Edward Street, IMBIL, QLD Australia 4570",-26.45992163,152.6793623,QLD,Full Access
+,Inala,Inala State School,"Cnr Rosemary Street & Glenala Road, DURACK, QLD Australia 4077",-27.586111,152.977257,QLD,Full Access
+,Inala West,Westside Multi-Cultural Baptist Church,"Cnr Biota and Balsa Streets, INALA, QLD Australia 4077",-27.58776685,152.97141194,QLD,No Access
+,Indooroopilly,Indooroopilly Uniting Church Hall,"Cnr Station and Musgrave Roads, INDOOROOPILLY, QLD Australia 4068",-27.50176712,152.97172844,QLD,Full Access
+,Indooroopilly East,St Andrew's Anglican Church Hall Indooroopilly,"Cnr Lambert Road & Fairley Street, INDOOROOPILLY, QLD Australia 4068",-27.503459,152.979954,QLD,Full Access
+,Indooroopilly West,Indooroopilly State School,"Cnr Russell Terrace & Moggill Road, INDOOROOPILLY, QLD Australia 4068",-27.49995898,152.96596169,QLD,Assisted Access
+,Ingham,Ingham State School,"28 McIllwraith Street, INGHAM, QLD Australia 4850",-18.65205982,146.16188407,QLD,Full Access
+,Inglewood,Inglewood Civic Centre,"18 Elizabeth Street, INGLEWOOD, QLD Australia 4387",-28.41422226,151.0819003,QLD,Full Access
+,Injune,Injune State School,"Hutton Street, INJUNE, QLD Australia 4454",-25.84700027,148.56498241,QLD,Assisted Access
+,Innisfail East,Innisfail East State School,"92 Mourilyan Road, INNISFAIL, QLD Australia 4860",-17.53498965,146.03233874,QLD,Full Access
+,Inverlaw,Inverlaw Farmers Hall,"1136 Kingaroy Burrandowan Rd, Inverlaw, QLD Australia 4610",-26.594129265481733,151.71836475396728,QLD,Full Access
+,Ironside,Ironside State School,"2 Hawken Drive, ST LUCIA, QLD Australia 4067",-27.50057756,152.99625993,QLD,Assisted Access
+,Isle of Capri,Surfers Paradise State School,"42 St Andrews Avenue, ISLE OF CAPRI, QLD Australia 4217",-28.01239481,153.42055321,QLD,Full Access
+,Ithaca Creek,Ithaca Creek State School,"Dacca Street, BARDON, QLD Australia 4065",-27.4512018,152.99228489,QLD,Full Access
+,Jacobs Well,Jacobs Well Community Centre,"27 Bay Street, JACOBS WELL, QLD Australia 4208",-27.779830999999998,153.36505599999998,QLD,Assisted Access
+,Jambin,Jambin State School,"Cnr Burnett Highway & Threeways Road, JAMBIN, QLD Australia 4702",-24.17384964,150.37509799,QLD,Assisted Access
+,Jamboree Heights,Jamboree Heights State School,"35 Beanland Street, JAMBOREE HEIGHTS, QLD Australia 4074",-27.55437569,152.92951584,QLD,Full Access
+,Gympie North,James Nash State High School,"109 Myall Street, GYMPIE, QLD Australia 4570",-26.175159999999998,152.656694,QLD,Full Access
+,Jandowae,Jandowae Memorial Hall,"38 George Street, JANDOWAE, QLD Australia 4410",-26.77979023,151.11213684,QLD,Full Access
+,Jarvisfield,Jarvisfield State School,"516 Rita Island Road, JARVISFIELD, QLD Australia 4807",-19.60058773,147.46059895,QLD,Assisted Access
+,Jericho,Jericho State School,"1 Pasteur Street, JERICHO, QLD Australia 4728",-23.60417337,146.12931132,QLD,Full Access
+,Jimboomba,Jimboomba State School,"Mt Lindesay Highway, JIMBOOMBA, QLD Australia 4280",-27.82942253,153.02821577,QLD,Full Access
+,Jimboomba East,Emmaus College,"48 East Street, JIMBOOMBA, QLD Australia 4280",-27.833589,153.036138,QLD,Full Access
+,Jimbour,Jimbour State School,"2421 Dalby-Jandowae Road, JIMBOUR, QLD Australia 4352",-26.962591,151.215729,QLD,Full Access
+,Jindalee,Jindalee State School,"114 Burrendah Road, JINDALEE, QLD Australia 4074",-27.53034604,152.93504119,QLD,Full Access
+,Jindalee South,Twelve Apostles Catholic Church Hall,"111 Yallambee Road, JINDALEE, QLD Australia 4074",-27.54061826,152.94074625,QLD,Full Access
+,Jondaryan,Jondaryan State School,"10 Scott Road, JONDARYAN, QLD Australia 4403",-27.37295825,151.58558428,QLD,Full Access
+,Jones Hill,Jones Hill State School,"Heilbronn Road, GYMPIE, QLD Australia 4570",-26.22823172,152.66679883,QLD,Full Access
+,Julatten,Julatten State School,"1141 Euluma Creek Road, JULATTEN, QLD Australia 4871",-16.60758121,145.34271061,QLD,Full Access
+,Julia Creek,Julia Creek State School,"13 Burke Street, JULIA CREEK, QLD Australia 4823",-20.65664403,141.74688756,QLD,Full Access
+,Kaimkillenbun,Kaimkillenbun State School,"Messenger Street, KAIMKILLENBUN, QLD Australia 4406",-27.05829932,151.43207073,QLD,No Access
+,Kairi,Kairi State School,"2 McGeehan Street, KAIRI, QLD Australia 4872",-17.21517,145.546303,QLD,Assisted Access
+,Kalamia,Kalamia State School,"39 Lillesmere Road, AYR, QLD Australia 4807",-19.51875975,147.4176836,QLD,Full Access
+,Kalbar,Kalbar State School,"48 George Street, KALBAR, QLD Australia 4309",-27.94304286,152.62346506,QLD,Full Access
+,Kalinga,St Anne's Catholic Church,"127 Nelson Street, Wooloowin, QLD Australia 4030",-27.40887606,153.0442822,QLD,Assisted Access
+,Kalkadoon,Spinifex State College - Senior Campus,"145-163 Abel Smith Parade, MOUNT ISA, QLD Australia 4825",-20.721792,139.509927,QLD,Assisted Access
+,Kalkie,Kalkie State School,"257 Bargara Road, KALKIE, QLD Australia 4670",-24.84633412,152.39739776,QLD,Full Access
+,Kallangur,Kallangur State School,"139 School Road, KALLANGUR, QLD Australia 4503",-27.24904987,152.99230099,QLD,Full Access
+,Kallangur East,Kallangur Community Hall,"1480 Anzac Avenue, KALLANGUR, QLD Australia 4503",-27.24878757,152.9988724,QLD,Full Access
+,Kandanga,Kandanga State School,"84 Main Street, KANDANGA, QLD Australia 4570",-26.38704357,152.68038824,QLD,Full Access
+,Karalee,Karalee State School Hall,"77 Arthur Summervilles Road, KARALEE, QLD Australia 4306",-27.56256988,152.82529593,QLD,Full Access
+,Karumba,Karumba State School,"5 Yappar Street, KARUMBA, QLD Australia 4891",-17.48288948,140.84075689,QLD,Full Access
+,Kawana Waters,Kawana Waters State College - Innovation Hall,"119 Sportsmans Parade, BOKARINA, QLD Australia 4575",-26.73706381,153.12574625,QLD,Full Access
+,Kawungan,Kawungan State School,"Grevillea Street, KAWUNGAN, QLD Australia 4655",-25.298377,152.850477,QLD,Full Access
+,Kedron,Kedron State School,"Leckie Road, KEDRON, QLD Australia 4031",-27.406409,153.035232,QLD,No Access
+,Kedron High,Kedron State High School,"34 Park Road, WOOLOOWIN, QLD Australia 4030",-27.415011,153.039345,QLD,Full Access
+,Kedron West,Little Flower Church Hall,"Cnr Wayland Street & Turner Road, KEDRON, QLD Australia 4031",-27.40822364,153.02476108,QLD,Full Access
+,Keebra Park,Keebra Park State High School,"Anne Street, SOUTHPORT, QLD Australia 4215",-27.98383795,153.40020597,QLD,Assisted Access
+,Kelso,Kelso State School,"Yvette Street, KELSO, QLD Australia 4815",-19.38808178,146.72647297,QLD,Assisted Access
+,Kelvin Grove,"Kelvin Grove State College, Junior School Hall","L'Estrange Terrace (gates 4 & 5), KELVIN GROVE, QLD Australia 4059",-27.450269,153.011636,QLD,Full Access
+,Kenilworth,Kenilworth Community Hall,"Elizabeth Street, KENILWORTH, QLD Australia 4574",-26.594279999999998,152.72794,QLD,Full Access
+,Kenmore,Kenmore State School,"2052 Moggill Road, KENMORE, QLD Australia 4069",-27.509223,152.93839931,QLD,Full Access
+,Kenmore South,Kenmore South State School,"16 Kersley Road, KENMORE, QLD Australia 4069",-27.51888586,152.94397295,QLD,Full Access
+,Kennedy,Kennedy State School,"161 Kennedy Creek Road, Kennedy, QLD Australia 4816",-18.209878,145.941962,QLD,Full Access
+,Kentville,Kentville State School,"4 Turpin Road, KENTVILLE, QLD Australia 4341",-27.47926319,152.42732048,QLD,Full Access
+,Keperra,Keperra Baptist Church Hall,"980 Samford Road, KEPERRA, QLD Australia 4054",-27.41492155,152.95546889,QLD,Full Access
+,Kepnock,Kepnock State High School,"43 Kepnock Road, BUNDABERG, QLD Australia 4670",-24.875531,152.377492,QLD,Assisted Access
+,Keppel Sands,Keppel Sands State School,"1325 Keppel Sands Road, KEPPEL SANDS, QLD Australia 4702",-23.327590999999998,150.78617,QLD,Full Access
+,Kerry,Kerry Memorial Hall,"1488 Kerry Road, KERRY, QLD Australia 4285",-28.104602999999997,153.02790099999999,QLD,Assisted Access
+,Kilcoy,Kilcoy Memorial Hall,"Kennedy Street, KILCOY, QLD Australia 4515",-26.94122915,152.56439745,QLD,Full Access
+,Kilkivan,Kilkivan State School,"6 Council Street, KILKIVAN, QLD Australia 4600",-26.08760227,152.2421515,QLD,Full Access
+,Killarney,Killarney Senior Citizens Hall,"11 Ailanthus Street, KILLARNEY, QLD Australia 4373",-28.33393345,152.29545772,QLD,Full Access
+,Kimberley Park,Kimberley Park State School,"6 Floret Street, SHAILER PARK, QLD Australia 4128",-27.6475526,153.1769067,QLD,Assisted Access
+,Kin Kin,Kin Kin State School,"26 - 32 Main Street, KIN KIN, QLD Australia 4571",-26.262966,152.871703,QLD,No Access
+,Kin Kora,Gladstone Uniting Church,"1 Dixon Drive, GLADSTONE, QLD Australia 4680",-23.887929999999997,151.258881,QLD,Full Access
+,Kingaroy,Kingaroy State High School,"Toomey Street, Kingaroy, QLD Australia 4610",-26.5428893,151.8314839,QLD,Assisted Access
+,Kingsthorpe,Kingsthorpe State School,"50 Goombungee Road, KINGSTHORPE, QLD Australia 4400",-27.47179577,151.81450546,QLD,Full Access
+,Kingston,Kingston State School,"50 Juers Street, KINGSTON, QLD Australia 4114",-27.65966928,153.11165929,QLD,Assisted Access
+,Kippa-Ring,Kippa-Ring State School Hall,"Korsch Street, KIPPA-RING, QLD Australia 4021",-27.2298142887,153.08741029380002,QLD,Assisted Access
+,Kippa-Ring West,Hercules Road State School,"Hercules Road, KIPPA-RING, QLD Australia 4021",-27.220584,153.078426,QLD,Full Access
+,Kirwan,Kirwan State School,"21 Burnda Street, KIRWAN, QLD Australia 4817",-19.29886103,146.73300683,QLD,Full Access
+,Kirwan South,Kirwan State High School,"Hudson Street, KIRWAN, QLD Australia 4817",-19.30997389,146.73441231,QLD,Full Access
+,Koumala,Koumala State School,"10 Bull Street, KOUMALA, QLD Australia 4738",-21.60735284,149.24305558,QLD,Full Access
+,Kowanyama,Kowanyama State School,"345 Kowanyama Street, KOWANYAMA, QLD Australia 4892",-15.471666666666,141.74472222222198,QLD,Full Access
+,Bellbird Park,Bellbird Park State Secondary College,"2 Alesana Drive, Bellbird Park, QLD Australia 4300",-27.640487999999998,152.88406,QLD,Full Access
+,Kulpi,Kulpi State School,"9 Beckman Street, KULPI, QLD Australia 4352",-27.18610858,151.70001268,QLD,Assisted Access
+,Kuluin,Kuluin State School,"41-67 Tallow Wood Drive, KULUIN, QLD Australia 4558",-26.659222,153.058351,QLD,Full Access
+,Kumbia,Kumbia State School,"22 Bell Street, KUMBIA, QLD Australia 4610",-26.69353534,151.65174365,QLD,Full Access
+,Kuraby,Kuraby State School,"1523 Beenleigh Road, KURABY, QLD Australia 4112",-27.60697096,153.09600592,QLD,Full Access
+,Kuranda,Kuranda CWA Hall.,"20 Thongon Street, KURANDA, QLD Australia 4881",-16.820477575714342,145.63668079895018,QLD,Full Access
+,Kureelpa,Kureelpa Public Hall,"2 - 4 Jewett Road, KUREELPA, QLD Australia 4560",-26.61729173,152.90096641,QLD,Assisted Access
+,Kurrimine Beach,Kurrimine Beach Hall,"919 Murdering Point Road, KURRIMINE BEACH, QLD Australia 4871",-17.77399528,146.10223174,QLD,Full Access
+,Kurwongbah,Kurwongbah State School,"2-16 Eacham Street, PETRIE, QLD Australia 4502",-27.254861,152.96968099999998,QLD,Full Access
+,Kuttabul,Hampden State School,"2880 Bruce Highway, KUTTABUL, QLD Australia 4741",-21.0598821,148.93125415,QLD,No Access
+,Labrador,Labrador State School,"Imperial Parade, LABRADOR, QLD Australia 4215",-27.942504,153.401994,QLD,Full Access
+,Laidley,Laidley District State School,"232 Patrick Street, LAIDLEY, QLD Australia 4341",-27.62371446,152.39567041,QLD,Full Access
+,Lake Clarendon,Lake Clarendon State School,"35 Lake Clarendon Road, LAKE CLARENDON, QLD Australia 4343",-27.52184498,152.35822678,QLD,Full Access
+,Lakes Creek,Lakes Creek State School,"445 Paterson Street, LAKES CREEK, QLD Australia 4701",-23.37545849,150.56030989,QLD,Full Access
+,Lamb Island,Lamb Island Community Hall,"125-133 Lucas Drive, LAMB ISLAND, QLD Australia 4184",-27.6243041,153.3841442,QLD,Full Access
+,Landsborough,Landsborough State School,"41 Gympie Street, LANDSBOROUGH, QLD Australia 4551",-26.80417827,152.96433091,QLD,Full Access
+,Lawnton,Lawnton State School,"44-60 Todds Road, LAWNTON, QLD Australia 4501",-27.28133199,152.97482371,QLD,Assisted Access
+,One Mile,Immaculate Heart Primary School,"Chubb Street, LEICHHARDT, QLD Australia 4305",-27.62911367,152.73824215,QLD,Assisted Access
+,Leichhardt,Leichhardt State School Hall,"72 Samford Road, LEICHHARDT, QLD Australia 4305",-27.62428481,152.73680449,QLD,Full Access
+,Leyburn,Leyburn State School,"34 Peter Street, LEYBURN, QLD Australia 4352",-28.01310993,151.57875538,QLD,Assisted Access
+,Lindum,Wynnum Baptist Church,"287 Kianawah Road, WYNNUM WEST, QLD Australia 4178",-27.45657855,153.14267635,QLD,Full Access
+,Logan Reserve,Logan Reserve State School,"369 School Road, LOGAN RESERVE, QLD Australia 4133",-27.71456713,153.11477602,QLD,Assisted Access
+,Loganholme,Loganholme State School,"Wandilla Crescent, LOGANHOLME, QLD Australia 4129",-27.686778999999998,153.181489,QLD,Assisted Access
+,Loganlea,Loganlea State High School,"16-22 Neridah Street, LOGANLEA, QLD Australia 4131",-27.67268727,153.1435132,QLD,Full Access
+,Long Pocket,CWA Hall,"2346 Ingham-Abergowrie Road, LONG POCKET, QLD Australia 4850",-18.521867999999998,146.0028715,QLD,Full Access
+,Lower Tully,Lower Tully State School,"6 Collins Road, LOWER TULLY, QLD Australia 4854",-17.99546844,146.00091934,QLD,Assisted Access
+,Lowood,Lowood State High School Hall,"Prospect Street, LOWOOD, QLD Australia 4311",-27.46751688,152.58239508,QLD,Assisted Access
+,Lucinda,Coast Guard Building,"19 Patterson Parade, LUCINDA, QLD Australia 4850",-18.53012356,146.33450031,QLD,Assisted Access
+,Macalister,Macalister QCWA Hall,"20649 Warrego Highway, MACALISTER, QLD Australia 4352",-27.04421033,151.07741565,QLD,Assisted Access
+,Macgregor,Macgregor State High School,"29 Blackwattle Street, MACGREGOR, QLD Australia 4109",-27.565295,153.076809,QLD,Full Access
+,Macgregor West,Macgregor State School,"370 McCullough Street, MACGREGOR, QLD Australia 4109",-27.571744,153.066547,QLD,Full Access
+,Machans Beach,Machans Beach State School,"61 Machan Street, MACHANS BEACH, QLD Australia 4878",-16.85262999,145.74526593,QLD,Assisted Access
+,Mackay South,Mercy College,"Cnr Juliet & Penn Streets, SOUTH MACKAY, QLD Australia 4740",-21.15456,149.18401699999998,QLD,Full Access
+,Mackay West,"Mackay West State School, Library Performing Arts Centre","20 Pinder Street, WEST MACKAY, QLD Australia 4740",-21.15240113,149.1615057,QLD,Assisted Access
+,MacKenzie,Mackenzie State School,"26 Vivaldi Place, MACKENZIE, QLD Australia 4156",-27.546185649999998,153.12439442,QLD,Full Access
+,Macknade,Macknade State School,"79 Farrell Drive, MACKNADE, QLD Australia 4850",-18.57689594,146.25183463,QLD,Assisted Access
+,Maidenwell,Maidenwell Hall,"Pool Street, MAIDENWELL, QLD Australia 4615",-26.84706609,151.79898083,QLD,Assisted Access
+,Main Beach,Main Beach Pavilion,"MacArthur Parade, MAIN BEACH, QLD Australia 4217",-27.974661583991885,153.42884659370483,QLD,Full Access
+,Malanda,Malanda State School,"24 Mary Street, MALANDA, QLD Australia 4885",-17.34940949,145.59473634,QLD,Full Access
+,Mango Hill,Mango Hill Village Community Centre,"Chermside Road, MANGO HILL, QLD Australia 4509",-27.2183851,153.02905798,QLD,Assisted Access
+,Manly,Manly State School,"63 Ernest Street, MANLY, QLD Australia 4179",-27.45831123,153.18162203,QLD,Full Access
+,Manly West,Manly West State School,"226 Manly Road, Manly West, QLD Australia 4179",-27.46871632,153.17304432,QLD,Assisted Access
+,Mansfield,Mansfield State School,"174 Ham Road, MANSFIELD, QLD Australia 4122",-27.54215224,153.10657918,QLD,Assisted Access
+,Mapleton,Mapleton State School,"24 Flaxton Drive, MAPLETON, QLD Australia 4560",-26.62588564,152.86572754,QLD,Full Access
+,Marburg,Marburg State School,"Louisa Street, MARBURG, QLD Australia 4346",-27.56186129,152.59268939,QLD,Full Access
+,Mareeba,Mareeba State School,"3/37 Constance Street, MAREEBA, QLD Australia 4880",-16.99197907563088,145.42488415078736,QLD,Full Access
+,Mareeba West,Mareeba State High School,"17-37 Jasper Street, MAREEBA WEST, QLD Australia 4880",-16.995432,145.416551,QLD,Full Access
+,Marian,Marian State School,"137 Anzac Avenue, MARIAN, QLD Australia 4753",-21.14601218,148.9588809,QLD,Full Access
+,Cotton Tree,Maroochy Neighbourhood Centre,"2 Fifth Avenue, MAROOCHYDORE, QLD Australia 4558",-26.657007,153.100977,QLD,Full Access
+,Maroochydore,Maroochydore State High School,"160 Maroochydore Road, MAROOCHYDORE, QLD Australia 4558",-26.65426207,153.07483792,QLD,Full Access
+,Marsden,Marsden State High School,"106-130 Muchow Road, WATERFORD WEST, QLD Australia 4133",-27.684988999999998,153.11072000000001,QLD,Assisted Access
+,Holland Park West,Marshall Road State School,"20 Kurts Street, HOLLAND PARK WEST, QLD Australia 4121",-27.52556754,153.05840671,QLD,Full Access
+,Maryborough,St Paul's Memorial Hall,"Cnr Adelaide & Ellena Streets, MARYBOROUGH, QLD Australia 4650",-25.538919,152.700976,QLD,Full Access
+,Maryborough West,Maryborough West State School,"Ariadne Street, MARYBOROUGH WEST, QLD Australia 4650",-25.52300192,152.69416809,QLD,Full Access
+,Maryvale,Maryvale State School,"81 Taylor Street, MARYVALE, QLD Australia 4370",-28.06765395,152.2423178,QLD,Assisted Access
+,Massie,Deuchar Massie Hall,"12 Warwick Allora Back Road, MASSIE, QLD Australia 4370",-28.14902076,151.95467234,QLD,Full Access
+,Mater,Queensland Children's Hospital School (Junior Campus),"Stanley Street, SOUTH BRISBANE, QLD Australia 4101",-27.484519,153.027566,QLD,Full Access
+,Carina,Mayfield State School,"37 Paget Street, CARINA, QLD Australia 4152",-27.48436969,153.0921033,QLD,Assisted Access
+,McDonnell Creek,McDonnell Creek State School,"69273 Bruce Highway, FISHERY FALLS, QLD Australia 4871",-17.19685174,145.89715004,QLD,Full Access
+,McDowall,McDowall State School,"1018 Rode Road, MCDOWALL, QLD Australia 4053",-27.38820129,152.98951149,QLD,Assisted Access
+,Meadowbrook,Logan Campus Griffith University,"68 University Drive, MEADOWBROOK, QLD Australia 4131",-27.66535178,153.1513238,QLD,Full Access
+,Meandarra,Meandarra State School,"Sara Street, MEANDARRA, QLD Australia 4422",-27.32423314,149.88246202,QLD,Full Access
+,Mena Creek,Mena Creek State School,"10 Mena Creek Road, MENA CREEK, QLD Australia 4871",-17.65449123,145.95552564,QLD,Assisted Access
+,Merinda,Merinda State School,"Bergl Street, MERINDA, QLD Australia 4805",-20.02010918,148.16423893,QLD,Full Access
+,Meringandan,Meringandan State School,"10 School Rd, Meringandan West, QLD Australia 4352",-27.4310423,151.9055996,QLD,Full Access
+,Mermaid Beach,Mermaid Beach Community Centre,"2439 Gold Coast Highway, MERMAID BEACH, QLD Australia 4218",-28.04603378,153.43596518,QLD,Assisted Access
+,Merrimac,Merrimac State School,"2 Boowaggan Road, MERRIMAC, QLD Australia 4226",-28.040568999999998,153.376555,QLD,Full Access
+,Merrimac East,Merrimac State High School,"3-31 Dunlop Court, MERMAID WATERS, QLD Australia 4218",-28.040046,153.417328,QLD,Full Access
+,Miallo,Miallo State School,"Miallo Road, MIALLO, QLD Australia 4873",-16.388917,145.376243,QLD,Assisted Access
+,Miami East,Miami State High School,"Gold Coast Highway, MIAMI EAST, QLD Australia 4220",-28.062523,153.438648,QLD,Assisted Access
+,Miami West,Miami State School,"18-36 Oceanic Drive, MERMAID WATERS, QLD Australia 4218",-28.06027887,153.42581034,QLD,Full Access
+,Middle Park,Middle Park State School,"27 MacFarlane Street, MIDDLE PARK, QLD Australia 4074",-27.559976,152.91853700000001,QLD,Full Access
+,Middle Ridge,Middle Ridge State School,"203 Spring Street, TOOWOOMBA, QLD Australia 4350",-27.60136387,151.95607781,QLD,Assisted Access
+,Middlemount,Middlemount Community School,"James Randell Drive, MIDDLEMOUNT, QLD Australia 4746",-22.81141313,148.70093822,QLD,Assisted Access
+,Miles,Leichhardt Centre,"29 Dawson Street, MILES, QLD Australia 4415",-26.658559999999998,150.18669,QLD,Full Access
+,Millaa Millaa,Millaa Millaa State School,"1 Beech Street, MILLAA MILLAA, QLD Australia 4886",-17.51289086,145.61000347,QLD,Full Access
+,Millmerran,Millmerran State School,"19 Simmons Street, MILLMERRAN, QLD Australia 4357",-27.87777659,151.26517296,QLD,Full Access
+,Minden,Minden State School,"1032 Lowood-Minden Road, MINDEN, QLD Australia 4311",-27.554574,152.54321099999999,QLD,Full Access
+,Mirani,Mirani State School,"12 Maud Street, MIRANI, QLD Australia 4754",-21.16152129,148.86237502,QLD,Full Access
+,Mirriwinni,Mirriwinni State School,"3 Whitman Street, MIRRIWINNI, QLD Australia 4871",-17.40239242,145.91009974,QLD,Full Access
+,Mission Beach,Mission Beach State School,"21-101 Webb Road, WONGALING BEACH, QLD Australia 4852",-17.90418036,146.0923934,QLD,Full Access
+,Mitchell,Mitchell Shire Hall,"2 - 6 Cambridge Street, MITCHELL, QLD Australia 4465",-26.48639943,147.97898412,QLD,Full Access
+,Mitchelton South,Mitchelton State School,"47 Glen Retreat Road, MITCHELTON, QLD Australia 4053",-27.41277864,152.9694888,QLD,Assisted Access
+,Broadbeach Waters,Broadbeach Senior Citizens Centre,"23 T E Peters Drive, BROADBEACH WATERS, QLD Australia 4218",-28.02745883,153.42570305,QLD,Full Access
+,Moggill,Moggill State School,"3417 Moggill Road, MOGGILL, QLD Australia 4070",-27.56916568,152.87749171,QLD,Assisted Access
+,Mondure,Mondure Public Hall,"12 McConnell Way, MONDURE, QLD Australia 4611",-26.18101303,151.77477121,QLD,Full Access
+,Monto,Monto State School,"3 Leichhardt Street, MONTO, QLD Australia 4630",-24.86810865,151.11838102,QLD,Full Access
+,Montville,Montville Village Hall,"137 Memorial Close, Montville, QLD Australia 4560",-26.6880885,152.8928572,QLD,Full Access
+,Mooloolaba,Mooloolaba State School,"15 Meta Street, MOOLOOLABA, QLD Australia 4557",-26.677798,153.114993,QLD,Full Access
+,Mooloolah,Mooloolah State School,"48 King Road, MOOLOOLAH VALLEY, QLD Australia 4553",-26.768507999999997,152.957248,QLD,Full Access
+,Moonie,Moonie State School,"11305 Moonie Highway, MOONIE, QLD Australia 4406",-27.71404949,150.37323654,QLD,Full Access
+,Moore,Moore Soldiers Memorial Hall,"9 Main Street, MOORE, QLD Australia 4314",-26.89368379,152.2896266,QLD,Assisted Access
+,Moore Park,Moore Park Beach Community Hall,"1 Club Avenue, Moore Park Beach, QLD Australia 4670",-24.7178,152.27700000000002,QLD,Full Access
+,Moorooka,Moorooka State School,"274 Beaudesert Road, MOOROOKA, QLD Australia 4105",-27.53690097,153.02386522,QLD,Full Access
+,Moorooka West,St Brendan's Church Hall,"27 Hawtree Street, MOOROOKA, QLD Australia 4105",-27.538031999999998,153.01897400000001,QLD,Assisted Access
+,Moorvale,Clifton Hill Scout Group Hall,"118 Vendale Street, MOOROOKA, QLD Australia 4105",-27.530849999999997,153.02885,QLD,Assisted Access
+,Moranbah Central,Moranbah Community Centre,"Batchelor Parade, MORANBAH, QLD Australia 4744",-22.00014625,148.04761648,QLD,Assisted Access
+,Morayfield,"Morayfield State High School, K Block","70 Visentin Road, MORAYFIELD, QLD Australia 4506",-27.108417,152.954631,QLD,Assisted Access
+,Morayfield East,Morayfield East State School,"107 Graham Road, MORAYFIELD, QLD Australia 4506",-27.11744996,152.9671526,QLD,Full Access
+,Morayfield West,Minimbah State School,"Cnr Walkers Road & Minimbah Drive, MORAYFIELD, QLD Australia 4506",-27.11005844,152.9246664,QLD,Full Access
+,Moreton Downs,Moreton Downs State School,"101 Parsons Boulevard, DECEPTION BAY, QLD Australia 4508",-27.199379,153.016444,QLD,Full Access
+,Morningside,Church of the Ascension Morningside,"706 Wynnum Road, Morningside, QLD Australia 4170",-27.466564418839187,153.07440491897964,QLD,Full Access
+,Mornington Island,Mornington Island PCYC,"122 Lardil Street, GUNUNA, QLD Australia 4871",-16.6662053,139.1818714,QLD,Full Access
+,Morven,Morven State School,"Cnr Warrego Highway & West Street, MORVEN, QLD Australia 4468",-26.4156487,147.1096158,QLD,Full Access
+,Mossman,Mossman State School,"30 - 34 Front Street, MOSSMAN, QLD Australia 4873",-16.46218,145.37390299999998,QLD,Full Access
+,Mothar Mountain,Mothar Mountain Hall,"Cnr Old Noosa & Shadbolt Roads, MOTHAR MOUNTAIN, QLD Australia 4570",-26.24544574,152.7502799,QLD,Full Access
+,Mount Alford,Mount Alford State School,"942 Reckumpilla Street, MOUNT ALFORD, QLD Australia 4310",-28.06791429,152.59455085,QLD,Full Access
+,Mount Archer,Mount Archer State School,"242 Thozet Road, KOONGAL, QLD Australia 4701",-23.35895177,150.545834,QLD,Full Access
+,Mount Cotton,Mount Cotton State School,"Sanctuary Drive, MOUNT COTTON, QLD Australia 4165",-27.621693,153.236748,QLD,Assisted Access
+,Mount Crosby,Mount Crosby State School,"541-561 Mount Crosby Road, MOUNT CROSBY, QLD Australia 4306",-27.5508491,152.80712396,QLD,Full Access
+,Mount Garnet,QCWA Hall,"16 Garnet Street, MOUNT GARNET, QLD Australia 4872",-17.67698416,145.11575013,QLD,Full Access
+,Mount Kilcoy,Mount Kilcoy State School,"251 Jenkinsons Road, MOUNT KILCOY, QLD Australia 4515",-26.87391357,152.58706212,QLD,Full Access
+,Mount Larcom,Mount Larcom State School,"Raglan Street, MOUNT LARCOM, QLD Australia 4695",-23.807368636488857,150.97447246046963,QLD,Assisted Access
+,Mount Lofty,Toowoomba State High School - Multi Purpose Centre,"Stuart Street, TOOWOOMBA, QLD Australia 4066",-27.54573856,151.9658196,QLD,Full Access
+,Mount Louisa,"Brothers Townsville Football Club, High Vista Park","488 Bayswater Road, MOUNT LOUISA, QLD Australia 4814",-19.27211668,146.74862779,QLD,Full Access
+,Mount Mee,Mount Mee Public Hall,"1352 Mount Mee Road, Mount Mee, QLD Australia 4521",-27.0804813,152.7718339,QLD,Full Access
+,Mount Molloy,Mount Molloy CWA Hall,"31 Main Street, MOUNT MOLLOY, QLD Australia 4871",-16.674958021495364,145.33019542714723,QLD,Full Access
+,Mount Nebo,Mount Nebo State School,"1918 Mt Nebo Road, MOUNT NEBO, QLD Australia 4520",-27.39668289,152.78379679,QLD,Assisted Access
+,Mount Perry,Perry Shire Hall,"66 Heusman Street, MOUNT PERRY, QLD Australia 4671",-25.174484,151.6409789,QLD,Full Access
+,Mount Sylvia,Mount Sylvia State School,"6 Left Hand Branch Road, MOUNT SYLVIA, QLD Australia 4343",-27.7229274,152.22380787,QLD,Full Access
+,Mount Tarampa,Mount Tarampa State School,"9 Profkes Road, MOUNT TARAMPA, QLD Australia 4311",-27.45535993,152.48949409,QLD,Full Access
+,Mount Tyson,Mount Tyson State School,"Main Street, MOUNT TYSON, QLD Australia 4356",-27.57438688,151.57019913,QLD,Full Access
+,Mountain Creek,Mountain Creek State School,"51 Lady Musgrave Drive, MOUNTAIN CREEK, QLD Australia 4557",-26.691071870000002,153.10371995,QLD,Full Access
+,Moura,Moura Tennis Club,"12 Nott Street, MOURA, QLD Australia 4718",-24.5740234,149.9754883,QLD,Assisted Access
+,Mourilyan,Mourilyan State School,"34 Mourilyan Harbour Road, MOURILYAN, QLD Australia 4858",-17.58493221,146.04434967,QLD,Full Access
+,Mount Gravatt,Nursery Road State Special School,"49 Nursery Road, HOLLAND PARK, QLD Australia 4121",-27.535173,153.065145,QLD,Full Access
+,Mount Gravatt East,Mount Gravatt East State School,"Cnr Newnham & Wecker Roads, MANSFIELD, QLD Australia 4122",-27.53389469,153.09489012,QLD,Assisted Access
+,Mount Gravatt West,Mount Gravatt Showground Lower Memorial Hall,"1644 Logan Road, MOUNT GRAVATT, QLD Australia 4122",-27.54448,153.082338,QLD,Full Access
+,Mount Warren Park,Mount Warren Park State School,"125 Mt Warren Boulevard, MT WARREN PARK, QLD Australia 4207",-27.72683782,153.20600331,QLD,Assisted Access
+,Mudgeeraba,Mudgeeraba Special School,"4 School Street, MUDGEERABA, QLD Australia 4213",-28.078329999999998,153.36361499999998,QLD,Full Access
+,Tallai,Mudgeeraba State School,"32-48 Old Coach Road, MUDGEERABA, QLD Australia 4213",-28.074147999999997,153.353849,QLD,Full Access
+,Mudjimba,Mudjimba Community Hall,"41 Cottonwood Street, MUDJIMBA, QLD Australia 4564",-26.618768,153.096104,QLD,Full Access
+,Mulgildie,Mulgildie State School,"2 Brigalow Street, MULGILDIE, QLD Australia 4630",-24.96336813,151.13450915,QLD,Full Access
+,Mundingburra,Mundingburra State School,"77 Ross River Road, MUNDINGBURRA, QLD Australia 4812",-19.293993,146.789592,QLD,Full Access
+,Mundubbera,Mundubbera CWA Hall,"79 Lyons Street, Mundubbera, QLD Australia 4626",-25.59058548543849,151.29779346990586,QLD,Full Access
+,Mungar,Mungar State School,"1143 Mungar Road, MUNGAR, QLD Australia 4650",-25.60410825,152.59105325,QLD,Full Access
+,Murarrie,Murarrie Progress Hall,"10 Queensport Road, MURARRIE, QLD Australia 4172",-27.464085999999998,153.10458599999998,QLD,Assisted Access
+,Murgon,PCYC South Burnett,"40-42 Macalister Street, MURGON, QLD Australia 4605",-26.2460018,151.9400474,QLD,Full Access
+,Murphys Creek,Murphys Creek Community Centre,"18 Jessie Lane, MURPHYS CREEK, QLD Australia 4352",-27.459753798603504,152.05724347619628,QLD,Full Access
+,Murray Upper,Murray River Upper State School,"1 Middle Murray Road, Murray Upper, QLD Australia 4854",-18.09042158,145.85043669,QLD,Assisted Access
+,Murrays Bridge,Murray's Bridge State School,"1378 Warwick-Killarney Road, MURRAYS BRIDGE, QLD Australia 4370",-28.29308254,152.11806446,QLD,No Access
+,Murrumba Downs,Undurba State School,"49 Ogg Road, MURRUMBA DOWNS, QLD Australia 4503",-27.2620306,153.0078578,QLD,Full Access
+,Mutchilba,Mutchilba State School,"33 Marsterson Street, MUTCHILBA, QLD Australia 4872",-17.139620999999998,145.21111,QLD,Assisted Access
+,Mutdapilly,Mutdapilly State School,"4 Mutdapilly-Churchbank Weir Road, MUTDAPILLY, QLD Australia 4307",-27.7707664,152.65092552,QLD,Assisted Access
+,Nambour,"Hungerford Hall, Nambour State College","7 Carrol Street, NAMBOUR, QLD Australia 4560",-26.622684999999997,152.963077,QLD,Assisted Access
+,Nambour West,Nambour Heights Bowls Club,"54 Isabella Avenue, NAMBOUR, QLD Australia 4560",-26.624225,152.93995,QLD,Assisted Access
+,Nanango,Nanango State School,"39 Drayton Street, NANANGO, QLD Australia 4615",-26.671885481265996,152.0052651620407,QLD,Full Access
+,Napranum,Suzie Madua Conference Hall,"320 Wa-Tyne Street, NAPRANUM, QLD Australia 4874",-12.68329341,141.88752651,QLD,Assisted Access
+,Narangba,Narangba State School,"Knights Road, NARANGBA, QLD Australia 4504",-27.20553286,152.95980871,QLD,Full Access
+,Nebo,Nebo State School,"34 Oxford Street, NEBO, QLD Australia 4742",-21.68950779,148.68972123,QLD,Full Access
+,Nelly Bay,Magnetic Island State School,"10-16 Mandalay Avenue, NELLY BAY, QLD Australia 4819",-19.156522,146.85141,QLD,Full Access
+,Highland Park,William Duncan State School,"Explorers Way, HIGHLAND PARK, QLD Australia 4211",-28.013261,153.3339,QLD,Full Access
+,Nerang South,PCYC Nerang,"33 Cayuga Road, NERANG, QLD Australia 4211",-28.00425339,153.33923936,QLD,Full Access
+,Nerang West,Nerang State High School,"1-35 Weedons Road, NERANG, QLD Australia 4211",-28.000059999999998,153.328885,QLD,Full Access
+,New Farm South,Holy Spirit School Hall,"36 Villiers Street, NEW FARM, QLD Australia 4005",-27.464774,153.045557,QLD,Full Access
+,New Farm,New Farm State School,"Cnr James & Heal Streets, NEW FARM, QLD Australia 4005",-27.460645,153.045579,QLD,Assisted Access
+,Newmarket,Newmarket State School,"15 Banks Street, NEWMARKET, QLD Australia 4051",-27.43191571,153.00404638,QLD,Assisted Access
+,Newtown,Newtown State School,"24 Albert Street, TOOWOOMBA, QLD Australia 4350",-27.55895082,151.93527997,QLD,Full Access
+,Ningi,Ningi Community Hall,"1320 Bribie Island Road, NINGI, QLD Australia 4511",-27.06629138,153.0989027,QLD,Full Access
+,Nobby,Nobby State School,"4 Davenport Street, NOBBY, QLD Australia 4360",-27.85231422333328,151.90580865767214,QLD,Full Access
+,Nome,Nome District Rural Fire Brigade Hall,"2 Alligator Creek Road, NOME, QLD Australia 4816",-19.38838033,146.95301235,QLD,Assisted Access
+,Noosa Junction,Sunshine Beach State School,"Bicentennial Drive, SUNSHINE BEACH, QLD Australia 4567",-26.40300784,153.1010592,QLD,Full Access
+,Norman Park South,Faith Works Uniting Church Hall,"Cnr Bennetts Road & McIlwraith Avenue, NORMAN PARK, QLD Australia 4170",-27.483974,153.06437499999998,QLD,Full Access
+,Norman Park,Norman Park State School,"53 Hipwood Street, NORMAN PARK, QLD Australia 4170",-27.474355,153.062884,QLD,Assisted Access
+,Norman Gardens,Rockhampton Baptist Tabernacle,"650 Norman Road, NORTH ROCKHAMPTON, QLD Australia 4701",-23.329985999999998,150.532762,QLD,Full Access
+,Normanton,Normanton Shire Hall,"99 Landsborough Street, NORMANTON, QLD Australia 4890",-17.66889562,141.08019501,QLD,Full Access
+,North Booval,Trinity Uniting Church Hall,"114 Jacaranda Street, NORTH BOOVAL, QLD Australia 4304",-27.60782424,152.78523982,QLD,Full Access
+,North Bundaberg,North Progress Hall,"Cnr Queen & Gavegan Streets, BUNDABERG NORTH, QLD Australia 4670",-24.856355,152.345691,QLD,Full Access
+,North Ipswich,Ipswich North State School Hall,"Lawrence Street, NORTH IPSWICH, QLD Australia 4305",-27.60367425,152.76275218,QLD,Assisted Access
+,North Lakes,North Lakes State College - Senior Campus Sports Hall,"1 The Corso, NORTH LAKES, QLD Australia 4509",-27.2398104,153.0174791,QLD,Full Access
+,North Mackay,Mackay North State High School,"Valley Street, NORTH MACKAY, QLD Australia 4740",-21.11501411,149.17350054,QLD,Assisted Access
+,North Rockhampton,North Rockhampton State High School,"302-308 Berserker Street, NORTH ROCKHAMPTON, QLD Australia 4701",-23.3528154,150.53269386,QLD,Full Access
+,North Toowoomba,Toowoomba North State School,"Cnr Taylor & Mort Streets, TOOWOOMBA, QLD Australia 4350",-27.55668706,151.9483906,QLD,No Access
+,North Ward,Townsville Central State School,"4-6 Warburton Street, NORTH WARD, QLD Australia 4810",-19.251683,146.811627,QLD,Full Access
+,Northern Beaches,Community Recreation Hall,"Meranti Street, DEERAGUN, QLD Australia 4818",-19.2452251221492,146.6740832857056,QLD,Full Access
+,Northgate Central,Northgate State School,"128 Amelia Street, NORTHGATE, QLD Australia 4012",-27.398049999999998,153.070909,QLD,Full Access
+,Norville,Norville State School,"9 Dr Mays Road, BUNDABERG, QLD Australia 4670",-24.887113,152.337198,QLD,Full Access
+,Nudgee,Nudgee School of Arts,"61 Hayden St, Nudgee, QLD Australia 4014",-27.3654058,153.0850591,QLD,Full Access
+,Nundah,Nundah State School,"41 Bage Street, NUNDAH, QLD Australia 4012",-27.40247306,153.05809826,QLD,Full Access
+,Nundah East,St Paul's Lutheran Church Hall,"Cnr Buckland Road & Atthow Parade, NUNDAH, QLD Australia 4012",-27.40392562,153.06280553,QLD,Assisted Access
+,Nundah North,St Francis of Assisi Anglican Church Hall,"Cnr Cameron & Cavendish Streets, NUNDAH, QLD Australia 4012",-27.39459559,153.06142956,QLD,Full Access
+,Nundah West,Holy Spirit Anglican Church Hall,"Cnr Imbros & Olive Streets, NUNDAH, QLD Australia 4012",-27.39978459,153.05066586,QLD,Full Access
+,Oakey,Oakey State High School,"1 Campbell Street, OAKEY, QLD Australia 4401",-27.444508,151.718706,QLD,No Access
+,Oakwood,Oakwood State School,"125 Oakwood School Road, OAKWOOD, QLD Australia 4670",-24.84413139,152.30095625,QLD,Full Access
+,Oonoonba,Oonoonba State School,"83 Fairfield Waters Drive, OONOONBA, QLD Australia 4811",-19.30469348,146.81290448,QLD,Assisted Access
+,Ormeau,Ormeau State School,"29 Mirambeena Drive, PIMPAMA, QLD Australia 4209",-27.800366999999998,153.276575,QLD,Full Access
+,Ormiston,Ormiston State School,"82-110 Gordon Street, ORMISTON, QLD Australia 4160",-27.516969,153.25779699999998,QLD,Full Access
+,Oxenford,Oxenford State School,"90 Michigan Drive, OXENFORD, QLD Australia 4210",-27.900364999999997,153.303598,QLD,Full Access
+,Oxford Park,Grovely Scout Hall,"170 Blaker Road, OXFORD PARK, QLD Australia 4053",-27.40419231,152.96539843,QLD,Assisted Access
+,Oxley,Oxley Senior Citizens Hall,"86 Oxley Station Road, OXLEY, QLD Australia 4075",-27.555097999999997,152.975349,QLD,Assisted Access
+,Oxley South,Oxley State School,"26 Bannerman Street, OXLEY, QLD Australia 4075",-27.563871,152.980275,QLD,Full Access
+,Pacific Paradise,Pacific Paradise State School,"14-24 Menzies Drive, PACIFIC PARADISE, QLD Australia 4564",-26.61293218,153.0804491,QLD,Full Access
+,Pacific Pines,Pacific Pines Primary School,"47-67 Santa Isobel Boulevard, PACIFIC PINES, QLD Australia 4211",-27.939444444444003,153.319722222222,QLD,Full Access
+,Paddington,Brisbane West Senior Citizens Club,"132 Latrobe Terrace, PADDINGTON, QLD Australia 4064",-27.458799,152.996061,QLD,Full Access
+,Pallara,Pallara State School,"39 Ritchie Road, PALLARA, QLD Australia 4110",-27.62986852,152.99401201,QLD,Full Access
+,Palm Beach,Palm Beach Share-N-Care,"31 Tenth Avenue, PALM BEACH, QLD Australia 4221",-28.118153,153.467972,QLD,Full Access
+,Palm Beach North,Palm Beach State School,"13-19 Nineteenth Avenue (access via Townsend Avenue), PALM BEACH, QLD Australia 4221",-28.109634999999997,153.463266,QLD,Assisted Access
+,Palm Beach South,Palm Beach-Currumbin State High School,"Thrower Drive, PALM BEACH, QLD Australia 4221",-28.13195853,153.47499669,QLD,Full Access
+,Palm Island,Bwgcolman Community School,"9 Creek Road, PALM ISLAND, QLD Australia 4816",-18.7371924,146.5781184,QLD,Assisted Access
+,Palmwoods,Palmwoods State School,"111 Palmwoods-Montville Road, PALMWOODS, QLD Australia 4555",-26.69365516,152.94714332,QLD,Full Access
+,Paradise Lakes,Marj Shipman Community Centre,"91 Hansford Road, COOMBABAH, QLD Australia 4216",-27.898967,153.37892399999998,QLD,Full Access
+,Paradise Point,Paradise Point Community Centre,"31 Community Lane, PARADISE POINT, QLD Australia 4216",-27.885554,153.393635,QLD,Assisted Access
+,Park Avenue,Park Avenue State School,"5-13 Main Street, PARK AVENUE, QLD Australia 4701",-23.35951319,150.5073148,QLD,Full Access
+,Park Ridge,Park Ridge State High School,"14-30 Lancewood Street, PARK RIDGE, QLD Australia 4125",-27.70042373,153.03381085,QLD,Assisted Access
+,Parkhurst,DAF Conference Centre,"25 Yeppoon Road, PARKHURST, QLD Australia 4702",-23.313098,150.518176,QLD,Full Access
+,Parramatta Park,Parramatta State School,"Minnie Street, PARRAMATTA PARK, QLD Australia 4870",-16.9242901,145.76248169,QLD,Full Access
+,Ferny Hills North,Patricks Road State School,"238-256 Patricks Road, FERNY HILLS, QLD Australia 4055",-27.393333333333,152.93388888888802,QLD,Full Access
+,The Gap East,Payne Road State School,"171 Payne Road, THE GAP, QLD Australia 4061",-27.44826935,152.95109689,QLD,Assisted Access
+,Peachester,Peachester Community Hall,"960 Peachester Road, PEACHESTER, QLD Australia 4519",-26.84388889,152.88305556,QLD,Full Access
+,Peak Crossing,Peak Crossing State School,"1323 Ipswich-Boonah Road, PEAK CROSSING, QLD Australia 4306",-27.77914372,152.73144007,QLD,Full Access
+,Pelican Waters,Caloundra City Private School,"200 Pelican Waters Boulevard, PELICAN WATERS, QLD Australia 4551",-26.82437237,153.10412765,QLD,Full Access
+,Pentland,Pentland State School,"Gilmore Street, PENTLAND, QLD Australia 4816",-20.52291985,145.39780855,QLD,Assisted Access
+,Peregian Beach,Peregian Beach Community Kindergarten,"13 Rufous Street, PEREGIAN BEACH, QLD Australia 4573",-26.48019109,153.09482574,QLD,Assisted Access
+,Perseverance,Perseverance Hall,"10 Perseverance Hall road, PERSEVERANCE, QLD Australia 4352",-27.37856723038783,152.1179263908768,QLD,Full Access
+,Petrie,Petrie School of Arts Community Centre,"1018 Anzac Avenue, PETRIE, QLD Australia 4502",-27.26936548594613,152.97832546494294,QLD,Assisted Access
+,Petrie Terrace,Petrie Terrace State School,"40 Moreton Street, PADDINGTON, QLD Australia 4064",-27.460221999999998,153.009814,QLD,Full Access
+,Pie Creek,Pie Creek Community Hall,"Herron Road, PIE CREEK, QLD Australia 4570",-26.24110579,152.61939883,QLD,Full Access
+,Pilton,Pilton State School,"24 Pilton Valley Road, PILTON, QLD Australia 4361",-27.86821658,152.04966545,QLD,Full Access
+,Pimlico,"Pimlico State High School, Performing Arts Complex","55-77 Fulham Road, PIMLICO, QLD Australia 4812",-19.2875,146.783319,QLD,Full Access
+,Pimpama,Pimpama State School,"9 Hotham Creek Road, PIMPAMA, QLD Australia 4209",-27.81702581,153.2781601,QLD,Assisted Access
+,Pine Mountain,Pine Mountain Hall,"840 Pine Mountain Road, PINE MOUNTAIN, QLD Australia 4306",-27.5438265,152.71138251,QLD,No Access
+,Raymonds Hill,St Joseph's School Hall,"42 Pine Mountain Road, NORTH IPSWICH, QLD Australia 4305",-27.591227,152.757049,QLD,Assisted Access
+,Andergrove South,Pioneer State High School,"221 Bedford Road, ANDERGROVE, QLD Australia 4740",-21.095551999999998,149.180113,QLD,Full Access
+,Pittsworth,Pittsworth Function Centre,"42 Hume Street, PITTSWORTH, QLD Australia 4356",-27.718611,151.6342192,QLD,Full Access
+,Ooralea,"CQUniversity Mackay Ooralea, Building 5","151 Boundary Road, OORALEA, QLD Australia 4740",-21.173797999999998,149.142989,QLD,Full Access
+,Pomona,Pomona Memorial School of Arts Hall,"6 Reserve Street, Pomona, QLD Australia 4568",-26.3651496,152.8551152,QLD,Full Access
+,Pormpuraaw,Pormpuraaw Justice Building,"24 Yalu Street, PORMPURAAW, QLD Australia 4892",-14.8989859,141.62005663,QLD,Assisted Access
+,Port Douglas,Port Douglas Community Hall,"13 - 29 Mowbray Street, PORT DOUGLAS, QLD Australia 4871",-16.48543966,145.4637755238,QLD,Full Access
+,Pratten,Pratten Hall,"101 White Street, PRATTEN, QLD Australia 4370",-28.08645859,151.78448081,QLD,Assisted Access
+,Preston Road,Wynnum-Manly Alliance Church Hall,"60 Preston Road, MANLY WEST, QLD Australia 4179",-27.45663567,153.17442834,QLD,Assisted Access
+,Proserpine,"Father Tom Guard Hall, St Catherine's Catholic College","90 Renwick Road, Proserpine, QLD Australia 4800",-20.41013092,148.58936906,QLD,Full Access
+,Proston,Proston State School,"94 Rodney Street, PROSTON, QLD Australia 4613",-26.16781696,151.6003418,QLD,Full Access
+,Pullenvale,Pullenvale State School,"120 Grandview Road, PULLENVALE, QLD Australia 4069",-27.53288148,152.89543569,QLD,Assisted Access
+,Queens Beach,Queens Beach State School,"39 Tracey Street, QUEENS BEACH, QLD Australia 4805",-19.97630827,148.22682559,QLD,Full Access
+,Quilpie,Quilpie State College,"Cnr Boonkai & Chulungra Streets, QUILPIE, QLD Australia 4480",-26.61471631,144.27184403,QLD,Assisted Access
+,Quinalow,Quinalow State School,"7 Progress St, Quinalow, QLD Australia 4403",-27.107424983601557,151.62200114921265,QLD,Full Access
+,Raceview,Raceview State School Hall,"96 Wildey Street, RACEVIEW, QLD Australia 4305",-27.64055758,152.78304577,QLD,Assisted Access
+,Railway Estate,Railway Estate State School,"39 Railway Avenue, RAILWAY ESTATE, QLD Australia 4810",-19.27415437,146.81614459,QLD,Full Access
+,Rainbow Beach,Rainbow Beach State School,"1 Warooga Road, RAINBOW BEACH, QLD Australia 4581",-25.907208999999998,153.07909899999999,QLD,Full Access
+,Rainworth,Rainworth State School,"185 Boundary Road, Bardon, QLD Australia 4065",-27.467041,152.985285,QLD,Full Access
+,Rangeville,Rangeville State School,"32A High Street, TOOWOOMBA, QLD Australia 4350",-27.58299323,151.97867274,QLD,Assisted Access
+,Rasmussen,Rasmussen State School,"19 Allambie Lane, RASMUSSEN, QLD Australia 4815",-19.36478796,146.72924638,QLD,Full Access
+,Rathdowney,Rathdowney State School,"141-155 Mt Lindesay Highway, RATHDOWNEY, QLD Australia 4287",-28.21584804,152.86001444,QLD,Full Access
+,Ravenshoe,"Ravenshoe State School, F Block Hall, Jr School Campus","Ascham Street, RAVENSHOE, QLD Australia 4888",-17.6122987,145.4817383,QLD,Full Access
+,Ravenswood,Ravenswood State School,"30-40 Elphinstone St, Ravenswood, QLD Australia 4816",-20.0958328,146.8866816,QLD,No Access
+,Redbank,Redbank State School,"9 Brisbane Road, REDBANK, QLD Australia 4301",-27.603496,152.864781,QLD,Assisted Access
+,Redbank Plains,Redbank Plains State School Hall,"39 - 53 School Road, REDBANK PLAINS, QLD Australia 4301",-27.64818,152.850312,QLD,Full Access
+,Redbank Plains East,"Redbank Plains State High School, Performing Arts Hall","136 Willow Road, REDBANK PLAINS, QLD Australia 4301",-27.652388,152.869332,QLD,Full Access
+,Redland Bay,Redland Bay Community Hall,"7-9 Weinam Street, REDLAND BAY, QLD Australia 4165",-27.6159573,153.3074875,QLD,Full Access
+,Redlynch,Redlynch State College,"Jungara Road, REDLYNCH, QLD Australia 4870",-16.90888551,145.69607824,QLD,Full Access
+,Reedy Creek,King's Church,"68 Gemvale Road, REEDY CREEK, QLD Australia 4228",-28.0967943,153.3957535,QLD,Full Access
+,Regents Park,Regents Park State School,"42-60 Emerald Drive, REGENTS PARK, QLD Australia 4118",-27.68224,153.034298,QLD,Full Access
+,Richlands East,Richlands East State School,"99 Poinsettia Street, INALA, QLD Australia 4077",-27.597444199999998,152.96773732,QLD,Full Access
+,Ridgelands,Ridgelands State School,"43 Dalma Ridgelands Road, RIDGELANDS, QLD Australia 4702",-23.24985346,150.2804482,QLD,Full Access
+,Riverside,Riverside Gardens Community Centre,"55 Riverside Blvd, Douglas, QLD Australia 4814",-19.3165163,146.7520851,QLD,Assisted Access
+,Riverview,Riverview Community Centre,"138 Old Ipswich Road, RIVERVIEW, QLD Australia 4303",-27.60314182,152.84841657,QLD,Assisted Access
+,Roadvale,Roadvale State School,"111 Roadvale Road, ROADVALE, QLD Australia 4310",-27.92028378,152.70528316,QLD,Assisted Access
+,Robertson,Robertson State School,"640 Musgrave Road, ROBERTSON, QLD Australia 4109",-27.56523773,153.05620193,QLD,Full Access
+,Robina,Robina State School,"1-13 Killarney Avenue (access via Glen Eagles Drive), ROBINA, QLD Australia 4226",-28.071106,153.40019,QLD,Full Access
+,Robina North,St Vincent's Catholic Primary School,"22 Fairway Drive, CLEAR ISLAND WATERS, QLD Australia 4226",-28.0365381,153.4037976,QLD,Full Access
+,Robina Town,Robina State High School,"1 Investigator Drive, ROBINA, QLD Australia 4226",-28.074783,153.376348,QLD,Full Access
+,Rochedale,Rochedale State School,"694 Rochedale Road, ROCHEDALE, QLD Australia 4123",-27.5803591,153.1254673,QLD,Assisted Access
+,Rochedale South,St Peter's Catholic Primary School,"955 Rochedale Road, ROCHEDALE, QLD Australia 4123",-27.592627,153.122344,QLD,Full Access
+,Rockhampton South,Rockhampton State High School,"1 Campbell Street, WANDAL, QLD Australia 4700",-23.36959372,150.49974829,QLD,Full Access
+,Rocklea,Rocklea State School,"19 Elmes Road, ROCKLEA, QLD Australia 4106",-27.54681824,153.01154584,QLD,Full Access
+,Rockville,Rockville State School,"3 Holberton Street, NORTH TOOWOOMBA, QLD Australia 4350",-27.53102628,151.93600416,QLD,Assisted Access
+,Rolleston,Rolleston State School,"16 Warrijo Street, ROLLESTON, QLD Australia 4702",-24.46259992,148.62448454,QLD,Assisted Access
+,Rollingstone,Rollingstone State School,"Fred Williams Drive, ROLLINGSTONE, QLD Australia 4816",-19.04372196,146.39189959,QLD,No Access
+,Rosedale,Rosedale State School,"21 James Street, ROSEDALE, QLD Australia 4674",-24.622834000149734,151.9155727142944,QLD,Full Access
+,Rosewood,Rosewood State High School,"46 Lanefield Road, ROSEWOOD, QLD Australia 4340",-27.636803,152.58721,QLD,Full Access
+,Hermit Park South,Corcoran Park Netball Association,"111 Queens Road, HERMIT PARK, QLD Australia 4812",-19.28684108,146.79976165,QLD,Full Access
+,Rothwell,Grace Lutheran College,"Mewes Road, ROTHWELL, QLD Australia 4022",-27.218373,153.057421,QLD,Assisted Access
+,Rubyvale,Rubyvale Hall,"7 Buridge Road, RUBYVALE, QLD Australia 4702",-23.420233099618038,147.6999137171619,QLD,Assisted Access
+,Runaway Bay,Runaway Bay Indoor Stadium (Seahawks Basketball),"Sports Drive, RUNAWAY BAY, QLD Australia 4216",-27.911012024775314,153.39307961636354,QLD,Full Access
+,Runcorn,Runcorn State School,"646 Beenleigh Road (access via Ardagie Street), SUNNYBANK, QLD Australia 4109",-27.58798537,153.06194186,QLD,Assisted Access
+,Runcorn Heights,Runcorn Heights State School,"200 Nemies Road, RUNCORN HEIGHTS, QLD Australia 4113",-27.60512415,153.06997776,QLD,Assisted Access
+,Runcorn East,Runcorn State High School,"132 Hill Road, RUNCORN, QLD Australia 4113",-27.593660999999997,153.077018,QLD,Full Access
+,Rupertswood,Rupertswood Community Hall,"Progress Road, RUPERTSWOOD, QLD Australia 4817",-19.330725539605552,146.6036057672119,QLD,Full Access
+,Russell Island,Russell Island Recreation Hall,"1 Alison Crescent, RUSSELL ISLAND, QLD Australia 4184",-27.64641836,153.38253017,QLD,Full Access
+,Sadliers Crossing,Blair State School,"Cribb Street, SADLIERS CROSSING, QLD Australia 4305",-27.6122783,152.74867058,QLD,Full Access
+,Salisbury,Salisbury State School Hall,"Lillian Avenue, SALISBURY, QLD Australia 4107",-27.553549999999998,153.03225,QLD,Full Access
+,Sandgate,Sandgate State School Hall,"Keogh Street, SANDGATE, QLD Australia 4017",-27.32028217,153.06666255,QLD,Assisted Access
+,Sapphire,Sapphire Community Hall,"Rethammel Road, SAPPHIRE, QLD Australia 4702",-23.46439608,147.72240276,QLD,Assisted Access
+,Sarina,St Luke's Anglican Church Hall,"56-60 Broad Street, SARINA, QLD Australia 4737",-21.42176068,149.21771944,QLD,Assisted Access
+,Scarborough,Scarborough State School,"Garsden Street, SCARBOROUGH, QLD Australia 4020",-27.2159348,153.1104698,QLD,Assisted Access
+,Scarborough North,Alice Bartlett Hall,"72 Seaville Avenue, SCARBOROUGH, QLD Australia 4020",-27.19669669,153.11055422,QLD,Assisted Access
+,Seaforth,Seaforth Community Hall,"3 Prince Charles Avenue, SEAFORTH, QLD Australia 4741",-20.90232695,148.96665394,QLD,Full Access
+,Seaview,St Peter's Anglican Church,"50 J Hickey Avenue, CLINTON, QLD Australia 4680",-23.8793694,151.2191235,QLD,Assisted Access
+,Serviceton South,Serviceton South State School,"59 Lorikeet Street, INALA, QLD Australia 4077",-27.60632684,152.97681928,QLD,Full Access
+,Seven Hills,Seven Hills State School,"152 D'Arcy Road, SEVEN HILLS, QLD Australia 4170",-27.47869923,153.07563454,QLD,No Access
+,Holland Park South,Seville Road State School,"Cnr Oates Avenue & Roscoe Street, HOLLAND PARK, QLD Australia 4121",-27.525333999999997,153.072359,QLD,Full Access
+,Sharon,Sharon State School,"18 Sharon School Road, SHARON, QLD Australia 4670",-24.87250836,152.26362526,QLD,Assisted Access
+,Sherwood,St Matthew's Anglican Church Hall,"Cnr Oxley & Sherwood Roads, SHERWOOD, QLD Australia 4075",-27.53267693,152.98260748,QLD,Full Access
+,Shinfield,Swayneville State School,"952 Marlborough-Sarina Road, SHINFIELD, QLD Australia 4737",-21.4726589,149.14451122,QLD,Full Access
+,Shorncliffe,Shorncliffe State School After School Care Centre,"cnr Signal Row & Yundah Street, SHORNCLIFFE, QLD Australia 4017",-27.32344201,153.08049738,QLD,Full Access
+,Silkstone,Silkstone State School,"Prospect Street, SILKSTONE, QLD Australia 4304",-27.618931999999997,152.784308,QLD,Full Access
+,Silkwood,Silkwood State School,"Cnr Japoon & Walter Lever Estate Roads, SILKWOOD, QLD Australia 4856",-17.736239374398224,146.00108485507812,QLD,Full Access
+,Seventeen Mile Rocks,iSee Church,"308 Seventeen Mile Rocks Road, SEVENTEEN MILE ROCKS, QLD Australia 4073",-27.549937,152.957556,QLD,Full Access
+,Daisy Hill,Daisy Hill State School,"20-50 Daisy Hill Road, DAISY HILL, QLD Australia 4127",-27.64253923,153.15255761,QLD,Full Access
+,Slade Point,Slade Point Community Centre,"4 Wren Street, SLADE POINT, QLD Australia 4740",-21.0758974,149.2188978,QLD,Full Access
+,Caravonica,Caravonica State School,"Lot 3 1115R Kamerunga Road, CARAVONICA, QLD Australia 4878",-16.85257865,145.69534868,QLD,Full Access
+,Somerset Hills,Somerset Hills State School,"233 Kitchener Road, STAFFORD HEIGHTS, QLD Australia 4053",-27.3977696,153.0189544,QLD,Full Access
+,Manunda,Trinity Bay State High School,"26-62 Hoare Street, MANUNDA, QLD Australia 4870",-16.92283258,145.752756,QLD,Full Access
+,South Johnstone,South Johnstone State School,"2 East Avenue, SOUTH JOHNSTONE, QLD Australia 4859",-17.59335946,145.99978209,QLD,Full Access
+,South Kolan,Kolan South State School,"2297 Gin Gin Road, SOUTH KOLAN, QLD Australia 4670",-24.934403999999997,152.17584729,QLD,Assisted Access
+,South Townsville,Townsville South State School,"Macrossan Street, South Townsville, QLD Australia 4810",-19.26295045,146.82760298,QLD,Assisted Access
+,Southbrook,Southbrook Central State School,"1 School Road, SOUTHBROOK, QLD Australia 4352",-27.67803655,151.70361757,QLD,Full Access
+,Southport East,Southport Community Centre,"6 Lawson Street, SOUTHPORT, QLD Australia 4215",-27.970934,153.414131,QLD,Full Access
+,Southport North,Southport State High School,"Brooke Avenue, SOUTHPORT, QLD Australia 4215",-27.96247575,153.40266287,QLD,Assisted Access
+,Southport West,CrossLife Baptist Church,"170 Nerang Street, SOUTHPORT, QLD Australia 4215",-27.973991,153.403162,QLD,Full Access
+,Springbrook,Springbrook State School,"2327 Springbrook Road, SPRINGBROOK, QLD Australia 4213",-28.18995051,153.26496363,QLD,Assisted Access
+,Springfield,Woodcrest State College Auditorium,"38 Nev Smith Drive, SPRINGFIELD, QLD Australia 4300",-27.65912762,152.92113662,QLD,Full Access
+,Springsure,Springsure State School,"55 Eclipse Street, SPRINGSURE, QLD Australia 4722",-24.11547049,148.08818221,QLD,Full Access
+,Springwood Central,Springwood Central State School,"26-34 Dennis Road, SPRINGWOOD, QLD Australia 4127",-27.61860969,153.12978029,QLD,Assisted Access
+,Springwood North,Springwood Church of Christ,"179 Springwood Rd, Springwood, QLD Australia 4127",-27.61076,153.134134,QLD,Full Access
+,St Bernard,St Bernard State School,"1-19 School Road, MOUNT TAMBORINE, QLD Australia 4272",-27.9703,153.198739,QLD,Full Access
+,Hill End,St Francis of Assisi Church Hall,"47 Dornoch Terrace, WEST END, QLD Australia 4101",-27.48732497,153.00891459,QLD,Assisted Access
+,St George,St George State School Hall,"20 - 40 Grey Street, ST GEORGE, QLD Australia 4487",-28.03775286,148.58073235,QLD,Assisted Access
+,Rangeville North,"St Joseph's College Toowoomba, MacKillop Centre","Coronet Street, TOOWOOMBA, QLD Australia 4350",-27.572716370077462,151.97059481349183,QLD,Full Access
+,Spring Hill,Brisbane Central State School,"Rogers Street, SPRING HILL, QLD Australia 4000",-27.45907,153.027731,QLD,Full Access
+,Stafford,Stafford State School,"314 Stafford Road, STAFFORD, QLD Australia 4053",-27.41132859,153.01736355,QLD,Full Access
+,Stafford Heights,Stafford Heights State School,"95 Redwood Street, STAFFORD HEIGHTS, QLD Australia 4053",-27.40114193,153.00359845,QLD,Full Access
+,Stafford West,Our Lady Queen of Apostles Church Hall,"70 Appleby Road, STAFFORD, QLD Australia 4053",-27.40535196,153.00835669,QLD,Full Access
+,Stanthorpe,St Paul's Parish Hall,"2 Corundum Street, STANTHORPE, QLD Australia 4380",-28.652690999999997,151.937724,QLD,Full Access
+,Stanwell,Stanwell State School,"10 Teakle Street, STANWELL, QLD Australia 4702",-23.484844,150.320692,QLD,Full Access
+,South Brisbane,Brisbane State High School,"Cnr Vulture & Ernest Streets (entry via Vulture Street gates), SOUTH BRISBANE, QLD Australia 4101",-27.481749286897738,153.01828482936094,QLD,Full Access
+,Varsity Lakes South,"Varsity Lakes Community Centre, Jim Harris Park","Lyn Muller Lane (off Mattocks Road), VARSITY LAKES, QLD Australia 4227",-28.098057793371222,153.41922283106507,QLD,Full Access
+,Stockyard Creek,Stockyard Creek Hall,"111 Stockyard Creek Road, STOCKYARD, QLD Australia 4344",-27.64232063,152.06349492,QLD,Full Access
+,Stones Corner,The Little Kings Movement for the Handicapped,"Cnr Carl & O'Keefe Streets, BURANDA, QLD Australia 4102",-27.4978462761582,153.03796827322938,QLD,Full Access
+,Stratford,Stratford Community Hall,"15 Kamerunga Road, STRATFORD, QLD Australia 4870",-16.87570736,145.7324262,QLD,Full Access
+,Strathpine,Pine Rivers State High School (Auditorium),"Gympie Road, STRATHPINE, QLD Australia 4500",-27.29647332354021,152.98772894708253,QLD,Full Access
+,Strathpine West,Strathpine West State School,"16-20 Garbala Drive, STRATHPINE, QLD Australia 4500",-27.30648361,152.9693681,QLD,No Access
+,Sunbury,Sunbury State School,"545 Alice Street, MARYBOROUGH, QLD Australia 4650",-25.52509318,152.67843962,QLD,Full Access
+,Sunnybank,Sunnybank State High School,"Boorman Street (access via Gager Street), SUNNYBANK, QLD Australia 4109",-27.57572543,153.05811435,QLD,Full Access
+,Sunnybank Hills,Sunnybank Hills State School,"77 Symons Road, SUNNYBANK HILLS, QLD Australia 4109",-27.59457508,153.05674374,QLD,Full Access
+,Sunset,Sunset State School,"30 Abel Smith Parade, MOUNT ISA, QLD Australia 4825",-20.70924478,139.50998425,QLD,Assisted Access
+,Surat,Surat State School,"55 Robert Street, SURAT, QLD Australia 4417",-27.15459119,149.06688273,QLD,Assisted Access
+,Merthyr,Merthyr Road Uniting Church Hall,"52 Merthyr Road, NEW FARM, QLD Australia 4005",-27.468653999999997,153.044431,QLD,Full Access
+,Taabinga,Taabinga State School,"2 Rae Street, KINGAROY, QLD Australia 4610",-26.556134486854866,151.8384950780487,QLD,Full Access
+,Taigum,Taigum State School Hall,"266 Handford Road, TAIGUM, QLD Australia 4018",-27.34811713,153.03989947,QLD,Full Access
+,Tallebudgera,Tallebudgera State School,"492 Guineas Creek Road, TALLEBUDGERA, QLD Australia 4228",-28.141263,153.429412,QLD,Full Access
+,Talwood,Talwood State School,"17 Recreation Street, TALWOOD, QLD Australia 4496",-28.487064999999998,149.470236,QLD,Full Access
+,Tambo,Tambo State School,"16 Mitchell Street, TAMBO, QLD Australia 4478",-24.88476977,146.25358611,QLD,Full Access
+,Tamborine,Tamborine Memorial Hall,"2760 Waterford-Tamborine Road, TAMBORINE, QLD Australia 4270",-27.8770754,153.1249422,QLD,Full Access
+,Tannum Sands,Tannum Sands State High School,"65 Coronation Drive, TANNUM SANDS, QLD Australia 4680",-23.95945025,151.36520863,QLD,Assisted Access
+,Tansey,Tansey Bowls Club,"21 Tansey Hall Road, TANSEY, QLD Australia 4601",-26.03441014,152.0451057,QLD,Full Access
+,Tara,Tara Shire State College,"22 Binnie Street, TARA, QLD Australia 4421",-27.280307999999998,150.458695,QLD,Full Access
+,Tarampa,Tarampa State School,"18 Manthey Road, TARAMPA, QLD Australia 4311",-27.48716793,152.54600286,QLD,Full Access
+,Taringa,Taringa Baptist Church,"36 Morrow Street, TARINGA, QLD Australia 4068",-27.49271185,152.98115373,QLD,Assisted Access
+,Taroom,Taroom State School,"Wolsey Street, TAROOM, QLD Australia 4420",-25.63887131,149.80063856,QLD,Full Access
+,Tarragindi,Southside Uniting Church - Tarragindi Centre,"24 Pope Street, TARRAGINDI, QLD Australia 4121",-27.529,153.0445,QLD,Full Access
+,Greenbank South,Greenbank Community Centre,"145 Teviot Road, GREENBANK, QLD Australia 4124",-27.73029939,152.98353553,QLD,Full Access
+,Tewantin,Tewantin State School,"Goodwin Street, TEWANTIN, QLD Australia 4565",-26.38954388,153.03082824,QLD,Full Access
+,Texas,Texas Memorial Hall,"50 High Street, TEXAS, QLD Australia 4385",-28.8550578,151.1682496,QLD,Full Access
+,Thabeban,Thabeban State School,"270 Goodwood Road, THABEBAN, QLD Australia 4670",-24.89837781,152.36392915,QLD,Full Access
+,Thallon,Thallon State School,"15 Henry Street, THALLON, QLD Australia 4497",-28.63358489,148.86765897,QLD,Full Access
+,Thangool,Thangool State School,"2 Aerodrome Road, THANGOOL, QLD Australia 4716",-24.49111261,150.57232618,QLD,Full Access
+,Thargomindah,Thargomindah State School,"1 Dowling Street, THARGOMINDAH, QLD Australia 4492",-27.99547191,143.82705331,QLD,Assisted Access
+,The Caves,The Caves State School,"Cnr Barmoya & Rossmoya Roads, THE CAVES, QLD Australia 4702",-23.176137,150.45909799999998,QLD,Full Access
+,The Gap,The Gap State School,"Cnr Waterworks & Settlement Roads, THE GAP, QLD Australia 4061",-27.44298741,152.94486076,QLD,Assisted Access
+,The Gums,The Gums State School,"12051 Coomrith Road, THE GUMS, QLD Australia 4406",-27.34130319,150.19946158,QLD,Assisted Access
+,The Summit,The Summit State School,"34 Taggart's Road, THE SUMMIT, QLD Australia 4377",-28.57945303,151.95518732,QLD,Assisted Access
+,Buranda West,St John's Annerley Presbyterian Church Hall,"23-33 King Street, ANNERLEY, QLD Australia 4103",-27.50271638,153.03662717,QLD,Full Access
+,Thornlands,Thornlands State School,"South Street, THORNLANDS, QLD Australia 4164",-27.548333333333,153.263333333333,QLD,Assisted Access
+,Thornton,Thornton State School,"4 Thornton School Road, THORNTON, QLD Australia 4341",-27.79797965,152.37202406,QLD,Full Access
+,Tieri,Tieri State School,"Bottlebrush Lane, TIERI, QLD Australia 4709",-23.03594086,148.34636092,QLD,Assisted Access
+,Tin Can Bay,Tin Can Bay P-10 State School,"2 Snapper Creek Road, TIN CAN BAY, QLD Australia 4580",-25.9247597,152.99521923,QLD,Full Access
+,Tinana,Tinana State School,"239 Gympie Road, TINANA, QLD Australia 4650",-25.55809,152.667607,QLD,Full Access
+,Tinbeerwah,Tinbeerwah Hall,"863 Sunrise Road, TINBEERWAH, QLD Australia 4563",-26.4038421,152.9828444,QLD,Assisted Access
+,Tingalpa,Tingalpa State School,"1546 Wynnum Road (access via Tenbar Street), TINGALPA, QLD Australia 4173",-27.474024,153.126981,QLD,Full Access
+,Tingalpa South,Good Shepherd Lutheran Church Hall,"152 Belmont Road, TINGALPA, QLD Australia 4173",-27.482262,153.128932,QLD,Assisted Access
+,Tivoli,Tivoli State School,"108 Mt Crosby Road, TIVOLI, QLD Australia 4305",-27.58335459,152.77714491,QLD,Full Access
+,Tolga,Tolga State School,"35-55 Main Street, TOLGA, QLD Australia 4882",-17.22363096,145.47773838,QLD,Assisted Access
+,Toobanna,Toobanna State School,"49049 Bruce Highway, TOOBANNA, QLD Australia 4850",-18.712380369999998,146.14748597,QLD,Assisted Access
+,Toobeah,Toobeah Kindergarten & Children's Centre,"Cnr Barwon Highway & Minnel Road, TOOBEAH, QLD Australia 4498",-28.4145517,149.8720206,QLD,Full Access
+,Toogoolawah,Toogoolawah State School,"Gardner Street, TOOGOOLAWAH, QLD Australia 4313",-27.0916348,152.37915337,QLD,Full Access
+,Toogoom,Toogoom Community Hall,"140 Toogoom Road, TOOGOOM, QLD Australia 4655",-25.26006639,152.66725481,QLD,Assisted Access
+,Toorbul,Toorbul Community Hall,"158 Esplanade, TOORBUL, QLD Australia 4510",-27.02773509,153.09172511,QLD,Assisted Access
+,Toowong,Toowong Uniting Church Hall,"80 Sherwood Road, TOOWONG, QLD Australia 4066",-27.48530007,152.98846811,QLD,Assisted Access
+,Toowong West,Qld Academy SMT,"78 Bywong Street, TOOWONG, QLD Australia 4066",-27.48695378,152.97935128,QLD,Full Access
+,Toowoomba,St Luke's Anglican Church Hall,"590 Ruthven Street, TOOWOOMBA, QLD Australia 4350",-27.56527599,151.95301975,QLD,Full Access
+,Toowoomba East,Toowoomba East State School,"Cnr Arthur & Mary Streets, TOOWOOMBA, QLD Australia 4350",-27.560509999999997,151.965804,QLD,Full Access
+,Toowoomba West,Good Shepherd Lutheran Church,"23 Glenvale Road, HARRISTOWN, QLD Australia 4350",-27.56584757,151.92712337,QLD,Assisted Access
+,Wilsonton East,Sacred Heart Primary School,"263 Tor Street, WILSONTON, QLD Australia 4350",-27.539628,151.930757,QLD,Full Access
+,Torbanlea,Torbanlea Community Hall,"27 Robertson Street, TORBANLEA, QLD Australia 4662",-25.34633371,152.59669125,QLD,Full Access
+,Caboolture South,Caboolture Special School,"50 - 80 Torrens Road, CABOOLTURE SOUTH, QLD Australia 4506",-27.0967496,152.94347942,QLD,Full Access
+,Trebonne,Trebonne State School,"11 Stone River Road, TREBONNE, QLD Australia 4850",-18.63058926,146.07430458,QLD,Assisted Access
+,Trinity Beach,Trinity Beach State School,"Wewak Street, TRINITY BEACH, QLD Australia 4879",-16.79463988,145.69006205,QLD,Assisted Access
+,Tugun,Tugun Village Community Centre,"414 Coolangatta Road, TUGUN, QLD Australia 4224",-28.151642,153.500643,QLD,Full Access
+,Tully,"Tully Multi Purpose Centre, Tully State High School","59337 Bruce Highway, TULLY, QLD Australia 4854",-17.94001634,145.93080103,QLD,Full Access
+,University,James Cook University,"James Cook University Drive, DOUGLAS, QLD Australia 4814",-19.323380999999998,146.757376,QLD,Assisted Access
+,Upper Brookfield,Upper Brookfield State School,"496 Upper Brookfield Road, UPPER BROOKFIELD, QLD Australia 4069",-27.47821617,152.86898375,QLD,Full Access
+,Upper Coomera,Highland Reserve State School,"570 Reserve Road, UPPER COOMERA, QLD Australia 4209",-27.89278355,153.2826072,QLD,Assisted Access
+,Upper Mount Gravatt,Upper Mount Gravatt State School,"1899 Logan Road, UPPER MOUNT GRAVATT, QLD Australia 4122",-27.55640171,153.07968736,QLD,Full Access
+,Upper Tenthill,Tenthill Baptist Church Hall,"979 Tenthill Creek Road, UPPER TENTHILL, QLD Australia 4343",-27.63380924,152.21731424,QLD,Assisted Access
+,Urangan,Urangan Point State School,"Miller Street, URANGAN, QLD Australia 4655",-25.290674,152.902063,QLD,Assisted Access
+,Urangan West,Sandy Straits State School,"134 Robert Street, URANGAN, QLD Australia 4655",-25.30054034,152.87608624,QLD,Full Access
+,Urraween,Fraser Coast Baptist Church,"171 Urraween Road, URRAWEEN, QLD Australia 4655",-25.299114,152.81579299999999,QLD,Full Access
+,Varsity Lakes Central,Varsity College,"Christine Avenue, VARSITY LAKES, QLD Australia 4227",-28.088523,153.409546,QLD,Full Access
+,Veteran,Veteran Hall,"594 Sandy Creek Road, VETERAN, QLD Australia 4570",-26.13535723,152.70152271,QLD,Full Access
+,Victoria Estate,Victoria Plantation State School,"244 Forrest Beach Road, VICTORIA ESTATE, QLD Australia 4850",-18.64747519,146.20178461,QLD,Assisted Access
+,Victoria Park,Victoria Park State School,"Cnr Goldsmith & Shakespeare Streets, EAST MACKAY, QLD Australia 4740",-21.1481,149.194314,QLD,Full Access
+,Victoria Point,Victoria Point State School,"Colburn Avenue, VICTORIA POINT, QLD Australia 4165",-27.58370168,153.2951653,QLD,Assisted Access
+,Vienna Woods,Vienna Woods State School,"12 Heffernan Road, ALEXANDRA HILLS, QLD Australia 4161",-27.527409,153.229697,QLD,Assisted Access
+,Vincent,Vincent State School,"280 Palmerston Street, VINCENT, QLD Australia 4814",-19.28712463,146.76450133,QLD,Full Access
+,Virginia,Virginia State School,"Cnr Sandgate Road & Jefferis Street, VIRGINIA, QLD Australia 4014",-27.383492,153.061521,QLD,Full Access
+,Vulture Street,St Paul's Anglican Church Hall,"554 Vulture Street, EAST BRISBANE, QLD Australia 4169",-27.485526,153.044543,QLD,Assisted Access
+,Walkamin,Walkamin State School,"40 Wattle Street, WALKAMIN, QLD Australia 4872",-17.12698003,145.426476,QLD,Full Access
+,Walkerston,Walkerston State School,"Dutton Street, WALKERSTON, QLD Australia 4751",-21.15966,149.064679,QLD,Full Access
+,Walkervale,Walkervale State School,"46 Hurst Street, BUNDABERG, QLD Australia 4670",-24.8848368,152.3598389,QLD,Assisted Access
+,Wallangarra,Wallangarra State School,"50 Callandoon Street, WALLANGARRA, QLD Australia 4383",-28.91830221,151.9310689,QLD,Full Access
+,Wallaville,Wallaville State School,"7 Grey Street, WALLAVILLE, QLD Australia 4671",-25.07342552,151.99735433,QLD,Full Access
+,Walloon,Walloon State School,"528 Karrabin-Rosewood Road, WALLOON, QLD Australia 4306",-27.60612718,152.66275406,QLD,Full Access
+,Wallumbilla,Wallumbilla State School,"22 High Street, WALLUMBILLA, QLD Australia 4428",-26.58400819,149.18576896,QLD,Assisted Access
+,Wamuran,Wamuran Community Hall,"1046-1052 D'Aguilar Highway, WAMURAN, QLD Australia 4512",-27.04002724,152.86472172,QLD,Assisted Access
+,Wandoan,Wandoan State School,"49 North Street, WANDOAN, QLD Australia 4419",-26.11880368,149.96154428,QLD,Full Access
+,Warner,Genesis Christian College,"10 Youngs Crossing Road, BRAY PARK, QLD Australia 4500",-27.28868833,152.95412242,QLD,Full Access
+,Warra,Warra State School,"Robinson Street, WARRA, QLD Australia 4411",-26.9303634,150.91734946,QLD,Assisted Access
+,Eight Mile Plains West,Warrigal Road State School,"314 Warrigal Road, EIGHT MILE PLAINS, QLD Australia 4113",-27.58668758,153.08465481,QLD,Full Access
+,Warrill View,Warrill View State School,"7-19 Ipswich Street, WARRILL VIEW, QLD Australia 4307",-27.8229136,152.6157698,QLD,Full Access
+,Warwick,Warwick Indoor Recreation and Aquatic Centre,"29 Palmerin Street, WARWICK, QLD Australia 4370",-28.2116,152.03300000000002,QLD,Assisted Access
+,Warwick East,Warwick East State School,"45 Fitzroy Street, WARWICK, QLD Australia 4370",-28.21441103,152.03887224,QLD,Assisted Access
+,Warwick West,Warwick West State School,"17 George Street, WARWICK, QLD Australia 4370",-28.22075926,152.01448023,QLD,Assisted Access
+,Waterford West,Waterford West State School,"5-15 John Street, WATERFORD WEST, QLD Australia 4133",-27.689961999999998,153.132949,QLD,Full Access
+,Acacia Ridge South,Watson Road State School,"210 Watson Road, ACACIA RIDGE, QLD Australia 4110",-27.59308225,153.0182004,QLD,Assisted Access
+,Weir,Weir State School,"592 Ross River Road, KIRWAN, QLD Australia 4817",-19.315997,146.734386,QLD,Full Access
+,Wellers Hill,Wellers Hill State School,"190 Toohey Road, TARRAGINDI, QLD Australia 4121",-27.5258,153.04680000000002,QLD,Assisted Access
+,Wellington Point,Trinity Uniting Church,"47 Marlborough Road, WELLINGTON POINT, QLD Australia 4160",-27.498348,153.233753,QLD,Assisted Access
+,Wellington Point West,Wellington Point State High School,"Anson Road, WELLINGTON POINT, QLD Australia 4160",-27.490427,153.23003599999998,QLD,Assisted Access
+,West Burleigh,Burleigh Church of Christ,"174 West Burleigh Road, WEST BURLEIGH, QLD Australia 4219",-28.10017543,153.44289333,QLD,Full Access
+,Cairns West,Cairns West State School,"Mayers Street, MANUNDA, QLD Australia 4870",-16.923199759215965,145.74239515767212,QLD,Assisted Access
+,West Coorparoo,St James Hall,"92 Kirkland Avenue, COORPAROO, QLD Australia 4151",-27.49911676,153.05232078,QLD,Full Access
+,West End,West End State School,"24 Vulture Street, WEST END, QLD Australia 4101",-27.479362,153.007853,QLD,Assisted Access
+,West Ipswich,Ipswich West State School,"Kennedy Street, WEST IPSWICH, QLD Australia 4305",-27.62093871,152.75095582,QLD,Assisted Access
+,Harristown East,Our Saviour's Lutheran Church Hall,"Cnr Alderley & West Streets, HARRISTOWN, QLD Australia 4350",-27.58330704,151.93902969,QLD,Assisted Access
+,Westwood,Westwood State School,"108 Herbert Street, WESTWOOD, QLD Australia 4702",-23.6168572,150.1547429,QLD,No Access
+,White Rock,White Rock State School,"114 Progress Road, WHITE ROCK, QLD Australia 4868",-16.986926999999998,145.744115,QLD,Full Access
+,Whites Hill,Whites Hill State College,"138 Burn Street, CAMP HILL, QLD Australia 4152",-27.500235,153.082784,QLD,Full Access
+,Whitfield,Whitfield State School,"42 McManus Street, WHITFIELD, QLD Australia 4870",-16.91136706,145.7288307,QLD,Assisted Access
+,Widgee,Widgee State School,"2156 Gympie-Woolooga Road, WIDGEE, QLD Australia 4570",-26.203901600000002,152.4434191,QLD,Full Access
+,Allenstown North,The Cathedral College,"189 William Street, ROCKHAMPTON, QLD Australia 4700",-23.38619266,150.50630629,QLD,Full Access
+,Willows,The Willows State School,"Cnr Sandstone Drive & Bilberry Street, KIRWAN, QLD Australia 4817",-19.30528582,146.72215998,QLD,Assisted Access
+,Wilsonton,Wilsonton State School Hall,"Denyer Street, WILSONTON, QLD Australia 4350",-27.540903,151.921953,QLD,Full Access
+,Wilston,Wilston State School G Block,"11 Primrose Street, THE GRANGE, QLD Australia 4051",-27.428469,153.01515,QLD,No Access
+,Windaroo Valley,Windaroo Valley State High School,"240 Beaudesert-Beenleigh Road, BAHRS SCRUB, QLD Australia 4207",-27.74027987,153.19018632,QLD,Full Access
+,Alexandra Park,Alexandra Hills State High School,"Windemere Road, ALEXANDRA HILLS, QLD Australia 4161",-27.523135999999997,153.214329,QLD,Assisted Access
+,Windsor,Windsor State School,"Harris Street, WINDSOR, QLD Australia 4030",-27.43078015,153.02963734,QLD,Assisted Access
+,Winton,Winton Shire Supper Room,"75 Vindex Street, Winton, QLD Australia 4735",-22.38762445,143.03763685,QLD,Full Access
+,Withcott,Withcott State School,"26 Biggs Road, WITHCOTT, QLD Australia 4352",-27.55896033,152.02413082,QLD,Full Access
+,Witta,Old Witta School Community Centre,"316 Witta Road, WITTA, QLD Australia 4552",-26.708599,152.826855,QLD,Assisted Access
+,Wondai,Wondai Memorial Hall,"Cnr Mackenzie & Scott Streets, WONDAI, QLD Australia 4606",-26.318642999999998,151.873015,QLD,Full Access
+,Wondall Heights,Wondall Heights State School,"260 Wondall Road, MANLY WEST, QLD Australia 4179",-27.464603,153.158593,QLD,Assisted Access
+,Wonga,Wonga Beach State School,"48 Snapper Island Drive, WONGA BEACH, QLD Australia 4873",-16.341974,145.412993,QLD,Full Access
+,Lower Wonga,Lower Wonga Hall,"7 Lower Wonga Road, LOWER WONGA, QLD Australia 4570",-26.09012682,152.48445153,QLD,Full Access
+,Woodford,Woodford Memorial Hall,"109 Archer Street, WOODFORD, QLD Australia 4514",-26.95449426,152.77818561,QLD,Full Access
+,Woodgate,Woodgate Community Hall,"Esplanade, WOODGATE, QLD Australia 4660",-25.11514911,152.57107079,QLD,Full Access
+,Woodhill,Woodhill Hall,"6098 Mt Lindesay Highway, WOODHILL, QLD Australia 4285",-27.899845,152.974275,QLD,Full Access
+,Woodridge,Woodridge State High School,"323 Wembley Road, WOODRIDGE, QLD Australia 4114",-27.64314275,153.09936404,QLD,Assisted Access
+,Woodridge North,Woodridge North State School,"3/11 Arthur Street, WOODRIDGE, QLD Australia 4114",-27.62639984,153.10649872,QLD,Full Access
+,Woodstock,Woodstock State School,"54 Woodstock Avenue, WOODSTOCK, QLD Australia 4816",-19.59771728,146.83493614,QLD,Full Access
+,Woody Point,Holy Cross Catholic Parish Hall,"Cnr Collins Street & Victoria Avenue, WOODY POINT, QLD Australia 4019",-27.250104999999998,153.098723,QLD,Full Access
+,Woody Point South,Woody Point Memorial Hall,"Cnr Oxley Avenue & Hornibrook Esplanade, WOODY POINT, QLD Australia 4019",-27.259918120000002,153.10346246,QLD,Full Access
+,Woombye,Woombye State School,"95 Pine Grove Road, WOOMBYE, QLD Australia 4559",-26.66719168,152.97382593,QLD,Full Access
+,Woongarra,Woongarra State School,"468 Elliott Heads Road, BUNDABERG, QLD Australia 4670",-24.8784555,152.40589499,QLD,Full Access
+,Woongoolba,Woongoolba State School,"1219 Stapylton-Jacobs Well Road, WOONGOOLBA, QLD Australia 4207",-27.74453862,153.31904233,QLD,Full Access
+,Woorim,The Surf Club Bribie Island,"2 First Avenue, WOORIM, QLD Australia 4507",-27.06977608,153.20465684,QLD,Full Access
+,Wooroolin,Wooroolin State School,"34 Frederick Street, WOOROOLIN, QLD Australia 4608",-26.4088552,151.81193054,QLD,Full Access
+,Woree,Woree State High School,"42-80 Windarra Street, WOREE, QLD Australia 4868",-16.960687999999998,145.741717,QLD,Full Access
+,Worongary,Worongary State School,"2 Delta Cove Drive, WORONGARY, QLD Australia 4213",-28.022561999999997,153.34276499999999,QLD,Full Access
+,Wowan,Wowan State School,"Don Street, WOWAN, QLD Australia 4702",-23.91048286,150.19373238,QLD,Assisted Access
+,Wujal Wujal,Wujal Wujal Aboriginal Shire Council -  Training Room,"1 Hartwig Street, WUJAL WUJAL, QLD Australia 4895",-15.945725,145.31938,QLD,Full Access
+,Wulguru,Wulguru State School,"Edison Street, WULGURU, QLD Australia 4811",-19.32443213,146.81266844,QLD,Full Access
+,Wynnum,Wynnum State School,"81 Boxgrove Avenue, WYNNUM, QLD Australia 4178",-27.440604999999998,153.161095,QLD,Assisted Access
+,Wynnum Central,St Peter's Anglican Church Hall,"86 Bride Street, WYNNUM, QLD Australia 4178",-27.4433917,153.1712796,QLD,Full Access
+,Wynnum South,Guardian Angels Catholic Church,"198 Bay Terrace, Wynnum, QLD Australia 4178",-27.446095999999997,153.176321,QLD,Full Access
+,Wynnum West,Wynnum West State School,"2036 Wynnum Road, WYNNUM WEST, QLD Australia 4178",-27.45456973,153.15416962,QLD,Full Access
+,Wyreema,Wyreema State School,"12 High Street, WYREEMA, QLD Australia 4352",-27.65863823,151.85507923,QLD,Full Access
+,Yandaran,Yandaran State School,"School Lane, YANDARAN, QLD Australia 4673",-24.72459936,152.11221993,QLD,Full Access
+,Yandina,Yandina School of Arts Hall,"11 Farrell Street, YANDINA, QLD Australia 4561",-26.561297999999997,152.95595600000001,QLD,Full Access
+,Yangan,Yangan School of Arts,"7-9 King Street, YANGAN, QLD Australia 4371",-28.19637111,152.20927835,QLD,Assisted Access
+,Yarrabah,Yarrabah State School,"Gribble St, Yarrabah, QLD Australia 4871",-16.907593,145.8701039,QLD,Assisted Access
+,Yarraman,Yarraman State School,"17 John Street, YARRAMAN, QLD Australia 4614",-26.84147565,151.97617292,QLD,Full Access
+,Yarwun,Yarwun State School,"35 Butler Street, YARWUN, QLD Australia 4694",-23.84705314,151.12590194,QLD,Full Access
+,Yelarbon,Yelarbon State School,"17 Eena Street, YELARBON, QLD Australia 4388",-28.57408024,150.75380445,QLD,Assisted Access
+,Yeppoon,Yeppoon State High School - Evacuation Centre,"Rawlings Street, YEPPOON, QLD Australia 4703",-23.13476112,150.73411703,QLD,Full Access
+,Yeppoon North,St Brendan's College,"139 Adelaide Park Road, YEPPOON, QLD Australia 4703",-23.118261999999998,150.728451,QLD,Assisted Access
+,Yeronga,Yeronga State School,"122 Park Road, YERONGA, QLD Australia 4104",-27.51896674,153.01992774,QLD,Assisted Access
+,Yeronga West,St Sebastian's Catholic Primary School,"141 Kadumba Street, YERONGA, QLD Australia 4104",-27.5138,153.010796,QLD,Full Access
+,Yorkeys Knob,Yorkeys Knob State School,"26-38 Clinton Street, YORKEYS KNOB, QLD Australia 4878",-16.81438013,145.72317123,QLD,Full Access
+,Yugumbir,Yugumbir State School,"163-189 Vansittart Road, REGENTS PARK, QLD Australia 4118",-27.676679999999998,153.049579,QLD,Full Access
+,Yuleba,Yuleba Memorial Hall,"14 Garden Street, YULEBA, QLD Australia 4427",-26.612140999999998,149.384324,QLD,Assisted Access
+,Yungaburra,Yungaburra State School,"4 Maple Street, YUNGABURRA, QLD Australia 4872",-17.27300554,145.58613181,QLD,Full Access
+,Zillmere,Zillmere State School Library,"70 Murphy Road, ZILLMERE, QLD Australia 4034",-27.36461894,153.03760618,QLD,Assisted Access
+,Zillmere North,Zillmere Community Centre,"54 Handford Road, ZILLMERE, QLD Australia 4034",-27.35748283,153.0382683,QLD,Full Access
+,Upper Coomera North,Upper Coomera State College,"137 Reserve Road, UPPER COOMERA, QLD Australia 4209",-27.86973884,153.29806209,QLD,Full Access
+,Warana,Life Church,"6 Kawana Island Boulevard, WARANA, QLD Australia 4575",-26.720710999999998,153.12872199999998,QLD,Full Access
+,Kingaroy East,St John's Lutheran School,"84 Ivy Street, KINGAROY, QLD Australia 4610",-26.5371483,151.85570955,QLD,Full Access
+,Peregian Springs,Peregian Springs State School,"191 The Avenue, PEREGIAN SPRINGS, QLD Australia 4573",-26.50024094,153.07223082,QLD,Full Access
+,Chinchilla North,Chinchilla Masonic Centre,"Cnr Boyd & Wambo Streets, CHINCHILLA, QLD Australia 4413",-26.7401941,150.63376399999999,QLD,Full Access
+,Roma South,Roma State College - Junior Campus,"28 Bowen St, Roma, QLD Australia 4455",-26.5738206,148.7873129,QLD,Full Access
+,Meridan Plains,Meridan State College - Senior Learning Precinct,"214 Parklands Boulevard, MERIDAN PLAINS, QLD Australia 4551",-26.772226,153.103565,QLD,Full Access
+,Pialba North,Hervey Bay State High School,"58 Beach Road, PIALBA, QLD Australia 4655",-25.282919999999997,152.83244,QLD,Full Access
+,Greenmeadows,Living Faith Uniting Church,"330 Pine Mountain Road, Carina Heights, QLD Australia 4152",-27.5174491,153.09629023,QLD,Assisted Access
+,Springfield Lakes,Springfield Lakes State School Hall,"63 Springfield Lakes Boulevard, SPRINGFIELD LAKES, QLD Australia 4300",-27.669984,152.921844,QLD,Full Access
+,Bellbowrie,Bellbowrie Community Church,"3077 Moggill Road, BELLBOWRIE, QLD Australia 4070",-27.550086,152.888107,QLD,Full Access
+,Stretton,Stretton State College (Illaweena Campus),"226 Illaweena Street, STRETTON, QLD Australia 4116",-27.639491,153.05611199999998,QLD,Full Access
+,Smithfield,Smithfield State High School,"O'Brien Road, SMITHFIELD, QLD Australia 4878",-16.8121515,145.6953755,QLD,Full Access
+,Cooloola Cove,Veterans Community Hall,"Cnr Nautilus Drive & Santa Maria Court, COOLOOLA COVE, QLD Australia 4580",-25.97090752,152.98491418,QLD,Full Access
+,Wheatlands,Wheatlands State School,"422 Byee Road, WHEATLANDS, QLD Australia 4606",-26.2243098,151.84575319,QLD,Full Access
+,Sandstone Point,Sandstone Point Community Centre,"202 Bestmann Rd E, Sandstone Point, QLD Australia 4511",-27.0790525,153.1261803,QLD,Assisted Access
+,Deception Bay North,Deception Bay Community Hall,"Cnr Bayview Terrace & Ewart Street, DECEPTION BAY, QLD Australia 4508",-27.18439072,153.02537262,QLD,Assisted Access
+,Beaconsfield,Beaconsfield State School,"1 Nadina Street, BEACONSFIELD, QLD Australia 4740",-21.093358,149.17051800000002,QLD,Assisted Access
+,Innes Park,Coral Coast Baptist Church,"596 Windermere Road, INNES PARK NORTH, QLD Australia 4670",-24.84915503,152.46181369,QLD,Full Access
+,Ingham Showgrounds,Ingham Showgrounds Pavilion,"Cooper Street, INGHAM, QLD Australia 4850",-18.65743211,146.1590302,QLD,Full Access
+,Caloundra West,Unity College,"47 Lomond Crescent, CALOUNDRA WEST, QLD Australia 4551",-26.802789999999998,153.088843,QLD,Full Access
+,Port Kennedy,Port Kennedy Hall,"64-66 Douglas Street, THURSDAY ISLAND, QLD Australia 4875",-10.58369809,142.22005069,QLD,Full Access
+,Hope Vale,Council Business Precinct,"1 Muni Street, Hope Vale, QLD Australia 4895",-15.29358212,145.10915995,QLD,Full Access
+,Woorabinda,HACC  Building,"Munns Drive, Woorabinda, QLD Australia 4713",-24.130830165,149.45600689,QLD,No Access
+,Horn Island,Horn Island Sports Complex,"43 Nawie Street, Horn Island, QLD Australia 4875",-10.59240395,142.25174904,QLD,Assisted Access
+,North Tamborine,"Convention Room, Vonda Youngman Cultural Centre","2-4 Knoll Road, North Tamborine, QLD Australia 4272",-27.922715999999998,153.184924,QLD,Assisted Access
+,Redcliffe South,Redcliffe Senior Citizens Centre,"401 Oxley Avenue, REDCLIFFE, QLD Australia 4020",-27.2351104,153.1080916,QLD,Full Access
+,River Heads,River Heads Community Hall,"45 Ariadne Street, RIVER HEADS, QLD Australia 4655",-25.4230729,152.91843295,QLD,Full Access
+,Sinnamon,Jindalee Girl Guides Hall,"44 Goggs Road, JINDALEE, QLD Australia 4074",-27.53414204,152.94903159,QLD,Full Access
+,Norfolk Village,Norfolk Village State School,"83 Halfway Drive, ORMEAU, QLD Australia 4208",-27.77302573,153.24486852,QLD,Full Access
+,Coolum Beach North,Coolum Beach Uniting Church Hall,"22-26 Elizabeth Street, COOLUM BEACH, QLD Australia 4573",-26.528581,153.088338,QLD,Full Access
+,Waterford,Canterbury College Art Centre,"Cnr Old Logan Village Road & Easterley Street, WATERFORD, QLD Australia 4133",-27.70785661,153.14872742,QLD,Full Access
+,Ormeau Woods,Ormeau Woods State High School,"148 Goldmine Road, ORMEAU, QLD Australia 4208",-27.771388888888,153.264722222222,QLD,Full Access
+,Wavell,St Paschal's Catholic Church Hall,"30 Warraba Avenue, Wavell Heights, QLD Australia 4012",-27.393649,153.040058,QLD,Assisted Access
+,Kallangur West,"Kruger Hall, Penson Park","24 Ann Street, KALLANGUR, QLD Australia 4503",-27.24617407,152.9904449,QLD,Assisted Access
+,Chermside South,Chermside Kedron Community Church,"Cnr Rode & Gympie Roads, KEDRON, QLD Australia 4031",-27.39274998,153.03066194,QLD,Full Access
+,Varsity Lakes,Varsity College Middle & Senior Campus,"Digital Learning Centre, Assembly Drive, VARSITY LAKES, QLD Australia 4227",-28.0776195,153.4113652,QLD,Full Access
+,Bongaree,Bribie Island Orchid Society,"156A First Avenue, Bongaree, QLD Australia 4507",-27.079663541836304,153.17856163203126,QLD,Full Access
+,Yamanto,Amberley District State School Hall,"37 Deebing Creek Road, YAMANTO, QLD Australia 4305",-27.6574076,152.75003314,QLD,Full Access
+,Raceview West,Whitehill Church of Christ,"219 Whitehill Road, RACEVIEW, QLD Australia 4305",-27.640421,152.76881,QLD,Full Access
+,Bulimba Heights,Bulimba State School,"271 Oxford Street, BULIMBA, QLD Australia 4171",-27.45276796,153.06478769,QLD,Full Access
+,Burpengary Meadows,Burpengary Meadows State School,"153-187 Rowley Road, BURPENGARY, QLD Australia 4505",-27.159982,152.939727,QLD,Full Access
+,Coomera Springs,Coomera Springs State School,"225 Old Coach Road, UPPER COOMERA, QLD Australia 4209",-27.847071999999997,153.299609,QLD,Full Access
+,Bay View Thornlands,Bayview State School,"77 Ziegenfusz Road, THORNLANDS, QLD Australia 4164",-27.562331999999998,153.261797,QLD,Assisted Access
+,North Lakes North,Bounty Boulevard State School,"195 Bounty Boulevard, NORTH LAKES, QLD Australia 4509",-27.21562777,153.00750375,QLD,Full Access
+,Mango Hill South,Mango Hill State School,"39 Bonnet Parade, MANGO HILL, QLD Australia 4509",-27.2433669,153.0347985,QLD,Full Access
+,Windaroo,Windaroo State School,"300 Mt Warren Boulevard, MOUNT WARREN PARK, QLD Australia 4207",-27.732816,153.196227,QLD,Full Access
+,Coomera North,Coomera Rivers State School,"81 - 87 Finnegan Way, COOMERA, QLD Australia 4209",-27.845122,153.326235,QLD,Full Access
+,Victoria Point Central,Victoria Point Community Hall,"Cnr Colburn Avenue and Link Road, Victoria Point, QLD Australia 4165",-27.58407342650345,153.2928072939179,QLD,Full Access
+,Samford Village,Samford Community Centre,"41 School Road, Samford, QLD Australia 4520",-27.37748375,152.87948728,QLD,Full Access
+,Charleville North,Charleville State High School,"Cnr Partridge & Hunter Streets, Charleville, QLD Australia 4470",-26.397390218058533,146.25828346693422,QLD,Assisted Access
+,Tallebudgera Valley,Tallebudgera Valley Community Centre,"611 Tallebudgera Creek Road, TALLEBUDGERA VALLEY, QLD Australia 4228",-28.15212119,153.4023571,QLD,Full Access
+,Gracemere,Gracemere Community Centre,"6-9 Barry Street, GRACEMERE, QLD Australia 4702",-23.437493,150.454249,QLD,Assisted Access
+,Redcliffe TAFE,Redcliffe TAFE,"64-68 Klingner Road, REDCLIFFE, QLD Australia 4020",-27.221467,153.10904399999998,QLD,Assisted Access
+,Maroochydore East,Millwell Road Community Centre,"11 Millwell Road East, MAROOCHYDORE, QLD Australia 4558",-26.65537915,153.08369994,QLD,Full Access
+,Milton,Lavalla Centre,"58 Fernberg Road, PADDINGTON, QLD Australia 4064",-27.4638578,152.9993134,QLD,Full Access
+,Fitzgibbon,Fitzgibbon Community Centre,"545 Roghan Road, FITZGIBBON, QLD Australia 4018",-27.33894918,153.02770615,QLD,Assisted Access
+,Willowbank,Amberley Girl Guides Hut,"21 Wellington Rise, WILLOWBANK, QLD Australia 4306",-27.660824556417186,152.67828785225373,QLD,Full Access
+,Plainland,Faith Lutheran College,"5 Faith Avenue, PLAINLAND, QLD Australia 4341",-27.5686283,152.4157441,QLD,Assisted Access
+,Narangba Valley,Narangba Sporting Complex,"164-168 Harris Avenue, Narangba, QLD Australia 4504",-27.17108595,152.94327557,QLD,Full Access
+,South Pine,South Pine Community Church,"10 South Pine Road, WARNER, QLD Australia 4500",-27.335209,152.960287,QLD,Full Access
+,Burdell,St Clare's Catholic School - Recreation Hall,"Burdell Drive, Burdell, QLD Australia 4818",-19.258301,146.705311,QLD,Full Access
+,Mountain Creek South,Brightwater State School,"20 Dianella Drive, Mountain Creek, QLD Australia 4557",-26.71045228,153.11135888,QLD,Full Access
+,Bunya,"Hills Community Function Centre, James Drysdale Reserve","Jinker Track, BUNYA, QLD Australia 4055",-27.378764999999998,152.94728800000001,QLD,Assisted Access
+,Kooralbyn,Kooralbyn Community Centre,"79 Ogilvie Place, Kooralbyn, QLD Australia 4285",-28.08942122,152.842049,QLD,Assisted Access
+,Highfields North,Highfields State Secondary College,"10 O'Brien Road, Highfields, QLD Australia 4352",-27.44773855,151.95114255,QLD,Full Access
+,Woodridge East,Harris Fields State School Assembly Hall,"10 - 38 Smith Road, WOODRIDGE, QLD Australia 4114",-27.63013549,153.11609834,QLD,Full Access
+,Yarrabilba,Yarrabilba State School,"1-35 Darnell Street, Yarrabilba, QLD Australia 4207",-27.80412278,153.11447703,QLD,Full Access
+,Beaudesert East,Beaudesert State School,"15-17 Tina Street (access via Eaglesfield Street), Beaudesert, QLD Australia 4285",-27.988743,153.003443,QLD,Full Access
+,Griffin,Griffin State School,"19 Wesley Road, Griffin, QLD Australia 4503",-27.2566228,153.0238653,QLD,Full Access
+,Caboolture North,Pumicestone State School,"75 Cottrill Road, Caboolture, QLD Australia 4510",-27.0579006,152.9568649,QLD,Full Access
+,Kewarra Beach,Kewarra Beach Community Hall,"41 Poolwood Road, KEWARRA BEACH, QLD Australia 4879",-16.7902793,145.68186,QLD,Full Access
+,Cloncurry,Cloncurry Shire Hall Meeting Room,"38-46 Daintree St, Cloncurry, QLD Australia 4824",-20.7047368,140.5069219,QLD,Assisted Access
+,Maleny,Maleny Community Centre,"23 Maple Street, Maleny, QLD Australia 4552",-26.758696,152.851492,QLD,Assisted Access
+,Upper Caboolture,Upper Caboolture Farmers Assembly Hall,"704 Caboolture River Road, UPPER CABOOLTURE, QLD Australia 4510",-27.11770064,152.88620889,QLD,Full Access
+,Bundamba,Oasis Church of Christ,"25 Byrne Street, Bundamba, QLD Australia 4304",-27.6049899,152.8126807,QLD,Assisted Access
+,Algester South,St Stephen's Catholic Primary School,"156 Ridgewood Road, Algester, QLD Australia 4115",-27.619104,153.029539,QLD,Full Access
+,Woolloongabba,Nazareth Lutheran Church Hall,"12 Hawthorne Street, Woolloongabba, QLD Australia 4102",-27.4887294,153.0346611,QLD,Full Access
+,Emerald Christian College,Emerald  Christian College,"6373 Gregory Highway, Emerald, QLD Australia 4720",-23.55316906,148.17081571,QLD,Full Access
+,Arundel Central,Parkwood Arundel Community Centre,"Napper Road, Arundel, QLD Australia 4214",-27.94461648,153.36761562,QLD,Full Access
+,Belmont East,Gateway Church,"1374 Old Cleveland Road, Carindale, QLD Australia 4152",-27.50176695,153.12323753,QLD,Assisted Access
+,Mansfield North,Citipointe Christian College Hall,"322 Wecker Road, Carindale, QLD Australia 4152",-27.5339686,153.1133598,QLD,Full Access
+,Burdell North,North Shore State School,"9 Langford Street, BURDELL, QLD Australia 4818",-19.23361431,146.69614903,QLD,Full Access
+,Murrumba Downs North,Living Faith Lutheran Primary School,"50 Brays Road, Murrumba Downs, QLD Australia 4503",-27.2556215,153.01433802,QLD,Full Access
+,Narangba West,Narangba Valley State School,"59-85 Creekside Drive, NARANGBA, QLD Australia 4504",-27.17372078,152.93366642,QLD,Full Access
+,Pimpama East,Pimpama State Primary College,"Cnr Dixon Drive & Cunningham Drive North, PIMPAMA, QLD Australia 4209",-27.83425464,153.32297449,QLD,Full Access
+,Worongary South,Mudgeeraba Showground,"115 Mudgeeraba Road, WORONGARY, QLD Australia 4213",-28.0608424,153.3544297,QLD,Assisted Access
+,Kirwan East,Greenwood Park Sporting Complex,"Thuringowa Drive, KIRWAN, QLD Australia 4817",-19.29114702,146.73915626,QLD,Full Access
+,Reedy Creek South,Reedy Creek Baptist Church,"10 Gemvale Road, REEDY CREEK, QLD Australia 4228",-28.10007291,153.39977143,QLD,Full Access
+,Pacific Pines North,Jubilee Primary School,"34 Manra Way, PACIFIC PINES, QLD Australia 4211",-27.927349999999997,153.31565999999998,QLD,Full Access
+,Caloundra North,Caloundra Community Centre,"58A Queen Street, Caloundra, QLD Australia 4551",-26.794435999999997,153.13067,QLD,Full Access
+,Samford,The Shed Samford,"44 Mount Glorious Road, Samford Village, QLD Australia 4520",-27.37245852759839,152.88235259391786,QLD,Assisted Access
+,Redbank Plains South,Fernbrooke State School,"8 Regents Drive, Redbank Plains, QLD Australia 4301",-27.662999,152.844372,QLD,Full Access
+,Lockhart River,Lockhart River Aboriginal Shire Council,"14 Maathuy St, Lockhart River, QLD Australia 4892",-12.785604922428632,143.34225463226315,QLD,Full Access
+,Kangaroo Point,Kangaroo Point Uniting Church Hall,"46 Linton St, Kangaroo Point, QLD Australia 4169",-27.4836633,153.0372597,QLD,Full Access
+,Coen,James Love Building,"56 Taylor St, Coen, QLD Australia 4892",-13.9447537,143.2034471,QLD,Full Access
+,Mackay,Jubilee Community Centre (JCC),"73 Gordon St, Mackay, QLD Australia 4740",-21.143852,149.181228,QLD,Full Access
+,Noosaville West,Good Shepherd Lutheran Church,"115 Eumundi Rd, Noosaville, QLD Australia 4566",-26.4087827,153.0494119,QLD,Full Access
+,Noosaville,Noosa Baptist Church,"1 Lake Weyba Dr, Noosaville, QLD Australia 4566",-26.40386,153.0715269,QLD,Full Access
+,Deebing Heights,Deebing Heights State School,"81 Rawlings Rd, Deebing Heights, QLD Australia 4306",-27.6736493,152.7496899,QLD,Full Access
+,Aurukun,Wo'uw Ko'alam Community Centre,"Cnr Tal Tal Street and MacKenzie Drive, AURUKUN, QLD Australia 4892",-13.362643986109187,141.72690409999998,QLD,Full Access
+,Eimeo,Mackay Northern Beaches State High School,"30 Rosewood Dr, Rural View, QLD Australia 4740",-21.0686875,149.1615379,QLD,Full Access
+,Mabel Park,Mabel Park State High School,"72-116 Paradise Rd, Slacks Creek, QLD Australia 4127",-27.639403,153.1291,QLD,Full Access
+,Flying Fish Point,QCWA Hall,"3 Alice St, Flying Fish Point, QLD Australia 4860",-17.5038409,146.0756941,QLD,Full Access
+,Shaw,St Benedict's Catholic School,"890 Dalrymple Rd, Shaw, QLD Australia 4818",-19.290365,146.6964894,QLD,Full Access
+,Bayside,Eastside Community Church,"568 Wondall Rd, Manly West, QLD Australia 4179",-27.474335,153.1465824,QLD,Full Access
+,Ubobo,Ubobo Memorial Hall,"Cnr Railway Terrace and Cedarvale Road, Ubobo, QLD Australia 4680",-24.406433133315865,151.32206386270445,QLD,Full Access
+,Miriam Vale,Miriam Vale Community Centre,"41 Blomfield St, Miriam Vale, QLD Australia 4677",-24.327608,151.560426,QLD,Full Access
+,Macleay Island,Macleay Island Community Centre Hall,"32 High Central Rd, MacLeay Island, QLD Australia 4184",-27.6288769,153.363293,QLD,Full Access
+,Thorneside,Thorneside Hall,"200 Mooroondu Rd, Thorneside, QLD Australia 4158",-27.4854834,153.2069044,QLD,Full Access
+,Clontarf Beach,Clontarf Beach State High School,"Cnr Elizabeth Avenue and King Street, CLONTARF, QLD Australia 4019",-27.2492823492624,153.08575579895023,QLD,Full Access
+,Toowoomba North,Toowoomba West Special School,"26 Gladstone St, Newtown, QLD Australia 4350",-27.547781,151.940864,QLD,Full Access
+,Atherton,St Mary the Virgin Anglican Church,"36 Alice St, Atherton, QLD Australia 4883",-17.2670998,145.4784483,QLD,Assisted Access
+,Logan Village,Logan Office,"Units 4 & 5/36 Centenary Pl, Logan Village, QLD Australia 4207",-27.7700677,153.1102256,QLD,Full Access
+,Amamoor,Amamoor Hall,"35 Busby St, Amamoor, QLD Australia 4570",-26.3464453,152.6759753,QLD,Full Access
+,Curra,Curra Community Hall,"10-22 David Dr, Curra, QLD Australia 4570",-26.0824206,152.5802449,QLD,Full Access
+,Bamaga,"NPA State College, Bamaga Junior Campus","Anu Cres, Bamaga, QLD Australia 4876",-10.8894495,142.3896011,QLD,Assisted Access
+,Granville,Granville State School,"Cambridge St, Granville, QLD Australia 4650",-25.539011742708187,152.71504424124757,QLD,Full Access
+,Baringa,Baringa State School,"30 Baringa Dr, Bells Creek, QLD Australia 4551",-26.8081454,153.0825144,QLD,Full Access
+,Torquay,Hervey Bay Girl Guides Hut,"193 Torquay Terrace, Scarness, QLD Australia 4655",-25.2868857,152.8610579,QLD,Assisted Access
+,Cooktown,PCYC Cooktown,"3 May St, Cooktown, QLD Australia 4895",-15.4804511,145.2505346,QLD,Full Access
+,Ripley Valley,"Ripley Valley State Secondary College, Raptor Dome","18 Parkway Ave, South Ripley, QLD Australia 4306",-27.6976897,152.809474,QLD,Full Access
+,Boonooroo,Boonooroo Community Hall,"117 Eckert Rd, Boonooroo, QLD Australia 4650",-25.67245,152.8876115,QLD,Full Access
+,Collingwood Park South,Woodlinks State School,"7 Woodlinks Way, Collingwood Park, QLD Australia 4301",-27.63059772621626,152.85332963942568,QLD,Full Access
+,Tiaro,Tiaro District Community Centre,"9 Forgan Terrace, Tiaro, QLD Australia 4650",-25.728400833567125,152.58269005358122,QLD,Full Access
+,Longreach,"Arts & Crafts Pavilion, Longreach Showgrounds","Sandpiper St, Longreach, QLD Australia 4730",-23.437670062942416,144.24918924232787,QLD,Assisted Access
+,Monkland,Monkland State School,"220 Brisbane Rd, Monkland, QLD Australia 4570",-26.2136502,152.6864669,QLD,Full Access
+,Glenwood,Glenwood Community Hall,"13 Pepper Rd, Glenwood, QLD Australia 4570",-25.9356423,152.6161223,QLD,Full Access
+,Eudlo,Eudlo Hall,"19 Rosebed St, Eudlo, QLD Australia 4554",-26.7259233,152.9584508,QLD,Assisted Access
+,Springfield Central,World Knowledge Centre,"37 Sinnathamby Blvd, Springfield Central, QLD Australia 4300",-27.683811646883715,152.90732432593384,QLD,Full Access
+,Windsor East,Windsor Bowls Club,"69 Blackmore St, Windsor, QLD Australia 4030",-27.430809,153.037304,QLD,No Access
+,Pialba,Pialba Office,"31 Carlo St, Pialba, QLD Australia 4655",-25.2868994,152.834271,QLD,Assisted Access
+,Augustine Heights,Augusta State School,"60 Brittains Rd, Augustine Heights, QLD Australia 4300",-27.6554849,152.8778381,QLD,Assisted Access
+,Hillcrest,Life & Legacy Church,"Unit 13/98 Anzac Ave, Hillcrest, QLD Australia 4118",-27.6656858,153.0325871,QLD,Assisted Access
+,Minyama,Minyama Office,"2 Eden St, Minyama, QLD Australia 4575",-26.699659,153.1195484,QLD,Assisted Access
+,Wishart,Mansfield Christian Reformed Church,"Cnr Wishart & Ham Rds, Wishart, QLD Australia 4122",-27.5490443,153.1027532,QLD,Assisted Access
+,Roma,RSL Roma Sub-Branch Hall,"19 Quintin St, Roma, QLD Australia 4455",-26.568783237890678,148.78719445980224,QLD,Full Access
+,Kogan,Kogan Memorial Hall,"High St, Kogan, QLD Australia 4406",-27.040192076306713,150.76141465690003,QLD,Assisted Access
+,Richmond,"Richmond Shire Hall, Supper Room","50 Goldring St, Richmond, QLD Australia 4822",-20.729177268843127,143.14117563187713,QLD,Full Access
+,Coorparoo South,St Stephen's Coorparoo Hall,"343 Cavendish Rd, Coorparoo, QLD Australia 4151",-27.504983,153.0611052,QLD,Assisted Access
+,Bargara,"Bargara Central Shopping Centre, Shop 16","699 Bargara Rd, Bargara, QLD Australia 4670",-24.8181054,152.4551391,QLD,Assisted Access
+,Surfers Paradise,Surfers Paradise Boulevard Office,"Unit 2/3298 Surfers Paradise Blvd, Surfers Paradise, QLD Australia 4217",-27.9981146,153.4281932,QLD,Assisted Access
+,Toowong South,Toowong Community Meeting Hall,"56 Josling St, Toowong, QLD Australia 4066",-27.4915235,152.9908872,QLD,Assisted Access
+,Hillview,Hillview Memorial Hall,"20 Widgee Creek Rd, Hillview, QLD Australia 4285",-28.2151576,153.0066178,QLD,Full Access
+,Biloela,Biloela State School,"48 Rainbow St, Biloela, QLD Australia 4715",-24.3984973,150.5160903,QLD,Full Access
+,Goondiwindi West,Goondiwindi Waggamba Community Cultural Centre,"18 Russell St, Goondiwindi, QLD Australia 4390",-28.5377037,150.2951482,QLD,Full Access
+,Theodore,Theodore Memorial RSL Hall,"30 The Blvd, Theodore, QLD Australia 4719",-24.9501731,150.075594,QLD,Full Access
+,Buderim Headland,Headlands Bowls Club,"1 Syd Lingard Dr, Buderim, QLD Australia 4556",-26.6787516,153.0939896,QLD,Assisted Access
+,Point Lookout,Point Lookout Community Hall,"E Coast Rd, Point Lookout, QLD Australia 4183",-27.425972697928348,153.52103194186407,QLD,Assisted Access
+,Newmarket South,St James' Church Hall,"58 Enoggera Rd, Newmarket, QLD Australia 4051",-27.4396217,153.0067557,QLD,Assisted Access
+,Dalveen,Dalveen Hall,"38 Pine Cres, Dalveen, QLD Australia 4374",-28.4897534,151.9739498,QLD,Full Access
+,Childers,Isis Cultural Centre,"49 Churchill St, Childers, QLD Australia 4660",-25.2358128,152.2799587,QLD,Assisted Access
+,Shailer Park,Shailer Park State School,"19 Bulwarna St, Shailer Park, QLD Australia 4128",-27.6606569,153.1886162,QLD,No Access
+,Tamwoy Town,Tamwoy Town Hall,"Olandi St, Thursday Island, QLD Australia 4875",-10.5792277,142.2104282,QLD,Assisted Access
+,Weipa North,Storm surge shelter,"Hibberd Dr, Rocky Point, QLD Australia 4874",-12.6234283,141.8787115,QLD,Assisted Access
+,Mount Morgan,"Mount Morgan Central State School, Back Gate","cnr Gordon and Central Streets, Mount Morgan, QLD Australia 4714",-23.646409157048083,150.38770935330353,QLD,Assisted Access
+,Innisfail,Innisfail Shire Hall,"70 Rankin St, Innisfail, QLD Australia 4860",-17.5230182,146.0301527,QLD,Full Access
+,Annandale East,"Annandale Community Centre, Annandale Shopping Centre","73 MacArthur Dr, Annandale, QLD Australia 4814",-19.3164559,146.7906671,QLD,Full Access
+,Camp Hill,Camp Hill State School Hall,"Ferguson Rd, Camp Hill, QLD Australia 4152",-27.491864045321936,153.079455228064,QLD,Full Access
+,Lota,Lota State School,"26 Richard St, Lota, QLD Australia 4179",-27.468786173071184,153.18645945819705,QLD,Full Access
+,The Range,"Toowoomba Anglican School, Millennium Centre","3-5 Dudley St, East Toowoomba, QLD Australia 4350",-27.558938724412577,151.97728216204072,QLD,Assisted Access
+,Sippy Downs,Chancellor College - Primary Campus,"Scholars Dr, Sippy Downs, QLD Australia 4556",-26.721240385110388,153.05950895508627,QLD,Full Access

@@ -10,4 +10,4 @@ db-pg/data*/
 logs/
 *.pyc
 initial-data/emails.csv
-TODO.md
+TODO*.md
