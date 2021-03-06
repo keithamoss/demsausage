@@ -244,14 +244,14 @@ class SausageMap extends React.PureComponent<IProps, IState> {
           <COVIDSafeToolbar>
             <ToolbarGroup firstChild={true}>
               <COVIDSafeFlatButton
-                label="COVID-19 and #democracysausage"
+                label="COVID safe voting"
                 fullWidth={true}
                 icon={<MapsLocalHospital color="red" />}
                 containerElement={
                   // eslint-disable-next-line
                   <a
                     href={
-                      "/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf"
+                      "https://www.elections.wa.gov.au/covid-safe-voting-plan"
                     }
                   />
                 }
