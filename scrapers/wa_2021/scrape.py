@@ -44,10 +44,5 @@ for electorate in electorate_response.json()["electorates"]:
             "wheelchair_access": get_disabled_access_string(polling_place["INDICATOR_DA"])
         }
 
-        # break
-    # break
-
-# print(polling_places)
-
 df = pd.DataFrame.from_dict(polling_places, orient='index')
 df.to_csv("data/wa_2021.csv", index=False)
