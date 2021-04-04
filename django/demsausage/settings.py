@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from demsausage.util import get_env
 

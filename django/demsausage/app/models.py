@@ -1,19 +1,20 @@
-from django.contrib.postgres.fields import JSONField
-from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.gis.db import models
-from django.contrib.postgres.indexes import GinIndex
-from model_utils import FieldTracker
-from simple_history.models import HistoricalRecords
+from datetime import datetime
 
-from demsausage.app.enums import ProfileSettings, StallStatus, PollingPlaceStatus, PollingPlaceChanceOfSausage
+import pytz
+from demsausage.app.enums import (PollingPlaceChanceOfSausage,
+                                  PollingPlaceStatus, ProfileSettings,
+                                  StallStatus)
+from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
-from demsausage.app.managers import PollingPlacesManager
 from demsausage.util import make_logger
-
-from datetime import datetime
-import pytz
+from django.contrib.auth.models import User
+from django.contrib.gis.db import models
+from django.contrib.postgres.indexes import GinIndex
+from django.db.models import JSONField
+from django.utils.translation import ugettext_lazy as _
+from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
 
 logger = make_logger(__name__)
 
