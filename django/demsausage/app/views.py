@@ -1,42 +1,60 @@
-from django.contrib.auth.models import User
+import json
+from copy import deepcopy
+from datetime import datetime
+
+import pytz
+from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.exceptions import BadRequest
+from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
+                                    PollingPlacesNearbyFilter,
+                                    PollingPlacesSearchFilter)
+from demsausage.app.models import (Elections, PollingPlaceFacilityType,
+                                   PollingPlaces, Stalls)
+from demsausage.app.permissions import (AnonymousOnlyGET,
+                                        StallEditingPermissions)
+from demsausage.app.sausage.elections import (
+    LoadPollingPlaces, RollbackPollingPlaces, get_elections_cache_key,
+    get_polling_place_geojson_cache_key, regenerate_election_geojson)
+from demsausage.app.sausage.mailgun import (make_confirmation_hash,
+                                            send_stall_approved_email,
+                                            send_stall_edited_email,
+                                            send_stall_submitted_email,
+                                            verify_webhook)
+from demsausage.app.sausage.polling_places import (
+    data_quality, find_by_distance, find_by_lookup_terms, find_by_stall,
+    get_active_polling_place_queryset)
+from demsausage.app.sausage.sausagelytics import FederalSausagelytics
+from demsausage.app.serializers import (ElectionsSerializer,
+                                        ElectionsStatsSerializer,
+                                        MailgunEventsSerializer,
+                                        PendingStallsSerializer,
+                                        PollingPlaceFacilityTypeSerializer,
+                                        PollingPlaceSearchResultsSerializer,
+                                        PollingPlacesGeoJSONSerializer,
+                                        PollingPlacesManagementSerializer,
+                                        PollingPlacesSerializer,
+                                        StallsManagementSerializer,
+                                        StallsSerializer,
+                                        StallsUserEditSerializer,
+                                        UserSerializer)
+from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
 from django.contrib.auth import logout
-from django.http import HttpResponseNotFound
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models import Extent
+from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Func
-from django.contrib.gis.geos import Point
-from django.contrib.gis.db.models import Extent
+from django.http import HttpResponseNotFound
+from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.decorators import list_route, detail_route, action
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.exceptions import APIException
-from rest_framework import generics
-from rest_framework import mixins
-from rest_framework.settings import api_settings
-from rest_framework_csv.renderers import CSVRenderer
 from rest_framework.parsers import MultiPartParser
-
-from demsausage.app.models import Elections, PollingPlaces, Stalls, PollingPlaceFacilityType
-from demsausage.app.serializers import UserSerializer, ElectionsSerializer, ElectionsStatsSerializer, PollingPlaceFacilityTypeSerializer, PollingPlacesSerializer, PollingPlacesGeoJSONSerializer, PollingPlaceSearchResultsSerializer, StallsSerializer, PendingStallsSerializer, StallsUserEditSerializer, StallsManagementSerializer, PollingPlacesManagementSerializer, MailgunEventsSerializer
-from demsausage.app.permissions import StallEditingPermissions, AnonymousOnlyGET
-from demsausage.app.filters import PollingPlacesBaseFilter, PollingPlacesSearchFilter, PollingPlacesNearbyFilter
-from demsausage.app.enums import StallStatus, PollingPlaceStatus
-from demsausage.app.exceptions import BadRequest
-from demsausage.app.filters import LonLatFilter
-from demsausage.app.sausage.mailgun import send_stall_approved_email, send_stall_submitted_email, send_stall_edited_email, make_confirmation_hash, verify_webhook
-from demsausage.app.sausage.elections import get_polling_place_geojson_cache_key, get_elections_cache_key, LoadPollingPlaces, RollbackPollingPlaces, regenerate_election_geojson
-from demsausage.app.sausage.polling_places import find_by_distance, find_by_lookup_terms, find_by_stall, get_active_polling_place_queryset, data_quality
-from demsausage.app.sausage.sausagelytics import FederalSausagelytics
-from demsausage.util import make_logger, get_or_none, add_datetime_to_filename
-
-from datetime import datetime
-from copy import deepcopy
-import pytz
-import json
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
+from rest_framework.views import APIView
+from rest_framework_csv.renderers import CSVRenderer
 
 logger = make_logger(__name__)
 
