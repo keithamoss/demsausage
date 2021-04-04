@@ -61,21 +61,21 @@ services:
       - db
       - memcached
   frontend_public:
-    image: node:12.17.0-alpine
+    image: node:15.10.0-alpine3.12
     entrypoint: /app/docker-entrypoint.sh
     volumes:
       - ./public:/app:delegated
     env_file:
       - secrets/sausage-public-frontend.dev.env
   # frontend_public2:
-  #   image: node:12.17.0-alpine
+  #   image: node:15.10.0-alpine3.12
   #   entrypoint: /app/docker-entrypoint.sh
   #   volumes:
   #     - ./public2:/app:delegated
   #   env_file:
   #     - secrets/sausage-public-frontend.dev.env
   frontend_admin:
-    image: node:12.17.0-alpine
+    image: node:15.10.0-alpine3.12
     entrypoint: /app/docker-entrypoint.sh
     volumes:
       - ./admin:/app:delegated

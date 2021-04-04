@@ -1,5 +1,5 @@
-FROM nginx:1.18.0-alpine
-MAINTAINER Keith Moss <keithamoss@gmail.com>
+FROM nginx:1.19.7-alpine
+LABEL maintainer="<keithamoss@gmail.com>"
 
 # Copy our local nginx config in
 RUN rm -rf /etc/nginx
