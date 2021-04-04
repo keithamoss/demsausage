@@ -174,7 +174,7 @@ TEMPLATES = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': get_env('MEMCACHED_LOCATION'),
         'TIMEOUT': None,
         'KEY_PREFIX': 'demsausage',
