@@ -105,7 +105,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'simple_history',
     'django_filters',
-    'rest_framework_swagger',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -230,6 +230,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 
@@ -254,12 +255,18 @@ STATIC_URL = '/api/static/'
 
 # Swagger
 
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': False,
-    'USE_SESSION_AUTH': False,
-    'APIS_SORTER': 'alpha',
-    'DOC_EXPANSION': 'list',
-    'OPERATIONS_SORTER': 'alpha',
+SPECTACULAR_SETTINGS = {
+    'SERVE_PUBLIC': False,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+    },
+    'TITLE': 'Democracy Sausage API',
+    'DESCRIPTION': 'Sausage Transfer Protocol',
+    'CONTACT': {
+        'name': 'Keith Moss',
+        'email': 'keithamoss@gmail.com',
+    },
+    'VERSION': '0.1',
 }
 
 # Sentry SDK

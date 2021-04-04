@@ -1,21 +1,16 @@
-from django.conf.urls import url, include
-from .views import (
-    UserViewSet,
-    ProfileViewSet,
-    CurrentUserView,
-    LogoutUserView,
-    ElectionsViewSet,
-    PollingPlacesViewSet,
-    PollingPlacesSearchViewSet,
-    PollingPlacesNearbyViewSet,
-    PollingPlacesGeoJSONViewSet,
-    PendingStallsViewSet,
-    StallsViewSet,
-    MailManagementViewSet,
-    PollingPlaceFacilityTypeViewSet,
-    api_not_found)
+from django.conf.urls import include, url
+from django.urls import path
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 from rest_framework import routers
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework.permissions import AllowAny
+
+from .views import (CurrentUserView, ElectionsViewSet, LogoutUserView,
+                    MailManagementViewSet, PendingStallsViewSet,
+                    PollingPlaceFacilityTypeViewSet,
+                    PollingPlacesGeoJSONViewSet, PollingPlacesNearbyViewSet,
+                    PollingPlacesSearchViewSet, PollingPlacesViewSet,
+                    ProfileViewSet, StallsViewSet, UserViewSet, api_not_found)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -32,11 +27,10 @@ router.register(r'mail', MailManagementViewSet, 'MailManagementViewSet')
 # http://stackoverflow.com/questions/22083090/what-base-name-parameter-do-i-need-in-my-route-to-make-this-django-api-work
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
-schema_view = get_swagger_view(title="Democracy Sausage API")
-schema_view.cls.schema = None
-
 urlpatterns = [
-    url(r'^api/0.1/swagger/$', schema_view),
+    url(r'^api/0.1/schema/$', SpectacularAPIView.as_view(), name='schema'),
+    url(r'^api/0.1/schema/swagger-ui/$', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    url(r'^api/0.1/schema/redoc/$', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     url(r'^api/0.1/polling_places/search/$', PollingPlacesSearchViewSet.as_view(), name='api-polling-places-search'),
     url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
     url(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),

@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User, AnonymousUser
-from rest_framework import permissions
-
 from demsausage.app.sausage.mailgun import make_confirmation_hash
+from django.contrib.auth.models import AnonymousUser, User
+from rest_framework import permissions
 
 
 class AnonymousOnlyList(permissions.BasePermission):
@@ -48,21 +47,17 @@ class StallEditingPermissions(permissions.BasePermission):
         if view.action == "create":
             return True
         elif view.action == "retrieve":
-            # Stops django-rest-swagger triggering "there's no PK!" errors
-            if "pk" in view.kwargs:
-                stall = view.get_object()
-                token = request.query_params.get("token", None)
-                signature = request.query_params.get("signature", None)
+            stall = view.get_object()
+            token = request.query_params.get("token", None)
+            signature = request.query_params.get("signature", None)
 
-                return make_confirmation_hash(stall.id, token) == signature
+            return make_confirmation_hash(stall.id, token) == signature
         elif view.action == "update_and_resubmit":
-            # Stops django-rest-swagger triggering "there's no PK!" errors
-            if "pk" in view.kwargs:
-                stall = view.get_object()
-                token = request.data.get("token", None)
-                signature = request.data.get("signature", None)
+            stall = view.get_object()
+            token = request.data.get("token", None)
+            signature = request.data.get("signature", None)
 
-                return make_confirmation_hash(stall.id, token) == signature
+            return make_confirmation_hash(stall.id, token) == signature
         return isinstance(request.user, User)
 
 
