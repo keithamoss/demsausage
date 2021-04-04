@@ -6,7 +6,7 @@ from django.db import transaction
 from django.db.models import Func
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models import Extent
-
+from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import list_route, detail_route, action
@@ -89,7 +89,7 @@ class ProfileViewSet(viewsets.ViewSet):
     """
     permission_classes = (IsAuthenticated,)
 
-    @list_route(methods=["post"])
+    @action(detail=False, methods=["post"])
     def update_settings(self, request):
         request.user.profile.merge_settings(request.data)
         request.user.profile.save()
@@ -104,7 +104,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
 
-    @list_route(methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,), serializer_class=ElectionsSerializer)
+    @action(detail=False, methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,), serializer_class=ElectionsSerializer)
     def public(self, request, format=None):
         """
         Retrieve a list of all publicly visible elections that have been, or will be, available.
@@ -121,7 +121,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             cache.delete(cache_key)
             return Response()
 
-    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,), serializer_class=ElectionsSerializer)
+    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,), serializer_class=ElectionsSerializer)
     @transaction.atomic
     def set_primary(self, request, pk=None, format=None):
         self.get_queryset().filter(is_primary=True).update(is_primary=False)
@@ -133,7 +133,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @detail_route(methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
+    @action(detail=True, methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
     def polling_places(self, request, pk=None, format=None):
         election = self.get_object()
         dry_run = True if str(request.data.get("dry_run", 0)) == "1" else False
@@ -149,7 +149,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
         return Response({"message": "Done", "logs": loader.collects_logs()})
 
-    @detail_route(methods=["post"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def polling_places_rollback(self, request, pk=None, format=None):
         election = self.get_object()
@@ -165,7 +165,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         rollback.collects_logs()
         return Response({})
 
-    @detail_route(methods=["get"], permission_classes=(AllowAny,))
+    @action(detail=True, methods=["get"], permission_classes=(AllowAny,))
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
@@ -175,7 +175,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         stats = FederalSausagelytics(election)
         return Response(stats.get_stats())
 
-    @detail_route(methods=["get"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))
     def data_quality(self, request, pk=None, format=None):
         election = self.get_object()
 
@@ -222,7 +222,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
         return response
 
-    @list_route(methods=["get"])
+    @action(detail=False, methods=["get"])
     def without_facility_type(self, request, format=None):
         election_id = request.query_params.get("election_id", None)
         if election_id is not None:
@@ -231,7 +231,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No election_id provided.")
 
-    @list_route(methods=["get"])
+    @action(detail=False, methods=["get"])
     def favourited(self, request, format=None):
         election_id = request.query_params.get("election_id", None)
         if election_id is not None:
@@ -240,7 +240,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No election_id provided.")
 
-    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    @action(detail=False, methods=["get"], permission_classes=(AllowAny,))
     def lookup(self, request, format=None):
         """
         Lookup the details for an individual polling place by its name + premises + state or its ec_id field.
@@ -261,7 +261,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No election_id provided.")
 
-    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    @action(detail=False, methods=["get"], permission_classes=(AllowAny,))
     def stall_lookup(self, request, format=None):
         """
         Lookup the details for an individual polling place by the id of the stall attached to it.
@@ -276,7 +276,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         else:
             raise BadRequest("No stall_id provided.")
 
-    @list_route(methods=["get"], permission_classes=(AllowAny,))
+    @action(detail=False, methods=["get"], permission_classes=(AllowAny,))
     def nearby_bbox(self, request, format=None):
         """
         Retrieve the bounding box of the 15 polling places closest to a given latitude, longitude.
@@ -374,7 +374,7 @@ class StallsViewSet(viewsets.ModelViewSet):
 
         return super(StallsViewSet, self).retrieve(request, *args, **kwargs)
 
-    @detail_route(methods=["patch"])
+    @action(detail=True, methods=["patch"])
     @transaction.atomic
     def update_and_resubmit(self, request, pk=None, format=None):
         stall = self.get_object()
@@ -397,7 +397,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["patch"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
         stall = self.get_object()
@@ -416,7 +416,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @detail_route(methods=["patch"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["patch"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve_and_add(self, request, pk=None, format=None):
         stall = self.get_object()
@@ -484,7 +484,7 @@ class MailManagementViewSet(viewsets.ViewSet):
     schema = None
     permission_classes = (AllowAny,)
 
-    @list_route(methods=["get"])
+    @action(detail=False, methods=["get"])
     def opt_out(self, request, format=None):
         stall_id = request.query_params.get("stall_id", None)
         token = request.query_params.get("token", None)
@@ -504,7 +504,7 @@ class MailManagementViewSet(viewsets.ViewSet):
 
         return Response("No worries, we've removed you from our mailing list :)", content_type="text/html")
 
-    @list_route(methods=["post"])
+    @action(detail=False, methods=["post"])
     def mailgun_webhook(self, request, format=None):
         signature_data = request.data.get("signature", None)
         if signature_data is not None:
