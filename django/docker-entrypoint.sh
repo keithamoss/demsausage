@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function postgres_ready(){
+postgres_ready(){
 python << END
 import sys
 import psycopg2
