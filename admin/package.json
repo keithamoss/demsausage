@@ -62,7 +62,7 @@
         "@types/redux-thunk": "^2.1.0",
         "@types/reselect": "^2.2.0",
         "core-js": "^2.6.1",
-        "react-scripts": "3.0.0",
+        "react-scripts": "^4.0.3",
         "redux-devtools-extension": "^2.13.7",
         "tslint": "5.14.0",
         "tslint-config-prettier": "^1.17.0",

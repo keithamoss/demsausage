@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "lib": [
       "es2018",
       "dom"
@@ -25,7 +25,8 @@
     "sourceMap": true,
     "outDir": "build/dist",
     "rootDir": "src",
-    "noEmit": true
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": [
     "node_modules",
