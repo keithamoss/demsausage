@@ -1,111 +1,112 @@
-import { cloneDeep } from "lodash-es"
-import * as React from "react"
-import { connect } from "react-redux"
-import { isValid, submit } from "redux-form"
-import { fromStallFormValues, IStallFormInfo } from "../../add-stall/AddStallForm/AddStallFormContainer"
-import { buildNomsObject } from "../../redux/modules/polling_places"
-import { IStore } from "../../redux/modules/reducer"
-import { IStall, updateStallWithCredentials } from "../../redux/modules/stalls"
-import { IDjangoAPIError } from "../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI"
-import { IStallEditCredentials } from "../EditStall/EditStallContainer"
-import EditStallForm from "./EditStallForm"
+import { cloneDeep } from 'lodash-es'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { isValid, submit } from 'redux-form'
+import { fromStallFormValues, IStallFormInfo } from '../../add-stall/AddStallForm/AddStallFormContainer'
+import { buildNomsObject } from '../../redux/modules/polling_places'
+import { IStore } from '../../redux/modules/reducer'
+import { IStall, updateStallWithCredentials } from '../../redux/modules/stalls'
+import { IDjangoAPIError } from '../../shared/ui/DjangoAPIErrorUI/DjangoAPIErrorUI'
+import { IStallEditCredentials } from '../EditStall/EditStallContainer'
+import EditStallForm from './EditStallForm'
 
 interface IProps {
-    stall: IStall
-    credentials: IStallEditCredentials
-    onStallUpdated: Function
+  stall: IStall
+  credentials: IStallEditCredentials
+  onStallUpdated: Function
 }
 
 interface IDispatchProps {
-    onFormSubmit: Function
-    onSaveForm: Function
+  onFormSubmit: Function
+  onSaveForm: Function
 }
 
 interface IStoreProps {
-    isValid: boolean
+  isValid: boolean
 }
 
 interface IStateProps {
-    formSubmitting: boolean
-    errors: IDjangoAPIError | undefined
+  formSubmitting: boolean
+  errors: IDjangoAPIError | undefined
 }
 
 const toFormValues = (stall: IStall): any => {
-    return {
-        ...buildNomsObject(stall.noms as any),
-        ...cloneDeep(stall),
-    }
+  return {
+    ...buildNomsObject(stall.noms as any),
+    ...cloneDeep(stall),
+  }
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class EditStallFormContainer extends React.Component<TComponentProps, IStateProps> {
-    initialValues: object | undefined
-    constructor(props: TComponentProps) {
-        super(props)
+  initialValues: object | undefined
 
-        this.state = {
-            formSubmitting: false,
-            errors: undefined,
-        }
+  constructor(props: TComponentProps) {
+    super(props)
 
-        this.initialValues = cloneDeep(toFormValues(props.stall))
+    this.state = {
+      formSubmitting: false,
+      errors: undefined,
     }
 
-    toggleFormSubmitting() {
-        this.setState({ ...this.state, formSubmitting: !this.state.formSubmitting })
-    }
+    this.initialValues = cloneDeep(toFormValues(props.stall))
+  }
 
-    render() {
-        const { isValid, onFormSubmit, onSaveForm } = this.props
-        const { formSubmitting, errors } = this.state
+  toggleFormSubmitting() {
+    this.setState({ ...this.state, formSubmitting: !this.state.formSubmitting })
+  }
 
-        return (
-            <EditStallForm
-                initialValues={this.initialValues}
-                formSubmitting={formSubmitting}
-                errors={errors}
-                isValid={isValid}
-                onSubmit={async (values: object, dispatch: Function, props: IProps) => {
-                    this.toggleFormSubmitting()
-                    await onFormSubmit(values, this)
-                }}
-                onSaveForm={() => {
-                    onSaveForm()
-                }}
-            />
-        )
-    }
+  render() {
+    const { isValid, onFormSubmit, onSaveForm } = this.props
+    const { formSubmitting, errors } = this.state
+
+    return (
+      <EditStallForm
+        initialValues={this.initialValues}
+        formSubmitting={formSubmitting}
+        errors={errors}
+        isValid={isValid}
+        onSubmit={async (values: object, dispatch: Function, props: IProps) => {
+          this.toggleFormSubmitting()
+          await onFormSubmit(values, this)
+        }}
+        onSaveForm={() => {
+          onSaveForm()
+        }}
+      />
+    )
+  }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
-    return {
-        isValid: isValid("editStall")(state),
-    }
+  return {
+    isValid: isValid('editStall')(state),
+  }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-    return {
-        async onFormSubmit(values: object, that: EditStallFormContainer) {
-            const stallFormFields: Partial<IStallFormInfo> = fromStallFormValues(values)
+  return {
+    async onFormSubmit(values: object, that: EditStallFormContainer) {
+      const stallFormFields: Partial<IStallFormInfo> = fromStallFormValues(values)
 
-            const { stall, credentials, onStallUpdated } = that.props
+      const { stall, credentials, onStallUpdated } = that.props
 
-            const { response, json } = await dispatch(
-                updateStallWithCredentials(stall.id, stallFormFields, credentials.token, credentials.signature)
-            )
-            if (response.status === 200) {
-                onStallUpdated()
-            } else if (response.status === 400) {
-                that.setState({ ...that.state, errors: json }, () => that.toggleFormSubmitting())
-            }
-        },
-        onSaveForm: () => {
-            dispatch(submit("editStall"))
-        },
-    }
+      const { response, json } = await dispatch(
+        updateStallWithCredentials(stall.id, stallFormFields, credentials.token, credentials.signature)
+      )
+      if (response.status === 200) {
+        onStallUpdated()
+      } else if (response.status === 400) {
+        that.setState({ ...that.state, errors: json }, () => that.toggleFormSubmitting())
+      }
+    },
+    onSaveForm: () => {
+      dispatch(submit('editStall'))
+    },
+  }
 }
 
 export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(EditStallFormContainer)

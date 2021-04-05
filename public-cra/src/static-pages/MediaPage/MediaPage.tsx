@@ -1,9 +1,9 @@
-import { List, ListItem } from "material-ui/List";
-import { CommunicationEmail, FileFileDownload } from "material-ui/svg-icons";
-import * as React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import { IStore } from "../../redux/modules/reducer";
+import { List, ListItem } from 'material-ui/List'
+import { CommunicationEmail, FileFileDownload } from 'material-ui/svg-icons'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
+import { IStore } from '../../redux/modules/reducer'
 
 interface IProps {}
 
@@ -16,12 +16,12 @@ interface IStateProps {}
 const PageWrapper = styled.div`
   padding-left: 15px;
   padding-right: 15px;
-`;
+`
 
-type TComponentProps = IProps & IStoreProps & IDispatchProps;
+type TComponentProps = IProps & IStoreProps & IDispatchProps
 class MediaPage extends React.Component<TComponentProps, IStateProps> {
   componentDidMount() {
-    document.title = "Democracy Sausage | Media";
+    document.title = 'Democracy Sausage | Media'
   }
 
   render() {
@@ -45,7 +45,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             containerElement={
               // eslint-disable-next-line
               <a
-                href={"/media/2021%20WA%20Media%20Release%20-%206%20Mar.pdf"}
+                href="/media/2021%20WA%20Media%20Release%20-%206%20Mar.pdf"
               />
             }
           />
@@ -55,9 +55,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             containerElement={
               // eslint-disable-next-line
               <a
-                href={
-                  "/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf"
-                }
+                href="/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf"
               />
             }
           />
@@ -75,9 +73,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             containerElement={
               // eslint-disable-next-line
               <a
-                href={
-                  "/media/2019%20Federal%20Election%20Media%20Release%20-%2017%20May.pdf"
-                }
+                href="/media/2019%20Federal%20Election%20Media%20Release%20-%2017%20May.pdf"
               />
             }
           />
@@ -95,9 +91,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             containerElement={
               // eslint-disable-next-line
               <a
-                href={
-                  "/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"
-                }
+                href="/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"
               />
             }
           />
@@ -107,25 +101,22 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             containerElement={
               // eslint-disable-next-line
               <a
-                href={"/media/Canning%20Press%20Release%20-%20DemSausage.pdf"}
+                href="/media/Canning%20Press%20Release%20-%20DemSausage.pdf"
               />
             }
           />
         </List>
       </PageWrapper>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-  return {};
-};
+  return {}
+}
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-  return {};
-};
+  return {}
+}
 
-export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
-  mapStateToProps,
-  mapDispatchToProps
-)(MediaPage);
+export default connect<IStoreProps, IDispatchProps, IProps, IStore>(mapStateToProps, mapDispatchToProps)(MediaPage)

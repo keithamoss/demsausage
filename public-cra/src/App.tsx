@@ -109,7 +109,7 @@ class App extends React.Component<IProps, {}> {
     } = this.props
 
     // Ugh - For making /, /<election-1-name>, /<election-2-name> all match
-    let bottomNavSelectedIndex: number = -1
+    let bottomNavSelectedIndex = -1
     if (content.type.muiName === 'SausageMapContainer') {
       bottomNavSelectedIndex = 0
     } else if (content.type.muiName === 'PollingPlaceFinderContainer') {
@@ -139,7 +139,7 @@ class App extends React.Component<IProps, {}> {
                 leftIcon={<MapsMap />}
                 containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
                 locationPathName={locationPathName}
-                locationPathNameMatch={'/'}
+                locationPathNameMatch="/"
                 muiThemePalette={muiThemePalette}
                 contentMuiName={content.type.muiName}
               />
@@ -148,16 +148,16 @@ class App extends React.Component<IProps, {}> {
                 leftIcon={<ActionSearch />}
                 containerElement={<Link to={`/search/${getURLSafeElectionName(currentElection)}`} />}
                 locationPathName={locationPathName}
-                locationPathNameMatch={'/search'}
+                locationPathNameMatch="/search"
                 muiThemePalette={muiThemePalette}
                 contentMuiName={content.type.muiName}
               />
               <MenuListItem
                 primaryText="Add Stall"
                 leftIcon={<MapsAddLocation />}
-                containerElement={<Link to={'/add-stall'} />}
+                containerElement={<Link to="/add-stall" />}
                 locationPathName={locationPathName}
-                locationPathNameMatch={'/add-stall'}
+                locationPathNameMatch="/add-stall"
                 muiThemePalette={muiThemePalette}
                 contentMuiName={content.type.muiName}
               />
@@ -175,17 +175,17 @@ class App extends React.Component<IProps, {}> {
                   containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
                   onClick={onClickDrawerLink}
                   locationPathName={locationPathName}
-                  locationPathNameMatch={'/'}
+                  locationPathNameMatch="/"
                   muiThemePalette={muiThemePalette}
                   contentMuiName={content.type.muiName}
                 />
                 <MenuListItem
                   primaryText="Add Stall"
                   leftIcon={<MapsAddLocation />}
-                  containerElement={<Link to={`/add-stall`} />}
+                  containerElement={<Link to="/add-stall" />}
                   onClick={onClickDrawerLink}
                   locationPathName={locationPathName}
-                  locationPathNameMatch={'/add-stall'}
+                  locationPathNameMatch="/add-stall"
                   muiThemePalette={muiThemePalette}
                 />
               </React.Fragment>
@@ -193,10 +193,10 @@ class App extends React.Component<IProps, {}> {
             <MenuListItem
               primaryText="Elections"
               leftIcon={<MapsLayers />}
-              containerElement={<Link to={`/elections`} />}
+              containerElement={<Link to="/elections" />}
               onClick={onClickDrawerLink}
               locationPathName={locationPathName}
-              locationPathNameMatch={'/elections'}
+              locationPathNameMatch="/elections"
               muiThemePalette={muiThemePalette}
             />
             <MenuListItem
@@ -205,26 +205,26 @@ class App extends React.Component<IProps, {}> {
               containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
               onClick={onClickDrawerLink}
               locationPathName={locationPathName}
-              locationPathNameMatch={'/sausagelytics'}
+              locationPathNameMatch="/sausagelytics"
               muiThemePalette={muiThemePalette}
               contentMuiName={content.type.muiName}
             />
             <MenuListItem
               primaryText="FAQs and About Us"
               leftIcon={<ActionInfo />}
-              containerElement={<Link to={`/about`} />}
+              containerElement={<Link to="/about" />}
               onClick={onClickDrawerLink}
               locationPathName={locationPathName}
-              locationPathNameMatch={'/about'}
+              locationPathNameMatch="/about"
               muiThemePalette={muiThemePalette}
             />
             <MenuListItem
               primaryText="Media"
               leftIcon={<HardwareTv />}
-              containerElement={<Link to={`/media`} />}
+              containerElement={<Link to="/media" />}
               onClick={onClickDrawerLink}
               locationPathName={locationPathName}
-              locationPathNameMatch={'/media'}
+              locationPathNameMatch="/media"
               muiThemePalette={muiThemePalette}
             />
             <ListItem

@@ -1,25 +1,26 @@
-import Avatar from "material-ui/Avatar";
-import { List, ListItem } from "material-ui/List";
-import ActionStore from "material-ui/svg-icons/action/store";
-import * as React from "react";
-import styled from "styled-components";
-import { IPollingPlace } from "../../redux/modules/polling_places";
-const reactStringReplace = require("react-string-replace");
+import Avatar from 'material-ui/Avatar'
+import { List, ListItem } from 'material-ui/List'
+import ActionStore from 'material-ui/svg-icons/action/store'
+import * as React from 'react'
+import styled from 'styled-components'
+import { IPollingPlace } from '../../redux/modules/polling_places'
+
+const reactStringReplace = require('react-string-replace')
 
 interface IProps {
-  searchText?: string;
-  searchResults: Array<IPollingPlace> | undefined;
-  onChoosePollingPlace: any;
+  searchText?: string
+  searchResults: Array<IPollingPlace> | undefined
+  onChoosePollingPlace: any
 }
 
 const HighlightedString = styled.span`
   color: purple;
   font-weight: bold !important;
-`;
+`
 
 class PollingPlaceAutocompleteList extends React.PureComponent<IProps, {}> {
   render() {
-    const { searchText, searchResults, onChoosePollingPlace } = this.props;
+    const { searchText, searchResults, onChoosePollingPlace } = this.props
 
     return (
       <div>
@@ -29,21 +30,15 @@ class PollingPlaceAutocompleteList extends React.PureComponent<IProps, {}> {
               const primaryTextString =
                 pollingPlace.name === pollingPlace.premises
                   ? pollingPlace.name
-                  : `${pollingPlace.name}, ${pollingPlace.premises}`;
-              const primaryText = reactStringReplace(
-                primaryTextString,
-                searchText,
-                (match: string, i: number) => (
-                  <HighlightedString key={i}>{match}</HighlightedString>
-                )
-              );
+                  : `${pollingPlace.name}, ${pollingPlace.premises}`
+              const primaryText = reactStringReplace(primaryTextString, searchText, (match: string, i: number) => (
+                <HighlightedString key={i}>{match}</HighlightedString>
+              ))
               const secondaryText = reactStringReplace(
                 `${pollingPlace.address}, ${pollingPlace.state}`,
                 searchText,
-                (match: string, i: number) => (
-                  <HighlightedString key={i}>{match}</HighlightedString>
-                )
-              );
+                (match: string, i: number) => <HighlightedString key={i}>{match}</HighlightedString>
+              )
 
               return (
                 <ListItem
@@ -53,16 +48,16 @@ class PollingPlaceAutocompleteList extends React.PureComponent<IProps, {}> {
                   secondaryText={secondaryText}
                   secondaryTextLines={2}
                   onClick={(event: any) => {
-                    onChoosePollingPlace(pollingPlace);
+                    onChoosePollingPlace(pollingPlace)
                   }}
                 />
-              );
+              )
             })}
           </List>
         )}
       </div>
-    );
+    )
   }
 }
 
-export default PollingPlaceAutocompleteList;
+export default PollingPlaceAutocompleteList

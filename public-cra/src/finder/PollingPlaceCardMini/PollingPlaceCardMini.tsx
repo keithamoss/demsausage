@@ -1,15 +1,9 @@
-import { FlatButton } from "material-ui";
-import Avatar from "material-ui/Avatar";
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardText,
-  CardTitle,
-} from "material-ui/Card";
-import { ListItem } from "material-ui/List";
-import Paper from "material-ui/Paper";
-import { grey500, yellow600 } from "material-ui/styles/colors";
+import { FlatButton } from 'material-ui'
+import Avatar from 'material-ui/Avatar'
+import { Card, CardActions, CardHeader, CardText, CardTitle } from 'material-ui/Card'
+import { ListItem } from 'material-ui/List'
+import Paper from 'material-ui/Paper'
+import { grey500, yellow600 } from 'material-ui/styles/colors'
 import {
   ActionAccessible,
   ActionHelpOutline,
@@ -17,17 +11,17 @@ import {
   ContentContentCopy,
   DeviceAccessTime,
   EditorFormatListBulleted,
-} from "material-ui/svg-icons";
-import * as React from "react";
-import styled from "styled-components";
-import BaconandEggsIcon from "../../icons/bacon-and-eggs";
-import CakeIcon from "../../icons/cake";
-import CoffeeIcon from "../../icons/coffee";
-import HalalIcon from "../../icons/halal";
-import RedCrossofShameIcon from "../../icons/red-cross-of-shame";
-import SausageIcon from "../../icons/sausage";
-import VegoIcon from "../../icons/vego";
-import { IElection, isElectionLive } from "../../redux/modules/elections";
+} from 'material-ui/svg-icons'
+import * as React from 'react'
+import styled from 'styled-components'
+import BaconandEggsIcon from '../../icons/bacon-and-eggs'
+import CakeIcon from '../../icons/cake'
+import CoffeeIcon from '../../icons/coffee'
+import HalalIcon from '../../icons/halal'
+import RedCrossofShameIcon from '../../icons/red-cross-of-shame'
+import SausageIcon from '../../icons/sausage'
+import VegoIcon from '../../icons/vego'
+import { IElection, isElectionLive } from '../../redux/modules/elections'
 import {
   getFoodDescription,
   getSausageChanceDescription,
@@ -36,14 +30,14 @@ import {
   IPollingPlaceSearchResult,
   pollingPlaceHasReports,
   pollingPlaceHasReportsOfNoms,
-} from "../../redux/modules/polling_places";
+} from '../../redux/modules/polling_places'
 
 const FlexboxContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
   margin-bottom: 10px;
-`;
+`
 
 const FlexboxIcons = styled.div`
   flex-grow: 1;
@@ -51,7 +45,7 @@ const FlexboxIcons = styled.div`
     padding-left: 5px;
     padding-right: 5px;
   }
-`;
+`
 
 // const FlexboxDistance = styled(FlatButton)`
 //     color: ${grey500} !important;
@@ -60,11 +54,11 @@ const FlexboxIcons = styled.div`
 const HasFreeTextDeliciousness = styled.div`
   color: ${grey500};
   font-size: 12px;
-`;
+`
 
 const RunOutWarning = styled(ListItem)`
   margin-bottom: 10px !important;
-`;
+`
 
 const MoreInfoRow = styled.div`
   color: ${grey500};
@@ -77,7 +71,7 @@ const MoreInfoRow = styled.div`
   & > span {
     vertical-align: middle;
   }
-`;
+`
 
 const ChanceOfSausage = styled(ListItem)`
   color: ${grey500};
@@ -86,30 +80,24 @@ const ChanceOfSausage = styled(ListItem)`
   .sausageChance {
     color: red;
   }
-`;
+`
 
 interface IProps {
-  pollingPlace: IPollingPlace | IPollingPlaceSearchResult;
-  election: IElection;
-  copyLinkEnabled: boolean;
-  onClickCopyLink: any;
+  pollingPlace: IPollingPlace | IPollingPlaceSearchResult
+  election: IElection
+  copyLinkEnabled: boolean
+  onClickCopyLink: any
 }
 
 class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
   render() {
-    const {
-      pollingPlace,
-      election,
-      copyLinkEnabled,
-      onClickCopyLink,
-    } = this.props;
+    const { pollingPlace, election, copyLinkEnabled, onClickCopyLink } = this.props
 
-    const isExpandable: boolean =
-      pollingPlaceHasReportsOfNoms(pollingPlace) === true ? true : false;
+    const isExpandable: boolean = pollingPlaceHasReportsOfNoms(pollingPlace) === true
 
-    let title = `${pollingPlace.name}`;
+    let title = `${pollingPlace.name}`
     if (pollingPlace.premises !== null) {
-      title = `${pollingPlace.name}, ${pollingPlace.premises}`;
+      title = `${pollingPlace.name}, ${pollingPlace.premises}`
     }
 
     return (
@@ -125,7 +113,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
             <CardTitle
               title={pollingPlace.stall.name}
               subtitle={pollingPlace.stall.description}
-              subtitleStyle={{ whiteSpace: "pre-wrap" }}
+              subtitleStyle={{ whiteSpace: 'pre-wrap' }}
             />
           )}
           <CardText>
@@ -138,9 +126,7 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                   {pollingPlace.stall.noms.nothing && <RedCrossofShameIcon />}
                   {pollingPlace.stall.noms.halal && <HalalIcon />}
                   {pollingPlace.stall.noms.coffee && <CoffeeIcon />}
-                  {pollingPlace.stall.noms.bacon_and_eggs && (
-                    <BaconandEggsIcon />
-                  )}
+                  {pollingPlace.stall.noms.bacon_and_eggs && <BaconandEggsIcon />}
                 </FlexboxIcons>
               )}
               {/* {"distance_km" in pollingPlace && (
@@ -157,71 +143,49 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
                             </MoreInfoRow>
                         )} */}
             {pollingPlace.stall !== null &&
-              "free_text" in pollingPlace.stall.noms &&
+              'free_text' in pollingPlace.stall.noms &&
               pollingPlace.stall.noms.free_text !== null && (
-                <HasFreeTextDeliciousness>
-                  Also available: {pollingPlace.stall.noms.free_text}
-                </HasFreeTextDeliciousness>
+                <HasFreeTextDeliciousness>Also available: {pollingPlace.stall.noms.free_text}</HasFreeTextDeliciousness>
               )}
             {pollingPlace.stall !== null && pollingPlace.stall.noms.run_out && (
               <RunOutWarning
-                secondaryText={
-                  "We've had reports that the stalls at this polling booth have run out of food."
-                }
+                secondaryText={"We've had reports that the stalls at this polling booth have run out of food."}
                 secondaryTextLines={2}
-                leftAvatar={
-                  <Avatar icon={<AlertWarning />} backgroundColor={yellow600} />
-                }
+                leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={yellow600} />}
                 disabled={true}
               />
             )}
-            {isElectionLive(election) &&
-              pollingPlaceHasReports(pollingPlace) === false && (
-                <ChanceOfSausage
-                  primaryText={"We don't have any reports for this booth yet."}
-                  secondaryText={
-                    <span>{getSausageChanceDescription(pollingPlace)}</span>
-                  }
-                  secondaryTextLines={2}
-                  leftAvatar={<Avatar icon={<ActionHelpOutline />} />}
-                  disabled={true}
-                />
-              )}
-            {pollingPlace.stall !== null &&
-              pollingPlace.stall.opening_hours !== "" && (
-                <MoreInfoRow>
-                  <DeviceAccessTime />{" "}
-                  <span>
-                    Stall Opening Hours: {pollingPlace.stall.opening_hours}
-                  </span>
-                </MoreInfoRow>
-              )}
+            {isElectionLive(election) && pollingPlaceHasReports(pollingPlace) === false && (
+              <ChanceOfSausage
+                primaryText={"We don't have any reports for this booth yet."}
+                secondaryText={<span>{getSausageChanceDescription(pollingPlace)}</span>}
+                secondaryTextLines={2}
+                leftAvatar={<Avatar icon={<ActionHelpOutline />} />}
+                disabled={true}
+              />
+            )}
+            {pollingPlace.stall !== null && pollingPlace.stall.opening_hours !== '' && (
+              <MoreInfoRow>
+                <DeviceAccessTime /> <span>Stall Opening Hours: {pollingPlace.stall.opening_hours}</span>
+              </MoreInfoRow>
+            )}
             <MoreInfoRow>
-              <ActionAccessible />{" "}
-              <span>
-                Wheelchair Access:{" "}
-                {getWheelchairAccessDescription(pollingPlace)}
-              </span>
+              <ActionAccessible /> <span>Wheelchair Access: {getWheelchairAccessDescription(pollingPlace)}</span>
             </MoreInfoRow>
             {pollingPlace.divisions.length > 0 && (
               <MoreInfoRow>
-                <EditorFormatListBulleted />{" "}
+                <EditorFormatListBulleted />{' '}
                 <span>
-                  Division{pollingPlace.divisions.length > 1 ? "s" : ""}:{" "}
-                  {pollingPlace.divisions.join(", ")}
+                  Division{pollingPlace.divisions.length > 1 ? 's' : ''}: {pollingPlace.divisions.join(', ')}
                 </span>
               </MoreInfoRow>
             )}
             {pollingPlace.stall !== null &&
               pollingPlace.stall.extra_info !== null &&
               pollingPlace.stall.extra_info.length > 0 && (
-                <MoreInfoRow>
-                  Extra Info: {pollingPlace.stall.extra_info}
-                </MoreInfoRow>
+                <MoreInfoRow>Extra Info: {pollingPlace.stall.extra_info}</MoreInfoRow>
               )}
-            {pollingPlace.booth_info.length > 0 && (
-              <MoreInfoRow>Booth Info: {pollingPlace.booth_info}</MoreInfoRow>
-            )}
+            {pollingPlace.booth_info.length > 0 && <MoreInfoRow>Booth Info: {pollingPlace.booth_info}</MoreInfoRow>}
           </CardText>
           {isExpandable && (
             <CardText expandable={isExpandable}>
@@ -231,18 +195,13 @@ class PollingPlaceCardMini extends React.PureComponent<IProps, {}> {
           )}
           {copyLinkEnabled === true && (
             <CardActions>
-              <FlatButton
-                label="Copy Link"
-                icon={<ContentContentCopy />}
-                secondary={true}
-                onClick={onClickCopyLink}
-              />
+              <FlatButton label="Copy Link" icon={<ContentContentCopy />} secondary={true} onClick={onClickCopyLink} />
             </CardActions>
           )}
         </Card>
       </Paper>
-    );
+    )
   }
 }
 
-export default PollingPlaceCardMini;
+export default PollingPlaceCardMini

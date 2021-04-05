@@ -1,49 +1,49 @@
-import { VictoryTheme } from "victory"
+import { VictoryTheme } from 'victory'
 
 // DemSausage Colours
-const demsausagePurple = "#6740B4"
-const demsausageDarkPurple = "#351B69"
+const demsausagePurple = '#6740B4'
+const demsausageDarkPurple = '#351B69'
 
 // Colors
 // const yellow200 = "#FFF59D"
 // const deepOrange600 = "#F4511E"
-const lime300 = "#DCE775"
-const lightGreen500 = "#8BC34A"
-const teal700 = "#00796B"
-const cyan900 = "#006064"
-const colors = ["transparent", demsausagePurple, lime300, lightGreen500, teal700, cyan900]
+const lime300 = '#DCE775'
+const lightGreen500 = '#8BC34A'
+const teal700 = '#00796B'
+const cyan900 = '#006064'
+const colors = ['transparent', demsausagePurple, lime300, lightGreen500, teal700, cyan900]
 // const blueGrey50 = "#ECEFF1"
 // const blueGrey300 = "#90A4AE";
-const blueGrey700 = "#455A64"
+const blueGrey700 = '#455A64'
 // const grey900 = "#212121";
 
 // Typography
 const sansSerif = "'Roboto', 'Helvetica Neue', Helvetica, sans-serif"
-const letterSpacing = "normal"
+const letterSpacing = 'normal'
 const fontSize = 12
 
 // Layout
 const padding = 8
 const baseProps = {
-    props: {} as any,
-    // width: 350,
-    // height: 350,
-    // padding: 50,
+  props: {} as any,
+  // width: 350,
+  // height: 350,
+  // padding: 50,
 }
 
 // * Labels
 const baseLabelStyles = {
-    fontFamily: sansSerif,
-    fontSize,
-    letterSpacing,
-    padding,
-    fill: blueGrey700,
-    stroke: "transparent",
-    strokeWidth: 0,
+  fontFamily: sansSerif,
+  fontSize,
+  letterSpacing,
+  padding,
+  fill: blueGrey700,
+  stroke: 'transparent',
+  strokeWidth: 0,
 }
 
 // const centeredLabelStyles = { ...baseLabelStyles, textAnchor: "middle" }
-const topLabelStyles = { ...baseLabelStyles, textAnchor: "start" }
+const topLabelStyles = { ...baseLabelStyles, textAnchor: 'start' }
 
 // Strokes
 // const strokeDasharray = "10, 5";
@@ -51,22 +51,22 @@ const topLabelStyles = { ...baseLabelStyles, textAnchor: "start" }
 // const strokeLinejoin = "round";
 
 export const theme = {
-    ...VictoryTheme.grayscale,
-    pie: {
-        ...baseProps,
-        colorScale: colors,
-        style: {
-            data: {
-                // padding,
-                stroke: demsausageDarkPurple,
-                strokeWidth: 1.5,
-            },
-            labels: { ...topLabelStyles, padding: 0 },
-        },
+  ...VictoryTheme.grayscale,
+  pie: {
+    ...baseProps,
+    colorScale: colors,
+    style: {
+      data: {
+        // padding,
+        stroke: demsausageDarkPurple,
+        strokeWidth: 1.5,
+      },
+      labels: { ...topLabelStyles, padding: 0 },
     },
+  },
 }
 
-/*const theme = {
+/* const theme = {
   area: Object.assign(
     {
       style: {
@@ -298,4 +298,4 @@ export const theme = {
     },
     baseProps
   )
-}*/
+} */

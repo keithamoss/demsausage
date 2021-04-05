@@ -1,189 +1,199 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { browserHistory } from "react-router"
-import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from "../../redux/modules/app"
-import { getURLSafeElectionName, IElection } from "../../redux/modules/elections"
-import { clearMapToSearch, IMapFilterOptions, IMapSearchResults } from "../../redux/modules/map"
-import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from "../../redux/modules/polling_places"
-import { IStore } from "../../redux/modules/reducer"
-import { gaTrack } from "../../shared/analytics/GoogleAnalytics"
-import { searchPollingPlacesByGeolocation } from "../../shared/geolocation/geo"
-import SausageMap from "./SausageMap"
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from '../../redux/modules/app'
+import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
+import { clearMapToSearch, IMapFilterOptions, IMapSearchResults } from '../../redux/modules/map'
+import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from '../../redux/modules/polling_places'
+import { IStore } from '../../redux/modules/reducer'
+import { gaTrack } from '../../shared/analytics/GoogleAnalytics'
+import { searchPollingPlacesByGeolocation } from '../../shared/geolocation/geo'
+import SausageMap from './SausageMap'
 
 interface IRouteProps {
-    electionName: string
+  electionName: string
 }
 
 interface IOwnProps {
-    params: IRouteProps
+  params: IRouteProps
 }
 
 interface IProps extends IOwnProps {}
 
 interface IStoreProps {
-    elections: Array<IElection>
-    currentElection: IElection
-    defaultElection: IElection
-    geolocationSupported: boolean
-    mapSearchResults: IMapSearchResults | null
+  elections: Array<IElection>
+  currentElection: IElection
+  defaultElection: IElection
+  geolocationSupported: boolean
+  mapSearchResults: IMapSearchResults | null
 }
 
 interface IDispatchProps {
-    fetchQueriedPollingPlaces: Function
-    onOpenFinderForAddressSearch: Function
-    onOpenFinderForGeolocation: Function
-    onClearMapSearch: Function
+  fetchQueriedPollingPlaces: Function
+  onOpenFinderForAddressSearch: Function
+  onOpenFinderForGeolocation: Function
+  onClearMapSearch: Function
 }
 
 interface IStateProps {
-    waitingForGeolocation: boolean
-    queriedPollingPlaces: Array<IPollingPlace>
-    mapFilterOptions: IMapFilterOptions
+  waitingForGeolocation: boolean
+  queriedPollingPlaces: Array<IPollingPlace>
+  mapFilterOptions: IMapFilterOptions
 }
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 class SausageMapContainer extends React.Component<TComponentProps, IStateProps> {
-    static muiName = "SausageMapContainer"
-    static pageTitle = "Democracy Sausage"
-    static pageBaseURL = ""
-    onOpenFinderForAddressSearch: Function
-    onOpenFinderForGeolocation: Function
+  static muiName = 'SausageMapContainer'
 
-    constructor(props: TComponentProps) {
-        super(props)
+  static pageTitle = 'Democracy Sausage'
 
-        this.state = { waitingForGeolocation: false, queriedPollingPlaces: [], mapFilterOptions: {} }
+  static pageBaseURL = ''
 
-        this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
-        this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
-        this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
-        this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
-        this.onGeolocationError = this.onGeolocationError.bind(this)
-        this.onClickMapFilterOption = this.onClickMapFilterOption.bind(this)
-        this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
-        this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
+  onOpenFinderForAddressSearch: Function
 
-        gaTrack.event({
-            category: "SausageMapContainer",
-            action: "geolocationSupported",
-            value: props.geolocationSupported ? 1 : 0,
-        })
-    }
+  onOpenFinderForGeolocation: Function
 
-    onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
-        this.setState({ ...this.state, queriedPollingPlaces: pollingPlaces })
-    }
+  constructor(props: TComponentProps) {
+    super(props)
 
-    onClearQueriedPollingPlaces() {
-        this.setState({ ...this.state, queriedPollingPlaces: [] })
-    }
+    this.state = { waitingForGeolocation: false, queriedPollingPlaces: [], mapFilterOptions: {} }
 
-    onWaitForGeolocation() {
-        this.setState({ ...this.state, waitingForGeolocation: true })
-    }
+    this.onSetQueriedPollingPlaces = this.onSetQueriedPollingPlaces.bind(this)
+    this.onClearQueriedPollingPlaces = this.onClearQueriedPollingPlaces.bind(this)
+    this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
+    this.onGeolocationComplete = this.onGeolocationComplete.bind(this)
+    this.onGeolocationError = this.onGeolocationError.bind(this)
+    this.onClickMapFilterOption = this.onClickMapFilterOption.bind(this)
+    this.onOpenFinderForAddressSearch = props.onOpenFinderForAddressSearch.bind(this)
+    this.onOpenFinderForGeolocation = props.onOpenFinderForGeolocation.bind(this)
 
-    onGeolocationComplete() {
-        this.setState({ ...this.state, waitingForGeolocation: false })
-    }
+    gaTrack.event({
+      category: 'SausageMapContainer',
+      action: 'geolocationSupported',
+      value: props.geolocationSupported ? 1 : 0,
+    })
+  }
 
-    onGeolocationError() {
-        this.setState({ ...this.state, waitingForGeolocation: false })
-    }
+  onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
+    this.setState({ ...this.state, queriedPollingPlaces: pollingPlaces })
+  }
 
-    onClickMapFilterOption(option: string) {
-        const state = option in this.state.mapFilterOptions && this.state.mapFilterOptions[option] === true ? false : true
-        this.setState({ ...this.state, mapFilterOptions: { ...this.state.mapFilterOptions, [option]: state } })
-    }
+  onClearQueriedPollingPlaces() {
+    this.setState({ ...this.state, queriedPollingPlaces: [] })
+  }
 
-    render() {
-        const { currentElection, geolocationSupported, fetchQueriedPollingPlaces, mapSearchResults, onClearMapSearch } = this.props
-        const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
+  onWaitForGeolocation() {
+    this.setState({ ...this.state, waitingForGeolocation: true })
+  }
 
-        return (
-            <SausageMap
-                currentElection={currentElection}
-                waitingForGeolocation={waitingForGeolocation}
-                queriedPollingPlaces={queriedPollingPlaces}
-                geolocationSupported={geolocationSupported}
-                mapSearchResults={mapSearchResults}
-                mapFilterOptions={mapFilterOptions}
-                onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
-                    const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
-                    const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
-                    this.onSetQueriedPollingPlaces(pollingPlaces)
-                }}
-                onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
-                onOpenFinderForAddressSearch={this.onOpenFinderForAddressSearch}
-                onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
-                onClearMapSearch={onClearMapSearch}
-                onClickMapFilterOption={this.onClickMapFilterOption}
-            />
-        )
-    }
+  onGeolocationComplete() {
+    this.setState({ ...this.state, waitingForGeolocation: false })
+  }
+
+  onGeolocationError() {
+    this.setState({ ...this.state, waitingForGeolocation: false })
+  }
+
+  onClickMapFilterOption(option: string) {
+    const state = !(option in this.state.mapFilterOptions && this.state.mapFilterOptions[option] === true)
+    this.setState({ ...this.state, mapFilterOptions: { ...this.state.mapFilterOptions, [option]: state } })
+  }
+
+  render() {
+    const {
+      currentElection,
+      geolocationSupported,
+      fetchQueriedPollingPlaces,
+      mapSearchResults,
+      onClearMapSearch,
+    } = this.props
+    const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
+
+    return (
+      <SausageMap
+        currentElection={currentElection}
+        waitingForGeolocation={waitingForGeolocation}
+        queriedPollingPlaces={queriedPollingPlaces}
+        geolocationSupported={geolocationSupported}
+        mapSearchResults={mapSearchResults}
+        mapFilterOptions={mapFilterOptions}
+        onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
+          const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
+          const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
+          this.onSetQueriedPollingPlaces(pollingPlaces)
+        }}
+        onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
+        onOpenFinderForAddressSearch={this.onOpenFinderForAddressSearch}
+        onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
+        onClearMapSearch={onClearMapSearch}
+        onClickMapFilterOption={this.onClickMapFilterOption}
+      />
+    )
+  }
 }
 
 const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
-    const { app, elections, map } = state
+  const { app, elections, map } = state
 
-    return {
-        elections: elections.elections,
-        currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
-        defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
-        geolocationSupported: app.geolocationSupported,
-        mapSearchResults: map.search,
-    }
+  return {
+    elections: elections.elections,
+    currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
+    defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
+    geolocationSupported: app.geolocationSupported,
+    mapSearchResults: map.search,
+  }
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
-    return {
-        fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
-            gaTrack.event({
-                category: "SausageMapContainer",
-                action: "fetchQueriedPollingPlaces",
-                label: "Polling Places Queried",
-                value: pollingPlaceIds.length,
-            })
+  return {
+    fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
+      gaTrack.event({
+        category: 'SausageMapContainer',
+        action: 'fetchQueriedPollingPlaces',
+        label: 'Polling Places Queried',
+        value: pollingPlaceIds.length,
+      })
 
-            const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
+      const results = await dispatch(fetchPollingPlacesByIds(election, pollingPlaceIds))
 
-            gaTrack.event({
-                category: "SausageMapContainer",
-                action: "fetchQueriedPollingPlaces",
-                label: "Polling Places Returned",
-                value: results.length,
-            })
+      gaTrack.event({
+        category: 'SausageMapContainer',
+        action: 'fetchQueriedPollingPlaces',
+        label: 'Polling Places Returned',
+        value: results.length,
+      })
 
-            return results
-        },
-        onOpenFinderForAddressSearch(this: SausageMapContainer) {
-            gaTrack.event({
-                category: "SausageMapContainer",
-                action: "onOpenFinderForAddressSearch",
-            })
-            dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
-            browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
-        },
-        onOpenFinderForGeolocation(this: SausageMapContainer) {
-            const { geolocationSupported, currentElection } = this.props
+      return results
+    },
+    onOpenFinderForAddressSearch(this: SausageMapContainer) {
+      gaTrack.event({
+        category: 'SausageMapContainer',
+        action: 'onOpenFinderForAddressSearch',
+      })
+      dispatch(setPollingPlaceFinderMode(ePollingPlaceFinderInit.FOCUS_INPUT))
+      browserHistory.push(`/search/${getURLSafeElectionName(this.props.currentElection)}`)
+    },
+    onOpenFinderForGeolocation(this: SausageMapContainer) {
+      const { geolocationSupported, currentElection } = this.props
 
-            if (geolocationSupported === true) {
-                gaTrack.event({
-                    category: "SausageMapContainer",
-                    action: "onOpenFinderForGeolocation",
-                    label: "Clicked the geolocation button",
-                })
+      if (geolocationSupported === true) {
+        gaTrack.event({
+          category: 'SausageMapContainer',
+          action: 'onOpenFinderForGeolocation',
+          label: 'Clicked the geolocation button',
+        })
 
-                this.onWaitForGeolocation()
-                searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete, this.onGeolocationError)
-            }
-        },
-        onClearMapSearch() {
-            dispatch(clearMapToSearch())
-        },
-    }
+        this.onWaitForGeolocation()
+        searchPollingPlacesByGeolocation(dispatch, currentElection, this.onGeolocationComplete, this.onGeolocationError)
+      }
+    },
+    onClearMapSearch() {
+      dispatch(clearMapToSearch())
+    },
+  }
 }
 
 export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(SausageMapContainer)
