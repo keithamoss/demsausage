@@ -1,0 +1,13 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "tabWidth": 2,
+  "newline-before-return": true,
+  "no-duplicate-variable": [
+    true,
+    "check-parameters"
+  ],
+  "no-var-keyword": true
+}
