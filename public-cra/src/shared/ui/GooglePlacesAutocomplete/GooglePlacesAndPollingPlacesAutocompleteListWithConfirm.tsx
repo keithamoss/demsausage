@@ -52,6 +52,7 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
     const { fetchPollingPlaces } = this.props
 
     this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
       ...this.state,
       geocodedPlace: place,
       matchedPollingPlaces: await fetchPollingPlaces(place.geometry.location.lat(), place.geometry.location.lng()),
@@ -59,6 +60,7 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
   }
 
   onCancelChosenLocation() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, geocodedPlace: null, matchedPollingPlaces: undefined })
   }
 

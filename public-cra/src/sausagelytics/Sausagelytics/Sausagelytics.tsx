@@ -182,6 +182,26 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
 }
 
 class Sausagelytics extends React.PureComponent<IProps, {}> {
+  private groupStateStatsByNoms() {
+    const { stats } = this.props
+    const statsGrouped: any = []
+
+    stats.states.forEach((stateStats: IElectionStats) => {
+      for (const [nomsName, nomsStats] of Object.entries(stateStats.data.all_booths_by_noms)) {
+        if (!(nomsName in statsGrouped)) {
+          statsGrouped[nomsName] = []
+        }
+
+        statsGrouped[nomsName].push({
+          x: stateStats.domain,
+          y: nomsStats.booth_count,
+        })
+      }
+    })
+
+    return statsGrouped
+  }
+
   render() {
     const { stats } = this.props
 
@@ -194,7 +214,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
             <NavLink>
               <a href="#expected_sausage_access">Voters with access to #democracysausage</a> |{' '}
               <a href="#the_best_and_wurst">Best & Wurst electorates with #democracysausage on offer</a> |{' '}
-              <a href="#whos_got_what_by_state">Who's got what by state</a>
+              <a href="#whos_got_what_by_state">Who&apos;s got what by state</a>
             </NavLink>
           </NavLinksContainer>
         </FlexboxContainerCols>
@@ -219,6 +239,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
           </FlexboxItemCircle>
 
           <FlexboxWrapContainer>
+            {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
             {stats.states.map((stats: IElectionStats) => (
               <FlexboxWrapContainerChild key={stats.domain}>{getPie(stats)}</FlexboxWrapContainerChild>
             ))}
@@ -234,6 +255,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
           <FlexboxWrapContainer>
             <SausagelyticsTable selectable={false}>
               <TableBody displayRowCheckbox={false}>
+                {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
                 {stats.divisions.top.map((stats: IElectionStats) => (
                   <TableRow key={stats.domain}>
                     <TableRowColumn style={{ width: '40px' }}>{stats.metadata!.rank!}.</TableRowColumn>
@@ -257,6 +279,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
           <FlexboxWrapContainer>
             <SausagelyticsTable selectable={false}>
               <TableBody displayRowCheckbox={false}>
+                {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
                 {stats.divisions.bottom.map((stats: IElectionStats) => (
                   <TableRow key={stats.domain}>
                     <TableRowColumn style={{ width: '40px' }}>{stats.metadata!.rank!}.</TableRowColumn>
@@ -278,7 +301,7 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
         </FlexboxContainerCols>
 
         <FlexboxContainerCols>
-          <FlexboxItemTitle id="whos_got_what_by_state">By state - Who's got what stalls</FlexboxItemTitle>
+          <FlexboxItemTitle id="whos_got_what_by_state">By state - Who&apos;s got what stalls</FlexboxItemTitle>
 
           <FlexboxWrapContainer>
             <VictoryChart height={1400} domainPadding={{ x: 60, y: 50 }}>
@@ -312,30 +335,10 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
           As the expected voters relate to election day polling places, pre-poll and postal voters are excluded from the
           expected voters total calculation.
           <br />
-          For polling places with multiple divisions, the expected voters count towards the 'home' division.
+          For polling places with multiple divisions, the expected voters count towards the &apos;home&apos; division.
         </Metadata>
       </SausagelyticsContainer>
     )
-  }
-
-  private groupStateStatsByNoms() {
-    const { stats } = this.props
-    const statsGrouped: any = []
-
-    stats.states.forEach((stateStats: IElectionStats) => {
-      for (const [nomsName, nomsStats] of Object.entries(stateStats.data.all_booths_by_noms)) {
-        if (!(nomsName in statsGrouped)) {
-          statsGrouped[nomsName] = []
-        }
-
-        statsGrouped[nomsName].push({
-          x: stateStats.domain,
-          y: nomsStats.booth_count,
-        })
-      }
-    })
-
-    return statsGrouped
   }
 }
 

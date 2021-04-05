@@ -36,7 +36,7 @@ class SausagelyticsContainer extends React.Component<TComponentProps, IStateProp
     this.fetchStats = (election: IElection) => props.fetchStats(election)
   }
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     const { currentElection } = this.props
 
     if (currentElection !== undefined) {
@@ -67,6 +67,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
     fetchStats: async (election: IElection) => {
+      // eslint-disable-next-line @typescript-eslint/return-await
       return await dispatch(fetchElectionStats(election))
     },
   }

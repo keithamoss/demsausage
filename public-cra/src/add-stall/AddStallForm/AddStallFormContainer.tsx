@@ -90,28 +90,30 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
     this.initialValues = {}
   }
 
-  onChooseElection(event: any, electionId: number) {
-    const election = this.props.liveElections.find((e: IElection) => String(e.id) === String(electionId))!
-    this.setState({
-      ...this.state,
-      stepIndex: 1,
-      chosenElection: election,
-      stallLocationInfo: null,
-      locationConfirmed: false,
-    })
-  }
-
-  onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
-    this.setState({ ...this.state, stepIndex: 2, stallLocationInfo, locationConfirmed: true })
-  }
-
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // const { pollingPlace } = this.props
 
     // Each layer mounts this component anew, so store their initial layer form values.
     // e.g. For use in resetting the form state (Undo/Discard Changes)
     // this.initialValues = cloneDeep(toFormValues(pollingPlace))
     this.initialValues = {}
+  }
+
+  onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    this.setState({ ...this.state, stepIndex: 2, stallLocationInfo, locationConfirmed: true })
+  }
+
+  onChooseElection(event: any, electionId: number) {
+    const election = this.props.liveElections.find((e: IElection) => String(e.id) === String(electionId))!
+    this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
+      ...this.state,
+      stepIndex: 1,
+      chosenElection: election,
+      stallLocationInfo: null,
+      locationConfirmed: false,
+    })
   }
 
   render() {

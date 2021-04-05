@@ -1,9 +1,9 @@
 import * as dotProp from 'dot-prop-immutable'
-import { sendNotification, sendNotification as sendSnackbarNotification } from './snackbars'
 import { IAPIClient } from '../../shared/api/APIClient'
 import { getBaseURL } from './app'
 import { getURLSafeElectionName, IElection } from './elections'
 import { IGeoJSON } from './interfaces'
+import { sendNotification, sendNotification as sendSnackbarNotification } from './snackbars'
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -31,6 +31,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
 export const reduxFormReducer = (state: {}, action: any) => {
   switch (action.type) {
     case VALIDATION_ERRORS:
+      // eslint-disable-next-line no-param-reassign
       state = dotProp.set(state, 'submitSucceeded', false)
       return dotProp.merge(state, 'syncErrors', action.errors)
     default:
@@ -168,6 +169,7 @@ export interface IPollingPlaceLoaderResponseMessage {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
@@ -180,6 +182,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 }
 
 export function fetchAllPollingPlaces(election: IElection) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
@@ -192,6 +195,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
@@ -209,6 +213,7 @@ export function updatePollingPlace(
   pollingPlace: IPollingPlace,
   pollingPlaceNew: any /* Partial<IPollingPlace> */
 ) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
 
@@ -220,6 +225,7 @@ export function updatePollingPlace(
 }
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/nearby/', dispatch, {
       election_id: election.id,
@@ -233,6 +239,7 @@ export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: 
 }
 
 export function fetchNearbyPollingPlacesBBOX(election: IElection, lat: number, lon: number) {
+  // eslint-disable-next-line consistent-return
   return async (dispatch: Function, getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/nearby_bbox/', dispatch, {
       election_id: election.id,
@@ -347,6 +354,7 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
 
   for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
     if (key === 'run_out' || key === 'nothing') {
+      // eslint-disable-next-line no-continue
       continue
     }
 

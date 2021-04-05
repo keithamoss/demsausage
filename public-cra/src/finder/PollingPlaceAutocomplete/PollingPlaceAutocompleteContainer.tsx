@@ -64,8 +64,10 @@ const mapStateToProps = (state: IStore): any => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
+    // eslint-disable-next-line consistent-return
     onPollingPlaceSearch: async (election: IElection, searchTerm: string) => {
       if (searchTerm.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(searchPollingPlaces(election, searchTerm))
       }
     },

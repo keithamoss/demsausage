@@ -24,8 +24,11 @@ export default function reducer(state: IModule = initialState, action: IAction) 
       if (state.open === false && state.messages.length > 0) {
         // Pop the first message off the front of the queue
         const message = state.messages.shift()
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `messages`, state.messages)
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `active`, message)
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `open`, true)
       }
       return state
@@ -33,10 +36,13 @@ export default function reducer(state: IModule = initialState, action: IAction) 
       if (state.messages.length > 0) {
         // Pop the first message off the front of the queue
         const message = state.messages.shift()
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `messages`, state.messages)
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `active`, message)
         return dotProp.set(state, `open`, true)
       }
+      // eslint-disable-next-line no-param-reassign
       state = dotProp.set(state, `active`, { message: '' })
       return dotProp.set(state, `open`, false)
 

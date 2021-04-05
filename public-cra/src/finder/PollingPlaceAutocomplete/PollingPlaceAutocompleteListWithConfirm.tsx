@@ -34,14 +34,17 @@ class PollingPlaceAutocompleteListWithConfirm extends React.Component<TComponent
   }
 
   onChoosePlace(pollingPlaceInfo: IPollingPlace) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, pollingPlaceInfo })
   }
 
   onCancelChosenLocation() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, pollingPlaceInfo: null, locationConfirmed: false })
   }
 
   onConfirmChosenLocation(pollingPlaceInfo: IPollingPlace) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, locationConfirmed: true })
     this.props.onConfirmChosenLocation(this.state.pollingPlaceInfo!)
   }

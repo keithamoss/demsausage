@@ -13,7 +13,7 @@ import SausagelyticsContainerV1 from './sausagelytics/Sausagelytics_v1/Sausagely
 import AboutPage from './static-pages/AboutPage/AboutPage'
 import MediaPage from './static-pages/MediaPage/MediaPage'
 
-export default (store: IStore) => {
+const routes = (store: IStore) => {
   return (
     <Route component={AppContainer}>
       <Route path="/elections" components={{ content: ElectionChooserContainer }} />
@@ -34,3 +34,5 @@ export default (store: IStore) => {
     </Route>
   )
 }
+
+export default routes

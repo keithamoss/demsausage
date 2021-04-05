@@ -24,6 +24,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
     case LOAD_ELECTIONS:
       return dotProp.set(state, 'elections', action.elections)
     case LOAD_ELECTION:
+      // eslint-disable-next-line no-case-declarations
       const electionIndex: number = state.elections!.findIndex(
         (election: IElection) => election.id === action.election.id
       )!
@@ -44,6 +45,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
       return dotProp.set(state, 'default_election_id', action.electionId)
     case SET_PRIMARY_ELECTION:
       state.elections!.forEach((election: IElection, index: number) => {
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `elections.${index}.is_primary`, election.id === action.electionId)
       })
       return state
@@ -196,6 +198,7 @@ export function getDefaultElection(elections: Array<IElection>) {
       defaultElection = firstLiveElection
     } else {
       // If there are no active elections at all just grab the most recent one
+      // eslint-disable-next-line prefer-destructuring
       defaultElection = elections[0]
     }
   }

@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { ResponsiveAppBar } from 'material-ui-responsive-drawer'
 import IconButton from 'material-ui/IconButton'
 import { NavigationMoreHoriz, NavigationMoreVert } from 'material-ui/svg-icons'

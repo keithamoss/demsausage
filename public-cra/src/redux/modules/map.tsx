@@ -3,7 +3,7 @@ import Icon from 'ol/style/Icon'
 import Style from 'ol/style/Style'
 import * as sprite from '../../icons/sprite.json'
 import { NomsReader } from '../../sausage/noms'
-import { IGeoJSONFeatureCollection } from './interfaces.jsx'
+import { IGeoJSONFeatureCollection } from './interfaces'
 import { IMapPollingPlaceFeature } from './polling_places'
 // import { IAnalytisMeta } from "../../shared/analytics/GoogleAalytics"
 
@@ -167,11 +167,11 @@ export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilte
   return true
 }
 
-export const olStyleFunction = function (
+export const olStyleFunction = (
   feature: IMapPollingPlaceFeature,
   resolution: number,
   mapFilterOptions: IMapFilterOptions
-) {
+) => {
   const nomsReader = new NomsReader(feature.get('noms'))
 
   if (nomsReader.hasAnyNoms() === true) {

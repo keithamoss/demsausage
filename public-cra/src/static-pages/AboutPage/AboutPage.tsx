@@ -58,8 +58,8 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
       <PageWrapper>
         <Question>What is this?</Question>
         <Answer>A map of sausage and cake availability on election day.</Answer>
-        <Question>I still don't understand</Question>
-        <Answer>It's practically part of the Australian Constitution. Or something.</Answer>
+        <Question>I still don&apos;t understand</Question>
+        <Answer>It&apos;s practically part of the Australian Constitution. Or something.</Answer>
         <Question>But how do you get all of the sausage sizzles?</Question>
         <Answer>
           <p>
@@ -69,9 +69,9 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
           <p>
             To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{' '}
             <a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a
-            Direct Message. We'll be keeping an eye out.
+            Direct Message. We&apos;ll be keeping an eye out.
           </p>
-          <p>To make this work, we've also used:</p>
+          <p>To make this work, we&apos;ve also used:</p>
           <ul>
             <li>
               Australian Electoral Commission polling place data (likewise from the various state electoral
@@ -130,36 +130,36 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
         </Answer>
         <Question>What does the halal symbol indicate?</Question>
         <Answer>
-          Firstly, it's important to note that our site can't actually provide halal certification, and we display the
-          symbol based on information submitted to us by the folks running the stalls themselves.
+          Firstly, it&apos;s important to note that our site can&apos;t actually provide halal certification, and we
+          display the symbol based on information submitted to us by the folks running the stalls themselves.
           <br />
           <br />
           The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is
-          just one of a variation of halal seals / stamps that are used in Australia - though we're happy to be
-          corrected on that). For the curious, the ABC's Bush Telegraph has more in their segment{' '}
+          just one of a variation of halal seals / stamps that are used in Australia - though we&apos;re happy to be
+          corrected on that). For the curious, the ABC&apos;s Bush Telegraph has more in their segment{' '}
           <a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
-            What's the big fuss about Halal certification?
+            What&apos;s the big fuss about Halal certification?
           </a>
           .
         </Answer>
         <Question>Who are you?</Question>
         <Answer>
-          <p>We're six people, a baby, and some parrots.</p>
+          <p>We&apos;re six people, a baby, and some parrots.</p>
           <p>
             Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
             crowdsaucing sausage sizzle locations.
           </p>
           <p>
-            We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can find us
-            on Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{' '}
+            We&apos;re enthusiastic about democracy sausage and making elections just a little bit more fun. You can
+            find us on Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{' '}
             <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
           </p>
         </Answer>
         <Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
         <Answer>
           Well your school, first of all (but you knew that already). Beyond that, your local government may require you
-          to get a permit to run a temporary food stall - so give them a call to find out. There's also some pretty
-          basic food safety regulations you'll need to abide by - check out foodstandards.gov.au{' '}
+          to get a permit to run a temporary food stall - so give them a call to find out. There&apos;s also some pretty
+          basic food safety regulations you&apos;ll need to abide by - check out foodstandards.gov.au{' '}
           <a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
             for more information
           </a>
@@ -170,8 +170,8 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
         <Question>Will you share my info with others?</Question>
         <Answer>
           <p>
-            If you submit a stall to us, we won't share any personal information about you - such as your email address,
-            Twitter handle, et cetera.
+            If you submit a stall to us, we won&apos;t share any personal information about you - such as your email
+            address, Twitter handle, et cetera.
           </p>
           <p>
             We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them

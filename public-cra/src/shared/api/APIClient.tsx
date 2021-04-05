@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import * as Cookies from 'js-cookie'
 import * as qs from 'qs'
-import 'whatwg-fetch'
+// import 'whatwg-fetch'
 import { beginFetch, finishFetch, getAPIBaseURL, isDevelopment } from '../../redux/modules/app'
 import { sendNotification } from '../../redux/modules/snackbars'
 
@@ -44,6 +44,7 @@ export class APIClient {
   }
 
   // Handles fatal errors from the API
+  // eslint-disable-next-line class-methods-use-this
   public handleError(error: any, url: string, dispatch: any) {
     if (isDevelopment() === true) {
       // tslint:disable-next-line:no-console
@@ -66,6 +67,7 @@ export class APIClient {
     if (Object.keys(params).length > 0) {
       // Yay, a library just to do query string operations for fetch()
       // https://github.com/github/fetch/issues/256
+      // eslint-disable-next-line no-param-reassign
       url += `?${qs.stringify(params)}`
     }
 

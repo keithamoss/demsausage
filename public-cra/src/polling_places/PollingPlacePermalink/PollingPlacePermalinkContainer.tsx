@@ -54,7 +54,7 @@ class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IS
     this.fetchPollingPlace = (election: IElection) => props.fetchPollingPlace(election)
   }
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     const { election } = this.props
 
     if (this.props.election !== undefined) {
@@ -75,7 +75,7 @@ class PollingPlacePermalinkContainer extends React.Component<TComponentProps, IS
         <EmptyState
           message={
             <div>
-              Sorry about this, but we couldn't
+              Sorry about this, but we couldn&apos;t
               <br />
               find that polling place.
             </div>
@@ -103,12 +103,15 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
       const { routeParams } = ownProps
 
       if ('stallId' in routeParams) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(lookupPollingPlacesByStallId(election, routeParams.stallId!))
       }
       if ('ecId' in routeParams) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(lookupPollingPlacesByECId(election, routeParams.ecId!))
       }
       if ('name' in routeParams && 'premises' in routeParams && 'state' in routeParams) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(
           lookupPollingPlaces(election, routeParams.name!, routeParams.premises!, routeParams.state!)
         )

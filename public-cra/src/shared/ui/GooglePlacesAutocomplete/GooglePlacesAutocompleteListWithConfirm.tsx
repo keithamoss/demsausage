@@ -40,6 +40,7 @@ class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponent
 
   onChoosePlace(place: IGoogleGeocodeResult, addressResult?: IGoogleAddressSearchResult) {
     this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
       ...this.state,
       addressResult: addressResult!,
       geocodedPlace: place,
@@ -49,6 +50,7 @@ class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponent
 
   onCancelChosenLocation() {
     this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
       ...this.state,
       addressResult: null,
       geocodedPlace: null,
@@ -58,10 +60,12 @@ class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponent
   }
 
   onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, locationConfirmed: true })
     this.props.onConfirmChosenLocation(this.state.stallLocationInfo!)
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getPollingPlaceInfo(place: IGoogleGeocodeResult, addressResult: IGoogleAddressSearchResult): IStallLocationInfo {
     const stateComponent: any = place.address_components.find(
       (o: any) => o.types.includes('administrative_area_level_1') && o.types.includes('political')

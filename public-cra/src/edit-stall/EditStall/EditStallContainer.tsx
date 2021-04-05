@@ -55,15 +55,6 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     this.onStallUpdated = this.onStallUpdated.bind(this)
   }
 
-  onStallUpdated() {
-    this.setState({ ...this.state, formSubmitted: true })
-  }
-
-  getCredentials() {
-    const { token, signature } = this.props.location.query
-    return { token, signature }
-  }
-
   async componentDidMount() {
     document.title = 'Democracy Sausage | Update your sausage sizzle or cake stall'
 
@@ -71,10 +62,22 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     const { response, json } = await fetchStall(location.query.stall_id, location.query.token, location.query.signature)
 
     if (response.status === 200) {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       this.setState({ ...this.state, stall: json, election: elections.find((e: IElection) => e.id === json.election) })
     } else if (response.status >= 400) {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       this.setState({ ...this.state, stall: null, errors: json })
     }
+  }
+
+  onStallUpdated() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    this.setState({ ...this.state, formSubmitted: true })
+  }
+
+  getCredentials() {
+    const { token, signature } = this.props.location.query
+    return { token, signature }
   }
 
   render() {

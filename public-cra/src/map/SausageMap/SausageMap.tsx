@@ -202,6 +202,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
                       geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch
                     }
                     searchIcon={
+                      // eslint-disable-next-line no-nested-ternary
                       geolocationSupported === true ? (
                         waitingForGeolocation === false ? (
                           <DeviceLocationSearching />
@@ -230,9 +231,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
                 icon={<MapsLocalHospital color="red" />}
                 containerElement={
                   // eslint-disable-next-line
-                  <a
-                    href="https://www.elections.wa.gov.au/covid-safe-voting-plan"
-                  />
+                  <a href="https://www.elections.wa.gov.au/covid-safe-voting-plan" />
                 }
               />
             </ToolbarGroup>
@@ -334,7 +333,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             <ul style={{ textAlign: 'left' }}>
               <li style={{ marginBottom: 10 }}>
                 <strong>
-                  Katherine Isolated Children's Service: <a href="https://www.kics.org.au">Donate</a>
+                  Katherine Isolated Children&apos;s Service: <a href="https://www.kics.org.au">Donate</a>
                 </strong>
                 <p>
                   The Katherine Isolated Children’s Service provides play based learning opportunities for children and

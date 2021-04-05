@@ -157,8 +157,10 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     this.getCurrentDataState = this.getCurrentDataState.bind(this)
     this.getLatLgn = this.getLatLgn.bind(this)
     this.getPlacePredictions = debounce(
+      // eslint-disable-next-line func-names
       function (this: GooglePlacesAutocomplete) {
         if (this.state.searchText.length >= 3) {
+          // eslint-disable-next-line @typescript-eslint/no-this-alias
           const outerScope = this
           this.service.getPlacePredictions(
             {
@@ -197,6 +199,31 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     })
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getPoweredByGoogleMenuItem() {
+    // disabled removed because https://github.com/callemall/material-ui/issues/5131
+    return {
+      text: '',
+      value: (
+        <MenuItem
+          style={{ cursor: 'default' }}
+          children={
+            <div style={{ paddingTop: 20 }}>
+              <img
+                style={{ float: 'right' }}
+                width={96}
+                height={12}
+                src="https://developers.google.com/places/documentation/images/powered-by-google-on-white.png"
+                alt="presentation"
+              />
+            </div>
+            // tslint:disable-next-line:jsx-curly-spacing
+          }
+        />
+      ),
+    }
+  }
+
   updateInput(searchText: string) {
     // v0.4x of material-ui-search-bar doesn't implement onCancelSearch
     // So let's hack around that here.
@@ -224,30 +251,6 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
     this.props.onReceiveSearchResults(array)
     this.setState({ data: array })
     // }
-  }
-
-  getPoweredByGoogleMenuItem() {
-    // disabled removed because https://github.com/callemall/material-ui/issues/5131
-    return {
-      text: '',
-      value: (
-        <MenuItem
-          style={{ cursor: 'default' }}
-          children={
-            <div style={{ paddingTop: 20 }}>
-              <img
-                style={{ float: 'right' }}
-                width={96}
-                height={12}
-                src="https://developers.google.com/places/documentation/images/powered-by-google-on-white.png"
-                alt="presentation"
-              />
-            </div>
-            // tslint:disable-next-line:jsx-curly-spacing
-          }
-        />
-      ),
-    }
   }
 
   render() {

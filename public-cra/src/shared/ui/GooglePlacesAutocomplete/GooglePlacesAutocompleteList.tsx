@@ -71,11 +71,13 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 
   onWaitForGeolocation() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: true })
   }
 
   onGeolocationComplete(position: Position, place: IGoogleGeocodeResult, locationSearched: string) {
     const { onChoosePlace } = this.props
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
 
     this.onPlaceChosen()
@@ -83,6 +85,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 
   onGeolocationError() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
   }
 
@@ -95,6 +98,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
     })
 
     this.setState({
+      // eslint-disable-next-line react/no-access-state-in-setstate
       ...this.state,
       addressSearchResults: results,
     })
@@ -105,7 +109,43 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 
   onPlaceChosen() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, addressSearchResults: [] })
+  }
+
+  private getAutoFocus() {
+    return this.props.autoFocus === true || this.props.initMode === ePollingPlaceFinderInit.FOCUS_INPUT
+  }
+
+  private getHintText() {
+    const { hintText } = this.props
+    const { waitingForGeolocation } = this.state
+
+    // eslint-disable-next-line no-nested-ternary
+    return this.canUseGPS() === true
+      ? waitingForGeolocation === false
+        ? `${hintText} or use GPS →`
+        : 'Fetching your location...'
+      : hintText
+  }
+
+  private getSearchIcon() {
+    const { waitingForGeolocation } = this.state
+
+    // eslint-disable-next-line no-nested-ternary
+    return this.canUseGPS() === true ? (
+      waitingForGeolocation === false ? (
+        <DeviceLocationSearching />
+      ) : (
+        <DeviceLocationSearching className="spin" />
+      )
+    ) : (
+      <ActionSearch />
+    )
+  }
+
+  public canUseGPS() {
+    return (this.props.gps === true || this.props.gps === undefined) && this.props.geolocationSupported
   }
 
   render() {
@@ -154,39 +194,6 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
           </List>
         )}
       </div>
-    )
-  }
-
-  public canUseGPS() {
-    return (this.props.gps === true || this.props.gps === undefined) && this.props.geolocationSupported
-  }
-
-  private getAutoFocus() {
-    return this.props.autoFocus === true || this.props.initMode === ePollingPlaceFinderInit.FOCUS_INPUT
-  }
-
-  private getHintText() {
-    const { hintText } = this.props
-    const { waitingForGeolocation } = this.state
-
-    return this.canUseGPS() === true
-      ? waitingForGeolocation === false
-        ? `${hintText} or use GPS →`
-        : 'Fetching your location...'
-      : hintText
-  }
-
-  private getSearchIcon() {
-    const { waitingForGeolocation } = this.state
-
-    return this.canUseGPS() === true ? (
-      waitingForGeolocation === false ? (
-        <DeviceLocationSearching />
-      ) : (
-        <DeviceLocationSearching className="spin" />
-      )
-    ) : (
-      <ActionSearch />
     )
   }
 }

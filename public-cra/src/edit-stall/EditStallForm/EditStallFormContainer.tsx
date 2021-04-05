@@ -53,10 +53,12 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
   }
 
   toggleFormSubmitting() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, formSubmitting: !this.state.formSubmitting })
   }
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { isValid, onFormSubmit, onSaveForm } = this.props
     const { formSubmitting, errors } = this.state
 

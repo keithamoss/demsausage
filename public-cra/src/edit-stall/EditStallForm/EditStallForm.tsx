@@ -92,7 +92,7 @@ class EditStallForm extends React.PureComponent<IProps, {}> {
         </FormSection>
 
         <FormSection>
-          <FormSectionHeader>What's on offer?</FormSectionHeader>
+          <FormSectionHeader>What&apos;s on offer?</FormSectionHeader>
           <List>
             <ListItem
               primaryText="Is there a sausage sizzle?"

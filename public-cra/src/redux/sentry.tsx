@@ -1,6 +1,7 @@
 // https://github.com/captbaritone/raven-for-redux/issues/93#issuecomment-435854873
 
 import * as Sentry from '@sentry/browser'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Event } from '@sentry/types'
 import { Action, Dispatch, MiddlewareAPI } from 'redux'
 import { IStore } from './modules/reducer'

@@ -17,7 +17,7 @@ export default class DjangoAPIErrorUI extends React.PureComponent<IProps, {}> {
       if (Object.keys(errors).length === 1 && 'detail' in errors) {
         return (
           <div>
-            <h2>Sorry about this, but we've found a snag (geddit?) in what you're trying to do:</h2>
+            <h2>Sorry about this, but we&apos;ve found a snag (geddit?) in what you&apos;re trying to do:</h2>
             {errors.detail}
           </div>
         )

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-default */
 import { responsiveDrawer } from 'material-ui-responsive-drawer'
 import { routerReducer } from 'react-router-redux'
 import * as Redux from 'redux'

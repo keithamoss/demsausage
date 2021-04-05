@@ -1,9 +1,13 @@
+/* eslint-disable import/extensions */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line import/no-unresolved
 import { MapBrowserEvent } from 'ol.js'
 import Attribution from 'ol/control/Attribution'
 import Control from 'ol/control/Control'
 import Event from 'ol/events/Event'
 import Feature from 'ol/Feature'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { xhr } from 'ol/featureloader.js'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -17,6 +21,7 @@ import Map from 'ol/Map'
 import * as Observable from 'ol/Observable'
 import 'ol/ol.css'
 // c.f. Re proj import https://github.com/openlayers/openlayers/issues/8037
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { transform, transformExtent } from 'ol/proj.js'
 import OSM from 'ol/source/OSM'
@@ -71,8 +76,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     })
 
     const view = this.map.getView()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857')
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     view.fit(polygon, {
       size: this.map.getSize(),
@@ -114,6 +121,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         // The user has changed the noms filter options
         const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true)
         if (sausageLayer !== null) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
             olStyleFunction(feature, resolution, this.props.mapFilterOptions)
@@ -131,6 +139,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     // ... So we use Observable.unByKey
     // https://gis.stackexchange.com/a/241531
     if (this.vectorSourceChangedEventKey !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Observable.unByKey(this.vectorSourceChangedEventKey)
     }
@@ -168,14 +177,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     // 5. And finally clean up the map object itself
     // https://stackoverflow.com/a/25997026
     if (this.map !== null) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.map.setTarget(null)
       this.map = null
     }
-  }
-
-  render() {
-    return <div id="openlayers-map" className="openlayers-map" />
   }
 
   private onMapContainerResize() {
@@ -208,6 +214,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
       // Wait for a bit before doing map onLoad things like zooming to search results.
       // If we don't wait then OpenLayers seems to stop rendering when the zoom starts, so the user sees nothing.
       const timeoutId = window.setTimeout(
+        // eslint-disable-next-line func-names
         function (this: OpenLayersMap) {
           if (this.map !== null) {
             onMapLoaded()
@@ -223,129 +230,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
       )
 
       this.timeoutIds.push(timeoutId)
-    }
-  }
-
-  private workaroundOLRenderingBug(view: View) {
-    // @TODO Hacky fix for the GeoJSON loading, but not rendering until the map view changes.
-    // const centre = view.getCenter()
-    // centre[0] -= 1
-    // view.setCenter(centre)
-    // view.changed()
-  }
-
-  private getMapDataVectorLayer(map: Map) {
-    const { election, geojson, mapFilterOptions, onMapBeginLoading } = this.props
-
-    const vectorSource = new VectorSource({
-      format: new GeoJSON(),
-      async loader(this: VectorSource, extent: any, resolution: number, projection: any) {
-        if (geojson === undefined) {
-          // Fetch GeoJSON from remote
-          onMapBeginLoading()
-          const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
-          xhr(url, this.getFormat()).call(this, extent, resolution, projection)
-        } else {
-          // Load GeoJSON from local Redux store
-          this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson))
-        }
-      },
-    })
-
-    this.vectorSourceChangedEventKey = vectorSource.once('change', this.onVectorSourceChanged.bind(this))
-
-    const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
-      olStyleFunction(feature, resolution, mapFilterOptions)
-
-    const vectorLayer = new VectorLayer({
-      renderMode: 'image',
-      source: vectorSource,
-      style: styleFunction,
-    } as any)
-
-    vectorLayer.setProperties({ isSausageLayer: true })
-
-    return vectorLayer
-  }
-
-  private getSearchResultsVectorLayer(map: Map) {
-    const { mapSearchResults } = this.props
-
-    if (mapSearchResults !== null) {
-      const iconFeature = new Feature({
-        geometry: new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')),
-      })
-
-      iconFeature.setStyle(
-        new Style({
-          image: new RegularShape({
-            fill: new Fill({ color: '#6740b4' }),
-            stroke: new Stroke({ color: 'black', width: 2 }),
-            points: 5,
-            radius: 10,
-            radius2: 4,
-            angle: 0,
-          }),
-        })
-      )
-
-      const vectorLayer = new VectorLayer({
-        source: new VectorSource({
-          features: [iconFeature],
-        }),
-      })
-
-      vectorLayer.setProperties({ isSearchIndicatorLayer: true })
-
-      return vectorLayer
-    }
-    return null
-  }
-
-  private addSearchResultsVectorLayer(map: Map) {
-    this.workaroundOLRenderingBug(map.getView())
-
-    const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map)
-    if (searchResultsVectorLayerNew !== null) {
-      map.addLayer(searchResultsVectorLayerNew)
-    }
-  }
-
-  private clearSearchResultsVectorLayer(map: Map) {
-    const searchResultsVectorLayer = this.getLayerByProperties(map, 'isSearchIndicatorLayer', true)
-    if (searchResultsVectorLayer !== null) {
-      map.removeLayer(searchResultsVectorLayer)
-    }
-  }
-
-  private zoomMapToSearchResults(map: Map) {
-    const { mapSearchResults } = this.props
-    const that = this
-
-    if (mapSearchResults !== null) {
-      const view = map.getView()
-
-      if (mapSearchResults.extent !== null) {
-        // Remove any existing search indicator layer
-        this.clearSearchResultsVectorLayer(map)
-
-        view.fit(transformExtent(mapSearchResults.extent, 'EPSG:4326', 'EPSG:3857'), {
-          size: map.getSize(),
-          duration: 750,
-          padding: [85, 0, 20, 0],
-          callback: (completed: boolean) => {
-            if (completed === true) {
-              that.addSearchResultsVectorLayer(map)
-            }
-          },
-        })
-      } else if (mapSearchResults.lat !== null && mapSearchResults.lon !== null) {
-        view.fit(new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')), {
-          minResolution: 4,
-          size: map.getSize(),
-          duration: 750,
-        })
-      }
     }
   }
 
@@ -390,6 +274,75 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
   }
 
+  private getSearchResultsVectorLayer(map: Map) {
+    const { mapSearchResults } = this.props
+
+    if (mapSearchResults !== null) {
+      const iconFeature = new Feature({
+        geometry: new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')),
+      })
+
+      iconFeature.setStyle(
+        new Style({
+          image: new RegularShape({
+            fill: new Fill({ color: '#6740b4' }),
+            stroke: new Stroke({ color: 'black', width: 2 }),
+            points: 5,
+            radius: 10,
+            radius2: 4,
+            angle: 0,
+          }),
+        })
+      )
+
+      const vectorLayer = new VectorLayer({
+        source: new VectorSource({
+          features: [iconFeature],
+        }),
+      })
+
+      vectorLayer.setProperties({ isSearchIndicatorLayer: true })
+
+      return vectorLayer
+    }
+    return null
+  }
+
+  private getMapDataVectorLayer(map: Map) {
+    const { election, geojson, mapFilterOptions, onMapBeginLoading } = this.props
+
+    const vectorSource = new VectorSource({
+      format: new GeoJSON(),
+      async loader(this: VectorSource, extent: any, resolution: number, projection: any) {
+        if (geojson === undefined) {
+          // Fetch GeoJSON from remote
+          onMapBeginLoading()
+          const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
+          xhr(url, this.getFormat()).call(this, extent, resolution, projection)
+        } else {
+          // Load GeoJSON from local Redux store
+          this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson))
+        }
+      },
+    })
+
+    this.vectorSourceChangedEventKey = vectorSource.once('change', this.onVectorSourceChanged.bind(this))
+
+    const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
+      olStyleFunction(feature, resolution, mapFilterOptions)
+
+    const vectorLayer = new VectorLayer({
+      renderMode: 'image',
+      source: vectorSource,
+      style: styleFunction,
+    } as any)
+
+    vectorLayer.setProperties({ isSausageLayer: true })
+
+    return vectorLayer
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer | null {
     let layer = null
     map.getLayers().forEach((l: BaseLayer) => {
@@ -401,6 +354,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     return layer
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private getBasemap() {
     gaTrack.event({
       category: 'OpenLayersMap',
@@ -417,6 +371,67 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
         }),
       }),
     ]
+  }
+
+  private zoomMapToSearchResults(map: Map) {
+    const { mapSearchResults } = this.props
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this
+
+    if (mapSearchResults !== null) {
+      const view = map.getView()
+
+      if (mapSearchResults.extent !== null) {
+        // Remove any existing search indicator layer
+        this.clearSearchResultsVectorLayer(map)
+
+        view.fit(transformExtent(mapSearchResults.extent, 'EPSG:4326', 'EPSG:3857'), {
+          size: map.getSize(),
+          duration: 750,
+          padding: [85, 0, 20, 0],
+          callback: (completed: boolean) => {
+            if (completed === true) {
+              that.addSearchResultsVectorLayer(map)
+            }
+          },
+        })
+      } else if (mapSearchResults.lat !== null && mapSearchResults.lon !== null) {
+        view.fit(new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')), {
+          minResolution: 4,
+          size: map.getSize(),
+          duration: 750,
+        })
+      }
+    }
+  }
+
+  private clearSearchResultsVectorLayer(map: Map) {
+    const searchResultsVectorLayer = this.getLayerByProperties(map, 'isSearchIndicatorLayer', true)
+    if (searchResultsVectorLayer !== null) {
+      map.removeLayer(searchResultsVectorLayer)
+    }
+  }
+
+  private addSearchResultsVectorLayer(map: Map) {
+    this.workaroundOLRenderingBug(map.getView())
+
+    const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map)
+    if (searchResultsVectorLayerNew !== null) {
+      map.addLayer(searchResultsVectorLayerNew)
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private workaroundOLRenderingBug(view: View) {
+    // @TODO Hacky fix for the GeoJSON loading, but not rendering until the map view changes.
+    // const centre = view.getCenter()
+    // centre[0] -= 1
+    // view.setCenter(centre)
+    // view.changed()
+  }
+
+  render() {
+    return <div id="openlayers-map" className="openlayers-map" />
   }
 }
 

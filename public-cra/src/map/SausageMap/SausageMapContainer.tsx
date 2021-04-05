@@ -75,27 +75,34 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
   }
 
   onSetQueriedPollingPlaces(pollingPlaces: Array<IPollingPlace>) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, queriedPollingPlaces: pollingPlaces })
   }
 
   onClearQueriedPollingPlaces() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, queriedPollingPlaces: [] })
   }
 
   onWaitForGeolocation() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: true })
   }
 
   onGeolocationComplete() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
   }
 
   onGeolocationError() {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
   }
 
   onClickMapFilterOption(option: string) {
+    // eslint-disable-next-line react/no-access-state-in-setstate
     const state = !(option in this.state.mapFilterOptions && this.state.mapFilterOptions[option] === true)
+    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, mapFilterOptions: { ...this.state.mapFilterOptions, [option]: state } })
   }
 

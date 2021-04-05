@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { BodyContainer, ResponsiveAppBar, ResponsiveDrawer } from 'material-ui-responsive-drawer'
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation'
 import Divider from 'material-ui/Divider'
@@ -57,13 +58,18 @@ class MenuListItem extends React.Component<any, any> {
       (locationPathNameMatch === '/search' && contentMuiName === 'PollingPlaceFinderContainer') ||
       (locationPathNameMatch === '/sausagelytics' && contentMuiName === 'SausagelyticsContainer')
     ) {
+      // 🤦‍♂️
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       rest.style = { color: muiThemePalette.accent1Color }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
     } else if (locationPathNameMatch === locationPathName) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       rest.style = { color: muiThemePalette.accent1Color }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       rest.leftIcon = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
     }

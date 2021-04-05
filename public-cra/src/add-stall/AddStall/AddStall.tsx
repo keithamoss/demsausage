@@ -37,12 +37,12 @@ class AddStall extends React.PureComponent<IProps, {}> {
       <FormContainer>
         {showNoLiveElections && (
           <FormSection>
-            <FormSectionHeader>There aren't any live elections at the moment</FormSectionHeader>
+            <FormSectionHeader>There aren&apos;t any live elections at the moment</FormSectionHeader>
             <FormText>
-              Thanks for your interest in submitting a stall, but there aren't any elections coming up that we're
-              planning to cover. If you know of an election that you think we should cover, please get in touch with us
-              at <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> and we'll consider
-              adding it.
+              Thanks for your interest in submitting a stall, but there aren&apos;t any elections coming up that
+              we&apos;re planning to cover. If you know of an election that you think we should cover, please get in
+              touch with us at <a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> and
+              we&apos;ll consider adding it.
             </FormText>
           </FormSection>
         )}
@@ -81,8 +81,8 @@ class AddStall extends React.PureComponent<IProps, {}> {
           <FormSection>
             <FormSectionHeader>Thank you</FormSectionHeader>
             <FormText>
-              Thanks for letting us know about your stall! We'll let you know once it's approved and it's appearing on
-              the map.
+              Thanks for letting us know about your stall! We&apos;ll let you know once it&apos;s approved and it&apos;s
+              appearing on the map.
             </FormText>
           </FormSection>
         )}

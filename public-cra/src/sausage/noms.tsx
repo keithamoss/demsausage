@@ -153,6 +153,7 @@ export class NomsReader {
     return 'tick'
   }
 
+  // eslint-disable-next-line class-methods-use-this
   public getIconAnchorPosition(position: number, iconSize: number, scaleFactor: number) {
     const columnCount = 3
     const rowPosition = Math.floor(position / columnCount)
@@ -169,6 +170,7 @@ export class NomsReader {
     return [anchorX, anchorY]
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private filterFalsey(noms: IMapPollingGeoJSONNoms | null) {
     // For legacy reasons the backend stores falsey values for noms.
     // e.g. {bbq: false, cake: true} only contains one piece of information

@@ -103,7 +103,7 @@ interface IStoreProps {
 }
 
 interface IDispatchProps {
-  fetchInitialAppState: Function
+  getInitialAppState: Function
   setElectionFromRoute: Function
   handleSnackbarClose: Function
   onOpenDrawer: Function
@@ -129,13 +129,13 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
   }
 
   async componentDidMount() {
-    const { fetchInitialAppState, params } = this.props
-    await fetchInitialAppState(params.electionName)
+    const { getInitialAppState, params } = this.props
+    await getInitialAppState(params.electionName)
 
     document.title = 'Democracy Sausage'
   }
 
-  componentWillReceiveProps(nextProps: TComponentProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: TComponentProps) {
     // Handle setting the currentElection in Redux based on route changes
     if ('params' in nextProps && 'electionName' in nextProps.params && nextProps.elections.length > 0) {
       // Fallback to our default election if the route hasn't specified an election
@@ -146,7 +146,7 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
       } else {
         // Otherwise, set the election the route wants to use
         const election = nextProps.elections.find(
-          (election: IElection) => getURLSafeElectionName(election) === nextProps.params.electionName
+          (e: IElection) => getURLSafeElectionName(e) === nextProps.params.electionName
         )
         if (election !== undefined) {
           nextProps.setElectionFromRoute(election.id)
@@ -155,7 +155,7 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
     }
   }
 
-  componentWillUpdate(nextProps: TComponentProps) {
+  UNSAFE_componentWillUpdate(nextProps: TComponentProps) {
     if (nextProps.currentElection !== undefined) {
       document.title = `Democracy Sausage | ${nextProps.currentElection.name}`
     }
@@ -249,7 +249,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
-    fetchInitialAppState: (initialElectionName: string) => {
+    getInitialAppState: (initialElectionName: string) => {
       dispatch(fetchInitialAppState(initialElectionName))
     },
     setElectionFromRoute: (electionId: number) => {
