@@ -58,7 +58,7 @@ class PollingPlaceAutocompleteContainer extends React.PureComponent<IProps & IDi
   }
 }
 
-const mapStateToProps = (state: IStore): any => {
+const mapStateToProps = (_state: IStore): any => {
   return {}
 }
 

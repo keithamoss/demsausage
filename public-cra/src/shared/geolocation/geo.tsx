@@ -12,6 +12,8 @@ export function askForGeolocationPermissions(
   onGeolocationError?: Function
 ) {
   navigator.geolocation.getCurrentPosition(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     async (position: Position) => {
       gaTrack.event({
         category: 'Geolocation',
@@ -60,6 +62,8 @@ export function askForGeolocationPermissions(
         }
       )
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     (error: PositionError) => {
       if (onGeolocationError !== undefined) {
         onGeolocationError()
@@ -102,6 +106,8 @@ export function searchPollingPlacesByGeolocation(
 ) {
   askForGeolocationPermissions(
     dispatch,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     async (position: Position, place: IGoogleGeocodeResult, locationSearched: string) => {
       if (onGeolocationComplete !== undefined) {
         onGeolocationComplete()

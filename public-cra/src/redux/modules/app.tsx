@@ -169,8 +169,8 @@ export function getMapboxAPIKey(): any {
     : process.env.REACT_APP_MAPBOX_API_KEY_PROD
 }
 
-export function fetchInitialAppState(initialElectionName: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+export function fetchInitialAppState(_initialElectionName: string) {
+  return async (dispatch: Function, _getState: Function, _api: IAPIClient) => {
     dispatch(loading())
     await Promise.all([dispatch(fetchElections())])
     dispatch(loaded())

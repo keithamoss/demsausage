@@ -167,7 +167,7 @@ const EditStallFormReduxForm = reduxForm({
   form: 'editStall', // a unique name for this form
   enableReinitialize: true,
   // tslint:disable-next-line: no-empty
-  onChange: (values: object, dispatch: Function, props: any) => {},
+  onChange: (_values: object, _dispatch: Function, _props: any) => {},
 })(EditStallForm)
 
 export default EditStallFormReduxForm

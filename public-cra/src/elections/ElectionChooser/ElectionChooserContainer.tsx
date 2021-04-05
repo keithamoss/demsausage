@@ -57,7 +57,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Function, _ownProps: IProps): IDispatchProps => {
   return {
     onChooseElection(election: IElection) {
       gaTrack.event({

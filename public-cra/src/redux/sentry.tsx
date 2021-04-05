@@ -6,6 +6,8 @@ import { Event } from '@sentry/types'
 import { Action, Dispatch, MiddlewareAPI } from 'redux'
 import { IStore } from './modules/reducer'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 const sentry = (store: MiddlewareAPI<IStore>) => {
   Sentry.addGlobalEventProcessor((event: Event) => {
     const stateCopy = JSON.parse(JSON.stringify(store.getState()))
@@ -22,12 +24,16 @@ const sentry = (store: MiddlewareAPI<IStore>) => {
     }
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
   return (next: Dispatch<IStore>) => (action: Action) => {
     Sentry.addBreadcrumb({
       category: 'redux-action',
       message: action.type,
     })
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     return next(action)
   }
 }

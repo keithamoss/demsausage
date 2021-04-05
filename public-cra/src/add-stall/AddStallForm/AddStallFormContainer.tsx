@@ -51,6 +51,8 @@ export const fromStallFormValues = (formValues: any): Partial<IStallFormInfo> =>
     fields.forEach((fieldName: string) => {
       if (fieldName !== 'free_text') {
         if (formValues[fieldName] === true) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore-next-line
           noms[fieldName] = true
         }
       } else if (formValues[fieldName] !== undefined) {
@@ -104,7 +106,7 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
     this.setState({ ...this.state, stepIndex: 2, stallLocationInfo, locationConfirmed: true })
   }
 
-  onChooseElection(event: any, electionId: number) {
+  onChooseElection(_event: any, electionId: number) {
     const election = this.props.liveElections.find((e: IElection) => String(e.id) === String(electionId))!
     this.setState({
       // eslint-disable-next-line react/no-access-state-in-setstate
@@ -142,7 +144,7 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
         formSyncErrors={formSyncErrors}
         formHasSubmitFailed={formHasSubmitFailed}
         errors={errors}
-        onSubmit={async (values: object, dispatch: Function, props: IProps) => {
+        onSubmit={async (values: object, _dispatch: Function, _props: IProps) => {
           await onFormSubmit(onStallAdded, values, chosenElection, stallLocationInfo, this)
         }}
         onSaveForm={() => {
@@ -153,7 +155,7 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   return {
     liveElections: getLiveElections(state),
     formIsSubmitting: isSubmitting('addStall')(state),

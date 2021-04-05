@@ -37,7 +37,7 @@ class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps,
   }
 }
 
-const mapStateToProps = (state: IStore): IStoreProps => {
+const mapStateToProps = (_state: IStore): IStoreProps => {
   return {}
 }
 

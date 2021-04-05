@@ -99,7 +99,7 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
     this.setState({ ...this.state, waitingForGeolocation: false })
   }
 
-  onClickMapFilterOption(option: string) {
+  onClickMapFilterOption(option: keyof IMapFilterOptions) {
     // eslint-disable-next-line react/no-access-state-in-setstate
     const state = !(option in this.state.mapFilterOptions && this.state.mapFilterOptions[option] === true)
     // eslint-disable-next-line react/no-access-state-in-setstate
@@ -139,7 +139,7 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   const { app, elections, map } = state
 
   return {

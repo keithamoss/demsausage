@@ -26,7 +26,7 @@ class PollingPlacePermalink extends React.PureComponent<TComponentProps, {}> {
   constructor(props: TComponentProps) {
     super(props)
 
-    this.onViewOnMap = (event: React.MouseEvent<HTMLElement>) => props.onViewOnMap(props.election, props.pollingPlace)
+    this.onViewOnMap = (_event: React.MouseEvent<HTMLElement>) => props.onViewOnMap(props.election, props.pollingPlace)
   }
 
   render() {

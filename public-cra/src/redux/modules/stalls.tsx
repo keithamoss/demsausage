@@ -66,7 +66,7 @@ export interface IStall {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function createStall(stall: IStallFormInfo) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     // eslint-disable-next-line @typescript-eslint/return-await
     return await api.post('/0.1/stalls/', stall, dispatch)
   }
@@ -77,7 +77,7 @@ export function updateStallWithCredentials(
   token: string,
   signature: string
 ) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     // eslint-disable-next-line @typescript-eslint/return-await
     return await api.patch(
       `/0.1/stalls/${stallId}/update_and_resubmit/`,
@@ -88,7 +88,7 @@ export function updateStallWithCredentials(
 }
 
 export function fetchStallWithCredentials(stallId: string, token: string, signature: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     // eslint-disable-next-line @typescript-eslint/return-await
     return await api.get(`/0.1/stalls/${stallId}/`, dispatch, { token, signature })
   }

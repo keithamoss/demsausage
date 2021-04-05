@@ -245,7 +245,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
       const features: Array<any> = []
       this.map.forEachFeatureAtPixel(
         event.pixel,
-        (feature: any, layer: any) => {
+        (feature: any, _layer: any) => {
           features.push(feature)
         },
         {
@@ -274,7 +274,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     }
   }
 
-  private getSearchResultsVectorLayer(map: Map) {
+  private getSearchResultsVectorLayer(_map: Map) {
     const { mapSearchResults } = this.props
 
     if (mapSearchResults !== null) {
@@ -308,7 +308,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     return null
   }
 
-  private getMapDataVectorLayer(map: Map) {
+  private getMapDataVectorLayer(_map: Map) {
     const { election, geojson, mapFilterOptions, onMapBeginLoading } = this.props
 
     const vectorSource = new VectorSource({
@@ -422,7 +422,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private workaroundOLRenderingBug(view: View) {
+  private workaroundOLRenderingBug(_view: View) {
     // @TODO Hacky fix for the GeoJSON loading, but not rendering until the map view changes.
     // const centre = view.getCenter()
     // centre[0] -= 1

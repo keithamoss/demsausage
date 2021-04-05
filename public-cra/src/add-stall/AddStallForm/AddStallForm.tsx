@@ -361,7 +361,7 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
 const AddStallFormReduxForm = reduxForm({
   form: 'addStall', // a unique name for this form
   enableReinitialize: true,
-  onChange: (values: object, dispatch: Function, props: any) => {
+  onChange: (_values: object, _dispatch: Function, _props: any) => {
     // console.log("values", values)
     // props.onFormChange(values, dispatch, props)
   },

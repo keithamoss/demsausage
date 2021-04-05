@@ -68,7 +68,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
         formSubmitting={formSubmitting}
         errors={errors}
         isValid={isValid}
-        onSubmit={async (values: object, dispatch: Function, props: IProps) => {
+        onSubmit={async (values: object, _dispatch: Function, _props: IProps) => {
           this.toggleFormSubmitting()
           await onFormSubmit(values, this)
         }}
@@ -80,7 +80,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   return {
     isValid: isValid('editStall')(state),
   }

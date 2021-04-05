@@ -2,18 +2,26 @@
 export const deepValue = (obj: object, searchPath: string) => {
   const path = searchPath.split('.')
   for (let i = 0, len = path.length; i < len; i += 1) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     if (obj[path[i]] === null) {
       return null
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     if (obj[path[i]] === undefined) {
       return undefined
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     // eslint-disable-next-line no-param-reassign
     obj = obj[path[i]]
   }
   return obj
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
 
 // http://stackoverflow.com/questions/14484787/wrap-text-in-javascript

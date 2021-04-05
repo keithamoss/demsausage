@@ -130,7 +130,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
 
     this.onMapBeginLoading = () => this.setState({ mapLoading: true })
     this.onMapLoaded = () => this.setState({ mapLoading: false })
-    this.onClickMapFilterOption = (option: string) => (event: React.MouseEvent<HTMLElement>) =>
+    this.onClickMapFilterOption = (option: string) => (_event: React.MouseEvent<HTMLElement>) =>
       props.onClickMapFilterOption(option)
     this.onCloseNT2020Dialog = () => this.setState({ nt2020DialogOpen: false })
   }

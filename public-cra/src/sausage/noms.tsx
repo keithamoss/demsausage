@@ -87,7 +87,7 @@ export class NomsReader {
     spriteIcons: any,
     spriteIconsDetailed: any,
     feature: IMapPollingPlaceFeature,
-    resolution: number
+    _resolution: number
   ) {
     const scaleFactor = 0.4
     const iconSize = 64
@@ -184,6 +184,8 @@ export class NomsReader {
     const filtered = {}
     Object.entries(noms).forEach(([name, value]: [string, boolean]) => {
       if (value !== false) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore-next-line
         filtered[name] = value
       }
     })
@@ -191,6 +193,8 @@ export class NomsReader {
   }
 
   private isPropertyTrue(prop: string) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     return this.noms !== null && prop in this.noms && this.noms[prop] === true
   }
 

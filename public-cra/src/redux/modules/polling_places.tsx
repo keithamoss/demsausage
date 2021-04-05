@@ -170,7 +170,7 @@ export interface IPollingPlaceLoaderResponseMessage {
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
       search_term: searchTerm,
@@ -183,7 +183,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 
 export function fetchAllPollingPlaces(election: IElection) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
     })
@@ -196,7 +196,7 @@ export function fetchAllPollingPlaces(election: IElection) {
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
       ids: pollingPlaceIds.join(','),
@@ -209,12 +209,12 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 }
 
 export function updatePollingPlace(
-  election: IElection,
+  _election: IElection,
   pollingPlace: IPollingPlace,
   pollingPlaceNew: any /* Partial<IPollingPlace> */
 ) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
 
     if (response.status === 200) {
@@ -226,7 +226,7 @@ export function updatePollingPlace(
 
 export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: number) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/nearby/', dispatch, {
       election_id: election.id,
       lonlat: `${lon},${lat}`,
@@ -240,7 +240,7 @@ export function fetchNearbyPollingPlaces(election: IElection, lat: number, lon: 
 
 export function fetchNearbyPollingPlacesBBOX(election: IElection, lat: number, lon: number) {
   // eslint-disable-next-line consistent-return
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/nearby_bbox/', dispatch, {
       election_id: election.id,
       lonlat: `${lon},${lat}`,
@@ -257,7 +257,7 @@ export function fetchNearbyPollingPlacesBBOX(election: IElection, lat: number, l
 }
 
 export function lookupPollingPlaces(election: IElection, name: string, premises: string, state: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/lookup/', dispatch, {
       election_id: election.id,
       name,
@@ -273,7 +273,7 @@ export function lookupPollingPlaces(election: IElection, name: string, premises:
 }
 
 export function lookupPollingPlacesByECId(election: IElection, ecId: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/lookup/', dispatch, {
       election_id: election.id,
       ec_id: ecId,
@@ -287,7 +287,7 @@ export function lookupPollingPlacesByECId(election: IElection, ecId: string) {
 }
 
 export function lookupPollingPlacesByStallId(election: IElection, stallId: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/stall_lookup/', dispatch, {
       election_id: election.id,
       stall_id: stallId,
@@ -317,13 +317,19 @@ export function buildNomsObject(stallNoms: INoms | null) {
   const keys = ['bbq', 'cake', 'nothing', 'run_out', 'coffee', 'vego', 'halal', 'bacon_and_eggs', 'free_text']
 
   keys.forEach((key: string) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     const value = stallNoms[key]
 
     if (key !== 'free_text') {
       if (value === true) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore-next-line
         noms[key] = value
       }
     } else if (value !== '') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       noms[key] = value
     }
   })

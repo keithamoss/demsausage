@@ -27,7 +27,7 @@ class PollingPlaceAutocompleteList extends React.PureComponent<IProps, {}> {
       <div>
         {searchResults !== undefined && searchResults.length > 0 && (
           <List>
-            {searchResults.map((pollingPlace: IPollingPlace, index: number) => {
+            {searchResults.map((pollingPlace: IPollingPlace, _index: number) => {
               const primaryTextString =
                 pollingPlace.name === pollingPlace.premises
                   ? pollingPlace.name
@@ -48,7 +48,7 @@ class PollingPlaceAutocompleteList extends React.PureComponent<IProps, {}> {
                   primaryText={primaryText}
                   secondaryText={secondaryText}
                   secondaryTextLines={2}
-                  onClick={(event: any) => {
+                  onClick={(_event: any) => {
                     onChoosePollingPlace(pollingPlace)
                   }}
                 />

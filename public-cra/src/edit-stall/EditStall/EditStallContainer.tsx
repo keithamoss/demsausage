@@ -103,7 +103,7 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   const { elections } = state
   return { elections: elections.elections }
 }

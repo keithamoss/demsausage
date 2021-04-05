@@ -95,7 +95,7 @@ const mapStateToProps = (state: IStore): IStoreProps => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (_dispatch: Function): IDispatchProps => {
   return {
     onChooseElection(election: IElection, pageBaseURL: string) {
       browserHistory.push(`${pageBaseURL}/${getURLSafeElectionName(election)}`)

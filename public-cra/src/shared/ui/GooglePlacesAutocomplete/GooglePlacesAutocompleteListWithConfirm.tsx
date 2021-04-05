@@ -59,7 +59,7 @@ class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponent
     })
   }
 
-  onConfirmChosenLocation(stallLocationInfo: IStallLocationInfo) {
+  onConfirmChosenLocation(_stallLocationInfo: IStallLocationInfo) {
     // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, locationConfirmed: true })
     this.props.onConfirmChosenLocation(this.state.stallLocationInfo!)
@@ -115,11 +115,11 @@ class GooglePlacesAutocompleteListWithConfirm extends React.Component<TComponent
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (_state: IStore, _ownProps: IProps): IStoreProps => {
   return {}
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (_dispatch: Function): IDispatchProps => {
   return {}
 }
 

@@ -44,9 +44,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a
-                href="/media/2021%20WA%20Media%20Release%20-%206%20Mar.pdf"
-              />
+              <a href="/media/2021%20WA%20Media%20Release%20-%206%20Mar.pdf" />
             }
           />
           <ListItem
@@ -54,9 +52,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a
-                href="/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf"
-              />
+              <a href="/media/2020%20ACT%20%2B%20Qld%20-%20Media%20Release%20-%2011%20Oct.pdf" />
             }
           />
           <ListItem
@@ -64,7 +60,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a href={"/media/2020%20NT%20-%20Media%20Release.pdf"} />
+              <a href={'/media/2020%20NT%20-%20Media%20Release.pdf'} />
             }
           />
           <ListItem
@@ -72,9 +68,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a
-                href="/media/2019%20Federal%20Election%20Media%20Release%20-%2017%20May.pdf"
-              />
+              <a href="/media/2019%20Federal%20Election%20Media%20Release%20-%2017%20May.pdf" />
             }
           />
           <ListItem
@@ -82,7 +76,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a href={"/media/2019%20Fed%20-%20Media%20Release.pdf"} />
+              <a href={'/media/2019%20Fed%20-%20Media%20Release.pdf'} />
             }
           />
           <ListItem
@@ -90,9 +84,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a
-                href="/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf"
-              />
+              <a href="/media/Democracy%20Sausage%20-%202016%20Federal%20Election%20Release.pdf" />
             }
           />
           <ListItem
@@ -100,9 +92,7 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
             leftIcon={<FileFileDownload />}
             containerElement={
               // eslint-disable-next-line
-              <a
-                href="/media/Canning%20Press%20Release%20-%20DemSausage.pdf"
-              />
+              <a href="/media/Canning%20Press%20Release%20-%20DemSausage.pdf" />
             }
           />
         </List>
@@ -111,11 +101,11 @@ class MediaPage extends React.Component<TComponentProps, IStateProps> {
   }
 }
 
-const mapStateToProps = (state: IStore): IStoreProps => {
+const mapStateToProps = (_state: IStore): IStoreProps => {
   return {}
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (_dispatch: Function): IDispatchProps => {
   return {}
 }
 

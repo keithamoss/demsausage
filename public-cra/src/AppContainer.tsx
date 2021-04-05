@@ -267,10 +267,10 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
       })
       dispatch(toggleDrawerOpen())
     },
-    onClickDrawerLink: (e: React.MouseEvent<HTMLElement>) => {
+    onClickDrawerLink: (_e: React.MouseEvent<HTMLElement>) => {
       dispatch(setDrawerOpen(false))
     },
-    onClickOutboundDrawerLink: (e: React.MouseEvent<HTMLElement>, linkName: string) => {
+    onClickOutboundDrawerLink: (_e: React.MouseEvent<HTMLElement>, linkName: string) => {
       gaTrack.event({
         category: 'AppContainer',
         action: 'onOutboundLinkClick',

@@ -1,7 +1,6 @@
 // tslint:disable:max-line-length
 
 import SvgIcon from 'material-ui/SvgIcon'
-import * as React from 'react'
 import { pure } from 'recompose'
 
 const svg = (props: any) => (

@@ -75,7 +75,9 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
     this.setState({ ...this.state, waitingForGeolocation: true })
   }
 
-  onGeolocationComplete(position: Position, place: IGoogleGeocodeResult, locationSearched: string) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  onGeolocationComplete(_position: Position, place: IGoogleGeocodeResult, _locationSearched: string) {
     const { onChoosePlace } = this.props
     // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
@@ -179,14 +181,14 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
 
         {addressSearchResults.length > 0 && (
           <List>
-            {addressSearchResults.map((value: IGoogleAddressSearchResult, index: number) => (
+            {addressSearchResults.map((value: IGoogleAddressSearchResult, _index: number) => (
               <ListItem
                 key={value.place_id}
                 leftAvatar={<Avatar icon={<MapsPlace />} />}
                 primaryText={value.structured_formatting.main_text}
                 secondaryText={value.structured_formatting.secondary_text}
                 secondaryTextLines={2}
-                onClick={(event: any) => {
+                onClick={(_event: any) => {
                   fetchLocationFromGeocoder(onChoosePlace, value, this.onPlaceChosen)
                 }}
               />
@@ -198,7 +200,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   const { app } = state
 
   return {

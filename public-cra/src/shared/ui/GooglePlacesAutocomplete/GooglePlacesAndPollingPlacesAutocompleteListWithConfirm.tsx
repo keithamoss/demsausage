@@ -119,7 +119,7 @@ class GooglePlacesAndPollingPlacesAutocompleteListWithConfirm extends React.Comp
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (_state: IStore, _ownProps: IProps): IStoreProps => {
   return {}
 }
 

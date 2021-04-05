@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Route } from 'react-router'
 import AddStallContainer from './add-stall/AddStall/AddStallContainer'
 import AppContainer from './AppContainer'
@@ -13,7 +12,7 @@ import SausagelyticsContainerV1 from './sausagelytics/Sausagelytics_v1/Sausagely
 import AboutPage from './static-pages/AboutPage/AboutPage'
 import MediaPage from './static-pages/MediaPage/MediaPage'
 
-const routes = (store: IStore) => {
+const routes = (_store: IStore) => {
   return (
     <Route component={AppContainer}>
       <Route path="/elections" components={{ content: ElectionChooserContainer }} />

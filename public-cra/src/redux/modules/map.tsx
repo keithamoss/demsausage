@@ -137,10 +137,15 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
       opacity: 'opacity' in iconConfig ? iconConfig.opacity : undefined,
     } as any /* IconOptions */
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     spriteIcons[iconName] = new Style({
       image: new Icon(iconAttributes),
       zIndex: iconConfig.zIndex,
     })
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     spriteIconsDetailed[iconName] = new Style({
       image: new Icon({ ...iconAttributes, anchorXUnits: 'pixels', anchorYUnits: 'pixels' }),
       zIndex: 1,
@@ -152,6 +157,8 @@ export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
   Object.values(mapFilterOptions).filter((enabled: boolean) => enabled === true).length > 0
 
 export const isFilterEnabled = (option: string, mapFilterOptions: IMapFilterOptions) =>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
   option in mapFilterOptions && mapFilterOptions[option] === true
 
 export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilterOptions) => {
@@ -184,5 +191,7 @@ export const olStyleFunction = (
       : nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature, resolution)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
   return hasFilterOptions(mapFilterOptions) === false ? spriteIcons.unknown : null
 }

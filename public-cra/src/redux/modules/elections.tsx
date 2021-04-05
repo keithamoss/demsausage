@@ -167,7 +167,7 @@ export interface IElectionStatsNoms {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/elections/public/', dispatch)
 
     if (response.status === 200) {
@@ -207,7 +207,7 @@ export function getDefaultElection(elections: Array<IElection>) {
 }
 
 export function fetchElectionStats(election: IElection) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get(`/0.1/elections/${election.id}/stats/`, dispatch, {})
 
     if (response.status === 200) {

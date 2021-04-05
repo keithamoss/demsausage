@@ -23,7 +23,7 @@ export class APIClient {
             json,
           }
         })
-        .catch((error: any) => {
+        .catch((_error: any) => {
           return {
             response,
             json: null,
@@ -45,7 +45,7 @@ export class APIClient {
 
   // Handles fatal errors from the API
   // eslint-disable-next-line class-methods-use-this
-  public handleError(error: any, url: string, dispatch: any) {
+  public handleError(error: any, url: string, _dispatch: any) {
     if (isDevelopment() === true) {
       // tslint:disable-next-line:no-console
       console.error(error)
