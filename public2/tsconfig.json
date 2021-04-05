@@ -13,7 +13,6 @@
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
     "module": "esnext",
@@ -24,14 +23,17 @@
       "dom.iterable",
       "esnext"
     ],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "noEmit": true
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*"
   ],
-  "plugins": [{
-    "name": "typescript-tslint-plugin"
-  }]
+  "plugins": [
+    {
+      "name": "typescript-tslint-plugin"
+    }
+  ]
 }

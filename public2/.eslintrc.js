@@ -14,7 +14,6 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   extends: [
     'airbnb-typescript',
-    'prettier/react', // Handles conflicts between airbnb-typescript and prettier per https://github.com/prettier/eslint-config-prettier/issues/126
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:import/errors',
@@ -23,7 +22,6 @@ module.exports = {
     // Disabled because it slows down eslint quite a bit when saving in VSCode. Sometimes it runs fast, but most of the time it's slow. Could be a TypeScript issue?
     // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'react-app',
-    'prettier/@typescript-eslint',
     'plugin:prettier/recommended', // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   settings: {

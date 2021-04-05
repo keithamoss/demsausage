@@ -4,21 +4,53 @@
   "homepage": "https://democracysausage.org",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.10.2",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
-    "@material-ui/styles": "^4.10.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "axios": "^0.19.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/styles": "^4.11.3",
+    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/user-event": "^13.1.1",
+    "axios": "^0.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8",
-    "typeface-roboto": "^0.0.75"
+    "redux-devtools-extension": "^2.13.9",
+    "typeface-roboto": "^1.1.13",
+    "web-vitals": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "4.3.8",
+    "lint-staged": "^10.2.10",
+    "prettier": "^2.2.1",
+    "prettier-eslint": "^12.0.0",
+    "react-scripts": "^4.0.3",
+    "redux-mock-store": "^1.5.4",
+    "typescript": "^4.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -29,7 +61,10 @@
     "fix": "eslint --ext .js,.jsx,.ts,.tsx --cache  --fix ./"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -50,38 +85,6 @@
     }
   },
   "lint-staged": {
-    "*.+(ts|tsx|js|jsx)": [
-      "eslint --fix"
-    ]
-  },
-  "devDependencies": {
-    "@types/enzyme": "^3.10.5",
-    "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/jest": "^26.0.0",
-    "@types/node": "^14.0.13",
-    "@types/react": "^16.9.36",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-redux": "^7.1.9",
-    "@types/react-router-dom": "^5.1.5",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-typescript": "^7.2.1",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-config-react-app": "^5.2.1",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.4",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.10",
-    "prettier": "^2.0.5",
-    "prettier-eslint": "^11.0.0",
-    "react-scripts": "^4.0.3",
-    "redux-mock-store": "^1.5.4",
-    "typescript": "^3.9.5"
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
   }
 }

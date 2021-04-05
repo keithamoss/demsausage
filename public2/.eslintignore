@@ -6,3 +6,5 @@ build
 public
 # don't lint nyc coverage output
 coverage
+# Reasons: https://github.com/typescript-eslint/typescript-eslint/issues/1723#issuecomment-634640844
+.eslintrc.js
