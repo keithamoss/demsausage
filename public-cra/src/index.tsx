@@ -1,6 +1,5 @@
 // This must be the first line in src/index.js
 import * as Sentry from '@sentry/browser'
-import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
@@ -53,16 +52,17 @@ const store: Store<IStore> = createStore(
 const history = syncHistoryWithStore(browserHistory as any, store)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router
-        history={history as any}
-        onUpdate={'REACT_APP_GOOGLE_ANALYTICS_UA' in process.env ? fireAnalyticsTracking : undefined}
-      >
-        {getRoutes(store as any)}
-      </Router>
-    </Provider>
-  </React.StrictMode>,
+  // Too much legacy code is broken for StrictMode to be useful
+  // <React.StrictMode>
+  <Provider store={store}>
+    <Router
+      history={history as any}
+      onUpdate={'REACT_APP_GOOGLE_ANALYTICS_UA' in process.env ? fireAnalyticsTracking : undefined}
+    >
+      {getRoutes(store as any)}
+    </Router>
+  </Provider>,
+  // </React.StrictMode>
   document.getElementById('root')
 )
 // registerServiceWorker()
