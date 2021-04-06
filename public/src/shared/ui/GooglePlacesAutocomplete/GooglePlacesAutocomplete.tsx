@@ -94,7 +94,6 @@ declare global {
 }
 
 export interface IGoogleAddressSearchResult {
-  id: string
   place_id: string
   description: string
   reference: string
