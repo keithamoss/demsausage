@@ -1,7 +1,6 @@
 // import registerServiceWorker from "./registerServiceWorker"
 import * as createRavenMiddleware from 'raven-for-redux'
 import * as Raven from 'raven-js'
-import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
@@ -27,7 +26,8 @@ const Middleware: Array<any> = []
 if ('REACT_APP_RAVEN_URL' in process.env) {
   Raven.config(process.env.REACT_APP_RAVEN_URL!, {
     environment: process.env.REACT_APP_ENVIRONMENT,
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     site: process.env.REACT_APP_RAVEN_SITE_NAME!,
   }).install()
   Middleware.push(

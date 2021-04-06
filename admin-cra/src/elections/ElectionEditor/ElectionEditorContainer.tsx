@@ -73,7 +73,7 @@ type TComponentProps = IProps & IStoreProps & IDispatchProps & IOwnProps
 class ElectionEditorContainer extends React.Component<TComponentProps, IStateProps> {
   initialValues: any
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { election } = this.props
 
     // Each layer mounts this component anew, so store their initial layer form values.
@@ -82,6 +82,7 @@ class ElectionEditorContainer extends React.Component<TComponentProps, IStatePro
   }
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { election, onElectionEdited, isDirty, onFormSubmit, onSaveForm } = this.props
 
     return (
@@ -89,7 +90,7 @@ class ElectionEditorContainer extends React.Component<TComponentProps, IStatePro
         election={election}
         initialValues={this.initialValues}
         isDirty={isDirty}
-        onSubmit={(values: object, dispatch: Function, props: IProps) => {
+        onSubmit={(values: object, _dispatch: Function, _props: IProps) => {
           onFormSubmit(values, election, onElectionEdited)
         }}
         onSaveForm={() => {
@@ -116,7 +117,7 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
-    async onFormSubmit(values: object, election: IElection, onElectionEdited: Function) {
+    async onFormSubmit(values: object, election: IElection, _onElectionEdited: Function) {
       const electionNew: Partial<IElection> = fromFormValues(values)
       const json = await dispatch(updateElection(election, electionNew))
       if (json) {
@@ -124,7 +125,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
         browserHistory.push('/elections/')
       }
     },
-    onSaveForm: (election: IElection, isDirty: boolean) => {
+    onSaveForm: (_election: IElection, _isDirty: boolean) => {
       dispatch(submit('election'))
     },
   }

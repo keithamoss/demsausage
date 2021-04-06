@@ -55,7 +55,7 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (_dispatch: Function): IDispatchProps => {
   return {}
 }
 

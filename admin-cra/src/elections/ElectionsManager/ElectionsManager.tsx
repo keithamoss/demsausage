@@ -87,6 +87,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                         month: 'long',
                         year: 'numeric',
                       })}
+                      // eslint-disable-next-line react/jsx-no-bind
                       onClick={this.onClickElection.bind(this, election)}
                     />
                     {election.polling_places_loaded === true && (
@@ -103,6 +104,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                     {election.is_primary === true && (
                       <IconButton
                         tooltip="This election is the primary election"
+                        // eslint-disable-next-line react/jsx-no-bind
                         onClick={this.onMakeElectionPrimary.bind(this, election)}
                       >
                         <ToggleStar color={yellow600} />
@@ -111,6 +113,7 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                     {election.is_primary === false && (
                       <IconButton
                         tooltip="Make this election the primary election"
+                        // eslint-disable-next-line react/jsx-no-bind
                         onClick={this.onMakeElectionPrimary.bind(this, election)}
                       >
                         <ToggleStarBorder hoverColor={yellow600} />
@@ -130,18 +133,21 @@ class ElectionsManager extends React.PureComponent<IProps, {}> {
                   <TableRowColumnWithIconButtons>
                     <IconButton
                       tooltip="Load a new polling places file"
+                      // eslint-disable-next-line react/jsx-no-bind
                       onClick={this.onClickFileUpload.bind(this, election)}
                     >
                       <FileFileUpload />
                     </IconButton>
                     <IconButton
                       tooltip="Download this election as an Excel file"
+                      // eslint-disable-next-line react/jsx-no-bind
                       onClick={onDownloadElection.bind(this, election)}
                     >
                       <FileCloudDownload />
                     </IconButton>
                     <IconButton
                       tooltip="Refresh the map data for this election"
+                      // eslint-disable-next-line react/jsx-no-bind
                       onClick={onRegenerateMapDataForElection.bind(this, election)}
                     >
                       <NavigationRefresh />

@@ -1,11 +1,11 @@
 import * as dotProp from 'dot-prop-immutable'
 import { memoize } from 'lodash-es'
 import { createSelector } from 'reselect'
-import { sendNotification as sendSnackbarNotification } from './snackbars'
 import { IAPIClient } from '../../shared/api/APIClient'
 import { IGeoJSON } from './interfaces'
 import { INoms } from './polling_places'
 import { IStore } from './reducer'
+import { sendNotification as sendSnackbarNotification } from './snackbars'
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -22,6 +22,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
     case LOAD_PENDING:
       return dotProp.set(state, 'pending', action.stalls)
     case REMOVE:
+      // eslint-disable-next-line no-case-declarations
       const pending = state.pending!.filter((stall: IPendingStall) => stall.id !== action.stallId)
       return dotProp.set(state, 'pending', pending)
     default:
@@ -115,7 +116,8 @@ export interface IPendingStall extends IStall {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchPendingStalls(quiet = false) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/stalls/pending/', dispatch, {}, quiet)
 
     if (response.status === 200) {
@@ -126,7 +128,8 @@ export function fetchPendingStalls(quiet = false) {
 }
 
 export function approveStall(id: number) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/stalls/${id}/approve/`, {}, dispatch)
 
     if (response.status === 200) {
@@ -139,7 +142,8 @@ export function approveStall(id: number) {
 }
 
 export function approveStallAndAddUnofficialPollingPlace(id: number) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/stalls/${id}/approve_and_add/`, {}, dispatch)
 
     if (response.status === 200) {
@@ -152,7 +156,8 @@ export function approveStallAndAddUnofficialPollingPlace(id: number) {
 }
 
 export function declineStall(id: number) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/stalls/${id}/`, { status: StallStatus.DECLINED }, dispatch)
 
     if (response.status === 200) {

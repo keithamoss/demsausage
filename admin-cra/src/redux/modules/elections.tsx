@@ -1,10 +1,10 @@
 import * as dotProp from 'dot-prop-immutable'
 import { DateTime } from 'luxon'
 import { createSelector } from 'reselect'
-import { sendNotification as sendSnackbarNotification } from './snackbars'
 import { IAPIClient } from '../../shared/api/APIClient'
 import { IGeoJSON } from './interfaces'
 import { IStore } from './reducer'
+import { sendNotification as sendSnackbarNotification } from './snackbars'
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -23,6 +23,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
     case LOAD_ELECTIONS:
       return dotProp.set(state, 'elections', action.elections)
     case LOAD_ELECTION:
+      // eslint-disable-next-line no-case-declarations
       const electionIndex: number = state.elections!.findIndex(
         (election: IElection) => election.id === action.election.id
       )!
@@ -41,6 +42,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
       return dotProp.set(state, 'current_election_id', action.electionId)
     case SET_PRIMARY_ELECTION:
       state.elections!.forEach((election: IElection, index: number) => {
+        // eslint-disable-next-line no-param-reassign
         state = dotProp.set(state, `elections.${index}.is_primary`, election.id === action.electionId)
       })
       return state
@@ -155,6 +157,7 @@ export function fetchElections() {
             activeElection = firstActiveElection
           } else {
             // If there are no active elections at all just grab the most recent one
+            // eslint-disable-next-line prefer-destructuring
             activeElection = json[0]
           }
         }
@@ -166,7 +169,8 @@ export function fetchElections() {
 }
 
 export function createElection(electionNew: Partial<IElection>) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.post('/0.1/elections/', electionNew, dispatch)
 
     if (response.status === 201) {
@@ -178,7 +182,8 @@ export function createElection(electionNew: Partial<IElection>) {
 }
 
 export function updateElection(election: IElection, electionNew: Partial<IElection>) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/elections/${election.id}/`, electionNew, dispatch)
 
     if (response.status === 200) {
@@ -190,7 +195,7 @@ export function updateElection(election: IElection, electionNew: Partial<IElecti
 }
 
 export function setPrimaryElection(electionId: number) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response } = await api.post(`/0.1/elections/${electionId}/set_primary/`, {}, dispatch)
 
     if (response.status === 200) {

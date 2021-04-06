@@ -1,3 +1,4 @@
+/* eslint-disable-next-line max-classes-per-file */
 import Avatar from 'material-ui/Avatar'
 import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
@@ -240,7 +241,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
 const PollingPlaceFormReduxForm = reduxForm({
   form: 'pollingPlace', // a unique name for this form
   enableReinitialize: true,
-  onChange: (values: object, dispatch: Function, props: any) => {
+  onChange: (_values: object, _dispatch: Function, _props: any) => {
     // console.log("values", values)
     // props.onFormChange(values, dispatch, props)
   },

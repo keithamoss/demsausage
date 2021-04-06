@@ -111,6 +111,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
             <h2>Info</h2>
             <List>
               {messages.logs.info.map((message: string, index: number) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <ListItem key={index} primaryText={message} leftIcon={<ActionInfo />} disabled={true} />
               ))}
             </List>
@@ -122,6 +123,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
             <h2>Errors</h2>
             <List>
               {messages.logs.errors.map((message: string, index: number) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <ListItem key={index} primaryText={message} leftIcon={<AlertError />} disabled={true} />
               ))}
             </List>
@@ -133,6 +135,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
             <h2>Warnings</h2>
             <List>
               {messages.logs.warnings.map((message: string, index: number) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <ListItem key={index} primaryText={message} leftIcon={<AlertWarning />} disabled={true} />
               ))}
             </List>

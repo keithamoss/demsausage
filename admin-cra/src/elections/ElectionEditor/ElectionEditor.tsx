@@ -1,3 +1,4 @@
+/* eslint-disable-next-line max-classes-per-file */
 import RaisedButton from 'material-ui/RaisedButton'
 import * as React from 'react'
 import { BaseFieldProps, Field, reduxForm } from 'redux-form'
@@ -110,7 +111,7 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
 const ElectionEditorReduxForm = reduxForm({
   form: 'election', // a unique name for this form
   enableReinitialize: true,
-  onChange: (values: object, dispatch: Function, props: any) => {
+  onChange: (_values: object, _dispatch: Function, _props: any) => {
     // console.log("values", values)
     // props.onFormChange(values, dispatch, props)
   },

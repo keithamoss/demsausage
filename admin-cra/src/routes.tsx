@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Route } from 'react-router'
 import AppContainer from './AppContainer'
 import ElectionCreatorContainer from './elections/ElectionEditor/ElectionCreatorContainer'
@@ -12,7 +11,7 @@ import { IStore } from './redux/modules/reducer'
 import PendingStallEditorContainer from './stalls/PendingStallEditor/PendingStallEditorContainer'
 import PendingStallsManagerContainer from './stalls/PendingStallsManager/PendingStallsManagerContainer'
 
-const routes = (store: IStore) => {
+const routes = (_store: IStore) => {
   return (
     <Route path="/" component={AppContainer}>
       {/* Home (main) route */}

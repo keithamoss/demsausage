@@ -39,7 +39,7 @@ class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStat
     this.state = { pollingPlacesChecked: false }
   }
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     const { fetchRequiredState, election, pollingPlaceId } = this.props
 
     if (pollingPlaceId !== null /* && election.polling_places_loaded === true */) {
@@ -47,7 +47,7 @@ class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStat
     }
   }
 
-  async componentWillReceiveProps(nextProps: any) {
+  async UNSAFE_componentWillReceiveProps(nextProps: any) {
     const { fetchRequiredState, election, pollingPlaceId } = nextProps
 
     if (pollingPlaceId !== null) {
@@ -97,7 +97,7 @@ class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStat
   }
 }
 
-const mapStateToProps = (state: IStore): IStoreProps => {
+const mapStateToProps = (_state: IStore): IStoreProps => {
   return {}
 }
 

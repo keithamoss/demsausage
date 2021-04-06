@@ -23,11 +23,11 @@ class StallInfoCardContainer extends React.PureComponent<IProps & IDispatchProps
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (_state: IStore, _ownProps: IProps): IStoreProps => {
   return {}
 }
 
-const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
+const mapDispatchToProps = (_dispatch: Function): IDispatchProps => {
   return {}
 }
 

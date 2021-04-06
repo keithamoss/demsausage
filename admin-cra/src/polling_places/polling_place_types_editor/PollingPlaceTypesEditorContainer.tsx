@@ -53,7 +53,7 @@ class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentPro
     this.setState({ pollingPlaces: await fetchPollingPlaces(election) })
   }
 
-  async componentWillReceiveProps(nextProps: TComponentProps) {
+  async UNSAFE_componentWillReceiveProps(nextProps: TComponentProps) {
     const { election } = this.props
     if (election.id !== nextProps.election.id) {
       this.setState({ pollingPlaces: await nextProps.fetchPollingPlaces(nextProps.election) })
@@ -69,7 +69,7 @@ class PollingPlaceTypesEditorContainer extends React.PureComponent<TComponentPro
         <EmptyState
           message={
             <div>
-              We don't have any polling
+              We don&apos;t have any polling
               <br />
               places for this election yet :(
             </div>
@@ -111,6 +111,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
     fetchPollingPlaces: async (election: IElection) => {
       if (election.polling_places_loaded === true) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(fetchPollingPlacesWithoutFacilityTypes(election))
       }
       return null

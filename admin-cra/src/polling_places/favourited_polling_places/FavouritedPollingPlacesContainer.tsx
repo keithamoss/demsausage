@@ -44,7 +44,7 @@ class FavouritedPollingPlacesContainer extends React.PureComponent<TComponentPro
     this.setState({ pollingPlaces: await fetchPollingPlaces(election) })
   }
 
-  async componentWillReceiveProps(nextProps: TComponentProps) {
+  async UNSAFE_componentWillReceiveProps(nextProps: TComponentProps) {
     const { election } = this.props
     if (election.id !== nextProps.election.id) {
       this.setState({ pollingPlaces: await nextProps.fetchPollingPlaces(nextProps.election) })
@@ -76,6 +76,7 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
     fetchPollingPlaces: async (election: IElection) => {
+      // eslint-disable-next-line @typescript-eslint/return-await
       return await dispatch(fetchFavouritedPollingPlaces(election))
     },
     onElectionChanged: (electionId: number) => {

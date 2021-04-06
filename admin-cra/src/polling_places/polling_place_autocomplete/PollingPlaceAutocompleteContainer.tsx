@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import { debounce } from 'lodash-es'
 import * as React from 'react'
 import { connect } from 'react-redux'
@@ -31,14 +32,19 @@ class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentPr
     this.state = { searchText: '', searchResults: [] }
 
     // http://stackoverflow.com/a/24679479/7368493
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     this.onFieldChangeDebounced = debounce(function (this: PollingPlaceAutocompleteContainer, searchText: string) {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       this.setState({ ...this.state, searchText })
     }, 750)
   }
 
-  async componentDidUpdate(prevProps: IProps & IDispatchProps, prevState: IStateProps) {
+  async componentDidUpdate(_prevProps: IProps & IDispatchProps, prevState: IStateProps) {
     if (this.state.searchText !== prevState.searchText) {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       const searchResults = await this.props.onPollingPlaceSearch(this.props.election, this.state.searchText)
+      // eslint-disable-next-line react/no-access-state-in-setstate, react/no-did-update-set-state
       this.setState({ ...this.state, searchResults })
     }
   }
@@ -49,12 +55,12 @@ class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentPr
       <PollingPlaceAutocomplete
         searchText={this.state.searchText}
         pollingPlaces={this.state.searchResults}
-        onPollingPlaceAutocompleteSelect={(searchText: string, dataSource: any, params: any) => {
+        onPollingPlaceAutocompleteSelect={(searchText: string, _dataSource: any, params: any) => {
           if (params.source === 'change' && searchText.length >= 3) {
             this.onFieldChangeDebounced(searchText)
           }
         }}
-        onChoosePollingPlace={(chosenRequest: any, index: number) => {
+        onChoosePollingPlace={(_chosenRequest: any, index: number) => {
           if (index >= 0) {
             onPollingPlaceChosen(this.state.searchResults[index])
           }
@@ -64,14 +70,16 @@ class PollingPlaceAutocompleteContainer extends React.PureComponent<TComponentPr
   }
 }
 
-const mapStateToProps = (state: IStore): IStoreProps => {
+const mapStateToProps = (_state: IStore): IStoreProps => {
   return {}
 }
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
+    // eslint-disable-next-line consistent-return
     onPollingPlaceSearch: async (election: IElection, searchTerm: string) => {
       if (searchTerm.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/return-await
         return await dispatch(searchPollingPlaces(election, searchTerm))
       }
     },

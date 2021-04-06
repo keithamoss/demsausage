@@ -40,6 +40,7 @@ class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponent
   }
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { election, loadPollingPlaces } = this.props
 
     return (
@@ -49,19 +50,22 @@ class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponent
         error={this.state.error}
         messages={this.state.messages}
         onFileUpload={(file: File) => {
+          // eslint-disable-next-line react/no-access-state-in-setstate
           this.setState({ ...this.state, file })
           loadPollingPlaces(election, file, this.state.config, this.state.dryRun, this)
         }}
-        onConfigChange={(event: any, config: string) => {
+        onConfigChange={(_event: any, config: string) => {
           try {
             JSON.parse(config)
+            // eslint-disable-next-line react/no-access-state-in-setstate
             this.setState({ ...this.state, config })
           } catch (e) {
             // tslint:disable-next-line: no-console
             console.error(e)
           }
         }}
-        onCheckDryRun={(event: any, isInputChecked: boolean) => {
+        onCheckDryRun={(_event: any, isInputChecked: boolean) => {
+          // eslint-disable-next-line react/no-access-state-in-setstate
           this.setState({ ...this.state, dryRun: isInputChecked })
         }}
       />

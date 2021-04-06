@@ -89,7 +89,8 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
   private intervalId: number | undefined
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { setElectionFromRoute, fetchInitialAppState } = this.props
 
     // If our route dictates that we're looking at a particular election then

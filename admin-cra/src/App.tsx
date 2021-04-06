@@ -1,3 +1,4 @@
+/* eslint-disable-next-line max-classes-per-file */
 import { BodyContainer, ResponsiveAppBar, ResponsiveDrawer } from 'material-ui-responsive-drawer'
 import Badge from 'material-ui/Badge'
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation'
@@ -67,9 +68,11 @@ class MenuListItem extends React.Component<any, any> {
     const { locationPathName, muiThemePalette, ...rest } = this.props
 
     if (locationPathName === rest.containerElement.props.to) {
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       rest.style! = { color: muiThemePalette.accent1Color }
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       rest.leftIcon! = React.cloneElement(rest.leftIcon, { color: muiThemePalette.accent1Color })
     }
     return <ListItem {...rest} />

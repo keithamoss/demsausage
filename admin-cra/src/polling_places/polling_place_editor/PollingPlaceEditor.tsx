@@ -66,6 +66,7 @@ export class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
                 <PollingPlaceAutocompleteContainer
                   key={election.id}
                   election={election}
+                  // eslint-disable-next-line @typescript-eslint/no-shadow
                   onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
                     browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
                   }}
@@ -79,6 +80,7 @@ export class PollingPlaceEditor extends React.PureComponent<IProps, {}> {
           <PollingPlaceAutocompleteContainer
             key={election.id}
             election={election}
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             onPollingPlaceChosen={(pollingPlace: IPollingPlace) => {
               browserHistory.push(`/election/${election.id}/polling_places/${pollingPlace.id}/edit`)
             }}

@@ -34,6 +34,7 @@ const fromFormValues = (formValues: any): IElectionFormValues => {
 
 class ElectionCreatorContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { onElectionCreated, isDirty, onFormSubmit, onSaveForm } = this.props
 
     return (
@@ -41,7 +42,7 @@ class ElectionCreatorContainer extends React.Component<IProps & IStoreProps & ID
         election={null}
         initialValues={{}}
         isDirty={isDirty}
-        onSubmit={(values: object, dispatch: Function, props: IProps) => {
+        onSubmit={(values: object, _dispatch: Function, _props: IProps) => {
           onFormSubmit(values, onElectionCreated)
         }}
         onSaveForm={() => {
@@ -55,7 +56,7 @@ class ElectionCreatorContainer extends React.Component<IProps & IStoreProps & ID
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   return {
     isDirty: isDirty('election')(state),
   }
@@ -63,14 +64,14 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
-    async onFormSubmit(values: object, onElectionCreated: Function) {
+    async onFormSubmit(values: object, _onElectionCreated: Function) {
       const electionNew: Partial<IElection> = fromFormValues(values)
       const json = await dispatch(createElection(electionNew))
       if (json) {
         browserHistory.push('/elections/')
       }
     },
-    onSaveForm: (isDirty: boolean) => {
+    onSaveForm: (_isDirty: boolean) => {
       dispatch(submit('election'))
     },
   }

@@ -1,9 +1,9 @@
 import * as dotProp from 'dot-prop-immutable'
-import { sendNotification as sendSnackbarNotification } from './snackbars'
 import { IAPIClient } from '../../shared/api/APIClient'
 import { getPublicSiteBaseURL } from './app'
 import { getURLSafeElectionName, IElection } from './elections'
 import { IGeoJSON } from './interfaces'
+import { sendNotification as sendSnackbarNotification } from './snackbars'
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
 // Actions
@@ -31,6 +31,7 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
 export const reduxFormReducer = (state: {}, action: any) => {
   switch (action.type) {
     case VALIDATION_ERRORS:
+      // eslint-disable-next-line no-param-reassign
       state = dotProp.set(state, 'submitSucceeded', false)
       return dotProp.merge(state, 'syncErrors', action.errors)
     default:
@@ -146,7 +147,8 @@ export interface IPollingPlaceLoaderResponseMessages {
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function searchPollingPlaces(election: IElection, searchTerm: string) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
       search_term: searchTerm,
@@ -158,7 +160,7 @@ export function searchPollingPlaces(election: IElection, searchTerm: string) {
 }
 
 export function fetchAllPollingPlaces(election: IElection) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
     })
@@ -170,7 +172,8 @@ export function fetchAllPollingPlaces(election: IElection) {
 }
 
 export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Array<number>) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/search/', dispatch, {
       election_id: election.id,
       ids: pollingPlaceIds.join(','),
@@ -183,7 +186,7 @@ export function fetchPollingPlacesByIds(election: IElection, pollingPlaceIds: Ar
 }
 
 export function fetchPollingPlacesWithoutFacilityTypes(election: IElection) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/without_facility_type/', dispatch, {
       election_id: election.id,
     })
@@ -196,7 +199,7 @@ export function fetchPollingPlacesWithoutFacilityTypes(election: IElection) {
 }
 
 export function fetchFavouritedPollingPlaces(election: IElection) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places/favourited/', dispatch, {
       election_id: election.id,
     })
@@ -209,11 +212,12 @@ export function fetchFavouritedPollingPlaces(election: IElection) {
 }
 
 export function updatePollingPlace(
-  election: IElection,
+  _election: IElection,
   pollingPlace: IPollingPlace,
   pollingPlaceNew: any /* Partial<IPollingPlace> */
 ) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  // eslint-disable-next-line consistent-return
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.patch(`/0.1/polling_places/${pollingPlace.id}/`, pollingPlaceNew, dispatch)
 
     if (response.status === 200) {
@@ -224,7 +228,7 @@ export function updatePollingPlace(
 }
 
 export function loadPollingPlaces(election: IElection, file: File, config: string | undefined, dryRun: boolean) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const data = new FormData()
     data.append('file', file)
     data.append('dry_run', dryRun === true ? '1' : '0')
@@ -244,7 +248,7 @@ export function loadPollingPlaces(election: IElection, file: File, config: strin
 }
 
 export function fetchPollingPlaceTypes() {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places_facility_types/', dispatch)
 
     if (response.status === 200) {
@@ -254,7 +258,7 @@ export function fetchPollingPlaceTypes() {
 }
 
 export function regenerateMapDataForElection(election: IElection) {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const response = await api.delete('/0.1/map/clear_cache/', dispatch, {
       election_id: election.id,
     })
@@ -262,11 +266,11 @@ export function regenerateMapDataForElection(election: IElection) {
     if (response.status !== 200) {
       dispatch(sendSnackbarNotification('Error clearing polling place data cache'))
     } else if (response.status === 200) {
-      const { response } = await api.get('/0.1/map/', dispatch, {
+      const { response: responseFetchMap } = await api.get('/0.1/map/', dispatch, {
         election_id: election.id,
       })
 
-      if (response.status === 200) {
+      if (responseFetchMap.status === 200) {
         dispatch(sendSnackbarNotification('Polling place data regenerated! 🌭🎉'))
       }
     }
@@ -290,13 +294,19 @@ export function buildNomsObject(stallNoms: INoms | null) {
   const keys = ['bbq', 'cake', 'nothing', 'run_out', 'coffee', 'vego', 'halal', 'bacon_and_eggs', 'free_text']
 
   keys.forEach((key: string) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
     const value = stallNoms[key]
 
     if (key !== 'free_text') {
       if (value === true) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore-next-line
         noms[key] = value
       }
     } else if (value !== '') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       noms[key] = value
     }
   })
@@ -328,6 +338,7 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
 
   for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
     if (key === 'run_out' || key === 'nothing') {
+      // eslint-disable-next-line no-continue
       continue
     }
 

@@ -71,9 +71,14 @@ const fromFormValues = (formValues: any) => {
 class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & IDispatchProps, IStateProps> {
   initialValues: any
 
-  canStallPropsBeMerged() {
-    const { pollingPlace, stall } = this.props
-    return stall !== undefined && pollingPlaceHasReports(pollingPlace) === false
+  UNSAFE_componentWillMount() {
+    this.initialValues = this.getInitialValues(this.props.pollingPlace, this.props.stall)
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps: IProps & IStoreProps & IDispatchProps) {
+    if (this.props.pollingPlace.id !== nextProps.pollingPlace.id || this.props.election.id !== nextProps.election.id) {
+      this.initialValues = this.getInitialValues(nextProps.pollingPlace, nextProps.stall)
+    }
   }
 
   getInitialValues(pollingPlace: IPollingPlace, stall?: IStall) {
@@ -103,14 +108,9 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
     return initialValues
   }
 
-  componentWillReceiveProps(nextProps: IProps & IStoreProps & IDispatchProps) {
-    if (this.props.pollingPlace.id !== nextProps.pollingPlace.id || this.props.election.id !== nextProps.election.id) {
-      this.initialValues = this.getInitialValues(nextProps.pollingPlace, nextProps.stall)
-    }
-  }
-
-  componentWillMount() {
-    this.initialValues = this.getInitialValues(this.props.pollingPlace, this.props.stall)
+  canStallPropsBeMerged() {
+    const { pollingPlace, stall } = this.props
+    return stall !== undefined && pollingPlaceHasReports(pollingPlace) === false
   }
 
   render() {
@@ -118,6 +118,7 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
       election,
       pollingPlace,
       onPollingPlaceEdited,
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       isDirty,
       pollingPlaceTypes,
       onFormSubmit,
@@ -133,7 +134,7 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
         isDirty={isDirty}
         stallWasMerged={this.canStallPropsBeMerged()}
         pollingPlaceTypes={pollingPlaceTypes}
-        onSubmit={(values: object, dispatch: Function, props: IProps) => {
+        onSubmit={(values: object, _dispatch: Function, _props: IProps) => {
           onFormSubmit(values, election, pollingPlace, onPollingPlaceEdited)
         }}
         onSaveForm={() => {
@@ -145,7 +146,7 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   const { polling_places } = state
 
   return {
@@ -170,7 +171,8 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
       }
       // dispatch(initialize("layerForm", layerFormValues, false))
     },
-    onSaveForm: (pollingPlace: IPollingPlace, isDirty: boolean) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    onSaveForm: (_pollingPlace: IPollingPlace, _isDirty: boolean) => {
       dispatch(submit('pollingPlace'))
     },
     onClickCopyLink() {

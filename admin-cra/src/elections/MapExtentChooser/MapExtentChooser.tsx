@@ -1,7 +1,9 @@
+/* eslint-disable import/extensions, import/no-duplicates */
 import GeoJSON from 'ol/format/GeoJSON'
 import Polygon from 'ol/geom/Polygon'
 import Draw from 'ol/interaction/Draw'
-// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 import { createBox, DrawEventType } from 'ol/interaction/Draw.js'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
@@ -40,9 +42,11 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
 
     if (this.props.value !== undefined) {
       const view = this.map.getView()
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       const polygon = new Polygon(this.props.value.coordinates).transform('EPSG:4326', 'EPSG:3857')
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore-next-line
       view.fit(polygon, {
         size: this.map.getSize(),
       })
@@ -50,33 +54,6 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
 
     const source = this.createDrawingVectorLayer()
     this.createDrawingInteraction(source)
-  }
-
-  public render() {
-    return <div id="map" style={{ width: 400, height: 300, paddingTop: 20, paddingBottom: 20 }} />
-  }
-
-  private createDrawingInteraction(source: VectorSource | null) {
-    if (this.map !== undefined && source !== null) {
-      const draw = new Draw({
-        source,
-        type: 'Circle',
-        geometryFunction: createBox(),
-      })
-      draw.on('drawstart', (event: DrawEventType) => {
-        source.clear()
-      })
-      draw.on('drawend', (event: DrawEventType) => {
-        const writer = new GeoJSON()
-        const feature = writer.writeFeatureObject(event.feature, {
-          featureProjection: 'EPSG:3857',
-          dataProjection: 'EPSG:4326',
-        })
-        // @ts-ignore
-        this.props.onChange(feature.geometry)
-      })
-      this.map.addInteraction(draw)
-    }
   }
 
   private createDrawingVectorLayer() {
@@ -103,6 +80,34 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
       return source
     }
     return null
+  }
+
+  private createDrawingInteraction(source: VectorSource | null) {
+    if (this.map !== undefined && source !== null) {
+      const draw = new Draw({
+        source,
+        type: 'Circle',
+        geometryFunction: createBox(),
+      })
+      draw.on('drawstart', (_event: DrawEventType) => {
+        source.clear()
+      })
+      draw.on('drawend', (event: DrawEventType) => {
+        const writer = new GeoJSON()
+        const feature = writer.writeFeatureObject(event.feature, {
+          featureProjection: 'EPSG:3857',
+          dataProjection: 'EPSG:4326',
+        })
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore-next-line
+        this.props.onChange(feature.geometry)
+      })
+      this.map.addInteraction(draw)
+    }
+  }
+
+  public render() {
+    return <div id="map" style={{ width: 400, height: 300, paddingTop: 20, paddingBottom: 20 }} />
   }
 }
 

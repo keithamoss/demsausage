@@ -1,9 +1,11 @@
+/* eslint-disable-next-line max-classes-per-file */
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import { blueGrey50 } from 'material-ui/styles/colors'
 import { ActionCheckCircle, ActionOpenInNew } from 'material-ui/svg-icons'
 import * as React from 'react'
 import { Link } from 'react-router'
+// eslint-disable-next-line import/no-named-default
 import { default as VirtualList } from 'react-tiny-virtual-list'
 import styled from 'styled-components'
 import ElectionChooser from '../../elections/ElectionChooser/ElectionChooserContainer'
@@ -46,7 +48,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
   constructor(props: IProps) {
     super(props)
 
-    this.onChangeType = (pollingPlace: IPollingPlace, e: any, value: string) => {
+    this.onChangeType = (pollingPlace: IPollingPlace, _e: any, value: string) => {
       props.onChangeType(value, pollingPlace)
     }
   }
@@ -91,6 +93,7 @@ class PollingPlaceTypesEditor extends React.PureComponent<IProps, {}> {
                 <div>
                   <RadioButtonGroup
                     name={`pollingPlaceTypes-${pollingPlaces[index].id}`}
+                    // eslint-disable-next-line react/jsx-no-bind
                     onChange={this.onChangeType.bind(this, pollingPlaces[index])}
                   >
                     {pollingPlaceTypes.map((type: IPollingPlaceFacilityType) => (

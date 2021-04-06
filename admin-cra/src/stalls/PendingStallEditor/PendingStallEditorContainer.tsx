@@ -64,9 +64,8 @@ class PendingStallEditorContainer extends React.Component<TComponentProps, IStat
 const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
   const { stalls, elections } = state
 
-  const stall = stalls.pending.find((stall: IPendingStall) => stall.id === parseInt(ownProps.params.stallId, 10))!
-  const election =
-    stall !== undefined ? elections.elections.find((election: IElection) => election.id === stall.election_id)! : null
+  const stall = stalls.pending.find((s: IPendingStall) => s.id === parseInt(ownProps.params.stallId, 10))!
+  const election = stall !== undefined ? elections.elections.find((e: IElection) => e.id === stall.election_id)! : null
 
   return { stall, election }
 }

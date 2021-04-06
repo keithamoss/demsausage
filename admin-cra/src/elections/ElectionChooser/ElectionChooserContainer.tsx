@@ -34,7 +34,7 @@ class ElectionChooserContainer extends React.Component<IProps & IStoreProps & ID
   }
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
+const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
   const { elections } = state
 
   return { elections: elections.elections, currentElectionId: elections.current_election_id }
@@ -42,7 +42,7 @@ const mapStateToProps = (state: IStore, ownProps: IProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
-    onChangeElection: (event: object, key: number, electionId: number, onElectionChanged: Function) => {
+    onChangeElection: (_event: object, _key: number, electionId: number, onElectionChanged: Function) => {
       dispatch(setCurrentElection(electionId))
       onElectionChanged(electionId)
     },

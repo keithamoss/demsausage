@@ -37,12 +37,15 @@ export default function reducer(state: IModule = initialState, action: IAction) 
     case LOADED:
       return dotProp.set(state, 'loading', false)
     case BEGIN_FETCH:
-      return dotProp.set(state, 'requestsInProgress', ++requestsInProgress)
+      // eslint-disable-next-line no-return-assign
+      return dotProp.set(state, 'requestsInProgress', (requestsInProgress += 1))
     case FINISH_FETCH:
-      return dotProp.set(state, 'requestsInProgress', --requestsInProgress)
+      // eslint-disable-next-line no-return-assign
+      return dotProp.set(state, 'requestsInProgress', (requestsInProgress -= 1))
     case SET_LAST_PAGE:
       return dotProp.set(state, 'previousPath', action.previousPath)
     case TOGGLE_MODAL:
+      // eslint-disable-next-line no-case-declarations
       const modals = dotProp.get(state, 'modals')
       modals.set(action.modalId, !modals.get(action.modalId))
       return dotProp.set(state, 'modals', modals)
@@ -131,7 +134,7 @@ export function getPublicSiteBaseURL(): string {
 }
 
 export function fetchInitialAppState() {
-  return async (dispatch: Function, getState: Function, api: IAPIClient) => {
+  return async (dispatch: Function, _getState: Function, _api: IAPIClient) => {
     dispatch(loading())
 
     const self: ISelf = await dispatch(fetchUser())

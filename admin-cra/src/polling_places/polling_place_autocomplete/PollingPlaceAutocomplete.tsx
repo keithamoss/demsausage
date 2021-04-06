@@ -1,3 +1,4 @@
+/* eslint-disable-next-line max-classes-per-file */
 import { AutoCompleteProps } from 'material-ui'
 import AutoComplete from 'material-ui/AutoComplete'
 import { ListItem } from 'material-ui/List'
@@ -5,7 +6,7 @@ import MenuItem from 'material-ui/MenuItem'
 import * as React from 'react'
 import styled from 'styled-components'
 import { getPollingPlaceLongName, IPollingPlace } from '../../redux/modules/polling_places'
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const reactStringReplace = require('react-string-replace')
 
 interface IProps {
@@ -35,7 +36,7 @@ class App extends React.PureComponent<IProps, {}> {
   render() {
     const { searchText, pollingPlaces, onPollingPlaceAutocompleteSelect, onChoosePollingPlace } = this.props
 
-    const pollingPlaceResults: any = pollingPlaces.map((currentValue: IPollingPlace, index: any, array: any) => {
+    const pollingPlaceResults: any = pollingPlaces.map((currentValue: IPollingPlace, _index: any, _array: any) => {
       const primaryText = reactStringReplace(
         getPollingPlaceLongName(currentValue),
         searchText,

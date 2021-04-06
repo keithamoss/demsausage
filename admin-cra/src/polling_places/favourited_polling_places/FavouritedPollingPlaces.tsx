@@ -27,7 +27,7 @@ class FavouritedPollingPlaces extends React.PureComponent<IProps, {}> {
           <EmptyState
             message={
               <div>
-                We haven't favourited any
+                We haven&apos;t favourited any
                 <br />
                 polling places for this election yet.
               </div>
