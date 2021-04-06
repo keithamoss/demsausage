@@ -11,6 +11,7 @@ import Feature from 'ol/Feature'
 // @ts-ignore
 import { xhr } from 'ol/featureloader.js'
 import GeoJSON from 'ol/format/GeoJSON'
+import Geometry from 'ol/geom/Geometry'
 import Point from 'ol/geom/Point'
 import Polygon from 'ol/geom/Polygon'
 import Interaction from 'ol/interaction/Interaction'
@@ -30,6 +31,7 @@ import Fill from 'ol/style/Fill'
 import RegularShape from 'ol/style/RegularShape'
 import Stroke from 'ol/style/Stroke'
 import Style from 'ol/style/Style'
+import VectorTile from 'ol/VectorTile'
 import View from 'ol/View'
 import * as React from 'react'
 import { getAPIBaseURL } from '../../redux/modules/app'
@@ -87,8 +89,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
       callback: (completed: boolean) => {
         if (completed === true) {
           const centre = view.getCenter()
-          centre[0] -= 1
-          view.setCenter(centre)
+          if (centre !== undefined) {
+            centre[0] -= 1
+            view.setCenter(centre)
+          }
         }
       },
     })
@@ -313,14 +317,16 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
     const vectorSource = new VectorSource({
       format: new GeoJSON(),
-      async loader(this: VectorSource, extent: any, resolution: number, projection: any) {
+      async loader(this: VectorSource<Geometry> | VectorTile, extent: any, resolution: number, projection: any) {
         if (geojson === undefined) {
           // Fetch GeoJSON from remote
           onMapBeginLoading()
           const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
-          xhr(url, this.getFormat()).call(this, extent, resolution, projection)
+          xhr(url, this.getFormat() as GeoJSON).call(this, extent, resolution, projection)
         } else {
           // Load GeoJSON from local Redux store
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore-next-line
           this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson))
         }
       },
