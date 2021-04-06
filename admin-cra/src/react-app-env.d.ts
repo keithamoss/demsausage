@@ -1,7 +1,5 @@
 /// <reference types="react-scripts" />
 
-declare module 'raven-for-redux'
-declare module 'ol-react'
 declare module 'react-google-maps-loader'
 declare module 'material-ui-chip-input'
 declare module 'react-list'

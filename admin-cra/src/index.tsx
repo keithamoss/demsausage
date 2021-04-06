@@ -1,6 +1,4 @@
-// import registerServiceWorker from "./registerServiceWorker"
-import * as createRavenMiddleware from 'raven-for-redux'
-import * as Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
@@ -16,6 +14,7 @@ import './polyfills'
 //     Middleware.push(AnalyticsMiddleware as any)
 // }
 import reducers, { IStore } from './redux/modules/reducer'
+import sentry from './redux/sentry'
 import getRoutes from './routes'
 import { APIClient } from './shared/api/APIClient'
 // const Config: IConfig = require("Config") as any
@@ -23,20 +22,17 @@ import { APIClient } from './shared/api/APIClient'
 // declare var DEVELOPMENT: boolean
 const Middleware: Array<any> = []
 
+// This should be run as soon as possible
 if ('REACT_APP_RAVEN_URL' in process.env) {
-  Raven.config(process.env.REACT_APP_RAVEN_URL!, {
+  Sentry.init({
+    dsn: process.env.REACT_APP_RAVEN_URL,
     environment: process.env.REACT_APP_ENVIRONMENT,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore-next-line
-    site: process.env.REACT_APP_RAVEN_SITE_NAME!,
-  }).install()
-  Middleware.push(
-    createRavenMiddleware(Raven, {
-      breadcrumbDataFromAction: (action: any) => {
-        return JSON.stringify(action)
-      },
-    })
-  )
+    // @ts-ignore
+    site: process.env.REACT_APP_RAVEN_SITE_NAME,
+    attachStacktrace: true,
+  })
+  Middleware.push(sentry)
 }
 
 const composeEnhancers = composeWithDevTools({

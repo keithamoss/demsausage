@@ -1,10 +1,11 @@
 /* eslint-disable import/extensions, import/no-duplicates */
 import GeoJSON from 'ol/format/GeoJSON'
+import GeometryType from 'ol/geom/GeometryType'
 import Polygon from 'ol/geom/Polygon'
 import Draw from 'ol/interaction/Draw'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-next-line
-import { createBox, DrawEventType } from 'ol/interaction/Draw.js'
+import { createBox, DrawEvent } from 'ol/interaction/Draw.js'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import Map from 'ol/Map'
@@ -86,13 +87,13 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
     if (this.map !== undefined && source !== null) {
       const draw = new Draw({
         source,
-        type: 'Circle',
+        type: GeometryType.CIRCLE,
         geometryFunction: createBox(),
       })
-      draw.on('drawstart', (_event: DrawEventType) => {
+      draw.on('drawstart', (_event: DrawEvent) => {
         source.clear()
       })
-      draw.on('drawend', (event: DrawEventType) => {
+      draw.on('drawend', (event: DrawEvent) => {
         const writer = new GeoJSON()
         const feature = writer.writeFeatureObject(event.feature, {
           featureProjection: 'EPSG:3857',
