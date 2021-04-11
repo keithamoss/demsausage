@@ -47,18 +47,18 @@ jobs:
       #     - run: sudo yarn global add pm2
 
       # Install public frontend
-      - run: pwd
-      - run: ls -l
-      - run: cd public && yarn install
-      - run: pwd
-      - run: ls -l
+      - run: cd public
+      - run: yarn install
       - run: yarn lint
-      - run: yarn build && cd ../
+      - run: yarn build
+      - run: cd ../
 
       # Install admin console
-      - run: cd admin && yarn install
+      - run: cd admin
+      - run: yarn install
       - run: yarn lint
-      - run: yarn build && cd ../
+      - run: yarn build
+      - run: cd ../
 
     # Start daemonised local dev
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
