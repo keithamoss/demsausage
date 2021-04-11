@@ -48,7 +48,13 @@ jobs:
 
       - name: Install public frontend
         run: yarn install
+        working-directory: public
+
+      - name: Lint public frontend
         run: yarn lint
+        working-directory: public
+
+      - name: Build public frontend
         run: yarn build
         working-directory: public
 
