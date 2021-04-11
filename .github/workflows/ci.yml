@@ -47,7 +47,11 @@ jobs:
       #     - run: sudo yarn global add pm2
 
       # Install public frontend
+      - run: pwd
+      - run: ls -l
       - run: cd public
+      - run: pwd
+      - run: ls -l
       - run: yarn install
       - run: yarn lint
       - run: yarn build
