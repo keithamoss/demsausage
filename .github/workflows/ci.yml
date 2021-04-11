@@ -23,39 +23,41 @@ jobs:
       # Let's get setup with Node
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: "12.x"
 
-#       - name: Install homebrew
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install libnss3-tools
-#           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-#           # Add Homebrew to path
-#           # c.f. https://github.community/t5/GitHub-Actions/Installing-Homebrew-on-Linux/td-p/51916
-#           echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+      #       - name: Install homebrew
+      #         run: |
+      #           sudo apt-get update
+      #           sudo apt-get install libnss3-tools
+      #           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      #           # Add Homebrew to path
+      #           # c.f. https://github.community/t5/GitHub-Actions/Installing-Homebrew-on-Linux/td-p/51916
+      #           echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
 
-#       - name: Setup local dev certs
-#         run: |
-#           brew install mkcert
-#           mkcert -install
-#           mkdir dev-certs
-#           cd dev-certs
-#           mkcert localhost
-#           cd ../
+      #       - name: Setup local dev certs
+      #         run: |
+      #           brew install mkcert
+      #           mkcert -install
+      #           mkdir dev-certs
+      #           cd dev-certs
+      #           mkcert localhost
+      #           cd ../
 
       # So we can daemonise yarn start
       #     - run: sudo yarn global add pm2
 
-      # Install public frontend
+      - name: Install public frontend
       - run: cd public && yarn install
+      - run: pwd
+      - run: ls -l
       - run: yarn lint
       - run: yarn build && cd ../
-      
-      # Install admin console
+
+      - name: Install admin console
       - run: cd admin && yarn install
       - run: yarn lint
       - run: yarn build && cd ../
-      
+
     # Start daemonised local dev
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
