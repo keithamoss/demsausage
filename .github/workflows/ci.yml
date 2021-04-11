@@ -46,6 +46,12 @@ jobs:
       # So we can daemonise yarn start
       #     - run: sudo yarn global add pm2
 
+      - name: Install public frontend
+        run: yarn install
+        run: yarn lint
+        run: yarn build
+        working-directory: public
+
       # Install public frontend
       - run: pwd
       - run: ls -l
