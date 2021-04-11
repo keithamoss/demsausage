@@ -58,23 +58,17 @@ jobs:
         run: yarn build
         working-directory: public
 
-      # Install public frontend
-      - run: pwd
-      - run: ls -l
-      - run: cd public
-      - run: pwd
-      - run: ls -l
-      - run: yarn install
-      - run: yarn lint
-      - run: yarn build
-      - run: cd ../
+      - name: Install admin console
+        run: yarn install
+        working-directory: admin
 
-      # Install admin console
-      - run: cd admin
-      - run: yarn install
-      - run: yarn lint
-      - run: yarn build
-      - run: cd ../
+      - name: Lint admin console
+        run: yarn lint
+        working-directory: admin
+
+      - name: Build admin console
+        run: yarn build
+        working-directory: admin
 
     # Start daemonised local dev
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
