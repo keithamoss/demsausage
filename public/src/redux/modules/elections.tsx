@@ -164,6 +164,28 @@ export interface IElectionStatsNoms {
   expected_voters: number
 }
 
+export interface ISausagelyticsStateStats {
+  state: IElectionStateStats
+}
+
+export interface IElectionStateStats {
+  domain: string
+  data: IElectionStateStatsData
+}
+
+export interface IElectionStateStatsData {
+  all_booths: {
+    booth_count: number
+  }
+  all_booths_by_noms: {
+    [key: string]: IElectionStateStatsNoms
+  }
+}
+
+export interface IElectionStateStatsNoms {
+  booth_count: number
+}
+
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
 export function fetchElections() {

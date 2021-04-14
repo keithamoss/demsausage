@@ -181,7 +181,7 @@ const getPie = (stats: IElectionStats, style: any = undefined) => {
   )
 }
 
-class Sausagelytics extends React.PureComponent<IProps, {}> {
+class SausagelyticsFederal extends React.PureComponent<IProps, {}> {
   private groupStateStatsByNoms() {
     const { stats } = this.props
     const statsGrouped: any = []
@@ -342,4 +342,4 @@ class Sausagelytics extends React.PureComponent<IProps, {}> {
   }
 }
 
-export default Sausagelytics
+export default SausagelyticsFederal

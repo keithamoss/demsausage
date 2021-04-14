@@ -1,8 +1,14 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { fetchElectionStats, IElection, ISausagelyticsStats } from '../../redux/modules/elections'
+import {
+  fetchElectionStats,
+  IElection,
+  ISausagelyticsStateStats,
+  ISausagelyticsStats,
+} from '../../redux/modules/elections'
 import { IStore } from '../../redux/modules/reducer'
-import Sausagelytics from './Sausagelytics'
+import SausagelyticsFederal from './SausagelyticsFederal'
+import SausagelyticsState from './SausagelyticsState'
 
 interface IProps {}
 
@@ -15,7 +21,7 @@ interface IStoreProps {
 }
 
 interface IStateProps {
-  stats: ISausagelyticsStats | undefined
+  stats: ISausagelyticsStats | ISausagelyticsStateStats | undefined
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
@@ -49,10 +55,14 @@ class SausagelyticsContainer extends React.Component<TComponentProps, IStateProp
     const { stats } = this.state
 
     if (stats === undefined || stats === null) {
-      return null
+      return <div>No stats are available for this election 😢</div>
     }
 
-    return <Sausagelytics election={currentElection} stats={stats} />
+    return currentElection.id === 27 ? (
+      <SausagelyticsFederal election={currentElection} stats={stats as ISausagelyticsStats} />
+    ) : (
+      <SausagelyticsState election={currentElection} stats={stats as ISausagelyticsStateStats} />
+    )
   }
 }
 
