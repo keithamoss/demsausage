@@ -13,6 +13,10 @@ export class APIClient {
   }
 
   public handleResponse(url: string, response: any, dispatch: any) {
+    if (response.status === 404) {
+      return { response, undefined }
+    }
+
     if (response.status >= 401) {
       return response
         .json()
