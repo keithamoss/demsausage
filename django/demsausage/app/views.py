@@ -23,7 +23,8 @@ from demsausage.app.sausage.mailgun import (make_confirmation_hash,
 from demsausage.app.sausage.polling_places import (
     data_quality, find_by_distance, find_by_lookup_terms, find_by_stall,
     get_active_polling_place_queryset)
-from demsausage.app.sausage.sausagelytics import FederalSausagelytics
+from demsausage.app.sausage.sausagelytics import (FederalSausagelytics,
+                                                  StateSausagelytics)
 from demsausage.app.serializers import (ElectionsSerializer,
                                         ElectionsStatsSerializer,
                                         MailgunEventsSerializer,
@@ -187,10 +188,12 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.id != 27:
+        if election.id == 27:
+            stats = FederalSausagelytics(election)
+        elif election.short_name.startswith("FED ") == False:
+            stats = StateSausagelytics(election)
+        else:
             return HttpResponseNotFound()
-
-        stats = FederalSausagelytics(election)
         return Response(stats.get_stats())
 
     @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))

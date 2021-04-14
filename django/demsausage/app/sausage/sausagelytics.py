@@ -1,8 +1,8 @@
-from django.db.models import F, Sum, Count, IntegerField, Q
-from django.db.models.functions import Cast
+from demsausage.app.sausage.polling_places import \
+    get_active_polling_place_queryset
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
-
-from demsausage.app.sausage.polling_places import get_active_polling_place_queryset
+from django.db.models import Count, F, IntegerField, Q, Sum
+from django.db.models.functions import Cast
 
 
 class SausagelyticsBase():
@@ -160,3 +160,42 @@ class FederalSausagelytics(SausagelyticsBase):
     def _group_by_noms(self, queryset, noms_name):
         queryset_with_noms = queryset.filter(noms__isnull=False).filter(**{"noms__noms__{}".format(noms_name): True})
         return self._cast_vote_counts_to_numbers(queryset_with_noms).aggregate(expected_voters=Sum(F("ordvoteest") + F("decvoteest")))
+
+
+class StateSausagelytics(SausagelyticsBase):
+    def get_stats(self):
+        return {
+            "state": self._get_stats_for_state(),
+        }
+
+    def get_queryset(self):
+        return super(StateSausagelytics, self).get_queryset().exclude(state__exact="Overseas")
+
+    def _get_stats_for_state(self):
+        # Calculate stats for all booths in the state
+        queryset_all_booths = super(StateSausagelytics, self).get_queryset()
+
+        data = {
+            "domain": queryset_all_booths.first().state,
+            "data": {
+                "all_booths": {
+                    "booth_count": queryset_all_booths.count(),
+                },
+                "all_booths_by_noms": {}
+            }
+        }
+
+        # Calculate stats for booths by noms in the state
+        for noms_name in self.noms_names:
+            queryset_stats_with_this_noms = self._filter_by_noms(queryset_all_booths, noms_name)
+
+            for stats in queryset_stats_with_this_noms:
+                data["data"]["all_booths_by_noms"][noms_name] = {
+                    "booth_count": stats["booth_count"],
+                }
+
+        return data
+
+    def _filter_by_noms(self, queryset, noms_name):
+        queryset_with_noms = queryset.filter(noms__isnull=False).filter(**{"noms__noms__{}".format(noms_name): True})
+        return queryset_with_noms.values("state").annotate(booth_count=Count("state"))
