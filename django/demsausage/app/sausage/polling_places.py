@@ -1,12 +1,11 @@
+from demsausage.util import get_or_none
 from django.contrib.gis import measure
 from django.contrib.gis.db.models.functions import Distance
 
-from demsausage.util import get_or_none
-
 
 def get_active_polling_place_queryset():
-    from demsausage.app.models import PollingPlaces
     from demsausage.app.enums import PollingPlaceStatus
+    from demsausage.app.models import PollingPlaces
 
     return PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
 
@@ -56,7 +55,7 @@ def getFoodDescription(stall):
     descriptions = [{"key": "bbq", "descriptor": "sausage sizzle"},
                     {"key": "cake", "descriptor": "cake stall"},
                     {"key": "coffee", "descriptor": "coffee"},
-                    {"key": "vego", "descriptor": "vegetarian options"},
+                    {"key": "vego", "descriptor": "savoury vegetarian options"},
                     {"key": "halal", "descriptor": "halal options"},
                     {"key": "bacon_and_eggs", "descriptor": "bacon and egg burgers"}]
     noms = []

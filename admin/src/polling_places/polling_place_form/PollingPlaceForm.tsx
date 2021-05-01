@@ -108,7 +108,7 @@ class PollingPlaceForm extends React.PureComponent<IProps, {}> {
                 rightToggle={<DeliciousnessToggle name="cake" />}
               />
               <ListItem
-                primaryText="Are there vegetarian options?"
+                primaryText="Are there savoury vegetarian options?"
                 leftIcon={<VegoIcon />}
                 rightToggle={<DeliciousnessToggle name="vego" />}
               />

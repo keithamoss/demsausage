@@ -408,7 +408,7 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
     noms.push('bacon and egg burgers')
   }
   if ('vego' in pollingPlace.stall.noms && pollingPlace.stall.noms.vego) {
-    noms.push('vegetarian options')
+    noms.push('savoury vegetarian options')
   }
   if ('halal' in pollingPlace.stall.noms && pollingPlace.stall.noms.halal) {
     noms.push('halal options')

@@ -353,7 +353,7 @@ export const getElectionsToShowInAppBar = (
 //     }
 
 //     if ("ttl_vego" in election.stats) {
-//         description.push(`Vegetarian Options: ${election.stats.ttl_vego}`)
+//         description.push(`Savoury Vegetarian Options: ${election.stats.ttl_vego}`)
 //     }
 
 //     if ("ttl_free_text" in election.stats) {

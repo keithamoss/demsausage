@@ -118,7 +118,7 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
           <List>
             <ListItem disabled={true} primaryText="There's a sausage sizzle here" leftIcon={<SausageIcon />} />
             <ListItem disabled={true} primaryText="There's a cake stall here" leftIcon={<CakeIcon />} />
-            <ListItem disabled={true} primaryText="This booth has vegetarian options" leftIcon={<VegoIcon />} />
+            <ListItem disabled={true} primaryText="This booth has savoury vegetarian options" leftIcon={<VegoIcon />} />
             <ListItem disabled={true} primaryText="This booth has halal food" leftIcon={<HalalIcon />} />
             <ListItem disabled={true} primaryText="There's coffee available" leftIcon={<CoffeeIcon />} />
             <ListItem

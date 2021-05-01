@@ -120,7 +120,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
               )}
 
               {stall.noms.vego && (
-                <IconButton tooltip="Vegetarian Options" touch={true}>
+                <IconButton tooltip="Savoury Vegetarian Options" touch={true}>
                   <VegoIcon />
                 </IconButton>
               )}
