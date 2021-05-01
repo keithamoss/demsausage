@@ -101,8 +101,8 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
                 Question mark (by Dave Gandy)
               </a>
               , <a href="https://www.flaticon.com/free-icon/remove_189690">Run out (by Roundicons)</a>,{' '}
-              <a href="https://www.flaticon.com/free-icon/vegetables_498229">Vegetables in crate (by Freepik)</a>,{' '}
-              <a href="https://www.flaticon.com/free-icon/coffee_1585293">Coffee cup (by Freepik)</a>, and{' '}
+              <a href="https://www.flaticon.com/free-icon/vegetarian_723632">Carrot on a bbq fork (by Pixel perfect)</a>
+              , <a href="https://www.flaticon.com/free-icon/coffee_1585293">Coffee cup (by Freepik)</a>, and{' '}
               <a href="https://www.flaticon.com/free-icon/egg-and-bacon_648653">Eggs and bacons (by Freepik)</a>.
             </li>
             <li>
