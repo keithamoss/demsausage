@@ -1,0 +1,27 @@
+{
+    "rename_columns": {
+        "Premise Name": "premises",
+        "Polling Place Name": "name",
+        "State": "state",
+        "Premise Latitude": "lat",
+        "Premise Longitude": "lon",
+        "Division": "divisions",
+        "Disabled Access": "wheelchair_access"
+    },
+    "address_fields": [
+        "Address",
+        "City",
+        "Postcode"
+    ],
+    "extras": {
+        "fields": [
+            "Location Within Premise",
+            "Dual polling place",
+            "Vision impaired voting service"
+        ]
+    },
+    "address_format": "{Address} {City}, {Postcode}",
+    "geocoding": {
+        "enabled": false
+    }
+}
