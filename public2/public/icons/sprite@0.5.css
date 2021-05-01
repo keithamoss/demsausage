@@ -1,4 +1,4 @@
-/* glue: 0.13 hash: ab97341dab */
+/* glue: 0.13 hash: 8d7a020c93 */
         .sprite_05-cake_tick,
 .sprite_05-cake_run_out,
 .sprite_05-cake_plus,
@@ -20,7 +20,7 @@
 .sprite_05-bbq,
 .sprite_05-bacon_and_eggs,
 .sprite_05-unknown {
-            background-image: url('sprite@0.5_ab97341dab.png');
+            background-image: url('sprite@0.5_8d7a020c93.png');
             background-repeat: no-repeat;
         }
         
@@ -172,7 +172,7 @@
     .sprite_05-bbq,
     .sprite_05-bacon_and_eggs,
     .sprite_05-unknown {
-                background-image: url('sprite@0.5_ab97341dab.png');
+                background-image: url('sprite@0.5_8d7a020c93.png');
                 -webkit-background-size: 194px 149px;
                 -moz-background-size: 194px 149px;
                 background-size: 194px 149px;
