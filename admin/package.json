@@ -43,7 +43,7 @@
     "@types/lodash-es": "^4.17.4",
     "@types/luxon": "^1.26.5",
     "@types/material-ui": "^0.21.8",
-    "@types/node": "^15.0.1",
+    "@types/node": "^15.0.2",
     "@types/ol": "^6.4.2",
     "@types/prop-types": "^15.7.3",
     "@types/qs": "^6.9.6",
