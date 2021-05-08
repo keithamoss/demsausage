@@ -44,7 +44,7 @@
     "reselect": "^4.0.0",
     "styled-components": "^5.3.0",
     "victory": "^35.5.1",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^1.1.2"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
