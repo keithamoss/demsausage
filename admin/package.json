@@ -50,7 +50,7 @@
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
     "@types/react-redux": "^7.1.16",
-    "@types/react-router": "3.0.24",
+    "@types/react-router": "5.1.15",
     "@types/react-router-redux": "^4.0.44",
     "@types/recompose": "^0.30.7",
     "@types/redux-form": "^8.3.1",
