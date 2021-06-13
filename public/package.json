@@ -54,7 +54,7 @@
     "@types/luxon": "^1.27.0",
     "@types/material-ui": "^0.21.8",
     "@types/node": "^15.12.2",
-    "@types/ol": "^6.4.2",
+    "@types/ol": "^6.5.1",
     "@types/prop-types": "^15.7.3",
     "@types/qs": "^6.9.6",
     "@types/react": "^17.0.11",

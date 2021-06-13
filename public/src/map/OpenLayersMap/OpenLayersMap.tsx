@@ -322,7 +322,15 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
           // Fetch GeoJSON from remote
           onMapBeginLoading()
           const url = `${getAPIBaseURL()}/0.1/map/?election_id=${election.id}&s=${Date.now()}`
-          xhr(url, this.getFormat() as GeoJSON).call(this, extent, resolution, projection)
+          // https://openlayers.org/en/latest/apidoc/module-ol_featureloader.html#~FeatureLoader
+          xhr(url, this.getFormat() as GeoJSON).call(
+            this,
+            extent,
+            resolution,
+            projection,
+            () => {},
+            () => {}
+          )
         } else {
           // Load GeoJSON from local Redux store
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
