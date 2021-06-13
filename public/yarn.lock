@@ -1953,13 +1953,14 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/ol@^6.4.2":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.4.2.tgz#3992e2f06fb3c224cda28e6727bc283febd5f8ff"
-  integrity sha512-lSms1n5obkacAosby0U3HtnDkjhEXNCYNj0BYjQXyAZHz7+QkA3SuvUHiQ91DBUaAPptCrps3E2mtaPTGw74UA==
+"@types/ol@^6.5.1":
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.5.1.tgz#148def5e5370da4fdf0da65b0e8657c816d79ed8"
+  integrity sha512-SHQjTKZ0s5EvhSnI0nyXEhmS/Ez+045c0TvSad0bZmwgldOsVTCG4b43G7q9dHjN+FQIET1Y4s/i2JFDsEZqEA==
   dependencies:
     "@types/arcgis-rest-api" "*"
     "@types/geojson" "*"
+    "@types/rbush" "*"
     "@types/topojson-specification" "*"
 
 "@types/parse-json@^4.0.0":
@@ -1986,6 +1987,11 @@
   version "6.9.6"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.6.tgz#df9c3c8b31a247ec315e6996566be3171df4b3b1"
   integrity sha512-0/HnwIfW4ki2D8L8c9GVcG5I72s9jP5GSLVF0VIXDW00kmIpA6O33G7a8n59Tmh7Nz0WUC3rSb7PTY/sdW2JzA==
+
+"@types/rbush@*":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/rbush/-/rbush-3.0.0.tgz#b6887d99b159e87ae23cd14eceff34f139842aa6"
+  integrity sha512-W3ue/GYWXBOpkRm0VSoifrP3HV0Ni47aVJWvXyWMcbtpBy/l/K/smBRiJ+fI8f7shXRjZBiux+iJzYbh7VmcZg==
 
 "@types/react-addons-linked-state-mixin@*":
   version "0.14.21"
