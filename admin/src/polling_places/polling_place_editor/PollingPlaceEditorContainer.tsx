@@ -58,14 +58,8 @@ class PollingPlaceEditorContainer extends React.Component<TComponentProps, IStat
   }
 
   render() {
-    const {
-      election,
-      stall,
-      showAutoComplete,
-      showElectionChooser,
-      onPollingPlaceEdited,
-      onElectionChanged,
-    } = this.props
+    const { election, stall, showAutoComplete, showElectionChooser, onPollingPlaceEdited, onElectionChanged } =
+      this.props
     const pollingPlace: any = this.state !== null && this.state.pollingPlace !== null ? this.state.pollingPlace : null
 
     if (

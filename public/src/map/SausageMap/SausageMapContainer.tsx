@@ -107,13 +107,8 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
   }
 
   render() {
-    const {
-      currentElection,
-      geolocationSupported,
-      fetchQueriedPollingPlaces,
-      mapSearchResults,
-      onClearMapSearch,
-    } = this.props
+    const { currentElection, geolocationSupported, fetchQueriedPollingPlaces, mapSearchResults, onClearMapSearch } =
+      this.props
     const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
 
     return (

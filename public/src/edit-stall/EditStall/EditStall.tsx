@@ -37,17 +37,8 @@ const BodyText = styled.p`
 
 class EditStall extends React.PureComponent<IProps, {}> {
   render() {
-    const {
-      showAPIErrors,
-      showWelcome,
-      showThankYou,
-      showForm,
-      stall,
-      election,
-      errors,
-      credentials,
-      onStallUpdated,
-    } = this.props
+    const { showAPIErrors, showWelcome, showThankYou, showForm, stall, election, errors, credentials, onStallUpdated } =
+      this.props
 
     return (
       <EditStallUIContainer>
