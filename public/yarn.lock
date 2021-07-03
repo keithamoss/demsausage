@@ -2132,10 +2132,10 @@
   dependencies:
     source-map "^0.6.1"
 
-"@types/victory@^33.1.4":
-  version "33.1.4"
-  resolved "https://registry.yarnpkg.com/@types/victory/-/victory-33.1.4.tgz#b843b7cee8ed1ab846d4dd03eb048a178e197b4c"
-  integrity sha512-y0uROW9/p2ltaZW+VcH1llrtu6Uwp1lSJ8zZbVjcXJJgddU3Is2aUvU6PxFQhbjBMtjaqNdw1tH/44c5bn/Zsw==
+"@types/victory@^33.1.5":
+  version "33.1.5"
+  resolved "https://registry.yarnpkg.com/@types/victory/-/victory-33.1.5.tgz#de1ee8ddc685582b9e394baff03606f87d627d4b"
+  integrity sha512-Lpi1kAlZ4+gY7oH3tRcmJs4YhTIJTTJxkQkyYTK7CtTHl+S6Xf7E7e207eq6D/Dn9UQAB7PCrNrzTGtO5+9GGQ==
   dependencies:
     "@types/react" "*"
 

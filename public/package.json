@@ -66,7 +66,7 @@
     "@types/recompose": "^0.30.7",
     "@types/redux-form": "^8.3.1",
     "@types/styled-components": "^5.1.10",
-    "@types/victory": "^33.1.4",
+    "@types/victory": "^33.1.5",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",
