@@ -55,7 +55,7 @@
     "@types/material-ui": "^0.21.9",
     "@types/node": "^16.0.0",
     "@types/ol": "^6.5.2",
-    "@types/prop-types": "^15.7.3",
+    "@types/prop-types": "^15.7.4",
     "@types/qs": "^6.9.6",
     "@types/react": "^17.0.13",
     "@types/react-copy-to-clipboard": "^5.0.1",
