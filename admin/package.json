@@ -53,7 +53,7 @@
     "@types/react-router": "3.0.24",
     "@types/react-router-redux": "^4.0.44",
     "@types/recompose": "^0.30.7",
-    "@types/redux-form": "^8.3.1",
+    "@types/redux-form": "^8.3.2",
     "@types/styled-components": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.2",
