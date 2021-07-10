@@ -1978,10 +1978,10 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/ol@^6.5.2":
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.5.2.tgz#06184728abdae557f1f367bd2e9adb10b9a6ebc6"
-  integrity sha512-lUWXoYqtv7SEa0IXsgOQxUhEmQL8bZ1/zGgB8BZJXq3KEAi6BXAm7BPtkd5UjUvICyCffDdYzhO1J3/g6VIFDw==
+"@types/ol@^6.5.3":
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.5.3.tgz#ffb324d92a6efaedc5903a823f0ce51a085e2a31"
+  integrity sha512-C0Sm5dytTfRxztYFMuWq0IBJYfMffPF4GzXI/s4ZyJlNZ8AAdS+9fW0iGOyYkTb3ZQmfYWYdAzMqwGXfHVw+3A==
   dependencies:
     "@types/arcgis-rest-api" "*"
     "@types/geojson" "*"
