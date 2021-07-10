@@ -52,7 +52,7 @@
     "@types/js-cookie": "^2.2.7",
     "@types/lodash-es": "^4.17.4",
     "@types/luxon": "^1.27.1",
-    "@types/material-ui": "^0.21.8",
+    "@types/material-ui": "^0.21.9",
     "@types/node": "^16.0.0",
     "@types/ol": "^6.5.2",
     "@types/prop-types": "^15.7.3",
