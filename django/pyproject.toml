@@ -24,7 +24,7 @@ django-pymemcache = "^1.0.0"
 djangorestframework-gis = "^0.17"
 django-filter = "^2.4.0"
 djangorestframework-csv = "^2.1.1"
-requests = "^2.25.1"
+requests = "^2.26.0"
 chardet = "^4.0.0"
 drf-spectacular = "^0.17.2"
 
