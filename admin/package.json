@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^13.1.9",
     "copy-to-clipboard": "^3.3.1",
     "core-js": "^3.15.2",
-    "dot-prop-immutable": "^2.1.0",
+    "dot-prop-immutable": "^2.1.1",
     "js-cookie": "^2.2.1",
     "lodash-es": "^4.17.21",
     "luxon": "^2.0.1",
