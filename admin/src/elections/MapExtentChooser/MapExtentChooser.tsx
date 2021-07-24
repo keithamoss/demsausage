@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions, import/no-duplicates */
 import GeoJSON from 'ol/format/GeoJSON'
+import Geometry from 'ol/geom/Geometry'
 import GeometryType from 'ol/geom/GeometryType'
 import Polygon from 'ol/geom/Polygon'
 import Draw from 'ol/interaction/Draw'
@@ -83,7 +84,7 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
     return null
   }
 
-  private createDrawingInteraction(source: VectorSource | null) {
+  private createDrawingInteraction(source: VectorSource<Geometry> | null) {
     if (this.map !== undefined && source !== null) {
       const draw = new Draw({
         source,

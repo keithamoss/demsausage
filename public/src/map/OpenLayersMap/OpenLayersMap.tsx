@@ -5,7 +5,7 @@
 import { MapBrowserEvent } from 'ol.js'
 import Attribution from 'ol/control/Attribution'
 import Control from 'ol/control/Control'
-import Event from 'ol/events/Event'
+import BaseEvent from 'ol/events/Event'
 import Feature from 'ol/Feature'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -157,7 +157,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     // 4. Remove all layers, controls, and interactions on the map
     if (this.map !== null) {
       const layers = [...this.map.getLayers().getArray()]
-      layers.forEach((l: BaseLayer | VectorLayer) => {
+      layers.forEach((l: BaseLayer) => {
         if (this.map !== null) {
           this.map.removeLayer(l)
         }
@@ -203,9 +203,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     this.timeoutIds.push(timeoutId)
   }
 
-  private onVectorSourceChanged(event: Event) {
+  private onVectorSourceChanged(event: BaseEvent) {
     const { geojson, mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props
-    const vectorSource = event.target
+    const vectorSource = event.target as VectorSource<Geometry>
 
     if (vectorSource.getState() === 'ready') {
       // Cache GeoJSON features in the local Redux store for recycling if the user navigates back
@@ -357,7 +357,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer | null {
+  private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer<VectorSource<Geometry>> | null {
     let layer = null
     map.getLayers().forEach((l: BaseLayer) => {
       const props = l.getProperties()
