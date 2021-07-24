@@ -43,7 +43,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^5.3.0",
-    "victory": "^35.9.1",
+    "victory": "^35.9.3",
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
