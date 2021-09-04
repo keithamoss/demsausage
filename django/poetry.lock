@@ -195,7 +195,7 @@ djangorestframework = "*"
 
 [[package]]
 name = "drf-spectacular"
-version = "0.18.0"
+version = "0.18.1"
 description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework"
 category = "main"
 optional = false
@@ -562,7 +562,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b12a50c3eb533598fc6d943bbbda44d4d62c99f46b96c447a8aafe9cbd3d4b79"
+content-hash = "f08de3e0d4eaaf630c681c04ea8b36b92068864284e8bc11d465d7d034fdbe3b"
 
 [metadata.files]
 asgiref = [
@@ -692,8 +692,8 @@ djangorestframework-gis = [
     {file = "djangorestframework_gis-0.17-py2.py3-none-any.whl", hash = "sha256:5be17e27cf2be33ac6119e6d2206d3d81183c62d03aaa9b814ce95a82256614f"},
 ]
 drf-spectacular = [
-    {file = "drf-spectacular-0.18.0.tar.gz", hash = "sha256:5b1c27de127c86564be5a967a6fa195cfe161b552d98364282ae9e6ed3d75a85"},
-    {file = "drf_spectacular-0.18.0-py3-none-any.whl", hash = "sha256:8588706c27f44adfbb3405bae9ef9cd6506f4b59d4cbd66c59780dce035602d9"},
+    {file = "drf-spectacular-0.18.1.tar.gz", hash = "sha256:98681add6671db9e6dba5f0d3dcf8aab5950cbb978497390507356e593bf082f"},
+    {file = "drf_spectacular-0.18.1-py3-none-any.whl", hash = "sha256:a430bab0f4ecfc90786b7b63bbee3f9a56094201fbed9bdfbf952e99e6469104"},
 ]
 gevent = [
     {file = "gevent-21.8.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:e91632fdcf1c9a33e97e35f96edcbdf0b10e36cf53b58caa946dca4836bb688c"},
