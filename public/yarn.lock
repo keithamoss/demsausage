@@ -2119,12 +2119,12 @@
   dependencies:
     source-map "^0.6.1"
 
-"@types/victory@^33.1.5":
-  version "33.1.5"
-  resolved "https://registry.yarnpkg.com/@types/victory/-/victory-33.1.5.tgz#de1ee8ddc685582b9e394baff03606f87d627d4b"
-  integrity sha512-Lpi1kAlZ4+gY7oH3tRcmJs4YhTIJTTJxkQkyYTK7CtTHl+S6Xf7E7e207eq6D/Dn9UQAB7PCrNrzTGtO5+9GGQ==
+"@types/victory@^35.0.0":
+  version "35.0.0"
+  resolved "https://registry.yarnpkg.com/@types/victory/-/victory-35.0.0.tgz#57d81e24314fcccf9e63807f6933e8a57768741b"
+  integrity sha512-17Ed/5fSNmIj2APAdM95R4IkJObrOGrHs+YTOwxW28hJvG5XH0uVGxdjLjA5yyoCTPEGQ9i0KKVdQMRjtY2EiQ==
   dependencies:
-    "@types/react" "*"
+    victory "*"
 
 "@types/webpack-sources@*":
   version "2.1.0"
@@ -12912,7 +12912,7 @@ victory-zoom-container@^36.0.0:
     prop-types "^15.5.8"
     victory-core "^36.0.0"
 
-victory@^36.0.1:
+victory@*, victory@^36.0.1:
   version "36.0.1"
   resolved "https://registry.yarnpkg.com/victory/-/victory-36.0.1.tgz#ffb0b805b30f49822d46782f2a8c7a805cbfdcbd"
   integrity sha512-WEfV7Nw1WcbKNXBU2r89SlvUFjClNmo4hZU8y/IB/yb9KaNm1u+JzicwfmGzRUHbtyr9UQfP5+xEGJZ/LcrtAw==
