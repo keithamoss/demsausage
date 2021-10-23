@@ -62,7 +62,7 @@
     "@types/react-redux": "^7.1.19",
     "@types/react-router": "3.0.27",
     "@types/react-router-redux": "^4.0.53",
-    "@types/recompose": "^0.30.8",
+    "@types/recompose": "^0.30.9",
     "@types/redux-form": "^8.3.2",
     "@types/styled-components": "^5.1.15",
     "@types/victory": "^35.0.0",
