@@ -2037,10 +2037,10 @@
     "@types/history" "^3"
     redux "^3.6.0"
 
-"@types/react-router@3.0.26":
-  version "3.0.26"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.26.tgz#09406b00e1df696311ce365819b5a21efea99975"
-  integrity sha512-fXijsAY9jFSQbdTz8e4QCMm2s8xkd6HPnYQcg57K4H+Hy5xeB+i2zbY7BaURGewWecN56oILH93AjaYB3BfVig==
+"@types/react-router@3.0.27":
+  version "3.0.27"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.27.tgz#db78ffc4141e5b2d5b0e29bb5565094c05d864d3"
+  integrity sha512-Sq4bfTZ8TuHFTHXyzA3tu/BTGm/d4B8CwtOK4qOyJNoJMkY87qMOazkBizMHNpszVR1+kYOCNLjPdh/wAD7ESw==
   dependencies:
     "@types/history" "^3"
     "@types/react" "*"
