@@ -2054,10 +2054,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/recompose@^0.30.8":
-  version "0.30.8"
-  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.30.8.tgz#e42e6be3426b464466aff3c9691157a8ff49c618"
-  integrity sha512-AfyR61Y2eTGGQ2KLBY2CP8Q49GAI/49jlwI2nejgR93yleekdYxg5D1LuoNBq5mAd0PNbNLcMjEKo71f4AK+KA==
+"@types/recompose@^0.30.9":
+  version "0.30.9"
+  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.30.9.tgz#51bdde3819e8446ec3f36f2070d498af3122f966"
+  integrity sha512-rw72/l+ZJbV5xsSsneGjvTZpTjGR7qFNFUW5jcOJr74n4TYIQLiLLFB8I8FMKM/fusjvGK0/Lmyyg8UEPoqZNQ==
   dependencies:
     "@types/react" "*"
 
