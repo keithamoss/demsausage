@@ -1950,10 +1950,10 @@
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.0.5.tgz#29d3b095d55ee50df8f4cf109b16009334d9828e"
   integrity sha512-GKrG5v16BOs9XGpouu33hOkAFaiSDi3ZaDXG9F2yAoyzHRBtksZnI60VWY5aM/yAENCccBejrxw8jDY+9OVlxw==
 
-"@types/material-ui@^0.21.10":
-  version "0.21.10"
-  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.21.10.tgz#7a793256b4c49c38ad9745b4d6ac6f6c6314e15f"
-  integrity sha512-IC5HJA5u/+oyBqdSFB0H9+3Bgq5YuJFudsYwfkPxHStg3cPW+cIk9fqIJpFJTBmaHEkxx3ShvsttkQGgZn8AjA==
+"@types/material-ui@^0.21.12":
+  version "0.21.12"
+  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.21.12.tgz#208e8b7e49a545bb704fa7e865986afde1b33384"
+  integrity sha512-rBY3iOr5LISKDLAYo3229R79xIPPKSOL2c7FzAFn5dUj38Oe7rQldYedHWsYmkJUeboE9Ipad7ppyJwBzXxrMw==
   dependencies:
     "@types/react" "*"
     "@types/react-addons-linked-state-mixin" "*"
@@ -2037,10 +2037,10 @@
     "@types/history" "^3"
     redux "^3.6.0"
 
-"@types/react-router@3.0.26":
-  version "3.0.26"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.26.tgz#09406b00e1df696311ce365819b5a21efea99975"
-  integrity sha512-fXijsAY9jFSQbdTz8e4QCMm2s8xkd6HPnYQcg57K4H+Hy5xeB+i2zbY7BaURGewWecN56oILH93AjaYB3BfVig==
+"@types/react-router@3.0.27":
+  version "3.0.27"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.27.tgz#db78ffc4141e5b2d5b0e29bb5565094c05d864d3"
+  integrity sha512-Sq4bfTZ8TuHFTHXyzA3tu/BTGm/d4B8CwtOK4qOyJNoJMkY87qMOazkBizMHNpszVR1+kYOCNLjPdh/wAD7ESw==
   dependencies:
     "@types/history" "^3"
     "@types/react" "*"
@@ -2054,10 +2054,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/recompose@^0.30.8":
-  version "0.30.8"
-  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.30.8.tgz#e42e6be3426b464466aff3c9691157a8ff49c618"
-  integrity sha512-AfyR61Y2eTGGQ2KLBY2CP8Q49GAI/49jlwI2nejgR93yleekdYxg5D1LuoNBq5mAd0PNbNLcMjEKo71f4AK+KA==
+"@types/recompose@^0.30.9":
+  version "0.30.9"
+  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.30.9.tgz#51bdde3819e8446ec3f36f2070d498af3122f966"
+  integrity sha512-rw72/l+ZJbV5xsSsneGjvTZpTjGR7qFNFUW5jcOJr74n4TYIQLiLLFB8I8FMKM/fusjvGK0/Lmyyg8UEPoqZNQ==
   dependencies:
     "@types/react" "*"
 
@@ -6446,10 +6446,10 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-husky@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-7.0.2.tgz#21900da0f30199acca43a46c043c4ad84ae88dff"
-  integrity sha512-8yKEWNX4z2YsofXAMT7KvA1g8p+GxtB1ffV8XtpAEGuXNAbCV5wdNKH+qTpw8SM9fh4aMPDR+yQuKfgnreyZlg==
+husky@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-7.0.4.tgz#242048245dc49c8fb1bf0cc7cfb98dd722531535"
+  integrity sha512-vbaCKN2QLtP/vD4yvs6iz6hBEo6wkSzs8HpRah1Z6aGmF2KW5PdYuAd7uX5a+OyBZHBhd+TFLqgjUgytQr4RvQ==
 
 hyphenate-style-name@^1.0.2:
   version "1.0.4"
