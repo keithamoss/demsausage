@@ -129,7 +129,7 @@ Django = ">=2.2"
 
 [[package]]
 name = "django-model-utils"
-version = "4.1.1"
+version = "4.2.0"
 description = "Django model mixins and utilities"
 category = "main"
 optional = false
@@ -565,7 +565,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9dbd373e348bfefb88c9a047fbc681f279875b19fdd4879ca0d09dfd1e420e75"
+content-hash = "eab13290cee246b2c788b9880c5391237ad44c9f7f3bb4bbe0812027aab61db7"
 
 [metadata.files]
 asgiref = [
@@ -672,8 +672,8 @@ django-filter = [
     {file = "django_filter-21.1-py3-none-any.whl", hash = "sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063"},
 ]
 django-model-utils = [
-    {file = "django-model-utils-4.1.1.tar.gz", hash = "sha256:eb5dd05ef7d7ce6bc79cae54ea7c4a221f6f81e2aad7722933aee66489e7264b"},
-    {file = "django_model_utils-4.1.1-py3-none-any.whl", hash = "sha256:ef7c440024e797796a3811432abdd2be8b5225ae64ef346f8bfc6de7d8e5d73c"},
+    {file = "django-model-utils-4.2.0.tar.gz", hash = "sha256:e7a95e102f9c9653427eadab980d5d59e1dea972913b9c9e01ac37f86bba0ddf"},
+    {file = "django_model_utils-4.2.0-py3-none-any.whl", hash = "sha256:a768a25c80514e0ad4e4a6f9c02c44498985f36c5dfdea47b5b1e8cf994beba6"},
 ]
 django-pymemcache = [
     {file = "django-pymemcache-1.0.0.tar.gz", hash = "sha256:e2a9185dff1fc77c11c462f21cc4d8353683e354b85409639eaf77c9b373ffd8"},
