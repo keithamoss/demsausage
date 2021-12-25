@@ -304,7 +304,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "jsonschema"
-version = "4.3.1"
+version = "4.3.2"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
@@ -594,7 +594,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b156a7dd1d3d3afa707d2f17d13ebcc7f4f0fe1093292462708409e2cbf3533f"
+content-hash = "34e5181999f0cb9a5a71d18b40ed3b4f7cb5beda9fe67d3ded05dc18a221c79f"
 
 [metadata.files]
 asgiref = [
@@ -839,8 +839,8 @@ inflection = [
     {file = "inflection-0.5.1.tar.gz", hash = "sha256:1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417"},
 ]
 jsonschema = [
-    {file = "jsonschema-4.3.1-py3-none-any.whl", hash = "sha256:91ffbad994d766041c6003d5f8f475cceb890c30084bd0e64847ccb1c10e48bb"},
-    {file = "jsonschema-4.3.1.tar.gz", hash = "sha256:0070ca8dd5bf47941d1e9d8bc115a3654b1138cfb8aff44f3e3527276107314f"},
+    {file = "jsonschema-4.3.2-py3-none-any.whl", hash = "sha256:8697a10a5a5edc922d2eb8556c7f35e814436f3ed8278ec2f65d40e9312d7c80"},
+    {file = "jsonschema-4.3.2.tar.gz", hash = "sha256:cca171fb7544de15ccda236bf78d58434d769c9a2ce21d44e0d209e39eeb8876"},
 ]
 oauthlib = [
     {file = "oauthlib-3.1.0-py2.py3-none-any.whl", hash = "sha256:df884cd6cbe20e32633f1db1072e9356f53638e4361bef4e8b03c9127c9328ea"},
