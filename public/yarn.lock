@@ -8734,22 +8734,22 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-ol-mapbox-style@^6.5.1:
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-6.5.1.tgz#880da1a4561d2526674a6a7988ea7c4d1fc80e79"
-  integrity sha512-diGjCUlYjCA855vJjQjPzxXLn/skm0iQLD2/yDsXaKdNxFd35hNfRm5Li+Vxh/FxraCodxRvd8IplhrhvXoqbQ==
+ol-mapbox-style@^6.7.0:
+  version "6.8.1"
+  resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-6.8.1.tgz#12accc9aef73ba975aac54e0b7fd64e6a62ce589"
+  integrity sha512-HD3FNFzFiBptEwiLIVna7H/WSpv/cN99xMmIErcvqv/r4XLwWS/8VKti8w6moVPV28Fg2QmitXvaG3okedMU7w==
   dependencies:
     "@mapbox/mapbox-gl-style-spec" "^13.20.1"
     mapbox-to-css-font "^2.4.0"
     webfont-matcher "^1.1.0"
 
-ol@^6.9.0:
-  version "6.9.0"
-  resolved "https://registry.yarnpkg.com/ol/-/ol-6.9.0.tgz#3e1b39a76f99ede117ad79e66464698d6915df0b"
-  integrity sha512-VmU5HKHwO2O1uGgmBcng/dL1PouVB1jKiYUbiXPR5l1i/3B3qatexl4rapZAnsGx0vsOC7lI1GLx7jEZro8C8Q==
+ol@^6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/ol/-/ol-6.10.0.tgz#4f3efbb3cc6571962149666de807f11e91015b62"
+  integrity sha512-XBU0IzeCU50MUOmCoBH5ThimGUt6oiNf8LL3iRVeLckpg7Q/0i4jernuJTpg8OLVzcgxG+ex/0iXf9mgHSzM6Q==
   dependencies:
     geotiff "^1.0.8"
-    ol-mapbox-style "^6.5.1"
+    ol-mapbox-style "^6.7.0"
     pbf "3.2.1"
     rbush "^3.0.1"
 
