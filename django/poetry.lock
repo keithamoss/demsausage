@@ -185,7 +185,7 @@ unicodecsv = "*"
 
 [[package]]
 name = "djangorestframework-gis"
-version = "0.17"
+version = "0.18"
 description = "Geographic add-ons for Django Rest Framework"
 category = "main"
 optional = false
@@ -594,7 +594,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ef1f90ba0410792ce5fae12696eb86406fcbc364adf2b6e799d83e3ad041e3fd"
+content-hash = "9e66d6b4d63d5e551e4741bbc4472ed94e5d35fb7eecf057b53d6b922aa42473"
 
 [metadata.files]
 asgiref = [
@@ -720,8 +720,8 @@ djangorestframework-csv = [
     {file = "djangorestframework-csv-2.1.1.tar.gz", hash = "sha256:aa0ee4c894fe319c68e042b05c61dace43a9fb6e6872e1abe1724ca7ea4d15f7"},
 ]
 djangorestframework-gis = [
-    {file = "djangorestframework-gis-0.17.tar.gz", hash = "sha256:d3b6aa6beef32f75811f815bda3bc7e9ea5d2f0306f9741cad5f3820d3973be7"},
-    {file = "djangorestframework_gis-0.17-py2.py3-none-any.whl", hash = "sha256:5be17e27cf2be33ac6119e6d2206d3d81183c62d03aaa9b814ce95a82256614f"},
+    {file = "djangorestframework-gis-0.18.tar.gz", hash = "sha256:6ddd201a208e68f8f11ac71d2df2c030b1280818a4b54681be00e73057fcafb1"},
+    {file = "djangorestframework_gis-0.18-py2.py3-none-any.whl", hash = "sha256:7df5d5a32c3492d55837e2a695ef8f9a5c83dc163d90a0764eaa187091a9a633"},
 ]
 drf-spectacular = [
     {file = "drf-spectacular-0.21.1.tar.gz", hash = "sha256:e61d0273c370a9f14944a5072c312eee5407becdfce80ecbe81ef687ccc9365e"},
