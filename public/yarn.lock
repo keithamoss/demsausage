@@ -1868,10 +1868,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/history@^3":
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/@types/history/-/history-3.2.4.tgz#0b6c62240d1fac020853aa5608758991d9f6ef3d"
-  integrity sha512-q7x8QeCRk2T6DR2UznwYW//mpN5uNlyajkewH2xd1s1ozCS4oHFRg2WMusxwLFlE57EkUYsd/gCapLBYzV3ffg==
+"@types/history@^3", "@types/history@^3.2.5":
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@types/history/-/history-3.2.5.tgz#be614208f1a10a20c414b4d3762d1f2b65b53ae4"
+  integrity sha512-TqWYI0mlqS5qhH8MHgJJs0RcgvvZLxkn0bi2qK07liZqP7M9rl1kpJ6TCAUo5Cp4vP5DObIqHcky0MWyyQojVQ==
 
 "@types/history@^4.7.10":
   version "4.7.10"
@@ -2029,12 +2029,12 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-router-redux@^4.0.53":
-  version "4.0.53"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.53.tgz#acbb5671fcd6925643e7902bf077e263bc765076"
-  integrity sha512-+39zVG6uNEqSKefoZyBdoV7wRk2dtFNjiLU6YJLHYqaVJr+WvipPJKOycy0bR6pTToWyWcMTXOqNDHWtkwAcdg==
+"@types/react-router-redux@^4.0.54":
+  version "4.0.54"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.54.tgz#432a875252529c50d74c7b230782e99cd0aceaa1"
+  integrity sha512-dPvCg55wPtPHMmiaK0JqYC+ffFyiRQXDYRLe7KxgovY6MULjdYlplTZPgpdgKVchLhzbjJ50jbuvrzFHbOqpeg==
   dependencies:
-    "@types/history" "^3"
+    "@types/history" "^3.2.5"
     redux "^3.6.0"
 
 "@types/react-router@3.0.27":
