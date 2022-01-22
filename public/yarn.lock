@@ -1875,7 +1875,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/history@^3", "@types/history@^3.2.5":
+"@types/history@^3.2.5":
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-3.2.5.tgz#be614208f1a10a20c414b4d3762d1f2b65b53ae4"
   integrity sha512-TqWYI0mlqS5qhH8MHgJJs0RcgvvZLxkn0bi2qK07liZqP7M9rl1kpJ6TCAUo5Cp4vP5DObIqHcky0MWyyQojVQ==
@@ -2046,12 +2046,12 @@
     "@types/history" "^3.2.5"
     redux "^3.6.0"
 
-"@types/react-router@3.0.27":
-  version "3.0.27"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.27.tgz#db78ffc4141e5b2d5b0e29bb5565094c05d864d3"
-  integrity sha512-Sq4bfTZ8TuHFTHXyzA3tu/BTGm/d4B8CwtOK4qOyJNoJMkY87qMOazkBizMHNpszVR1+kYOCNLjPdh/wAD7ESw==
+"@types/react-router@3.0.28":
+  version "3.0.28"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.28.tgz#ae457228e6934f6664e6b092afd7f8e1bb6eee3a"
+  integrity sha512-cf3V8fSBLAzmICC8l5qbnrJhdjF0ia8K0EZwL8IpJDBQN6ieHDdw8t1+9regufQxEVip1T4tCQRwhAmy26Zn2A==
   dependencies:
-    "@types/history" "^3"
+    "@types/history" "^3.2.5"
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^17.0.38":
