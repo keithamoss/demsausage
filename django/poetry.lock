@@ -249,7 +249,7 @@ test = ["requests", "objgraph", "cffi (>=1.12.2)", "dnspython (>=1.16.0,<2.0)", 
 
 [[package]]
 name = "googlemaps"
-version = "4.5.3"
+version = "4.6.0"
 description = "Python client library for Google Maps Platform"
 category = "main"
 optional = false
@@ -615,7 +615,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "89626722ceb9307aed73633aca51d3d7ee06f4b04d25eb1ec033f903c8562e21"
+content-hash = "a51cbd10939e320045a6663efb0667fd67e21078f4b787de23e020bbe00f84e0"
 
 [metadata.files]
 asgiref = [
@@ -802,7 +802,7 @@ gevent = [
     {file = "gevent-21.12.0.tar.gz", hash = "sha256:f48b64578c367b91fa793bf8eaaaf4995cb93c8bc45860e473bf868070ad094e"},
 ]
 googlemaps = [
-    {file = "googlemaps-4.5.3.tar.gz", hash = "sha256:cd6a4bcf6fbdbbffeb5e4cffd7f9db223864cce96c9149fb48358b62050f3a2a"},
+    {file = "googlemaps-4.6.0.tar.gz", hash = "sha256:2cc88cdf206deccc18e7fdfd23a0ed244209a08b2f0561fd8739c4c277325241"},
 ]
 greenlet = [
     {file = "greenlet-1.1.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:58df5c2a0e293bf665a51f8a100d3e9956febfbf1d9aaf8c0677cf70218910c6"},
