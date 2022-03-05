@@ -59,8 +59,7 @@ Alternatively, if you have access to the production database you can use the scr
 
 ```
 docker-compose up db
-
-docker exec -i -t demsausage_db_1 /bin/bash
+docker exec -i -t demsausage-db-1 /bin/bash
 cd /var/lib/postgresql/scripts
 ./replace-dev-with-prod.sh
 ```
