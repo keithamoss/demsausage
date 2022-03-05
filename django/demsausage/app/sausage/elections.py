@@ -147,7 +147,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
-        allowed_fields = ["filters", "exclude_columns", "rename_columns", "extras", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
+        allowed_fields = ["filters", "exclude_columns", "rename_columns", "add_columns", "extras", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
         for field_name in allowed_fields:
@@ -194,7 +194,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_remove_excluded_fields(polling_place))
 
-                self.logger.info("Removed {} excluded columns".format(len(self.exclude_columns)))
+                self.logger.info("Removed {} columns".format(len(self.exclude_columns)))
                 self.polling_places = processed_polling_places
 
         def _rename_columns():
@@ -210,6 +210,20 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     processed_polling_places.append(_rename_fields(polling_place))
 
                 self.logger.info("Renamed {} columns".format(len(self.rename_columns)))
+                self.polling_places = processed_polling_places
+
+        def _add_columns():
+            def _add_fields(polling_place):
+                for column_name, column_value in self.add_columns.items():
+                    polling_place[column_name] = column_value
+                return polling_place
+
+            if self.add_columns is not None:
+                processed_polling_places = []
+                for polling_place in self.polling_places:
+                    processed_polling_places.append(_add_fields(polling_place))
+
+                self.logger.info("Added {} new columns".format(len(self.add_columns)))
                 self.polling_places = processed_polling_places
 
         def _create_extras():
@@ -275,6 +289,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         _filter()
         _exclude_columns()
         _rename_columns()
+        _add_columns()
         _create_extras()
         # _skip_blank_coordinates()
         _run_regexes()
@@ -319,7 +334,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for field in self.division_fields:
                     if field not in header:
                         self.logger.error("Required division field missing in header: {}".format(field))
-        
+
         def check_ec_id_is_unique():
             if "ec_id" in self.polling_places[0]:
                 ec_id_tracker = []
@@ -333,11 +348,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             self.logger.error("[EC_ID Checker] Polling place {} ({}) has a non-unique ec_id of {}".format(polling_place["name"], polling_place["premises"], polling_place["ec_id"]))
 
                         ec_id_tracker.append(polling_place["ec_id"])
-                
+
                 # We only care about blanks if any polling place have an ec_id (not all Electoral Commissions deliver ec_ids)
                 if blank_ec_id_counter > 0 and len(ec_id_tracker) > 0:
                     self.logger.warning("[EC_ID Checker] {} polling places have blank ec_ids".format(blank_ec_id_counter))
-
 
         # Ensure we have all of the required fields and no unknown/excess fields
         check_file_header_validity(_get_header())
@@ -431,7 +445,6 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         else:
                             return True
 
-                    
                     geocode_result = self.gmaps.geocode(term, components=self.geocoding["components"])
 
                     if _is_good_result(geocode_result) is False:
@@ -449,7 +462,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                             if geocode_result is None:
                                 self.logger.warning("[Geocoding Skipping - No good results found] {} ({})".format(polling_place["premises"], polling_place["address"]))
-                    
+
                     return geocode_result
 
                 def _is_geocoding_accurate_enough(geocode_result):
@@ -491,7 +504,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             processed_polling_places.append(new_polling_place)
                         else:
                             geocoding_skipped_counter += 1
-                    
+
                     else:
                         geocoding_skipped_counter += 1
                         self.logger.warning("[Geocoding Skipping - Not enabled] {} ({})".format(polling_place["premises"], polling_place["address"]))
@@ -544,7 +557,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             if serialiser.is_valid() is True:
                 return True
             return serialiser.errors
-        
+
         def is_polling_place_within_election_geom(polling_place):
             return polling_place["geom"].within(self.election.geom)
 
@@ -553,7 +566,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             validation = is_polling_place_valid(polling_place)
             if validation is not True:
                 self.logger.error("Polling place {} ({}) invalid: {}".format(polling_place["name"], polling_place["premises"], validation))
-            
+
             if polling_place["state"] != "Overseas":
                 if is_polling_place_within_election_geom(polling_place) is False:
                     if self.bbox_validation is not None and polling_place["name"] not in self.bbox_validation["ignore"]:
@@ -592,7 +605,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             # We'll just use the first one - it'll probably be wrong but whatever
             return polling_places[0]["divisions"]
-        
+
         def _merge_divisions(polling_places):
             home_division = _find_home_division(polling_places)
 
@@ -605,11 +618,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             for pp in polling_places:
                 divisions += pp["divisions"]
             divisions = list(set(divisions))
-            
+
             divisions.sort()
             divisions = [home_division] + [div for div in divisions if div != home_division]
             return divisions
-        
+
         def _merge_and_sum_extras(polling_places):
             extras = [pp["extras"] for pp in polling_places]
             return merge_and_sum_dicts(extras)
@@ -694,7 +707,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
         polling_places_to_update = []
-        
+
         for polling_place in queryset:
             # start = timer()
 
@@ -723,7 +736,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # location info. This is a poke for us to pick up any discrepancies.
                 if self.election.polling_places_loaded is False:
                     self.logger.warning("Noms Migration: User-added polling place '{}' ({}) has been merged successfully into the official polling place '{}' ({}). Is this correct?".format(polling_place.name, polling_place.address, matching_polling_places[0].name, matching_polling_places[0].address))
-            
+
             # end = timer()
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
 
@@ -893,14 +906,14 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
                     regenerate_election_geojson(self.election.id)
                     raise BadRequest({"message": "Rollback", "logs": self.collects_logs()})
-            
+
             if self.is_dry_run() is False:
                 # Use a transaction to speed up all of the update calls in here
                 with transaction.atomic():
                     self.invoke_and_bail_if_errors("detect_facility_type")
                     self.invoke_and_bail_if_errors("calculate_chance_of_sausage")
                     self.invoke_and_bail_if_errors("cleanup")
-            
+
             print("All done with loading")
 
 
