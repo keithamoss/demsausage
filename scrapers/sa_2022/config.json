@@ -1,0 +1,58 @@
+{
+    "rename_columns": {
+        "di_name": "divisions",
+        "pplace": "name",
+        "disabled_code": "wheelchair_access",
+        "AccessDetails": "entrance_desc",
+        "Address": "premises",
+        "FormatAddress": "address",
+        "Longitude": "lon",
+        "Latitude": "lat"
+    },
+    "exclude_columns": [
+        "suburb",
+        "SortId"
+    ],
+    "add_columns": {
+        "ec_id": "",
+        "state": "SA"
+    },
+    "extras": {
+        "fields": []
+    },
+    "geocoding": {
+        "enabled": false
+    },
+    "fix_data_issues": [
+        {
+            "field": "wheelchair_access",
+            "value": "F",
+            "overwrite": [
+                {
+                    "field": "wheelchair_access",
+                    "value": "Fully wheelchair accessible"
+                }
+            ]
+        },
+        {
+            "field": "wheelchair_access",
+            "value": "A",
+            "overwrite": [
+                {
+                    "field": "wheelchair_access",
+                    "value": "Assisted wheelchair access"
+                }
+            ]
+        },
+        {
+            "field": "wheelchair_access",
+            "value": "N",
+            "overwrite": [
+                {
+                    "field": "wheelchair_access",
+                    "value": "No wheelchair access"
+                }
+            ]
+        }
+    ]
+}

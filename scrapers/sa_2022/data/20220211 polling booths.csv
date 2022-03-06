@@ -1,0 +1,692 @@
+di_name,pplace,disabled_code,AccessDetails,suburb,Address,FormatAddress,SortId,Longitude,Latitude
+Adelaide,Adelaide,F,,ADELAIDE,Christian Brothers College (Senior Campus),"214 Wakefield St, ADELAIDE",,138.60935,-34.92788
+Adelaide,Adelaide South,A,,ADELAIDE,Gilles St Primary School,"91-93 Gilles St, ADELAIDE",,138.604511,-34.934369
+Adelaide,Adelaide West,F,,ADELAIDE,Adelaide High School,"West Tce, ADELAIDE",,138.587085,-34.925624
+Adelaide,Nailsworth,A,,NAILSWORTH,Nailsworth Primary School,"2 Balfour St, NAILSWORTH",,138.603328,-34.882844
+Adelaide,North Adelaide,A,via Gover St,NORTH ADELAIDE,North Adelaide Primary School,"62-80 Tynte St, NORTH ADELAIDE",,138.597561,-34.905119
+Adelaide,North Adelaide East,A,,NORTH ADELAIDE,St Cyprian's Anglican Church,"70 Melbourne St, NORTH ADELAIDE",,138.608547,-34.906083
+Adelaide,Prospect,A,via Braund Rd,PROSPECT,Prospect Primary School,"27 Gladstone Rd, PROSPECT",,138.59,-34.8852
+Adelaide,Prospect North,A,via Arthur St,PROSPECT,Prospect North Primary School,"30 Stuart Rd, PROSPECT",,138.596073,-34.875284
+Adelaide,Prospect South,F,,PROSPECT,Blackfriars Priory Gym,"22-24 Highbury St, PROSPECT",,138.5966919,-34.89537746
+Adelaide,Walkerville,A,,WALKERVILLE,Walkerville Primary School,"159 Stephen Tce, WALKERVILLE",,138.613,-34.8953
+Adelaide,Walkerville North,A,,WALKERVILLE,St Monica's Parish School,"92 North East Rd, WALKERVILLE",,138.616,-34.8876
+Badcoe,Ascot Park,F,,ASCOT PARK,Active Elders Association,"27a Charles St, ASCOT PARK",,138.562874,-34.990835
+Badcoe,Black Forest,A,,BLACK FOREST,Black Forest Primary School,"679 South Rd, BLACK FOREST",,138.573,-34.9607
+Badcoe,Black Forest East,A,,BLACK FOREST,Clarence Park Community Centre,"72-74 East Ave, BLACK FOREST",,138.580696,-34.960802
+Badcoe,Edwardstown,A,,EDWARDSTOWN,Southpoint Church of Christ,"68 De Laine Ave, EDWARDSTOWN",,138.5648541,-34.97443758
+Badcoe,Goodwood,A,,GOODWOOD,Goodwood Primary School,"140 Goodwood Rd, GOODWOOD",,138.589,-34.9515
+Badcoe,Keswick,F,,KESWICK,National Servicemen's Association,"41 Surrey Rd, KESWICK",,138.572767,-34.945611
+Badcoe,Kurralta Park,N,,KURRALTA PARK,Plympton/ Kurralta Park Guide Hall,"Cnr Daly St & Cross Tce, KURRALTA PARK",,138.56374,-34.95114
+Badcoe,Netley,A,adj Joe Wells Reserve,NETLEY,Netley Kindergarten,"Comet Ave, NETLEY",,138.546985,-34.954278
+Badcoe,Park Holme South,A,,PARK HOLME,Ascot Park Primary School,"1-37 Pildappa Ave, PARK HOLME",,138.556,-34.9905
+Badcoe,Plympton,A,,PLYMPTON,Plympton Primary School,"19 Owen St, PLYMPTON",,138.55683,-34.960849
+Badcoe,Plympton Park,F,,PLYMPTON PARK,Plympton Glenelg RSL Hall,"464 Marion Rd, PLYMPTON PARK",,138.555,-34.9703
+Badcoe,Plympton West,F,,PLYMPTON,Plympton International College,"21a Errington St, PLYMPTON",,138.54768,-34.96232
+Badcoe,Richmond,A,,RICHMOND,Tenison Woods Catholic School,"68 Brooker Tce, RICHMOND",,138.562,-34.9399
+Badcoe,South Plympton,A,,SOUTH PLYMPTON,Forbes Primary School,"80 Thomas St, SOUTH PLYMPTON",,138.558,-34.9781
+Badcoe,South Plympton North,A,,SOUTH PLYMPTON,Plympton South Kindergarten,"13 Yapinga St, SOUTH PLYMPTON",,138.560659,-34.97005
+Black,Hallett Cove,A,,HALLETT COVE,Hallett Cove R-12 School,"2-30 Gledsdale Rd, HALLETT COVE",,138.511,-35.0771
+Black,Hallett Cove East,F,,HALLETT COVE,Hallett Cove East Primary School,"Quailo Ave, HALLETT COVE",,138.517448,-35.070877
+Black,Hallett Cove South,A,,HALLETT COVE,Hallett Cove South Primary School,"Livonia St, HALLETT COVE",,138.504,-35.0833
+Black,Marino,A,,MARINO,Marino Community Hall,"44 Newland Ave, MARINO",,138.518,-35.0428
+Black,Seacliff,A,,SEACLIFF,Seacliff Uniting Church Hall,"5-7 Wheatland St, SEACLIFF",,138.522985,-35.031709
+Black,Seacombe Heights,A,via Gate 1,SEACOMBE HEIGHTS,Seaview High School,"78-124 Seacombe Rd, SEACOMBE HEIGHTS",,138.545894,-35.02983
+Black,Seaview Downs,A,,SEAVIEW DOWNS,Seaview Downs Primary School,"26-44 Ross St, SEAVIEW DOWNS",,138.535626,-35.040721
+Black,Sheidow Park,A,,SHEIDOW PARK,Sheidow Park School,"21-43 Adams Rd, SHEIDOW PARK",,138.53124,-35.07171
+Black,Sheidow Park South,A,,SHEIDOW PARK,Woodend Primary School,"10-22 Edward Beck Dr, SHEIDOW PARK",,138.536,-35.0791
+Black,South Brighton,N,,SOUTH BRIGHTON,Lou Kesting Community Hall,"Dover Square Brdwy, SOUTH BRIGHTON",,138.5281,-35.025396
+Bragg,Beaumont,A,,BEAUMONT,Beaumont Scout Hall,"42 Cooper Pl, BEAUMONT",,138.658358,-34.9449
+Bragg,Burnside,F,Gymnasium via Sturt St,BURNSIDE,Burnside Primary School,"11 High St, BURNSIDE",,138.660955,-34.936155
+Bragg,Glen Osmond,F,,GLEN OSMOND,St Saviour's Anglican Church,"2 Pridmore Rd, GLEN OSMOND",,138.644805,-34.962859
+Bragg,Glenunga,A,Gymnasium via Conyngham St,GLENUNGA,Glenunga International High School,"99 L'Estrange St, GLENUNGA",,138.635693,-34.949223
+Bragg,Kensington,A,,KENSINGTON,Marryatville Primary School,"54 Dankel Ave, KENSINGTON",,138.6494,-34.92491
+Bragg,Linden Park,A,OSHC building,LINDEN PARK,Linden Park Primary School,"14 Hay Rd, LINDEN PARK",,138.647,-34.9475
+Bragg,Magill South,A,,MAGILL,Morialta Uniting Church ,"26 Chapel St, MAGILL",,138.6732975,-34.91540628
+Bragg,Parkside,F,Gymnasium via Young St,PARKSIDE,Parkside Primary School,"12 Robsart St, PARKSIDE",,138.62,-34.9446
+Bragg,Rose Park,A,,ROSE PARK,Rose Park Primary School Gym,"54 Alexandra Ave, ROSE PARK",,138.62877,-34.93144
+Bragg,Tusmore,F,via Fisher St,TUSMORE,Burnside City Uniting Church,"384 Portrush Rd, TUSMORE",,138.643,-34.9375
+Bragg,Wattle Park,A,,STONYFELL,St Peters Girls School ,"6 Stonyfell Rd, STONYFELL",,138.6694484,-34.93025326
+Chaffey,Barmera,A,,BARMERA,Barmera Primary School,"1 Rumbold Dr, BARMERA",,140.4767059,-34.2525186
+Chaffey,Berri,A,,BERRI,Berri Bowling Club (Glassey Park),"25 Chilton Rd, BERRI",,140.614214,-34.28104
+Chaffey,Blanchetown,A,,BLANCHETOWN,Blanchetown District Hall,"3 Shaw St, BLANCHETOWN",,139.614699,-34.352048
+Chaffey,Cadell,A,,CADELL,Cadell Institute,"33-35 McGuire Tce, CADELL",,139.764381,-34.039468
+Chaffey,Cambrai,A,,CAMBRAI,Cambrai Hall,"Skinner St, CAMBRAI",,139.2828213,-34.65377544
+Chaffey,Cobdogla,F,,COBDOGLA,Cobdogla Primary School,"2-12 Dolan St, COBDOGLA",,140.406,-34.2424
+Chaffey,Glossop,A,,GLOSSOP,Glossop Primary School,"Mitchell Tce, GLOSSOP",,140.5246729,-34.27096406
+Chaffey,Karoonda,A,,KAROONDA,Karoonda Area School,"1 North Tce, KAROONDA",,139.8951,-35.091901
+Chaffey,Loxton,A,,LOXTON,Lutheran Peace Hall,"60 Bookpurnong Tce, LOXTON",,140.567876,-34.453377
+Chaffey,Loxton North,A,,LOXTON NORTH,Loxton North Sports Club,"357 Balfour-Ogilvy Ave, LOXTON NORTH",,140.6255263,-34.41526609
+Chaffey,Lyrup,N,,LYRUP,Lyrup Village Association,"Cnr Rupert Ct & Wilson Pde, LYRUP",,140.6464963,-34.2555036
+Chaffey,Monash,A,,MONASH,Monash Memorial Hall,"Cnr Randell Tce & Madison Ave, MONASH",,140.557973,-34.237766
+Chaffey,Moorook,A,,MOOROOK,Moorook Community Hall,"Kingston Rd, MOOROOK",,140.367403,-34.288879
+Chaffey,Morgan,N,,MORGAN,Morgan Sporting Complex,"North East Tce, MORGAN",,139.669154,-34.029234
+Chaffey,Nildottie,A,,NILDOTTIE,St Stephens Lutheran Church Hall,"4103 Hunter Rd, NILDOTTIE",,139.652,-34.6801
+Chaffey,Paringa,A,,PARINGA,Paringa Murtho War Memorial Hall,"21 Hughes Ave, PARINGA",,140.785933,-34.180646
+Chaffey,Purnong,A,,PURNONG,Purnong District Hall,"3214 Purnong Rd, PURNONG",,139.623837,-34.854079
+Chaffey,Ramco,A,,RAMCO,Ramco Institute,"421 Ramco Rd, RAMCO",,139.937149,-34.170607
+Chaffey,Renmark,F,,RENMARK,Renmark Paringa Community & Civic Centre,"61 Eighteenth St, RENMARK",,140.74294,-34.174281
+Chaffey,Renmark North,A,,RENMARK NORTH,Renmark North Primary School,"65 Warrego St, RENMARK NORTH",,140.712,-34.1261
+Chaffey,Renmark West,F,,RENMARK WEST,Renmark West Primary School,"327 Tarcoola St, RENMARK WEST",,140.709867,-34.166183
+Chaffey,Sedan,A,,SEDAN,Sedan Hall,"Stott Hwy, SEDAN",,139.298343,-34.57306
+Chaffey,Swan Reach,A,,SWAN REACH,Swan Reach Area School,"8 Showground Rd, SWAN REACH",,139.602896,-34.572124
+Chaffey,Waikerie,A,,WAIKERIE,Lutheran Social Centre,"4 Cates Ave, WAIKERIE",,139.981251,-34.183715
+Chaffey,Walker Flat,A,,WALKER FLAT,Walker Flat & Districts Community Hall,"4945 Angas Valley Rd, WALKER FLAT",,139.567811,-34.761449
+Chaffey,Winkie,A,,WINKIE,Croation Association Hall,"41 Bullpit Rd, WINKIE",,140.526,-34.313
+Cheltenham,Beverley,A,via Hubbard St,BEVERLEY,St Michael's College - Primary,"78 East Ave, BEVERLEY",,138.5500663,-34.89907811
+Cheltenham,Cheltenham,A,,CHELTENHAM,Cheltenham Community Centre,"62 Stroud St North, CHELTENHAM",,138.52552,-34.866135
+Cheltenham,Findon,A,,FINDON,Findon Community Centre,"222 Findon Rd, FINDON",,138.5315696,-34.89735904
+Cheltenham,Findon West,A,,FINDON,Findon High School,"44 Drummond Ave, FINDON",,138.52717,-34.898748
+Cheltenham,Kilkenny,A,,KILKENNY,Kilkenny Community Hall,"27a Wilpena Tce, KILKENNY",,138.550635,-34.883864
+Cheltenham,Mansfield Park,F,,MANSFIELD PARK,St Patrick's School,"33a Dudley St, MANSFIELD PARK",,138.551,-34.8544
+Cheltenham,Ottoway,F,,OTTAWAY,Junction Community Centre,"2A May Tce, OTTAWAY",,138.52726,-34.8513
+Cheltenham,Pennington,A,via Torrens Cres,PENNINGTON,Pennington School R-7,"Butler Ave, PENNINGTON",,138.532937,-34.857626
+Cheltenham,Queenstown,F,via Spring St,QUEENSTOWN,Alberton Primary School,"14 Broad St, QUEENSTOWN",,138.512268,-34.863315
+Cheltenham,Rosewater,A,,ROSEWATER,Mt Carmel College,"33 Newcastle St, ROSEWATER",,138.522289,-34.856273
+Cheltenham,Seaton Park,A,,SEATON,Seaton Park Primary School,"80 Balcombe Ave, SEATON",,138.519992,-34.895627
+Cheltenham,St Clair,A,via Leslie St W,ST CLAIR,Woodville High School,"11 Actil Ave, ST CLAIR",,138.5412155,-34.87224234
+Cheltenham,Woodville Gardens,A,,WOODVILLE GARDENS,Woodville Gardens School B-7,"18-58 Ridley Gr, WOODVILLE GARDENS",,138.55001,-34.86398
+Cheltenham,Woodville South,A,,WOODVILLE SOUTH,Woodville Primary School,"Evans St, WOODVILLE SOUTH",,138.532536,-34.881787
+Cheltenham,Woodville West,A,,WOODVILLE WEST,Frank Mitchell Park - White City FC,"Todville St, WOODVILLE WEST",,138.5213954,-34.88767462
+Colton,Fulham,A,,FULHAM,Fulham Community Centre,"19 Fitch Rd, FULHAM",,138.514,-34.9306
+Colton,Grange,A,via Surrey St,GRANGE,"Grange Primary School, Lawson Hall","39c Jetty St, GRANGE",,138.49675,-34.9025
+Colton,Henley Beach,A,,HENLEY BEACH,Henley Fulham Uniting Church Temple Centre,"214 Military Rd, HENLEY BEACH",,138.495,-34.9179
+Colton,Henley Beach North,A,via Mitton Ave,HENLEY BEACH,Fulham Gardens Primary School,"70-72 Marlborough St, HENLEY BEACH",,138.504,-34.9131
+Colton,Henley Beach South,A,via Burford Rd,HENLEY BEACH SOUTH,Henley Beach Primary School,"38 Hazel Tce, HENLEY BEACH SOUTH",,138.5,-34.93
+Colton,Kidman Park,A,,KIDMAN PARK,"Office for Recreation, Sport & Racing","27 Valetta Rd, KIDMAN PARK",,138.529815,-34.914807
+Colton,Lockleys,A,,LOCKLEYS,Christ the King Church Hall,"456 Henley Beach Rd, LOCKLEYS",,138.52655,-34.925937
+Colton,Lockleys North,F,,LOCKLEYS,Lockleys North Primary School,"55 Malurus Ave, LOCKLEYS",,138.53797,-34.91979
+Colton,Seaton West,F,,SEATON,Christian Family Centre,"185 Frederick Rd, SEATON",,138.505721,-34.898056
+Colton,West Beach,A,,WEST BEACH,West Beach Primary School Activity Hall,"3 Woodhead St, WEST BEACH",,138.509675,-34.937499
+Croydon,Brompton,A,,BROMPTON,Bowden Brompton Community Centre,"19 Green St, BROMPTON",,138.576,-34.8979
+Croydon,Croydon,F,,CROYDON,St Barnabas Anglican Church,"4a William St, CROYDON",,138.567045,-34.895527
+Croydon,Croydon Park,A,,CROYDON PARK,Guardian Childcare & Education ,"346 Torrens Road, CROYDON PARK",,138.5589981,-34.88072058
+Croydon,Kilburn,A,,KILBURN,St Brigid's Parish Hall,"43 Le Hunte St, KILBURN",,138.588167,-34.862254
+Croydon,Kilkenny,A,,KILKENNY,Kilkenny Community Hall,"27a Wilpena Tce, KILKENNY",,138.550635,-34.883864
+Croydon,Kilkenny North,A,,KILKENNY,Challa Gardens Primary School,"8 Humphries Tce, KILKENNY",,138.554273,-34.877911
+Croydon,Mansfield Park,F,,MANSFIELD PARK,St Patrick's School,"33a Dudley St, MANSFIELD PARK",,138.551,-34.8544
+Croydon,Prospect,A,via Braund Rd,PROSPECT,Prospect Primary School,"27 Gladstone Rd, PROSPECT",,138.59,-34.8852
+Croydon,Prospect North,A,via Arthur St,PROSPECT,Prospect North Primary School,"30 Stuart Rd, PROSPECT",,138.596073,-34.875284
+Croydon,Regency Park,F,,REGENCY PARK,Regency TAFE,"137 Days Rd, REGENCY PARK",,138.5685765,-34.87287012
+Croydon,Renown Park,A,,RENOWN PARK,Brompton Primary School,"11 Napier St, RENOWN PARK",,138.581477,-34.893794
+Croydon,West Croydon,A,,WEST CROYDON,West Croydon United Church,"38-40 Rosetta St, WEST CROYDON",,138.559029,-34.889409
+Croydon,Woodville Gardens,A,,WOODVILLE GARDENS,Woodville Gardens School B-7,"18-58 Ridley Gr, WOODVILLE GARDENS",,138.55001,-34.86398
+Davenport,Aberfoyle Park,A,,ABERFOYLE PARK,Aberfoyle Park High School,"36a Taylors Rd, ABERFOYLE PARK",,138.594,-35.0742
+Davenport,Aberfoyle Park Central,F,Performing Arts Centre via London Dr,ABERFOYLE PARK,Aberfoyle Park Primary School Campus,"2-8 Campus Dr, ABERFOYLE PARK",,138.595504,-35.067016
+Davenport,Aberfoyle Park North,F,,ABERFOYLE PARK,Aberfoyle Park Baptist Church,"70 Manning Rd, ABERFOYLE PARK",,138.599371,-35.059308
+Davenport,Aberfoyle Park South,A,,ABERFOYLE PARK,Aberfoyle Hub R-7 School,"29 Jeanette Cres, ABERFOYLE PARK",,138.594674,-35.078519
+Davenport,Flagstaff Hill,F,,FLAGSTAFF HILL,Flagstaff Hill Primary School,"145 Black Rd, FLAGSTAFF HILL",,138.588,-35.0493
+Davenport,Flagstaff Hill East,F,,FLAGSTAFF HILL,Craigburn Primary School,"15 Murrays Hill Rd, FLAGSTAFF HILL",,138.616,-35.0569
+Davenport,Happy Valley,A,,HAPPY VALLEY,Happy Valley Primary School,"18 Education Rd, HAPPY VALLEY",,138.584,-35.0868
+Davenport,Happy Valley West,F,,HAPPY VALLEY,Braeview School R-7,"1a Montana Dr, HAPPY VALLEY",,138.554,-35.0803
+Davenport,Seacombe Heights,A,via Gate 1,SEACOMBE HEIGHTS,Seaview High School,"78-124 Seacombe Rd, SEACOMBE HEIGHTS",,138.545894,-35.02983
+Dunstan,Glynde,A,,GLYNDE,Zion Lutheran Church Glynde,"15-17 Glynburn Rd, GLYNDE",,138.6562883,-34.89143418
+Dunstan,Joslin,A,,JOSLIN,College Park Scout Hall,"95 Fourth Ave, JOSLIN",,138.628389,-34.90159
+Dunstan,Kensington,A,,KENSINGTON,Marryatville Primary School,"54 Dankel Ave, KENSINGTON",,138.6494,-34.92491
+Dunstan,Kensington Park,A,,KENSINGTON PARK,Kensington Park RSL,"346 The Parade, KENSINGTON PARK",,138.651,-34.9206
+Dunstan,Kent Town,A,via Fullarton Rd,KENT TOWN,Wesley Uniting Church,"27 Grenfell St, KENT TOWN",,138.62267,-34.91925
+Dunstan,Marden,A,,MARDEN,Marden Education Centre,"1-37 Marden Rd, MARDEN",,138.634664,-34.89164
+Dunstan,Maylands,A,,MAYLANDS,Field of Dreams Australia,"17a Augusta St, MAYLANDS",,138.635907,-34.91259
+Dunstan,Norwood,A,,NORWOOD,Salvation Army,"55 George St, NORWOOD",,138.636585,-34.921807
+Dunstan,Norwood West,A,,NORWOOD,Norwood Primary School,"37 Osmond Tce, NORWOOD",,138.631653,-34.918862
+Dunstan,Rose Park,A,,ROSE PARK,Rose Park Primary School Gym,"54 Alexandra Ave, ROSE PARK",,138.62877,-34.93144
+Dunstan,St Morris,A,via Gardiner Ave,ST MORRIS,Adelaide Korean Uniting Church Hall,"40 Third Ave, ST MORRIS",,138.655594,-34.911364
+Dunstan,St Peters,A,,ST PETERS,Spicer Uniting Church,"44a Fourth Ave, ST PETERS",,138.623486,-34.906927
+Dunstan,St Peters East,F,via Third Ave,ST PETERS,East Adelaide School,"57-59 Second Ave, ST PETERS",,138.6277,-34.905343
+Dunstan,Tranmere South,N,,TRANMERE,St Joseph's Parish School,"1 Birkinshaw Ave, TRANMERE",,138.66634,-34.91318
+Dunstan,Trinity Gardens,A,,TRINITY GARDENS,Trinity Gardens School,"160 Portrush Rd, TRINITY GARDENS",,138.64048,-34.90884
+Elder,Ascot Park,F,,ASCOT PARK,Active Elders Association,"27a Charles St, ASCOT PARK",,138.562874,-34.990835
+Elder,Black Forest East,A,,BLACK FOREST,Clarence Park Community Centre,"72-74 East Ave, BLACK FOREST",,138.580696,-34.960802
+Elder,Clapham,A,,CLAPHAM,Clapham Primary School,"48 Barretts Rd, CLAPHAM",,138.604224,-34.993877
+Elder,Clarence Gardens,F,via Dinwoodie Ave,CLARENCE GARDENS,St Francis Anglican Church Community Centre,"835 South Rd, CLARENCE GARDENS",,138.573552,-34.970124
+Elder,Clarence Park,F,,CLARENCE PARK,Church of the Trinity,"318 Goodwood Rd, CLARENCE PARK",,138.59,-34.9643
+Elder,Colonel Light Gardens South,A,,COLONEL LIGHT GARDENS,Colonel Light Gardens Primary School,"Windsor Ave, COLONEL LIGHT GARDENS",,138.596256,-34.98722
+Elder,Daw Park,F,via Aver Ave,DAW PARK,Colonel Light Gardens Uniting Church,"560 Goodwood Rd, DAW PARK",,138.591655,-34.980878
+Elder,Edwardstown,A,,EDWARDSTOWN,Southpoint Church of Christ,"68 De Laine Ave, EDWARDSTOWN",,138.5648541,-34.97443758
+Elder,Hawthorn,A,,HAWTHORN,Hawthorn Church of Christ,"42 Angas Rd, HAWTHORN",,138.6,-34.9737
+Elder,Marion,F,,MARION,Marion Primary School,"2-22 Malcolm Ave, MARION",,138.556,-35.0042
+Elder,Melrose Park,F,,MELROSE PARK,Edwardstown Primary School,"125 Edward St, MELROSE PARK",,138.579122,-34.978459
+Elder,Mitchell Park,F,via Gate 3,MITCHELL PARK,Hamilton Secondary College,"815 Marion Rd, MITCHELL PARK",,138.558,-34.9979
+Elder,Mitchell Park South,A,,MITCHELL PARK,Marion Church of Christ,"15 Alawoona Ave, MITCHELL PARK",,138.5588772,-35.00714892
+Elder,Pasadena,F,via Gate 1,PASADENA,Tower Arts Centre,"267 Daws Rd, PASADENA",,138.5918859,-34.9920491
+Elder,St Marys,F,,ST MARYS,Edwardstown Baptist Church,"54C Dorene St, ST MARYS",,138.5784854,-34.99946995
+Elder,Westbourne Park,A,,WESTBOURNE PARK,Westbourne Park Primary School Gym,"2 Marlborough Rd, WESTBOURNE PARK",,138.592,-34.9694
+Elizabeth,Craigmore,F,,CRAIGMORE,Craigmore High School,"2 Jamieson Rd, CRAIGMORE",,138.699873,-34.690878
+Elizabeth,Craigmore North,A,via Somerset Gr,CRAIGMORE,Playford Primary School Gym,"216 Adams Rd, CRAIGMORE",,138.712,-34.6888
+Elizabeth,Craigmore South,F,via Yorktown Rd,CRAIGMORE,Craigmore South Primary School,"1 Gooronga Dr, CRAIGMORE",,138.70646,-34.708847
+Elizabeth,Elizabeth,F,,ELIZABETH,Anglican Parish of Elizabeth - Holy Cross,"91-93 Elizabeth Way, ELIZABETH",,138.672412,-34.714863
+Elizabeth,Elizabeth Downs,A,via Coleman Rd,ELIZABETH DOWNS,Elizabeth Downs Primary School,"Heard St, ELIZABETH DOWNS",,138.694,-34.6995
+Elizabeth,Elizabeth East,F,,ELIZABETH EAST,Elizabeth East Primary School,"15 Dolphin St, ELIZABETH EAST",,138.678405,-34.725145
+Elizabeth,Elizabeth Grove,A,via Smithan St,ELIZABETH GROVE,Elizabeth Grove Primary,"20 Haynes St, ELIZABETH GROVE",,138.67,-34.7327
+Elizabeth,Elizabeth Park,A,,ELIZABETH PARK,Elizabeth Park Primary School,"15 Turner Rd, ELIZABETH PARK",,138.685,-34.713
+Elizabeth,Elizabeth South,F,,ELIZABETH SOUTH,Elizabeth South Primary School,"Chivell St, ELIZABETH SOUTH",,138.662059,-34.731299
+Elizabeth,Hillbank,N,,HILLBANK,Hillbank Community Children's Centre,"10 Penarth Ct, HILLBANK",,138.684422,-34.731614
+Elizabeth,Munno Para East,A,,MUNNO PARA,Munno Para Primary School,"81 Maltarra Rd, MUNNO PARA",,138.6995818,-34.6698313
+Enfield,Blair Athol,A,,BLAIR ATHOL,St Paul Lutheran Church Hall,"44 Audrey Ave, BLAIR ATHOL",,138.599201,-34.861592
+Enfield,Blair Athol North,F,,BLAIR ATHOL,Blair Athol North B-7 School,"5-13 Marmion Ave, BLAIR ATHOL",,138.599472,-34.852973
+Enfield,Broadview,F,via Collingrove Ave,BROADVIEW,Broadview Uniting Church,"61 Galway Ave, BROADVIEW",,138.614978,-34.880086
+Enfield,Clearview,N,via Fairview Tce,CLEARVIEW,Good Shepherd Catholic Church,"7 St Albans Pl, CLEARVIEW",,138.6102747,-34.8526521
+Enfield,Enfield,F,via Harewood Ave,ENFIELD,Enfield Primary School,"Clarice Ave, ENFIELD",,138.603055,-34.86487
+Enfield,Enfield South,F,,ENFIELD,Enfield Community Centre,"540 Regency Rd, ENFIELD",,138.6090483,-34.87297788
+Enfield,Hampstead Gardens,A,via Falcon Ave,HAMPSTEAD GARDENS,Church of Christ Hampstead Gardens,"28 Gambia Ave, HAMPSTEAD GARDENS",,138.625872,-34.873251
+Enfield,Lightsview,N,,LIGHTSVIEW,Wiltja Boarding,"111-125 Folland Ave, LIGHTSVIEW",,138.626874,-34.858804
+Enfield,Nailsworth,A,,NAILSWORTH,Nailsworth Primary School,"2 Balfour St, NAILSWORTH",,138.603328,-34.882844
+Enfield,Northfield,A,,NORTHFIELD,Northfield Primary School,"North Ave, NORTHFIELD",,138.620956,-34.848609
+Enfield,Oakden,A,,OAKDEN,Salvation Army Oakden,"166 Fosters Rd, OAKDEN",,138.636487,-34.8576
+Enfield,Pooraka,F,,POORAKA,Pooraka Primary School,"11 South Tce, POORAKA",,138.61305,-34.83318
+Enfield,Prospect North,A,via Arthur St,PROSPECT,Prospect North Primary School,"30 Stuart Rd, PROSPECT",,138.596073,-34.875284
+Enfield,Walkley Heights,F,,WALKLEY HEIGHTS,Walkley Heights Child Care Centre,"1-5 Homestead Ave, WALKLEY HEIGHTS",,138.641,-34.8369
+Finniss,Currency Creek,A,,CURRENCY CREEK,Currency Creek Community Hall,"2836 Alexandrina Rd, CURRENCY CREEK",,138.764039,-35.451449
+Finniss,Goolwa,A,,GOOLWA,Goolwa Primary School,"2 Gardiner St, GOOLWA",,138.7802512,-35.49741316
+Finniss,Goolwa Central,F,,GOOLWA,Goolwa Uniting Church,"1 Collingwood St, GOOLWA",,138.779002,-35.504052
+Finniss,Middleton,A,,MIDDLETON,Middleton Pioneer Hall,"1 Walker Pl, MIDDLETON",,138.706,-35.5082
+Finniss,Milang,A,,MILANG,Milang Institute,"23 Coxe St, MILANG",,138.9694613,-35.40719565
+Finniss,Mount Compass,A,,MOUNT COMPASS,Mount Compass Area School,"School Rd, MOUNT COMPASS",,138.621,-35.3506
+Finniss,Port Elliot,A,,PORT ELLIOT,Port Elliot Primary School,"4 Cameron St, PORT ELLIOT",,138.677173,-35.523793
+Finniss,Victor Harbor,A,,VICTOR HARBOR,Victor Harbor Church of Christ,"9-11 Seaview Rd, VICTOR HARBOR",,138.6217636,-35.55109942
+Finniss,Victor Harbor East,A,,MCCRACKEN 5211,Victor Harbor Lutheran Church,"21a Adelaide Rd, MCCRACKEN 5211",,138.6377601,-35.53330655
+Finniss,Victor Harbor South,A,,VICTOR HARBOR,Salvation Army Church Victor Harbor,"22 Bartel Blvd, VICTOR HARBOR",,138.607562,-35.565941
+Flinders,Arno Bay,A,,ARNO BAY,Arno Bay Memorial Hall,"21-23 Tel El Kebir Tce, ARNO BAY",,136.56762,-33.911085
+Flinders,Ceduna,A,,CEDUNA,Ceduna Memorial Hall,"31 Poynton St, CEDUNA",,133.6735432,-32.1254828
+Flinders,Cleve,A,,CLEVE,Cleve Area School,"Second St, CLEVE",,136.497093,-33.70005
+Flinders,Coffin Bay,A,,COFFIN BAY,Coffin Bay Community Hall,"153 The Esplanade, COFFIN BAY",,135.465981,-34.6218
+Flinders,Cowell,A,,COWELL,Franklin Harbour Institute,"8 Main St, COWELL",,136.926256,-33.684279
+Flinders,Cummins,A,,CUMMINS,Cummins Area School,"13-15 McFarlane St, CUMMINS",,135.722475,-34.263971
+Flinders,Darke Peak,N,,DARKE PEAK,Darke Peak Sporting Complex,"Carapee Hill Rd, DARKE PEAK",,136.199,-33.4646
+Flinders,Elliston,A,,ELLISTON,Elliston Area School,"52 Flinders Hwy, ELLISTON",,134.891352,-33.644499
+Flinders,Kimba,A,,KIMBA,District Council of Kimba,"35-37 West Tce, KIMBA",,136.418581,-33.138662
+Flinders,Kirton Point,A,,PORT LINCOLN,Kirton Point Primary School,"Matthew Pl, PORT LINCOLN",,135.869,-34.7318
+Flinders,Lock,A,,LOCK,Lock Area School,"2-16 West Tce, LOCK",,135.753898,-33.568293
+Flinders,Minnipa,N,,MINNIPA,Minnipa Memorial Hall,"24 Thomas St, MINNIPA",,135.154872,-32.853957
+Flinders,North Shields,A,,NORTH SHIELDS,North Shields Soldiers Memorial Hall,"25 Dorward St, NORTH SHIELDS",,135.866,-34.6262
+Flinders,Poochera,N,,POOCHERA,Poochera Memorial Hall,"27 Main St, POOCHERA",,134.839111,-32.721047
+Flinders,Port Kenny,N,,VENUS BAY,Port Kenny & District Sports Centre,"22706 Flinders Hwy, VENUS BAY",,134.712945,-33.179853
+Flinders,Port Lincoln,A,,PORT LINCOLN,Nautilus Arts Centre,"66 Tasman Tce, PORT LINCOLN",,135.8576642,-34.71992162
+Flinders,Port Lincoln Central,A,,PORT LINCOLN,Our Saviours Lutheran Church,"23 Flinders Hwy, PORT LINCOLN",,135.847724,-34.718372
+Flinders,Port Lincoln South,A,,PORT LINCOLN,Lincoln Gardens Primary School,"31B Barley Rd, PORT LINCOLN",,135.846549,-34.741381
+Flinders,Port Neill,A,,PORT NEILL,Port Neill War Memorial Hall,"41 Wallis St, PORT NEILL",,136.349057,-34.119326
+Flinders,Smoky Bay,N,,SMOKY BAY,Smoky Bay CFS Station,"Tremaine St, SMOKY BAY",,133.935485,-32.374121
+Flinders,Streaky Bay,A,,STREAKY BAY,Streaky Bay RSL Hall,"21 Bay Rd, STREAKY BAY",,134.210683,-32.79889
+Flinders,Tumby Bay,A,,TUMBY BAY,Tumby Bay Senior Citizens Clubrooms,"11 Tumby Tce, TUMBY BAY",,136.102971,-34.377343
+Flinders,Ungarra,A,,UNGARRA,Ungarra Primary School,"15 Schramm St, UNGARRA",,136.047025,-34.180707
+Flinders,Wangary,A,,WANGARY,Lake Wangary Primary School,"2-8 Third St, WANGARY",,135.479,-34.5501
+Flinders,Wirrulla,N,,WIRRULLA,Wirrulla Memorial Hall,"13 Chapman Tce, WIRRULLA",,134.534209,-32.405214
+Flinders,Wudinna,A,,WUDINNA,Wudinna Senior Citizens Club,"20 Naylor Tce, WUDINNA",,135.466713,-33.048123
+Florey,Ingle Farm,A,,INGLE FARM,Ingle Farm Primary School,"2 Belalie Rd, INGLE FARM",,138.642,-34.8268
+Florey,Ingle Farm North,A,,INGLE FARM,North Ingle Primary School,"1-15 Rothwell Ave, INGLE FARM",,138.6451923,-34.81903333
+Florey,Mawson Lakes,A,via University Blvd,MAWSON LAKES,The Mawson Centre,"2-8 Main St, MAWSON LAKES",,138.6174731,-34.81067438
+Florey,Mawson Lakes North,F,,MAWSON LAKES,Mawson Lakes School,"12-28 Garden Tce, MAWSON LAKES",,138.612,-34.8088
+Florey,Para Hills East,A,,PARA HILLS,East Para Primary School,"12 Caroona Ave, PARA HILLS",,138.666963,-34.817596
+Florey,Para Hills West,A,,PARA HILLS WEST,Para Hills West Primary School,"21 Balkara Rd, PARA HILLS WEST",,138.652685,-34.80065
+Florey,Para Vista,A,,PARA VISTA,Valley View Secondary School,"240 Wright Rd, PARA VISTA",,138.656864,-34.834909
+Florey,Pooraka,F,,POORAKA,Pooraka Primary School,"11 South Tce, POORAKA",,138.61305,-34.83318
+Florey,Pooraka North,F,,POORAKA,Pooraka Farm Community Centre,"126 Henderson Ave, POORAKA",,138.622604,-34.823681
+Florey,Walkley Heights,F,,WALKLEY HEIGHTS,Walkley Heights Child Care Centre,"1-5 Homestead Ave, WALKLEY HEIGHTS",,138.641,-34.8369
+Frome,Angle Vale,A,,ANGLE VALE,Angle Vale Primary School,"Heaslip Rd, ANGLE VALE",,138.64697,-34.64345
+Frome,Auburn,A,,AUBURN,Auburn Clare & Districts RSL Hall,"11 Main North Rd, AUBURN",,138.685604,-34.027802
+Frome,Balaklava,A,,BALAKLAVA,Balaklava High School,"14 Gwy Tce, BALAKLAVA",,138.416933,-34.151573
+Frome,Booborowie,N,,BOOBOROWIE,Booborowie District Soldiers Memorial Institute,"Cnr North Tce & Booborowie Rd, BOOBOROWIE",,138.758074,-33.559554
+Frome,Burra,A,,BURRA,Burra Community School,"Smelts Rd, BURRA",,138.938718,-33.677171
+Frome,Clare,A,,CLARE,Vineyard Lutheran School,"59 Main North Rd, CLARE",,138.619585,-33.848568
+Frome,Dublin,A,,DUBLIN,Dublin Institute,"9 Sixth St, DUBLIN",,138.351706,-34.453775
+Frome,Eudunda,A,,EUDUNDA,Eudunda RSL,"2 Railway Pde, EUDUNDA",,139.0847245,-34.1726112
+Frome,Farrell Flat,A,,FARRELL FLAT,Farrell Flat Memorial Hall,"1 Patterson Tce, FARRELL FLAT",,138.796157,-33.829185
+Frome,Freeling,A,,FREELING,Freeling Institute,"8 Clarke St, FREELING",,138.809923,-34.45500647
+Frome,Hallett,N,,HALLETT,Hallett Institute Hall,"Alfred St, HALLETT",,138.892676,-33.410992
+Frome,Hamley Bridge,A,,HAMLEY BRIDGE,Hamley Bridge Primary School,"Florence St, HAMLEY BRIDGE",,138.68497,-34.354499
+Frome,Jamestown,A,,JAMESTOWN,Jamestown Memorial Hall,"73 Ayr St, JAMESTOWN",,138.603917,-33.205711
+Frome,Kapunda,A,via Jeff's St,KAPUNDA,Kapunda Primary School,"51 High St, KAPUNDA",,138.918,-34.3377
+Frome,Mallala,A,,MALLALA,Mallala Primary School,"28 Aerodrome Rd, MALLALA",,138.51,-34.4344
+Frome,Manoora,A,,MANOORA,Manoora Primary School,"3 Weymouth St, MANOORA",,138.814504,-34.006573
+Frome,Marrabel,A,,MARRABEL,Marrabel District Hall Inc.,"15 Main Rd, MARRABEL",,138.877706,-34.144913
+Frome,Owen,A,,OWEN,Owen Primary School,"23 Second St, OWEN",,138.54305,-34.271665
+Frome,Point Pass,A,,POINT PASS,Point Pass District Hall,"15 Main St, POINT PASS",,139.05111,-34.075486
+Frome,Riverton,A,via Paul St,RIVERTON,Riverton Primary School,"21 Swinden St, RIVERTON",,138.745,-34.1573
+Frome,Robertstown,A,,ROBERTSTOWN,Robertstown Peace Hall,"32 Commercial St, ROBERTSTOWN",,139.083,-33.9897
+Frome,Roseworthy,A,,ROSEWORTHY,Roseworthy Soldiers Memorial Hall,"10 Elizabeth St, ROSEWORTHY",,138.748619,-34.533327
+Frome,Saddleworth,A,,SADDLEWORTH,Saddleworth Primary School,"7 Saddle Rd, SADDLEWORTH",,138.784,-34.0816
+Frome,Spalding,A,,SPALDING,Spalding District Hall,"11 Main St, SPALDING",,138.608035,-33.498017
+Frome,Tarlee,A,,TARLEE,Tarlee Primary School,"38-42 Craig St, TARLEE",,138.772417,-34.269968
+Frome,Terowie,A,,TEROWIE,Terowie Institute,"Main St, TEROWIE",,138.919796,-33.149395
+Frome,Two Wells,A,,TWO WELLS,Two Wells Primary School,"17 Gawler Rd, TWO WELLS",,138.516792,-34.592104
+Frome,Wasleys,A,,WASLEYS,Wasleys Community Hall ,"43 -45 Annie Tce, WASLEYS",,138.683664,-34.470435
+Frome,Watervale,A,via Commercial Rd,WATERVALE,Watervale Primary School,"27 Main North Rd, WATERVALE",,138.645,-33.9605
+Gibson,Brighton,F,,BRIGHTON,Brighton Primary School,"1 Highet Ave, BRIGHTON",,138.523195,-35.016048
+Gibson,Glenelg South,A,,GLENELG SOUTH,St Martin's Anglican Church,"45 Hastings St, GLENELG SOUTH",,138.517,-34.9896
+Gibson,Marion,F,,MARION,Marion Primary School,"2-22 Malcolm Ave, MARION",,138.556,-35.0042
+Gibson,Marion South,A,,MARION,Marion Uniting Church,"9-11 Township Rd, MARION",,138.555484,-35.010999
+Gibson,North Brighton,A,,NORTH BRIGHTON,Paringa Park Primary School,"21 Bowker St, NORTH BRIGHTON",,138.525681,-35.002579
+Gibson,North Brighton West,A,,NORTH BRIGHTON,Brighton Secondary School,"305 Brighton Rd, NORTH BRIGHTON",,138.520593,-35.004206
+Gibson,Oaklands Park,A,,OAKLANDS PARK,St Elizabeth Of Hungary Anglican Church,"12 Dwyer Rd, OAKLANDS PARK",,138.542209,-35.010678
+Gibson,Seacombe Heights,A,via Gate 1,SEACOMBE HEIGHTS,Seaview High School,"78-124 Seacombe Rd, SEACOMBE HEIGHTS",,138.545894,-35.02983
+Gibson,Somerton Park,A,Masonic Village Hall,SOMERTON PARK,Somerton Park Seniors Living Community,"91 Diagonal Rd, SOMERTON PARK",,138.527,-34.994
+Gibson,South Brighton,N,,SOUTH BRIGHTON,Lou Kesting Community Hall,"Dover Square Brdwy, SOUTH BRIGHTON",,138.5281,-35.025396
+Gibson,Sturt,F,,STURT,Marion Council Chambers,"245 Sturt Rd, STURT",,138.55153,-35.018045
+Gibson,Warradale,A,Cnr Oaklands & Diagonal Rds,WARRADALE,Corner Uniting Church,"93 Oaklands Rd, WARRADALE",,138.5314332,-34.99693765
+Giles,Andamooka,A,,ANDAMOOKA,Andamooka Community Hall,"Lot 281 School Rd, ANDAMOOKA",,137.16725,-30.448802
+Giles,Coober Pedy,A,,COOBER PEDY,TAFE SA (Coober Pedy),"Hutchison St, COOBER PEDY",,134.754,-29.0117
+Giles,Hawker,A,,HAWKER,Hawker Institute,"58 Elder Tce, HAWKER",,138.422064,-31.888243
+Giles,Iron Knob,A,,IRON KNOB,Iron Knob Rural Transaction Centre,"Lot 783 Dickenson St, IRON KNOB",,137.15,-32.7318
+Giles,Port Augusta West,A,via Chinnery St,PORT AUGUSTA WEST,Flinders View Primary School,"27-43 McSporran Cres, PORT AUGUSTA WEST",,137.753977,-32.472415
+Giles,Quorn,A,,QUORN,Quorn Town Hall,"20 Railway Tce, QUORN",,138.041685,-32.345553
+Giles,Roxby Downs,A,,ROXBY DOWNS,Roxby Downs Christian Community Church,"Tutop, ROXBY DOWNS",,136.895941,-30.563909
+Giles,Whyalla Central East,A,,WHYALLA,Whyalla Town Primary School,"3-9 Walls St, WHYALLA",,137.585,-33.0361
+Giles,Whyalla Central West,A,,WHYALLA,Memorial Oval Primary School,"60 Bradford St, WHYALLA",,137.568,-33.034
+Giles,Whyalla Norrie East,F,,WHYALLA NORRIE,Nicolson Ave Primary School,"93 Nicolson Ave, WHYALLA NORRIE",,137.550636,-33.02905
+Giles,Whyalla Norrie North,A,,WHYALLA NORRIE,Hincks Ave Primary School,"6 Schulz Ave, WHYALLA NORRIE",,137.545,-33.0192
+Giles,Whyalla Norrie North-West,A,,WHYALLA NORRIE,Fisk St Primary School,"Pattinson Cl, WHYALLA NORRIE",,137.533,-33.0167
+Giles,Whyalla Norrie South,F,,WHYALLA NORRIE,Long St Primary School,"40 Eyre Ave, WHYALLA NORRIE",,137.532,-33.0391
+Giles,Whyalla Stuart West,F,,WHYALLA STUART,Whyalla Stuart Campus,"76 Bastyan Cres, WHYALLA STUART",,137.517482,-33.016283
+Giles,Woomera,A,,WOOMERA,Woomera Youth Centre,"Bool St, WOOMERA",,136.827052,-31.19874
+Hammond,Callington,A,,CALLINGTON,Callington Memorial Hall,"9-13 Callington Rd, CALLINGTON",,139.039367,-35.113538
+Hammond,Harrogate,A,,HARROGATE,Harrogate Soldiers Memorial Hall,"13 Mail Rd, HARROGATE",,139.011006,-34.950178
+Hammond,Jervois,A,,JERVOIS,Jervois Hall,"Henningson Rd, JERVOIS",,139.436404,-35.265639
+Hammond,Langhorne Creek,A,,LANGHORNE CREEK,Langhorne Creek Soldiers Memorial Hall  ,"89 Bridge Rd, LANGHORNE CREEK",,139.036486,-35.29594695
+Hammond,Mannum,F,,MANNUM,Mannum Leisure Centre,"51 Adelaide Rd, MANNUM",,139.302551,-34.914131
+Hammond,Murray Bridge,A,,MURRAY BRIDGE,Murray Bridge North School Gym,"28-40 Railway Tce, MURRAY BRIDGE",,139.270828,-35.115619
+Hammond,Murray Bridge East,A,,MURRAY BRIDGE EAST,Murray Bridge Basketball Stadium,"Murray Bridge Showgrounds, 113 Old Princes Hwy, MURRAY BRIDGE EAST",,139.303034,-35.114437
+Hammond,Murray Bridge South,A,Gymnasium via Long Island Rd,MURRAY BRIDGE,Murray Bridge High School,"5 Lohmann St, MURRAY BRIDGE",,139.285942,-35.136178
+Hammond,Murray Bridge West,A,,MURRAY BRIDGE,Bridge Evangelical Christian Church,"10 Thomas St, MURRAY BRIDGE",,139.265575,-35.125951
+Hammond,Mypolonga,A,,MYPOLONGA,Mypolonga Institute Hall,"6-8 Green St, MYPOLONGA",,139.35438,-35.039444
+Hammond,Palmer,A,,PALMER,Collier Park Hall,"Oval Complex, Olive Grove Ave, PALMER",,139.161997,-34.854075
+Hammond,Ponde,N,,PONDE,Ponde Hall,"443 Dabinett Rd, PONDE",,139.31,-34.9511
+Hammond,Strathalbyn,A,,STRATHALBYN,Strathalbyn Town Hall,"9-11 High St, STRATHALBYN",,138.892592,-35.25492
+Hammond,Wellington,A,,WELLINGTON,Wellington Hall,"3444 Jervois Rd, WELLINGTON",,139.382,-35.3313
+Hammond,Woodchester,A,,WOODCHESTER,Richardson Hall,"1372 Callington Rd, WOODCHESTER",,138.967739,-35.203918
+Hammond,Woods Point,N,via Arthur St,WOODS POINT,Woods Point Community Hall,"Jean St, WOODS POINT",,139.381,-35.2196
+Hartley,Campbelltown,F,carpark via Rowney Ave,CAMPBELLTOWN,Campbelltown Uniting Church,"607 Lower North East Rd, CAMPBELLTOWN",,138.662549,-34.879385
+Hartley,Dernancourt,A,,DERNANCOURT,Dernancourt School R-7,"29 Parsons Rd, DERNANCOURT",,138.67119,-34.86131
+Hartley,Felixstow,A,,FELIXSTOW,Felixstow Education Office,"5-11 Briar Rd, FELIXSTOW",,138.645,-34.8925
+Hartley,Glynde,A,,GLYNDE,Zion Lutheran Church Glynde,"15-17 Glynburn Rd, GLYNDE",,138.6562883,-34.89143418
+Hartley,Hectorville,A,,HECTORVILLE,East Torrens Primary School,"12 Robson Rd, HECTORVILLE",,138.666936,-34.890378
+Hartley,Holden Hill,A,via Lyons Rd,HOLDEN HILL,Kildare College,"96-98 Valiant Rd, HOLDEN HILL",,138.671,-34.8566
+Hartley,Magill,F,Gymnasium via Magill Rd,MAGILL,Magill Primary School,"11 Adelaide St, MAGILL",,138.677606,-34.913054
+Hartley,Magill South,A,,MAGILL,Morialta Uniting Church ,"26 Chapel St, MAGILL",,138.6732975,-34.91540628
+Hartley,Newton,A,via Graves St,NEWTON,St Francis of Assisi School,"57 Newton Rd, NEWTON",,138.674578,-34.882453
+Hartley,Paradise,F,,PARADISE,Charles Campbell College,"3 Campbell Rd, PARADISE",,138.673329,-34.875391
+Hartley,Paradise East,F,,PARADISE,Paradise Primary School,"100 George St, PARADISE",,138.685245,-34.869982
+Hartley,Rostrevor South,A,,MAGILL,Magill Church of Christ,"61 St Bernards Rd, MAGILL",,138.6758429,-34.9056768
+Hartley,Tranmere South,N,,TRANMERE,St Joseph's Parish School,"1 Birkinshaw Ave, TRANMERE",,138.66634,-34.91318
+Heysen,Aldgate,A,,ALDGATE,Aldgate Primary School,"3 Fairview Rd, ALDGATE",,138.75,-35.0191
+Heysen,Ashbourne,N,,ASHBOURNE,Ashbourne War Memorial Hall,"1293 Bull Creek Rd, ASHBOURNE",,138.769448,-35.285233
+Heysen,Bradbury,N,,BRADBURY,Longwood Institute,"706 Longwood Rd, BRADBURY",,138.72166,-35.05708
+Heysen,Bridgewater,F,via Lezayre Ave,BRIDGEWATER,Bridgewater Primary School,"46 Morella Gr, BRIDGEWATER",,138.76143,-35.00428
+Heysen,Cherry Gardens,A,,CHERRY GARDENS,Cherry Gardens Memorial Hall,"312 Cherry Gardens Rd, CHERRY GARDENS",,138.65358,-35.0635
+Heysen,Clarendon,A,,CLARENDON,Clarendon Primary School,"249 Potter Rd, CLARENDON",,138.6324776,-35.11023742
+Heysen,Crafers,A,,CRAFERS,Crafers Primary School,"55 Piccadilly Rd, CRAFERS",,138.71278,-34.99365
+Heysen,Echunga,F,,ECHUNGA,Echunga Primary School,"802 Echunga Rd, ECHUNGA",,138.791539,-35.097293
+Heysen,Hahndorf,A,,HAHNDORF,St Paul's Lutheran Church Hall,"10 Mount Barker Rd, HAHNDORF",,138.8140617,-35.0338468
+Heysen,Kangarilla,A,,KANGARILLA,Kangarilla Primary School,"33-35 McLaren Flat Rd, KANGARILLA",,138.659525,-35.148405
+Heysen,Macclesfield,A,,MACCLESFIELD,Macclesfield Primary School,"1/5 Luck St, MACCLESFIELD",,138.8388789,-35.17101506
+Heysen,Meadows,A,,MEADOWS,Meadows Primary School,"77 Mawson Rd, MEADOWS",,138.762168,-35.18073
+Heysen,Montacute,N,,MONTACUTE,Montacute Institute,"63 Institute Rd, MONTACUTE",,138.746289,-34.891459
+Heysen,Mylor,F,,MYLOR,Mylor Primary School,"220 Strathalbyn Rd, MYLOR",,138.760299,-35.040914
+Heysen,Norton Summit,A,,NORTON SUMMIT,Norton Summit Primary School,"15 Crescent Dr, NORTON SUMMIT",,138.728575,-34.927138
+Heysen,Oakbank,A,,OAKBANK,Oakbank Area School Hall ,"154 Onkaparinga Valley Rd, OAKBANK",,138.835737,-34.988768
+Heysen,Piccadilly,N,,PICCADILLY,Piccadilly Community Hall,"171 Piccadilly Rd, PICCADILLY",,138.726,-34.9822
+Heysen,Prospect Hill,A,,PROSPECT HILL,Prospect Hill War Memorial Hall,"397 Harvey Rd, PROSPECT HILL",,138.733669,-35.224201
+Heysen,Stirling,A,,STIRLING,Stirling RSL Hall,"5 Merrion Tce, STIRLING",,138.7179461,-35.00426057
+Heysen,Stirling East,A,via Paratoo Rd,STIRLING,Stirling East Primary School,"51 Braeside Rd, STIRLING",,138.735,-35.0029
+Heysen,Summertown,F,,SUMMERTOWN,Summertown Uniting Church Hall,"5a Bonython Rd, SUMMERTOWN",,138.72805,-34.95898
+Heysen,Upper Sturt,A,via Fernwood Way,UPPER STURT,Upper Sturt Primary School,"118 Upper Sturt Rd, UPPER STURT",,138.68462,-35.01891
+Heysen,Uraidla,F,,URAIDLA,Uraidla Primary School,"17 Kidney St, URAIDLA",,138.744127,-34.959405
+Heysen,Yundi,A,,YUNDI,Yundi War Memorial Hall,"482 Yundi Rd, YUNDI",,138.632956,-35.317572
+Hurtle Vale,Hackham,A,Penney Space,HACKHAM,Hackham East Primary School,"72 Collins Pde, HACKHAM",,138.534,-35.1394
+Hurtle Vale,Hackham West,F,,HACKHAM WEST,Hackham West R-7 School,"50 Glynville Dr, HACKHAM WEST",,138.516767,-35.143426
+Hurtle Vale,Happy Valley,A,,HAPPY VALLEY,Happy Valley Primary School,"18 Education Rd, HAPPY VALLEY",,138.584,-35.0868
+Hurtle Vale,Happy Valley West,F,,HAPPY VALLEY,Braeview School R-7,"1a Montana Dr, HAPPY VALLEY",,138.554,-35.0803
+Hurtle Vale,Huntfield Heights,A,,HUNTFIELD HEIGHTS,Huntfield Heights Primary School,"78 Melsetter Rd, HUNTFIELD HEIGHTS",,138.516542,-35.153182
+Hurtle Vale,Morphett Vale East,F,Mark Porter Hall,MORPHETT VALE,Woodcroft College,"143 - 173 Bains Rd, MORPHETT VALE",,138.544,-35.1143
+Hurtle Vale,Morphett Vale South,A,,MORPHETT VALE,Coorara Primary School,"Taylors Ave, MORPHETT VALE",,138.541285,-35.130778
+Hurtle Vale,Reynella East,F,via Gates 3-5,REYNELLA EAST,Reynella East College,"63 Malbeck Dr, REYNELLA EAST",,138.55491,-35.09086
+Hurtle Vale,Woodcroft,A,,WOODCROFT,Woodcroft Primary School Gym,"1-23 Investigator Dr, WOODCROFT",,138.55622,-35.10601
+Kaurna,Christie Downs,A,,CHRISTIE DOWNS,Christie Downs Primary School,"33 Elizabeth Rd, CHRISTIE DOWNS",,138.492677,-35.132632
+Kaurna,Christie Downs East,F,,CHRISTIE DOWNS,Elizabeth House Positive Ageing Centre,"112 Elizabeth Rd, CHRISTIE DOWNS",,138.50298,-35.1344
+Kaurna,Christies Beach,F,via Price St,CHRISTIES BEACH,Christies Beach Primary School,"46 Maturin Ave, CHRISTIES BEACH",,138.478939,-35.13752
+Kaurna,Maslin Beach,A,,MASLIN BEACH,Maslin Beach Community Hall,"5 Parkway Dr, MASLIN BEACH",,138.478734,-35.224469
+Kaurna,McLaren Vale,A,,MCLAREN VALE,McLaren Vale Primary School,"239-253 Caffrey St, MCLAREN VALE",,138.5306818,-35.2119088
+Kaurna,Noarlunga Downs,F,,NOARLUNGA DOWNS,Noarlunga Downs P-7 School,"Canterbury Cres, NOARLUNGA DOWNS",,138.496,-35.1504
+Kaurna,Old Noarlunga,F,,OLD NOARLUNGA,Old Noarlunga Institute,"Patapinda Rd, OLD NOARLUNGA",,138.5026689,-35.18092931
+Kaurna,Port Noarlunga,F,wheelchair parking via Ralphs Ave,PORT NOARLUNGA,Port Noarlunga Primary School ,"53 Anderson Ave, PORT NOARLUNGA",,138.4734998,-35.14476898
+Kaurna,Port Noarlunga South,F,,PORT NOARLUNGA SOUTH,South Port Primary School,"39 Jane St, PORT NOARLUNGA SOUTH",,138.473068,-35.175854
+Kaurna,Seaford,F,via Beechwood Gr,SEAFORD,Moana Primary School,"52 Schooner Rd, SEAFORD",,138.47449,-35.19206
+Kaurna,Seaford East,F,,SEAFORD,All Saints Catholic Primary School,"621-631 Grand Blvd, SEAFORD",,138.48051,-35.185625
+Kaurna,Seaford Rise,F,via Barbados Dr,SEAFORD RISE,Seaford Rise Primary School,"184-202 Grand Blvd, SEAFORD RISE",,138.48743,-35.20019
+Kavel,Brukunga,A,,BRUKUNGA,Brukunga Hall,"12 Pyrites Rd, BRUKUNGA",,138.942102,-35.002414
+Kavel,Charleston,A,,CHARLESTON,Charleston Memorial Hall,"1 Newman Rd, CHARLESTON",,138.902162,-34.916055
+Kavel,Lenswood,F,,LENSWOOD,Lenswood Primary School Gym,"1554 Lobethal Rd, LENSWOOD",,138.82437,-34.921722
+Kavel,Littlehampton,A,Wheelchair access via William St,LITTLEHAMPTON,Littlehampton Primary School Gym,"16-30 Baker St, LITTLEHAMPTON",,138.867323,-35.049488
+Kavel,Lobethal,A,,LOBETHAL,Lobethal Primary School Gym,"1 School Rd, LOBETHAL",,138.8719715,-34.90139879
+Kavel,Mount Barker,A,,MOUNT BARKER,Mount Barker High School Gym,"2 Wellington Rd, MOUNT BARKER",,138.857119,-35.075401
+Kavel,Mount Barker Central,F,,MT BARKER,St Marks Lutheran School Library,"27 Hampden Rd, MT BARKER",,138.8608926,-35.07254512
+Kavel,Mount Barker South,A,,MOUNT BARKER,Mount Barker South Primary School Gym,"33-45 Princes Rd, MOUNT BARKER",,138.859556,-35.080811
+Kavel,Nairne,A,,NAIRNE,Nairne Primary School Gym,"5 Saleyard Rd, NAIRNE",,138.903,-35.0385
+Kavel,Oakbank,A,,OAKBANK,Oakbank Area School Hall ,"154 Onkaparinga Valley Rd, OAKBANK",,138.835737,-34.988768
+Kavel,Woodside,A,via William St,WOODSIDE,Woodside Primary School,"23 Moffett St, WOODSIDE",,138.879,-34.9527
+King,Elizabeth East,F,,ELIZABETH EAST,Elizabeth East Primary School,"15 Dolphin St, ELIZABETH EAST",,138.678405,-34.725145
+King,Elizabeth Vale,A,,ELIZABETH VALE,Elizabeth Vale School,"13-19 Rollison Rd, ELIZABETH VALE",,138.669,-34.7463
+King,Golden Grove,F,,GOLDEN GROVE,Golden Grove Uniting Church,"75 One Tree Hill Rd, GOLDEN GROVE",,138.731,-34.7747
+King,Golden Grove Central,A,,GOLDEN GROVE,Golden Grove High School,"1 Adey Pl, GOLDEN GROVE",,138.69623,-34.79381
+King,Golden Grove East,F,,GOLDEN GROVE,Golden Grove Primary School,"140 Bicentennial Dr, GOLDEN GROVE",,138.70932,-34.78673
+King,Greenwith,F,,GREENWITH,Greenwith Community Centre,"The Golden Way, GREENWITH",,138.708679,-34.768078
+King,Greenwith West,A,,GREENWITH,Jesus Is Lord Church,"1681 Golden Grove Rd, GREENWITH",,138.708998,-34.767937
+King,Hillbank,N,,HILLBANK,Hillbank Community Children's Centre,"10 Penarth Ct, HILLBANK",,138.684422,-34.731614
+King,One Tree Hill,A,,ONE TREE HILL,One Tree Hill Institute,"1009 Blacktop Rd, ONE TREE HILL",,138.7654983,-34.71860765
+King,Salisbury East North,A,via London Dr,SALISBURY EAST,Tyndale Christian School,"50 Fern Grove Blvd, SALISBURY EAST",,138.67,-34.774
+King,Salisbury Heights,F,,SALISBURY HEIGHTS,Salisbury Heights Primary School,"9 Ward St, SALISBURY HEIGHTS",,138.677,-34.7589
+King,Salisbury Park,A,,SALISBURY PARK,Salisbury Park Primary School,"66 Goddard Dr, SALISBURY PARK",,138.67,-34.7603
+Lee,Albert Park,A,,ALBERT PARK,Good News Lutheran Church,"57-59 Botting St, ALBERT PARK",,138.52157,-34.87703
+Lee,Grange,A,via Surrey St,GRANGE,"Grange Primary School, Lawson Hall","39c Jetty St, GRANGE",,138.49675,-34.9025
+Lee,Royal Park,A,,ROYAL PARK,Western Strikers Soccer Club,"Kingston Ave, ROYAL PARK",,138.5062547,-34.87335832
+Lee,Royal Park South,A,,ROYAL PARK,Hendon Primary School,"162 Cedar Ave, ROYAL PARK",,138.511127,-34.877997
+Lee,Seaton,N,,SEATON,Seaton High School,"67-91 Glenburnie St, SEATON",,138.50648,-34.88529
+Lee,Seaton Park,A,,SEATON,Seaton Park Primary School,"80 Balcombe Ave, SEATON",,138.519992,-34.895627
+Lee,Seaton West,F,,SEATON,Christian Family Centre,"185 Frederick Rd, SEATON",,138.505721,-34.898056
+Lee,Semaphore Park,N,,SEMAPHORE PARK,Bower Cottages,"200 Bower Rd, SEMAPHORE PARK",,138.4943365,-34.85209757
+Lee,Semaphore Park South,F,,SEMAPHORE PARK,Westport Primary School,"53 West St, SEMAPHORE PARK",,138.491,-34.8549
+Lee,West Lakes Shore,A,,WEST LAKES SHORE,West Lakes Shore School,"Edwin St, WEST LAKES SHORE",,138.482,-34.8637
+Light,Angle Vale,A,,ANGLE VALE,Angle Vale Primary School,"Heaslip Rd, ANGLE VALE",,138.64697,-34.64345
+Light,Evanston,A,,EVANSTON,Gawler & District College B-12,"Barnet Rd, EVANSTON",,138.738,-34.6198
+Light,Evanston Gardens,A,,EVANSTON GARDENS,Evanston Gardens Memorial Hall,"65 Angle Vale Rd, EVANSTON GARDENS",,138.7192288,-34.62450325
+Light,Evanston South,F,,EVANSTON SOUTH,Trinity College - Senior,"Alexander Ave, EVANSTON SOUTH",,138.7343204,-34.6328696
+Light,Gawler,A,,GAWLER EAST,Gawler Council Administration Centre,"43 High St, GAWLER EAST",,138.7501168,-34.59727781
+Light,Gawler East,A,,GAWLER EAST,Gawler East Primary School,"Finch Rd, GAWLER EAST",,138.762024,-34.597911
+Light,Gawler South,A,,GAWLER SOUTH,Gawler Lutheran Church - Immanuel Worship Centre,"2 Second St, GAWLER SOUTH",,138.747792,-34.606696
+Light,Gawler West,F,,GAWLER,Gawler Sport and Community Centre,"Nixon Tce, GAWLER",,138.7394994,-34.59811923
+Light,Hewett,F,Gymnasium opposite Kestrel Rd,HEWETT,Hewett Primary School ,"Kingfisher Dr, HEWETT",,138.750535,-34.577631
+Light,Munno Para,F,,MUNNO PARA,Mark Oliphant College,"99 Douglas Dr, MUNNO PARA",,138.685501,-34.66549
+Light,Munno Para East,A,,MUNNO PARA,Munno Para Primary School,"81 Maltarra Rd, MUNNO PARA",,138.6995818,-34.6698313
+Light,Willaston,A,via Holmes St,WILLASTON,Gawler Scout Hall,"Gawler River Rd, WILLASTON",,138.737,-34.5891
+MacKillop,Beachport,A,,BEACHPORT,Beachport Recreation Centre,"Lot 15 Golf Course Rd, BEACHPORT",,140.01118,-37.475618
+MacKillop,Bordertown,A,,BORDERTOWN,Bordertown High School Hall,"30 South Tce, BORDERTOWN",,140.7693,-36.31303
+MacKillop,Coomandook,N,,COOMANDOOK,Coomandook Uniting Church,"3223 Dukes Hwy, COOMANDOOK",,139.701,-35.4722
+MacKillop,Coonalpyn,A,,COONALPYN,Coonalpyn Community Hall,"53 Poyntz Tce, COONALPYN",,139.859061,-35.698121
+MacKillop,Coonawarra,N,,COONAWARRA,Coonawarra Soldiers Memorial Community Club,"9-11 Memorial Dr, COONAWARRA",,140.8332342,-37.29125843
+MacKillop,Frances,A,,FRANCES,Frances Primary School,"23 Barrett Rd, FRANCES",,140.958651,-36.712667
+MacKillop,Furner,N,,FURNER,Furner Community Hall,"North Tce, FURNER",,140.338313,-37.406445
+MacKillop,Glencoe,N,,GLENCOE,Glencoe Central Primary School,"135 Kirip Rd, GLENCOE",,140.595186,-37.670243
+MacKillop,Kalangadoo,A,,KALANGADOO,Kalangadoo Primary School,"48a Kangaroo Flat Rd, KALANGADOO",,140.696,-37.565
+MacKillop,Keith,A,,KEITH,Keith Area School,"Tolmer Tce, KEITH",,140.351861,-36.098617
+MacKillop,Kingston,A,,KINGSTON SE,Kingston Community School Gym,"46 East Tce, KINGSTON SE",,139.856662,-36.836455
+MacKillop,Lameroo,A,,LAMEROO,Lameroo Regional Community School Library,"1 Bews Tce, LAMEROO",,140.521764,-35.330302
+MacKillop,Lucindale,A,,LUCINDALE,Lucindale Town Hall,"10 Centenary Ave, LUCINDALE",,140.369158,-36.971496
+MacKillop,Meningie,A,,MENINGIE,Meningie Uniting Church,"2 Princes Hwy, MENINGIE",,139.3405,-35.6842
+MacKillop,Millicent,A,,MILLICENT,Millicent Civic and Arts Centre,"14 Ridge Tce, MILLICENT",,140.349742,-37.59298
+MacKillop,Millicent South,A,,MILLICENT,Newbery Park Primary School,"Bridges St, MILLICENT",,140.362,-37.6086
+MacKillop,Mount Burr,N,,MOUNT BURR,Mount Burr Netball Club,"Lot 51 Riddoch Ave, MOUNT BURR",,140.457199,-37.539174
+MacKillop,Mundulla,A,,MUNDULLA,Mundulla Primary School,"22 Kennedy St, MUNDULLA",,140.692619,-36.357932
+MacKillop,Nangwarry,A,,NANGWARRY,Nangwarry Primary School,"Whitford Cres, NANGWARRY",,140.818034,-37.54216
+MacKillop,Naracoorte,A,,NARACOORTE,Naracoorte Town Hall & Function Centre,"95 Smith St, NARACOORTE",,140.74244,-36.95565
+MacKillop,Naracoorte South,A,,NARACOORTE,Naracoorte South Primary School gym,"71 Cedar Ave, NARACOORTE",,140.746032,-36.973231
+MacKillop,Padthaway,A,,PADTHAWAY,Padthaway Primary School,"67 Vogelsang Rd, PADTHAWAY",,140.497,-36.593
+MacKillop,Penola,A,,PENOLA,Penola Coonawarra Soldiers Memorial hall,"22 Young St, PENOLA",,140.835768,-37.37951407
+MacKillop,Pinnaroo,A,,PINNAROO,Pinnaroo Primary School  Community Library,"Bundey Tce, PINNAROO",,140.907309,-35.256413
+MacKillop,Rendelsham,A,,RENDELSHAM,Rendelsham Community Hall,"17-19 Nilsson St, RENDELSHAM",,140.226,-37.5508
+MacKillop,Robe,A,,ROBE,Robe Primary School,"1 Union St, ROBE",,139.760508,-37.163526
+MacKillop,Southend,N,via Watson St,SOUTHEND,Southend Community Centre,"Corner Eliza St and Watson St, SOUTHEND",,140.133652,-37.567775
+MacKillop,Tailem Bend,A,via Library La,TAILEM BEND,Tailem Bend Primary School Gym,"1 Murray St, TAILEM BEND",,139.457647,-35.258672
+MacKillop,Tantanoola,A,,TANTANOOLA,Tantanoola Memorial Hall,"24 Railway Tce W, TANTANOOLA",,140.4550783,-37.69753179
+MacKillop,Tintinara,A,,TINTINARA,Tintinara War Memorial Hall,"49-51 Becker Tce, TINTINARA",,140.057898,-35.884896
+MacKillop,Western Flat,A,,WESTERN FLAT,Western Flat Hall,"2600 Naracoorte Rd, WESTERN FLAT",,140.75,-36.523
+MacKillop,Willalooka,A,,WILLALOOKA,Willalooka Hall,"3436 Riddoch Hwy, WILLALOOKA",,140.35032,-36.391618
+MacKillop,Wolseley,A,,WOLSELEY,Wolseley Community Club,"Railway Tce N, WOLSELEY",,140.907105,-36.365227
+Mawson,Aldinga Beach,A,,ALDINGA BEACH,Aldinga Beach R-7 School,"58 Quiniven Rd, ALDINGA BEACH",,138.462287,-35.268588
+Mawson,Aldinga Beach West,F,,ALDINGA BEACH,Aldinga Community Centre,"7 Stewart Ave, ALDINGA BEACH",,138.455,-35.273
+Mawson,American River,A,,AMERICAN RIVER,American River Community Hall,"32 Ryberg Rd, AMERICAN RIVER",,137.780578,-35.772867
+Mawson,Cape Jervis,A,,CAPE JERVIS,Cape Jervis Community Recreation & Sporting Club,"17 Ransford St, CAPE JERVIS",,138.108,-35.6044
+Mawson,Kingscote,A,,KINGSCOTE,Kangaroo Island Community Education (Kingscote Campus),"5 Centenary Ave, KINGSCOTE",,137.633,-35.6512
+Mawson,Maslin Beach,A,,MASLIN BEACH,Maslin Beach Community Hall,"5 Parkway Dr, MASLIN BEACH",,138.478734,-35.224469
+Mawson,McLaren Flat,A,,MCLAREN FLAT,McLaren Flat Soldiers Memorial Hall,"41 Main Rd, MCLAREN FLAT",,138.586837,-35.206549
+Mawson,McLaren Vale,A,,MCLAREN VALE,McLaren Vale Primary School,"239-253 Caffrey St, MCLAREN VALE",,138.5306818,-35.2119088
+Mawson,Myponga,A,,MYPONGA,Myponga Hall,"40 Main South Rd, MYPONGA",,138.463179,-35.391654
+Mawson,Parawa,N,,PARAWA,Parawa Recreation Centre,"1541 Range Rd, PARAWA",,138.354682,-35.56163
+Mawson,Parndana,A,,PARNDANA,Parndana Community Health Centre,"12 Jubilee Ave, PARNDANA",,137.260781,-35.788012
+Mawson,Penneshaw,A,via Cape Willoughby Rd,PENNESHAW,Kangaroo Island Community Education (Penneshaw Campus),"47 Howard Dr, PENNESHAW",,137.931801,-35.720175
+Mawson,Second Valley,A,,SECOND VALLEY,Second Valley Soldiers Memorial Hall,"140 Finniss Vale Dr, SECOND VALLEY",,138.227548,-35.527805
+Mawson,Sellicks Beach,A,,SELLICKS BEACH,Sellicks Beach Community Hall,"18 Riviera Rd, SELLICKS BEACH",,138.455381,-35.324679
+Mawson,Willunga,N,,WILLUNGA,Willunga Show Hall,"7 Main Rd, WILLUNGA",,138.55404,-35.27092
+Mawson,Yankalilla,A,Jubilee Hall,YANKALILLA,Yankalilla Area School,"207 Main South Rd, YANKALILLA",,138.334,-35.4534
+Morialta,Athelstone,A,,ATHELSTONE,Athelstone School,"8 Brookside Rd, ATHELSTONE",,138.699,-34.8678
+Morialta,Athelstone South,F,,ATHELSTONE,Thorndon Park Primary School,"71 Stradbroke Rd, ATHELSTONE",,138.692006,-34.884361
+Morialta,Highbury,F,,HIGHBURY,Turramurra Recreation Centre,"1000-1030 Lower North East Rd, HIGHBURY",,138.701,-34.853
+Morialta,Highbury West,A,,HIGHBURY,Dernancourt Kindergarten,"10 Vernons Dr, HIGHBURY",,138.69317,-34.857335
+Morialta,Hope Valley East,A,,HOPE VALLEY,Highbury Primary School,"1 Payne St, HOPE VALLEY",,138.70963,-34.8481
+Morialta,Magill,F,Gymnasium via Magill Rd,MAGILL,Magill Primary School,"11 Adelaide St, MAGILL",,138.677606,-34.913054
+Morialta,Newton,A,via Graves St,NEWTON,St Francis of Assisi School,"57 Newton Rd, NEWTON",,138.674578,-34.882453
+Morialta,Rostrevor,F,,ROSTREVOR,Stradbroke Primary School,"73 Koonga Ave, ROSTREVOR",,138.6851,-34.89392
+Morialta,Rostrevor South,A,,MAGILL,Magill Church of Christ,"61 St Bernards Rd, MAGILL",,138.6758429,-34.9056768
+Morialta,St Agnes,F,,ST AGNES,St Agnes Primary School,"250 Smart Rd, ST AGNES",,138.71822,-34.831352
+Morphett,Glenelg,F,cnr High & Chapel Sts,GLENELG,St Mary's Hall,"19 High St, GLENELG",,138.514908,-34.981499
+Morphett,Glenelg East,A,,GLENELG EAST,St Paul's Lutheran Church,"48 -50 Brighton Rd, GLENELG EAST",,138.520372,-34.980827
+Morphett,Glenelg East Central,A,,GLENELG EAST,Glenelg Primary School,"cnr Diagonal Rd & Brighton Rd, GLENELG EAST",,138.522,-34.9852
+Morphett,Glenelg North,A,,GLENELG NORTH,St Leonard's Primary School,"5a Jervois St, GLENELG NORTH",,138.5197092,-34.97220679
+Morphett,Glenelg South,A,,GLENELG SOUTH,St Martin's Anglican Church,"45 Hastings St, GLENELG SOUTH",,138.517,-34.9896
+Morphett,Glengowrie,A,,GLENGOWRIE,Glengowrie Uniting Church,"31-33 Butler Cres, GLENGOWRIE",,138.52973,-34.98337
+Morphett,Morphettville,A,,MORPHETTVILLE,Marion Leisure & Fitness Centre,"Oaklands Rd, MORPHETTVILLE",,138.545,-34.9953
+Morphett,Novar Gardens,A,,NOVAR GARDENS,Immanuel Primary School,"24 Morphett Rd, NOVAR GARDENS",,138.537,-34.9727
+Morphett,Park Holme,A,,PARK HOLME,Springpark Baptist Church,"80 Hendrie St, PARK HOLME",,138.547506,-34.989145
+Morphett,Park Holme South,A,,PARK HOLME,Ascot Park Primary School,"1-37 Pildappa Ave, PARK HOLME",,138.556,-34.9905
+Morphett,Plympton West,F,,PLYMPTON,Plympton International College,"21a Errington St, PLYMPTON",,138.54768,-34.96232
+Morphett,Somerton Park,A,Masonic Village Hall,SOMERTON PARK,Somerton Park Seniors Living Community,"91 Diagonal Rd, SOMERTON PARK",,138.527,-34.994
+Mount Gambier,Carpenter Rocks,A,,CARPENTER ROCKS,Carpenter Rocks Community Hall,"26-44 Carpenter Rocks Rd, CARPENTER ROCKS",,140.399,-37.9136
+Mount Gambier,Compton,A,,SUTTONTOWN,Compton Soldiers Memorial Hall,"1 Compton Hall Rd, SUTTONTOWN",,140.729174,-37.80204828
+Mount Gambier,Glenburnie,A,,GLENBURNIE,Glenburnie Primary School,"36 Kromelite Rd, GLENBURNIE",,140.862951,-37.840281
+Mount Gambier,Kongorong,A,,KONGORONG,Kongorong Soldiers Memorial Hall,"2 Hay Tce, KONGORONG",,140.560849,-37.89905529
+Mount Gambier,Moorak,A,,MOORAK,Moorak Primary School,"171 Yells Rd, MOORAK",,140.736738,-37.864439
+Mount Gambier,Mount Gambier,F,,MOUNT GAMBIER,Anglican Parish of Mt Gambier,"26 Bay Rd, MOUNT GAMBIER",,140.778992,-37.831299
+Mount Gambier,Mount Gambier East,A,,MOUNT GAMBIER,Melaleuca Park Primary School,"61 Boandik Tce, MOUNT GAMBIER",,140.794,-37.8402
+Mount Gambier,Mount Gambier North,F,,MOUNT GAMBIER,Mount Gambier North Primary School Gym,"9 Heath St, MOUNT GAMBIER",,140.775843,-37.816935
+Mount Gambier,Mount Gambier Park,A,,MOUNT GAMBIER,McDonald Park School ,"55-57 North Tce, MOUNT GAMBIER",,140.793552,-37.826238
+Mount Gambier,Mount Gambier West,A,,MOUNT GAMBIER,Mount Gambier High School,"17 Brownes Rd, MOUNT GAMBIER",,140.765858,-37.825391
+Mount Gambier,Port MacDonnell,A,,PORT MACDONNELL,Port MacDonnell Senior Citizens Club,"2 Elizabeth St, PORT MACDONNELL",,140.69955,-38.051395
+Mount Gambier,Suttontown,A,,SUTTONTOWN,Suttontown Primary School,"127 Pinehall Ave, SUTTONTOWN",,140.769729,-37.79688
+Mount Gambier,Tarpeena,N,,TARPEENA,Tarpeena Memorial Hall,"55 Riddoch Hwy, TARPEENA",,140.79642,-37.626675
+Mount Gambier,Yahl,A,,YAHL,Yahl Hall,"29 Yahl Hall Rd, YAHL",,140.82732,-37.878871
+Narungga,Alford,N,,ALFORD,Alford Institute Hall,"High St, ALFORD",,137.821715,-33.815808
+Narungga,Ardrossan,A,,ARDROSSAN,Ardrossan Area School,"14 Second St, ARDROSSAN",,137.91308,-34.423748
+Narungga,Arthurton,A,,ARTHURTON,Arthurton Town Hall,"14 Main St, ARTHURTON",,137.75665,-34.25948
+Narungga,Balaklava,A,,BALAKLAVA,Balaklava High School,"14 Gwy Tce, BALAKLAVA",,138.416933,-34.151573
+Narungga,Blyth,A,,BLYTH,Blyth Primary School,"August St, BLYTH",,138.49094,-33.844465
+Narungga,Brinkworth,A,,BRINKWORTH,Brinkworth Primary School,"104 Main St, BRINKWORTH",,138.404468,-33.688291
+Narungga,Bute,A,,BUTE,Bute Soldiers Memorial Hall,"14 High St, BUTE",,138.006505,-33.865238
+Narungga,Coobowie,A,,COOBOWIE,Coobowie Community Hall,"1 Gilbert St, COOBOWIE",,137.730627,-35.0436
+Narungga,Corny Point,A,,CORNY POINT,Corny Point Memorial Hall,"2 Liddiard Rd, CORNY POINT",,137.083,-34.9264
+Narungga,Curramulka,A,,CURRAMULKA,Curramulka Primary School,"1 Sixth St, CURRAMULKA",,137.712996,-34.696328
+Narungga,Edithburgh,A,,EDITHBURGH,Edithburgh Institute,"30 Blanche St, EDITHBURGH",,137.745677,-35.085975
+Narungga,Hardwicke Bay,A,,HARDWICKE BAY,Hardwicke Bay Community Centre,"5 Progress Rd, HARDWICKE BAY",,137.460104,-34.892364
+Narungga,Kadina,A,,KADINA,Kadina Copper Coast Sport & Leisure Centre,"1 Doswell Tce, KADINA",,137.709183,-33.961926
+Narungga,Lochiel,A,,LOCHIEL,Lochiel Hall,"5-7 Frances St, LOCHIEL",,138.161434,-33.9273
+Narungga,Maitland,A,Gymnasium,MAITLAND,Maitland Central Yorke School,"4-24 Junction Rd, MAITLAND",,137.673957,-34.368386
+Narungga,Marion Bay,A,,MARION BAY,Marion Bay Community Hall,"10-20 Slow St, MARION BAY",,136.98082,-35.238024
+Narungga,Minlaton,A,,MINLATON,Minlaton Town Hall,"57 Main St, MINLATON",,137.594783,-34.77267
+Narungga,Moonta,F,,MOONTA,Moonta Area School Gym,"Blanche Tce, MOONTA",,137.591428,-34.070284
+Narungga,Paskeville,A,,PASKEVILLE,Paskeville Community Centre,"70 Railway Tce S, PASKEVILLE",,137.902118,-34.038986
+Narungga,Port Broughton,A,via South Tce,PORT BROUGHTON,Port Broughton Area School,"12 East Tce, PORT BROUGHTON",,137.9336164,-33.60330606
+Narungga,Port Clinton,A,,PORT CLINTON,Port Clinton Community Hall,"32 Cumberland Rd, PORT CLINTON",,138.0187539,-34.22437324
+Narungga,Port Victoria,A,,PORT VICTORIA,Port Victoria Institute,"16-18 Main St, PORT VICTORIA",,137.484558,-34.497447
+Narungga,Port Vincent,A,,PORT VINCENT,Port Vincent Senior Citizens Club,"13 Main St, PORT VINCENT",,137.860242,-34.77864
+Narungga,Port Wakefield,A,,PORT WAKEFIELD,Port Wakefield Soldiers Memorial Hall,"41 Edward St, PORT WAKEFIELD",,138.146279,-34.18507
+Narungga,Redhill,N,,REDHILL,Redhill Community Centre,"6 Moorhouse St, REDHILL",,138.223,-33.5393
+Narungga,Snowtown,A,,SNOWTOWN,Snowtown Soldiers Memorial Hall,"22-24 Railway Tce E, SNOWTOWN",,138.215051,-33.781168
+Narungga,Stansbury,A,,STANSBURY,Stansbury Institute,"6 Weaver St, STANSBURY",,137.796993,-34.909114
+Narungga,Wallaroo,F,The Lamshed,WALLAROO,Wallaroo Primary School,"12A Hughes St, WALLAROO",,137.624804,-33.932822
+Narungga,Wallaroo Mines,A,,WALLAROO MINES,Wallaroo Mines Primary School,"Lipson Ave, WALLAROO MINES",,137.698678,-33.966337
+Narungga,Warooka,A,,WAROOKA,Warooka Memorial Hall,"1-3 Player St, WAROOKA",,137.401988,-34.990853
+Narungga,Yorketown,A,,YORKETOWN,Yorketown Area School,"Cnr Stansbury & School Rds, YORKETOWN",,137.615161,-35.01717
+Newland,Banksia Park,A,,BANKSIA PARK,Banksia Park Primary R-7,"1-5 Cottenham Rd, BANKSIA PARK",,138.727,-34.8083
+Newland,Fairview Park,A,via Pengaruh Dr,FAIRVIEW PARK,Fairview Park Primary School,"Nepondi Ct, FAIRVIEW PARK",,138.731349,-34.798176
+Newland,Highbury,F,,HIGHBURY,Turramurra Recreation Centre,"1000-1030 Lower North East Rd, HIGHBURY",,138.701,-34.853
+Newland,Hope Valley,F,,HOPE VALLEY,Modbury South Primary School,"8 Dampier Ave, HOPE VALLEY",,138.69694,-34.840391
+Newland,Hope Valley East,A,,HOPE VALLEY,Highbury Primary School,"1 Payne St, HOPE VALLEY",,138.70963,-34.8481
+Newland,Hope Valley West,A,,HOPE VALLEY,John XXIII Catholic Community Centre,"50 Reservoir Rd, HOPE VALLEY",,138.688,-34.8398
+Newland,Modbury,F,,MODBURY,Modbury West School,"450-474 Wright Rd, MODBURY",,138.677757,-34.833554
+Newland,Modbury Heights,A,,MODBURY HEIGHTS,The Heights School,"21-51 Brunel Dr, MODBURY HEIGHTS",,138.682,-34.8111
+Newland,Modbury North,A,,MODBURY NORTH,Burragah Recreation centre,"140 Kelly Rd, MODBURY NORTH",,138.6743247,-34.82519114
+Newland,Modbury North East,F,via Iliad Gr,MODBURY NORTH,Modbury School P-7 Gym,"2-18 Golden Grove Rd, MODBURY NORTH",,138.693056,-34.826145
+Newland,Redwood Park,A,,REDWOOD PARK,Redwood Park Primary,"2 Lokan St, REDWOOD PARK",,138.701999,-34.814693
+Newland,Ridgehaven,A,,RIDGEHAVEN,Ridgehaven Primary School,"479 Milne Rd, RIDGEHAVEN",,138.710634,-34.817075
+Newland,St Agnes,F,,ST AGNES,St Agnes Primary School,"250 Smart Rd, ST AGNES",,138.71822,-34.831352
+Newland,St Agnes West,A,,ST AGNES,Ardtornish Primary School,"2 Saarinen Ave, ST AGNES",,138.705,-34.8342
+Newland,Tea Tree Gully,A,via Memorial Dr,TEA TREE GULLY,Tea Tree Gully Primary School,"11-13 Neale St, TEA TREE GULLY",,138.727,-34.8221
+Playford,Mawson Lakes,A,via University Blvd,MAWSON LAKES,The Mawson Centre,"2-8 Main St, MAWSON LAKES",,138.6174731,-34.81067438
+Playford,Mawson Lakes North,F,,MAWSON LAKES,Mawson Lakes School,"12-28 Garden Tce, MAWSON LAKES",,138.612,-34.8088
+Playford,Parafield Gardens,A,via Blackie Ave only,PARAFIELD GARDENS,Karrendi Primary School Gym,"15 Bradman Rd, PARAFIELD GARDENS",,138.61827,-34.7908
+Playford,Parafield Gardens Central,A,,PARAFIELD GARDENS,Parafield Gardens Primary School,"23 Shepherdson Rd, PARAFIELD GARDENS",,138.616,-34.7859
+Playford,Parafield Gardens North-West,A,via Hemming St,PARAFIELD GARDENS,The Pines School,"42 Andrew Smith Dr, PARAFIELD GARDENS",,138.607083,-34.77256
+Playford,Paralowie,A,via Halba Cres only,PARALOWIE,Paralowie R-12 School,"168-186 Whites Rd, PARALOWIE",,138.622,-34.7535
+Playford,Paralowie South,F,,PARALOWIE,Bethany Christian School,"37 Countess St, PARALOWIE",,138.605547,-34.762006
+Playford,Paralowie West,F,,PARALOWIE,Freedom Uniting Church,"11 Liberator Dr, PARALOWIE",,138.5949237,-34.75871631
+Playford,Salisbury Downs,F,,SALISBURY DOWNS,Salisbury Downs Primary School,"39 Paramount Rd, SALISBURY DOWNS",,138.624,-34.7717
+Port Adelaide,Birkenhead,F,,BIRKENHEAD,Le Fevre Peninsula Primary School,"1 Shorney St, BIRKENHEAD",,138.495,-34.8404
+Port Adelaide,Ethelton,F,,ETHELTON,Portlife Church,"1 Causeway Rd, ETHELTON",,138.49516,-34.85085
+Port Adelaide,Largs Bay,A,,LARGS BAY,Largs Bay School,"215 Fletcher Rd, LARGS BAY",,138.49448,-34.82346
+Port Adelaide,Largs Bay Central,A,,LARGS BAY,St Albans Anglican Church,"29-31 Jetty Rd, LARGS BAY",,138.489,-34.826
+Port Adelaide,Mawson Lakes,A,via University Blvd,MAWSON LAKES,The Mawson Centre,"2-8 Main St, MAWSON LAKES",,138.6174731,-34.81067438
+Port Adelaide,Mawson Lakes North,F,,MAWSON LAKES,Mawson Lakes School,"12-28 Garden Tce, MAWSON LAKES",,138.612,-34.8088
+Port Adelaide,North Haven,A,,NORTH HAVEN,North Haven School,"15 Tapping Cres, NORTH HAVEN",,138.498014,-34.790214
+Port Adelaide,Ottoway,F,,OTTAWAY,Junction Community Centre,"2A May Tce, OTTAWAY",,138.52726,-34.8513
+Port Adelaide,Port Adelaide,F,,PORT ADELAIDE,TAFE SA Port Adelaide Campus,"1 Mundy St, PORT ADELAIDE",,138.5,-34.8444
+Port Adelaide,Rosewater,A,,ROSEWATER,Mt Carmel College,"33 Newcastle St, ROSEWATER",,138.522289,-34.856273
+Port Adelaide,Semaphore,N,,SEMAPHORE,Semaphore Masonic Hall,"66 Semaphore Rd, SEMAPHORE",,138.484795,-34.839379
+Port Adelaide,Semaphore South,A,,SEMAPHORE SOUTH,Le Fevre High School,"90 Hart St, SEMAPHORE SOUTH",,138.48565,-34.84544
+Port Adelaide,Taperoo,A,,TAPEROO,Ocean View College,"47 Gedville Rd, TAPEROO",,138.495251,-34.804178
+Port Adelaide,Taperoo East,F,,TAPEROO,Our Lady of the Visitation school,"433 Victoria Rd, TAPEROO",,138.499517,-34.805676
+Ramsay,Brahma Lodge,A,,BRAHMA LODGE,Brahma Lodge Primary School,"20 Mortess St, BRAHMA LODGE",,138.65,-34.7753
+Ramsay,Burton,A,via Brookfield Ave,BURTON,Burton Primary School,"49a Kensington Way, BURTON",,138.596641,-34.741597
+Ramsay,Elizabeth Vale,A,,ELIZABETH VALE,Elizabeth Vale School,"13-19 Rollison Rd, ELIZABETH VALE",,138.669,-34.7463
+Ramsay,Lake Windemere,F,,SALISBURY NORTH,Lake Windemere B-7 School,"17 Uraidla Ave, SALISBURY NORTH",,138.619781,-34.739637
+Ramsay,Paralowie,A,via Halba Cres only,PARALOWIE,Paralowie R-12 School,"168-186 Whites Rd, PARALOWIE",,138.622,-34.7535
+Ramsay,Paralowie South,F,,PARALOWIE,Bethany Christian School,"37 Countess St, PARALOWIE",,138.605547,-34.762006
+Ramsay,Paralowie West,F,,PARALOWIE,Freedom Uniting Church,"11 Liberator Dr, PARALOWIE",,138.5949237,-34.75871631
+Ramsay,Salisbury,A,,SALISBURY,Salisbury Primary School,"10 Compuda St, SALISBURY",,138.647,-34.7681
+Ramsay,Salisbury Central,F,via Mary St,SALISBURY,TAFE SA Salisbury Campus,"16 Wiltshire St, SALISBURY",,138.648,-34.7629
+Ramsay,Salisbury Downs,F,,SALISBURY DOWNS,Salisbury Downs Primary School,"39 Paramount Rd, SALISBURY DOWNS",,138.624,-34.7717
+Ramsay,Salisbury North,F,via Rolleston Rd,SALISBURY NORTH,Salisbury North R-7 School,"38 Bagster Rd, SALISBURY NORTH",,138.63447,-34.7529
+Ramsay,Salisbury Park,A,,SALISBURY PARK,Salisbury Park Primary School,"66 Goddard Dr, SALISBURY PARK",,138.67,-34.7603
+Reynell,Christie Downs,A,,CHRISTIE DOWNS,Christie Downs Primary School,"33 Elizabeth Rd, CHRISTIE DOWNS",,138.492677,-35.132632
+Reynell,Christie Downs East,F,,CHRISTIE DOWNS,Elizabeth House Positive Ageing Centre,"112 Elizabeth Rd, CHRISTIE DOWNS",,138.50298,-35.1344
+Reynell,Christie Downs North,A,,CHRISTIE DOWNS,Lonsdale Heights Primary School,"25 Sunningdale Dr, CHRISTIE DOWNS",,138.502,-35.1251
+Reynell,Christies Beach North,F,,CHRISTIES BEACH,St John The Apostle Parish School,"14 Winnerah Rd, CHRISTIES BEACH",,138.478,-35.1295
+Reynell,Hackham,A,Penney Space,HACKHAM,Hackham East Primary School,"72 Collins Pde, HACKHAM",,138.534,-35.1394
+Reynell,Morphett Vale,A,,MORPHETT VALE,Flaxmill School P-6,"80 Flaxmill Rd, MORPHETT VALE",,138.518689,-35.126899
+Reynell,Morphett Vale Central,A,,MORPHETT VALE,Morphett Vale East Primary School Gym,"1 Monarch St, MORPHETT VALE",,138.5316926,-35.12133355
+Reynell,Morphett Vale East,F,Mark Porter Hall,MORPHETT VALE,Woodcroft College,"143 - 173 Bains Rd, MORPHETT VALE",,138.544,-35.1143
+Reynell,Morphett Vale North,F,,MORPHETT VALE,Wakefield House Positive Ageing Centre,"65 Acre Ave, MORPHETT VALE",,138.517051,-35.110885
+Reynell,Old Reynella,F,,OLD REYNELLA,Reynella Primary School,"55 Concord Dr, OLD REYNELLA",,138.537225,-35.100252
+Reynell,O'Sullivan Beach,F,,O'SULLIVAN BEACH,O'Sullivan Beach Primary School,"51 Galloway Rd, O'SULLIVAN BEACH",,138.479463,-35.125427
+Reynell,Pimpala,F,,MORPHETT VALE,Pimpala Primary School,"24 Vanstone Ave, MORPHETT VALE",,138.529454,-35.113405
+Reynell,Reynella,F,,REYNELLA,Reynella South Primary School,"119-135 Sherriffs Rd, REYNELLA",,138.524156,-35.10486
+Schubert,Angaston,F,via Washington St,ANGASTON,Angaston Town Hall,"8 Sturt St, ANGASTON",,139.046,-34.5023
+Schubert,Birdwood,A,via Pflaum St,BIRDWOOD,Birdwood Primary School Gym,"44 Shannon St, BIRDWOOD",,138.9589,-34.81977
+Schubert,Cudlee Creek,N,,CUDLEE CREEK,Cudlee Creek Soldiers Memorial Hall,"4 Redden Dr, CUDLEE CREEK",,138.816358,-34.840164
+Schubert,Eden Valley,A,,EDEN VALLEY,Eden Valley Lutheran Church Hall,"1 Murray St, EDEN VALLEY",,139.097,-34.6402
+Schubert,Forreston,A,,FORRESTON,Forreston Memorial Hall,"231 Forreston Rd, FORRESTON",,138.899083,-34.797971
+Schubert,Greenock,A,,GREENOCK,Greenock Institute,"1 Greenock Rd, GREENOCK",,138.92706,-34.45729
+Schubert,Gumeracha,F,,GUMERACHA,Gumeracha Town Hall,"45 Albert St, GUMERACHA",,138.886181,-34.822272
+Schubert,Houghton,A,,HOUGHTON,Houghton Oval Clubrooms,"1377 Lower North East Rd, HOUGHTON",,138.763403,-34.828394
+Schubert,Kersbrook,A,,KERSBROOK,Kersbrook Primary School Resource Centre,"Bowden St, KERSBROOK",,138.850101,-34.782639
+Schubert,Keyneton,A,,KEYNETON,Keyneton Community Soldiers Memorial Hall,"903 Keyneton Rd, KEYNETON",,139.1294198,-34.56510585
+Schubert,Lyndoch,A,,LYNDOCH,Lyndoch Institute,"31 Barossa Valley Way, LYNDOCH",,138.890991,-34.601338
+Schubert,Moculta,A,,MOCULTA,Moculta Soldiers Memorial Hall,"2 Truro Rd, MOCULTA",,139.118047,-34.471006
+Schubert,Mount Pleasant,F,,MOUNT PLEASANT,Mount Pleasant Soldiers Memorial Hall,"61 Melrose St, MOUNT PLEASANT",,139.050868,-34.773105
+Schubert,Mount Torrens,A,,MOUNT TORRENS,Mount Torrens Soldiers Memorial Hall,"34 Townsend St, MOUNT TORRENS",,138.959469,-34.872049
+Schubert,Nuriootpa,A,,NURIOOTPA,Nuriootpa High School,"1 Penrice Rd, NURIOOTPA",,138.998947,-34.468461
+Schubert,One Tree Hill,A,,ONE TREE HILL,One Tree Hill Institute,"1009 Blacktop Rd, ONE TREE HILL",,138.7654983,-34.71860765
+Schubert,Paracombe,A,,PARACOMBE,Paracombe Hall,"383 Paracombe Rd, PARACOMBE",,138.7833239,-34.84840723
+Schubert,Sandy Creek,A,,COCKATOO VALLEY,Sandy Creek Primary School,"31 Davies Rd, COCKATOO VALLEY",,138.829924,-34.609807
+Schubert,Springton,A,,SPRINGTON,Springton Hall,"4 Graetz Tce, SPRINGTON",,139.0901328,-34.70675094
+Schubert,Stockwell,A,,STOCKWELL,Stockwell Hall,"4 Duck Ponds Rd, STOCKWELL",,139.053506,-34.434907
+Schubert,Tanunda,F,,TANUNDA,Tanunda Primary School Hall,"25 Research Rd, TANUNDA",,138.98,-34.5181
+Schubert,Truro,A,,TRURO,Truro Town Hall,"36 Moorundie St, TRURO",,139.127,-34.4087
+Schubert,Williamstown,A,,WILLIAMSTOWN,Williamstown Primary School Gym,"Queen St, WILLIAMSTOWN",,138.8899541,-34.6683173
+Stuart,Booleroo Centre,A,,BOOLEROO CENTRE,Booleroo Centre District Hall,"33 Stephens St, BOOLEROO CENTRE",,138.350764,-32.881545
+Stuart,Crystal Brook,A,,CRYSTAL BROOK,Crystal Brook Primary School,"7 Mitchell St, CRYSTAL BROOK",,138.212829,-33.352862
+Stuart,Georgetown,A,,GEORGETOWN,Georgetown Memorial Hall,"3 Pitts St, GEORGETOWN",,138.392383,-33.359869
+Stuart,Gladstone,A,,GLADSTONE,Gladstone District Hall,"14 Fifth St, GLADSTONE",,138.355568,-33.267515
+Stuart,Laura,A,via Hughes St,LAURA,Laura Civic Centre,"Cnr Hughes St & West Tce, LAURA",,138.299305,-33.185678
+Stuart,Leigh Creek,A,,LEIGH CREEK,Leigh Creek Area School,"Cnr Black Oak Dr & Moonah St, LEIGH CREEK",,138.400942,-30.592712
+Stuart,Melrose,A,,MELROSE,Melrose Primary School,"29 Stuart St, MELROSE",,138.188,-32.824
+Stuart,Napperby,A,Resource Centre,NAPPERBY,Napperby Primary School,"Oaks Rd, NAPPERBY",,138.11361,-33.15288
+Stuart,Orroroo,A,,ORROROO,Orroroo Town Hall,"17 Second St, ORROROO",,138.613198,-32.733725
+Stuart,Peterborough,A,,PETERBOROUGH,Peterborough Town Hall,"108 Main St, PETERBOROUGH",,138.838,-32.9735
+Stuart,Port Augusta,A,,PORT AUGUSTA,,"68 Commercial Rd, PORT AUGUSTA",,137.763359,-32.492682
+Stuart,Port Augusta Central,A,,PORT AUGUSTA,TAFE SA (Port Augusta),"9-39 Carlton Pde, PORT AUGUSTA",,137.7722,-32.49441
+Stuart,Port Germein,A,,PORT GERMEIN,Port Germein & Districts Hall,"9 Cottage Rd, PORT GERMEIN",,138.001331,-33.017352
+Stuart,Port Pirie,A,,PORT PIRIE,John Pirie Secondary School,"Mary Elie St, PORT PIRIE",,138.0095008,-33.18186369
+Stuart,Port Pirie South,A,,PORT PIRIE,Risdon Park Primary School,"28 Kingston Rd, PORT PIRIE",,138.008,-33.2033
+Stuart,Risdon Park,A,,RISDON PARK,Lighthouse Port Pirie Uniting Church,"390 The Terrace, RISDON PARK",,138.003605,-33.198045
+Stuart,Risdon Park South,A,,RISDON PARK SOUTH,Risdon Park South Baptist Church,"44 Hannan St, RISDON PARK SOUTH",,137.992479,-33.206969
+Stuart,Solomontown,A,,SOLOMONTOWN,Solomontown Primary School,"79 Three Chain Rd, SOLOMONTOWN",,138.019216,-33.189663
+Stuart,Stirling North,A,,STIRLING NORTH,Stirling North Primary School,"2-20 Beckman St, STIRLING NORTH",,137.837,-32.5131
+Stuart,Willsden,F,Activity Room,PORT AUGUSTA,Willsden Primary School,"70-80 Elizabeth Tce, PORT AUGUSTA",,137.77948,-32.506375
+Stuart,Wilmington,F,,WILMINGTON,Wilmington CWA Rooms,"22 Horrocks Hwy, WILMINGTON",,138.099535,-32.651739
+Stuart,Wirrabara,A,,WIRRABARA,Wirrabara Institute Hall ,"35 High St, WIRRABARA",,138.268272,-33.032823
+Taylor,Andrews Farm,A,,ANDREWS FARM,St Columba College,"42 President Ave, ANDREWS FARM",,138.666405,-34.672219
+Taylor,Angle Vale,A,,ANGLE VALE,Angle Vale Primary School,"Heaslip Rd, ANGLE VALE",,138.64697,-34.64345
+Taylor,Davoren Park,A,,DAVOREN PARK,Swallowcliffe School P-6,"18 Swallowcliffe Rd, DAVOREN PARK",,138.663,-34.6971
+Taylor,Elizabeth North,F,Gymnasium via Amport St,ELIZABETH NORTH,Elizabeth North Primary School,"141 Woodford Rd, ELIZABETH NORTH",,138.6746,-34.70362
+Taylor,Munno Para,F,,MUNNO PARA,Mark Oliphant College,"99 Douglas Dr, MUNNO PARA",,138.685501,-34.66549
+Taylor,Smithfield,A,,SMITHFIELD,Smithfield Sports & Social Club,"1 Anderson Walk, SMITHFIELD",,138.6913726,-34.6834756
+Taylor,Smithfield Plains,A,,SMITHFIELD PLAINS,John Hartley School B-6,"199 Peachey Rd, SMITHFIELD PLAINS",,138.673034,-34.680429
+Taylor,Virginia,A,,VIRGINIA,Virginia Community Centre,"Old Port Wakefield Rd, VIRGINIA",,138.557,-34.6651
+Torrens,Gilles Plains,F,,GILLES PLAINS,Wandana Primary School,"2-12 Cowra Ave, GILLES PLAINS",,138.662,-34.8494
+Torrens,Hampstead Gardens,A,via Falcon Ave,HAMPSTEAD GARDENS,Church of Christ Hampstead Gardens,"28 Gambia Ave, HAMPSTEAD GARDENS",,138.625872,-34.873251
+Torrens,Hillcrest,A,,HILLCREST,North East Community Centre,"17-31 Queensborough Ave, HILLCREST",,138.638602,-34.865556
+Torrens,Holden Hill,A,via Lyons Rd,HOLDEN HILL,Kildare College,"96-98 Valiant Rd, HOLDEN HILL",,138.671,-34.8566
+Torrens,Klemzig,F,,KLEMZIG,Klemzig Primary School,"2 Hay St, KLEMZIG",,138.637,-34.8767
+Torrens,Modbury,F,,MODBURY,Modbury West School,"450-474 Wright Rd, MODBURY",,138.677757,-34.833554
+Torrens,Oakden,A,,OAKDEN,Salvation Army Oakden,"166 Fosters Rd, OAKDEN",,138.636487,-34.8576
+Torrens,Para Vista,A,,PARA VISTA,Valley View Secondary School,"240 Wright Rd, PARA VISTA",,138.656864,-34.834909
+Torrens,Vale Park,A,,VALE PARK,Vale Park Primary School,"40-56 Ascot Ave, VALE PARK",,138.62594,-34.88542
+Torrens,Windsor Gardens East,A,,WINDSOR GARDENS,Avenues College B-12,"20-28 McKay Ave, WINDSOR GARDENS",,138.658,-34.8621
+Torrens,Windsor Gardens West,A,,WINDSOR GARDENS,St Pius X School,"8 Windsor Gr, WINDSOR GARDENS",,138.643,-34.8686
+Unley,Clarence Park,F,,CLARENCE PARK,Church of the Trinity,"318 Goodwood Rd, CLARENCE PARK",,138.59,-34.9643
+Unley,Fullarton,F,,FULLARTON,Fullarton Park Community Centre,"411 Fullarton Rd, FULLARTON",,138.6250275,-34.95783925
+Unley,Glenunga,A,Gymnasium via Conyngham St,GLENUNGA,Glenunga International High School,"99 L'Estrange St, GLENUNGA",,138.635693,-34.949223
+Unley,Goodwood,A,,GOODWOOD,Goodwood Primary School,"140 Goodwood Rd, GOODWOOD",,138.589,-34.9515
+Unley,Hawthorn,A,,HAWTHORN,Hawthorn Church of Christ,"42 Angas Rd, HAWTHORN",,138.6,-34.9737
+Unley,Kingswood,F,,KINGSWOOD,Mitcham Girls High School,"Kyre Ave, KINGSWOOD",,138.610396,-34.96937543
+Unley,Millswood,A,via Angas St,GOODWOOD,St Thomas School and Pre School,"10 Rushton St, GOODWOOD",,138.5911021,-34.95385853
+Unley,Mitcham,F,,MITCHAM,Mitcham Village Uniting Church Hall,"103a Princes Rd, MITCHAM",,138.619666,-34.976836
+Unley,Myrtle Bank,A,,MYRTLE BANK,Fullarton Scout Hall,"1A Culross Ave, MYRTLE BANK",,138.62902,-34.958022
+Unley,Netherby,F,"Gym via Gate C, Cross Rd",NETHERBY,Urrbrae Agricultural High School,"505 Fullarton Rd, NETHERBY",,138.626182,-34.966249
+Unley,Parkside,F,Gymnasium via Young St,PARKSIDE,Parkside Primary School,"12 Robsart St, PARKSIDE",,138.62,-34.9446
+Unley,Unley,A,,UNLEY,Unley Town Hall,"181 Unley Rd, UNLEY",,138.608,-34.9508
+Unley,Unley Park,A,,UNLEY PARK,Unley Park Baptist Church,"1A Northgate St, UNLEY PARK",,138.6069378,-34.9603357
+Unley,Unley South,A,Gym via Rugby St,MALVERN,Unley Primary School,"222 Wattle St, MALVERN",,138.609,-34.9544
+Unley,Wayville,A,,WAYVILLE,Healinglife Church ,"26 Clark St, WAYVILLE",,138.596145,-34.944973
+Waite,Belair,A,,BELAIR,St John's Grammar School,"29-43 Gloucester Ave, BELAIR",,138.6202762,-35.00091812
+Waite,Bellevue Heights,A,,BELLEVUE HEIGHTS,Bellevue Heights Primary School,"7-19 Vaucluse Cres, BELLEVUE HEIGHTS",,138.588774,-35.0291846
+Waite,Blackwood,A,,BLACKWOOD,Blackwood Hills Baptist Church,"72 Coromandel Pde, BLACKWOOD",,138.62,-35.0294
+Waite,Blackwood Central,A,,BLACKWOOD,Blackwood Church of Christ Hall,"367 Shepherds Hill Rd, BLACKWOOD",,138.615,-35.0209
+Waite,Clapham,A,,CLAPHAM,Clapham Primary School,"48 Barretts Rd, CLAPHAM",,138.604224,-34.993877
+Waite,Colonel Light Gardens South,A,,COLONEL LIGHT GARDENS,Colonel Light Gardens Primary School,"Windsor Ave, COLONEL LIGHT GARDENS",,138.596256,-34.98722
+Waite,Coromandel Valley,A,,COROMANDEL VALLEY,Coromandel Valley Primary School,"339 Main Rd, COROMANDEL VALLEY",,138.62523,-35.033158
+Waite,Eden Hills,A,,EDEN HILLS,Blackwood Primary School,"4 Seymour St, EDEN HILLS",,138.607004,-35.025151
+Waite,Flagstaff Hill East,F,,FLAGSTAFF HILL,Craigburn Primary School,"15 Murrays Hill Rd, FLAGSTAFF HILL",,138.616,-35.0569
+Waite,Hawthorn,A,,HAWTHORN,Hawthorn Church of Christ,"42 Angas Rd, HAWTHORN",,138.6,-34.9737
+Waite,Hawthorndene,A,,HAWTHORNDENE,Hawthorndene Primary School,"Suffolk Rd, HAWTHORNDENE",,138.636,-35.0203
+Waite,Kingswood,F,,KINGSWOOD,Mitcham Girls High School,"Kyre Ave, KINGSWOOD",,138.610396,-34.96937543
+Waite,Mitcham,F,,MITCHAM,Mitcham Village Uniting Church Hall,"103a Princes Rd, MITCHAM",,138.619666,-34.976836
+West Torrens,Allenby Gardens,F,,ALLENBY GARDENS,Allenby Gardens Primary School,"33 Barham St, ALLENBY GARDENS",,138.554784,-34.901685
+West Torrens,Brooklyn Park,F,,BROOKLYN PARK,Uniting College for Leadership and Theology,"312 Sir Donald Bradman Dr, BROOKLYN PARK",,138.548,-34.9307
+West Torrens,Brooklyn Park North,F,,BROOKLYN PARK,Brooklyn Park Church of Christ,"3 Allen Ave, BROOKLYN PARK",,138.54852,-34.925541
+West Torrens,Brooklyn Park West,F,,BROOKLYN PARK,Lockleys Primary School,"29 Elston St, BROOKLYN PARK",,138.535,-34.9302
+West Torrens,Cowandilla,A,,COWANDILLA,Cowandilla Primary School,"21 Jenkins St, COWANDILLA",,138.559349,-34.934191
+West Torrens,Flinders Park,A,,FLINDERS PARK,Flinders Park Primary School,"70 Holbrooks Rd, FLINDERS PARK",,138.5479007,-34.911378
+West Torrens,Lockleys North,F,,LOCKLEYS,Lockleys North Primary School,"55 Malurus Ave, LOCKLEYS",,138.53797,-34.91979
+West Torrens,Mile End,A,,MILE END,St George College,"73-75 Rose St, MILE END",,138.570789,-34.922585
+West Torrens,Richmond,A,,RICHMOND,Tenison Woods Catholic School,"68 Brooker Tce, RICHMOND",,138.562,-34.9399
+West Torrens,Torrensville,A,,TORRENSVILLE,Thebarton Senior College,"40 Ashley St, TORRENSVILLE",,138.562538,-34.917891
+West Torrens,West Hindmarsh,F,,WEST HINDMARSH,St Joseph's School,"56 Albemarle St, WEST HINDMARSH",,138.563,-34.9038
+Wright,Golden Grove Central,A,,GOLDEN GROVE,Golden Grove High School,"1 Adey Pl, GOLDEN GROVE",,138.69623,-34.79381
+Wright,Gulfview Heights,A,,GULFVIEW HEIGHTS,Gulfview Heights Primary School,"39 Kiekebusch Rd, GULFVIEW HEIGHTS",,138.66827,-34.79236
+Wright,Modbury Heights,A,,MODBURY HEIGHTS,The Heights School,"21-51 Brunel Dr, MODBURY HEIGHTS",,138.682,-34.8111
+Wright,Modbury North,A,,MODBURY NORTH,Burragah Recreation centre,"140 Kelly Rd, MODBURY NORTH",,138.6743247,-34.82519114
+Wright,Para Hills East,A,,PARA HILLS,East Para Primary School,"12 Caroona Ave, PARA HILLS",,138.666963,-34.817596
+Wright,Redwood Park,A,,REDWOOD PARK,Redwood Park Primary,"2 Lokan St, REDWOOD PARK",,138.701999,-34.814693
+Wright,Ridgehaven,A,,RIDGEHAVEN,Ridgehaven Primary School,"479 Milne Rd, RIDGEHAVEN",,138.710634,-34.817075
+Wright,Salisbury East,F,,SALISBURY EAST,Madison Park School,"19-23 Lincoln Ave, SALISBURY EAST",,138.663,-34.7847
+Wright,Salisbury East South,A,,SALISBURY EAST,Keller Road Primary School,"23-33 Melville Rd, SALISBURY EAST",,138.656996,-34.791771
+Wright,Surrey Downs,A,,SURREY DOWNS,Surrey Downs Primary School,"16-24 Vine St, SURREY DOWNS",,138.713,-34.7998
+Wright,Wynn Vale,A,,WYNN VALE,Wynn Vale R-7 School,"17-19 Sunnybrook Dr, WYNN VALE",,138.688,-34.8006
+Wright,Wynn Vale West,F,,WYNN VALE,Keithcot Farm Children's Centre,"5 Keithcot Farm Dr, WYNN VALE",,138.676775,-34.800121
