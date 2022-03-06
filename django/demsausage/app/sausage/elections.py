@@ -604,7 +604,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             return None
 
             # We'll just use the first one - it'll probably be wrong but whatever
-            return polling_places[0]["divisions"]
+            return polling_places[0]["divisions"][0]
 
         def _merge_divisions(polling_places):
             home_division = _find_home_division(polling_places)
