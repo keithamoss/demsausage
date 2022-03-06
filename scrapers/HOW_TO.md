@@ -6,9 +6,9 @@ We use a JSON structured configuration file to tell the polling place loader how
 
 There's a few steps we need to take to get our CSV file ready for loading into Democracy Sausage:
 
-1. _Make the fields match our standard structure:_ Ensure that field names used in the CSV file match the ones expected by our polling place loader. (Rename, exclude, and add fields)
-2. _Geocoding polling places from addresses to coordinates:_ Not always necessary, most of the time the electoral commissions provide coordinates.
-3. _Test loading:_ Head over to the [elections administration page](https://admin.democracysausage.org/elections), hit the upload button next to the election, and use the `dry run` feature to test your config file (this ensures that polling place data isn't committed to the database, so it's a good way to test your config file).
+1. **Make the fields match our standard structure:** Ensure that field names used in the CSV file match the ones expected by our polling place loader. (Rename, exclude, and add fields)
+2. **Geocoding polling places from addresses to coordinates:** Not always necessary, most of the time the electoral commissions provide coordinates.
+3. **Test loading:** Head over to the [elections administration page](https://admin.democracysausage.org/elections), hit the upload button next to the election, and use the `dry run` feature to test your config file (this ensures that polling place data isn't committed to the database, so it's a good way to test your config file).
 
 # Examples of polling place JSON config
 
