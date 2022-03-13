@@ -22,7 +22,7 @@ ENV PYTHONUNBUFFERED=1 \
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y supervisor gdal-bin
+RUN apt-get install -y supervisor gdal-bin cron
 
 ADD . /app
 WORKDIR /app
