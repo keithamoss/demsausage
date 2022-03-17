@@ -30,6 +30,7 @@ WORKDIR /app
 # Python deps management
 RUN apt-get install -y curl
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN poetry update
 RUN poetry install --no-dev
 
 RUN apt-get remove -y --purge curl && \
