@@ -26,8 +26,9 @@ waitfordb()
 
 CMD="$1"
 
-if [ "$ENVIRONMENT" != "DEVELOPMENT" ] && [ "$CMD" != "build" ]; then
+if [ "$CMD" != "build" ]; then
   waitfordb
+
   >&2 echo "Starting crond in the background"
   # Add our cronjob
   crontab -l > mycron
@@ -37,7 +38,7 @@ if [ "$ENVIRONMENT" != "DEVELOPMENT" ] && [ "$CMD" != "build" ]; then
 
   # Start crond
   chmod 755 /app/demsausage/app/sausage/cron/cron.sh
-  crond
+  service cron start
 fi
 
 if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then

@@ -1,16 +1,15 @@
-from rest_framework.exceptions import APIException
-from django.forms.models import model_to_dict
-
-from demsausage.app.sausage.polling_places import getFoodDescription
-from demsausage.app.sausage.elections import get_url_safe_election_name
-from demsausage.app.admin import get_admins
-from demsausage.util import get_env
+import hashlib
+import hmac
+import time
+from random import getrandbits
 
 import requests
-import hmac
-import hashlib
-from random import getrandbits
-import time
+from demsausage.app.admin import get_admins, is_development
+from demsausage.app.sausage.elections import get_url_safe_election_name
+from demsausage.app.sausage.polling_places import getFoodDescription
+from demsausage.util import get_env
+from django.forms.models import model_to_dict
+from rest_framework.exceptions import APIException
 
 
 class MailgunException(APIException):
@@ -131,7 +130,10 @@ def send_stall_edited_email(stall):
 
 
 def send_pending_stall_reminder_email(pending_stall_count):
-    admin_emails = [u.email for u in get_admins()]
+    if is_development() is False:
+        admin_emails = [u.email for u in get_admins()]
+    else:
+        admin_emails = ["keithamoss@gmail.com"]
 
     if len(admin_emails) > 0:
         return send({
