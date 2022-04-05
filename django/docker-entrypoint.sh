@@ -12,8 +12,7 @@ sys.exit(0)
 END
 }
 
-waitfordb()
-{
+waitfordb() {
   until postgres_ready; do
     >&2 echo "Postgres is unavailable - sleeping"
     sleep 1
@@ -30,13 +29,19 @@ if [ "$CMD" != "build" ]; then
   waitfordb
 
   >&2 echo "Starting crond in the background"
-  # Add our cronjob
-  crontab -l > mycron
-  cat /app/demsausage/app/sausage/cron/crontab.txt >> mycron
-  crontab mycron
-  rm mycron
+  # Print environment variables for cron to utilise
+  # Source: https://stackoverflow.com/a/48651061
+  declare -p | grep -Ev 'BASH|BASHOPTS|BASH_VERSINFO|BASHPID|BASH_|EUID|PPID|SHELLOPTS|UID' > /app/demsausage/app/sausage/cron/demsausage.cron.env
 
-  # Start crond
+  # Add our cronjob
+  cat /app/demsausage/app/sausage/cron/crontab.txt >> sausage_cron
+  crontab sausage_cron
+  rm sausage_cron
+
+  # Ensure we have a place to log to
+  mkdir -p /app/logs/cron
+
+  # Start crond service
   chmod 755 /app/demsausage/app/sausage/cron/cron.sh
   service cron start
 fi

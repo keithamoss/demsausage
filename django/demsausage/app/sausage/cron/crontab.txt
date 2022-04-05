@@ -1,2 +1,4 @@
-0 12 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/demsausage/app/sausage/cron/output.log
-0 0 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/demsausage/app/sausage/cron/output.log
+SHELL=/bin/bash
+BASH_ENV=/app/demsausage/app/sausage/cron/demsausage.cron.env
+0 12 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
+0 0 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
