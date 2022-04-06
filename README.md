@@ -163,3 +163,9 @@ travis encrypt-file --force secrets.tar
 - [Deploying a static site to Github Pages using Travis and Cloudflare](https://jmsbrdy.com/2017/07/deploying-a-static-site-to-github-pages-using-travis-and-cloudflare/)
 - [Secure and fast GitHub Pages with CloudFlare](https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/)
 - [How to get your SSL for free on a Shared Azure website with CloudFlare](https://www.troyhunt.com/how-to-get-your-ssl-for-free-on-shared/)
+
+# Logs
+
+docker-compose logs service_name
+
+docker-compose -f docker-compose-prod-demsausage.yml logs service_name
