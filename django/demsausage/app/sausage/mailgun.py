@@ -4,7 +4,7 @@ import time
 from random import getrandbits
 
 import requests
-from demsausage.app.admin import get_admins, is_development
+from demsausage.app.admin import get_admins, get_super_admins, is_development
 from demsausage.app.sausage.elections import get_url_safe_election_name
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env
@@ -133,13 +133,24 @@ def send_pending_stall_reminder_email(pending_stall_count):
     if is_development() is False:
         admin_emails = [u.email for u in get_admins()]
     else:
-        admin_emails = ["keithamoss@gmail.com"]
+        admin_emails = get_super_admins()
 
     if len(admin_emails) > 0:
         return send({
             "to": ", ".join(admin_emails),
             "subject": "Reminder: There are {} Democracy Sausage stalls waiting to be reviewed".format(pending_stall_count),
             "html": get_mail_template("pending_stall_reminder"),
+        })
+
+
+def send_monthly_reminder_heartbeat_email():
+    import datetime
+
+    if datetime.datetime.today().day == 1:
+        return send({
+            "to": ", ".join(get_super_admins()),
+            "subject": "This is your monthly hearbeat email for the Democracy Sausage pending stalls reminder email",
+            "html": "Nothing to see here.",
         })
 
 

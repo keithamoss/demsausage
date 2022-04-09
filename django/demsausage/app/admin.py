@@ -1,11 +1,16 @@
+from demsausage.util import get_env
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import connection
+
 from .models import Profile
-from demsausage.util import get_env
 
 # Register your models here.
 admin.register(Profile)(admin.ModelAdmin)
+
+
+def get_super_admins():
+    return ["keithamoss@gmail.com"]
 
 
 def get_admins():
