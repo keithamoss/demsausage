@@ -52,6 +52,7 @@ services:
       - ./django/:/app:delegated
       - ./scrapers/:/scrapers:delegated
       - ./data/:/data:delegated
+      - ./electoral_boundaries/:/electoral_boundaries:delegated
     ports:
       - "8000:8000"
     env_file:

@@ -1,0 +1,4 @@
+data/*.shp
+data/*.dbf
+data/*.prj
+data/*.shx

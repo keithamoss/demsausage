@@ -1,0 +1,3822 @@
+[
+    {
+        "name": "Adaminaby",
+        "address": "cnr York & Denison St, ADAMINABY, NSW 2630",
+        "premises": "Adaminaby Memorial Hall",
+        "state": "NSW",
+        "lon_new": 148.774101,
+        "lat_new": -35.995259,
+        "ec_id": 666,
+        "distance_shift_m": 30.06939542
+    },
+    {
+        "name": "Bargo Central",
+        "address": "Great Southern Rd, BARGO, NSW 2574",
+        "premises": "Bargo Public School",
+        "state": "NSW",
+        "lon_new": 150.582607,
+        "lat_new": -34.293208,
+        "ec_id": 83831,
+        "distance_shift_m": 1172.56842875
+    },
+    {
+        "name": "Barmedman",
+        "address": "Robertson Street, BARMEDMAN, NSW 2668",
+        "premises": "Barmedman Public School",
+        "state": "NSW",
+        "lon_new": 147.385233,
+        "lat_new": -34.147653,
+        "ec_id": 2483,
+        "distance_shift_m": 107.1921897
+    },
+    {
+        "name": "Bawley Point",
+        "address": "636 Murramarang Rd, KIOLOA, NSW 2539",
+        "premises": "Kioloa/Bawley Point Community Centre",
+        "state": "NSW",
+        "lon_new": 150.377174,
+        "lat_new": -35.556905,
+        "ec_id": 671,
+        "distance_shift_m": 0.05047232
+    },
+    {
+        "name": "Bellata",
+        "address": "10 Wilga St, BELLATA, NSW 2397",
+        "premises": "Bellata War Memorial Hall",
+        "state": "NSW",
+        "lon_new": 149.792979,
+        "lat_new": -29.917575,
+        "ec_id": 1066,
+        "distance_shift_m": 292.05433959
+    },
+    {
+        "name": "Bellingen North",
+        "address": "59-81 Wheatley St, BELLINGEN, NSW 2454",
+        "premises": "Showgrounds",
+        "state": "NSW",
+        "lon_new": 152.898025,
+        "lat_new": -30.448931,
+        "ec_id": 83890,
+        "distance_shift_m": 76.10997569
+    },
+    {
+        "name": "Ben Lomond",
+        "address": "1227-1239 Ben Lomond Rd, BEN LOMOND, NSW 2365",
+        "premises": "Ben Lomond War Memorial Hall",
+        "state": "NSW",
+        "lon_new": 151.658539,
+        "lat_new": -30.019604,
+        "ec_id": 1921,
+        "distance_shift_m": 63.44283723
+    },
+    {
+        "name": "Berridale",
+        "address": "8 Florence St, BERRIDALE, NSW 2628",
+        "premises": "Berridale Community Hall",
+        "state": "NSW",
+        "lon_new": 148.829302,
+        "lat_new": -36.371987,
+        "ec_id": 677,
+        "distance_shift_m": 36.25726397
+    },
+    {
+        "name": "Bloomfield",
+        "address": "1502 Forest Rd, BLOOMFIELD, NSW 2800",
+        "premises": "Bloomfield Hall",
+        "state": "NSW",
+        "lon_new": 149.09106,
+        "lat_new": -33.318681,
+        "ec_id": 230,
+        "distance_shift_m": 0.04344474
+    },
+    {
+        "name": "Boambee East",
+        "address": "2 Eungalla St, TOORMINA, NSW 2452",
+        "premises": "Mary Help of Christians School",
+        "state": "NSW",
+        "lon_new": 153.083743,
+        "lat_new": -30.35848,
+        "ec_id": 83751,
+        "distance_shift_m": 102.38034716
+    },
+    {
+        "name": "Broken Hill Central",
+        "address": "334 Argent St, BROKEN HILL, NSW 2880",
+        "premises": "334 Argent St",
+        "state": "NSW",
+        "lon_new": 141.466106,
+        "lat_new": -31.95754,
+        "ec_id": 2490,
+        "distance_shift_m": 0.0585783
+    },
+    {
+        "name": "Bungendore North",
+        "address": "28 Turallo Terrace, BUNGENDORE, NSW 2621",
+        "premises": "St Mary's Hall",
+        "state": "NSW",
+        "lon_new": 149.441755,
+        "lat_new": -35.251606,
+        "ec_id": 83842,
+        "distance_shift_m": 0.06356116
+    },
+    {
+        "name": "Buronga",
+        "address": "6 Midway Dr, BURONGA, NSW 2739",
+        "premises": "Midway Community Centre",
+        "state": "NSW",
+        "lon_new": 142.19881,
+        "lat_new": -34.173925,
+        "ec_id": 764,
+        "distance_shift_m": 198.4162462
+    },
+    {
+        "name": "Capertee",
+        "address": "18 Castlereagh Hwy, CAPERTEE, NSW 2846",
+        "premises": "Capertee Community Hall",
+        "state": "NSW",
+        "lon_new": 149.98671,
+        "lat_new": -33.146568,
+        "ec_id": 237,
+        "distance_shift_m": 0.04347927
+    },
+    {
+        "name": "Chatsworth Island",
+        "address": "17 Chatsworth Rd, CHATSWORTH ISLAND, NSW 2460",
+        "premises": "Chatsworth Island Hall",
+        "state": "NSW",
+        "lon_new": 153.233813,
+        "lat_new": -29.382175,
+        "ec_id": 2058,
+        "distance_shift_m": 0.02235683
+    },
+    {
+        "name": "Cobar",
+        "address": "1 Wetherell Cres, COBAR, NSW 2835",
+        "premises": "Cobar High School",
+        "state": "NSW",
+        "lon_new": 145.827505,
+        "lat_new": -31.502284,
+        "ec_id": 2497,
+        "distance_shift_m": 145.51566289
+    },
+    {
+        "name": "Coffs Harbour",
+        "address": "48 Harbour Dr, COFFS HARBOUR, NSW 2450",
+        "premises": "Shopfront 48 Harbour Dr",
+        "state": "NSW",
+        "lon_new": 153.115868,
+        "lat_new": -30.297016,
+        "ec_id": 462,
+        "distance_shift_m": 0.06542017
+    },
+    {
+        "name": "Coffs Harbour North",
+        "address": "40 Mastracolas Rd, COFFS HARBOUR, NSW 2450",
+        "premises": "Salvation Army Hall",
+        "state": "NSW",
+        "lon_new": 153.127465,
+        "lat_new": -30.279317,
+        "ec_id": 83637,
+        "distance_shift_m": 0.04537469
+    },
+    {
+        "name": "Coolamon",
+        "address": "6 Dr Buchanan Drive, COOLAMON, NSW 2701",
+        "premises": "Allawah Community Centre",
+        "state": "NSW",
+        "lon_new": 147.199758,
+        "lat_new": -34.820342,
+        "ec_id": 1262,
+        "distance_shift_m": 0.02399964
+    },
+    {
+        "name": "Coonabarabran",
+        "address": "Chapple Ave, COONABARABRAN, NSW 2357",
+        "premises": "Coonabarabran Sport and Recreation Centre",
+        "state": "NSW",
+        "lon_new": 149.277792,
+        "lat_new": -31.269722,
+        "ec_id": 1089,
+        "distance_shift_m": 1923.30996963
+    },
+    {
+        "name": "Cowra West",
+        "address": "1 Grenfell Rd, COWRA, NSW 2794",
+        "premises": "Cowra West Tennis Club",
+        "state": "NSW",
+        "lon_new": 148.680836,
+        "lat_new": -33.834389,
+        "ec_id": 913,
+        "distance_shift_m": 2030.09090876
+    },
+    {
+        "name": "Cudmirrah",
+        "address": "32 Collier Dr, CUDMIRRAH, NSW 2540",
+        "premises": "Cudmirrah/Berrara Community Hall",
+        "state": "NSW",
+        "lon_new": 150.558174,
+        "lat_new": -35.197903,
+        "ec_id": 916,
+        "distance_shift_m": 43.95541904
+    },
+    {
+        "name": "Cumborah",
+        "address": "1 Cumborah St, CUMBORAH, NSW 2832",
+        "premises": "Cumborah Recreation Reserve Hall",
+        "state": "NSW",
+        "lon_new": 147.771162,
+        "lat_new": -29.744402,
+        "ec_id": 1093,
+        "distance_shift_m": 120.91410443
+    },
+    {
+        "name": "Currarong",
+        "address": "62 Walton Way, CURRARONG, NSW 2540",
+        "premises": "Currarong Progress Hall",
+        "state": "NSW",
+        "lon_new": 150.821364,
+        "lat_new": -35.017064,
+        "ec_id": 918,
+        "distance_shift_m": 332.13798781
+    },
+    {
+        "name": "Deniliquin North",
+        "address": "Victoria St, DENILIQUIN, NSW 2710",
+        "premises": "Deniliquin North Scout Hall",
+        "state": "NSW",
+        "lon_new": 144.983,
+        "lat_new": -35.5258,
+        "ec_id": 782,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Dubbo",
+        "address": "88-90 Macquarie St, DUBBO, NSW 2830",
+        "premises": "88-90 Macquarie St",
+        "state": "NSW",
+        "lon_new": 148.601976,
+        "lat_new": -32.245691,
+        "ec_id": 2174,
+        "distance_shift_m": 0.05821075
+    },
+    {
+        "name": "Dubbo Blue Ridge",
+        "address": "141 Sheraton Rd, DUBBO, NSW 2830",
+        "premises": "Dubbo Christian School",
+        "state": "NSW",
+        "lon_new": 148.644601,
+        "lat_new": -32.263018,
+        "ec_id": 83502,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Dubbo South",
+        "address": "293 Fitzroy St, DUBBO, NSW 2830",
+        "premises": "Dubbo South Public School",
+        "state": "NSW",
+        "lon_new": 148.609726,
+        "lat_new": -32.263178,
+        "ec_id": 2178,
+        "distance_shift_m": 372.29654775
+    },
+    {
+        "name": "Dunedoo",
+        "address": "Bolaro St, DUNEDOO, NSW 2844",
+        "premises": "Jubilee Hall",
+        "state": "NSW",
+        "lon_new": 149.389601,
+        "lat_new": -32.016279,
+        "ec_id": 243,
+        "distance_shift_m": 458.44304174
+    },
+    {
+        "name": "East Maitland South",
+        "address": "1 Garnett Rd, EAST MAITLAND, NSW 2323",
+        "premises": "Living Hope Maitland Church of Christ",
+        "state": "NSW",
+        "lon_new": 151.591455,
+        "lat_new": -32.759903,
+        "ec_id": 1366,
+        "distance_shift_m": 53.25221524
+    },
+    {
+        "name": "Exeter",
+        "address": "16 Exeter Rd, EXETER, NSW 2579",
+        "premises": "Exeter Hall",
+        "state": "NSW",
+        "lon_new": 150.316487,
+        "lat_new": -34.611722,
+        "ec_id": 921,
+        "distance_shift_m": 9.69904651
+    },
+    {
+        "name": "Forbes",
+        "address": "3-5 Court St, FORBES, NSW 2871",
+        "premises": "St Johns Anglican Church",
+        "state": "NSW",
+        "lon_new": 148.008563,
+        "lat_new": -33.385269,
+        "ec_id": 2186,
+        "distance_shift_m": 203428.33302777
+    },
+    {
+        "name": "Gerringong",
+        "address": "12 Archibald Rd, GERRINGONG, NSW 2534",
+        "premises": "Gerringong Public School",
+        "state": "NSW",
+        "lon_new": 150.822051,
+        "lat_new": -34.749511,
+        "ec_id": 2783,
+        "distance_shift_m": 0.05753751
+    },
+    {
+        "name": "Grafton North",
+        "address": "32 Pine St, JUNCTION HILL, NSW 2460",
+        "premises": "Junction Hill Playgroup",
+        "state": "NSW",
+        "lon_new": 152.921,
+        "lat_new": -29.6441,
+        "ec_id": 2089,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Harden",
+        "address": "39-41 Neill St, HARDEN, NSW 2587",
+        "premises": "Harden Mechanics Institute Hall",
+        "state": "NSW",
+        "lon_new": 148.369201,
+        "lat_new": -34.553447,
+        "ec_id": 1281,
+        "distance_shift_m": 496.99783296
+    },
+    {
+        "name": "Innes Lake",
+        "address": "166 The Ruins Way, PORT MACQUARIE, NSW 2444",
+        "premises": "Innes Lake Community Centre/Honour Church",
+        "state": "NSW",
+        "lon_new": 152.872893,
+        "lat_new": -31.473253,
+        "ec_id": 501,
+        "distance_shift_m": 15.97916126
+    },
+    {
+        "name": "Innes Lake North",
+        "address": "7 Major Innes Rd, PORT MACQUARIE, NSW 2444",
+        "premises": "Charles Sturt University",
+        "state": "NSW",
+        "lon_new": 152.876132,
+        "lat_new": -31.457834,
+        "ec_id": 97473,
+        "distance_shift_m": 26.0135137
+    },
+    {
+        "name": "Jerilderie",
+        "address": "31 Bolton St, JERILDERIE, NSW 2716",
+        "premises": "Jerilderie Public School",
+        "state": "NSW",
+        "lon_new": 145.728791,
+        "lat_new": -35.354597,
+        "ec_id": 797,
+        "distance_shift_m": 0.04929166
+    },
+    {
+        "name": "Jerrys Plains",
+        "address": "Wambo St, JERRYS PLAINS, NSW 2330",
+        "premises": "Jerrys Plains School of Arts",
+        "state": "NSW",
+        "lon_new": 150.910121,
+        "lat_new": -32.498109,
+        "ec_id": 1377,
+        "distance_shift_m": 0.04360831
+    },
+    {
+        "name": "Jesmond North",
+        "address": "24 Janet St, JESMOND, NSW 2299",
+        "premises": "Callaghan College Jesmond Senior Campus",
+        "state": "NSW",
+        "lon_new": 151.695972,
+        "lat_new": -32.90153,
+        "ec_id": 1879,
+        "distance_shift_m": 0.05007404
+    },
+    {
+        "name": "Kandos",
+        "address": "44 Angus Ave, KANDOS, NSW 2848",
+        "premises": "Kandos Memorial Hall",
+        "state": "NSW",
+        "lon_new": 149.974916,
+        "lat_new": -32.859021,
+        "ec_id": 259,
+        "distance_shift_m": 0.05623543
+    },
+    {
+        "name": "Kangaroo Valley",
+        "address": "Moss Vale Rd, KANGAROO VALLEY, NSW 2577",
+        "premises": "Kangaroo Valley Public School",
+        "state": "NSW",
+        "lon_new": 150.531894,
+        "lat_new": -34.735941,
+        "ec_id": 938,
+        "distance_shift_m": 55.45771197
+    },
+    {
+        "name": "Khancoban",
+        "address": "Alpine Way & Scammel St, KHANCOBAN, NSW 2642",
+        "premises": "Khancoban Visitor Centre",
+        "state": "NSW",
+        "lon_new": 148.12969,
+        "lat_new": -36.217697,
+        "ec_id": 800,
+        "distance_shift_m": 23.49583804
+    },
+    {
+        "name": "Kooringal North",
+        "address": "72-104 Ziegler Ave, KOORINGAL, NSW 2650",
+        "premises": "Kooringal High School",
+        "state": "NSW",
+        "lon_new": 147.381096,
+        "lat_new": -35.144091,
+        "ec_id": 1315,
+        "distance_shift_m": 142.93594598
+    },
+    {
+        "name": "Merimbula Central",
+        "address": "10 Short St, MERIMBULA, NSW 2548",
+        "premises": "Albert Moore Gardens, Bimbimbie Park",
+        "state": "NSW",
+        "lon_new": 149.906992,
+        "lat_new": -36.892339,
+        "ec_id": 679,
+        "distance_shift_m": 90.21089051
+    },
+    {
+        "name": "Milton",
+        "address": "109 Princes Hwy, MILTON, NSW 2538",
+        "premises": "St Peter & St Paul Anglican Church Hall",
+        "state": "NSW",
+        "lon_new": 150.437029,
+        "lat_new": -35.317767,
+        "ec_id": 705,
+        "distance_shift_m": 18.96470493
+    },
+    {
+        "name": "Mittagong South",
+        "address": "10 Oxford St, MITTAGONG, NSW 2575",
+        "premises": "Mittagong Preschool Kindergarten",
+        "state": "NSW",
+        "lon_new": 150.448397,
+        "lat_new": -34.455627,
+        "ec_id": 2799,
+        "distance_shift_m": 0.05546532
+    },
+    {
+        "name": "Moonee Beach",
+        "address": "2B Moonee Beach Rd, MOONEE BEACH, NSW 2450",
+        "premises": "Moonee Market Shopping Centre",
+        "state": "NSW",
+        "lon_new": 153.149641,
+        "lat_new": -30.206624,
+        "ec_id": 2105,
+        "distance_shift_m": 0.03462258
+    },
+    {
+        "name": "Moore Creek",
+        "address": "1019 Upper Moore Creek Rd, MOORE CREEK, NSW 2340",
+        "premises": "Moore Creek Fire Shed",
+        "state": "NSW",
+        "lon_new": 150.921909,
+        "lat_new": -30.995076,
+        "ec_id": 1962,
+        "distance_shift_m": 0.02865275
+    },
+    {
+        "name": "Moree East",
+        "address": "342 Boston St, MOREE, NSW 2400",
+        "premises": "PCYC Moree",
+        "state": "NSW",
+        "lon_new": 149.839185,
+        "lat_new": -29.478559,
+        "ec_id": 1124,
+        "distance_shift_m": 62.59319117
+    },
+    {
+        "name": "Moruya South",
+        "address": "97 Albert St, MORUYA, NSW 2537",
+        "premises": "Moruya High School",
+        "state": "NSW",
+        "lon_new": 150.080132,
+        "lat_new": -35.920206,
+        "ec_id": 83544,
+        "distance_shift_m": 0.03776842
+    },
+    {
+        "name": "Mount Victoria",
+        "address": "105-107 Great Western Hwy, MOUNT VICTORIA, NSW 2786",
+        "premises": "Mt Victoria Public School",
+        "state": "NSW",
+        "lon_new": 150.253908,
+        "lat_new": -33.590398,
+        "ec_id": 1792,
+        "distance_shift_m": 133.59309049
+    },
+    {
+        "name": "Mudgee",
+        "address": "50 Market St, MUDGEE, NSW 2850",
+        "premises": "Mudgee Police Citizens Youth Club",
+        "state": "NSW",
+        "lon_new": 149.589323,
+        "lat_new": -32.590787,
+        "ec_id": 276,
+        "distance_shift_m": 260.35353278
+    },
+    {
+        "name": "Muswellbrook",
+        "address": "cnr Carl St & Market St, MUSWELLBROOK, NSW 2333",
+        "premises": "PCYC Muswellbrook",
+        "state": "NSW",
+        "lon_new": 150.89248,
+        "lat_new": -32.266398,
+        "ec_id": 1131,
+        "distance_shift_m": 35.34628292
+    },
+    {
+        "name": "Nana Glen",
+        "address": "26 Grafton St, NANA GLEN, NSW 2450",
+        "premises": "Nana Glen Community Hall",
+        "state": "NSW",
+        "lon_new": 153.014491,
+        "lat_new": -30.131934,
+        "ec_id": 2107,
+        "distance_shift_m": 0.04406396
+    },
+    {
+        "name": "Narrabri West",
+        "address": "13 Burigal St, NARRABRI WEST, NSW 2390",
+        "premises": "Narrabri West Anglican Church Hall",
+        "state": "NSW",
+        "lon_new": 149.754,
+        "lat_new": -30.3367,
+        "ec_id": 1136,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Nelson Bay Central",
+        "address": "7 Austral St, NELSON BAY, NSW 2315",
+        "premises": "PCYC Port Stephens - Nelson Bay",
+        "state": "NSW",
+        "lon_new": 152.153792,
+        "lat_new": -32.721235,
+        "ec_id": 1620,
+        "distance_shift_m": 65.62216262
+    },
+    {
+        "name": "Newville",
+        "address": "40-46 Centenary Pde, NAMBUCCA HEADS, NSW 2448",
+        "premises": "Frank Partridge VC Public School",
+        "state": "NSW",
+        "lon_new": 152.985602,
+        "lat_new": -30.642298,
+        "ec_id": 495,
+        "distance_shift_m": 269.53183541
+    },
+    {
+        "name": "Norfolk Island",
+        "address": "79c Taylors Rd, NORFOLK ISLAND, NSW 2899",
+        "premises": "Taylors Rd",
+        "state": "NSW",
+        "lon_new": 167.953244,
+        "lat_new": -29.034672,
+        "ec_id": 65739,
+        "distance_shift_m": 0.04482709
+    },
+    {
+        "name": "North Boambee Valley",
+        "address": "111 North Boambee Dr, COFFS HARBOUR, NSW 2450",
+        "premises": "Bishop Druitt College",
+        "state": "NSW",
+        "lon_new": 153.08533,
+        "lat_new": -30.308525,
+        "ec_id": 83753,
+        "distance_shift_m": 84.84057375
+    },
+    {
+        "name": "North Star",
+        "address": "28 David St, NORTH STAR, NSW 2408",
+        "premises": "North Star Hall",
+        "state": "NSW",
+        "lon_new": 150.393151,
+        "lat_new": -28.92757,
+        "ec_id": 1137,
+        "distance_shift_m": 190.56832613
+    },
+    {
+        "name": "Nowra Centre",
+        "address": "29 Berry St, NOWRA, NSW 2541",
+        "premises": "Nowra Uniting Church",
+        "state": "NSW",
+        "lon_new": 150.6,
+        "lat_new": -34.8746,
+        "ec_id": 963,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Orangeville",
+        "address": "440 Silverdale Rd, ORANGEVILLE, NSW 2570",
+        "premises": "Camden County Uniting Church",
+        "state": "NSW",
+        "lon_new": 150.572,
+        "lat_new": -34.0347,
+        "ec_id": 1692,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Picton",
+        "address": "27 Lumsdaine St, PICTON, NSW 2571",
+        "premises": "Picton Public School",
+        "state": "NSW",
+        "lon_new": 150.609066,
+        "lat_new": -34.176344,
+        "ec_id": 1693,
+        "distance_shift_m": 0.05622381
+    },
+    {
+        "name": "Port Macquarie East",
+        "address": "16 Owen St, PORT MACQUARIE, NSW 2444",
+        "premises": "Hastings Secondary College (Port Macquarie Campus)",
+        "state": "NSW",
+        "lon_new": 152.920121,
+        "lat_new": -31.433941,
+        "ec_id": 500,
+        "distance_shift_m": 85.40498234
+    },
+    {
+        "name": "Port Macquarie Greenmeadows",
+        "address": "Lochinvar Pl, PORT MACQUARIE, NSW 2444",
+        "premises": "Mackillop College",
+        "state": "NSW",
+        "lon_new": 152.897169,
+        "lat_new": -31.453896,
+        "ec_id": 83752,
+        "distance_shift_m": 387.80833627
+    },
+    {
+        "name": "Port Macquarie West",
+        "address": "30 Findlay Ave, PORT MACQUARIE, NSW 2444",
+        "premises": "Hastings Secondary College (Westport Campus)",
+        "state": "NSW",
+        "lon_new": 152.894813,
+        "lat_new": -31.435194,
+        "ec_id": 502,
+        "distance_shift_m": 117.83543951
+    },
+    {
+        "name": "Rutherford West",
+        "address": "75 Regiment Rd, RUTHERFORD, NSW 2320",
+        "premises": "Playtime Preschool",
+        "state": "NSW",
+        "lon_new": 151.515193,
+        "lat_new": -32.719979,
+        "ec_id": 8870,
+        "distance_shift_m": 20.10277094
+    },
+    {
+        "name": "South Grafton Central",
+        "address": "69 Wharf St, SOUTH GRAFTON, NSW 2461",
+        "premises": "Connect Church",
+        "state": "NSW",
+        "lon_new": 152.936097,
+        "lat_new": -29.705712,
+        "ec_id": 2081,
+        "distance_shift_m": 25.30501972
+    },
+    {
+        "name": "Spring Ridge",
+        "address": "Darby Rd, SPRING RIDGE, NSW 2343",
+        "premises": "Spring Ridge Community Hall",
+        "state": "NSW",
+        "lon_new": 150.244062,
+        "lat_new": -31.396267,
+        "ec_id": 1149,
+        "distance_shift_m": 0.01902141
+    },
+    {
+        "name": "Tallimba",
+        "address": "14 Kikoira St, TALLIMBA, NSW 2669",
+        "premises": "Tallimba Public School",
+        "state": "NSW",
+        "lon_new": 146.878819,
+        "lat_new": -33.993797,
+        "ec_id": 2548,
+        "distance_shift_m": 327.97539023
+    },
+    {
+        "name": "Thrumster",
+        "address": "1 College Dr, PORT MACQUARIE, NSW 2444",
+        "premises": "St Josephs Regional College",
+        "state": "NSW",
+        "lon_new": 152.831025,
+        "lat_new": -31.454659,
+        "ec_id": 97476,
+        "distance_shift_m": 26.67012829
+    },
+    {
+        "name": "Tomakin",
+        "address": "2-10 Ainslie Pde, TOMAKIN, NSW 2537",
+        "premises": "Tomakin Community Hall",
+        "state": "NSW",
+        "lon_new": 150.189217,
+        "lat_new": -35.823083,
+        "ec_id": 31033,
+        "distance_shift_m": 28.22778082
+    },
+    {
+        "name": "Tura Beach",
+        "address": "15 Beach Dr, TURA BEACH, NSW 2548",
+        "premises": "Tura Murrang Library",
+        "state": "NSW",
+        "lon_new": 149.91595,
+        "lat_new": -36.864364,
+        "ec_id": 31665,
+        "distance_shift_m": 1786.70733147
+    },
+    {
+        "name": "Tuross Head",
+        "address": "Lot 80 Hector William Dr, TUROSS HEAD, NSW 2537",
+        "premises": "Kyla Park Hall",
+        "state": "NSW",
+        "lon_new": 150.124419,
+        "lat_new": -36.038672,
+        "ec_id": 731,
+        "distance_shift_m": 0.05196988
+    },
+    {
+        "name": "Waratah North Orange",
+        "address": "17 Ralston Dr, ORANGE, NSW 2800",
+        "premises": "Integra Health Club",
+        "state": "NSW",
+        "lon_new": 149.104804,
+        "lat_new": -33.246382,
+        "ec_id": 83290,
+        "distance_shift_m": 0.03727704
+    },
+    {
+        "name": "Wilcannia",
+        "address": "22 Myers St, WILCANNIA, NSW 2836",
+        "premises": "Wilcannia Central Darling Council Hall",
+        "state": "NSW",
+        "lon_new": 143.37739,
+        "lat_new": -31.557831,
+        "ec_id": 2560,
+        "distance_shift_m": 84.49539414
+    },
+    {
+        "name": "Williamtown",
+        "address": "2 Sandeman St, WILLIAMTOWN, NSW 2318",
+        "premises": "Williamtown Public Hall",
+        "state": "NSW",
+        "lon_new": 151.84594,
+        "lat_new": -32.809193,
+        "ec_id": 1655,
+        "distance_shift_m": 32.46369659
+    },
+    {
+        "name": "Windeyer",
+        "address": "1986 Windeyer Rd, WINDEYER, NSW 2850",
+        "premises": "Windeyer Recreational Hall",
+        "state": "NSW",
+        "lon_new": 149.557345,
+        "lat_new": -32.795688,
+        "ec_id": 311,
+        "distance_shift_m": 16330.66739195
+    },
+    {
+        "name": "Wingello",
+        "address": "300 Kareela Rd, PENROSE, NSW 2579",
+        "premises": "Penrose Hall",
+        "state": "NSW",
+        "lon_new": 150.21229,
+        "lat_new": -34.671183,
+        "ec_id": 976,
+        "distance_shift_m": 0.05755907
+    },
+    {
+        "name": "Alton Downs",
+        "address": "3280 Stanwell Waroula Rd, ALTON DOWNS, QLD 4702",
+        "premises": "Alton Downs Polocrosse Hall",
+        "state": "QLD",
+        "lon_new": 150.328083,
+        "lat_new": -23.300032,
+        "ec_id": 5210,
+        "distance_shift_m": 0.04239008
+    },
+    {
+        "name": "Atherton",
+        "address": "36-38 Alice St, ATHERTON, QLD 4883",
+        "premises": "St Marys Anglican Church",
+        "state": "QLD",
+        "lon_new": 145.478695,
+        "lat_new": -17.267144,
+        "ec_id": 5808,
+        "distance_shift_m": 26.6847482
+    },
+    {
+        "name": "Ayr",
+        "address": "142 Wickham St, AYR, QLD 4807",
+        "premises": "Burdekin Sports Club Hall",
+        "state": "QLD",
+        "lon_new": 147.403153,
+        "lat_new": -19.581045,
+        "ec_id": 5291,
+        "distance_shift_m": 0.0392839
+    },
+    {
+        "name": "Bamaga",
+        "address": "NPA State College, Anu st, BAMAGA, QLD 4876",
+        "premises": "Bamaga Junior School",
+        "state": "QLD",
+        "lon_new": 142.386302,
+        "lat_new": -10.895791,
+        "ec_id": 5927,
+        "distance_shift_m": 171.74773107
+    },
+    {
+        "name": "Blackall",
+        "address": "12 Short St, BLACKALL, QLD 4472",
+        "premises": "Blackall Memorial Hall",
+        "state": "QLD",
+        "lon_new": 145.464444,
+        "lat_new": -24.424938,
+        "ec_id": 5811,
+        "distance_shift_m": 0.05897955
+    },
+    {
+        "name": "Branyan",
+        "address": "430 Branyan Dr, BRANYAN, QLD 4670",
+        "premises": "Branyan Road State School Hall",
+        "state": "QLD",
+        "lon_new": 152.293913,
+        "lat_new": -24.892157,
+        "ec_id": 97425,
+        "distance_shift_m": 0.01499299
+    },
+    {
+        "name": "Bundaberg Central",
+        "address": "BUNDABERG CENTRAL, QLD 4670",
+        "premises": "Level 1, 2 Maryborough St",
+        "state": "QLD",
+        "lon_new": 152.347449,
+        "lat_new": -24.868061,
+        "ec_id": 82905,
+        "distance_shift_m": 375.79411659
+    },
+    {
+        "name": "Bundaberg West",
+        "address": "Steffensen St, BUNDABERG WEST, QLD 4670",
+        "premises": "Bundaberg West State School Hall",
+        "state": "QLD",
+        "lon_new": 152.333587,
+        "lat_new": -24.876244,
+        "ec_id": 82904,
+        "distance_shift_m": 0.01499384
+    },
+    {
+        "name": "Bundamba",
+        "address": "25 Byrne St, BUNDAMBA, QLD 4304",
+        "premises": "Oasis Church of Christ Bundamba",
+        "state": "QLD",
+        "lon_new": 152.812681,
+        "lat_new": -27.60499,
+        "ec_id": 6349,
+        "distance_shift_m": 71481.18607041
+    },
+    {
+        "name": "Cairns City",
+        "address": "Creswell Hall, Grafton St, CAIRNS NORTH, QLD 4870",
+        "premises": "Cairns State High School",
+        "state": "QLD",
+        "lon_new": 145.767108,
+        "lat_new": -16.914771,
+        "ec_id": 5934,
+        "distance_shift_m": 0.03072259
+    },
+    {
+        "name": "Centenary Heights North",
+        "address": "60 Ramsay St, CENTENARY HEIGHTS, QLD 4350",
+        "premises": "Centenary Heights High School",
+        "state": "QLD",
+        "lon_new": 151.965403,
+        "lat_new": -27.578743,
+        "ec_id": 5636,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Chinchilla North",
+        "address": "98 Boyd St, CHINCHILLA, QLD 4413",
+        "premises": "Chinchilla Burstows Lodge",
+        "state": "QLD",
+        "lon_new": 150.633764,
+        "lat_new": -26.740194,
+        "ec_id": 6133,
+        "distance_shift_m": 0.01107994
+    },
+    {
+        "name": "Clinton",
+        "address": "Harvey Rd, CLINTON, QLD 4680",
+        "premises": "Gladstone Touch Association Clubhouse",
+        "state": "QLD",
+        "lon_new": 151.223574,
+        "lat_new": -23.880709,
+        "ec_id": 5741,
+        "distance_shift_m": 0.03009284
+    },
+    {
+        "name": "Curra",
+        "address": "10-22 David Dr, CURRA, QLD 4570",
+        "premises": "Curra Community Hall",
+        "state": "QLD",
+        "lon_new": 152.580063,
+        "lat_new": -26.083493,
+        "ec_id": 31543,
+        "distance_shift_m": 120.19609855
+    },
+    {
+        "name": "Doomadgee",
+        "address": "Doomadgee Rd, DOOMADGEE, QLD 4830",
+        "premises": "Doomadgee State School",
+        "state": "QLD",
+        "lon_new": 138.827874,
+        "lat_new": -17.94149,
+        "ec_id": 5828,
+        "distance_shift_m": 245.83858822
+    },
+    {
+        "name": "Eimeo",
+        "address": "30 Rosewood Dr, RURAL VIEW, QLD 4740",
+        "premises": "Mackay Northern Beaches State High School",
+        "state": "QLD",
+        "lon_new": 149.161623,
+        "lat_new": -21.067879,
+        "ec_id": 5312,
+        "distance_shift_m": 852.66420108
+    },
+    {
+        "name": "Emerald",
+        "address": "59 Clermont St, EMERALD, QLD 4720",
+        "premises": "Shopfront",
+        "state": "QLD",
+        "lon_new": 148.160309,
+        "lat_new": -23.525909,
+        "ec_id": 6151,
+        "distance_shift_m": 0.03063631
+    },
+    {
+        "name": "Gayndah",
+        "address": "5 Pineapple St, GAYNDAH, QLD 4625",
+        "premises": "Gayndah QCWA Hall",
+        "state": "QLD",
+        "lon_new": 151.610139,
+        "lat_new": -25.62584,
+        "ec_id": 5750,
+        "distance_shift_m": 0.06842556
+    },
+    {
+        "name": "Goondi",
+        "address": "2-8 Leichhardt St, Goondi, INNISFAIL, QLD 4860",
+        "premises": "Goondi Combined Sports Club",
+        "state": "QLD",
+        "lon_new": 146.01408,
+        "lat_new": -17.525381,
+        "ec_id": 5959,
+        "distance_shift_m": 0.03372323
+    },
+    {
+        "name": "Goondiwindi West",
+        "address": "68 Elizabeth Dr, GOONDIWINDI, QLD 4390",
+        "premises": "River View Function Centre",
+        "state": "QLD",
+        "lon_new": 150.299837,
+        "lat_new": -28.546538,
+        "ec_id": 6163,
+        "distance_shift_m": 0.03858153
+    },
+    {
+        "name": "Harristown South",
+        "address": "7 Mathews St, HARRISTOWN, QLD 4350",
+        "premises": "Toowoomba Philharmonic Society",
+        "state": "QLD",
+        "lon_new": 151.934062,
+        "lat_new": -27.587924,
+        "ec_id": 83264,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Harristown West",
+        "address": "100 Glenvale Rd, HARRISTOWN, QLD 4350",
+        "premises": "Toowoomba Community Baptist Church",
+        "state": "QLD",
+        "lon_new": 151.915447,
+        "lat_new": -27.564866,
+        "ec_id": 83251,
+        "distance_shift_m": 67.26098448
+    },
+    {
+        "name": "Highfields North",
+        "address": "10 O'Brien Rd, HIGHFIELDS, QLD 4352",
+        "premises": "Highfields State Secondary College",
+        "state": "QLD",
+        "lon_new": 151.95103,
+        "lat_new": -27.447609,
+        "ec_id": 83378,
+        "distance_shift_m": 155.96059106
+    },
+    {
+        "name": "Hope Vale",
+        "address": "Cape York Aboriginal Shire Council, 1 Muni St, HOPE VALE, QLD 4895",
+        "premises": "Hope Vale Business Precinct",
+        "state": "QLD",
+        "lon_new": 145.109555,
+        "lat_new": -15.294098,
+        "ec_id": 5966,
+        "distance_shift_m": 206.78771507
+    },
+    {
+        "name": "Howard",
+        "address": "108 William St, HOWARD, QLD 4659",
+        "premises": "Howard State School",
+        "state": "QLD",
+        "lon_new": 152.558278,
+        "lat_new": -25.322547,
+        "ec_id": 6580,
+        "distance_shift_m": 20.19495142
+    },
+    {
+        "name": "Ingham South",
+        "address": "73-75 McIlwraith St, INGHAM, QLD 4850",
+        "premises": "Tyto Conference and Events Centre",
+        "state": "QLD",
+        "lon_new": 146.15242,
+        "lat_new": -18.652587,
+        "ec_id": 5847,
+        "distance_shift_m": 0.06375611
+    },
+    {
+        "name": "Innisfail",
+        "address": "45 Flying Fish Point Rd, INNISFAIL, QLD 4860",
+        "premises": "Innisfail State College",
+        "state": "QLD",
+        "lon_new": 146.035597,
+        "lat_new": -17.516027,
+        "ec_id": 5968,
+        "distance_shift_m": 160.30271874
+    },
+    {
+        "name": "Innisfail North",
+        "address": "7 Emily St, INNISFAIL, QLD 4860",
+        "premises": "Innisfail State School",
+        "state": "QLD",
+        "lon_new": 146.028047,
+        "lat_new": -17.51808,
+        "ec_id": 5969,
+        "distance_shift_m": 0.01061889
+    },
+    {
+        "name": "Jondaryan",
+        "address": "10 Scott Rd, JONDARYAN, QLD 4403",
+        "premises": "Jondaryan State School",
+        "state": "QLD",
+        "lon_new": 151.585552,
+        "lat_new": -27.373086,
+        "ec_id": 6178,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Kamerunga",
+        "address": "450-462 Kamerunga Road, KAMERUNGA, QLD 4870",
+        "premises": "St John the Baptist Greek Orthodox Parish",
+        "state": "QLD",
+        "lon_new": 145.693995,
+        "lat_new": -16.883881,
+        "ec_id": 83243,
+        "distance_shift_m": 32.16019494
+    },
+    {
+        "name": "Kearneys Spring",
+        "address": "505 Hume St, KEARNEYS SPRING, QLD 4350",
+        "premises": "Highlands Christian College",
+        "state": "QLD",
+        "lon_new": 151.950932,
+        "lat_new": -27.600121,
+        "ec_id": 83248,
+        "distance_shift_m": 421.78574079
+    },
+    {
+        "name": "Kewarra Beach",
+        "address": "Poolwood Rd, KEWARRA BEACH, QLD 4879",
+        "premises": "Trinity Anglican School",
+        "state": "QLD",
+        "lon_new": 145.683041,
+        "lat_new": -16.788745,
+        "ec_id": 74453,
+        "distance_shift_m": 211.37984102
+    },
+    {
+        "name": "Kin Kora",
+        "address": "1 Uniting Place, TELINA, QLD 4680",
+        "premises": "Uniting Church Hall",
+        "state": "QLD",
+        "lon_new": 151.259033,
+        "lat_new": -23.887838,
+        "ec_id": 5763,
+        "distance_shift_m": 0.0601842
+    },
+    {
+        "name": "Kogan",
+        "address": "High St, KOGAN, QLD 4406",
+        "premises": "Kogan Community Centre",
+        "state": "QLD",
+        "lon_new": 150.76191,
+        "lat_new": -27.04019,
+        "ec_id": 6184,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Kowanyama",
+        "address": "345 Kowanyama St, KOWANYAMA, QLD 4892",
+        "premises": "Kowanyama State School",
+        "state": "QLD",
+        "lon_new": 141.744675,
+        "lat_new": -15.477078,
+        "ec_id": 5971,
+        "distance_shift_m": 582.47959688
+    },
+    {
+        "name": "Macalister",
+        "address": "20649 Warrego Hwy, MACALISTER, QLD 4352",
+        "premises": "Macalister QCWA Hall",
+        "state": "QLD",
+        "lon_new": 151.07743,
+        "lat_new": -27.04419,
+        "ec_id": 6188,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Maidenwell",
+        "address": "28-32 Tanduringie Rd, PIMPIMBUDGEE, QLD 4615",
+        "premises": "Tanduringie Primary School",
+        "state": "QLD",
+        "lon_new": 151.795233,
+        "lat_new": -26.892751,
+        "ec_id": 6597,
+        "distance_shift_m": 0.02980466
+    },
+    {
+        "name": "Mareeba North",
+        "address": "88 Byrnes St, MAREEBA, QLD 4880",
+        "premises": "Mareeba RSL",
+        "state": "QLD",
+        "lon_new": 145.421649,
+        "lat_new": -16.991604,
+        "ec_id": 5869,
+        "distance_shift_m": 0.0440104
+    },
+    {
+        "name": "Meringandan",
+        "address": "Meringandan-Shirley Rd, MERINGANDAN, QLD 4352",
+        "premises": "Meringandan State School",
+        "state": "QLD",
+        "lon_new": 151.904949,
+        "lat_new": -27.430849,
+        "ec_id": 31483,
+        "distance_shift_m": 0.02426762
+    },
+    {
+        "name": "Moonie",
+        "address": "11305 Moonie Hwy, MOONIE, QLD 4406",
+        "premises": "Moonie State School",
+        "state": "QLD",
+        "lon_new": 150.37321,
+        "lat_new": -27.71407,
+        "ec_id": 6195,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Moore Park",
+        "address": "Club Ave, MOORE PARK, QLD 4670",
+        "premises": "Moore Park Community Hall",
+        "state": "QLD",
+        "lon_new": 152.27568,
+        "lat_new": -24.716377,
+        "ec_id": 32534,
+        "distance_shift_m": 0.04196068
+    },
+    {
+        "name": "Mount Lofty",
+        "address": "55 Stuart St, HARLAXTON, QLD 4350",
+        "premises": "Toowoomba Bridge Club",
+        "state": "QLD",
+        "lon_new": 151.965023,
+        "lat_new": -27.540044,
+        "ec_id": 5628,
+        "distance_shift_m": 73.17962382
+    },
+    {
+        "name": "Mount Louisa",
+        "address": "High Vista Park, 488 Bayswater Rd, MOUNT LOUISA, QLD 4814",
+        "premises": "Brothers TSV Football Club",
+        "state": "QLD",
+        "lon_new": 146.748649,
+        "lat_new": -19.27208,
+        "ec_id": 8867,
+        "distance_shift_m": 79.60163697
+    },
+    {
+        "name": "Mount Low",
+        "address": "10 Iris La, BURDELL, QLD 4818",
+        "premises": "Northern Beaches Suns AFL Club",
+        "state": "QLD",
+        "lon_new": 146.702368,
+        "lat_new": -19.252374,
+        "ec_id": 83396,
+        "distance_shift_m": 0.05436263
+    },
+    {
+        "name": "Mount Morgan",
+        "address": "33 Morgan St, MOUNT MORGAN, QLD 4714",
+        "premises": "Mount Morgan School of Arts",
+        "state": "QLD",
+        "lon_new": 150.386687,
+        "lat_new": -23.645151,
+        "ec_id": 5252,
+        "distance_shift_m": 0.04228763
+    },
+    {
+        "name": "Mungindi",
+        "address": "92-100 Barwon St, MUNGINDI NSW, QLD 2406",
+        "premises": "Mungindi Community Pre-School",
+        "state": "QLD",
+        "lon_new": 148.98743,
+        "lat_new": -28.972172,
+        "ec_id": 6200,
+        "distance_shift_m": 305112.18772626
+    },
+    {
+        "name": "Normanton",
+        "address": "99 Landsborough St, NORMANTON, QLD 4890",
+        "premises": "Normanton Shire Hall",
+        "state": "QLD",
+        "lon_new": 141.080196,
+        "lat_new": -17.668838,
+        "ec_id": 5885,
+        "distance_shift_m": 118.65898795
+    },
+    {
+        "name": "Northern Beaches",
+        "address": "Meranti St, DEERAGUN, QLD 4818",
+        "premises": "Northern Beaches High School",
+        "state": "QLD",
+        "lon_new": 146.672464,
+        "lat_new": -19.247282,
+        "ec_id": 40275,
+        "distance_shift_m": 161.50040712
+    },
+    {
+        "name": "Oakey",
+        "address": "1 Campbell St, OAKEY, QLD 4401",
+        "premises": "Oakey State High School Assembly Hall",
+        "state": "QLD",
+        "lon_new": 151.719111,
+        "lat_new": -27.44493,
+        "ec_id": 5632,
+        "distance_shift_m": 0.03468204
+    },
+    {
+        "name": "Palm Cove",
+        "address": "135 Williams Esp, PALM COVE, QLD 4879",
+        "premises": "Palm Cove Surf Club",
+        "state": "QLD",
+        "lon_new": 145.671063,
+        "lat_new": -16.742616,
+        "ec_id": 83240,
+        "distance_shift_m": 982.88842355
+    },
+    {
+        "name": "Parkhurst",
+        "address": "25 Yeppoon Rd, PARKHURST, QLD 4702",
+        "premises": "QDAF Rockhampton Conference Centre",
+        "state": "QLD",
+        "lon_new": 150.515761,
+        "lat_new": -23.316316,
+        "ec_id": 5260,
+        "distance_shift_m": 558.70141859
+    },
+    {
+        "name": "Pittsworth",
+        "address": "42 Hume St, PITTSWORTH, QLD 4356",
+        "premises": "Pittsworth Function Centre",
+        "state": "QLD",
+        "lon_new": 151.634965,
+        "lat_new": -27.718015,
+        "ec_id": 6204,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Proston",
+        "address": "Rodney St, PROSTON, QLD 4613",
+        "premises": "Proston Town Hall",
+        "state": "QLD",
+        "lon_new": 151.600565,
+        "lat_new": -26.163875,
+        "ec_id": 6617,
+        "distance_shift_m": 288.0359714
+    },
+    {
+        "name": "Rangeville",
+        "address": "32A High St, RANGEVILLE, QLD 4350",
+        "premises": "Rangeville State School K Block Hall",
+        "state": "QLD",
+        "lon_new": 151.97993,
+        "lat_new": -27.583455,
+        "ec_id": 5633,
+        "distance_shift_m": 0.04936875
+    },
+    {
+        "name": "Rockhampton City",
+        "address": "80 Denham St, ROCKHAMPTON CITY, QLD 4700",
+        "premises": "80 Denham St",
+        "state": "QLD",
+        "lon_new": 150.507967,
+        "lat_new": -23.38115,
+        "ec_id": 5265,
+        "distance_shift_m": 655.93584391
+    },
+    {
+        "name": "Rosedale",
+        "address": "77 James Street, ROSEDALE, QLD 4674",
+        "premises": "Rosedale Memorial Hall",
+        "state": "QLD",
+        "lon_new": 151.914709,
+        "lat_new": -24.629295,
+        "ec_id": 5781,
+        "distance_shift_m": 0.04616335
+    },
+    {
+        "name": "Smithfield",
+        "address": "McGregor Rd, SMITHFIELD, QLD 4878",
+        "premises": "James Cook University",
+        "state": "QLD",
+        "lon_new": 145.687926,
+        "lat_new": -16.818249,
+        "ec_id": 46395,
+        "distance_shift_m": 0.02401899
+    },
+    {
+        "name": "Soldiers Hill",
+        "address": "3-17 Bougainville St, MOUNT ISA, QLD 4825",
+        "premises": "Barkly Highway State School",
+        "state": "QLD",
+        "lon_new": 139.49,
+        "lat_new": -20.709,
+        "ec_id": 5894,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "St George",
+        "address": "cnr Alfred St & Grey St, ST GEORGE, QLD 4487",
+        "premises": "St George State School Hall",
+        "state": "QLD",
+        "lon_new": 148.581036,
+        "lat_new": -28.038392,
+        "ec_id": 6214,
+        "distance_shift_m": 4978.94323243
+    },
+    {
+        "name": "Stanthorpe West",
+        "address": "Cnr Railway & Hillcrest St, STANTHORPE, QLD 4380",
+        "premises": "Stanthorpe Baptist Church",
+        "state": "QLD",
+        "lon_new": 151.927032,
+        "lat_new": -28.655134,
+        "ec_id": 6221,
+        "distance_shift_m": 56.84460769
+    },
+    {
+        "name": "Tamwoy",
+        "address": "2-4 Olandi St, THURSDAY ISLAND, QLD 4875",
+        "premises": "Tamwoy Community Hall",
+        "state": "QLD",
+        "lon_new": 142.210934,
+        "lat_new": -10.579249,
+        "ec_id": 6002,
+        "distance_shift_m": 0.0466806
+    },
+    {
+        "name": "Tara",
+        "address": "22 Binnie St, TARA, QLD 4421",
+        "premises": "Tara State School",
+        "state": "QLD",
+        "lon_new": 150.458695,
+        "lat_new": -27.280308,
+        "ec_id": 6226,
+        "distance_shift_m": 58.2317019
+    },
+    {
+        "name": "Thabeban",
+        "address": "270 Goodwood Rd, THABEBAN, QLD 4670",
+        "premises": "Thabeban State School Hall",
+        "state": "QLD",
+        "lon_new": 152.364345,
+        "lat_new": -24.897867,
+        "ec_id": 5785,
+        "distance_shift_m": 35.04766387
+    },
+    {
+        "name": "Thangool",
+        "address": "58 Aerodrome Rd, THANGOOL, QLD 4716",
+        "premises": "Thangool State School",
+        "state": "QLD",
+        "lon_new": 150.571086,
+        "lat_new": -24.491626,
+        "ec_id": 5275,
+        "distance_shift_m": 98.6426146
+    },
+    {
+        "name": "Thargomindah",
+        "address": "1 Dowling St, THARGOMINDAH, QLD 4492",
+        "premises": "Thargomindah State School",
+        "state": "QLD",
+        "lon_new": 143.82694,
+        "lat_new": -27.99546,
+        "ec_id": 6230,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Theodore",
+        "address": "30 The Boulevard, THEODORE, QLD 4719",
+        "premises": "Theodore RSL Hall",
+        "state": "QLD",
+        "lon_new": 150.075594,
+        "lat_new": -24.950173,
+        "ec_id": 5786,
+        "distance_shift_m": 0.01107721
+    },
+    {
+        "name": "Thursday Island",
+        "address": "124 Douglas St, THURSDAY ISLAND, QLD 4875",
+        "premises": "Anglican Parish Hall",
+        "state": "QLD",
+        "lon_new": 142.214693,
+        "lat_new": -10.583896,
+        "ec_id": 6003,
+        "distance_shift_m": 21.19577081
+    },
+    {
+        "name": "Tieri",
+        "address": "Bottlebrush Lane, TIERI, QLD 4709",
+        "premises": "Tieri State School",
+        "state": "QLD",
+        "lon_new": 148.344735,
+        "lat_new": -23.030708,
+        "ec_id": 5898,
+        "distance_shift_m": 0.01508988
+    },
+    {
+        "name": "Tin Can Bay",
+        "address": "20 Gympie Rd, TIN CAN BAY, QLD 4580",
+        "premises": "Tuncunba Hall",
+        "state": "QLD",
+        "lon_new": 153.006098,
+        "lat_new": -25.912311,
+        "ec_id": 6629,
+        "distance_shift_m": 32.94494248
+    },
+    {
+        "name": "Toowoomba South",
+        "address": "240 Hume St, SOUTH TOOWOOMBA, QLD 4350",
+        "premises": "Greek Orthodox Hall",
+        "state": "QLD",
+        "lon_new": 151.955936,
+        "lat_new": -27.572955,
+        "ec_id": 5635,
+        "distance_shift_m": 0.03162878
+    },
+    {
+        "name": "Trinity Park",
+        "address": "Reed Rd, TRINITY PARK, QLD 4879",
+        "premises": "Holy Cross Catholic School",
+        "state": "QLD",
+        "lon_new": 145.695147,
+        "lat_new": -16.810536,
+        "ec_id": 83241,
+        "distance_shift_m": 949.05412008
+    },
+    {
+        "name": "Tully",
+        "address": "45 Bryant St, Tully, TULLY, QLD 4854",
+        "premises": "Shop Front Tully",
+        "state": "QLD",
+        "lon_new": 145.922839,
+        "lat_new": -17.934081,
+        "ec_id": 5901,
+        "distance_shift_m": 0.0245406
+    },
+    {
+        "name": "Tully North",
+        "address": "59337 Bruce Hwy, TULLY, QLD 4854",
+        "premises": "Tully State High School",
+        "state": "QLD",
+        "lon_new": 145.93012,
+        "lat_new": -17.940277,
+        "ec_id": 5902,
+        "distance_shift_m": 106.8856067
+    },
+    {
+        "name": "Wandoan",
+        "address": "6 Henderson Rd, WANDOAN, QLD 4419",
+        "premises": "Wandoan Community and Cultural Centre",
+        "state": "QLD",
+        "lon_new": 149.9587,
+        "lat_new": -26.12099,
+        "ec_id": 6237,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Warwick South",
+        "address": "18 Kingsford St, WARWICK, QLD 4370",
+        "premises": "Warwick Showgrounds",
+        "state": "QLD",
+        "lon_new": 152.033312,
+        "lat_new": -28.226452,
+        "ec_id": 6484,
+        "distance_shift_m": 0.02254324
+    },
+    {
+        "name": "Westbrook",
+        "address": "315 Bunkers Hill School Rd, WESTBROOK, QLD 4350",
+        "premises": "Bunkers Hill State School Hall",
+        "state": "QLD",
+        "lon_new": 151.832748,
+        "lat_new": -27.606251,
+        "ec_id": 5648,
+        "distance_shift_m": 41.7659045
+    },
+    {
+        "name": "Wilsonton Heights",
+        "address": "275 North St, WILSONTON HEIGHTS, QLD 4350",
+        "premises": "Wilsonton High School",
+        "state": "QLD",
+        "lon_new": 151.925098,
+        "lat_new": -27.536979,
+        "ec_id": 83239,
+        "distance_shift_m": 115.48122494
+    },
+    {
+        "name": "Winton",
+        "address": "75 Elderslie St, WINTON, QLD 4735",
+        "premises": "Winton Neighbourhood Centre",
+        "state": "QLD",
+        "lon_new": 143.037287,
+        "lat_new": -22.389581,
+        "ec_id": 5906,
+        "distance_shift_m": 0.032818
+    },
+    {
+        "name": "Yeppoon",
+        "address": "11 James St, YEPPOON, QLD 4703",
+        "premises": "11 James St",
+        "state": "QLD",
+        "lon_new": 150.745741,
+        "lat_new": -23.12857,
+        "ec_id": 5281,
+        "distance_shift_m": 0.06033977
+    },
+    {
+        "name": "Andamooka",
+        "address": "Lot 281 School Rd, ANDAMOOKA, SA 5722",
+        "premises": "Andamooka Community Hall",
+        "state": "SA",
+        "lon_new": 137.167115,
+        "lat_new": -30.448248,
+        "ec_id": 6908,
+        "distance_shift_m": 98.44974965
+    },
+    {
+        "name": "Arthurton",
+        "address": "14 Main St, ARTHURTON, SA 5572",
+        "premises": "Arthurton Hall",
+        "state": "SA",
+        "lon_new": 137.75665,
+        "lat_new": -34.25948,
+        "ec_id": 7327,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Berri",
+        "address": "Verran Tce, BERRI, SA 5343",
+        "premises": "Our Lady of the River Catholic School",
+        "state": "SA",
+        "lon_new": 140.597127,
+        "lat_new": -34.284125,
+        "ec_id": 6706,
+        "distance_shift_m": 83.08798744
+    },
+    {
+        "name": "Blyth",
+        "address": "South Tce, BLYTH, SA 5462",
+        "premises": "Blyth Bowling Club",
+        "state": "SA",
+        "lon_new": 138.490462,
+        "lat_new": -33.84804,
+        "ec_id": 7332,
+        "distance_shift_m": 105.59067963
+    },
+    {
+        "name": "Booborowie",
+        "address": "Cnr North Tce & N Booborowie Rd, BOOBOROWIE, SA 5417",
+        "premises": "Booborowie District Soldiers Memorial Hall",
+        "state": "SA",
+        "lon_new": 138.758262,
+        "lat_new": -33.559536,
+        "ec_id": 7333,
+        "distance_shift_m": 169.3952794
+    },
+    {
+        "name": "Cambrai",
+        "address": "Main St, CAMBRAI, SA 5353",
+        "premises": "Cambrai Primary School",
+        "state": "SA",
+        "lon_new": 139.281272,
+        "lat_new": -34.652657,
+        "ec_id": 7341,
+        "distance_shift_m": 41.03837911
+    },
+    {
+        "name": "Carpenter Rocks",
+        "address": "26-44 Carpenter Rocks Rd, CARPENTER ROCKS, SA 5291",
+        "premises": "Carpenter Rocks Community Hall",
+        "state": "SA",
+        "lon_new": 140.399,
+        "lat_new": -37.9136,
+        "ec_id": 6711,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Coober Pedy",
+        "address": "Lot 1 Hutchison St, COOBER PEDY, SA 5723",
+        "premises": "TAFE SA (Coober Pedy)",
+        "state": "SA",
+        "lon_new": 134.754676,
+        "lat_new": -29.011404,
+        "ec_id": 6916,
+        "distance_shift_m": 0.04539229
+    },
+    {
+        "name": "Coonawarra",
+        "address": "Helen Street, COONAWARRA, SA 5263",
+        "premises": "Coonawarra Tennis Club",
+        "state": "SA",
+        "lon_new": 140.833343,
+        "lat_new": -37.291129,
+        "ec_id": 6716,
+        "distance_shift_m": 83.66190383
+    },
+    {
+        "name": "Cowell",
+        "address": "Lincoln Highway, COWELL, SA 5602",
+        "premises": "Cowell Community and Sports Complex INC",
+        "state": "SA",
+        "lon_new": 136.916667,
+        "lat_new": -33.683333,
+        "ec_id": 6918,
+        "distance_shift_m": 10831.55592488
+    },
+    {
+        "name": "Elliston",
+        "address": "6 Memorial Dr, ELLISTON, SA 5670",
+        "premises": "Elliston Community Agricultural Hall",
+        "state": "SA",
+        "lon_new": 134.891038,
+        "lat_new": -33.647255,
+        "ec_id": 6925,
+        "distance_shift_m": 0.04436641
+    },
+    {
+        "name": "Farrell Flat",
+        "address": "1 Patterson St, FARRELL FLAT, SA 5416",
+        "premises": "Farrell Flat Town Hall",
+        "state": "SA",
+        "lon_new": 138.796294,
+        "lat_new": -33.829134,
+        "ec_id": 7354,
+        "distance_shift_m": 81.12857112
+    },
+    {
+        "name": "Jervois",
+        "address": "17-18 Henningson Rd, JERVOIS, SA 5259",
+        "premises": "Jervois Hall",
+        "state": "SA",
+        "lon_new": 139.436534,
+        "lat_new": -35.265575,
+        "ec_id": 66023,
+        "distance_shift_m": 50.53015838
+    },
+    {
+        "name": "Kadina",
+        "address": "1 Doswell Tce, KADINA, SA 5554",
+        "premises": "Copper Coast Sport & Leisure Centre",
+        "state": "SA",
+        "lon_new": 137.707148,
+        "lat_new": -33.961466,
+        "ec_id": 7369,
+        "distance_shift_m": 695.57975256
+    },
+    {
+        "name": "Kimba",
+        "address": "35 West Tce, KIMBA, SA 5641",
+        "premises": "District Council of Kimba",
+        "state": "SA",
+        "lon_new": 136.418443,
+        "lat_new": -33.138714,
+        "ec_id": 6932,
+        "distance_shift_m": 34.40968801
+    },
+    {
+        "name": "Laura",
+        "address": "7 Hughes St, LAURA, SA 5480",
+        "premises": "Laura Civic Centre",
+        "state": "SA",
+        "lon_new": 138.299858,
+        "lat_new": -33.185688,
+        "ec_id": 7375,
+        "distance_shift_m": 114.9403956
+    },
+    {
+        "name": "Lock",
+        "address": "18/19 Railway Tce, LOCK, SA 5633",
+        "premises": "Lock Institute",
+        "state": "SA",
+        "lon_new": 135.757,
+        "lat_new": -33.5664,
+        "ec_id": 6937,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Lucindale",
+        "address": "Lot 92 Centenary Ave, LUCINDALE, SA 5272",
+        "premises": "Lucindale War Memorial Hall",
+        "state": "SA",
+        "lon_new": 140.368976,
+        "lat_new": -36.971551,
+        "ec_id": 6742,
+        "distance_shift_m": 176.03652341
+    },
+    {
+        "name": "Lyrup",
+        "address": "Cnr\" Rupert Ct & Wilson Pde\", LYRUP, SA 5343",
+        "premises": "Lyrup Village Association",
+        "state": "SA",
+        "lon_new": 140.646789,
+        "lat_new": -34.255696,
+        "ec_id": 6743,
+        "distance_shift_m": 65.97304186
+    },
+    {
+        "name": "Maitland",
+        "address": "4-24 Junction Rd, MAITLAND, SA 5573",
+        "premises": "Central Yorke School",
+        "state": "SA",
+        "lon_new": 137.673,
+        "lat_new": -34.368808,
+        "ec_id": 7379,
+        "distance_shift_m": 92.54797029
+    },
+    {
+        "name": "Moonta",
+        "address": "Blanche Tce, MOONTA, SA 5558",
+        "premises": "Moonta Area School",
+        "state": "SA",
+        "lon_new": 137.591707,
+        "lat_new": -34.070203,
+        "ec_id": 7389,
+        "distance_shift_m": 128.11918875
+    },
+    {
+        "name": "Morgan",
+        "address": "4 N E Tce, MORGAN, SA 5320",
+        "premises": "Morgan Sporting Complex",
+        "state": "SA",
+        "lon_new": 139.669354,
+        "lat_new": -34.02905,
+        "ec_id": 7391,
+        "distance_shift_m": 102.05077759
+    },
+    {
+        "name": "Mount Burr",
+        "address": "Thomas Dr, MOUNT BURR, SA 5279",
+        "premises": "Mount Burr Primary School",
+        "state": "SA",
+        "lon_new": 140.459368,
+        "lat_new": -37.541254,
+        "ec_id": 6755,
+        "distance_shift_m": 159.4832558
+    },
+    {
+        "name": "Mount Gambier",
+        "address": "26 Bay Rd, MOUNT GAMBIER, SA 5290",
+        "premises": "Anglican Parish of Mt Gambier",
+        "state": "SA",
+        "lon_new": 140.77883,
+        "lat_new": -37.831234,
+        "ec_id": 6756,
+        "distance_shift_m": 0.04526169
+    },
+    {
+        "name": "Mount Gambier North",
+        "address": "Heath St, MOUNT GAMBIER, SA 5290",
+        "premises": "Mt Gambier North Primary School Gym",
+        "state": "SA",
+        "lon_new": 140.775784,
+        "lat_new": -37.816876,
+        "ec_id": 6759,
+        "distance_shift_m": 169.59430517
+    },
+    {
+        "name": "Murray Bridge",
+        "address": "1 North Tce, MURRAY BRIDGE, SA 5254",
+        "premises": "Murray Bridge North School",
+        "state": "SA",
+        "lon_new": 139.2709,
+        "lat_new": -35.117144,
+        "ec_id": 7209,
+        "distance_shift_m": 123.12423199
+    },
+    {
+        "name": "Mypolonga",
+        "address": "6-8 Green St, MYPOLONGA, SA 5254",
+        "premises": "Mypolonga Institute Hall",
+        "state": "SA",
+        "lon_new": 139.35426,
+        "lat_new": -35.03949,
+        "ec_id": 7213,
+        "distance_shift_m": 95.59716426
+    },
+    {
+        "name": "Naracoorte",
+        "address": "171 Smith St, NARACOORTE, SA 5271",
+        "premises": "Senior Citizens Clubrooms",
+        "state": "SA",
+        "lon_new": 140.74939,
+        "lat_new": -36.953791,
+        "ec_id": 6765,
+        "distance_shift_m": 83.05235047
+    },
+    {
+        "name": "Nildottie",
+        "address": "4103 Hunter Rd, NILDOTTIE, SA 5238",
+        "premises": "St Stephens Lutheran Church",
+        "state": "SA",
+        "lon_new": 139.65146,
+        "lat_new": -34.680079,
+        "ec_id": 6769,
+        "distance_shift_m": 71.53708456
+    },
+    {
+        "name": "Penola",
+        "address": "Young St, PENOLA, SA 5277",
+        "premises": "Penola Primary School Gymnasium",
+        "state": "SA",
+        "lon_new": 140.833802,
+        "lat_new": -37.380306,
+        "ec_id": 6778,
+        "distance_shift_m": 479.42010523
+    },
+    {
+        "name": "Pinnaroo",
+        "address": "21 Day St, PINNAROO, SA 5304",
+        "premises": "Pinnaroo Council Chambers",
+        "state": "SA",
+        "lon_new": 140.908517,
+        "lat_new": -35.260769,
+        "ec_id": 6779,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Port Augusta Central",
+        "address": "PORT AUGUSTA, SA 5700",
+        "premises": "68 Commercial Rd",
+        "state": "SA",
+        "lon_new": 137.763359,
+        "lat_new": -32.492682,
+        "ec_id": 6947,
+        "distance_shift_m": 0.03587322
+    },
+    {
+        "name": "Port Augusta East",
+        "address": "9-39 Carlton Pde, PORT AUGUSTA, SA 5700",
+        "premises": "TAFE SA (Port Augusta)",
+        "state": "SA",
+        "lon_new": 137.7722,
+        "lat_new": -32.49441,
+        "ec_id": 6922,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Port Lincoln",
+        "address": "Cnr Adelaide & Hallett Pl, PORT LINCOLN, SA 5606",
+        "premises": "St Thomas Anglican Parish Church",
+        "state": "SA",
+        "lon_new": 135.857234,
+        "lat_new": -34.721112,
+        "ec_id": 6951,
+        "distance_shift_m": 0.03328064
+    },
+    {
+        "name": "Port Pirie West",
+        "address": "35 Mary Elie St, PORT PIRIE, SA 5540",
+        "premises": "TAFE SA (Port Pirie)",
+        "state": "SA",
+        "lon_new": 138.006,
+        "lat_new": -33.1838,
+        "ec_id": 6956,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Renmark",
+        "address": "61 Eighteenth St, RENMARK, SA 5341",
+        "premises": "Renmark Paringa Community & Civic Centre",
+        "state": "SA",
+        "lon_new": 140.747889,
+        "lat_new": -34.178387,
+        "ec_id": 6787,
+        "distance_shift_m": 121.20180043
+    },
+    {
+        "name": "Risdon Park East",
+        "address": "390 The Terrace, PORT PIRIE, SA 5540",
+        "premises": "Lighthouse Church Port Pirie Uniting Church",
+        "state": "SA",
+        "lon_new": 138.003118,
+        "lat_new": -33.198068,
+        "ec_id": 6958,
+        "distance_shift_m": 82.58618047
+    },
+    {
+        "name": "Risdon Park South",
+        "address": "44 Hannan St, RISDON PARK SOUTH, SA 5540",
+        "premises": "Risdon Park South Baptist Church",
+        "state": "SA",
+        "lon_new": 137.992483,
+        "lat_new": -33.207176,
+        "ec_id": 6959,
+        "distance_shift_m": 52.00450793
+    },
+    {
+        "name": "Roseworthy",
+        "address": "9 Elizabeth St, ROSEWORTHY, SA 5371",
+        "premises": "Roseworthy Memorial Hall",
+        "state": "SA",
+        "lon_new": 138.748594,
+        "lat_new": -34.533443,
+        "ec_id": 7414,
+        "distance_shift_m": 54.89650965
+    },
+    {
+        "name": "Sellicks Beach",
+        "address": "18 Riviera Rd, SELLICKS BEACH, SA 5174",
+        "premises": "Sellicks Community Hall",
+        "state": "SA",
+        "lon_new": 138.455335,
+        "lat_new": -35.324758,
+        "ec_id": 7227,
+        "distance_shift_m": 119.55178425
+    },
+    {
+        "name": "Southend",
+        "address": "Eliza St, SOUTHEND, SA 5280",
+        "premises": "Southend Community Centre",
+        "state": "SA",
+        "lon_new": 140.134,
+        "lat_new": -37.5676,
+        "ec_id": 6793,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Tintinara",
+        "address": "49 Becker Tce, TINTINARA, SA 5266",
+        "premises": "Tintinara War Memorial Hall",
+        "state": "SA",
+        "lon_new": 140.058,
+        "lat_new": -35.8847,
+        "ec_id": 6802,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Walker Flat",
+        "address": "4945 Angas Valley Rd, WALKER FLAT, SA 5238",
+        "premises": "Walker Flat & Districts Community Hall",
+        "state": "SA",
+        "lon_new": 139.567999,
+        "lat_new": -34.761502,
+        "ec_id": 7431,
+        "distance_shift_m": 94.23929395
+    },
+    {
+        "name": "Wallaroo",
+        "address": "12a Hughes St, WALLAROO, SA 5556",
+        "premises": "Wallaroo Primary School",
+        "state": "SA",
+        "lon_new": 137.624689,
+        "lat_new": -33.932718,
+        "ec_id": 7432,
+        "distance_shift_m": 193.17713519
+    },
+    {
+        "name": "Wellington",
+        "address": "3444 Jervois Rd, WELLINGTON, SA 5259",
+        "premises": "Wellington Hall",
+        "state": "SA",
+        "lon_new": 139.381871,
+        "lat_new": -35.331254,
+        "ec_id": 7237,
+        "distance_shift_m": 93.85223762
+    },
+    {
+        "name": "Whyalla Norrie North",
+        "address": "6 Schulz Ave, WHYALLA NORRIE, SA 5608",
+        "premises": "Hincks Avenue Primary School",
+        "state": "SA",
+        "lon_new": 137.544006,
+        "lat_new": -33.019023,
+        "ec_id": 6979,
+        "distance_shift_m": 200.86548261
+    },
+    {
+        "name": "Wilmington",
+        "address": "22 Horrocks Hwy, WILMINGTON, SA 5485",
+        "premises": "Wilmington CWA",
+        "state": "SA",
+        "lon_new": 138.098651,
+        "lat_new": -32.650838,
+        "ec_id": 7440,
+        "distance_shift_m": 4806.15256536
+    },
+    {
+        "name": "Wudinna",
+        "address": "20 Naylor Tce, WUDINNA, SA 5652",
+        "premises": "Wudinna Senior Citizens Club",
+        "state": "SA",
+        "lon_new": 135.467,
+        "lat_new": -33.0483,
+        "ec_id": 6987,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Bicheno",
+        "address": "78 Burgess St, BICHENO, TAS 7215",
+        "premises": "Bicheno War Memorial Hall",
+        "state": "TAS",
+        "lon_new": 148.304624,
+        "lat_new": -41.872264,
+        "ec_id": 8556,
+        "distance_shift_m": 424.25134961
+    },
+    {
+        "name": "Blackmans Bay South",
+        "address": "24 Ocean Esp, BLACKMANS BAY, TAS 7052",
+        "premises": "Blackmans Bay Hall",
+        "state": "TAS",
+        "lon_new": 147.324,
+        "lat_new": -43.0025,
+        "ec_id": 83602,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Carlton",
+        "address": "225-227 Carlton River Rd, CARLTON, TAS 7173",
+        "premises": "Salvation Army Carlton",
+        "state": "TAS",
+        "lon_new": 147.639051,
+        "lat_new": -42.863899,
+        "ec_id": 83676,
+        "distance_shift_m": 0.03332703
+    },
+    {
+        "name": "Cascades",
+        "address": "59 Anglesea St, SOUTH HOBART, TAS 7004",
+        "premises": "South Hobart Primary School",
+        "state": "TAS",
+        "lon_new": 147.310633,
+        "lat_new": -42.892494,
+        "ec_id": 8445,
+        "distance_shift_m": 0.04443626
+    },
+    {
+        "name": "Claremont",
+        "address": "29 Wyndham Rd, CLAREMONT, TAS 7011",
+        "premises": "Holy Rosary Catholic School",
+        "state": "TAS",
+        "lon_new": 147.247567,
+        "lat_new": -42.789815,
+        "ec_id": 8447,
+        "distance_shift_m": 83.12193427
+    },
+    {
+        "name": "Colebrook",
+        "address": "45 Richmond St, COLEBROOK, TAS 7027",
+        "premises": "Colebrook Memorial Hall",
+        "state": "TAS",
+        "lon_new": 147.362604,
+        "lat_new": -42.533165,
+        "ec_id": 8572,
+        "distance_shift_m": 0.04255326
+    },
+    {
+        "name": "Devonport Central",
+        "address": "45 Stewart St, DEVONPORT, TAS 7310",
+        "premises": "Old Devonport Regional Gallery",
+        "state": "TAS",
+        "lon_new": 146.359846,
+        "lat_new": -41.179983,
+        "ec_id": 8371,
+        "distance_shift_m": 0.00839059
+    },
+    {
+        "name": "Epping Forest",
+        "address": "13517 Midland Hwy, EPPING FOREST, TAS 7211",
+        "premises": "Epping Hall",
+        "state": "TAS",
+        "lon_new": 147.349062,
+        "lat_new": -41.758076,
+        "ec_id": 8589,
+        "distance_shift_m": 0.04442744
+    },
+    {
+        "name": "Five Ways",
+        "address": "89-91 Meredith Cres, SOUTH LAUNCESTON, TAS 7249",
+        "premises": "Kim Roe School of Dance",
+        "state": "TAS",
+        "lon_new": 147.151925,
+        "lat_new": -41.457583,
+        "ec_id": 8314,
+        "distance_shift_m": 0.03342025
+    },
+    {
+        "name": "Glengarry",
+        "address": "33 Glengarry Rd, GLENGARRY, TAS 7275",
+        "premises": "Glengarry Catholic Church",
+        "state": "TAS",
+        "lon_new": 146.870343,
+        "lat_new": -41.335033,
+        "ec_id": 8599,
+        "distance_shift_m": 0.03331812
+    },
+    {
+        "name": "Goodwood",
+        "address": "4 Rothesay Cir, GOODWOOD, TAS 7010",
+        "premises": "Karadi Aboriginal Corporation",
+        "state": "TAS",
+        "lon_new": 147.292683,
+        "lat_new": -42.826763,
+        "ec_id": 8459,
+        "distance_shift_m": 0.05075727
+    },
+    {
+        "name": "Gravelly Beach",
+        "address": "401 Gravelly Beach Rd, GRAVELLY BEACH, TAS 7276",
+        "premises": "Edinburgh Park Equestrian Centre",
+        "state": "TAS",
+        "lon_new": 146.971017,
+        "lat_new": -41.28267,
+        "ec_id": 8603,
+        "distance_shift_m": 1258.21132645
+    },
+    {
+        "name": "Hobart City",
+        "address": "Level 1, HOBART, TAS 7000",
+        "premises": "144 Macquarie St",
+        "state": "TAS",
+        "lon_new": 147.327458,
+        "lat_new": -42.885224,
+        "ec_id": 8461,
+        "distance_shift_m": 731.38115769
+    },
+    {
+        "name": "Kempton",
+        "address": "89 Main St, KEMPTON, TAS 7030",
+        "premises": "Kempton Memorial Hall",
+        "state": "TAS",
+        "lon_new": 147.200647,
+        "lat_new": -42.531821,
+        "ec_id": 8611,
+        "distance_shift_m": 0.0473743
+    },
+    {
+        "name": "Kings Meadows",
+        "address": "8A Blaydon St, KINGS MEADOWS, TAS 7249",
+        "premises": "YMCA Centre",
+        "state": "TAS",
+        "lon_new": 147.159536,
+        "lat_new": -41.467805,
+        "ec_id": 8309,
+        "distance_shift_m": 40.47767293
+    },
+    {
+        "name": "Kingston",
+        "address": "7 Goshawk Way, KINGSTON, TAS 7050",
+        "premises": "Kingborough Community Hub",
+        "state": "TAS",
+        "lon_new": 147.308035,
+        "lat_new": -42.974326,
+        "ec_id": 46852,
+        "distance_shift_m": 291.85365598
+    },
+    {
+        "name": "Lady Barron",
+        "address": "Main St, LADY BARRON, TAS 7255",
+        "premises": "Lady Barron Memorial Hall",
+        "state": "TAS",
+        "lon_new": 148.240354,
+        "lat_new": -40.211081,
+        "ec_id": 8310,
+        "distance_shift_m": 0.01110387
+    },
+    {
+        "name": "Launceston Central",
+        "address": "LAUNCESTON, TAS 7250",
+        "premises": "59 Bathurst St",
+        "state": "TAS",
+        "lon_new": 147.136819,
+        "lat_new": -41.442151,
+        "ec_id": 8312,
+        "distance_shift_m": 0.03522487
+    },
+    {
+        "name": "Legana Central",
+        "address": "1-9 Freshwater Point Rd, LEGANA, TAS 7277",
+        "premises": "Legana Regis",
+        "state": "TAS",
+        "lon_new": 147.040062,
+        "lat_new": -41.363815,
+        "ec_id": 97469,
+        "distance_shift_m": 33.43811295
+    },
+    {
+        "name": "Lindisfarne Village",
+        "address": "37A Lincoln St, LINDISFARNE, TAS 7015",
+        "premises": "Lindisfarne Citizens Activities Centre",
+        "state": "TAS",
+        "lon_new": 147.355308,
+        "lat_new": -42.847111,
+        "ec_id": 8523,
+        "distance_shift_m": 0.01379233
+    },
+    {
+        "name": "New Town",
+        "address": "393 Argyle St, NORTH HOBART, TAS 7000",
+        "premises": "The Friends School",
+        "state": "TAS",
+        "lon_new": 147.313602,
+        "lat_new": -42.866171,
+        "ec_id": 8476,
+        "distance_shift_m": 216.51951225
+    },
+    {
+        "name": "Newnham Alanvale",
+        "address": "1B George Town Rd, NEWNHAM, TAS 7248",
+        "premises": "North Launceston Bowls and Community Club",
+        "state": "TAS",
+        "lon_new": 147.128665,
+        "lat_new": -41.400285,
+        "ec_id": 83667,
+        "distance_shift_m": 0.04442466
+    },
+    {
+        "name": "Norwood North",
+        "address": "161 Penquite Rd, NORWOOD, TAS 7250",
+        "premises": "Queechy High School",
+        "state": "TAS",
+        "lon_new": 147.17678,
+        "lat_new": -41.452158,
+        "ec_id": 83668,
+        "distance_shift_m": 63.14296386
+    },
+    {
+        "name": "Oatlands",
+        "address": "27 Church St, OATLANDS, TAS 7120",
+        "premises": "Oatlands District High School",
+        "state": "TAS",
+        "lon_new": 147.371439,
+        "lat_new": -42.301459,
+        "ec_id": 8639,
+        "distance_shift_m": 31.93338538
+    },
+    {
+        "name": "Railton",
+        "address": "94 Foster St, RAILTON, TAS 7305",
+        "premises": "Sheffield School - Railton Campus",
+        "state": "TAS",
+        "lon_new": 146.414,
+        "lat_new": -41.3526,
+        "ec_id": 8654,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Riverside",
+        "address": "452a West Tamar Rd, RIVERSIDE, TAS 7250",
+        "premises": "Launceston Christian School",
+        "state": "TAS",
+        "lon_new": 147.090073,
+        "lat_new": -41.401828,
+        "ec_id": 8336,
+        "distance_shift_m": 173.60605791
+    },
+    {
+        "name": "Riverside North",
+        "address": "453 West Tamar Rd, RIVERSIDE, TAS 7250",
+        "premises": "Riverside Gospel Chapel",
+        "state": "TAS",
+        "lon_new": 147.089092,
+        "lat_new": -41.40312,
+        "ec_id": 97468,
+        "distance_shift_m": 0.0334482
+    },
+    {
+        "name": "Rokeby",
+        "address": "73 Burtonia St, ROKEBY, TAS 7019",
+        "premises": "Rokeby Primary School",
+        "state": "TAS",
+        "lon_new": 147.433488,
+        "lat_new": -42.89874,
+        "ec_id": 8533,
+        "distance_shift_m": 30.45072527
+    },
+    {
+        "name": "Rosetta",
+        "address": "32 Riverview Pde, ROSETTA, TAS 7010",
+        "premises": "Rosetta Primary School",
+        "state": "TAS",
+        "lon_new": 147.258237,
+        "lat_new": -42.822156,
+        "ec_id": 83688,
+        "distance_shift_m": 89.77264137
+    },
+    {
+        "name": "Seven Mile Beach",
+        "address": "78 Surf Rd, SEVEN MILE BEACH, TAS 7170",
+        "premises": "Ramada Resort By Wyndham Seven Mile Beach",
+        "state": "TAS",
+        "lon_new": 147.511754,
+        "lat_new": -42.853484,
+        "ec_id": 8536,
+        "distance_shift_m": 115.93943946
+    },
+    {
+        "name": "South Launceston",
+        "address": "50 Glen Dhu Street, LAUNCESTON, TAS 7250",
+        "premises": "Door of Hope",
+        "state": "TAS",
+        "lon_new": 147.141116,
+        "lat_new": -41.455891,
+        "ec_id": 8330,
+        "distance_shift_m": 88.31866617
+    },
+    {
+        "name": "Summerhill",
+        "address": "87 Stanley St, SUMMERHILL, TAS 7250",
+        "premises": "Summerhill Baptist Church",
+        "state": "TAS",
+        "lon_new": 147.130385,
+        "lat_new": -41.467325,
+        "ec_id": 33084,
+        "distance_shift_m": 312.80075591
+    },
+    {
+        "name": "Bairnsdale",
+        "address": "BAIRNSDALE, VIC 3875",
+        "premises": "1/80-88 Main St",
+        "state": "VIC",
+        "lon_new": 147.633408,
+        "lat_new": -37.824839,
+        "ec_id": 3718,
+        "distance_shift_m": 0.05666843
+    },
+    {
+        "name": "Ballarat",
+        "address": "9 Grenville St N, BALLARAT CENTRAL, VIC 3350",
+        "premises": "Grenville St N",
+        "state": "VIC",
+        "lon_new": 143.860609,
+        "lat_new": -37.561375,
+        "ec_id": 2986,
+        "distance_shift_m": 0.04173411
+    },
+    {
+        "name": "Balmoral",
+        "address": "26 Glendinning St, BALMORAL, VIC 3407",
+        "premises": "Balmoral Mechanics Hall",
+        "state": "VIC",
+        "lon_new": 141.84222,
+        "lat_new": -37.248674,
+        "ec_id": 4937,
+        "distance_shift_m": 0.04527081
+    },
+    {
+        "name": "Benalla",
+        "address": "52 Carrier St, BENALLA, VIC 3672",
+        "premises": "old CVGT building",
+        "state": "VIC",
+        "lon_new": 145.985278,
+        "lat_new": -36.550333,
+        "ec_id": 4024,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Bendigo Central",
+        "address": "10 Myers St, BENDIGO, VIC 3550",
+        "premises": "Bendigo Anglican Cathedral Hall (St Pauls)",
+        "state": "VIC",
+        "lon_new": 144.2831,
+        "lat_new": -36.7621,
+        "ec_id": 3129,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Bowenvale",
+        "address": "395 Bet Bet Creek Rd, TIMOR, VIC 3465",
+        "premises": "Timor Primary School",
+        "state": "VIC",
+        "lon_new": 143.712175,
+        "lat_new": -36.984191,
+        "ec_id": 3136,
+        "distance_shift_m": 21.90762721
+    },
+    {
+        "name": "Churchill Central",
+        "address": "14-18 Philip Pde, CHURCHILL, VIC 3842",
+        "premises": "Churchill Public Hall",
+        "state": "VIC",
+        "lon_new": 146.421418,
+        "lat_new": -38.313338,
+        "ec_id": 64689,
+        "distance_shift_m": 94767.51894425
+    },
+    {
+        "name": "Clunes",
+        "address": "Canterbury St, CLUNES, VIC 3370",
+        "premises": "Primary School",
+        "state": "VIC",
+        "lon_new": 143.791914,
+        "lat_new": -37.291281,
+        "ec_id": 3012,
+        "distance_shift_m": 29.29954024
+    },
+    {
+        "name": "Corinella",
+        "address": "38 Smythe St, CORINELLA, VIC 3984",
+        "premises": "Corinella Public Hall",
+        "state": "VIC",
+        "lon_new": 145.433334,
+        "lat_new": -38.414381,
+        "ec_id": 3622,
+        "distance_shift_m": 291.31694654
+    },
+    {
+        "name": "Corryong",
+        "address": "14-18 Donaldson St, CORRYONG, VIC 3707",
+        "premises": "Corryong Youth Club Hall",
+        "state": "VIC",
+        "lon_new": 147.903349,
+        "lat_new": -36.192202,
+        "ec_id": 4040,
+        "distance_shift_m": 49.84693568
+    },
+    {
+        "name": "Daylesford",
+        "address": "39 Smith St, DAYLESFORD, VIC 3460",
+        "premises": "Daylesford Secondary College",
+        "state": "VIC",
+        "lon_new": 144.15258,
+        "lat_new": -37.335657,
+        "ec_id": 3277,
+        "distance_shift_m": 113.92111227
+    },
+    {
+        "name": "Delacombe",
+        "address": "16 Nandiriog Dr, DELACOMBE, VIC 3356",
+        "premises": "Doug Dean Stadium",
+        "state": "VIC",
+        "lon_new": 143.818049,
+        "lat_new": -37.583878,
+        "ec_id": 3018,
+        "distance_shift_m": 21.35096099
+    },
+    {
+        "name": "Dereel",
+        "address": "14 Swamp Rd, DEREEL, VIC 3352",
+        "premises": "Dereel Soldiers' Memorial Hall",
+        "state": "VIC",
+        "lon_new": 143.752662,
+        "lat_new": -37.819508,
+        "ec_id": 3019,
+        "distance_shift_m": 284.50313622
+    },
+    {
+        "name": "Drouin Central",
+        "address": "128-132 Princes Way, DROUIN, VIC 3818",
+        "premises": "Drouin Anglican Church Hall",
+        "state": "VIC",
+        "lon_new": 145.853995,
+        "lat_new": -38.134392,
+        "ec_id": 83698,
+        "distance_shift_m": 111.72676966
+    },
+    {
+        "name": "Echuca West",
+        "address": "College Dr, ECHUCA, VIC 3564",
+        "premises": "Recreation Centre",
+        "state": "VIC",
+        "lon_new": 144.732,
+        "lat_new": -36.1319,
+        "ec_id": 4744,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Edenhope",
+        "address": "54 Langford Street, EDENHOPE, VIC 3318",
+        "premises": "Edenhope Senior Citizens",
+        "state": "VIC",
+        "lon_new": 141.299571,
+        "lat_new": -37.036858,
+        "ec_id": 4976,
+        "distance_shift_m": 379.05208254
+    },
+    {
+        "name": "Elmore",
+        "address": "36 Michie St, ELMORE, VIC 3558",
+        "premises": "Elmore Primary School",
+        "state": "VIC",
+        "lon_new": 144.608917,
+        "lat_new": -36.497215,
+        "ec_id": 4747,
+        "distance_shift_m": 0.04278666
+    },
+    {
+        "name": "Epsom North",
+        "address": "353 Midland Hwy, EPSOM, VIC 3551",
+        "premises": "Epsom Huntly Recreation Reserve Pavilion",
+        "state": "VIC",
+        "lon_new": 144.316791,
+        "lat_new": -36.688333,
+        "ec_id": 82934,
+        "distance_shift_m": 79.26243431
+    },
+    {
+        "name": "Euroa",
+        "address": "26 Campbell St, EUROA, VIC 3666",
+        "premises": "Euroa Secondary College",
+        "state": "VIC",
+        "lon_new": 145.564644,
+        "lat_new": -36.758138,
+        "ec_id": 4323,
+        "distance_shift_m": 0.05697471
+    },
+    {
+        "name": "Foster",
+        "address": "79 Main St, FOSTER, VIC 3960",
+        "premises": "Foster War Memorial Arts Centre",
+        "state": "VIC",
+        "lon_new": 146.202986,
+        "lat_new": -38.651865,
+        "ec_id": 3760,
+        "distance_shift_m": 42.90630086
+    },
+    {
+        "name": "Girgarre",
+        "address": "524 Winter Rd, GIRGARRE, VIC 3624",
+        "premises": "Girgarre Primary School",
+        "state": "VIC",
+        "lon_new": 144.973956,
+        "lat_new": -36.398349,
+        "ec_id": 4748,
+        "distance_shift_m": 0.02911037
+    },
+    {
+        "name": "Hamilton North",
+        "address": "McPherson St, HAMILTON, VIC 3300",
+        "premises": "Hamilton and Alexandra College MPAC",
+        "state": "VIC",
+        "lon_new": 142.024232,
+        "lat_new": -37.737198,
+        "ec_id": 5031,
+        "distance_shift_m": 0.03444439
+    },
+    {
+        "name": "Kerang",
+        "address": "79 Victoria Street, KERANG, VIC 3579",
+        "premises": "Kerang Primary SChool",
+        "state": "VIC",
+        "lon_new": 143.920822,
+        "lat_new": -35.731965,
+        "ec_id": 4759,
+        "distance_shift_m": 50.0836962
+    },
+    {
+        "name": "Kilmore Central",
+        "address": "35 Kilmore-Lancefield Rd, KILMORE, VIC 3764",
+        "premises": "Kilmore Primary School",
+        "state": "VIC",
+        "lon_new": 144.949014,
+        "lat_new": -37.296318,
+        "ec_id": 82921,
+        "distance_shift_m": 153.46876121
+    },
+    {
+        "name": "Kyabram West",
+        "address": "Unwin St, KYABRAM, VIC 3620",
+        "premises": "Youth Club Hall",
+        "state": "VIC",
+        "lon_new": 145.043601,
+        "lat_new": -36.312183,
+        "ec_id": 83253,
+        "distance_shift_m": 0.0378259
+    },
+    {
+        "name": "Kyneton",
+        "address": "4 Victoria St, KYNETON, VIC 3444",
+        "premises": "Kyneton Sports & Aquatic Centre",
+        "state": "VIC",
+        "lon_new": 144.459422,
+        "lat_new": -37.24852,
+        "ec_id": 3298,
+        "distance_shift_m": 78.33563172
+    },
+    {
+        "name": "Lake Boga",
+        "address": "8 Williams Road, LAKE BOGA, VIC 3584",
+        "premises": "Lake Boga Primary School",
+        "state": "VIC",
+        "lon_new": 143.631569,
+        "lat_new": -35.46392,
+        "ec_id": 4498,
+        "distance_shift_m": 0.06630003
+    },
+    {
+        "name": "Learmonth",
+        "address": "2 McKay St, LEARMONTH, VIC 3352",
+        "premises": "Learmonth Bowls Club",
+        "state": "VIC",
+        "lon_new": 143.714335,
+        "lat_new": -37.423717,
+        "ec_id": 3032,
+        "distance_shift_m": 61.45143885
+    },
+    {
+        "name": "Leongatha East",
+        "address": "15 Nerrena Rd, LEONGATHA, VIC 3953",
+        "premises": "Leongatha Secondary College",
+        "state": "VIC",
+        "lon_new": 145.959871,
+        "lat_new": -38.479418,
+        "ec_id": 83613,
+        "distance_shift_m": 1388.34466034
+    },
+    {
+        "name": "Long Gully",
+        "address": "21 Cunneen St, LONG GULLY, VIC 3550",
+        "premises": "Long Gully Multi-Purpose Facility",
+        "state": "VIC",
+        "lon_new": 144.25595,
+        "lat_new": -36.74496,
+        "ec_id": 3174,
+        "distance_shift_m": 253.28304334
+    },
+    {
+        "name": "Lorne",
+        "address": "2 Otway St, LORNE, VIC 3232",
+        "premises": "Lorne Community Connect",
+        "state": "VIC",
+        "lon_new": 143.97296,
+        "lat_new": -38.53705,
+        "ec_id": 3498,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Lucas",
+        "address": "150 Eleanor Dr, LUCAS, VIC 3350",
+        "premises": "Siena Catholic Primary",
+        "state": "VIC",
+        "lon_new": 143.780093,
+        "lat_new": -37.546231,
+        "ec_id": 82992,
+        "distance_shift_m": 31.20274698
+    },
+    {
+        "name": "Mansfield",
+        "address": "26 Highett St, MANSFIELD, VIC 3722",
+        "premises": "Masonic Lodge",
+        "state": "VIC",
+        "lon_new": 146.088341,
+        "lat_new": -37.053208,
+        "ec_id": 4339,
+        "distance_shift_m": 124.36113091
+    },
+    {
+        "name": "Maryborough East",
+        "address": "21 Burns St, MARYBOROUGH, VIC 3465",
+        "premises": "St Augustine's Primary School",
+        "state": "VIC",
+        "lon_new": 143.736943,
+        "lat_new": -37.052341,
+        "ec_id": 3179,
+        "distance_shift_m": 0.05619774
+    },
+    {
+        "name": "Meeniyan",
+        "address": "McLeans Lane, MEENIYAN, VIC 3956",
+        "premises": "Meeniyan Youth Club Hall",
+        "state": "VIC",
+        "lon_new": 146.014134,
+        "lat_new": -38.578568,
+        "ec_id": 3790,
+        "distance_shift_m": 549.21952902
+    },
+    {
+        "name": "Morwell",
+        "address": "2-4 Maryvale Cres, MORWELL, VIC 3840",
+        "premises": "Morwell Senior Citizens Centre",
+        "state": "VIC",
+        "lon_new": 146.3883,
+        "lat_new": -38.23875,
+        "ec_id": 4408,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Nathalia",
+        "address": "41 Chapel St, NATHALIA, VIC 3638",
+        "premises": "Nathalia Secondary College",
+        "state": "VIC",
+        "lon_new": 145.208772,
+        "lat_new": -36.060135,
+        "ec_id": 4793,
+        "distance_shift_m": 90.40020844
+    },
+    {
+        "name": "Numurkah",
+        "address": "40 Saxton St, NUMURKAH, VIC 3636",
+        "premises": "Numurkah RSL",
+        "state": "VIC",
+        "lon_new": 145.443173,
+        "lat_new": -36.088209,
+        "ec_id": 4083,
+        "distance_shift_m": 0.03496447
+    },
+    {
+        "name": "Ocean Grove West",
+        "address": "cnr Lake Ave and Wallington Rd, OCEAN GROVE, VIC 3226",
+        "premises": "The Wave Baptist Church",
+        "state": "VIC",
+        "lon_new": 144.507512,
+        "lat_new": -38.258717,
+        "ec_id": 3508,
+        "distance_shift_m": 304.34775596
+    },
+    {
+        "name": "Peterborough",
+        "address": "19 Macs St, PETERBOROUGH, VIC 3270",
+        "premises": "Peterborough Community Hall",
+        "state": "VIC",
+        "lon_new": 142.877034,
+        "lat_new": -38.607027,
+        "ec_id": 5033,
+        "distance_shift_m": 115.15048929
+    },
+    {
+        "name": "Piries-Goughs Bay",
+        "address": "6 Walshs Rd, GOUGHS BAY, VIC 3723",
+        "premises": "Piries-Goughs Bay CFA Hall",
+        "state": "VIC",
+        "lon_new": 146.06306,
+        "lat_new": -37.176761,
+        "ec_id": 4352,
+        "distance_shift_m": 0.06155458
+    },
+    {
+        "name": "Port Franklin",
+        "address": "12 Tramway St, PORT FRANKLIN, VIC 3964",
+        "premises": "Port Franklin Old School",
+        "state": "VIC",
+        "lon_new": 146.277827,
+        "lat_new": -38.683143,
+        "ec_id": 3812,
+        "distance_shift_m": 0.0375755
+    },
+    {
+        "name": "Red Cliffs",
+        "address": "10 Jamieson Avenue, RED CLIFFS, VIC 3496",
+        "premises": "Red Cliffs Civic Centre",
+        "state": "VIC",
+        "lon_new": 142.18707,
+        "lat_new": -34.308608,
+        "ec_id": 4540,
+        "distance_shift_m": 0.03452799
+    },
+    {
+        "name": "Rosebud East",
+        "address": "1157 Point Nepean Rd, ROSEBUD, VIC 3939",
+        "premises": "All Saints Anglican Church",
+        "state": "VIC",
+        "lon_new": 144.900819,
+        "lat_new": -38.357035,
+        "ec_id": 3656,
+        "distance_shift_m": 21.97500565
+    },
+    {
+        "name": "Rutherglen",
+        "address": "153 High St, RUTHERGLEN, VIC 3685",
+        "premises": "Rutherglen Memorial Hall",
+        "state": "VIC",
+        "lon_new": 146.459117,
+        "lat_new": -36.055384,
+        "ec_id": 4088,
+        "distance_shift_m": 0.022192
+    },
+    {
+        "name": "Sea Lake",
+        "address": "Mudge St, SEA LAKE, VIC 3533",
+        "premises": "Sea Lake Uniting Church Hall",
+        "state": "VIC",
+        "lon_new": 142.853587,
+        "lat_new": -35.504701,
+        "ec_id": 4546,
+        "distance_shift_m": 0.01433204
+    },
+    {
+        "name": "Stanley",
+        "address": "Pioneer Rd, STANLEY, VIC 3747",
+        "premises": "Stanley Safer Place Recreation Reserve",
+        "state": "VIC",
+        "lon_new": 146.754964,
+        "lat_new": -36.403027,
+        "ec_id": 4092,
+        "distance_shift_m": 464.22251123
+    },
+    {
+        "name": "Strathdale",
+        "address": "Beischer Park, 32 Reservoir Rd, STRATHDALE, VIC 3550",
+        "premises": "Strathdale - Conroy Pavilion",
+        "state": "VIC",
+        "lon_new": 144.31666,
+        "lat_new": -36.763275,
+        "ec_id": 3203,
+        "distance_shift_m": 1370.30698081
+    },
+    {
+        "name": "Timboon",
+        "address": "57 Bailey St, TIMBOON, VIC 3268",
+        "premises": "Timboon and District Public Hall",
+        "state": "VIC",
+        "lon_new": 142.97317,
+        "lat_new": -38.483222,
+        "ec_id": 5060,
+        "distance_shift_m": 27.38241653
+    },
+    {
+        "name": "Torquay East",
+        "address": "25 Stretton Dr, TORQUAY, VIC 3228",
+        "premises": "Torquay Coast Primary School",
+        "state": "VIC",
+        "lon_new": 144.337893,
+        "lat_new": -38.304468,
+        "ec_id": 83617,
+        "distance_shift_m": 66.72459555
+    },
+    {
+        "name": "Traralgon West",
+        "address": "36 Kosciuszko St, TRARALGON, VIC 3844",
+        "premises": "Kosciuszko St Primary School",
+        "state": "VIC",
+        "lon_new": 146.515165,
+        "lat_new": -38.201092,
+        "ec_id": 83204,
+        "distance_shift_m": 602.66397952
+    },
+    {
+        "name": "Wallan Central",
+        "address": "42 Bentinck St, WALLAN, VIC 3756",
+        "premises": "Wallan Community Centre",
+        "state": "VIC",
+        "lon_new": 144.981717,
+        "lat_new": -37.414747,
+        "ec_id": 4370,
+        "distance_shift_m": 0.03445239
+    },
+    {
+        "name": "Warragul East",
+        "address": "210 Sutton St, WARRAGUL, VIC 3820",
+        "premises": "Warragul Uniting Church",
+        "state": "VIC",
+        "lon_new": 145.943574,
+        "lat_new": -38.1547,
+        "ec_id": 4435,
+        "distance_shift_m": 112.17875468
+    },
+    {
+        "name": "Warrnambool Central",
+        "address": "3 Jamieson St, WARRNAMBOOL, VIC 3280",
+        "premises": "Warrnambool Primary School",
+        "state": "VIC",
+        "lon_new": 142.482618,
+        "lat_new": -38.377495,
+        "ec_id": 82959,
+        "distance_shift_m": 19.14167016
+    },
+    {
+        "name": "Weeroona",
+        "address": "347 Napier St, BENDIGO, VIC 3550",
+        "premises": "Weeroona Pavilion",
+        "state": "VIC",
+        "lon_new": 144.294188,
+        "lat_new": -36.74387,
+        "ec_id": 3211,
+        "distance_shift_m": 0.01424469
+    },
+    {
+        "name": "Woodend East",
+        "address": "146 High St, WOODEND, VIC 3442",
+        "premises": "Woodend Primary School",
+        "state": "VIC",
+        "lon_new": 144.533063,
+        "lat_new": -37.35316,
+        "ec_id": 82935,
+        "distance_shift_m": 108.12719778
+    },
+    {
+        "name": "Woomelang",
+        "address": "45 Brook St, WOOMELANG, VIC 3485",
+        "premises": "Woomelang Public Memorial Hall",
+        "state": "VIC",
+        "lon_new": 142.665765,
+        "lat_new": -35.680705,
+        "ec_id": 4572,
+        "distance_shift_m": 0.0293368
+    },
+    {
+        "name": "Yarram",
+        "address": "2-6 Buckley St, YARRAM, VIC 3971",
+        "premises": "St Mary's Primary School",
+        "state": "VIC",
+        "lon_new": 146.676822,
+        "lat_new": -38.557603,
+        "ec_id": 3846,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Alexander Heights West",
+        "address": "95 Azelia St, ALEXANDER HEIGHTS, WA 6064",
+        "premises": "Alexander Heights Early Learning Centre",
+        "state": "WA",
+        "lon_new": 115.865993,
+        "lat_new": -31.830141,
+        "ec_id": 32071,
+        "distance_shift_m": 0.04822561
+    },
+    {
+        "name": "Alkimos",
+        "address": "340 Benenden Ave, ALKIMOS, WA 6038",
+        "premises": "Alkimos Primary School",
+        "state": "WA",
+        "lon_new": 115.703132,
+        "lat_new": -31.627064,
+        "ec_id": 82858,
+        "distance_shift_m": 45.75811633
+    },
+    {
+        "name": "Alkimos West",
+        "address": "200 Leatherback Blvd, ALKIMOS, WA 6038",
+        "premises": "Alkimos Beach Primary School",
+        "state": "WA",
+        "lon_new": 115.678654,
+        "lat_new": -31.625358,
+        "ec_id": 82963,
+        "distance_shift_m": 243.08146352
+    },
+    {
+        "name": "Armadale East",
+        "address": "7 Albany Hwy, ARMADALE, WA 6112",
+        "premises": "Pioneer Village School",
+        "state": "WA",
+        "lon_new": 116.023711,
+        "lat_new": -32.150174,
+        "ec_id": 70737,
+        "distance_shift_m": 77.18942941
+    },
+    {
+        "name": "Australind Central",
+        "address": "Barnes Ave, AUSTRALIND, WA 6230",
+        "premises": "Australind Primary School",
+        "state": "WA",
+        "lon_new": 115.727141,
+        "lat_new": -33.278752,
+        "ec_id": 83257,
+        "distance_shift_m": 772.90989176
+    },
+    {
+        "name": "Aveley East",
+        "address": "8 Bolero Rd, AVELEY, WA 6069",
+        "premises": "Aveley Primary School",
+        "state": "WA",
+        "lon_new": 115.990217,
+        "lat_new": -31.790916,
+        "ec_id": 82964,
+        "distance_shift_m": 18.01585262
+    },
+    {
+        "name": "Balcatta Central",
+        "address": "51 Delwaney St, BALCATTA, WA 6021",
+        "premises": "Amelia Scout Hall",
+        "state": "WA",
+        "lon_new": 115.8141,
+        "lat_new": -31.866128,
+        "ec_id": 8175,
+        "distance_shift_m": 916.85328819
+    },
+    {
+        "name": "Bayswater",
+        "address": "27 King William St, BAYSWATER, WA 6053",
+        "premises": "Bayswater Community Centre",
+        "state": "WA",
+        "lon_new": 115.913871,
+        "lat_new": -31.920133,
+        "ec_id": 8130,
+        "distance_shift_m": 38.88815496
+    },
+    {
+        "name": "Beaconsfield",
+        "address": "79 Lefroy Rd, BEACONSFIELD, WA 6162",
+        "premises": "Fremantle College",
+        "state": "WA",
+        "lon_new": 115.76842,
+        "lat_new": -32.067512,
+        "ec_id": 7756,
+        "distance_shift_m": 967.19512501
+    },
+    {
+        "name": "Beckenham",
+        "address": "386 Railway Pde, BECKENHAM, WA 6107",
+        "premises": "Beckenham Primary School",
+        "state": "WA",
+        "lon_new": 115.957304,
+        "lat_new": -32.024086,
+        "ec_id": 11599,
+        "distance_shift_m": 0.00944684
+    },
+    {
+        "name": "Bedford",
+        "address": "1 Catherine Street, BEDFORD, WA 6052",
+        "premises": "Filipino Australian Club",
+        "state": "WA",
+        "lon_new": 115.887769,
+        "lat_new": -31.912752,
+        "ec_id": 8131,
+        "distance_shift_m": 838.86639508
+    },
+    {
+        "name": "Bedfordale",
+        "address": "86 Admiral Rd, BEDFORDALE, WA 6112",
+        "premises": "Southern Hills Christian College",
+        "state": "WA",
+        "lon_new": 116.04832,
+        "lat_new": -32.18166,
+        "ec_id": 8850,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Belmont East",
+        "address": "240 Epsom Ave, BELMONT, WA 6104",
+        "premises": "Nations Church Belmont",
+        "state": "WA",
+        "lon_new": 115.946195,
+        "lat_new": -31.948645,
+        "ec_id": 8208,
+        "distance_shift_m": 19.41896068
+    },
+    {
+        "name": "Beverley",
+        "address": "20 John St, BEVERLEY, WA 6304",
+        "premises": "Beverley District High School",
+        "state": "WA",
+        "lon_new": 116.926588,
+        "lat_new": -32.10134,
+        "ec_id": 7982,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Bull Creek North",
+        "address": "1 Keith Rd, BULL CREEK, WA 6149",
+        "premises": "Rossmoyne Senior High School",
+        "state": "WA",
+        "lon_new": 115.869714,
+        "lat_new": -32.045424,
+        "ec_id": 8265,
+        "distance_shift_m": 104.34823297
+    },
+    {
+        "name": "Bunbury Central",
+        "address": "1 Lyons Cove, BUNBURY, WA 6230",
+        "premises": "Bunbury Power Boat Club",
+        "state": "WA",
+        "lon_new": 115.64256,
+        "lat_new": -33.322383,
+        "ec_id": 7661,
+        "distance_shift_m": 240.30902106
+    },
+    {
+        "name": "Bunbury South",
+        "address": "19 Prosser St, BUNBURY, WA 6230",
+        "premises": "South Bunbury Primary School",
+        "state": "WA",
+        "lon_new": 115.643044,
+        "lat_new": -33.340867,
+        "ec_id": 7728,
+        "distance_shift_m": 110.12880742
+    },
+    {
+        "name": "Busselton",
+        "address": "21 Cammilleri St, BUSSELTON, WA 6280",
+        "premises": "Busselton Community Resource Centre",
+        "state": "WA",
+        "lon_new": 115.347881,
+        "lat_new": -33.651341,
+        "ec_id": 7666,
+        "distance_shift_m": 0.04532578
+    },
+    {
+        "name": "Butler North",
+        "address": "2 Halesworth Pde, BUTLER, WA 6036",
+        "premises": "John Butler Primary College",
+        "state": "WA",
+        "lon_new": 115.694273,
+        "lat_new": -31.631842,
+        "ec_id": 82965,
+        "distance_shift_m": 41.73340836
+    },
+    {
+        "name": "Butler South",
+        "address": "15 McCormack Blvd, BUTLER, WA 6036",
+        "premises": "Butler College",
+        "state": "WA",
+        "lon_new": 115.708282,
+        "lat_new": -31.652874,
+        "ec_id": 82966,
+        "distance_shift_m": 139.95437407
+    },
+    {
+        "name": "Byford North",
+        "address": "36 Clifton St, BYFORD, WA 6122",
+        "premises": "Byford Primary School",
+        "state": "WA",
+        "lon_new": 116.011991,
+        "lat_new": -32.219788,
+        "ec_id": 65834,
+        "distance_shift_m": 106.49888649
+    },
+    {
+        "name": "Capel",
+        "address": "21 Barlee Rd, CAPEL, WA 6271",
+        "premises": "Capel Primary School",
+        "state": "WA",
+        "lon_new": 115.56603,
+        "lat_new": -33.55755,
+        "ec_id": 7668,
+        "distance_shift_m": 123.73548367
+    },
+    {
+        "name": "Carine North",
+        "address": "58 Osmaston Rd, CARINE, WA 6020",
+        "premises": "Carine Primary School",
+        "state": "WA",
+        "lon_new": 115.772554,
+        "lat_new": -31.851148,
+        "ec_id": 97414,
+        "distance_shift_m": 24.96606005
+    },
+    {
+        "name": "Cervantes",
+        "address": "26 Iberia St, CERVANTES, WA 6511",
+        "premises": "Cervantes Primary School",
+        "state": "WA",
+        "lon_new": 115.06592,
+        "lat_new": -30.49915,
+        "ec_id": 7926,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Churchlands North",
+        "address": "20 Lucca St, CHURCHLANDS, WA 6018",
+        "premises": "Churchlands Senior High School",
+        "state": "WA",
+        "lon_new": 115.788756,
+        "lat_new": -31.917387,
+        "ec_id": 83357,
+        "distance_shift_m": 117.22448323
+    },
+    {
+        "name": "Clarkson West",
+        "address": "8 Aldersea Cir, CLARKSON, WA 6030",
+        "premises": "Clarkson Primary School",
+        "state": "WA",
+        "lon_new": 115.718307,
+        "lat_new": -31.677545,
+        "ec_id": 82881,
+        "distance_shift_m": 124.29869748
+    },
+    {
+        "name": "College Grove",
+        "address": "60 Robertson Dr, BUNBURY, WA 6230",
+        "premises": "Manea Senior College",
+        "state": "WA",
+        "lon_new": 115.6543,
+        "lat_new": -33.365781,
+        "ec_id": 33112,
+        "distance_shift_m": 0.07239211
+    },
+    {
+        "name": "Collie Central",
+        "address": "99-105 Forrest St, COLLIE, WA 6225",
+        "premises": "Margaretta Wilson Senior Citizens Centre Collie",
+        "state": "WA",
+        "lon_new": 116.152,
+        "lat_new": -33.3586,
+        "ec_id": 7674,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Como",
+        "address": "58 Park St, COMO, WA 6152",
+        "premises": "St Augustine's Anglican Church Hall",
+        "state": "WA",
+        "lon_new": 115.862436,
+        "lat_new": -32.003881,
+        "ec_id": 8218,
+        "distance_shift_m": 2755.34171282
+    },
+    {
+        "name": "Dalyellup South",
+        "address": "Wake Dr, DALYELLUP, WA 6230",
+        "premises": "Dalyellup College",
+        "state": "WA",
+        "lon_new": 115.624683,
+        "lat_new": -33.403746,
+        "ec_id": 83255,
+        "distance_shift_m": 281.35780383
+    },
+    {
+        "name": "Darch South",
+        "address": "75 Westport Pde, DARCH, WA 6065",
+        "premises": "Ashdale Secondary College Gymnasium",
+        "state": "WA",
+        "lon_new": 115.840819,
+        "lat_new": -31.810884,
+        "ec_id": 82962,
+        "distance_shift_m": 103.97326466
+    },
+    {
+        "name": "Dawesville",
+        "address": "Estuary Rd, DAWESVILLE, WA 6210",
+        "premises": "Southern Estuary Hall",
+        "state": "WA",
+        "lon_new": 115.642687,
+        "lat_new": -32.609764,
+        "ec_id": 7482,
+        "distance_shift_m": 0.04360683
+    },
+    {
+        "name": "Djugun",
+        "address": "100 Tanami Drive, BILINGURR, WA 6725",
+        "premises": "Broome North Primary School",
+        "state": "WA",
+        "lon_new": 122.230848,
+        "lat_new": -17.925864,
+        "ec_id": 58812,
+        "distance_shift_m": 0.04596484
+    },
+    {
+        "name": "Doubleview North",
+        "address": "228 Hancock St, DOUBLEVIEW, WA 6018",
+        "premises": "Neighbourhood House",
+        "state": "WA",
+        "lon_new": 115.78016,
+        "lat_new": -31.893907,
+        "ec_id": 83305,
+        "distance_shift_m": 556.51956065
+    },
+    {
+        "name": "Dunsborough South",
+        "address": "40 Turner Road, DUNSBOROUGH, WA 6281",
+        "premises": "Dunsborough Primary School",
+        "state": "WA",
+        "lon_new": 115.100742,
+        "lat_new": -33.60064,
+        "ec_id": 83252,
+        "distance_shift_m": 88.31226329
+    },
+    {
+        "name": "Eaton North",
+        "address": "9 Monash Blvd, EATON, WA 6232",
+        "premises": "Glen Huon Primary School",
+        "state": "WA",
+        "lon_new": 115.727164,
+        "lat_new": -33.314209,
+        "ec_id": 83258,
+        "distance_shift_m": 69.23638999
+    },
+    {
+        "name": "Ellenbrook - The Vines",
+        "address": "16 Dunnett Dr, ELLENBROOK, WA 6069",
+        "premises": "Anne Hamersley Primary School",
+        "state": "WA",
+        "lon_new": 116.008619,
+        "lat_new": -31.745353,
+        "ec_id": 82871,
+        "distance_shift_m": 116.77005936
+    },
+    {
+        "name": "Ellenbrook North",
+        "address": "3 Chandala Turn, ELLENBROOK, WA 6069",
+        "premises": "Malvern Springs Primary School",
+        "state": "WA",
+        "lon_new": 115.980383,
+        "lat_new": -31.757225,
+        "ec_id": 46519,
+        "distance_shift_m": 28.72374559
+    },
+    {
+        "name": "Ellenbrook South",
+        "address": "65 Fortescue Place, ELLENBROOK, WA 6069",
+        "premises": "Ellenbrook Primary School",
+        "state": "WA",
+        "lon_new": 115.9748,
+        "lat_new": -31.79269,
+        "ec_id": 82876,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Exmouth",
+        "address": "2 Truscott Cres, EXMOUTH, WA 6707",
+        "premises": "Ningaloo Centre",
+        "state": "WA",
+        "lon_new": 114.130673,
+        "lat_new": -21.93683,
+        "ec_id": 7823,
+        "distance_shift_m": 146.63418279
+    },
+    {
+        "name": "Floreat East",
+        "address": "122 Birkdale St, FLOREAT, WA 6014",
+        "premises": "Floreat Park Primary School Kindergarten",
+        "state": "WA",
+        "lon_new": 115.802,
+        "lat_new": -31.9392,
+        "ec_id": 7601,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Gingin",
+        "address": "1 Daw St, GINGIN, WA 6503",
+        "premises": "Gingin District High School",
+        "state": "WA",
+        "lon_new": 115.912154,
+        "lat_new": -31.343125,
+        "ec_id": 7934,
+        "distance_shift_m": 129.70015092
+    },
+    {
+        "name": "Golden Bay",
+        "address": "9 Thundelarra Dr, GOLDEN BAY, WA 6174",
+        "premises": "Golden Bay Primary School",
+        "state": "WA",
+        "lon_new": 115.759839,
+        "lat_new": -32.423023,
+        "ec_id": 32064,
+        "distance_shift_m": 335.03345895
+    },
+    {
+        "name": "Halls Head West",
+        "address": "240 McLartry Rd, HALLS HEAD, WA 6210",
+        "premises": "Elevation Church",
+        "state": "WA",
+        "lon_new": 115.694,
+        "lat_new": -32.5397,
+        "ec_id": 34340,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "High Wycombe North",
+        "address": "30 Munday Rd, HIGH WYCOMBE, WA 6057",
+        "premises": "Matthew Gibney Catholic Primary School",
+        "state": "WA",
+        "lon_new": 115.996986,
+        "lat_new": -31.9343,
+        "ec_id": 95842,
+        "distance_shift_m": 56.23681303
+    },
+    {
+        "name": "Hillarys West",
+        "address": "137 Broadbeach Blvd, HILLARYS, WA 6025",
+        "premises": "Flinders Park Community Centre",
+        "state": "WA",
+        "lon_new": 115.736355,
+        "lat_new": -31.808005,
+        "ec_id": 82937,
+        "distance_shift_m": 472.91469407
+    },
+    {
+        "name": "Kalgoorlie Central",
+        "address": "15 Porter St, KALGOORLIE, WA 6430",
+        "premises": "St Mary's Church Hall",
+        "state": "WA",
+        "lon_new": 121.474141,
+        "lat_new": -30.743595,
+        "ec_id": 7846,
+        "distance_shift_m": 72.16271352
+    },
+    {
+        "name": "Kinross East",
+        "address": "Falkland Way, KINROSS, WA 6028",
+        "premises": "Kinross College",
+        "state": "WA",
+        "lon_new": 115.732741,
+        "lat_new": -31.717953,
+        "ec_id": 82936,
+        "distance_shift_m": 135.4465653
+    },
+    {
+        "name": "Lakelands",
+        "address": "135 Badgerup Ave, LAKELANDS, WA 6180",
+        "premises": "Coastal Lakes College",
+        "state": "WA",
+        "lon_new": 115.762355,
+        "lat_new": -32.468222,
+        "ec_id": 47748,
+        "distance_shift_m": 0.06463044
+    },
+    {
+        "name": "Landsdale East",
+        "address": "Pomodora Ave, LANDSDALE, WA 6065",
+        "premises": "Carnaby Rise Primary School",
+        "state": "WA",
+        "lon_new": 115.873262,
+        "lat_new": -31.814674,
+        "ec_id": 82884,
+        "distance_shift_m": 273.26442793
+    },
+    {
+        "name": "Leonora",
+        "address": "79 Tower St, LEONORA, WA 6438",
+        "premises": "Leonora Recreation and Aquatic Centre",
+        "state": "WA",
+        "lon_new": 121.331211,
+        "lat_new": -28.881926,
+        "ec_id": 7856,
+        "distance_shift_m": 273.65744371
+    },
+    {
+        "name": "Marangaroo Central",
+        "address": "46 Highclere Blvd, MARANGAROO, WA 6064",
+        "premises": "The Hepburn Centre",
+        "state": "WA",
+        "lon_new": 115.839737,
+        "lat_new": -31.830706,
+        "ec_id": 11633,
+        "distance_shift_m": 34.77799187
+    },
+    {
+        "name": "Melville",
+        "address": "cnr Stock Rd & Kitchener Rd, MELVILLE, WA 6156",
+        "premises": "Melville Girl Guides Hall",
+        "state": "WA",
+        "lon_new": 115.794053,
+        "lat_new": -32.036282,
+        "ec_id": 34109,
+        "distance_shift_m": 49.71352642
+    },
+    {
+        "name": "Mosman Park",
+        "address": "Chidley Campus, McCabe St, MOSMAN PARK, WA 6012",
+        "premises": "St Hilda's Anglican School for Girls (Chidley Campus)",
+        "state": "WA",
+        "lon_new": 115.774,
+        "lat_new": -32.0206,
+        "ec_id": 7614,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Mount Barker",
+        "address": "Memorial Dr, MT BARKER, WA 6324",
+        "premises": "Plantagenet Hall",
+        "state": "WA",
+        "lon_new": 117.662731,
+        "lat_new": -34.624695,
+        "ec_id": 8065,
+        "distance_shift_m": 2922.93223378
+    },
+    {
+        "name": "Nedlands Central",
+        "address": "Clifton St, NEDLANDS, WA 6009",
+        "premises": "UWA Cafeteria",
+        "state": "WA",
+        "lon_new": 115.812,
+        "lat_new": -31.9771,
+        "ec_id": 7619,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Norseman",
+        "address": "17 Goodliffe St, NORSEMAN, WA 6443",
+        "premises": "Norseman District High School",
+        "state": "WA",
+        "lon_new": 121.774858,
+        "lat_new": -32.191955,
+        "ec_id": 7872,
+        "distance_shift_m": 731.05079444
+    },
+    {
+        "name": "Ocean Reef South",
+        "address": "Kaufman Ave, OCEAN REEF, WA 6027",
+        "premises": "Ocean Reef Primary School",
+        "state": "WA",
+        "lon_new": 115.739406,
+        "lat_new": -31.765885,
+        "ec_id": 89900,
+        "distance_shift_m": 103.86016624
+    },
+    {
+        "name": "Perth Central",
+        "address": "200 St Georges Terrace, PERTH, WA 6000",
+        "premises": "The Cloisters",
+        "state": "WA",
+        "lon_new": 115.853141,
+        "lat_new": -31.953354,
+        "ec_id": 8161,
+        "distance_shift_m": 843.05337448
+    },
+    {
+        "name": "Piara Waters South",
+        "address": "30 Sunray Ave, PIARA WATERS, WA 6112",
+        "premises": "Aspiri Primary School",
+        "state": "WA",
+        "lon_new": 115.912283,
+        "lat_new": -32.137686,
+        "ec_id": 95838,
+        "distance_shift_m": 0.02188729
+    },
+    {
+        "name": "Pingelly",
+        "address": "4 Somerset St, PINGELLY, WA 6308",
+        "premises": "Pingelly Recreation & Cultural Centre",
+        "state": "WA",
+        "lon_new": 117.090654,
+        "lat_new": -32.531126,
+        "ec_id": 8086,
+        "distance_shift_m": 228.15253572
+    },
+    {
+        "name": "Preston Beach",
+        "address": "25 Preston Drive, PRESTON BEACH, WA 6215",
+        "premises": "Preston Beach Volunteer Bush Fire Brigade",
+        "state": "WA",
+        "lon_new": 115.661295,
+        "lat_new": -32.878328,
+        "ec_id": 46571,
+        "distance_shift_m": 39.60356353
+    },
+    {
+        "name": "Queens Park",
+        "address": "140 Railway Pde, QUEENS PARK, WA 6107",
+        "premises": "Saint Joesph's School",
+        "state": "WA",
+        "lon_new": 115.938731,
+        "lat_new": -32.005658,
+        "ec_id": 7552,
+        "distance_shift_m": 0.02191058
+    },
+    {
+        "name": "Seville Grove",
+        "address": "39 Seville Dr, SEVILLE GROVE, WA 6112",
+        "premises": "Cecil Andrews College",
+        "state": "WA",
+        "lon_new": 115.992403,
+        "lat_new": -32.141637,
+        "ec_id": 11898,
+        "distance_shift_m": 114.40084926
+    },
+    {
+        "name": "Sorrento Beach",
+        "address": "93 Seacrest Dr, SORRENTO, WA 6020",
+        "premises": "Seacrest Park Community Sporting Facility",
+        "state": "WA",
+        "lon_new": 115.750552,
+        "lat_new": -31.824586,
+        "ec_id": 32446,
+        "distance_shift_m": 35.82068375
+    },
+    {
+        "name": "South Perth South",
+        "address": "9 Ridge St, SOUTH PERTH, WA 6151",
+        "premises": "Church of St Mary The Virgin",
+        "state": "WA",
+        "lon_new": 115.857946,
+        "lat_new": -31.982528,
+        "ec_id": 97403,
+        "distance_shift_m": 42.263161
+    },
+    {
+        "name": "Southern Cross",
+        "address": "Lot 100 Achernar St, SOUTHERN CROSS, WA 6426",
+        "premises": "Southern Cross Senior Citizen Centre",
+        "state": "WA",
+        "lon_new": 119.328914,
+        "lat_new": -31.231045,
+        "ec_id": 7888,
+        "distance_shift_m": 541.79747423
+    },
+    {
+        "name": "Southern River East",
+        "address": "34 Lockway St, SOUTHERN RIVER, WA 6110",
+        "premises": "Southern Grove Primary School",
+        "state": "WA",
+        "lon_new": 115.95956,
+        "lat_new": -32.099487,
+        "ec_id": 95837,
+        "distance_shift_m": 715.63806852
+    },
+    {
+        "name": "Spalding",
+        "address": "75 Mitchell St, SPALDING, WA 6530",
+        "premises": "Spalding Community Centre",
+        "state": "WA",
+        "lon_new": 114.629879,
+        "lat_new": -28.741549,
+        "ec_id": 11904,
+        "distance_shift_m": 0.03856402
+    },
+    {
+        "name": "Stirling Central",
+        "address": "Osborne Pl, STIRLING, WA 6021",
+        "premises": "Osborne Park Out-Patients Clinic",
+        "state": "WA",
+        "lon_new": 115.804912,
+        "lat_new": -31.885821,
+        "ec_id": 8194,
+        "distance_shift_m": 12.08523145
+    },
+    {
+        "name": "Stratton",
+        "address": "Cockman Cross, STRATTON, WA 6056",
+        "premises": "Middle Swan Primary SChool",
+        "state": "WA",
+        "lon_new": 116.036686,
+        "lat_new": -31.867377,
+        "ec_id": 11901,
+        "distance_shift_m": 132.54015667
+    },
+    {
+        "name": "Swan View East",
+        "address": "Salisbury Rd, SWAN VIEW, WA 6056",
+        "premises": "Swan View Youth Centre-Brown Park",
+        "state": "WA",
+        "lon_new": 116.053752,
+        "lat_new": -31.889742,
+        "ec_id": 83289,
+        "distance_shift_m": 98.91796291
+    },
+    {
+        "name": "Tom Price",
+        "address": "316 Tanunda St, TOM PRICE, WA 6751",
+        "premises": "Tom Price Civic Centre",
+        "state": "WA",
+        "lon_new": 117.782597,
+        "lat_new": -22.681147,
+        "ec_id": 7891,
+        "distance_shift_m": 175.52632456
+    },
+    {
+        "name": "Two Rocks",
+        "address": "Resolute Dr, TWO ROCKS, WA 6037",
+        "premises": "Two Rocks Primary School",
+        "state": "WA",
+        "lon_new": 115.591113,
+        "lat_new": -31.489398,
+        "ec_id": 7964,
+        "distance_shift_m": 539.06447739
+    },
+    {
+        "name": "Victoria Park",
+        "address": "5 Mackie St, VICTORIA PARK, WA 6100",
+        "premises": "The Homestead",
+        "state": "WA",
+        "lon_new": 115.893636,
+        "lat_new": -31.972134,
+        "ec_id": 8242,
+        "distance_shift_m": 0.03599893
+    },
+    {
+        "name": "Wagin",
+        "address": "10 Ranford St, WAGIN, WA 6315",
+        "premises": "Wagin District High School",
+        "state": "WA",
+        "lon_new": 117.342033,
+        "lat_new": -33.311681,
+        "ec_id": 8107,
+        "distance_shift_m": 119.26916649
+    },
+    {
+        "name": "Wandi",
+        "address": "Widjana Rise, WANDI, WA 6167",
+        "premises": "Honeywood Primary School",
+        "state": "WA",
+        "lon_new": 115.861505,
+        "lat_new": -32.197753,
+        "ec_id": 46575,
+        "distance_shift_m": 0.05029104
+    },
+    {
+        "name": "Warwick",
+        "address": "355 Erindale Rd, WARWICK, WA 6024",
+        "premises": "Warwick Senior High School",
+        "state": "WA",
+        "lon_new": 115.81543,
+        "lat_new": -31.83868,
+        "ec_id": 7588,
+        "distance_shift_m": 0.0
+    },
+    {
+        "name": "Wembley Central",
+        "address": "63 Nanson St, WEMBLEY, WA 6014",
+        "premises": "Westcity Church of Christ",
+        "state": "WA",
+        "lon_new": 115.814854,
+        "lat_new": -31.935606,
+        "ec_id": 7634,
+        "distance_shift_m": 36.63209116
+    },
+    {
+        "name": "Wickham",
+        "address": "289 Tamarind Pl, WICKHAM, WA 6720",
+        "premises": "Wickham Primary School",
+        "state": "WA",
+        "lon_new": 117.141272,
+        "lat_new": -20.680878,
+        "ec_id": 7896,
+        "distance_shift_m": 294.40951418
+    },
+    {
+        "name": "Witchcliffe",
+        "address": "10418 Bussell Hwy, WITCHCLIFFE, WA 6286",
+        "premises": "Witchcliffe Hall",
+        "state": "WA",
+        "lon_new": 115.099966,
+        "lat_new": -34.025639,
+        "ec_id": 7738,
+        "distance_shift_m": 0.04532018
+    },
+    {
+        "name": "Woodvale South",
+        "address": "44 Keatley Cres, WOODVALE, WA 6026",
+        "premises": "Woodvale Primary School",
+        "state": "WA",
+        "lon_new": 115.79339,
+        "lat_new": -31.794503,
+        "ec_id": 82938,
+        "distance_shift_m": 113.08703816
+    },
+    {
+        "name": "Yallingup",
+        "address": "1721 Wildwood Rd, YALLINGUP, WA 6282",
+        "premises": "Yallingup Steiner School",
+        "state": "WA",
+        "lon_new": 115.031148,
+        "lat_new": -33.672829,
+        "ec_id": 7742,
+        "distance_shift_m": 40.47454609
+    },
+    {
+        "name": "Yanchep",
+        "address": "15 Primary Rd, YANCHEP, WA 6035",
+        "premises": "Yanchep Lagoon Primary School",
+        "state": "WA",
+        "lon_new": 115.63573,
+        "lat_new": -31.551827,
+        "ec_id": 7971,
+        "distance_shift_m": 48.65900752
+    },
+    {
+        "name": "Yarloop",
+        "address": "21 Teesdale Street, YARLOOP, WA 6218",
+        "premises": "Yarloop Community Resource Centre",
+        "state": "WA",
+        "lon_new": 115.897231,
+        "lat_new": -32.956036,
+        "ec_id": 95841,
+        "distance_shift_m": 136.2046805
+    }
+]
