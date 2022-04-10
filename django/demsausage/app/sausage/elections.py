@@ -404,7 +404,15 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 return polling_place
 
             def _has_blank_coordinates(polling_place):
-                return len(str(polling_place["lon"]).strip()) == 0 or len(str(polling_place["lat"]).strip()) == 0
+                # Blank (empty)
+                if len(str(polling_place["lon"]).strip()) == 0 or len(str(polling_place["lat"]).strip()) == 0:
+                    return True
+
+                # Literal string "0"
+                if str(polling_place["lon"]).strip() == "0" or str(polling_place["lat"]).strip() == "0":
+                    return True
+
+                return False
 
             # Blanks will be filled in by the next step (geocode_missing_locations)
             if _has_blank_coordinates(polling_place) is False:
