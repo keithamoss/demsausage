@@ -21,11 +21,9 @@ We need to merge the official AEC data with an unofficial list of overseas polli
 
 # Data Quality Issues
 
-The dates listed below reflect the date the data was published by the AEC, not the date we downloaded it and loaded it onto the map.
+## April 1st 2022 (loaded April 10th)
 
-## April 10th 2022
-
-`prdelms.gaz.statics.220401.09.00.01.csv`
+Source: `prdelms.gaz.statics.220401.09.00.01.csv`
 
 ### Data file formatting errors (AEC notified; fixed at ingest)
 
