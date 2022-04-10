@@ -35,9 +35,18 @@ export function askForGeolocationPermissions(
               label: `Success for ${window.location.href}`,
             })
 
-            const streetAddressPlace = results.find(
-              (place: IGoogleGeocodeResult) => place.types[0] === 'street_address'
-            )
+            // This broke searches where there were no street addresses in the list
+            // Note: Not even sure why we're trying to gecode the current location
+            // when we can already zoom the map to the `position` object we get here.
+            // When this gets up to findNearestPollingPlaces() in PollingPlaceFinderContainer
+            // we only care about getting a set of coordinates we can zoom to.
+            // Tested with Toodyay Road and had no issues with that being a not-a-point feature.
+            // *shrugs* Deal with it in the redesign
+            // const streetAddressPlace = results.find(
+            //   (place: IGoogleGeocodeResult) => place.types[0] === 'street_address'
+            // )
+            const streetAddressPlace = results[0]
+
             if (streetAddressPlace !== undefined) {
               locationSearched = streetAddressPlace.formatted_address
             }
