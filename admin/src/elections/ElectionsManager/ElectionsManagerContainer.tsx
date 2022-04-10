@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { getAPIBaseURL } from '../../redux/modules/app'
-import { IElection, setPrimaryElection } from '../../redux/modules/elections'
+import { getElectionsSortedByElectionDay, IElection, setPrimaryElection } from '../../redux/modules/elections'
 import { regenerateMapDataForElection } from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import ElectionsManager from './ElectionsManager'
@@ -43,10 +43,8 @@ class ElectionsManagerContainer extends React.PureComponent<TComponentProps, ISt
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {
-  const { elections } = state
-
   return {
-    elections: elections.elections,
+    elections: getElectionsSortedByElectionDay(state),
   }
 }
 

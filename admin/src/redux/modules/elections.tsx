@@ -1,4 +1,5 @@
 import * as dotProp from 'dot-prop-immutable'
+import { orderBy } from 'lodash-es'
 import { DateTime } from 'luxon'
 import { createSelector } from 'reselect'
 import { IAPIClient } from '../../shared/api/APIClient'
@@ -53,6 +54,10 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
 
 // Selectors
 const getElections = (state: IStore) => state.elections.elections
+
+export const getElectionsSortedByElectionDay = createSelector([getElections], (elections: IElection[]) => {
+  return orderBy(elections, ['election_day'], ['desc'])
+})
 
 export const getLiveElections = createSelector([getElections], (elections: IElection[]): any => {
   return elections.filter((election: IElection) => isElectionLive(election))
