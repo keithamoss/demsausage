@@ -10,4 +10,6 @@ Workaround: Results are logged locally and in the database, so just inspect them
 
 Solution: We're already using RQ, so create a simple set of RQ jobs that run the loader and return the results.
 
+Edit: Oh, wait, we'd already lodged a ticket for this: https://github.com/keithamoss/demsausage/issues/52 🤦‍♂️
+
 [1] https://support.cloudflare.com/hc/en-us/articles/115003011431-Troubleshooting-Cloudflare-5XX-errors#524error
