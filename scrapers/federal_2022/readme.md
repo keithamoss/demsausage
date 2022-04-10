@@ -4,8 +4,8 @@
 
 # Config notes
 
-- cleaning_regexes: For multi-division polling places, the AEC includes the division name in brackets after the polling place name (e.g. "Hurstville (Banks)"). This ensures we remove the division name.
-- geocode: Handles filling in geocodes for places with missing coordinates (it doesn't geocode any places with coordinates)
+- `cleaning_regexes`: For multi-division polling places, the AEC includes the division name in brackets after the polling place name (e.g. "Hurstville (Banks)"). This ensures we remove the division name.
+- `geocode`: Handles filling in geocodes for places with missing coordinates (it doesn't geocode any places with coordinates)
 
 ## Changes from config vs 2019
 
