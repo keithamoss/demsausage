@@ -197,7 +197,7 @@ class ElectoralBoundaries(models.Model):
     loader_id = models.TextField()
     geom = models.MultiPolygonField(null=False)
     election_ids = JSONField(default=list, blank=True)
-    division_name = models.TextField(unique=True)
+    division_name = models.TextField()
     state = models.CharField(max_length=8)
     extras = JSONField(default=dict, blank=True)
     loaded = models.DateField(auto_now_add=True)
