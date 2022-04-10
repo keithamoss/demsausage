@@ -192,9 +192,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
     // Potted history of responding to window/container resize events in OpenLayers
     // https://gis.stackexchange.com/questions/31409/openlayers-redrawing-map-after-container-resize
 
-    const timeoutId = setTimeout(
-      (map: Map) => {
-        map.updateSize()
+    const timeoutId = window.setTimeout(
+      (map: Map | undefined | null) => {
+        if (map !== undefined && map !== null) {
+          map.updateSize()
+        }
       },
       200,
       this.map
