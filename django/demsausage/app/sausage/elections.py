@@ -578,9 +578,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             if polling_place["state"] != "Overseas":
                 if is_polling_place_within_election_geom(polling_place) is False:
                     if self.bbox_validation is not None and polling_place["name"] not in self.bbox_validation["ignore"]:
-                        self.logger.error("Polling place {} ({}) fall outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
+                        self.logger.error("Polling place {} ({}) falls outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
                     else:
-                        self.logger.warning("Polling place {} ({}) fall outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
+                        self.logger.warning("Polling place {} ({}) falls outside the election's boundary".format(polling_place["name"], polling_place["premises"]))
 
         self.raise_exception_if_errors()
 
