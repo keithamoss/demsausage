@@ -231,7 +231,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
                 icon={<MapsLocalHospital color="red" />}
                 containerElement={
                   // eslint-disable-next-line
-                  <a href="https://www.elections.wa.gov.au/covid-safe-voting-plan" />
+                  <a href="https://aec.gov.au/election/covid19-safety-measures.htm" />
                 }
               />
             </ToolbarGroup>
