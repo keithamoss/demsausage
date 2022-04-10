@@ -166,6 +166,8 @@ travis encrypt-file --force secrets.tar
 
 # Logs
 
+scp -r demsausage:/apps/digitalocean-stack/logs/ .
+
 docker-compose logs service_name
 
 docker-compose -f docker-compose-prod-demsausage.yml logs service_name
