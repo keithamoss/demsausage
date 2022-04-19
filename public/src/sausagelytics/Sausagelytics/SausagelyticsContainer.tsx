@@ -54,11 +54,16 @@ class SausagelyticsContainer extends React.Component<TComponentProps, IStateProp
     const { currentElection } = this.props
     const { stats } = this.state
 
-    if (stats === undefined || stats === null) {
+    // Not loaded yet
+    if (stats === undefined) {
+      return null
+    }
+
+    if (stats === null) {
       return <div>No stats are available for this election 😢</div>
     }
 
-    return currentElection.id === 27 ? (
+    return currentElection.id === 27 || currentElection.id === 37 ? (
       <SausagelyticsFederal election={currentElection} stats={stats as ISausagelyticsStats} />
     ) : (
       <SausagelyticsState election={currentElection} stats={stats as ISausagelyticsStateStats} />

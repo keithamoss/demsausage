@@ -188,7 +188,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.id == 27:
+        if election.id in [27, 37]:
             stats = FederalSausagelytics(election)
         elif election.short_name.startswith("FED ") == False:
             stats = StateSausagelytics(election)
