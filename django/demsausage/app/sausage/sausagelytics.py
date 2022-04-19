@@ -9,6 +9,7 @@ class SausagelyticsBase():
     def __init__(self, election):
         self.election = election
         self.noms_names = ["bbq", "cake", "coffee", "vego", "halal", "bacon_and_eggs"]
+        self.states = self._get_states()
 
     def get_queryset(self):
         return get_active_polling_place_queryset().filter(election_id=self.election.id)
@@ -80,6 +81,12 @@ class FederalSausagelytics(SausagelyticsBase):
         # Calculate stats for booths by noms in each state
         for noms_name in self.noms_names:
             queryset_stats_by_state_with_bbq = self._group_by_state_and_noms(queryset_all_booths, noms_name)
+
+            for state in self.states:
+                data[state]["data"]["all_booths_by_noms"][noms_name] = {
+                    "booth_count": 0,
+                    "expected_voters": 0,
+                }
 
             for stats in queryset_stats_by_state_with_bbq:
                 data[stats["state"]]["data"]["all_booths_by_noms"][noms_name] = {

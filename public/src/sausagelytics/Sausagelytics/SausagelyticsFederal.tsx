@@ -314,7 +314,7 @@ class SausagelyticsFederal extends React.PureComponent<IProps, {}> {
                       x: ['ACT', 'NT', 'TAS', 'WA', 'SA', 'QLD', 'VIC', 'NSW'],
                     }}
                     barWidth={20}
-                    labels={(d) => `${d.y} ${nomsName.replace(/_/g, ' ')}`}
+                    labels={({ datum }) => `${datum.y} ${nomsName.replace(/_/g, ' ')}`}
                     style={{ labels: { fill: 'black' } }}
                     labelComponent={<VictoryLabel />}
                   />
