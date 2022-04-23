@@ -1,12 +1,13 @@
-from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
-from django.contrib.auth.models import User
-from simple_history.signals import pre_create_historical_record
-from simple_history.models import HistoricalRecords
-
-from demsausage.app.models import Profile, PollingPlaces, PollingPlaceNoms, Elections
-from demsausage.app.sausage.elections import regenerate_election_geojson, clear_elections_cache
 from demsausage.app.enums import PollingPlaceStatus
+from demsausage.app.models import (Elections, PollingPlaceNoms, PollingPlaces,
+                                   Profile)
+from demsausage.app.sausage.elections import (clear_elections_cache,
+                                              regenerate_cached_election_data)
+from django.contrib.auth.models import User
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
+from simple_history.models import HistoricalRecords
+from simple_history.signals import pre_create_historical_record
 
 
 @receiver(post_save, sender=PollingPlaceNoms)
@@ -16,14 +17,14 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
     # The other post_save() signal below takes care of regenerating GeoJSON for
     # newly created noms records. We handle it this way because this post_save() triggers before the post_save() that actually links the polling_place and noms records.
     if created is False and instance.tracker.has_changed("noms") is True:
-        regenerate_election_geojson(instance.polling_place.election_id)
+        regenerate_cached_election_data(instance.polling_place.election_id)
 
 
 @receiver(post_save, sender=PollingPlaces)
 def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, created, **kwargs):
     if instance.status == PollingPlaceStatus.ACTIVE:
         if created is True or instance.tracker.has_changed("noms") is True:
-            regenerate_election_geojson(instance.election_id)
+            regenerate_cached_election_data(instance.election_id)
 
 
 @receiver(post_save, sender=Elections)

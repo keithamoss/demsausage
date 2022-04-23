@@ -259,9 +259,13 @@ export function fetchPollingPlaceTypes() {
 
 export function regenerateMapDataForElection(election: IElection) {
   return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
-    const response = await api.delete('/0.1/map/clear_cache/', dispatch, {
-      election_id: election.id,
-    })
+    const response = await api.delete(
+      '/0.1/map/clear_cache/',
+      {
+        election_id: election.id,
+      },
+      dispatch
+    )
 
     if (response.status !== 200) {
       dispatch(sendSnackbarNotification('Error clearing polling place data cache'))
@@ -270,7 +274,11 @@ export function regenerateMapDataForElection(election: IElection) {
         election_id: election.id,
       })
 
-      if (responseFetchMap.status === 200) {
+      const { response: responseFetchExport } = await api.get('/0.1/export/', dispatch, {
+        election_id: election.id,
+      })
+
+      if (responseFetchMap.status === 200 && responseFetchExport.status === 200) {
         dispatch(sendSnackbarNotification('Polling place data regenerated! 🌭🎉'))
       }
     }

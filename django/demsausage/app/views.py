@@ -14,7 +14,8 @@ from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.sausage.elections import (
     LoadPollingPlaces, RollbackPollingPlaces, get_elections_cache_key,
-    get_polling_place_geojson_cache_key, regenerate_election_geojson)
+    get_polling_place_geojson_cache_key, get_polling_place_json_cache_key,
+    regenerate_cached_election_data)
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
                                             send_stall_edited_email,
@@ -31,6 +32,7 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         PendingStallsSerializer,
                                         PollingPlaceFacilityTypeSerializer,
                                         PollingPlaceSearchResultsSerializer,
+                                        PollingPlacesFlatJSONSerializer,
                                         PollingPlacesGeoJSONSerializer,
                                         PollingPlacesManagementSerializer,
                                         PollingPlacesSerializer,
@@ -46,7 +48,7 @@ from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Func
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
@@ -179,7 +181,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
         if rollback.is_dry_run() is True:
             # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
-            regenerate_election_geojson(election.id)
+            regenerate_cached_election_data(election.id)
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
         rollback.collects_logs()
         return Response({})
@@ -357,9 +359,33 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
 
     @action(methods=["delete"], permission_classes=(IsAuthenticated,), detail=False)
     def clear_cache(self, request, format=None):
-        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
-        cache.delete(cache_key)
-        return Response({})
+        if 'election_id' in request.data:
+            cache_key_geojson = get_polling_place_geojson_cache_key(request.data['election_id'])
+            cache.delete(cache_key_geojson)
+
+            cache_key_json = get_polling_place_json_cache_key(request.data['election_id'])
+            cache.delete(cache_key_json)
+
+            return Response({})
+        else:
+            return HttpResponseBadRequest()
+
+
+class PollingPlacesJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Retrieve a list of all polling places and their food stall attributes for a given election as a set of flat JSON objects.
+    """
+    queryset = get_active_polling_place_queryset()
+    serializer_class = PollingPlacesFlatJSONSerializer
+    permission_classes = (AllowAny,)
+    filter_class = PollingPlacesBaseFilter
+
+    def list(self, request, format=None):
+        response = super(PollingPlacesJSONViewSet, self).list(request, format)
+
+        cache_key = get_polling_place_json_cache_key(request.query_params.get("election_id"))
+        cache.set(cache_key, json.dumps(response.data))
+        return response
 
 
 class StallsViewSet(viewsets.ModelViewSet):

@@ -16,6 +16,7 @@ from demsausage.app.models import ElectoralBoundaries, PollingPlaces, Stalls
 from demsausage.app.sausage.polling_places import (find_by_distance,
                                                    is_noms_item_true)
 from demsausage.app.serializers import (PollingPlaceLoaderEventsSerializer,
+                                        PollingPlacesFlatJSONSerializer,
                                         PollingPlacesGeoJSONSerializer,
                                         PollingPlacesManagementSerializer)
 from demsausage.util import (convert_string_to_number, get_env, is_numeric,
@@ -26,9 +27,14 @@ from django.db import transaction
 from django.db.models import Q
 
 
-def regenerate_election_geojson(election_id):
-    polling_places = PollingPlacesGeoJSONSerializer(PollingPlaces.objects.select_related("noms").filter(election_id=election_id, status=PollingPlaceStatus.ACTIVE), many=True)
-    cache.set(get_polling_place_geojson_cache_key(election_id), json.dumps(polling_places.data))
+def regenerate_cached_election_data(election_id):
+    queryset = PollingPlaces.objects.select_related("noms").filter(election_id=election_id, status=PollingPlaceStatus.ACTIVE)
+
+    polling_places_geojson = PollingPlacesGeoJSONSerializer(queryset, many=True)
+    cache.set(get_polling_place_geojson_cache_key(election_id), json.dumps(polling_places_geojson.data))
+
+    polling_places_json = PollingPlacesFlatJSONSerializer(queryset, many=True)
+    cache.set(get_polling_place_json_cache_key(election_id), json.dumps(polling_places_json.data))
 
 
 def clear_elections_cache():
@@ -37,6 +43,10 @@ def clear_elections_cache():
 
 def get_polling_place_geojson_cache_key(electionId):
     return "election_{}_polling_places_geojson".format(electionId)
+
+
+def get_polling_place_json_cache_key(electionId):
+    return "election_{}_polling_places_json".format(electionId)
 
 
 def get_elections_cache_key():
@@ -798,8 +808,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         old_polling_places_queryset.update(status=PollingPlaceStatus.ARCHIVED)
         new_polling_places_queryset.update(status=PollingPlaceStatus.ACTIVE)
 
-        # Update GeoJSON
-        regenerate_election_geojson(self.election.id)
+        # Update GeoJSON et cetera
+        regenerate_cached_election_data(self.election.id)
 
         # Update election if necessary
         if self.election.polling_places_loaded is False:
@@ -890,8 +900,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.logger.info("Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(queryset.count(), update_count))
 
     def cleanup(self):
-        # Update GeoJSON
-        regenerate_election_geojson(self.election.id)
+        # Update GeoJSON et cetera
+        regenerate_cached_election_data(self.election.id)
 
     def run(self):
         if self.can_loading_begin() is False:
@@ -911,8 +921,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.invoke_and_bail_if_errors("migrate")
 
                 if self.is_dry_run() is True:
-                    # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
-                    regenerate_election_geojson(self.election.id)
+                    # Regenerate GeoJSON et cetera because the loader does this and transactions don't help us here :)
+                    regenerate_cached_election_data(self.election.id)
                     raise BadRequest({"message": "Rollback", "logs": self.collects_logs()})
 
             if self.is_dry_run() is False:
@@ -996,8 +1006,8 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
         active_polling_places_queryset.delete()
         archived_polling_places_queryset.update(status=PollingPlaceStatus.ACTIVE)
 
-        # Update GeoJSON
-        regenerate_election_geojson(self.election.id)
+        # Update GeoJSON et cetera
+        regenerate_cached_election_data(self.election.id)
 
         # Update election if necessary
         if self.all_polling_places_are_unofficial() is True:

@@ -1,18 +1,19 @@
 
-from django.contrib.auth.models import User
-from rest_framework import serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from datetime import datetime
 
+import pytz
+from demsausage.app.enums import PollingPlaceStatus
+from demsausage.app.models import (Elections, MailgunEvents,
+                                   PollingPlaceFacilityType,
+                                   PollingPlaceLoaderEvents, PollingPlaceNoms,
+                                   PollingPlaces, Profile, Stalls)
+from demsausage.app.schemas import noms_schema, stall_location_info_schema
+from demsausage.util import get_or_none
+from django.contrib.auth.models import User
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-
-from demsausage.app.models import Profile, Elections, PollingPlaceFacilityType, PollingPlaceNoms, PollingPlaces, Stalls, MailgunEvents, PollingPlaceLoaderEvents
-from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.app.enums import PollingPlaceStatus
-from demsausage.util import get_or_none
-
-from datetime import datetime
-import pytz
+from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -229,6 +230,35 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
                 value = getattr(instance, field.source)
                 props = {**props, **{field.source: field.to_representation(value) if value is not None else None}}
         return props
+
+
+class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
+    def to_representation(self, obj):
+        representation = super().to_representation(obj)
+
+        geom_representation = representation.pop("geom")
+        if geom_representation is not None and geom_representation["type"] == "Point":
+            representation["lon"] = geom_representation["coordinates"][0]
+            representation["lat"] = geom_representation["coordinates"][1]
+
+        stall_representation = representation.pop("stall")
+        if stall_representation is not None:
+            if "noms" in stall_representation:
+                noms_representation = stall_representation.pop("noms")
+                for key in noms_representation:
+                    representation[f"stall_noms_{key}"] = noms_representation[key]
+
+            for key in stall_representation:
+                representation[f"stall_{key}"] = stall_representation[key]
+
+        extras_representation = representation.pop("extras")
+        if extras_representation is not None and "noms" in extras_representation:
+            for key in extras_representation["noms"]:
+                representation[f"noms_{key}"] = extras_representation["noms"][key]
+
+        representation["divisions"] = ", ".join(representation["divisions"]) if representation["divisions"] is not None else ""
+
+        return representation
 
 
 class DistanceField(serializers.CharField):

@@ -8,16 +8,18 @@ from rest_framework.permissions import AllowAny
 from .views import (CurrentUserView, ElectionsViewSet, LogoutUserView,
                     MailManagementViewSet, PendingStallsViewSet,
                     PollingPlaceFacilityTypeViewSet,
-                    PollingPlacesGeoJSONViewSet, PollingPlacesNearbyViewSet,
-                    PollingPlacesSearchViewSet, PollingPlacesViewSet,
-                    ProfileViewSet, StallsViewSet, UserViewSet, api_not_found)
+                    PollingPlacesGeoJSONViewSet, PollingPlacesJSONViewSet,
+                    PollingPlacesNearbyViewSet, PollingPlacesSearchViewSet,
+                    PollingPlacesViewSet, ProfileViewSet, StallsViewSet,
+                    UserViewSet, api_not_found)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 router.register(r'elections', ElectionsViewSet, 'ElectionsViewSet')
 router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
-router.register(r'map', PollingPlacesGeoJSONViewSet, 'PollingPlacesViewSet')
+router.register(r'map', PollingPlacesGeoJSONViewSet, 'PollingPlacesGeoJSONViewSet')
+router.register(r'export', PollingPlacesJSONViewSet, 'PollingPlacesJSONViewSet')
 router.register(r'stalls', StallsViewSet, 'StallsViewSet')
 router.register(r'polling_places_facility_types', PollingPlaceFacilityTypeViewSet, 'PollingPlaceFacilityTypeViewSet')
 router.register(r'mail', MailManagementViewSet, 'MailManagementViewSet')
