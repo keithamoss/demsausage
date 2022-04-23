@@ -25,7 +25,7 @@ const Middleware: Array<any> = []
 if ('REACT_APP_RAVEN_URL' in process.env) {
   Sentry.init({
     dsn: process.env.REACT_APP_RAVEN_URL,
-    environment: process.env.REACT_APP_ENVIRONMENT,
+    environment: `${process.env.REACT_APP_ENVIRONMENT}-PUBLIC`.toUpperCase(),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     site: process.env.REACT_APP_RAVEN_SITE_NAME,

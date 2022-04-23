@@ -275,7 +275,7 @@ sentry_sdk.init(
     dsn=get_env("RAVEN_URL"),
     integrations=[DjangoIntegration()],
     send_default_pii=True,
-    environment=get_env("ENVIRONMENT")
+    environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper()
 )
 
 with sentry_sdk.configure_scope() as scope:
