@@ -12,6 +12,7 @@ const SET_LAST_PAGE = 'ealgis/app/SET_LAST_PAGE'
 const TOGGLE_SIDEBAR = 'ealgis/app/TOGGLE_SIDEBAR'
 const TOGGLE_MODAL = 'ealgis/app/TOGGLE_MODAL'
 const SET_POLLING_PLACE_FINDER_MODE = 'ealgis/app/SET_POLLING_PLACE_FINDER_MODE'
+const SET_EMBED_MAP_FLAG = 'ealgis/app/SET_EMBED_MAP_FLAG'
 
 export enum eAppEnv {
   DEV = 1,
@@ -33,6 +34,7 @@ const initialState: IModule = {
   modals: new Map(),
   geolocationSupported: typeof navigator !== 'undefined' && 'geolocation' in navigator,
   pollingPlaceFinderMode: ePollingPlaceFinderInit.DO_NOTHING,
+  embedded_map: false,
 }
 
 // Reducer
@@ -61,6 +63,8 @@ export default function reducer(state: IModule = initialState, action: IAction) 
       return dotProp.set(state, 'modals', modals)
     case SET_POLLING_PLACE_FINDER_MODE:
       return dotProp.set(state, 'pollingPlaceFinderMode', action.pollingPlaceFinderMode)
+    case SET_EMBED_MAP_FLAG:
+      return dotProp.set(state, 'embedded_map', action.embedded_map)
     default:
       return state
   }
@@ -123,6 +127,13 @@ export function setPollingPlaceFinderMode(mode: ePollingPlaceFinderInit): IActio
   }
 }
 
+export function setEmbedMapFlag(embedded_map: boolean) {
+  return {
+    type: SET_EMBED_MAP_FLAG,
+    embedded_map,
+  }
+}
+
 // Models
 export interface IModule {
   loading: boolean
@@ -132,6 +143,7 @@ export interface IModule {
   modals: Map<string, boolean>
   geolocationSupported: boolean
   pollingPlaceFinderMode: ePollingPlaceFinderInit
+  embedded_map: boolean
 }
 
 export interface IAction {
@@ -143,6 +155,7 @@ export interface IAction {
   meta?: {
     analytics: IAnalyticsMeta
   }
+  embedded_map?: boolean
 }
 
 // Side effects, only as applicable

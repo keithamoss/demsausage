@@ -24,6 +24,7 @@ interface IStoreProps {
   elections: Array<IElection>
   currentElection: IElection
   defaultElection: IElection
+  embeddedMap: boolean
   geolocationSupported: boolean
   mapSearchResults: IMapSearchResults | null
 }
@@ -107,13 +108,20 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
   }
 
   render() {
-    const { currentElection, geolocationSupported, fetchQueriedPollingPlaces, mapSearchResults, onClearMapSearch } =
-      this.props
+    const {
+      currentElection,
+      embeddedMap,
+      geolocationSupported,
+      fetchQueriedPollingPlaces,
+      mapSearchResults,
+      onClearMapSearch,
+    } = this.props
     const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
 
     return (
       <SausageMap
         currentElection={currentElection}
+        embeddedMap={embeddedMap}
         waitingForGeolocation={waitingForGeolocation}
         queriedPollingPlaces={queriedPollingPlaces}
         geolocationSupported={geolocationSupported}
@@ -141,6 +149,7 @@ const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
     elections: elections.elections,
     currentElection: elections.elections.find((election: IElection) => election.id === elections.current_election_id)!,
     defaultElection: elections.elections.find((election: IElection) => election.id === elections.default_election_id)!,
+    embeddedMap: app.embedded_map,
     geolocationSupported: app.geolocationSupported,
     mapSearchResults: map.search,
   }

@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import App from './App'
 import { ReactComponent as Logo } from './demsausage_logo.svg'
-import { fetchInitialAppState, IModule as IAppModule } from './redux/modules/app'
+import { fetchInitialAppState, IModule as IAppModule, setEmbedMapFlag } from './redux/modules/app'
 import {
   getElectionsToShowInAppBar,
   getLiveElections,
@@ -82,6 +82,7 @@ interface IRouterProps {
 
 interface IRouteProps {
   electionName: string
+  embed: string | undefined
 }
 
 interface IOwnProps {
@@ -105,6 +106,7 @@ interface IStoreProps {
 interface IDispatchProps {
   getInitialAppState: Function
   setElectionFromRoute: Function
+  setEmbedMapFromRoute: Function
   handleSnackbarClose: Function
   onOpenDrawer: Function
   onClickDrawerLink: Function
@@ -129,10 +131,14 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
   }
 
   async componentDidMount() {
-    const { getInitialAppState, params } = this.props
+    const { getInitialAppState, params, setEmbedMapFromRoute, location } = this.props
     await getInitialAppState(params.electionName)
 
     document.title = 'Democracy Sausage'
+
+    if (new URLSearchParams(location.search).has('embed') === true) {
+      setEmbedMapFromRoute(true)
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: TComponentProps) {
@@ -254,6 +260,9 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
     },
     setElectionFromRoute: (electionId: number) => {
       dispatch(setCurrentElection(electionId))
+    },
+    setEmbedMapFromRoute: (embed: boolean) => {
+      dispatch(setEmbedMapFlag(embed))
     },
     handleSnackbarClose: (reason: string) => {
       if (reason === 'timeout') {

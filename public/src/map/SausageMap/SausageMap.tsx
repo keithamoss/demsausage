@@ -96,6 +96,7 @@ const COVIDSafeFlatButton = styled(FlatButton)`
 
 interface IProps {
   currentElection: IElection
+  embeddedMap: boolean
   waitingForGeolocation: boolean
   queriedPollingPlaces: Array<IPollingPlace>
   geolocationSupported: boolean
@@ -138,6 +139,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
   render() {
     const {
       currentElection,
+      embeddedMap,
       waitingForGeolocation,
       queriedPollingPlaces,
       geolocationSupported,
@@ -164,11 +166,14 @@ class SausageMap extends React.PureComponent<IProps, IState> {
               onMapLoaded={this.onMapLoaded}
               onQueryMap={onQueryMap}
             />
-            <AddStallFABContainer>
-              <FloatingActionButton containerElement={<Link to="/add-stall" />}>
-                <MapsAddLocation />
-              </FloatingActionButton>
-            </AddStallFABContainer>
+
+            {embeddedMap === false && (
+              <AddStallFABContainer>
+                <FloatingActionButton containerElement={<Link to="/add-stall" />}>
+                  <MapsAddLocation />
+                </FloatingActionButton>
+              </AddStallFABContainer>
+            )}
           </div>
 
           {mapLoading === true && (
@@ -179,82 +184,88 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             </MapLoadingContainer>
           )}
 
-          <SearchBarContainer>
-            <GoogleMapLoader
-              params={{
-                key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-                libraries: 'places',
-              }}
-              render={(googleMaps: any) =>
-                googleMaps && (
-                  <SearchBar
-                    hintText={
-                      waitingForGeolocation === false ? 'Search here or use GPS →' : 'Fetching your location...'
-                    }
-                    value={mapSearchResults !== null ? mapSearchResults.formattedAddress : undefined}
-                    onChange={(value: string) => {
-                      if (value === '') {
-                        onClearMapSearch()
+          {embeddedMap === false && (
+            <SearchBarContainer>
+              <GoogleMapLoader
+                params={{
+                  key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+                  libraries: 'places',
+                }}
+                render={(googleMaps: any) =>
+                  googleMaps && (
+                    <SearchBar
+                      hintText={
+                        waitingForGeolocation === false ? 'Search here or use GPS →' : 'Fetching your location...'
                       }
-                    }}
-                    onClick={onOpenFinderForAddressSearch}
-                    onRequestSearch={
-                      geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch
-                    }
-                    searchIcon={
-                      // eslint-disable-next-line no-nested-ternary
-                      geolocationSupported === true ? (
-                        waitingForGeolocation === false ? (
-                          <DeviceLocationSearching />
+                      value={mapSearchResults !== null ? mapSearchResults.formattedAddress : undefined}
+                      onChange={(value: string) => {
+                        if (value === '') {
+                          onClearMapSearch()
+                        }
+                      }}
+                      onClick={onOpenFinderForAddressSearch}
+                      onRequestSearch={
+                        geolocationSupported === true ? onOpenFinderForGeolocation : onOpenFinderForAddressSearch
+                      }
+                      searchIcon={
+                        // eslint-disable-next-line no-nested-ternary
+                        geolocationSupported === true ? (
+                          waitingForGeolocation === false ? (
+                            <DeviceLocationSearching />
+                          ) : (
+                            <DeviceLocationSearching className="spin" />
+                          )
                         ) : (
-                          <DeviceLocationSearching className="spin" />
+                          <ActionSearch />
                         )
-                      ) : (
-                        <ActionSearch />
-                      )
-                    }
-                    style={{
-                      margin: '0 auto',
-                      maxWidth: 800,
-                    }}
-                  />
-                )
-              }
-            />
-          </SearchBarContainer>
-
-          <COVIDSafeToolbar>
-            <ToolbarGroup firstChild={true}>
-              <COVIDSafeFlatButton
-                label="COVID safe voting"
-                fullWidth={true}
-                icon={<MapsLocalHospital color="red" />}
-                containerElement={
-                  // eslint-disable-next-line
-                  <a href="https://aec.gov.au/election/covid19-safety-measures.htm" />
+                      }
+                      style={{
+                        margin: '0 auto',
+                        maxWidth: 800,
+                      }}
+                    />
+                  )
                 }
               />
-            </ToolbarGroup>
-          </COVIDSafeToolbar>
+            </SearchBarContainer>
+          )}
 
-          <PollingPlaceFilterToolbar>
-            <PollingPlaceFilterToolbarGroup>
-              <MapsRestaurantMenu color={grey600} />
-              <PollingPlaceFilterToolbarSeparator />
-              <IconButton onClick={this.onClickMapFilterOption('vego')}>
-                <VegoIcon disabled={isFilterEnabled('vego', mapFilterOptions) !== true} />
-              </IconButton>
-              <IconButton onClick={this.onClickMapFilterOption('halal')}>
-                <HalalIcon disabled={isFilterEnabled('halal', mapFilterOptions) !== true} />
-              </IconButton>
-              <IconButton onClick={this.onClickMapFilterOption('coffee')}>
-                <CoffeeIcon disabled={isFilterEnabled('coffee', mapFilterOptions) !== true} />
-              </IconButton>
-              <IconButton onClick={this.onClickMapFilterOption('bacon_and_eggs')}>
-                <BaconandEggsIcon disabled={isFilterEnabled('bacon_and_eggs', mapFilterOptions) !== true} />
-              </IconButton>
-            </PollingPlaceFilterToolbarGroup>
-          </PollingPlaceFilterToolbar>
+          {embeddedMap === false && (
+            <COVIDSafeToolbar>
+              <ToolbarGroup firstChild={true}>
+                <COVIDSafeFlatButton
+                  label="COVID safe voting"
+                  fullWidth={true}
+                  icon={<MapsLocalHospital color="red" />}
+                  containerElement={
+                    // eslint-disable-next-line
+                    <a href="https://aec.gov.au/election/covid19-safety-measures.htm" />
+                  }
+                />
+              </ToolbarGroup>
+            </COVIDSafeToolbar>
+          )}
+
+          {embeddedMap === false && (
+            <PollingPlaceFilterToolbar>
+              <PollingPlaceFilterToolbarGroup>
+                <MapsRestaurantMenu color={grey600} />
+                <PollingPlaceFilterToolbarSeparator />
+                <IconButton onClick={this.onClickMapFilterOption('vego')}>
+                  <VegoIcon disabled={isFilterEnabled('vego', mapFilterOptions) !== true} />
+                </IconButton>
+                <IconButton onClick={this.onClickMapFilterOption('halal')}>
+                  <HalalIcon disabled={isFilterEnabled('halal', mapFilterOptions) !== true} />
+                </IconButton>
+                <IconButton onClick={this.onClickMapFilterOption('coffee')}>
+                  <CoffeeIcon disabled={isFilterEnabled('coffee', mapFilterOptions) !== true} />
+                </IconButton>
+                <IconButton onClick={this.onClickMapFilterOption('bacon_and_eggs')}>
+                  <BaconandEggsIcon disabled={isFilterEnabled('bacon_and_eggs', mapFilterOptions) !== true} />
+                </IconButton>
+              </PollingPlaceFilterToolbarGroup>
+            </PollingPlaceFilterToolbar>
+          )}
         </FlexboxMapContainer>
 
         {currentElection.name === 'Northern Territory Election 2020' && (

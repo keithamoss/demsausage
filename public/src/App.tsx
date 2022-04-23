@@ -133,55 +133,34 @@ class App extends React.Component<IProps, {}> {
         zIndex: 1200,
         display: app.requestsInProgress > 0 ? 'block' : 'none',
       },
+      bodyContainerStyle: { display: 'flex', flexDirection: 'column', height: '100%' },
+    }
+
+    if (app.embedded_map === true) {
+      styles.bodyContainerStyle.inset = '0px'
     }
 
     return (
       <PageContainer>
-        <ResponsiveDrawer breakPoint={defaultBreakPoint}>
-          {isResponsiveAndOverBreakPoint === true && (
-            <List>
-              <MenuListItem
-                primaryText="Map"
-                leftIcon={<MapsMap />}
-                containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
-                locationPathName={locationPathName}
-                locationPathNameMatch="/"
-                muiThemePalette={muiThemePalette}
-                contentMuiName={content.type.muiName}
-              />
-              <MenuListItem
-                primaryText="Find"
-                leftIcon={<ActionSearch />}
-                containerElement={<Link to={`/search/${getURLSafeElectionName(currentElection)}`} />}
-                locationPathName={locationPathName}
-                locationPathNameMatch="/search"
-                muiThemePalette={muiThemePalette}
-                contentMuiName={content.type.muiName}
-              />
-              <MenuListItem
-                primaryText="Add Stall"
-                leftIcon={<MapsAddLocation />}
-                containerElement={<Link to="/add-stall" />}
-                locationPathName={locationPathName}
-                locationPathNameMatch="/add-stall"
-                muiThemePalette={muiThemePalette}
-                contentMuiName={content.type.muiName}
-              />
-            </List>
-          )}
-
-          {isResponsiveAndOverBreakPoint === true && <Divider />}
-
-          <List>
-            {isResponsiveAndOverBreakPoint === false && (
-              <React.Fragment>
+        {app.embedded_map === false && (
+          <ResponsiveDrawer breakPoint={defaultBreakPoint}>
+            {isResponsiveAndOverBreakPoint === true && (
+              <List>
                 <MenuListItem
                   primaryText="Map"
                   leftIcon={<MapsMap />}
                   containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
-                  onClick={onClickDrawerLink}
                   locationPathName={locationPathName}
                   locationPathNameMatch="/"
+                  muiThemePalette={muiThemePalette}
+                  contentMuiName={content.type.muiName}
+                />
+                <MenuListItem
+                  primaryText="Find"
+                  leftIcon={<ActionSearch />}
+                  containerElement={<Link to={`/search/${getURLSafeElectionName(currentElection)}`} />}
+                  locationPathName={locationPathName}
+                  locationPathNameMatch="/search"
                   muiThemePalette={muiThemePalette}
                   contentMuiName={content.type.muiName}
                 />
@@ -189,91 +168,119 @@ class App extends React.Component<IProps, {}> {
                   primaryText="Add Stall"
                   leftIcon={<MapsAddLocation />}
                   containerElement={<Link to="/add-stall" />}
-                  onClick={onClickDrawerLink}
                   locationPathName={locationPathName}
                   locationPathNameMatch="/add-stall"
                   muiThemePalette={muiThemePalette}
+                  contentMuiName={content.type.muiName}
                 />
-              </React.Fragment>
+              </List>
             )}
-            <MenuListItem
-              primaryText="Elections"
-              leftIcon={<MapsLayers />}
-              containerElement={<Link to="/elections" />}
-              onClick={onClickDrawerLink}
-              locationPathName={locationPathName}
-              locationPathNameMatch="/elections"
-              muiThemePalette={muiThemePalette}
-            />
-            <MenuListItem
-              primaryText="Stats"
-              leftIcon={<EditorInsertChart />}
-              containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
-              onClick={onClickDrawerLink}
-              locationPathName={locationPathName}
-              locationPathNameMatch="/sausagelytics"
-              muiThemePalette={muiThemePalette}
-              contentMuiName={content.type.muiName}
-            />
-            <MenuListItem
-              primaryText="FAQs and About Us"
-              leftIcon={<ActionInfo />}
-              containerElement={<Link to="/about" />}
-              onClick={onClickDrawerLink}
-              locationPathName={locationPathName}
-              locationPathNameMatch="/about"
-              muiThemePalette={muiThemePalette}
-            />
-            <MenuListItem
-              primaryText="Media"
-              leftIcon={<HardwareTv />}
-              containerElement={<Link to="/media" />}
-              onClick={onClickDrawerLink}
-              locationPathName={locationPathName}
-              locationPathNameMatch="/media"
-              muiThemePalette={muiThemePalette}
-            />
-            <ListItem
-              primaryText="Redbubble Store"
-              leftIcon={<ActionStore />}
-              onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Redbubble Store')}
-              // eslint-disable-next-line
-              containerElement={<a href={'https://www.redbubble.com/people/demsausage/shop'} />}
-            />
-          </List>
-          <Divider />
-          <List>
-            <Subheader>Contact Us</Subheader>
-            <ListItem
-              primaryText="Email"
-              leftIcon={<CommunicationEmail />}
-              onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Email')}
-              // eslint-disable-next-line
-              containerElement={<a href={'mailto:ausdemocracysausage@gmail.com'} />}
-            />
-            <ListItem
-              primaryText="Twitter"
-              leftIcon={<TwitterIcon />}
-              onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Twitter')}
-              // eslint-disable-next-line
-              containerElement={<a href={'https://twitter.com/DemSausage'} />}
-            />
-            <ListItem
-              primaryText="Facebook"
-              leftIcon={<FacebookIcon />}
-              onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Facebook')}
-              // eslint-disable-next-line
-              containerElement={<a href={'https://www.facebook.com/AusDemocracySausage'} />}
-            />
-            <ListItem
-              primaryText="Instagram"
-              leftIcon={<InstagramIcon />}
-              onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Instagram')}
-              // eslint-disable-next-line
-              containerElement={<a href={'https://www.instagram.com/ausdemocracysausage/'} />}
-            />
-          </List>
-        </ResponsiveDrawer>
+
+            {isResponsiveAndOverBreakPoint === true && <Divider />}
+
+            <List>
+              {isResponsiveAndOverBreakPoint === false && (
+                <React.Fragment>
+                  <MenuListItem
+                    primaryText="Map"
+                    leftIcon={<MapsMap />}
+                    containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
+                    onClick={onClickDrawerLink}
+                    locationPathName={locationPathName}
+                    locationPathNameMatch="/"
+                    muiThemePalette={muiThemePalette}
+                    contentMuiName={content.type.muiName}
+                  />
+                  <MenuListItem
+                    primaryText="Add Stall"
+                    leftIcon={<MapsAddLocation />}
+                    containerElement={<Link to="/add-stall" />}
+                    onClick={onClickDrawerLink}
+                    locationPathName={locationPathName}
+                    locationPathNameMatch="/add-stall"
+                    muiThemePalette={muiThemePalette}
+                  />
+                </React.Fragment>
+              )}
+              <MenuListItem
+                primaryText="Elections"
+                leftIcon={<MapsLayers />}
+                containerElement={<Link to="/elections" />}
+                onClick={onClickDrawerLink}
+                locationPathName={locationPathName}
+                locationPathNameMatch="/elections"
+                muiThemePalette={muiThemePalette}
+              />
+              <MenuListItem
+                primaryText="Stats"
+                leftIcon={<EditorInsertChart />}
+                containerElement={<Link to={`/sausagelytics/${getURLSafeElectionName(currentElection)}`} />}
+                onClick={onClickDrawerLink}
+                locationPathName={locationPathName}
+                locationPathNameMatch="/sausagelytics"
+                muiThemePalette={muiThemePalette}
+                contentMuiName={content.type.muiName}
+              />
+              <MenuListItem
+                primaryText="FAQs and About Us"
+                leftIcon={<ActionInfo />}
+                containerElement={<Link to="/about" />}
+                onClick={onClickDrawerLink}
+                locationPathName={locationPathName}
+                locationPathNameMatch="/about"
+                muiThemePalette={muiThemePalette}
+              />
+              <MenuListItem
+                primaryText="Media"
+                leftIcon={<HardwareTv />}
+                containerElement={<Link to="/media" />}
+                onClick={onClickDrawerLink}
+                locationPathName={locationPathName}
+                locationPathNameMatch="/media"
+                muiThemePalette={muiThemePalette}
+              />
+              <ListItem
+                primaryText="Redbubble Store"
+                leftIcon={<ActionStore />}
+                onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Redbubble Store')}
+                // eslint-disable-next-line
+                containerElement={<a href={'https://www.redbubble.com/people/demsausage/shop'} />}
+              />
+            </List>
+            <Divider />
+            <List>
+              <Subheader>Contact Us</Subheader>
+              <ListItem
+                primaryText="Email"
+                leftIcon={<CommunicationEmail />}
+                onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Email')}
+                // eslint-disable-next-line
+                containerElement={<a href={'mailto:ausdemocracysausage@gmail.com'} />}
+              />
+              <ListItem
+                primaryText="Twitter"
+                leftIcon={<TwitterIcon />}
+                onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Twitter')}
+                // eslint-disable-next-line
+                containerElement={<a href={'https://twitter.com/DemSausage'} />}
+              />
+              <ListItem
+                primaryText="Facebook"
+                leftIcon={<FacebookIcon />}
+                onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Facebook')}
+                // eslint-disable-next-line
+                containerElement={<a href={'https://www.facebook.com/AusDemocracySausage'} />}
+              />
+              <ListItem
+                primaryText="Instagram"
+                leftIcon={<InstagramIcon />}
+                onClick={(e: React.MouseEvent<HTMLElement>) => onClickOutboundDrawerLink(e, 'Instagram')}
+                // eslint-disable-next-line
+                containerElement={<a href={'https://www.instagram.com/ausdemocracysausage/'} />}
+              />
+            </List>
+          </ResponsiveDrawer>
+        )}
 
         {/* <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                     <div style={{ backgroundColor: "purple" }}>Header</div>
@@ -284,10 +291,7 @@ class App extends React.Component<IProps, {}> {
                     <div style={{ backgroundColor: "blue" }}>Footer</div>
                 </div> */}
 
-        <BodyContainer
-          breakPoint={defaultBreakPoint}
-          style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-        >
+        <BodyContainer breakPoint={defaultBreakPoint} style={styles.bodyContainerStyle}>
           <LinearProgress
             mode="indeterminate"
             color={muiThemePalette.accent3Color}
