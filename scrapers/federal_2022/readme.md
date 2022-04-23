@@ -1,6 +1,13 @@
-# Data Source
+# Data sources
 
 [Commonwealth Electoral Act 1918 (CEA) notices – Expected election day polling places](https://www.aec.gov.au/about_aec/cea-notices/election-pp.htm)
+[Voting from overseas](https://www.aec.gov.au/election/overseas.htm)
+
+## Overseas polling places
+
+The AEC's list of overseas polling places contains the country, category, and address of each overseas polling booth.
+
+We then manually geocode each to their coordinates and update `overseas_polling_places_2022.csv`.
 
 # Config notes
 
@@ -11,15 +18,24 @@
 
 None yet.
 
-# Usage Instructions (Not applied yet)
+# Usage Instructions
 
-We need to merge the official AEC data with an unofficial list of overseas polling booths.
+Run `merge_overseas.py` each time we download new polling place data from the AEC. This merges the official AEC data with a quasi-unofficial list of overseas polling booths that we maintain (adding coordinates et cetera) based on the AEC's official list.
 
-1. Add a `booth_info` column as the far right most column.
-2. Paste the contents of `./data/overseas_polling_places_2019.csv` (minus the header) at the bottom of the file.
-3. Load the polling place data per normal whilst applying `config.json`.
+Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
+
+## April 23rd 2022 (loaded April 23rd)
+
+Source: `prdelms.gaz.statics.220423.09.00.02.csv`
+Source: Overseas polling places retrieved April 23rd (number with in-person voting = 19)
+
+None identified.
+
+- Overseas polling places loaded for the first time
+- Data file formatting errors are resolved now
+- Fixes removed for Wahroonga East (PPID=144)
 
 ## April 1st 2022 (loaded April 10th)
 
