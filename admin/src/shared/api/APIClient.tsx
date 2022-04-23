@@ -150,7 +150,7 @@ export class APIClient {
       .catch((error: any) => this.handleError(error, url, dispatch))
   }
 
-  public delete(url: string, dispatch: any): Promise<IAPIResponse> {
+  public delete(url: string, body: any, dispatch: any): Promise<IAPIResponse> {
     dispatch(beginFetch())
 
     return fetch(this.baseURL + url, {
@@ -161,6 +161,7 @@ export class APIClient {
         'Content-Type': 'application/json',
         'X-CSRFToken': Cookies.get('csrftoken')!,
       },
+      body: JSON.stringify(body),
     })
       .then((response: any) => {
         dispatch(finishFetch())
