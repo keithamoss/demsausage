@@ -5,20 +5,21 @@ import re
 from datetime import datetime
 from io import StringIO
 from timeit import default_timer as timer
-from urllib.parse import quote
 
 import chardet
 import googlemaps
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
                                   PollingPlaceStatus, StallStatus)
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.models import ElectoralBoundaries, PollingPlaces, Stalls
+from demsausage.app.models import (Elections, ElectoralBoundaries,
+                                   PollingPlaces, Stalls)
 from demsausage.app.sausage.polling_places import (find_by_distance,
                                                    is_noms_item_true)
 from demsausage.app.serializers import (PollingPlaceLoaderEventsSerializer,
                                         PollingPlacesFlatJSONSerializer,
                                         PollingPlacesGeoJSONSerializer,
                                         PollingPlacesManagementSerializer)
+from demsausage.app.webdriver import get_map_screenshot
 from demsausage.util import (convert_string_to_number, get_env, is_numeric,
                              merge_and_sum_dicts)
 from django.contrib.gis.geos import Point
@@ -36,6 +37,9 @@ def regenerate_cached_election_data(election_id):
     polling_places_json = PollingPlacesFlatJSONSerializer(queryset, many=True)
     cache.set(get_polling_place_json_cache_key(election_id), json.dumps(polling_places_json.data))
 
+    png_image = get_map_screenshot(Elections.objects.get(id=election_id))
+    cache.set(get_election_map_png_cache_key(election_id), png_image)
+
 
 def clear_elections_cache():
     cache.delete(get_elections_cache_key())
@@ -49,12 +53,12 @@ def get_polling_place_json_cache_key(electionId):
     return "election_{}_polling_places_json".format(electionId)
 
 
+def get_election_map_png_cache_key(electionId):
+    return f"election_/api/0.1/map_image/{electionId}/_map_export_png"
+
+
 def get_elections_cache_key():
     return "elections_list"
-
-
-def get_url_safe_election_name(election):
-    return quote(election.name.lower().replace(" ", "_"))
 
 
 class PollingPlacesIngestBase():

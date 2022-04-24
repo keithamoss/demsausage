@@ -1,11 +1,12 @@
+import datetime
 import logging
 import os
+import string
 import time
 import unicodedata
-import string
-import datetime
-import pytz
+from urllib.parse import quote
 
+import pytz
 from django.conf import settings
 
 
@@ -175,3 +176,7 @@ def merge_and_sum_dicts(dict_list):
             merged_dict[key] = ", ".join(merged_dict[key])
 
     return merged_dict
+
+
+def get_url_safe_election_name(election):
+    return quote(election.name.lower().replace(" ", "_"))

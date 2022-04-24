@@ -12,10 +12,11 @@ from demsausage.app.models import (Elections, PollingPlaceFacilityType,
                                    PollingPlaces, Stalls)
 from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
+from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
-    LoadPollingPlaces, RollbackPollingPlaces, get_elections_cache_key,
-    get_polling_place_geojson_cache_key, get_polling_place_json_cache_key,
-    regenerate_cached_election_data)
+    LoadPollingPlaces, RollbackPollingPlaces, get_election_map_png_cache_key,
+    get_elections_cache_key, get_polling_place_geojson_cache_key,
+    get_polling_place_json_cache_key, regenerate_cached_election_data)
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
                                             send_stall_edited_email,
@@ -40,6 +41,7 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         StallsSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
+from demsausage.app.webdriver import get_map_screenshot
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -366,6 +368,9 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
             cache_key_json = get_polling_place_json_cache_key(request.data['election_id'])
             cache.delete(cache_key_json)
 
+            cache_key_map_png = get_election_map_png_cache_key(request.data['election_id'])
+            cache.delete(cache_key_map_png)
+
             return Response({})
         else:
             return HttpResponseBadRequest()
@@ -386,6 +391,23 @@ class PollingPlacesJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         cache_key = get_polling_place_json_cache_key(request.query_params.get("election_id"))
         cache.set(cache_key, json.dumps(response.data))
         return response
+
+
+class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Retrieve a static embeddable image of an election.
+    """
+    queryset = Elections.objects
+    renderer_classes = (PNGRenderer,)
+    permission_classes = (AllowAny,)
+
+    def retrieve(self, request, pk=None, format=None):
+        election = self.get_object()
+        png_image = get_map_screenshot(election)
+
+        cache_key = get_election_map_png_cache_key(election.id)
+        cache.set(cache_key, png_image)
+        return Response(png_image)
 
 
 class StallsViewSet(viewsets.ModelViewSet):

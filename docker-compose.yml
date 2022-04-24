@@ -98,3 +98,9 @@ services:
       - "443:443"
       - "3001:3001"
       - "8001:8001"
+    # So Django can talk to the nginx container
+    # Ref: https://stackoverflow.com/a/60026589
+    networks:
+      default:
+        aliases:
+          - public.test.democracysausage.org

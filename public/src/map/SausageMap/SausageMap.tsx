@@ -177,7 +177,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
           </div>
 
           {mapLoading === true && (
-            <MapLoadingContainer>
+            <MapLoadingContainer className="map-loading">
               <MapLoaderBar>
                 <SausageLoader />
               </MapLoaderBar>

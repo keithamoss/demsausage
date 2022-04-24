@@ -278,7 +278,9 @@ export function regenerateMapDataForElection(election: IElection) {
         election_id: election.id,
       })
 
-      if (responseFetchMap.status === 200 && responseFetchExport.status === 200) {
+      const { response: responseFetchMapPNG } = await api.get(`/0.1/map_image/${election.id}/`, dispatch)
+
+      if (responseFetchMap.status === 200 && responseFetchExport.status === 200 && responseFetchMapPNG.status === 200) {
         dispatch(sendSnackbarNotification('Polling place data regenerated! 🌭🎉'))
       }
     }

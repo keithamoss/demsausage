@@ -5,9 +5,9 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
 from rest_framework import routers
 from rest_framework.permissions import AllowAny
 
-from .views import (CurrentUserView, ElectionsViewSet, LogoutUserView,
-                    MailManagementViewSet, PendingStallsViewSet,
-                    PollingPlaceFacilityTypeViewSet,
+from .views import (CurrentUserView, ElectionMapStaticImageViewSet,
+                    ElectionsViewSet, LogoutUserView, MailManagementViewSet,
+                    PendingStallsViewSet, PollingPlaceFacilityTypeViewSet,
                     PollingPlacesGeoJSONViewSet, PollingPlacesJSONViewSet,
                     PollingPlacesNearbyViewSet, PollingPlacesSearchViewSet,
                     PollingPlacesViewSet, ProfileViewSet, StallsViewSet,
@@ -19,6 +19,7 @@ router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 router.register(r'elections', ElectionsViewSet, 'ElectionsViewSet')
 router.register(r'polling_places', PollingPlacesViewSet, 'PollingPlacesViewSet')
 router.register(r'map', PollingPlacesGeoJSONViewSet, 'PollingPlacesGeoJSONViewSet')
+router.register(r'map_image', ElectionMapStaticImageViewSet, 'ElectionMapStaticImageViewSet')
 router.register(r'export', PollingPlacesJSONViewSet, 'PollingPlacesJSONViewSet')
 router.register(r'stalls', StallsViewSet, 'StallsViewSet')
 router.register(r'polling_places_facility_types', PollingPlaceFacilityTypeViewSet, 'PollingPlaceFacilityTypeViewSet')

@@ -5,9 +5,8 @@ from random import getrandbits
 
 import requests
 from demsausage.app.admin import get_admins, get_super_admins, is_development
-from demsausage.app.sausage.elections import get_url_safe_election_name
 from demsausage.app.sausage.polling_places import getFoodDescription
-from demsausage.util import get_env
+from demsausage.util import get_env, get_url_safe_election_name
 from django.forms.models import model_to_dict
 from rest_framework.exceptions import APIException
 
