@@ -4,6 +4,7 @@ import * as React from 'react'
 import { BaseFieldProps, Field, reduxForm } from 'redux-form'
 import { Checkbox, DatePicker, TextField } from 'redux-form-material-ui'
 import styled from 'styled-components'
+import { getAPIBaseURL } from '../../redux/modules/app'
 import { IElection } from '../../redux/modules/elections'
 import { IGeoJSON } from '../../redux/modules/interfaces'
 import MapExtentChooserContainer from '../MapExtentChooser/MapExtentChooserContainer'
@@ -102,6 +103,10 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
         />
         <PaddedButton label="Cancel" primary={false} onClick={onCancelForm} />
         <HiddenButton type="submit" />
+
+        <br />
+        <br />
+        <img src={`${getAPIBaseURL()}/0.1/map_image/${election!.id}/`} />
       </form>
     )
   }
