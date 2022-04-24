@@ -313,7 +313,7 @@ class App extends React.Component<IProps, {}> {
             }}
           />
 
-          {showElectionAppBar === true && (
+          {showElectionAppBar === true && app.embedded_map === false && (
             <ElectionAppBarContainer
               isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint}
               pageTitle={content.type.pageTitle}
