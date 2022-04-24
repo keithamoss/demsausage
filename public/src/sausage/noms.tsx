@@ -38,6 +38,14 @@ export class NomsReader {
     return this.hasAnyPropertiesTrue(NomsReader.additionalFoodNomsIcons)
   }
 
+  public hasCoreNoms() {
+    return this.hasAnyPropertiesTrue(NomsReader.coreNomsIcons)
+  }
+
+  public onlyHasExtraNoms() {
+    return this.hasExtraNoms() === true && this.hasCoreNoms() === false
+  }
+
   public getFoodIconNamesFromNoms() {
     if (this.noms === null) {
       return []
@@ -78,6 +86,11 @@ export class NomsReader {
         return spriteIcons.cake_plus
       }
       return spriteIcons.cake
+    }
+
+    if (this.onlyHasExtraNoms()) {
+      const firstExtraNomsIcon = Object.keys(this.noms!)[0] as string
+      return firstExtraNomsIcon in spriteIcons ? spriteIcons[firstExtraNomsIcon] : spriteIcons.unknown
     }
 
     return null
