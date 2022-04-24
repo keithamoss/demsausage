@@ -21,13 +21,14 @@ from demsausage.app.serializers import (PollingPlaceLoaderEventsSerializer,
                                         PollingPlacesManagementSerializer)
 from demsausage.app.webdriver import get_map_screenshot
 from demsausage.util import (convert_string_to_number, get_env, is_numeric,
-                             merge_and_sum_dicts)
+                             merge_and_sum_dicts, threaded)
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Q
 
 
+@threaded
 def regenerate_cached_election_data(election_id):
     queryset = PollingPlaces.objects.select_related("noms").filter(election_id=election_id, status=PollingPlaceStatus.ACTIVE)
 

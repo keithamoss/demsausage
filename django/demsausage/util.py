@@ -1,7 +1,9 @@
 import datetime
+import functools
 import logging
 import os
 import string
+import threading
 import time
 import unicodedata
 from urllib.parse import quote
@@ -180,3 +182,15 @@ def merge_and_sum_dicts(dict_list):
 
 def get_url_safe_election_name(election):
     return quote(election.name.lower().replace(" ", "_"))
+
+
+def threaded(func):
+    """Decorator to automatically launch a function in a thread"""
+    # Ref: https://stackoverflow.com/a/67071996
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):  # replaces original function...
+        # ...and launches the original in a thread
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+        thread.start()
+        return thread
+    return wrapper
