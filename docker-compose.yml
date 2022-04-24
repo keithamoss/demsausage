@@ -28,9 +28,9 @@ services:
   # memcached_gui:
   #     # http://localhost/index.php (admin/admin)
   #     image: jacksoncage/phpmemcachedadmin
-  #     # environment:
-  #     #     - MEMCACHED_HOST=localhost
-  #     #     - MEMCACHED_PORT=11211
+  #     environment:
+  #         - MEMCACHED_HOST=memcached
+  #         - MEMCACHED_PORT=11211
   #     depends_on:
   #         - memcached
   #     ports:
