@@ -115,6 +115,20 @@ interface IState {
   nt2020DialogOpen: boolean
 }
 
+// Allows us to use the actual map search results, or to override it (a bit hackily) and use the `extent` parameter passed when a map is embedded
+const getMapSearchResultsForEmbedding = (mapSearchResults: any) => {
+  const searchParams = new URLSearchParams(window.location.search)
+  if (searchParams.has('extent') === true && searchParams.get('extent') !== '') {
+    return {
+      extent: searchParams.get('extent')?.split(','),
+      padding: false,
+      animation: false,
+    }
+  }
+
+  return mapSearchResults
+}
+
 class SausageMap extends React.PureComponent<IProps, IState> {
   private onMapBeginLoading: Function
 
@@ -160,7 +174,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
             <OpenLayersMapContainer
               key={currentElection.id}
               election={currentElection}
-              mapSearchResults={mapSearchResults}
+              mapSearchResults={getMapSearchResultsForEmbedding(mapSearchResults)}
               mapFilterOptions={mapFilterOptions}
               onMapBeginLoading={this.onMapBeginLoading}
               onMapLoaded={this.onMapLoaded}

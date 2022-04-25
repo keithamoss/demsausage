@@ -403,8 +403,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
         view.fit(transformExtent(mapSearchResults.extent, 'EPSG:4326', 'EPSG:3857'), {
           size: map.getSize(),
-          duration: 750,
-          padding: [85, 0, 20, 0],
+          // if not undefined, assume embedded mode and have no animation
+          duration: mapSearchResults.animation !== undefined ? 0 : 750,
+          // top, right, bottom, left
+          // if not undefined, assume embedded mode and only set padding of 50 bottom
+          padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
           callback: (completed: boolean) => {
             if (completed === true) {
               that.addSearchResultsVectorLayer(map)

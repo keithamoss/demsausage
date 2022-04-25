@@ -15,6 +15,7 @@ const PageWrapper = styled.div`
 
 const ElectionSelectField = styled(SelectField)`
   width: 350px !important;
+  margin-bottom: 20px;
 `
 
 const ElectionImageURLTextField = styled(TextField)`
@@ -23,8 +24,8 @@ const ElectionImageURLTextField = styled(TextField)`
 `
 
 const ElectionEmbedIFrameCodePreviewContainer = styled.div`
-  width: 600px;
-  height: 315px;
+  width: 900px;
+  height: 472.5px;
 `
 
 const ElectionEmbedIFrameCodePreview = styled.code`
@@ -34,22 +35,79 @@ const ElectionEmbedIFrameCodePreview = styled.code`
   padding: 20px;
 `
 
+const defaultMapZoomStates = [
+  { name: 'Australia', extent: [112.568664550781, -10.1135419412474, 154.092864990234, -44.2422476272383] },
+  {
+    name: 'Australian Capital Territory',
+    extent: [148.677978515625, -35.07496485398955, 149.43603515625, -35.96022296929668],
+  },
+  {
+    name: 'New South Wales',
+    extent: [140.6015665303642, -28.13879606611416, 154.1025132963242, -38.02075411828389],
+  },
+  {
+    name: 'Northern Territory',
+    extent: [128.14453125, -9.275622176792098, 138.8671875, -26.509904531413923],
+  },
+  { name: 'Queensland', extent: [137.724609375, -8.494104537551863, 155.478515625, -29.76437737516313] },
+  {
+    name: 'South Australia',
+    extent: [128.58398437499997, -25.48295117535531, 141.591796875, -38.82259097617711],
+  },
+  { name: 'Tasmania', extent: [142.998046875, -39.19820534889478, 149.1943359375, -44.245199015221274] },
+  {
+    name: 'Victoria',
+    extent: [140.899144152847, -32.0615020550698, 150.074726746086, -39.2320874986644],
+  },
+  {
+    name: 'Western Australia',
+    extent: [111.796875, -12.726084296948173, 129.19921874999997, -35.88905007936091],
+  },
+]
+
+// Used to manufacture defaultMapZoomStates
+// const getExtentFromPolygon = (geom: IGeoJSONPoylgon) => {
+//   if (geom.type === 'Polygon') {
+//     const smallestLongitude = Math.min(...geom.coordinates[0].map((coord) => coord[0]))
+//     const biggestLongitude = Math.max(...geom.coordinates[0].map((coord) => coord[0]))
+//     const biggestLatitude = Math.min(...geom.coordinates[0].map((coord) => coord[1]))
+//     const smallestLatitude = Math.max(...geom.coordinates[0].map((coord) => coord[1]))
+
+//     return [smallestLongitude, smallestLatitude, biggestLongitude, biggestLatitude]
+//   }
+
+//   return null
+// }
+
+const getEmbedMapURL = (election: IElection, mapEmbedDefaultPosition: [number, number, number, number] | null) => {
+  const url = `${getBaseURL()}/${getURLSafeElectionName(election)}?embed`
+  if (mapEmbedDefaultPosition !== null) {
+    return `${url}&extent=${mapEmbedDefaultPosition}`
+  }
+  return url
+}
+
 export default function EmbedBuilder() {
-  // const { elections, onChooseElection } = this.props
   const elections = useSelector((state: IStore) => state.elections.elections)
-  console.log('elections', elections)
 
   const [electionId, setElectionId] = React.useState(elections[0].id)
-  console.log('election', electionId, setElectionId)
   const election = elections.find((e: IElection) => e.id === electionId)
-  console.log('election', election)
-
   const handleChange = (_event: React.ChangeEvent<{ value: unknown }>, _key: number, selectedElectionId: number) => {
     setElectionId(selectedElectionId)
   }
 
-  const [value, copy] = useCopyToClipboard()
-  console.log('value', value)
+  const [mapEmbedDefaultPosition, setDefaultMapEmbedPosition] = React.useState<[number, number, number, number] | null>(
+    null
+  )
+  const handleDefaultMapPositionChange = (
+    _event: React.ChangeEvent<{ value: unknown }>,
+    _key: number,
+    selectedExtent: [number, number, number, number]
+  ) => {
+    setDefaultMapEmbedPosition(selectedExtent)
+  }
+
+  const [, copy] = useCopyToClipboard()
 
   if (election === undefined) {
     return null
@@ -57,75 +115,91 @@ export default function EmbedBuilder() {
 
   const electionImageEmbedURL = `${getAPIBaseURL()}/0.1/map_image/${election.id}/`
 
-  const electionMapEmbedHTML = `<iframe src="${getBaseURL()}/${getURLSafeElectionName(
-    election
-  )}?embed" title="Democracy Sausage"
+  const electionMapEmbedHTML = `<iframe src="${getEmbedMapURL(
+    election,
+    mapEmbedDefaultPosition
+  )}" title="Democracy Sausage"
   scrolling="no"
   loading="lazy"
   allowTransparency="false"
   allowFullScreen="true"
   width="100%"
-  height="315"
+  height="472.5"
   style="border: none;"></iframe>`
 
   return (
     <PageWrapper>
-      <ElectionSelectField
-        floatingLabelText="Election"
-        value={electionId}
-        onChange={handleChange}
-        autoWidth={true}
-        // fullWidth={true}
-      >
-        {elections.map((e: IElection) => (
-          <MenuItem key={e.id} value={e.id} primaryText={e.name} />
-        ))}
-      </ElectionSelectField>
+      <p>Would you like to embed the Democracy Sausage map on your website?</p>
 
-      <h2>Embed an image of the map</h2>
-      <img src={electionImageEmbedURL} />
+      <React.Fragment>
+        <h2>Choose an election</h2>
+        <ElectionSelectField value={electionId} onChange={handleChange} autoWidth={true}>
+          {elections.map((e: IElection) => (
+            <MenuItem key={e.id} value={e.id} primaryText={e.name} />
+          ))}
+        </ElectionSelectField>
+      </React.Fragment>
 
-      <br />
+      <React.Fragment>
+        <h2>Embed an image of the map</h2>
+        <img src={electionImageEmbedURL} />
 
-      <ElectionImageURLTextField value={electionImageEmbedURL} fullWidth={false} />
+        <br />
 
-      <RaisedButton
-        primary={true}
-        icon={<ContentCopy />}
-        label="Copy link"
-        onClick={() => copy(electionImageEmbedURL)}
-      />
+        <ElectionImageURLTextField name="embed_image_url" value={electionImageEmbedURL} fullWidth={false} />
 
-      <h2>Embed an interactive map</h2>
-
-      <ElectionEmbedIFrameCodePreviewContainer>
-        <iframe
-          src={`${getBaseURL()}/${getURLSafeElectionName(election)}?embed`}
-          title="Democracy Sausage"
-          scrolling="no"
-          loading="lazy"
-          allowTransparency={false}
-          allowFullScreen={true}
-          width="100%"
-          height="315"
-          style={{ border: 'none' }}
+        <RaisedButton
+          primary={true}
+          icon={<ContentCopy />}
+          label="Copy link"
+          onClick={() => copy(electionImageEmbedURL)}
         />
-      </ElectionEmbedIFrameCodePreviewContainer>
 
-      <br />
+        <br />
+        <br />
+      </React.Fragment>
 
-      {/* <ElectionImageURLTextField value={electionMapEmbedHTML} fullWidth={false} multiLine={true} /> */}
+      <React.Fragment>
+        <h2>Embed an interactive map</h2>
 
-      <pre>
-        <ElectionEmbedIFrameCodePreview>{electionMapEmbedHTML}</ElectionEmbedIFrameCodePreview>
-      </pre>
+        <ElectionSelectField
+          floatingLabelText="Zoom to an area"
+          value={mapEmbedDefaultPosition}
+          onChange={handleDefaultMapPositionChange}
+          autoWidth={true}
+        >
+          {defaultMapZoomStates.map((state) => {
+            return <MenuItem key={state.name} value={state.extent} primaryText={state.name} />
+          })}
+        </ElectionSelectField>
 
-      <RaisedButton
-        primary={true}
-        icon={<ContentCopy />}
-        label="Copy code"
-        onClick={() => copy(electionMapEmbedHTML)}
-      />
+        <ElectionEmbedIFrameCodePreviewContainer>
+          <iframe
+            src={`${getEmbedMapURL(election, mapEmbedDefaultPosition)}`}
+            title="Democracy Sausage"
+            scrolling="no"
+            loading="lazy"
+            allowTransparency={false}
+            allowFullScreen={true}
+            width="100%"
+            height="472.5"
+            style={{ border: 'none' }}
+          />
+        </ElectionEmbedIFrameCodePreviewContainer>
+
+        <br />
+
+        <pre>
+          <ElectionEmbedIFrameCodePreview>{electionMapEmbedHTML}</ElectionEmbedIFrameCodePreview>
+        </pre>
+
+        <RaisedButton
+          primary={true}
+          icon={<ContentCopy />}
+          label="Copy code"
+          onClick={() => copy(electionMapEmbedHTML)}
+        />
+      </React.Fragment>
     </PageWrapper>
   )
 }

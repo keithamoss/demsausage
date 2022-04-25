@@ -43,3 +43,8 @@ export interface IGeoJSON {
   type: string
   coordinates: [number, number]
 }
+
+export interface IGeoJSONPoylgon {
+  type: string
+  coordinates: [[[number, number]]]
+}

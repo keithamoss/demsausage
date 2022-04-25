@@ -69,6 +69,8 @@ export interface IMapSearchResults {
   lat: number
   extent: [number, number, number, number] | null
   formattedAddress: string
+  padding?: boolean
+  animation?: boolean
 }
 
 export interface IMapFilterOptions {

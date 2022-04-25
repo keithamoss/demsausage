@@ -3,7 +3,7 @@ import { memoize } from 'lodash-es'
 import { DateTime } from 'luxon'
 import { createSelector } from 'reselect'
 import { IAPIClient } from '../../shared/api/APIClient'
-import { IGeoJSON } from './interfaces'
+import { IGeoJSONPoylgon } from './interfaces'
 import { IStore } from './reducer'
 // import { IAnalyticsMeta } from "../../shared/analytics/GoogleAnalytics"
 
@@ -122,7 +122,7 @@ export interface IAction {
 
 export interface IElection {
   id: number
-  geom: IGeoJSON
+  geom: IGeoJSONPoylgon
   name: string
   short_name: string
   is_hidden: boolean
