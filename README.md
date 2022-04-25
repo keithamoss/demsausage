@@ -204,6 +204,13 @@ References:
 - https://stackoverflow.com/a/62559163
 - https://www.indiehackers.com/post/solved-react-app-with-dynamic-meta-tags-without-ssr-cdda6da385 (see the comment by RBouschery)
 
+## Clearing the cached images
+
+General instructions: https://www.socialmediaexaminer.com/how-to-clear-facebook-cache-twitter-cache-linkedin-cache/
+
+- Twitter: https://cards-dev.twitter.com/validator
+- Facebook: https://developers.facebook.com/tools/debug/sharing/
+
 ## Testing
 
 🤦‍♂️ the [Social Share Preview](https://socialsharepreview.com) browser extension works perfectly well with https://public.test.democracysausage.org
