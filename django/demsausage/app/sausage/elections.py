@@ -41,6 +41,10 @@ def regenerate_cached_election_data(election_id):
     png_image = get_map_screenshot(Elections.objects.get(id=election_id))
     cache.set(get_election_map_png_cache_key(election_id), png_image)
 
+    defaultElection = getDefaultElection()
+    if defaultElection is not None and defaultElection.id == election_id:
+        cache.set(get_default_election_map_png_cache_key(), png_image)
+
 
 def clear_elections_cache():
     cache.delete(get_elections_cache_key())
@@ -58,8 +62,15 @@ def get_election_map_png_cache_key(electionId):
     return f"election_/api/0.1/map_image/{electionId}/_map_export_png"
 
 
+def get_default_election_map_png_cache_key():
+    return "election_/api/0.1/map_image/_map_export_png"
+
+
 def get_elections_cache_key():
     return "elections_list"
+
+def getDefaultElection():
+    return Elections.objects.filter(is_primary=True).get()
 
 
 class PollingPlacesIngestBase():

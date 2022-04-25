@@ -14,9 +14,11 @@ from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
-    LoadPollingPlaces, RollbackPollingPlaces, get_election_map_png_cache_key,
+    LoadPollingPlaces, RollbackPollingPlaces,
+    get_default_election_map_png_cache_key, get_election_map_png_cache_key,
     get_elections_cache_key, get_polling_place_geojson_cache_key,
-    get_polling_place_json_cache_key, regenerate_cached_election_data)
+    get_polling_place_json_cache_key, getDefaultElection,
+    regenerate_cached_election_data)
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
                                             send_stall_edited_email,
@@ -371,6 +373,11 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
             cache_key_map_png = get_election_map_png_cache_key(request.data['election_id'])
             cache.delete(cache_key_map_png)
 
+            defaultElection = getDefaultElection()
+            if defaultElection is not None and defaultElection.id == request.data['election_id']:
+                cache_key_default_map_png = get_default_election_map_png_cache_key()
+                cache.delete(cache_key_default_map_png)
+
             return Response({})
         else:
             return HttpResponseBadRequest()
@@ -395,7 +402,7 @@ class PollingPlacesJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    Retrieve a static embeddable image of an election.
+    Retrieve a static embeddable image of an election map.
     """
     queryset = Elections.objects
     renderer_classes = (PNGRenderer,)
@@ -408,6 +415,17 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
         cache_key = get_election_map_png_cache_key(election.id)
         cache.set(cache_key, png_image)
         return Response(png_image)
+
+    def list(self, request, format=None):
+        primaryElection = getDefaultElection()
+        if primaryElection is not None:
+            png_image = get_map_screenshot(primaryElection)
+
+            cache_key = get_default_election_map_png_cache_key()
+            cache.set(cache_key, png_image)
+            return Response(png_image)
+
+        return HttpResponseBadRequest()
 
 
 class StallsViewSet(viewsets.ModelViewSet):

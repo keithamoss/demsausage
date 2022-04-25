@@ -280,7 +280,15 @@ export function regenerateMapDataForElection(election: IElection) {
 
       const { response: responseFetchMapPNG } = await api.get(`/0.1/map_image/${election.id}/`, dispatch)
 
-      if (responseFetchMap.status === 200 && responseFetchExport.status === 200 && responseFetchMapPNG.status === 200) {
+      // @TODO Fix this so it only happens if this is the default election (or it all happens in the background server-side)
+      const { response: responseFetchDefaultMapPNG } = await api.get(`/0.1/map_image/`, dispatch)
+
+      if (
+        responseFetchMap.status === 200 &&
+        responseFetchExport.status === 200 &&
+        responseFetchMapPNG.status === 200 &&
+        responseFetchDefaultMapPNG.status === 200
+      ) {
         dispatch(sendSnackbarNotification('Polling place data regenerated! 🌭🎉'))
       }
     }
