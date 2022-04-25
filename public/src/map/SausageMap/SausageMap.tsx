@@ -249,7 +249,6 @@ class SausageMap extends React.PureComponent<IProps, IState> {
               <ToolbarGroup firstChild={true}>
                 <COVIDSafeFlatButton
                   label="COVID safe voting"
-                  fullWidth={true}
                   icon={<MapsLocalHospital color="red" />}
                   containerElement={
                     // eslint-disable-next-line
