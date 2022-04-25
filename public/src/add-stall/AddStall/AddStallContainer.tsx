@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import { getBaseURL } from '../../redux/modules/app'
 import { getLiveElections, IElection } from '../../redux/modules/elections'
 import { IStore } from '../../redux/modules/reducer'
 import AddStall from './AddStall'
@@ -25,10 +27,6 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
     this.onStallAdded = this.onStallAdded.bind(this)
   }
 
-  componentDidMount() {
-    document.title = 'Democracy Sausage | Report your sausage sizzle or cake stall'
-  }
-
   onStallAdded() {
     this.setState({ formSubmitted: true })
   }
@@ -40,13 +38,23 @@ class AddStallFormContainer extends React.Component<TComponentProps, IStateProps
     const showNoLiveElections = liveElections.length === 0
 
     return (
-      <AddStall
-        showNoLiveElections={showNoLiveElections}
-        showWelcome={!formSubmitted && !showNoLiveElections}
-        showThankYou={formSubmitted && !showNoLiveElections}
-        showForm={!formSubmitted && !showNoLiveElections}
-        onStallAdded={this.onStallAdded}
-      />
+      <React.Fragment>
+        <Helmet>
+          <title>Democracy Sausage | Add a sausage sizzle or cake stall to the map</title>
+
+          {/* Open Graph / Facebook / Twitter */}
+          <meta property="og:url" content={`${getBaseURL()}/add-stall`} />
+          <meta property="og:title" content="Democracy Sausage | Add a sausage sizzle or cake stall to the map" />
+        </Helmet>
+
+        <AddStall
+          showNoLiveElections={showNoLiveElections}
+          showWelcome={!formSubmitted && !showNoLiveElections}
+          showThankYou={formSubmitted && !showNoLiveElections}
+          showForm={!formSubmitted && !showNoLiveElections}
+          onStallAdded={this.onStallAdded}
+        />
+      </React.Fragment>
     )
   }
 }

@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import { getBaseURL } from '../../redux/modules/app'
 import { IElection } from '../../redux/modules/elections'
 import { IStore } from '../../redux/modules/reducer'
 import { fetchStallWithCredentials, IStall } from '../../redux/modules/stalls'
@@ -56,8 +58,6 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
   }
 
   async componentDidMount() {
-    document.title = 'Democracy Sausage | Update your sausage sizzle or cake stall'
-
     const { fetchStall, location, elections } = this.props
     const { response, json } = await fetchStall(location.query.stall_id, location.query.token, location.query.signature)
 
@@ -88,17 +88,27 @@ class EditStallFormContainer extends React.Component<TComponentProps, IStateProp
     }
 
     return (
-      <EditStall
-        showAPIErrors={errors !== undefined}
-        showWelcome={!formSubmitted && errors === undefined}
-        showThankYou={formSubmitted && errors === undefined}
-        showForm={!formSubmitted && errors === undefined}
-        stall={stall}
-        election={election}
-        errors={errors}
-        credentials={this.getCredentials()}
-        onStallUpdated={this.onStallUpdated}
-      />
+      <React.Fragment>
+        <Helmet>
+          <title>Democracy Sausage | Update your sausage sizzle or cake stall</title>
+
+          {/* Open Graph / Facebook / Twitter */}
+          <meta property="og:url" content={getBaseURL()} />
+          <meta property="og:title" content="Democracy Sausage | Update your sausage sizzle or cake stall" />
+        </Helmet>
+
+        <EditStall
+          showAPIErrors={errors !== undefined}
+          showWelcome={!formSubmitted && errors === undefined}
+          showThankYou={formSubmitted && errors === undefined}
+          showForm={!formSubmitted && errors === undefined}
+          stall={stall}
+          election={election}
+          errors={errors}
+          credentials={this.getCredentials()}
+          onStallUpdated={this.onStallUpdated}
+        />
+      </React.Fragment>
     )
   }
 }

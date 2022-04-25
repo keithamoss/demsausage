@@ -1,7 +1,8 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { ePollingPlaceFinderInit, setPollingPlaceFinderMode } from '../../redux/modules/app'
+import { ePollingPlaceFinderInit, getAPIBaseURL, getBaseURL, setPollingPlaceFinderMode } from '../../redux/modules/app'
 import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
 import { clearMapToSearch, IMapFilterOptions, IMapSearchResults } from '../../redux/modules/map'
 import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from '../../redux/modules/polling_places'
@@ -41,6 +42,9 @@ interface IStateProps {
   queriedPollingPlaces: Array<IPollingPlace>
   mapFilterOptions: IMapFilterOptions
 }
+
+const getPageTitle = (election: IElection | undefined) =>
+  election !== undefined ? `Democracy Sausage | ${election.name}` : 'Democracy Sausage'
 
 type TComponentProps = IStoreProps & IDispatchProps & IOwnProps
 class SausageMapContainer extends React.Component<TComponentProps, IStateProps> {
@@ -117,27 +121,37 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
       onClearMapSearch,
     } = this.props
     const { waitingForGeolocation, queriedPollingPlaces, mapFilterOptions } = this.state
-
     return (
-      <SausageMap
-        currentElection={currentElection}
-        embeddedMap={embeddedMap}
-        waitingForGeolocation={waitingForGeolocation}
-        queriedPollingPlaces={queriedPollingPlaces}
-        geolocationSupported={geolocationSupported}
-        mapSearchResults={mapSearchResults}
-        mapFilterOptions={mapFilterOptions}
-        onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
-          const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
-          const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
-          this.onSetQueriedPollingPlaces(pollingPlaces)
-        }}
-        onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
-        onOpenFinderForAddressSearch={this.onOpenFinderForAddressSearch}
-        onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
-        onClearMapSearch={onClearMapSearch}
-        onClickMapFilterOption={this.onClickMapFilterOption}
-      />
+      <React.Fragment>
+        <Helmet>
+          <title>{getPageTitle(currentElection)}</title>
+
+          {/* Open Graph / Facebook / Twitter */}
+          <meta property="og:url" content={`${getBaseURL()}/${getURLSafeElectionName(currentElection)}`} />
+          <meta property="og:title" content={getPageTitle(currentElection)} />
+          <meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${currentElection.id}/`} />
+        </Helmet>
+
+        <SausageMap
+          currentElection={currentElection}
+          embeddedMap={embeddedMap}
+          waitingForGeolocation={waitingForGeolocation}
+          queriedPollingPlaces={queriedPollingPlaces}
+          geolocationSupported={geolocationSupported}
+          mapSearchResults={mapSearchResults}
+          mapFilterOptions={mapFilterOptions}
+          onQueryMap={async (features: Array<IMapPollingPlaceFeature>) => {
+            const pollingPlaceIds: Array<number> = features.map((feature: IMapPollingPlaceFeature) => feature.getId())
+            const pollingPlaces = await fetchQueriedPollingPlaces(currentElection, pollingPlaceIds)
+            this.onSetQueriedPollingPlaces(pollingPlaces)
+          }}
+          onCloseQueryMapDialog={() => this.onClearQueriedPollingPlaces()}
+          onOpenFinderForAddressSearch={this.onOpenFinderForAddressSearch}
+          onOpenFinderForGeolocation={this.onOpenFinderForGeolocation}
+          onClearMapSearch={onClearMapSearch}
+          onClickMapFilterOption={this.onClickMapFilterOption}
+        />
+      </React.Fragment>
     )
   }
 }

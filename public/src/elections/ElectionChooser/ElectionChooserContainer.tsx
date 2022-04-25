@@ -1,6 +1,8 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { getBaseURL } from '../../redux/modules/app'
 import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
 import { clearMapToSearch } from '../../redux/modules/map'
 import { IStore } from '../../redux/modules/reducer'
@@ -34,10 +36,6 @@ class ElectionChooserContainer extends React.Component<TComponentProps, IStatePr
 
   static pageBaseURL = '/elections'
 
-  componentDidMount() {
-    document.title = ElectionChooserContainer.pageTitle
-  }
-
   render() {
     const { elections, onChooseElection } = this.props
 
@@ -45,7 +43,19 @@ class ElectionChooserContainer extends React.Component<TComponentProps, IStatePr
       return null
     }
 
-    return <ElectionChooser elections={elections} onChooseElection={onChooseElection} />
+    return (
+      <React.Fragment>
+        <Helmet>
+          <title>{ElectionChooserContainer.pageTitle}</title>
+
+          {/* Open Graph / Facebook / Twitter */}
+          <meta property="og:url" content={`${getBaseURL()}${ElectionChooserContainer.pageBaseURL}`} />
+          <meta property="og:title" content={ElectionChooserContainer.pageTitle} />
+        </Helmet>
+
+        <ElectionChooser elections={elections} onChooseElection={onChooseElection} />
+      </React.Fragment>
+    )
   }
 }
 

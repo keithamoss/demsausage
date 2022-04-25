@@ -13,11 +13,18 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { fade } from 'material-ui/utils/colorManipulator'
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import App from './App'
 import { ReactComponent as Logo } from './demsausage_logo.svg'
-import { fetchInitialAppState, IModule as IAppModule, setEmbedMapFlag } from './redux/modules/app'
+import {
+  fetchInitialAppState,
+  getAPIBaseURL,
+  getBaseURL,
+  IModule as IAppModule,
+  setEmbedMapFlag,
+} from './redux/modules/app'
 import {
   getElectionsToShowInAppBar,
   getLiveElections,
@@ -122,19 +129,9 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 
 type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps
 class AppContainer extends React.Component<TComponentProps, IStateProps> {
-  constructor(props: TComponentProps) {
-    super(props)
-
-    if (props.currentElection !== undefined) {
-      document.title = `Democracy Sausage | ${props.currentElection.name}`
-    }
-  }
-
   async componentDidMount() {
     const { getInitialAppState, params, setEmbedMapFromRoute, location } = this.props
     await getInitialAppState(params.electionName)
-
-    document.title = 'Democracy Sausage'
 
     if (new URLSearchParams(location.search).has('embed') === true) {
       setEmbedMapFromRoute(true)
@@ -158,12 +155,6 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
           nextProps.setElectionFromRoute(election.id)
         }
       }
-    }
-  }
-
-  UNSAFE_componentWillUpdate(nextProps: TComponentProps) {
-    if (nextProps.currentElection !== undefined) {
-      document.title = `Democracy Sausage | ${nextProps.currentElection.name}`
     }
   }
 
@@ -215,24 +206,45 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <App
-          muiThemePalette={muiTheme.palette}
-          app={app}
-          snackbars={snackbars}
-          elections={elections}
-          currentElection={currentElection}
-          showElectionAppBar={showElectionAppBar}
-          showFooterNavBar={showFooterNavBar}
-          defaultBreakPoint={DEFAULT_BREAK_POINT}
-          isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
-          handleSnackbarClose={handleSnackbarClose}
-          onOpenDrawer={onOpenDrawer}
-          onClickDrawerLink={onClickDrawerLink}
-          onClickOutboundDrawerLink={onClickOutboundDrawerLink}
-          locationPathName={location.pathname}
-          children={children}
-          content={content}
-        />
+        <React.Fragment>
+          <Helmet>
+            <title>Democracy Sausage</title>
+
+            {/* Open Graph / Facebook */}
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content={getBaseURL()} />
+            <meta property="og:title" content="Democracy Sausage" />
+            <meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/`} />
+            <meta
+              property="og:description"
+              content="A real-time crowd-sourced map of sausage and cake availability at Australian elections. It's practically part of the Australian Constitution. Or something. #demsausage"
+            />
+
+            {/* Twitter */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:site" content="@DemSausage" />
+            <meta name="twitter:creator" content="@DemSausage" />
+          </Helmet>
+
+          <App
+            muiThemePalette={muiTheme.palette}
+            app={app}
+            snackbars={snackbars}
+            elections={elections}
+            currentElection={currentElection}
+            showElectionAppBar={showElectionAppBar}
+            showFooterNavBar={showFooterNavBar}
+            defaultBreakPoint={DEFAULT_BREAK_POINT}
+            isResponsiveAndOverBreakPoint={isResponsiveAndOverBreakPoint(browser, responsiveDrawer)}
+            handleSnackbarClose={handleSnackbarClose}
+            onOpenDrawer={onOpenDrawer}
+            onClickDrawerLink={onClickDrawerLink}
+            onClickOutboundDrawerLink={onClickOutboundDrawerLink}
+            locationPathName={location.pathname}
+            children={children}
+            content={content}
+          />
+        </React.Fragment>
       </MuiThemeProvider>
     )
   }
