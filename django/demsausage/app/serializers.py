@@ -245,16 +245,16 @@ class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
         if stall_representation is not None:
             if "noms" in stall_representation:
                 noms_representation = stall_representation.pop("noms")
-                for key in noms_representation:
-                    representation[f"stall_noms_{key}"] = noms_representation[key]
+                for noms_name, prop in noms_schema["properties"].items():
+                    representation[f"stall_noms_{noms_name}"] = 1 if noms_name in noms_representation and noms_representation[noms_name] is True else 0
 
             for key in stall_representation:
                 representation[f"stall_{key}"] = stall_representation[key]
 
         extras_representation = representation.pop("extras")
-        if extras_representation is not None and "noms" in extras_representation:
-            for key in extras_representation["noms"]:
-                representation[f"noms_{key}"] = extras_representation["noms"][key]
+        if extras_representation is not None:
+            for key in extras_representation:
+                representation[f"extras_{key.lower()}"] = extras_representation[key]
 
         representation["divisions"] = ", ".join(representation["divisions"]) if representation["divisions"] is not None else ""
 
