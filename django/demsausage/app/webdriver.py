@@ -18,6 +18,8 @@ def get_map_screenshot(election):
     # firefox_options.add_argument("--no-sandbox")
     # firefox_options.add_argument("--ignore-certificate-errors")
     firefox_options.add_argument("--kiosk")  # Ensures the window size we set is the actual output size of the screenshot
+    # firefox_options.add_argument("--start-fullscreen")
+    # firefox_options.add_argument("--start-maximized")
     firefox_options.binary_location = FirefoxBinary('/usr/lib/firefox-esr/firefox-esr')
 
     if os.path.isfile('/app/logs/webdriver/geckodriver.log') is False:
@@ -26,6 +28,8 @@ def get_map_screenshot(election):
             pass
 
     driver = webdriver.Firefox(service=Service(GeckoDriverManager().install(), log_path='/app/logs/webdriver/geckodriver.log'), options=firefox_options)
+
+    # driver.maximize_window()
 
     # https://typito.com/blog/video-resolutions/
     # driver.set_window_size(2560, 1440)
