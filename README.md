@@ -171,3 +171,46 @@ scp -r demsausage:/apps/digitalocean-stack/logs/ .
 docker-compose logs service_name
 
 docker-compose -f docker-compose-prod-demsausage.yml logs service_name
+
+# Open Graph rich link previews
+
+We're using the [Open Graph](https://ogp.me) standard to show rich link previews for the socials.
+
+For testing, [Social Share Preview](https://socialsharepreview.com) (and its browser extension) are super useful. [MetaTags.io](https://metatags.io) was also useful.
+
+References:
+
+- [Open Graph Spec](https://ogp.me)
+- [Twitter Cards Spec](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started)
+
+## localtunnel testing
+
+Sourced from [this StackOverflow post](https://stackoverflow.com/questions/8569892/how-to-test-open-graph-on-localhost).
+
+https://github.com/localtunnel/localtunnel
+
+`brew install localtunnel`
+`lt --port 443 --subdomain public-test-demsausage --local-https --allow-invalid-cert --print-requests`
+
+We've also added `public-test-demsausage.loca.lt` to our local dev NGinx config.
+
+Issues:
+
+The docs say we can set `-local-host public.test.democracysausage.org` to have it change the hostname to look like our local testing domain, but that didn't work. So we worked around it per the details below.
+
+Generating the map preview images fails with CORS errors because it assumes it's on public.test.democracysausage.org (Could fix by changing `PUBLIC_SITE_URL` for the `django` container).
+
+The simplest (read: least changes required) fix would be to just get CORS working so the loca.lt domain can request to public.test.democracysausage.org
+
+### settings.py
+
+`ALLOWED_HOSTS_AND_WHITELIST = f"{get_env('ALLOWED_HOSTS_AND_WHITELIST')},https://public-test-demsausage.loca.lt"`
+
+### app.tsx
+
+```
+export function getAPIBaseURL(): string {
+  // return process.env.REACT_APP_API_BASE_URL!
+  return 'https://public-test-demsausage.loca.lt/api'
+}
+```
