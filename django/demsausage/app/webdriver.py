@@ -17,6 +17,7 @@ def get_map_screenshot(election):
     firefox_options.add_argument("--headless")
     # firefox_options.add_argument("--no-sandbox")
     # firefox_options.add_argument("--ignore-certificate-errors")
+    firefox_options.add_argument("--kiosk")  # Ensures the window size we set is the actual output size of the screenshot
     firefox_options.binary_location = FirefoxBinary('/usr/lib/firefox-esr/firefox-esr')
 
     if os.path.isfile('/app/logs/webdriver/geckodriver.log') is False:
@@ -28,7 +29,8 @@ def get_map_screenshot(election):
 
     # https://typito.com/blog/video-resolutions/
     # driver.set_window_size(2560, 1440)
-    driver.set_window_size(1920, 1080)
+    # driver.set_window_size(1920, 1080)
+    driver.set_window_size(1200, 630)
     driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election)}?embed=1')
 
     # Give the map and basemap tiles time to load
