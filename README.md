@@ -183,6 +183,27 @@ References:
 - [Open Graph Spec](https://ogp.me)
 - [Twitter Cards Spec](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started)
 
+## Outcome
+
+Well that's annoying...it only works locally, not in production. It looks like we need SSR and all of that jazz for the dynamic react-helmet tags to work.
+
+And it doesn't work because the search engine crawlers don't execute JavaScript.
+
+Don't know why it worked locally, but maybe create-react-app is doing something fancy?
+
+So, what are our options?
+
+1. Use Next.js
+2. Use a service like https://prerender.io
+3. Roll our own little server like https://blog.logrocket.com/adding-dynamic-meta-tags-react-app-without-ssr/
+
+References:
+
+- https://stackoverflow.com/a/55888431
+- https://stackoverflow.com/a/70796399
+- https://stackoverflow.com/a/62559163
+- https://www.indiehackers.com/post/solved-react-app-with-dynamic-meta-tags-without-ssr-cdda6da385 (see the comment by RBouschery)
+
 ## Testing
 
 🤦‍♂️ the [Social Share Preview](https://socialsharepreview.com) browser extension works perfectly well with https://public.test.democracysausage.org
