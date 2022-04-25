@@ -13,3 +13,9 @@ Solution: We're already using RQ, so create a simple set of RQ jobs that run the
 Edit: Oh, wait, we'd already lodged a ticket for this: https://github.com/keithamoss/demsausage/issues/52 🤦‍♂️
 
 [1] https://support.cloudflare.com/hc/en-us/articles/115003011431-Troubleshooting-Cloudflare-5XX-errors#524error
+
+# usehooks-ts needs an "appropriate loader"
+
+We're pinned to 2.2.1 until it's resolved.
+
+Ref: https://github.com/juliencrn/usehooks-ts/issues/97

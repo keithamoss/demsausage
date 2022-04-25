@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { AppBar } from 'material-ui'
 import { BodyContainer, ResponsiveAppBar, ResponsiveDrawer } from 'material-ui-responsive-drawer'
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation'
 import Divider from 'material-ui/Divider'
@@ -8,6 +9,7 @@ import Paper from 'material-ui/Paper'
 import Snackbar from 'material-ui/Snackbar'
 import Subheader from 'material-ui/Subheader'
 import {
+  ActionCode,
   ActionInfo,
   ActionSearch,
   ActionStore,
@@ -26,7 +28,7 @@ import ElectionAppBarContainer from './elections/ElectionAppBar/ElectionAppBarCo
 import FacebookIcon from './icons/fontawesome/facebook'
 import InstagramIcon from './icons/fontawesome/instagram'
 import TwitterIcon from './icons/fontawesome/twitter'
-import { IModule as IAppModule } from './redux/modules/app'
+import { getBaseURL, IModule as IAppModule } from './redux/modules/app'
 import { getURLSafeElectionName, IElection } from './redux/modules/elections'
 import { IModule as ISnackbarsModule } from './redux/modules/snackbars'
 
@@ -46,6 +48,11 @@ const TitleContainer = styled.div`
 const TitleLogo = styled.img`
   height: 32px;
   margin-right: 10px;
+`
+
+const UnstyledAnchor = styled.a`
+  text-decoration: none;
+  color: inherit;
 `
 
 class MenuListItem extends React.Component<any, any> {
@@ -222,6 +229,15 @@ class App extends React.Component<IProps, {}> {
                 contentMuiName={content.type.muiName}
               />
               <MenuListItem
+                primaryText="Embed the map"
+                leftIcon={<ActionCode />}
+                containerElement={<Link to="/embed-builder" />}
+                onClick={onClickDrawerLink}
+                locationPathName={locationPathName}
+                locationPathNameMatch="/embed-builder"
+                muiThemePalette={muiThemePalette}
+              />
+              <MenuListItem
                 primaryText="FAQs and About Us"
                 leftIcon={<ActionInfo />}
                 containerElement={<Link to="/about" />}
@@ -298,20 +314,42 @@ class App extends React.Component<IProps, {}> {
             style={styles.linearProgressStyle}
           />
 
-          <ResponsiveAppBar
-            breakPoint={defaultBreakPoint}
-            onLeftIconButtonClick={onOpenDrawer}
-            title={
-              <TitleContainer>
-                <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage
-              </TitleContainer>
-            }
-            zDepth={0}
-            style={{
-              position: 'relative',
-              left: isResponsiveAndOverBreakPoint === true ? '0px !important' : undefined,
-            }}
-          />
+          {app.embedded_map === false && (
+            <ResponsiveAppBar
+              breakPoint={defaultBreakPoint}
+              onLeftIconButtonClick={onOpenDrawer}
+              title={
+                <TitleContainer>
+                  <TitleLogo src="/icons/sausage+cake_big.png" /> Democracy Sausage
+                </TitleContainer>
+              }
+              zDepth={0}
+              style={{
+                position: 'relative',
+                left: isResponsiveAndOverBreakPoint === true ? '0px !important' : undefined,
+              }}
+            />
+          )}
+
+          {app.embedded_map === true && (
+            <AppBar
+              title={
+                <TitleContainer>
+                  <TitleLogo src="/icons/sausage+cake_big.png" />{' '}
+                  <UnstyledAnchor href={`${getBaseURL()}`} target="_parent">
+                    Democracy Sausage
+                  </UnstyledAnchor>
+                </TitleContainer>
+              }
+              showMenuIconButton={false}
+              zDepth={0}
+              style={{
+                position: 'fixed',
+                bottom: 0,
+                width: '100%',
+              }}
+            />
+          )}
 
           {showElectionAppBar === true && app.embedded_map === false && (
             <ElectionAppBarContainer

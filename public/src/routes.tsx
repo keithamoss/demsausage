@@ -3,6 +3,7 @@ import AddStallContainer from './add-stall/AddStall/AddStallContainer'
 import AppContainer from './AppContainer'
 import EditStallContainer from './edit-stall/EditStall/EditStallContainer'
 import ElectionChooserContainer from './elections/ElectionChooser/ElectionChooserContainer'
+import EmbedBuilder from './embed/EmbedBuilder/EmbedBuilder'
 import PollingPlaceFinderContainer from './finder/PollingPlaceFinder/PollingPlaceFinderContainer'
 import SausageMapContainer from './map/SausageMap/SausageMapContainer'
 import PollingPlacePermalinkContainer from './polling_places/PollingPlacePermalink/PollingPlacePermalinkContainer'
@@ -21,6 +22,7 @@ const routes = (_store: IStore) => {
       <Route path="/sausagelytics_v1(/:electionName)" components={{ content: SausagelyticsContainerV1 }} />
       <Route path="/add-stall" components={{ content: AddStallContainer }} />
       <Route path="/edit-stall" components={{ content: EditStallContainer }} />
+      <Route path="/embed-builder" components={{ content: EmbedBuilder }} />
       <Route path="/about" components={{ content: AboutPage }} />
       <Route path="/media" components={{ content: MediaPage }} />
       <Route path="/(:electionName)/stalls/(:stallId)" components={{ content: PollingPlacePermalinkContainer }} />
