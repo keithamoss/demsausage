@@ -183,6 +183,12 @@ References:
 - [Open Graph Spec](https://ogp.me)
 - [Twitter Cards Spec](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started)
 
+## Testing
+
+🤦‍♂️ the [Social Share Preview](https://socialsharepreview.com) browser extension works perfectly well with https://public.test.democracysausage.org
+
+..so I don't think we needed localtunnel after all? Like, it's only useful for checking with the web-based versions of the testers.
+
 ## localtunnel testing
 
 Sourced from [this StackOverflow post](https://stackoverflow.com/questions/8569892/how-to-test-open-graph-on-localhost).
