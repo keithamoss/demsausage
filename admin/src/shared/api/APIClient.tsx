@@ -53,11 +53,11 @@ export class APIClient {
     if (isDevelopment() === true) {
       // tslint:disable-next-line:no-console
       console.error(error)
+    } else {
+      Sentry.captureException(`${error} For ${url}`)
+      Sentry.captureException(error)
+      Sentry.showReportDialog()
     }
-
-    Sentry.captureException(`${error} For ${url}`)
-    Sentry.captureException(error)
-    Sentry.showReportDialog()
   }
 
   public async get(
