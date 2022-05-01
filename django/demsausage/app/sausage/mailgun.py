@@ -16,21 +16,26 @@ class MailgunException(APIException):
 
 
 def send(body):
-    r = requests.post(
-        get_env("MAILGUN_API_BASE_URL") + "/messages",
-        auth=("api", get_env("MAILGUN_API_KEY")),
-        data={
-            **{
-                "from": get_env("MAILGUN_FROM_ADDRESS"),
-                "h:Reply-To": get_env("MAILGUN_REPLY_TO_ADDRESS"),
-            },
-            **body
-        }
-    )
+    if is_development() is True:
+        print(f"Mailgun Dev Wrapper: Subject = {body['subject']}, To = {body['to']}, HTML = {body['html'][:100]}")
+        return True
 
-    if r.status_code != 200:
-        raise MailgunException("Mailgun Error ({}): {}".format(r.status_code, r.text))
-    return True
+    else:
+        r = requests.post(
+            get_env("MAILGUN_API_BASE_URL") + "/messages",
+            auth=("api", get_env("MAILGUN_API_KEY")),
+            data={
+                **{
+                    "from": get_env("MAILGUN_FROM_ADDRESS"),
+                    "h:Reply-To": get_env("MAILGUN_REPLY_TO_ADDRESS"),
+                },
+                **body
+            }
+        )
+
+        if r.status_code != 200:
+            raise MailgunException("Mailgun Error ({}): {}".format(r.status_code, r.text))
+        return True
 
 
 def get_mail_template(template_name, params=None):
