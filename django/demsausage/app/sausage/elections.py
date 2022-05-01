@@ -658,6 +658,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         indexes_to_remove = []
         for polling_places in [i for i in polling_places_group_by.values() if len(i) >= 2]:
+            # @TOOD Example links or hacky Google Maps debugging help
+            # https://www.google.com.au/maps/place/-37.87558+144.79174
+            # https://www.google.com.au/maps/place/Queen+of+Peace+Parish+Primary,+62+Everingham+Rd,+Altona+Meadows+VIC+3028 (note: does not zoom, but just need to click result)
+
             # Try to ensure that the group polling places are actually the same place
             unique_keys = list(set(["{}/{}".format(pp["name"], pp["premises"]) for pp in polling_places]))
             if len(unique_keys) > 1:
