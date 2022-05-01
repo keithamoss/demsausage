@@ -270,27 +270,7 @@ export function regenerateMapDataForElection(election: IElection) {
     if (response.status !== 200) {
       dispatch(sendSnackbarNotification('Error clearing polling place data cache'))
     } else if (response.status === 200) {
-      const { response: responseFetchMap } = await api.get('/0.1/map/', dispatch, {
-        election_id: election.id,
-      })
-
-      const { response: responseFetchExport } = await api.get('/0.1/export/', dispatch, {
-        election_id: election.id,
-      })
-
-      const { response: responseFetchMapPNG } = await api.get(`/0.1/map_image/${election.id}/`, dispatch)
-
-      // @TODO Fix this so it only happens if this is the default election (or it all happens in the background server-side)
-      const { response: responseFetchDefaultMapPNG } = await api.get(`/0.1/map_image/`, dispatch)
-
-      if (
-        responseFetchMap.status === 200 &&
-        responseFetchExport.status === 200 &&
-        responseFetchMapPNG.status === 200 &&
-        responseFetchDefaultMapPNG.status === 200
-      ) {
-        dispatch(sendSnackbarNotification('Polling place data regenerated! 🌭🎉'))
-      }
+      dispatch(sendSnackbarNotification('Polling place data is being regenerated! 🌭🎉'))
     }
   }
 }

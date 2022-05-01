@@ -3,7 +3,7 @@ from datetime import datetime
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
                                   PollingPlaceStatus, ProfileSettings,
-                                  StallStatus)
+                                  StallStatus, TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
@@ -204,3 +204,20 @@ class ElectoralBoundaries(models.Model):
 
     class Meta:
         unique_together = ("division_name", "loader_id")
+
+
+class TaskResults(models.Model):
+    "The result store for our task queue"
+
+    job_id = models.TextField()
+    job_name = models.TextField()
+    job_func_name = models.TextField()
+    queue = models.TextField()
+    worker = models.TextField()
+    status = models.TextField(choices=[(tag, tag.value) for tag in TaskStatus])
+    result = JSONField(default=None, blank=True, null=True)
+    meta = JSONField(default=None, blank=True, null=True)
+    job_args = JSONField(default=None, blank=True, null=True)
+    job_kwargs = JSONField(default=None, blank=True, null=True)
+    date_enqueued = models.DateTimeField()
+    date_done = models.DateTimeField()

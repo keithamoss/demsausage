@@ -6,7 +6,7 @@ authors = ["Keith Moss <keithamoss@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^4.0"
+Django = "^3.2.13"
 psycopg2-binary = "^2.9.3"
 djangorestframework = "^3.13.1"
 django-cors-headers = "^3.11.0"
@@ -29,6 +29,9 @@ chardet = "^4.0.0"
 drf-spectacular = "^0.22.1"
 selenium = "^4.1.3"
 webdriver-manager = "^3.5.4"
+pytz = "^2022.1"
+rq = "^1.10.1"
+django-rq = "^2.5.1"
 
 [tool.poetry.dev-dependencies]
 

@@ -38,3 +38,11 @@ class StallStatus(str, EnumBase):
 
     def __str__(self):
         return self.value
+
+
+class TaskStatus(str, EnumBase):
+    SUCCESS = "Success"
+    FAILED = "Failed"
+
+    def __str__(self):
+        return self.value

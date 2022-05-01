@@ -18,6 +18,17 @@ services:
       - ./db-pg/data:/var/lib/postgresql/data
 
       - ./db-pg/scripts:/var/lib/postgresql/scripts
+  redis:
+    image: bitnami/redis:6.2-debian-10
+    ports:
+      - "6379:6379"
+    env_file:
+      - secrets/redis.env
+    volumes:
+      - ./redis:/bitnami/redis/data
+    # https://github.com/docker-library/redis/issues/35#issuecomment-360810072
+    sysctls:
+      net.core.somaxconn: "511"
   memcached:
     image: memcached
     expose:
@@ -61,6 +72,29 @@ services:
     depends_on:
       - db
       - memcached
+  python_rq_worker:
+    build: django/
+    entrypoint: /app/docker-entrypoint.sh
+    command: python_rq_supervisord
+    volumes:
+      - ./django/:/app:delegated
+    env_file:
+      - secrets/sausage-web.dev.env
+      - secrets/sausage-web-db.dev.env
+    depends_on:
+      - db
+      - redis
+  rq_dashboard:
+    build: rq-dashboard/
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./rq-dashboard/:/app:delegated
+    ports:
+      - "9181:9181"
+    env_file:
+      - secrets/sausage-rq-dashboard.dev.env
+    depends_on:
+      - redis
   frontend_public:
     image: node:16-alpine3.14
     entrypoint: /app/docker-entrypoint.sh
@@ -98,7 +132,7 @@ services:
       - "443:443"
       - "3001:3001"
       - "8001:8001"
-    # So Django can talk to the nginx container
+    # So Django can talk to the nginx container for WebDriver screenshot generation
     # Ref: https://stackoverflow.com/a/60026589
     networks:
       default:

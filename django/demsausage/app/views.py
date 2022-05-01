@@ -17,8 +17,7 @@ from demsausage.app.sausage.elections import (
     LoadPollingPlaces, RollbackPollingPlaces,
     get_default_election_map_png_cache_key, get_election_map_png_cache_key,
     get_elections_cache_key, get_polling_place_geojson_cache_key,
-    get_polling_place_json_cache_key, getDefaultElection,
-    regenerate_cached_election_data)
+    get_polling_place_json_cache_key, getDefaultElection)
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
                                             send_stall_edited_email,
@@ -44,6 +43,7 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
+from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -185,7 +185,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
         if rollback.is_dry_run() is True:
             # Regenerate GeoJSON because the loader does this and transactions don't help us here :)
-            regenerate_cached_election_data(election.id)
+            task_regenerate_cached_election_data.delay(election_id=election.id)
             raise BadRequest({"message": "Rollback", "logs": rollback.collects_logs()})
         rollback.collects_logs()
         return Response({})
@@ -377,6 +377,8 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
             if defaultElection is not None and defaultElection.id == request.data['election_id']:
                 cache_key_default_map_png = get_default_election_map_png_cache_key()
                 cache.delete(cache_key_default_map_png)
+
+            task_regenerate_cached_election_data.delay(election_id=request.data['election_id'])
 
             return Response({})
         else:

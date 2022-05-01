@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'simple_history',
     'django_filters',
     'drf_spectacular',
+    'django_rq'
 ]
 
 MIDDLEWARE = [
@@ -270,6 +271,23 @@ SPECTACULAR_SETTINGS = {
     },
     'VERSION': '0.1',
 }
+
+# RQ and Django-RQ
+RQ = {
+    "DEFAULT_RESULT_TTL": 60 * 60 * 24,
+    'QUEUE_CLASS': 'demsausage.rq.custom_classes.CustomQueue',
+    'WORKER_CLASS': 'demsausage.rq.custom_classes.CustomWorker',
+    'JOB_CLASS': 'demsausage.rq.custom_classes.CustomJob',
+}
+
+RQ_QUEUES = {
+    'cache_hydration': {
+        'URL': get_env("RQ_REDIS_URL"),
+        'DEFAULT_TIMEOUT': 500,
+    }
+}
+
+RQ_API_TOKEN = get_env("RQ_API_KEY")
 
 # Sentry SDK
 
