@@ -172,6 +172,12 @@ docker-compose logs service_name
 
 docker-compose -f docker-compose-prod-demsausage.yml logs service_name
 
+# Disk space usage
+
+```
+docker image prune -a --filter "until=720h"
+```
+
 # Open Graph rich link previews
 
 We're using the [Open Graph](https://ogp.me) standard to show rich link previews for the socials.
