@@ -35,6 +35,7 @@ interface IDispatchProps {
 interface IStateProps {
   waitingForGeolocation: boolean
   addressSearchResults: Array<IGoogleAddressSearchResult>
+  searchText: string
 }
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
@@ -44,7 +45,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   constructor(props: TComponentProps) {
     super(props)
 
-    this.state = { waitingForGeolocation: false, addressSearchResults: [] }
+    this.state = { waitingForGeolocation: false, addressSearchResults: [], searchText: '' }
 
     this.onRequestLocationPermissions = props.onRequestLocationPermissions.bind(this)
     this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
@@ -82,7 +83,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
     // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
 
-    this.onPlaceChosen()
+    this.onPlaceChosen(place)
     onChoosePlace(place)
   }
 
@@ -110,9 +111,9 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
     }
   }
 
-  onPlaceChosen() {
+  onPlaceChosen(place: IGoogleGeocodeResult) {
     // eslint-disable-next-line react/no-access-state-in-setstate
-    this.setState({ ...this.state, addressSearchResults: [] })
+    this.setState({ ...this.state, addressSearchResults: [], searchText: place.formatted_address })
   }
 
   private getAutoFocus() {
@@ -152,7 +153,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
 
   render() {
     const { onChoosePlace, onCancelSearch, fetchLocationFromGeocoder, componentRestrictions, style } = this.props
-    const { addressSearchResults } = this.state
+    const { addressSearchResults, searchText } = this.state
 
     return (
       <div>
@@ -173,6 +174,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
                 // tslint:disable-next-line: no-empty
                 onRequestSearch={this.canUseGPS() === true ? this.onRequestLocationPermissions : () => {}}
                 onCancelSearch={onCancelSearch}
+                searchText={searchText}
                 style={style}
               />
             )
@@ -245,7 +247,7 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
             value: results.length,
           })
 
-          onPlaceChosen()
+          onPlaceChosen(results[0])
           onChoosePlace(results[0], addressResult)
         } else {
           gaTrack.event({

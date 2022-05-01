@@ -136,7 +136,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
 
     this.state = {
       data: [],
-      searchText: '',
+      searchText: props.searchText !== undefined ? props.searchText : '',
     }
 
     const { google } = window
@@ -186,6 +186,15 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
       1500
       // { maxWait: 5000 },
     )
+  }
+
+  componentDidUpdate(prevProps: IProps, _prevState: IState) {
+    if (this.props.searchText !== undefined && this.props.searchText !== prevProps.searchText) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        searchText: this.props.searchText,
+      })
+    }
   }
 
   getCurrentDataState() {
