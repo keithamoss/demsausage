@@ -26,6 +26,20 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## May 1st 2022 (loaded May 2nd)
+
+Source: `prdelms.gaz.statics.220501.09.00.02.csv`
+Source: Overseas polling places retrieved May 1st - No change (number with in-person voting = 19)
+
+### Data file formatting errors (AEC notified; fixed at ingest)
+
+1. Muswellbrook (PPID=1131): Had one extra empty column included between 'AdvBoothLocation' and 'EntrancesDesc'. Fixed manually.
+   `"Hall",""," double door"`
+
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Altona North (PPID=3678): -37.83629165982374, 144.84627682788758 (was -37.87558 144.79174). Incorrectly duplicated the coordinates of Altona Meadows East (PPID=83734).
+
 ## April 23rd 2022 (loaded April 23rd)
 
 Source: `prdelms.gaz.statics.220423.09.00.02.csv`
