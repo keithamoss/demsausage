@@ -20,6 +20,9 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
         task_regenerate_cached_election_data.delay(election_id=instance.polling_place.election_id)
 
 
+# I think this is only for when we have unofficial polling places?
+# The usual polling place loading process triggers the function, but
+# the logic prevents it getting to cache regeneration.
 @receiver(post_save, sender=PollingPlaces)
 def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, created, **kwargs):
     if instance.status == PollingPlaceStatus.ACTIVE:
