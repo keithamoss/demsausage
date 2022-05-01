@@ -4,7 +4,7 @@ import AppContainer from './AppContainer'
 import EditStallContainer from './edit-stall/EditStall/EditStallContainer'
 import ElectionChooserContainer from './elections/ElectionChooser/ElectionChooserContainer'
 import EmbedBuilder from './embed/EmbedBuilder/EmbedBuilder'
-import PollingPlaceFinderContainer from './finder/PollingPlaceFinder/PollingPlaceFinderContainer'
+import SausageNearMeFinder from './finder/SausageNearMeFinder/SausageNearMeFinder'
 import SausageMapContainer from './map/SausageMap/SausageMapContainer'
 import PollingPlacePermalinkContainer from './polling_places/PollingPlacePermalink/PollingPlacePermalinkContainer'
 import { IStore } from './redux/modules/reducer'
@@ -17,7 +17,8 @@ const routes = (_store: IStore) => {
   return (
     <Route component={AppContainer}>
       <Route path="/elections" components={{ content: ElectionChooserContainer }} />
-      <Route path="/search(/:electionName)" components={{ content: PollingPlaceFinderContainer }} />
+      {/* <Route path="/search(/:electionName)" components={{ content: PollingPlaceFinderContainer }} /> */}
+      <Route path="/search(/:electionName)" components={{ content: SausageNearMeFinder }} />
       <Route path="/sausagelytics(/:electionName)" components={{ content: SausagelyticsContainer }} />
       <Route path="/sausagelytics_v1(/:electionName)" components={{ content: SausagelyticsContainerV1 }} />
       <Route path="/add-stall" components={{ content: AddStallContainer }} />

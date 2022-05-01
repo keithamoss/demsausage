@@ -16,6 +16,7 @@ import reportWebVitals from './reportWebVitals'
 import getRoutes from './routes'
 import { AnalyticsMiddleware, fireAnalyticsTracking } from './shared/analytics/GoogleAnalytics'
 import { APIClient } from './shared/api/APIClient'
+import { rtkQueryErrorLogger, sausageApi } from './shared/api/APIClient-RTK'
 
 // const Config: IConfig = require("Config") as any
 
@@ -45,7 +46,12 @@ const store: Store<IStore> = createStore(
   reducers,
   composeEnhancers(
     responsiveStoreEnhancer,
-    applyMiddleware(thunkMiddleware.withExtraArgument(new APIClient()), ...Middleware)
+    applyMiddleware(
+      thunkMiddleware.withExtraArgument(new APIClient()),
+      sausageApi.middleware,
+      rtkQueryErrorLogger,
+      ...Middleware
+    )
   )
 )
 

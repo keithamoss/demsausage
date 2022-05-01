@@ -4,6 +4,7 @@ import { routerReducer } from 'react-router-redux'
 import * as Redux from 'redux'
 import { reducer as form } from 'redux-form'
 import { responsiveStateReducer } from 'redux-responsive'
+import { sausageApi } from '../../shared/api/APIClient-RTK'
 import { default as app, IModule as IAppModule } from './app'
 import { default as elections, IModule as IElectionsModule } from './elections'
 import { default as map, IModule as IMapModule } from './map'
@@ -40,6 +41,7 @@ const rootReducer: Redux.Reducer<IStore> = Redux.combineReducers<IStore>({
   form: formReducer.plugin({ pollingPlace: pollingPlaceFormReducer }),
   browser: responsiveStateReducer,
   responsiveDrawer,
+  sausageApi: sausageApi.reducer,
 } as any)
 
 export default rootReducer
