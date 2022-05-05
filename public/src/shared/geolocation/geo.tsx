@@ -119,7 +119,7 @@ export function searchPollingPlacesByGeolocation(
     // @ts-ignore-next-line
     async (position: Position, place: IGoogleGeocodeResult, locationSearched: string) => {
       if (onGeolocationComplete !== undefined) {
-        onGeolocationComplete()
+        onGeolocationComplete(position, place, locationSearched)
       }
 
       dispatch(

@@ -21,6 +21,10 @@ interface IProps {
   autoFocus?: boolean
   hintText: string
   style?: any
+  searchText?: string
+  // This is a giant hack to allow parent components like SausageNearMe to override initMode without having to interact with the Redux store.
+  // Improve this in the rebuild once we're using modern React + Redux Toolkit
+  initModeOverride?: ePollingPlaceFinderInit
 }
 interface IStoreProps {
   initMode: ePollingPlaceFinderInit
@@ -45,7 +49,11 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   constructor(props: TComponentProps) {
     super(props)
 
-    this.state = { waitingForGeolocation: false, addressSearchResults: [], searchText: '' }
+    this.state = {
+      waitingForGeolocation: false,
+      addressSearchResults: [],
+      searchText: props.searchText !== undefined ? props.searchText : '',
+    }
 
     this.onRequestLocationPermissions = props.onRequestLocationPermissions.bind(this)
     this.onWaitForGeolocation = this.onWaitForGeolocation.bind(this)
@@ -57,9 +65,11 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 
   componentDidMount() {
-    const { initMode } = this.props
+    const { initMode, initModeOverride } = this.props
 
-    if (initMode === ePollingPlaceFinderInit.GEOLOCATION) {
+    const actualInitMode = initModeOverride !== undefined ? initModeOverride : initMode
+
+    if (actualInitMode === ePollingPlaceFinderInit.GEOLOCATION) {
       // GooglePlacesAutocompleteList loads the Google APIs for us - but if we come here and try to
       // use it too soon for a geolocation request it may not be loaded yet
       const intervalId = window.setInterval(() => {
@@ -117,7 +127,12 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
   }
 
   private getAutoFocus() {
-    return this.props.autoFocus === true || this.props.initMode === ePollingPlaceFinderInit.FOCUS_INPUT
+    return (
+      this.props.autoFocus === true ||
+      (this.props.initMode === ePollingPlaceFinderInit.FOCUS_INPUT &&
+        (this.props.initModeOverride === undefined ||
+          this.props.initModeOverride === ePollingPlaceFinderInit.FOCUS_INPUT))
+    )
   }
 
   private getHintText() {
@@ -175,6 +190,7 @@ class GooglePlacesAutocompleteList extends React.PureComponent<TComponentProps, 
                 onRequestSearch={this.canUseGPS() === true ? this.onRequestLocationPermissions : () => {}}
                 onCancelSearch={onCancelSearch}
                 searchText={searchText}
+                value={searchText}
                 style={style}
               />
             )

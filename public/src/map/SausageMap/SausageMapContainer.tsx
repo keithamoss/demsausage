@@ -4,11 +4,17 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { ePollingPlaceFinderInit, getAPIBaseURL, getBaseURL, setPollingPlaceFinderMode } from '../../redux/modules/app'
 import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
-import { clearMapToSearch, IMapFilterOptions, IMapSearchResults } from '../../redux/modules/map'
+import {
+  clearMapToSearch,
+  IMapFilterOptions,
+  IMapSearchResults,
+  setSausageNearMeSearchGeocodePlaceResult,
+} from '../../redux/modules/map'
 import { fetchPollingPlacesByIds, IMapPollingPlaceFeature, IPollingPlace } from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import { gaTrack } from '../../shared/analytics/GoogleAnalytics'
 import { searchPollingPlacesByGeolocation } from '../../shared/geolocation/geo'
+import { IGoogleGeocodeResult } from '../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete'
 import SausageMap from './SausageMap'
 
 interface IRouteProps {
@@ -31,6 +37,7 @@ interface IStoreProps {
 }
 
 interface IDispatchProps {
+  onGeolocationComplete: Function
   fetchQueriedPollingPlaces: Function
   onOpenFinderForAddressSearch: Function
   onOpenFinderForGeolocation: Function
@@ -94,9 +101,11 @@ class SausageMapContainer extends React.Component<TComponentProps, IStateProps> 
     this.setState({ ...this.state, waitingForGeolocation: true })
   }
 
-  onGeolocationComplete() {
+  onGeolocationComplete(position: any /* Position */, place: IGoogleGeocodeResult, locationSearched: string) {
     // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ ...this.state, waitingForGeolocation: false })
+
+    this.props.onGeolocationComplete(this.props.currentElection, position, place, locationSearched)
   }
 
   onGeolocationError() {
@@ -171,6 +180,16 @@ const mapStateToProps = (state: IStore, _ownProps: IProps): IStoreProps => {
 
 const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
   return {
+    onGeolocationComplete: (
+      currentElection: IElection,
+      _position: any /* Position */,
+      place: IGoogleGeocodeResult,
+      _locationSearched: string
+    ) => {
+      dispatch(setSausageNearMeSearchGeocodePlaceResult(place))
+
+      browserHistory.push(`/search/${getURLSafeElectionName(currentElection)}`)
+    },
     fetchQueriedPollingPlaces: async (election: IElection, pollingPlaceIds: Array<number>) => {
       gaTrack.event({
         category: 'SausageMapContainer',

@@ -5,6 +5,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
+import { ePollingPlaceFinderInit } from '../../redux/modules/app'
 import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
 import { setMapToSearch, setSausageNearMeSearchGeocodePlaceResult } from '../../redux/modules/map'
 import {
@@ -129,6 +130,9 @@ export default function SausageNearMeFinder() {
         componentRestrictions={{ country: 'AU' }}
         hintText="Search here"
         onChoosePlace={onGeocoderResults}
+        searchText={geocodeResult !== undefined ? geocodeResult.formatted_address : undefined}
+        autoFocus={false}
+        initModeOverride={geocodeResult !== undefined ? ePollingPlaceFinderInit.DO_NOTHING : undefined}
       />
 
       <br />
@@ -148,7 +152,7 @@ export default function SausageNearMeFinder() {
           </StyledPaper>
         )}
 
-      {doWeHaveAnyResults === true && (
+      {error === undefined && isLoading === false && pollingPlacesWithNoms !== undefined && (
         <StyledCheckbox label="Show all polling places" checked={showAllPollingPlaces} onCheck={onCheckboxChange} />
       )}
 
@@ -171,7 +175,7 @@ export default function SausageNearMeFinder() {
         </StyledPaper>
       )}
 
-      {doWeHaveAnyResults === true && (
+      {error === undefined && isLoading === false && pollingPlacesWithNoms !== undefined && (
         <MapViewFABContainer>
           <FloatingActionButton onClick={onClickGoToMap}>
             <SocialPublic />

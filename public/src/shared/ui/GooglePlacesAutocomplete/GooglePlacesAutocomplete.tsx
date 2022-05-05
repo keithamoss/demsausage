@@ -61,6 +61,7 @@ interface IProps {
   openOnFocus?: boolean
   popoverProps?: object
   searchText?: string
+  value?: string
   style?: object
   targetOrigin?: object
   textFieldStyle?: object
