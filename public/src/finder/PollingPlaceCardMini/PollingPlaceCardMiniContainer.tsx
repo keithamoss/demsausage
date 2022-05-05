@@ -5,7 +5,7 @@ import { IElection } from '../../redux/modules/elections'
 import { getPollingPlacePermalink, IPollingPlace } from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import { sendNotification } from '../../redux/modules/snackbars'
-import PollingPlaceCardMiniNew from './PollingPlaceCardMiniNew'
+import PollingPlaceCardMini from './PollingPlaceCardMini'
 
 interface IProps {
   pollingPlace: IPollingPlace
@@ -27,7 +27,7 @@ class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps,
     const { pollingPlace, election, showFullCard, onClickCopyLink } = this.props
 
     return (
-      <PollingPlaceCardMiniNew
+      <PollingPlaceCardMini
         pollingPlace={pollingPlace}
         election={election}
         showFullCardDefault={showFullCard !== undefined ? showFullCard : false}
