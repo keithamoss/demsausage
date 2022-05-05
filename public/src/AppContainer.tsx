@@ -127,6 +127,14 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
   return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
+const isFooterNavBarVisible = (content: any) => {
+  if (content.type.name === 'SausageNearMeFinder') {
+    return false
+  }
+
+  return !('muiName' in content.type) || content.type.muiName !== 'SausageMapContainer'
+}
+
 type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps
 class AppContainer extends React.Component<TComponentProps, IStateProps> {
   async componentDidMount() {
@@ -202,7 +210,7 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
       (!('muiName' in content.type) || content.type.muiName !== 'ElectionChooserContainer') &&
       (isHistoricalElectionShown === true || (isHistoricalElectionShown === false && electionsToShow.length > 1))
 
-    const showFooterNavBar = !('muiName' in content.type) || content.type.muiName !== 'SausageMapContainer'
+    const showFooterNavBar = isFooterNavBarVisible(content)
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>

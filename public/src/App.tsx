@@ -18,7 +18,7 @@ import {
   HardwareTv,
   MapsAddLocation,
   MapsLayers,
-  MapsMap,
+  SocialPublic,
 } from 'material-ui/svg-icons'
 import * as React from 'react'
 import { browserHistory, Link } from 'react-router'
@@ -155,7 +155,7 @@ class App extends React.Component<IProps, {}> {
               <List>
                 <MenuListItem
                   primaryText="Map"
-                  leftIcon={<MapsMap />}
+                  leftIcon={<SocialPublic />}
                   containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
                   locationPathName={locationPathName}
                   locationPathNameMatch="/"
@@ -190,7 +190,7 @@ class App extends React.Component<IProps, {}> {
                 <React.Fragment>
                   <MenuListItem
                     primaryText="Map"
-                    leftIcon={<MapsMap />}
+                    leftIcon={<SocialPublic />}
                     containerElement={<Link to={`/${getURLSafeElectionName(currentElection)}`} />}
                     onClick={onClickDrawerLink}
                     locationPathName={locationPathName}
@@ -366,7 +366,7 @@ class App extends React.Component<IProps, {}> {
               <BottomNavigation selectedIndex={bottomNavSelectedIndex}>
                 <BottomNavigationItem
                   label="Map"
-                  icon={<MapsMap />}
+                  icon={<SocialPublic />}
                   onClick={() => browserHistory.push(`/${getURLSafeElectionName(currentElection)}`)}
                 />
                 <BottomNavigationItem

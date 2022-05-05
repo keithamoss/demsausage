@@ -7,6 +7,7 @@ import { ListItem } from 'material-ui/List'
 import { blue500, grey600 } from 'material-ui/styles/colors'
 import {
   ActionInfo,
+  ActionList,
   ActionSearch,
   DeviceLocationSearching,
   MapsAddLocation,
@@ -22,7 +23,7 @@ import BaconandEggsIcon from '../../icons/bacon-and-eggs'
 import CoffeeIcon from '../../icons/coffee'
 import HalalIcon from '../../icons/halal'
 import VegoIcon from '../../icons/vego'
-import { IElection } from '../../redux/modules/elections'
+import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
 import { IMapFilterOptions, IMapSearchResults, isFilterEnabled } from '../../redux/modules/map'
 import { IPollingPlace } from '../../redux/modules/polling_places'
 import SausageLoader from '../../shared/loader/SausageLoader'
@@ -64,6 +65,12 @@ const MapLoaderBar = styled.div`
 const AddStallFABContainer = styled.div`
   position: absolute;
   bottom: 16px;
+  right: 16px;
+`
+
+const ListSearchResultsFABContainer = styled.div`
+  position: absolute;
+  bottom: 88px;
   right: 16px;
 `
 
@@ -187,6 +194,16 @@ class SausageMap extends React.PureComponent<IProps, IState> {
                   <MapsAddLocation />
                 </FloatingActionButton>
               </AddStallFABContainer>
+            )}
+
+            {embeddedMap === false && mapSearchResults !== null && (
+              <ListSearchResultsFABContainer>
+                <FloatingActionButton
+                  containerElement={<Link to={`/search/${getURLSafeElectionName(currentElection)}`} />}
+                >
+                  <ActionList />
+                </FloatingActionButton>
+              </ListSearchResultsFABContainer>
             )}
           </div>
 

@@ -1,11 +1,17 @@
-import { Avatar, Checkbox, CircularProgress, ListItem, Paper } from 'material-ui'
+import { Avatar, Checkbox, CircularProgress, FloatingActionButton, ListItem, Paper } from 'material-ui'
 import { blue500 } from 'material-ui/styles/colors'
-import { ActionInfo } from 'material-ui/svg-icons'
+import { ActionInfo, SocialPublic } from 'material-ui/svg-icons'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory } from 'react-router'
 import styled from 'styled-components'
-import { IElection } from '../../redux/modules/elections'
-import { IPollingPlace, pollingPlaceHasReportsOfNoms } from '../../redux/modules/polling_places'
+import { getURLSafeElectionName, IElection } from '../../redux/modules/elections'
+import { setMapToSearch, setSausageNearMeSearchGeocodePlaceResult } from '../../redux/modules/map'
+import {
+  getBBoxFromPollingPlaces,
+  IPollingPlace,
+  pollingPlaceHasReportsOfNoms,
+} from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import { gaTrack } from '../../shared/analytics/GoogleAnalytics'
 import { useGetNearbyPollingPlacesQuery } from '../../shared/api/APIClient-RTK'
@@ -28,6 +34,12 @@ const StyledCheckbox = styled(Checkbox)`
   margin-bottom: 15px;
 `
 
+const MapViewFABContainer = styled.div`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+`
+
 export default function SausageNearMeFinder() {
   const election = useSelector(
     (state: IStore) => state.elections.elections.find((e: IElection) => e.id === state.elections.current_election_id)!
@@ -39,7 +51,11 @@ export default function SausageNearMeFinder() {
     setShowAllPollingPlaces(checked)
   }
 
-  const [geocodeResult, setGeocodeResult] = React.useState<IGoogleGeocodeResult>()
+  const geocodePlaceResult = useSelector((state: IStore) => state.map.place)
+
+  const [geocodeResult, setGeocodeResult] = React.useState<IGoogleGeocodeResult | undefined>(geocodePlaceResult)
+
+  const dispatch = useDispatch()
 
   const onGeocoderResults = async (place: IGoogleGeocodeResult) => {
     gaTrack.event({
@@ -49,6 +65,8 @@ export default function SausageNearMeFinder() {
     })
 
     setGeocodeResult(place)
+
+    dispatch(setSausageNearMeSearchGeocodePlaceResult(place))
   }
 
   const {
@@ -65,12 +83,33 @@ export default function SausageNearMeFinder() {
     }
   )
 
+  if (geocodePlaceResult !== undefined && pollingPlaces !== undefined) {
+    const bbox = getBBoxFromPollingPlaces(pollingPlaces)
+
+    dispatch(
+      setMapToSearch({
+        lon: geocodePlaceResult.geometry.location.lng(),
+        lat: geocodePlaceResult.geometry.location.lat(),
+        extent: [bbox.lon_left, bbox.lat_bottom, bbox.lon_right, bbox.lat_top],
+        formattedAddress: geocodePlaceResult.formatted_address,
+      })
+    )
+  }
+
   const pollingPlacesWithNoms =
     pollingPlaces !== undefined
       ? pollingPlaces.filter((pollingPlace: IPollingPlace) =>
           showAllPollingPlaces === false ? pollingPlaceHasReportsOfNoms(pollingPlace) === true : true
         )
       : undefined
+
+  const doWeHaveAnyResults =
+    error === undefined &&
+    isLoading === false &&
+    pollingPlacesWithNoms !== undefined &&
+    pollingPlacesWithNoms.length > 0
+
+  const onClickGoToMap = () => browserHistory.push(`/${getURLSafeElectionName(election)}`)
 
   return (
     <FinderContainer>
@@ -109,14 +148,12 @@ export default function SausageNearMeFinder() {
           </StyledPaper>
         )}
 
-      {error === undefined && isLoading === false && pollingPlacesWithNoms !== undefined && (
+      {doWeHaveAnyResults === true && (
         <StyledCheckbox label="Show all polling places" checked={showAllPollingPlaces} onCheck={onCheckboxChange} />
       )}
 
-      {error === undefined &&
-        isLoading === false &&
+      {doWeHaveAnyResults === true &&
         pollingPlacesWithNoms !== undefined &&
-        pollingPlacesWithNoms.length > 0 &&
         pollingPlacesWithNoms.map((pollingPlace: IPollingPlace) => (
           <React.Fragment key={pollingPlace.id}>
             <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} />
@@ -132,6 +169,14 @@ export default function SausageNearMeFinder() {
             disabled={true}
           />
         </StyledPaper>
+      )}
+
+      {doWeHaveAnyResults === true && (
+        <MapViewFABContainer>
+          <FloatingActionButton onClick={onClickGoToMap}>
+            <SocialPublic />
+          </FloatingActionButton>
+        </MapViewFABContainer>
       )}
     </FinderContainer>
   )

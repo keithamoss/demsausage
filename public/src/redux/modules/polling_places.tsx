@@ -467,3 +467,12 @@ export function hasAnyWheelchairAccess(pollingPlace: IPollingPlace) {
 export function getWheelchairAccessDescription(pollingPlace: IPollingPlace) {
   return hasAnyWheelchairAccess(pollingPlace) === true ? pollingPlace.wheelchair_access : 'None'
 }
+
+export const getBBoxFromPollingPlaces = (pollingPlaces: IPollingPlace[]) => {
+  return {
+    lat_top: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[1])),
+    lat_bottom: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[1])),
+    lon_left: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[0])),
+    lon_right: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[0])),
+  }
+}

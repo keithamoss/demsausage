@@ -3,6 +3,7 @@ import Icon from 'ol/style/Icon'
 import Style from 'ol/style/Style'
 import * as sprite from '../../icons/sprite.json'
 import { NomsReader } from '../../sausage/noms'
+import { IGoogleGeocodeResult } from '../../shared/ui/GooglePlacesAutocomplete/GooglePlacesAutocomplete'
 import { IGeoJSONFeatureCollection } from './interfaces'
 import { IMapPollingPlaceFeature } from './polling_places'
 // import { IAnalytisMeta } from "../../shared/analytics/GoogleAalytics"
@@ -10,11 +11,13 @@ import { IMapPollingPlaceFeature } from './polling_places'
 // Actions
 const STORE_MAP_DATA = 'ealgis/map/STORE_MAP_DATA'
 const SEARCH_MAP = 'ealgis/map/SEARCH_MAP'
+const GEOCODE_PLACE_RESULT = 'ealgis/map/GEOCODE_PLACE_RESULT'
 const CLEAR_MAP_SEARCH = 'ealgis/map/CLEAR_MAP_SEARCH'
 
 const initialState: Partial<IModule> = {
   search: null,
   geojson: {},
+  place: undefined,
 }
 
 // Reducer
@@ -26,6 +29,8 @@ export default function reducer(state: Partial<IModule> = initialState, action: 
       return dotProp.set(state, 'search', action.searchParams)
     case CLEAR_MAP_SEARCH:
       return dotProp.set(state, 'search', null)
+    case GEOCODE_PLACE_RESULT:
+      return dotProp.set(state, 'place', action.place)
     default:
       return state
   }
@@ -54,10 +59,18 @@ export function storeMapData(electionId: number, geojson: IGeoJSONFeatureCollect
   }
 }
 
+export function setSausageNearMeSearchGeocodePlaceResult(place: IGoogleGeocodeResult) {
+  return {
+    type: GEOCODE_PLACE_RESULT,
+    place,
+  }
+}
+
 // Models
 export interface IModule {
   search: IMapSearchResults | null
   geojson: IMapGeoJSONStore
+  place: IGoogleGeocodeResult | undefined
 }
 
 export interface IMapGeoJSONStore {
@@ -85,6 +98,7 @@ export interface IAction {
   searchParams?: IMapSearchResults
   electionId?: number
   geojson?: IGeoJSONFeatureCollection
+  place?: IGoogleGeocodeResult
   meta?: {
     // analytics: IAnalyticsMeta
   }
