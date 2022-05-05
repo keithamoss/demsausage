@@ -128,7 +128,7 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
 }
 
 const isFooterNavBarVisible = (content: any) => {
-  if (content.type.name === 'SausageNearMeFinder') {
+  if (window.location.pathname.startsWith('/search/')) {
     return false
   }
 
