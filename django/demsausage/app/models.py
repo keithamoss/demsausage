@@ -148,7 +148,10 @@ class IPAddressHistoricalModel(models.Model):
     """
     Abstract model for history models tracking the IP address.
     """
-    ip_address = models.GenericIPAddressField(_('IP address'), null=True)
+    # Doesn't work with CloudFlare in production (we get two comma separated IP addresses - CloudFlare's and the users)
+    # This is just for record keeping, so we'll just store it as a text field for now.
+    # ip_address = models.GenericIPAddressField(_('IP address'), null=True)
+    ip_address = models.TextField(null=True)
 
     class Meta:
         abstract = True
