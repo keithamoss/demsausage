@@ -189,7 +189,7 @@ interface IProps {
   onClickCopyLink: any
 }
 
-export default function PollingPlaceCardMini(props: IProps) {
+export default function PollingPlaceCardMiniNew(props: IProps) {
   const { pollingPlace, election, showFullCardDefault, showMoreLessButton, onClickCopyLink } = props
 
   const [showFullCard, setShowFullCard] = React.useState<boolean>(showFullCardDefault)

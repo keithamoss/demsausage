@@ -34,7 +34,8 @@ class PollingPlacePermalink extends React.PureComponent<TComponentProps, {}> {
 
     return (
       <Container>
-        <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} />
+        <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} showFullCard={true} />
+
         <RaisedButtonPadded label="View on Map" primary={true} onClick={this.onViewOnMap} />
       </Container>
     )

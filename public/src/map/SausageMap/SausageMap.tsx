@@ -444,7 +444,7 @@ class SausageMap extends React.PureComponent<IProps, IState> {
                 <PollingPlaceCardMiniContainer
                   pollingPlace={pollingPlace}
                   election={currentElection}
-                  copyLinkEnabled={true}
+                  showFullCard={true}
                 />
               </PollingPlaceCardWrapper>
             ))}

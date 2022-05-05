@@ -1,4 +1,5 @@
 import * as dotProp from 'dot-prop-immutable'
+import { purple200, purple300, purple400, purple500, purple600 } from 'material-ui/styles/colors'
 import { IAPIClient } from '../../shared/api/APIClient'
 import { getBaseURL } from './app'
 import { getURLSafeElectionName, IElection } from './elections'
@@ -375,6 +376,40 @@ export function pollingPlaceHasReportsOfNoms(pollingPlace: IPollingPlace) {
   return false
 }
 
+export function getSausageChanceNumericIndicator(pollingPlace: IPollingPlace) {
+  switch (pollingPlace.chance_of_sausage) {
+    case PollingPlaceChanceOfSausage.STRONG:
+      return 4
+    case PollingPlaceChanceOfSausage.FAIR:
+      return 3
+    case PollingPlaceChanceOfSausage.MIXED:
+      return 2
+    case PollingPlaceChanceOfSausage.UNLIKELY:
+      return 1
+    case PollingPlaceChanceOfSausage.NO_IDEA:
+      return 0
+    default:
+      return 0
+  }
+}
+
+export function getSausageChancColourIndicator(pollingPlace: IPollingPlace) {
+  switch (pollingPlace.chance_of_sausage) {
+    case PollingPlaceChanceOfSausage.STRONG:
+      return purple600
+    case PollingPlaceChanceOfSausage.FAIR:
+      return purple500
+    case PollingPlaceChanceOfSausage.MIXED:
+      return purple400
+    case PollingPlaceChanceOfSausage.UNLIKELY:
+      return purple300
+    case PollingPlaceChanceOfSausage.NO_IDEA:
+      return purple200
+    default:
+      return purple200
+  }
+}
+
 export function getSausageChanceDescription(pollingPlace: IPollingPlace) {
   switch (pollingPlace.chance_of_sausage) {
     case PollingPlaceChanceOfSausage.STRONG:
@@ -419,9 +454,16 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
   return noms.join(', ')
 }
 
+export function hasAnyWheelchairAccess(pollingPlace: IPollingPlace) {
+  return !(
+    pollingPlace.wheelchair_access === '' ||
+    pollingPlace.wheelchair_access === 'None' ||
+    pollingPlace.wheelchair_access === 'No wheelchair access' ||
+    pollingPlace.wheelchair_access === 'No Access' ||
+    pollingPlace.wheelchair_access === null
+  )
+}
+
 export function getWheelchairAccessDescription(pollingPlace: IPollingPlace) {
-  if (pollingPlace.wheelchair_access === '' || pollingPlace.wheelchair_access === null) {
-    return 'None'
-  }
-  return pollingPlace.wheelchair_access
+  return hasAnyWheelchairAccess(pollingPlace) === true ? pollingPlace.wheelchair_access : 'None'
 }

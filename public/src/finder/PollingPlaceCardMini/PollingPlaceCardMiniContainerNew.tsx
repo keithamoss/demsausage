@@ -22,7 +22,7 @@ interface IDispatchProps {
 interface IStateProps {}
 
 type TComponentProps = IProps & IStoreProps & IDispatchProps
-class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {
+class PollingPlaceCardMiniContainerNew extends React.PureComponent<TComponentProps, IStateProps> {
   render() {
     const { pollingPlace, election, showFullCard, onClickCopyLink } = this.props
 
@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch: Function, ownProps: IProps): IDispatchProp
 export default connect<IStoreProps, IDispatchProps, IProps, IStore>(
   mapStateToProps,
   mapDispatchToProps
-)(PollingPlaceCardMiniContainer)
+)(PollingPlaceCardMiniContainerNew)
