@@ -93,6 +93,7 @@ const PollingPlaceCardWrapper = styled.div`
 
 const COVIDSafeToolbar = styled(Toolbar)`
   background-color: white !important;
+  padding-left: 12px !important;
 `
 
 const COVIDSafeFlatButton = styled(FlatButton)`
