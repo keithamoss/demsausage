@@ -247,6 +247,19 @@ export function loadPollingPlaces(election: IElection, file: File, config: strin
   }
 }
 
+export function fetchPollingPlaceLoaderJob(election: IElection, job_id: string) {
+  return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
+    const { response, json } = await api.get(`/0.1/elections/${election.id}/polling_place_loader_job/`, dispatch, {
+      job_id,
+    })
+
+    if (response.status === 200) {
+      return json
+    }
+    return null
+  }
+}
+
 export function fetchPollingPlaceTypes() {
   return async (dispatch: Function, _getState: Function, api: IAPIClient) => {
     const { response, json } = await api.get('/0.1/polling_places_facility_types/', dispatch)

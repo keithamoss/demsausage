@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { IElection } from '../../redux/modules/elections'
-import { IPollingPlaceLoaderResponseMessages, loadPollingPlaces } from '../../redux/modules/polling_places'
+import {
+  fetchPollingPlaceLoaderJob,
+  IPollingPlaceLoaderResponseMessages,
+  loadPollingPlaces,
+} from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import ElectionPollingPlaceLoader from './ElectionPollingPlaceLoader'
 
@@ -21,12 +25,17 @@ interface IStoreProps {
 
 interface IDispatchProps {
   loadPollingPlaces: Function
+  fetchPollingPlaceLoaderJobStatus: Function
 }
 
 interface IStateProps {
   file: File | undefined
   config: string | undefined
   dryRun: boolean
+  intervalId: number | undefined
+  job_id: string | undefined
+  job_status: string | undefined
+  stages_log: string[] | undefined
   error: boolean | undefined
   messages: IPollingPlaceLoaderResponseMessages | undefined
 }
@@ -36,7 +45,17 @@ class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponent
   constructor(props: TComponentProps) {
     super(props)
 
-    this.state = { file: undefined, config: undefined, dryRun: true, error: undefined, messages: undefined }
+    this.state = {
+      file: undefined,
+      config: undefined,
+      dryRun: true,
+      intervalId: undefined,
+      job_id: undefined,
+      job_status: undefined,
+      stages_log: undefined,
+      error: undefined,
+      messages: undefined,
+    }
   }
 
   render() {
@@ -48,6 +67,9 @@ class ElectionPollingPlaceLoaderContainer extends React.PureComponent<TComponent
         election={election}
         file={this.state.file}
         error={this.state.error}
+        job_id={this.state.job_id}
+        job_status={this.state.job_status}
+        stages_log={this.state.stages_log}
         messages={this.state.messages}
         onFileUpload={(file: File) => {
           // eslint-disable-next-line react/no-access-state-in-setstate
@@ -93,11 +115,46 @@ const mapDispatchToProps = (dispatch: Function): IDispatchProps => {
       that: ElectionPollingPlaceLoaderContainer
     ) => {
       const json = await dispatch(loadPollingPlaces(election, file, config, dryRun))
+
+      if (json !== null) {
+        const { job_id } = json
+
+        const intervalId = window.setInterval(() => {
+          that.props.fetchPollingPlaceLoaderJobStatus(election, job_id, that)
+        }, 5000)
+
+        that.setState({
+          ...that.state,
+          intervalId,
+          job_id,
+          job_status: undefined,
+          stages_log: undefined,
+          error: undefined,
+          messages: undefined,
+        })
+      }
+    },
+    fetchPollingPlaceLoaderJobStatus: async (
+      election: IElection,
+      job_id: string,
+      that: ElectionPollingPlaceLoaderContainer
+    ) => {
+      const json = await dispatch(fetchPollingPlaceLoaderJob(election, job_id))
+
       that.setState({
         ...that.state,
-        error: !!('errors' in json.logs && json.logs.errors.length > 0),
-        messages: json,
+        job_status: json.status,
+        stages_log: json.stages_log !== null ? json.stages_log : undefined,
+        error:
+          json.response !== null
+            ? !!('errors' in json.response.logs && json.response.logs.errors.length > 0)
+            : undefined,
+        messages: json.response !== null ? json.response : undefined,
       })
+
+      if (['finished', 'failed', 'stopped', 'canceled', 'cancelled'].includes(json.status)) {
+        window.clearInterval(that.state.intervalId)
+      }
     },
   }
 }

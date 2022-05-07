@@ -14,10 +14,10 @@ from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
-    LoadPollingPlaces, RollbackPollingPlaces,
     get_default_election_map_png_cache_key, get_election_map_png_cache_key,
     get_elections_cache_key, get_polling_place_geojson_cache_key,
     get_polling_place_json_cache_key, getDefaultElection)
+from demsausage.app.sausage.loader import RollbackPollingPlaces
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
                                             send_stall_edited_email,
@@ -44,6 +44,8 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
 from demsausage.rq.jobs import task_regenerate_cached_election_data
+from demsausage.rq.jobs_loader import task_refresh_polling_place_data
+from demsausage.rq.rq_utils import get_redis_connection
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -62,6 +64,7 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer
+from rq.job import Job
 
 logger = make_logger(__name__)
 
@@ -169,10 +172,23 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         except ValueError as e:
             raise BadRequest("Could not parse config: {}".format(e))
 
-        loader = LoadPollingPlaces(election, request.data["file"], dry_run, config)
-        loader.run()
+        job = task_refresh_polling_place_data.delay(election_id=election.id, file=request.data["file"], dry_run=dry_run, config=config)
+        return Response({"job_id": job.id if job is not None else None})
 
-        return Response({"message": "Done", "logs": loader.collects_logs()})
+    @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))
+    def polling_place_loader_job(self, request, pk=None, format=None):
+        job_id = request.query_params.get("job_id", None)
+
+        if job_id is not None:
+            job = Job.fetch(job_id, connection=get_redis_connection())
+            jobStatus = job.get_status()
+
+            response = None
+            if jobStatus == "finished":
+                response = {"message": "Done", "logs": job.meta.get("_polling_place_loading_results", None)}
+
+            return Response({"status": jobStatus, "stages_log": job.meta.get("_polling_place_loading_stages_log", None), "response": response})
+        raise BadRequest("No job_id provided")
 
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic

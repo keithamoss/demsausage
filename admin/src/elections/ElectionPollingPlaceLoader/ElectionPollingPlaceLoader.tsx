@@ -3,7 +3,7 @@ import { ListItem } from 'material-ui/List'
 // import "./ElectionPollingPlaceLoader.css"
 import RaisedButton from 'material-ui/RaisedButton'
 import { greenA200, red500 } from 'material-ui/styles/colors'
-import { ActionInfo, AlertWarning } from 'material-ui/svg-icons'
+import { ActionInfo, ActionInfoOutline, AlertWarning, HardwareKeyboardArrowRight } from 'material-ui/svg-icons'
 import AlertError from 'material-ui/svg-icons/alert/error'
 import EditorInsertDriveFile from 'material-ui/svg-icons/editor/insert-drive-file'
 import FileFileUpload from 'material-ui/svg-icons/file/file-upload'
@@ -15,6 +15,9 @@ import { IPollingPlaceLoaderResponseMessages } from '../../redux/modules/polling
 interface IProps {
   election: IElection
   file: File | undefined
+  job_id: string | undefined
+  job_status: string | undefined
+  stages_log: string[] | undefined
   error: boolean | undefined
   messages: IPollingPlaceLoaderResponseMessages | undefined
   onFileUpload: any
@@ -44,7 +47,7 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
   }
 
   render() {
-    const { election, file, error, messages } = this.props
+    const { election, file, job_id, job_status, stages_log, error, messages } = this.props
 
     return (
       <div>
@@ -82,6 +85,22 @@ class ElectionPollingPlaceLoader extends React.PureComponent<IProps, {}> {
             leftIcon={<EditorInsertDriveFile />}
             disabled={true}
           />
+        )}
+
+        {job_id !== undefined && (
+          <ListItem primaryText={`Job ID: ${job_id}`} leftIcon={<ActionInfoOutline />} disabled={true} />
+        )}
+
+        {job_status !== undefined && (
+          <ListItem primaryText={`Job status: ${job_status}`} leftIcon={<ActionInfoOutline />} disabled={true} />
+        )}
+
+        {stages_log !== undefined && stages_log.length > 0 && (
+          <List>
+            {stages_log.map((stage_name: string, _index: number) => (
+              <ListItem key={stage_name} primaryText={stage_name} leftIcon={<HardwareKeyboardArrowRight />} />
+            ))}
+          </List>
         )}
 
         {messages !== undefined && error === true && (
