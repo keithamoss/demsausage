@@ -12669,10 +12669,10 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-usehooks-ts@2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/usehooks-ts/-/usehooks-ts-2.2.1.tgz#9bb9af81d4680cf9cdb9234331a37e4be39d1183"
-  integrity sha512-n6Rat52iF+Tz9CFU2IIuaFsm9uCXX4dU565lKaAKMEXLLGTg9qYwzDSpXkCPRnx9lTdkm8M+W+YJ36Lb13zjEA==
+usehooks-ts@2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/usehooks-ts/-/usehooks-ts-2.5.2.tgz#c6229a4dd59f7081e0b78569b23e7bb6f966e569"
+  integrity sha512-keONG+M5aax8eN9kEZeayNBgK+7MSLVGCuP18pSdce5D5iLiImCxqkm04GWYSkA7Xpo0GWnPOK3cXAOY/K+T1g==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
