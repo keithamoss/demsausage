@@ -1,10 +1,13 @@
 import datetime
 import functools
+import json
 import logging
 import os
 import string
+import sys
 import threading
 import time
+import traceback
 import unicodedata
 from urllib.parse import quote
 
@@ -194,3 +197,29 @@ def threaded(func):
         thread.start()
         return thread
     return wrapper
+
+
+def is_jsonable(obj):
+    try:
+        json.dumps(obj)
+        return True
+    except:
+        return False
+
+
+def get_stracktrace_string_for_current_exception():
+    # https://stackoverflow.com/a/49613561
+
+    # Get current system exception
+    ex_type, ex_value, ex_traceback = sys.exc_info()
+
+    # Extract unformatter stack traces as tuples
+    trace_back = traceback.extract_tb(ex_traceback)
+
+    # Format stacktrace
+    stack_trace = list()
+
+    for trace in trace_back:
+        stack_trace.append("File \"%s\", line : %d, in \"%s\", message: %s" % (trace[0], trace[1], trace[2], trace[3]))
+
+    return "\r\n".join(stack_trace)
