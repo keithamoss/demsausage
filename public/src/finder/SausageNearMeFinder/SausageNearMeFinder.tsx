@@ -35,6 +35,14 @@ const StyledCheckbox = styled(Checkbox)`
   margin-bottom: 15px;
 `
 
+const PollingPlaceCardsContainer = styled.div`
+  padding-bottom: 68px;
+`
+
+const PollingPlaceCardContainer = styled.div`
+  padding-bottom: 20px;
+`
+
 const MapViewFABContainer = styled.div`
   position: absolute;
   bottom: 16px;
@@ -156,14 +164,15 @@ export default function SausageNearMeFinder() {
         <StyledCheckbox label="Show all polling places" checked={showAllPollingPlaces} onCheck={onCheckboxChange} />
       )}
 
-      {doWeHaveAnyResults === true &&
-        pollingPlacesWithNoms !== undefined &&
-        pollingPlacesWithNoms.map((pollingPlace: IPollingPlace) => (
-          <React.Fragment key={pollingPlace.id}>
-            <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} />
-            <br />
-          </React.Fragment>
-        ))}
+      {doWeHaveAnyResults === true && pollingPlacesWithNoms !== undefined && (
+        <PollingPlaceCardsContainer>
+          {pollingPlacesWithNoms.map((pollingPlace: IPollingPlace) => (
+            <PollingPlaceCardContainer key={pollingPlace.id}>
+              <PollingPlaceCardMiniContainer pollingPlace={pollingPlace} election={election} />
+            </PollingPlaceCardContainer>
+          ))}
+        </PollingPlaceCardsContainer>
+      )}
 
       {error !== undefined && (
         <StyledPaper>
