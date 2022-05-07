@@ -7,3 +7,4 @@
 # app-specific
 demsausage/app/sausage/cron/output.log
 demsausage/app/sausage/cron/*.env
+supervisord.pid

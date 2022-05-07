@@ -12,4 +12,3 @@ logs/
 initial-data/emails.csv
 TODO*.md
 redis/*
-django/supervisord.pid
