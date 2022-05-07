@@ -1,4 +1,4 @@
-import { Avatar, Checkbox, CircularProgress, FloatingActionButton, ListItem, Paper } from 'material-ui'
+import { Avatar, CircularProgress, FloatingActionButton, ListItem, Paper, Toggle } from 'material-ui'
 import { blue500 } from 'material-ui/styles/colors'
 import { ActionInfo, SocialPublic } from 'material-ui/svg-icons'
 import React from 'react'
@@ -31,7 +31,7 @@ const StyledPaper = styled(Paper)`
   margin-bottom: 15px;
 `
 
-const StyledCheckbox = styled(Checkbox)`
+const StyledToggle = styled(Toggle)`
   margin-bottom: 15px;
 `
 
@@ -54,10 +54,10 @@ export default function SausageNearMeFinder() {
     (state: IStore) => state.elections.elections.find((e: IElection) => e.id === state.elections.current_election_id)!
   )
 
-  const [showAllPollingPlaces, setShowAllPollingPlaces] = React.useState<boolean>(false)
+  const [showPollingPlacesWithNoms, setShowPollingPlacesWithNoms] = React.useState<boolean>(true)
 
-  const onCheckboxChange = (_event: React.MouseEvent<HTMLInputElement>, checked: boolean) => {
-    setShowAllPollingPlaces(checked)
+  const onToggleChange = (_event: React.MouseEvent<HTMLInputElement>, toggled: boolean) => {
+    setShowPollingPlacesWithNoms(toggled)
   }
 
   const geocodePlaceResult = useSelector((state: IStore) => state.map.place)
@@ -108,7 +108,7 @@ export default function SausageNearMeFinder() {
   const pollingPlacesWithNoms =
     pollingPlaces !== undefined
       ? pollingPlaces.filter((pollingPlace: IPollingPlace) =>
-          showAllPollingPlaces === false ? pollingPlaceHasReportsOfNoms(pollingPlace) === true : true
+          showPollingPlacesWithNoms === true ? pollingPlaceHasReportsOfNoms(pollingPlace) === true : true
         )
       : undefined
 
@@ -161,7 +161,14 @@ export default function SausageNearMeFinder() {
         )}
 
       {error === undefined && isLoading === false && pollingPlacesWithNoms !== undefined && (
-        <StyledCheckbox label="Show all polling places" checked={showAllPollingPlaces} onCheck={onCheckboxChange} />
+        <StyledToggle
+          label="Only show booths with food and drink"
+          toggled={showPollingPlacesWithNoms}
+          onToggle={onToggleChange}
+          labelPosition="right"
+          thumbStyle={{ backgroundColor: 'rgb(245, 245, 245)' }}
+          trackStyle={{ backgroundColor: 'rgb(189, 189, 189)' }}
+        />
       )}
 
       {doWeHaveAnyResults === true && pollingPlacesWithNoms !== undefined && (
