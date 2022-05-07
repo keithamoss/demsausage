@@ -1,7 +1,7 @@
 import copy
 import csv
 
-POLLING_PLACE_FILENAME = 'prdelms.gaz.statics.220504.09.00.02'
+POLLING_PLACE_FILENAME = 'prdelms.gaz.statics.220507.09.00.01'
 OVERSEAS_POLLING_PLACE_FILENAME = 'overseas_polling_places_2022'
 MERGED_POLLING_PLACE_FILENAME = f'{POLLING_PLACE_FILENAME}_merged_overseas'
 

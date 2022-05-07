@@ -26,6 +26,16 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## May 7th 2022 (loaded May 8th)
+
+Source: `prdelms.gaz.statics.220507.09.00.01`
+Source: Overseas polling places retrieved May 7th - No change (number with in-person voting = 19)
+
+None identified.
+
+- AEC has fixed Altona North, so removed our fix (PPID=3678)
+- AEC has fixed Muswellbrook, so removed our fix (PPID=1131)
+
 ## May 1st 2022 (loaded May 2nd)
 
 Source: `prdelms.gaz.statics.220501.09.00.02.csv`
@@ -49,7 +59,7 @@ None identified.
 
 - Overseas polling places loaded for the first time
 - Data file formatting errors are resolved now
-- Fixes removed for Wahroonga East (PPID=144)
+- AEC has fixed Wahroonga East, so removed our fix (PPID=144)
 
 ## April 1st 2022 (loaded April 10th)
 

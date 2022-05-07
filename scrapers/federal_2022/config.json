@@ -34,20 +34,6 @@
     "fix_data_issues": [
         {
             "field": "ec_id",
-            "value": 3678,
-            "overwrite": [
-                {
-                    "field": "lat",
-                    "value": -37.83629165982374
-                },
-                {
-                    "field": "lon",
-                    "value": 144.84627682788758
-                }
-            ]
-        },
-        {
-            "field": "ec_id",
             "value": 2325,
             "overwrite": [
                 {
