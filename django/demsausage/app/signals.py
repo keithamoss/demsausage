@@ -3,6 +3,7 @@ from demsausage.app.models import (Elections, PollingPlaceNoms, PollingPlaces,
                                    Profile)
 from demsausage.app.sausage.elections import clear_elections_cache
 from demsausage.rq.jobs import task_regenerate_cached_election_data
+from demsausage.util import is_iterable
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
@@ -53,7 +54,7 @@ def pre_create_historical_record_callback(sender, **kwargs):
     history_instance = kwargs["history_instance"]
 
     # When running in an RQ task there's no request object
-    if "request" in HistoricalRecords.thread:
+    if hasattr(HistoricalRecords.thread, "request"):
         forwarded_for = HistoricalRecords.thread.request.META["HTTP_X_FORWARDED_FOR"]
         if ", " in forwarded_for:
             # 123.4.5.6, 172.68.2.109
