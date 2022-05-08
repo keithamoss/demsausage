@@ -54,13 +54,13 @@ CMD="$1"
 
 # python_rq_worker entrypoint (development)
 if [ "$CMD" = "python_rq_supervisord" ]; then
-    waitfordb
-    waitforredis
-    echo "[Run] Starting python_rq_supervisord"
+  waitfordb
+  waitforredis
+  echo "[Run] Starting python_rq_supervisord"
 
-   python /app/demsausage/rq/init.py
-   /usr/bin/supervisord -c /app/demsausage/rq/supervisord.dev.conf
-   exit
+  python /app/demsausage/rq/init.py
+  /usr/bin/supervisord -c /app/demsausage/rq/supervisord.dev.conf
+  exit
 fi
 
 # Cron entrypoint (development and production)
@@ -88,22 +88,24 @@ fi
 # Supervisord entrypoint (production)
 if [ "$CMD" = "supervisord" ]; then
   waitfordb
+
   export ENVIRONMENT=PRODUCTION
   django-admin migrate
+
   /usr/bin/supervisord -c /app/supervisord.conf
   exit
 fi
 
 # Build entrypoint (development)
 if [ "$CMD" = "build" ]; then
-   export ENVIRONMENT=PRODUCTION
+  export ENVIRONMENT=PRODUCTION
 
-   rm -rf /app/static
-   mkdir -p /app/static
+  rm -rf /app/static
+  mkdir -p /app/static
 
-   django-admin collectstatic --noinput
-   cd /app/static && tar czvf /build/django.tgz . && rm -rf /app/static
-   exit
+  django-admin collectstatic --noinput
+  cd /app/static && tar czvf /build/django.tgz . && rm -rf /app/static
+  exit
 fi
 
 # Development server (development)
