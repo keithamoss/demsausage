@@ -15,5 +15,5 @@ class MyAppConfig(AppConfig):
 
         # Otherwise this would run every time Django reloads due to code changes in development
         if is_production() is True:
-            logger.info("Starting cache regeneration tasks from init.py")
+            logger.info("Starting cache regeneration tasks from ready()")
             cache_rehydration_on_init_tasks()

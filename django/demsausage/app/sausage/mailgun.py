@@ -17,7 +17,9 @@ class MailgunException(APIException):
 
 
 def send(body):
-    if is_development() is True:
+    # Warning: This assumes that body["to"] is a string representing a single email address
+    # If we're in development we still want to send emails to the super admins so we can still test that flow
+    if is_development() is True and body["to"] not in get_super_admins():
         print(f"Mailgun Dev Wrapper: Subject = {body['subject']}, To = {body['to']}, HTML = {body['html'][:100]}")
         return True
 
