@@ -22,3 +22,7 @@ def get_admins():
 
 def is_development():
     return get_env("ENVIRONMENT") == "DEVELOPMENT"
+
+
+def is_production():
+    return get_env("ENVIRONMENT") == "PRODUCTION"

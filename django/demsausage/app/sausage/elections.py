@@ -1,7 +1,11 @@
 
+from datetime import timedelta
+
 from demsausage.app.models import Elections
+from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import make_logger
 from django.core.cache import cache
+from django.utils import timezone
 
 logger = make_logger(__name__)
 
@@ -28,6 +32,12 @@ def get_default_election_map_png_cache_key():
 
 def get_elections_cache_key():
     return "elections_list"
+
+
+def cache_rehydration_on_init_tasks():
+    # Rehydrate the cache for all active elections (starting with the primary election)
+    for election in Elections.objects.filter(is_hidden=False, election_day__gte=timezone.now() - timedelta(days=1)).order_by("-is_primary").values("id"):
+        task_regenerate_cached_election_data.delay(election_id=election['id'])
 
 
 def getDefaultElection():

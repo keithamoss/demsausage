@@ -4,7 +4,8 @@ import time
 from random import getrandbits
 
 import requests
-from demsausage.app.admin import get_admins, get_super_admins, is_development
+from demsausage.app.admin import (get_admins, get_super_admins, is_development,
+                                  is_production)
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env, get_url_safe_election_name
 from django.forms.models import model_to_dict
@@ -134,7 +135,7 @@ def send_stall_edited_email(stall):
 
 
 def send_pending_stall_reminder_email(pending_stall_count):
-    if is_development() is False:
+    if is_production() is True:
         admin_emails = [u.email for u in get_admins()]
     else:
         admin_emails = get_super_admins()
