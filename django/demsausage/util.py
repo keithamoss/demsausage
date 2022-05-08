@@ -207,6 +207,19 @@ def is_jsonable(obj):
         return False
 
 
+def is_iterable(obj):
+    # https://stackoverflow.com/a/1952655
+
+    try:
+        iterator = iter(obj)
+    except TypeError:
+        # not iterable
+        return False
+    else:
+        # iterable
+        return True
+
+
 def get_stracktrace_string_for_current_exception():
     # https://stackoverflow.com/a/49613561
 

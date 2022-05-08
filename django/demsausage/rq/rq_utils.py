@@ -1,7 +1,7 @@
 from demsausage.app.enums import TaskStatus
 from demsausage.util import (get_env,
                              get_stracktrace_string_for_current_exception,
-                             is_jsonable, make_logger)
+                             is_iterable, is_jsonable, make_logger)
 from django.utils.timezone import make_aware
 from pytz import timezone
 from redis import Redis
@@ -203,7 +203,8 @@ def report_job_result(status, job, connection, result, *args, **kwargs):
     def _format_complex_parameter(result):
         if is_jsonable(result):
             return result
-        elif __name__ in result and "Exception" in result.__name__:
+        elif is_iterable(result) and __name__ in result and "Exception" in result.__name__:
+            # Without is_iterable() checking this would fail on types like 'type'
             return get_stracktrace_string_for_current_exception()
         return f"{result}"
 
