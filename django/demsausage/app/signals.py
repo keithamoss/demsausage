@@ -52,11 +52,15 @@ def save_user_profile(sender, instance, **kwargs):
 def pre_create_historical_record_callback(sender, **kwargs):
     history_instance = kwargs["history_instance"]
 
-    forwarded_for = HistoricalRecords.thread.request.META["HTTP_X_FORWARDED_FOR"]
-    if ", " in forwarded_for:
-        # 123.4.5.6, 172.68.2.109
-        # Remote IP, Docker NGinx Container IP
-        remote_addr, rest = forwarded_for.split(", ")
-        history_instance.ip_address = remote_addr
+    # When running in an RQ task there's no request object
+    if "request" in HistoricalRecords.thread:
+        forwarded_for = HistoricalRecords.thread.request.META["HTTP_X_FORWARDED_FOR"]
+        if ", " in forwarded_for:
+            # 123.4.5.6, 172.68.2.109
+            # Remote IP, Docker NGinx Container IP
+            remote_addr, rest = forwarded_for.split(", ")
+            history_instance.ip_address = remote_addr
+        else:
+            history_instance.ip_address = forwarded_for
     else:
-        history_instance.ip_address = forwarded_for
+        history_instance.ip_address = None
