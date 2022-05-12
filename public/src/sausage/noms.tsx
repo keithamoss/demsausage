@@ -54,12 +54,23 @@ export class NomsReader {
     return Object.keys(this.noms).filter((nomsName: string) => NomsReader.foodNomsIcons.includes(nomsName))
   }
 
+  public onlyHasFreeText() {
+    return (
+      this.hasCoreNoms() === false &&
+      this.hasExtraNoms() === false &&
+      this.noms !== null &&
+      this.noms.free_text !== undefined &&
+      this.noms.free_text.length > 0
+    )
+  }
+
   public getIconForNoms(spriteIcons: any) {
     const hasMoreOptions = this.hasExtraNoms()
 
     if (this.isPropertyTrue('nothing') === true) {
       return spriteIcons.red_cross_of_shame
     }
+
     if (this.hasAllPropertiesTrue(['bbq', 'cake'])) {
       if (this.isPropertyTrue('run_out') === true) {
         return spriteIcons.bbq_and_cake_run_out
@@ -69,6 +80,7 @@ export class NomsReader {
       }
       return spriteIcons.bbq_and_cake
     }
+
     if (this.isPropertyTrue('bbq') === true) {
       if (this.isPropertyTrue('run_out') === true) {
         return spriteIcons.bbq_run_out
@@ -78,6 +90,7 @@ export class NomsReader {
       }
       return spriteIcons.bbq
     }
+
     if (this.isPropertyTrue('cake') === true) {
       if (this.isPropertyTrue('run_out') === true) {
         return spriteIcons.cake_run_out
@@ -91,6 +104,10 @@ export class NomsReader {
     if (this.onlyHasExtraNoms()) {
       const firstExtraNomsIcon = Object.keys(this.noms!)[0] as string
       return firstExtraNomsIcon in spriteIcons ? spriteIcons[firstExtraNomsIcon] : spriteIcons.unknown
+    }
+
+    if (this.onlyHasFreeText()) {
+      return spriteIcons.tick
     }
 
     return null
