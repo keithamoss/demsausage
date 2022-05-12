@@ -196,6 +196,19 @@ export default function PollingPlaceCardMini(props: IProps) {
 
   const onClickCardButton = () => setShowFullCard(!showFullCard)
 
+  const nomsList = []
+  const nomsDescription = getFoodDescription(pollingPlace)
+  if (nomsDescription !== '') {
+    nomsList.push(nomsDescription)
+  }
+  if (
+    pollingPlace.stall !== null &&
+    'free_text' in pollingPlace.stall.noms &&
+    pollingPlace.stall.noms.free_text !== null
+  ) {
+    nomsList.push(pollingPlace.stall?.noms.free_text)
+  }
+
   return (
     <FlexboxContainer>
       <CardRow>
@@ -280,13 +293,7 @@ export default function PollingPlaceCardMini(props: IProps) {
 
         {pollingPlaceHasReportsOfNoms(pollingPlace) === true && showFullCard === true && (
           <StallIconAndTextRow>
-            <MapsRestaurant />{' '}
-            <span>
-              {getFoodDescription(pollingPlace)}
-              {pollingPlace.stall !== null && 'free_text' in pollingPlace.stall.noms
-                ? `, ${pollingPlace.stall?.noms.free_text}`
-                : ''}
-            </span>
+            <MapsRestaurant /> <span>{nomsList.join(', ')}</span>
           </StallIconAndTextRow>
         )}
 
