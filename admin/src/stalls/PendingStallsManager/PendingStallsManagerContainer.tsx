@@ -2,13 +2,13 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { IElection } from '../../redux/modules/elections'
 import { IStore } from '../../redux/modules/reducer'
-import { IStall } from '../../redux/modules/stalls'
+import { IPendingStall } from '../../redux/modules/stalls'
 import PendingStallsManager from './PendingStallsManager'
 
 interface IProps {}
 
 interface IStoreProps {
-  stalls: Array<IStall>
+  stalls: Array<IPendingStall>
   elections: Array<IElection>
 }
 

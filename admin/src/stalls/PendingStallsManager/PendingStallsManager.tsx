@@ -2,14 +2,14 @@ import { groupBy } from 'lodash-es'
 // import "./PendingStallsManager.css"
 import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
-import { ActionHome } from 'material-ui/svg-icons'
+import { ActionChangeHistory, AvFiberNew } from 'material-ui/svg-icons'
 import * as React from 'react'
 import { Link } from 'react-router'
 import { IElection } from '../../redux/modules/elections'
-import { getStallLocationName, IStall } from '../../redux/modules/stalls'
+import { getStallLocationName, IPendingStall } from '../../redux/modules/stalls'
 
 interface IProps {
-  stalls: Array<IStall>
+  stalls: Array<IPendingStall>
   elections: Array<IElection>
 }
 
@@ -17,7 +17,7 @@ class PendingStallsManager extends React.PureComponent<IProps, {}> {
   render() {
     const { stalls, elections } = this.props
 
-    const stallsByElection: any = groupBy(stalls, 'election_id')
+    const stallsByElection = groupBy(stalls, 'election_id')
 
     return (
       <List>
@@ -27,12 +27,12 @@ class PendingStallsManager extends React.PureComponent<IProps, {}> {
           return (
             <div key={electionId}>
               <Subheader key={electionId}>{election.name}</Subheader>
-              {stallsByElection[electionId].map((stall: IStall) => (
+              {stallsByElection[electionId].map((stall) => (
                 <ListItem
                   key={stall.id}
                   primaryText={stall.name}
                   secondaryText={getStallLocationName(stall)}
-                  leftIcon={<ActionHome />}
+                  leftIcon={stall.diff !== null ? <ActionChangeHistory /> : <AvFiberNew />}
                   containerElement={<Link to={`/stalls/${stall.id}/`} />}
                 />
               ))}

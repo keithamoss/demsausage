@@ -8,13 +8,13 @@ import { browserHistory } from 'react-router'
 import { IElection } from '../../redux/modules/elections'
 import { fetchPollingPlacesByIds, IPollingPlace } from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
-import { IStall } from '../../redux/modules/stalls'
+import { IPendingStall } from '../../redux/modules/stalls'
 import { PollingPlaceEditor } from './PollingPlaceEditor'
 
 interface IProps {
   election: IElection
   pollingPlaceId: number | null
-  stall?: IStall
+  stall?: IPendingStall
   showAutoComplete: boolean
   showElectionChooser: boolean
   onPollingPlaceEdited: Function

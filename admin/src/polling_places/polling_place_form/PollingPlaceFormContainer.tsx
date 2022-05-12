@@ -14,13 +14,13 @@ import {
 } from '../../redux/modules/polling_places'
 import { IStore } from '../../redux/modules/reducer'
 import { sendNotification } from '../../redux/modules/snackbars'
-import { IStall } from '../../redux/modules/stalls'
+import { IPendingStall, IStall } from '../../redux/modules/stalls'
 import { deepValue } from '../../utils'
 import PollingPlaceForm from './PollingPlaceForm'
 
 interface IProps {
   election: IElection
-  stall?: IStall
+  stall?: IPendingStall
   pollingPlace: IPollingPlace
   onPollingPlaceEdited: Function
 }
@@ -110,12 +110,13 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
 
   canStallPropsBeMerged() {
     const { pollingPlace, stall } = this.props
-    return stall !== undefined && pollingPlaceHasReports(pollingPlace) === false
+    return stall !== undefined && (pollingPlaceHasReports(pollingPlace) === false || stall.diff !== null)
   }
 
   render() {
     const {
       election,
+      stall,
       pollingPlace,
       onPollingPlaceEdited,
       // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -132,7 +133,7 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
         pollingPlace={pollingPlace}
         initialValues={this.initialValues}
         isDirty={isDirty}
-        stallWasMerged={this.canStallPropsBeMerged()}
+        stallWasEdited={(stall as IPendingStall).diff !== null}
         pollingPlaceTypes={pollingPlaceTypes}
         onSubmit={(values: object, _dispatch: Function, _props: IProps) => {
           onFormSubmit(values, election, pollingPlace, onPollingPlaceEdited)

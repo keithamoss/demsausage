@@ -7,7 +7,14 @@ import { List, ListItem } from 'material-ui/List'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import { blue500, grey100, grey500, yellow700 } from 'material-ui/styles/colors'
-import { AlertWarning, ContentBlock, ContentContentCopy, ToggleStar, ToggleStarBorder } from 'material-ui/svg-icons'
+import {
+  ActionChangeHistory,
+  AvFiberNew,
+  ContentBlock,
+  ContentContentCopy,
+  ToggleStar,
+  ToggleStarBorder,
+} from 'material-ui/svg-icons'
 import * as React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { Checkbox, SelectField, TextField, Toggle } from 'redux-form-material-ui'
@@ -25,7 +32,7 @@ import { IPollingPlace, IPollingPlaceFacilityType } from '../../redux/modules/po
 interface IProps {
   election: IElection
   pollingPlace: IPollingPlace
-  stallWasMerged: boolean
+  stallWasEdited: boolean
   pollingPlaceTypes: IPollingPlaceFacilityType[]
   onSubmit: any
   onSaveForm: any
@@ -77,19 +84,30 @@ const HiddenButton = styled.button`
 
 class PollingPlaceForm extends React.PureComponent<IProps, {}> {
   render() {
-    const { stallWasMerged, pollingPlaceTypes, onSaveForm, onClickCopyLink, handleSubmit, onSubmit } = this.props
+    const { stallWasEdited, pollingPlaceTypes, onSaveForm, onClickCopyLink, handleSubmit, onSubmit } = this.props
 
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
-        {stallWasMerged && (
+        {stallWasEdited === false && (
           <ListItem
-            leftAvatar={<Avatar icon={<AlertWarning />} backgroundColor={blue500} />}
-            primaryText="Stall information has already been automatically populated for you"
+            leftAvatar={<Avatar icon={<AvFiberNew />} backgroundColor={blue500} />}
+            primaryText="Stall information has been automatically populated"
             secondaryText={
               "This polling place had no reports yet, so just double check everything and hit 'Save' if it's all OK."
             }
             secondaryTextLines={2}
             disabled={true}
+          />
+        )}
+
+        {stallWasEdited === true && (
+          <ListItem
+            leftAvatar={<Avatar icon={<ActionChangeHistory />} backgroundColor={blue500} />}
+            primaryText="Stall edits have already been automatically applied"
+            secondaryText={"So just double check everything and hit 'Save' if it's all OK."}
+            secondaryTextLines={2}
+            disabled={true}
+            style={{ backgroundColor: 'orange' }}
           />
         )}
 

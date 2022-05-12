@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import ElectionChooser from '../../elections/ElectionChooser/ElectionChooserContainer'
 import { IElection } from '../../redux/modules/elections'
 import { IPollingPlace } from '../../redux/modules/polling_places'
-import { IStall } from '../../redux/modules/stalls'
+import { IPendingStall } from '../../redux/modules/stalls'
 import PollingPlaceAutocompleteContainer from '../polling_place_autocomplete/PollingPlaceAutocompleteContainer'
 import PollingPlaceFormContainer from '../polling_place_form/PollingPlaceFormContainer'
 import PollingPlaceInfoCardContainer from '../polling_place_info_card/PollingPlaceInfoCardContainer'
@@ -35,7 +35,7 @@ const FlexboxPollingPlaceAutocompleteContainer = styled.div`
 interface IProps {
   election: IElection
   pollingPlace?: IPollingPlace
-  stall?: IStall
+  stall?: IPendingStall
   showAutoComplete: boolean
   showElectionChooser: boolean
   onPollingPlaceEdited: Function

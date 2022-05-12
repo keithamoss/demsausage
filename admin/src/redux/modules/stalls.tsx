@@ -111,6 +111,7 @@ export interface IStallDiff {
 
 export interface IPendingStall extends IStall {
   diff: IStallDiff[] | null
+  current_stall: IStall | null
 }
 
 // Side effects, only as applicable

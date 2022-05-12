@@ -1,15 +1,16 @@
+import { cloneDeep, isArray, isPlainObject } from 'lodash-es'
 import Avatar from 'material-ui/Avatar'
 import { CardActions } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 // import "./PendingStallEditor.css"
 import { ListItem } from 'material-ui/List'
-import { blue500, lightBlue100, orange300 } from 'material-ui/styles/colors'
+import { blue500, orange300 } from 'material-ui/styles/colors'
 import { AlertWarning } from 'material-ui/svg-icons'
 import * as React from 'react'
 import styled from 'styled-components'
 import PollingPlaceEditorContainer from '../../polling_places/polling_place_editor/PollingPlaceEditorContainer'
 import { IElection } from '../../redux/modules/elections'
-import { IPendingStall } from '../../redux/modules/stalls'
+import { IPendingStall, IStallDiff } from '../../redux/modules/stalls'
 import StallInfoCardContainer from '../StallInfoCard/StallInfoCardContainer'
 
 const FlexboxContainer = styled.div`
@@ -40,6 +41,30 @@ interface IProps {
   onDeclineUnofficialStall: any
 }
 
+const applyDiffToStall = (stall: IPendingStall) => {
+  if (stall.diff === undefined || stall.diff === null) {
+    return stall
+  }
+
+  const newStall = cloneDeep(stall) as any
+
+  stall.diff.forEach((diffItem: IStallDiff) => {
+    if (isPlainObject(diffItem.old) && isPlainObject(diffItem.new)) {
+      // newStall[diffItem.field] = { ...diffItem.old, ...diffItem.new }
+      // On second thoughts, no, noms are a replacement and not a merge
+      // So really this whole thing can just be a simple object merge at the top-level, right?
+      newStall[diffItem.field] = diffItem.new
+    } else if (isArray(diffItem.old) && isArray(diffItem.new)) {
+      throw Error('Handling arrays in merging stall diffs is not implemented')
+    } else {
+      // Strings, numbers, and boolean
+      newStall[diffItem.field] = diffItem.new
+    }
+  })
+
+  return newStall
+}
+
 class PendingStallEditor extends React.PureComponent<IProps, {}> {
   render() {
     const { stall, election, onPollingPlaceEdited, onApproveUnofficialStall, onDeclineUnofficialStall } = this.props
@@ -52,7 +77,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
               primaryText="This stall has been edited since it was first approved"
               secondaryText="Changes are highlighted below"
               leftIcon={<AlertWarning color={orange300} />}
-              style={{ backgroundColor: lightBlue100, marginBottom: 10 }}
+              style={{ marginBottom: 10 }}
             />
           )}
           <StallInfoCardContainer
@@ -84,7 +109,7 @@ class PendingStallEditor extends React.PureComponent<IProps, {}> {
           <PollingPlaceEditorContainer
             election={election}
             pollingPlaceId={stall.polling_place !== null ? stall.polling_place.id : null}
-            stall={stall}
+            stall={applyDiffToStall(stall)}
             showAutoComplete={false}
             showElectionChooser={false}
             onPollingPlaceEdited={onPollingPlaceEdited}

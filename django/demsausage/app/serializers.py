@@ -342,10 +342,11 @@ class StallsManagementSerializer(StallsSerializer):
 class PendingStallsSerializer(StallsSerializer):
     polling_place = PollingPlacesInfoSerializer(read_only=True)
     diff = serializers.SerializerMethodField()
+    current_stall = serializers.SerializerMethodField()
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "diff")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "current_stall", "diff")
 
     def get_diff(self, obj):
         fields_to_include_in_diff = ("name", "description", "opening_hours", "website", "noms", "email")
@@ -362,6 +363,9 @@ class PendingStallsSerializer(StallsSerializer):
                 "old": c.old,
                 "new": c.new,
             } for c in delta.changes if c.field in fields_to_include_in_diff]
+
+    def get_current_stall(self, obj):
+        return PollingPlaceNomsSerializer(PollingPlaceNoms.objects.get(id=obj.polling_place.noms_id)).data if obj.polling_place.noms_id is not None else None
 
 
 class MailgunEventsSerializer(serializers.ModelSerializer):
