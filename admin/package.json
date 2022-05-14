@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/history": "^5.0.0",
-    "@types/jest": "^27.5.0",
+    "@types/jest": "^27.5.1",
     "@types/js-cookie": "^3.0.2",
     "@types/lodash-es": "^4.17.6",
     "@types/luxon": "^2.3.2",
