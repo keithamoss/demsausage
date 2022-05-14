@@ -230,11 +230,11 @@ testing = ["mock (>=2.0.0)"]
 
 [[package]]
 name = "django-simple-history"
-version = "3.0.0"
+version = "3.1.1"
 description = "Store model history and view/revert changes from admin site."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [[package]]
 name = "djangorestframework"
@@ -870,7 +870,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0c9de685ffec8b18d0d600a791b5e60637f1423c14e4edefdd4ac390c47234f4"
+content-hash = "c3ac5dbf81b3a347ad27e65eb98fb28130d68612926c5b45a770a4b165e728af"
 
 [metadata.files]
 asgiref = [
@@ -1034,8 +1034,7 @@ django-rq = [
     {file = "django_rq-2.5.1-py2.py3-none-any.whl", hash = "sha256:7be1e10e7091555f9f36edf100b0dbb205ea2b98683d74443d2bdf3c6649a03f"},
 ]
 django-simple-history = [
-    {file = "django-simple-history-3.0.0.tar.gz", hash = "sha256:66fe76c560054be393c52b1799661e104fbe372918d37d151e5d41c676158118"},
-    {file = "django_simple_history-3.0.0-py2.py3-none-any.whl", hash = "sha256:a312adfe8fbec4c450b08e641b11249a8a589a7e7d1ba2404764b8b5bed53552"},
+    {file = "django-simple-history-3.1.1.tar.gz", hash = "sha256:eab6dbddb7da756cc5579f7d6f28a32b2e8bb1697a5c37794d96309793ffec38"},
 ]
 djangorestframework = [
     {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
