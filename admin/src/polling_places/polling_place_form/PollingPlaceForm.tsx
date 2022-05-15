@@ -32,7 +32,7 @@ import { IPollingPlace, IPollingPlaceFacilityType } from '../../redux/modules/po
 interface IProps {
   election: IElection
   pollingPlace: IPollingPlace
-  stallWasEdited: boolean
+  stallWasEdited: boolean | undefined
   pollingPlaceTypes: IPollingPlaceFacilityType[]
   onSubmit: any
   onSaveForm: any

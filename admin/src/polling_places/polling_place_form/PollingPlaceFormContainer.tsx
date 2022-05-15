@@ -133,7 +133,7 @@ class PollingPlaceFormContainer extends React.Component<IProps & IStoreProps & I
         pollingPlace={pollingPlace}
         initialValues={this.initialValues}
         isDirty={isDirty}
-        stallWasEdited={(stall as IPendingStall).diff !== null}
+        stallWasEdited={stall !== undefined ? stall.diff !== null : undefined}
         pollingPlaceTypes={pollingPlaceTypes}
         onSubmit={(values: object, _dispatch: Function, _props: IProps) => {
           onFormSubmit(values, election, pollingPlace, onPollingPlaceEdited)
