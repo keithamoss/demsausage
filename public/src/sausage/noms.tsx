@@ -59,8 +59,7 @@ export class NomsReader {
       this.hasCoreNoms() === false &&
       this.hasExtraNoms() === false &&
       this.noms !== null &&
-      this.noms.free_text !== undefined &&
-      this.noms.free_text.length > 0
+      this.noms.free_text === true
     )
   }
 

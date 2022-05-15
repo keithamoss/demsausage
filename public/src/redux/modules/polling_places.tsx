@@ -98,7 +98,7 @@ export interface IMapPollingGeoJSONNoms {
   halal?: boolean
   vego?: boolean
   coffee?: boolean
-  free_text?: string
+  free_text?: boolean // This is actually a boolean - Map GeoJSON returns summary info only
 }
 
 export interface INoms {
