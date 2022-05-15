@@ -26,6 +26,13 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## May 15th 2022 (loaded May 15th)
+
+Source: `prdelms.gaz.statics.220515.13.43.51`
+Source: Overseas polling places retrieved May 15th - No change (number with in-person voting = 19)
+
+None identified.
+
 ## May 7th 2022 (loaded May 8th)
 
 Source: `prdelms.gaz.statics.220507.09.00.01`
