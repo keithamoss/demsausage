@@ -62,6 +62,7 @@ class App extends React.PureComponent<IProps, {}> {
     return (
       <CustomAutoComplete
         floatingLabelText="Search for a polling place"
+        autoComplete="off"
         dataSource={pollingPlaceResults}
         filter={AutoComplete.noFilter}
         maxSearchResults={20}
