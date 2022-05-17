@@ -11,6 +11,7 @@ interface IProps {
   pollingPlace: IPollingPlace
   election: IElection
   showFullCard?: boolean
+  showCopyLinkButton?: boolean
 }
 
 interface IStoreProps {}
@@ -24,7 +25,7 @@ interface IStateProps {}
 type TComponentProps = IProps & IStoreProps & IDispatchProps
 class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps, IStateProps> {
   render() {
-    const { pollingPlace, election, showFullCard, onClickCopyLink } = this.props
+    const { pollingPlace, election, showFullCard, showCopyLinkButton, onClickCopyLink } = this.props
 
     return (
       <PollingPlaceCardMini
@@ -32,6 +33,7 @@ class PollingPlaceCardMiniContainer extends React.PureComponent<TComponentProps,
         election={election}
         showFullCardDefault={showFullCard !== undefined ? showFullCard : false}
         showMoreLessButton={showFullCard !== true}
+        showCopyLinkButton={showCopyLinkButton !== false}
         onClickCopyLink={onClickCopyLink}
       />
     )

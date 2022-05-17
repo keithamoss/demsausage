@@ -102,7 +102,7 @@ const PollingPlaceAddress = styled.div`
   font-size: 14px;
   color: ${grey500};
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `
 
 const StallName = styled.div`
@@ -186,11 +186,12 @@ interface IProps {
   election: IElection
   showFullCardDefault: boolean
   showMoreLessButton: boolean
+  showCopyLinkButton: boolean
   onClickCopyLink: any
 }
 
 export default function PollingPlaceCardMini(props: IProps) {
-  const { pollingPlace, election, showFullCardDefault, showMoreLessButton, onClickCopyLink } = props
+  const { pollingPlace, election, showFullCardDefault, showMoreLessButton, showCopyLinkButton, onClickCopyLink } = props
 
   const [showFullCard, setShowFullCard] = React.useState<boolean>(showFullCardDefault)
 
@@ -355,7 +356,7 @@ export default function PollingPlaceCardMini(props: IProps) {
           </FlexboxColumnContainer>
         )}
 
-        {showFullCard === true && (
+        {showFullCard === true && showCopyLinkButton === true && (
           <FlexboxColumnContainer>
             <ButtonContainerCentred>
               <FlatButton label="Copy Link" primary={true} onClick={onClickCopyLink} />

@@ -1,13 +1,14 @@
 /* eslint-disable max-classes-per-file */
 // import "./AddStallForm.css"
-import { List, ListItem, RadioButton, RaisedButton } from 'material-ui'
+import { Avatar, List, ListItem, RadioButton, RaisedButton } from 'material-ui'
 import { Step, StepContent, StepLabel, Stepper } from 'material-ui/Stepper'
 import { grey100, grey500, grey800 } from 'material-ui/styles/colors'
-import { HardwareSecurity } from 'material-ui/svg-icons'
+import { AvFiberNew, EditorModeEdit, HardwareSecurity } from 'material-ui/svg-icons'
 import * as React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { RadioButtonGroup, TextField, Toggle } from 'redux-form-material-ui'
 import styled from 'styled-components'
+import PollingPlaceCardMiniContainer from '../../finder/PollingPlaceCardMini/PollingPlaceCardMiniContainer'
 import BaconandEggsIcon from '../../icons/bacon-and-eggs'
 import CakeIcon from '../../icons/cake'
 import CoffeeIcon from '../../icons/coffee'
@@ -119,6 +120,27 @@ const StupidFormPadderToFixiOSBugs = styled.div`
 //     font-size: 12px;
 // `
 
+const StallAlreadyExistsSection = styled.div`
+  margin-top: 0;
+  margin-bottom: 10;
+  max-width: 650;
+`
+
+const StallAlreadyExistsSectionHeader = styled.h2`
+  margin-top: 0px;
+  margin-bottom: 15px;
+`
+
+const ListItemWithBigSecondaryText = styled(ListItem)`
+  & div:last-child {
+    height: auto !important;
+    white-space: normal !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    overflow: auto !important;
+  }
+`
+
 class AddStallForm extends React.PureComponent<IProps, {}> {
   render() {
     const {
@@ -188,6 +210,38 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
         <Step>
           <StepLabel>Tell us about your stall</StepLabel>
           <StepContentStyled>
+            {stallLocationInfo?.stall !== null && (
+              <StallAlreadyExistsSection>
+                <StallAlreadyExistsSectionHeader>
+                  We&apos;ve already had a submission for this polling booth
+                </StallAlreadyExistsSectionHeader>
+
+                <PollingPlaceCardMiniContainer
+                  pollingPlace={stallLocationInfo}
+                  election={chosenElection}
+                  showFullCard={true}
+                  showCopyLinkButton={false}
+                />
+
+                <List>
+                  <ListItemWithBigSecondaryText
+                    primaryText="Would you like to edit it?"
+                    secondaryText="If this was you and you'd like to make a change, check your inbox for the
+                  confirmation email we sent you. There's a link in there that will let you edit your stall."
+                    secondaryTextLines={2}
+                    leftAvatar={<Avatar icon={<EditorModeEdit />} />}
+                  />
+                  <ListItemWithBigSecondaryText
+                    primaryText="Have another stall to add?"
+                    secondaryText="If this wasn't you, or if you're running another stall at this booth, please review what's already here and consider if you need to list your stall in addition to the existing
+                  one. If you still want to add content, you can do so below."
+                    secondaryTextLines={2}
+                    leftAvatar={<Avatar icon={<AvFiberNew />} />}
+                  />
+                </List>
+              </StallAlreadyExistsSection>
+            )}
+
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* <div> required here so that StepContentStyled works */}
               <div>
