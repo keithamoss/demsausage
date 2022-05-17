@@ -27,6 +27,7 @@ def get_map_screenshot(election):
         with open('/app/logs/webdriver/geckodriver.log', 'x') as f:
             pass
 
+    # .install() uses GH_TOKEN to get a higher rate limit
     driver = webdriver.Firefox(service=Service(GeckoDriverManager().install(), log_path='/app/logs/webdriver/geckodriver.log'), options=firefox_options)
 
     # driver.maximize_window()
