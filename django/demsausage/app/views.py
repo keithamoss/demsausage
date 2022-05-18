@@ -43,7 +43,8 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
-from demsausage.rq.jobs import task_regenerate_cached_election_data
+from demsausage.rq.jobs import (task_generate_election_map_screenshot,
+                                task_regenerate_cached_election_data)
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
@@ -426,24 +427,36 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
     renderer_classes = (PNGRenderer,)
     permission_classes = (AllowAny,)
 
+    # A screenshot of a specific election
     def retrieve(self, request, pk=None, format=None):
-        election = self.get_object()
-        png_image = get_map_screenshot(election)
+        # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
+        # So let's fire off a job to cache an image for this election...
+        task_generate_election_map_screenshot.delay(election_id=pk)
 
-        cache_key = get_election_map_png_cache_key(election.id)
-        cache.set(cache_key, png_image)
-        return Response(png_image)
+        # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
+        try:
+            with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+                default_map_png = f.read()
+                return Response(default_map_png)
+        except:
+            return HttpResponseBadRequest()
 
+    # A screenshot of the default election (i.e. the current active primary election) for use where no specific election needs to be shown
     def list(self, request, format=None):
+        # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
+
         primaryElection = getDefaultElection()
         if primaryElection is not None:
-            png_image = get_map_screenshot(primaryElection)
+            # So let's fire off a job to cache an image for this election...
+            task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
 
-            cache_key = get_default_election_map_png_cache_key()
-            cache.set(cache_key, png_image)
-            return Response(png_image)
-
-        return HttpResponseBadRequest()
+            # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
+            try:
+                with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+                    default_map_png = f.read()
+                    return Response(default_map_png)
+            except:
+                return HttpResponseBadRequest()
 
 
 class StallsViewSet(viewsets.ModelViewSet):

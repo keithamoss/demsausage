@@ -38,3 +38,21 @@ def task_regenerate_cached_election_data(election_id):
     defaultElection = getDefaultElection()
     if defaultElection is not None and defaultElection.id == election_id:
         cache.set(get_default_election_map_png_cache_key(), png_image)
+
+
+@job("cache_hydration", timeout=20, meta={"_custom_job_name": "task_generate_election_map_screenshot_{election_id}", "_ensure_task_is_unique_in_scheduled_jobs": True})
+def task_generate_election_map_screenshot(election_id):
+    log_task_debug_info(get_current_job())
+
+    from demsausage.app.models import Elections
+    from demsausage.app.sausage.elections import (
+        get_default_election_map_png_cache_key, get_election_map_png_cache_key,
+        getDefaultElection)
+    from demsausage.app.webdriver import get_map_screenshot
+
+    png_image = get_map_screenshot(Elections.objects.get(id=election_id))
+    cache.set(get_election_map_png_cache_key(election_id), png_image)
+
+    defaultElection = getDefaultElection()
+    if defaultElection is not None and defaultElection.id == election_id:
+        cache.set(get_default_election_map_png_cache_key(), png_image)
