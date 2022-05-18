@@ -10,7 +10,7 @@ from rq import Retry, get_current_job
 logger = make_logger(__name__)
 
 
-@job("cache_hydration", timeout=60, meta={"_custom_job_name": "task_regenerate_cached_election_data_{election_id}", "_ensure_task_is_unique_in_scheduled_jobs": True})
+@job("cache_hydration", timeout=90, meta={"_custom_job_name": "task_regenerate_cached_election_data_{election_id}", "_ensure_task_is_unique_in_scheduled_jobs": True})
 def task_regenerate_cached_election_data(election_id):
     log_task_debug_info(get_current_job())
 
@@ -40,7 +40,7 @@ def task_regenerate_cached_election_data(election_id):
         cache.set(get_default_election_map_png_cache_key(), png_image)
 
 
-@job("cache_hydration", timeout=20, meta={"_custom_job_name": "task_generate_election_map_screenshot_{election_id}", "_ensure_task_is_unique_in_scheduled_jobs": True})
+@job("cache_hydration", timeout=40, meta={"_custom_job_name": "task_generate_election_map_screenshot_{election_id}", "_ensure_task_is_unique_in_scheduled_jobs": True})
 def task_generate_election_map_screenshot(election_id):
     log_task_debug_info(get_current_job())
 

@@ -30,35 +30,43 @@ def get_map_screenshot(election):
     # .install() uses GH_TOKEN to get a higher rate limit
     driver = webdriver.Firefox(service=Service(GeckoDriverManager().install(), log_path='/app/logs/webdriver/geckodriver.log'), options=firefox_options)
 
-    # driver.maximize_window()
+    try:
+        # driver.maximize_window()
 
-    # https://typito.com/blog/video-resolutions/
-    # driver.set_window_size(2560, 1440)
-    # driver.set_window_size(1920, 1080)
-    driver.set_window_size(1200, 630)
-    driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election)}?embed=1')
+        # https://typito.com/blog/video-resolutions/
+        # driver.set_window_size(2560, 1440)
+        # driver.set_window_size(1920, 1080)
+        driver.set_window_size(1200, 630)
+        driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election)}?embed=1')
 
-    # Give the map and basemap tiles time to load
-    sleep(6)
+        # Give the map and basemap tiles time to load
+        sleep(6)
 
-    def find_element_or_none():
-        try:
-            return driver.find_element(by=By.CSS_SELECTOR, value='div.map-loading')
-        except NoSuchElementException:
-            return None
+        def find_element_or_none():
+            try:
+                return driver.find_element(by=By.CSS_SELECTOR, value='div.map-loading')
+            except NoSuchElementException:
+                return None
 
-    # Try and wait for the map to finish loading
-    retryCounter = 0
-    while find_element_or_none() is not None and retryCounter < 10:
-        retryCounter += 1
-        sleep(2)
+        # Try and wait for the map to finish loading
+        retryCounter = 0
+        while find_element_or_none() is not None and retryCounter < 10:
+            retryCounter += 1
+            sleep(2)
 
-    # driver.save_screenshot('screenie.png')
-    image = driver.get_full_page_screenshot_as_png()
+        # driver.save_screenshot('screenie.png')
+        image = driver.get_full_page_screenshot_as_png()
 
-    driver.quit()
+        driver.quit()
 
-    return image
+        return image
+
+    except Exception as e:
+        # In case of exceptions, ensure the browser process (e.g. firefox-esr) dies and doesn't just hang around
+        # https://stackoverflow.com/questions/15067107/difference-between-webdriver-dispose-close-and-quit
+        # https://stackoverflow.com/questions/54241243/how-to-kill-the-webdriver-instance-keeping-the-web-browser-open
+        driver.quit()
+        raise e
 
     # For targeting particular elements
     # https://www.lambdatest.com/blog/python-selenium-screenshots/
