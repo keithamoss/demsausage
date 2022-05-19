@@ -446,7 +446,20 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
 
     # Hacky hacky...make this all work better
     def list(self, request, format=None):
-        return HttpResponseBadRequest()
+        # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
+
+        primaryElection = getDefaultElection()
+        if primaryElection is not None:
+            # So let's fire off a job to cache an image for this election...
+            task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
+
+            # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
+            try:
+                with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+                    default_map_png = f.read()
+                    return Response(default_map_png)
+            except:
+                return HttpResponseBadRequest()
 
 
 class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
