@@ -441,8 +441,14 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
         except:
             return HttpResponseBadRequest()
 
+
+class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
+    permission_classes = (AllowAny,)
+    queryset = Elections.objects
+    renderer_classes = (PNGRenderer,)
+
     # A screenshot of the default election (i.e. the current active primary election) for use where no specific election needs to be shown
-    def list(self, request, format=None):
+    def get(self, request):
         # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
 
         primaryElection = getDefaultElection()
@@ -457,6 +463,17 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
                     return Response(default_map_png)
             except:
                 return HttpResponseBadRequest()
+
+    # We were seeing a fair number of HEAD requests for the default map image.
+    # (Presumably from the crawlers building the social previews? Or someother bot doing things there?)
+    # Not sure why it was only the default and not a specific election. I guess because the homepage uses
+    # the default map image?
+    # Anyway, this is a hacky fix for that.
+    # Couldn't find a good way to make the old ElectionMapStaticImageViewSet.list() route respond to HEAD
+    # requests, so this is the workaround.
+    # I guess we could also have done it in NGINX by terminating there and returning a 200 OK? Meh.
+    def head(self, request):
+        return Response()
 
 
 class StallsViewSet(viewsets.ModelViewSet):

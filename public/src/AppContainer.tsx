@@ -222,7 +222,7 @@ class AppContainer extends React.Component<TComponentProps, IStateProps> {
             <meta property="og:type" content="website" />
             <meta property="og:url" content={getBaseURL()} />
             <meta property="og:title" content="Democracy Sausage" />
-            <meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/`} />
+            <meta property="og:image" content={`${getAPIBaseURL()}/0.1/current_map_image/`} />
             <meta
               property="og:description"
               content="A real-time crowd-sourced map of sausage and cake availability at Australian elections. It's practically part of the Australian Constitution. Or something. #demsausage"

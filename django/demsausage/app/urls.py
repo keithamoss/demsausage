@@ -5,8 +5,10 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
 from rest_framework import routers
 from rest_framework.permissions import AllowAny
 
-from .views import (CurrentUserView, ElectionMapStaticImageViewSet,
-                    ElectionsViewSet, LogoutUserView, MailManagementViewSet,
+from .views import (CurrentUserView,
+                    ElectionMapStaticImageCurrentDefaultElectionViewSet,
+                    ElectionMapStaticImageViewSet, ElectionsViewSet,
+                    LogoutUserView, MailManagementViewSet,
                     PendingStallsViewSet, PollingPlaceFacilityTypeViewSet,
                     PollingPlacesGeoJSONViewSet, PollingPlacesJSONViewSet,
                     PollingPlacesNearbyViewSet, PollingPlacesSearchViewSet,
@@ -38,6 +40,7 @@ urlpatterns = [
     url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
     url(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),
     url(r'^api/0.1/', include(router.urls)),
+    url(r'^api/0.1/current_map_image/$', ElectionMapStaticImageCurrentDefaultElectionViewSet.as_view(), name='current-map-image'),
     url(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
     url(r'^api/0.1/logout$', LogoutUserView.as_view(), name='api-logout'),
     # make sure that the API never serves up the react app

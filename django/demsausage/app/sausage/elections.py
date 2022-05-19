@@ -27,7 +27,7 @@ def get_election_map_png_cache_key(electionId):
 
 
 def get_default_election_map_png_cache_key():
-    return "election_/api/0.1/map_image/_map_export_png"
+    return "current_election_map_export_png"
 
 
 def get_elections_cache_key():
