@@ -642,7 +642,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             # https://www.google.com.au/maps/place/Queen+of+Peace+Parish+Primary,+62+Everingham+Rd,+Altona+Meadows+VIC+3028 (note: does not zoom, but just need to click result)
 
             # Try to ensure that the group polling places are actually the same place
-            unique_keys = list(set(["{}/{}".format(pp["name"], pp["premises"]) for pp in polling_places]))
+            unique_keys = list(set(["{} ({})".format(pp["name"], pp["premises"]) for pp in polling_places]))
             if len(unique_keys) > 1:
                 self.logger.error("Deduping: Found multiple unique polling places sharing the same location: {}".format(", ".join(unique_keys)))
 

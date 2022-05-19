@@ -45,6 +45,150 @@
                     "value": 151.239767
                 }
             ]
+        },
+        {
+            "field": "ec_id",
+            "value": 2887,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.88694957623772
+                },
+                {
+                    "field": "lon",
+                    "value": 151.2124001071115
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 46435,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -34.68968738737803
+                },
+                {
+                    "field": "lon",
+                    "value": 138.7141293913578
+                },
+                {
+                    "field": "entrance_desc",
+                    "value": "Use rear pedestrian gate off of Somerset Grove - next to the gym"
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1475,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.755306457346464
+                },
+                {
+                    "field": "lon",
+                    "value": 150.6097771238578
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 11978,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.806824753560676
+                },
+                {
+                    "field": "lon",
+                    "value": 150.95353600487007
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 81621,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.806824753560676
+                },
+                {
+                    "field": "lon",
+                    "value": 150.95353600487007
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1051,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.769365588737415
+                },
+                {
+                    "field": "lon",
+                    "value": 150.93716583271913
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1042,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.77701786927137
+                },
+                {
+                    "field": "lon",
+                    "value": 150.9247200383731
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1030,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.74747662545731
+                },
+                {
+                    "field": "lon",
+                    "value": 150.89069333206263
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 402,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.7673706076731
+                },
+                {
+                    "field": "lon",
+                    "value": 150.82192702960785
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 83589,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.77153067607477
+                },
+                {
+                    "field": "lon",
+                    "value": 150.83803072773907
+                }
+            ]
         }
     ],
     "geocoding": {
