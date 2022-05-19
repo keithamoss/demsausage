@@ -213,6 +213,9 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
         if election.id in [27, 37]:
             stats = FederalSausagelytics(election)
+        elif election.id in [29]:
+            # No data for the 2020 NT Election because COVID :(
+            return HttpResponseNotFound()
         elif election.short_name.startswith("FED ") == False:
             stats = StateSausagelytics(election)
         else:
