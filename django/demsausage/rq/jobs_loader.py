@@ -10,7 +10,7 @@ from rq import Retry, get_current_job
 logger = make_logger(__name__)
 
 
-@job("cache_hydration", timeout=600, retry=Retry(max=1), meta={"_custom_job_name": "task_refresh_polling_place_data_{election_id}", "_ensure_task_is_unique": True})
+@job("cache_hydration", timeout=900, retry=Retry(max=1), meta={"_custom_job_name": "task_refresh_polling_place_data_{election_id}", "_ensure_task_is_unique": True})
 def task_refresh_polling_place_data(election_id, file, dry_run, config):
     log_task_debug_info(get_current_job())
 
