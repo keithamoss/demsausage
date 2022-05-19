@@ -189,6 +189,20 @@
                     "value": 150.83803072773907
                 }
             ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1476,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.7465560892024
+                },
+                {
+                    "field": "lon",
+                    "value": 150.62407404685226
+                }
+            ]
         }
     ],
     "geocoding": {

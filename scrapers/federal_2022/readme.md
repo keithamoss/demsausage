@@ -50,6 +50,7 @@ Note: Some of these look like additions, but others had the correct location in 
 8. Marayong West (PPID=1030): -33.74747662545731, 150.89069333206263 (was -33.785393 150.915389). Incorrectly duplicated the coordinates of Blacktown (PPID=11947).
 9. Mount Druitt (PPID=402): -33.7673706076731, 150.82192702960785 (was -33.785393 150.915389). Incorrectly duplicated the coordinates of Blacktown (PPID=11947).
 10. Rooty Hill West (PPID=83589): -33.77153067607477, 150.83803072773907 (was -33.785393 150.915389). Incorrectly duplicated the coordinates of Blacktown (PPID=11947).
+11. Blaxland East (PPID=1476): -33.7465560892024, 150.62407404685226 (was -33.638879 150.285664). Incorrectly duplicated the coordinates of Blackheath (PPID=1749).
 
 ## May 15th 2022 (loaded May 15th)
 
