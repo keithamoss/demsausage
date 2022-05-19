@@ -468,6 +468,22 @@ export function getWheelchairAccessDescription(pollingPlace: IPollingPlace) {
   return hasAnyWheelchairAccess(pollingPlace) === true ? pollingPlace.wheelchair_access : 'None'
 }
 
+export function hasEntranceDescription(pollingPlace: IPollingPlace) {
+  return pollingPlace.entrance_desc !== ''
+}
+
+export function getEntranceDescription(pollingPlace: IPollingPlace) {
+  if (hasEntranceDescription(pollingPlace) === true) {
+    if (pollingPlace.entrance_desc.startsWith('Entrance to polling place: ')) {
+      return pollingPlace.entrance_desc.slice('Entrance to polling place: '.length)
+    }
+
+    return pollingPlace.entrance_desc
+  }
+
+  return 'No information supplied'
+}
+
 export const getBBoxFromPollingPlaces = (pollingPlaces: IPollingPlace[]) => {
   return {
     lat_top: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[1])),

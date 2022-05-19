@@ -7,6 +7,7 @@ import {
   AlertWarning,
   DeviceAccessTime,
   EditorFormatListBulleted,
+  MapsDirections,
   MapsRestaurant,
   PlacesCasino,
   SocialPublic,
@@ -22,11 +23,13 @@ import SausageIcon from '../../icons/sausage'
 import VegoIcon from '../../icons/vego'
 import { IElection, isElectionLive } from '../../redux/modules/elections'
 import {
+  getEntranceDescription,
   getFoodDescription,
   getSausageChancColourIndicator,
   getSausageChanceDescription,
   getWheelchairAccessDescription,
   hasAnyWheelchairAccess,
+  hasEntranceDescription,
   IPollingPlace,
   IPollingPlaceSearchResult,
   pollingPlaceHasReports,
@@ -306,6 +309,12 @@ export default function PollingPlaceCardMini(props: IProps) {
               <ActionInfoOutline /> <span>{pollingPlace.stall.extra_info}</span>
             </StallIconAndTextRow>
           )}
+
+        {hasEntranceDescription(pollingPlace) === true && (
+          <StallIconAndTextRow>
+            <MapsDirections /> <span>Entrance: {getEntranceDescription(pollingPlace)}</span>
+          </StallIconAndTextRow>
+        )}
 
         {hasAnyWheelchairAccess(pollingPlace) === true && showFullCard === true && (
           <StallIconAndTextRow>
