@@ -40,7 +40,7 @@ def get_map_screenshot(election):
         driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election)}?embed=1')
 
         # Give the map and basemap tiles time to load
-        sleep(6)
+        sleep(8)
 
         def find_element_or_none():
             try:
