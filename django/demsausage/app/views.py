@@ -444,6 +444,10 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
         except:
             return HttpResponseBadRequest()
 
+    # Hacky hacky...make this all work better
+    def list(self, request, format=None):
+        return HttpResponseBadRequest()
+
 
 class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
     permission_classes = (AllowAny,)
