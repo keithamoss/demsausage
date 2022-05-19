@@ -246,7 +246,10 @@ class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
             if "noms" in stall_representation:
                 noms_representation = stall_representation.pop("noms")
                 for noms_name, prop in noms_schema["properties"].items():
-                    representation[f"stall_noms_{noms_name}"] = 1 if noms_name in noms_representation and noms_representation[noms_name] is True else 0
+                    if noms_name == "free_text":
+                        representation[f"stall_noms_{noms_name}"] = noms_representation[noms_name] if "free_text" in noms_representation else ""
+                    else:
+                        representation[f"stall_noms_{noms_name}"] = 1 if noms_name in noms_representation and noms_representation[noms_name] is True else 0
 
             for key in stall_representation:
                 representation[f"stall_{key}"] = stall_representation[key]
