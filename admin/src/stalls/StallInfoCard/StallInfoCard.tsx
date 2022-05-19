@@ -35,6 +35,9 @@ const ListItemWithBigSecondaryText = styled(ListItem)`
   & div:last-child {
     height: auto !important;
     white-space: normal !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    overflow: auto !important;
   }
 `
 
@@ -84,7 +87,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
               leftIcon={<MapsPlace />}
               disabled={true}
             />
-            <ListItem
+            <ListItemWithBigSecondaryText
               primaryText="Name"
               secondaryText={stall.name}
               leftIcon={<ActionLabel />}
@@ -92,7 +95,7 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
               style={getFieldStyle('name')}
             />
             {whatChangedFields.includes('name') && (
-              <ListItem
+              <ListItemWithBigSecondaryText
                 primaryText="Name (was previously)"
                 secondaryText={stall.current_stall?.name}
                 leftIcon={<ActionLabel />}
@@ -103,16 +106,16 @@ class StallInfoCard extends React.PureComponent<IProps, {}> {
             <ListItemWithBigSecondaryText
               primaryText="Description"
               secondaryText={stall.description}
-              secondaryTextLines={3}
+              secondaryTextLines={2}
               leftIcon={<ActionDescription />}
               disabled={true}
               style={getFieldStyle('description')}
             />
             {whatChangedFields.includes('description') && (
-              <ListItem
+              <ListItemWithBigSecondaryText
                 primaryText="Description (was previously)"
                 secondaryText={stall.current_stall?.description}
-                secondaryTextLines={3}
+                secondaryTextLines={2}
                 leftIcon={<ActionDescription />}
                 disabled={true}
                 style={getFieldStyleForPreviousValue('description')}
