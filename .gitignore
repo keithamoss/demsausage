@@ -12,3 +12,5 @@ logs/
 initial-data/emails.csv
 TODO*.md
 redis/*
+demsausage-logs-federal-2022/
+db-a-logs-federal-election-2022/
