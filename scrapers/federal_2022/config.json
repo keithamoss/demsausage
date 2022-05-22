@@ -203,6 +203,48 @@
                     "value": 150.62407404685226
                 }
             ]
+        },
+        {
+            "field": "ec_id",
+            "value": 6208,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -26.5699088791283
+                },
+                {
+                    "field": "lon",
+                    "value": 148.78947214890607
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 7212,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -35.021817532730324
+                },
+                {
+                    "field": "lon",
+                    "value": 138.71269299191056
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 6936,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -30.592711384297914
+                },
+                {
+                    "field": "lon",
+                    "value": 138.40114226600966
+                }
+            ]
         }
     ],
     "geocoding": {

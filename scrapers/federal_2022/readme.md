@@ -26,6 +26,21 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## May 21st 2022 (loaded May 22nd)
+
+Source: `prdelms.gaz.statics.220521.09.00.01`
+Source: Overseas polling places retrieved May 19th - No change (number with in-person voting = 19)
+
+### Data file formatting errors (AEC notified; fixed at ingest)
+
+1. Darlinghurst South (PPID=83845): The issue from the May 19th load remains.
+
+### Wrong location (AEC notified; fixed at ingest)
+
+1. Roma South (PPID=6208): -26.5699088791283, 148.78947214890607 (was -26.5745 148.787). Incorrectly located the booth a few blocks away at Roma State College - Junior Campus.
+2. Mylor (PPID=7212): -35.021817532730324, 138.71269299191056 (was -35.05404251 138.7236294). Incorrectly located the booth a few kilometres to the south.
+3. Leigh Creek (PPID=6936): -30.592711384297914, 138.40114226600966 (was -30.5925456 143.4016719). Incorrectly located the booth in New South Wales.
+
 ## May 19th 2022 (loaded May 19th)
 
 Source: `prdelms.gaz.statics.220519.09.00.01.csv`
