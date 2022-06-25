@@ -46,7 +46,7 @@
     "reselect": "^4.1.6",
     "styled-components": "^5.3.5",
     "usehooks-ts": "2.5.4",
-    "victory": "^36.5.0",
+    "victory": "^36.5.2",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
