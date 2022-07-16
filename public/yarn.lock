@@ -2128,10 +2128,10 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-router-redux@^4.0.54":
-  version "4.0.54"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.54.tgz#432a875252529c50d74c7b230782e99cd0aceaa1"
-  integrity sha512-dPvCg55wPtPHMmiaK0JqYC+ffFyiRQXDYRLe7KxgovY6MULjdYlplTZPgpdgKVchLhzbjJ50jbuvrzFHbOqpeg==
+"@types/react-router-redux@^4.0.55":
+  version "4.0.55"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.55.tgz#3d36ebc9001969db5b2fe9b9f9786ec45953d3fb"
+  integrity sha512-2fbxIc9OTmVyOUgBnRa3gcbMJT035Scu1bmkYMEiv7IzMht24W+gGzIrlYurSz3cijY4r9d16O/0+nycZ0RXjg==
   dependencies:
     "@types/history" "^3.2.5"
     redux "^3.6.0"
