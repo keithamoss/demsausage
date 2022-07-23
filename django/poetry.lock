@@ -7,7 +7,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
+tests = ["mypy (>=0.800)", "pytest-asyncio", "pytest"]
 
 [[package]]
 name = "async-generator"
@@ -465,10 +465,10 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+docs = ["zope.interface", "sphinx-rtd-theme", "sphinx"]
+dev = ["pre-commit", "mypy", "coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)", "cryptography (>=3.3.1)", "zope.interface", "sphinx-rtd-theme", "sphinx"]
 crypto = ["cryptography (>=3.3.1)"]
-dev = ["sphinx", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.3.1)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "mypy", "pre-commit"]
-docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
-tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
 
 [[package]]
 name = "pymemcache"
@@ -642,7 +642,7 @@ urllib3 = {version = ">=1.26,<2.0", extras = ["secure", "socks"]}
 
 [[package]]
 name = "sentry-sdk"
-version = "1.7.2"
+version = "1.8.0"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -660,6 +660,7 @@ celery = ["celery (>=3)"]
 chalice = ["chalice (>=1.16.0)"]
 django = ["django (>=1.8)"]
 falcon = ["falcon (>=1.4)"]
+fastapi = ["fastapi (>=0.79.0)"]
 flask = ["flask (>=0.11)", "blinker (>=1.1)"]
 httpx = ["httpx (>=0.16.0)"]
 pure_eval = ["pure-eval", "executing", "asttokens"]
@@ -668,6 +669,7 @@ quart = ["quart (>=0.16.1)", "blinker (>=1.1)"]
 rq = ["rq (>=0.6)"]
 sanic = ["sanic (>=0.8)"]
 sqlalchemy = ["sqlalchemy (>=1.2)"]
+starlette = ["starlette (>=0.19.1)"]
 tornado = ["tornado (>=5)"]
 
 [[package]]
@@ -882,7 +884,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a51706b6fbddf5fa89f25390cf41a25a69c376ad1085374db7b0a472975880d5"
+content-hash = "0184480efa28589ad55585707f7b976e910d52ec3811cb6386f9e90e2586fa95"
 
 [metadata.files]
 asgiref = [
@@ -1367,8 +1369,8 @@ selenium = [
     {file = "selenium-4.3.0-py3-none-any.whl", hash = "sha256:f67402b8f973aaa98d9c55b8f9aa63532009cd1859b2222a8b9800354942d8bc"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.7.2.tar.gz", hash = "sha256:95fd321f583dfcfaf279a0b2cdc83d8d28c8b7cca4d2959fc4539bb4fecb56a0"},
-    {file = "sentry_sdk-1.7.2-py2.py3-none-any.whl", hash = "sha256:6f460da98b730d671510af18f119f96d01e3ba027ac0e985871abb3aede1c514"},
+    {file = "sentry-sdk-1.8.0.tar.gz", hash = "sha256:9c68e82f7b1ad78aee6cdef57c2c0f6781ddd9ffa8848f4503c5a8e02b360eea"},
+    {file = "sentry_sdk-1.8.0-py2.py3-none-any.whl", hash = "sha256:5daae00f91dd72d9bb1a65307221fe291417a7b9c30527de3a6f0d9be4ddf08d"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
