@@ -30,7 +30,7 @@ drf-spectacular = "^0.23.1"
 selenium = "^4.3.0"
 webdriver-manager = "^3.8.2"
 pytz = "^2022.1"
-rq = "^1.10.1"
+rq = "^1.11.0"
 django-rq = "^2.5.1"
 
 [tool.poetry.dev-dependencies]
