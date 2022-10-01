@@ -627,7 +627,7 @@ redis = ">=3.5.0"
 
 [[package]]
 name = "selenium"
-version = "4.4.3"
+version = "4.5.0"
 description = ""
 category = "main"
 optional = false
@@ -916,7 +916,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "953090c13117ab6d7a128f939694253f219e8f99e27b7b2e074cd72c825530be"
+content-hash = "4e320d111d3ea068fda206f61a2b5eaa13c7f5c85e2a27797d4048502c11eb70"
 
 [metadata.files]
 asgiref = [
@@ -1407,7 +1407,7 @@ rq = [
     {file = "rq-1.11.0.tar.gz", hash = "sha256:50d0cf687cfb2530eac9396c7426e420958a166e8f4666bd2096bdcf7f4ad03e"},
 ]
 selenium = [
-    {file = "selenium-4.4.3-py3-none-any.whl", hash = "sha256:ca6ed4a58a426bb40bf5aa2b027ce211cc5200f1acdcdfb8258b32b24624150c"},
+    {file = "selenium-4.5.0-py3-none-any.whl", hash = "sha256:a733dd77d3171b846893f4d51b18967d809313f547a10974e26579f9ce797462"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-1.9.8.tar.gz", hash = "sha256:ef4b4d57631662ff81e15c22bf007f7ce07c47321648c8e601fbd22950ed1a79"},
