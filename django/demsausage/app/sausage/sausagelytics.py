@@ -181,9 +181,10 @@ class StateSausagelytics(SausagelyticsBase):
     def _get_stats_for_state(self):
         # Calculate stats for all booths in the state
         queryset_all_booths = super(StateSausagelytics, self).get_queryset()
+        first_booth = queryset_all_booths.first()
 
         data = {
-            "domain": queryset_all_booths.first().state,
+            "domain": first_booth.state if first_booth is not None else "",
             "data": {
                 "all_booths": {
                     "booth_count": queryset_all_booths.count(),
