@@ -368,7 +368,7 @@ class PendingStallsSerializer(StallsSerializer):
             } for c in delta.changes if c.field in fields_to_include_in_diff]
 
     def get_current_stall(self, obj):
-        return PollingPlaceNomsSerializer(PollingPlaceNoms.objects.get(id=obj.polling_place.noms_id)).data if obj.polling_place.noms_id is not None else None
+        return PollingPlaceNomsSerializer(PollingPlaceNoms.objects.get(id=obj.polling_place.noms_id)).data if obj.polling_place is not None and obj.polling_place.noms_id is not None else None
 
 
 class MailgunEventsSerializer(serializers.ModelSerializer):

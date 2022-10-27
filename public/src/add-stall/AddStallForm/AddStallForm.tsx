@@ -210,37 +210,38 @@ class AddStallForm extends React.PureComponent<IProps, {}> {
         <Step>
           <StepLabel>Tell us about your stall</StepLabel>
           <StepContentStyled>
-            {stallLocationInfo?.stall !== null && (
-              <StallAlreadyExistsSection>
-                <StallAlreadyExistsSectionHeader>
-                  We&apos;ve already had a submission for this polling booth
-                </StallAlreadyExistsSectionHeader>
+            {stallLocationInfo?.stall !== null ||
+              (stallLocationInfo?.stall !== undefined && (
+                <StallAlreadyExistsSection>
+                  <StallAlreadyExistsSectionHeader>
+                    We&apos;ve already had a submission for this polling booth
+                  </StallAlreadyExistsSectionHeader>
 
-                <PollingPlaceCardMiniContainer
-                  pollingPlace={stallLocationInfo}
-                  election={chosenElection}
-                  showFullCard={true}
-                  showCopyLinkButton={false}
-                />
+                  <PollingPlaceCardMiniContainer
+                    pollingPlace={stallLocationInfo}
+                    election={chosenElection}
+                    showFullCard={true}
+                    showCopyLinkButton={false}
+                  />
 
-                <List>
-                  <ListItemWithBigSecondaryText
-                    primaryText="Would you like to edit it?"
-                    secondaryText="If this was you and you'd like to make a change, check your inbox for the
+                  <List>
+                    <ListItemWithBigSecondaryText
+                      primaryText="Would you like to edit it?"
+                      secondaryText="If this was you and you'd like to make a change, check your inbox for the
                   confirmation email we sent you. There's a link in there that will let you edit your stall."
-                    secondaryTextLines={2}
-                    leftAvatar={<Avatar icon={<EditorModeEdit />} />}
-                  />
-                  <ListItemWithBigSecondaryText
-                    primaryText="Have another stall to add?"
-                    secondaryText="If this wasn't you, or if you're running another stall at this booth, please review what's already here and consider if you need to list your stall in addition to the existing
+                      secondaryTextLines={2}
+                      leftAvatar={<Avatar icon={<EditorModeEdit />} />}
+                    />
+                    <ListItemWithBigSecondaryText
+                      primaryText="Have another stall to add?"
+                      secondaryText="If this wasn't you, or if you're running another stall at this booth, please review what's already here and consider if you need to list your stall in addition to the existing
                   one. If you still want to add content, you can do so below."
-                    secondaryTextLines={2}
-                    leftAvatar={<Avatar icon={<AvFiberNew />} />}
-                  />
-                </List>
-              </StallAlreadyExistsSection>
-            )}
+                      secondaryTextLines={2}
+                      leftAvatar={<Avatar icon={<AvFiberNew />} />}
+                    />
+                  </List>
+                </StallAlreadyExistsSection>
+              ))}
 
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* <div> required here so that StepContentStyled works */}
