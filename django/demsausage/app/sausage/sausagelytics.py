@@ -195,8 +195,11 @@ class StateSausagelytics(SausagelyticsBase):
 
         # Calculate stats for booths by noms in the state
         for noms_name in self.noms_names:
-            queryset_stats_with_this_noms = self._filter_by_noms(queryset_all_booths, noms_name)
+            data["data"]["all_booths_by_noms"][noms_name] = {
+                "booth_count": 0,
+            }
 
+            queryset_stats_with_this_noms = self._filter_by_noms(queryset_all_booths, noms_name)
             for stats in queryset_stats_with_this_noms:
                 data["data"]["all_booths_by_noms"][noms_name] = {
                     "booth_count": stats["booth_count"],

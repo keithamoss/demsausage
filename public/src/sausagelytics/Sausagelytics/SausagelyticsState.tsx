@@ -124,13 +124,14 @@ class SausagelyticsState extends React.PureComponent<IProps, {}> {
                     <TableRowColumn>{nomsName.replace(/_/g, ' ')}</TableRowColumn>
                     <TableRowColumn>{stats.state.data.all_booths_by_noms[nomsName].booth_count}</TableRowColumn>
                     <TableRowColumn>
-                      {new Intl.NumberFormat('en-AU', {
-                        style: 'percent',
-                        minimumFractionDigits: 1,
-                      }).format(
-                        stats.state.data.all_booths_by_noms[nomsName].booth_count /
-                          stats.state.data.all_booths.booth_count
-                      )}
+                      {stats.state.data.all_booths.booth_count > 0 &&
+                        new Intl.NumberFormat('en-AU', {
+                          style: 'percent',
+                          minimumFractionDigits: 1,
+                        }).format(
+                          stats.state.data.all_booths_by_noms[nomsName].booth_count /
+                            stats.state.data.all_booths.booth_count
+                        )}
                     </TableRowColumn>
                   </TableRow>
                 ))}
