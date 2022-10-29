@@ -254,3 +254,22 @@ export function getAPIBaseURL(): string {
   return 'https://public-test-demsausage.loca.lt/api'
 }
 ```
+
+# Maintenance
+
+## PostgreSQL upgrades
+
+The lazy "Eh, just dump everything and reload it rather than trying to upgrade it" approach.
+
+1. Navigate to the shared scripts directory `/var/lib/postgresql/scripts`
+2. Dump the current database with `pg_dumpall -U postgres > dumpfile`
+3. Stop the old container
+4. Rename the old `data` directory
+5. Start the new container
+6. Import the dump into the new container with `psql -U postgres < dumpfile`
+7. ...
+8. Profit!
+
+### PostgreSQL 15
+
+Had to run through [these steps](https://www.crunchydata.com/blog/how-to-upgrade-postgresql-passwords-to-scram) to change the password authentication method being used.

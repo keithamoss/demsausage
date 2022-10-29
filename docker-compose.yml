@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   db:
-    image: mdillon/postgis:10-alpine
+    image: postgis/postgis:15-3.3-alpine
     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     ports:
       - "5432:5432"
