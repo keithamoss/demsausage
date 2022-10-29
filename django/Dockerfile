@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.9-slim-buster
 LABEL maintainer="<keithamoss@gmail.com>"
 
 # Python
@@ -32,8 +32,9 @@ WORKDIR /app
 # Python deps management
 RUN apt-get install -y curl
 RUN curl -sSL https://install.python-poetry.org | python -
+# Even though Dependabot takes care of updating packages for us, we still need this for poetry to install without complaining about some packages "not being available at [version]". Whatever!
 RUN poetry update
-RUN poetry install --no-dev
+RUN poetry install --only main
 
 RUN apt-get remove -y --purge curl && \
   apt-get autoremove -y && \
