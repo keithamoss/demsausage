@@ -1,7 +1,7 @@
 from demsausage.app.sausage.polling_places import \
     get_active_polling_place_queryset
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
 from django.db.models import Count, F, IntegerField, Q, Sum
+from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
 
 

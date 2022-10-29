@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from django.db.models import JSONField
-from django.utils.translation import ugettext_lazy as _
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
 

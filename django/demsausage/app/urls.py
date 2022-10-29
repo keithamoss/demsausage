@@ -1,5 +1,4 @@
-from django.conf.urls import include, url
-from django.urls import path
+from django.urls import include, path, re_path
 from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 from rest_framework import routers
@@ -33,16 +32,16 @@ router.register(r'mail', MailManagementViewSet, 'MailManagementViewSet')
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
 urlpatterns = [
-    url(r'^api/0.1/schema/$', SpectacularAPIView.as_view(), name='schema'),
-    url(r'^api/0.1/schema/swagger-ui/$', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    url(r'^api/0.1/schema/redoc/$', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    url(r'^api/0.1/polling_places/search/$', PollingPlacesSearchViewSet.as_view(), name='api-polling-places-search'),
-    url(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
-    url(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),
-    url(r'^api/0.1/', include(router.urls)),
-    url(r'^api/0.1/current_map_image/$', ElectionMapStaticImageCurrentDefaultElectionViewSet.as_view(), name='current-map-image'),
-    url(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
-    url(r'^api/0.1/logout$', LogoutUserView.as_view(), name='api-logout'),
+    re_path(r'^api/0.1/schema/$', SpectacularAPIView.as_view(), name='schema'),
+    re_path(r'^api/0.1/schema/swagger-ui/$', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    re_path(r'^api/0.1/schema/redoc/$', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    re_path(r'^api/0.1/polling_places/search/$', PollingPlacesSearchViewSet.as_view(), name='api-polling-places-search'),
+    re_path(r'^api/0.1/polling_places/nearby/$', PollingPlacesNearbyViewSet.as_view(), name='api-polling-places-nearby'),
+    re_path(r'^api/0.1/stalls/pending/$', PendingStallsViewSet.as_view(), name='api-stalls-pending'),
+    re_path(r'^api/0.1/', include(router.urls)),
+    re_path(r'^api/0.1/current_map_image/$', ElectionMapStaticImageCurrentDefaultElectionViewSet.as_view(), name='current-map-image'),
+    re_path(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
+    re_path(r'^api/0.1/logout$', LogoutUserView.as_view(), name='api-logout'),
     # make sure that the API never serves up the react app
-    url(r'^api/0.1/.*', api_not_found),
+    re_path(r'^api/0.1/.*', api_not_found),
 ]
