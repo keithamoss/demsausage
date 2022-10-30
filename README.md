@@ -267,9 +267,12 @@ The lazy "Eh, just dump everything and reload it rather than trying to upgrade i
 4. Rename the old `data` directory
 5. Start the new container
 6. Import the dump into the new container with `psql -U postgres < dumpfile`
-7. ...
-8. Profit!
+7. Follow any specific steps for this upgrade (e.g. the `PostgreSQL 10.7 to 15 upgrade` section below)
+8. ...
+9. Profit!
 
-### PostgreSQL 15
+### PostgreSQL 10.7 to 15 upgrade
+
+Performed on 30 October, 2022.
 
 Had to run through [these steps](https://www.crunchydata.com/blog/how-to-upgrade-postgresql-passwords-to-scram) to change the password authentication method being used.
