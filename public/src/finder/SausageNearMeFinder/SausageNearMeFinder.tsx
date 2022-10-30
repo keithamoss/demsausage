@@ -126,7 +126,7 @@ export default function SausageNearMeFinder() {
         <StyledPaper>
           <ListItem
             leftAvatar={<Avatar icon={<ActionInfo />} backgroundColor={blue500} />}
-            primaryText={"Polling places haven't been annonced yet"}
+            primaryText={"Polling places haven't been announced yet"}
             secondaryText={"Until then we're only listing stalls reported by the community."}
             secondaryTextLines={2}
             disabled={true}
