@@ -36,16 +36,16 @@ services:
     command:
       # 5mb to accommodate the larger polling place GeoJSON objects
       - "--max-item-size=5242880"
-  # memcached_gui:
-  #     # http://localhost/index.php (admin/admin)
-  #     image: jacksoncage/phpmemcachedadmin
-  #     environment:
-  #         - MEMCACHED_HOST=memcached
-  #         - MEMCACHED_PORT=11211
-  #     depends_on:
-  #         - memcached
-  #     ports:
-  #         - "80:80"
+  memcached_gui:
+      # http://localhost/index.php (admin/admin)
+      image: jacksoncage/phpmemcachedadmin
+      environment:
+          - MEMCACHED_HOST=memcached
+          - MEMCACHED_PORT=11211
+      depends_on:
+          - memcached
+      ports:
+          - "80:80"
   # memcached_gui:
   #     # http://localhost/index.php (admin/admin)
   #     image: bastienm/phpmemadmin
@@ -102,13 +102,13 @@ services:
       - ./public:/app:delegated
     env_file:
       - secrets/sausage-public-frontend.dev.env
-  frontend_public_redesign:
-    image: node:16-alpine3.14
-    entrypoint: /app/docker-entrypoint.sh
-    volumes:
-      - ./public-redesign:/app:delegated
-    env_file:
-      - secrets/sausage-public-frontend.dev.env
+  # frontend_public_redesign:
+  #   image: node:16-alpine3.14
+  #   entrypoint: /app/docker-entrypoint.sh
+  #   volumes:
+  #     - ./public-redesign:/app:delegated
+  #   env_file:
+  #     - secrets/sausage-public-frontend.dev.env
   frontend_admin:
     image: node:16-alpine3.14
     entrypoint: /app/docker-entrypoint.sh
@@ -127,7 +127,7 @@ services:
     depends_on:
       - django
       - frontend_public
-      - frontend_public_redesign
+      # - frontend_public_redesign
       - frontend_admin
     ports:
       - "443:443"
