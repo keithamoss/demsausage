@@ -620,8 +620,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             return divisions
 
         def _merge_and_sum_extras(polling_places):
-            extras = [pp["extras"] for pp in polling_places]
-            return merge_and_sum_dicts(extras)
+            if "extras" in pp and pp["extras"] != "":
+                extras = [pp["extras"] for pp in polling_places]
+                return merge_and_sum_dicts(extras)
+            return ""
 
         def get_key(polling_place):
             return "{},{}".format(polling_place["geom"].x, polling_place["geom"].y)
@@ -696,12 +698,14 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def migrate_noms(self):
         def _fetch_matching(polling_place):
             if polling_place.ec_id is not None:
+                self.logger.info(f"Doing noms migration by ec_id for {polling_place.name}")
                 results = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT).filter(ec_id=polling_place.ec_id)
                 count = results.count()
                 if count >= 2:
                     self.logger.error("Find by ec_id [{}]: Found {} existing polling places with that id.".format(polling_place.ec_id, count))
                 return results
             else:
+                self.logger.info(f"Doing noms migration by distance for {polling_place.name}")
                 return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
         # Migrate polling places with attached noms (and their stalls)
