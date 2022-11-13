@@ -1,3 +1,3 @@
-scripts/*.dump
+scripts/dumps/
 scripts/electoral_boundaries/*.dump
 scripts/secrets/
