@@ -1,0 +1,8 @@
+{
+    "add_columns": {
+        "ec_id": ""
+    },
+    "geocoding": {
+        "enabled": false
+    }
+}
