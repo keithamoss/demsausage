@@ -268,6 +268,7 @@ class GooglePlacesAutocomplete extends React.Component<IProps, IState> {
 
     return (
       <SearchBar
+        name="search"
         {...(autocompleteProps as any)}
         // Used by Google Places API / No user input
         searchText={this.state.searchText}
