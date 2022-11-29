@@ -157,7 +157,7 @@ class AboutPage extends React.Component<TComponentProps, IStateProps> {
           </Answer>
           <Question>Who are you?</Question>
           <Answer>
-            <p>We&apos;re six people, a baby, and some parrots.</p>
+            <p>We&apos;re six people, three babies, three cats, and some parrots.</p>
             <p>
               Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
               crowdsaucing sausage sizzle locations.
