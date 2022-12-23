@@ -23,7 +23,7 @@ mkdir -p nginx/build/demsausage-api
 # assumes local sources exist for DemocracySausage
 # this is horrible, fixme
 # cp ../demsausage/build/frontend-public-"$DEMSAUSAGE_VERSION".tgz nginx/build/demsausage
-cp ../demsausage/build/frontend-public-redesign-"$DEMSAUSAGE_VERSION".tgz nginx/build/demsausage-redesign
+# cp ../demsausage/build/frontend-public-redesign-"$DEMSAUSAGE_VERSION".tgz nginx/build/demsausage-redesign
 # cp ../demsausage/build/frontend-admin-"$DEMSAUSAGE_ADMIN_VERSION".tgz nginx/build/demsausage-admin
 # cp ../demsausage/build/django-"$DEMSAUSAGE_DJANGO_VERSION".tgz nginx/build/demsausage-api
 

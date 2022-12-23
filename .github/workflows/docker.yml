@@ -95,7 +95,8 @@ jobs:
       - name: Build prep
         run: |
           pwd
-          mkdir build
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       - name: Public Redesign Frontend - Install
         run: yarn install
@@ -118,7 +119,7 @@ jobs:
           mv ./public-redesign/frontend-public-redesign.tgz ./build/frontend-public-redesign.tgz
           ls -l ./build/
           ls -l ./nginx-prod/build/
-          cp ./build/frontend-public-redesign.tgz ./nginx-prod/build/frontend-public-redesign.tgz
+          cp ./build/frontend-public-redesign.tgz ./nginx-prod/build/demsausage-redesign.tgz
           ls -l ./nginx-prod/build/
 
       # - name: Public Redesign Frontend - Build assets
@@ -135,12 +136,13 @@ jobs:
       - name: Prodbuild-nginx
         run: sudo ./prodbuild-nginx.sh
 
-      # - name: Docker push
-      #   run: |
-      #     docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-      #     docker push keithmoss/sausage2-nginx:latest
+      - name: Docker push
+        run: |
+          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
+          docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
+
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
