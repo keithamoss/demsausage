@@ -26,6 +26,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: keithmoss/sausage-nginx (sausage-nginx)
+
+      - name: Extract metadata (tags, labels) for Docker (sausage2-nginx)
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: keithmoss/sausage2-nginx
+
       # Let's get setup with Node
       - uses: actions/setup-node@v3
         with:
@@ -66,6 +78,12 @@ jobs:
           echo $SAUSAGE_ADMIN_FRONTEND_PROD_ENV > secrets/sausage-admin-frontend.prod.env
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
+
+      - name: Prodbuild-nginx
+        run: sudo ./prodbuild-nginx.sh
+
+      - name: Prodbuild-nginx push
+        run: sudo ./prodbuild-dockerpush-nginx.sh
 
       - name: Docker version
         run: docker --version
