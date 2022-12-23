@@ -92,39 +92,39 @@ jobs:
       - name: Docker Compose version
         run: docker-compose --version
 
-      - name: Install public-redesign frontend
+      - name: Build prep
+        run: |
+          pwd
+          mkdir build
+
+      - name: Public Redesign Frontend - Install
         run: yarn install
         working-directory: public-redesign
 
-      - name: Prodbuild public-redesign frontend
-        run: ./prodbuild.sh frontend
-
-      - name: Foobar
+      - name: Public Redesign Frontend - Build
         run: |
-          id
-          pwd
-          echo "ls"
-          ls -l
-          echo "ls build"
-          ls -l build
-          echo "cp"
-          sudo cp build/frontend-public-redesign.tgz build/frontend-public-redesign-VERSION.tgz
-          echo "ls build"
-          ls -l build
+          rm -rf ./build
+          mkdir -p ./build
+          yarn run build
+          cd ./build && tar czvf /build/frontend-public-redesign.tgz .
+          ls -l /build
+        working-directory: public-redesign
 
-      - name: Prodbuild-dockerpush
-        run: sudo ./prodbuild-dockerpush.sh frontend
+      # - name: Prodbuild public-redesign frontend
+      #   run: ./prodbuild.sh frontend
 
-      - name: Prodbuild-nginx
-        run: sudo ./prodbuild-nginx.sh
+      # - name: Prodbuild-dockerpush
+      #   run: sudo ./prodbuild-dockerpush.sh frontend
 
-      - name: Docker push
-        run: |
-          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-          docker push keithmoss/sausage2-nginx:latest
+      # - name: Prodbuild-nginx
+      #   run: sudo ./prodbuild-nginx.sh
+
+      # - name: Docker push
+      #   run: |
+      #     docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
+      #     docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
-
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
