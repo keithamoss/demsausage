@@ -96,6 +96,12 @@ jobs:
       - name: Prodbuild-dockerpush
         run: sudo ./prodbuild-dockerpush.sh frontend
 
+      - name: Prodbuild-nginx
+        run: sudo ./prodbuild-nginx.sh
+
+      - name: Prodbuild-nginx push
+        run: sudo ./prodbuild-dockerpush-nginx.sh
+
     # Start daemonised local dev
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
