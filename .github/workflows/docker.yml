@@ -89,10 +89,10 @@ jobs:
       - name: Prodbuild-nginx
         run: sudo ./prodbuild-nginx.sh
 
-      - name: Prodbuild-nginx
+      - name: Docker push
         run: |
-          sudo docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-          sudo docker push keithmoss/sausage2-nginx:latest
+          docker tag sausage2/nginx:latest keithmoss/sausage-nginx:latest
+          docker push keithmoss/sausage-nginx:latest
 
       - name: Prodbuild-nginx push
         run: sudo ./prodbuild-dockerpush-nginx.sh
