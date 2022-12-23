@@ -1,0 +1,66 @@
+name: Docker
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Let's get setup with Node
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      #       - name: Install homebrew
+      #         run: |
+      #           sudo apt-get update
+      #           sudo apt-get install libnss3-tools
+      #           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      #           # Add Homebrew to path
+      #           # c.f. https://github.community/t5/GitHub-Actions/Installing-Homebrew-on-Linux/td-p/51916
+      #           echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+
+      #       - name: Setup local dev certs
+      #         run: |
+      #           brew install mkcert
+      #           mkcert -install
+      #           mkdir dev-certs
+      #           cd dev-certs
+      #           mkcert localhost
+      #           cd ../
+
+      # So we can daemonise yarn start
+      #     - run: sudo yarn global add pm2
+
+      - name: Foobar
+        run: docker --version
+
+      - name: Foobar
+        run: docker-compose --version
+
+      - name: Foobar
+        run: ./prodbuild.sh frontend
+
+    # Start daemonised local dev
+#     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
+
+# Screenshot the landing page
+#     - name: Take photo of our local build
+#       uses: "lannonbr/puppeteer-screenshot-action@1.3.0"
+#       with:
+# #         url: https://localhost:3000
+#         url: https://trove.keithmoss.me
