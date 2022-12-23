@@ -67,6 +67,19 @@ jobs:
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
 
+      - name: Foobar
+        run: |
+          id
+          pwd
+          echo "ls"
+          ls -l
+          echo "ls build"
+          ls -l build
+          echo "cp"
+          sudo cp prodbuild.sh prodbuild.foobar.sh
+          echo "ls build"
+          ls -l build
+
       - name: Docker version
         run: docker --version
 
@@ -82,14 +95,19 @@ jobs:
 
       - name: Foobar
         run: |
+          id
           pwd
+          echo "ls"
           ls -l
+          echo "ls build"
           ls -l build
-          cp build/frontend-public-redesign.tgz build/frontend-public-redesign-VERSION.tgz
+          echo "cp"
+          sudo cp build/frontend-public-redesign.tgz build/frontend-public-redesign-VERSION.tgz
+          echo "ls build"
           ls -l build
 
       - name: Prodbuild-dockerpush
-        run: ./prodbuild-dockerpush.sh frontend
+        run: sudo ./prodbuild-dockerpush.sh frontend
 
     # Start daemonised local dev
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
