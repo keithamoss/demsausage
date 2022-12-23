@@ -61,16 +61,17 @@ jobs:
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
 
-      - name: Foobar
-        run: tail secrets/sausage-db.dev.env
-
-      - name: Foobar
+      - name: Docker version
         run: docker --version
 
-      - name: Foobar
+      - name: Docker Compose version
         run: docker-compose --version
 
-      - name: Foobar
+      - name: Install public-redesign frontend
+        run: yarn install
+        working-directory: public-redesign
+
+      - name: Prodbuild frontend
         run: ./prodbuild.sh frontend
 
     # Start daemonised local dev
