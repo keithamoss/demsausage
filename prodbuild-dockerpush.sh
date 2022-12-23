@@ -27,10 +27,10 @@ if [ "$CMD" = "frontend" ] || [ "$CMD" = "all" ]; then
     # docker push demsausage/nginx:"$VERSION"
 
     echo versioning frontend assets
-    mv build/frontend-public.tgz build/frontend-public-$VERSION.tgz
+    # mv build/frontend-public.tgz build/frontend-public-$VERSION.tgz
     mv build/frontend-public-redesign.tgz build/frontend-public-redesign-$VERSION.tgz
-    mv build/frontend-admin.tgz build/frontend-admin-$VERSION.tgz
-    mv build/django.tgz build/django-$VERSION.tgz
+    # mv build/frontend-admin.tgz build/frontend-admin-$VERSION.tgz
+    # mv build/django.tgz build/django-$VERSION.tgz
 fi
 
 if [ "$CMD" = "django" ] || [ "$CMD" = "all" ]; then
