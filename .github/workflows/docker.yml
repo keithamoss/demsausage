@@ -86,19 +86,6 @@ jobs:
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
 
-      - name: Prodbuild-nginx
-        run: sudo ./prodbuild-nginx.sh
-
-      - name: Docker push
-        run: |
-          docker tag sausage2/nginx:latest keithmoss/sausage-nginx:latest
-          docker push keithmoss/sausage-nginx:latest
-          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:1
-          docker push keithmoss/sausage2-nginx:1
-
-      - name: Prodbuild-nginx push
-        run: sudo ./prodbuild-dockerpush-nginx.sh
-
       - name: Docker version
         run: docker --version
 
@@ -131,10 +118,13 @@ jobs:
       - name: Prodbuild-nginx
         run: sudo ./prodbuild-nginx.sh
 
-      - name: Prodbuild-nginx push
-        run: sudo ./prodbuild-dockerpush-nginx.sh
+      - name: Docker push
+        run: |
+          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
+          docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
+
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
