@@ -46,6 +46,16 @@ jobs:
       # So we can daemonise yarn start
       #     - run: sudo yarn global add pm2
 
+      - name: Do Something with env files
+        env:
+          SAUSAGE_DB_DEV_ENV: ${{ secrets.SAUSAGE_DB_DEV_ENV }}
+        run: |
+          mkdir secrets
+          echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
+
+      - name: Foobar
+        run: tail secrets/sausage-db.dev.env
+
       - name: Foobar
         run: docker --version
 
