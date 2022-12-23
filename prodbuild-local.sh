@@ -14,6 +14,8 @@ if [ "$CMD" = "frontend" ] || [ "$CMD" = "all" ]; then
     # build the frontend assets (this takes quite a while due to minification)
     docker-compose -f docker-compose-buildjs.prod-local.yml run frontend_public
     docker-compose -f docker-compose-buildjs.prod-local.yml stop
+    docker-compose -f docker-compose-buildjs.prod-local.yml run frontend_public_redesign
+    docker-compose -f docker-compose-buildjs.prod-local.yml stop
     docker-compose -f docker-compose-buildjs.prod-local.yml run frontend_admin
     docker-compose -f docker-compose-buildjs.prod-local.yml stop
 
@@ -23,7 +25,7 @@ if [ "$CMD" = "frontend" ] || [ "$CMD" = "all" ]; then
     docker-compose -f docker-compose-buildpy.yml stop
 
     # copy assets locally for build local production nginx image (local testing only)
-    cp build/frontend-public.tgz build/frontend-admin.tgz build/django.tgz nginx-prod/build # this is horrible, fixme
+    cp build/frontend-public.tgz build/frontend-public-redesign.tgz build/frontend-admin.tgz build/django.tgz nginx-prod/build # this is horrible, fixme
 
     # For local testing with docker-compose-prod.yml only
     echo building prod nginx container

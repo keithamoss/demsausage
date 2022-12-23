@@ -1,58 +1,86 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import * as React from "react";
 
-function App() {
+import { grey } from "@mui/material/colors";
+import CssBaseline from "@mui/material/CssBaseline";
+import Fab from "@mui/material/Fab";
+import { styled } from "@mui/material/styles";
+// import BottomBar from "./swipe/bottom_bar";
+import BottomDrawer from "./pages/swipe/bottom_drawer";
+import Map from "./pages/swipe/map";
+
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import { IMapFilterOptions } from "./pages/swipe/infra/map_stuff";
+import LayersSelector from "./pages/swipe/layers_selector";
+import SideMenuDrawer from "./pages/swipe/side_menu_drawer";
+
+// const bottomNav = 56;
+// const drawerBleeding = 175 + bottomNav;
+export const drawerBleeding = 245;
+// const fixedBarHeightWithTopPadding = 56;
+// const magicNumber = 30;
+
+interface Props {}
+
+const Root = styled("div")(({ theme }) => ({
+  height: "100%",
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? grey[100]
+      : theme.palette.background.default,
+}));
+
+const AddStallFab = styled(Fab)(() => ({
+  position: "absolute",
+  //   bottom: `${drawerBleeding + bottomNav + 16}px`,
+  bottom: `${drawerBleeding + 16}px`,
+  right: "16px",
+  backgroundColor: "#6740b4",
+}));
+
+export default function SwipeableEdgeDrawerSimple(props: Props) {
+  const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
+  const toggleSideDrawerOpen = (e: any) => {
+    setSideDrawerOpen(!sideDrawerOpen);
+  };
+
+  const [mapSearchResults, setMapSearchResults] = React.useState<number | null>(
+    null
+  );
+  const toggleMapSearchResults = (resultSet: number) => {
+    setMapSearchResults(resultSet);
+  };
+
+  const [mapFilterOptions, setMapFilterOptions] =
+    React.useState<IMapFilterOptions>({});
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Root>
+      <CssBaseline />
+
+      <SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
+
+      <Map
+        mapSearchResults={mapSearchResults}
+        mapFilterOptions={mapFilterOptions}
+      />
+
+      <LayersSelector />
+
+      <AddStallFab
+        color="primary"
+        aria-label="add"
+        onClick={() => (document.location.href = "/add-stall")}
+      >
+        <AddLocationIcon />
+      </AddStallFab>
+
+      <BottomDrawer
+        toggleSideDrawerOpen={toggleSideDrawerOpen}
+        toggleMapSearchResults={toggleMapSearchResults}
+        onChangeFilter={setMapFilterOptions}
+      />
+
+      {/* <BottomBar /> */}
+    </Root>
   );
 }
-
-export default App;

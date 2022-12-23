@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   frontend_public:
-    image: node:11.11.0-alpine
+    image: node:16-alpine3.14
     command: build
     entrypoint: /app/docker-entrypoint.sh
     volumes:
@@ -9,8 +9,17 @@ services:
       - ./build:/build:delegated
     env_file:
       - secrets/sausage-public-frontend.prod.env
+  frontend_public_redesign:
+    image: node:16-alpine3.14
+    command: build
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./public-redesign:/app:delegated
+      - ./build:/build:delegated
+    env_file:
+      - secrets/sausage-public-redesign-frontend.prod.env
   frontend_admin:
-    image: node:11.11.0-alpine
+    image: node:16-alpine3.14
     command: build
     entrypoint: /app/docker-entrypoint.sh
     volumes:

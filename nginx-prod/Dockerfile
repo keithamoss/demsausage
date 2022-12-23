@@ -14,5 +14,6 @@ CMD ["nginx", "-g", "daemon off;"]
 
 # ADD automatically uncompresses the tgz files for us
 ADD build/frontend-public.tgz /frontend-public/
+ADD build/frontend-public-redesign.tgz /frontend-public-redesign/
 ADD build/frontend-admin.tgz /frontend-admin/
 ADD build/django.tgz /frontend/

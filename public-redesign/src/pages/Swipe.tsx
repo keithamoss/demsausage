@@ -1,15 +1,27 @@
 import { Global } from "@emotion/react";
+import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { grey } from "@mui/material/colors";
-import CssBaseline from "@mui/material/CssBaseline";
-import Skeleton from "@mui/material/Skeleton";
-import { styled } from "@mui/material/styles";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 
-const drawerBleeding = 56;
+import AppBar from "@mui/material/AppBar";
+import { grey } from "@mui/material/colors";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Fab from "@mui/material/Fab";
+import { styled } from "@mui/material/styles";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Toolbar from "@mui/material/Toolbar";
+import BottomBar from "./swipe/bottom_bar";
+import Map from "./swipe/map";
+import SearchBar from "./swipe/search_bar";
+import SearchFilter from "./swipe/search_filter";
+// import StallSearchResults from "./swipe/stall_search_results";
+
+const bottomNav = 56;
+const drawerBleeding = 175 + bottomNav;
+// const fixedBarHeightWithTopPadding = 56;
+const magicNumber = 30;
 
 interface Props {
   /**
@@ -31,22 +43,47 @@ const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],
 }));
 
+const StyledInteractableBox = styled(Box)(({ theme }) => ({
+  pointerEvents: "all",
+  // backgroundColor: "red",
+  padding: theme.spacing(1),
+  overflowY: "auto",
+  // height: `calc(100vh - ${drawerBleeding}px - ${fixedBarHeightWithTopPadding}px + ${fixedBarHeightWithTopPadding}px)`,
+  height: `calc(30vh - ${bottomNav}px - ${magicNumber}px)`,
+}));
+
 const Puller = styled(Box)(({ theme }) => ({
   width: 30,
   height: 6,
-  backgroundColor: theme.palette.mode === "light" ? grey[300] : grey[900],
+  backgroundColor: theme.palette.mode === "light" ? grey[600] : grey[900],
   borderRadius: 3,
   position: "absolute",
   top: 8,
   left: "calc(50% - 15px)",
 }));
 
+const TitleLogo = styled("img")(({ theme }) => ({
+  height: "32px",
+  marginRight: "10px",
+}));
+
+const AddStallFab = styled(Fab)(() => ({
+  position: "absolute",
+  bottom: `${drawerBleeding + bottomNav + 16}px`,
+  right: "16px",
+}));
+
 export default function SwipeableEdgeDrawer(props: Props) {
   const { window } = props;
-  const [open, setOpen] = React.useState(false);
 
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+
+  const [filterOpen, setFilterOpen] = React.useState(false);
+  const toggleFilter = (e: any) => {
+    setFilterOpen(!filterOpen);
   };
 
   // This is used only for the example
@@ -64,9 +101,16 @@ export default function SwipeableEdgeDrawer(props: Props) {
           },
         }}
       />
-      <Box sx={{ textAlign: "center", pt: 1 }}>
-        <Button onClick={toggleDrawer(true)}>Open</Button>
-      </Box>
+
+      <Map
+        mapSearchResults={null}
+        mapFilterOptions={{ bbq: true, cake: true }}
+      />
+
+      <AddStallFab color="primary" aria-label="add">
+        <AddIcon />
+      </AddStallFab>
+
       <SwipeableDrawer
         container={container}
         anchor="bottom"
@@ -82,31 +126,62 @@ export default function SwipeableEdgeDrawer(props: Props) {
         <StyledBox
           sx={{
             position: "absolute",
-            top: -drawerBleeding,
+            top: -(drawerBleeding + bottomNav),
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
             visibility: "visible",
             right: 0,
             left: 0,
-            backgroundColor: grey[100],
+            backgroundColor: grey[300],
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, color: "text.secondary" }}>
-            51 results
-          </Typography>
-        </StyledBox>
-        <StyledBox
-          sx={{
-            px: 2,
-            pb: 2,
-            height: "100%",
-            overflow: "auto",
-          }}
-        >
-          <Skeleton variant="rectangular" height="100%" />
+
+          <AppBar
+            position="static"
+            sx={{ paddingTop: 1, backgroundColor: "#6740b4" }}
+          >
+            <Container maxWidth="xl">
+              <Toolbar disableGutters>
+                <TitleLogo src="https://democracysausage.org/icons/sausage+cake_big.png" />
+
+                <Typography
+                  variant="h5"
+                  noWrap
+                  component="a"
+                  href=""
+                  sx={{
+                    mr: 2,
+                    display: { xs: "flex", md: "none" },
+                    flexGrow: 1,
+                    fontWeight: 600,
+                    color: "inherit",
+                    textDecoration: "none",
+                  }}
+                >
+                  Democracy Sausage
+                </Typography>
+              </Toolbar>
+            </Container>
+          </AppBar>
+
+          <StyledInteractableBox>
+            <SearchBar
+              onSearch={() => {}}
+              filterOpen={filterOpen}
+              onToggleFilter={toggleFilter}
+              onClick={() => {}}
+              showFilter={true}
+            />
+
+            {filterOpen === true && <SearchFilter onChangeFilter={() => {}} />}
+
+            {/* <StallSearchResults /> */}
+          </StyledInteractableBox>
         </StyledBox>
       </SwipeableDrawer>
+
+      <BottomBar />
     </Root>
   );
 }
