@@ -80,6 +80,14 @@ jobs:
       - name: Prodbuild public-redesign frontend
         run: ./prodbuild.sh frontend
 
+      - name: Foobar
+        run: |
+          pwd
+          ls -l
+          ls -l build
+          cp build/frontend-public-redesign.tgz build/frontend-public-redesign-VERSION.tgz
+          ls -l build
+
       - name: Prodbuild-dockerpush
         run: ./prodbuild-dockerpush.sh frontend
 
