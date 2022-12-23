@@ -31,7 +31,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker login -u DOCKER_USERNAME -p "DOCKER_PASSWORD"
+          docker login -u DOCKER_USERNAME -p DOCKER_PASSWORD
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta1
@@ -39,7 +39,7 @@ jobs:
         with:
           images: keithmoss/sausage-nginx (sausage-nginx)
 
-      - name: Extract metadata (tags, labels) for Docker (sausage2-nginx) foobar2
+      - name: Extract metadata (tags, labels) for Docker (sausage2-nginx)
         id: meta2
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
