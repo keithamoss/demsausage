@@ -67,9 +67,6 @@ jobs:
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
 
-      - name: Prodbuild-nginx
-        run: sudo ./prodbuild-nginx.sh
-
       - name: Docker version
         run: docker --version
 
