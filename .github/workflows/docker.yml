@@ -73,12 +73,8 @@ jobs:
           pwd
           echo "ls"
           ls -l
-          echo "ls build"
-          ls -l build
           echo "cp"
           sudo cp prodbuild.sh prodbuild.foobar.sh
-          echo "ls build"
-          ls -l build
 
       - name: Docker version
         run: docker --version
