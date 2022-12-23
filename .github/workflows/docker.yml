@@ -106,9 +106,12 @@ jobs:
           rm -rf ./build
           mkdir -p ./build
           yarn run build
-          cd ./build && tar czvf /build/frontend-public-redesign.tgz .
-          ls -l /build
         working-directory: public-redesign
+
+      - name: Public Redesign Frontend - Build assets
+        run: |
+          tar czvf ./build/frontend-public-redesign.tgz ./frontend-public-redesign/build/
+          ls -l ./build
 
       # - name: Prodbuild public-redesign frontend
       #   run: ./prodbuild.sh frontend
@@ -125,6 +128,7 @@ jobs:
       #     docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
+
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
