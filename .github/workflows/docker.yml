@@ -27,13 +27,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
-        id: meta
+        id: meta1
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: keithmoss/sausage-nginx (sausage-nginx)
 
       - name: Extract metadata (tags, labels) for Docker (sausage2-nginx)
-        id: meta
+        id: meta2
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: keithmoss/sausage2-nginx
