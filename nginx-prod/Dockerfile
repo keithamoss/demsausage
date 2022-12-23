@@ -7,13 +7,15 @@ COPY nginx /etc/nginx
 
 EXPOSE 443
 
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+# ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
 
 # ADD automatically uncompresses the tgz files for us
-ADD build/frontend-public.tgz /frontend-public/
-ADD build/frontend-public-redesign.tgz /frontend-public-redesign/
-ADD build/frontend-admin.tgz /frontend-admin/
-ADD build/django.tgz /frontend/
+ADD build/scremsong/*.tgz /frontend/scremsong/
+ADD build/demsausage/*.tgz /frontend/demsausage/
+ADD build/demsausage-redesign/*.tgz /frontend/demsausage-redesign/
+ADD build/demsausage-admin/*.tgz /frontend/demsausage-admin/
+ADD build/demsausage-api/*.tgz /frontend/demsausage-api/
+ADD build/scremsong-api/*.tgz /frontend/scremsong-api/
