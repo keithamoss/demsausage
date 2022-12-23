@@ -113,14 +113,11 @@ jobs:
         run: ./build.sh
         working-directory: public-redesign
 
-      - name: Public Redesign Frontend - Move build assets
-        run: |
-          ls -l ./build/
-          mv ./public-redesign/frontend-public-redesign.tgz ./build/frontend-public-redesign.tgz
-          ls -l ./build/
-          ls -l ./nginx-prod/build/
-          cp ./build/frontend-public-redesign.tgz ./nginx-prod/build/demsausage-redesign.tgz
-          ls -l ./nginx-prod/build/
+      # - name: Public Redesign Frontend - Move build assets
+      #   run: |
+      #     ls -l ./nginx-prod/build/
+      #     cp ./public-redesign/frontend-public-redesign.tgz ./nginx-prod/build/demsausage-redesign.tgz
+      #     ls -l ./nginx-prod/build/
 
       # - name: Public Redesign Frontend - Build assets
       #   run: |

@@ -4,4 +4,4 @@ rm -rf ./build
 mkdir -p ./build
 
 yarn run build
-tar czvf ./frontend-public-redesign.tgz ./build/
+tar czvf ../nginx-prod/build/public-redesign.tgz ./build/
