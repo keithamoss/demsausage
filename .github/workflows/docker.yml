@@ -101,17 +101,27 @@ jobs:
         run: yarn install
         working-directory: public-redesign
 
+      # - name: Public Redesign Frontend - Build
+      #   run: |
+      #     rm -rf ./build
+      #     mkdir -p ./build
+      #     yarn run build
+      #   working-directory: public-redesign
+
       - name: Public Redesign Frontend - Build
-        run: |
-          rm -rf ./build
-          mkdir -p ./build
-          yarn run build
+        run: ./build.sh
         working-directory: public-redesign
 
-      - name: Public Redesign Frontend - Build assets
+      - name: Public Redesign Frontend - Move build assets
         run: |
-          tar czvf ./build/frontend-public-redesign.tgz ./frontend-public-redesign/build/
-          ls -l ./build
+          ls -l ./build/
+          mv ./public-redesign/build/frontend-public-redesign.tgz ./frontend-public-redesign.tgz
+          ls -l ./build/
+
+      # - name: Public Redesign Frontend - Build assets
+      #   run: |
+      #     tar czvf ./build/frontend-public-redesign.tgz ./public-redesign/build/
+      #     ls -l ./build
 
       # - name: Prodbuild public-redesign frontend
       #   run: ./prodbuild.sh frontend
