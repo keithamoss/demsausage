@@ -186,7 +186,8 @@ jobs:
           pwd
           ls -l
           ls -l ./secrets
-          docker compose -f build.yml --verbose up
+          docker compose -f build.yml --verbose run build
+          ls -l ./nginx-prod/build
 
       # - name: Prodbuild-nginx
       #   run: |

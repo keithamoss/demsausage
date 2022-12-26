@@ -2,8 +2,8 @@ version: "3.8"
 services:
   django:
     build: django/
-    entrypoint: /app/foo.sh
-    # command: build
+    entrypoint: /app/docker-entrypoint
+    command: build
     volumes:
       - ./django/:/app:delegated
       - ./nginx-prod/build/:/build:delegated
