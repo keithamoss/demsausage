@@ -16,4 +16,4 @@ services:
     env_file:
       - ./secrets/test.env
       - ./secrets/sausage-web.prod-local.env
-    #   - ./secrets/sausage-web-db.dev.env
+      - ./secrets/sausage-web-db.dev.env
