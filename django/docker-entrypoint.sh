@@ -105,6 +105,10 @@ if [ "$CMD" = "build" ]; then
   echo "Clean..."
   rm -rf /app/static
   mkdir -p /app/static
+
+  echo "Secrets..."
+  ls -l /secrets
+  echo $RAVEN_SITE_NAME
   
   echo "Static..."
   django-admin collectstatic --noinput
