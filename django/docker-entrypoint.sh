@@ -99,8 +99,8 @@ fi
 # Build entrypoint (development)
 if [ "$CMD" = "build" ]; then
   echo "Building..."
-  export ENVIRONMENT=PRODUCTION
-  export BUILD=YES
+  # export ENVIRONMENT=PRODUCTION
+  # export BUILD=YES
 
   echo "Clean..."
   rm -rf /app/static
