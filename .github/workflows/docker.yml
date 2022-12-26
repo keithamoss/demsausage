@@ -178,7 +178,7 @@ jobs:
       #     docker-compose --version
 
       - name: Django - Build Static Assets 1
-        run: docker compose -f build.yml build django
+        run: docker compose --file build.yml build django
 
       # - name: Django - Build Static Assets 2
       #   run: docker compose -f build.yml run django
