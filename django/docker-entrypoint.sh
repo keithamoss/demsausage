@@ -100,14 +100,15 @@ fi
 if [ "$CMD" = "build" ]; then
   echo "CMD=build..."
   # export ENVIRONMENT=PRODUCTION
-  # export BUILD=YES
+  export BUILD=YES
 
   echo "Clean..."
   rm -rf /app/static
   mkdir -p /app/static
 
   echo "Secrets..."
-  ls -l /secrets
+  # ls -l /secrets
+  echo "ENVIRONMENT: $ENVIRONMENT"
   echo "RAVEN_SITE_NAME: $RAVEN_SITE_NAME"
   echo "ALLOWED_HOSTS_AND_WHITELIST: $ALLOWED_HOSTS_AND_WHITELIST"
   
