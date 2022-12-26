@@ -152,8 +152,17 @@ jobs:
       # - name: Prodbuild-dockerpush
       #   run: sudo ./prodbuild-dockerpush.sh frontend
 
-      - name: Django - Build Static Assets
-        run: ./build.sh
+      # - name: Django - Build Static Assets
+      #   run: ./build.sh
+
+      - name: Django - Build Static Assets 1
+        run: docker compose -f build.yml build django
+
+      - name: Django - Build Static Assets 2
+        run: docker compose -f build.yml run django
+
+      - name: Django - Build Static Assets 3
+        run: docker compose -f build.yml up django
 
       # - name: Prodbuild-nginx
       #   run: |
