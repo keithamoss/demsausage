@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "Build..."
-docker-compose build django
+docker-compose -f ../docker-compose.yml build django
 echo "Run..."
-docker-compose run django build
+docker-compose -f ../docker-compose.yml run django build
 echo "Tar..."
 tar czvf ../nginx-prod/build/django.tgz ./static/
 echo "Stop..."
-docker-compose stop
+docker-compose -f ../docker-compose.yml stop
