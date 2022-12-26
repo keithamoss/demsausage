@@ -13,6 +13,6 @@ services:
     environment:
       - FOO=BAR
       - BUILD=YES
-    # env_file:
-    #   - ./secrets/sausage-web.prod-local.env
+    env_file:
+      - ./secrets/sausage-web.prod-local.env
     #   - ./secrets/sausage-web-db.dev.env
