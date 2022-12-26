@@ -175,19 +175,19 @@ jobs:
       #     sudo apt-get install docker-compose-plugin
       #     docker-compose --version
 
-      # - name: Django - Build Static Assets 1
-      #   run: docker compose --file build.yml build django
-
-      # - name: Django - Build Static Assets 2
-      #   run: docker compose -f build.yml run django
+      - name: Django - Build Static Assets 1
+        run: docker compose --file build.yml build django
 
       - name: Django - Build Static Assets 2
-        run: |
-          pwd
-          ls -l
-          ls -l ./secrets
-          docker compose -f build.yml --verbose run django build
-          ls -l ./nginx-prod/build
+        run: docker compose --file build.yml run django
+
+      # - name: Django - Build Static Assets 2
+      #   run: |
+      #     pwd
+      #     ls -l
+      #     ls -l ./secrets
+      #     docker compose -f build.yml --verbose run django build
+      #     ls -l ./nginx-prod/build
 
       # - name: Prodbuild-nginx
       #   run: |
@@ -200,7 +200,6 @@ jobs:
       #     docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
-
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
