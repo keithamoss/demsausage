@@ -104,7 +104,7 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Django - Build Static Assets
+      - name: Django - Build Static Assetsz
         run: ./build-static-assets.sh
         working-directory: django
 
