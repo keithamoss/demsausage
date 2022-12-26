@@ -79,6 +79,8 @@ jobs:
           SAUSAGE_WEB_PROD_LOCAL_ENV: ${{ secrets.SAUSAGE_WEB_PROD_LOCAL_ENV }}
           SAUSAGE_DB_DEV_ENV: ${{ secrets.SAUSAGE_DB_DEV_ENV }}
           REDIS_ENV: ${{ secrets.REDIS_ENV }}
+          SAUSAGE_WEB_DEV_ENV: ${{ secrets.SAUSAGE_WEB_DEV_ENV }}
+          SAUSAGE_WEB_DB_DEV_ENV: ${{ secrets.SAUSAGE_WEB_DB_DEV_ENV }}
         run: |
           mkdir secrets
           echo $SAUSAGE_PUBLIC_FRONTEND_PROD_ENV > secrets/sausage-public-frontend.prod.env
@@ -87,6 +89,8 @@ jobs:
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > secrets/sausage-web.prod-local.env
           echo $SAUSAGE_DB_DEV_ENV > secrets/sausage-db.dev.env
           echo $REDIS_ENV > secrets/redis.env
+          echo $SAUSAGE_WEB_DEV_ENV > secrets/sausage-web.dev.env
+          echo $SAUSAGE_WEB_DB_DEV_ENV > secrets/sausage-web-db.dev.env
 
       - name: Docker version
         run: docker --version
