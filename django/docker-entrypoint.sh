@@ -108,7 +108,6 @@ if [ "$CMD" = "build" ]; then
 
   echo "Secrets..."
   ls -l /secrets
-  echo $RAVEN_SITE_NAME
   
   echo "Static..."
   django-admin collectstatic --noinput

@@ -18,6 +18,11 @@ from corsheaders.defaults import default_headers
 from demsausage.util import get_env
 from sentry_sdk.integrations.django import DjangoIntegration
 
+print("###")
+print("RAVEN_SITE_NAME", get_env("RAVEN_SITE_NAME"))
+print("ALLOWED_HOSTS_AND_WHITELIST", get_env("ALLOWED_HOSTS_AND_WHITELIST"))
+print("###")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
