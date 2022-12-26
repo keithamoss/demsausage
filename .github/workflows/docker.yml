@@ -105,94 +105,41 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Public Frontend - Install
-        run: yarn install
-        working-directory: public
-
-      - name: Public Frontend - Build
-        run: ./build.sh
-        working-directory: public
-
-      - name: Public Admin - Install
-        run: yarn install
-        working-directory: admin
-
-      - name: Public Admin - Build
-        run: ./build.sh
-        working-directory: admin
-
-      # - name: Public Redesign Frontend - Install
+      # - name: Public Frontend - Install
       #   run: yarn install
-      #   working-directory: public-redesign
+      #   working-directory: public
 
-      # - name: Public Redesign Frontend - Build
+      # - name: Public Frontend - Build
       #   run: ./build.sh
-      #   working-directory: public-redesign
+      #   working-directory: public
 
-      # - name: Public Redesign Frontend - Build
-      #   run: |
-      #     rm -rf ./build
-      #     mkdir -p ./build
-      #     yarn run build
-      #   working-directory: public-redesign
+      # - name: Public Admin - Install
+      #   run: yarn install
+      #   working-directory: admin
 
-      # - name: Public Redesign Frontend - Move build assets
-      #   run: |
-      #     ls -l ./nginx-prod/build/
-      #     cp ./public-redesign/frontend-public-redesign.tgz ./nginx-prod/build/demsausage-redesign.tgz
-      #     ls -l ./nginx-prod/build/
+      # - name: Public Admin - Build
+      #   run: ./build.sh
+      #   working-directory: admin
 
-      # - name: Public Redesign Frontend - Build assets
-      #   run: |
-      #     tar czvf ./build/frontend-public-redesign.tgz ./public-redesign/build/
-      #     ls -l ./build
+      - name: Public Redesign Frontend - Install
+        run: yarn install
+        working-directory: public-redesign
 
-      # - name: Prodbuild public-redesign frontend
-      #   run: ./prodbuild.sh frontend
+      - name: Public Redesign Frontend - Build
+        run: ./build.sh
+        working-directory: public-redesign
 
-      # - name: Prodbuild-dockerpush
-      #   run: sudo ./prodbuild-dockerpush.sh frontend
-
+      # - name: Django - Build Docker Container
+      #   run: docker compose --file build.yml build django
       # - name: Django - Build Static Assets
-      #   run: ./build.sh
-
-      # - name: Docker-Compose
-      #   run: |
-      #     docker-compose --version
-      #     sudo apt-get update
-      #     sudo apt-get install \
-      #       ca-certificates \
-      #       curl \
-      #       gnupg \
-      #       lsb-release
-      #     sudo mkdir -p /etc/apt/keyrings
-      #     echo "Curling..."
-      #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      #     echo \
-      #       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      #       $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      #     sudo apt-get update
-      #     sudo apt-get install docker-compose-plugin
-      #     docker-compose --version
-
-      - name: Django - Build Static Assets 1
-        run: docker compose --file build.yml build django
-
-      - name: Django - Build Static Assets 2
-        run: docker compose --file build.yml run django
-
-      # - name: Django - Build Static Assets 2
-      #   run: |
-      #     pwd
-      #     ls -l
-      #     ls -l ./secrets
-      #     docker compose -f build.yml --verbose run django build
-      #     ls -l ./nginx-prod/build
-
+      #   run: docker compose --file build.yml run django
       - name: Prodbuild-nginx
         run: |
           ls -l ./nginx-prod/build/
-          sudo ./prodbuild-nginx.sh
+          docker build -t sausage2/nginx:latest .
+        working-directory: nginx-prod
+
+        # sudo ./prodbuild-nginx.sh
 
       # - name: Docker push
       #   run: |
@@ -200,7 +147,6 @@ jobs:
       #     docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
-
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
