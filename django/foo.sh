@@ -7,5 +7,7 @@ echo "Env vars..."
 echo "FOO: $FOO"
 echo "BUILD: $BUILD"
 echo "RAVEN_SITE_NAME: $RAVEN_SITE_NAME"
+echo "DOG: $DOG"
+echo "FISH: $FISH"
 
 echo "Going away now..."
