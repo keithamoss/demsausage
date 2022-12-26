@@ -2,7 +2,7 @@ version: "3.8"
 services:
   django:
     build: django/
-    entrypoint: /app/docker-entrypoint
+    entrypoint: /app/docker-entrypoint.sh
     command: build
     volumes:
       - ./django/:/app:delegated
