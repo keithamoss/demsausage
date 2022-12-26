@@ -3,7 +3,7 @@ services:
   django:
     build: django/
     entrypoint: /app/docker-entrypoint.sh
-    command: build
+    # command: build
     volumes:
       - ./django/:/app:delegated
       - ./nginx-prod/build/:/build:delegated

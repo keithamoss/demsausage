@@ -100,7 +100,7 @@ fi
 if [ "$CMD" = "build" ]; then
   echo "CMD=build..."
   # export ENVIRONMENT=PRODUCTION
-  export BUILD=YES
+  # export BUILD=YES
 
   echo "Clean..."
   rm -rf /app/static
