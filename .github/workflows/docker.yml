@@ -71,7 +71,7 @@ jobs:
       # So we can daemonise yarn start
       #     - run: sudo yarn global add pm2
 
-      - name: Do Something with env files
+      - name: Do something with env files
         env:
           SAUSAGE_PUBLIC_FRONTEND_PROD_ENV: ${{ secrets.SAUSAGE_PUBLIC_FRONTEND_PROD_ENV }}
           SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PROD_ENV: ${{ secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PROD_ENV }}
