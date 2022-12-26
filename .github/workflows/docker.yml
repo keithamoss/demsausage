@@ -104,12 +104,29 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Django - Build Static Assets
-        run: docker-compose -f build.yml run django
+      # - name: Public Frontend - Install
+      #   run: yarn install
+      #   working-directory: public
 
-      - name: Public Redesign Frontend - Install
-        run: yarn install
-        working-directory: public-redesign
+      # - name: Public Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public
+
+      # - name: Public Admin - Install
+      #   run: yarn install
+      #   working-directory: admin
+
+      # - name: Public Admin - Build
+      #   run: ./build.sh
+      #   working-directory: admin
+
+      # - name: Public Redesign Frontend - Install
+      #   run: yarn install
+      #   working-directory: public-redesign
+
+      # - name: Public Redesign Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public-redesign
 
       # - name: Public Redesign Frontend - Build
       #   run: |
@@ -117,10 +134,6 @@ jobs:
       #     mkdir -p ./build
       #     yarn run build
       #   working-directory: public-redesign
-
-      - name: Public Redesign Frontend - Build
-        run: ./build.sh
-        working-directory: public-redesign
 
       # - name: Public Redesign Frontend - Move build assets
       #   run: |
@@ -139,16 +152,20 @@ jobs:
       # - name: Prodbuild-dockerpush
       #   run: sudo ./prodbuild-dockerpush.sh frontend
 
-      - name: Prodbuild-nginx
-        run: sudo ./prodbuild-nginx.sh
+      - name: Django - Build Static Assets
+        run: docker-compose -f build.yml run django
 
-      - name: Docker push
-        run: |
-          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-          docker push keithmoss/sausage2-nginx:latest
+      # - name: Prodbuild-nginx
+      #   run: |
+      #     ls -l ./nginx-prod/build/
+      #     sudo ./prodbuild-nginx.sh
+
+      # - name: Docker push
+      #   run: |
+      #     docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
+      #     docker push keithmoss/sausage2-nginx:latest
 
     # Start daemonised local dev
-
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page

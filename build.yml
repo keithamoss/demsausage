@@ -1,41 +1,5 @@
 version: "3.7"
 services:
-  # db:
-  #   image: postgis/postgis:15-3.3-alpine
-  #   command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-  #   ports:
-  #     - "5432:5432"
-  #   env_file:
-  #     - secrets/sausage-db.dev.env
-  #   volumes:
-  #     # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
-  #     - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
-
-  #     # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
-  #     # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
-
-  #     # Enable this to store the PostgreSQL data on the host
-  #     - ./db-pg/data:/var/lib/postgresql/data
-
-  #     - ./db-pg/scripts:/var/lib/postgresql/scripts
-  # redis:
-  #   image: bitnami/redis:6.2-debian-10
-  #   ports:
-  #     - "6379:6379"
-  #   env_file:
-  #     - secrets/redis.env
-  #   volumes:
-  #     - ./redis:/bitnami/redis/data
-  #   # https://github.com/docker-library/redis/issues/35#issuecomment-360810072
-  #   sysctls:
-  #     net.core.somaxconn: "511"
-  # memcached:
-  #   image: memcached
-  #   expose:
-  #     - "11211"
-  #   command:
-  #     # 5mb to accommodate the larger polling place GeoJSON objects
-  #     - "--max-item-size=5242880"
   django:
     build: django/
     entrypoint: /app/docker-entrypoint.sh
@@ -43,14 +7,8 @@ services:
     volumes:
       - ./django/:/app:delegated
       - ./nginx-prod/build/:/build:delegated
-      # - ./scrapers/:/scrapers:delegated
-      # - ./data/:/data:delegated
-      # - ./electoral_boundaries/:/electoral_boundaries:delegated
     ports:
       - "8000:8000"
     env_file:
       - secrets/sausage-web.dev.env
       - secrets/sausage-web-db.dev.env
-    # depends_on:
-    #   - db
-    #   - memcached
