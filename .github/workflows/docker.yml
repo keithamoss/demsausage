@@ -91,6 +91,7 @@ jobs:
           echo $REDIS_ENV > secrets/redis.env
           echo $SAUSAGE_WEB_DEV_ENV > secrets/sausage-web.dev.env
           echo $SAUSAGE_WEB_DB_DEV_ENV > secrets/sausage-web-db.dev.env
+          echo $SAUSAGE_DB_DEV_ENV > sausage-db.dev.env
           echo $SAUSAGE_WEB_PROD_LOCAL_ENV > sausage-web.prod-local.env
           echo $SAUSAGE_WEB_DB_DEV_ENV > sausage-web-db.dev.env
 
