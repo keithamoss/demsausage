@@ -98,14 +98,18 @@ fi
 
 # Build entrypoint (development)
 if [ "$CMD" = "build" ]; then
+  echo "Building..."
   export ENVIRONMENT=PRODUCTION
   export BUILD=YES
 
+  echo "Clean..."
   rm -rf /app/static
   mkdir -p /app/static
-
+  
+  echo "Static..."
   django-admin collectstatic --noinput
 
+  echo "Tar..."
   tar czvf /build/django.tgz /app/static
   exit
 fi
