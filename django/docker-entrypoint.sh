@@ -108,6 +108,8 @@ if [ "$CMD" = "build" ]; then
 
   echo "Secrets..."
   ls -l /secrets
+  echo "RAVEN_SITE_NAME: $RAVEN_SITE_NAME"
+  echo "ALLOWED_HOSTS_AND_WHITELIST: $ALLOWED_HOSTS_AND_WHITELIST"
   
   echo "Static..."
   django-admin collectstatic --noinput
