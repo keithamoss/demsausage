@@ -11,5 +11,5 @@ services:
     # ports:
     #   - "8000:8000"
     env_file:
-      - ./secrets/sausage-web.prod-local.env
-      - ./secrets/sausage-db.dev.env
+      - ./sausage-web.prod-local.env
+      - ./sausage-db.dev.env
