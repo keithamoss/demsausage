@@ -135,7 +135,7 @@ jobs:
       #   run: docker compose --file build.yml run django
       - name: Prodbuild-nginx
         run: |
-          ls -l ./nginx-prod/build/
+          ls -l .//build/
           docker build -t sausage2/nginx:latest .
         working-directory: nginx-prod
 
