@@ -102,15 +102,17 @@ if [ "$CMD" = "build" ]; then
   # export ENVIRONMENT=PRODUCTION
   # export BUILD=YES
 
-  echo "Clean..."
-  rm -rf /app/static
-  mkdir -p /app/static
-
   echo "Secrets..."
   # ls -l /secrets
+  echo "FOO: $FOO"
+  echo "BUILD: $BUILD"
   echo "ENVIRONMENT: $ENVIRONMENT"
   echo "RAVEN_SITE_NAME: $RAVEN_SITE_NAME"
   echo "ALLOWED_HOSTS_AND_WHITELIST: $ALLOWED_HOSTS_AND_WHITELIST"
+
+  echo "Clean..."
+  rm -rf /app/static
+  mkdir -p /app/static
   
   echo "Static..."
   django-admin collectstatic --noinput
