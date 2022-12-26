@@ -185,6 +185,9 @@ jobs:
           pwd
           ls -l
           ls -l ./secrets
+          echo "###"
+          tail ./secrets/sausage-db.dev.env
+          echo "###"
           docker compose --file=build.yml --verbose run django build
 
       # - name: Prodbuild-nginx
