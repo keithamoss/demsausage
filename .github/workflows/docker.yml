@@ -158,11 +158,11 @@ jobs:
       - name: Django - Build Static Assets 1
         run: docker compose -f build.yml build django
 
-      - name: Django - Build Static Assets 2
-        run: docker compose -f build.yml run django
+      # - name: Django - Build Static Assets 2
+      #   run: docker compose -f build.yml run django
 
-      - name: Django - Build Static Assets 3
-        run: docker compose -f build.yml up django
+      - name: Django - Build Static Assets 2
+        run: docker compose -f build.yml --env-file secrets/sausage-web.prod-local.env --env-file secrets/sausage-db.dev.env run django
 
       # - name: Prodbuild-nginx
       #   run: |
