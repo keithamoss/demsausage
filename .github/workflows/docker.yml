@@ -108,36 +108,34 @@ jobs:
       # - name: Public Frontend - Install
       #   run: yarn install
       #   working-directory: public
-
       # - name: Public Frontend - Build
       #   run: ./build.sh
       #   working-directory: public
-
       # - name: Public Admin - Install
       #   run: yarn install
       #   working-directory: admin
-
       # - name: Public Admin - Build
       #   run: ./build.sh
       #   working-directory: admin
-
-      - name: Public Redesign Frontend - Install
-        run: yarn install
-        working-directory: public-redesign
-
-      - name: Public Redesign Frontend - Build
-        run: ./build.sh
-        working-directory: public-redesign
-
+      # - name: Public Redesign Frontend - Install
+      #   run: yarn install
+      #   working-directory: public-redesign
+      # - name: Public Redesign Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public-redesign
       # - name: Django - Build Docker Container
       #   run: docker compose --file build.yml build django
       # - name: Django - Build Static Assets
       #   run: docker compose --file build.yml run django
-      - name: Prodbuild-nginx
+      # - name: Containers - Build Nginx
+      #   run: |
+      #     ls -l ./build/
+      #     docker build -t sausage2/nginx:latest .
+      #   working-directory: nginx-prod
+      - name: Containers - Build Django
         run: |
-          ls -l .//build/
-          docker build -t sausage2/nginx:latest .
-        working-directory: nginx-prod
+          docker build -t sausage2/django:latest .
+        working-directory: django
 
         # sudo ./prodbuild-nginx.sh
 
