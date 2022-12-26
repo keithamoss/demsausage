@@ -104,8 +104,9 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Django - Build Static Assetsz
-        run: ./build-static-assets.sh
+      - name: Django - Build Static Assets
+        # run: ./build-static-assets.sh
+        run: docker-compose -f build.yml run django
         working-directory: django
 
       - name: Public Redesign Frontend - Install

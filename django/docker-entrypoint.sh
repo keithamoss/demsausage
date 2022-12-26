@@ -105,6 +105,8 @@ if [ "$CMD" = "build" ]; then
   mkdir -p /app/static
 
   django-admin collectstatic --noinput
+
+  tar czvf /build/django.tgz /app/static
   exit
 fi
 
