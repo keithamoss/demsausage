@@ -1,4 +1,5 @@
-from demsausage.util import make_logger
+from demsausage.util import get_env, make_logger
+
 from django.apps import AppConfig
 
 logger = make_logger(__name__)
@@ -14,6 +15,6 @@ class MyAppConfig(AppConfig):
             cache_rehydration_on_init_tasks
 
         # Otherwise this would run every time Django reloads due to code changes in development
-        if is_production() is True:
+        if is_production() is True and get_env("BUILD") != "YES":
             logger.info("Starting cache regeneration tasks from ready()")
             cache_rehydration_on_init_tasks()

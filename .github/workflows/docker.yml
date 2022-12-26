@@ -98,6 +98,10 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
+      - name: Django - Build Static Assets
+        run: ./build-static-assets.sh
+        working-directory: django
+
       - name: Public Redesign Frontend - Install
         run: yarn install
         working-directory: public-redesign
