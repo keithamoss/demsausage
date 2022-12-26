@@ -177,8 +177,8 @@ jobs:
       #     sudo apt-get install docker-compose-plugin
       #     docker-compose --version
 
-      - name: Django - Build Static Assets 1
-        run: docker compose --file build.yml build django
+      # - name: Django - Build Static Assets 1
+      #   run: docker compose --file build.yml build django
 
       # - name: Django - Build Static Assets 2
       #   run: docker compose -f build.yml run django
@@ -191,7 +191,7 @@ jobs:
           echo "###"
           tail ./secrets/sausage-db.dev.env
           echo "###"
-          docker compose --file build.yml --verbose run django build
+          docker compose -f build.yml --verbose up
 
       # - name: Prodbuild-nginx
       #   run: |
