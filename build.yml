@@ -7,9 +7,9 @@ services:
     volumes:
       - ./django/:/app:delegated
       - ./nginx-prod/build/:/build:delegated
-      - ./secrets/:/secrets:delegated
-    ports:
-      - "8000:8000"
+      # - ./secrets/:/secrets:delegated
+    # ports:
+    #   - "8000:8000"
     # env_file:
     #   - secrets/sausage-web.prod-local.env
     #   - secrets/sausage-db.dev.env
