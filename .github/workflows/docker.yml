@@ -169,9 +169,6 @@ jobs:
           pwd
           ls -l
           ls -l ./secrets
-          echo "###"
-          tail ./secrets/sausage-db.dev.env
-          echo "###"
           docker compose -f build.yml --verbose up
 
       # - name: Prodbuild-nginx
