@@ -85,7 +85,6 @@ jobs:
           echo "${{secrets.SAUSAGE_DB_DEV_ENV }}" > sausage-db.dev.env
           echo "${{secrets.SAUSAGE_WEB_PROD_LOCAL_ENV }}" > sausage-web.prod-local.txt
           echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > sausage-web-db.dev.txt
-          echo "${{secrets.TEST_ENV }}" > secrets/test.env
 
       # - name: Retrieve the secret and decode it to a file
       #   env:
@@ -93,58 +92,67 @@ jobs:
       #   run: |
       #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
 
-      - name: Docker version
-        run: docker --version
+      # - name: Docker version
+      #   run: docker --version
 
-      - name: Docker Compose version
-        run: docker-compose --version
+      # - name: Docker Compose version
+      #   run: docker-compose --version
 
-      - name: Build prep
+      - name: Build - Prep
         run: |
-          pwd
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      # - name: Public Frontend - Install
-      #   run: yarn install
-      #   working-directory: public
-      # - name: Public Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public
-      # - name: Public Admin - Install
-      #   run: yarn install
-      #   working-directory: admin
-      # - name: Public Admin - Build
-      #   run: ./build.sh
-      #   working-directory: admin
-      # - name: Public Redesign Frontend - Install
-      #   run: yarn install
-      #   working-directory: public-redesign
-      # - name: Public Redesign Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public-redesign
-      # - name: Django - Build Docker Container
-      #   run: docker compose --file build.yml build django
-      # - name: Django - Build Static Assets
-      #   run: docker compose --file build.yml run django
-      # - name: Containers - Build Nginx
-      #   run: |
-      #     ls -l ./build/
-      #     docker build -t sausage2/nginx:latest .
-      #   working-directory: nginx-prod
+      - name: Public Frontend - Install
+        run: yarn install
+        working-directory: public
+
+      - name: Public Frontend - Build
+        run: ./build.sh
+        working-directory: public
+
+      - name: Public Admin - Install
+        run: yarn install
+        working-directory: admin
+
+      - name: Public Admin - Build
+        run: ./build.sh
+        working-directory: admin
+
+      - name: Public Redesign Frontend - Install
+        run: yarn install
+        working-directory: public-redesign
+
+      - name: Public Redesign Frontend - Build
+        run: ./build.sh
+        working-directory: public-redesign
+
+      - name: Django - Build Docker Container
+        run: docker compose --file build.yml build django
+
+      - name: Django - Build Static Assets
+        run: docker compose --file build.yml run django
+
+      - name: Containers - Build Nginx
+        run: |
+          ls -l ./build/
+          docker build -t sausage2/nginx:latest .
+        working-directory: nginx-prod
+
       - name: Containers - Build Django
         run: |
           docker build -t sausage2/django:latest .
         working-directory: django
 
-        # sudo ./prodbuild-nginx.sh
-
-      # - name: Docker push
-      #   run: |
-      #     docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-      #     docker push keithmoss/sausage2-nginx:latest
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
+          docker push keithmoss/sausage2-nginx:latest
+          docker tag sausage2/django:latest keithmoss/sausage2-django:latest
+          docker push keithmoss/sausage2-django:latest
 
     # Start daemonised local dev
+
 #     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
 
 # Screenshot the landing page
