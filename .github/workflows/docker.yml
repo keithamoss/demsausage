@@ -186,7 +186,7 @@ jobs:
           pwd
           ls -l
           ls -l ./secrets
-          docker compose -f build.yml --verbose run build
+          docker compose -f build.yml --verbose run django build
           ls -l ./nginx-prod/build
 
       # - name: Prodbuild-nginx
