@@ -115,8 +115,8 @@ if [ "$CMD" = "build" ]; then
   echo "Static..."
   django-admin collectstatic --noinput
 
-  echo "Tar..."
-  tar czvf /build/django.tgz /app/static
+  # echo "Tar..."
+  # tar czvf /build/django.tgz /app/static
   exit
 fi
 
