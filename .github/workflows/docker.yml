@@ -18,18 +18,18 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    - name: Executing remote ssh commands using password
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.SSH_STAGING_HOST }}
-        username: ${{ secrets.SSH_STAGING_USERNAME }}
-        # password: ${{ secrets.PASSWORD }}
-        key: ${{ secrets.SSH_STAGING_KEY }}
-        port: ${{ secrets.SSH_STAGING_PORT }}
-        script: whoami
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_STAGING_HOST }}
+          username: ${{ secrets.SSH_STAGING_USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_STAGING_KEY }}
+          port: ${{ secrets.SSH_STAGING_PORT }}
+          script: whoami
 
-    # # Steps represent a sequence of tasks that will be executed as part of the job
-    # steps:
     #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     #   - uses: actions/checkout@v3
 
