@@ -70,7 +70,7 @@ jobs:
       #   working-directory: public
 
       - name: Public Frontend - Build
-        run: docker compose --file build.yml run public
+        run: docker compose --file build_staging.yml run public
 
       # - name: Public Admin - Install
       #   run: yarn install
@@ -81,7 +81,7 @@ jobs:
       #   working-directory: admin
 
       - name: Public Admin - Build
-        run: docker compose --file build.yml run admin
+        run: docker compose --file build_staging.yml run admin
 
       # - name: Public Redesign Frontend - Install
       #   run: yarn install
@@ -92,13 +92,13 @@ jobs:
       #   working-directory: public-redesign
 
       - name: Public Redesign Frontend - Build
-        run: docker compose --file build.yml run public_redesign
+        run: docker compose --file build_staging.yml run public_redesign
 
       # - name: Django - Build Docker Container
-      #   run: docker compose --file build.yml build django
+      #   run: docker compose --file build_staging.yml build django
 
       - name: Django - Build
-        run: docker compose --file build.yml run django
+        run: docker compose --file build_staging.yml run django
 
       - name: Containers - Build Nginx
         run: docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
