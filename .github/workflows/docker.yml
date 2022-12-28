@@ -50,28 +50,7 @@ jobs:
         with:
           node-version: "16.x"
 
-      #       - name: Install homebrew
-      #         run: |
-      #           sudo apt-get update
-      #           sudo apt-get install libnss3-tools
-      #           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-      #           # Add Homebrew to path
-      #           # c.f. https://github.community/t5/GitHub-Actions/Installing-Homebrew-on-Linux/td-p/51916
-      #           echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
-
-      #       - name: Setup local dev certs
-      #         run: |
-      #           brew install mkcert
-      #           mkcert -install
-      #           mkdir dev-certs
-      #           cd dev-certs
-      #           mkcert localhost
-      #           cd ../
-
-      # So we can daemonise yarn start
-      #     - run: sudo yarn global add pm2
-
-      - name: Do something with env files
+      - name: Setup Env Vars
         run: |
           mkdir secrets
           echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PROD_ENV }}" > secrets/sausage-public-frontend.prod.env
@@ -83,20 +62,12 @@ jobs:
           echo "${{secrets.SAUSAGE_WEB_DEV_ENV }}" > secrets/sausage-web.dev.env
           echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
           echo "${{secrets.SAUSAGE_DB_DEV_ENV }}" > sausage-db.dev.env
-          echo "${{secrets.SAUSAGE_WEB_PROD_LOCAL_ENV }}" > sausage-web.prod-local.txt
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > sausage-web-db.dev.txt
 
       # - name: Retrieve the secret and decode it to a file
       #   env:
       #     TEST_ENV_BASE64: ${{ secrets.TEST_ENV_BASE64 }}
       #   run: |
       #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
-
-      # - name: Docker version
-      #   run: docker --version
-
-      # - name: Docker Compose version
-      #   run: docker-compose --version
 
       - name: Build - Prep
         run: |
@@ -150,14 +121,3 @@ jobs:
           docker push keithmoss/sausage2-nginx:latest
           docker tag sausage2/django:latest keithmoss/sausage2-django:latest
           docker push keithmoss/sausage2-django:latest
-
-    # Start daemonised local dev
-
-#     - run: pm2 start node_modules/react-scripts/scripts/start.js --name react-app
-
-# Screenshot the landing page
-#     - name: Take photo of our local build
-#       uses: "lannonbr/puppeteer-screenshot-action@1.3.0"
-#       with:
-# #         url: https://localhost:3000
-#         url: https://trove.keithmoss.me
