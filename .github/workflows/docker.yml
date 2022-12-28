@@ -1,12 +1,12 @@
 name: Docker
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
+# events but only for the staging branch
 on:
   push:
-    branches: [main]
+    branches: [staging]
   pull_request:
-    branches: [main]
+    branches: [staging]
 
 env:
   LATEST_IMAGE_TAG: latest-staging
@@ -20,7 +20,105 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Executing remote ssh commands using password
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: Log in to Docker Hub (again)
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #   run: |
+      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      # Let's get setup with Node
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+
+      # - name: Retrieve the secret and decode it to a file
+      #   env:
+      #     TEST_ENV_BASE64: ${{ secrets.TEST_ENV_BASE64 }}
+      #   run: |
+      #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      # - name: Public Frontend - Install
+      #   run: yarn install
+      #   working-directory: public
+
+      # - name: Public Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public
+
+      - name: Public Frontend - Build
+        run: docker compose --file build.yml run public
+
+      # - name: Public Admin - Install
+      #   run: yarn install
+      #   working-directory: admin
+
+      # - name: Public Admin - Build
+      #   run: ./build.sh
+      #   working-directory: admin
+
+      - name: Public Admin - Build
+        run: docker compose --file build.yml run admin
+
+      # - name: Public Redesign Frontend - Install
+      #   run: yarn install
+      #   working-directory: public-redesign
+
+      # - name: Public Redesign Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public-redesign
+
+      - name: Public Redesign Frontend - Build
+        run: docker compose --file build.yml run public_redesign
+
+      # - name: Django - Build Docker Container
+      #   run: docker compose --file build.yml build django
+
+      - name: Django - Build
+        run: docker compose --file build.yml run django
+
+      - name: Containers - Build Nginx
+        run: docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: nginx-prod
+
+      - name: Containers - Build Django
+        run: docker build -t keithmoss/demsausage-django:$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: django
+
+      - name: Containers - Build RQ Dashboard
+        run: docker build -t keithmoss/demsausage-rq-dashboard:$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: rq-dashboard
+
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/demsausage-nginx --all-tags
+          docker push keithmoss/demsausage-django --all-tags
+          docker push keithmoss/demsausage-rq-dashboard --all-tags
+
+      - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SSH_STAGING_HOST }}
@@ -30,102 +128,3 @@ jobs:
           script: |
             cd /apps/digitalocean-stack/
             ./redeploy-demsausage-staging.sh
-            docker ps
-
-    #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    #   - uses: actions/checkout@v3
-
-    #   - name: Log in to Docker Hub
-    #     uses: docker/login-action@v2
-    #     with:
-    #       username: ${{ secrets.DOCKER_USERNAME }}
-    #       password: ${{ secrets.DOCKER_PASSWORD }}
-
-    #   # - name: Log in to Docker Hub (again)
-    #   #   env:
-    #   #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    #   #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    #   #   run: |
-    #   #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-    #   # Let's get setup with Node
-    #   - uses: actions/setup-node@v3
-    #     with:
-    #       node-version: "16.x"
-
-    #   - name: Setup Env Vars
-    #     run: |
-    #       mkdir secrets
-    #       echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-    #       echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-    #       echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-    #       echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-    #       echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
-
-    #   # - name: Retrieve the secret and decode it to a file
-    #   #   env:
-    #   #     TEST_ENV_BASE64: ${{ secrets.TEST_ENV_BASE64 }}
-    #   #   run: |
-    #   #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
-
-    #   - name: Build - Prep
-    #     run: |
-    #       mkdir ./build
-    #       mkdir ./nginx-prod/build
-
-    #   # - name: Public Frontend - Install
-    #   #   run: yarn install
-    #   #   working-directory: public
-
-    #   # - name: Public Frontend - Build
-    #   #   run: ./build.sh
-    #   #   working-directory: public
-
-    #   - name: Public Frontend - Build
-    #     run: docker compose --file build.yml run public
-
-    #   # - name: Public Admin - Install
-    #   #   run: yarn install
-    #   #   working-directory: admin
-
-    #   # - name: Public Admin - Build
-    #   #   run: ./build.sh
-    #   #   working-directory: admin
-
-    #   - name: Public Admin - Build
-    #     run: docker compose --file build.yml run admin
-
-    #   # - name: Public Redesign Frontend - Install
-    #   #   run: yarn install
-    #   #   working-directory: public-redesign
-
-    #   # - name: Public Redesign Frontend - Build
-    #   #   run: ./build.sh
-    #   #   working-directory: public-redesign
-
-    #   - name: Public Redesign Frontend - Build
-    #     run: docker compose --file build.yml run public_redesign
-
-    #   # - name: Django - Build Docker Container
-    #   #   run: docker compose --file build.yml build django
-
-    #   - name: Django - Build
-    #     run: docker compose --file build.yml run django
-
-    #   - name: Containers - Build Nginx
-    #     run: docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
-    #     working-directory: nginx-prod
-
-    #   - name: Containers - Build Django
-    #     run: docker build -t keithmoss/demsausage-django:$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
-    #     working-directory: django
-
-    #   - name: Containers - Build RQ Dashboard
-    #     run: docker build -t keithmoss/demsausage-rq-dashboard:$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
-    #     working-directory: rq-dashboard
-
-    #   - name: Containers - Push to Docker Hub
-    #     run: |
-    #       docker push keithmoss/demsausage-nginx --all-tags
-    #       docker push keithmoss/demsausage-django --all-tags
-    #       docker push keithmoss/demsausage-rq-dashboard --all-tags
