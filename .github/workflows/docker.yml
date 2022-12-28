@@ -60,65 +60,60 @@ jobs:
       #   run: |
       #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
 
-      - name: Test
+      - name: Build - Prep
         run: |
-          echo "docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} ."
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Public Frontend - Install
+        run: yarn install
+        working-directory: public
+
+      - name: Public Frontend - Build
+        run: ./build.sh
+        working-directory: public
+
+      - name: Public Admin - Install
+        run: yarn install
+        working-directory: admin
+
+      - name: Public Admin - Build
+        run: ./build.sh
+        working-directory: admin
+
+      - name: Public Redesign Frontend - Install
+        run: yarn install
+        working-directory: public-redesign
+
+      - name: Public Redesign Frontend - Build
+        run: ./build.sh
+        working-directory: public-redesign
+
+      - name: Django - Build Docker Container
+        run: docker compose --file build.yml build django
+
+      - name: Django - Build Static Assets
+        run: docker compose --file build.yml run django
+
+      - name: Containers - Build Nginx
+        run: |
+          ls -l ./build/
+          ls -l ./build/
+          docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: nginx-prod
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./build
-      #     mkdir ./nginx-prod/build
+      - name: Containers - Build Django
+        run: |
+          ls -l ./build/
+          docker build -t keithmoss/demsausage-django:$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: django
 
-      # - name: Public Frontend - Install
-      #   run: yarn install
-      #   working-directory: public
+      - name: Containers - Build RQ Dashboard
+          ls -l ./build/
+        run: docker build -t keithmoss/demsausage-rq-dashboard:$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
 
-      # - name: Public Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public
-
-      # - name: Public Admin - Install
-      #   run: yarn install
-      #   working-directory: admin
-
-      # - name: Public Admin - Build
-      #   run: ./build.sh
-      #   working-directory: admin
-
-      # - name: Public Redesign Frontend - Install
-      #   run: yarn install
-      #   working-directory: public-redesign
-
-      # - name: Public Redesign Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public-redesign
-
-      # - name: Django - Build Docker Container
-      #   run: docker compose --file build.yml build django
-
-      # - name: Django - Build Static Assets
-      #   run: docker compose --file build.yml run django
-
-      # - name: Containers - Build Nginx
-      #   run: |
-      #     ls -l ./build/
-      #     ls -l ./build/
-      #     docker build -t keithmoss/demsausage-nginx:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
-      #   working-directory: nginx-prod
-
-      # - name: Containers - Build Django
-      #   run: |
-      #     ls -l ./build/
-      #     docker build -t keithmoss/demsausage-django:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
-      #   working-directory: django
-
-      # - name: Containers - Build RQ Dashboard
-      #     ls -l ./build/
-      #   run: docker build -t keithmoss/demsausage-rq-dashboard:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
-
-      # - name: Containers - Push to Docker Hub
-      #   run: |
-      #     docker push keithmoss/demsausage-nginx --all-tags
-      #     docker push keithmoss/demsausage-django --all-tags
-      #     docker push keithmoss/demsausage-rq-dashboard --all-tags
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/demsausage-nginx --all-tags
+          docker push keithmoss/demsausage-django --all-tags
+          docker push keithmoss/demsausage-rq-dashboard --all-tags
