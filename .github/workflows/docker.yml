@@ -62,7 +62,7 @@ jobs:
 
       - name: Test
         run: |
-          echo "docker build -t keithmoss/demsausage-nginx:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} ."
+          echo "docker build -t keithmoss/demsausage-nginx:${{ GITHUB_SHA }} -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} ."
         working-directory: nginx-prod
 
       # - name: Build - Prep
