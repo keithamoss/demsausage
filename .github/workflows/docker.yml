@@ -27,6 +27,7 @@ jobs:
           username: ${{ secrets.SSH_STAGING_USERNAME }}
           # password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SSH_STAGING_KEY }}
+          passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
           port: ${{ secrets.SSH_STAGING_PORT }}
           script: whoami
 
