@@ -42,6 +42,12 @@ if [ "$CMD" = "full-run" ]; then
 fi
 
 # Containers - Push to Docker Hub
-docker push keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG
-docker push keithmoss/demsausage-django:$LATEST_IMAGE_TAG
-docker push keithmoss/demsausage-rq-dashboard:$LATEST_IMAGE_TAG
+if [ "$CMD" = "django-only" ]; then
+    docker push keithmoss/demsausage-django:$LATEST_IMAGE_TAG
+elif [ "$CMD" = "frontend-only" ]; then
+    docker push keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG
+elif [ "$CMD" = "full-run" ]; then
+    docker push keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG
+    docker push keithmoss/demsausage-django:$LATEST_IMAGE_TAG
+    docker push keithmoss/demsausage-rq-dashboard:$LATEST_IMAGE_TAG
+fi
