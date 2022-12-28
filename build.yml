@@ -11,5 +11,32 @@ services:
     environment:
       - BUILD=YES
     env_file:
-      - ./secrets/sausage-web.prod-local.env
+      - ./secrets/sausage-web.staging.env
       - ./secrets/sausage-web-db.dev.env
+  public:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./public:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-public-frontend.staging.env
+  public_redesign:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./public-redesign:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-public-redesign-frontend.staging.env
+  admin:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./admin:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-admin-frontend.staging.env

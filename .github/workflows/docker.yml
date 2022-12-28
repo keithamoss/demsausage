@@ -65,34 +65,43 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Public Frontend - Install
-        run: yarn install
-        working-directory: public
+      # - name: Public Frontend - Install
+      #   run: yarn install
+      #   working-directory: public
+
+      # - name: Public Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public
 
       - name: Public Frontend - Build
-        run: ./build.sh
-        working-directory: public
+        run: docker compose --file build.yml run public
 
-      - name: Public Admin - Install
-        run: yarn install
-        working-directory: admin
+      # - name: Public Admin - Install
+      #   run: yarn install
+      #   working-directory: admin
 
-      - name: Public Admin - Build
-        run: ./build.sh
-        working-directory: admin
+      # - name: Public Admin - Build
+      #   run: ./build.sh
+      #   working-directory: admin
 
-      - name: Public Redesign Frontend - Install
-        run: yarn install
-        working-directory: public-redesign
+      - name: Public Frontend - Build
+        run: docker compose --file build.yml run admin
 
-      - name: Public Redesign Frontend - Build
-        run: ./build.sh
-        working-directory: public-redesign
+      # - name: Public Redesign Frontend - Install
+      #   run: yarn install
+      #   working-directory: public-redesign
 
-      - name: Django - Build Docker Container
-        run: docker compose --file build.yml build django
+      # - name: Public Redesign Frontend - Build
+      #   run: ./build.sh
+      #   working-directory: public-redesign
 
-      - name: Django - Build Static Assets
+      - name: Public Frontend - Build
+        run: docker compose --file build.yml run public_redesign
+
+      # - name: Django - Build Docker Container
+      #   run: docker compose --file build.yml build django
+
+      - name: Django - Build
         run: docker compose --file build.yml run django
 
       - name: Containers - Build Nginx

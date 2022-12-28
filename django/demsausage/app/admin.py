@@ -1,4 +1,5 @@
 from demsausage.util import get_env
+
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import connection
@@ -22,6 +23,10 @@ def get_admins():
 
 def is_development():
     return get_env("ENVIRONMENT") == "DEVELOPMENT"
+
+
+def is_staging():
+    return get_env("ENVIRONMENT") == "STAGING"
 
 
 def is_production():

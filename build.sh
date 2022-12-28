@@ -24,13 +24,13 @@ fi
 
 if [ "$CMD" = "frontend-only" ] || [ "$CMD" = "full-run" ]; then
     echo -e "\n\n Public Frontend - Build"
-    cd public && ./build.sh && cd ../
+    docker compose --file build.yml run public
 
     echo -e "\n\n Public Redesign - Build"
-    cd public-redesign && ./build.sh && cd ../
+    docker compose --file build.yml run public_redesign
 
     echo -e "\n\n Admin - Build"
-    cd admin && ./build.sh && cd ../
+    docker compose --file build.yml run admin
 
     echo -e "\n\n Containers - Build Nginx"
     cd nginx-prod && docker build -t keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG . && cd ../

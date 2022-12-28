@@ -13,12 +13,6 @@ if [ "$REACT_APP_ENVIRONMENT" = "DEVELOPMENT" ]; then
 fi
 
 if [ x"$command" = x"build" ]; then
-    export TERM=xterm
-
-    rm -rf /app/build
-    mkdir -p /app/build
-
-    yarn run build
-    cd /app/build && tar czvf /build/frontend-public.tgz .
+    . /app/build.sh
     exit
 fi

@@ -7,9 +7,6 @@ COPY nginx /etc/nginx
 
 EXPOSE 443
 
-# COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-# ENTRYPOINT ["/app/docker-entrypoint.sh"]
-
 CMD ["nginx", "-g", "daemon off;"]
 
 # ADD automatically uncompresses the tgz files for us

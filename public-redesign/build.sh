@@ -6,4 +6,4 @@ mkdir -p ./build
 yarn run lint
 
 yarn run build
-tar czvf ../nginx-prod/build/public-redesign.tgz ./build/
+cd ./build && tar czvf /build/public-redesign.tgz .

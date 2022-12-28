@@ -103,7 +103,7 @@ if [ "$CMD" = "build" ]; then
   
   django-admin collectstatic --noinput
 
-  tar czvf /build/django.tgz /app/static
+  cd /app/static && tar czvf /build/django.tgz .
   exit
 fi
 
