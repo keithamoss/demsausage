@@ -30,9 +30,11 @@ jobs:
           script: |
             pwd
             ls -l
-            /apps/digitalocean-stack/
+            cd /apps/digitalocean-stack/
             pwd
             ls -l
+            redeploy-demsausage-staging.sh
+            docker ps
 
     #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     #   - uses: actions/checkout@v3
