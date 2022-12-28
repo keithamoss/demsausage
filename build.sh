@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CMD="$1"
+LATEST_IMAGE_TAG="latest-staging"
 
 if [ x"$CMD" = x ]; then
     echo "provide a command!"
@@ -8,35 +9,39 @@ if [ x"$CMD" = x ]; then
 fi
 
 if [ "$CMD" = "full-run" ]; then
-    # Build - Prep
+    echo "Build - Prep"
     rm -rf ./nginx-prod/build/
     mkdir ./nginx-prod/build
 fi
 
-if [ "$CMD" = "frontend-only" ] || [ "$CMD" = "full-run" ]; then
-    # Public Frontend - Build
-    cd public && ./build.sh && cd ../
+if [ "$CMD" = "django-only" ] || [ "$CMD" = "full-run" ]; then
+    echo -e "\n\n Django - Build Static Assets"
+    docker compose --file build.yml run django
 
-    # Public Redesign - Build
-    cd public-redesign && ./build.sh && cd ../
-
-    # Admin - Build
-    cd admin && ./build.sh && cd ../
-
-    # Containers - Build Nginx
-    cd nginx-prod && docker build -t sausage2/nginx:latest . && cd ../
+    echo -e "\n\n Containers - Build Django"
+    cd django && docker build -t keithmoss/demsausage-django:$LATEST_IMAGE_TAG . && cd ../
 fi
 
-if [ "$CMD" = "django-only" ] || [ "$CMD" = "full-run" ]; then
-    # Django - Build Static Assets
-    docker compose --file build.yml run django
-    
-    # Containers - Build Django
-    cd django && docker build -t sausage2/django:latest . && cd ../
+if [ "$CMD" = "frontend-only" ] || [ "$CMD" = "full-run" ]; then
+    echo -e "\n\n Public Frontend - Build"
+    cd public && ./build.sh && cd ../
+
+    echo -e "\n\n Public Redesign - Build"
+    cd public-redesign && ./build.sh && cd ../
+
+    echo -e "\n\n Admin - Build"
+    cd admin && ./build.sh && cd ../
+
+    echo -e "\n\n Containers - Build Nginx"
+    cd nginx-prod && docker build -t keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG . && cd ../
+fi
+
+if [ "$CMD" = "full-run" ]; then
+    echo -e "\n\n Containers - Build RQ Dashboard"
+    cd rq-dashboard && docker build -t keithmoss/demsausage-rq-dashboard:$LATEST_IMAGE_TAG . && cd ../
 fi
 
 # Containers - Push to Docker Hub
-docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-docker push keithmoss/sausage2-nginx:latest
-docker tag sausage2/django:latest keithmoss/sausage2-django:latest
-docker push keithmoss/sausage2-django:latest
+docker push keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG
+docker push keithmoss/demsausage-django:$LATEST_IMAGE_TAG
+docker push keithmoss/demsausage-rq-dashboard:$LATEST_IMAGE_TAG
