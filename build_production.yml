@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  django:
+    build: django/
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./django/:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+      - ./logs/django:/app/logs:delegated
+    environment:
+      - BUILD=YES
+    env_file:
+      - ./secrets/sausage-web.production.env
+      - ./secrets/sausage-web-db.dev.env
+  public:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./public:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-public-frontend.production.env
+  public_redesign:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./public-redesign:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-public-redesign-frontend.production.env
+  admin:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./admin:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/sausage-admin-frontend.production.env
