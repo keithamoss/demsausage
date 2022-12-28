@@ -102,15 +102,15 @@ jobs:
         run: docker compose --file build_staging.yml run django
 
       - name: Containers - Build Nginx
-        run: docker build -t keithmoss/demsausage-nginx:$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
+        run: docker build -t keithmoss/demsausage-nginx:staging-$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: nginx-prod
 
       - name: Containers - Build Django
-        run: docker build -t keithmoss/demsausage-django:$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
+        run: docker build -t keithmoss/demsausage-django:staging-$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: django
 
       - name: Containers - Build RQ Dashboard
-        run: docker build -t keithmoss/demsausage-rq-dashboard:$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
+        run: docker build -t keithmoss/demsausage-rq-dashboard:staging-$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: rq-dashboard
 
       - name: Containers - Push to Docker Hub
