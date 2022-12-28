@@ -105,6 +105,7 @@ jobs:
 
       - name: Containers - Build RQ Dashboard
         run: docker build -t keithmoss/demsausage-rq-dashboard:$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: rq-dashboard
 
       - name: Containers - Push to Docker Hub
         run: |
