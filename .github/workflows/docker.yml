@@ -1,12 +1,15 @@
 name: Docker
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
+
+env:
+  LATEST_IMAGE_TAG: latest-staging
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -95,16 +98,19 @@ jobs:
       - name: Containers - Build Nginx
         run: |
           ls -l ./build/
-          docker build -t keithmoss/demsausage-nginx:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-nginx:latest .
+          ls -l ./build/
+          docker build -t keithmoss/demsausage-nginx:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: nginx-prod
 
       - name: Containers - Build Django
         run: |
-          docker build -t keithmoss/demsausage-django:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-django:latest .
+          ls -l ./build/
+          docker build -t keithmoss/demsausage-django:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: django
 
       - name: Containers - Build RQ Dashboard
-        run: docker build -t keithmoss/demsausage-rq-dashboard:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-rq-dashboard:latest .
+          ls -l ./build/
+        run: docker build -t keithmoss/demsausage-rq-dashboard:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
 
       - name: Containers - Push to Docker Hub
         run: |
