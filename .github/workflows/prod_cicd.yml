@@ -3,10 +3,11 @@ name: Production CI/CD
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the production branch
 on:
-  push:
-    branches: [production]
+  # push:
+  #   branches: [production]
   pull_request:
     branches: [production]
+    types: [closed]
 
 env:
   LATEST_IMAGE_TAG: latest-production
