@@ -16,7 +16,7 @@ fi
 
 if [ "$CMD" = "django-only" ] || [ "$CMD" = "full-run" ]; then
     echo -e "\n\n Django - Build Static Assets"
-    docker compose --file build.yml run django
+    docker compose --file build_staging.yml run django
 
     echo -e "\n\n Containers - Build Django"
     cd django && docker build -t keithmoss/demsausage-django:$LATEST_IMAGE_TAG . && cd ../
@@ -24,13 +24,13 @@ fi
 
 if [ "$CMD" = "frontend-only" ] || [ "$CMD" = "full-run" ]; then
     echo -e "\n\n Public Frontend - Build"
-    docker compose --file build.yml run public
+    docker compose --file build_staging.yml run public
 
     echo -e "\n\n Public Redesign - Build"
-    docker compose --file build.yml run public_redesign
+    docker compose --file build_staging.yml run public_redesign
 
     echo -e "\n\n Admin - Build"
-    docker compose --file build.yml run admin
+    docker compose --file build_staging.yml run admin
 
     echo -e "\n\n Containers - Build Nginx"
     cd nginx-prod && docker build -t keithmoss/demsausage-nginx:$LATEST_IMAGE_TAG . && cd ../
