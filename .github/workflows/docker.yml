@@ -80,7 +80,7 @@ jobs:
       #   run: ./build.sh
       #   working-directory: admin
 
-      - name: Public Frontend - Build
+      - name: Public Admin - Build
         run: docker compose --file build.yml run admin
 
       # - name: Public Redesign Frontend - Install
@@ -91,7 +91,7 @@ jobs:
       #   run: ./build.sh
       #   working-directory: public-redesign
 
-      - name: Public Frontend - Build
+      - name: Public Redesign Frontend - Build
         run: docker compose --file build.yml run public_redesign
 
       # - name: Django - Build Docker Container
