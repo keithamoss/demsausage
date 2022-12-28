@@ -95,17 +95,19 @@ jobs:
       - name: Containers - Build Nginx
         run: |
           ls -l ./build/
-          docker build -t sausage2/nginx:latest .
+          docker build -t keithmoss/demsausage-nginx:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-nginx:latest .
         working-directory: nginx-prod
 
       - name: Containers - Build Django
         run: |
-          docker build -t sausage2/django:latest .
+          docker build -t keithmoss/demsausage-django:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-django:latest .
         working-directory: django
+
+      - name: Containers - Build RQ Dashboard
+        run: docker build -t keithmoss/demsausage-rq-dashboard:${{ env.GITHUB_SHA }} -t keithmoss/demsausage-rq-dashboard:latest .
 
       - name: Containers - Push to Docker Hub
         run: |
-          docker tag sausage2/nginx:latest keithmoss/sausage2-nginx:latest
-          docker push keithmoss/sausage2-nginx:latest
-          docker tag sausage2/django:latest keithmoss/sausage2-django:latest
-          docker push keithmoss/sausage2-django:latest
+          docker push keithmoss/demsausage-nginx --all-tags
+          docker push keithmoss/demsausage-django --all-tags
+          docker push keithmoss/demsausage-rq-dashboard --all-tags
