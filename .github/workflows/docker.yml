@@ -26,24 +26,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Log in to Docker Hub (again)
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta1
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: keithmoss/sausage-nginx (sausage-nginx)
-
-      - name: Extract metadata (tags, labels) for Docker (sausage2-nginx)
-        id: meta2
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: keithmoss/sausage2-nginx
+      # - name: Log in to Docker Hub (again)
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #   run: |
+      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       # Let's get setup with Node
       - uses: actions/setup-node@v3
