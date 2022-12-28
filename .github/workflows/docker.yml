@@ -28,12 +28,8 @@ jobs:
           key: ${{ secrets.SSH_STAGING_KEY }}
           passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
           script: |
-            pwd
-            ls -l
             cd /apps/digitalocean-stack/
-            pwd
-            ls -l
-            redeploy-demsausage-staging.sh
+            ./redeploy-demsausage-staging.sh
             docker ps
 
     #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
