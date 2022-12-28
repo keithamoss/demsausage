@@ -28,7 +28,6 @@ jobs:
           # password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SSH_STAGING_KEY }}
           passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
-          port: ${{ secrets.SSH_STAGING_PORT }}
           script: whoami
 
     #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
