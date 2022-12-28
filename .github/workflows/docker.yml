@@ -25,10 +25,11 @@ jobs:
         with:
           host: ${{ secrets.SSH_STAGING_HOST }}
           username: ${{ secrets.SSH_STAGING_USERNAME }}
-          # password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SSH_STAGING_KEY }}
           passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
-          script: whoami
+          script: |
+            pwd
+            ls -l
 
     #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     #   - uses: actions/checkout@v3
