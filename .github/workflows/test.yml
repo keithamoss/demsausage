@@ -224,9 +224,9 @@ jobs:
           mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
           ls -l ./nginx-prod/build/
 
-      # - name: Containers - Build Nginx
-      #   run: docker build -t keithmoss/demsausage-nginx:staging-$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
-      #   working-directory: nginx-prod
+      - name: Containers - Build Nginx
+        run: docker build -t keithmoss/demsausage-nginx:staging-$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: nginx-prod
 
       # - name: Containers - Push to Docker Hub
       #   run: |
