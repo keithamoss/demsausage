@@ -41,7 +41,7 @@ jobs:
       - name: Build - Prep
         run: |
           mkdir ./build
-          mkdir ./nginx-prod/build
+          mkdir -p ./nginx-prod/build
 
       # - name: Public Frontend - Build
       #   run: docker compose --file build_staging.yml run public
@@ -82,7 +82,7 @@ jobs:
       - name: Build - Prep
         run: |
           mkdir ./build
-          mkdir ./nginx-prod/build
+          mkdir -p ./nginx-prod/build
 
       # - name: Public Admin - Build
       #   run: docker compose --file build_staging.yml run admin
@@ -123,7 +123,7 @@ jobs:
       - name: Build - Prep
         run: |
           mkdir ./build
-          mkdir ./nginx-prod/build
+          mkdir -p ./nginx-prod/build
 
       # - name: Public Redesign Frontend - Build
       #   run: docker compose --file build_staging.yml run public_redesign
@@ -164,7 +164,7 @@ jobs:
       - name: Build - Prep
         run: |
           mkdir ./build
-          mkdir ./nginx-prod/build
+          mkdir -p ./nginx-prod/build
 
       # - name: Django - Build
       #   run: docker compose --file build_staging.yml run django
