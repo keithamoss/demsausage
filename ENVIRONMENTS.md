@@ -83,5 +83,6 @@ SSH_STAGING_KEY_PASSPHRASE
 
 ## Resources
 
+https://docs.servicestack.net/do-github-action-mix-deployment
 https://faun.pub/full-ci-cd-with-docker-github-actions-digitalocean-droplets-container-registry-db2938db8246
 https://thaoth.dev/Full-CI-CD-with-Docker-GitHub-Actions-DigitalOcean-Droplets-Container-Registry/

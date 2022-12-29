@@ -14,3 +14,4 @@ TODO*.md
 redis/*
 demsausage-logs-federal-2022/
 db-a-logs-federal-election-2022/
+.dccache
