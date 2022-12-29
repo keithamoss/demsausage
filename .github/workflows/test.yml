@@ -38,10 +38,10 @@ jobs:
       #     echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
       #     echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./build
-      #     mkdir ./nginx-prod/build
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       # - name: Public Frontend - Build
       #   run: docker compose --file build_staging.yml run public
@@ -79,10 +79,10 @@ jobs:
       #     echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
       #     echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./build
-      #     mkdir ./nginx-prod/build
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       # - name: Public Admin - Build
       #   run: docker compose --file build_staging.yml run admin
@@ -120,10 +120,10 @@ jobs:
       #     echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
       #     echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./build
-      #     mkdir ./nginx-prod/build
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       # - name: Public Redesign Frontend - Build
       #   run: docker compose --file build_staging.yml run public_redesign
@@ -161,10 +161,10 @@ jobs:
       #     echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
       #     echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./build
-      #     mkdir ./nginx-prod/build
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       # - name: Django - Build
       #   run: docker compose --file build_staging.yml run django
