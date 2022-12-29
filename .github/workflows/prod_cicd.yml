@@ -1,7 +1,5 @@
 name: Production CI/CD
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the production branch
 on:
   # push:
   #   branches: [production]
@@ -12,32 +10,12 @@ on:
 env:
   LATEST_IMAGE_TAG: latest-production
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build-public:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # - name: Log in to Docker Hub (again)
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      #   run: |
-      #     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-      # Let's get setup with Node
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
@@ -51,63 +29,183 @@ jobs:
           echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-redesign-frontend.production.env
           echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-admin-frontend.production.env
 
-      # - name: Retrieve the secret and decode it to a file
-      #   env:
-      #     TEST_ENV_BASE64: ${{ secrets.TEST_ENV_BASE64 }}
-      #   run: |
-      #     echo $TEST_ENV_BASE64 | base64 --decode > secrets/test.env
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Public Frontend - Build
+        run: docker compose --file build_production.yml run public
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-public
+          path: ./nginx-prod/build/public.tgz
+
+  build-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/sausage-web.production.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-frontend.production.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-redesign-frontend.production.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-admin-frontend.production.env
 
       - name: Build - Prep
         run: |
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      # - name: Public Frontend - Install
-      #   run: yarn install
-      #   working-directory: public
-
-      # - name: Public Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public
-
-      - name: Public Frontend - Build
-        run: docker compose --file build_production.yml run public
-
-      # - name: Public Admin - Install
-      #   run: yarn install
-      #   working-directory: admin
-
-      # - name: Public Admin - Build
-      #   run: ./build.sh
-      #   working-directory: admin
-
       - name: Public Admin - Build
         run: docker compose --file build_production.yml run admin
 
-      # - name: Public Redesign Frontend - Install
-      #   run: yarn install
-      #   working-directory: public-redesign
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-admin
+          path: ./nginx-prod/build/admin.tgz
 
-      # - name: Public Redesign Frontend - Build
-      #   run: ./build.sh
-      #   working-directory: public-redesign
+  build-public-redesign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/sausage-web.production.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-frontend.production.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-redesign-frontend.production.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-admin-frontend.production.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_production.yml run public_redesign
 
-      # - name: Django - Build Docker Container
-      #   run: docker compose --file build_production.yml build django
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-public-redesign
+          path: ./nginx-prod/build/public-redesign.tgz
+
+  build-django-static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/sausage-web.production.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-frontend.production.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-public-redesign-frontend.production.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/sausage-admin-frontend.production.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
 
       - name: Django - Build
         run: docker compose --file build_production.yml run django
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-django
+          path: ./nginx-prod/build/django.tgz
+
+  build-nginx:
+    runs-on: ubuntu-latest
+    needs:
+      [build-public, build-admin, build-public-redesign, build-django-static]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Download artifacts for container building
+        uses: actions/download-artifact@v3
+        with:
+          path: ./build/
+
+      - name: Move artifacts
+        run: |
+          mv ./build/build-public/public.tgz ./nginx-prod/build/public.tgz
+          mv ./build/build-admin/admin.tgz ./nginx-prod/build/admin.tgz
+          mv ./build/build-public-redesign/public-redesign.tgz ./nginx-prod/build/public-redesign.tgz
+          mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
 
       - name: Containers - Build Nginx
         run: docker build -t keithmoss/demsausage-nginx:production-$GITHUB_SHA -t keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: nginx-prod
 
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/demsausage-nginx --all-tags
+
+  build-django:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Containers - Build Django
         run: docker build -t keithmoss/demsausage-django:production-$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
         working-directory: django
+
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/demsausage-django --all-tags
+
+  build-rq-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Containers - Build RQ Dashboard
         run: docker build -t keithmoss/demsausage-rq-dashboard:production-$GITHUB_SHA -t keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }} .
@@ -115,17 +213,19 @@ jobs:
 
       - name: Containers - Push to Docker Hub
         run: |
-          docker push keithmoss/demsausage-nginx --all-tags
-          docker push keithmoss/demsausage-django --all-tags
           docker push keithmoss/demsausage-rq-dashboard --all-tags
 
-      # - name: Deploy to Digital Ocean droplet via SSH action
-      #   uses: appleboy/ssh-action@v0.1.6
-      #   with:
-      #     host: ${{ secrets.SSH_STAGING_HOST }}
-      #     username: ${{ secrets.SSH_STAGING_USERNAME }}
-      #     key: ${{ secrets.SSH_STAGING_KEY }}
-      #     passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
-      #     script: |
-      #       cd /apps/digitalocean-stack/
-      #       ./redeploy-demsausage-staging.sh
+  deploy-app:
+    runs-on: ubuntu-latest
+    needs: [build-nginx, build-django, build-rq-dashboard]
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_PRODUCTION_HOST }}
+          username: ${{ secrets.SSH_PRODUCTION_USERNAME }}
+          key: ${{ secrets.SSH_PRODUCTION_KEY }}
+          passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
+          script: |
+            cd /apps/digitalocean-stack/
+            ./redeploy-demsausage-production.sh
