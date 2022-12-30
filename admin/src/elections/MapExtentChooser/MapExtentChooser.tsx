@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions, import/no-duplicates */
+import { MenuItem, SelectField } from 'material-ui'
 import GeoJSON from 'ol/format/GeoJSON'
 import Geometry from 'ol/geom/Geometry'
 import GeometryType from 'ol/geom/GeometryType'
@@ -15,9 +16,11 @@ import OSM from 'ol/source/OSM'
 import VectorSource from 'ol/source/Vector'
 import View from 'ol/View'
 import * as React from 'react'
+import { IElection } from '../../redux/modules/elections'
 import { IGeoJSON } from '../../redux/modules/interfaces'
 
 interface IProps {
+  elections: IElection[]
   value: IGeoJSON | undefined
   onChange: (geojson: IGeoJSON) => void
 }
@@ -109,7 +112,24 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
   }
 
   public render() {
-    return <div id="map" style={{ width: 400, height: 300, paddingTop: 20, paddingBottom: 20 }} />
+    const { elections } = this.props
+
+    return (
+      <React.Fragment>
+        <div id="map" style={{ width: 400, height: 300, paddingTop: 20, paddingBottom: 20 }} />
+
+        <div>OR</div>
+
+        <SelectField
+          floatingLabelText="Use existing geometry"
+          onChange={(_e: any, _key: number, geojson: string) => this.props.onChange(JSON.parse(geojson))}
+        >
+          {elections.map((elec: IElection) => (
+            <MenuItem key={elec.id} value={JSON.stringify(elec.geom)} primaryText={elec.name} />
+          ))}
+        </SelectField>
+      </React.Fragment>
+    )
   }
 }
 

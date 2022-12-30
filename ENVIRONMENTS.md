@@ -5,6 +5,8 @@ $4/month 512mb Ubuntu droplet
 # Setting up the server
 
 ```
+# Docker
+apt update
 apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -13,13 +15,19 @@ apt-cache policy docker-ce
 apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Docker
 # General
-apt update
 apt upgrade
 # General
 > reboot
 mkdir /apps && cd /apps
 git clone https://github.com/keithamoss/digitalocean-stack
 cd digitalocean-stack && mkdir secrets && cd secrets
+> add secrets
+cd ../
+mkdir keys && cd keys
+> add keys
+cd ../
+mkdir logs
+echo "cd /apps/digitalocean-stack" >> ~/.bashrc
 ```
 
 ## Secrets
@@ -83,5 +91,6 @@ SSH_STAGING_KEY_PASSPHRASE
 
 ## Resources
 
+https://docs.servicestack.net/do-github-action-mix-deployment
 https://faun.pub/full-ci-cd-with-docker-github-actions-digitalocean-droplets-container-registry-db2938db8246
 https://thaoth.dev/Full-CI-CD-with-Docker-GitHub-Actions-DigitalOcean-Droplets-Container-Registry/

@@ -104,9 +104,13 @@ class ElectionEditor extends React.PureComponent<IProps, {}> {
         <PaddedButton label="Cancel" primary={false} onClick={onCancelForm} />
         <HiddenButton type="submit" />
 
-        <br />
-        <br />
-        <img src={`${getAPIBaseURL()}/0.1/map_image/${election!.id}/`} />
+        {election !== null && (
+          <React.Fragment>
+            <br />
+            <br />
+            <img src={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
+          </React.Fragment>
+        )}
       </form>
     )
   }
