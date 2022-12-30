@@ -228,4 +228,4 @@ jobs:
           passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
           script: |
             cd /apps/digitalocean-stack/
-            ./redeploy-demsausage-staging.sh
+            ./demsausage-staging-redeploy.sh
