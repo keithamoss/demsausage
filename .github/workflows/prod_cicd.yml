@@ -228,4 +228,4 @@ jobs:
           passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
           script: |
             cd /apps/digitalocean-stack/
-            ./redeploy-demsausage-production.sh
+            ./demsausage-production-redeploy.sh
