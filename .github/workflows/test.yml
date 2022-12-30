@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_STAGING_USERNAME }}
+          SSH_KEY: ${{ secrets.SSH_STAGING_KEY }}
+          SSH_HOST: ${{ secrets.SSH_STAGING_HOST }}
+          SSH_PASSPHRASE: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
+
+      - name: Foobar
+        run: |
+          ssh staging 'pwd'
