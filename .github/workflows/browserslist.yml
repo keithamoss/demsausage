@@ -22,7 +22,7 @@ jobs:
         uses: c2corg/browserslist-update-action@v2
         with:
           github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          branch: browserslist-update
+          branch: browserslist-update-admin
           base_branch: main
           directory: admin
           commit_message: "build: update Browserslist db"
@@ -34,7 +34,7 @@ jobs:
         uses: c2corg/browserslist-update-action@v2
         with:
           github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          branch: browserslist-update
+          branch: browserslist-update-public
           base_branch: main
           directory: public
           commit_message: "build: update Browserslist db"
@@ -46,7 +46,7 @@ jobs:
         uses: c2corg/browserslist-update-action@v2
         with:
           github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          branch: browserslist-update
+          branch: browserslist-update-public-redesign
           base_branch: main
           directory: public-redesign
           commit_message: "build: update Browserslist db"
