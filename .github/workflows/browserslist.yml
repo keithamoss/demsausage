@@ -1,4 +1,4 @@
-name: "Browerserslist Update"
+name: "Browserslist Update"
 
 on:
   push:
