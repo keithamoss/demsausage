@@ -158,6 +158,12 @@ export default function AddStall(props: Props) {
   //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   //   };
 
+  const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
+  const onChangeWhoIsSubmitting = (
+    input: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => setWhoIsSubmitting(value);
+
   const step1Content = (
     <React.Fragment>
       <Typography variant="body1" gutterBottom>
@@ -226,14 +232,15 @@ export default function AddStall(props: Props) {
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           name="radio-buttons-group"
+          onChange={onChangeWhoIsSubmitting}
         >
           <FormControlLabel
-            value="female"
+            value="owner"
             control={<Radio />}
             label="I'm involved in running this stall"
           />
           <FormControlLabel
-            value="male"
+            value="tip_off"
             control={<Radio />}
             label="I'm sending a tip-off about a stall I've seen"
           />
@@ -263,11 +270,12 @@ export default function AddStall(props: Props) {
       </Typography>
 
       <TextField
-        label="What is the stall called?"
+        label="What is the stall called? (Required)"
         helperText="e.g. Smith Hill Primary School Sausage Sizzle"
         fullWidth
         sx={{ mb: 2 }}
         variant="filled"
+        required
       />
 
       <TextField
@@ -356,69 +364,71 @@ export default function AddStall(props: Props) {
   <MenuItem>PM</MenuItem>
   </Select> */}
 
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <TimePicker
-          label="Start time"
-          value={startTimeValue}
-          onChange={setStartTimeValue}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="filled"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccessTimeIcon />
-                  </InputAdornment>
-                ),
-              }}
+      {whoIsSubmitting === "owner" && (
+        <React.Fragment>
+          {" "}
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <TimePicker
+              label="Start time"
+              value={startTimeValue}
+              onChange={setStartTimeValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccessTimeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </LocalizationProvider>
-      <br />
-      <br />
-
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <TimePicker
-          label="End time"
-          value={endTimeValue}
-          onChange={setEndTimeValue}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="filled"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccessTimeIcon />
-                  </InputAdornment>
-                ),
-              }}
+          </LocalizationProvider>
+          <br />
+          <br />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <TimePicker
+              label="End time"
+              value={endTimeValue}
+              onChange={setEndTimeValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccessTimeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </LocalizationProvider>
-
-      <br />
-      <br />
-
-      <TextField
-        label="Website or social media page link"
-        helperText="We'll include a link to your site as part of your stall's information"
-        fullWidth
-        variant="filled"
-        // sx={{ mb: 2 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LinkIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
+          </LocalizationProvider>
+          <br />
+          <br />
+          <TextField
+            label="Website or social media page link"
+            helperText="We'll include a link to your site as part of your stall's information"
+            fullWidth
+            variant="filled"
+            // sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </React.Fragment>
+      )}
 
       <Divider sx={{ mt: 3, mb: 3 }} />
 
@@ -618,7 +628,7 @@ export default function AddStall(props: Props) {
           <MobileStepper
             variant="text"
             steps={maxSteps}
-            position="static"
+            position="bottom"
             activeStep={activeStep}
             nextButton={
               <Button
