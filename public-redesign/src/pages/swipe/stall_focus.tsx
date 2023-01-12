@@ -21,13 +21,13 @@ import { styled } from "@mui/material/styles";
 
 import { Avatar, Chip, Divider } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
-import { purple } from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
+import { useTheme } from "@mui/material/styles";
 import { IconsWithTooltips } from "../../icons/noms";
 
 interface Props {
@@ -50,6 +50,8 @@ const StyledCardHeader = styled(CardHeader)(() => ({
 
 export default function StallFocus(props: Props) {
   const { toggleStallFocussed, focussedStallId } = props;
+
+  const theme = useTheme();
 
   const ppPremises =
     focussedStallId === 0
@@ -89,7 +91,10 @@ export default function StallFocus(props: Props) {
 
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: purple[500] }} aria-label="recipe">
+              <Avatar
+                sx={{ bgcolor: theme.palette.secondary.main }}
+                aria-label="recipe"
+              >
                 <CasinoIcon />
               </Avatar>
             }

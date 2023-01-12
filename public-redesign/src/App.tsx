@@ -29,12 +29,12 @@ const Root = styled("div")(({ theme }) => ({
       : theme.palette.background.default,
 }));
 
-const AddStallFab = styled(Fab)(() => ({
+const AddStallFab = styled(Fab)(({ theme }) => ({
   position: "absolute",
   //   bottom: `${drawerBleeding + bottomNav + 16}px`,
   bottom: `${drawerBleeding + 16}px`,
   right: "16px",
-  backgroundColor: "#6740b4",
+  backgroundColor: theme.palette.secondary.main,
 }));
 
 export default function SwipeableEdgeDrawerSimple(props: Props) {

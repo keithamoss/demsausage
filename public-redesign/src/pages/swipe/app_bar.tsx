@@ -2,7 +2,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
@@ -21,10 +21,15 @@ interface Props {
 export default function DSAppBar(props: Props) {
   const { toggleSideDrawerOpen, topPadding } = props;
 
+  const theme = useTheme();
+
   return (
     <AppBar
       position="static"
-      sx={{ paddingTop: topPadding ? 1 : 0, backgroundColor: "#6740b4" }}
+      sx={{
+        paddingTop: topPadding ? 1 : 0,
+        backgroundColor: theme.palette.secondary.main,
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
