@@ -5,7 +5,7 @@ USER_FIELDS = ["username", "email"]
 
 def allowed_email(email):
     allowed_emails = list(AllowedUsers.objects.all().values_list("email", flat=True))
-    if len(allowed_emails) > 1:
+    if len(allowed_emails) >= 1:
         return email in allowed_emails
     return False
 
