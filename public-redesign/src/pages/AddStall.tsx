@@ -202,7 +202,9 @@ export default function AddStall(props: Props) {
         filterOpen={false}
         onToggleFilter={() => {}}
         onClick={() => {}}
+        isMapFiltered={false}
         showFilter={false}
+        styleProps={{}}
       />
 
       {/* <Box sx={{ mb: 2 }}>

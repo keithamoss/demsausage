@@ -25,16 +25,17 @@ export default function DSAppBar(props: Props) {
 
   return (
     <AppBar
-      position="static"
+      // position="static"
       sx={{
         paddingTop: topPadding ? 1 : 0,
         backgroundColor: theme.palette.secondary.main,
+        height: "46px !important",
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ minHeight: "46px !important" }}>
           <IconButton
-            size="large"
+            size="small"
             edge="start"
             color="inherit"
             aria-label="menu"
@@ -55,7 +56,7 @@ export default function DSAppBar(props: Props) {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontWeight: 600,
+              fontWeight: 500,
               color: "inherit",
               textDecoration: "none",
             }}

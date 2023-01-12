@@ -208,7 +208,9 @@ export default function BottomDrawer(props: Props) {
                   filterOpen={filterOpen}
                   onToggleFilter={toggleFilter}
                   onClick={setOpen}
+                  isMapFiltered={false}
                   showFilter={true}
+                  styleProps={{}}
                 />
 
                 {filterOpen === true && (

@@ -176,7 +176,9 @@ export default function SwipeableEdgeDrawer(props: Props) {
               filterOpen={filterOpen}
               onToggleFilter={toggleFilter}
               onClick={() => {}}
+              isMapFiltered={false}
               showFilter={true}
+              styleProps={{}}
             />
 
             {filterOpen === true && <SearchFilter onChangeFilter={() => {}} />}

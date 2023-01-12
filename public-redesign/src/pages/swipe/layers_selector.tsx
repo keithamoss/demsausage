@@ -76,6 +76,8 @@ export default function LayersSelector(props: Props) {
         badgeContent={2}
         color="primary"
         className="layer-selector"
+        /* ...or use this if we're using the current layout */
+        sx={{ marginTop: "56px" }}
       >
         <StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
           <LayersIcon />

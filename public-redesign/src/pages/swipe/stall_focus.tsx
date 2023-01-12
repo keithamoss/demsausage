@@ -45,7 +45,7 @@ const FlexboxIcons = styled("div")(() => ({
 }));
 
 const StyledCardHeader = styled(CardHeader)(() => ({
-  pointerEvents: "all",
+  // pointerEvents: "all",
 }));
 
 export default function StallFocus(props: Props) {
@@ -64,7 +64,7 @@ export default function StallFocus(props: Props) {
       : "Avast Drive, Ye Matey Park 1234";
 
   return (
-    <Box sx={{ width: "100%", marginTop: 1 }}>
+    <Box sx={{ width: "100%" }}>
       <Stack spacing={1}>
         <Card variant="outlined" sx={{ border: 0 }}>
           <StyledCardHeader
