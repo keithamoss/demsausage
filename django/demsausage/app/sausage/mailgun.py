@@ -8,8 +8,9 @@ from demsausage.app.admin import (get_admins, get_super_admins, is_development,
                                   is_production)
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env, get_url_safe_election_name
-from django.forms.models import model_to_dict
 from rest_framework.exceptions import APIException
+
+from django.forms.models import model_to_dict
 
 
 class MailgunException(APIException):
@@ -156,7 +157,7 @@ def send_monthly_reminder_heartbeat_email():
     if datetime.datetime.today().day == 1:
         return send({
             "to": ", ".join(get_super_admins()),
-            "subject": "This is your monthly hearbeat email for the Democracy Sausage pending stalls reminder email",
+            "subject": f"This is your monthly hearbeat email for the Democracy Sausage ({get_env('ENVIRONMENT')}) pending stalls reminder email",
             "html": "Nothing to see here.",
         })
 

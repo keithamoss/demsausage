@@ -2,7 +2,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
@@ -21,15 +21,21 @@ interface Props {
 export default function DSAppBar(props: Props) {
   const { toggleSideDrawerOpen, topPadding } = props;
 
+  const theme = useTheme();
+
   return (
     <AppBar
-      position="static"
-      sx={{ paddingTop: topPadding ? 1 : 0, backgroundColor: "#6740b4" }}
+      // position="static"
+      sx={{
+        paddingTop: topPadding ? 1 : 0,
+        backgroundColor: theme.palette.secondary.main,
+        height: "46px !important",
+      }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ minHeight: "46px !important" }}>
           <IconButton
-            size="large"
+            size="small"
             edge="start"
             color="inherit"
             aria-label="menu"
@@ -50,7 +56,7 @@ export default function DSAppBar(props: Props) {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontWeight: 600,
+              fontWeight: 500,
               color: "inherit",
               textDecoration: "none",
             }}

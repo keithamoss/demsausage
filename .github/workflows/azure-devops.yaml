@@ -1,5 +1,5 @@
 # https://github.com/marketplace/actions/github-issues-to-azure-devops
-name: Sync issues to Azure DevOps work items
+name: Sync issues to Azure DevOps
 
 on:
   issues:

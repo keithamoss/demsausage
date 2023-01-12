@@ -3,6 +3,7 @@ import Fill from "ol/style/Fill";
 import Icon from "ol/style/Icon";
 import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
+import { IMapFilterOptions, spriteIconConfig } from "../../../icons/noms";
 import { NomsReader } from "./noms";
 import sprite from "./sprite.json";
 
@@ -28,57 +29,6 @@ export interface IMapSearchResults {
   padding?: boolean;
   animation?: boolean;
 }
-export interface IMapFilterOptions {
-  bbq?: boolean;
-  cake?: boolean;
-  vego?: boolean;
-  halal?: boolean;
-  coffee?: boolean;
-  bacon_and_eggs?: boolean;
-}
-
-export interface IMapPollingGeoJSONNoms {
-  bbq?: boolean;
-  cake?: boolean;
-  nothing?: boolean;
-  run_out?: boolean;
-  bacon_and_eggs?: boolean;
-  halal?: boolean;
-  vego?: boolean;
-  coffee?: boolean;
-  free_text?: boolean; // This is actually a boolean - Map GeoJSON returns summary info only
-}
-
-const spriteIconConfig = {
-  // Core icons
-  cake: { zIndex: 2, scale: 0.5 },
-  cake_plus: { zIndex: 3, scale: 0.5 },
-  cake_run_out: { zIndex: 1, scale: 0.5 },
-  cake_tick: { zIndex: 3, scale: 0.5 },
-  bbq_and_cake: { zIndex: 2, scale: 0.5 },
-  bbq_and_cake_plus: { zIndex: 3, scale: 0.5 },
-  bbq_and_cake_run_out: { zIndex: 1, scale: 0.5 },
-  bbq_and_cake_tick: { zIndex: 3, scale: 0.5 },
-  bbq: { zIndex: 2, scale: 0.5 },
-  bbq_plus: { zIndex: 3, scale: 0.5 },
-  bbq_run_out: { zIndex: 1, scale: 0.5 },
-  bbq_tick: { zIndex: 3, scale: 0.5 },
-
-  // Other icons
-  unknown: { zIndex: 0, scale: 1, opacity: 0.4 },
-
-  // Additional info icons
-  tick: { zIndex: 2, scale: 0.5 },
-  plus: { zIndex: 2, scale: 0.5 },
-  run_out: { zIndex: 2, scale: 0.5 },
-  red_cross_of_shame: { zIndex: 1, scale: 0.4 },
-
-  // Other noms icons
-  vego: { zIndex: 0, scale: 0.5 },
-  bacon_and_eggs: { zIndex: 0, scale: 0.5 },
-  coffee: { zIndex: 0, scale: 0.5 },
-  halal: { zIndex: 0, scale: 0.5 },
-};
 
 const spriteIcons = {};
 const spriteIconsDetailed = {};

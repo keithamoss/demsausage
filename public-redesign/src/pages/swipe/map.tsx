@@ -1,5 +1,6 @@
 import "ol/ol.css";
-import { IMapFilterOptions, IMapSearchResults } from "./infra/map_stuff";
+import { IMapFilterOptions } from "../../icons/noms";
+import { IMapSearchResults } from "./infra/map_stuff";
 import OpenLayersMap from "./OpenLayersMap/OpenLayersMap";
 
 // const StyledOpenLayersMap = styled(OpenLayersMap)(() => ({

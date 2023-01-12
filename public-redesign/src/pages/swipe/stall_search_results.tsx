@@ -31,6 +31,14 @@ const FlexboxIcons = styled("div")(() => ({
   },
 }));
 
+const StyledCardContent = styled(CardContent)(() => ({
+  paddingBottom: 0,
+}));
+
+const StyledCardActions = styled(CardActions)(({ theme }) => ({
+  paddingTop: theme.spacing(0.5),
+}));
+
 export default function StallSearchResults(props: Props) {
   const { toggleStallFocussed, toggleUserHasSearched } = props;
 
@@ -72,7 +80,7 @@ export default function StallSearchResults(props: Props) {
       </Box>
       <Stack spacing={1}>
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -110,16 +118,16 @@ export default function StallSearchResults(props: Props) {
                     <br />
                     {'"a benevolent smile"'}
                   </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -157,16 +165,16 @@ export default function StallSearchResults(props: Props) {
             <br />
             {'"a benevolent smile"'}
           </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -204,16 +212,16 @@ export default function StallSearchResults(props: Props) {
             <br />
             {'"a benevolent smile"'}
           </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -251,12 +259,12 @@ export default function StallSearchResults(props: Props) {
             <br />
             {'"a benevolent smile"'}
           </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
       </Stack>
     </Box>
