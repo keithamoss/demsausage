@@ -77,7 +77,7 @@ export default function LayersSelector(props: Props) {
         color="primary"
         className="layer-selector"
         /* ...or use this if we're using the current layout */
-        sx={{ marginTop: "56px" }}
+        sx={{ marginTop: "46px" }}
       >
         <StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
           <LayersIcon />
