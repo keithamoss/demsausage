@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import GpsNotFixedIcon from "@mui/icons-material/GpsNotFixed";
 
 import { Divider, IconButton, InputBase, Paper } from "@mui/material";
@@ -76,7 +76,7 @@ export default function SearchBar(props: Props) {
             aria-label="directions"
             onClick={onToggleFilter}
           >
-            <FilterListIcon />
+            <FilterAltOutlinedIcon />
           </IconButton>
         </React.Fragment>
       )}
