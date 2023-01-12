@@ -201,7 +201,7 @@ export default function StallFocus(props: Props) {
             <Button startIcon={<IosShareIcon />} size="small">
               Share
             </Button>
-            <Button startIcon={<PublicIcon />} size="small" color="secondary">
+            <Button startIcon={<PublicIcon />} size="small">
               Stall Website
             </Button>
           </CardActions>
