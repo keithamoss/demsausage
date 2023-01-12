@@ -34,6 +34,7 @@ import Style from "ol/style/Style";
 import VectorTile from "ol/VectorTile";
 import View from "ol/View";
 import * as React from "react";
+import { IMapFilterOptions } from "../../../icons/noms";
 import {
   getAPIBaseURL,
   IElection,

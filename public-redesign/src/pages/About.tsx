@@ -8,12 +8,7 @@ import { grey } from "@mui/material/colors";
 import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import BaconandEggsIcon from "../icons/bacon-and-eggs";
-import CakeIcon from "../icons/cake";
-import CoffeeIcon from "../icons/coffee";
-import HalalIcon from "../icons/halal";
-import SausageIcon from "../icons/sausage";
-import VegoIcon from "../icons/vego";
+import { nomsData } from "../icons/noms";
 import DSAppBar from "./swipe/app_bar";
 import SideMenuDrawer from "./swipe/side_menu_drawer";
 
@@ -174,47 +169,12 @@ export default function About(props: Props) {
         <Question>What do the all of the icons mean?</Question>
         <Answer>
           <List>
-            <ListItemButton>
-              <ListItemIcon>
-                <SausageIcon />
-              </ListItemIcon>
-              <ListItemText primary="There's a sausage sizzle here" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <CakeIcon />
-              </ListItemIcon>
-              <ListItemText primary="There's a cake stall here" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <VegoIcon />
-              </ListItemIcon>
-              <ListItemText primary="This booth has savoury vegetarian options" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <HalalIcon />
-              </ListItemIcon>
-              <ListItemText primary="This booth has halal food" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <CoffeeIcon />
-              </ListItemIcon>
-              <ListItemText primary="There's coffee available" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <BaconandEggsIcon />
-              </ListItemIcon>
-              <ListItemText primary="There's bacon and egg rolls/sandwiches" />
-            </ListItemButton>
+            {Object.values(nomsData).map((noms) => (
+              <ListItemButton key={noms.value}>
+                <ListItemIcon>{noms.icon}</ListItemIcon>
+                <ListItemText primary={noms.description} />
+              </ListItemButton>
+            ))}
           </List>
         </Answer>
         <Question>What does the halal symbol indicate?</Question>

@@ -9,7 +9,7 @@ import BottomDrawer from "./pages/swipe/bottom_drawer";
 import Map from "./pages/swipe/map";
 
 import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { IMapFilterOptions } from "./pages/swipe/infra/map_stuff";
+import { IMapFilterOptions } from "./icons/noms";
 import LayersSelector from "./pages/swipe/layers_selector";
 import SideMenuDrawer from "./pages/swipe/side_menu_drawer";
 

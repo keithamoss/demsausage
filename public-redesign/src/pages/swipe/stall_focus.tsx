@@ -18,12 +18,6 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import SendIcon from "@mui/icons-material/Send";
 import { styled } from "@mui/material/styles";
-import BaconandEggsIcon from "../../icons/bacon-and-eggs";
-import CakeIcon from "../../icons/cake";
-import CoffeeIcon from "../../icons/coffee";
-import HalalIcon from "../../icons/halal";
-import SausageIcon from "../../icons/sausage";
-import VegoIcon from "../../icons/vego";
 
 import { Avatar, Chip, Divider } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
@@ -33,6 +27,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+
+import { IconsWithTooltips } from "../../icons/noms";
 
 interface Props {
   toggleStallFocussed: any;
@@ -104,12 +100,7 @@ export default function StallFocus(props: Props) {
 
           <CardContent>
             <FlexboxIcons>
-              <SausageIcon />
-              <CakeIcon />
-              <VegoIcon />
-              <HalalIcon />
-              <CoffeeIcon />
-              <BaconandEggsIcon />
+              <IconsWithTooltips />
             </FlexboxIcons>
 
             <Divider sx={{ paddingTop: 1, paddingBottom: 1 }}>
