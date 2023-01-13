@@ -26,7 +26,7 @@ interface Props {
   onChangeFilter: any;
   open: boolean;
   onSetOpen: any;
-  onSearchTextChange: any
+  onSearchTextChange: any;
 }
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -36,13 +36,13 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
   overflowY: "auto",
-  height: `90vh`,
+  height: `90dvh`,
 }));
 
 const StyledInteractableBoxForStallFocusFullHeight = styled(Box)(
   ({ theme }) => ({
     overflowY: "auto",
-    height: "90vh",
+    height: "90dvh",
   })
 );
 export default function BottomDrawerTemporary(props: Props) {

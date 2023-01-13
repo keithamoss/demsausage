@@ -1,11 +1,13 @@
 html, body {
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
   }
   
   body {
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   /* hacky wip for map positioning, start again for the real thing */
@@ -14,7 +16,7 @@ html, body {
   /* https://codepen.io/anon/pen/gRKOoz?editors=1100 */
  
   #root, #root > div {
-    min-height: 100vh;
+    min-height: 100dvh;
 
   }
   /* .header {

@@ -97,6 +97,7 @@ export default function SearchBar(props: Props) {
         onKeyPress={(e: any) => {
           if (e.key === "Enter") {
             onSearch(true);
+            e.target.blur();
             e.preventDefault();
           }
         }}
