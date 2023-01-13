@@ -5,7 +5,7 @@ import * as React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { Badge } from "@mui/material";
+import { Badge, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -20,7 +20,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 
 interface Props {}
 
-const StyledLayersBadge = styled(Badge)(() => ({
+const StyledLayersBadge = styled(Badge)(({ theme }) => ({
   position: "absolute",
   top: "24px",
   right: "24px",
@@ -28,7 +28,7 @@ const StyledLayersBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
     right: 4,
     top: 4,
-    backgroundColor: "#6740b4",
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -37,7 +37,7 @@ const StyledElectionBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     right: 20,
     top: 6,
     border: `2px solid ${theme.palette.background.paper}`,
-    backgroundColor: "#6740b4",
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -54,6 +54,8 @@ const StyledCloseIconButton = styled(IconButton)(() => ({
 
 export default function LayersSelector(props: Props) {
   const [state, setState] = React.useState(false);
+
+  const theme = useTheme();
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -74,6 +76,8 @@ export default function LayersSelector(props: Props) {
         badgeContent={2}
         color="primary"
         className="layer-selector"
+        /* ...or use this if we're using the current layout */
+        sx={{ marginTop: "46px" }}
       >
         <StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
           <LayersIcon />
@@ -109,7 +113,7 @@ export default function LayersSelector(props: Props) {
             <ListItem
               secondaryAction={
                 <IconButton edge="end" aria-label="delete">
-                  <LiveTvIcon sx={{ color: "#6740b4" }} />
+                  <LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
                 </IconButton>
               }
               //   sx={{ backgroundColor: "rgba(103, 64, 180, 0.3)" }}
@@ -130,7 +134,7 @@ export default function LayersSelector(props: Props) {
             <ListItem
               secondaryAction={
                 <IconButton edge="end" aria-label="delete">
-                  <LiveTvIcon sx={{ color: "#6740b4" }} />
+                  <LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
                 </IconButton>
               }
             >

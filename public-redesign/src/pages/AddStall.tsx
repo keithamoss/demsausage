@@ -36,12 +36,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { Moment } from "moment";
 import * as React from "react";
-import BaconandEggsIcon from "../icons/bacon-and-eggs";
-import CakeIcon from "../icons/cake";
-import CoffeeIcon from "../icons/coffee";
-import HalalIcon from "../icons/halal";
-import SausageIcon from "../icons/sausage";
-import VegoIcon from "../icons/vego";
+import { nomsData } from "../icons/noms";
 import DSAppBar from "./swipe/app_bar";
 import SearchBar from "./swipe/search_bar";
 import SideMenuDrawer from "./swipe/side_menu_drawer";
@@ -88,19 +83,6 @@ export default function AddStall(props: Props) {
 
   //   // TODO Vary if only one election is active
   //   const numberOfSteps = 5 - 1;
-
-  const filterData = [
-    { icon: <SausageIcon />, label: "Sausage Sizzle", name: "bbq" },
-    { icon: <CakeIcon />, label: "Cake Stall", name: "cake" },
-    { icon: <VegoIcon />, label: "Savoury Vegetarian", name: "vego" },
-    { icon: <HalalIcon />, label: "Halal", name: "halal" },
-    {
-      icon: <BaconandEggsIcon />,
-      label: "Bacon and Eggs",
-      name: "bacon_and_eggs",
-    },
-    { icon: <CoffeeIcon />, label: "Coffee", name: "coffee" },
-  ];
 
   // eslint-disable-next-line
   const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
@@ -176,6 +158,12 @@ export default function AddStall(props: Props) {
   //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   //   };
 
+  const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
+  const onChangeWhoIsSubmitting = (
+    input: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => setWhoIsSubmitting(value);
+
   const step1Content = (
     <React.Fragment>
       <Typography variant="body1" gutterBottom>
@@ -214,7 +202,9 @@ export default function AddStall(props: Props) {
         filterOpen={false}
         onToggleFilter={() => {}}
         onClick={() => {}}
+        isMapFiltered={false}
         showFilter={false}
+        styleProps={{}}
       />
 
       {/* <Box sx={{ mb: 2 }}>
@@ -244,14 +234,15 @@ export default function AddStall(props: Props) {
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           name="radio-buttons-group"
+          onChange={onChangeWhoIsSubmitting}
         >
           <FormControlLabel
-            value="female"
+            value="owner"
             control={<Radio />}
             label="I'm involved in running this stall"
           />
           <FormControlLabel
-            value="male"
+            value="tip_off"
             control={<Radio />}
             label="I'm sending a tip-off about a stall I've seen"
           />
@@ -281,11 +272,12 @@ export default function AddStall(props: Props) {
       </Typography>
 
       <TextField
-        label="What is the stall called?"
+        label="What is the stall called? (Required)"
         helperText="e.g. Smith Hill Primary School Sausage Sizzle"
         fullWidth
         sx={{ mb: 2 }}
         variant="filled"
+        required
       />
 
       <TextField
@@ -374,69 +366,71 @@ export default function AddStall(props: Props) {
   <MenuItem>PM</MenuItem>
   </Select> */}
 
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <TimePicker
-          label="Start time"
-          value={startTimeValue}
-          onChange={setStartTimeValue}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="filled"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccessTimeIcon />
-                  </InputAdornment>
-                ),
-              }}
+      {whoIsSubmitting === "owner" && (
+        <React.Fragment>
+          {" "}
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <TimePicker
+              label="Start time"
+              value={startTimeValue}
+              onChange={setStartTimeValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccessTimeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </LocalizationProvider>
-      <br />
-      <br />
-
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <TimePicker
-          label="End time"
-          value={endTimeValue}
-          onChange={setEndTimeValue}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="filled"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccessTimeIcon />
-                  </InputAdornment>
-                ),
-              }}
+          </LocalizationProvider>
+          <br />
+          <br />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <TimePicker
+              label="End time"
+              value={endTimeValue}
+              onChange={setEndTimeValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccessTimeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </LocalizationProvider>
-
-      <br />
-      <br />
-
-      <TextField
-        label="Website or social media page link"
-        helperText="We'll include a link to your site as part of your stall's information"
-        fullWidth
-        variant="filled"
-        // sx={{ mb: 2 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LinkIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
+          </LocalizationProvider>
+          <br />
+          <br />
+          <TextField
+            label="Website or social media page link"
+            helperText="We'll include a link to your site as part of your stall's information"
+            fullWidth
+            variant="filled"
+            // sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </React.Fragment>
+      )}
 
       <Divider sx={{ mt: 3, mb: 3 }} />
 
@@ -457,17 +451,16 @@ export default function AddStall(props: Props) {
           //   bgcolor: "background.paper",
         }}
       >
-        {[0, 1, 2, 3, 4, 5].map((value) => {
-          const labelId = `checkbox-list-secondary-label-${value}`;
-          const filterDataItem = filterData[value];
+        {Object.values(nomsData).map((noms) => {
+          const labelId = `checkbox-list-secondary-label-${noms.value}`;
           return (
             <ListItem
-              key={value}
+              key={noms.value}
               secondaryAction={
                 <Checkbox
                   edge="end"
-                  // onChange={handleToggle(value, filterDataItem.label)}
-                  // checked={checked.indexOf(value) !== -1}
+                  // onChange={handleToggle(noms.value, noms.label)}
+                  // checked={checked.indexOf(noms.value) !== -1}
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               }
@@ -476,14 +469,14 @@ export default function AddStall(props: Props) {
               <ListItemButton>
                 <ListItemAvatar>
                   <Avatar
-                    alt={`Avatar n°${value + 1}`}
+                    alt={`Avatar n°${noms.value + 1}`}
                     sx={{ backgroundColor: "transparent" }}
-                    // src={`/static/images/avatar/${value + 1}.jpg`}
+                    // src={`/static/images/avatar/${noms.value + 1}.jpg`}
                   >
-                    {filterDataItem.icon}
+                    {noms.icon}
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText id={labelId} primary={filterDataItem.label} />
+                <ListItemText id={labelId} primary={noms.label} />
               </ListItemButton>
             </ListItem>
           );
@@ -637,7 +630,7 @@ export default function AddStall(props: Props) {
           <MobileStepper
             variant="text"
             steps={maxSteps}
-            position="static"
+            position="bottom"
             activeStep={activeStep}
             nextButton={
               <Button
