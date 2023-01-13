@@ -31,6 +31,14 @@ const FlexboxIcons = styled("div")(() => ({
   },
 }));
 
+const StyledCardContent = styled(CardContent)(() => ({
+  paddingBottom: 0,
+}));
+
+const StyledCardActions = styled(CardActions)(({ theme }) => ({
+  paddingTop: theme.spacing(0.5),
+}));
+
 export default function StallSearchResults(props: Props) {
   const { toggleStallFocussed, toggleUserHasSearched } = props;
 
@@ -72,7 +80,7 @@ export default function StallSearchResults(props: Props) {
       </Box>
       <Stack spacing={1}>
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -110,16 +118,16 @@ export default function StallSearchResults(props: Props) {
                     <br />
                     {'"a benevolent smile"'}
                   </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -157,16 +165,16 @@ export default function StallSearchResults(props: Props) {
             <br />
             {'"a benevolent smile"'}
           </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -204,16 +212,16 @@ export default function StallSearchResults(props: Props) {
             <br />
             {'"a benevolent smile"'}
           </Typography> */}
-          </CardContent>
-          <CardActions>
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
         </Card>
 
         <Card variant="outlined" onClick={toggleStallFocussed}>
-          <CardContent>
+          <StyledCardContent>
             <FlexboxIcons>
               <FlexboxIcons>
                 <SausageIcon />
@@ -225,12 +233,12 @@ export default function StallSearchResults(props: Props) {
               </FlexboxIcons>
             </FlexboxIcons>
             {/* <Typography
-            sx={{ fontSize: 14 }}
-            color="text.secondary"
-            gutterBottom
-          >
-            Word of the Day
-          </Typography> */}
+    sx={{ fontSize: 14 }}
+    color="text.secondary"
+    gutterBottom
+  >
+    Word of the Day
+  </Typography> */}
             <Typography
               variant="h5"
               component="div"
@@ -247,16 +255,63 @@ export default function StallSearchResults(props: Props) {
               Avast Drive, Ye Matey Park 1234
             </Typography>
             {/* <Typography variant="body2">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-          </Typography> */}
-          </CardContent>
-          <CardActions>
+    well meaning and kindly.
+    <br />
+    {'"a benevolent smile"'}
+  </Typography> */}
+          </StyledCardContent>
+          <StyledCardActions>
             <Button size="small" startIcon={<UnfoldMoreIcon />}>
               Learn More
             </Button>
-          </CardActions>
+          </StyledCardActions>
+        </Card>
+
+        <Card variant="outlined" onClick={toggleStallFocussed}>
+          <StyledCardContent>
+            <FlexboxIcons>
+              <FlexboxIcons>
+                <SausageIcon />
+                <CakeIcon />
+                <VegoIcon />
+                <HalalIcon />
+                <CoffeeIcon />
+                <BaconandEggsIcon />
+              </FlexboxIcons>
+            </FlexboxIcons>
+            {/* <Typography
+    sx={{ fontSize: 14 }}
+    color="text.secondary"
+    gutterBottom
+  >
+    Word of the Day
+  </Typography> */}
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                fontSize: 16,
+                fontWeight: 550,
+                textTransform: "uppercase",
+              }}
+            >
+              Fisherman's Knob, Sea Views Primary School
+            </Typography>
+            {/* <Typography sx={{ mb: 1.5 }} color="text.secondary"> */}
+            <Typography color="text.secondary">
+              Avast Drive, Ye Matey Park 1234
+            </Typography>
+            {/* <Typography variant="body2">
+    well meaning and kindly.
+    <br />
+    {'"a benevolent smile"'}
+  </Typography> */}
+          </StyledCardContent>
+          <StyledCardActions>
+            <Button size="small" startIcon={<UnfoldMoreIcon />}>
+              Learn More
+            </Button>
+          </StyledCardActions>
         </Card>
       </Stack>
     </Box>

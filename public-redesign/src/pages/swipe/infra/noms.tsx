@@ -2,27 +2,21 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
 import Text from "ol/style/Text";
-import { IMapPollingGeoJSONNoms, IMapPollingPlaceFeature } from "./map_stuff";
+import { IMapPollingGeoJSONNoms, nomsData } from "../../../icons/noms";
+import { IMapPollingPlaceFeature } from "./map_stuff";
 import { stringDivider } from "./utils";
 
 export class NomsReader {
-  static coreNomsIcons = ["bbq", "cake", "nothing", "run_out"];
+  static coreNomsIcons = Object.values(nomsData)
+    .filter((noms) => noms.is_primary === true)
+    .map((noms) => noms.value)
+    .concat(["nothing", "run_out"]);
 
-  static foodNomsIcons = [
-    "bbq",
-    "cake",
-    "bacon_and_eggs",
-    "halal",
-    "vego",
-    "coffee",
-  ];
+  static foodNomsIcons = Object.values(nomsData).map((noms) => noms.value);
 
-  static additionalFoodNomsIcons = [
-    "bacon_and_eggs",
-    "halal",
-    "vego",
-    "coffee",
-  ];
+  static additionalFoodNomsIcons = Object.values(nomsData)
+    .filter((noms) => noms.is_primary === false)
+    .map((noms) => noms.value);
 
   noms: IMapPollingGeoJSONNoms | null;
 

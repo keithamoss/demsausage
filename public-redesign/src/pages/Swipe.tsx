@@ -9,7 +9,7 @@ import { grey } from "@mui/material/colors";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Fab from "@mui/material/Fab";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Toolbar from "@mui/material/Toolbar";
 import BottomBar from "./swipe/bottom_bar";
@@ -76,6 +76,8 @@ const AddStallFab = styled(Fab)(() => ({
 export default function SwipeableEdgeDrawer(props: Props) {
   const { window } = props;
 
+  const theme = useTheme();
+
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -139,7 +141,10 @@ export default function SwipeableEdgeDrawer(props: Props) {
 
           <AppBar
             position="static"
-            sx={{ paddingTop: 1, backgroundColor: "#6740b4" }}
+            sx={{
+              paddingTop: 1,
+              backgroundColor: theme.palette.secondary.main,
+            }}
           >
             <Container maxWidth="xl">
               <Toolbar disableGutters>
@@ -171,7 +176,9 @@ export default function SwipeableEdgeDrawer(props: Props) {
               filterOpen={filterOpen}
               onToggleFilter={toggleFilter}
               onClick={() => {}}
+              isMapFiltered={false}
               showFilter={true}
+              styleProps={{}}
             />
 
             {filterOpen === true && <SearchFilter onChangeFilter={() => {}} />}

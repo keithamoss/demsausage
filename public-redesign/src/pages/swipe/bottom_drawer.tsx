@@ -51,7 +51,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
   overflowY: "auto",
   // height: `calc(100vh - ${drawerBleeding}px - ${fixedBarHeightWithTopPadding}px + ${fixedBarHeightWithTopPadding}px)`,
   //   height: `calc(30vh - ${bottomNav}px - ${magicNumber}px)`,
-  height: `calc(80vh - 61px)`,
+  height: `calc(80dvh - 61px)`,
 }));
 
 const StyledInteractableBoxForStallFocusMinimised = styled(Box)(
@@ -67,7 +67,7 @@ const StyledInteractableBoxForStallFocusFullHeight = styled(Box)(
   ({ theme }) => ({
     pointerEvents: "all",
     overflowY: "auto",
-    height: "80vh",
+    height: "80dvh",
   })
 );
 
@@ -149,7 +149,7 @@ export default function BottomDrawer(props: Props) {
       <Global
         styles={{
           ".MuiDrawer-root.SwipeableDrawer > .MuiPaper-root": {
-            height: `calc(80vh - ${drawerBleeding}px)`,
+            height: `calc(80dvh - ${drawerBleeding}px)`,
             overflow: "visible",
           },
         }}
@@ -208,7 +208,9 @@ export default function BottomDrawer(props: Props) {
                   filterOpen={filterOpen}
                   onToggleFilter={toggleFilter}
                   onClick={setOpen}
+                  isMapFiltered={false}
                   showFilter={true}
+                  styleProps={{}}
                 />
 
                 {filterOpen === true && (

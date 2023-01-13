@@ -18,21 +18,17 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import SendIcon from "@mui/icons-material/Send";
 import { styled } from "@mui/material/styles";
-import BaconandEggsIcon from "../../icons/bacon-and-eggs";
-import CakeIcon from "../../icons/cake";
-import CoffeeIcon from "../../icons/coffee";
-import HalalIcon from "../../icons/halal";
-import SausageIcon from "../../icons/sausage";
-import VegoIcon from "../../icons/vego";
 
 import { Avatar, Chip, Divider } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
-import { purple } from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+
+import { useTheme } from "@mui/material/styles";
+import { IconsWithTooltips } from "../../icons/noms";
 
 interface Props {
   toggleStallFocussed: any;
@@ -49,11 +45,13 @@ const FlexboxIcons = styled("div")(() => ({
 }));
 
 const StyledCardHeader = styled(CardHeader)(() => ({
-  pointerEvents: "all",
+  // pointerEvents: "all",
 }));
 
 export default function StallFocus(props: Props) {
   const { toggleStallFocussed, focussedStallId } = props;
+
+  const theme = useTheme();
 
   const ppPremises =
     focussedStallId === 0
@@ -66,7 +64,7 @@ export default function StallFocus(props: Props) {
       : "Avast Drive, Ye Matey Park 1234";
 
   return (
-    <Box sx={{ width: "100%", marginTop: 1 }}>
+    <Box sx={{ width: "100%" }}>
       <Stack spacing={1}>
         <Card variant="outlined" sx={{ border: 0 }}>
           <StyledCardHeader
@@ -93,7 +91,10 @@ export default function StallFocus(props: Props) {
 
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: purple[500] }} aria-label="recipe">
+              <Avatar
+                sx={{ bgcolor: theme.palette.secondary.main }}
+                aria-label="recipe"
+              >
                 <CasinoIcon />
               </Avatar>
             }
@@ -104,12 +105,7 @@ export default function StallFocus(props: Props) {
 
           <CardContent>
             <FlexboxIcons>
-              <SausageIcon />
-              <CakeIcon />
-              <VegoIcon />
-              <HalalIcon />
-              <CoffeeIcon />
-              <BaconandEggsIcon />
+              <IconsWithTooltips />
             </FlexboxIcons>
 
             <Divider sx={{ paddingTop: 1, paddingBottom: 1 }}>
@@ -205,7 +201,7 @@ export default function StallFocus(props: Props) {
             <Button startIcon={<IosShareIcon />} size="small">
               Share
             </Button>
-            <Button startIcon={<PublicIcon />} size="small" color="secondary">
+            <Button startIcon={<PublicIcon />} size="small">
               Stall Website
             </Button>
           </CardActions>
