@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@sentry/browser": "^7.29.0",
+    "@sentry/browser": "^7.30.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
@@ -22,7 +22,7 @@
     "react-dom": "^17.0.2",
     "react-google-maps": "^9.4.5",
     "react-redux": "^7.2.9",
-    "react-router": "^3.2.6",
+    "react-router": "^6.6.2",
     "react-router-redux": "^4.0.8",
     "react-string-replace": "^1.1.0",
     "react-tiny-virtual-list": "^2.2.0",
@@ -35,7 +35,7 @@
     "redux-thunk": "^2.4.2",
     "reselect": "^4.1.7",
     "styled-components": "^5.3.6",
-    "web-vitals": "^3.1.0"
+    "web-vitals": "^3.1.1"
   },
   "devDependencies": {
     "@types/history": "^5.0.0",
@@ -62,15 +62,15 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.10.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-mui-unused-classes": "^1.0.3",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-mui-unused-classes": "^2.0.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react": "^7.32.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^12.4.2",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.2",
     "prettier-eslint": "^15.0.1",
     "react-scripts": "^4.0.3",
     "typescript": "^4.7.4"
