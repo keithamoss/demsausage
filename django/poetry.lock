@@ -507,13 +507,13 @@ test = ["backports.socketpair", "cffi (>=1.12.2)", "contextvars (==2.4)", "cover
 
 [[package]]
 name = "googlemaps"
-version = "4.7.3"
+version = "4.10.0"
 description = "Python client library for Google Maps Platform"
 category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "googlemaps-4.7.3.tar.gz", hash = "sha256:da6d29e406d13c9e9c78bc7c4c2b4e96d0b034cf4031d8afadf6e5b54e73ffde"},
+    {file = "googlemaps-4.10.0.tar.gz", hash = "sha256:3055fcbb1aa262a9159b589b5e6af762b10e80634ae11c59495bd44867e47d88"},
 ]
 
 [package.dependencies]
@@ -1558,4 +1558,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "04ac0ab3e4679124964ace9f1cb821b2369b65b920002f3df6d7fe76f9ddd690"
+content-hash = "c15882ebb072adfc74138e51ad3418824668c3b233431001e439ff3beae8f189"
