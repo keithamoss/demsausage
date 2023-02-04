@@ -27,7 +27,7 @@
     "react-string-replace": "^1.1.0",
     "react-tiny-virtual-list": "^2.2.0",
     "recompose": "^0.30.0",
-    "redux": "^4.2.0",
+    "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-form": "^8.3.9",
     "redux-form-material-ui": "^4.3.4",
