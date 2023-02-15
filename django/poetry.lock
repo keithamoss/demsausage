@@ -346,14 +346,14 @@ pymemcache = "*"
 
 [[package]]
 name = "django-rq"
-version = "2.6.0"
+version = "2.7.0"
 description = "An app that provides django integration for RQ (Redis Queue)"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "django-rq-2.6.0.tar.gz", hash = "sha256:f03b1eb68afe218175989c14b1266c7b446d5152f629888a078d0022059b255e"},
-    {file = "django_rq-2.6.0-py2.py3-none-any.whl", hash = "sha256:b1964ad656ae103d8b4714f8745e739586917b126f02c844791d9059940b01a0"},
+    {file = "django-rq-2.7.0.tar.gz", hash = "sha256:50440be33c23427f3b34d206ff72025740b721b54b42976e7b18a0474174802b"},
+    {file = "django_rq-2.7.0-py2.py3-none-any.whl", hash = "sha256:5b09798a3d0b03d4c7b55dbba50409c16dcbb09d42c2839511b52c29744be8c8"},
 ]
 
 [package.dependencies]
@@ -1564,4 +1564,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c1b3b8e914baed49cf7d2c13ead19f02ea58b4f7cc79134fe46adc0516e77117"
+content-hash = "599af79d9b7e2ee4fe031f7ba48069c6486b86a6ed8650cd5952695e94bf444f"
