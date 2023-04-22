@@ -29,7 +29,7 @@ chardet = "^5.1.0"
 drf-spectacular = "^0.26.1"
 selenium = "^4.9.0"
 webdriver-manager = "^3.8.6"
-pytz = "^2022.7"
+pytz = "^2023.3"
 rq = "^1.13.0"
 django-rq = "^2.7.0"
 
