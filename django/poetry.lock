@@ -1160,18 +1160,19 @@ files = [
 
 [[package]]
 name = "social-auth-app-django"
-version = "5.1.0"
+version = "5.2.0"
 description = "Python Social Authentication, Django integration."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "social-auth-app-django-5.1.0.tar.gz", hash = "sha256:fdf1dc6bcb8b457001d88d2279f637bc9955f1aedf750c627784bb5104601b1c"},
-    {file = "social_auth_app_django-5.1.0-py3-none-any.whl", hash = "sha256:e4e9eb2c8c1258f443d4f1c04cb6693c0303e8ee2fa0981ba1b371546195a939"},
+    {file = "social-auth-app-django-5.2.0.tar.gz", hash = "sha256:4a5dae406f3874b4003708ff120c02cb1a4c8eeead56cd163646347309fcd0f8"},
+    {file = "social_auth_app_django-5.2.0-py3-none-any.whl", hash = "sha256:0347ca4cd23ea9d15a665da9d22950552fb66b95600e6c2ebae38ca883b3a4ed"},
 ]
 
 [package.dependencies]
-social-auth-core = ">=4.1.0"
+Django = ">=3.2"
+social-auth-core = ">=4.4.1"
 
 [[package]]
 name = "social-auth-core"
@@ -1468,4 +1469,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ae6f6fdf790099954fca72c27167ba5c23dd55f81f23ddf8fa8806b6f9d53094"
+content-hash = "3d49d8146c9a5467e8e32b89ddac6582eff44b0696c4a8da3c01f94224cd52de"
