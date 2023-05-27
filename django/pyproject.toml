@@ -31,7 +31,7 @@ selenium = "^4.9.1"
 webdriver-manager = "^3.8.6"
 pytz = "^2023.3"
 rq = "^1.14.1"
-django-rq = "^2.8.0"
+django-rq = "^2.8.1"
 
 [tool.poetry.dev-dependencies]
 
