@@ -34,7 +34,7 @@
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.4.2",
     "reselect": "^4.1.8",
-    "styled-components": "^6.0.3",
+    "styled-components": "^6.0.4",
     "web-vitals": "^3.3.2"
   },
   "devDependencies": {
