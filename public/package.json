@@ -47,7 +47,7 @@
     "styled-components": "^6.0.3",
     "usehooks-ts": "2.6.0",
     "victory": "^36.6.11",
-    "web-vitals": "^3.3.2"
+    "web-vitals": "^3.4.0"
   },
   "devDependencies": {
     "@types/history": "^5.0.0",
