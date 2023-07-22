@@ -44,7 +44,7 @@
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.8",
-    "styled-components": "^6.0.4",
+    "styled-components": "^6.0.5",
     "usehooks-ts": "2.6.0",
     "victory": "^36.6.11",
     "web-vitals": "^3.4.0"
