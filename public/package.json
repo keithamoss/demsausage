@@ -10,7 +10,7 @@
     "@testing-library/user-event": "^14.4.3",
     "classlist-polyfill": "^1.2.0",
     "copy-to-clipboard": "^3.3.3",
-    "core-js": "^3.31.1",
+    "core-js": "^3.32.0",
     "dot-prop-immutable": "^2.1.1",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
