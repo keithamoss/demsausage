@@ -32,7 +32,7 @@
     "react-google-maps-loader": "^4.3.1",
     "react-helmet": "^6.1.0",
     "react-redux": "^8.1.2",
-    "react-router": "^6.14.2",
+    "react-router": "^6.15.0",
     "react-router-redux": "^4.0.8",
     "react-string-replace": "^1.1.1",
     "react-tiny-virtual-list": "^2.2.0",
