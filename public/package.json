@@ -14,7 +14,7 @@
     "dot-prop-immutable": "^2.1.1",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.3.0",
+    "luxon": "^3.4.0",
     "material-ui": "^0.20.2",
     "material-ui-bottom-sheet": "^0.5.1",
     "material-ui-fullscreen-dialog": "^0.7.2",
