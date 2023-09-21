@@ -31,36 +31,7 @@
         "Long": "lon",
         "PPId": "ec_id"
     },
-    "fix_data_issues": [
-        {
-            "field": "ec_id",
-            "value": 2325,
-            "overwrite": [
-                {
-                    "field": "lat",
-                    "value": -33.921647
-                },
-                {
-                    "field": "lon",
-                    "value": 151.239767
-                }
-            ]
-        },
-        {
-            "field": "ec_id",
-            "value": 1604,
-            "overwrite": [
-                {
-                    "field": "lat",
-                    "value": -32.04629732946641
-                },
-                {
-                    "field": "lon",
-                    "value": 152.27194407394296
-                }
-            ]
-        }
-    ],
+    "fix_data_issues": [],
     "geocoding": {
         "enabled": true,
         "components": {
