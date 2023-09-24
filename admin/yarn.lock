@@ -2955,10 +2955,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*, @types/prop-types@npm:^15.7.5":
+"@types/prop-types@npm:*":
   version: 15.7.5
   resolution: "@types/prop-types@npm:15.7.5"
   checksum: 5b43b8b15415e1f298243165f1d44390403bb2bd42e662bca3b5b5633fdd39c938e91b7fce3a9483699db0f7a715d08cef220c121f723a634972fdf596aec980
+  languageName: node
+  linkType: hard
+
+"@types/prop-types@npm:^15.7.7":
+  version: 15.7.7
+  resolution: "@types/prop-types@npm:15.7.7"
+  checksum: 023b95f7dd82e1c594f51dcb93ec4c382600cef6eeee29a2ac7b782b92c0882eab8da16d4cbd6e18b39e85ac8d94ebf4ca02c6e248ce5b5fb4b16dbab5d82861
   languageName: node
   linkType: hard
 
@@ -3715,7 +3722,7 @@ __metadata:
     "@types/luxon": ^3.2.0
     "@types/material-ui": ^0.21.12
     "@types/node": ^18.11.16
-    "@types/prop-types": ^15.7.5
+    "@types/prop-types": ^15.7.7
     "@types/qs": ^6.9.7
     "@types/react": ^17.0.43
     "@types/react-dom": ^18.0.3
