@@ -103,15 +103,12 @@ services:
     env_file:
       - secrets/sausage-public-frontend.dev.env
   frontend_public_redesign:
-    image: node:16-alpine3.14
+    image: node:20-alpine3.16
     entrypoint: /app/docker-entrypoint.sh
     volumes:
       - ./public-redesign:/app:delegated
     env_file:
       - secrets/sausage-public-redesign-frontend.dev.env
-    environment:
-      # Fixes bug where websocket connection is fixed to default port 3000
-      - WDS_SOCKET_PORT=0
   frontend_admin:
     image: node:16-alpine3.14
     entrypoint: /app/docker-entrypoint.sh
