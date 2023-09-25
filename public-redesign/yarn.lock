@@ -3121,7 +3121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.8.1":
+"@reduxjs/toolkit@npm:^1.9.5":
   version: 1.9.5
   resolution: "@reduxjs/toolkit@npm:1.9.5"
   dependencies:
@@ -3225,6 +3225,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/browser@npm:7.70.0, @sentry/browser@npm:^7.70.0":
+  version: 7.70.0
+  resolution: "@sentry/browser@npm:7.70.0"
+  dependencies:
+    "@sentry-internal/tracing": 7.70.0
+    "@sentry/core": 7.70.0
+    "@sentry/replay": 7.70.0
+    "@sentry/types": 7.70.0
+    "@sentry/utils": 7.70.0
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: 805f3fa8517c2d072aef94e9b4487929dd275aac5332a46a641a7c394de130d50401671a2b0d043ef67e716ba35a364dacac95e67d845d657ca9cad6f947abe2
+  languageName: node
+  linkType: hard
+
 "@sentry/bundler-plugin-core@npm:2.7.1":
   version: 2.7.1
   resolution: "@sentry/bundler-plugin-core@npm:2.7.1"
@@ -3280,6 +3294,41 @@ __metadata:
     lru_map: ^0.3.3
     tslib: ^2.4.1 || ^1.9.3
   checksum: 4d60023f0ddfca92ee15e42b5a207d998d683570103655282ce6e1a07a3bccbb86675810778f5500229cf21daef34e1f0fd48e0dbe3665d3df19d7b97c2788e5
+  languageName: node
+  linkType: hard
+
+"@sentry/react@npm:^7.70.0":
+  version: 7.70.0
+  resolution: "@sentry/react@npm:7.70.0"
+  dependencies:
+    "@sentry/browser": 7.70.0
+    "@sentry/types": 7.70.0
+    "@sentry/utils": 7.70.0
+    hoist-non-react-statics: ^3.3.2
+    tslib: ^2.4.1 || ^1.9.3
+  peerDependencies:
+    react: 15.x || 16.x || 17.x || 18.x
+  checksum: 2290a9b0b9349b5cc7782580ce4361b38ceeabe8fa2eefaf8ab5c1cb2fda64ec186cc97908850d4729febfdd9f5ad968a8f98dc593db26e5e7a6950d0312cb6c
+  languageName: node
+  linkType: hard
+
+"@sentry/replay@npm:7.70.0":
+  version: 7.70.0
+  resolution: "@sentry/replay@npm:7.70.0"
+  dependencies:
+    "@sentry/core": 7.70.0
+    "@sentry/types": 7.70.0
+    "@sentry/utils": 7.70.0
+  checksum: 5e02e535cf41f4d2c6b7bd2a4f936005f25c853783f7bd2a16a40a7e526fddcb64b480f2c541315d6055f77acbb8f10b83a66bcd05411fbe44ca726b9bd0a8c4
+  languageName: node
+  linkType: hard
+
+"@sentry/tracing@npm:^7.70.0":
+  version: 7.70.0
+  resolution: "@sentry/tracing@npm:7.70.0"
+  dependencies:
+    "@sentry-internal/tracing": 7.70.0
+  checksum: 4efa3ccfa076971dfba85d449b069daac9e4dbe8bba30d71e0db0ca3d10e18677e68ed6cb9a1f3493572f623973bd482bff869ae72c725f06275bf46b678a9ca
   languageName: node
   linkType: hard
 
@@ -3930,6 +3979,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-cookie@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@types/js-cookie@npm:3.0.4"
+  checksum: 46ac93974776a256f3cedadf60b45ded4d905a5e69986882d8c17baa351cb2e81a691864a1f19c3ca90eaa2cb3eeb7cb5426416b487a7d54cf5ff278d39d7870
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.12, @types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.13
   resolution: "@types/json-schema@npm:7.0.13"
@@ -3941,6 +3997,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/luxon@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "@types/luxon@npm:3.3.2"
+  checksum: b9111132720eae0269538872a5a496b29587ecfc8edc3b0ff7d269aa93a5ff00a131b23d1e9d1f12ec39f2c779ad21bd8d9f90b122c85a182771aabde7f676b8
   languageName: node
   linkType: hard
 
@@ -10192,6 +10255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 2dbd2809c6180fbcf060c6957cb82dbb47edae0ead6bd71cbeedf448aa6b6923115003b995f7d3e3077bfe2cb76295ea6b584eb7196cca8ba0a09f389f64967a
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -10654,6 +10724,13 @@ __metadata:
   version: 0.3.3
   resolution: "lru_map@npm:0.3.3"
   checksum: ca9dd43c65ed7a4f117c548028101c5b6855e10923ea9d1f635af53ad20c5868ff428c364d454a7b57fe391b89c704982275410c3c5099cca5aeee00d76e169a
+  languageName: node
+  linkType: hard
+
+"luxon@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "luxon@npm:3.4.3"
+  checksum: 3eade81506224d038ed24035a0cd0dd4887848d7eba9361dce9ad8ef81380596a68153240be3988721f9690c624fb449fcf8fd8c3fc0681a6a8496faf48e92a3
   languageName: node
   linkType: hard
 
@@ -12827,12 +12904,17 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.110
     "@mui/material": ^5.10.16
     "@mui/x-date-pickers": ^5.0.11
-    "@reduxjs/toolkit": ^1.8.1
+    "@reduxjs/toolkit": ^1.9.5
+    "@sentry/browser": ^7.70.0
+    "@sentry/react": ^7.70.0
+    "@sentry/tracing": ^7.70.0
     "@sentry/vite-plugin": ^2.7.1
     "@testing-library/jest-dom": ^5.16.4
     "@testing-library/react": ^13.2.0
     "@testing-library/user-event": ^14.2.0
     "@types/jest": ^27.5.1
+    "@types/js-cookie": ^3.0.4
+    "@types/luxon": ^3.3.2
     "@types/node": ^20.6.3
     "@types/react": ^18.2.22
     "@types/react-dom": ^18.2.7
@@ -12853,13 +12935,15 @@ __metadata:
     eslint-plugin-react: ^7.33.2
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.3
+    js-cookie: ^3.0.5
+    luxon: ^3.4.3
     moment: ^2.29.4
     ol: ^7.1.0
     prettier: ^3.0.3
     react: ^18.2.0
     react-dom: ^18.2.0
     react-redux: ^8.0.1
-    react-router-dom: ^6.3.0
+    react-router-dom: ^6.16.0
     react-scripts: 5.0.1
     react-spring-bottom-sheet: ^3.4.1
     recompose: ^0.30.0
@@ -13100,7 +13184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.3.0":
+"react-router-dom@npm:^6.16.0":
   version: 6.16.0
   resolution: "react-router-dom@npm:6.16.0"
   dependencies:

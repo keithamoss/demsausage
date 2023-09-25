@@ -1,7 +1,8 @@
 import * as React from 'react';
 
+import './App.css';
+
 import { grey } from '@mui/material/colors';
-import CssBaseline from '@mui/material/CssBaseline';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
 // import BottomBar from "./swipe/bottom_bar";
@@ -34,7 +35,7 @@ const AddStallFab = styled(Fab)(({ theme }) => ({
 	/* Use this if we're using the SwipeableDrawer... */
 	// bottom: `${drawerBleeding + 16}px`,
 	/* ...or use this if we're using the current layout */
-	bottom: `${16 + 48 + 28}px`, // 8 for standard bottom padding, 48 for the height of <SearchBar />, and then 16 more on top
+	bottom: `${16 + 48 + 36}px`, // 16 for standard bottom padding, 48 for the height of <SearchBar />, and then 36 more on top
 	right: '16px',
 	backgroundColor: theme.palette.secondary.main,
 }));
@@ -83,8 +84,6 @@ export default function SwipeableEdgeDrawerSimple(props: Props) {
 
 	return (
 		<Root>
-			<CssBaseline />
-
 			<SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
 
 			<DSAppBar toggleSideDrawerOpen={toggleSideDrawerOpen} topPadding={false} />

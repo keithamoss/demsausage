@@ -1,25 +1,27 @@
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './app/routing/routes';
 import { store } from './app/store';
-import './index.css';
-import { theme } from './pages/swipe/theme';
-import routes from './routes';
+import { theme } from './app/ui/theme';
+// import './index.css';
+// import "./browserstack";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
+// store.dispatch(authApi.endpoints.checkLoginStatus.initiate());
+
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<BrowserRouter>
-				<ThemeProvider theme={theme}>
-					<CssBaseline />
-					{routes()}
-				</ThemeProvider>
-			</BrowserRouter>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<RouterProvider router={router} />
+			</ThemeProvider>
 		</Provider>
 	</React.StrictMode>,
 );
