@@ -9,6 +9,11 @@ import { styled } from '@mui/material/styles';
 import Map from './pages/swipe/map';
 
 import AddLocationIcon from '@mui/icons-material/AddLocation';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from './app/hooks/store';
+import { getStringParamOrUndefined } from './app/routing/routingHelpers';
+import { getDefaultElection } from './features/elections/electionHelpers';
+import { selectAllElections } from './features/elections/electionsSlice';
 import { IMapFilterOptions } from './icons/noms';
 import DSAppBar from './pages/swipe/app_bar';
 import BottomDrawerTemporary from './pages/swipe/bottom_drawer_temporary';
@@ -22,7 +27,9 @@ export const drawerBleeding = 245;
 // const fixedBarHeightWithTopPadding = 56;
 // const magicNumber = 30;
 
-interface Props {}
+interface Props {
+	electionId: number;
+}
 
 const Root = styled('div')(({ theme }) => ({
 	height: '100%',
@@ -40,7 +47,30 @@ const AddStallFab = styled(Fab)(({ theme }) => ({
 	backgroundColor: theme.palette.secondary.main,
 }));
 
-export default function SwipeableEdgeDrawerSimple(props: Props) {
+function AppEntrypoint() {
+	// Handle setting the currentElection in Redux based on route changes
+
+	// Fallback to our default election if the route hasn't specified an election
+	const elections = useAppSelector(selectAllElections);
+	const defaultElection = getDefaultElection(elections);
+	let electionId = defaultElection?.id;
+
+	// Otherwise, set the election the route wants to use
+	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
+	if (urlElectionName !== undefined && urlElectionName !== '' && urlElectionName !== defaultElection?.name_url_safe) {
+		electionId = elections.find((e) => e.name_url_safe === urlElectionName)?.id;
+	}
+
+	if (electionId === undefined) {
+		return null;
+	}
+
+	return <App electionId={electionId} />;
+}
+
+function App(props: Props) {
+	const { electionId } = props;
+
 	const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
 	const toggleSideDrawerOpen = (e: any) => {
 		setSideDrawerOpen(!sideDrawerOpen);
@@ -92,7 +122,9 @@ export default function SwipeableEdgeDrawerSimple(props: Props) {
 
 			{/* <div style={{ width: "100%", height: "100%" }}>
         <div className="openlayers-map-container"> */}
-			<Map mapSearchResults={mapSearchResults} mapFilterOptions={mapFilterOptions} />
+			{electionId !== undefined && (
+				<Map electionId={electionId} mapSearchResults={mapSearchResults} mapFilterOptions={mapFilterOptions} />
+			)}
 			{/* </div>
       </div> */}
 
@@ -133,3 +165,5 @@ export default function SwipeableEdgeDrawerSimple(props: Props) {
 		</Root>
 	);
 }
+
+export default AppEntrypoint;

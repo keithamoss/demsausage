@@ -23,10 +23,10 @@ export const router = sentryCreateBrowserRouter([
 		path: '/',
 		element: <App />,
 		children: [
-			// {
-			// 	path: 'DebugView',
-			// 	element: <DebugView />,
-			// },
+			{
+				path: ':election_name',
+				element: <App />,
+			},
 			// {
 			// 	path: 'MapManager',
 			// 	element: <MapManager />,

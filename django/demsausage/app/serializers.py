@@ -1,4 +1,5 @@
-
+import re
+import urllib.parse
 from datetime import datetime
 
 import pytz
@@ -9,11 +10,12 @@ from demsausage.app.models import (Elections, MailgunEvents,
                                    PollingPlaces, Profile, Stalls)
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none
-from django.contrib.auth.models import User
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
+from django.contrib.auth.models import User
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -52,11 +54,19 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'is_approved',
             'settings')
 
+class ElectionURLSafeNameCharField(serializers.CharField):
+    """ Serializer for CharField -- creates a URL safe version of the election name"""
+    # "New South Wales Election 2023" to "new_south_wales_election_2023"
+
+    def to_representation(self, value):
+        return urllib.parse.quote(re.sub("\s", "_", value).lower())
 
 class ElectionsSerializer(serializers.ModelSerializer):
+    name_url_safe = ElectionURLSafeNameCharField(source="name", allow_null=False)
+    
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
 
     # Prevents us from editing existing elections (e.g. When we were setting the new bounding boxes)
     # def validate_election_day(self, value):

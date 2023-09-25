@@ -178,20 +178,3 @@ export interface IMapPollingPlaceFeature {
 	getProperties: Function;
 	get: Function;
 }
-
-export interface IElection {
-	id: number;
-	geom: IGeoJSONPoylgon;
-	name: string;
-	short_name: string;
-	is_hidden: boolean;
-	is_primary: boolean;
-	election_day: string; // Datetime
-	polling_places_loaded: boolean;
-}
-
-export interface IGeoJSONPoylgon {
-	type: string;
-	// coordinates: [[[number, number]]];
-	coordinates: number[][][];
-}

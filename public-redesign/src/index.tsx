@@ -1,10 +1,11 @@
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/routing/routes';
+import { electionsApi } from './app/services/elections';
 import { store } from './app/store';
 import { theme } from './app/ui/theme';
 // import './index.css';
@@ -13,7 +14,7 @@ import { theme } from './app/ui/theme';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-// store.dispatch(authApi.endpoints.checkLoginStatus.initiate());
+store.dispatch(electionsApi.endpoints.getElections.initiate());
 
 root.render(
 	<React.StrictMode>

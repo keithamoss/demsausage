@@ -28,7 +28,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // }
 
 export interface AppState {
-	// mapId: number | undefined;
+	// electionId: number | undefined;
 	// mapView: Partial<OLMapView> | undefined;
 	// mapFeatures: {
 	// 	status: eMapFeaturesLoadingStatus | undefined;
@@ -48,7 +48,7 @@ export interface AppState {
 // };
 
 const initialState: AppState = {
-	// mapId: undefined,
+	// electionId: undefined,
 	// mapView: undefined,
 	// mapFeatures: {
 	// 	status: undefined,
@@ -95,8 +95,8 @@ export const appSlice = createSlice({
 		//   state.value -= 1;
 		// },
 		// Use the PayloadAction type to declare the contents of `action.payload`
-		// setActiveMapId: (state, action: PayloadAction<number>) => {
-		// 	state.mapId = action.payload;
+		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
+		// 	state.electionId = action.payload;
 		// },
 		// setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
 		// 	state.mapView = action.payload;
@@ -141,10 +141,11 @@ export const appSlice = createSlice({
 	// },
 });
 
-// export const { setActiveMapId, setMapView, setFeaturesAvailableForEditing, setSearchParameters, setFilteredFeatures } =
-// 	appSlice.actions;
+export const {
+	/*setActiveElectionId , setMapView, setFeaturesAvailableForEditing, setSearchParameters, setFilteredFeatures*/
+} = appSlice.actions;
 
-// export const selectActiveMapId = (state: RootState) => state.app.mapId;
+// export const selectActiveElectionId = (state: RootState) => state.app.electionId;
 
 // export const selectMapView = (state: RootState) => state.app.mapView;
 

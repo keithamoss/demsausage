@@ -34,15 +34,10 @@ import Style from 'ol/style/Style';
 import VectorTile from 'ol/VectorTile';
 import View from 'ol/View';
 import * as React from 'react';
+import { Election } from '../../../app/services/elections';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { IMapFilterOptions } from '../../../icons/noms';
-import {
-	getAPIBaseURL,
-	IElection,
-	IMapPollingPlaceFeature,
-	IMapSearchResults,
-	olStyleFunction,
-} from '../infra/map_stuff';
-import { demSausagePurple } from '../theme';
+import { getAPIBaseURL, IMapPollingPlaceFeature, IMapSearchResults, olStyleFunction } from '../infra/map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'
@@ -52,7 +47,7 @@ import './OpenLayersMap.css';
 // import { gaTrack } from '../../shared/analytics/GoogleAnalytics'
 
 interface IProps {
-	election: IElection;
+	election: Election;
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
 	mapFilterOptions: IMapFilterOptions;
@@ -303,7 +298,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			iconFeature.setStyle(
 				new Style({
 					image: new RegularShape({
-						fill: new Fill({ color: demSausagePurple }),
+						fill: new Fill({ color: mapaThemePrimaryPurple }),
 						stroke: new Stroke({ color: 'black', width: 2 }),
 						points: 5,
 						radius: 10,

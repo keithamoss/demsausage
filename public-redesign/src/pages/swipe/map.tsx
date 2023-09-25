@@ -1,7 +1,9 @@
 import 'ol/ol.css';
+import { useAppSelector } from '../../app/hooks';
+import { selectElectionById } from '../../features/elections/electionsSlice';
 import { IMapFilterOptions } from '../../icons/noms';
-import { IMapSearchResults } from './infra/map_stuff';
 import OpenLayersMap from './OpenLayersMap/OpenLayersMap';
+import { IMapSearchResults } from './infra/map_stuff';
 
 // const StyledOpenLayersMap = styled(OpenLayersMap)(() => ({
 //   position: "absolute",
@@ -13,34 +15,37 @@ import OpenLayersMap from './OpenLayersMap/OpenLayersMap';
 // }));
 
 interface Props {
+	electionId: number;
 	mapSearchResults: number | null;
 	mapFilterOptions: IMapFilterOptions;
 }
 
 export default function Map(props: Props) {
-	const { mapSearchResults, mapFilterOptions } = props;
+	const { electionId, mapSearchResults, mapFilterOptions } = props;
 
-	const election = {
-		id: 34,
-		name: 'Federal Election 2013',
-		short_name: 'FED 2013',
-		geom: {
-			type: 'Polygon',
-			coordinates: [
-				[
-					[140.2734375, -39.232253141714885],
-					[150.73242187500003, -39.232253141714885],
-					[150.73242187500003, -33.28461996888768],
-					[140.2734375, -33.28461996888768],
-					[140.2734375, -39.232253141714885],
-				],
-			],
-		},
-		is_hidden: false,
-		is_primary: false,
-		election_day: '2013-09-07T08:00:00+08:00',
-		polling_places_loaded: true,
-	};
+	const election = useAppSelector((state) => selectElectionById(state, electionId));
+
+	// const election = {
+	// 	id: 34,
+	// 	name: 'Federal Election 2013',
+	// 	short_name: 'FED 2013',
+	// 	geom: {
+	// 		type: 'Polygon',
+	// 		coordinates: [
+	// 			[
+	// 				[140.2734375, -39.232253141714885],
+	// 				[150.73242187500003, -39.232253141714885],
+	// 				[150.73242187500003, -33.28461996888768],
+	// 				[140.2734375, -33.28461996888768],
+	// 				[140.2734375, -39.232253141714885],
+	// 			],
+	// 		],
+	// 	},
+	// 	is_hidden: false,
+	// 	is_primary: false,
+	// 	election_day: '2013-09-07T08:00:00+08:00',
+	// 	polling_places_loaded: true,
+	// };
 
 	const mapSearchResultsArray = [
 		{
@@ -61,6 +66,10 @@ export default function Map(props: Props) {
 	const stashMapData = () => {};
 	const onMapLoaded = () => {};
 	const onQueryMap = () => {};
+
+	if (election === undefined) {
+		return null;
+	}
 
 	return (
 		<OpenLayersMap
