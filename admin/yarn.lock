@@ -2927,10 +2927,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.11.16":
+"@types/node@npm:*":
   version: 18.11.16
   resolution: "@types/node@npm:18.11.16"
   checksum: 23603ecc1cc5afdd2311671565e1bd1a8905e18ed7f05857089eebe524824a3347dd0c3de9c1c291839f7cf21bcf5633903cdf7905efa0fdc7464cc7606fc9fa
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.8.3":
+  version: 20.8.3
+  resolution: "@types/node@npm:20.8.3"
+  checksum: bfb88b341faeb19f8fd37306a3bf433721b876c6491d10fcb0b13fd26601fa36ee45113dd82b1e1c23e3c957dff5b99f81a16493cefa03abe797e41a2487a4f7
   languageName: node
   linkType: hard
 
@@ -3714,7 +3721,7 @@ __metadata:
     "@types/lodash-es": ^4.17.9
     "@types/luxon": ^3.2.0
     "@types/material-ui": ^0.21.12
-    "@types/node": ^18.11.16
+    "@types/node": ^20.8.3
     "@types/prop-types": ^15.7.5
     "@types/qs": ^6.9.7
     "@types/react": ^17.0.43
