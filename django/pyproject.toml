@@ -7,7 +7,7 @@ authors = ["Keith Moss <keithamoss@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Django = "^4.2.6"
-psycopg2-binary = "^2.9.8"
+psycopg2-binary = "^2.9.9"
 djangorestframework = "^3.14.0"
 django-cors-headers = "^3.13.0"
 django-model-utils = "^4.3.1"
