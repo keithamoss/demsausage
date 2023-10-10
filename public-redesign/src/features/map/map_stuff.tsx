@@ -3,9 +3,9 @@ import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import { IMapFilterOptions, spriteIconConfig } from '../../../icons/noms';
+import { IMapFilterOptions, spriteIconConfig } from '../icons/noms';
 import { NomsReader } from './noms';
-import sprite from './sprite.json';
+import sprite from '../icons/sprite.json';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {

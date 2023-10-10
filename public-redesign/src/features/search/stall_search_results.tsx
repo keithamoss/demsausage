@@ -9,12 +9,12 @@ import Typography from '@mui/material/Typography';
 
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { styled } from '@mui/material/styles';
-import BaconandEggsIcon from '../../icons/bacon-and-eggs';
-import CakeIcon from '../../icons/cake';
-import CoffeeIcon from '../../icons/coffee';
-import HalalIcon from '../../icons/halal';
-import SausageIcon from '../../icons/sausage';
-import VegoIcon from '../../icons/vego';
+import BaconandEggsIcon from '../icons/bacon-and-eggs';
+import CakeIcon from '../icons/cake';
+import CoffeeIcon from '../icons/coffee';
+import HalalIcon from '../icons/halal';
+import SausageIcon from '../icons/sausage';
+import VegoIcon from '../icons/vego';
 
 interface Props {
 	toggleStallFocussed: any;

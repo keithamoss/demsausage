@@ -6,7 +6,7 @@ import { grey } from '@mui/material/colors';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
 // import BottomBar from "./swipe/bottom_bar";
-import Map from './pages/swipe/map';
+import Map from './features/map/map';
 
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import { useParams } from 'react-router-dom';
@@ -14,12 +14,12 @@ import { useAppSelector } from './app/hooks/store';
 import { getStringParamOrUndefined } from './app/routing/routingHelpers';
 import { getDefaultElection } from './features/elections/electionHelpers';
 import { selectAllElections } from './features/elections/electionsSlice';
-import { IMapFilterOptions } from './icons/noms';
-import DSAppBar from './pages/swipe/app_bar';
-import BottomDrawerTemporary from './pages/swipe/bottom_drawer_temporary';
-import LayersSelector from './pages/swipe/layers_selector';
-import SearchBar from './pages/swipe/search_bar';
-import SideMenuDrawer from './pages/swipe/side_menu_drawer';
+import { IMapFilterOptions } from './features/icons/noms';
+import DSAppBar from './features/app/app_bar';
+import BottomDrawerTemporary from './features/app/bottom_drawer_temporary';
+import LayersSelector from './features/map/layers_selector';
+import SearchBar from './features/app/search_bar';
+import SideMenuDrawer from './features/app/side_menu_drawer';
 
 // const bottomNav = 56;
 // const drawerBleeding = 175 + bottomNav;

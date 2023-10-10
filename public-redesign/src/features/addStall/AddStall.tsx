@@ -31,15 +31,13 @@ import { grey } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 import { styled, useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { Moment } from 'moment';
 import * as React from 'react';
 import { nomsData } from '../icons/noms';
-import DSAppBar from './swipe/app_bar';
-import SearchBar from './swipe/search_bar';
-import SideMenuDrawer from './swipe/side_menu_drawer';
+import DSAppBar from '../app/app_bar';
+import SearchBar from '../app/search_bar';
+import SideMenuDrawer from '../app/side_menu_drawer';
 
 const bottomNav = 56;
 
@@ -87,9 +85,11 @@ export default function AddStall(props: Props) {
 	const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
 
 	// @TODO See https://stackoverflow.com/questions/72811784/from-time-and-to-time-validation-in-react-dropdown-react-datepicker-hour
-	const [startTimeValue, setStartTimeValue] = React.useState<Moment | null>(null);
+	// const [startTimeValue, setStartTimeValue] = React.useState<Moment | null>(null);
+	const [startTimeValue, setStartTimeValue] = React.useState<any | null>(null);
 
-	const [endTimeValue, setEndTimeValue] = React.useState<Moment | null>(null);
+	// const [endTimeValue, setEndTimeValue] = React.useState<Moment | null>(null);
+	const [endTimeValue, setEndTimeValue] = React.useState<any | null>(null);
 
 	//   const times = [
 	//     "00:00",

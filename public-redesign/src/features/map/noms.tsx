@@ -2,9 +2,9 @@ import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
-import { IMapPollingGeoJSONNoms, nomsData } from '../../../icons/noms';
+import { IMapPollingGeoJSONNoms, nomsData } from '../icons/noms';
 import { IMapPollingPlaceFeature } from './map_stuff';
-import { stringDivider } from './utils';
+import { stringDivider } from '../../app/utils';
 
 export class NomsReader {
 	static coreNomsIcons = Object.values(nomsData)

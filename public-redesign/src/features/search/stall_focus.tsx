@@ -27,7 +27,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-import { IconsWithTooltips } from '../../icons/noms';
+import { IconsWithTooltips } from '../icons/noms';
 
 interface Props {
 	toggleStallFocussed: any;

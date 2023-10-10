@@ -19,8 +19,8 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { useAppSelector } from '../../app/hooks';
-import { selectActiveElections, selectAllElections } from '../../features/elections/electionsSlice';
-import { getElectionVeryShortName, isElectionLive } from '../../features/elections/electionHelpers';
+import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
+import { getElectionVeryShortName, isElectionLive } from '../elections/electionHelpers';
 import { Link, useNavigate } from 'react-router-dom';
 import { Election } from '../../app/services/elections';
 
@@ -58,6 +58,12 @@ const StyledCloseIconButton = styled(IconButton)(() => ({
 	right: '0px',
 	zIndex: '3',
 	height: '48px',
+}));
+
+const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
+	padding: theme.spacing(1),
+	overflowY: 'auto',
+	height: `90dvh`,
 }));
 
 export default function LayersSelector(props: Props) {
@@ -105,7 +111,12 @@ export default function LayersSelector(props: Props) {
 			</StyledLayersBadge>
 
 			<Drawer anchor="bottom" open={state} onClose={toggleDrawer(false)}>
-				<Box sx={{ width: 'auto' }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+				<StyledInteractableBoxFullHeight
+					sx={{ width: 'auto' }}
+					role="presentation"
+					onClick={toggleDrawer(false)}
+					onKeyDown={toggleDrawer(false)}
+				>
 					<StyledCloseIconButton aria-label="close-layers" onClick={toggleDrawer(false)}>
 						<CloseIcon />
 					</StyledCloseIconButton>
@@ -116,7 +127,7 @@ export default function LayersSelector(props: Props) {
 							bgcolor: 'background.paper',
 							position: 'relative',
 							overflow: 'auto',
-							maxHeight: 400,
+							// maxHeight: 400,
 							'& ul': { padding: 0 },
 							'& li.MuiListSubheader-root': { zIndex: 2 },
 						}}
@@ -170,7 +181,7 @@ export default function LayersSelector(props: Props) {
 								);
 							})}
 					</List>
-				</Box>
+				</StyledInteractableBoxFullHeight>
 			</Drawer>
 		</React.Fragment>
 	);

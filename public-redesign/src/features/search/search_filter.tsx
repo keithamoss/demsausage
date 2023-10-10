@@ -7,7 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 
-import { nomsData } from '../../icons/noms';
+import { nomsData } from '../icons/noms';
 
 interface Props {
 	onChangeFilter: any;

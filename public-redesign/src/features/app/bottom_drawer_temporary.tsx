@@ -5,9 +5,9 @@ import * as React from 'react';
 // import BottomBar from "./bottom_bar";
 import { Drawer } from '@mui/material';
 import SearchBar from './search_bar';
-import SearchFilter from './search_filter';
-import StallFocus from './stall_focus';
-import StallSearchResults from './stall_search_results';
+import SearchFilter from '../search/search_filter';
+import StallFocus from '../search/stall_focus';
+import StallSearchResults from '../search/stall_search_results';
 
 // const bottomNav = 56;
 // const drawerBleeding = 175 + bottomNav;

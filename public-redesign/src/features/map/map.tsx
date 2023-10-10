@@ -1,9 +1,9 @@
 import 'ol/ol.css';
 import { useAppSelector } from '../../app/hooks';
-import { selectElectionById } from '../../features/elections/electionsSlice';
-import { IMapFilterOptions } from '../../icons/noms';
-import OpenLayersMap from './OpenLayersMap/OpenLayersMap';
-import { IMapSearchResults } from './infra/map_stuff';
+import { selectElectionById } from '../elections/electionsSlice';
+import { IMapFilterOptions } from '../icons/noms';
+import { IMapSearchResults } from './map_stuff';
+import OpenLayersMap from './OpenLayersMap';
 
 // const StyledOpenLayersMap = styled(OpenLayersMap)(() => ({
 //   position: "absolute",
