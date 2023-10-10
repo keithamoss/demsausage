@@ -28,6 +28,12 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## October 6th 2023 (loaded October 6th)
+
+Source: `prdelms.gaz.statics.231006.09.00.02`
+
+Everything went fine.
+
 ## September 21th 2023 (loaded September 21th)
 
 Source: `prdelms.gaz.statics.230921.09.00.09`
