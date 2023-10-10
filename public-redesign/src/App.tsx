@@ -122,13 +122,14 @@ function App(props: Props) {
 
 			{/* <div style={{ width: "100%", height: "100%" }}>
         <div className="openlayers-map-container"> */}
-			{electionId !== undefined && (
+			{/* {electionId !== undefined && (
 				<Map electionId={electionId} mapSearchResults={mapSearchResults} mapFilterOptions={mapFilterOptions} />
-			)}
+			)} */}
+			<Map electionId={electionId} mapSearchResults={mapSearchResults} mapFilterOptions={mapFilterOptions} />
 			{/* </div>
       </div> */}
 
-			<LayersSelector />
+			<LayersSelector electionId={electionId} />
 
 			<SearchBar
 				onSearch={toggleUserHasSearched}

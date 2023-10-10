@@ -1,3 +1,4 @@
+import { groupBy, sortBy } from 'lodash-es';
 import LayersIcon from '@mui/icons-material/Layers';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
@@ -5,7 +6,7 @@ import * as React from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
-import { Badge, useTheme } from '@mui/material';
+import { Badge, ListItemButton, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -17,8 +18,15 @@ import ListSubheader from '@mui/material/ListSubheader';
 
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { useAppSelector } from '../../app/hooks';
+import { selectActiveElections, selectAllElections } from '../../features/elections/electionsSlice';
+import { getElectionVeryShortName, isElectionLive } from '../../features/elections/electionHelpers';
+import { Link, useNavigate } from 'react-router-dom';
+import { Election } from '../../app/services/elections';
 
-interface Props {}
+interface Props {
+	electionId: number;
+}
 
 const StyledLayersBadge = styled(Badge)(({ theme }) => ({
 	position: 'absolute',
@@ -53,7 +61,18 @@ const StyledCloseIconButton = styled(IconButton)(() => ({
 }));
 
 export default function LayersSelector(props: Props) {
+	const { electionId } = props;
+
+	const navigate = useNavigate();
+
 	const [state, setState] = React.useState(false);
+
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
+
+	const elections = useAppSelector((state) => selectAllElections(state));
+	const electionsByYear = groupBy(sortBy(elections, 'election_day').reverse(), (e) =>
+		new Date(e.election_day).getFullYear(),
+	);
 
 	const theme = useTheme();
 
@@ -68,10 +87,13 @@ export default function LayersSelector(props: Props) {
 		setState(open);
 	};
 
+	// const onClickElection = (election: Election) => navigate(`/${election.name_url_safe}`);
+	const onClickElection = (election: Election) => {};
+
 	return (
 		<React.Fragment>
 			<StyledLayersBadge
-				badgeContent={2}
+				badgeContent={activeElections.length > 1 ? activeElections.length : null}
 				color="primary"
 				className="layer-selector"
 				/* ...or use this if we're using the current layout */
@@ -81,6 +103,7 @@ export default function LayersSelector(props: Props) {
 					<LayersIcon />
 				</StyledIconButton>
 			</StyledLayersBadge>
+
 			<Drawer anchor="bottom" open={state} onClose={toggleDrawer(false)}>
 				<Box sx={{ width: 'auto' }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
 					<StyledCloseIconButton aria-label="close-layers" onClick={toggleDrawer(false)}>
@@ -99,82 +122,53 @@ export default function LayersSelector(props: Props) {
 						}}
 						subheader={<li />}
 					>
-						<ListSubheader>2022</ListSubheader>
-						<ListItem
-							secondaryAction={
-								<IconButton edge="end" aria-label="delete">
-									<LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
-								</IconButton>
-							}
-							//   sx={{ backgroundColor: "rgba(103, 64, 180, 0.3)" }}
-						>
-							<ListItemAvatar>
-								<StyledElectionBadge color="success" overlap="circular" badgeContent=" ">
-									<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>SA</Avatar>
-								</StyledElectionBadge>
-							</ListItemAvatar>
-							<ListItemText primary="Election 1" secondary="Jan 9, 2022" />
-						</ListItem>
-						<ListItem
-							secondaryAction={
-								<IconButton edge="end" aria-label="delete">
-									<LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
-								</IconButton>
-							}
-						>
-							<ListItemAvatar>
-								<StyledElectionBadge color="success" overlap="circular" badgeContent=" ">
-									<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>VIC</Avatar>
-								</StyledElectionBadge>
-							</ListItemAvatar>
-							<ListItemText primary="Election 2" secondary="Jan 7, 2022" />
-						</ListItem>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>NSW</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 3" secondary="July 20, 2022" />
-						</ListItem>
+						{Object.keys(electionsByYear)
+							.sort()
+							.reverse()
+							.map((year: string) => {
+								return (
+									<React.Fragment key={year}>
+										<ListSubheader>{year}</ListSubheader>
+										{electionsByYear[year].map((election) => {
+											return (
+												<ListItem
+													key={election.id}
+													secondaryAction={
+														isElectionLive(election) === true ? (
+															<IconButton edge="end" aria-label="delete">
+																<LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
+															</IconButton>
+														) : null
+													}
+												>
+													<ListItemAvatar>
+														{election.id === electionId ? (
+															<StyledElectionBadge color="success" overlap="circular" badgeContent=" ">
+																<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>SA</Avatar>
+															</StyledElectionBadge>
+														) : (
+															<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>
+																{getElectionVeryShortName(election)}
+															</Avatar>
+														)}
+													</ListItemAvatar>
 
-						<ListSubheader>2021</ListSubheader>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>TAS</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 4" secondary="Jan 9, 2021" />
-						</ListItem>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>VIC</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 5" secondary="Jan 7, 2021" />
-						</ListItem>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>WA</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 6" secondary="July 20, 2021" />
-						</ListItem>
-
-						<ListSubheader>2020</ListSubheader>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>NT</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 7" secondary="Jan 9, 2020" />
-						</ListItem>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>ACT</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 8" secondary="Jan 7, 2020" />
-						</ListItem>
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>NSW</Avatar>
-							</ListItemAvatar>
-							<ListItemText primary="Election 9" secondary="July 20, 2020" />
-						</ListItem>
+													<ListItemButton onClick={onClickElection(election)}>
+														<ListItemText
+															primary={election.name}
+															secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
+																day: '2-digit',
+																month: 'long',
+																year: 'numeric',
+															})}
+														/>
+													</ListItemButton>
+												</ListItem>
+											);
+										})}
+									</React.Fragment>
+								);
+							})}
 					</List>
 				</Box>
 			</Drawer>

@@ -26,3 +26,25 @@ export function getDefaultElection(elections: Election[]) {
 
 	return defaultElection;
 }
+
+// Yeah, sorry. Replace with fields in the database if we ditch short_name in the longer term
+// "South Australian Election 2018" => "South Australia"
+export const getElectionKindaShortName = (election: Election) =>
+	election.name
+		.replace('Election ', '')
+		.replace(/\s[0-9]{4}$/, '')
+		.replace(/ian$/, 'ia')
+		.replace(/\sBy-election$/, '');
+
+// "South Australian Election 2018" => "South Australia 2018"
+export const getElectionKindaNotSoShortName = (election: Election) =>
+	election.name
+		.replace('Election ', '')
+		.replace(/ian\s/, 'ia ')
+		.replace(/\sBy-election\s/, ' ');
+
+// "SA 2018" => "SA"
+export const getElectionVeryShortName = (election: Election) => {
+	const veryShortName = election.short_name.replace(/\s[0-9]{4}$/, '');
+	return veryShortName.length <= 3 ? veryShortName : veryShortName.slice(0, 3);
+};
