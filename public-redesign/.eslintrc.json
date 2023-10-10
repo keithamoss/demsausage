@@ -1,39 +1,39 @@
-module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
-  extends: [
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
     "eslint:recommended",
     "airbnb/hooks",
     "airbnb-typescript",
     "plugin:react/recommended",
-    'plugin:react-hooks/recommended',
     "plugin:react/jsx-runtime",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
     "plugin:import/recommended"
-
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
   // Specifying Parser
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "tsconfigRootDir": __dirname,
+    "tsconfigRootDir": ".",
     "project": [
-      "./tsconfig.json", './tsconfig.node.json'
+      "./tsconfig.json"
     ]
   },
   // Configuring third-party plugins
-  plugins: ["react",
-    "@typescript-eslint", 'react-refresh'],
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
   // Resolve imports
-  settings: {
+  "settings": {
     "import/resolver": {
       "typescript": {
         "project": "./tsconfig.json"
@@ -43,11 +43,7 @@ module.exports = {
       "version": "18.x"
     }
   },
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+  "rules": {
     "linebreak-style": "off",
     // Configure prettier
     "prettier/prettier": [
@@ -62,7 +58,6 @@ module.exports = {
         "trailingComma": "all"
       }
     ],
-    "@typescript-eslint/no-unused-vars": "off",
     // Disallow the `any` type.
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/ban-types": [
@@ -86,7 +81,8 @@ module.exports = {
         "selector": "variable",
         "format": [
           "camelCase",
-          "snake_case"
+          "snake_case",
+          "StrictPascalCase"
         ]
       }
     ],

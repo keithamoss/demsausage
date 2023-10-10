@@ -84,7 +84,7 @@ export default function AddStall(props: Props) {
 	//   const numberOfSteps = 5 - 1;
 
 	// eslint-disable-next-line
-  const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
+	const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
 
 	// @TODO See https://stackoverflow.com/questions/72811784/from-time-and-to-time-validation-in-react-dropdown-react-datepicker-hour
 	const [startTimeValue, setStartTimeValue] = React.useState<Moment | null>(null);
@@ -351,50 +351,46 @@ export default function AddStall(props: Props) {
 			{whoIsSubmitting === 'owner' && (
 				<React.Fragment>
 					{' '}
-					<LocalizationProvider dateAdapter={AdapterMoment}>
-						<TimePicker
-							label="Start time"
-							value={startTimeValue}
-							onChange={setStartTimeValue}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									fullWidth
-									variant="filled"
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<AccessTimeIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							)}
-						/>
-					</LocalizationProvider>
+					<TimePicker
+						label="Start time"
+						value={startTimeValue}
+						onChange={setStartTimeValue}
+						// renderInput={(params: unknown) => (
+						// 	<TextField
+						// 		{...params}
+						// 		fullWidth
+						// 		variant="filled"
+						// 		InputProps={{
+						// 			startAdornment: (
+						// 				<InputAdornment position="start">
+						// 					<AccessTimeIcon />
+						// 				</InputAdornment>
+						// 			),
+						// 		}}
+						// 	/>
+						// )}
+					/>
 					<br />
 					<br />
-					<LocalizationProvider dateAdapter={AdapterMoment}>
-						<TimePicker
-							label="End time"
-							value={endTimeValue}
-							onChange={setEndTimeValue}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									fullWidth
-									variant="filled"
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<AccessTimeIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							)}
-						/>
-					</LocalizationProvider>
+					<TimePicker
+						label="End time"
+						value={endTimeValue}
+						onChange={setEndTimeValue}
+						// renderInput={(params) => (
+						// 	<TextField
+						// 		{...params}
+						// 		fullWidth
+						// 		variant="filled"
+						// 		InputProps={{
+						// 			startAdornment: (
+						// 				<InputAdornment position="start">
+						// 					<AccessTimeIcon />
+						// 				</InputAdornment>
+						// 			),
+						// 		}}
+						// 	/>
+						// )}
+					/>
 					<br />
 					<br />
 					<TextField

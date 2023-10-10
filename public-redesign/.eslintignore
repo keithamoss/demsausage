@@ -2,4 +2,4 @@ node_modules/
 .yarn/
 build/
 .prettierrc.js
-.eslintrc.cjs
+.eslintrc.js

@@ -8,6 +8,8 @@ import { router } from './app/routing/routes';
 import { electionsApi } from './app/services/elections';
 import { store } from './app/store';
 import { theme } from './app/ui/theme';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import './index.css';
 // import "./browserstack";
 
@@ -19,10 +21,12 @@ store.dispatch(electionsApi.endpoints.getElections.initiate());
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<RouterProvider router={router} />
-			</ThemeProvider>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<RouterProvider router={router} />
+				</ThemeProvider>
+			</LocalizationProvider>
 		</Provider>
 	</React.StrictMode>,
 );

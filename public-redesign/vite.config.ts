@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig, loadEnv } from 'vite';
 import checker from 'vite-plugin-checker';
@@ -7,10 +7,10 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 // https://docs.sentry.io/platforms/javascript/guides/react/sourcemaps/uploading/vite/
 export default defineConfig(({ command, mode }) => {
-// Load env file based on `mode` in the current working directory.
-  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-	const env = loadEnv(mode, process.cwd(), '')
-	
+	// Load env file based on `mode` in the current working directory.
+	// Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+	const env = loadEnv(mode, process.cwd(), '');
+
 	return {
 		build: {
 			outDir: 'build',
@@ -19,7 +19,6 @@ export default defineConfig(({ command, mode }) => {
 			react(),
 			viteTsconfigPaths(),
 			checker({
-				// e.g. use TypeScript check
 				typescript: true,
 			}),
 			// Put the Sentry vite plugin after all other plugins
@@ -37,7 +36,7 @@ export default defineConfig(({ command, mode }) => {
 					// Don't upload the source maps of dependencies
 					ignore: ['./node_modules/**'],
 				},
-			})
+			}),
 		],
-	}
-})
+	};
+});

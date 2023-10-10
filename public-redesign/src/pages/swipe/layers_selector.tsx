@@ -88,7 +88,7 @@ export default function LayersSelector(props: Props) {
 	};
 
 	// const onClickElection = (election: Election) => navigate(`/${election.name_url_safe}`);
-	const onClickElection = (election: Election) => {};
+	const onClickElection = (election: Election) => (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {};
 
 	return (
 		<React.Fragment>
