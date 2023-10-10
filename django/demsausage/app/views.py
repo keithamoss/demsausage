@@ -211,7 +211,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.id in [27, 37]:
+        if election.id in [27, 37, 53]:
             stats = FederalSausagelytics(election)
         elif election.id in [29]:
             # No data for the 2020 NT Election because COVID :(
