@@ -5008,7 +5008,7 @@ __metadata:
     eslint-plugin-flowtype: ^5.10.0
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsx-a11y: ^6.6.1
-    eslint-plugin-mui-unused-classes: ^1.0.3
+    eslint-plugin-mui-unused-classes: ^2.0.2
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-react: ^7.28.0
     eslint-plugin-react-hooks: ^4.6.0
@@ -8673,12 +8673,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-mui-unused-classes@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "eslint-plugin-mui-unused-classes@npm:1.0.3"
+"eslint-plugin-mui-unused-classes@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "eslint-plugin-mui-unused-classes@npm:2.0.2"
   peerDependencies:
-    eslint: ^7.14.0
-  checksum: 99346e711b5915916f11e3ea68528234e06b132c67b829f554529298b5c498be4351623175394982e788cbcfcbe6e22d41fe921fc129acc257dfb74afac85409
+    eslint: "*"
+  checksum: 6879cdc01f24449582ccc19f732ef2bb841345b2e18a11f1397c7ff14096ff7e90932ad3885cccab24fa5de75d785587aad42a14259cdfe1c65ad044b73d4fb6
   languageName: node
   linkType: hard
 
