@@ -4122,10 +4122,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-cookie@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@types/js-cookie@npm:3.0.2"
-  checksum: 7ab964288dd26373e134ed0bcde4a7dbea7e6f5de1805e2d1e48eac847e89a0e7f5fdc9164c37931680ec97c6e6e5a73e3e4039e0d08527c2e21badd7bee62d1
+"@types/js-cookie@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@types/js-cookie@npm:3.0.4"
+  checksum: 46ac93974776a256f3cedadf60b45ded4d905a5e69986882d8c17baa351cb2e81a691864a1f19c3ca90eaa2cb3eeb7cb5426416b487a7d54cf5ff278d39d7870
   languageName: node
   linkType: hard
 
@@ -4980,7 +4980,7 @@ __metadata:
     "@testing-library/user-event": ^14.5.1
     "@types/history": ^5.0.0
     "@types/jest": ^28.1.8
-    "@types/js-cookie": ^3.0.2
+    "@types/js-cookie": ^3.0.4
     "@types/lodash-es": ^4.17.9
     "@types/luxon": ^3.2.0
     "@types/material-ui": ^0.21.12
@@ -5013,7 +5013,7 @@ __metadata:
     eslint-plugin-react: ^7.28.0
     eslint-plugin-react-hooks: ^4.6.0
     husky: ^8.0.3
-    js-cookie: ^3.0.1
+    js-cookie: ^3.0.5
     lint-staged: ^12.4.2
     lodash-es: ^4.17.21
     luxon: ^3.2.1
@@ -12136,10 +12136,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "js-cookie@npm:3.0.1"
-  checksum: bb48de67e2a6bd1ae3dfd6b2d5a167c33dd0c5a37e909206161eb0358c98f17cb55acd55827a58e9eea3630d89444e7479f7938ef4420dda443218b8c434a4c3
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 2dbd2809c6180fbcf060c6957cb82dbb47edae0ead6bd71cbeedf448aa6b6923115003b995f7d3e3077bfe2cb76295ea6b584eb7196cca8ba0a09f389f64967a
   languageName: node
   linkType: hard
 
