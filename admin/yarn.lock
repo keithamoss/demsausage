@@ -5039,7 +5039,7 @@ __metadata:
     react-router: ^6.16.0
     react-router-redux: ^4.0.8
     react-scripts: ^4.0.3
-    react-string-replace: ^1.1.0
+    react-string-replace: ^1.1.1
     react-tiny-virtual-list: ^2.2.0
     recompose: ^0.30.0
     redux: ^4.2.1
@@ -16508,10 +16508,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-string-replace@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "react-string-replace@npm:1.1.0"
-  checksum: 5df67fbdb49cacdc9f4488d4bc3dedef1f85d6156b3626d9b4b6c317ec8cc534494def078ab0b2df7aea8fa3cbcecd8d3f76a161f04bf8b29869daccf33785ec
+"react-string-replace@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "react-string-replace@npm:1.1.1"
+  checksum: fd5058bbb3953f4bb2daa7012630a154c6109e3e848f93925e146710cebf527647a7c1496c89ca0b5d9e4b4f8ffd5c55ca631539095039faaba0a7ba3787e7cb
   languageName: node
   linkType: hard
 
