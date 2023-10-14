@@ -4496,12 +4496,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/recompose@npm:^0.30.10":
-  version: 0.30.10
-  resolution: "@types/recompose@npm:0.30.10"
+"@types/recompose@npm:^0.30.11":
+  version: 0.30.11
+  resolution: "@types/recompose@npm:0.30.11"
   dependencies:
     "@types/react": "*"
-  checksum: 2b58b9e75841c8f2ceb5b40974e958a815bd6a606869fb926ae27e40d9b3ef17ab6697f63d60a367e31fb2008bf35f74eaa6c6a9cd542f857e97568e8ebe322d
+  checksum: 26c4bee26bfd2ca522fe149b4073b9243b09f990fe1cdd56ed995b832b448968a11d879e0b5f7f704ab6dc3ee5f8f85c4ce6a6a42db8dcfe5b24e38e94f33e7a
   languageName: node
   linkType: hard
 
@@ -5309,7 +5309,7 @@ __metadata:
     "@types/react-redux": ^7.1.24
     "@types/react-router": 3.0.28
     "@types/react-router-redux": ^4.0.56
-    "@types/recompose": ^0.30.10
+    "@types/recompose": ^0.30.11
     "@types/redux-form": ^8.3.5
     "@types/styled-components": ^5.1.26
     "@typescript-eslint/eslint-plugin": ^4.33.0
