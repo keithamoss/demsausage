@@ -35,7 +35,7 @@
     "redux-thunk": "^2.4.2",
     "reselect": "^4.1.8",
     "styled-components": "^6.0.9",
-    "web-vitals": "^3.1.0"
+    "web-vitals": "^3.5.0"
   },
   "devDependencies": {
     "@types/history": "^5.0.0",
