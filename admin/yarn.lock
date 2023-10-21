@@ -4388,13 +4388,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/redux-form@npm:^8.3.6":
-  version: 8.3.6
-  resolution: "@types/redux-form@npm:8.3.6"
+"@types/redux-form@npm:^8.3.8":
+  version: 8.3.8
+  resolution: "@types/redux-form@npm:8.3.8"
   dependencies:
     "@types/react": "*"
     redux: ^3.6.0 || ^4.0.0
-  checksum: 1b4a061a8d68b49b713f178982e9b434c9630984adc6ddcde40ab75834b259e01b8f4783f1beb9ae3476ca6a65ee15eadc76d2738f8a93e6e5bfd85992c024db
+  checksum: b303731211643bf5c20fff64ddace69624483f620e0fd7589d1493a048a807a19487e7ca5ce49241f10bb35f07d62863793ea23f4e5f7c6d4d1ec67f96e1ffe9
   languageName: node
   linkType: hard
 
@@ -5253,7 +5253,7 @@ __metadata:
     "@types/react-router": 3.0.28
     "@types/react-router-redux": ^4.0.57
     "@types/recompose": ^0.30.12
-    "@types/redux-form": ^8.3.6
+    "@types/redux-form": ^8.3.8
     "@types/styled-components": ^5.1.28
     "@typescript-eslint/eslint-plugin": ^6.7.5
     "@typescript-eslint/parser": ^6.7.5
