@@ -5356,7 +5356,7 @@ __metadata:
     eslint-config-airbnb-typescript: ^17.1.0
     eslint-config-prettier: ^9.0.0
     eslint-config-react-app: ^7.0.1
-    eslint-plugin-flowtype: ^5.10.0
+    eslint-plugin-flowtype: ^7.0.0
     eslint-plugin-import: ^2.28.1
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-mui-unused-classes: ^2.0.2
@@ -9310,7 +9310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-flowtype@npm:^5.10.0, eslint-plugin-flowtype@npm:^5.2.0":
+"eslint-plugin-flowtype@npm:^5.2.0":
   version: 5.10.0
   resolution: "eslint-plugin-flowtype@npm:5.10.0"
   dependencies:
@@ -9319,6 +9319,18 @@ __metadata:
   peerDependencies:
     eslint: ^7.1.0
   checksum: 791cd53c886bf819d52d6353cdfb4d49276dcd8a14f564a85d275d5017d81c7b1cc1921013ac9749f69c3f1bc4d23f36182137aab42bc059c2ae3f9773dd7740
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-flowtype@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "eslint-plugin-flowtype@npm:7.0.0"
+  dependencies:
+    lodash: ^4.17.21
+    string-natural-compare: ^3.0.1
+  peerDependencies:
+    eslint: ^7.32.0
+  checksum: a47625dd2d56ad9e12aa4fb94f1b9abdbc45832aac66bafd0b547a225e27ee35d20dc69d2b762e6845369e00f06181d69fc4e4ebb7922d6e2f909b84b97616d8
   languageName: node
   linkType: hard
 
