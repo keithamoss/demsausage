@@ -44,7 +44,7 @@
     "@types/lodash-es": "^4.17.9",
     "@types/luxon": "^3.3.3",
     "@types/material-ui": "^0.21.13",
-    "@types/node": "^20.8.6",
+    "@types/node": "^20.8.7",
     "@types/prop-types": "^15.7.9",
     "@types/qs": "^6.9.9",
     "@types/react": "^17.0.43",
