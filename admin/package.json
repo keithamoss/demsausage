@@ -71,7 +71,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
-    "prettier-eslint": "^15.0.1",
+    "prettier-eslint": "^16.1.1",
     "react-scripts": "^4.0.3",
     "typescript": "^5.2.2"
   },
