@@ -55,7 +55,7 @@
     "@types/recompose": "^0.30.12",
     "@types/redux-form": "^8.3.8",
     "@types/styled-components": "^5.1.29",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "eslint": "^8.52.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
