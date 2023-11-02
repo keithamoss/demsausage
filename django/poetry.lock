@@ -1125,13 +1125,13 @@ redis = ">=4.0.0"
 
 [[package]]
 name = "selenium"
-version = "4.13.0"
+version = "4.15.1"
 description = ""
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "selenium-4.13.0-py3-none-any.whl", hash = "sha256:f0f9185c01ae249a321529c4e3aa0edc2a900642e61fdbb76988cd72d2762ece"},
-    {file = "selenium-4.13.0.tar.gz", hash = "sha256:3c413a4f1b8af67824703195e3b1c19cfb1c3186c799efa035d55fd59d6dd59f"},
+    {file = "selenium-4.15.1-py3-none-any.whl", hash = "sha256:e3a4ebdcc3eed27eec69f8000d798923dbf4897c97cc6441eb88a1386809170d"},
+    {file = "selenium-4.15.1.tar.gz", hash = "sha256:8f0436b5949f1d4aa742f3dff0d748b955c371be92db8b6b008bf9c9ca227de7"},
 ]
 
 [package.dependencies]
@@ -1494,4 +1494,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "131fe4d26afadacd9eae93a926e71f217dace3ce394f4e53767cef1fe21fbec4"
+content-hash = "f4110e7d0bc851eb155cd706f6601bd627f2ccff584fd3db8d26ce47acfb4284"
