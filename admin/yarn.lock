@@ -4445,13 +4445,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-redux@npm:^4.0.57":
-  version: 4.0.57
-  resolution: "@types/react-router-redux@npm:4.0.57"
+"@types/react-router-redux@npm:^4.0.58":
+  version: 4.0.58
+  resolution: "@types/react-router-redux@npm:4.0.58"
   dependencies:
     "@types/history": ^3.2.5
     redux: ^3.6.0
-  checksum: 45a3ccf43c276a1aa9360a0765fdd8250f487c208b36f8df67db494e03be1cd5ca8fcb7aa3617b1b00cebb02a6f75595f78134f5a81a8cfd9f485fc708311d9f
+  checksum: 9f3af80d9de9858df3f71eaba71ea7934d9e0aaeb9bc07ccaca143cbd98424cc7af64654453d20a107ddc1df779faef3651780c940ffbf64bfb71bfa7a890cbd
   languageName: node
   linkType: hard
 
@@ -5454,7 +5454,7 @@ __metadata:
     "@types/react-dom": ^18.2.15
     "@types/react-redux": ^7.1.28
     "@types/react-router": 3.0.28
-    "@types/react-router-redux": ^4.0.57
+    "@types/react-router-redux": ^4.0.58
     "@types/recompose": ^0.30.12
     "@types/redux-form": ^8.3.9
     "@types/styled-components": ^5.1.29
