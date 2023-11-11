@@ -5503,7 +5503,7 @@ __metadata:
     redux-responsive: ^4.3.8
     redux-thunk: ^2.4.2
     reselect: ^4.1.8
-    styled-components: ^6.1.0
+    styled-components: ^6.1.1
     typescript: ^5.2.2
     web-vitals: ^3.5.0
   languageName: unknown
@@ -19703,9 +19703,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "styled-components@npm:6.1.0"
+"styled-components@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "styled-components@npm:6.1.1"
   dependencies:
     "@emotion/is-prop-valid": ^1.2.1
     "@emotion/unitless": ^0.8.0
@@ -19719,7 +19719,7 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
-  checksum: 989262a2be35f09fc0a277da9ed21280d11e0de90e4160d4c0612faed3f4bf2d1667f227e3ee1393a0bf037869075e5c3b4160627777dc7cc533fed89c6d64e0
+  checksum: d062ba473014a551ed76f4876feaccebc06aaa8dc2849c9d72f67420701dbc7d7c9af1dfa5207b2ad5df9b2e122ddf9e5fe6b6b69ba4d93c4c702abdff19435a
   languageName: node
   linkType: hard
 
