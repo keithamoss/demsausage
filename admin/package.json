@@ -13,7 +13,7 @@
     "dot-prop-immutable": "^2.1.1",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.4.3",
+    "luxon": "^3.4.4",
     "material-ui": "^0.20.2",
     "material-ui-responsive-drawer": "^1.19.4",
     "ol": "^8.1.0",
