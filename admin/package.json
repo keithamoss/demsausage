@@ -33,7 +33,7 @@
     "redux-form-material-ui": "^4.3.4",
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.4.2",
-    "reselect": "^4.1.8",
+    "reselect": "^5.0.1",
     "styled-components": "^6.1.1",
     "web-vitals": "^3.5.0"
   },
