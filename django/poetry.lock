@@ -362,13 +362,13 @@ pytz = "*"
 
 [[package]]
 name = "djangorestframework-csv"
-version = "3.0.1"
+version = "3.0.2"
 description = "CSV Tools for Django REST Framework"
 optional = false
 python-versions = "*"
 files = [
-    {file = "djangorestframework-csv-3.0.1.tar.gz", hash = "sha256:76ca3530c362e90ed46316002ea0b17e7e4e14c78240c787125d2c8f7c6c0174"},
-    {file = "djangorestframework_csv-3.0.1-py3-none-any.whl", hash = "sha256:91484439b3eb555eb6496dcf25c9f8d12746533feb9eb35360f5cccee42dfd15"},
+    {file = "djangorestframework-csv-3.0.2.tar.gz", hash = "sha256:b269b692feda1971e1342f395a21d339c6a16d2961ff64357a9a6188f27af10f"},
+    {file = "djangorestframework_csv-3.0.2-py3-none-any.whl", hash = "sha256:d1bcfbaaeaa5145af6bb0985a36a5bbf2f853d9961c722f69c7b0c9c3bcc269a"},
 ]
 
 [package.dependencies]
@@ -1499,4 +1499,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "cdc6835653a5b80defa38a07207043cb3cc79af676ae308f94d14b977f8d65f7"
+content-hash = "0ed424cb7a895c082b6539ddd1e7023994d9b6064b7ab78f88d8558a0800c2ed"
