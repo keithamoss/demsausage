@@ -4350,13 +4350,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/material-ui@npm:^0.21.14":
-  version: 0.21.14
-  resolution: "@types/material-ui@npm:0.21.14"
+"@types/material-ui@npm:^0.21.15":
+  version: 0.21.15
+  resolution: "@types/material-ui@npm:0.21.15"
   dependencies:
     "@types/react": "*"
     "@types/react-addons-linked-state-mixin": "*"
-  checksum: aedec6e65c746bad27ebe953d70b7d1eb55de81041b9d532b2513e505019e1b547dc5e5d2df28fcde522bd07b8dcea0c5d3133281eac44be842a75ac05ded7fe
+  checksum: 3e3f817fd887bb8b8e78443026afbd1460b4a56bd35b25e8d7948de0c519ad39db98cff18042aa74fa18ec25b504829c07846c6eb493aadb65ad4cf5ec7a9f3d
   languageName: node
   linkType: hard
 
@@ -5472,7 +5472,7 @@ __metadata:
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
     "@types/luxon": ^3.3.7
-    "@types/material-ui": ^0.21.14
+    "@types/material-ui": ^0.21.15
     "@types/node": ^20.10.4
     "@types/prop-types": ^15.7.11
     "@types/qs": ^6.9.11
