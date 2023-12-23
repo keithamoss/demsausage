@@ -3095,7 +3095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/is-prop-valid@npm:^1.2.1":
+"@emotion/is-prop-valid@npm:1.2.1":
   version: 1.2.1
   resolution: "@emotion/is-prop-valid@npm:1.2.1"
   dependencies:
@@ -3111,10 +3111,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/unitless@npm:^0.8.0":
-  version: 0.8.1
-  resolution: "@emotion/unitless@npm:0.8.1"
-  checksum: 385e21d184d27853bb350999471f00e1429fa4e83182f46cd2c164985999d9b46d558dc8b9cc89975cb337831ce50c31ac2f33b15502e85c299892e67e7b4a88
+"@emotion/unitless@npm:0.8.0":
+  version: 0.8.0
+  resolution: "@emotion/unitless@npm:0.8.0"
+  checksum: 176141117ed23c0eb6e53a054a69c63e17ae532ec4210907a20b2208f91771821835f1c63dd2ec63e30e22fcc984026d7f933773ee6526dd038e0850919fae7a
   languageName: node
   linkType: hard
 
@@ -4580,10 +4580,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/stylis@npm:^4.0.2":
-  version: 4.2.1
-  resolution: "@types/stylis@npm:4.2.1"
-  checksum: 556e7e4c3140f70afba4b1eacd2af48f6877c86eef43ce5d10d9d607e68f46ab25fe2cf9ae8a2f93765ca59aede98b6a1fd3cb66b4f8d73769932c50b614c8c3
+"@types/stylis@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@types/stylis@npm:4.2.0"
+  checksum: 02a47584acd2fcb664f7d8270a69686c83752bdfb855f804015d33116a2b09c0b2ac535213a4a7b6d3a78b2915b22b4024cce067ae979beee0e4f8f5fdbc26a9
   languageName: node
   linkType: hard
 
@@ -5574,7 +5574,7 @@ __metadata:
     redux-responsive: ^4.3.8
     redux-thunk: ^2.4.2
     reselect: ^5.0.1
-    styled-components: ^6.1.1
+    styled-components: ^6.1.3
     typescript: ^5.3.2
     web-vitals: ^3.5.0
   languageName: unknown
@@ -8149,7 +8149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-to-react-native@npm:^3.2.0":
+"css-to-react-native@npm:3.2.0":
   version: 3.2.0
   resolution: "css-to-react-native@npm:3.2.0"
   dependencies:
@@ -8343,17 +8343,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csstype@npm:3.1.2":
+  version: 3.1.2
+  resolution: "csstype@npm:3.1.2"
+  checksum: e1a52e6c25c1314d6beef5168da704ab29c5186b877c07d822bd0806717d9a265e8493a2e35ca7e68d0f5d472d43fac1cdce70fd79fd0853dff81f3028d857b5
+  languageName: node
+  linkType: hard
+
 "csstype@npm:^3.0.2":
   version: 3.0.7
   resolution: "csstype@npm:3.0.7"
   checksum: 2f30c993be570c6d0de334b979a718370ee9bca9569c90340f13e05e542146c55b22e87372b858c061f9f8ded494da7a4715957882f9356cf9993ba11ab6f09c
-  languageName: node
-  linkType: hard
-
-"csstype@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "csstype@npm:3.1.2"
-  checksum: e1a52e6c25c1314d6beef5168da704ab29c5186b877c07d822bd0806717d9a265e8493a2e35ca7e68d0f5d472d43fac1cdce70fd79fd0853dff81f3028d857b5
   languageName: node
   linkType: hard
 
@@ -17057,6 +17057,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:8.4.31":
+  version: 8.4.31
+  resolution: "postcss@npm:8.4.31"
+  dependencies:
+    nanoid: ^3.3.6
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
+  languageName: node
+  linkType: hard
+
 "postcss@npm:^7, postcss@npm:^7.0.0, postcss@npm:^7.0.1, postcss@npm:^7.0.14, postcss@npm:^7.0.17, postcss@npm:^7.0.2, postcss@npm:^7.0.26, postcss@npm:^7.0.27, postcss@npm:^7.0.32, postcss@npm:^7.0.5, postcss@npm:^7.0.6":
   version: 7.0.35
   resolution: "postcss@npm:7.0.35"
@@ -17076,17 +17087,6 @@ __metadata:
     nanoid: ^3.1.22
     source-map: ^0.6.1
   checksum: c072fb97655068fb815c3a14a6b01abacb75e6e9b07bd0b7d08c792d9c8561e75e5c0e16f2e5072d14833f288fda76781c32ae8a8cde55da61c1a28070910236
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.4.31":
-  version: 8.4.31
-  resolution: "postcss@npm:8.4.31"
-  dependencies:
-    nanoid: ^3.3.6
-    picocolors: ^1.0.0
-    source-map-js: ^1.0.2
-  checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
   languageName: node
   linkType: hard
 
@@ -19173,7 +19173,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallowequal@npm:^1.1.0":
+"shallowequal@npm:1.1.0":
   version: 1.1.0
   resolution: "shallowequal@npm:1.1.0"
   checksum: f4c1de0837f106d2dbbfd5d0720a5d059d1c66b42b580965c8f06bb1db684be8783538b684092648c981294bf817869f743a066538771dbecb293df78f765e00
@@ -20076,23 +20076,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "styled-components@npm:6.1.1"
+"styled-components@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "styled-components@npm:6.1.3"
   dependencies:
-    "@emotion/is-prop-valid": ^1.2.1
-    "@emotion/unitless": ^0.8.0
-    "@types/stylis": ^4.0.2
-    css-to-react-native: ^3.2.0
-    csstype: ^3.1.2
-    postcss: ^8.4.31
-    shallowequal: ^1.1.0
-    stylis: ^4.3.0
-    tslib: ^2.5.0
+    "@emotion/is-prop-valid": 1.2.1
+    "@emotion/unitless": 0.8.0
+    "@types/stylis": 4.2.0
+    css-to-react-native: 3.2.0
+    csstype: 3.1.2
+    postcss: 8.4.31
+    shallowequal: 1.1.0
+    stylis: 4.3.0
+    tslib: 2.5.0
   peerDependencies:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
-  checksum: d062ba473014a551ed76f4876feaccebc06aaa8dc2849c9d72f67420701dbc7d7c9af1dfa5207b2ad5df9b2e122ddf9e5fe6b6b69ba4d93c4c702abdff19435a
+  checksum: 5609c8594a15f0ebd9186a1b351b6f876f23776061a3ab4edd58c5a4421011dea9edb8ac1b33ab79df1e877148f09bcb9bd34e01bf2a8023ae3538dc8f94b550
   languageName: node
   linkType: hard
 
@@ -20107,7 +20107,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylis@npm:^4.3.0":
+"stylis@npm:4.3.0":
   version: 4.3.0
   resolution: "stylis@npm:4.3.0"
   checksum: 6120de3f03eacf3b5adc8e7919c4cca991089156a6badc5248752a3088106afaaf74996211a6817a7760ebeadca09004048eea31875bd8d4df51386365c50025
@@ -20589,6 +20589,13 @@ __metadata:
     minimist: ^1.2.6
     strip-bom: ^3.0.0
   checksum: 59f35407a390d9482b320451f52a411a256a130ff0e7543d18c6f20afab29ac19fbe55c360a93d6476213cc335a4d76ce90f67df54c4e9037f7d240920832201
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.5.0":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
   languageName: node
   linkType: hard
 
