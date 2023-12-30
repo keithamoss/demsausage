@@ -5568,7 +5568,7 @@ __metadata:
     redux-responsive: ^4.3.8
     redux-thunk: ^2.4.2
     reselect: ^5.0.1
-    styled-components: ^6.1.3
+    styled-components: ^6.1.6
     typescript: ^5.3.3
     web-vitals: ^3.5.1
   languageName: unknown
@@ -19908,9 +19908,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.1.3":
-  version: 6.1.3
-  resolution: "styled-components@npm:6.1.3"
+"styled-components@npm:^6.1.6":
+  version: 6.1.6
+  resolution: "styled-components@npm:6.1.6"
   dependencies:
     "@emotion/is-prop-valid": 1.2.1
     "@emotion/unitless": 0.8.0
@@ -19919,12 +19919,12 @@ __metadata:
     csstype: 3.1.2
     postcss: 8.4.31
     shallowequal: 1.1.0
-    stylis: 4.3.0
+    stylis: 4.3.1
     tslib: 2.5.0
   peerDependencies:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
-  checksum: 5609c8594a15f0ebd9186a1b351b6f876f23776061a3ab4edd58c5a4421011dea9edb8ac1b33ab79df1e877148f09bcb9bd34e01bf2a8023ae3538dc8f94b550
+  checksum: 8bcda3719af222ebde8be358d0db4019e6fb03b6f9b19797ec20acc26aad4b1ede83b3820b25b8dd4aa7a1dfa7bb26d82e69f063b8e1f3b0d8a8e6e095f1b643
   languageName: node
   linkType: hard
 
@@ -19939,10 +19939,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylis@npm:4.3.0":
-  version: 4.3.0
-  resolution: "stylis@npm:4.3.0"
-  checksum: 6120de3f03eacf3b5adc8e7919c4cca991089156a6badc5248752a3088106afaaf74996211a6817a7760ebeadca09004048eea31875bd8d4df51386365c50025
+"stylis@npm:4.3.1":
+  version: 4.3.1
+  resolution: "stylis@npm:4.3.1"
+  checksum: d365f1b008677b2147e8391e9cf20094a4202a5f9789562e7d9d0a3bd6f0b3067d39e8fd17cce5323903a56f6c45388e3d839e9c0bb5a738c91726992b14966d
   languageName: node
   linkType: hard
 
