@@ -4336,10 +4336,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^3.3.7":
-  version: 3.3.7
-  resolution: "@types/luxon@npm:3.3.7"
-  checksum: 97026557e92bcba308a5592f981591cd200d493fc8997874d79acecf6a2ec41debeded3ac5cd80c371ef7f6f56cc0d1be0a5aca846e03d3e6b4a2be37256fe2f
+"@types/luxon@npm:^3.4.0":
+  version: 3.4.0
+  resolution: "@types/luxon@npm:3.4.0"
+  checksum: accd08e51e9eff4a5b47b2bdc2bc0a1404d35e0701e0165a1c1ea47065e588627784fe8bb9ddc64ca801726a7e9b0dbb075c586eb1f979fcf70e690cab963ff8
   languageName: node
   linkType: hard
 
@@ -5511,7 +5511,7 @@ __metadata:
     "@types/jest": ^29.5.11
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
-    "@types/luxon": ^3.3.7
+    "@types/luxon": ^3.4.0
     "@types/material-ui": ^0.21.16
     "@types/node": ^20.10.6
     "@types/prop-types": ^15.7.11
