@@ -5568,7 +5568,7 @@ __metadata:
     react-dom: ^18.2.0
     react-google-maps: ^9.4.5
     react-redux: ^8.1.3
-    react-router: ^6.21.2
+    react-router: ^6.21.3
     react-router-redux: ^4.0.8
     react-scripts: ^4.0.3
     react-string-replace: ^1.1.1
@@ -17582,14 +17582,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^6.21.2":
-  version: 6.21.2
-  resolution: "react-router@npm:6.21.2"
+"react-router@npm:^6.21.3":
+  version: 6.21.3
+  resolution: "react-router@npm:6.21.3"
   dependencies:
     "@remix-run/router": 1.14.2
   peerDependencies:
     react: ">=16.8"
-  checksum: 8c38a4914892d5b8052bc5c244af95109affd8b74bffa16f9ea7856dc0e992dd8539b19d2618721cd7ef091a585f394fac9d05ab7a98cf3ca6aeb7519b7bce0e
+  checksum: 7e6297d5b67ae07d2e8564e036dbb15ebd706b41c22238940f47eee9b21ffb76d41336803c3b33435f1ebe210226577e32df3838bcbf2cd7c813fa357c0a4fac
   languageName: node
   linkType: hard
 
