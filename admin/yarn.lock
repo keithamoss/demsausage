@@ -5519,7 +5519,7 @@ __metadata:
     material-ui-responsive-drawer: ^1.19.4
     ol: ^8.2.0
     prettier: ^3.2.4
-    prettier-eslint: ^16.2.0
+    prettier-eslint: ^16.3.0
     qs: ^6.11.2
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -16922,9 +16922,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-eslint@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "prettier-eslint@npm:16.2.0"
+"prettier-eslint@npm:^16.3.0":
+  version: 16.3.0
+  resolution: "prettier-eslint@npm:16.3.0"
   dependencies:
     "@typescript-eslint/parser": ^6.7.5
     common-tags: ^1.4.0
@@ -16938,7 +16938,15 @@ __metadata:
     require-relative: ^0.8.7
     typescript: ^5.2.2
     vue-eslint-parser: ^9.1.0
-  checksum: b3453cbfef2fb73244cdff8d1b7272294d77a8d8e437d832988a00b7b68dc93f8879c1319eea1dd72af6a65006695dee71dfc0c09417ab122bfae6effeb6b99f
+  peerDependencies:
+    prettier-plugin-svelte: ^3.0.0
+    svelte-eslint-parser: "*"
+  peerDependenciesMeta:
+    prettier-plugin-svelte:
+      optional: true
+    svelte-eslint-parser:
+      optional: true
+  checksum: 4b2a7006fb237cc95e307ed0b0aa6a4e84bba975b7899c5279fdd149edb025ac000544049a329dd5e214edd219c820e71069141da31cf5c5da3dc004ca81b3f7
   languageName: node
   linkType: hard
 
