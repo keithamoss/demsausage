@@ -5518,7 +5518,7 @@ __metadata:
     luxon: ^3.4.4
     material-ui: ^0.20.2
     material-ui-responsive-drawer: ^1.19.4
-    ol: ^9.0.0
+    ol: ^9.1.0
     prettier: ^3.2.5
     prettier-eslint: ^16.3.0
     qs: ^6.12.0
@@ -15854,9 +15854,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "ol@npm:9.0.0"
+"ol@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "ol@npm:9.1.0"
   dependencies:
     color-rgba: ^3.0.0
     color-space: ^2.0.1
@@ -15864,7 +15864,7 @@ __metadata:
     geotiff: ^2.0.7
     pbf: 3.2.1
     rbush: ^3.0.1
-  checksum: 99d42b615ee5f2dafdad95eb361305f10fbcbccea354bcab6a48968e6fe3f92d035584dfdf270757d7b3681244c0c6484f57a5a22a99554b838303fc5a614b80
+  checksum: 09b4dc4daa780a0d613d52378b39afb0645ac67635a39524e1d2176b78c3a31cce31a268bd3eeb37cc45d3015dadea5ee0d5f76f12d311a6120e62eb4498152a
   languageName: node
   linkType: hard
 
