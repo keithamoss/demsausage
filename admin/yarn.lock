@@ -4434,10 +4434,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:^6.9.12":
-  version: 6.9.12
-  resolution: "@types/qs@npm:6.9.12"
-  checksum: 76be8068091058987bb49aca59e9714ff856661cdc2340499f9d502c78950ac08e7ecbca256c8a72c4c83714bce30e6aaad13f9f739e8c0c436c0eedb2a2627c
+"@types/qs@npm:^6.9.14":
+  version: 6.9.14
+  resolution: "@types/qs@npm:6.9.14"
+  checksum: d3b76021d36b86c0063ec4b7373e9fa470754914e486fbfe54b3a8866dad037800a2c2068ecbcaa9399ae3ed15772a26b07e67793ed2519cf2de199104014716
   languageName: node
   linkType: hard
 
@@ -5485,7 +5485,7 @@ __metadata:
     "@types/material-ui": ^0.21.17
     "@types/node": ^20.11.28
     "@types/prop-types": ^15.7.11
-    "@types/qs": ^6.9.12
+    "@types/qs": ^6.9.14
     "@types/react": ^18.2.66
     "@types/react-dom": ^18.2.22
     "@types/react-redux": ^7.1.31
