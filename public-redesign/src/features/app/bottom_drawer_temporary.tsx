@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import * as React from 'react';
 // import BottomBar from "./bottom_bar";
 import { Drawer } from '@mui/material';
-import SearchBar from './search_bar';
+import SearchBar from '../map/searchBar/searchBar';
 import SearchFilter from '../search/search_filter';
 import StallFocus from '../search/stall_focus';
 import StallSearchResults from '../search/stall_search_results';

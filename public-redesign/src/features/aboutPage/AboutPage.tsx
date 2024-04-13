@@ -1,21 +1,15 @@
 import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
-import * as React from 'react';
 import { nomsData } from '../icons/noms';
-import DSAppBar from '../app/app_bar';
-import SideMenuDrawer from '../app/side_menu_drawer';
 
-const bottomNav = 56;
+// const bottomNav = 56;
 
-interface Props {}
-
-const Root = styled('div')(({ theme }) => ({
-	height: '100%',
-	backgroundColor: theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
-	paddingBottom: `${bottomNav}px`,
-}));
+// const Root = styled('div')(({ theme }) => ({
+// 	height: '100%',
+// 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
+// 	paddingBottom: `${bottomNav}px`,
+// }));
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingLeft: theme.spacing(1),
@@ -25,7 +19,6 @@ const PageWrapper = styled('div')(({ theme }) => ({
 const Question = styled('h3')(({ theme }) => ({
 	marginBottom: theme.spacing(1),
 	borderBottom: `1px solid ${grey[300]}`,
-	//   paddingBottom: theme.spacing(1),
 }));
 
 const Answer = styled('div')(({ theme }) => ({
@@ -44,20 +37,9 @@ const Answer = styled('div')(({ theme }) => ({
 	},
 }));
 
-export default function About(props: Props) {
-	const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
-	const toggleSideDrawerOpen = (e: any) => {
-		setSideDrawerOpen(!sideDrawerOpen);
-	};
-
+export default function AboutPage() {
 	return (
-		<Root>
-			<CssBaseline />
-
-			<SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
-
-			<DSAppBar toggleSideDrawerOpen={toggleSideDrawerOpen} topPadding={false} />
-
+		<div>
 			{/* <Helmet>
           <title>Democracy Sausage | FAQs and About Us</title>
 
@@ -188,6 +170,6 @@ export default function About(props: Props) {
 			</PageWrapper>
 
 			{/* <BottomBar /> */}
-		</Root>
+		</div>
 	);
 }

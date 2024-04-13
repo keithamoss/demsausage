@@ -1,20 +1,8 @@
 import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
-
 import App from '../../App';
-// import FeatureEditor from '../../features/features/featureEditor';
-// import FeatureManager from '../../features/features/featureManager';
-// import MapCreator from '../../features/maps/mapCreator';
-// import MapEditor from '../../features/maps/mapEditor';
-// import MapManager from '../../features/maps/mapsManager';
-// import SchemaCreator from '../../features/schemas/schemaCreator';
-// import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
-// // eslint-disable-next-line import/no-named-as-default
-// import DebugView from '../../features/app/debugView';
-// import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
-// import SchemaManager from '../../features/schemas/schemaManager';
-// import SearchManager from '../../features/search/searchManager';
-// import SettingsManager from '../../features/settings/settingsManager';
+import AboutPage from '../../features/aboutPage/AboutPage';
+import Map from '../../features/map/map';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -24,13 +12,17 @@ export const router = sentryCreateBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: ':election_name',
-				element: <App />,
+				path: 'about',
+				element: <AboutPage />,
 			},
-			// {
-			// 	path: 'MapManager',
-			// 	element: <MapManager />,
-			// },
+			{
+				path: ':election_name',
+				element: <Map />,
+			},
+			{
+				path: '',
+				element: <Map />,
+			},
 			// {
 			// 	path: 'MapManager/Create',
 			// 	element: <MapCreator />,

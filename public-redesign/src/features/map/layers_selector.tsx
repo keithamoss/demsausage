@@ -1,7 +1,7 @@
-import { groupBy, sortBy } from 'lodash-es';
 import LayersIcon from '@mui/icons-material/Layers';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
+import { groupBy, sortBy } from 'lodash-es';
 import * as React from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -18,11 +18,11 @@ import ListSubheader from '@mui/material/ListSubheader';
 
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
-import { getElectionVeryShortName, isElectionLive } from '../elections/electionHelpers';
-import { Link, useNavigate } from 'react-router-dom';
 import { Election } from '../../app/services/elections';
+import { getElectionVeryShortName, isElectionLive } from '../elections/electionHelpers';
+import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
 
 interface Props {
 	electionId: number;

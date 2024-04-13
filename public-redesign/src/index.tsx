@@ -10,7 +10,6 @@ import { store } from './app/store';
 import { theme } from './app/ui/theme';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import './index.css';
 // import "./browserstack";
 
 const container = document.getElementById('root')!;

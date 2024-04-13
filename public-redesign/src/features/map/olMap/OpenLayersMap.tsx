@@ -34,10 +34,10 @@ import Style from 'ol/style/Style';
 import VectorTile from 'ol/VectorTile';
 import View from 'ol/View';
 import * as React from 'react';
-import { Election } from '../../app/services/elections';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import { IMapFilterOptions } from '../icons/noms';
-import { getAPIBaseURL, IMapPollingPlaceFeature, IMapSearchResults, olStyleFunction } from './map_stuff';
+import { Election } from '../../../app/services/elections';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { IMapFilterOptions } from '../../icons/noms';
+import { getAPIBaseURL, IMapPollingPlaceFeature, IMapSearchResults, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'

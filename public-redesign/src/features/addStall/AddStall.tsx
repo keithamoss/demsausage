@@ -1,5 +1,4 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
 import SendIcon from '@mui/icons-material/Send';
@@ -27,17 +26,13 @@ import {
 	Stepper,
 	Typography,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import CssBaseline from '@mui/material/CssBaseline';
-import { styled, useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { grey } from '@mui/material/colors';
+import { styled, useTheme } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import * as React from 'react';
 import { nomsData } from '../icons/noms';
-import DSAppBar from '../app/app_bar';
-import SearchBar from '../app/search_bar';
-import SideMenuDrawer from '../app/side_menu_drawer';
+import SearchBar from '../map/searchBar/searchBar';
 
 const bottomNav = 56;
 
@@ -513,12 +508,6 @@ export default function AddStall(props: Props) {
 
 	return (
 		<Root>
-			<CssBaseline />
-
-			<SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
-
-			<DSAppBar toggleSideDrawerOpen={toggleSideDrawerOpen} topPadding={false} />
-
 			{/* <Helmet>
             <title>Democracy Sausage | FAQs and About Us</title>
   

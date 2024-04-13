@@ -38,5 +38,21 @@ export default defineConfig(({ command, mode }) => {
 				},
 			}),
 		],
+		// Resolve the randomly occuring error with "styled_default is not a function" from Popper.js
+		// https://github.com/mui/material-ui/issues/36515
+		// Solution found in:
+		// https://github.com/mui/material-ui/issues/31835#issuecomment-1734474232
+		// It only seems to need @mui/icons-material for some reason, but including the rest here
+		// as that was part of the original solution.
+		optimizeDeps: {
+			include: [
+				'@mui/icons-material',
+				// '@mui/material',
+				// '@mui/system',
+				// '@mui/x-date-pickers',
+				// '@emotion/react',
+				// '@emotion/styled',
+			],
+		},
 	};
 });
