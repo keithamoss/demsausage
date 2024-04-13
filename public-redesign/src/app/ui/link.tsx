@@ -10,14 +10,15 @@ interface ListItemLinkProps {
 	icon?: React.ReactElement;
 	primary: string;
 	to: string;
+	target?: string;
 }
 
 export function ListItemButtonLink(props: ListItemLinkProps) {
-	const { icon, primary, to } = props;
+	const { icon, primary, to, target } = props;
 
 	return (
 		<li>
-			<ListItemButton component={Link} to={to}>
+			<ListItemButton component={Link} to={to} target={target}>
 				{icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
 				<ListItemText primary={primary} />
 			</ListItemButton>

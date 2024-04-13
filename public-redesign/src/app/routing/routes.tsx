@@ -2,7 +2,11 @@ import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import AboutPage from '../../features/aboutPage/AboutPage';
+import AddStall from '../../features/addStall/AddStall';
+import DebugView from '../../features/debugView/debugView';
 import Map from '../../features/map/map';
+import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
+import SearchDrawer from '../../features/searchDrawer/searchDrawer';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -16,53 +20,31 @@ export const router = sentryCreateBrowserRouter([
 				element: <AboutPage />,
 			},
 			{
-				path: ':election_name',
+				path: 'add-stall',
+				element: <AddStall />,
+			},
+			{
+				path: 'debug',
+				element: <DebugView />,
+			},
+			{
+				path: '/:election_name',
 				element: <Map />,
+				children: [
+					{
+						path: '/:election_name/search/',
+						element: <SearchDrawer />,
+					},
+					{
+						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
+						element: <PollingPlaceCardDrawer />,
+					},
+				],
 			},
 			{
 				path: '',
 				element: <Map />,
 			},
-			// {
-			// 	path: 'MapManager/Create',
-			// 	element: <MapCreator />,
-			// },
-			// {
-			// 	path: 'MapManager/Edit/:mapId',
-			// 	element: <MapEditor />,
-			// },
-			// {
-			// 	path: 'SchemaManager',
-			// 	element: <SchemaManager />,
-			// },
-			// {
-			// 	path: 'SchemaManager/Create',
-			// 	element: <SchemaCreator />,
-			// },
-			// {
-			// 	path: 'SchemaManager/Edit/:schemaId',
-			// 	element: <SchemaEditorEntrypoint />,
-			// },
-			// {
-			// 	path: 'SchemaManager/Delete/:schemaId',
-			// 	element: <SchemaDeleteManager />,
-			// },
-			// {
-			// 	path: 'FeatureManager',
-			// 	element: <FeatureManager />,
-			// },
-			// {
-			// 	path: 'FeatureManager/Edit/:featureId',
-			// 	element: <FeatureEditor />,
-			// },
-			// {
-			// 	path: 'SearchManager',
-			// 	element: <SearchManager />,
-			// },
-			// {
-			// 	path: 'SettingsManager',
-			// 	element: <SettingsManager />,
-			// },
 		],
 	},
 ]);

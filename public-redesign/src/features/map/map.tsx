@@ -1,17 +1,24 @@
+import { Box } from '@mui/material';
 import 'ol/ol.css';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import AddStallButton from '../app/addStallButton';
-import BottomDrawerTemporary from '../app/bottom_drawer_temporary';
+import {
+	ESearchDrawerSubComponent,
+	selectMapFilterOptions,
+	setPollingPlaces,
+	setSearchDrawerInitialMode,
+} from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import { IMapFilterOptions } from '../icons/noms';
 import LayersSelector from './layers_selector';
-import { IMapSearchResults } from './map_stuff';
+import { IMapPollingPlaceGeoJSONFeatureCollection, IMapSearchResults } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBar from './searchBar/searchBar';
+
+export const isSearchRoute = (pathname: string) => pathname.startsWith('/search/') === true;
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypoint() {
@@ -26,21 +33,30 @@ function MapEntrypoint() {
 		electionId = elections.find((e) => e.name_url_safe === urlElectionName)?.id;
 	}
 
+	const { pathname } = useLocation();
+	const isSearchRouteShown = isSearchRoute(pathname);
+
 	if (electionId === undefined) {
 		return null;
 	}
 
-	return <Map electionId={electionId} />;
+	return <Map electionId={electionId} isSearchRouteShown={isSearchRouteShown} />;
 }
 
 interface Props {
 	electionId: number;
+	isSearchRouteShown: boolean;
 }
 
 function Map(props: Props) {
-	const { electionId } = props;
+	const { electionId, isSearchRouteShown } = props;
+
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
+
+	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
 	// ######################
 	// Geolocation
@@ -68,7 +84,8 @@ function Map(props: Props) {
 	];
 
 	const onMapBeginLoading = () => {};
-	const stashMapData = () => {};
+	const stashMapData = (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) =>
+		dispatch(setPollingPlaces(pollingPlaces));
 	const onMapLoaded = () => {};
 	const onQueryMap = () => {};
 
@@ -77,14 +94,15 @@ function Map(props: Props) {
 		setMapSearchResults(resultSet);
 	};
 
-	const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
+	const [bottomDrawerOpen, setBottomDrawerOpen] = useState(isSearchRouteShown);
 	const onToggleBottomDrawerOpen = () => {
 		setBottomDrawerOpen(!bottomDrawerOpen);
 	};
+
 	const onClickMapFilterButton = () => {
 		setFilterOpen(true);
+		// toggleFilter();
 		setBottomDrawerOpen(true);
-		toggleFilter();
 	};
 
 	const [filterOpen, setFilterOpen] = useState(false);
@@ -98,17 +116,33 @@ function Map(props: Props) {
 		setUserHasSearched(state);
 	};
 
-	const [mapFilterOptions, setMapFilterOptions] = useState<IMapFilterOptions>({});
+	// const [mapFilterOptions, setMapFilterOptions] = useState<IMapFilterOptions>({});
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-	const isMapFiltered = Object.values(mapFilterOptions).find((option) => option === true) || false;
+	// const isMapFiltered = Object.values(mapFilterOptions).find((option) => option === true) || false;
+
+	// const reduxSearchText = useAppSelector(select)
 
 	const [userSearchText, setUserSearchText] = useState('');
-	const onSearchTextChange = (value: string) => setUserSearchText(value);
+	const onSearchTextChange = (value: string) => {
+		setUserSearchText(value);
+	};
+
+	const [interactionMode, setInteractionMode] = useState<ESearchDrawerSubComponent | undefined>(undefined);
 
 	if (election === undefined) {
 		return null;
 	}
 
+	const onClickSearchBar = (subcomponentClicked: ESearchDrawerSubComponent) => {
+		// navigate(`/search/${election.name_url_safe}`);
+		navigate(`/${election.name_url_safe}/search/`);
+		// setInteractionMode(mode);
+		dispatch(setSearchDrawerInitialMode(subcomponentClicked));
+	};
+
+	if (isSearchRouteShown === true && bottomDrawerOpen === false) {
+		setBottomDrawerOpen(true);
+	}
 	return (
 		<React.Fragment>
 			<OpenLayersMap
@@ -127,34 +161,24 @@ function Map(props: Props) {
 
 			<AddStallButton />
 
-			<SearchBar
-				onSearch={toggleUserHasSearched}
-				filterOpen={filterOpen}
-				onToggleFilter={onClickMapFilterButton}
-				onClick={onToggleBottomDrawerOpen}
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				isMapFiltered={isMapFiltered}
-				showFilter={true}
-				styleProps={{
+			<Box
+				sx={{
 					position: 'absolute',
 					bottom: '24px',
 					width: '96%',
 					zIndex: 1050,
 					margin: '8px',
 				}}
-				id="search-bar"
-				valueToShow={userSearchText}
-			/>
+			>
+				<SearchBar
+					election={election}
+					enableSearchField={false}
+					onClick={onClickSearchBar}
+					onToggleFilter={onClickMapFilterButton}
+				/>
+			</Box>
 
-			<BottomDrawerTemporary
-				toggleMapSearchResults={toggleMapSearchResults}
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				isMapFiltered={isMapFiltered}
-				onChangeFilter={setMapFilterOptions}
-				open={bottomDrawerOpen}
-				onSetOpen={setBottomDrawerOpen}
-				onSearchTextChange={onSearchTextChange}
-			/>
+			<Outlet />
 		</React.Fragment>
 	);
 }

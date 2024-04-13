@@ -14,6 +14,7 @@ export interface Election {
 	geom: IGeoJSONPoylgon;
 	is_hidden: boolean;
 	is_primary: boolean;
+	is_federal: boolean;
 	election_day: string; // Datetime
 	polling_places_loaded: boolean;
 }

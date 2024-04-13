@@ -1,0 +1,4 @@
+/* Allows the SearchBar InputBase component to react to onClick events when the input field is disabled. */
+input.searchBar[disabled] {
+	pointer-events: none;
+}

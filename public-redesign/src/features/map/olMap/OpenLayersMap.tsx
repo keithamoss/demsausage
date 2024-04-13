@@ -73,6 +73,30 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.onMapContainerResize = this.onMapContainerResize.bind(this);
 	}
 
+	private fitMapViewToElection(election: Election) {
+		if (this.map !== null) {
+			const view = this.map.getView();
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			view.fit(polygon, {
+				size: this.map.getSize(),
+				// padding: [1, 1, 1, 1],
+				callback: (completed: boolean) => {
+					if (completed === true) {
+						const centre = view.getCenter();
+						if (centre !== undefined) {
+							centre[0] -= 1;
+							view.setCenter(centre);
+						}
+					}
+				},
+			});
+		}
+	}
+
 	componentDidMount() {
 		const { election } = this.props;
 
@@ -82,25 +106,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			controls: [new Attribution()],
 		});
 
-		const view = this.map.getView();
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		view.fit(polygon, {
-			size: this.map.getSize(),
-			// padding: [1, 1, 1, 1],
-			callback: (completed: boolean) => {
-				if (completed === true) {
-					const centre = view.getCenter();
-					if (centre !== undefined) {
-						centre[0] -= 1;
-						view.setCenter(centre);
-					}
-				}
-			},
-		});
+		this.fitMapViewToElection(election);
 
 		// Accommodate the window resizing
 		window.addEventListener('resize', this.onMapContainerResize);
@@ -115,6 +121,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 	componentDidUpdate(prevProps: IProps) {
 		if (this.map !== null) {
+			// Allow for elections changing
+			if (prevProps.election !== this.props.election) {
+				this.clearMapDataVectorLayer(this.map);
+				this.map.addLayer(this.getMapDataVectorLayer(this.map));
+				this.fitMapViewToElection(this.props.election);
+			}
+
 			if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
 				// The user has performed a search by location
 				const { mapSearchResults } = this.props;
@@ -364,6 +377,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		vectorLayer.setProperties({ isSausageLayer: true });
 
 		return vectorLayer;
+	}
+
+	private clearMapDataVectorLayer(map: Map) {
+		const vectorLayer = this.getLayerByProperties(map, 'isSausageLayer', true);
+		if (vectorLayer !== null) {
+			map.removeLayer(vectorLayer);
+		}
 	}
 
 	// eslint-disable-next-line class-methods-use-this

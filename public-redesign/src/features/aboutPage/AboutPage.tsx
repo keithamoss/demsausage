@@ -1,7 +1,7 @@
-import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { nomsData } from '../icons/noms';
+import { NomsOptionsAvailable } from '../icons/noms';
 
 // const bottomNav = 56;
 
@@ -10,6 +10,13 @@ import { nomsData } from '../icons/noms';
 // 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
 // 	paddingBottom: `${bottomNav}px`,
 // }));
+
+const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
+	padding: theme.spacing(1),
+	overflowY: 'auto',
+	height: `90dvh`,
+}));
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingLeft: theme.spacing(1),
@@ -39,7 +46,7 @@ const Answer = styled('div')(({ theme }) => ({
 
 export default function AboutPage() {
 	return (
-		<div>
+		<StyledInteractableBoxFullHeight>
 			{/* <Helmet>
           <title>Democracy Sausage | FAQs and About Us</title>
 
@@ -109,7 +116,7 @@ export default function AboutPage() {
 				<Question>What do the all of the icons mean?</Question>
 				<Answer>
 					<List>
-						{Object.values(nomsData).map((noms) => (
+						{Object.values(NomsOptionsAvailable).map((noms) => (
 							<ListItemButton key={noms.value}>
 								<ListItemIcon>{noms.icon}</ListItemIcon>
 								<ListItemText primary={noms.description} />
@@ -170,6 +177,6 @@ export default function AboutPage() {
 			</PageWrapper>
 
 			{/* <BottomBar /> */}
-		</div>
+		</StyledInteractableBoxFullHeight>
 	);
 }

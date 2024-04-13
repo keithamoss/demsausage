@@ -7,6 +7,15 @@ import HalalIcon from './halal';
 import SausageIcon from './sausage';
 import VegoIcon from './vego';
 
+// export enum INomsOptions {
+// 	BBQ = 'bbq',
+// 	CAKE = 'cake',
+// 	VEGO = 'vego',
+// 	HALAL = 'halal',
+// 	COFFEE = 'coffee',
+// 	BACON_AND_EGGS = 'bacon_and_eggs',
+// }
+
 // IMPORTANT!
 // Noms aren't fully data-driven yet.
 // See NomsReader in the other noms.tsx for more manual additions.
@@ -25,6 +34,57 @@ export interface IMapPollingGeoJSONNoms extends IMapFilterOptions {
 	nothing?: boolean;
 	run_out?: boolean;
 }
+
+export interface IMapPollingNoms extends IMapFilterOptions {
+	free_text?: string; // When use other API calls to retrieve individual polling places we get the actual text
+	nothing?: boolean;
+	run_out?: boolean;
+}
+
+export const NomsOptionsAvailable = {
+	bbq: {
+		icon: <SausageIcon />,
+		label: 'Sausage Sizzle',
+		value: 'bbq',
+		description: "There's a sausage sizzle here",
+		is_primary: true,
+	},
+	cake: {
+		icon: <CakeIcon />,
+		label: 'Cake Stall',
+		value: 'cake',
+		description: "There's a cake stall here",
+		is_primary: true,
+	},
+	vego: {
+		icon: <VegoIcon />,
+		label: 'Savoury Vegetarian Options',
+		value: 'vego',
+		description: 'This booth has savoury vegetarian options',
+		is_primary: false,
+	},
+	halal: {
+		icon: <HalalIcon />,
+		label: 'Halal Options',
+		value: 'halal',
+		description: 'This booth has halal food',
+		is_primary: false,
+	},
+	bacon_and_eggs: {
+		icon: <BaconandEggsIcon />,
+		label: 'Bacon and Eggs',
+		value: 'bacon_and_eggs',
+		description: "There's coffee available",
+		is_primary: false,
+	},
+	coffee: {
+		icon: <CoffeeIcon />,
+		label: 'Coffee',
+		value: 'coffee',
+		description: "There's bacon and egg rolls/sandwiches",
+		is_primary: false,
+	},
+};
 
 export const spriteIconConfig = {
 	// Core icons
@@ -57,54 +117,9 @@ export const spriteIconConfig = {
 	halal: { zIndex: 0, scale: 0.5 },
 };
 
-export const nomsData = {
-	bbq: {
-		icon: <SausageIcon />,
-		label: 'Sausage Sizzle',
-		value: 'bbq',
-		description: "There's a sausage sizzle here",
-		is_primary: true,
-	},
-	cake: {
-		icon: <CakeIcon />,
-		label: 'Cake Stall',
-		value: 'cake',
-		description: "There's a cake stall here",
-		is_primary: true,
-	},
-	vego: {
-		icon: <VegoIcon />,
-		label: 'Savoury Vegetarian',
-		value: 'vego',
-		description: 'This booth has savoury vegetarian options',
-		is_primary: false,
-	},
-	halal: {
-		icon: <HalalIcon />,
-		label: 'Halal',
-		value: 'halal',
-		description: 'This booth has halal food',
-		is_primary: false,
-	},
-	bacon_and_eggs: {
-		icon: <BaconandEggsIcon />,
-		label: 'Bacon and Eggs',
-		value: 'bacon_and_eggs',
-		description: "There's coffee available",
-		is_primary: false,
-	},
-	coffee: {
-		icon: <CoffeeIcon />,
-		label: 'Coffee',
-		value: 'coffee',
-		description: "There's bacon and egg rolls/sandwiches",
-		is_primary: false,
-	},
-};
-
 export const IconsWithTooltips = () => (
 	<React.Fragment>
-		{Object.values(nomsData).map((noms) => (
+		{Object.values(NomsOptionsAvailable).map((noms) => (
 			<Tooltip key={noms.value} disableFocusListener enterTouchDelay={0} title={noms.label}>
 				{noms.icon}
 			</Tooltip>

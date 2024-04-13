@@ -2,25 +2,25 @@ import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
-import { IMapPollingGeoJSONNoms, nomsData } from '../icons/noms';
-import { IMapPollingPlaceFeature } from './map_stuff';
 import { stringDivider } from '../../app/utils';
+import { IMapPollingGeoJSONNoms, IMapPollingNoms, NomsOptionsAvailable } from '../icons/noms';
+import { IMapPollingPlaceFeature } from './map_stuff';
 
 export class NomsReader {
-	static coreNomsIcons = Object.values(nomsData)
+	static coreNomsIcons = Object.values(NomsOptionsAvailable)
 		.filter((noms) => noms.is_primary === true)
 		.map((noms) => noms.value)
 		.concat(['nothing', 'run_out']);
 
-	static foodNomsIcons = Object.values(nomsData).map((noms) => noms.value);
+	static foodNomsIcons = Object.values(NomsOptionsAvailable).map((noms) => noms.value);
 
-	static additionalFoodNomsIcons = Object.values(nomsData)
+	static additionalFoodNomsIcons = Object.values(NomsOptionsAvailable)
 		.filter((noms) => noms.is_primary === false)
 		.map((noms) => noms.value);
 
-	noms: IMapPollingGeoJSONNoms | null;
+	noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null;
 
-	constructor(noms: IMapPollingGeoJSONNoms | null) {
+	constructor(noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null) {
 		this.noms = this.filterFalsey(noms);
 	}
 
@@ -61,11 +61,12 @@ export class NomsReader {
 	}
 
 	public onlyHasFreeText() {
+		// @TODO I think the free_text thing here works to handle the difference between IMapPollingNoms | IMapPollingGeoJSONNoms
 		return (
 			this.hasCoreNoms() === false &&
 			this.hasExtraNoms() === false &&
 			this.noms !== null &&
-			this.noms.free_text === true
+			(this.noms.free_text === true || typeof this.noms.free_text === 'string')
 		);
 	}
 
@@ -206,7 +207,7 @@ export class NomsReader {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	private filterFalsey(noms: IMapPollingGeoJSONNoms | null) {
+	private filterFalsey(noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null) {
 		// For legacy reasons the backend stores falsey values for noms.
 		// e.g. {bbq: false, cake: true} only contains one piece of information
 		// that we really care about: That the polling place has cake.

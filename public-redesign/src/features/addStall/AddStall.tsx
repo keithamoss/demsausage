@@ -31,7 +31,8 @@ import { grey } from '@mui/material/colors';
 import { styled, useTheme } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import * as React from 'react';
-import { nomsData } from '../icons/noms';
+import { Election } from '../../app/services/elections';
+import { NomsOptionsAvailable } from '../icons/noms';
 import SearchBar from '../map/searchBar/searchBar';
 
 const bottomNav = 56;
@@ -183,13 +184,14 @@ export default function AddStall(props: Props) {
 				//   onSearch={toggleUserHasSearched}
 				//   filterOpen={filterOpen}
 				// onToggleFilter={toggleFilter}
-				onSearch={() => {}}
-				filterOpen={false}
+				// onSearch={() => {}}
+				// filterOpen={false}
+				election={{} as Election}
 				onToggleFilter={() => {}}
-				onClick={() => {}}
-				isMapFiltered={false}
-				showFilter={false}
-				styleProps={{}}
+				onClick={() => () => {}}
+				// isMapFiltered={false}
+				enableFiltering={false}
+				// styleProps={{}}
 			/>
 
 			{/* <Box sx={{ mb: 2 }}>
@@ -424,7 +426,7 @@ export default function AddStall(props: Props) {
 					//   bgcolor: "background.paper",
 				}}
 			>
-				{Object.values(nomsData).map((noms) => {
+				{Object.values(NomsOptionsAvailable).map((noms) => {
 					const labelId = `checkbox-list-secondary-label-${noms.value}`;
 					return (
 						<ListItem

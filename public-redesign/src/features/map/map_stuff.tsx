@@ -3,9 +3,10 @@ import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import { IMapFilterOptions, spriteIconConfig } from '../icons/noms';
-import { NomsReader } from './noms';
+import { IMapFilterOptions, IMapPollingGeoJSONNoms, spriteIconConfig } from '../icons/noms';
 import sprite from '../icons/sprite.json';
+import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { NomsReader } from './noms';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {
@@ -63,7 +64,7 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 
 	if (spriteConfig !== undefined) {
 		const iconAttributes = {
-			src: `./icons/sprite_${sprite.meta.hash}.png`,
+			src: `/icons/sprite_${sprite.meta.hash}.png`,
 			offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
 			size: [spriteConfig.spriteSourceSize.w, spriteConfig.spriteSourceSize.h],
 			scale: iconConfig.scale,
@@ -148,6 +149,30 @@ export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilte
 	return true;
 };
 
+export const doesPollingPlaceSatisifyFilterCriteria = (
+	pollingPlace: IPollingPlace,
+	mapFilterOptions: IMapFilterOptions,
+) => {
+	if (hasFilterOptions(mapFilterOptions) === false) {
+		return true;
+	}
+
+	if (pollingPlace.stall === null) {
+		return false;
+	}
+
+	const nomsReader = new NomsReader(pollingPlace.stall.noms);
+	if (nomsReader.hasAnyNoms() === false) {
+		return false;
+	}
+
+	if (satisfiesMapFilter(nomsReader, mapFilterOptions) === false) {
+		return false;
+	}
+
+	return true;
+};
+
 export const olStyleFunction = (
 	feature: IMapPollingPlaceFeature,
 	resolution: number,
@@ -171,6 +196,27 @@ export const olStyleFunction = (
 		  spriteIcons.unknown
 		: null;
 };
+
+export interface IMapPollingPlaceGeoJSONFeatureCollection {
+	type: 'FeatureCollection';
+	features: IMapPollingPlaceGeoJSONFeature[];
+}
+
+export interface IMapPollingPlaceGeoJSONFeature {
+	type: 'Feature';
+	id: number;
+	geometry: {
+		type: 'Point';
+		coordinates: [number, number];
+	};
+	properties: {
+		name: string;
+		premises: string;
+		state: string;
+		noms: IMapPollingGeoJSONNoms | null;
+		ec_id: number | null;
+	};
+}
 
 // @FIXME Use the inbuilt OLFeature type when we upgrade
 export interface IMapPollingPlaceFeature {

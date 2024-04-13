@@ -1,26 +1,23 @@
+import CloseIcon from '@mui/icons-material/Close';
 import LayersIcon from '@mui/icons-material/Layers';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import { Badge, ListItemButton, useTheme } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
 import { styled } from '@mui/material/styles';
 import { groupBy, sortBy } from 'lodash-es';
 import * as React from 'react';
-
-import CloseIcon from '@mui/icons-material/Close';
-import LiveTvIcon from '@mui/icons-material/LiveTv';
-import { Badge, ListItemButton, useTheme } from '@mui/material';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-
-import { BadgeProps } from '@mui/material/Badge';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-
-import Avatar from '@mui/material/Avatar';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { Election } from '../../app/services/elections';
+import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getElectionVeryShortName, isElectionLive } from '../elections/electionHelpers';
 import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
 
@@ -36,15 +33,6 @@ const StyledLayersBadge = styled(Badge)(({ theme }) => ({
 	'& .MuiBadge-badge': {
 		right: 4,
 		top: 4,
-		backgroundColor: theme.palette.secondary.main,
-	},
-}));
-
-const StyledElectionBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-	'& .MuiBadge-badge': {
-		right: 20,
-		top: 6,
-		border: `2px solid ${theme.palette.background.paper}`,
 		backgroundColor: theme.palette.secondary.main,
 	},
 }));
@@ -93,8 +81,7 @@ export default function LayersSelector(props: Props) {
 		setState(open);
 	};
 
-	// const onClickElection = (election: Election) => navigate(`/${election.name_url_safe}`);
-	const onClickElection = (election: Election) => (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {};
+	const onClickElection = (election: Election) => () => navigate(`/${election.name_url_safe}`);
 
 	return (
 		<React.Fragment>
@@ -102,7 +89,6 @@ export default function LayersSelector(props: Props) {
 				badgeContent={activeElections.length > 1 ? activeElections.length : null}
 				color="primary"
 				className="layer-selector"
-				/* ...or use this if we're using the current layout */
 				sx={{ marginTop: '46px' }}
 			>
 				<StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
@@ -127,7 +113,6 @@ export default function LayersSelector(props: Props) {
 							bgcolor: 'background.paper',
 							position: 'relative',
 							overflow: 'auto',
-							// maxHeight: 400,
 							'& ul': { padding: 0 },
 							'& li.MuiListSubheader-root': { zIndex: 2 },
 						}}
@@ -153,15 +138,16 @@ export default function LayersSelector(props: Props) {
 													}
 												>
 													<ListItemAvatar>
-														{election.id === electionId ? (
-															<StyledElectionBadge color="success" overlap="circular" badgeContent=" ">
-																<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>SA</Avatar>
-															</StyledElectionBadge>
-														) : (
-															<Avatar sx={{ width: 50, height: 50, marginRight: 2 }}>
-																{getElectionVeryShortName(election)}
-															</Avatar>
-														)}
+														<Avatar
+															sx={{
+																width: 50,
+																height: 50,
+																marginRight: 2,
+																backgroundColor: election.id === electionId ? mapaThemePrimaryPurple : undefined,
+															}}
+														>
+															{getElectionVeryShortName(election)}
+														</Avatar>
 													</ListItemAvatar>
 
 													<ListItemButton onClick={onClickElection(election)}>

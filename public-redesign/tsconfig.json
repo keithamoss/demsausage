@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2021",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "ES2021",
+      "ES2017.Object"
     ],
     "types": [
       "vite/client",
