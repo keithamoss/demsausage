@@ -48,14 +48,6 @@ from demsausage.rq.jobs import (task_generate_election_map_screenshot,
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
-from django.contrib.auth import logout
-from django.contrib.auth.models import User
-from django.contrib.gis.db.models import Extent
-from django.contrib.gis.geos import Point
-from django.core.cache import cache
-from django.db import transaction
-from django.db.models import Func
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
@@ -66,6 +58,15 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer
 from rq.job import Job
+
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models import Extent
+from django.contrib.gis.geos import Point
+from django.core.cache import cache
+from django.db import transaction
+from django.db.models import Func
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
 
@@ -211,15 +212,13 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.id in [27, 37, 53]:
+        if election.is_federal is True:
             stats = FederalSausagelytics(election)
         elif election.id in [29]:
             # No data for the 2020 NT Election because COVID :(
             return HttpResponseNotFound()
-        elif election.short_name.startswith("FED ") == False:
-            stats = StateSausagelytics(election)
         else:
-            return HttpResponseNotFound()
+            stats = StateSausagelytics(election)
         return Response(stats.get_stats())
 
     @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))

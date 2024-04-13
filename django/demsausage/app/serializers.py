@@ -66,7 +66,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Elections
-        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded")
 
     # Prevents us from editing existing elections (e.g. When we were setting the new bounding boxes)
     # def validate_election_day(self, value):
@@ -80,7 +80,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
 
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded", "stats")
+        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "stats")
 
     def get_stats(self, obj):
         return {
@@ -228,7 +228,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "noms", "name", "premises", "ec_id")
+        fields = ("id", "noms", "name", "premises", "state", "ec_id")
 
     def get_properties(self, instance, fields):
         props = {"noms": None}
