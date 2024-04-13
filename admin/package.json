@@ -17,7 +17,7 @@
     "material-ui": "^0.20.2",
     "material-ui-responsive-drawer": "^1.19.4",
     "ol": "^9.1.0",
-    "qs": "^6.12.0",
+    "qs": "^6.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-google-maps": "^9.4.5",
