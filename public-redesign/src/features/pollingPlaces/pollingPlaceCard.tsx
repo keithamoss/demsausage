@@ -196,23 +196,25 @@ export default function PollingPlaceCard(props: Props) {
 								</ListItem>
 							)}
 
-							{pollingPlace.stall !== null && (
+							{pollingPlace.stall?.opening_hours !== '' && pollingPlace.stall !== null && (
 								<ListItem disableGutters>
 									<ListItemIcon>
 										<AccessTimeIcon />
 									</ListItemIcon>
 									{/* <ListItemText primary="Stall Open" secondary="From 8am" /> */}
-									<ListItemText primary="Stall Open" secondary={pollingPlace.stall?.opening_hours || 'Unknown'} />
+									<ListItemText primary="Stall Open" secondary={pollingPlace.stall?.opening_hours} />
 								</ListItem>
 							)}
 
-							<ListItem disableGutters>
-								<ListItemIcon>
-									<DirectionsIcon />
-								</ListItemIcon>
-								{/* <ListItemText primary="Entrance" secondary="Access via Aughtie Drive" /> */}
-								<ListItemText primary="Entrance" secondary={pollingPlace.entrance_desc} />
-							</ListItem>
+							{pollingPlace.entrance_desc !== '' && (
+								<ListItem disableGutters>
+									<ListItemIcon>
+										<DirectionsIcon />
+									</ListItemIcon>
+									{/* <ListItemText primary="Entrance" secondary="Access via Aughtie Drive" /> */}
+									<ListItemText primary="Entrance" secondary={pollingPlace.entrance_desc} />
+								</ListItem>
+							)}
 
 							<ListItem disableGutters>
 								<ListItemIcon>
