@@ -3,13 +3,15 @@ import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
 import { IPollingPlace } from './pollingPlacesInterfaces';
 
-export const getPollingPlacePermalink = (election: Election, pollingPlace: IPollingPlace) =>
-	encodeURI(
-		`/${election.name_url_safe}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${pollingPlace.state}/`.replace(
-			/\s/g,
-			'_',
-		),
-	);
+export const getPollingPlacePermalink = (election: Election, pollingPlace: IPollingPlace) => {
+	// Occasionally some elections will have no premises names on polling places
+	const uri =
+		pollingPlace.premises !== ''
+			? `/${election.name_url_safe}/polling_places/${pollingPlace.name}/${pollingPlace.premises}/${pollingPlace.state}/`
+			: `/${election.name_url_safe}/polling_places/${pollingPlace.name}/${pollingPlace.state}/`;
+
+	return encodeURI(uri.replace(/\s/g, '_'));
+};
 
 export enum PollingPlaceChanceOfSausage {
 	NO_IDEA = 0,

@@ -17,7 +17,8 @@ export const pollingPlacesApi = api.injectEndpoints({
 		}),
 		getPollingPlaceByUniqueDetailsLookup: builder.query<
 			IPollingPlace,
-			{ electionId: number; name: string; premises: string; state: string }
+			// Occasionally some elections will have no premises names on polling places
+			{ electionId: number; name: string; premises: string | undefined; state: string }
 		>({
 			query: ({ electionId, name, premises, state }) => ({
 				url: 'polling_places/lookup/',

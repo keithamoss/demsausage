@@ -39,6 +39,11 @@ export const router = sentryCreateBrowserRouter([
 						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <PollingPlaceCardDrawer />,
 					},
+					// Occasionally some elections will have no premises names on polling places
+					{
+						path: '/:election_name/polling_places/:polling_place_name/:polling_place_state/',
+						element: <PollingPlaceCardDrawer />,
+					},
 				],
 			},
 			{

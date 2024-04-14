@@ -45,11 +45,7 @@ function PollingPlaceCardDrawerEntrypoint() {
 		return null;
 	}
 
-	if (
-		params.polling_place_name === undefined ||
-		params.polling_place_premises === undefined ||
-		params.polling_place_state === undefined
-	) {
+	if (params.polling_place_name === undefined || params.polling_place_state === undefined) {
 		return null;
 	}
 
@@ -68,7 +64,8 @@ function PollingPlaceCardDrawerEntrypoint() {
 interface Props {
 	election: Election;
 	name: string;
-	premises: string;
+	// Occasionally some elections will have no premises names on polling places
+	premises: string | undefined;
 	state: string;
 	cameFromSearchDrawer: boolean;
 	showSearchResultsCardForDebug?: boolean;
