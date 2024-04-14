@@ -5,6 +5,39 @@ import { selectAllElections } from '../elections/electionsSlice';
 import PollingPlaceSearchResultsCard from '../map/searchBar/pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlaceCard from '../pollingPlaces/pollingPlaceCard';
 
+export const getPollingPlacePropsFromURL = (url: string) => {
+	if ((url.match(/\//g) || []).length === 5) {
+		const [
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			nowtOne,
+			electionName,
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			pollingPlaces,
+			pollinPlaceName,
+			pollingPlaceState,
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			nowtTwo,
+		] = url.split('/');
+
+		return { electionName, pollinPlaceName, pollingPlacePremises: undefined, pollingPlaceState };
+	}
+
+	const [
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		nowtOne,
+		electionName,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		pollingPlaces,
+		pollinPlaceName,
+		pollingPlacePremises,
+		pollingPlaceState,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		nowtTwo,
+	] = url.split('/');
+
+	return { electionName, pollinPlaceName, pollingPlacePremises, pollingPlaceState };
+};
+
 interface PropsPollingPlaceCardDebugViewLayer1 {
 	electionName: string;
 	name: string;

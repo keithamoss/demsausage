@@ -5,6 +5,7 @@ import { ListItemButtonLink } from '../../app/ui/link';
 import {
 	PollingPlaceCardDebugViewEntrypointLayer1,
 	PollingPlaceSearchResultsCardDebugViewEntrypointLayer1,
+	getPollingPlacePropsFromURL,
 } from './debugViewHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
@@ -78,18 +79,8 @@ export default function DebugView() {
 				]
 					.filter((item, index) => index >= 0)
 					.map((item, index) => {
-						const [
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							nowtOne,
-							electionName,
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							pollingPlaces,
-							pollinPlaceName,
-							pollingPlacePremises,
-							pollingPlaceState,
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							nowtTwo,
-						] = item.url.split('/');
+						const { electionName, pollinPlaceName, pollingPlacePremises, pollingPlaceState } =
+							getPollingPlacePropsFromURL(item.url);
 
 						return (
 							<React.Fragment key={index}>
@@ -117,9 +108,19 @@ export default function DebugView() {
 											state={pollingPlaceState}
 										/>
 									</Box>
+								</Stack>
 
+								<Stack direction="row" spacing={2} sx={{ marginBottom: 4 }}>
 									<iframe
-										src={`https://democracysausage.org${item.url}`}
+										src={`https://public.test.democracysausage.org${item.url}?debugViewShowMiniCard`}
+										scrolling="no"
+										loading="lazy"
+										width="390"
+										height="844"
+										style={{ border: '1px solid grey' }}
+									/>
+									<iframe
+										src={`https://public.test.democracysausage.org${item.url}`}
 										scrolling="no"
 										loading="lazy"
 										width="390"
