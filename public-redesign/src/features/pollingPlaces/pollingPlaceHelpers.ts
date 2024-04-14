@@ -153,3 +153,18 @@ export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) 
 		return '';
 	}
 };
+
+export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPlace) => {
+	switch (pollingPlace.divisions.length) {
+		case 0:
+			return '';
+		case 1:
+			return pollingPlace.divisions[0];
+		case 2:
+			return `${pollingPlace.divisions[0]} and ${pollingPlace.divisions[1]}`;
+		default: {
+			const lastDivision = pollingPlace.divisions.slice(-1)[0];
+			return `${pollingPlace.divisions.slice(0, -1).join(', ')}, and ${lastDivision}`;
+		}
+	}
+};

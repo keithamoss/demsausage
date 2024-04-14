@@ -33,6 +33,7 @@ import { isElectionLive } from '../elections/electionHelpers';
 import { NomsReader } from '../map/noms';
 import { getNomsIconsForPollingPlace } from '../map/searchBar/searchBarHelpers';
 import {
+	getPollingPlaceDivisionsDescriptiveText,
 	getPollingPlaceNomsDescriptiveText,
 	getSausageChancColourIndicator,
 	getSausageChanceDescription,
@@ -221,16 +222,18 @@ export default function PollingPlaceCard(props: Props) {
 								<ListItemText primary="Wheelchair Access" secondary={pollingPlace.wheelchair_access} />
 							</ListItem>
 
-							<ListItem disableGutters>
-								<ListItemIcon>
-									<CheckCircleOutlineIcon />
-								</ListItemIcon>
-								{/* <ListItemText primary="Division" secondary="Bentleigh District" /> */}
-								<ListItemText
-									primary={pollingPlace.divisions.length >= 1 ? 'Division' : 'Divison'}
-									secondary={pollingPlace.divisions.join(', ')}
-								/>
-							</ListItem>
+							{pollingPlace.divisions.length >= 1 && (
+								<ListItem disableGutters>
+									<ListItemIcon>
+										<CheckCircleOutlineIcon />
+									</ListItemIcon>
+									{/* <ListItemText primary="Division" secondary="Bentleigh District" /> */}
+									<ListItemText
+										primary={pollingPlace.divisions.length >= 2 ? 'Divisions' : 'Divison'}
+										secondary={getPollingPlaceDivisionsDescriptiveText(pollingPlace)}
+									/>
+								</ListItem>
+							)}
 						</List>
 					</CardContent>
 
