@@ -8,7 +8,6 @@ import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';
-import PollingPlaceSearchResultsCard from '../map/searchBar/pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlaceCard from './pollingPlaceCard';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
@@ -56,7 +55,6 @@ function PollingPlaceCardDrawerEntrypoint() {
 			premises={params.polling_place_premises}
 			state={params.polling_place_state}
 			cameFromSearchDrawer={cameFromSearchDrawer}
-			showSearchResultsCardForDebug={location.search.indexOf('showSearchResultsCardForDebug') !== -1}
 		/>
 	);
 }
@@ -68,11 +66,10 @@ interface Props {
 	premises: string | undefined;
 	state: string;
 	cameFromSearchDrawer: boolean;
-	showSearchResultsCardForDebug?: boolean;
 }
 
 function PollingPlaceCardDrawer(props: Props) {
-	const { election, name, premises, state, cameFromSearchDrawer, showSearchResultsCardForDebug } = props;
+	const { election, name, premises, state, cameFromSearchDrawer } = props;
 
 	const navigate = useNavigate();
 
@@ -111,11 +108,7 @@ function PollingPlaceCardDrawer(props: Props) {
 					</Alert>
 				)}
 
-				{showSearchResultsCardForDebug === true && isSuccess === true && pollingPlace !== undefined && (
-					<PollingPlaceSearchResultsCard pollingPlace={pollingPlace} />
-				)}
-
-				{showSearchResultsCardForDebug !== true && isSuccess === true && pollingPlace !== undefined && (
+				{isSuccess === true && pollingPlace !== undefined && (
 					<PollingPlaceCard pollingPlace={pollingPlace} election={election} onClose={toggleDrawer} />
 				)}
 			</StyledInteractableBoxFullHeight>
