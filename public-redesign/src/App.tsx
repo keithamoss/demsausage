@@ -4,8 +4,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import PublicIcon from '@mui/icons-material/Public';
 import { AppBar, Divider, Drawer, IconButton, List, Toolbar, Typography } from '@mui/material';
-import { Box, Container, styled } from '@mui/system';
-import { useState } from 'react';
+import { Box, styled } from '@mui/system';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import './App.css';
 import { ListItemButtonLink } from './app/ui/link';
@@ -32,45 +32,40 @@ export default function App() {
 	return (
 		<div className="App">
 			<AppBar
-				// position="static"
+				position="sticky"
 				sx={{
 					backgroundColor: mapaThemePrimaryPurple,
-					height: '46px',
 				}}
 			>
-				<Container maxWidth="xl">
-					<Toolbar disableGutters sx={{ minHeight: '46px' }}>
-						<IconButton
-							size="small"
-							edge="start"
-							color="inherit"
-							aria-label="menu"
-							sx={{ mr: 1, pointerEvents: 'all' }}
-							onClick={toggleDrawer(true)}
-						>
-							<MenuIcon />
-						</IconButton>
+				<Toolbar variant="dense">
+					<IconButton
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="menu"
+						sx={{ mr: 1 }}
+						onClick={toggleDrawer(true)}
+					>
+						<MenuIcon />
+					</IconButton>
 
-						<TitleLogo src="/icons/sausage+cake_big.png" />
+					<TitleLogo src="/icons/sausage+cake_big.png" />
 
-						<Typography
-							variant="h5"
-							noWrap
-							component="a"
-							href=""
-							sx={{
-								mr: 2,
-								display: { xs: 'flex', md: 'none' },
-								flexGrow: 1,
-								fontWeight: 500,
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							Democracy Sausage
-						</Typography>
-					</Toolbar>
-				</Container>
+					<Typography
+						variant="h5"
+						noWrap
+						component="a"
+						href="/"
+						sx={{
+							flexGrow: 1,
+							fontWeight: 500,
+							color: 'inherit',
+							textDecoration: 'none',
+						}}
+					>
+						Democracy Sausage
+					</Typography>
+				</Toolbar>
 			</AppBar>
 
 			<Outlet />

@@ -1,49 +1,32 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden;
-  }
-  
-  body {
-    min-height: 100dvh;
-  }
+html,
+body {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	overflow-y: hidden;
+}
 
-  /* hacky wip for map positioning, start again for the real thing */
-  /* mucked with the AppBar too - changed it from position="static" to fixed (i.e. commented it out) */
-  /* https://stackoverflow.com/questions/44908845/flexbox-header-centered-body-and-sticky-footer-overflow */
-  /* https://codepen.io/anon/pen/gRKOoz?editors=1100 */
- 
-  #root, #root > div {
-    min-height: 100dvh;
+body {
+	min-height: 100dvh;
+}
 
-  }
-  /* .header {
-    height: 60px;
-    line-height: 60px;
-    background: rgba(255, 0, 0, 0.5);
-  } */
+#root,
+#root > div {
+	min-height: 100dvh;
+}
 
-  .MuiPaper-root.MuiAppBar-positionStatic, .MuiPaper-root.MuiAppBar-positionFixed, #header {
-    position: relative;
+.content,
+#openlayers-map {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	/* background: rgba(0, 255, 0, 0.5); */
+}
 
-    /* position: absolute; */
-    width: 100%;
-    height: 46px;
-    /* background-color: orange; */
-  }
-  
-  .content, #openlayers-map {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* background: rgba(0, 255, 0, 0.5); */
-  }
-  
-  /* .openlayers-map-container {
+/* .openlayers-map-container {
     position: relative;
     flex-grow: 1;
     flex-basis: 0;
@@ -51,25 +34,25 @@ html, body {
 } */
 
 .openlayers-map {
-    /* width: 100%;
+	/* width: 100%;
     height: 100%; */
-    position: absolute;
-    width: 100%;
-    /* height: calc(100vh - 175px - 112px); */
-    /* Use this if we're using the SwipeableDrawer... */
-    /* height: calc(100vh - 175px); */
-    /* ...or use this if we're using the current layout */
-    /* height: 100%; */
-    height: calc(100% - 46px);
-    z-index: 1040;
+	position: absolute;
+	width: 100%;
+	/* height: calc(100vh - 175px - 112px); */
+	/* Use this if we're using the SwipeableDrawer... */
+	/* height: calc(100vh - 175px); */
+	/* ...or use this if we're using the current layout */
+	/* height: 100%; */
+	height: calc(100% - 46px);
+	z-index: 1040;
 
-    /* width: 100%;
+	/* width: 100%;
     height: 150px; */
 }
 
 .ol-attribution {
-    /* left: 0 !important;
+	/* left: 0 !important;
     right: auto !important; */
-    /* border-radius: 0 4px 0 0 !important; */
-    opacity: 0.7;
-} 
+	/* border-radius: 0 4px 0 0 !important; */
+	opacity: 0.7;
+}
