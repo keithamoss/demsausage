@@ -16,13 +16,14 @@ import {
 	Paper,
 	debounce,
 } from '@mui/material';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import Geolocation from 'ol/Geolocation';
 import { unByKey } from 'ol/Observable';
 import { EventsKey } from 'ol/events';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
+import { useUnmount } from '../../../app/hooks/useUnmount';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
@@ -30,6 +31,7 @@ import {
 	selectIsMapFiltered,
 	selectNumberOfMapFilterOptionsApplied,
 	selectSearchBarInitialMode,
+	setSearchBarInitialMode,
 	setSearchBarSearchLonLat,
 	setSearchBarSearchText,
 } from '../../app/appSlice';
@@ -71,7 +73,6 @@ export default function SearchBar(props: Props) {
 	// just need to handle setting the search term based on what's in
 	// the URL of the page.
 	if (isUserTyping === false && localSearchTerm !== urlSearchTerm) {
-		// console.log('Set localSearchTerm to', urlSearchTerm);
 		setLocalSearchTerm(urlSearchTerm);
 	}
 
@@ -132,8 +133,20 @@ export default function SearchBar(props: Props) {
 			isWaitingForGPSLocation === false &&
 			isGeolocationErrored === false
 		) {
-			// console.log('> Focus hack');
 			searchFieldRef.current.focus();
+		}
+	}, 50);
+
+	// Handles unfocussing the search field if the user
+	// is going back and forward between a GPS location
+	// search and the naked search bar.
+	window.setTimeout(() => {
+		if (
+			autoFocusSearchField === false &&
+			searchFieldRef.current !== null &&
+			document.activeElement === searchFieldRef.current
+		) {
+			searchFieldRef.current.blur();
 		}
 	}, 50);
 
@@ -166,15 +179,21 @@ export default function SearchBar(props: Props) {
 		}),
 	);
 
+	useUnmount(() => {
+		if (geolocationEventKeys.current.length >= 1) {
+			unByKey(geolocationEventKeys.current);
+			geolocationEventKeys.current = [];
+		}
+	});
+
 	useEffect(() => {
-		// Init geolocation event listeners only once component load
+		// Init geolocation event listeners only once on component load
 		if (geolocationEventKeys.current.length === 0) {
 			geolocationEventKeys.current = [
-				geolocation.current.once('change:position', () => {
+				geolocation.current.on('change:position', () => {
 					const currentPosition = geolocation.current.getPosition();
 
 					geolocation.current.setTracking(false);
-					unByKey(geolocationEventKeys.current);
 					setIsWaitingForGPSLocation(false);
 
 					if (currentPosition !== undefined) {
@@ -198,7 +217,6 @@ export default function SearchBar(props: Props) {
 
 				geolocation.current.on('error', function (evt) {
 					geolocation.current.setTracking(false);
-					unByKey(geolocationEventKeys.current);
 					setIsWaitingForGPSLocation(false);
 
 					setIsGeolocationErrored(true);
@@ -232,7 +250,17 @@ export default function SearchBar(props: Props) {
 		}
 	}, [navigate, urlElectionName]);
 
-	const onClickGPSControl = () => {
+	const onDiscardGPSSearch = useCallback(() => {
+		geolocation.current.setTracking(false);
+		setIsWaitingForGPSLocation(false);
+
+		setIsGeolocationErrored(false);
+		setGeolocationErrorMessage(undefined);
+
+		navigate(`/${urlElectionName}/search/`);
+	}, [navigate, urlElectionName]);
+
+	const onClickGPSControl = useCallback(() => {
 		// If we haven't got a GPS location, clicking the contol ask for one.
 		if (urlLonLatFromGPS === '') {
 			if (geolocation.current.getTracking() === false) {
@@ -245,8 +273,6 @@ export default function SearchBar(props: Props) {
 				geolocation.current.setTracking(true);
 				setIsWaitingForGPSLocation(true);
 
-				geolocationEventKeys.current = [];
-
 				setIsGeolocationErrored(false);
 				setGeolocationErrorMessage(undefined);
 			}
@@ -254,17 +280,26 @@ export default function SearchBar(props: Props) {
 			// If we have a GPS location, clicking the control discards it.
 			onDiscardGPSSearch();
 		}
-	};
+	}, [onDiscardGPSSearch, urlLonLatFromGPS]);
 
-	const onDiscardGPSSearch = () => {
-		geolocation.current.setTracking(false);
-		setIsWaitingForGPSLocation(false);
+	// Let the user come in from the map, click the GPS control there,
+	// and have it initiate a request for their location
+	useEffect(() => {
+		if (
+			searchBarInitialMode === ESearchDrawerSubComponent.REQUEST_LOCATION &&
+			urlLonLatFromGPS === '' &&
+			isWaitingForGPSLocation === false &&
+			geolocation.current.getTracking() === false
+		) {
+			onClickGPSControl();
 
-		setIsGeolocationErrored(false);
-		setGeolocationErrorMessage(undefined);
-
-		navigate(`/${urlElectionName}/search/`);
-	};
+			// Once we've init'd once, set it back to the default of the search field.
+			// If we don't, when the user clicks the GPS control from the map, we get
+			// a result, and then if we discard the GPS result or go back, then this
+			// code here would all run again and re-trigger a GPS location request.
+			dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+		}
+	}, [dispatch, isWaitingForGPSLocation, onClickGPSControl, searchBarInitialMode, urlLonLatFromGPS]);
 	// ######################
 	// GPS Control (End)
 	// ######################
