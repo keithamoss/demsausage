@@ -46,6 +46,7 @@ export default defineConfig(({ command, mode }) => {
 		// as that was part of the original solution.
 		optimizeDeps: {
 			include: [
+				'@mui/material/Tooltip',
 				'@mui/icons-material',
 				// '@mui/material',
 				// '@mui/system',

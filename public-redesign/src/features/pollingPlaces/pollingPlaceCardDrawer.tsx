@@ -10,6 +10,7 @@ import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';
 import PollingPlaceCard from './pollingPlaceCard';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	// backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	overflowY: 'auto',
@@ -81,10 +82,16 @@ function PollingPlaceCardDrawer(props: Props) {
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
 	const toggleDrawer = () => {
+		// If we've arrived here by searching in the UI, we know we can just
+		// go back and we'll remain within the search drawer interface.
+		// In most cases, this should send them back to the list of
+		// polling place search results for them to choose a different place from,
 		if (cameFromSearchDrawer === true) {
 			navigate(-1);
 		} else {
-			navigate(`/${election.name_url_safe}/`);
+			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
+			// be sure where we'll end up, so best just to send the user back to start a brand new search.
+			navigate(`/${election.name_url_safe}/search/`);
 		}
 	};
 

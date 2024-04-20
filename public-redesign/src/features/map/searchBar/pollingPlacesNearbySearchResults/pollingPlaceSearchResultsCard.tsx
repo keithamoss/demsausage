@@ -24,6 +24,10 @@ const FlexboxIcons = styled('div')(() => ({
 	},
 }));
 
+const StyledCard = styled(Card)(() => ({
+	cursor: 'pointer',
+}));
+
 const StyledCardContent = styled(CardContent)(() => ({
 	paddingBottom: 0,
 }));
@@ -50,7 +54,7 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 
 	return (
 		<React.Fragment>
-			<Card variant="outlined" onClick={onClickPollingPlace(pollingPlace)}>
+			<StyledCard variant="outlined" onClick={onClickPollingPlace(pollingPlace)}>
 				<StyledCardContent>
 					{pollingPlace.stall !== null && (
 						<FlexboxIcons>
@@ -94,7 +98,7 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						Learn More
 					</Button>
 				</StyledCardActions>
-			</Card>
+			</StyledCard>
 		</React.Fragment>
 	);
 }

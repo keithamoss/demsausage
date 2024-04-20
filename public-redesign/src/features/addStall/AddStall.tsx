@@ -187,8 +187,8 @@ export default function AddStall(props: Props) {
 				// onSearch={() => {}}
 				// filterOpen={false}
 				election={{} as Election}
-				onToggleFilter={() => {}}
-				onClick={() => () => {}}
+				// onToggleFilter={() => {}}
+				// onClick={() => () => {}}
 				// isMapFiltered={false}
 				enableFiltering={false}
 				// styleProps={{}}

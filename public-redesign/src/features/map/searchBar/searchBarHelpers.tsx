@@ -128,3 +128,13 @@ export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace) => {
 		);
 	}
 };
+
+// "115,-32" => {lon: 115, lat: -32}
+export const getLonLatFromString = (lonlat: string) => {
+	if (lonlat === '') {
+		return { lon: 0, lat: 0 };
+	}
+
+	const [lon, lat] = lonlat.split(',');
+	return { lon: parseFloat(lon), lat: parseFloat(lat) };
+};

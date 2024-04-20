@@ -36,6 +36,18 @@ export const router = sentryCreateBrowserRouter([
 						element: <SearchDrawer />,
 					},
 					{
+						path: '/:election_name/search/location/:search_term/',
+						element: <SearchDrawer />,
+					},
+					{
+						path: '/:election_name/search/location/:search_term/:lon_lat/',
+						element: <SearchDrawer />,
+					},
+					{
+						path: '/:election_name/search/gps/:gps_lon_lat/',
+						element: <SearchDrawer />,
+					},
+					{
 						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <PollingPlaceCardDrawer />,
 					},

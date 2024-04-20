@@ -9,7 +9,14 @@ export const getIntegerParamOrUndefined = (params: Params<string>, paramName: st
 
 export const getStringParamOrUndefined = (params: Params<string>, paramName: string) => {
 	if (params[paramName]?.match(/^.+$/) !== null) {
-		return params[paramName] ?? '';
+		return params[paramName] ?? undefined;
 	}
 	return undefined;
+};
+
+export const getStringParamOrEmptyString = (params: Params<string>, paramName: string) => {
+	if (params[paramName]?.match(/^.+$/) !== null) {
+		return params[paramName] ?? '';
+	}
+	return '';
 };

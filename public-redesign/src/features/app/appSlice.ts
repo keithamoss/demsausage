@@ -3,16 +3,14 @@ import { values } from 'lodash-es';
 import { RootState } from '../../app/store';
 import { IMapFilterOptions } from '../icons/noms';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/map_stuff';
-import { IMapboxGeocodingAPIResponse } from '../map/searchBar/searchBarHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterOptions: IMapFilterOptions;
-	searchDrawer: {
+	searchBar: {
 		initialMode: ESearchDrawerSubComponent;
 		searchText: string;
-		mapboxResults: IMapboxGeocodingAPIResponse | null | undefined;
-		pollingPlaceNearbyResults: IPollingPlace[] | null | undefined;
+		lonLat: string;
 	};
 	pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection | undefined;
 	mapFeatures: IPollingPlace | null | undefined;
@@ -26,11 +24,10 @@ export enum ESearchDrawerSubComponent {
 
 const initialState: AppState = {
 	mapFilterOptions: {},
-	searchDrawer: {
+	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
 		searchText: '',
-		mapboxResults: undefined,
-		pollingPlaceNearbyResults: undefined,
+		lonLat: '',
 	},
 	pollingPlaces: undefined,
 	mapFeatures: undefined,
@@ -72,17 +69,14 @@ export const appSlice = createSlice({
 		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
 			state.mapFilterOptions = action.payload;
 		},
-		setSearchDrawerInitialMode: (state, action: PayloadAction<ESearchDrawerSubComponent>) => {
-			state.searchDrawer.initialMode = action.payload;
+		setSearchBarInitialMode: (state, action: PayloadAction<ESearchDrawerSubComponent>) => {
+			state.searchBar.initialMode = action.payload;
 		},
-		setSearchDrawerSearchText: (state, action: PayloadAction<string>) => {
-			state.searchDrawer.searchText = action.payload;
+		setSearchBarSearchText: (state, action: PayloadAction<string>) => {
+			state.searchBar.searchText = action.payload;
 		},
-		setSearchDrawerMapboxResults: (state, action: PayloadAction<IMapboxGeocodingAPIResponse | null | undefined>) => {
-			state.searchDrawer.mapboxResults = action.payload;
-		},
-		setSearchDrawerPollingPlaceNearbyResults: (state, action: PayloadAction<IPollingPlace[] | null | undefined>) => {
-			state.searchDrawer.pollingPlaceNearbyResults = action.payload;
+		setSearchBarSearchLonLat: (state, action: PayloadAction<string>) => {
+			state.searchBar.lonLat = action.payload;
 		},
 		setPollingPlaces: (state, action: PayloadAction<IMapPollingPlaceGeoJSONFeatureCollection | undefined>) => {
 			state.pollingPlaces = action.payload;
@@ -110,10 +104,9 @@ export const appSlice = createSlice({
 
 export const {
 	setMapFilterOptions,
-	setSearchDrawerInitialMode,
-	setSearchDrawerSearchText,
-	setSearchDrawerMapboxResults,
-	setSearchDrawerPollingPlaceNearbyResults,
+	setSearchBarInitialMode,
+	setSearchBarSearchText,
+	setSearchBarSearchLonLat,
 	setPollingPlaces,
 } = appSlice.actions;
 
@@ -159,7 +152,11 @@ export const selectNumberOfMapFilterOptionsApplied = createSelector(
 	(mapFilterOptions) => values(mapFilterOptions).filter((option) => option === true).length,
 );
 
-export const selectSearchDrawerState = (state: RootState) => state.app.searchDrawer;
+export const selectSearchBarInitialMode = (state: RootState) => state.app.searchBar.initialMode;
+
+export const selectSearchBarSearchText = (state: RootState) => state.app.searchBar.searchText;
+
+export const selectSearcBarSearchLonLat = (state: RootState) => state.app.searchBar.lonLat;
 
 export const selectPollingPlaces = (state: RootState) => state.app.pollingPlaces;
 export default appSlice.reducer;

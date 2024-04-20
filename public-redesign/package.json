@@ -42,7 +42,7 @@
     "@types/autosuggest-highlight": "^3.2.0",
     "@types/jest": "^29.5.5",
     "@types/js-cookie": "^3.0.4",
-    "@types/lodash-es": "^4.17.9",
+    "@types/lodash-es": "^4",
     "@types/luxon": "^3.3.2",
     "@types/node": "^20.8.4",
     "@types/react": "^18.2.27",

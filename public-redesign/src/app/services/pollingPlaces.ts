@@ -9,10 +9,10 @@ export { initialState as initialPollingPlacesState };
 
 export const pollingPlacesApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getPollingPlaceByLatLonLookup: builder.query<IPollingPlace[], { electionId: number; lonlat: [number, number] }>({
-			query: ({ electionId, lonlat }) => ({
+		getPollingPlaceByLatLonLookup: builder.query<IPollingPlace[], { electionId: number; lon: number; lat: number }>({
+			query: ({ electionId, lon, lat }) => ({
 				url: 'polling_places/nearby/',
-				params: { election_id: electionId, lonlat },
+				params: { election_id: electionId, lonlat: `${lon},${lat}` },
 			}),
 		}),
 		getPollingPlaceByUniqueDetailsLookup: builder.query<
@@ -28,5 +28,4 @@ export const pollingPlacesApi = api.injectEndpoints({
 	}),
 });
 
-export const { useLazyGetPollingPlaceByLatLonLookupQuery, useGetPollingPlaceByUniqueDetailsLookupQuery } =
-	pollingPlacesApi;
+export const { useGetPollingPlaceByLatLonLookupQuery, useGetPollingPlaceByUniqueDetailsLookupQuery } = pollingPlacesApi;
