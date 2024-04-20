@@ -33,7 +33,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import * as React from 'react';
 import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
-import SearchBar from '../map/searchBar/searchBar';
+import SearchComponent from '../map/searchBar/searchComponent';
 
 const bottomNav = 56;
 
@@ -180,7 +180,7 @@ export default function AddStall(props: Props) {
 		<React.Fragment>
 			<Typography>Foobar foobar foobar</Typography>
 			<br />
-			<SearchBar
+			<SearchComponent
 				//   onSearch={toggleUserHasSearched}
 				//   filterOpen={filterOpen}
 				// onToggleFilter={toggleFilter}

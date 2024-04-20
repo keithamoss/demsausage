@@ -13,16 +13,10 @@ import {
 	InputAdornment,
 	InputBase,
 	LinearProgress,
-	List,
-	ListItem,
-	ListItemText,
 	Paper,
 	debounce,
 } from '@mui/material';
-import { skipToken } from '@reduxjs/toolkit/query';
 import * as Sentry from '@sentry/browser';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
 import Geolocation from 'ol/Geolocation';
 import { unByKey } from 'ol/Observable';
 import { EventsKey } from 'ol/events';
@@ -30,50 +24,30 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
-import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
-import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
 	ESearchDrawerSubComponent,
 	selectIsMapFiltered,
-	selectMapFilterOptions,
 	selectNumberOfMapFilterOptionsApplied,
 	selectSearchBarInitialMode,
 	setSearchBarSearchLonLat,
 	setSearchBarSearchText,
 } from '../../app/appSlice';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
-import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
-import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
 import './searchBar.css';
 import SearchBarFilter from './searchBarFilter/searchBarFilter';
-import {
-	EMapboxPlaceType,
-	IMapboxGeocodingAPIResponseFeature,
-	defaultMapboxSearchTypes,
-	getLonLatFromString,
-	getMapboxAPIKey,
-	getMapboxSearchParamsForElection,
-	isSearchingYet,
-} from './searchBarHelpers';
+import { isSearchingYet } from './searchBarHelpers';
 
 interface Props {
-	election: Election;
 	autoFocusSearchField?: boolean;
-	mapboxSearchTypes?: EMapboxPlaceType[];
 	enableFiltering?: boolean;
-	onChoosePollingPlace?: (pollingPlace: IPollingPlace) => void;
+	isFetching: boolean;
 }
 
 export default function SearchBar(props: Props) {
-	const { election, autoFocusSearchField, mapboxSearchTypes, enableFiltering, onChoosePollingPlace } = {
+	const { autoFocusSearchField, enableFiltering, isFetching } = {
 		...{
 			autoFocusSearchField: false,
 			enableFiltering: true,
-			// We allow the types to be overridden so we can further constrain the types e.g. When we're using it to let people add stalls when there are no official polling places available yet.
-			mapboxSearchTypes: defaultMapboxSearchTypes,
 		},
 		...props,
 	};
@@ -114,61 +88,8 @@ export default function SearchBar(props: Props) {
 	// @TODO Why does this exist again and is this really the best name for it?
 	const searchBarInitialMode = useAppSelector((state) => selectSearchBarInitialMode(state));
 
-	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
 	const numberOfMapFilterOptionsApplied = useAppSelector(selectNumberOfMapFilterOptionsApplied);
-
-	// ######################
-	// Mapbox Search Query
-	// ######################
-	// Move or doco some of this to mapbox.ts or a Mapbox utils file?
-	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${urlSearchTerm}.json?limit=10&proximity=ip&types=${mapboxSearchTypes.join(
-		'%2C',
-	)}&access_token=${getMapboxAPIKey()}&${getMapboxSearchParamsForElection(election)}`;
-	const {
-		data: mapboxSearchResults,
-		error: errorFetchingMapboxResults,
-		isFetching: isFetchingMapboxResults,
-		isSuccess: isSuccessFetchingMapboxResults,
-	} = useFetchMapboxGeocodingResultsQuery(
-		isSearchingYet(urlSearchTerm) === true && urlLonLat === '' ? { url } : skipToken,
-	);
-
-	const onChoose = (feature: IMapboxGeocodingAPIResponseFeature) => () => {
-		console.log('onChoose', feature);
-
-		navigate(`/${urlElectionName}/search/location/${feature.place_name}/${feature.geometry.coordinates.join(',')}/`, {
-			state: { cameFromSearchDrawer: true },
-		});
-	};
-	// ######################
-	// Mapbox Search Query (End)
-	// ######################
-
-	// ######################
-	// Polling Place Search Query
-	// ######################
-	const {
-		data: pollingPlaceNearbyResults,
-		error: errorFetchingNearbyPollingPlaces,
-		isFetching: isFetchingNearbyPollingPlaces,
-		isSuccess: isSuccessFetchingNearbyPollingPlaces,
-	} = useGetPollingPlaceByLatLonLookupQuery(
-		urlLonLat !== '' ? { electionId: election.id, ...getLonLatFromString(urlLonLat) } : skipToken,
-	);
-
-	const pollingPlaceNearbyResultsFiltered =
-		isFetchingNearbyPollingPlaces === false &&
-		isSuccessFetchingNearbyPollingPlaces === true &&
-		pollingPlaceNearbyResults !== undefined &&
-		pollingPlaceNearbyResults.length > 0
-			? pollingPlaceNearbyResults.filter(
-					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterOptions) === true,
-			  )
-			: undefined;
-	// ######################
-	// Polling Place Search Query (End)
-	// ######################
 
 	// ######################
 	// Search Field
@@ -362,6 +283,7 @@ export default function SearchBar(props: Props) {
 
 	return (
 		<React.Fragment>
+			{/* NOTE: Any changes to the <Paper> SearchBar component here need to be refleced in <SearchBarCosmeticNonFunctional > as well. We keep these separate to avoid over-complicating an already pretty complex component. */}
 			<Paper
 				sx={{
 					...{
@@ -433,9 +355,7 @@ export default function SearchBar(props: Props) {
 				)}
 			</Paper>
 
-			{(isWaitingForGPSLocation === true ||
-				isFetchingNearbyPollingPlaces === true ||
-				isFetchingMapboxResults === true) && <LinearProgress color="secondary" />}
+			{(isWaitingForGPSLocation === true || isFetching === true) && <LinearProgress color="secondary" />}
 
 			{enableFiltering === true && filterOpen === true && <SearchBarFilter />}
 
@@ -445,89 +365,6 @@ export default function SearchBar(props: Props) {
 					{geolocationErrorMessage}
 				</Alert>
 			)}
-
-			{/* Handles not found and all other types of error */}
-			{errorFetchingNearbyPollingPlaces !== undefined && (
-				<Alert severity="error">
-					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-					Something went awry when we tried to load this polling place.
-				</Alert>
-			)}
-
-			{/* Handles not found and all other types of error */}
-			{errorFetchingMapboxResults !== undefined && (
-				<Alert severity="error">
-					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-					Something went awry when we tried to search for that place.
-				</Alert>
-			)}
-
-			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<PollingPlacesNearbySearchResultsContainer numberOfResults={pollingPlaceNearbyResultsFiltered.length}>
-					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
-						<PollingPlaceSearchResultsCard
-							key={pollingPlace.id}
-							pollingPlace={pollingPlace}
-							onChoosePollingPlace={onChoosePollingPlace || undefined}
-						/>
-					))}
-				</PollingPlacesNearbySearchResultsContainer>
-			)}
-
-			{isFetchingMapboxResults === false &&
-				isSuccessFetchingMapboxResults === true &&
-				mapboxSearchResults !== undefined &&
-				urlLonLat === '' && (
-					<List>
-						{mapboxSearchResults === null && (
-							<ListItem>
-								<ListItemText primary="An error occurred"></ListItemText>
-							</ListItem>
-						)}
-
-						{typeof mapboxSearchResults === 'object' &&
-							mapboxSearchResults !== null &&
-							mapboxSearchResults.features.length === 0 && (
-								<ListItem>
-									<ListItemText primary="No results found"></ListItemText>
-								</ListItem>
-							)}
-
-						{isSearchingYet(localSearchTerm) === true &&
-							typeof mapboxSearchResults === 'object' &&
-							mapboxSearchResults !== null &&
-							mapboxSearchResults.features.length > 0 &&
-							mapboxSearchResults.features.map((feature) => {
-								const [place_name_first_part, ...place_name_rest] = feature.place_name.split(', ');
-								const matches = match(place_name_first_part, localSearchTerm, {
-									insideWords: true,
-								});
-								const parts = parse(place_name_first_part, matches);
-
-								return (
-									<ListItem key={feature.id} onClick={onChoose(feature)} sx={{ cursor: 'pointer' }}>
-										<ListItemText
-											primary={
-												<span>
-													{parts.map((part, index) => (
-														<span
-															key={index}
-															style={{
-																fontWeight: part.highlight ? 700 : 400,
-															}}
-														>
-															{part.text}
-														</span>
-													))}
-												</span>
-											}
-											secondary={place_name_rest.join(', ')}
-										></ListItemText>
-									</ListItem>
-								);
-							})}
-					</List>
-				)}
 		</React.Fragment>
 	);
 }

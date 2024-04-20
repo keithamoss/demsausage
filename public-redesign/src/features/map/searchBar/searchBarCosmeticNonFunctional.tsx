@@ -54,7 +54,6 @@ export default function SearchBarCosmeticNonFunctional(props: Props) {
 	// ######################
 	// Search Field
 	// ######################
-	// @TODO For the cosmetic version only
 	const onClickSearchField = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawer();

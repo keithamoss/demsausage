@@ -9,7 +9,7 @@ import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../ap
 import { ESearchDrawerSubComponent, selectSearchBarInitialMode } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import SearchBar from '../map/searchBar/searchBar';
+import SearchComponent from '../map/searchBar/searchComponent';
 import { getPollingPlacePermalink } from '../pollingPlaces/pollingPlaceHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
@@ -82,7 +82,7 @@ function SearchDrawer(props: Props) {
 			>
 				<StyledBox>
 					<StyledInteractableBoxFullHeight>
-						<SearchBar
+						<SearchComponent
 							election={election}
 							autoFocusSearchField={
 								searchBarInitialMode === ESearchDrawerSubComponent.SEARCH_FIELD && urlLonLatFromGPS === ''
