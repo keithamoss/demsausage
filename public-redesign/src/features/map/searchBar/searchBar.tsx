@@ -7,6 +7,7 @@ import {
 	Alert,
 	AlertTitle,
 	Badge,
+	Box,
 	Chip,
 	Divider,
 	IconButton,
@@ -317,7 +318,7 @@ export default function SearchBar(props: Props) {
 	// ######################
 
 	return (
-		<React.Fragment>
+		<Box sx={{ mb: 2 }}>
 			{/* NOTE: Any changes to the <Paper> SearchBar component here need to be refleced in <SearchBarCosmeticNonFunctional > as well. We keep these separate to avoid over-complicating an already pretty complex component. */}
 			<Paper
 				sx={{
@@ -400,6 +401,6 @@ export default function SearchBar(props: Props) {
 					{geolocationErrorMessage}
 				</Alert>
 			)}
-		</React.Fragment>
+		</Box>
 	);
 }

@@ -102,7 +102,7 @@ export default function SearchComponent(props: Props) {
 		isFetchingNearbyPollingPlaces === false &&
 		isSuccessFetchingNearbyPollingPlaces === true &&
 		pollingPlaceNearbyResults !== undefined &&
-		pollingPlaceNearbyResults.length > 0
+		pollingPlaceNearbyResults.length >= 0
 			? pollingPlaceNearbyResults.filter(
 					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterOptions) === true,
 			  )
@@ -136,34 +136,11 @@ export default function SearchComponent(props: Props) {
 			/>
 
 			{/* Handles not found and all other types of error */}
-			{errorFetchingNearbyPollingPlaces !== undefined && (
-				<Alert severity="error">
-					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-					Something went awry when we tried to load this polling place.
-				</Alert>
-			)}
-
-			{/* Handles not found and all other types of error */}
 			{errorFetchingMapboxResults !== undefined && (
 				<Alert severity="error">
 					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
 					Something went awry when we tried to search for that place.
 				</Alert>
-			)}
-
-			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<PollingPlacesNearbySearchResultsContainer
-					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
-					onViewOnMap={onViewOnMap}
-				>
-					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
-						<PollingPlaceSearchResultsCard
-							key={pollingPlace.id}
-							pollingPlace={pollingPlace}
-							onChoosePollingPlace={onChoosePollingPlace || undefined}
-						/>
-					))}
-				</PollingPlacesNearbySearchResultsContainer>
 			)}
 
 			{isFetchingMapboxResults === false &&
@@ -220,6 +197,29 @@ export default function SearchComponent(props: Props) {
 							})}
 					</List>
 				)}
+
+			{/* Handles not found and all other types of error */}
+			{errorFetchingNearbyPollingPlaces !== undefined && (
+				<Alert severity="error">
+					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
+					Something went awry when we tried to load your list of polling places.
+				</Alert>
+			)}
+
+			{pollingPlaceNearbyResultsFiltered !== undefined && (
+				<PollingPlacesNearbySearchResultsContainer
+					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+					onViewOnMap={onViewOnMap}
+				>
+					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
+						<PollingPlaceSearchResultsCard
+							key={pollingPlace.id}
+							pollingPlace={pollingPlace}
+							onChoosePollingPlace={onChoosePollingPlace || undefined}
+						/>
+					))}
+				</PollingPlacesNearbySearchResultsContainer>
+			)}
 		</React.Fragment>
 	);
 }

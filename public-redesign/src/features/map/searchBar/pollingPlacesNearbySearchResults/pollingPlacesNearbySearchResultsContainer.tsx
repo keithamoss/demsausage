@@ -1,5 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MapIcon from '@mui/icons-material/Map';
+import { Alert, AlertTitle } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -79,6 +80,14 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 					back
 				</Button>
 			</Box>
+
+			{/* Handles not found and all other types of error */}
+			{numberOfResults === 0 && (
+				<Alert severity="info">
+					<AlertTitle>No results found</AlertTitle>
+					Sorry, we didn&lsquo;t find any polling places 😢
+				</Alert>
+			)}
 
 			<Stack spacing={1}>{children}</Stack>
 		</Box>
