@@ -50,6 +50,7 @@ interface IProps {
 	election: Election;
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
+	bbox?: [number, number, number, number];
 	mapFilterOptions: IMapFilterOptions;
 	onMapBeginLoading: Function;
 	onMapDataLoaded: Function;
@@ -126,6 +127,16 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				this.clearMapDataVectorLayer(this.map);
 				this.map.addLayer(this.getMapDataVectorLayer(this.map));
 				this.fitMapViewToElection(this.props.election);
+			}
+
+			if (prevProps.bbox !== this.props.bbox) {
+				// The user has performed a search by location
+				const { bbox } = this.props;
+
+				// Zoom the user down to the bounding box of the polling places that are near their search area
+				if (bbox !== undefined) {
+					this.zoomMapToBBox(this.map);
+				}
 			}
 
 			if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
@@ -224,7 +235,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private onVectorSourceChanged(event: BaseEvent) {
-		const { /*geojson, */ mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props;
+		const { /*geojson, */ mapSearchResults, bbox, onMapDataLoaded, onMapLoaded } = this.props;
 		const vectorSource = event.target as VectorSource<Geometry>;
 
 		if (vectorSource.getState() === 'ready') {
@@ -245,7 +256,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					if (this.map !== null) {
 						onMapLoaded();
 
-						if (mapSearchResults !== null) {
+						if (bbox !== undefined) {
+							this.zoomMapToBBox(this.map);
+						} else if (mapSearchResults !== null) {
 							this.zoomMapToSearchResults(this.map);
 						} else {
 							this.workaroundOLRenderingBug(this.map.getView());
@@ -415,6 +428,27 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				}),
 			}),
 		];
+	}
+
+	private zoomMapToBBox(map: Map) {
+		const { bbox } = this.props;
+
+		if (bbox !== undefined) {
+			const view = map.getView();
+
+			if (bbox !== null) {
+				view.fit(transformExtent(bbox, 'EPSG:4326', 'EPSG:3857'), {
+					size: map.getSize(),
+					// @TODO There's a whole bunch of things here to consider implementing again
+					// if not undefined, assume embedded mode and have no animation
+					// duration: mapSearchResults.animation !== undefined ? 0 : 750,
+					// top, right, bottom, left
+					// if not undefined, assume embedded mode and only set padding of 50 bottom
+					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
+					padding: [85, 0, 20, 0],
+				});
+			}
+		}
 	}
 
 	private zoomMapToSearchResults(map: Map) {

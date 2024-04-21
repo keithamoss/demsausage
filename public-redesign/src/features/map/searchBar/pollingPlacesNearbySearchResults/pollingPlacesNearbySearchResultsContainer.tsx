@@ -1,4 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MapIcon from '@mui/icons-material/Map';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -12,11 +13,12 @@ interface LocationState {
 
 interface Props {
 	numberOfResults: number;
+	onViewOnMap: () => void;
 	children: JSX.Element[];
 }
 
 export default function PollingPlacesNearbySearchResultsContainer(props: Props) {
-	const { numberOfResults, children } = props;
+	const { numberOfResults, onViewOnMap, children } = props;
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -60,6 +62,10 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 					disabled={true}
 				>
 					{numberOfResults} result{numberOfResults === 0 || numberOfResults > 1 ? 's' : ''} nearby
+				</Button>
+
+				<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="contained">
+					view on map
 				</Button>
 
 				<Button

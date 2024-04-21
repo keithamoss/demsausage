@@ -338,10 +338,12 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         if lonlat is None or lonlat == "":
             raise BadRequest("No lonlat provided.")
 
-        polling_places_filter = LonLatFilter().filter(PollingPlaces.objects.filter(election_id=election_id).filter(status=PollingPlaceStatus.ACTIVE), lonlat)
+        polling_places_filter = LonLatFilter().filter(get_active_polling_place_queryset().filter(election_id=election_id), lonlat)
         extent = polling_places_filter.annotate(geom_as_geometry=Func("geom", template="geom::geometry")).aggregate(Extent("geom_as_geometry"))
 
-        return Response({"extent_wgs84": extent["geom_as_geometry__extent"]})
+        pollingPlaceSerializer = PollingPlaceSearchResultsSerializer(polling_places_filter, many=True)
+
+        return Response({"extent_wgs84": extent["geom_as_geometry__extent"], "polling_places": pollingPlaceSerializer.data})
 
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
@@ -681,6 +683,7 @@ class MailManagementViewSet(viewsets.ViewSet):
             "event_type": event_type,
             "payload": event_data,
         })
+
         if serializer.is_valid() is True:
             serializer.save()
             return Response({"status": "OK"})

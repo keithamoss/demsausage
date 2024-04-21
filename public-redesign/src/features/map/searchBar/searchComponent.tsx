@@ -19,6 +19,7 @@ import {
 	EMapboxPlaceType,
 	IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
+	getBBoxFromPollingPlaces,
 	getLonLatFromString,
 	getMapboxAPIKey,
 	getMapboxSearchParamsForElection,
@@ -110,6 +111,22 @@ export default function SearchComponent(props: Props) {
 	// Polling Place Search Query (End)
 	// ######################
 
+	// ######################
+	// Polling Place Search Results
+	// ######################
+	const onViewOnMap = () => {
+		if (pollingPlaceNearbyResultsFiltered !== undefined) {
+			const bbox = getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered);
+
+			navigate(`/${urlElectionName}/bounds/${Object.values(bbox).join(',')}/`, {
+				state: { cameFromSearchDrawer: true },
+			});
+		}
+	};
+	// ######################
+	// Polling Place Search Results (End)
+	// ######################
+
 	return (
 		<React.Fragment>
 			<SearchBar
@@ -135,7 +152,10 @@ export default function SearchComponent(props: Props) {
 			)}
 
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<PollingPlacesNearbySearchResultsContainer numberOfResults={pollingPlaceNearbyResultsFiltered.length}>
+				<PollingPlacesNearbySearchResultsContainer
+					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+					onViewOnMap={onViewOnMap}
+				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
 						<PollingPlaceSearchResultsCard
 							key={pollingPlace.id}

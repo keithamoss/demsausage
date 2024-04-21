@@ -138,3 +138,27 @@ export const getLonLatFromString = (lonlat: string) => {
 	const [lon, lat] = lonlat.split(',');
 	return { lon: parseFloat(lon), lat: parseFloat(lat) };
 };
+
+export const getBBoxFromPollingPlaces = (pollingPlaces: IPollingPlace[]) => {
+	return {
+		lat_top: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[1])),
+		lat_bottom: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[1])),
+		lon_left: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[0])),
+		lon_right: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[0])),
+	};
+};
+
+export const getBBoxExtentFromString = (bbox?: string): [number, number, number, number] | undefined => {
+	if (bbox !== undefined) {
+		const bboxArray = bbox.split(',');
+
+		if (bboxArray.length === 4) {
+			// We need to return [minX, minY, maxX, maxY]
+			// ['-31.88573783', '-31.9441543633231', '115.88422', '115.944482222191']
+			// becomes
+			// [115.88422, -31.9441543633231, 115.944482222191, -31.88573783]
+			return [parseFloat(bboxArray[2]), parseFloat(bboxArray[1]), parseFloat(bboxArray[3]), parseFloat(bboxArray[0])];
+		}
+	}
+	return undefined;
+};
