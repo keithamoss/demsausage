@@ -22,7 +22,7 @@ export enum ESearchDrawerSubComponent {
 	FILTER_CONTROL = 3,
 }
 
-const initialState: AppState = {
+export const initialState: AppState = {
 	mapFilterOptions: {},
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
@@ -31,6 +31,13 @@ const initialState: AppState = {
 	},
 	pollingPlaces: undefined,
 	mapFeatures: undefined,
+};
+
+// Used for storing state in localStorage
+// pollingPlaces is excluded from storage and
+// mapFeatures isn't implemented yet.
+export const isAppState = (o: any): o is AppState => {
+	return 'mapFilterOptions' in o && 'searchBar' in o;
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
