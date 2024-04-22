@@ -445,7 +445,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					// top, right, bottom, left
 					// if not undefined, assume embedded mode and only set padding of 50 bottom
 					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
-					padding: [85, 0, 20, 0],
+					padding: [85, 20, 20, 20],
 				});
 			}
 		}
