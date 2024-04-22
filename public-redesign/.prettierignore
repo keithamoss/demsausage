@@ -1,4 +1,4 @@
 node_modules/
 .yarn/
 build/
-.prettierrc.js
+.prettierrc.json

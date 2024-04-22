@@ -2,7 +2,7 @@
     "eslint.workingDirectories": [
         "./public-redesign"
     ],
-    "prettier.configPath": "./public-redesign/.prettierrc.js",
+    "prettier.configPath": "./public-redesign/.prettierrc.json",
     "prettier.prettierPath": "./public-redesign/.yarn/sdks/prettier/index.js",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
