@@ -8,7 +8,11 @@ import { useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
-import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
+import {
+	useGetPollingPlaceByIdsLookupQuery,
+	useGetPollingPlaceByLatLonLookupQuery,
+} from '../../../app/services/pollingPlaces';
+import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterOptions } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
@@ -57,6 +61,8 @@ export default function SearchComponent(props: Props) {
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
 	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
 
+	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(useParams(), 'polling_place_ids'));
+
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
 	// ######################
@@ -97,18 +103,47 @@ export default function SearchComponent(props: Props) {
 	} = useGetPollingPlaceByLatLonLookupQuery(
 		urlLonLat !== '' ? { electionId: election.id, ...getLonLatFromString(urlLonLat) } : skipToken,
 	);
+	// ######################
+	// Polling Place Search Query (End)
+	// ######################
 
-	const pollingPlaceNearbyResultsFiltered =
+	// ######################
+	// Polling Place By Ids Query
+	// ######################
+	const {
+		data: pollingPlaceByIdsResult,
+		error: errorFetchingPollingPlacesByIds,
+		isFetching: isFetchingPollingPlacesByIds,
+		isSuccess: isSuccessFetchingPollingPlacesByIds,
+	} = useGetPollingPlaceByIdsLookupQuery(
+		urlPollingPlaceIds.length >= 1 ? { electionId: election.id, pollingPlaceIds: urlPollingPlaceIds } : skipToken,
+	);
+	// ######################
+	// Polling Place By Ids Query (End)
+	// ######################
+
+	// ######################
+	// Polling Place Search Results Combiner
+	// ######################
+	const pollingPlaceNearbyResultsCombined =
 		isFetchingNearbyPollingPlaces === false &&
 		isSuccessFetchingNearbyPollingPlaces === true &&
-		pollingPlaceNearbyResults !== undefined &&
-		pollingPlaceNearbyResults.length >= 0
-			? pollingPlaceNearbyResults.filter(
+		pollingPlaceNearbyResults !== undefined
+			? pollingPlaceNearbyResults
+			: isFetchingPollingPlacesByIds === false &&
+			  isSuccessFetchingPollingPlacesByIds === true &&
+			  pollingPlaceByIdsResult !== undefined
+			? pollingPlaceByIdsResult
+			: undefined;
+
+	const pollingPlaceNearbyResultsFiltered =
+		pollingPlaceNearbyResultsCombined !== undefined
+			? pollingPlaceNearbyResultsCombined.filter(
 					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterOptions) === true,
 			  )
 			: undefined;
 	// ######################
-	// Polling Place Search Query (End)
+	// Polling Place Search Results Combiner (End)
 	// ######################
 
 	// ######################
@@ -199,7 +234,7 @@ export default function SearchComponent(props: Props) {
 				)}
 
 			{/* Handles not found and all other types of error */}
-			{errorFetchingNearbyPollingPlaces !== undefined && (
+			{(errorFetchingNearbyPollingPlaces !== undefined || errorFetchingPollingPlacesByIds !== undefined) && (
 				<Alert severity="error">
 					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
 					Something went awry when we tried to load your list of polling places.

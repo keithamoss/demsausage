@@ -1,6 +1,7 @@
 import { Tooltip } from '@mui/material';
 import React from 'react';
 import { Election, IGeoJSONPoylgon } from '../../../app/services/elections';
+import { getCSVStringsAsFloats } from '../../../app/utils';
 import BaconandEggsIcon from '../../icons/bacon-and-eggs';
 import CakeIcon from '../../icons/cake';
 import CoffeeIcon from '../../icons/coffee';
@@ -129,14 +130,14 @@ export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace) => {
 	}
 };
 
-// "115,-32" => {lon: 115, lat: -32}
 export const getLonLatFromString = (lonlat: string) => {
 	if (lonlat === '') {
 		return { lon: 0, lat: 0 };
 	}
 
-	const [lon, lat] = lonlat.split(',');
-	return { lon: parseFloat(lon), lat: parseFloat(lat) };
+	// "115,-32" => {lon: 115, lat: -32}
+	const [lon, lat] = getCSVStringsAsFloats(lonlat);
+	return { lon, lat };
 };
 
 export const getBBoxFromPollingPlaces = (pollingPlaces: IPollingPlace[]) => {

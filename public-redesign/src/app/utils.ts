@@ -77,3 +77,12 @@ export function stringDivider(str: string, width: number, spaceReplacer: string,
 	}
 	return [str, replaceCount];
 }
+
+export const getCSVStringsAsFloats = (s: string) => {
+	if (s.length === 0) {
+		return [];
+	}
+
+	const arrayOfStrings = s.includes(',') ? s.split(',') : [s];
+	return arrayOfStrings.map((v) => parseFloat(v)).filter((v) => Number.isNaN(v) === false);
+};

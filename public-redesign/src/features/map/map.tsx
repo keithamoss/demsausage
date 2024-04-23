@@ -1,13 +1,24 @@
 import { Box } from '@mui/material';
+import { Feature } from 'ol';
 import 'ol/ol.css';
 import React from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
+import { Election } from '../../app/services/elections';
 import AddStallButton from '../app/addStallButton';
-import { selectMapFilterOptions, setPollingPlaces } from '../app/appSlice';
+import {
+	ESearchDrawerSubComponent,
+	selectMapFilterOptions,
+	setPollingPlaces,
+	setSearchBarInitialMode,
+} from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
+import {
+	getPollingPlaceIdsFromFeatures,
+	getPollingPlacePermalinkFromFeature,
+} from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
@@ -15,7 +26,7 @@ import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunc
 import { getBBoxExtentFromString } from './searchBar/searchBarHelpers';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
-function MapEntrypoint() {
+function MapEntrypointLayer1() {
 	// Fallback to our default election if the route hasn't specified an election
 	const elections = useAppSelector(selectAllElections);
 	const defaultElection = getDefaultElection(elections);
@@ -31,34 +42,63 @@ function MapEntrypoint() {
 		return null;
 	}
 
-	return <Map electionId={electionId} />;
+	return <MapEntrypointLayer2 electionId={electionId} />;
 }
 
-interface Props {
+interface PropsEntrypointLayer2 {
 	electionId: number;
 }
 
-function Map(props: Props) {
+function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	const { electionId } = props;
 
-	const dispatch = useAppDispatch();
-
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
+
+	if (election === undefined) {
+		return null;
+	}
+
+	return <Map election={election} />;
+}
+
+interface Props {
+	election: Election;
+}
+
+function Map(props: Props) {
+	const { election } = props;
+
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const urlBBox = getBBoxExtentFromString(getStringParamOrUndefined(useParams(), 'bbox'));
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
 	const onMapBeginLoading = () => {};
-	const stashMapData = (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) =>
-		dispatch(setPollingPlaces(pollingPlaces));
-	const onMapLoaded = () => {};
-	const onQueryMap = () => {};
 
-	// const [mapSearchResults, setMapSearchResults] = useState<number | null>(null);
-	// const toggleMapSearchResults = (resultSet: number) => {
-	// 	setMapSearchResults(resultSet);
-	// };
+	const onMapDataLoaded = (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) =>
+		dispatch(setPollingPlaces(pollingPlaces));
+
+	const onMapLoaded = () => {};
+
+	const onQueryMap = (features: Feature[]) => {
+		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+
+		if (features.length === 1) {
+			const url = getPollingPlacePermalinkFromFeature(features[0], election);
+			if (url !== undefined) {
+				navigate(url, {
+					state: { cameFromSearchDrawer: true },
+				});
+			}
+		} else {
+			const ids = getPollingPlaceIdsFromFeatures(features);
+			if (ids.length >= 1) {
+				navigate(`/${election.name_url_safe}/search/by_ids/${ids.join(',')}/`);
+			}
+		}
+	};
 
 	if (election === undefined) {
 		return null;
@@ -68,19 +108,16 @@ function Map(props: Props) {
 		<React.Fragment>
 			<OpenLayersMap
 				election={election}
-				// mapSearchResults={
-				// 	mapSearchResults != null ? (mapSearchResultsArray[mapSearchResults] as IMapSearchResults) : null
-				// }
 				mapSearchResults={null}
 				bbox={urlBBox}
 				mapFilterOptions={mapFilterOptions}
 				onMapBeginLoading={onMapBeginLoading}
-				onMapDataLoaded={stashMapData}
+				onMapDataLoaded={onMapDataLoaded}
 				onMapLoaded={onMapLoaded}
 				onQueryMap={onQueryMap}
 			/>
 
-			<LayersSelector electionId={electionId} />
+			<LayersSelector electionId={election.id} />
 
 			<AddStallButton />
 
@@ -101,4 +138,4 @@ function Map(props: Props) {
 	);
 }
 
-export default MapEntrypoint;
+export default MapEntrypointLayer1;

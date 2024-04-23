@@ -88,6 +88,7 @@ export default function SearchBar(props: Props) {
 	}, [dispatch, urlLonLat]);
 
 	// @TODO Why does this exist again and is this really the best name for it?
+	// Increasingly, more places have to overwite this and set things back to SEARCH_FIELD
 	const searchBarInitialMode = useAppSelector((state) => selectSearchBarInitialMode(state));
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);

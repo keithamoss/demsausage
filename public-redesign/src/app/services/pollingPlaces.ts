@@ -25,7 +25,17 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { election_id: electionId, name, premises, state },
 			}),
 		}),
+		getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
+			query: ({ electionId, pollingPlaceIds }) => ({
+				url: 'polling_places/search/',
+				params: { election_id: electionId, ids: pollingPlaceIds },
+			}),
+		}),
 	}),
 });
 
-export const { useGetPollingPlaceByLatLonLookupQuery, useGetPollingPlaceByUniqueDetailsLookupQuery } = pollingPlacesApi;
+export const {
+	useGetPollingPlaceByLatLonLookupQuery,
+	useGetPollingPlaceByUniqueDetailsLookupQuery,
+	useGetPollingPlaceByIdsLookupQuery,
+} = pollingPlacesApi;

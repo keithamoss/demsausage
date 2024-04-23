@@ -52,6 +52,10 @@ export const router = sentryCreateBrowserRouter([
 						element: <SearchDrawer />,
 					},
 					{
+						path: '/:election_name/search/by_ids/:polling_place_ids/',
+						element: <SearchDrawer />,
+					},
+					{
 						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <PollingPlaceCardDrawer />,
 					},
