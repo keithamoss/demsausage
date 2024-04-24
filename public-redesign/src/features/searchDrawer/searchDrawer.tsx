@@ -67,7 +67,7 @@ function SearchDrawer(props: Props) {
 	}
 
 	const onChoosePollingPlace = (pollingPlace: IPollingPlace) => {
-		navigate(getPollingPlacePermalink(election, pollingPlace), { state: { cameFromSearchDrawer: true } });
+		navigate(getPollingPlacePermalink(election, pollingPlace), { state: { cameFromSearchDrawerOrMap: true } });
 	};
 
 	return (

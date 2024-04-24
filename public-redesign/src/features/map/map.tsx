@@ -89,7 +89,7 @@ function Map(props: Props) {
 			const url = getPollingPlacePermalinkFromFeature(features[0], election);
 			if (url !== undefined) {
 				navigate(url, {
-					state: { cameFromSearchDrawer: true },
+					state: { cameFromSearchDrawerOrMapOrMap: true },
 				});
 			}
 		} else {

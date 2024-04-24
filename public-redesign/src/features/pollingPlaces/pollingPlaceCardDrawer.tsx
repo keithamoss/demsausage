@@ -18,7 +18,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 }));
 
 interface LocationState {
-	cameFromSearchDrawer?: boolean;
+	cameFromSearchDrawerOrMap?: boolean;
 }
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
@@ -31,7 +31,7 @@ function PollingPlaceCardDrawerEntrypoint() {
 	const params = useParams();
 	const location = useLocation();
 
-	const cameFromSearchDrawer = (location.state as LocationState)?.cameFromSearchDrawer === true;
+	const cameFromSearchDrawerOrMap = (location.state as LocationState)?.cameFromSearchDrawerOrMap === true;
 
 	// Otherwise, set the election the route wants to use
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
@@ -55,7 +55,7 @@ function PollingPlaceCardDrawerEntrypoint() {
 			name={params.polling_place_name}
 			premises={params.polling_place_premises}
 			state={params.polling_place_state}
-			cameFromSearchDrawer={cameFromSearchDrawer}
+			cameFromSearchDrawerOrMap={cameFromSearchDrawerOrMap}
 		/>
 	);
 }
@@ -66,11 +66,11 @@ interface Props {
 	// Occasionally some elections will have no premises names on polling places
 	premises: string | undefined;
 	state: string;
-	cameFromSearchDrawer: boolean;
+	cameFromSearchDrawerOrMap: boolean;
 }
 
 function PollingPlaceCardDrawer(props: Props) {
-	const { election, name, premises, state, cameFromSearchDrawer } = props;
+	const { election, name, premises, state, cameFromSearchDrawerOrMap } = props;
 
 	const navigate = useNavigate();
 
@@ -86,7 +86,7 @@ function PollingPlaceCardDrawer(props: Props) {
 		// go back and we'll remain within the search drawer interface.
 		// In most cases, this should send them back to the list of
 		// polling place search results for them to choose a different place from,
-		if (cameFromSearchDrawer === true) {
+		if (cameFromSearchDrawerOrMap === true) {
 			navigate(-1);
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't

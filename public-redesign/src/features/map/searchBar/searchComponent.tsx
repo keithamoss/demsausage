@@ -85,7 +85,7 @@ export default function SearchComponent(props: Props) {
 		console.log('onChoose', feature);
 
 		navigate(`/${urlElectionName}/search/location/${feature.place_name}/${feature.geometry.coordinates.join(',')}/`, {
-			state: { cameFromSearchDrawer: true },
+			state: { cameFromSearchDrawerOrMap: true },
 		});
 	};
 	// ######################
@@ -154,7 +154,7 @@ export default function SearchComponent(props: Props) {
 			const bbox = getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered);
 
 			navigate(`/${urlElectionName}/bounds/${Object.values(bbox).join(',')}/`, {
-				state: { cameFromSearchDrawer: true },
+				state: { cameFromSearchDrawerOrMap: true },
 			});
 		}
 	};

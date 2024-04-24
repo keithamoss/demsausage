@@ -9,7 +9,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getStringParamOrUndefined } from '../../../../app/routing/routingHelpers';
 
 interface LocationState {
-	cameFromSearchDrawer?: boolean;
+	cameFromSearchDrawerOrMap?: boolean;
 }
 
 interface Props {
@@ -24,7 +24,7 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const cameFromSearchDrawer = (location.state as LocationState)?.cameFromSearchDrawer === true;
+	const cameFromSearchDrawerOrMap = (location.state as LocationState)?.cameFromSearchDrawerOrMap === true;
 
 	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
 
@@ -34,14 +34,14 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 		// In most cases, this should send them back to the list of Mapbox
 		// place search results for them to choose a different place from
 		// or to modify their search.
-		if (cameFromSearchDrawer === true) {
+		if (cameFromSearchDrawerOrMap === true) {
 			navigate(-1);
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
 			navigate(`/${urlElectionName}/search/`);
 		}
-	}, [cameFromSearchDrawer, navigate, urlElectionName]);
+	}, [cameFromSearchDrawerOrMap, navigate, urlElectionName]);
 
 	return (
 		<Box sx={{ width: '100%', marginTop: 1 }}>

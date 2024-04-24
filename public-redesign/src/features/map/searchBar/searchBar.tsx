@@ -203,7 +203,7 @@ export default function SearchBar(props: Props) {
 						setGeolocationErrorMessage(undefined);
 
 						navigate(`/${urlElectionName}/search/gps/${currentPosition.join(',')}/`, {
-							state: { cameFromSearchDrawer: true },
+							state: { cameFromSearchDrawerOrMap: true },
 						});
 					} else {
 						setIsGeolocationErrored(true);
