@@ -89,8 +89,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					if (completed === true) {
 						const centre = view.getCenter();
 						if (centre !== undefined) {
-							centre[0] -= 1;
-							view.setCenter(centre);
+							// Prevents error "Cannot assign to read only property '0' of object '[object Array]"
+							const centreCopy = [...centre];
+							centreCopy[0] -= 1;
+							view.setCenter(centreCopy);
 						}
 					}
 				},
