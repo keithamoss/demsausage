@@ -25,7 +25,7 @@ store.subscribe(
 	// care about synching state quite that accurately.
 	debounce(() => {
 		saveStateToLocalStorage(store.getState());
-	}, 2000),
+	}, 1000),
 );
 
 root.render(
