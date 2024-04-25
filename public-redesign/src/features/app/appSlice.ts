@@ -1,5 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { values } from 'lodash-es';
+import { Coordinate } from 'ol/coordinate';
 import { RootState } from '../../app/store';
 import { IMapFilterOptions } from '../icons/noms';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/map_stuff';
@@ -7,6 +8,7 @@ import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterOptions: IMapFilterOptions;
+	mapView: Partial<OLMapView> | undefined;
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent;
 		searchText: string;
@@ -22,8 +24,21 @@ export enum ESearchDrawerSubComponent {
 	FILTER_CONTROL = 3,
 }
 
+export interface OLMapView {
+	center: Coordinate;
+	zoom: number;
+	resolution: number;
+}
+
+export enum eMapFeaturesLoadingStatus {
+	LOADING,
+	SUCCEEDED,
+	FAILED,
+}
+
 export const initialState: AppState = {
 	mapFilterOptions: {},
+	mapView: undefined,
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
 		searchText: '',
@@ -73,6 +88,10 @@ export const appSlice = createSlice({
 		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
 		// 	state.electionId = action.payload;
 		// },
+		setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
+			state.mapView = action.payload;
+		},
+		// @TODO Either rename and move into setSearchBarMapFilterOptions or move into the `map` part of this app slice
 		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
 			state.mapFilterOptions = action.payload;
 		},
@@ -110,6 +129,7 @@ export const appSlice = createSlice({
 });
 
 export const {
+	setMapView,
 	setMapFilterOptions,
 	setSearchBarInitialMode,
 	setSearchBarSearchText,
@@ -146,6 +166,8 @@ export const {
 // );
 
 export const selectMapFeatures = (state: RootState) => state.app.mapFeatures;
+
+export const selectMapView = (state: RootState) => state.app.mapView;
 
 export const selectMapFilterOptions = (state: RootState) => state.app.mapFilterOptions;
 

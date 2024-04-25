@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import { Feature } from 'ol';
+import { Feature, MapBrowserEvent, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
@@ -10,6 +10,8 @@ import AddStallButton from '../app/addStallButton';
 import {
 	ESearchDrawerSubComponent,
 	selectMapFilterOptions,
+	selectMapView,
+	setMapView,
 	setPollingPlaces,
 	setSearchBarInitialMode,
 } from '../app/appSlice';
@@ -100,6 +102,90 @@ function Map(props: Props) {
 		}
 	};
 
+	const olMapRef = useRef<olMap | undefined>(undefined);
+
+	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
+	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
+	isUserMovingTheMapRef.current = isUserMovingTheMap;
+
+	const mapView = useAppSelector((state) => selectMapView(state));
+
+	// ######################
+	// Drag Detection, Map View Updating, and Feature Clicking
+	// ######################
+	const isScrollZooming = false;
+	const isScrollZoomingRef = useRef<boolean>(isScrollZooming);
+	isScrollZoomingRef.current = isScrollZooming;
+
+	useEffect(() => {
+		if (olMapRef.current !== undefined) {
+			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
+			// Ref: https://gis.stackexchange.com/a/378877
+			let isDragging = false;
+			let isDoubleClicking = false;
+
+			olMapRef.current.on('movestart', () => {
+				isDragging = false;
+				setIsUserMovingTheMap(true);
+			});
+
+			olMapRef.current.on('pointerdrag', () => {
+				isDragging = true;
+			});
+
+			olMapRef.current.on('moveend', (evt: MapEvent) => {
+				setIsUserMovingTheMap(false);
+
+				isDragging = false;
+				isDoubleClicking = false;
+				isScrollZoomingRef.current = false;
+
+				// Update the Redux store version of the view for when
+				// we add new features.
+				const view = evt.map.getView();
+
+				dispatch(
+					setMapView({
+						center: view.getCenter(),
+						zoom: view.getZoom(),
+						resolution: view.getResolution(),
+					}),
+				);
+			});
+
+			// olMapRef.current.on(
+			// 	'click',
+			// 	onMapClick((features: Feature[]) => {
+			// 		dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
+
+			// 		if (features.length === 1) {
+			// 			navigate(`/FeatureManager/Edit/${features[0].id}`);
+			// 		} else if (features.length > 1) {
+			// 			navigate('/FeatureManager');
+			// 		}
+			// 	}),
+			// );
+
+			olMapRef.current.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
+				evt.preventDefault();
+
+				isDoubleClicking = true;
+
+				if (olMapRef.current !== undefined) {
+					const view = olMapRef.current.getView();
+					view.setCenter(evt.coordinate);
+					olMapRef.current.setView(view);
+				}
+
+				return false;
+			});
+		}
+	}, []);
+	// ######################
+	// Drag Detection, Map View Updating, and Feature Clicking (End)
+	// ######################
+
+	// @TODO Move this up into an Entrypoint layer
 	if (election === undefined) {
 		return null;
 	}
@@ -108,6 +194,9 @@ function Map(props: Props) {
 		<React.Fragment>
 			<OpenLayersMap
 				election={election}
+				olMapRef={olMapRef}
+				mapView={mapView}
+				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
 				bbox={urlBBox}
 				mapFilterOptions={mapFilterOptions}

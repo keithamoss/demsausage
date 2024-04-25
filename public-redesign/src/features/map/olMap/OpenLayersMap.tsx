@@ -3,12 +3,15 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { MapBrowserEvent } from 'ol.js';
+import Feature from 'ol/Feature';
 import Attribution from 'ol/control/Attribution';
 import Control from 'ol/control/Control';
 import BaseEvent from 'ol/events/Event';
-import Feature from 'ol/Feature';
+import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import Map from 'ol/Map';
+import * as Observable from 'ol/Observable';
 import { xhr } from 'ol/featureloader.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
@@ -18,12 +21,12 @@ import Interaction from 'ol/interaction/Interaction';
 import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
-import Map from 'ol/Map';
-import * as Observable from 'ol/Observable';
 import 'ol/ol.css';
 // c.f. Re proj import https://github.com/openlayers/openlayers/issues/8037
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import VectorTile from 'ol/VectorTile';
+import View from 'ol/View';
 import { transform, transformExtent } from 'ol/proj.js';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
@@ -31,13 +34,12 @@ import Fill from 'ol/style/Fill';
 import RegularShape from 'ol/style/RegularShape';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import VectorTile from 'ol/VectorTile';
-import View from 'ol/View';
 import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { OLMapView } from '../../app/appSlice';
 import { IMapFilterOptions } from '../../icons/noms';
-import { getAPIBaseURL, IMapPollingPlaceFeature, IMapSearchResults, olStyleFunction } from '../map_stuff';
+import { IMapPollingPlaceFeature, IMapSearchResults, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'
@@ -48,6 +50,9 @@ import './OpenLayersMap.css';
 
 interface IProps {
 	election: Election;
+	olMapRef: React.MutableRefObject<Map | undefined>;
+	mapView: Partial<OLMapView> | undefined;
+	isScrollZoomingRef: React.MutableRefObject<boolean>;
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
 	bbox?: [number, number, number, number];
@@ -101,15 +106,32 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentDidMount() {
-		const { election } = this.props;
+		const { election, olMapRef, mapView, isScrollZoomingRef } = this.props;
 
 		this.map = new Map({
 			layers: this.getBasemap(),
 			target: 'openlayers-map',
 			controls: [new Attribution()],
-		});
+			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
+				new DblClickDragZoom(),
+				new MouseWheelZoom({
+					condition: (mapBrowserEvent) => {
+						if (mapBrowserEvent.type === 'wheel' && isScrollZoomingRef.current === false) {
+							isScrollZoomingRef.current = true;
+						}
 
-		this.fitMapViewToElection(election);
+						return true;
+					},
+				}),
+			]),
+			view: mapView !== undefined ? new View(mapView) : undefined,
+		});
+		olMapRef.current = this.map;
+
+		// If we don't have a view already cached in localStorage, fit to the election
+		if (mapView === undefined) {
+			this.fitMapViewToElection(election);
+		}
 
 		// Accommodate the window resizing
 		window.addEventListener('resize', this.onMapContainerResize);
