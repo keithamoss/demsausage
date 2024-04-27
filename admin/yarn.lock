@@ -5582,7 +5582,7 @@ __metadata:
     react-string-replace: "npm:^1.1.1"
     react-tiny-virtual-list: "npm:^2.2.0"
     recompose: "npm:^0.30.0"
-    redux: "npm:^4.2.1"
+    redux: "npm:^5.0.1"
     redux-devtools-extension: "npm:^2.13.9"
     redux-form: "npm:^8.3.10"
     redux-form-material-ui: "npm:^4.3.4"
@@ -18327,12 +18327,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "redux@npm:4.2.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.9.2"
-  checksum: 8/f63b9060c3a1d930ae775252bb6e579b42415aee7a23c4114e21a0b4ba7ec12f0ec76936c00f546893f06e139819f0e2855e0d55ebfce34ca9c026241a6950dd
+"redux@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "redux@npm:5.0.1"
+  checksum: 10c0/b10c28357194f38e7d53b760ed5e64faa317cc63de1fb95bc5d9e127fab956392344368c357b8e7a9bedb0c35b111e7efa522210cfdc3b3c75e5074718e9069c
   languageName: node
   linkType: hard
 
