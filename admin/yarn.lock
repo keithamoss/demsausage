@@ -5587,7 +5587,7 @@ __metadata:
     redux-form: "npm:^8.3.10"
     redux-form-material-ui: "npm:^4.3.4"
     redux-responsive: "npm:^4.3.8"
-    redux-thunk: "npm:^2.4.2"
+    redux-thunk: "npm:^3.1.0"
     reselect: "npm:^5.1.0"
     styled-components: "npm:^6.1.8"
     typescript: "npm:^5.4.5"
@@ -18288,12 +18288,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "redux-thunk@npm:2.4.2"
+"redux-thunk@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "redux-thunk@npm:3.1.0"
   peerDependencies:
-    redux: ^4
-  checksum: 8/c7f757f6c383b8ec26152c113e20087818d18ed3edf438aaad43539e9a6b77b427ade755c9595c4a163b6ad3063adf3497e5fe6a36c68884eb1f1cfb6f049a5c
+    redux: ^5.0.0
+  checksum: 10c0/21557f6a30e1b2e3e470933247e51749be7f1d5a9620069a3125778675ce4d178d84bdee3e2a0903427a5c429e3aeec6d4df57897faf93eb83455bc1ef7b66fd
   languageName: node
   linkType: hard
 
