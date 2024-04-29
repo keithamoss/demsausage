@@ -2,6 +2,8 @@ import { Alert, AlertTitle, List, ListItem, ListItemText } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
+import View from 'ol/View';
+import { transform, transformExtent } from 'ol/proj';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
@@ -15,6 +17,7 @@ import {
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterOptions } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { createURLHashFromView } from '../mapHelpers';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
 import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
@@ -23,6 +26,7 @@ import {
 	EMapboxPlaceType,
 	IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
+	getBBoxExtentFromString,
 	getBBoxFromPollingPlaces,
 	getLonLatFromString,
 	getMapboxAPIKey,
@@ -153,9 +157,55 @@ export default function SearchComponent(props: Props) {
 		if (pollingPlaceNearbyResultsFiltered !== undefined) {
 			const bbox = getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered);
 
-			navigate(`/${urlElectionName}/bounds/${Object.values(bbox).join(',')}/`, {
-				state: { cameFromSearchDrawerOrMap: true },
-			});
+			console.log('bbox', bbox);
+
+			const bboxNumbers = getBBoxExtentFromString(Object.values(bbox).join(','));
+			console.log('bbox.bboxNumbers', bboxNumbers);
+
+			if (bboxNumbers !== undefined) {
+				const bboxNumbersTransformed = transformExtent(bboxNumbers, 'EPSG:4326', 'EPSG:3857');
+				console.log('bbox.bboxNumbersTransformed', bboxNumbersTransformed);
+
+				const view = new View();
+				// const view = new View({ center: [16244645.474091748, -2297939.21259341], zoom: 7.373385226264362 });
+				// center: [16244645.474091748, -2297939.21259341];
+				// resolution: 944.1122307371187;
+				// zoom: 7.373385226264362;
+				console.log('bbox.view', view);
+
+				console.log('bbox.view.getCenter', view.getCenter());
+				console.log('bbox.view.getZoom', view.getZoom());
+
+				const fit = view.fit(bboxNumbersTransformed, {
+					// top, right, bottom, left
+					// if not undefined, assume embedded mode and only set padding of 50 bottom
+					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
+					padding: [48, 20, 98, 20],
+				});
+				console.log('bbox.fit', fit);
+
+				const centre = view.getCenter();
+				console.log('bbox.view.getCenter', centre);
+				console.log('bbox.view.getCenter.transform', transform(view.getCenter() || [0, 0], 'EPSG:3857', 'EPSG:4326'));
+				console.log('bbox.view.getZoom', view.getZoom());
+
+				const url = createURLHashFromView(view);
+				console.log('bbox.url', url);
+
+				if (url !== undefined) {
+					navigate(`/${urlElectionName}#${url}`, {
+						// state: { cameFromSearchDrawerOrMap: true },
+					});
+				}
+
+				// navigate(`/${urlElectionName}/bounds/${Object.values(bbox).join(',')}/`, {
+				// 	state: { cameFromSearchDrawerOrMap: true },
+				// });
+			}
+
+			// navigate(`/${urlElectionName}/bounds/${Object.values(bbox).join(',')}/`, {
+			// 	state: { cameFromSearchDrawerOrMap: true },
+			// });
 		}
 	};
 	// ######################

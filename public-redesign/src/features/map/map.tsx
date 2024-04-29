@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
+import { debounce } from 'lodash-es';
 import { Feature, MapBrowserEvent, MapEvent, Map as olMap } from 'ol';
+import { unByKey } from 'ol/Observable';
 import 'ol/ol.css';
-import React, { useEffect, useRef, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
@@ -11,7 +13,6 @@ import {
 	ESearchDrawerSubComponent,
 	selectMapFilterOptions,
 	selectMapView,
-	setMapView,
 	setPollingPlaces,
 	setSearchBarInitialMode,
 } from '../app/appSlice';
@@ -22,6 +23,7 @@ import {
 	getPollingPlacePermalinkFromFeature,
 } from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
+import { createURLHashFromView, getViewFromURLHash } from './mapHelpers';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
@@ -72,43 +74,64 @@ function Map(props: Props) {
 
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const urlViewFromHash = getViewFromURLHash(location.hash);
+	const mapViewFromRedux = useAppSelector((state) => selectMapView(state));
+	// const mapView = urlViewFromHash !== undefined ? urlViewFromHash : mapViewFromRedux;
+
+	const [mapView] = useState(urlViewFromHash !== undefined ? urlViewFromHash : mapViewFromRedux);
+
+	// useEffect(() => {
+	// 	if (
+	// 		mapViewFromRedux !== undefined &&
+	// 		urlViewFromHash !== undefined &&
+	// 		doTwoViewsMatch(mapViewFromRedux, urlViewFromHash) === true
+	// 	) {
+	// 		console.log('Set Redux mapView from URL', urlViewFromHash);
+	// 		dispatch(setMapView(urlViewFromHash));
+	// 	}
+	// }, [dispatch, mapViewFromRedux, urlViewFromHash]);
 
 	const urlBBox = getBBoxExtentFromString(getStringParamOrUndefined(useParams(), 'bbox'));
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
-	const onMapBeginLoading = () => {};
+	const onMapBeginLoading = useMemo(() => () => {}, []);
 
-	const onMapDataLoaded = (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) =>
-		dispatch(setPollingPlaces(pollingPlaces));
+	const onMapDataLoaded = useMemo(
+		() => (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) => dispatch(setPollingPlaces(pollingPlaces)),
+		[dispatch],
+	);
 
-	const onMapLoaded = () => {};
+	const onMapLoaded = useMemo(() => () => {}, []);
 
-	const onQueryMap = (features: Feature[]) => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+	const onQueryMap = useMemo(
+		() => (features: Feature[]) => {
+			dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 
-		if (features.length === 1) {
-			const url = getPollingPlacePermalinkFromFeature(features[0], election);
-			if (url !== undefined) {
-				navigate(url, {
-					state: { cameFromSearchDrawerOrMapOrMap: true },
-				});
+			if (features.length === 1) {
+				const url = getPollingPlacePermalinkFromFeature(features[0], election);
+				if (url !== undefined) {
+					navigate(url, {
+						state: { cameFromSearchDrawerOrMapOrMap: true },
+					});
+				}
+			} else {
+				const ids = getPollingPlaceIdsFromFeatures(features);
+				if (ids.length >= 1) {
+					navigate(`/${election.name_url_safe}/search/by_ids/${ids.join(',')}/`);
+				}
 			}
-		} else {
-			const ids = getPollingPlaceIdsFromFeatures(features);
-			if (ids.length >= 1) {
-				navigate(`/${election.name_url_safe}/search/by_ids/${ids.join(',')}/`);
-			}
-		}
-	};
+		},
+		[dispatch, election, navigate],
+	);
 
 	const olMapRef = useRef<olMap | undefined>(undefined);
 
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
-
-	const mapView = useAppSelector((state) => selectMapView(state));
 
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking
@@ -117,26 +140,74 @@ function Map(props: Props) {
 	const isScrollZoomingRef = useRef<boolean>(isScrollZooming);
 	isScrollZoomingRef.current = isScrollZooming;
 
+	const isDraggingRef = useRef<boolean>(false);
+
+	const isMapEventsSetup = useRef<boolean>(false);
+
+	const olEventKeys = [];
+	const windowEventKeys = [];
+
 	useEffect(() => {
-		if (olMapRef.current !== undefined) {
+		console.log('Init evt handlers?', olMapRef.current !== undefined, isMapEventsSetup.current);
+
+		if (olMapRef.current !== undefined && isMapEventsSetup.current === true) {
+			// windowEventKeys.forEach((v) => window.removeEventListener(v));
+			unByKey(olEventKeys);
+		}
+
+		if (olMapRef.current !== undefined && isMapEventsSetup.current === false) {
+			isMapEventsSetup.current = true;
+
 			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
 			// Ref: https://gis.stackexchange.com/a/378877
-			let isDragging = false;
+			// let isDragging = false;
 			let isDoubleClicking = false;
 
-			olMapRef.current.on('movestart', () => {
-				isDragging = false;
+			// olMapRef.current.on('movestart', () => {
+			// 	isDraggingRef.current = false;
+			// 	setIsUserMovingTheMap(true);
+			// });
+
+			// olMapRef.current.on('pointerdrag', () => {
+			// 	isDraggingRef.current = true;
+			// });
+
+			console.log('Attach event handleres');
+			const pointerDownKey = window.addEventListener('pointerdown', (e) => {
+				console.log('pointerdown', e);
+				isDraggingRef.current = true;
 				setIsUserMovingTheMap(true);
 			});
 
-			olMapRef.current.on('pointerdrag', () => {
-				isDragging = true;
+			const pointerUpKey = window.addEventListener('pointerup', () => {
+				console.log('pointerup');
+				isDraggingRef.current = false;
 			});
 
-			olMapRef.current.on('moveend', (evt: MapEvent) => {
-				setIsUserMovingTheMap(false);
+			windowEventKeys.push(pointerDownKey, pointerUpKey);
 
-				isDragging = false;
+			// olMapRef.current.on(
+			// 	'change:view',
+			// 	debounce(() => {
+			// 		console.log('change:view');
+			// 	}, 1000),
+			// );
+
+			const navigateDebounced = debounce((url: string) => {
+				console.log('navigate');
+				navigate(`#${url}`);
+			}, 500);
+
+			const moveEndKey = olMapRef.current.on('moveend', (evt: MapEvent) => {
+				// setIsUserMovingTheMap(false);
+
+				console.log('moveend', isDraggingRef.current);
+
+				if (isDraggingRef.current === true) {
+					return undefined;
+				}
+
+				// isDraggingRef.current = false;
 				isDoubleClicking = false;
 				isScrollZoomingRef.current = false;
 
@@ -144,13 +215,36 @@ function Map(props: Props) {
 				// we add new features.
 				const view = evt.map.getView();
 
-				dispatch(
-					setMapView({
-						center: view.getCenter(),
-						zoom: view.getZoom(),
-						resolution: view.getResolution(),
-					}),
-				);
+				// const reduxView = {
+				// 	center: view.getCenter(),
+				// 	zoom: view.getZoom(),
+				// 	resolution: view.getResolution(),
+				// };
+
+				// dispatch(setMapView(reduxView));
+
+				// @TOOD Remove /bounds
+				// https://public-redesign.test.democracysausage.org/referendum_2023/bounds/-20.7084446260404,-20.7456961356561,139.489826649035,139.511991886502/
+
+				const url = createURLHashFromView(view);
+
+				// if (reduxView.center !== undefined) {
+				// 	console.log(
+				// 		'reduxView vs urlHashView',
+				// 		reduxView.center,
+				// 		transform(reduxView.center, 'EPSG:3857', 'EPSG:4326'),
+				// 		reduxView.zoom,
+				// 		url,
+				// 	);
+				// }
+
+				// console.log('vs', url, location.hash);
+
+				if (url !== undefined && url !== location.hash.substring(1)) {
+					// console.log('navigate?');
+					navigate(`#${url}`);
+					// navigateDebounced(url);
+				}
 			});
 
 			// olMapRef.current.on(
@@ -166,7 +260,7 @@ function Map(props: Props) {
 			// 	}),
 			// );
 
-			olMapRef.current.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
+			const dblClickKey = olMapRef.current.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
 				evt.preventDefault();
 
 				isDoubleClicking = true;
@@ -179,8 +273,10 @@ function Map(props: Props) {
 
 				return false;
 			});
+
+			olEventKeys.push(moveEndKey, dblClickKey);
 		}
-	}, []);
+	}, [location.hash, navigate]);
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking (End)
 	// ######################
@@ -196,6 +292,7 @@ function Map(props: Props) {
 				election={election}
 				olMapRef={olMapRef}
 				mapView={mapView}
+				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
 				bbox={urlBBox}

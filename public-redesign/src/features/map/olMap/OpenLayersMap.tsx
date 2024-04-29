@@ -39,6 +39,7 @@ import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterOptions } from '../../icons/noms';
+import { doesTheMapViewMatchThisView } from '../mapHelpers';
 import { IMapPollingPlaceFeature, IMapSearchResults, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
@@ -52,6 +53,7 @@ interface IProps {
 	election: Election;
 	olMapRef: React.MutableRefObject<Map | undefined>;
 	mapView: Partial<OLMapView> | undefined;
+	isDraggingRef: React.MutableRefObject<boolean>;
 	isScrollZoomingRef: React.MutableRefObject<boolean>;
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
@@ -145,44 +147,63 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentDidUpdate(prevProps: IProps) {
+		console.log('componentDidUpdate', prevProps, this.props);
+
+		// Object.keys(this.props).forEach((key) => {
+		// 	if (prevProps[key] !== this.props[key]) {
+		// 		console.log('mismatch on', key, JSON.stringify(prevProps[key]), JSON.stringify(this.props[key]));
+		// 	}
+		// });
+
 		if (this.map !== null) {
 			// Allow for elections changing
 			if (prevProps.election !== this.props.election) {
 				this.clearMapDataVectorLayer(this.map);
 				this.map.addLayer(this.getMapDataVectorLayer(this.map));
+				// console.log('fitMapViewToElection');
 				this.fitMapViewToElection(this.props.election);
-			}
-
-			if (prevProps.bbox !== this.props.bbox) {
-				// The user has performed a search by location
-				const { bbox } = this.props;
-
-				// Zoom the user down to the bounding box of the polling places that are near their search area
-				if (bbox !== undefined) {
-					this.zoomMapToBBox(this.map);
+			} else {
+				if (this.props.isDraggingRef.current === false) {
+					const matchy = doesTheMapViewMatchThisView(this.map.getView(), this.props.mapView);
+					// console.log('cdu.areViewsMatching', matchy);
+					if (this.props.mapView !== undefined && matchy === false) {
+						console.log('cdu.Set map to this.props.mapView');
+						this.map.setView(new View(this.props.mapView));
+					}
 				}
-			}
 
-			if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
-				// The user has performed a search by location
-				const { mapSearchResults } = this.props;
+				// console.log('bbox matching?', prevProps.bbox !== this.props.bbox);
+				if (prevProps.bbox !== this.props.bbox) {
+					// The user has performed a search by location
+					const { bbox } = this.props;
 
-				// Zoom the user down to the bounding box of the polling places that are near their search area
-				if (mapSearchResults !== null) {
-					this.zoomMapToSearchResults(this.map);
-				} else {
-					// Remove any existing search indicator layer
-					this.clearSearchResultsVectorLayer(this.map);
+					// Zoom the user down to the bounding box of the polling places that are near their search area
+					if (bbox !== undefined) {
+						this.zoomMapToBBox(this.map);
+					}
 				}
-			} else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
-				// The user has changed the noms filter options
-				const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
-				if (sausageLayer !== null) {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-						olStyleFunction(feature, resolution, this.props.mapFilterOptions),
-					);
+
+				if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
+					// The user has performed a search by location
+					const { mapSearchResults } = this.props;
+
+					// Zoom the user down to the bounding box of the polling places that are near their search area
+					if (mapSearchResults !== null) {
+						this.zoomMapToSearchResults(this.map);
+					} else {
+						// Remove any existing search indicator layer
+						this.clearSearchResultsVectorLayer(this.map);
+					}
+				} else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
+					// The user has changed the noms filter options
+					const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
+					if (sausageLayer !== null) {
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
+						sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
+							olStyleFunction(feature, resolution, this.props.mapFilterOptions),
+						);
+					}
 				}
 			}
 		}
@@ -456,6 +477,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 	private zoomMapToBBox(map: Map) {
 		const { bbox } = this.props;
+
+		console.log('zoomMapToBBox');
 
 		if (bbox !== undefined) {
 			const view = map.getView();
