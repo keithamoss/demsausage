@@ -58,7 +58,7 @@ interface IProps {
 	isScrollZoomingRef: React.MutableRefObject<boolean>;
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
-	bbox?: [number, number, number, number];
+
 	mapFilterOptions: IMapFilterOptions;
 	onMapBeginLoading: Function;
 	onMapDataLoaded: Function;
@@ -200,19 +200,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					this.map.setView(new View(this.props.mapView));
 				} else {
 					// }
-
-					// Not needed, the above code takes care of it now
-					// console.log('bbox matching?', prevProps.bbox !== this.props.bbox);
-					// if (prevProps.bbox !== this.props.bbox) {
-					// 	// The user has performed a search by location
-					// 	const { bbox } = this.props;
-
-					// 	// Zoom the user down to the bounding box of the polling places that are near their search area
-					// 	if (bbox !== undefined) {
-					// 		this.zoomMapToBBox(this.map);
-					// 	}
-					// }
-
 					if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
 						// The user has performed a search by location
 						const { mapSearchResults } = this.props;
@@ -331,7 +318,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private onVectorSourceChanged(event: BaseEvent) {
-		const { /*geojson, */ mapSearchResults, bbox, onMapDataLoaded, onMapLoaded } = this.props;
+		const { /*geojson, */ mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props;
 		const vectorSource = event.target as VectorSource<Geometry>;
 
 		if (vectorSource.getState() === 'ready') {
@@ -352,11 +339,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					if (this.map !== null) {
 						onMapLoaded();
 
-						if (bbox !== undefined) {
-							// Dunno if we actually need this now, we added the whole zoomMapToBBox it during the redesign when we were hacking the map and we've since changed it to store the view in the URL hash and determine the map view from there
-							// @TODO True, we don't do that in this function...so let's test it if we need it here too
-							this.zoomMapToBBox(this.map);
-						} else if (mapSearchResults !== null) {
+						if (mapSearchResults !== null) {
 							this.zoomMapToSearchResults(this.map);
 						} else {
 							this.workaroundOLRenderingBug(this.map.getView());
@@ -550,29 +533,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				}),
 			}),
 		];
-	}
-
-	private zoomMapToBBox(map: Map) {
-		const { bbox } = this.props;
-
-		console.log('zoomMapToBBox');
-
-		if (bbox !== undefined) {
-			const view = map.getView();
-
-			if (bbox !== null) {
-				view.fit(transformExtent(bbox, 'EPSG:4326', 'EPSG:3857'), {
-					size: map.getSize(),
-					// @TODO There's a whole bunch of things here to consider implementing again
-					// if not undefined, assume embedded mode and have no animation
-					// duration: mapSearchResults.animation !== undefined ? 0 : 750,
-					// top, right, bottom, left
-					// if not undefined, assume embedded mode and only set padding of 50 bottom
-					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
-					padding: [48, 20, 98, 20],
-				});
-			}
-		}
 	}
 
 	private zoomMapToSearchResults(map: Map) {

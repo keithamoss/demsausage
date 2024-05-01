@@ -25,7 +25,6 @@ import { createURLHashFromView, getViewFromURLHash } from './mapHelpers';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
-import { getBBoxExtentFromString } from './searchBar/searchBarHelpers';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypointLayer1() {
@@ -75,8 +74,6 @@ function Map(props: Props) {
 	const location = useLocation();
 
 	const mapViewFromURLHash = getViewFromURLHash(location.hash);
-
-	const bboxFromURLPath = getBBoxExtentFromString(getStringParamOrUndefined(useParams(), 'bbox'));
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
@@ -174,7 +171,6 @@ function Map(props: Props) {
 				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
-				bbox={bboxFromURLPath}
 				mapFilterOptions={mapFilterOptions}
 				onMapBeginLoading={onMapBeginLoading}
 				onMapDataLoaded={onMapDataLoaded}

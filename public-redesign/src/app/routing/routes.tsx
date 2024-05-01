@@ -28,10 +28,6 @@ export const router = sentryCreateBrowserRouter([
 				element: <DebugView />,
 			},
 			{
-				path: '/:election_name/bounds/:bbox',
-				element: <Map />,
-			},
-			{
 				path: '/:election_name',
 				element: <Map />,
 				children: [
