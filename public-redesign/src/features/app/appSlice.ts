@@ -8,7 +8,7 @@ import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterOptions: IMapFilterOptions;
-	mapView: Partial<OLMapView> | undefined;
+	// mapView: Partial<OLMapView> | undefined;
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent;
 		searchText: string;
@@ -38,7 +38,7 @@ export enum eMapFeaturesLoadingStatus {
 
 export const initialState: AppState = {
 	mapFilterOptions: {},
-	mapView: undefined,
+	// mapView: undefined,
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
 		searchText: '',
@@ -88,9 +88,9 @@ export const appSlice = createSlice({
 		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
 		// 	state.electionId = action.payload;
 		// },
-		setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
-			state.mapView = action.payload;
-		},
+		// setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
+		// 	state.mapView = action.payload;
+		// },
 		// @TODO Either rename and move into setSearchBarMapFilterOptions or move into the `map` part of this app slice
 		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
 			state.mapFilterOptions = action.payload;
@@ -129,7 +129,7 @@ export const appSlice = createSlice({
 });
 
 export const {
-	setMapView,
+	// setMapView,
 	setMapFilterOptions,
 	setSearchBarInitialMode,
 	setSearchBarSearchText,
@@ -167,7 +167,7 @@ export const {
 
 export const selectMapFeatures = (state: RootState) => state.app.mapFeatures;
 
-export const selectMapView = (state: RootState) => state.app.mapView;
+// export const selectMapView = (state: RootState) => state.app.mapView;
 
 export const selectMapFilterOptions = (state: RootState) => state.app.mapFilterOptions;
 

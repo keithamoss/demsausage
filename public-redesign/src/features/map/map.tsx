@@ -1,9 +1,8 @@
 import { Box } from '@mui/material';
 import { debounce } from 'lodash-es';
-import { Feature, MapBrowserEvent, MapEvent, Map as olMap } from 'ol';
-import { unByKey } from 'ol/Observable';
+import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
@@ -12,7 +11,6 @@ import AddStallButton from '../app/addStallButton';
 import {
 	ESearchDrawerSubComponent,
 	selectMapFilterOptions,
-	selectMapView,
 	setPollingPlaces,
 	setSearchBarInitialMode,
 } from '../app/appSlice';
@@ -76,24 +74,9 @@ function Map(props: Props) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const urlViewFromHash = getViewFromURLHash(location.hash);
-	const mapViewFromRedux = useAppSelector((state) => selectMapView(state));
-	// const mapView = urlViewFromHash !== undefined ? urlViewFromHash : mapViewFromRedux;
+	const mapViewFromURLHash = getViewFromURLHash(location.hash);
 
-	const [mapView] = useState(urlViewFromHash !== undefined ? urlViewFromHash : mapViewFromRedux);
-
-	// useEffect(() => {
-	// 	if (
-	// 		mapViewFromRedux !== undefined &&
-	// 		urlViewFromHash !== undefined &&
-	// 		doTwoViewsMatch(mapViewFromRedux, urlViewFromHash) === true
-	// 	) {
-	// 		console.log('Set Redux mapView from URL', urlViewFromHash);
-	// 		dispatch(setMapView(urlViewFromHash));
-	// 	}
-	// }, [dispatch, mapViewFromRedux, urlViewFromHash]);
-
-	const urlBBox = getBBoxExtentFromString(getStringParamOrUndefined(useParams(), 'bbox'));
+	const bboxFromURLPath = getBBoxExtentFromString(getStringParamOrUndefined(useParams(), 'bbox'));
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
@@ -129,178 +112,77 @@ function Map(props: Props) {
 
 	const olMapRef = useRef<olMap | undefined>(undefined);
 
-	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
-	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
-	isUserMovingTheMapRef.current = isUserMovingTheMap;
-
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking
 	// ######################
-	const isScrollZooming = false;
-	const isScrollZoomingRef = useRef<boolean>(isScrollZooming);
-	isScrollZoomingRef.current = isScrollZooming;
-
+	const isScrollZoomingRef = useRef<boolean>(false);
 	const isDraggingRef = useRef<boolean>(false);
 
-	const isMapEventsSetup = useRef<boolean>(false);
+	// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
+	// Ref: https://gis.stackexchange.com/a/378877
+	// Note: We're using this in Mapa, but we hit issues in this legacy code where using a trackpad was seeing moveend fire during a drag event. We've since moved to using pointerup/down on the map itself, rather than the movestart/pointerdrag/moveend events as we are in Mapa.
+	// It may not actually be a thing and could've been caused by OL bugs (we're using an older version here) or just representative of the hacked together mass of code that makes the map work here - a combo of the legacy DemSausage map code with parts of Mapa's map code.
+	// Except, it still sort of happens. Mostly just when we're doing a specific combo of a two fingered click and drag to move the map.
+	// The (isDraggingRef.current === true) guard in moveend serves to deal with it.
+	const isDoubleClickingRef = useRef<boolean>(false);
 
-	const olEventKeys = [];
-	const windowEventKeys = [];
+	const navigateDebounced = useMemo(
+		() =>
+			debounce((url: string) => {
+				navigate(url);
+			}, 500),
+		[navigate],
+	);
 
-	useEffect(() => {
-		console.log('Init evt handlers?', olMapRef.current !== undefined, isMapEventsSetup.current);
+	const onMoveEnd = useCallback(
+		(evt: MapEvent) => {
+			// console.log('moveend', isDraggingRef.current);
 
-		if (olMapRef.current !== undefined && isMapEventsSetup.current === true) {
-			// windowEventKeys.forEach((v) => window.removeEventListener(v));
-			unByKey(olEventKeys);
-		}
+			// This doesn't seem to happen much any more, mostly just when we're doing a specific combo of a two fingered click and drag to move the map.
+			if (isDraggingRef.current === true) {
+				return undefined;
+			}
 
-		if (olMapRef.current !== undefined && isMapEventsSetup.current === false) {
-			isMapEventsSetup.current = true;
+			isDoubleClickingRef.current = false;
+			isScrollZoomingRef.current = false;
 
-			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
-			// Ref: https://gis.stackexchange.com/a/378877
-			// let isDragging = false;
-			let isDoubleClicking = false;
+			const url = createURLHashFromView(evt.map.getView());
+			if (url !== undefined && url !== location.hash.substring(1)) {
+				navigateDebounced(`#${url}`);
+			}
+		},
+		[location.hash, navigateDebounced],
+	);
 
-			// olMapRef.current.on('movestart', () => {
-			// 	isDraggingRef.current = false;
-			// 	setIsUserMovingTheMap(true);
-			// });
+	const onPointerDown = useCallback(() => {
+		isDraggingRef.current = true;
+	}, []);
 
-			// olMapRef.current.on('pointerdrag', () => {
-			// 	isDraggingRef.current = true;
-			// });
-
-			console.log('Attach event handleres');
-			const pointerDownKey = window.addEventListener('pointerdown', (e) => {
-				console.log('pointerdown', e);
-				isDraggingRef.current = true;
-				setIsUserMovingTheMap(true);
-			});
-
-			const pointerUpKey = window.addEventListener('pointerup', () => {
-				console.log('pointerup');
-				isDraggingRef.current = false;
-			});
-
-			windowEventKeys.push(pointerDownKey, pointerUpKey);
-
-			// olMapRef.current.on(
-			// 	'change:view',
-			// 	debounce(() => {
-			// 		console.log('change:view');
-			// 	}, 1000),
-			// );
-
-			const navigateDebounced = debounce((url: string) => {
-				console.log('navigate');
-				navigate(`#${url}`);
-			}, 500);
-
-			const moveEndKey = olMapRef.current.on('moveend', (evt: MapEvent) => {
-				// setIsUserMovingTheMap(false);
-
-				console.log('moveend', isDraggingRef.current);
-
-				if (isDraggingRef.current === true) {
-					return undefined;
-				}
-
-				// isDraggingRef.current = false;
-				isDoubleClicking = false;
-				isScrollZoomingRef.current = false;
-
-				// Update the Redux store version of the view for when
-				// we add new features.
-				const view = evt.map.getView();
-
-				// const reduxView = {
-				// 	center: view.getCenter(),
-				// 	zoom: view.getZoom(),
-				// 	resolution: view.getResolution(),
-				// };
-
-				// dispatch(setMapView(reduxView));
-
-				// @TOOD Remove /bounds
-				// https://public-redesign.test.democracysausage.org/referendum_2023/bounds/-20.7084446260404,-20.7456961356561,139.489826649035,139.511991886502/
-
-				const url = createURLHashFromView(view);
-
-				// if (reduxView.center !== undefined) {
-				// 	console.log(
-				// 		'reduxView vs urlHashView',
-				// 		reduxView.center,
-				// 		transform(reduxView.center, 'EPSG:3857', 'EPSG:4326'),
-				// 		reduxView.zoom,
-				// 		url,
-				// 	);
-				// }
-
-				// console.log('vs', url, location.hash);
-
-				if (url !== undefined && url !== location.hash.substring(1)) {
-					// console.log('navigate?');
-					navigate(`#${url}`);
-					// navigateDebounced(url);
-				}
-			});
-
-			// olMapRef.current.on(
-			// 	'click',
-			// 	onMapClick((features: Feature[]) => {
-			// 		dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
-
-			// 		if (features.length === 1) {
-			// 			navigate(`/FeatureManager/Edit/${features[0].id}`);
-			// 		} else if (features.length > 1) {
-			// 			navigate('/FeatureManager');
-			// 		}
-			// 	}),
-			// );
-
-			const dblClickKey = olMapRef.current.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
-				evt.preventDefault();
-
-				isDoubleClicking = true;
-
-				if (olMapRef.current !== undefined) {
-					const view = olMapRef.current.getView();
-					view.setCenter(evt.coordinate);
-					olMapRef.current.setView(view);
-				}
-
-				return false;
-			});
-
-			olEventKeys.push(moveEndKey, dblClickKey);
-		}
-	}, [location.hash, navigate]);
+	const onPointerUp = useCallback(() => {
+		isDraggingRef.current = false;
+	}, []);
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking (End)
 	// ######################
-
-	// @TODO Move this up into an Entrypoint layer
-	if (election === undefined) {
-		return null;
-	}
 
 	return (
 		<React.Fragment>
 			<OpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
-				mapView={mapView}
+				mapView={mapViewFromURLHash}
 				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
-				bbox={urlBBox}
+				bbox={bboxFromURLPath}
 				mapFilterOptions={mapFilterOptions}
 				onMapBeginLoading={onMapBeginLoading}
 				onMapDataLoaded={onMapDataLoaded}
 				onMapLoaded={onMapLoaded}
 				onQueryMap={onQueryMap}
+				onMoveEnd={onMoveEnd}
+				onPointerDown={onPointerDown}
+				onPointerUp={onPointerUp}
 			/>
 
 			<LayersSelector electionId={election.id} />

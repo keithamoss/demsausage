@@ -199,7 +199,6 @@ export default function SearchBar(props: Props) {
 					setIsWaitingForGPSLocation(false);
 
 					if (currentPosition !== undefined) {
-						console.log('currentPosition', currentPosition);
 						setIsGeolocationErrored(false);
 						setGeolocationErrorMessage(undefined);
 

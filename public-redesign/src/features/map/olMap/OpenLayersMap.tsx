@@ -27,6 +27,7 @@ import 'ol/ol.css';
 // @ts-ignore
 import VectorTile from 'ol/VectorTile';
 import View from 'ol/View';
+import { EventsKey } from 'ol/events';
 import { transform, transformExtent } from 'ol/proj.js';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
@@ -63,12 +64,22 @@ interface IProps {
 	onMapDataLoaded: Function;
 	onMapLoaded: Function;
 	onQueryMap: Function;
+	onMoveEnd?: (event: MapBrowserEvent) => void;
+	onDoubleClick?: (event: MapBrowserEvent) => void;
+	onPointerDown?: (event: MapBrowserEvent) => void;
+	onPointerUp?: (event: MapBrowserEvent) => void;
 }
 
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	private map: Map | null;
 
-	private vectorSourceChangedEventKey: any | undefined; /* ol.EventsKey */
+	private vectorSourceChangedEventKey: EventsKey | undefined;
+
+	private eventsKeys: EventsKey[];
+
+	private onPointerDownBound: undefined | ((event: MapBrowserEvent) => void);
+
+	private onPointerUpBound: undefined | ((event: MapBrowserEvent) => void);
 
 	private timeoutIds: number[];
 
@@ -77,6 +88,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 		this.map = null;
 		this.timeoutIds = [];
+		this.eventsKeys = [];
+		this.onPointerDownBound = undefined;
+		this.onPointerUpBound = undefined;
 
 		this.onMapContainerResize = this.onMapContainerResize.bind(this);
 	}
@@ -143,11 +157,22 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 		this.map.addLayer(this.getMapDataVectorLayer(this.map));
 
-		this.map.on('singleclick', this.onClickMap.bind(this));
+		this.eventsKeys.push(this.map.on('singleclick', this.onClickMap.bind(this)));
+
+		this.eventsKeys.push(this.map.on('dblclick', this.onDoubleClick.bind(this)));
+
+		this.eventsKeys.push(this.map.on('moveend', this.onMoveEnd.bind(this)));
+
+		// The pointer down/up events on OL's PointerInteractions don't do what we expect, so we use the regular 'ol pointerdown/pointerup events
+		this.onPointerDownBound = this.onPointerDown.bind(this);
+		this.map.addEventListener('pointerdown', this.onPointerDownBound);
+
+		this.onPointerUpBound = this.onPointerUp.bind(this);
+		this.map.addEventListener('pointerup', this.onPointerUpBound);
 	}
 
 	componentDidUpdate(prevProps: IProps) {
-		console.log('componentDidUpdate', prevProps, this.props);
+		// console.log('componentDidUpdate', this.props.isDraggingRef.current, prevProps, this.props);
 
 		// Object.keys(this.props).forEach((key) => {
 		// 	if (prevProps[key] !== this.props[key]) {
@@ -163,46 +188,52 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				// console.log('fitMapViewToElection');
 				this.fitMapViewToElection(this.props.election);
 			} else {
-				if (this.props.isDraggingRef.current === false) {
-					const matchy = doesTheMapViewMatchThisView(this.map.getView(), this.props.mapView);
-					// console.log('cdu.areViewsMatching', matchy);
-					if (this.props.mapView !== undefined && matchy === false) {
-						console.log('cdu.Set map to this.props.mapView');
-						this.map.setView(new View(this.props.mapView));
-					}
-				}
+				// Keeping this commented out for now. I thought we needed it when we were seeing the weird issue with 'moveend' firing when the map was still being dragged when using a trackpad. However, since moving onMoveEnd into this component (from map.tsx), and probably some other changes (there was a lot of hacking around), we're not seeing this issue.
+				// if (this.props.isDraggingRef.current === false) {
+				// If the Map's view doesn't match what's in the URL, use the URL.
+				// This is primarily used when we want to navigate() to a view internallyand have it change the map e.g. the "View On Map" button
+				// This is also needed when we're navigating via back/forward to make sure the view that's in the URL gets applied to the existing map object
+				const matchy = doesTheMapViewMatchThisView(this.map.getView(), this.props.mapView);
 
-				// console.log('bbox matching?', prevProps.bbox !== this.props.bbox);
-				if (prevProps.bbox !== this.props.bbox) {
-					// The user has performed a search by location
-					const { bbox } = this.props;
+				if (this.props.mapView !== undefined && matchy === false) {
+					// console.log('cdu.Set map to this.props.mapView');
+					this.map.setView(new View(this.props.mapView));
+				} else {
+					// }
 
-					// Zoom the user down to the bounding box of the polling places that are near their search area
-					if (bbox !== undefined) {
-						this.zoomMapToBBox(this.map);
-					}
-				}
+					// Not needed, the above code takes care of it now
+					// console.log('bbox matching?', prevProps.bbox !== this.props.bbox);
+					// if (prevProps.bbox !== this.props.bbox) {
+					// 	// The user has performed a search by location
+					// 	const { bbox } = this.props;
 
-				if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
-					// The user has performed a search by location
-					const { mapSearchResults } = this.props;
+					// 	// Zoom the user down to the bounding box of the polling places that are near their search area
+					// 	if (bbox !== undefined) {
+					// 		this.zoomMapToBBox(this.map);
+					// 	}
+					// }
 
-					// Zoom the user down to the bounding box of the polling places that are near their search area
-					if (mapSearchResults !== null) {
-						this.zoomMapToSearchResults(this.map);
-					} else {
-						// Remove any existing search indicator layer
-						this.clearSearchResultsVectorLayer(this.map);
-					}
-				} else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
-					// The user has changed the noms filter options
-					const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
-					if (sausageLayer !== null) {
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-							olStyleFunction(feature, resolution, this.props.mapFilterOptions),
-						);
+					if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
+						// The user has performed a search by location
+						const { mapSearchResults } = this.props;
+
+						// Zoom the user down to the bounding box of the polling places that are near their search area
+						if (mapSearchResults !== null) {
+							this.zoomMapToSearchResults(this.map);
+						} else {
+							// Remove any existing search indicator layer
+							this.clearSearchResultsVectorLayer(this.map);
+						}
+					} else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
+						// The user has changed the noms filter options
+						const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
+						if (sausageLayer !== null) {
+							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+							// @ts-ignore
+							sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
+								olStyleFunction(feature, resolution, this.props.mapFilterOptions),
+							);
+						}
 					}
 				}
 			}
@@ -210,6 +241,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentWillUnmount() {
+		// console.log('> componentWillUnmount');
+
 		// 1. Remove the "on data loaded" change event
 		// This doesn't work - presumably because of .bind(this)
 		// l.getSource().un("changed", this.onVectorSourceChanged.bind(this))
@@ -220,6 +253,12 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			Observable.unByKey(this.vectorSourceChangedEventKey);
+			this.vectorSourceChangedEventKey = undefined;
+		}
+
+		// 1.1 And the other event listeners can go too
+		if (this.eventsKeys !== undefined) {
+			Observable.unByKey(this.eventsKeys);
 		}
 
 		// 2. Cancel any window.setTimeout() calls that may be running
@@ -227,6 +266,18 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 		// 3. Remove the window.onresize event that lets the map know to update its size when the viewport changes
 		window.removeEventListener('resize', this.onMapContainerResize);
+
+		// 3.1 Remove other map event listeners
+		if (this.map !== null) {
+			if (this.onPointerDownBound !== undefined) {
+				this.map.removeEventListener('pointerdown', this.onPointerDownBound);
+				this.onPointerDownBound = undefined;
+			}
+			if (this.onPointerUpBound !== undefined) {
+				this.map.removeEventListener('pointerup', this.onPointerUpBound);
+				this.onPointerUpBound = undefined;
+			}
+		}
 
 		// 4. Remove all layers, controls, and interactions on the map
 		if (this.map !== null) {
@@ -302,6 +353,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 						onMapLoaded();
 
 						if (bbox !== undefined) {
+							// Dunno if we actually need this now, we added the whole zoomMapToBBox it during the redesign when we were hacking the map and we've since changed it to store the view in the URL hash and determine the map view from there
+							// @TODO True, we don't do that in this function...so let's test it if we need it here too
 							this.zoomMapToBBox(this.map);
 						} else if (mapSearchResults !== null) {
 							this.zoomMapToSearchResults(this.map);
@@ -314,6 +367,30 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			);
 
 			this.timeoutIds.push(timeoutId);
+		}
+	}
+
+	private onMoveEnd(event: MapBrowserEvent) {
+		if (this.props.onMoveEnd !== undefined) {
+			this.props.onMoveEnd(event);
+		}
+	}
+
+	private onDoubleClick(event: MapBrowserEvent) {
+		if (this.props.onDoubleClick !== undefined) {
+			this.props.onDoubleClick(event);
+		}
+	}
+
+	private onPointerDown(event: MapBrowserEvent) {
+		if (this.props.onPointerDown !== undefined) {
+			this.props.onPointerDown(event);
+		}
+	}
+
+	private onPointerUp(event: MapBrowserEvent) {
+		if (this.props.onPointerUp !== undefined) {
+			this.props.onPointerUp(event);
 		}
 	}
 
