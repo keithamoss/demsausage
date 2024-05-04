@@ -7,7 +7,11 @@ import { transformExtent } from 'ol/proj';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
-import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
+import {
+	navigateToMapWithNewView,
+	navigateToSearchListOfPollingPlacesFromSearchTermAndLonLat,
+} from '../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
 import {
@@ -17,7 +21,6 @@ import {
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterOptions } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { createURLHashFromView } from '../mapHelpers';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
 import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
@@ -53,19 +56,18 @@ export default function SearchComponent(props: Props) {
 		...props,
 	};
 
-	// const dispatch = useAppDispatch();
+	const params = useParams();
 	const navigate = useNavigate();
 
 	// @TODO Should all onXXXX functions here be useMemo'd or is that bad for some reason?
 
-	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
-	const urlSearchTerm = getStringParamOrEmptyString(useParams(), 'search_term');
+	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 
-	const urlLonLatFromSearch = getStringParamOrEmptyString(useParams(), 'lon_lat');
-	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
+	const urlLonLatFromSearch = getStringParamOrEmptyString(params, 'lon_lat');
+	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
 
-	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(useParams(), 'polling_place_ids'));
+	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(params, 'polling_place_ids'));
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
@@ -86,11 +88,12 @@ export default function SearchComponent(props: Props) {
 	);
 
 	const onChoose = (feature: IMapboxGeocodingAPIResponseFeature) => () => {
-		console.log('onChoose', feature);
-
-		navigate(`/${urlElectionName}/search/location/${feature.place_name}/${feature.geometry.coordinates.join(',')}/`, {
-			state: { cameFromSearchDrawerOrMap: true },
-		});
+		navigateToSearchListOfPollingPlacesFromSearchTermAndLonLat(
+			params,
+			navigate,
+			feature.place_name,
+			feature.geometry.coordinates.join(','),
+		);
 	};
 	// ######################
 	// Mapbox Search Query (End)
@@ -171,13 +174,7 @@ export default function SearchComponent(props: Props) {
 					padding: [48, 20, 98, 20],
 				});
 
-				const url = createURLHashFromView(view);
-
-				if (url !== undefined) {
-					navigate(`/${urlElectionName}#${url}`, {
-						state: { cameFromSearchDrawerOrMap: true },
-					});
-				}
+				navigateToMapWithNewView(params, navigate, view);
 			}
 		}
 	};

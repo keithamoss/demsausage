@@ -1,11 +1,10 @@
 import { purple } from '@mui/material/colors';
 import Feature from 'ol/Feature';
-import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
 import { IPollingPlace } from './pollingPlacesInterfaces';
 
 export const getPollingPlacePermalinkFromProps = (
-	election: Election,
+	electionNameURLSafe: string,
 	name: string,
 	premises: string,
 	state: string,
@@ -13,14 +12,11 @@ export const getPollingPlacePermalinkFromProps = (
 	// Occasionally some elections will have no premises names on polling places
 	const uri =
 		premises !== ''
-			? `/${election.name_url_safe}/polling_places/${name}/${premises}/${state}/`
-			: `/${election.name_url_safe}/polling_places/${name}/${state}/`;
+			? `/${electionNameURLSafe}/polling_places/${name}/${premises}/${state}/`
+			: `/${electionNameURLSafe}/polling_places/${name}/${state}/`;
 
 	return encodeURI(uri.replace(/\s/g, '_'));
 };
-
-export const getPollingPlacePermalink = (election: Election, pollingPlace: IPollingPlace) =>
-	getPollingPlacePermalinkFromProps(election, pollingPlace.name, pollingPlace.premises, pollingPlace.state);
 
 export enum PollingPlaceChanceOfSausage {
 	NO_IDEA = 0,
@@ -177,14 +173,6 @@ export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPl
 			const lastDivision = pollingPlace.divisions.slice(-1)[0];
 			return `${pollingPlace.divisions.slice(0, -1).join(', ')}, and ${lastDivision}`;
 		}
-	}
-};
-
-export const getPollingPlacePermalinkFromFeature = (feature: Feature, election: Election) => {
-	const { name, premises, state } = feature.getProperties();
-
-	if (typeof name === 'string' && typeof premises === 'string' && typeof state === 'string') {
-		return getPollingPlacePermalinkFromProps(election, name, premises, state);
 	}
 };
 

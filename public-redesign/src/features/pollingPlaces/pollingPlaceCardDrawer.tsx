@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import { navigateToMapUsingURLParams, navigateToSearchDrawer } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
@@ -72,6 +73,7 @@ interface Props {
 function PollingPlaceCardDrawer(props: Props) {
 	const { election, name, premises, state, cameFromSearchDrawerOrMap } = props;
 
+	const params = useParams();
 	const navigate = useNavigate();
 
 	const {
@@ -81,7 +83,11 @@ function PollingPlaceCardDrawer(props: Props) {
 		isSuccess,
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
-	const toggleDrawer = () => {
+	const onToggleDrawer = () => {
+		navigateToMapUsingURLParams(params, navigate);
+	};
+
+	const onClose = () => {
 		// If we've arrived here by searching in the UI, we know we can just
 		// go back and we'll remain within the search drawer interface.
 		// In most cases, this should send them back to the list of
@@ -91,7 +97,7 @@ function PollingPlaceCardDrawer(props: Props) {
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
-			navigate(`/${election.name_url_safe}/search/`);
+			navigateToSearchDrawer(params, navigate);
 		}
 	};
 
@@ -99,7 +105,7 @@ function PollingPlaceCardDrawer(props: Props) {
 		<Drawer
 			anchor="bottom"
 			open={true}
-			onClose={toggleDrawer}
+			onClose={onToggleDrawer}
 			ModalProps={{
 				keepMounted: true,
 			}}
@@ -116,7 +122,7 @@ function PollingPlaceCardDrawer(props: Props) {
 				)}
 
 				{isSuccess === true && pollingPlace !== undefined && (
-					<PollingPlaceCard pollingPlace={pollingPlace} election={election} onClose={toggleDrawer} />
+					<PollingPlaceCard pollingPlace={pollingPlace} election={election} onClose={onClose} />
 				)}
 			</StyledInteractableBoxFullHeight>
 		</Drawer>

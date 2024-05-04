@@ -1,5 +1,7 @@
 import View from 'ol/View';
 import { transform } from 'ol/proj';
+import { Params } from 'react-router-dom';
+import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { OLMapView } from '../app/appSlice';
 
 export const doesTheMapViewMatchThisView = (mapView: View, anotherView: Partial<OLMapView> | undefined) => {
@@ -20,44 +22,35 @@ export const doesTheMapViewMatchThisView = (mapView: View, anotherView: Partial<
 	);
 };
 
-export const doTwoViewsMatch = (view1: Partial<OLMapView>, view2: Partial<OLMapView>) => {
-	if (
-		view1.center !== undefined &&
-		view2.center !== undefined &&
-		(view1.center[0] !== view2.center[0] || view1.center[1] !== view2.center[1])
-	) {
-		return true;
-	}
-
-	if (view1.zoom !== undefined && view2.zoom !== undefined && view1.zoom !== view2.zoom) {
-		return true;
-	}
-
-	return false;
+export const extractMapViewFromString = (str: string) => {
+	const match = str.match(/\/{1}(?<map_lat_lon_zoom>@[\-0-9,.z]+)\/?/);
+	return match?.groups?.map_lat_lon_zoom;
 };
 
-export const createURLHashFromView = (view: View) => {
+export const createMapViewURLPathComponent = (view: View) => {
 	const centre = view.getCenter();
 	if (centre === undefined) {
 		return undefined;
 	}
 
-	return `${transform(centre, 'EPSG:3857', 'EPSG:4326').join(',')},z${view.getZoom()}`;
+	return `@${transform(centre, 'EPSG:3857', 'EPSG:4326').reverse().join(',')},z${view.getZoom()}`;
 };
 
-export const getViewFromURLHash = (hash: string): Partial<OLMapView> | undefined => {
-	if (hash === '') {
+export const createMapViewFromURL = (params: Params<string>): Partial<OLMapView> | undefined => {
+	const mapViewFromURL = getStringParamOrUndefined(params, 'map_lat_lon_zoom');
+
+	if (mapViewFromURL === undefined) {
 		return undefined;
 	}
 
-	// #139.5009092677685,-20.728621082178364,z14.373097035426929
-	const [lon, lat, zoom] = hash.substring(1).split(',');
+	// @-31.9439783,115.8640059,15z
+	const [lat, lon, zoom] = mapViewFromURL.substring(1).split(',');
 
-	const lonNumber = parseFloat(lon);
 	const latNumber = parseFloat(lat);
+	const lonNumber = parseFloat(lon);
 	const zoomNumber = parseFloat(zoom.substring(1));
 
-	if (Number.isNaN(lonNumber) === true || Number.isNaN(latNumber) === true || Number.isNaN(zoomNumber) === true) {
+	if (Number.isNaN(latNumber) === true || Number.isNaN(lonNumber) === true || Number.isNaN(zoomNumber) === true) {
 		return undefined;
 	}
 

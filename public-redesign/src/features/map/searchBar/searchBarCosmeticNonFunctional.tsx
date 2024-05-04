@@ -3,50 +3,24 @@ import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
 import { Badge, Divider, IconButton, InputBase, Paper } from '@mui/material';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
-import { Election } from '../../../app/services/elections';
+import { navigateToSearchDrawer, navigateToSearchDrawerRoot } from '../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import {
 	ESearchDrawerSubComponent,
 	selectIsMapFiltered,
 	selectNumberOfMapFilterOptionsApplied,
-	selectSearcBarSearchLonLat,
-	selectSearchBarSearchText,
 	setSearchBarInitialMode,
 } from '../../app/appSlice';
 import './searchBar.css';
 
-interface Props {
-	election: Election;
-}
-
-export default function SearchBarCosmeticNonFunctional(props: Props) {
-	const { election } = props;
-
+export default function SearchBarCosmeticNonFunctional() {
 	const dispatch = useAppDispatch();
+	const params = useParams();
 	const navigate = useNavigate();
 
-	const searchBarSearchText = useAppSelector((state) => selectSearchBarSearchText(state));
-	const searchBarSearchLonLat = useAppSelector((state) => selectSearcBarSearchLonLat(state));
-
-	const navigateToSearchDrawer = useMemo(
-		() => () => {
-			if (
-				searchBarSearchText !== undefined &&
-				searchBarSearchText !== '' &&
-				searchBarSearchLonLat !== undefined &&
-				searchBarSearchLonLat !== ''
-			) {
-				navigate(`/${election.name_url_safe}/search/location/${searchBarSearchText}/${searchBarSearchLonLat}/`);
-			} else if (searchBarSearchText !== undefined && searchBarSearchText !== '') {
-				navigate(`/${election.name_url_safe}/search/location/${searchBarSearchText}/`);
-			} else {
-				navigate(`/${election.name_url_safe}/search/`);
-			}
-		},
-		[navigate, election.name_url_safe, searchBarSearchText, searchBarSearchLonLat],
-	);
+	const searchBarSearchText = getStringParamOrEmptyString(useParams(), 'search_term');
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
 	const numberOfMapFilterOptionsApplied = useAppSelector(selectNumberOfMapFilterOptionsApplied);
@@ -56,12 +30,12 @@ export default function SearchBarCosmeticNonFunctional(props: Props) {
 	// ######################
 	const onClickSearchField = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
-		navigateToSearchDrawer();
+		navigateToSearchDrawer(params, navigate);
 	};
 
 	const onClearSearchBar = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
-		navigate(`/${election.name_url_safe}/search/`);
+		navigateToSearchDrawerRoot(params, navigate);
 	};
 	// ######################
 	// Search Field (End)
@@ -72,7 +46,7 @@ export default function SearchBarCosmeticNonFunctional(props: Props) {
 	// ######################
 	const onClickGPSControl = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.REQUEST_LOCATION));
-		navigateToSearchDrawer();
+		navigateToSearchDrawer(params, navigate);
 	};
 	// ######################
 	// GPS Control (End)
@@ -83,7 +57,7 @@ export default function SearchBarCosmeticNonFunctional(props: Props) {
 	// ######################
 	const onClickFilterControl = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.FILTER_CONTROL));
-		navigateToSearchDrawer();
+		navigateToSearchDrawer(params, navigate);
 	};
 	// ######################
 	// Filter Control (End)

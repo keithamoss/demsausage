@@ -8,11 +8,8 @@ import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterOptions: IMapFilterOptions;
-	// mapView: Partial<OLMapView> | undefined;
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent;
-		searchText: string;
-		lonLat: string;
 	};
 	pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection | undefined;
 	mapFeatures: IPollingPlace | null | undefined;
@@ -41,8 +38,6 @@ export const initialState: AppState = {
 	// mapView: undefined,
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
-		searchText: '',
-		lonLat: '',
 	},
 	pollingPlaces: undefined,
 	mapFeatures: undefined,
@@ -88,21 +83,12 @@ export const appSlice = createSlice({
 		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
 		// 	state.electionId = action.payload;
 		// },
-		// setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
-		// 	state.mapView = action.payload;
-		// },
 		// @TODO Either rename and move into setSearchBarMapFilterOptions or move into the `map` part of this app slice
 		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
 			state.mapFilterOptions = action.payload;
 		},
 		setSearchBarInitialMode: (state, action: PayloadAction<ESearchDrawerSubComponent>) => {
 			state.searchBar.initialMode = action.payload;
-		},
-		setSearchBarSearchText: (state, action: PayloadAction<string>) => {
-			state.searchBar.searchText = action.payload;
-		},
-		setSearchBarSearchLonLat: (state, action: PayloadAction<string>) => {
-			state.searchBar.lonLat = action.payload;
 		},
 		setPollingPlaces: (state, action: PayloadAction<IMapPollingPlaceGeoJSONFeatureCollection | undefined>) => {
 			state.pollingPlaces = action.payload;
@@ -128,14 +114,7 @@ export const appSlice = createSlice({
 	// },
 });
 
-export const {
-	// setMapView,
-	setMapFilterOptions,
-	setSearchBarInitialMode,
-	setSearchBarSearchText,
-	setSearchBarSearchLonLat,
-	setPollingPlaces,
-} = appSlice.actions;
+export const { setMapFilterOptions, setSearchBarInitialMode, setPollingPlaces } = appSlice.actions;
 
 // export const prepareFeaturesForMap = createAsyncThunk(
 // 	'app/prepareFeaturesForMap',
@@ -167,8 +146,6 @@ export const {
 
 export const selectMapFeatures = (state: RootState) => state.app.mapFeatures;
 
-// export const selectMapView = (state: RootState) => state.app.mapView;
-
 export const selectMapFilterOptions = (state: RootState) => state.app.mapFilterOptions;
 
 export const selectIsMapFiltered = createSelector(
@@ -182,10 +159,6 @@ export const selectNumberOfMapFilterOptionsApplied = createSelector(
 );
 
 export const selectSearchBarInitialMode = (state: RootState) => state.app.searchBar.initialMode;
-
-export const selectSearchBarSearchText = (state: RootState) => state.app.searchBar.searchText;
-
-export const selectSearcBarSearchLonLat = (state: RootState) => state.app.searchBar.lonLat;
 
 export const selectPollingPlaces = (state: RootState) => state.app.pollingPlaces;
 export default appSlice.reducer;

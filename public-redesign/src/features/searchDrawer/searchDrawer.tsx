@@ -5,12 +5,12 @@ import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import { navigateToMapUsingURLParams, navigateToPollingPlace } from '../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { ESearchDrawerSubComponent, selectSearchBarInitialMode } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import SearchComponent from '../map/searchBar/searchComponent';
-import { getPollingPlacePermalink } from '../pollingPlaces/pollingPlaceHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -59,7 +59,7 @@ function SearchDrawer(props: Props) {
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
 
 	const toggleDrawer = () => {
-		navigate(params.election_name !== undefined ? `/${params.election_name}` : '/');
+		navigateToMapUsingURLParams(params, navigate);
 	};
 
 	if (election === undefined) {
@@ -67,7 +67,7 @@ function SearchDrawer(props: Props) {
 	}
 
 	const onChoosePollingPlace = (pollingPlace: IPollingPlace) => {
-		navigate(getPollingPlacePermalink(election, pollingPlace), { state: { cameFromSearchDrawerOrMap: true } });
+		navigateToPollingPlace(params, navigate, pollingPlace);
 	};
 
 	return (

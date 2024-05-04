@@ -25,6 +25,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { useUnmount } from '../../../app/hooks/useUnmount';
+import {
+	navigateToSearchDrawerRoot,
+	navigateToSearchListOfPollingPlacesFromGPSSearch,
+	navigateToSearchListOfPollingPlacesFromSearchTerm,
+} from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
@@ -33,8 +38,6 @@ import {
 	selectNumberOfMapFilterOptionsApplied,
 	selectSearchBarInitialMode,
 	setSearchBarInitialMode,
-	setSearchBarSearchLonLat,
-	setSearchBarSearchText,
 } from '../../app/appSlice';
 import './searchBar.css';
 import SearchBarFilter from './searchBarFilter/searchBarFilter';
@@ -56,6 +59,8 @@ export default function SearchBar(props: Props) {
 	};
 
 	const dispatch = useAppDispatch();
+
+	const params = useParams();
 	const navigate = useNavigate();
 
 	// @TODO Should all onXXXX functions here be useMemo'd or is that bad for some reason?
@@ -66,9 +71,7 @@ export default function SearchBar(props: Props) {
 	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
 	const urlSearchTerm = getStringParamOrEmptyString(useParams(), 'search_term');
 
-	const urlLonLatFromSearch = getStringParamOrEmptyString(useParams(), 'lon_lat');
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
-	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
 
 	// When the user navigates back/forward, or reloads the page, we
 	// just need to handle setting the search term based on what's in
@@ -79,13 +82,13 @@ export default function SearchBar(props: Props) {
 
 	// Synch local state with the Redux store so SearchBarCosmeticNonFunctional
 	// and other components can consume information about the user's search criteria.
-	useEffect(() => {
-		dispatch(setSearchBarSearchText(urlSearchTerm));
-	}, [dispatch, urlSearchTerm]);
+	// useEffect(() => {
+	// 	dispatch(setSearchBarSearchText(urlSearchTerm));
+	// }, [dispatch, urlSearchTerm]);
 
-	useEffect(() => {
-		dispatch(setSearchBarSearchLonLat(urlLonLat));
-	}, [dispatch, urlLonLat]);
+	// useEffect(() => {
+	// 	dispatch(setSearchBarSearchLonLat(urlLonLat));
+	// }, [dispatch, urlLonLat]);
 
 	// @TODO Why does this exist again and is this really the best name for it?
 	// Increasingly, more places have to overwite this and set things back to SEARCH_FIELD
@@ -105,14 +108,12 @@ export default function SearchBar(props: Props) {
 				}
 
 				setIsUserTyping(false);
-				navigate(`/${urlElectionName}/search/location/${searchTerm}/`);
+				navigateToSearchListOfPollingPlacesFromSearchTerm(params, navigate, searchTerm);
 			}, 400),
-		[navigate, urlElectionName],
+		[navigate, params],
 	);
 
 	const onChangeSearchField = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-		console.log('onChangeSearchField', event.target.value);
-
 		debouncedNavigateOnSearchTermChange(event.target.value);
 
 		setIsUserTyping(true);
@@ -153,7 +154,7 @@ export default function SearchBar(props: Props) {
 	}, 50);
 
 	const onClearSearchBar = () => {
-		navigate(`/${urlElectionName}/search/`);
+		navigateToSearchDrawerRoot(params, navigate);
 
 		if (searchFieldRef.current !== null && document.activeElement !== searchFieldRef.current) {
 			searchFieldRef.current.focus();
@@ -202,9 +203,7 @@ export default function SearchBar(props: Props) {
 						setIsGeolocationErrored(false);
 						setGeolocationErrorMessage(undefined);
 
-						navigate(`/${urlElectionName}/search/gps/${currentPosition.join(',')}/`, {
-							state: { cameFromSearchDrawerOrMap: true },
-						});
+						navigateToSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(','));
 					} else {
 						setIsGeolocationErrored(true);
 						setGeolocationErrorMessage(
@@ -250,7 +249,7 @@ export default function SearchBar(props: Props) {
 				}),
 			];
 		}
-	}, [navigate, urlElectionName]);
+	}, [navigate, params, urlElectionName]);
 
 	const onDiscardGPSSearch = useCallback(() => {
 		geolocation.current.setTracking(false);
@@ -259,8 +258,8 @@ export default function SearchBar(props: Props) {
 		setIsGeolocationErrored(false);
 		setGeolocationErrorMessage(undefined);
 
-		navigate(`/${urlElectionName}/search/`);
-	}, [navigate, urlElectionName]);
+		navigateToSearchDrawerRoot(params, navigate);
+	}, [navigate, params]);
 
 	const onClickGPSControl = useCallback(() => {
 		// If we haven't got a GPS location, clicking the contol ask for one.

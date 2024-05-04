@@ -1,10 +1,15 @@
 import { Box } from '@mui/material';
 import { debounce } from 'lodash-es';
-import { Feature, MapEvent, Map as olMap } from 'ol';
+import { Feature, MapEvent, View, Map as olMap } from 'ol';
 import 'ol/ol.css';
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+	navigateToMapWithNewView,
+	navigateToPollingPlaceFromFeature,
+	navigateToPollingPlacesByIds,
+} from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import AddStallButton from '../app/addStallButton';
@@ -16,12 +21,9 @@ import {
 } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import {
-	getPollingPlaceIdsFromFeatures,
-	getPollingPlacePermalinkFromFeature,
-} from '../pollingPlaces/pollingPlaceHelpers';
+import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
-import { createURLHashFromView, getViewFromURLHash } from './mapHelpers';
+import { createMapViewFromURL } from './mapHelpers';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
@@ -70,10 +72,10 @@ function Map(props: Props) {
 	const { election } = props;
 
 	const dispatch = useAppDispatch();
+	const params = useParams();
 	const navigate = useNavigate();
-	const location = useLocation();
 
-	const mapViewFromURLHash = getViewFromURLHash(location.hash);
+	const mapViewFromURL = createMapViewFromURL(useParams());
 
 	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
 
@@ -91,20 +93,15 @@ function Map(props: Props) {
 			dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 
 			if (features.length === 1) {
-				const url = getPollingPlacePermalinkFromFeature(features[0], election);
-				if (url !== undefined) {
-					navigate(url, {
-						state: { cameFromSearchDrawerOrMapOrMap: true },
-					});
-				}
+				navigateToPollingPlaceFromFeature(params, navigate, features[0]);
 			} else {
 				const ids = getPollingPlaceIdsFromFeatures(features);
 				if (ids.length >= 1) {
-					navigate(`/${election.name_url_safe}/search/by_ids/${ids.join(',')}/`);
+					navigateToPollingPlacesByIds(params, navigate, ids);
 				}
 			}
 		},
-		[dispatch, election, navigate],
+		[dispatch, navigate, params],
 	);
 
 	const olMapRef = useRef<olMap | undefined>(undefined);
@@ -125,16 +122,14 @@ function Map(props: Props) {
 
 	const navigateDebounced = useMemo(
 		() =>
-			debounce((url: string) => {
-				navigate(url);
+			debounce((view: View) => {
+				navigateToMapWithNewView(params, navigate, view);
 			}, 500),
-		[navigate],
+		[navigate, params],
 	);
 
 	const onMoveEnd = useCallback(
 		(evt: MapEvent) => {
-			// console.log('moveend', isDraggingRef.current);
-
 			// This doesn't seem to happen much any more, mostly just when we're doing a specific combo of a two fingered click and drag to move the map.
 			if (isDraggingRef.current === true) {
 				return undefined;
@@ -143,12 +138,9 @@ function Map(props: Props) {
 			isDoubleClickingRef.current = false;
 			isScrollZoomingRef.current = false;
 
-			const url = createURLHashFromView(evt.map.getView());
-			if (url !== undefined && url !== location.hash.substring(1)) {
-				navigateDebounced(`#${url}`);
-			}
+			navigateDebounced(evt.map.getView());
 		},
-		[location.hash, navigateDebounced],
+		[navigateDebounced],
 	);
 
 	const onPointerDown = useCallback(() => {
@@ -167,7 +159,7 @@ function Map(props: Props) {
 			<OpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
-				mapView={mapViewFromURLHash}
+				mapView={mapViewFromURL}
 				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
@@ -194,7 +186,7 @@ function Map(props: Props) {
 					margin: '8px',
 				}}
 			>
-				<SearchBarCosmeticNonFunctional election={election} />
+				<SearchBarCosmeticNonFunctional />
 			</Box>
 
 			<Outlet />

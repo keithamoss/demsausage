@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { getStringParamOrUndefined } from '../../../../app/routing/routingHelpers';
+import { navigateToSearchDrawerRoot } from '../../../../app/routing/navigationHelpers';
 
 interface LocationState {
 	cameFromSearchDrawerOrMap?: boolean;
@@ -21,12 +21,11 @@ interface Props {
 export default function PollingPlacesNearbySearchResultsContainer(props: Props) {
 	const { numberOfResults, onViewOnMap, children } = props;
 
+	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const cameFromSearchDrawerOrMap = (location.state as LocationState)?.cameFromSearchDrawerOrMap === true;
-
-	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
 
 	const onGoBack = useCallback(() => {
 		// If we've arrived here by searching in the UI, we know we can just
@@ -39,9 +38,9 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
-			navigate(`/${urlElectionName}/search/`);
+			navigateToSearchDrawerRoot(params, navigate);
 		}
-	}, [cameFromSearchDrawerOrMap, navigate, urlElectionName]);
+	}, [cameFromSearchDrawerOrMap, navigate, params]);
 
 	return (
 		<Box sx={{ width: '100%', marginTop: 1 }}>

@@ -28,36 +28,58 @@ export const router = sentryCreateBrowserRouter([
 				element: <DebugView />,
 			},
 			{
+				path: '/:election_name/:map_lat_lon_zoom?/',
+				element: <Map />,
+			},
+			{
+				path: '/:election_name/place/:search_term/:map_lat_lon_zoom?/',
+				element: <Map />,
+			},
+			{
+				path: '/:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/',
+				element: <Map />,
+			},
+			{
+				path: '/:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/',
+				element: <Map />,
+			},
+			{
 				path: '/:election_name',
 				element: <Map />,
 				children: [
 					{
-						path: '/:election_name/search/',
+						path: '/:election_name/search/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
 					{
-						path: '/:election_name/search/location/:search_term/',
+						path: '/:election_name/search/location/:search_term/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
 					{
-						path: '/:election_name/search/location/:search_term/:lon_lat/',
+						path: '/:election_name/search/location/:search_term/:lon_lat/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
 					{
-						path: '/:election_name/search/gps/:gps_lon_lat/',
+						path: '/:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
 					{
-						path: '/:election_name/search/by_ids/:polling_place_ids/',
+						path: '/:election_name/search/by_ids/:polling_place_ids/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
+				],
+			},
+			{
+				path: '/:election_name',
+				element: <Map />,
+				children: [
 					{
-						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
+						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/:map_lat_lon_zoom?/',
 						element: <PollingPlaceCardDrawer />,
 					},
 					// Occasionally some elections will have no premises names on polling places
 					{
-						path: '/:election_name/polling_places/:polling_place_name/:polling_place_state/',
+						path: '/:election_name/polling_places/:polling_place_name/:polling_place_state/:map_lat_lon_zoom?/',
 						element: <PollingPlaceCardDrawer />,
 					},
 				],
