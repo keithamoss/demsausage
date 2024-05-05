@@ -98,13 +98,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	private fitMapViewToElection(election: Election) {
 		if (this.map !== null) {
 			const view = this.map.getView();
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			view.fit(polygon, {
-				size: this.map.getSize(),
+
+			view.fit(polygon.getExtent(), {
 				// padding: [1, 1, 1, 1],
 				callback: (completed: boolean) => {
 					if (completed === true) {

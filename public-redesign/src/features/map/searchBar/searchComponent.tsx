@@ -158,15 +158,21 @@ export default function SearchComponent(props: Props) {
 	// ######################
 	const onViewOnMap = () => {
 		if (pollingPlaceNearbyResultsFiltered !== undefined) {
-			const bbox = getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered);
-			const bboxNumbers = getBBoxExtentFromString(Object.values(bbox).join(','));
+			const bboxOfPollingPlaces = getBBoxExtentFromString(
+				Object.values(getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered)).join(','),
+			);
 
-			if (bboxNumbers !== undefined) {
-				const bboxNumbersTransformed = transformExtent(bboxNumbers, 'EPSG:4326', 'EPSG:3857');
+			if (bboxOfPollingPlaces !== undefined) {
+				const olMapDOMRect = document.getElementById('openlayers-map')?.getBoundingClientRect();
 
 				const view = new View();
-
-				view.fit(bboxNumbersTransformed, {
+				view.fit(transformExtent(bboxOfPollingPlaces, 'EPSG:4326', 'EPSG:3857'), {
+					// Fallback to the window if for some weird reason we can't get the size of the OpenLayers Map.
+					// It won't be exatly the same size (because of the header), but it'll do.
+					size:
+						olMapDOMRect !== undefined
+							? [olMapDOMRect.width, olMapDOMRect.height]
+							: [window.innerWidth, window.innerHeight],
 					// top, right, bottom, left
 					// @TODO Make this work for embedded mode
 					// if not undefined, assume embedded mode and only set padding of 50 bottom
