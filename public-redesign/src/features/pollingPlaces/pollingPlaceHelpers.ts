@@ -9,13 +9,13 @@ export const getPollingPlacePermalinkFromProps = (
 	premises: string,
 	state: string,
 ) => {
-	// Occasionally some elections will have no premises names on polling places
-	const uri =
-		premises !== ''
-			? `/${electionNameURLSafe}/polling_places/${name}/${premises}/${state}/`
-			: `/${electionNameURLSafe}/polling_places/${name}/${state}/`;
+	const nameEncoded = encodeURIComponent(name.replace(/\s/g, '_'));
+	const premisesEncoded = encodeURIComponent(premises.replace(/\s/g, '_'));
 
-	return encodeURI(uri.replace(/\s/g, '_'));
+	// Occasionally some elections will have no premises names on polling places
+	return premises !== ''
+		? `/${electionNameURLSafe}/polling_places/${nameEncoded}/${premisesEncoded}/${state}/`
+		: `/${electionNameURLSafe}/polling_places/${nameEncoded}/${state}/`;
 };
 
 export enum PollingPlaceChanceOfSausage {
