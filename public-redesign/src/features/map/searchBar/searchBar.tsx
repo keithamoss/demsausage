@@ -31,7 +31,7 @@ import {
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
 	navigateToSearchMapboxResults,
 } from '../../../app/routing/navigationHelpers';
-import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
@@ -64,15 +64,12 @@ export default function SearchBar(props: Props) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	// @TODO Should all onXXXX functions here be useMemo'd or is that bad for some reason?
-
 	const [localSearchTerm, setLocalSearchTerm] = useState('');
 	const [isUserTyping, setIsUserTyping] = useState(false);
 
-	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
-	const urlSearchTerm = getStringParamOrEmptyString(useParams(), 'search_term');
-	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
-	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
+	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
+	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
+	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
 	// When the user navigates back/forward, or reloads the page, we
 	// just need to handle setting the search term based on what's in
@@ -82,13 +79,14 @@ export default function SearchBar(props: Props) {
 	}
 
 	const searchBarFilterControlOpen = useAppSelector((state) => selectSearchBarFilterControlState(state));
-
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
 	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
 
 	// ######################
 	// Search Field
 	// ######################
+	const searchFieldRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
+
 	const debouncedNavigateOnSearchTermChange = useMemo(
 		() =>
 			debounce((searchTerm: string) => {
@@ -102,15 +100,14 @@ export default function SearchBar(props: Props) {
 		[navigate, params],
 	);
 
-	const onChangeSearchField = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-		debouncedNavigateOnSearchTermChange(event.target.value);
-
-		setIsUserTyping(true);
-
-		setLocalSearchTerm(event.target.value);
-	};
-
-	const searchFieldRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
+	const onChangeSearchField = useCallback(
+		(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+			debouncedNavigateOnSearchTermChange(event.target.value);
+			setIsUserTyping(true);
+			setLocalSearchTerm(event.target.value);
+		},
+		[debouncedNavigateOnSearchTermChange],
+	);
 
 	// For some reason autoFocus={autoFocusSearchField} on InputBase
 	// isn't working when the user comes from the <Map> using the 'Clear'
@@ -142,13 +139,13 @@ export default function SearchBar(props: Props) {
 		}
 	}, 50);
 
-	const onClearSearchBar = () => {
+	const onClearSearchBar = useCallback(() => {
 		navigateToSearchDrawerRoot(params, navigate);
 
 		if (searchFieldRef.current !== null && document.activeElement !== searchFieldRef.current) {
 			searchFieldRef.current.focus();
 		}
-	};
+	}, [navigate, params]);
 
 	const onDiscardPollingPlaceByIdsSearch = useCallback(() => {
 		navigateToSearchDrawerRoot(params, navigate);
@@ -242,7 +239,7 @@ export default function SearchBar(props: Props) {
 				}),
 			];
 		}
-	}, [navigate, params, urlElectionName]);
+	}, [navigate, params]);
 
 	const onDiscardGPSSearch = useCallback(() => {
 		geolocation.current.setTracking(false);
@@ -293,11 +290,46 @@ export default function SearchBar(props: Props) {
 	// ######################
 	// Filter Control
 	// ######################
-	const onClickFilterControl = () => {
+	const onClickFilterControl = useCallback(() => {
 		dispatch(setSearchBarFilterControlState(!searchBarFilterControlOpen));
-	};
+	}, [dispatch, searchBarFilterControlOpen]);
 	// ######################
 	// Filter Control (End)
+	// ######################
+
+	// ######################
+	// Search Field UI
+	// ######################
+	const searchFieldPlaceholder = useMemo(
+		() => (urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined),
+		[urlLonLatFromGPS, urlPollingPlaceIds],
+	);
+
+	const searchFieldStartAdornment = useMemo(
+		() =>
+			urlLonLatFromGPS !== '' ? (
+				<InputAdornment position="start">
+					<Chip
+						label="Searching by GPS location"
+						onDelete={onDiscardGPSSearch}
+						color="primary"
+						sx={{ cursor: 'auto' }}
+					/>
+				</InputAdornment>
+			) : urlPollingPlaceIds !== '' ? (
+				<InputAdornment position="start">
+					<Chip
+						label="Searching from map"
+						onDelete={onDiscardPollingPlaceByIdsSearch}
+						color="primary"
+						sx={{ cursor: 'auto' }}
+					/>
+				</InputAdornment>
+			) : undefined,
+		[onDiscardGPSSearch, onDiscardPollingPlaceByIdsSearch, urlLonLatFromGPS, urlPollingPlaceIds],
+	);
+	// ######################
+	// Search Field UI (End)
 	// ######################
 
 	return (
@@ -317,33 +349,13 @@ export default function SearchBar(props: Props) {
 					value={localSearchTerm}
 					onChange={onChangeSearchField}
 					autoFocus={autoFocusSearchField}
-					placeholder={urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined}
+					placeholder={searchFieldPlaceholder}
 					inputProps={{
 						'aria-label': 'Search for polling places',
 						className: 'searchBar',
 					}}
 					sx={{ ml: 1, flex: 1 }}
-					startAdornment={
-						urlLonLatFromGPS !== '' ? (
-							<InputAdornment position="start">
-								<Chip
-									label="Searching by GPS location"
-									onDelete={onDiscardGPSSearch}
-									color="primary"
-									sx={{ cursor: 'auto' }}
-								/>
-							</InputAdornment>
-						) : urlPollingPlaceIds !== '' ? (
-							<InputAdornment position="start">
-								<Chip
-									label="Searching from map"
-									onDelete={onDiscardPollingPlaceByIdsSearch}
-									color="primary"
-									sx={{ cursor: 'auto' }}
-								/>
-							</InputAdornment>
-						) : undefined
-					}
+					startAdornment={searchFieldStartAdornment}
 				/>
 
 				{localSearchTerm !== '' && (

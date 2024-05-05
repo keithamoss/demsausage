@@ -4,7 +4,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import View from 'ol/View';
 import { transformExtent } from 'ol/proj';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
@@ -75,10 +75,10 @@ export default function SearchComponent(props: Props) {
 	// ######################
 	// Mapbox Search Query
 	// ######################
-	// Move or doco some of this to mapbox.ts or a Mapbox utils file?
 	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${urlSearchTerm}.json?limit=10&proximity=ip&types=${mapboxSearchTypes.join(
 		'%2C',
 	)}&access_token=${getMapboxAPIKey()}&${getMapboxSearchParamsForElection(election)}`;
+
 	const {
 		data: mapboxSearchResults,
 		error: errorFetchingMapboxResults,
@@ -88,14 +88,17 @@ export default function SearchComponent(props: Props) {
 		isSearchingYet(urlSearchTerm) === true && urlLonLat === '' ? { url } : skipToken,
 	);
 
-	const onChoose = (feature: IMapboxGeocodingAPIResponseFeature) => () => {
-		navigateToSearchListOfPollingPlacesFromMapboxResults(
-			params,
-			navigate,
-			feature.place_name,
-			feature.geometry.coordinates.join(','),
-		);
-	};
+	const onChoose = useCallback(
+		(feature: IMapboxGeocodingAPIResponseFeature) => () => {
+			navigateToSearchListOfPollingPlacesFromMapboxResults(
+				params,
+				navigate,
+				feature.place_name,
+				feature.geometry.coordinates.join(','),
+			);
+		},
+		[navigate, params],
+	);
 	// ######################
 	// Mapbox Search Query (End)
 	// ######################
@@ -157,7 +160,7 @@ export default function SearchComponent(props: Props) {
 	// ######################
 	// Polling Place Search Results
 	// ######################
-	const onViewOnMap = () => {
+	const onViewOnMap = useCallback(() => {
 		if (pollingPlaceNearbyResultsFiltered !== undefined) {
 			const bboxOfPollingPlaces = getBBoxExtentFromString(
 				Object.values(getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered)).join(','),
@@ -184,7 +187,7 @@ export default function SearchComponent(props: Props) {
 				navigateToMapWithNewView(params, navigate, view);
 			}
 		}
-	};
+	}, [navigate, params, pollingPlaceNearbyResultsFiltered]);
 	// ######################
 	// Polling Place Search Results (End)
 	// ######################

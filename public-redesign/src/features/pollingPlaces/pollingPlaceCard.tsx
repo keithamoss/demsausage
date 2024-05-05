@@ -27,7 +27,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { navigateToSearchDrawer } from '../../app/routing/navigationHelpers';
 import { Election } from '../../app/services/elections';
@@ -80,7 +80,7 @@ export default function PollingPlaceCard(props: Props) {
 
 	const nomsReader = pollingPlace.stall !== null ? new NomsReader(pollingPlace.stall.noms) : undefined;
 
-	const onClose = () => {
+	const onClose = useCallback(() => {
 		// If we've arrived here by searching in the UI, we know we can just
 		// go back and we'll remain within the search drawer interface.
 		// In most cases, this should send them back to the list of
@@ -92,7 +92,7 @@ export default function PollingPlaceCard(props: Props) {
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
 			navigateToSearchDrawer(params, navigate);
 		}
-	};
+	}, [cameFromInternalNavigation, navigate, params]);
 
 	// @TODO How to make it clear post-election that a booth had no reports?
 

@@ -5,7 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { IPollingPlace } from '../../../pollingPlaces/pollingPlacesInterfaces';
 import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
@@ -46,11 +46,14 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 export default function PollingPlaceSearchResultsCard(props: Props) {
 	const { pollingPlace, onChoosePollingPlace } = props;
 
-	const onClickPollingPlace = (pollingPlace: IPollingPlace) => () => {
-		if (onChoosePollingPlace !== undefined) {
-			onChoosePollingPlace(pollingPlace);
-		}
-	};
+	const onClickPollingPlace = useCallback(
+		(pollingPlace: IPollingPlace) => () => {
+			if (onChoosePollingPlace !== undefined) {
+				onChoosePollingPlace(pollingPlace);
+			}
+		},
+		[onChoosePollingPlace],
+	);
 
 	return (
 		<React.Fragment>

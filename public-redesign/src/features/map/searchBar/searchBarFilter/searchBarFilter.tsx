@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../../app/appSlice';
 import { IMapFilterSettings, NomsOptionsAvailable } from '../../../icons/noms';
@@ -15,16 +15,19 @@ export default function SearchBarFilter() {
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
-	const onClickFilterOptionListItemButton = (value: keyof IMapFilterSettings) => () => {
-		dispatch(
-			setMapFilterSettings({
-				...mapFilterSettings,
-				[value]: !mapFilterSettings[value],
-			}),
-		);
-	};
+	const onClickFilterOptionListItemButton = useCallback(
+		(value: keyof IMapFilterSettings) => () => {
+			dispatch(
+				setMapFilterSettings({
+					...mapFilterSettings,
+					[value]: !mapFilterSettings[value],
+				}),
+			);
+		},
+		[dispatch, mapFilterSettings],
+	);
 
-	const onChangeFilterOption =
+	const onChangeFilterOption = useCallback(
 		(value: keyof IMapFilterSettings) => (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
 			dispatch(
 				setMapFilterSettings({
@@ -32,7 +35,9 @@ export default function SearchBarFilter() {
 					[value]: checked,
 				}),
 			);
-		};
+		},
+		[dispatch, mapFilterSettings],
+	);
 
 	return (
 		<List

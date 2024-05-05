@@ -1,6 +1,7 @@
 import { Alert, AlertTitle, Drawer, LinearProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
+import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParams } from '../../app/routing/navigationHelpers';
@@ -81,7 +82,7 @@ function PollingPlaceCardDrawer(props: Props) {
 		isSuccess,
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
-	const onToggleDrawer = () => {
+	const onToggleDrawer = useCallback(() => {
 		if (cameFromInternalNavigation === true) {
 			navigate(-1);
 		} else {
@@ -89,7 +90,7 @@ function PollingPlaceCardDrawer(props: Props) {
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
 			navigateToMapUsingURLParams(params, navigate);
 		}
-	};
+	}, [cameFromInternalNavigation, navigate, params]);
 
 	return (
 		<Drawer

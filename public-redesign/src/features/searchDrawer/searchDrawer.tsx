@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
+import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParams, navigateToPollingPlace } from '../../app/routing/navigationHelpers';
@@ -54,12 +55,12 @@ function SearchDrawer(props: Props) {
 	const params = useParams();
 	const navigate = useNavigate();
 
-	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
-	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
+	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
+	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
-	const toggleDrawer = () => {
+	const toggleDrawer = useCallback(() => {
 		navigateToMapUsingURLParams(params, navigate);
-	};
+	}, [navigate, params]);
 
 	if (election === undefined) {
 		return null;
