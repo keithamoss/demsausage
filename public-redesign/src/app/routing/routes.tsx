@@ -36,7 +36,7 @@ export const router = sentryCreateBrowserRouter([
 				element: <Map />,
 			},
 			{
-				path: '/:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/',
+				path: '/:election_name/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/',
 				element: <Map />,
 			},
 			{
@@ -60,7 +60,7 @@ export const router = sentryCreateBrowserRouter([
 						element: <SearchDrawer />,
 					},
 					{
-						path: '/:election_name/search/place/:search_term/:lon_lat/:map_lat_lon_zoom?/',
+						path: '/:election_name/search/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},
 					{

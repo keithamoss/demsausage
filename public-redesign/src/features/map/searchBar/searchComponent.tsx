@@ -63,7 +63,7 @@ export default function SearchComponent(props: Props) {
 
 	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 
-	const urlLonLatFromSearch = getStringParamOrEmptyString(params, 'lon_lat');
+	const urlLonLatFromSearch = getStringParamOrEmptyString(params, 'place_lon_lat');
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
 

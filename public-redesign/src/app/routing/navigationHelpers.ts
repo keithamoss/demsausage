@@ -14,7 +14,7 @@ export const getURLParams = (params: Params<string>) => {
 	return {
 		urlElectionName: params.election_name,
 		urlSearchTerm: params.search_term,
-		urlLonLat: params.lon_lat,
+		urlLonLat: params.place_lon_lat,
 		urlGPSLonLat: params.gps_lon_lat,
 		urlPollingPlaceName: params.polling_place_name,
 		urlPollingPlacePremises: params.polling_place_premises,
@@ -57,7 +57,7 @@ export const navigateToMap = (params: Params<string>, navigate: NavigateFunction
 	// We handle going to all of these routes:
 	// /:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/
+	// /:election_name/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/place/:search_term/:map_lat_lon_zoom?/
 	// /:election_name/:map_lat_lon_zoom?/
 
@@ -156,7 +156,7 @@ export const navigateToSearchDrawer = (params: Params<string>, navigate: Navigat
 	// /:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/search/place/:search_term/:map_lat_lon_zoom?/
-	// /:election_name/search/place/:search_term/:lon_lat/:map_lat_lon_zoom?/
+	// /:election_name/search/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/search/:map_lat_lon_zoom?/
 
 	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds, urlMapLatLonZoom } =
