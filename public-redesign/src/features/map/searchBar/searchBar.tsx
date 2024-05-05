@@ -35,7 +35,7 @@ import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../..
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
-	selectNumberOfMapFilterOptionsApplied,
+	selectNumberOfMapFilterSettingsApplied,
 	selectSearchBarFilterControlState,
 	setSearchBarFilterControlState,
 } from '../../app/appSlice';
@@ -84,7 +84,7 @@ export default function SearchBar(props: Props) {
 	const searchBarFilterControlOpen = useAppSelector((state) => selectSearchBarFilterControlState(state));
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
-	const numberOfMapFilterOptionsApplied = useAppSelector(selectNumberOfMapFilterOptionsApplied);
+	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
 
 	// ######################
 	// Search Field
@@ -372,7 +372,7 @@ export default function SearchBar(props: Props) {
 							sx={{ pr: 1 }}
 						>
 							{isMapFiltered === true ? (
-								<Badge badgeContent={numberOfMapFilterOptionsApplied} color="secondary">
+								<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
 									<FilterAltOutlinedIcon
 										sx={{ color: searchBarFilterControlOpen === true ? mapaThemeSecondaryBlue : undefined }}
 									/>

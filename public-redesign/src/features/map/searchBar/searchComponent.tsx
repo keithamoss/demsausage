@@ -19,7 +19,7 @@ import {
 	useGetPollingPlaceByLatLonLookupQuery,
 } from '../../../app/services/pollingPlaces';
 import { getCSVStringsAsFloats } from '../../../app/utils';
-import { selectMapFilterOptions } from '../../app/appSlice';
+import { selectMapFilterSettings } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { getStandardViewPadding } from '../mapHelpers';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
@@ -70,7 +70,7 @@ export default function SearchComponent(props: Props) {
 
 	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(params, 'polling_place_ids'));
 
-	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
 	// ######################
 	// Mapbox Search Query
@@ -147,7 +147,7 @@ export default function SearchComponent(props: Props) {
 	const pollingPlaceNearbyResultsFiltered =
 		pollingPlaceNearbyResultsCombined !== undefined
 			? pollingPlaceNearbyResultsCombined.filter(
-					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterOptions) === true,
+					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings) === true,
 			  )
 			: undefined;
 	// ######################

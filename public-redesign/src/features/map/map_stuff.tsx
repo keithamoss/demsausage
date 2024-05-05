@@ -3,7 +3,7 @@ import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import { IMapFilterOptions, IMapPollingGeoJSONNoms, spriteIconConfig } from '../icons/noms';
+import { IMapFilterSettings, IMapPollingGeoJSONNoms, spriteIconConfig } from '../icons/noms';
 import sprite from '../icons/sprite.json';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { NomsReader } from './noms';
@@ -133,12 +133,12 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 	}
 });
 
-export const hasFilterOptions = (mapFilterOptions: IMapFilterOptions) =>
-	Object.values(mapFilterOptions).filter((enabled: boolean) => enabled === true).length > 0;
+export const hasFilterOptions = (mapFilterSettings: IMapFilterSettings) =>
+	Object.values(mapFilterSettings).filter((enabled: boolean) => enabled === true).length > 0;
 
-export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilterOptions) => {
-	if (hasFilterOptions(mapFilterOptions) && noms.hasAnyNoms() === true) {
-		for (const [option, enabled] of Object.entries(mapFilterOptions)) {
+export const satisfiesMapFilter = (noms: NomsReader, mapFilterSettings: IMapFilterSettings) => {
+	if (hasFilterOptions(mapFilterSettings) && noms.hasAnyNoms() === true) {
+		for (const [option, enabled] of Object.entries(mapFilterSettings)) {
 			if (enabled === true && noms.hasNomsOption(option) === false) {
 				return false;
 			}
@@ -151,9 +151,9 @@ export const satisfiesMapFilter = (noms: NomsReader, mapFilterOptions: IMapFilte
 
 export const doesPollingPlaceSatisifyFilterCriteria = (
 	pollingPlace: IPollingPlace,
-	mapFilterOptions: IMapFilterOptions,
+	mapFilterSettings: IMapFilterSettings,
 ) => {
-	if (hasFilterOptions(mapFilterOptions) === false) {
+	if (hasFilterOptions(mapFilterSettings) === false) {
 		return true;
 	}
 
@@ -166,7 +166,7 @@ export const doesPollingPlaceSatisifyFilterCriteria = (
 		return false;
 	}
 
-	if (satisfiesMapFilter(nomsReader, mapFilterOptions) === false) {
+	if (satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
 		return false;
 	}
 
@@ -176,12 +176,12 @@ export const doesPollingPlaceSatisifyFilterCriteria = (
 export const olStyleFunction = (
 	feature: IMapPollingPlaceFeature,
 	resolution: number,
-	mapFilterOptions: IMapFilterOptions,
+	mapFilterSettings: IMapFilterSettings,
 ) => {
 	const nomsReader = new NomsReader(feature.get('noms'));
 
 	if (nomsReader.hasAnyNoms() === true) {
-		if (hasFilterOptions(mapFilterOptions) === true && satisfiesMapFilter(nomsReader, mapFilterOptions) === false) {
+		if (hasFilterOptions(mapFilterSettings) === true && satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
 			return null;
 		}
 
@@ -190,7 +190,7 @@ export const olStyleFunction = (
 			: nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature, resolution);
 	}
 
-	return hasFilterOptions(mapFilterOptions) === false
+	return hasFilterOptions(mapFilterSettings) === false
 		? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		  // @ts-ignore-next-line
 		  spriteIcons.unknown

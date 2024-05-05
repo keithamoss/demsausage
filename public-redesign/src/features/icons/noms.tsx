@@ -20,7 +20,7 @@ import VegoIcon from './vego';
 // Noms aren't fully data-driven yet.
 // See NomsReader in the other noms.tsx for more manual additions.
 
-export interface IMapFilterOptions {
+export interface IMapFilterSettings {
 	bbq?: boolean;
 	cake?: boolean;
 	vego?: boolean;
@@ -29,13 +29,13 @@ export interface IMapFilterOptions {
 	bacon_and_eggs?: boolean;
 }
 
-export interface IMapPollingGeoJSONNoms extends IMapFilterOptions {
+export interface IMapPollingGeoJSONNoms extends IMapFilterSettings {
 	free_text?: boolean; // This is actually a boolean - Map GeoJSON returns summary info only
 	nothing?: boolean;
 	run_out?: boolean;
 }
 
-export interface IMapPollingNoms extends IMapFilterOptions {
+export interface IMapPollingNoms extends IMapFilterSettings {
 	free_text?: string; // When use other API calls to retrieve individual polling places we get the actual text
 	nothing?: boolean;
 	run_out?: boolean;

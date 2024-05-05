@@ -39,14 +39,13 @@ import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { OLMapView } from '../../app/appSlice';
-import { IMapFilterOptions } from '../../icons/noms';
+import { IMapFilterSettings } from '../../icons/noms';
 import { doesTheMapViewMatchThisView, getStandardViewPadding } from '../mapHelpers';
 import { IMapPollingPlaceFeature, IMapSearchResults, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'
 // import { IGeoJSONFeatureCollection } from '../../redux/modules/interfaces'
-// import { IMapFilterOptions, IMapSearchResults, olStyleFunction } from '../../redux/modules/map'
 // import { IMapPollingPlaceFeature } from '../../redux/modules/polling_places'
 // import { gaTrack } from '../../shared/analytics/GoogleAnalytics'
 
@@ -59,7 +58,7 @@ interface IProps {
 	// geojson: IGeoJSONFeatureCollection | undefined
 	mapSearchResults: IMapSearchResults | null;
 
-	mapFilterOptions: IMapFilterOptions;
+	mapFilterSettings: IMapFilterSettings;
 	onMapBeginLoading: Function;
 	onMapDataLoaded: Function;
 	onMapLoaded: Function;
@@ -207,14 +206,14 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 							// Remove any existing search indicator layer
 							this.clearSearchResultsVectorLayer(this.map);
 						}
-					} else if (JSON.stringify(prevProps.mapFilterOptions) !== JSON.stringify(this.props.mapFilterOptions)) {
+					} else if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
 						// The user has changed the noms filter options
 						const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
 						if (sausageLayer !== null) {
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-								olStyleFunction(feature, resolution, this.props.mapFilterOptions),
+								olStyleFunction(feature, resolution, this.props.mapFilterSettings),
 							);
 						}
 					}
@@ -449,7 +448,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private getMapDataVectorLayer(_map: Map) {
-		const { election, /*geojson, */ mapFilterOptions, onMapBeginLoading } = this.props;
+		const { election, /*geojson, */ mapFilterSettings, onMapBeginLoading } = this.props;
 		const geojson = undefined;
 
 		const vectorSource = new VectorSource({
@@ -480,7 +479,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.vectorSourceChangedEventKey = vectorSource.once('change', this.onVectorSourceChanged.bind(this));
 
 		const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
-			olStyleFunction(feature, resolution, mapFilterOptions);
+			olStyleFunction(feature, resolution, mapFilterSettings);
 
 		const vectorLayer = new VectorLayer({
 			renderMode: 'image',

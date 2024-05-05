@@ -2,12 +2,12 @@ import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { values } from 'lodash-es';
 import { Coordinate } from 'ol/coordinate';
 import { RootState } from '../../app/store';
-import { IMapFilterOptions } from '../icons/noms';
+import { IMapFilterSettings } from '../icons/noms';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/map_stuff';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
-	mapFilterOptions: IMapFilterOptions;
+	mapFilterSettings: IMapFilterSettings;
 	searchBarFilterControlState: boolean;
 	pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection | undefined;
 	mapFeatures: IPollingPlace | null | undefined;
@@ -32,7 +32,7 @@ export enum eMapFeaturesLoadingStatus {
 }
 
 export const initialState: AppState = {
-	mapFilterOptions: {},
+	mapFilterSettings: {},
 	searchBarFilterControlState: false,
 	pollingPlaces: undefined,
 	mapFeatures: undefined,
@@ -42,7 +42,7 @@ export const initialState: AppState = {
 // pollingPlaces is excluded from storage and
 // mapFeatures isn't implemented yet.
 export const isAppState = (o: any): o is AppState => {
-	return 'mapFilterOptions' in o && 'searchBar' in o;
+	return 'mapFilterSettings' in o && 'searchBar' in o;
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -78,9 +78,8 @@ export const appSlice = createSlice({
 		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
 		// 	state.electionId = action.payload;
 		// },
-		// @TODO Either rename and move into setSearchBarMapFilterOptions or move into the `map` part of this app slice
-		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
-			state.mapFilterOptions = action.payload;
+		setMapFilterSettings: (state, action: PayloadAction<IMapFilterSettings>) => {
+			state.mapFilterSettings = action.payload;
 		},
 		setSearchBarFilterControlState: (state, action: PayloadAction<boolean>) => {
 			state.searchBarFilterControlState = action.payload;
@@ -109,7 +108,7 @@ export const appSlice = createSlice({
 	// },
 });
 
-export const { setMapFilterOptions, setSearchBarFilterControlState, setPollingPlaces } = appSlice.actions;
+export const { setMapFilterSettings, setSearchBarFilterControlState, setPollingPlaces } = appSlice.actions;
 
 // export const prepareFeaturesForMap = createAsyncThunk(
 // 	'app/prepareFeaturesForMap',
@@ -141,16 +140,16 @@ export const { setMapFilterOptions, setSearchBarFilterControlState, setPollingPl
 
 export const selectMapFeatures = (state: RootState) => state.app.mapFeatures;
 
-export const selectMapFilterOptions = (state: RootState) => state.app.mapFilterOptions;
+export const selectMapFilterSettings = (state: RootState) => state.app.mapFilterSettings;
 
 export const selectIsMapFiltered = createSelector(
-	selectMapFilterOptions,
-	(mapFilterOptions) => values(mapFilterOptions).find((option) => option === true) || false,
+	selectMapFilterSettings,
+	(mapFilterSettings) => values(mapFilterSettings).find((option) => option === true) || false,
 );
 
-export const selectNumberOfMapFilterOptionsApplied = createSelector(
-	selectMapFilterOptions,
-	(mapFilterOptions) => values(mapFilterOptions).filter((option) => option === true).length,
+export const selectNumberOfMapFilterSettingsApplied = createSelector(
+	selectMapFilterSettings,
+	(mapFilterSettings) => values(mapFilterSettings).filter((option) => option === true).length,
 );
 
 export const selectSearchBarFilterControlState = (state: RootState) => state.app.searchBarFilterControlState;

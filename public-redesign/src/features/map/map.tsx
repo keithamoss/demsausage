@@ -14,7 +14,7 @@ import {
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import AddStallButton from '../app/addStallButton';
-import { selectMapFilterOptions, setPollingPlaces } from '../app/appSlice';
+import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
@@ -84,7 +84,7 @@ function Map(props: Props) {
 
 	const mapViewFromURL = createMapViewFromURL(useParams());
 
-	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
 	const onMapBeginLoading = useMemo(() => () => {}, []);
 
@@ -171,7 +171,7 @@ function Map(props: Props) {
 				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
 				mapSearchResults={null}
-				mapFilterOptions={mapFilterOptions}
+				mapFilterSettings={mapFilterSettings}
 				onMapBeginLoading={onMapBeginLoading}
 				onMapDataLoaded={onMapDataLoaded}
 				onMapLoaded={onMapLoaded}

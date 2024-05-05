@@ -7,28 +7,28 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
-import { selectMapFilterOptions, setMapFilterOptions } from '../../../app/appSlice';
-import { IMapFilterOptions, NomsOptionsAvailable } from '../../../icons/noms';
+import { selectMapFilterSettings, setMapFilterSettings } from '../../../app/appSlice';
+import { IMapFilterSettings, NomsOptionsAvailable } from '../../../icons/noms';
 
 export default function SearchBarFilter() {
 	const dispatch = useAppDispatch();
 
-	const mapFilterOptions = useAppSelector((state) => selectMapFilterOptions(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
-	const onClickFilterOptionListItemButton = (value: keyof IMapFilterOptions) => () => {
+	const onClickFilterOptionListItemButton = (value: keyof IMapFilterSettings) => () => {
 		dispatch(
-			setMapFilterOptions({
-				...mapFilterOptions,
-				[value]: !mapFilterOptions[value],
+			setMapFilterSettings({
+				...mapFilterSettings,
+				[value]: !mapFilterSettings[value],
 			}),
 		);
 	};
 
 	const onChangeFilterOption =
-		(value: keyof IMapFilterOptions) => (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		(value: keyof IMapFilterSettings) => (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
 			dispatch(
-				setMapFilterOptions({
-					...mapFilterOptions,
+				setMapFilterSettings({
+					...mapFilterSettings,
 					[value]: checked,
 				}),
 			);
@@ -48,14 +48,14 @@ export default function SearchBarFilter() {
 					key={noms.value}
 					secondaryAction={
 						<Checkbox
-							checked={mapFilterOptions[noms.value as keyof IMapFilterOptions] === true}
-							onChange={onChangeFilterOption(noms.value as keyof IMapFilterOptions)}
+							checked={mapFilterSettings[noms.value as keyof IMapFilterSettings] === true}
+							onChange={onChangeFilterOption(noms.value as keyof IMapFilterSettings)}
 							edge="end"
 						/>
 					}
 					disablePadding
 				>
-					<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterOptions)}>
+					<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterSettings)}>
 						<ListItemAvatar>
 							<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent' }}>
 								{noms.icon}

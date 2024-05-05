@@ -13,7 +13,7 @@ import {
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import {
 	selectIsMapFiltered,
-	selectNumberOfMapFilterOptionsApplied,
+	selectNumberOfMapFilterSettingsApplied,
 	setSearchBarFilterControlState,
 } from '../../app/appSlice';
 import './searchBar.css';
@@ -29,7 +29,7 @@ export default function SearchBarCosmeticNonFunctional() {
 	const searchBarSearchText = getStringParamOrEmptyString(useParams(), 'search_term');
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
-	const numberOfMapFilterOptionsApplied = useAppSelector(selectNumberOfMapFilterOptionsApplied);
+	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
 
 	// ######################
 	// Search Field
@@ -141,7 +141,7 @@ export default function SearchBarCosmeticNonFunctional() {
 				sx={{ pr: 1 }}
 			>
 				{isMapFiltered === true ? (
-					<Badge badgeContent={numberOfMapFilterOptionsApplied} color="secondary">
+					<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
 						<FilterAltOutlinedIcon />
 					</Badge>
 				) : (
