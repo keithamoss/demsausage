@@ -56,7 +56,7 @@ export const navigateToMapUsingURLParams = (params: Params<string>, navigate: Na
 	}
 };
 
-const navigateToMap = (params: Params<string>, navigate: NavigateFunction, mapLatLonZoom: string) => {
+export const navigateToMap = (params: Params<string>, navigate: NavigateFunction, mapLatLonZoom: string) => {
 	// We handle going to all of these routes:
 	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/

@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
 import { debounce } from 'lodash-es';
-import { Feature, MapEvent, View, Map as olMap } from 'ol';
+import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
 import React, { useCallback, useMemo, useRef } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-	navigateToMapWithNewView,
+	navigateToMap,
 	navigateToPollingPlaceFromFeature,
 	navigateToPollingPlacesByIds,
 } from '../../app/routing/navigationHelpers';
@@ -23,7 +23,7 @@ import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
-import { createMapViewFromURL } from './mapHelpers';
+import { createMapViewFromURL, createMapViewURLPathComponent } from './mapHelpers';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
@@ -122,8 +122,8 @@ function Map(props: Props) {
 
 	const navigateDebounced = useMemo(
 		() =>
-			debounce((view: View) => {
-				navigateToMapWithNewView(params, navigate, view);
+			debounce((mapViewString: string) => {
+				navigateToMap(params, navigate, mapViewString);
 			}, 500),
 		[navigate, params],
 	);
@@ -138,7 +138,10 @@ function Map(props: Props) {
 			isDoubleClickingRef.current = false;
 			isScrollZoomingRef.current = false;
 
-			navigateDebounced(evt.map.getView());
+			const mapViewString = createMapViewURLPathComponent(evt.map.getView());
+			if (mapViewString !== undefined && location.pathname.includes(mapViewString) === false) {
+				navigateDebounced(mapViewString);
+			}
 		},
 		[navigateDebounced],
 	);
