@@ -78,7 +78,7 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						}}
 					>
 						{/* Gladstone Views, Gladstone Views Primary School */}
-						{pollingPlace.premises}
+						{pollingPlace.premises || pollingPlace.name}
 					</Typography>
 					{/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
 						Foobar

@@ -110,7 +110,7 @@ export default function PollingPlaceCard(props: Props) {
 								<CloseIcon />
 							</IconButton>
 						}
-						title={pollingPlace.premises}
+						title={pollingPlace.premises || pollingPlace.name}
 						subheader={pollingPlace.address}
 						sx={{ paddingBottom: 0 }}
 					/>
@@ -171,11 +171,13 @@ export default function PollingPlaceCard(props: Props) {
 							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace)}</FlexboxIcons>
 						</FlexboxIcons>
 
-						<Divider sx={{ paddingTop: 1, paddingBottom: 1 }}>
-							<Chip label="DESCRIPTION" />
-						</Divider>
+						{pollingPlace.stall !== null && (
+							<React.Fragment>
+								<Divider sx={{ paddingTop: 1, paddingBottom: 1 }}>
+									<Chip label="DESCRIPTION" />
+								</Divider>
 
-						{/* <Typography
+								{/* <Typography
                     sx={{ fontSize: 14 }}
                     color="text.secondary"
                     gutterBottom
@@ -183,28 +185,29 @@ export default function PollingPlaceCard(props: Props) {
                     Word of the Day
                   </Typography> */}
 
-						<Typography
-							variant="h5"
-							sx={{
-								fontSize: 16,
-								fontWeight: 550,
-								textTransform: 'uppercase',
-								paddingTop: 1,
-								paddingBottom: 1,
-							}}
-						>
-							{/* {pollingPlace.name} */}
-							{pollingPlace.stall?.name || pollingPlace.name}
-						</Typography>
-						<Typography variant="body2">
-							{/* Family and Friends of South Melbourne Park Primary bring you a lakeside BBQ and baked goods Bonanza */}
-							{pollingPlace.stall?.description}
-						</Typography>
-						{/* <Typography variant="body2">
+								<Typography
+									variant="h5"
+									sx={{
+										fontSize: 16,
+										fontWeight: 550,
+										textTransform: 'uppercase',
+										paddingTop: 1,
+										paddingBottom: 1,
+									}}
+								>
+									{pollingPlace.stall?.name}
+								</Typography>
+								<Typography variant="body2">
+									{/* Family and Friends of South Melbourne Park Primary bring you a lakeside BBQ and baked goods Bonanza */}
+									{pollingPlace.stall?.description}
+								</Typography>
+								{/* <Typography variant="body2">
 							Our P & F Association will be holding a sausage sizzle, selling snags in Bakers Delight bread, bacon and
 							eggs rolls and drinks. PLUS we will be having a huge cake stall AND craft stall. Don't miss out! 122
 							Jasper Road, Bentleigh (entry from Higgins Road)
 						</Typography> */}
+							</React.Fragment>
+						)}
 
 						<Divider sx={{ paddingTop: 2 }}>
 							<Chip label="DETAILS" />
