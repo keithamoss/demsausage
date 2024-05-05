@@ -60,8 +60,6 @@ export default function SearchComponent(props: Props) {
 	const params = useParams();
 	const navigate = useNavigate();
 
-	// @TODO Should all onXXXX functions here be useMemo'd or is that bad for some reason?
-
 	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 
 	const urlLonLatFromSearch = getStringParamOrEmptyString(params, 'place_lon_lat');

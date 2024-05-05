@@ -94,12 +94,6 @@ export default function PollingPlaceCard(props: Props) {
 		}
 	}, [cameFromInternalNavigation, navigate, params]);
 
-	// @TODO How to make it clear post-election that a booth had no reports?
-
-	// @TODO Create a debug page that shows all of the possible states somehow? (based on actual data from past elections?)
-
-	// @TODO Allow for multi-paragraph stall descriptions
-
 	return (
 		<Box sx={{ width: '100%' }}>
 			<Stack spacing={1}>

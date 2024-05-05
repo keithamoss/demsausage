@@ -36,13 +36,6 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 	paddingTop: theme.spacing(0.5),
 }));
 
-// @TODO
-// - Where to put .name if not in the title of polling place?
-// - How to handle Red Cross of Shame? How to phrase its tooltip?
-// - How to handle no report?
-// - How to handle a stall with no noms?
-// - Check older elections
-
 export default function PollingPlaceSearchResultsCard(props: Props) {
 	const { pollingPlace, onChoosePollingPlace } = props;
 
