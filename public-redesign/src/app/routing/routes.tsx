@@ -44,6 +44,10 @@ export const router = sentryCreateBrowserRouter([
 				element: <Map />,
 			},
 			{
+				path: '/:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/',
+				element: <Map />,
+			},
+			{
 				path: '/:election_name',
 				element: <Map />,
 				children: [

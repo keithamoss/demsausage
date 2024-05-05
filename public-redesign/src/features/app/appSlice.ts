@@ -35,7 +35,6 @@ export enum eMapFeaturesLoadingStatus {
 
 export const initialState: AppState = {
 	mapFilterOptions: {},
-	// mapView: undefined,
 	searchBar: {
 		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
 	},

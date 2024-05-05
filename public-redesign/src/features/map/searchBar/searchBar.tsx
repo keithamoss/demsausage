@@ -73,6 +73,8 @@ export default function SearchBar(props: Props) {
 
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
 
+	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
+
 	// When the user navigates back/forward, or reloads the page, we
 	// just need to handle setting the search term based on what's in
 	// the URL of the page.
@@ -160,6 +162,10 @@ export default function SearchBar(props: Props) {
 			searchFieldRef.current.focus();
 		}
 	};
+
+	const onDiscardPollingPlaceByIdsSearch = useCallback(() => {
+		navigateToSearchDrawerRoot(params, navigate);
+	}, [navigate, params]);
 	// ######################
 	// Search Field (End)
 	// ######################
@@ -334,7 +340,7 @@ export default function SearchBar(props: Props) {
 					value={localSearchTerm}
 					onChange={onChangeSearchField}
 					autoFocus={autoFocusSearchField}
-					placeholder={urlLonLatFromGPS === '' ? 'Search here or use GPS →' : undefined}
+					placeholder={urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined}
 					inputProps={{
 						'aria-label': 'Search for polling places',
 						className: 'searchBar',
@@ -346,6 +352,15 @@ export default function SearchBar(props: Props) {
 								<Chip
 									label="Searching by GPS location"
 									onDelete={onDiscardGPSSearch}
+									color="primary"
+									sx={{ cursor: 'auto' }}
+								/>
+							</InputAdornment>
+						) : urlPollingPlaceIds !== '' ? (
+							<InputAdornment position="start">
+								<Chip
+									label="Searching from map"
+									onDelete={onDiscardPollingPlaceByIdsSearch}
 									color="primary"
 									sx={{ cursor: 'auto' }}
 								/>

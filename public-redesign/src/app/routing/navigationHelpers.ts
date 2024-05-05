@@ -18,17 +18,12 @@ export const getURLParams = (params: Params<string>) => {
 		urlPollingPlaceName: params.polling_place_name,
 		urlPollingPlacePremises: params.polling_place_premises,
 		urlPollingPlaceState: params.polling_place_state,
+		urlPollingPlaceIds: params.polling_place_ids,
 		urlMapLatLonZoom: params.map_lat_lon_zoom,
 	};
 };
 
 export const navigateToMapWithNewView = (params: Params<string>, navigate: NavigateFunction, view: View) => {
-	// We handle going to all of these routes:
-	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/place/:search_term/:map_lat_lon_zoom?/
-	// /:election_name/:map_lat_lon_zoom?/
-
 	const { urlElectionName } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
@@ -43,12 +38,6 @@ export const navigateToMapWithNewView = (params: Params<string>, navigate: Navig
 };
 
 export const navigateToMapUsingURLParams = (params: Params<string>, navigate: NavigateFunction) => {
-	// We handle going to all of these routes:
-	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/place/:search_term/:map_lat_lon_zoom?/
-	// /:election_name/:map_lat_lon_zoom?/
-
 	const { urlMapLatLonZoom } = getURLParams(params);
 
 	if (urlMapLatLonZoom !== undefined) {
@@ -58,18 +47,21 @@ export const navigateToMapUsingURLParams = (params: Params<string>, navigate: Na
 
 export const navigateToMap = (params: Params<string>, navigate: NavigateFunction, mapLatLonZoom: string) => {
 	// We handle going to all of these routes:
+	// /:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/place/:search_term/:lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/place/:search_term/:map_lat_lon_zoom?/
 	// /:election_name/:map_lat_lon_zoom?/
 
-	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat } = getURLParams(params);
+	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
 		return;
 	}
 
-	if (urlGPSLonLat !== undefined) {
+	if (urlPollingPlaceIds !== undefined) {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/by_ids/${urlPollingPlaceIds}/`, mapLatLonZoom));
+	} else if (urlGPSLonLat !== undefined) {
 		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/gps/${urlGPSLonLat}/`, mapLatLonZoom));
 	} else if (urlSearchTerm !== undefined && urlLonLat !== undefined) {
 		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/place/${urlSearchTerm}/${urlLonLat}/`, mapLatLonZoom));
@@ -156,18 +148,24 @@ export const navigateToSearchListOfPollingPlacesFromGPSSearch = (
 
 export const navigateToSearchDrawer = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
+	// /:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/search/location/:search_term/:map_lat_lon_zoom?/
 	// /:election_name/search/location/:search_term/:lon_lat/:map_lat_lon_zoom?/
 	// /:election_name/search/:map_lat_lon_zoom?/
 
-	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlMapLatLonZoom } = getURLParams(params);
+	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds, urlMapLatLonZoom } =
+		getURLParams(params);
 
 	if (urlElectionName === undefined) {
 		return;
 	}
 
-	if (urlGPSLonLat !== undefined) {
+	if (urlPollingPlaceIds !== undefined) {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/by_ids/${urlPollingPlaceIds}/`, urlMapLatLonZoom), {
+			state: { cameFromSearchDrawerOrMap: true },
+		});
+	} else if (urlGPSLonLat !== undefined) {
 		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${urlGPSLonLat}/`, urlMapLatLonZoom), {
 			state: { cameFromSearchDrawerOrMap: true },
 		});
