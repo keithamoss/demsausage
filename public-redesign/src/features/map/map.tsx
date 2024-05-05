@@ -170,7 +170,6 @@ function Map(props: Props) {
 				mapView={mapViewFromURL}
 				isDraggingRef={isDraggingRef}
 				isScrollZoomingRef={isScrollZoomingRef}
-				mapSearchResults={null}
 				mapFilterSettings={mapFilterSettings}
 				onMapBeginLoading={onMapBeginLoading}
 				onMapDataLoaded={onMapDataLoaded}

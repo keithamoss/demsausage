@@ -3,7 +3,6 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { MapBrowserEvent } from 'ol.js';
-import Feature from 'ol/Feature';
 import Attribution from 'ol/control/Attribution';
 import Control from 'ol/control/Control';
 import BaseEvent from 'ol/events/Event';
@@ -15,7 +14,6 @@ import * as Observable from 'ol/Observable';
 import { xhr } from 'ol/featureloader.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
-import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
 import Interaction from 'ol/interaction/Interaction';
 import BaseLayer from 'ol/layer/Base';
@@ -28,20 +26,14 @@ import 'ol/ol.css';
 import VectorTile from 'ol/VectorTile';
 import View from 'ol/View';
 import { EventsKey } from 'ol/events';
-import { transform, transformExtent } from 'ol/proj.js';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
-import Fill from 'ol/style/Fill';
-import RegularShape from 'ol/style/RegularShape';
-import Stroke from 'ol/style/Stroke';
-import Style from 'ol/style/Style';
 import * as React from 'react';
 import { Election } from '../../../app/services/elections';
-import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterSettings } from '../../icons/noms';
 import { doesTheMapViewMatchThisView, getStandardViewPadding } from '../mapHelpers';
-import { IMapPollingPlaceFeature, IMapSearchResults, getAPIBaseURL, olStyleFunction } from '../map_stuff';
+import { IMapPollingPlaceFeature, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'
@@ -56,7 +48,6 @@ interface IProps {
 	isDraggingRef: React.MutableRefObject<boolean>;
 	isScrollZoomingRef: React.MutableRefObject<boolean>;
 	// geojson: IGeoJSONFeatureCollection | undefined
-	mapSearchResults: IMapSearchResults | null;
 
 	mapFilterSettings: IMapFilterSettings;
 	onMapBeginLoading: Function;
@@ -100,6 +91,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
 
 			view.fit(polygon.getExtent(), {
+				// @TODO Make this work for embedded mode
 				padding: getStandardViewPadding(),
 				callback: (completed: boolean) => {
 					if (completed === true) {
@@ -195,18 +187,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					this.map.setView(new View(this.props.mapView));
 				} else {
 					// }
-					if (prevProps.mapSearchResults !== this.props.mapSearchResults) {
-						// The user has performed a search by location
-						const { mapSearchResults } = this.props;
-
-						// Zoom the user down to the bounding box of the polling places that are near their search area
-						if (mapSearchResults !== null) {
-							this.zoomMapToSearchResults(this.map);
-						} else {
-							// Remove any existing search indicator layer
-							this.clearSearchResultsVectorLayer(this.map);
-						}
-					} else if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
+					if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
 						// The user has changed the noms filter options
 						const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
 						if (sausageLayer !== null) {
@@ -313,7 +294,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private onVectorSourceChanged(event: BaseEvent) {
-		const { /*geojson, */ mapSearchResults, onMapDataLoaded, onMapLoaded } = this.props;
+		const { /*geojson, */ onMapDataLoaded, onMapLoaded } = this.props;
 		const vectorSource = event.target as VectorSource<Geometry>;
 
 		if (vectorSource.getState() === 'ready') {
@@ -331,13 +312,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			const timeoutId = window.setTimeout(
 				// eslint-disable-next-line func-names
 				function (this: OpenLayersMap) {
-					if (this.map !== null) {
-						onMapLoaded();
-
-						if (mapSearchResults !== null) {
-							this.zoomMapToSearchResults(this.map);
-						}
-					}
+					onMapLoaded();
 				}.bind(this),
 				750,
 			);
@@ -409,40 +384,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				onQueryMap(features.slice(0, 21));
 			}
 		}
-	}
-
-	private getSearchResultsVectorLayer(_map: Map) {
-		const { mapSearchResults } = this.props;
-
-		if (mapSearchResults !== null) {
-			const iconFeature = new Feature({
-				geometry: new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')),
-			});
-
-			iconFeature.setStyle(
-				new Style({
-					image: new RegularShape({
-						fill: new Fill({ color: mapaThemePrimaryPurple }),
-						stroke: new Stroke({ color: 'black', width: 2 }),
-						points: 5,
-						radius: 10,
-						radius2: 4,
-						angle: 0,
-					}),
-				}),
-			);
-
-			const vectorLayer = new VectorLayer({
-				source: new VectorSource({
-					features: [iconFeature],
-				}),
-			});
-
-			vectorLayer.setProperties({ isSearchIndicatorLayer: true });
-
-			return vectorLayer;
-		}
-		return null;
 	}
 
 	private getMapDataVectorLayer(_map: Map) {
@@ -526,57 +467,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				}),
 			}),
 		];
-	}
-
-	private zoomMapToSearchResults(map: Map) {
-		const { mapSearchResults } = this.props;
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		const that = this;
-
-		if (mapSearchResults !== null) {
-			const view = map.getView();
-
-			if (mapSearchResults.extent !== null) {
-				// Remove any existing search indicator layer
-				this.clearSearchResultsVectorLayer(map);
-
-				view.fit(transformExtent(mapSearchResults.extent, 'EPSG:4326', 'EPSG:3857'), {
-					// if not undefined, assume embedded mode and have no animation
-					duration: mapSearchResults.animation !== undefined ? 0 : 750,
-					// top, right, bottom, left
-					// if not undefined, assume embedded mode and only set padding of 50 bottom
-					// @TODO Work out why we had this and whether we still need it
-					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
-					padding: getStandardViewPadding(),
-					callback: (completed: boolean) => {
-						if (completed === true) {
-							that.addSearchResultsVectorLayer(map);
-						}
-					},
-				});
-			} else if (mapSearchResults.lat !== null && mapSearchResults.lon !== null) {
-				// @TODO Is this even still needed?
-				view.fit(new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')), {
-					minResolution: 4,
-					padding: getStandardViewPadding(),
-					duration: 750,
-				});
-			}
-		}
-	}
-
-	private clearSearchResultsVectorLayer(map: Map) {
-		const searchResultsVectorLayer = this.getLayerByProperties(map, 'isSearchIndicatorLayer', true);
-		if (searchResultsVectorLayer !== null) {
-			map.removeLayer(searchResultsVectorLayer);
-		}
-	}
-
-	private addSearchResultsVectorLayer(map: Map) {
-		const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map);
-		if (searchResultsVectorLayerNew !== null) {
-			map.addLayer(searchResultsVectorLayerNew);
-		}
 	}
 
 	render() {
