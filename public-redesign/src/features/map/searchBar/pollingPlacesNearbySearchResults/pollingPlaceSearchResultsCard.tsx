@@ -62,11 +62,11 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						</FlexboxIcons>
 					)}
 
-					{pollingPlace.stall === null && (
+					{/* {pollingPlace.stall === null && (
 						<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-							Word of the Day
+							{pollingPlace.name}
 						</Typography>
-					)}
+					)} */}
 
 					<Typography
 						variant="h5"
