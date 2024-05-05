@@ -336,8 +336,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 						if (mapSearchResults !== null) {
 							this.zoomMapToSearchResults(this.map);
-						} else {
-							this.workaroundOLRenderingBug(this.map.getView());
 						}
 					}
 				}.bind(this),
@@ -575,21 +573,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private addSearchResultsVectorLayer(map: Map) {
-		this.workaroundOLRenderingBug(map.getView());
-
 		const searchResultsVectorLayerNew = this.getSearchResultsVectorLayer(map);
 		if (searchResultsVectorLayerNew !== null) {
 			map.addLayer(searchResultsVectorLayerNew);
 		}
-	}
-
-	// eslint-disable-next-line class-methods-use-this
-	private workaroundOLRenderingBug(_view: View) {
-		// @TODO Hacky fix for the GeoJSON loading, but not rendering until the map view changes.
-		// const centre = view.getCenter()
-		// centre[0] -= 1
-		// view.setCenter(centre)
-		// view.changed()
 	}
 
 	render() {
