@@ -26,7 +26,6 @@ function PollingPlaceCardDrawerEntrypoint() {
 	let electionId = defaultElection?.id;
 
 	const params = useParams();
-	const location = useLocation();
 
 	// Otherwise, set the election the route wants to use
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
@@ -54,6 +53,10 @@ function PollingPlaceCardDrawerEntrypoint() {
 	);
 }
 
+interface LocationState {
+	cameFromInternalNavigation?: boolean;
+}
+
 interface Props {
 	election: Election;
 	name: string;
@@ -67,6 +70,9 @@ function PollingPlaceCardDrawer(props: Props) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
 
 	const {
 		data: pollingPlace,
@@ -76,7 +82,13 @@ function PollingPlaceCardDrawer(props: Props) {
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
 	const onToggleDrawer = () => {
-		navigateToMapUsingURLParams(params, navigate);
+		if (cameFromInternalNavigation === true) {
+			navigate(-1);
+		} else {
+			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
+			// be sure where we'll end up, so best just to send the user back to start a brand new search.
+			navigateToMapUsingURLParams(params, navigate);
+		}
 	};
 
 	return (
