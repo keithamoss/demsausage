@@ -93,6 +93,43 @@ export const navigateToSearchDrawerRoot = (params: Params<string>, navigate: Nav
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/`, urlMapLatLonZoom));
 };
 
+export const navigateToSearchDrawer = (params: Params<string>, navigate: NavigateFunction) => {
+	// We handle going to all of these routes:
+	// /:election_name/search/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
+	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
+	// /:election_name/search/place/:search_term/:map_lat_lon_zoom?/
+	// /:election_name/search/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/
+	// /:election_name/search/:map_lat_lon_zoom?/
+
+	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds, urlMapLatLonZoom } =
+		getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	if (urlPollingPlaceIds !== undefined) {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/by_ids/${urlPollingPlaceIds}/`, urlMapLatLonZoom), {
+			state: { cameFromInternalNavigation: true },
+		});
+	} else if (urlGPSLonLat !== undefined) {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${urlGPSLonLat}/`, urlMapLatLonZoom), {
+			state: { cameFromInternalNavigation: true },
+		});
+	} else if (urlSearchTerm !== undefined && urlLonLat !== undefined) {
+		navigate(
+			addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${urlSearchTerm}/${urlLonLat}/`, urlMapLatLonZoom),
+			{
+				state: { cameFromInternalNavigation: true },
+			},
+		);
+	} else if (urlSearchTerm !== undefined) {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${urlSearchTerm}/`, urlMapLatLonZoom));
+	} else {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/`, urlMapLatLonZoom));
+	}
+};
+
 export const navigateToSearchDrawerAndInitiateGPSSearch = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /:election_name/search/gps/:map_lat_lon_zoom?/
@@ -104,6 +141,28 @@ export const navigateToSearchDrawerAndInitiateGPSSearch = (params: Params<string
 	}
 
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/`, urlMapLatLonZoom));
+};
+
+export const navigateToSearchListOfPollingPlacesFromGPSSearch = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	gpsLonLat: string,
+) => {
+	// We handle going to all of these routes:
+	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
+
+	const { urlElectionName, urlMapLatLonZoom } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${gpsLonLat}/`, urlMapLatLonZoom), {
+		// Use replace here because otherwise we can't navigate back from the GPS search results.
+		// Without replace, it just automatically retriggers another GPS search.
+		// Since we're replacing, no need for cameFromInternalNavigation here.
+		replace: true,
+	});
 };
 
 export const navigateToSearchMapboxResults = (
@@ -141,65 +200,6 @@ export const navigateToSearchListOfPollingPlacesFromMapboxResults = (
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${searchTerm}/${lonLat}/`, urlMapLatLonZoom), {
 		state: { cameFromInternalNavigation: true },
 	});
-};
-
-export const navigateToSearchListOfPollingPlacesFromGPSSearch = (
-	params: Params<string>,
-	navigate: NavigateFunction,
-	gpsLonLat: string,
-) => {
-	// We handle going to all of these routes:
-	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
-
-	const { urlElectionName, urlMapLatLonZoom } = getURLParams(params);
-
-	if (urlElectionName === undefined) {
-		return;
-	}
-
-	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${gpsLonLat}/`, urlMapLatLonZoom), {
-		// Use replace here because otherwise we can't navigate back from the GPS search results.
-		// Without replace, it just automatically retriggers another GPS search.
-		// Since we're replacing, no need for cameFromInternalNavigation here.
-		replace: true,
-	});
-};
-
-export const navigateToSearchDrawer = (params: Params<string>, navigate: NavigateFunction) => {
-	// We handle going to all of these routes:
-	// /:election_name/search/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
-	// /:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/search/place/:search_term/:map_lat_lon_zoom?/
-	// /:election_name/search/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/
-	// /:election_name/search/:map_lat_lon_zoom?/
-
-	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds, urlMapLatLonZoom } =
-		getURLParams(params);
-
-	if (urlElectionName === undefined) {
-		return;
-	}
-
-	if (urlPollingPlaceIds !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/by_ids/${urlPollingPlaceIds}/`, urlMapLatLonZoom), {
-			state: { cameFromInternalNavigation: true },
-		});
-	} else if (urlGPSLonLat !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${urlGPSLonLat}/`, urlMapLatLonZoom), {
-			state: { cameFromInternalNavigation: true },
-		});
-	} else if (urlSearchTerm !== undefined && urlLonLat !== undefined) {
-		navigate(
-			addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${urlSearchTerm}/${urlLonLat}/`, urlMapLatLonZoom),
-			{
-				state: { cameFromInternalNavigation: true },
-			},
-		);
-	} else if (urlSearchTerm !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${urlSearchTerm}/`, urlMapLatLonZoom));
-	} else {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/`, urlMapLatLonZoom));
-	}
 };
 
 export const navigateToPollingPlacesByIds = (params: Params<string>, navigate: NavigateFunction, ids: number[]) => {
