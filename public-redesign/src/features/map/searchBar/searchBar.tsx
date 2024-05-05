@@ -70,9 +70,7 @@ export default function SearchBar(props: Props) {
 
 	const urlElectionName = getStringParamOrUndefined(useParams(), 'election_name');
 	const urlSearchTerm = getStringParamOrEmptyString(useParams(), 'search_term');
-
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
-
 	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
 
 	// When the user navigates back/forward, or reloads the page, we

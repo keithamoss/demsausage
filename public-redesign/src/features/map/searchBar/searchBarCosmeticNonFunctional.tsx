@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
-import { Badge, Divider, IconButton, InputBase, Paper } from '@mui/material';
+import { Badge, Chip, Divider, IconButton, InputAdornment, InputBase, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { navigateToSearchDrawer, navigateToSearchDrawerRoot } from '../../../app/routing/navigationHelpers';
@@ -20,6 +20,9 @@ export default function SearchBarCosmeticNonFunctional() {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
+	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
+
 	const searchBarSearchText = getStringParamOrEmptyString(useParams(), 'search_term');
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
@@ -34,6 +37,16 @@ export default function SearchBarCosmeticNonFunctional() {
 	};
 
 	const onClearSearchBar = () => {
+		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+		navigateToSearchDrawerRoot(params, navigate);
+	};
+
+	const onDiscardGPSSearch = () => {
+		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+		navigateToSearchDrawerRoot(params, navigate);
+	};
+
+	const onDiscardPollingPlaceByIdsSearch = () => {
 		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawerRoot(params, navigate);
 	};
@@ -76,13 +89,34 @@ export default function SearchBarCosmeticNonFunctional() {
 			<InputBase
 				value={searchBarSearchText}
 				onClick={onClickSearchField}
-				placeholder="Search here or use GPS →"
+				placeholder={urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined}
 				inputProps={{
 					'aria-label': 'Search for polling places',
 					disabled: true,
 					className: 'searchBar',
 				}}
 				sx={{ ml: 1, flex: 1 }}
+				startAdornment={
+					urlLonLatFromGPS !== '' ? (
+						<InputAdornment position="start">
+							<Chip
+								label="Searching by GPS location"
+								onDelete={onDiscardGPSSearch}
+								color="primary"
+								sx={{ cursor: 'auto' }}
+							/>
+						</InputAdornment>
+					) : urlPollingPlaceIds !== '' ? (
+						<InputAdornment position="start">
+							<Chip
+								label="Searching from map"
+								onDelete={onDiscardPollingPlaceByIdsSearch}
+								color="primary"
+								sx={{ cursor: 'auto' }}
+							/>
+						</InputAdornment>
+					) : undefined
+				}
 			/>
 
 			{searchBarSearchText !== '' && (
