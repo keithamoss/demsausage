@@ -115,27 +115,26 @@ export default function PollingPlaceCard(props: Props) {
 						sx={{ paddingBottom: 0 }}
 					/>
 
-					{isElectionLive(election) !== undefined &&
-						(nomsReader === undefined || nomsReader.hasAnyNoms() === false) && (
-							<CardContent sx={{ paddingBottom: 1 }}>
-								<Button
-									startIcon={<SendIcon />}
-									variant="contained"
-									size="large"
-									color="secondary"
-									style={{ float: 'right', marginLeft: theme.spacing(1) }}
-								>
-									Send tip-off
-								</Button>
+					{isElectionLive(election) === true && (nomsReader === undefined || nomsReader.hasAnyNoms() === false) && (
+						<CardContent sx={{ paddingBottom: 1 }}>
+							<Button
+								startIcon={<SendIcon />}
+								variant="contained"
+								size="large"
+								color="secondary"
+								style={{ float: 'right', marginLeft: theme.spacing(1) }}
+							>
+								Send tip-off
+							</Button>
 
-								<Typography component={'p'} sx={{ fontSize: 14 }} color="text.secondary">
-									We don&lsquo;t have any reports for the polling place yet. If you find any stalls here, be sure to let
-									us know!
-								</Typography>
-							</CardContent>
-						)}
+							<Typography component={'p'} sx={{ fontSize: 14 }} color="text.secondary">
+								We don&lsquo;t have any reports for the polling place yet. If you find any stalls here, be sure to let
+								us know!
+							</Typography>
+						</CardContent>
+					)}
 
-					{isElectionLive(election) !== undefined && pollingPlaceHasReports(pollingPlace) === false && (
+					{isElectionLive(election) === true && pollingPlaceHasReports(pollingPlace) === false && (
 						<React.Fragment>
 							<Divider sx={{ paddingTop: 1, paddingBottom: 1 }}>
 								<Chip label="OUR PREDICTION" />
@@ -155,7 +154,7 @@ export default function PollingPlaceCard(props: Props) {
 					)}
 
 					<CardContent>
-						{/* {isElectionLive(election) !== undefined &&
+						{/* {isElectionLive(election) === true &&
 							(nomsReader === undefined || nomsReader.hasAnyNoms() === false) && (
 								<React.Fragment>
 									<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
