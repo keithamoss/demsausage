@@ -40,7 +40,7 @@ import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterOptions } from '../../icons/noms';
-import { doesTheMapViewMatchThisView } from '../mapHelpers';
+import { doesTheMapViewMatchThisView, getStandardViewPadding } from '../mapHelpers';
 import { IMapPollingPlaceFeature, IMapSearchResults, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
@@ -101,7 +101,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
 
 			view.fit(polygon.getExtent(), {
-				// padding: [1, 1, 1, 1],
+				padding: getStandardViewPadding(),
 				callback: (completed: boolean) => {
 					if (completed === true) {
 						const centre = view.getCenter();
@@ -544,12 +544,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				this.clearSearchResultsVectorLayer(map);
 
 				view.fit(transformExtent(mapSearchResults.extent, 'EPSG:4326', 'EPSG:3857'), {
-					size: map.getSize(),
 					// if not undefined, assume embedded mode and have no animation
 					duration: mapSearchResults.animation !== undefined ? 0 : 750,
 					// top, right, bottom, left
 					// if not undefined, assume embedded mode and only set padding of 50 bottom
-					padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
+					// @TODO Work out why we had this and whether we still need it
+					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
+					padding: getStandardViewPadding(),
 					callback: (completed: boolean) => {
 						if (completed === true) {
 							that.addSearchResultsVectorLayer(map);
@@ -557,9 +558,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					},
 				});
 			} else if (mapSearchResults.lat !== null && mapSearchResults.lon !== null) {
+				// @TODO Is this even still needed?
 				view.fit(new Point(transform([mapSearchResults.lon, mapSearchResults.lat], 'EPSG:4326', 'EPSG:3857')), {
 					minResolution: 4,
-					size: map.getSize(),
+					padding: getStandardViewPadding(),
 					duration: 750,
 				});
 			}

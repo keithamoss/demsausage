@@ -21,6 +21,7 @@ import {
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterOptions } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { getStandardViewPadding } from '../mapHelpers';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
 import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
@@ -177,7 +178,7 @@ export default function SearchComponent(props: Props) {
 					// @TODO Make this work for embedded mode
 					// if not undefined, assume embedded mode and only set padding of 50 bottom
 					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
-					padding: [48, 20, 98, 20],
+					padding: getStandardViewPadding(),
 				});
 
 				navigateToMapWithNewView(params, navigate, view);

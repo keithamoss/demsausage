@@ -4,6 +4,12 @@ import { Params } from 'react-router-dom';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { OLMapView } from '../app/appSlice';
 
+export const getStandardViewPadding = () => {
+	// top, right, bottom, left
+	// header bar is 48px and 80px is about the space taken up by the on-top-of-the-map search bar
+	return [48, 10, 80, 10];
+};
+
 export const doesTheMapViewMatchThisView = (mapView: View, anotherView: Partial<OLMapView> | undefined) => {
 	const mapViewCentre = mapView.getCenter();
 	const anotherViewCentre = anotherView?.center;
