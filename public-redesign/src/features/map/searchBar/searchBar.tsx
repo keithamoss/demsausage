@@ -22,10 +22,11 @@ import Geolocation from 'ol/Geolocation';
 import { unByKey } from 'ol/Observable';
 import { EventsKey } from 'ol/events';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { useUnmount } from '../../../app/hooks/useUnmount';
 import {
+	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
 	navigateToSearchListOfPollingPlacesFromSearchTerm,
@@ -33,11 +34,10 @@ import {
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 import {
-	ESearchDrawerSubComponent,
 	selectIsMapFiltered,
 	selectNumberOfMapFilterOptionsApplied,
-	selectSearchBarInitialMode,
-	setSearchBarInitialMode,
+	selectSearchBarFilterControlState,
+	setSearchBarFilterControlState,
 } from '../../app/appSlice';
 import './searchBar.css';
 import SearchBarFilter from './searchBarFilter/searchBarFilter';
@@ -62,6 +62,7 @@ export default function SearchBar(props: Props) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// @TODO Should all onXXXX functions here be useMemo'd or is that bad for some reason?
 
@@ -80,19 +81,7 @@ export default function SearchBar(props: Props) {
 		setLocalSearchTerm(urlSearchTerm);
 	}
 
-	// Synch local state with the Redux store so SearchBarCosmeticNonFunctional
-	// and other components can consume information about the user's search criteria.
-	// useEffect(() => {
-	// 	dispatch(setSearchBarSearchText(urlSearchTerm));
-	// }, [dispatch, urlSearchTerm]);
-
-	// useEffect(() => {
-	// 	dispatch(setSearchBarSearchLonLat(urlLonLat));
-	// }, [dispatch, urlLonLat]);
-
-	// @TODO Why does this exist again and is this really the best name for it?
-	// Increasingly, more places have to overwite this and set things back to SEARCH_FIELD
-	const searchBarInitialMode = useAppSelector((state) => selectSearchBarInitialMode(state));
+	const searchBarFilterControlOpen = useAppSelector((state) => selectSearchBarFilterControlState(state));
 
 	const isMapFiltered = useAppSelector(selectIsMapFiltered);
 	const numberOfMapFilterOptionsApplied = useAppSelector(selectNumberOfMapFilterOptionsApplied);
@@ -266,45 +255,37 @@ export default function SearchBar(props: Props) {
 	}, [navigate, params]);
 
 	const onClickGPSControl = useCallback(() => {
-		// If we haven't got a GPS location, clicking the contol ask for one.
+		// If we haven't got a GPS location, clicking the contol asks for one.
 		if (urlLonLatFromGPS === '') {
-			if (geolocation.current.getTracking() === false) {
-				// Just in case, let's clear focus from the search input since
-				// the user doesn't need to type anything if we're using GPS location.
-				if (searchFieldRef.current !== null) {
-					searchFieldRef.current.blur();
-				}
-
-				geolocation.current.setTracking(true);
-				setIsWaitingForGPSLocation(true);
-
-				setIsGeolocationErrored(false);
-				setGeolocationErrorMessage(undefined);
-			}
+			navigateToSearchDrawerAndInitiateGPSSearch(params, navigate);
 		} else {
 			// If we have a GPS location, clicking the control discards it.
 			onDiscardGPSSearch();
 		}
-	}, [onDiscardGPSSearch, urlLonLatFromGPS]);
+	}, [navigate, onDiscardGPSSearch, params, urlLonLatFromGPS]);
 
 	// Let the user come in from the map, click the GPS control there,
 	// and have it initiate a request for their location
 	useEffect(() => {
 		if (
-			searchBarInitialMode === ESearchDrawerSubComponent.REQUEST_LOCATION &&
+			location.pathname.includes('/search/gps/') &&
 			urlLonLatFromGPS === '' &&
 			isWaitingForGPSLocation === false &&
 			geolocation.current.getTracking() === false
 		) {
-			onClickGPSControl();
+			// Just in case, let's clear focus from the search input since
+			// the user doesn't need to type anything if we're using GPS location.
+			if (searchFieldRef.current !== null) {
+				searchFieldRef.current.blur();
+			}
 
-			// Once we've init'd once, set it back to the default of the search field.
-			// If we don't, when the user clicks the GPS control from the map, we get
-			// a result, and then if we discard the GPS result or go back, then this
-			// code here would all run again and re-trigger a GPS location request.
-			dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
+			geolocation.current.setTracking(true);
+			setIsWaitingForGPSLocation(true);
+
+			setIsGeolocationErrored(false);
+			setGeolocationErrorMessage(undefined);
 		}
-	}, [dispatch, isWaitingForGPSLocation, onClickGPSControl, searchBarInitialMode, urlLonLatFromGPS]);
+	}, [isWaitingForGPSLocation, location.pathname, urlLonLatFromGPS]);
 	// ######################
 	// GPS Control (End)
 	// ######################
@@ -312,10 +293,8 @@ export default function SearchBar(props: Props) {
 	// ######################
 	// Filter Control
 	// ######################
-	const [filterOpen, setFilterOpen] = useState(searchBarInitialMode === ESearchDrawerSubComponent.FILTER_CONTROL);
-
 	const onClickFilterControl = () => {
-		setFilterOpen(!filterOpen);
+		dispatch(setSearchBarFilterControlState(!searchBarFilterControlOpen));
 	};
 	// ######################
 	// Filter Control (End)
@@ -394,10 +373,14 @@ export default function SearchBar(props: Props) {
 						>
 							{isMapFiltered === true ? (
 								<Badge badgeContent={numberOfMapFilterOptionsApplied} color="secondary">
-									<FilterAltOutlinedIcon sx={{ color: filterOpen === true ? mapaThemeSecondaryBlue : undefined }} />
+									<FilterAltOutlinedIcon
+										sx={{ color: searchBarFilterControlOpen === true ? mapaThemeSecondaryBlue : undefined }}
+									/>
 								</Badge>
 							) : (
-								<FilterAltOffOutlinedIcon sx={{ color: filterOpen === true ? mapaThemeSecondaryBlue : undefined }} />
+								<FilterAltOffOutlinedIcon
+									sx={{ color: searchBarFilterControlOpen === true ? mapaThemeSecondaryBlue : undefined }}
+								/>
 							)}
 						</IconButton>
 					</React.Fragment>
@@ -406,7 +389,7 @@ export default function SearchBar(props: Props) {
 
 			{(isWaitingForGPSLocation === true || isFetching === true) && <LinearProgress color="secondary" />}
 
-			{enableFiltering === true && filterOpen === true && <SearchBarFilter />}
+			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchBarFilter />}
 
 			{isGeolocationErrored === true && (
 				<Alert severity="error" sx={{ mt: 2 }}>

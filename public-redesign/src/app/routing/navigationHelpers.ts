@@ -93,6 +93,21 @@ export const navigateToSearchDrawerRoot = (params: Params<string>, navigate: Nav
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/`, urlMapLatLonZoom));
 };
 
+export const navigateToSearchDrawerAndInitiateGPSSearch = (params: Params<string>, navigate: NavigateFunction) => {
+	// We handle going to all of these routes:
+	// /:election_name/search/gps/:map_lat_lon_zoom?/
+
+	const { urlElectionName, urlMapLatLonZoom } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/`, urlMapLatLonZoom), {
+		state: { cameFromSearchDrawerOrMap: true },
+	});
+};
+
 export const navigateToSearchListOfPollingPlacesFromSearchTerm = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -147,7 +162,9 @@ export const navigateToSearchListOfPollingPlacesFromGPSSearch = (
 	}
 
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${gpsLonLat}/`, urlMapLatLonZoom), {
-		state: { cameFromSearchDrawerOrMap: true },
+		// Use replace here because otherwise we can't navigate back from the GPS search results.
+		// Without replace, it just automatically retriggers another GPS search.
+		replace: true,
 	});
 };
 

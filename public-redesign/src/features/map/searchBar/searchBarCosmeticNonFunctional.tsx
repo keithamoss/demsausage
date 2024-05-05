@@ -5,13 +5,16 @@ import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
 import { Badge, Chip, Divider, IconButton, InputAdornment, InputBase, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
-import { navigateToSearchDrawer, navigateToSearchDrawerRoot } from '../../../app/routing/navigationHelpers';
+import {
+	navigateToSearchDrawer,
+	navigateToSearchDrawerAndInitiateGPSSearch,
+	navigateToSearchDrawerRoot,
+} from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import {
-	ESearchDrawerSubComponent,
 	selectIsMapFiltered,
 	selectNumberOfMapFilterOptionsApplied,
-	setSearchBarInitialMode,
+	setSearchBarFilterControlState,
 } from '../../app/appSlice';
 import './searchBar.css';
 
@@ -32,22 +35,18 @@ export default function SearchBarCosmeticNonFunctional() {
 	// Search Field
 	// ######################
 	const onClickSearchField = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawer(params, navigate);
 	};
 
 	const onClearSearchBar = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawerRoot(params, navigate);
 	};
 
 	const onDiscardGPSSearch = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawerRoot(params, navigate);
 	};
 
 	const onDiscardPollingPlaceByIdsSearch = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
 		navigateToSearchDrawerRoot(params, navigate);
 	};
 	// ######################
@@ -58,8 +57,7 @@ export default function SearchBarCosmeticNonFunctional() {
 	// GPS Control
 	// ######################
 	const onClickGPSControl = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.REQUEST_LOCATION));
-		navigateToSearchDrawer(params, navigate);
+		navigateToSearchDrawerAndInitiateGPSSearch(params, navigate);
 	};
 	// ######################
 	// GPS Control (End)
@@ -69,7 +67,7 @@ export default function SearchBarCosmeticNonFunctional() {
 	// Filter Control
 	// ######################
 	const onClickFilterControl = () => {
-		dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.FILTER_CONTROL));
+		dispatch(setSearchBarFilterControlState(true));
 		navigateToSearchDrawer(params, navigate);
 	};
 	// ######################

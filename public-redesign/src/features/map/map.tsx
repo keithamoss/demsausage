@@ -14,12 +14,7 @@ import {
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import AddStallButton from '../app/addStallButton';
-import {
-	ESearchDrawerSubComponent,
-	selectMapFilterOptions,
-	setPollingPlaces,
-	setSearchBarInitialMode,
-} from '../app/appSlice';
+import { selectMapFilterOptions, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
@@ -102,8 +97,6 @@ function Map(props: Props) {
 
 	const onQueryMap = useMemo(
 		() => (features: Feature[]) => {
-			dispatch(setSearchBarInitialMode(ESearchDrawerSubComponent.SEARCH_FIELD));
-
 			if (features.length === 1) {
 				navigateToPollingPlaceFromFeature(params, navigate, features[0]);
 			} else {
@@ -113,7 +106,7 @@ function Map(props: Props) {
 				}
 			}
 		},
-		[dispatch, navigate, params],
+		[navigate, params],
 	);
 
 	const olMapRef = useRef<olMap | undefined>(undefined);

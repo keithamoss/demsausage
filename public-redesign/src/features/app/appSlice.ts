@@ -8,9 +8,7 @@ import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterOptions: IMapFilterOptions;
-	searchBar: {
-		initialMode: ESearchDrawerSubComponent;
-	};
+	searchBarFilterControlState: boolean;
 	pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection | undefined;
 	mapFeatures: IPollingPlace | null | undefined;
 }
@@ -35,9 +33,7 @@ export enum eMapFeaturesLoadingStatus {
 
 export const initialState: AppState = {
 	mapFilterOptions: {},
-	searchBar: {
-		initialMode: ESearchDrawerSubComponent.SEARCH_FIELD,
-	},
+	searchBarFilterControlState: false,
 	pollingPlaces: undefined,
 	mapFeatures: undefined,
 };
@@ -86,8 +82,8 @@ export const appSlice = createSlice({
 		setMapFilterOptions: (state, action: PayloadAction<IMapFilterOptions>) => {
 			state.mapFilterOptions = action.payload;
 		},
-		setSearchBarInitialMode: (state, action: PayloadAction<ESearchDrawerSubComponent>) => {
-			state.searchBar.initialMode = action.payload;
+		setSearchBarFilterControlState: (state, action: PayloadAction<boolean>) => {
+			state.searchBarFilterControlState = action.payload;
 		},
 		setPollingPlaces: (state, action: PayloadAction<IMapPollingPlaceGeoJSONFeatureCollection | undefined>) => {
 			state.pollingPlaces = action.payload;
@@ -113,7 +109,7 @@ export const appSlice = createSlice({
 	// },
 });
 
-export const { setMapFilterOptions, setSearchBarInitialMode, setPollingPlaces } = appSlice.actions;
+export const { setMapFilterOptions, setSearchBarFilterControlState, setPollingPlaces } = appSlice.actions;
 
 // export const prepareFeaturesForMap = createAsyncThunk(
 // 	'app/prepareFeaturesForMap',
@@ -157,7 +153,7 @@ export const selectNumberOfMapFilterOptionsApplied = createSelector(
 	(mapFilterOptions) => values(mapFilterOptions).filter((option) => option === true).length,
 );
 
-export const selectSearchBarInitialMode = (state: RootState) => state.app.searchBar.initialMode;
+export const selectSearchBarFilterControlState = (state: RootState) => state.app.searchBarFilterControlState;
 
 export const selectPollingPlaces = (state: RootState) => state.app.pollingPlaces;
 export default appSlice.reducer;

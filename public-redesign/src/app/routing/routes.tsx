@@ -64,6 +64,10 @@ export const router = sentryCreateBrowserRouter([
 						element: <SearchDrawer />,
 					},
 					{
+						path: '/:election_name/search/gps/:map_lat_lon_zoom?/',
+						element: <SearchDrawer />,
+					},
+					{
 						path: '/:election_name/search/gps/:gps_lon_lat/:map_lat_lon_zoom?/',
 						element: <SearchDrawer />,
 					},

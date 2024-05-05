@@ -7,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParams, navigateToPollingPlace } from '../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { ESearchDrawerSubComponent, selectSearchBarInitialMode } from '../app/appSlice';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import SearchComponent from '../map/searchBar/searchComponent';
@@ -55,7 +54,6 @@ function SearchDrawer(props: Props) {
 	const params = useParams();
 	const navigate = useNavigate();
 
-	const searchBarInitialMode = useAppSelector((state) => selectSearchBarInitialMode(state));
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
 	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
 
@@ -85,11 +83,7 @@ function SearchDrawer(props: Props) {
 					<StyledInteractableBoxFullHeight>
 						<SearchComponent
 							election={election}
-							autoFocusSearchField={
-								searchBarInitialMode === ESearchDrawerSubComponent.SEARCH_FIELD &&
-								urlLonLatFromGPS === '' &&
-								urlPollingPlaceIds === ''
-							}
+							autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
 							onChoosePollingPlace={onChoosePollingPlace}
 						/>
 					</StyledInteractableBoxFullHeight>
