@@ -3,6 +3,7 @@ import { NavigateFunction, Params } from 'react-router-dom';
 import { createMapViewURLPathComponent } from '../../features/map/mapHelpers';
 import { getPollingPlacePermalinkFromProps } from '../../features/pollingPlaces/pollingPlaceHelpers';
 import { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import { Election } from '../services/elections';
 
 const addComponentToEndOfURLPath = (urlPathBase: string, param: string | undefined) => {
 	const urlPathBaseWithTrailingSlash = urlPathBase.endsWith('/') === true ? urlPathBase : `${urlPathBase}/`;
@@ -21,6 +22,13 @@ export const getURLParams = (params: Params<string>) => {
 		urlPollingPlaceIds: params.polling_place_ids,
 		urlMapLatLonZoom: params.map_lat_lon_zoom,
 	};
+};
+
+export const navigateToElection = (navigate: NavigateFunction, election: Election) => {
+	// We handle going to all of these routes:
+	// /:election_name/
+
+	navigate(`/${election.name_url_safe}/`);
 };
 
 export const navigateToMapWithNewView = (params: Params<string>, navigate: NavigateFunction, view: View) => {

@@ -2,10 +2,11 @@ import { Box } from '@mui/material';
 import { debounce } from 'lodash-es';
 import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+	navigateToElection,
 	navigateToMap,
 	navigateToPollingPlaceFromFeature,
 	navigateToPollingPlacesByIds,
@@ -55,13 +56,24 @@ interface PropsEntrypointLayer2 {
 function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	const { electionId } = props;
 
+	const navigate = useNavigate();
+
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
+
+	// Force users coming into the root of the domain over to the unique URL for the current default election
+	useEffect(() => {
+		if (election !== undefined && window.location.pathname.startsWith(`/${election.name_url_safe}`) === false) {
+			navigateToElection(navigate, election);
+		}
+	}, [election, navigate]);
 
 	if (election === undefined) {
 		return null;
 	}
 
-	return <Map election={election} />;
+	if (window.location.pathname.startsWith(`/${election.name_url_safe}`) === true) {
+		return <Map election={election} />;
+	}
 }
 
 interface Props {
