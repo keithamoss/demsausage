@@ -57,6 +57,7 @@ function SearchDrawer(props: Props) {
 
 	const searchBarInitialMode = useAppSelector((state) => selectSearchBarInitialMode(state));
 	const urlLonLatFromGPS = getStringParamOrEmptyString(useParams(), 'gps_lon_lat');
+	const urlPollingPlaceIds = getStringParamOrEmptyString(useParams(), 'polling_place_ids');
 
 	const toggleDrawer = () => {
 		navigateToMapUsingURLParams(params, navigate);
@@ -85,7 +86,9 @@ function SearchDrawer(props: Props) {
 						<SearchComponent
 							election={election}
 							autoFocusSearchField={
-								searchBarInitialMode === ESearchDrawerSubComponent.SEARCH_FIELD && urlLonLatFromGPS === ''
+								searchBarInitialMode === ESearchDrawerSubComponent.SEARCH_FIELD &&
+								urlLonLatFromGPS === '' &&
+								urlPollingPlaceIds === ''
 							}
 							onChoosePollingPlace={onChoosePollingPlace}
 						/>
