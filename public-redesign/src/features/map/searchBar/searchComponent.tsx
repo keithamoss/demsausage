@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
 	navigateToMapWithNewView,
-	navigateToSearchListOfPollingPlacesFromSearchTermAndLonLat,
+	navigateToSearchListOfPollingPlacesFromMapboxResults,
 } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
@@ -88,7 +88,7 @@ export default function SearchComponent(props: Props) {
 	);
 
 	const onChoose = (feature: IMapboxGeocodingAPIResponseFeature) => () => {
-		navigateToSearchListOfPollingPlacesFromSearchTermAndLonLat(
+		navigateToSearchListOfPollingPlacesFromMapboxResults(
 			params,
 			navigate,
 			feature.place_name,

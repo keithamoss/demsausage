@@ -87,7 +87,7 @@ function PollingPlaceCardDebugViewEntrypointLayer2(props: PropsPollingPlaceCardD
 		return null;
 	}
 
-	return <PollingPlaceCard pollingPlace={pollingPlace} election={election} onClose={() => {}} />;
+	return <PollingPlaceCard pollingPlace={pollingPlace} election={election} />;
 }
 
 interface PropsPollingPlaceSearchResultsCardDebugViewLayer1 {

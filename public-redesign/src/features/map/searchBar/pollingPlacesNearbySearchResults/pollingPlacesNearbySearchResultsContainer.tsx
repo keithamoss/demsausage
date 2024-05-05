@@ -9,7 +9,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { navigateToSearchDrawerRoot } from '../../../../app/routing/navigationHelpers';
 
 interface LocationState {
-	cameFromSearchDrawerOrMap?: boolean;
+	cameFromInternalNavigation?: boolean;
 }
 
 interface Props {
@@ -25,7 +25,7 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const cameFromSearchDrawerOrMap = (location.state as LocationState)?.cameFromSearchDrawerOrMap === true;
+	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
 
 	const onGoBack = useCallback(() => {
 		// If we've arrived here by searching in the UI, we know we can just
@@ -33,14 +33,14 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 		// In most cases, this should send them back to the list of Mapbox
 		// place search results for them to choose a different place from
 		// or to modify their search.
-		if (cameFromSearchDrawerOrMap === true) {
+		if (cameFromInternalNavigation === true) {
 			navigate(-1);
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
 			navigateToSearchDrawerRoot(params, navigate);
 		}
-	}, [cameFromSearchDrawerOrMap, navigate, params]);
+	}, [cameFromInternalNavigation, navigate, params]);
 
 	return (
 		<Box sx={{ width: '100%', marginTop: 1 }}>

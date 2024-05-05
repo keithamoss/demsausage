@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { navigateToMapUsingURLParams, navigateToSearchDrawer } from '../../app/routing/navigationHelpers';
+import { navigateToMapUsingURLParams } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
@@ -18,10 +18,6 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	height: '90dvh',
 }));
 
-interface LocationState {
-	cameFromSearchDrawerOrMap?: boolean;
-}
-
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function PollingPlaceCardDrawerEntrypoint() {
 	// Fallback to our default election if the route hasn't specified an election
@@ -31,8 +27,6 @@ function PollingPlaceCardDrawerEntrypoint() {
 
 	const params = useParams();
 	const location = useLocation();
-
-	const cameFromSearchDrawerOrMap = (location.state as LocationState)?.cameFromSearchDrawerOrMap === true;
 
 	// Otherwise, set the election the route wants to use
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
@@ -56,7 +50,6 @@ function PollingPlaceCardDrawerEntrypoint() {
 			name={params.polling_place_name}
 			premises={params.polling_place_premises}
 			state={params.polling_place_state}
-			cameFromSearchDrawerOrMap={cameFromSearchDrawerOrMap}
 		/>
 	);
 }
@@ -67,11 +60,10 @@ interface Props {
 	// Occasionally some elections will have no premises names on polling places
 	premises: string | undefined;
 	state: string;
-	cameFromSearchDrawerOrMap: boolean;
 }
 
 function PollingPlaceCardDrawer(props: Props) {
-	const { election, name, premises, state, cameFromSearchDrawerOrMap } = props;
+	const { election, name, premises, state } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -85,20 +77,6 @@ function PollingPlaceCardDrawer(props: Props) {
 
 	const onToggleDrawer = () => {
 		navigateToMapUsingURLParams(params, navigate);
-	};
-
-	const onClose = () => {
-		// If we've arrived here by searching in the UI, we know we can just
-		// go back and we'll remain within the search drawer interface.
-		// In most cases, this should send them back to the list of
-		// polling place search results for them to choose a different place from,
-		if (cameFromSearchDrawerOrMap === true) {
-			navigate(-1);
-		} else {
-			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
-			// be sure where we'll end up, so best just to send the user back to start a brand new search.
-			navigateToSearchDrawer(params, navigate);
-		}
 	};
 
 	return (
@@ -122,7 +100,7 @@ function PollingPlaceCardDrawer(props: Props) {
 				)}
 
 				{isSuccess === true && pollingPlace !== undefined && (
-					<PollingPlaceCard pollingPlace={pollingPlace} election={election} onClose={onClose} />
+					<PollingPlaceCard pollingPlace={pollingPlace} election={election} />
 				)}
 			</StyledInteractableBoxFullHeight>
 		</Drawer>

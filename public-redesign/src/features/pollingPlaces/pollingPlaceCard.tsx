@@ -28,6 +28,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import React from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { navigateToSearchDrawer } from '../../app/routing/navigationHelpers';
 import { Election } from '../../app/services/elections';
 import { isElectionLive } from '../elections/electionHelpers';
 import { NomsReader } from '../map/noms';
@@ -56,18 +58,41 @@ const StyledCardHeader = styled(CardHeader)(() => ({
 	// pointerEvents: "all",
 }));
 
+interface LocationState {
+	cameFromInternalNavigation?: boolean;
+}
+
 interface Props {
 	pollingPlace: IPollingPlace;
 	election: Election;
-	onClose: () => void;
 }
 
 export default function PollingPlaceCard(props: Props) {
-	const { pollingPlace, election, onClose } = props;
+	const { pollingPlace, election } = props;
 
 	const theme = useTheme();
 
+	const params = useParams();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
+
 	const nomsReader = pollingPlace.stall !== null ? new NomsReader(pollingPlace.stall.noms) : undefined;
+
+	const onClose = () => {
+		// If we've arrived here by searching in the UI, we know we can just
+		// go back and we'll remain within the search drawer interface.
+		// In most cases, this should send them back to the list of
+		// polling place search results for them to choose a different place from,
+		if (cameFromInternalNavigation === true) {
+			navigate(-1);
+		} else {
+			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
+			// be sure where we'll end up, so best just to send the user back to start a brand new search.
+			navigateToSearchDrawer(params, navigate);
+		}
+	};
 
 	// @TODO How to make it clear post-election that a booth had no reports?
 

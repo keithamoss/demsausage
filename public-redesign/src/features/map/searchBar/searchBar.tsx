@@ -29,7 +29,7 @@ import {
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
-	navigateToSearchListOfPollingPlacesFromSearchTerm,
+	navigateToSearchMapboxResults,
 } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
@@ -97,7 +97,7 @@ export default function SearchBar(props: Props) {
 				}
 
 				setIsUserTyping(false);
-				navigateToSearchListOfPollingPlacesFromSearchTerm(params, navigate, searchTerm);
+				navigateToSearchMapboxResults(params, navigate, searchTerm);
 			}, 400),
 		[navigate, params],
 	);
