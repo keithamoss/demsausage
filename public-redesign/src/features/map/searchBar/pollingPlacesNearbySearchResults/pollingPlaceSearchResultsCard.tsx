@@ -1,9 +1,11 @@
+import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { IPollingPlace } from '../../../pollingPlaces/pollingPlacesInterfaces';
@@ -90,8 +92,25 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 					</Typography> */}
 				</StyledCardContent>
 				<StyledCardActions>
-					<Button size="small" startIcon={<UnfoldMoreIcon />}>
+					<Button
+						size="small"
+						startIcon={<UnfoldMoreIcon />}
+						sx={{
+							flex: 1,
+							justifyContent: 'flex-start',
+							alignItems: 'flex-start',
+						}}
+					>
 						Learn More
+					</Button>
+
+					<Button
+						size="small"
+						startIcon={<AccessibleForwardIcon />}
+						disabled={true}
+						sx={{ color: `${blueGrey.A700} !important` }}
+					>
+						{pollingPlace.wheelchair_access}
 					</Button>
 				</StyledCardActions>
 			</StyledCard>
