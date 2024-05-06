@@ -160,9 +160,14 @@ export default function LayersSelector(props: Props) {
 													key={election.id}
 													secondaryAction={
 														isElectionLive(election) === true ? (
-															<IconButton edge="end" aria-label="delete">
-																<LiveTvIcon sx={{ color: theme.palette.secondary.main }} />
-															</IconButton>
+															<Button
+																startIcon={<LiveTvIcon />}
+																aria-label="live election"
+																disabled={true}
+																sx={{ color: `${theme.palette.secondary.main} !important` }}
+															>
+																Live
+															</Button>
 														) : null
 													}
 												>
