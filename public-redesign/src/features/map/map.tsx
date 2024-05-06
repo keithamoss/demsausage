@@ -5,6 +5,7 @@ import 'ol/ol.css';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useTitle } from '../../app/hooks/useTitle';
 import {
 	navigateToElection,
 	navigateToMap,
@@ -77,6 +78,8 @@ interface Props {
 
 function Map(props: Props) {
 	const { election } = props;
+
+	useTitle(`Democracy Sausage - ${election.name}`);
 
 	const dispatch = useAppDispatch();
 	const params = useParams();
