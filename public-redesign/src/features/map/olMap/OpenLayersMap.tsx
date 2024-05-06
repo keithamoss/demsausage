@@ -158,20 +158,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentDidUpdate(prevProps: IProps) {
-		// console.log('componentDidUpdate', this.props.isDraggingRef.current, prevProps, this.props);
-
-		// Object.keys(this.props).forEach((key) => {
-		// 	if (prevProps[key] !== this.props[key]) {
-		// 		console.log('mismatch on', key, JSON.stringify(prevProps[key]), JSON.stringify(this.props[key]));
-		// 	}
-		// });
-
 		if (this.map !== null) {
 			// Allow for elections changing
 			if (prevProps.election !== this.props.election) {
 				this.clearMapDataVectorLayer(this.map);
 				this.map.addLayer(this.getMapDataVectorLayer(this.map));
-				// console.log('fitMapViewToElection');
 				this.fitMapViewToElection(this.props.election);
 			} else {
 				// Keeping this commented out for now. I thought we needed it when we were seeing the weird issue with 'moveend' firing when the map was still being dragged when using a trackpad. However, since moving onMoveEnd into this component (from map.tsx), and probably some other changes (there was a lot of hacking around), we're not seeing this issue.
@@ -182,7 +173,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				const matchy = doesTheMapViewMatchThisView(this.map.getView(), this.props.mapView);
 
 				if (this.props.mapView !== undefined && matchy === false) {
-					// console.log('cdu.Set map to this.props.mapView');
 					this.map.setView(new View(this.props.mapView));
 				} else {
 					// }
@@ -203,8 +193,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentWillUnmount() {
-		// console.log('> componentWillUnmount');
-
 		// 1. Remove the "on data loaded" change event
 		// This doesn't work - presumably because of .bind(this)
 		// l.getSource().un("changed", this.onVectorSourceChanged.bind(this))
