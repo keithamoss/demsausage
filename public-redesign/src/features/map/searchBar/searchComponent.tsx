@@ -175,10 +175,6 @@ export default function SearchComponent(props: Props) {
 						olMapDOMRect !== undefined
 							? [olMapDOMRect.width, olMapDOMRect.height]
 							: [window.innerWidth, window.innerHeight],
-					// top, right, bottom, left
-					// @TODO Make this work for embedded mode
-					// if not undefined, assume embedded mode and only set padding of 50 bottom
-					// padding: mapSearchResults.padding !== undefined ? [0, 0, 50, 0] : [85, 0, 20, 0],
 					padding: getStandardViewPadding(),
 				});
 

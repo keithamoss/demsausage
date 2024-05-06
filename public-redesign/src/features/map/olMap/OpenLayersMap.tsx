@@ -91,7 +91,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
 
 			view.fit(polygon.getExtent(), {
-				// @TODO Make this work for embedded mode
 				padding: getStandardViewPadding(),
 				callback: (completed: boolean) => {
 					if (completed === true) {
