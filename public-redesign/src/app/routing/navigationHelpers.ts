@@ -24,11 +24,26 @@ export const getURLParams = (params: Params<string>) => {
 	};
 };
 
-export const navigateToElection = (navigate: NavigateFunction, election: Election) => {
+export const navigateToElection = (navigate: NavigateFunction, election: Election, view: View) => {
 	// We handle going to all of these routes:
 	// /:election_name/
 
-	navigate(`/${election.name_url_safe}/`);
+	const mapViewString = createMapViewURLPathComponent(view);
+
+	if (mapViewString !== undefined) {
+		navigate(`/${election.name_url_safe}/${mapViewString}/`, { state: { updateMapView: true } });
+	}
+};
+
+export const navigateToElectionAndReplace = (navigate: NavigateFunction, election: Election, view: View) => {
+	// We handle going to all of these routes:
+	// /:election_name/
+
+	const mapViewString = createMapViewURLPathComponent(view);
+
+	if (mapViewString !== undefined) {
+		navigate(`/${election.name_url_safe}/${mapViewString}/`, { state: { updateMapView: true }, replace: true });
+	}
 };
 
 export const navigateToMapAndUpdateMapWithNewView = (

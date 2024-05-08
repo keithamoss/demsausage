@@ -18,10 +18,16 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import { navigateToElection } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import { getDefaultElection, getElectionVeryShortName, isElectionLive } from '../elections/electionHelpers';
+import {
+	getDefaultElection,
+	getElectionVeryShortName,
+	getViewForElection,
+	isElectionLive,
+} from '../elections/electionHelpers';
 import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
 
 interface Props {
@@ -95,7 +101,9 @@ export default function LayersSelector(props: Props) {
 		[],
 	);
 
-	const onClickElection = (election: Election) => () => navigate(`/${election.name_url_safe}`);
+	const onClickElection = (election: Election) => () => {
+		navigateToElection(navigate, election, getViewForElection(election));
+	};
 
 	return (
 		<React.Fragment>

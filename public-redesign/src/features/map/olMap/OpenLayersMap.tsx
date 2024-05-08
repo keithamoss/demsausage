@@ -14,7 +14,6 @@ import * as Observable from 'ol/Observable';
 import { xhr } from 'ol/featureloader.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
-import Polygon from 'ol/geom/Polygon';
 import Interaction from 'ol/interaction/Interaction';
 import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
@@ -32,7 +31,6 @@ import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterSettings } from '../../icons/noms';
-import { getStandardViewPadding } from '../mapHelpers';
 import { IMapPollingPlaceFeature, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
@@ -92,30 +90,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.onMapContainerResize = this.onMapContainerResize.bind(this);
 	}
 
-	private fitMapViewToElection(election: Election) {
-		if (this.map !== null) {
-			const view = this.map.getView();
-			const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
-
-			view.fit(polygon.getExtent(), {
-				padding: getStandardViewPadding(),
-				callback: (completed: boolean) => {
-					if (completed === true) {
-						const centre = view.getCenter();
-						if (centre !== undefined) {
-							// Prevents error "Cannot assign to read only property '0' of object '[object Array]"
-							const centreCopy = [...centre];
-							centreCopy[0] -= 1;
-							view.setCenter(centreCopy);
-						}
-					}
-				},
-			});
-		}
-	}
-
 	componentDidMount() {
-		const { election, olMapRef, initialMapView } = this.props;
+		const { olMapRef, initialMapView } = this.props;
 
 		this.map = new Map({
 			layers: this.getBasemap(),
@@ -128,11 +104,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			view: initialMapView !== undefined ? new View(initialMapView) : undefined,
 		});
 		olMapRef.current = this.map;
-
-		// If we don't have a view already cached in localStorage, fit to the election
-		if (initialMapView === undefined) {
-			this.fitMapViewToElection(election);
-		}
 
 		// Accommodate the window resizing
 		window.addEventListener('resize', this.onMapContainerResize);
@@ -165,22 +136,20 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			if (prevProps.election !== this.props.election) {
 				this.clearMapDataVectorLayer(this.map);
 				this.map.addLayer(this.getMapDataVectorLayer(this.map));
-				this.fitMapViewToElection(this.props.election);
+			}
+
+			if (this.props.mapView !== undefined) {
+				this.map.setView(new View(this.props.mapView));
 			} else {
-				if (this.props.mapView !== undefined) {
-					this.map.setView(new View(this.props.mapView));
-				} else {
-					// }
-					if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
-						// The user has changed the noms filter options
-						const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
-						if (sausageLayer !== null) {
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-								olStyleFunction(feature, resolution, this.props.mapFilterSettings),
-							);
-						}
+				if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
+					// The user has changed the noms filter options
+					const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
+					if (sausageLayer !== null) {
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
+						sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
+							olStyleFunction(feature, resolution, this.props.mapFilterSettings),
+						);
 					}
 				}
 			}

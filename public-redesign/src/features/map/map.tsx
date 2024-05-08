@@ -7,16 +7,16 @@ import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, us
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useTitle } from '../../app/hooks/useTitle';
 import {
-	navigateToElection,
+	navigateToElectionAndReplace,
 	navigateToMapWithoutUpdatingTheView,
 	navigateToPollingPlaceFromFeature,
 	navigateToSearchPollingPlacesByIds,
 } from '../../app/routing/navigationHelpers';
-import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
+import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import AddStallButton from '../app/addStallButton';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
-import { getDefaultElection } from '../elections/electionHelpers';
+import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
@@ -52,16 +52,19 @@ interface PropsEntrypointLayer2 {
 function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	const { electionId } = props;
 
+	const params = useParams();
 	const navigate = useNavigate();
 
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
 
-	// Force users coming into the root of the domain over to the unique URL for the current default election
+	// Force users coming into:
+	// (a) the root of the domain (/) over to the unique URL (with its default extents) for the current default election
+	// (b) the root of an election (/election_name/) over to the unique URL (with its default extents) for their chosen election
 	useEffect(() => {
-		if (election !== undefined && window.location.pathname.startsWith(`/${election.name_url_safe}`) === false) {
-			navigateToElection(navigate, election);
+		if (election !== undefined && getStringParamOrEmptyString(params, 'map_lat_lon_zoom') === '') {
+			navigateToElectionAndReplace(navigate, election, getViewForElection(election));
 		}
-	}, [election, navigate]);
+	}, [election, navigate, params]);
 
 	if (election === undefined) {
 		return null;
