@@ -1,6 +1,5 @@
 import { Action, autoBatchEnhancer, configureStore, StoreEnhancer, ThunkAction } from '@reduxjs/toolkit';
 import appReducer from '../features/app/appSlice';
-import { loadStateFromLocalStorage } from './localStorage';
 import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';
 import { eAppEnv, getEnvironment } from './utils';
@@ -14,7 +13,6 @@ if (getEnvironment() !== eAppEnv.DEVELOPMENT) {
 }
 
 export const store = configureStore({
-	preloadedState: loadStateFromLocalStorage(),
 	reducer: {
 		app: appReducer,
 		[api.reducerPath]: api.reducer,
