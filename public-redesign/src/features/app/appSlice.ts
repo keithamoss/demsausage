@@ -38,11 +38,10 @@ export const initialState: AppState = {
 	mapFeatures: undefined,
 };
 
-// Used for storing state in localStorage
-// pollingPlaces is excluded from storage and
-// mapFeatures isn't implemented yet.
+// Used for storing state in localStorage pollingPlaces is excluded
+// from storage and mapFeatures isn't implemented yet.
 export const isAppState = (o: any): o is AppState => {
-	return 'mapFilterSettings' in o && 'searchBar' in o;
+	return 'mapFilterSettings' in o && 'searchBarFilterControlState' in o;
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
