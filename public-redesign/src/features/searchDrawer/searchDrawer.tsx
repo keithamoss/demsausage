@@ -6,7 +6,10 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { navigateToMapUsingURLParams, navigateToPollingPlace } from '../../app/routing/navigationHelpers';
+import {
+	navigateToMapUsingURLParamsWithoutUpdatingTheView,
+	navigateToPollingPlace,
+} from '../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
@@ -59,7 +62,7 @@ function SearchDrawer(props: Props) {
 	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
 	const toggleDrawer = useCallback(() => {
-		navigateToMapUsingURLParams(params, navigate);
+		navigateToMapUsingURLParamsWithoutUpdatingTheView(params, navigate);
 	}, [navigate, params]);
 
 	if (election === undefined) {

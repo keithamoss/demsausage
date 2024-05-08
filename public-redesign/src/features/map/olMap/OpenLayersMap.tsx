@@ -32,7 +32,7 @@ import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterSettings } from '../../icons/noms';
-import { doesTheMapViewMatchThisView, getStandardViewPadding } from '../mapHelpers';
+import { getStandardViewPadding } from '../mapHelpers';
 import { IMapPollingPlaceFeature, getAPIBaseURL, olStyleFunction } from '../map_stuff';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
@@ -44,9 +44,8 @@ import './OpenLayersMap.css';
 interface IProps {
 	election: Election;
 	olMapRef: React.MutableRefObject<Map | undefined>;
+	initialMapView: Partial<OLMapView> | undefined;
 	mapView: Partial<OLMapView> | undefined;
-	isDraggingRef: React.MutableRefObject<boolean>;
-	isScrollZoomingRef: React.MutableRefObject<boolean>;
 	// geojson: IGeoJSONFeatureCollection | undefined
 
 	mapFilterSettings: IMapFilterSettings;
@@ -58,6 +57,8 @@ interface IProps {
 	onDoubleClick?: (event: MapBrowserEvent) => void;
 	onPointerDown?: (event: MapBrowserEvent) => void;
 	onPointerUp?: (event: MapBrowserEvent) => void;
+	onWheelStart?: () => void;
+	onWheelEnd?: () => void;
 }
 
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
@@ -71,6 +72,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 	private onPointerUpBound: undefined | ((event: MapBrowserEvent) => void);
 
+	private wheelEventEndTimeout: number | undefined;
+
+	private onWheelBound: undefined | ((event: MapBrowserEvent) => void);
+
 	private timeoutIds: number[];
 
 	constructor(props: IProps) {
@@ -81,6 +86,8 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.eventsKeys = [];
 		this.onPointerDownBound = undefined;
 		this.onPointerUpBound = undefined;
+		this.wheelEventEndTimeout = undefined;
+		this.onWheelBound = undefined;
 
 		this.onMapContainerResize = this.onMapContainerResize.bind(this);
 	}
@@ -108,7 +115,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	componentDidMount() {
-		const { election, olMapRef, mapView, isScrollZoomingRef } = this.props;
+		const { election, olMapRef, initialMapView } = this.props;
 
 		this.map = new Map({
 			layers: this.getBasemap(),
@@ -116,22 +123,14 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			controls: [new Attribution()],
 			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
 				new DblClickDragZoom(),
-				new MouseWheelZoom({
-					condition: (mapBrowserEvent) => {
-						if (mapBrowserEvent.type === 'wheel' && isScrollZoomingRef.current === false) {
-							isScrollZoomingRef.current = true;
-						}
-
-						return true;
-					},
-				}),
+				new MouseWheelZoom(),
 			]),
-			view: mapView !== undefined ? new View(mapView) : undefined,
+			view: initialMapView !== undefined ? new View(initialMapView) : undefined,
 		});
 		olMapRef.current = this.map;
 
 		// If we don't have a view already cached in localStorage, fit to the election
-		if (mapView === undefined) {
+		if (initialMapView === undefined) {
 			this.fitMapViewToElection(election);
 		}
 
@@ -149,6 +148,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 		this.eventsKeys.push(this.map.on('moveend', this.onMoveEnd.bind(this)));
 
+		this.onWheelBound = this.onWheel.bind(this);
+		this.map.addEventListener('wheel', this.onWheelBound);
+
 		// The pointer down/up events on OL's PointerInteractions don't do what we expect, so we use the regular 'ol pointerdown/pointerup events
 		this.onPointerDownBound = this.onPointerDown.bind(this);
 		this.map.addEventListener('pointerdown', this.onPointerDownBound);
@@ -165,14 +167,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				this.map.addLayer(this.getMapDataVectorLayer(this.map));
 				this.fitMapViewToElection(this.props.election);
 			} else {
-				// Keeping this commented out for now. I thought we needed it when we were seeing the weird issue with 'moveend' firing when the map was still being dragged when using a trackpad. However, since moving onMoveEnd into this component (from map.tsx), and probably some other changes (there was a lot of hacking around), we're not seeing this issue.
-				// if (this.props.isDraggingRef.current === false) {
-				// If the Map's view doesn't match what's in the URL, use the URL.
-				// This is primarily used when we want to navigate() to a view internallyand have it change the map e.g. the "View On Map" button
-				// This is also needed when we're navigating via back/forward to make sure the view that's in the URL gets applied to the existing map object
-				const matchy = doesTheMapViewMatchThisView(this.map.getView(), this.props.mapView);
-
-				if (this.props.mapView !== undefined && matchy === false) {
+				if (this.props.mapView !== undefined) {
 					this.map.setView(new View(this.props.mapView));
 				} else {
 					// }
@@ -223,9 +218,15 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				this.map.removeEventListener('pointerdown', this.onPointerDownBound);
 				this.onPointerDownBound = undefined;
 			}
+
 			if (this.onPointerUpBound !== undefined) {
 				this.map.removeEventListener('pointerup', this.onPointerUpBound);
 				this.onPointerUpBound = undefined;
+			}
+
+			if (this.onWheelBound !== undefined) {
+				this.map.removeEventListener('wheel', this.onWheelBound);
+				this.onWheelBound = undefined;
 			}
 		}
 
@@ -312,6 +313,20 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		if (this.props.onMoveEnd !== undefined) {
 			this.props.onMoveEnd(event);
 		}
+	}
+
+	private onWheel() {
+		if (this.props.onWheelStart !== undefined && this.wheelEventEndTimeout === undefined) {
+			this.props.onWheelStart();
+		}
+
+		clearTimeout(this.wheelEventEndTimeout);
+		this.wheelEventEndTimeout = setTimeout(() => {
+			if (this.props.onWheelEnd !== undefined) {
+				this.props.onWheelEnd();
+				this.wheelEventEndTimeout = undefined;
+			}
+		}, 250);
 	}
 
 	private onDoubleClick(event: MapBrowserEvent) {

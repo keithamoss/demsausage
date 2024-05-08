@@ -35,11 +35,15 @@ export const extractMapViewFromString = (str: string) => {
 
 export const createMapViewURLPathComponent = (view: View) => {
 	const centre = view.getCenter();
-	if (centre === undefined) {
+	const zoom = view.getZoom();
+
+	if (centre === undefined || zoom === undefined) {
 		return undefined;
 	}
 
-	return `@${transform(centre, 'EPSG:3857', 'EPSG:4326').reverse().join(',')},z${view.getZoom()}`;
+	// Round to 7 decimal places to avoid occasional issues where there'd be a tiny tiny micro movement of the view when scrolling
+	const [lat, lon] = transform(centre, 'EPSG:3857', 'EPSG:4326').reverse();
+	return `@${lat.toPrecision(7)},${lon.toPrecision(7)},z${zoom.toPrecision(7)}`;
 };
 
 export const createMapViewFromURL = (params: Params<string>): Partial<OLMapView> | undefined => {
@@ -49,7 +53,7 @@ export const createMapViewFromURL = (params: Params<string>): Partial<OLMapView>
 		return undefined;
 	}
 
-	// @-31.9439783,115.8640059,15z
+	// @-33.83689,151.1098,z12.38029
 	const [lat, lon, zoom] = mapViewFromURL.substring(1).split(',');
 
 	const latNumber = parseFloat(lat);

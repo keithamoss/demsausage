@@ -8,7 +8,7 @@ import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
-	navigateToMapWithNewView,
+	navigateToMapAndUpdateMapWithNewView,
 	navigateToSearchListOfPollingPlacesFromMapboxResults,
 } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
@@ -178,7 +178,7 @@ export default function SearchComponent(props: Props) {
 					padding: getStandardViewPadding(),
 				});
 
-				navigateToMapWithNewView(params, navigate, view);
+				navigateToMapAndUpdateMapWithNewView(params, navigate, view);
 			}
 		}
 	}, [navigate, params, pollingPlaceNearbyResultsFiltered]);

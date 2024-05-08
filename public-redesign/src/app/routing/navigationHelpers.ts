@@ -31,7 +31,11 @@ export const navigateToElection = (navigate: NavigateFunction, election: Electio
 	navigate(`/${election.name_url_safe}/`);
 };
 
-export const navigateToMapWithNewView = (params: Params<string>, navigate: NavigateFunction, view: View) => {
+export const navigateToMapAndUpdateMapWithNewView = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	view: View,
+) => {
 	const { urlElectionName } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
@@ -41,19 +45,34 @@ export const navigateToMapWithNewView = (params: Params<string>, navigate: Navig
 	const mapViewString = createMapViewURLPathComponent(view);
 
 	if (mapViewString !== undefined) {
-		navigateToMap(params, navigate, mapViewString);
+		navigateToMap(params, navigate, mapViewString, { updateMapView: true });
 	}
 };
 
-export const navigateToMapUsingURLParams = (params: Params<string>, navigate: NavigateFunction) => {
+export const navigateToMapUsingURLParamsWithoutUpdatingTheView = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+) => {
 	const { urlMapLatLonZoom } = getURLParams(params);
 
 	if (urlMapLatLonZoom !== undefined) {
-		navigateToMap(params, navigate, urlMapLatLonZoom);
+		navigateToMapWithoutUpdatingTheView(params, navigate, urlMapLatLonZoom);
 	}
 };
 
-export const navigateToMap = (params: Params<string>, navigate: NavigateFunction, mapLatLonZoom: string) => {
+// Not passing `state` of `{ updateMapView: true }` means we don't update the map's view when the URL changes
+export const navigateToMapWithoutUpdatingTheView = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	mapLatLonZoom: string,
+) => navigateToMap(params, navigate, mapLatLonZoom);
+
+export const navigateToMap = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	mapLatLonZoom: string,
+	state?: object,
+) => {
 	// We handle going to all of these routes:
 	// /:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 	// /:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/
@@ -68,15 +87,25 @@ export const navigateToMap = (params: Params<string>, navigate: NavigateFunction
 	}
 
 	if (urlPollingPlaceIds !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/by_ids/${urlPollingPlaceIds}/`, mapLatLonZoom));
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/by_ids/${urlPollingPlaceIds}/`, mapLatLonZoom), {
+			state,
+		});
 	} else if (urlGPSLonLat !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/gps/${urlGPSLonLat}/`, mapLatLonZoom));
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/gps/${urlGPSLonLat}/`, mapLatLonZoom), {
+			state,
+		});
 	} else if (urlSearchTerm !== undefined && urlLonLat !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/place/${urlSearchTerm}/${urlLonLat}/`, mapLatLonZoom));
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/place/${urlSearchTerm}/${urlLonLat}/`, mapLatLonZoom), {
+			state,
+		});
 	} else if (urlSearchTerm !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/place/${urlSearchTerm}/`, mapLatLonZoom));
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/place/${urlSearchTerm}/`, mapLatLonZoom), {
+			state,
+		});
 	} else {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/`, mapLatLonZoom));
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/`, mapLatLonZoom), {
+			state,
+		});
 	}
 };
 
@@ -202,7 +231,11 @@ export const navigateToSearchListOfPollingPlacesFromMapboxResults = (
 	});
 };
 
-export const navigateToPollingPlacesByIds = (params: Params<string>, navigate: NavigateFunction, ids: number[]) => {
+export const navigateToSearchPollingPlacesByIds = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	ids: number[],
+) => {
 	// We handle going to all of these routes:
 	// //:election_name/search/by_ids/:polling_place_ids/:map_lat_lon_zoom?/
 
@@ -272,38 +305,3 @@ export const navigateToPollingPlace = (
 		);
 	}
 };
-
-// This was an experiment to build our own "Pass a template URL and we'll insert the relevant params if they exist"
-// Abandoned because further logic was required to skip parameters, so going the full declarative approach
-// seen in this file was more reliable, involved less magic, and was aligned to the declarative
-// approach taken in routes.tsx
-// const buildURL = (params: Params<string>, template: string) => {
-// 	console.log('params', params);
-// 	console.log('template', template);
-// 	let url = template;
-
-// 	for (const match of template.matchAll(/\/?:(?<param_name>[a-zA-Z_]+)\??\/?/g)) {
-// 		console.log('match', match.groups?.param_name);
-// 		if (match.groups?.param_name !== undefined) {
-// 			console.log(
-// 				'replace',
-// 				match.groups?.param_name,
-// 				'with',
-// 				getStringParamOrEmptyString(params, match.groups.param_name),
-// 			);
-// 			url = url.replace(`:${match.groups?.param_name}`, getStringParamOrEmptyString(params, match.groups.param_name));
-// 		}
-// 	}
-
-// 	// Object.keys(params).forEach((param_name) => {
-// 	// 	if (template.includes(`:${param_name}`) === true) {
-// 	// 		// if (params[param_name] !== undefined) {
-// 	// 		console.log('replace', param_name);
-// 	// 		url.replace(`:${param_name}`, params[param_name] || 'foo');
-// 	// 		// }
-// 	// 	}
-// 	// });
-
-// 	console.log('url', url);
-// 	return url;
-// };

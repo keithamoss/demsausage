@@ -2,15 +2,15 @@ import { Box } from '@mui/material';
 import { debounce } from 'lodash-es';
 import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useTitle } from '../../app/hooks/useTitle';
 import {
 	navigateToElection,
-	navigateToMap,
+	navigateToMapWithoutUpdatingTheView,
 	navigateToPollingPlaceFromFeature,
-	navigateToPollingPlacesByIds,
+	navigateToSearchPollingPlacesByIds,
 } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
@@ -72,6 +72,10 @@ function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	}
 }
 
+interface LocationState {
+	updateMapView?: boolean;
+}
+
 interface Props {
 	election: Election;
 }
@@ -84,8 +88,18 @@ function Map(props: Props) {
 	const dispatch = useAppDispatch();
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 
-	const mapViewFromURL = createMapViewFromURL(useParams());
+	const navigationType = useNavigationType();
+	// Tell OpenLayers to update the map's view if we've arrived
+	// here via a NavigationType.Pop(the browser's back or
+	// forward buttons) or if we've arrived here from a navigate()
+	// call that asked us to update the map view.
+	const updateMapView =
+		navigationType === NavigationType.Pop || (location.state as LocationState)?.updateMapView === true;
+
+	const mapViewFromURL = createMapViewFromURL(params);
+	const [initialMapView] = useState(mapViewFromURL);
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
@@ -105,7 +119,7 @@ function Map(props: Props) {
 			} else {
 				const ids = getPollingPlaceIdsFromFeatures(features);
 				if (ids.length >= 1) {
-					navigateToPollingPlacesByIds(params, navigate, ids);
+					navigateToSearchPollingPlacesByIds(params, navigate, ids);
 				}
 			}
 		},
@@ -117,49 +131,40 @@ function Map(props: Props) {
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking
 	// ######################
-	const isScrollZoomingRef = useRef<boolean>(false);
-	const isDraggingRef = useRef<boolean>(false);
+	// We use the 'pointerdown' / 'pointerup' combo here because our use case is different to Mapa. i.e. We want to update the URL every time the view changes, regardless of how the change happens. Hence, our guard for "Is the user still interacting with the map?" can be much more blunt and looking at if the user has their pointer activated.
+	// Where as Mapa uses looking to see if 'pointerdrag' fires between 'movestart' and 'moveend' because it wants to turn off GPS tracking as soon as we know the user has taken an action to change the view.
+	const isDraggingOrMouseWheelScrollingRef = useRef<boolean>(false);
 
-	// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
-	// Ref: https://gis.stackexchange.com/a/378877
-	// Note: We're using this in Mapa, but we hit issues in this legacy code where using a trackpad was seeing moveend fire during a drag event. We've since moved to using pointerup/down on the map itself, rather than the movestart/pointerdrag/moveend events as we are in Mapa.
-	// It may not actually be a thing and could've been caused by OL bugs (we're using an older version here) or just representative of the hacked together mass of code that makes the map work here - a combo of the legacy DemSausage map code with parts of Mapa's map code.
-	// Except, it still sort of happens. Mostly just when we're doing a specific combo of a two fingered click and drag to move the map.
-	// The (isDraggingRef.current === true) guard in moveend serves to deal with it.
-	const isDoubleClickingRef = useRef<boolean>(false);
-
-	const navigateDebounced = useMemo(
+	const onMoveEnd = useMemo(
 		() =>
-			debounce((mapViewString: string) => {
-				navigateToMap(params, navigate, mapViewString);
+			debounce((evt: MapEvent) => {
+				// Wait until the user has finished interacting with the map until we update the URL
+				if (isDraggingOrMouseWheelScrollingRef.current === true) {
+					return undefined;
+				}
+
+				const mapViewString = createMapViewURLPathComponent(evt.map.getView());
+				if (mapViewString !== undefined && location.pathname.includes(mapViewString) === false) {
+					navigateToMapWithoutUpdatingTheView(params, navigate, mapViewString);
+				}
 			}, 500),
-		[navigate, params],
-	);
-
-	const onMoveEnd = useCallback(
-		(evt: MapEvent) => {
-			// This doesn't seem to happen much any more, mostly just when we're doing a specific combo of a two fingered click and drag to move the map.
-			if (isDraggingRef.current === true) {
-				return undefined;
-			}
-
-			isDoubleClickingRef.current = false;
-			isScrollZoomingRef.current = false;
-
-			const mapViewString = createMapViewURLPathComponent(evt.map.getView());
-			if (mapViewString !== undefined && location.pathname.includes(mapViewString) === false) {
-				navigateDebounced(mapViewString);
-			}
-		},
-		[navigateDebounced],
+		[location.pathname, navigate, params],
 	);
 
 	const onPointerDown = useCallback(() => {
-		isDraggingRef.current = true;
+		isDraggingOrMouseWheelScrollingRef.current = true;
 	}, []);
 
 	const onPointerUp = useCallback(() => {
-		isDraggingRef.current = false;
+		isDraggingOrMouseWheelScrollingRef.current = false;
+	}, []);
+
+	const onWheelStart = useCallback(() => {
+		isDraggingOrMouseWheelScrollingRef.current = true;
+	}, []);
+
+	const onWheelEnd = useCallback(() => {
+		isDraggingOrMouseWheelScrollingRef.current = false;
 	}, []);
 	// ######################
 	// Drag Detection, Map View Updating, and Feature Clicking (End)
@@ -170,9 +175,8 @@ function Map(props: Props) {
 			<OpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
-				mapView={mapViewFromURL}
-				isDraggingRef={isDraggingRef}
-				isScrollZoomingRef={isScrollZoomingRef}
+				initialMapView={initialMapView}
+				mapView={updateMapView === true ? mapViewFromURL : undefined}
 				mapFilterSettings={mapFilterSettings}
 				onMapBeginLoading={onMapBeginLoading}
 				onMapDataLoaded={onMapDataLoaded}
@@ -181,6 +185,8 @@ function Map(props: Props) {
 				onMoveEnd={onMoveEnd}
 				onPointerDown={onPointerDown}
 				onPointerUp={onPointerUp}
+				onWheelStart={onWheelStart}
+				onWheelEnd={onWheelEnd}
 			/>
 
 			<LayersSelector electionId={election.id} />

@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { navigateToMapUsingURLParams } from '../../app/routing/navigationHelpers';
+import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
@@ -83,12 +83,18 @@ function PollingPlaceCardDrawer(props: Props) {
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
 	const onToggleDrawer = useCallback(() => {
+		// If we've arrived here by searching in the UI, we know we can just
+		// go back and we'll be in a sensible place.
+		// In most cases, this should send them back to the list of
+		// polling place search results for them to choose a different place from.
+		// However, if they've come here directly from the map (i.e. by clicking on
+		// a single polling place), then they'll be sent back to the map.
 		if (cameFromInternalNavigation === true) {
 			navigate(-1);
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
-			// be sure where we'll end up, so best just to send the user back to start a brand new search.
-			navigateToMapUsingURLParams(params, navigate);
+			// be sure where we'll end up, so best just to send the user back to the map.
+			navigateToMapUsingURLParamsWithoutUpdatingTheView(params, navigate);
 		}
 	}, [cameFromInternalNavigation, navigate, params]);
 
