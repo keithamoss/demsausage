@@ -4489,15 +4489,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:^7.1.31":
-  version: 7.1.31
-  resolution: "@types/react-redux@npm:7.1.31"
+"@types/react-redux@npm:^7.1.33":
+  version: 7.1.33
+  resolution: "@types/react-redux@npm:7.1.33"
   dependencies:
     "@types/hoist-non-react-statics": "npm:^3.3.0"
     "@types/react": "npm:*"
     hoist-non-react-statics: "npm:^3.3.0"
     redux: "npm:^4.0.0"
-  checksum: 8/d4274b77fdcc3de06c9a44f809430b36145fdd95d1c1840ece61e00b045b24e65825b6b0441efd73f3251cb386381fbfc64c5e7ab78818ed7229319afa9dd525
+  checksum: 10c0/e17a2fea00c6ab5f22868e927b4da7b7cf8dc7c85102638fa0f87e12ae0ec13335d9b3bf75098b3316dd8d2a18c99fe08bed22daa989a13f3710c4530f7b979e
   languageName: node
   linkType: hard
 
@@ -5509,7 +5509,7 @@ __metadata:
     "@types/qs": "npm:^6.9.15"
     "@types/react": "npm:^18.3.1"
     "@types/react-dom": "npm:^18.3.0"
-    "@types/react-redux": "npm:^7.1.31"
+    "@types/react-redux": "npm:^7.1.33"
     "@types/react-router": "npm:3.0.28"
     "@types/react-router-redux": "npm:^4.0.58"
     "@types/recompose": "npm:^0.30.15"
