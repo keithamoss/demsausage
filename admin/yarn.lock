@@ -3753,10 +3753,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/router@npm:1.16.0":
-  version: 1.16.0
-  resolution: "@remix-run/router@npm:1.16.0"
-  checksum: 10c0/234e66b4d7266aff6d111a43f5560f00ffdc91de0b5cd447f1fdf1de1a8b3a6ac326eb52302356e23b095e71a8f4da914e40239af5f121de2ec2994f101b8db0
+"@remix-run/router@npm:1.16.1":
+  version: 1.16.1
+  resolution: "@remix-run/router@npm:1.16.1"
+  checksum: 10c0/5f1b0aef4924830eeab9c86dcaa5af8157066e5de65b449e7fdf406532b2384828a46a447c31b0735fd713a06938dd88bfd4e566d9989be70c770457dda16c92
   languageName: node
   linkType: hard
 
@@ -5547,7 +5547,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-google-maps: "npm:^9.4.5"
     react-redux: "npm:^9.1.2"
-    react-router: "npm:^6.23.0"
+    react-router: "npm:^6.23.1"
     react-router-redux: "npm:^4.0.8"
     react-scripts: "npm:^4.0.3"
     react-string-replace: "npm:^1.1.1"
@@ -18017,14 +18017,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^6.23.0":
-  version: 6.23.0
-  resolution: "react-router@npm:6.23.0"
+"react-router@npm:^6.23.1":
+  version: 6.23.1
+  resolution: "react-router@npm:6.23.1"
   dependencies:
-    "@remix-run/router": "npm:1.16.0"
+    "@remix-run/router": "npm:1.16.1"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/567eb764d0814a9af2ea83c7d0bcf8a0a49d7070b4a7fffbbe8a4e4a376ca4e6adaa762b47760b110993eb2773fc617da7e26ab564d59cfd768130671a1b990e
+  checksum: 10c0/091949805745136350ab049b2a96281bf38742c9d3651019fb48ea79c5eafbfb0379f1d3e636602dd56b0ef278389e8fd25be983dc2c0ffd1103d06dfa8019f3
   languageName: node
   linkType: hard
 
