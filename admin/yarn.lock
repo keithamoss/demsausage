@@ -5507,7 +5507,7 @@ __metadata:
     luxon: "npm:^3.4.4"
     material-ui: "npm:^0.20.2"
     material-ui-responsive-drawer: "npm:^1.19.4"
-    ol: "npm:^9.2.1"
+    ol: "npm:^9.2.3"
     prettier: "npm:^3.2.5"
     prettier-eslint: "npm:^16.3.0"
     qs: "npm:^6.12.1"
@@ -15849,9 +15849,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^9.2.1":
-  version: 9.2.1
-  resolution: "ol@npm:9.2.1"
+"ol@npm:^9.2.3":
+  version: 9.2.3
+  resolution: "ol@npm:9.2.3"
   dependencies:
     color-rgba: "npm:^3.0.0"
     color-space: "npm:^2.0.1"
@@ -15859,7 +15859,7 @@ __metadata:
     geotiff: "npm:^2.0.7"
     pbf: "npm:3.2.1"
     rbush: "npm:^3.0.1"
-  checksum: 10c0/d2a98daf75c81dbe64a2b5682ffab80f1a389f70abbdd67a5454ce0476d643b948dc6de06867ab67f5c277742bce71c2173e852367b78c6282c6cb3143088968
+  checksum: 10c0/6402a80da8e00128f11991c5053ab10e4596fc4d1cdc310576391a189b0b5828d8ccaf669200806551cf5399f31a10221773ff89f32042d26b3dac807c7371d5
   languageName: node
   linkType: hard
 

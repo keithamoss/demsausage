@@ -16,7 +16,7 @@
     "luxon": "^3.4.4",
     "material-ui": "^0.20.2",
     "material-ui-responsive-drawer": "^1.19.4",
-    "ol": "^9.2.1",
+    "ol": "^9.2.3",
     "qs": "^6.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
