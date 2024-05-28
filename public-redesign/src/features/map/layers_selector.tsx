@@ -107,27 +107,35 @@ export default function LayersSelector(props: Props) {
 
 	return (
 		<React.Fragment>
+			{isViewingHistoricalElection === true && (
+				<Button
+					size="small"
+					disabled={true}
+					sx={{
+						marginTop: '46px',
+						position: 'absolute',
+						top: '24px',
+						// 24px for the StyledLayersBadge's right offset
+						// 40px for the width of StyledLayersBadge
+						// 24px to ensure even spacing either side of StyledLayersBadge
+						right: '88px', // 24px + 40px + 24px
+						left: '24px',
+						zIndex: 1050,
+						height: '40px',
+						backgroundColor: 'rgb(255, 255, 255, 0.8)',
+						color: `${blueGrey.A700} !important`,
+					}}
+				>
+					{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
+				</Button>
+			)}
+
 			<StyledLayersBadge
 				badgeContent={activeElections.length > 1 ? activeElections.length : null}
 				color="primary"
 				className="layer-selector"
 				sx={{ marginTop: '46px' }}
 			>
-				{isViewingHistoricalElection === true && (
-					<Button
-						size="small"
-						disabled={true}
-						sx={{
-							backgroundColor: 'white',
-							color: `${blueGrey.A700} !important`,
-							left: '20px',
-							paddingRight: '25px',
-						}}
-					>
-						{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
-					</Button>
-				)}
-
 				<StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
 					<LayersIcon />
 				</StyledIconButton>
