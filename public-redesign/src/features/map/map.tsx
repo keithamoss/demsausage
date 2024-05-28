@@ -93,11 +93,13 @@ function Map(props: Props) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const navigationType = useNavigationType();
+	const olMapRef = useRef<olMap | undefined>(undefined);
+
 	// Tell OpenLayers to update the map's view if we've arrived
 	// here via a NavigationType.Pop(the browser's back or
 	// forward buttons) or if we've arrived here from a navigate()
 	// call that asked us to update the map view.
+	const navigationType = useNavigationType();
 	const updateMapView =
 		navigationType === NavigationType.Pop || (location.state as LocationState)?.updateMapView === true;
 
@@ -106,6 +108,9 @@ function Map(props: Props) {
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
+	// ######################
+	// Map Loading
+	// ######################
 	const [isMapDataLoading, setIsMapDataLoading] = useState(false);
 
 	const onMapBeginLoading = useMemo(() => () => setIsMapDataLoading(true), []);
@@ -119,7 +124,13 @@ function Map(props: Props) {
 	);
 
 	const onMapLoaded = useMemo(() => () => {}, []);
+	// ######################
+	// Map Loading (End)
+	// ######################
 
+	// ######################
+	// Feature Querying
+	// ######################
 	const onQueryMap = useMemo(
 		() => (features: Feature[]) => {
 			if (features.length === 1) {
@@ -133,11 +144,12 @@ function Map(props: Props) {
 		},
 		[navigate, params],
 	);
-
-	const olMapRef = useRef<olMap | undefined>(undefined);
+	// ######################
+	// Feature Querying (End)
+	// ######################
 
 	// ######################
-	// Drag Detection, Map View Updating, and Feature Clicking
+	// Drag Detection and Map View Updating
 	// ######################
 	// We use the 'pointerdown' / 'pointerup' combo here because our use case is different to Mapa. i.e. We want to update the URL every time the view changes, regardless of how the change happens. Hence, our guard for "Is the user still interacting with the map?" can be much more blunt and looking at if the user has their pointer activated.
 	// Where as Mapa uses looking to see if 'pointerdrag' fires between 'movestart' and 'moveend' because it wants to turn off GPS tracking as soon as we know the user has taken an action to change the view.
@@ -175,7 +187,7 @@ function Map(props: Props) {
 		isDraggingOrMouseWheelScrollingRef.current = false;
 	}, []);
 	// ######################
-	// Drag Detection, Map View Updating, and Feature Clicking (End)
+	// Drag Detection and Map View Updating (End)
 	// ######################
 
 	return (
