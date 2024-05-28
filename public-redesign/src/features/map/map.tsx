@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { debounce } from 'lodash-es';
 import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
@@ -106,10 +106,15 @@ function Map(props: Props) {
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
-	const onMapBeginLoading = useMemo(() => () => {}, []);
+	const [isMapDataLoading, setIsMapDataLoading] = useState(false);
+
+	const onMapBeginLoading = useMemo(() => () => setIsMapDataLoading(true), []);
 
 	const onMapDataLoaded = useMemo(
-		() => (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) => dispatch(setPollingPlaces(pollingPlaces)),
+		() => (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) => {
+			setIsMapDataLoading(false);
+			dispatch(setPollingPlaces(pollingPlaces));
+		},
 		[dispatch],
 	);
 
@@ -207,6 +212,10 @@ function Map(props: Props) {
 			>
 				<SearchBarCosmeticNonFunctional />
 			</Box>
+
+			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isMapDataLoading}>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 
 			<Outlet />
 		</React.Fragment>
