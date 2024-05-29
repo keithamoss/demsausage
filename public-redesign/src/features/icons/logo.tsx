@@ -1,5 +1,5 @@
 import { SvgIcon } from '@mui/material';
-import { pure } from 'recompose';
+import { PureComponent } from 'react';
 
 const svg = (props: any) => (
 	<SvgIcon {...props}>
@@ -614,7 +614,7 @@ const svg = (props: any) => (
 	</SvgIcon>
 );
 
-const Logo: any = pure(svg);
+const Logo: any = new PureComponent(svg);
 Logo.displayName = 'Logo';
 Logo.muiName = 'SvgIcon';
 

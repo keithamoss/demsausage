@@ -1,4 +1,4 @@
-import { isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { isAction, isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import * as Sentry from '@sentry/browser';
 import Cookies from 'js-cookie';
@@ -10,9 +10,11 @@ export const api = createApi({
 		prepareHeaders: (headers) => {
 			const token = Cookies.get('csrftoken');
 			if (token) {
-				// file deepcode ignore WrongCsrfTokenHeader: <please specify a reason of ignoring this>
+				// https://docs.djangoproject.com/en/4.2/howto/csrf/
+				// deepcode ignore WrongCsrfTokenHeader: <please specify a reason of ignoring this>
 				headers.set('X-CSRFToken', token);
 			}
+
 			return headers;
 		},
 	}),
@@ -28,12 +30,15 @@ export const api = createApi({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action) => {
 	// c.f. https://github.com/reduxjs/redux-toolkit/issues/331
-	if (isRejectedWithValue(action)) {
+	if (isRejectedWithValue(action) && isAction(action) === true) {
 		if (isDevelopment() === true) {
 			// eslint-disable-next-line no-console
 			console.error(
+				// This broke in the RTK Query 2.0 upgrade because action.payload is now always Unknown
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-				`${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`,
+				// `${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`,
+				// action,
+				`${action.error.message} [${action.meta.requestStatus}] for ${action.type}`,
 				action,
 			);
 		} else {

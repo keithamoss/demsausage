@@ -1,5 +1,5 @@
 import { SvgIcon } from '@mui/material';
-import { pure } from 'recompose';
+import { PureComponent } from 'react';
 
 const svg = (props: any) => (
 	<SvgIcon {...props}>
@@ -9,7 +9,7 @@ const svg = (props: any) => (
 	</SvgIcon>
 );
 
-const TwitterIcon: any = pure(svg);
+const TwitterIcon: any = new PureComponent(svg);
 TwitterIcon.displayName = 'TwitterIcon';
 TwitterIcon.muiName = 'SvgIcon';
 

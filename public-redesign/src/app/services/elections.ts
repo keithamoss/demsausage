@@ -28,7 +28,7 @@ export { initialState as initialElectionsState };
 
 export const electionsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getElections: builder.query<EntityState<Election>, void>({
+		getElections: builder.query<EntityState<Election, number>, void>({
 			query: () => 'elections/public/',
 			transformResponse: (res: ElectionsResponse) => {
 				return electionsAdapter.setAll(initialState, res);
