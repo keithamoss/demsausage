@@ -15,14 +15,13 @@ export const sentryInit = () => {
 		site: import.meta.env.VITE_SENTRY_SITE_NAME,
 		attachStacktrace: true,
 		integrations: [
-			new Sentry.BrowserTracing({
-				routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-					useEffect,
-					useLocation,
-					useNavigationType,
-					createRoutesFromChildren,
-					matchRoutes,
-				),
+			Sentry.reactRouterV6BrowserTracingIntegration({
+				useEffect,
+				useLocation,
+				useNavigationType,
+				createRoutesFromChildren,
+				matchRoutes,
+				// stripBasename,
 			}),
 		],
 
@@ -38,6 +37,7 @@ export const sentryInit = () => {
 			if (event.exception) {
 				Sentry.showReportDialog({ eventId: event.event_id });
 			}
+
 			return event;
 		},
 	});
