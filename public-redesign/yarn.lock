@@ -2661,43 +2661,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-name@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "color-name@npm:2.0.0"
-  checksum: 10/10a1addae41de2987d6b90dbd3cfade266c2e6f680ce21749911df4493b4fae07654862c6b5358bdd13e155461acb4eedaa5e0ba172bf13542cdcca10866cf2b
-  languageName: node
-  linkType: hard
-
 "color-name@npm:~1.1.4":
   version: 1.1.4
   resolution: "color-name@npm:1.1.4"
   checksum: 10/b0445859521eb4021cd0fb0cc1a75cecf67fceecae89b63f62b201cca8d345baf8b952c966862a9d9a2632987d4f6581f0ec8d957dfacece86f0a7919316f610
-  languageName: node
-  linkType: hard
-
-"color-parse@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "color-parse@npm:2.0.2"
-  dependencies:
-    color-name: "npm:^2.0.0"
-  checksum: 10/64963587057e024edbce3f009e73e69b1d1b31d6f9955eed853748b8cb14d4e3bb49064da9c7452a22f5326a1197fa6c483483a53868e815f4cba30b6b1c36cc
-  languageName: node
-  linkType: hard
-
-"color-rgba@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "color-rgba@npm:3.0.0"
-  dependencies:
-    color-parse: "npm:^2.0.0"
-    color-space: "npm:^2.0.0"
-  checksum: 10/003b5fa70a77f46df3753e4b941154986163ccabbd9a8a80b2ca6cc4a0c9e505f3d4909c46a0b085e095d19b80297cf1c02dfefa33666b9ea1661ff52b3597bc
-  languageName: node
-  linkType: hard
-
-"color-space@npm:^2.0.0, color-space@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "color-space@npm:2.0.1"
-  checksum: 10/e74767555b10f2be11cc1c4244d81cd5788a5808ee7bd7c9afebefb567f8e27d6722f8096cb8777e6536662aecca83aa204090fed6537ee56bf0600cac966478
   languageName: node
   linkType: hard
 
@@ -5173,17 +5140,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^8.1.0":
-  version: 8.2.0
-  resolution: "ol@npm:8.2.0"
+"ol@npm:8.1.0":
+  version: 8.1.0
+  resolution: "ol@npm:8.1.0"
   dependencies:
-    color-rgba: "npm:^3.0.0"
-    color-space: "npm:^2.0.1"
     earcut: "npm:^2.2.3"
     geotiff: "npm:^2.0.7"
     pbf: "npm:3.2.1"
     rbush: "npm:^3.0.1"
-  checksum: 10/d6144e47dd2b608efb6d43ab51b4e3c3f2bb1d87a451988481b9a1bd73946f1b5e61ddaa3990e6b4402caaab034143245f8c055647a37223f3d0e0dab5d25d3d
+  checksum: 10/3b87a661aebbdb2332edfb04026dcde8fca5f2df8e0d1946d7c6c11fbba362d882537d0f132679010265f9f0e399a591a46a09ebde48b6e9c5f51c412e5b080b
   languageName: node
   linkType: hard
 
@@ -5513,7 +5478,7 @@ __metadata:
     js-cookie: "npm:^3.0.5"
     lodash-es: "npm:^4.17.21"
     luxon: "npm:^3.4.4"
-    ol: "npm:^8.1.0"
+    ol: "npm:8.1.0"
     prettier: "npm:^3.2.5"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
