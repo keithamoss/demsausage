@@ -140,16 +140,16 @@ export default function SearchComponent(props: Props) {
 		pollingPlaceNearbyResults !== undefined
 			? pollingPlaceNearbyResults
 			: isFetchingPollingPlacesByIds === false &&
-			  isSuccessFetchingPollingPlacesByIds === true &&
-			  pollingPlaceByIdsResult !== undefined
-			? pollingPlaceByIdsResult
-			: undefined;
+				  isSuccessFetchingPollingPlacesByIds === true &&
+				  pollingPlaceByIdsResult !== undefined
+				? pollingPlaceByIdsResult
+				: undefined;
 
 	const pollingPlaceNearbyResultsFiltered =
 		pollingPlaceNearbyResultsCombined !== undefined
 			? pollingPlaceNearbyResultsCombined.filter(
 					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings) === true,
-			  )
+				)
 			: undefined;
 	// ######################
 	// Polling Place Search Results Combiner (End)
