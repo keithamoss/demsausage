@@ -8,18 +8,19 @@ const Link = forwardRef<HTMLAnchorElement, RouterLinkProps>(function Link(itemPr
 
 interface ListItemLinkProps {
 	icon?: React.ReactElement;
+	colour?: string;
 	primary: string;
 	to: string;
 	target?: string;
 }
 
 export function ListItemButtonLink(props: ListItemLinkProps) {
-	const { icon, primary, to, target } = props;
+	const { icon, colour, primary, to, target } = props;
 
 	return (
 		<li>
-			<ListItemButton component={Link} to={to} target={target}>
-				{icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+			<ListItemButton component={Link} to={to} target={target} sx={{ color: colour }}>
+				{icon ? <ListItemIcon sx={{ color: colour }}>{icon}</ListItemIcon> : null}
 				<ListItemText primary={primary} />
 			</ListItemButton>
 		</li>

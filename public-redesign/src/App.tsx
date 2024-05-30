@@ -1,7 +1,7 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
@@ -14,16 +14,19 @@ const TitleLogo = styled('img')`
 
 export default function App() {
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	const onToggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-		if (
-			event.type === 'keydown' &&
-			((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-		) {
-			return;
-		}
+	const onToggleDrawer = useCallback(
+		(open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+			if (
+				event.type === 'keydown' &&
+				((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+			) {
+				return;
+			}
 
-		setDrawerOpen(open);
-	};
+			setDrawerOpen(open);
+		},
+		[],
+	);
 
 	return (
 		<div className="App">

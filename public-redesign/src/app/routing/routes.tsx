@@ -18,10 +18,16 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'about',
 				element: <AboutPage />,
+				loader: () => ({
+					name: 'About',
+				}),
 			},
 			{
 				path: 'add-stall',
 				element: <AddStall />,
+				loader: () => ({
+					name: 'Add Stall',
+				}),
 			},
 			{
 				path: 'debug',
@@ -30,26 +36,44 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: '/:election_name/:map_lat_lon_zoom?/',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 			{
 				path: '/:election_name/place/:search_term/:map_lat_lon_zoom?/',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 			{
 				path: '/:election_name/place/:search_term/:place_lon_lat/:map_lat_lon_zoom?/',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 			{
 				path: '/:election_name/gps/:gps_lon_lat/:map_lat_lon_zoom?/',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 			{
 				path: '/:election_name/by_ids/:polling_place_ids/:map_lat_lon_zoom?/',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 			{
 				path: '/:election_name',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 				children: [
 					{
 						path: '/:election_name/search/:map_lat_lon_zoom?/',
@@ -80,6 +104,9 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: '/:election_name',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 				children: [
 					// Occasionally some elections will have no premises names on polling places
 					{
@@ -95,6 +122,9 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: '',
 				element: <Map />,
+				loader: () => ({
+					name: 'Map',
+				}),
 			},
 		],
 	},
