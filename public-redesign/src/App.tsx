@@ -48,7 +48,7 @@ export default function App() {
 						<MenuIcon />
 					</IconButton>
 
-					<TitleLogo src="/icons/sausage+cake_big.png" />
+					<TitleLogo src="/logo/sausage+cake_big.png" />
 
 					<Typography
 						variant="h5"
