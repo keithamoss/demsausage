@@ -3,6 +3,37 @@ import { transform } from 'ol/proj';
 import { Params } from 'react-router-dom';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { OLMapView } from '../app/appSlice';
+import { IMapPollingGeoJSONNoms } from '../icons/noms';
+
+export interface IMapPollingPlaceGeoJSONFeatureCollection {
+	type: 'FeatureCollection';
+	features: IMapPollingPlaceGeoJSONFeature[];
+}
+
+export interface IMapPollingPlaceGeoJSONFeature {
+	type: 'Feature';
+	id: number;
+	geometry: {
+		type: 'Point';
+		coordinates: [number, number];
+	};
+	properties: {
+		name: string;
+		premises: string;
+		state: string;
+		noms: IMapPollingGeoJSONNoms | null;
+		ec_id: number | null;
+	};
+}
+
+// @FIXME Use the inbuilt OLFeature type when we upgrade
+export interface IMapPollingPlaceFeature {
+	getId: () => number | string | undefined;
+	getProperties: () => {
+		[key: string]: string;
+	};
+	get: (key: string) => string;
+}
 
 export const getStandardViewPadding = () => {
 	// top, right, bottom, left

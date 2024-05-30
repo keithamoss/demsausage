@@ -29,9 +29,11 @@ import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import * as React from 'react';
 import { Election } from '../../../app/services/elections';
+import { getAPIBaseURL } from '../../../app/utils';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterSettings } from '../../icons/noms';
-import { IMapPollingPlaceFeature, getAPIBaseURL, olStyleFunction } from '../map_stuff';
+import { IMapPollingPlaceFeature } from '../mapHelpers';
+import { olStyleFunction } from '../mapStyleHelpers';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
 // import { IElection } from '../../redux/modules/elections'

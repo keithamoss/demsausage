@@ -4,7 +4,7 @@ import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { stringDivider } from '../../app/utils';
 import { IMapPollingGeoJSONNoms, IMapPollingNoms, NomsOptionsAvailable } from '../icons/noms';
-import { IMapPollingPlaceFeature } from './map_stuff';
+import { IMapPollingPlaceFeature } from './mapHelpers';
 
 export class NomsReader {
 	static coreNomsIcons = Object.values(NomsOptionsAvailable)

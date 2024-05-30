@@ -21,8 +21,8 @@ import {
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterSettings } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { doesPollingPlaceSatisifyFilterCriteria } from '../mapFilterHelpers';
 import { getStandardViewPadding } from '../mapHelpers';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../map_stuff';
 import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
 import SearchBar from './searchBar';

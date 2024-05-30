@@ -20,8 +20,11 @@ import { getDefaultElection, getViewForElection } from '../elections/electionHel
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import LayersSelector from './layers_selector';
-import { createMapViewFromURL, createMapViewURLPathComponent } from './mapHelpers';
-import { IMapPollingPlaceGeoJSONFeatureCollection } from './map_stuff';
+import {
+	IMapPollingPlaceGeoJSONFeatureCollection,
+	createMapViewFromURL,
+	createMapViewURLPathComponent,
+} from './mapHelpers';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
 

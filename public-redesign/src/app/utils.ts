@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {
 	DEVELOPMENT = 1,
 	TEST = 2,

@@ -3,7 +3,7 @@ import { values } from 'lodash-es';
 import { Coordinate } from 'ol/coordinate';
 import { RootState } from '../../app/store';
 import { IMapFilterSettings } from '../icons/noms';
-import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/map_stuff';
+import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/mapHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {

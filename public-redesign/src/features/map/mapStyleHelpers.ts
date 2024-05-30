@@ -3,62 +3,16 @@ import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import { IMapFilterSettings, IMapPollingGeoJSONNoms, spriteIconConfig } from '../icons/noms';
+import { IMapFilterSettings, spriteIconConfig } from '../icons/noms';
 import sprite from '../icons/sprite.json';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { hasFilterOptions, satisfiesMapFilter } from './mapFilterHelpers';
+import { IMapPollingPlaceFeature } from './mapHelpers';
 import { NomsReader } from './noms';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export enum eAppEnv {
-	DEVELOPMENT = 1,
-	TEST = 2,
-	PRODUCTION = 3,
-}
-
-export function getEnvironment(): eAppEnv {
-	switch (import.meta.env.VITE_ENVIRONMENT) {
-		case 'DEVELOPMENT':
-			return eAppEnv.DEVELOPMENT;
-		case 'TEST':
-			return eAppEnv.TEST;
-		case 'PRODUCTION':
-			return eAppEnv.PRODUCTION;
-	}
-}
-
-export function isDevelopment(): boolean {
-	return getEnvironment() === eAppEnv.DEVELOPMENT;
-}
-
-export function getAPIBaseURL(): string {
-	return import.meta.env.VITE_API_BASE_URL;
-}
-
-export function getBaseURL(): string {
-	return import.meta.env.VITE_SITE_BASE_URL;
-}
-
-export interface IGeoJSONFeatureCollection {
-	type: string;
-	features: IGeoJSON[];
-}
-
-export interface IGeoJSON {
-	type: string;
-	coordinates: [number, number];
-}
-
-export interface IMapSearchResults {
-	lon: number;
-	lat: number;
-	extent: [number, number, number, number] | null;
-	formattedAddress: string;
-	padding?: boolean;
-	animation?: boolean;
-}
-
+// @TODO FIXME This is a shitshow
 const spriteIcons = {};
 const spriteIconsDetailed = {};
+
 Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 	const spriteConfig = sprite.frames.find((config: any) => config.filename === `${iconName}.png`);
 
@@ -133,52 +87,12 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 	}
 });
 
-export const hasFilterOptions = (mapFilterSettings: IMapFilterSettings) =>
-	Object.values(mapFilterSettings).filter((enabled: boolean) => enabled === true).length > 0;
-
-export const satisfiesMapFilter = (noms: NomsReader, mapFilterSettings: IMapFilterSettings) => {
-	if (hasFilterOptions(mapFilterSettings) && noms.hasAnyNoms() === true) {
-		for (const [option, enabled] of Object.entries(mapFilterSettings)) {
-			if (enabled === true && noms.hasNomsOption(option) === false) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	return true;
-};
-
-export const doesPollingPlaceSatisifyFilterCriteria = (
-	pollingPlace: IPollingPlace,
-	mapFilterSettings: IMapFilterSettings,
-) => {
-	if (hasFilterOptions(mapFilterSettings) === false) {
-		return true;
-	}
-
-	if (pollingPlace.stall === null) {
-		return false;
-	}
-
-	const nomsReader = new NomsReader(pollingPlace.stall.noms);
-	if (nomsReader.hasAnyNoms() === false) {
-		return false;
-	}
-
-	if (satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
-		return false;
-	}
-
-	return true;
-};
-
 export const olStyleFunction = (
 	feature: IMapPollingPlaceFeature,
 	resolution: number,
 	mapFilterSettings: IMapFilterSettings,
 ) => {
-	const nomsReader = new NomsReader(feature.get('noms'));
+	const nomsReader = new NomsReader(feature.get('noms') as any);
 
 	if (nomsReader.hasAnyNoms() === true) {
 		if (hasFilterOptions(mapFilterSettings) === true && satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
@@ -192,35 +106,7 @@ export const olStyleFunction = (
 
 	return hasFilterOptions(mapFilterSettings) === false
 		? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		  // @ts-ignore-next-line
-		  spriteIcons.unknown
+			// @ts-ignore-next-line
+			spriteIcons.unknown
 		: null;
 };
-
-export interface IMapPollingPlaceGeoJSONFeatureCollection {
-	type: 'FeatureCollection';
-	features: IMapPollingPlaceGeoJSONFeature[];
-}
-
-export interface IMapPollingPlaceGeoJSONFeature {
-	type: 'Feature';
-	id: number;
-	geometry: {
-		type: 'Point';
-		coordinates: [number, number];
-	};
-	properties: {
-		name: string;
-		premises: string;
-		state: string;
-		noms: IMapPollingGeoJSONNoms | null;
-		ec_id: number | null;
-	};
-}
-
-// @FIXME Use the inbuilt OLFeature type when we upgrade
-export interface IMapPollingPlaceFeature {
-	getId: Function;
-	getProperties: Function;
-	get: Function;
-}

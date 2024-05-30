@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material';
 import React from 'react';
 import { Election, IGeoJSONPoylgon } from '../../../app/services/elections';
-import { getCSVStringsAsFloats } from '../../../app/utils';
+import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../../app/utils';
 import BaconandEggsIcon from '../../icons/bacon-and-eggs';
 import CakeIcon from '../../icons/cake';
 import CoffeeIcon from '../../icons/coffee';
@@ -11,7 +11,6 @@ import RedCrossOfShame from '../../icons/red-cross-of-shame';
 import SausageIcon from '../../icons/sausage';
 import VegoIcon from '../../icons/vego';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { eAppEnv, getEnvironment } from '../map_stuff';
 
 // https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
 export interface IMapboxGeocodingAPIResponse {
