@@ -31,7 +31,9 @@ import { grey } from '@mui/material/colors';
 import { styled, useTheme } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import * as React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Election } from '../../app/services/elections';
+import { getBaseURL } from '../../app/utils';
 import { NomsOptionsAvailable } from '../icons/noms';
 import SearchComponent from '../map/searchBar/searchComponent';
 
@@ -510,13 +512,13 @@ export default function AddStall(props: Props) {
 
 	return (
 		<Root>
-			{/* <Helmet>
-            <title>Democracy Sausage | FAQs and About Us</title>
-  
-            {/* Open Graph / Facebook / Twitter *}
-            <meta property="og:url" content={`${getBaseURL()}/about`} />
-            <meta property="og:title" content="Democracy Sausage | FAQs and About Us" />
-          </Helmet> */}
+			<Helmet>
+				<title>Democracy Sausage | Add a sausage sizzle or cake stall to the map</title>
+
+				{/* Open Graph: Facebook / Twitter */}
+				<meta property="og:url" content={`${getBaseURL()}/add-stall/`} />
+				<meta property="og:title" content="Democracy Sausage | Add a sausage sizzle or cake stall to the map" />
+			</Helmet>
 
 			<PageWrapper>
 				{/* <div>

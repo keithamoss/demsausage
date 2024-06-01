@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, Drawer, LinearProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers';
@@ -119,7 +119,28 @@ function PollingPlaceCardDrawer(props: Props) {
 				)}
 
 				{isSuccess === true && pollingPlace !== undefined && (
-					<PollingPlaceCard pollingPlace={pollingPlace} election={election} />
+					<React.Fragment>
+						{/* <Helmet>
+							<title>
+								Democracy Sausage | {election.name} | {pollingPlace.name}
+							</title>
+
+							{ Open Graph: Facebook / Twitter }
+							<meta
+								property="og:url"
+								content={getPollingPlacePermalinkFromProps(
+									election.name_url_safe,
+									pollingPlace.name,
+									pollingPlace.premises,
+									pollingPlace.state,
+								)}
+							/>
+							<meta property="og:title" content={`Democracy Sausage | ${election.name} | ${pollingPlace.name}`} />
+							<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
+						</Helmet> */}
+
+						<PollingPlaceCard pollingPlace={pollingPlace} election={election} />
+					</React.Fragment>
 				)}
 			</StyledInteractableBoxFullHeight>
 		</Drawer>

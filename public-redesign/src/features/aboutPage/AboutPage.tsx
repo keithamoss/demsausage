@@ -1,6 +1,8 @@
 import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { Helmet } from 'react-helmet-async';
+import { getBaseURL } from '../../app/utils';
 import { NomsOptionsAvailable } from '../icons/noms';
 
 // const bottomNav = 56;
@@ -47,13 +49,13 @@ const Answer = styled('div')(({ theme }) => ({
 export default function AboutPage() {
 	return (
 		<StyledInteractableBoxFullHeight>
-			{/* <Helmet>
-          <title>Democracy Sausage | FAQs and About Us</title>
+			<Helmet>
+				<title>Democracy Sausage | FAQs and About Us</title>
 
-          {/* Open Graph / Facebook / Twitter *}
-          <meta property="og:url" content={`${getBaseURL()}/about`} />
-          <meta property="og:title" content="Democracy Sausage | FAQs and About Us" />
-        </Helmet> */}
+				{/* Open Graph: Facebook / Twitter */}
+				<meta property="og:url" content={`${getBaseURL()}/about/`} />
+				<meta property="og:title" content="Democracy Sausage | FAQs and About Us" />
+			</Helmet>
 
 			<PageWrapper>
 				<Question>What is this?</Question>

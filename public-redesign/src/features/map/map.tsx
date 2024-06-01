@@ -3,9 +3,9 @@ import { debounce } from 'lodash-es';
 import { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useTitle } from '../../app/hooks/useTitle';
 import {
 	navigateToElectionAndReplace,
 	navigateToMapWithoutUpdatingTheView,
@@ -14,6 +14,7 @@ import {
 } from '../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
+import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import AddStallButton from '../app/addStallButton';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
@@ -88,8 +89,6 @@ interface Props {
 
 function Map(props: Props) {
 	const { election } = props;
-
-	useTitle(`Democracy Sausage - ${election.name}`);
 
 	const dispatch = useAppDispatch();
 	const params = useParams();
@@ -195,6 +194,15 @@ function Map(props: Props) {
 
 	return (
 		<React.Fragment>
+			<Helmet>
+				<title>Democracy Sausage | {election.name}</title>
+
+				{/* Open Graph: Facebook / Twitter */}
+				<meta property="og:url" content={`${getBaseURL()}/${election.name_url_safe}/`} />
+				<meta property="og:title" content={`Democracy Sausage | ${election.name}`} />
+				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
+			</Helmet>
+
 			<OpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
@@ -211,11 +219,8 @@ function Map(props: Props) {
 				onWheelStart={onWheelStart}
 				onWheelEnd={onWheelEnd}
 			/>
-
 			<LayersSelector electionId={election.id} />
-
 			<AddStallButton />
-
 			<Box
 				sx={{
 					position: 'absolute',
@@ -227,11 +232,9 @@ function Map(props: Props) {
 			>
 				<SearchBarCosmeticNonFunctional />
 			</Box>
-
 			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isMapDataLoading}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
-
 			<Outlet />
 		</React.Fragment>
 	);

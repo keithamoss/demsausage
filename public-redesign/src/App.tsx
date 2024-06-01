@@ -2,10 +2,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { useCallback, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Outlet } from 'react-router-dom';
 import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
+import { getAPIBaseURL, getBaseURL } from './app/utils';
 
 const TitleLogo = styled('img')`
 	height: 32px;
@@ -30,6 +32,15 @@ export default function App() {
 
 	return (
 		<div className="App">
+			<Helmet>
+				<title>Democracy Sausage</title>
+
+				{/* Open Graph: Facebook / Twitter */}
+				<meta property="og:url" content={getBaseURL()} />
+				<meta property="og:title" content="Democracy Sausage" />
+				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/current_map_image/`} />
+			</Helmet>
+
 			<AppBar
 				position="sticky"
 				sx={{
