@@ -5530,7 +5530,7 @@ __metadata:
     reselect: "npm:^5.1.0"
     styled-components: "npm:^6.1.11"
     typescript: "npm:^5.4.5"
-    web-vitals: "npm:^4.0.0"
+    web-vitals: "npm:^4.0.1"
   languageName: unknown
   linkType: soft
 
@@ -21707,10 +21707,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "web-vitals@npm:4.0.0"
-  checksum: 10c0/419f1de159bd81763aed43207a54964ca17c7c851edde88770cc1818afcce7f2b93c88893f8dde07156f0c6cc22fd485fdc5d250b33ab308706b5c419223ab0f
+"web-vitals@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "web-vitals@npm:4.0.1"
+  checksum: 10c0/5ebcc2b3b2616ba133f5696e4029b2fc2147b03e850d554bdabe900f4fc00eea812be66e6e7809ecbdbfe1f46581238ca74d0c2390ba83881a3ba1e09d33a407
   languageName: node
   linkType: hard
 
