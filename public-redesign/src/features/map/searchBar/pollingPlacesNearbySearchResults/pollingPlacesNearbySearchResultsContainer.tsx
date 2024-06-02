@@ -14,12 +14,13 @@ interface LocationState {
 
 interface Props {
 	numberOfResults: number;
+	pollingPlacesLoaded: boolean;
 	onViewOnMap: () => void;
 	children: JSX.Element[];
 }
 
 export default function PollingPlacesNearbySearchResultsContainer(props: Props) {
-	const { numberOfResults, onViewOnMap, children } = props;
+	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -79,6 +80,13 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 					back
 				</Button>
 			</Box>
+
+			{pollingPlacesLoaded === false && (
+				<Alert severity="warning" sx={{ mb: 1 }}>
+					<AlertTitle>We don&apos;t have the official list of polling places yet</AlertTitle>
+					So for now, we&apos;re listing stall locations based on reports from the community.
+				</Alert>
+			)}
 
 			{/* Handles not found and all other types of error */}
 			{numberOfResults === 0 && (

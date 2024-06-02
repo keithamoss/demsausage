@@ -268,6 +268,7 @@ export default function SearchComponent(props: Props) {
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
 				<PollingPlacesNearbySearchResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+					pollingPlacesLoaded={election.polling_places_loaded}
 					onViewOnMap={onViewOnMap}
 				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
