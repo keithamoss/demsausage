@@ -18,6 +18,7 @@ const navigationItemsTier1 = [
 		icon: <AddLocationIcon />,
 	},
 	{ text: 'About', path: '/about', icon: <InfoIcon /> },
+	{ text: 'Embed The Map', path: '/embed', icon: <InfoIcon /> },
 	{ text: 'Item 4', path: '/' },
 	{ text: 'Item 5', path: '/' },
 ];

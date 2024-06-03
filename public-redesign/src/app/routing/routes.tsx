@@ -5,6 +5,7 @@ import ErrorElement from '../../ErrorElement';
 import AboutPage from '../../features/aboutPage/AboutPage';
 import AddStall from '../../features/addStall/AddStall';
 import DebugView from '../../features/debugView/debugView';
+import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/searchDrawer/searchDrawer';
@@ -22,6 +23,13 @@ export const router = sentryCreateBrowserRouter([
 				element: <AboutPage />,
 				loader: () => ({
 					name: 'About',
+				}),
+			},
+			{
+				path: 'embed',
+				element: <EmbedBuilder />,
+				loader: () => ({
+					name: 'Embed The Map',
 				}),
 			},
 			{
