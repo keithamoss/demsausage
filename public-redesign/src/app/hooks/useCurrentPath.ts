@@ -5,7 +5,6 @@ import { router } from '../routing/routes';
 export const useCurrentPath = () => {
 	const location = useLocation();
 	const matchedRoutes = matchRoutes(router.routes, location);
-	console.log('matchedRoutes', JSON.parse(JSON.stringify(matchedRoutes)));
 
 	const lastMatchedRoute = matchedRoutes?.pop();
 	return lastMatchedRoute?.route.path;
