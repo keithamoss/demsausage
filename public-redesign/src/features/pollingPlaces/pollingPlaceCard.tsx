@@ -19,7 +19,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
 
-import { Avatar, Chip, Divider, useTheme } from '@mui/material';
+import { Alert, Avatar, Chip, Divider, Snackbar, useTheme } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -27,16 +27,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers';
 import { Election } from '../../app/services/elections';
+import { getBaseURL, isClipboardApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
 import { NomsReader } from '../map/noms';
 import { getNomsIconsForPollingPlace } from '../map/searchBar/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,
 	getPollingPlaceNomsDescriptiveText,
+	getPollingPlacePermalinkFromElectionAndPollingPlace,
 	getSausageChancColourIndicator,
 	getSausageChanceDescription,
 	getSausageChanceDescriptionSubheader,
@@ -93,6 +95,27 @@ export default function PollingPlaceCard(props: Props) {
 			navigateToMapUsingURLParamsWithoutUpdatingTheView(params, navigate);
 		}
 	}, [cameFromInternalNavigation, navigate, params]);
+
+	// ######################
+	// Copy To Clipboard
+	// ######################
+	const [isCopyToClipboardSnackbarShown, setIsCopyToClipboardSnackbarShown] = useState(false);
+
+	const copyToClipboard = useCallback(async () => {
+		try {
+			await navigator.clipboard.writeText(
+				`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`,
+			);
+			setIsCopyToClipboardSnackbarShown(true);
+		} catch {
+			/* empty */
+		}
+	}, [election, pollingPlace]);
+
+	const onSnackbarClose = useCallback(() => setIsCopyToClipboardSnackbarShown(false), []);
+	// ######################
+	// Copy To Clipboard (End)
+	// ######################
 
 	return (
 		<Box sx={{ width: '100%' }}>
@@ -261,9 +284,11 @@ export default function PollingPlaceCard(props: Props) {
 					</CardContent>
 
 					<CardActions>
-						<Button startIcon={<ContentCopyIcon />} size="small">
-							Copy Link
-						</Button>
+						{isClipboardApiSupported() === true && (
+							<Button startIcon={<ContentCopyIcon />} size="small" onClick={copyToClipboard}>
+								Copy Link
+							</Button>
+						)}
 						<Button startIcon={<IosShareIcon />} size="small">
 							Share
 						</Button>
@@ -273,6 +298,12 @@ export default function PollingPlaceCard(props: Props) {
 					</CardActions>
 				</Card>
 			</Stack>
+
+			<Snackbar open={isCopyToClipboardSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
+				<Alert severity="info" variant="filled" sx={{ width: '100%' }}>
+					Polling place link copied
+				</Alert>
+			</Snackbar>
 		</Box>
 	);
 }

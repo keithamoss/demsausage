@@ -1,7 +1,16 @@
 import { purple } from '@mui/material/colors';
 import Feature from 'ol/Feature';
+import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
 import { IPollingPlace } from './pollingPlacesInterfaces';
+
+export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
+	getPollingPlacePermalinkFromProps(
+		election.name_url_safe,
+		pollingPlace.name,
+		pollingPlace.premises,
+		pollingPlace.state,
+	);
 
 export const getPollingPlacePermalinkFromProps = (
 	electionNameURLSafe: string,
