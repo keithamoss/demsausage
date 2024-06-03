@@ -1,3 +1,4 @@
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PublicIcon from '@mui/icons-material/Public';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -329,6 +330,19 @@ export default function PollingPlaceCard(props: Props) {
 									<ListItemText
 										primary={pollingPlace.divisions.length >= 2 ? 'Divisions' : 'Divison'}
 										secondary={getPollingPlaceDivisionsDescriptiveText(pollingPlace)}
+									/>
+								</ListItem>
+							)}
+
+							{pollingPlace.booth_info.length >= 1 && (
+								<ListItem disableGutters>
+									<ListItemIcon>
+										<InfoOutlinedIcon />
+									</ListItemIcon>
+									<ListItemText
+										primary="Booth Information"
+										secondary={pollingPlace.booth_info}
+										sx={{ '& .MuiListItemText-secondary': { textTransform: 'capitalize' } }}
 									/>
 								</ListItem>
 							)}
