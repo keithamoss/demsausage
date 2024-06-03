@@ -2,7 +2,7 @@ import { purple } from '@mui/material/colors';
 import Feature from 'ol/Feature';
 import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
-import { IPollingPlace } from './pollingPlacesInterfaces';
+import { IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
 export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
 	getPollingPlacePermalinkFromProps(
@@ -27,14 +27,6 @@ export const getPollingPlacePermalinkFromProps = (
 		: `/${electionNameURLSafe}/polling_places/${nameEncoded}/${state}/`;
 };
 
-export enum PollingPlaceChanceOfSausage {
-	NO_IDEA = 0,
-	UNLIKELY = 1,
-	MIXED = 2,
-	FAIR = 3,
-	STRONG = 4,
-}
-
 export const getSausageChancColourIndicator = (pollingPlace: IPollingPlace) => {
 	switch (pollingPlace.chance_of_sausage) {
 		case PollingPlaceChanceOfSausage.STRONG:
@@ -46,7 +38,7 @@ export const getSausageChancColourIndicator = (pollingPlace: IPollingPlace) => {
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return purple[300];
 		case PollingPlaceChanceOfSausage.NO_IDEA:
-			return purple[200];
+		case null:
 		default:
 			return purple[200];
 	}
@@ -63,7 +55,7 @@ export const getSausageChanceDescription = (pollingPlace: IPollingPlace) => {
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'This booth is UNLIKELY to have food.';
 		case PollingPlaceChanceOfSausage.NO_IDEA:
-			return 'We have never had reports from this booth.';
+		case null:
 		default:
 			return 'We have never had reports from this booth.';
 	}
@@ -77,7 +69,7 @@ export const getSausageChanceDescriptionSubheader = (pollingPlace: IPollingPlace
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'Based on reports from past elections';
 		case PollingPlaceChanceOfSausage.NO_IDEA:
-			return 'Let us know what you find!';
+		case null:
 		default:
 			return 'Let us know what you find!';
 	}
