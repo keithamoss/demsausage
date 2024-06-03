@@ -204,7 +204,7 @@ export default function LayersSelector(props: Props) {
 														<ListItemText
 															primary={election.name}
 															secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
-																day: '2-digit',
+																day: 'numeric',
 																month: 'long',
 																year: 'numeric',
 															})}
