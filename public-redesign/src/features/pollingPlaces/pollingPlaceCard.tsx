@@ -31,7 +31,7 @@ import React, { useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers';
 import { Election } from '../../app/services/elections';
-import { getBaseURL, isClipboardApiSupported } from '../../app/utils';
+import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
 import { NomsReader } from '../map/noms';
 import { getNomsIconsForPollingPlace } from '../map/searchBar/searchBarHelpers';
@@ -101,7 +101,7 @@ export default function PollingPlaceCard(props: Props) {
 	// ######################
 	const [isCopyToClipboardSnackbarShown, setIsCopyToClipboardSnackbarShown] = useState(false);
 
-	const copyToClipboard = useCallback(async () => {
+	const onCopyToClipboard = useCallback(async () => {
 		try {
 			await navigator.clipboard.writeText(
 				`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`,
@@ -115,6 +115,25 @@ export default function PollingPlaceCard(props: Props) {
 	const onSnackbarClose = useCallback(() => setIsCopyToClipboardSnackbarShown(false), []);
 	// ######################
 	// Copy To Clipboard (End)
+	// ######################
+
+	// ######################
+	// Share Link
+	// ######################
+	const onShareLink = useCallback(() => {
+		const shareData = {
+			title: `${pollingPlace.premises || pollingPlace.name} | Democracy Sausage | ${election.name}`,
+			url: `${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`,
+		};
+
+		if (navigator.canShare(shareData)) {
+			navigator.share(shareData);
+		} else {
+			// Don't worry about handling a fail on canShare() or share()
+		}
+	}, [election, pollingPlace]);
+	// ######################
+	// Share Link (End)
 	// ######################
 
 	return (
@@ -285,13 +304,15 @@ export default function PollingPlaceCard(props: Props) {
 
 					<CardActions>
 						{isClipboardApiSupported() === true && (
-							<Button startIcon={<ContentCopyIcon />} size="small" onClick={copyToClipboard}>
+							<Button startIcon={<ContentCopyIcon />} size="small" onClick={onCopyToClipboard}>
 								Copy Link
 							</Button>
 						)}
-						<Button startIcon={<IosShareIcon />} size="small">
-							Share
-						</Button>
+						{isWebShareApiSupported() === true && (
+							<Button startIcon={<IosShareIcon />} size="small" onClick={onShareLink}>
+								Share
+							</Button>
+						)}
 						<Button startIcon={<PublicIcon />} size="small">
 							Stall Website
 						</Button>

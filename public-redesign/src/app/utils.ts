@@ -65,6 +65,7 @@ export const getCSVStringsAsFloats = (s: string) => {
 };
 
 // https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
-export const isClipboardApiSupported = () => {
-	return !!(navigator.clipboard && navigator.clipboard.writeText);
-};
+export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator.clipboard.writeText);
+
+// https://philna.sh/blog/2017/03/14/the-web-share-api/
+export const isWebShareApiSupported = () => !!('canShare' in navigator && navigator.share);
