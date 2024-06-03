@@ -189,3 +189,29 @@ export const getPollingPlaceIdsFromFeatures = (features: Feature[]) => {
 
 	return ids;
 };
+
+export const isStallWebsiteValid = (website: string | undefined) => {
+	if (typeof website === 'string' && website !== '') {
+		const url = getStallWebsiteWithProtocol(website);
+		return url !== undefined && URL.canParse(url) === true;
+	}
+	return false;
+};
+
+export const getStallWebsiteWithProtocol = (website: string | undefined) => {
+	if (website === undefined || (typeof website === 'string' && website === '')) {
+		return undefined;
+	}
+
+	// Assume that everything supports https these days
+	return website.startsWith('http') === true ? website : `https://${website}`;
+};
+
+export const getStallWebsiteDomainName = (website: string | undefined) => {
+	const url = getStallWebsiteWithProtocol(website);
+
+	if (url !== undefined && URL.canParse(url) === true) {
+		return new URL(url).host;
+	}
+	return undefined;
+};

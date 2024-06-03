@@ -19,7 +19,18 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
 
-import { Alert, Avatar, Chip, Divider, Snackbar, useTheme } from '@mui/material';
+import {
+	Alert,
+	Avatar,
+	Chip,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Divider,
+	Snackbar,
+	useTheme,
+} from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -42,6 +53,9 @@ import {
 	getSausageChancColourIndicator,
 	getSausageChanceDescription,
 	getSausageChanceDescriptionSubheader,
+	getStallWebsiteDomainName,
+	getStallWebsiteWithProtocol,
+	isStallWebsiteValid,
 	pollingPlaceHasReports,
 	pollingPlaceHasReportsOfNoms,
 } from './pollingPlaceHelpers';
@@ -134,6 +148,25 @@ export default function PollingPlaceCard(props: Props) {
 	}, [election, pollingPlace]);
 	// ######################
 	// Share Link (End)
+	// ######################
+
+	// ######################
+	// Visit Stall Website
+	// ######################
+	const [isVisitStallWebsiteConfirmDialogShown, setIsVisitStallWebsiteConfirmDialogShown] = useState(false);
+
+	const onVisitStallWebsite = useCallback(() => setIsVisitStallWebsiteConfirmDialogShown(true), []);
+
+	const onVisitStallWebsiteConfirmOK = useCallback(() => {
+		setIsVisitStallWebsiteConfirmDialogShown(false);
+
+		// https://stackoverflow.com/a/11384018/7368493
+		window.open(getStallWebsiteWithProtocol(pollingPlace.stall?.website), '_blank')?.focus();
+	}, [pollingPlace.stall?.website]);
+
+	const onVisitStallWebsiteConfirmNope = useCallback(() => setIsVisitStallWebsiteConfirmDialogShown(false), []);
+	// ######################
+	// Visit Stall Website (End)
 	// ######################
 
 	return (
@@ -308,14 +341,18 @@ export default function PollingPlaceCard(props: Props) {
 								Copy Link
 							</Button>
 						)}
+
 						{isWebShareApiSupported() === true && (
 							<Button startIcon={<IosShareIcon />} size="small" onClick={onShareLink}>
 								Share
 							</Button>
 						)}
-						<Button startIcon={<PublicIcon />} size="small">
-							Stall Website
-						</Button>
+
+						{isStallWebsiteValid(pollingPlace.stall?.website) && (
+							<Button startIcon={<PublicIcon />} size="small" onClick={onVisitStallWebsite}>
+								Stall Website
+							</Button>
+						)}
 					</CardActions>
 				</Card>
 			</Stack>
@@ -325,6 +362,24 @@ export default function PollingPlaceCard(props: Props) {
 					Polling place link copied
 				</Alert>
 			</Snackbar>
+
+			<Dialog open={isVisitStallWebsiteConfirmDialogShown} onClose={onVisitStallWebsiteConfirmNope}>
+				<DialogTitle>Visit this stall&apos;s website</DialogTitle>
+
+				<DialogContent>
+					You&apos;re about to leave Demoracy Sausage and visit&nbsp;
+					<Typography variant="overline" display="inline-block">
+						{getStallWebsiteDomainName(pollingPlace.stall?.website) || 'Unknown Domain'}
+					</Typography>
+				</DialogContent>
+
+				<DialogActions>
+					<Button autoFocus onClick={onVisitStallWebsiteConfirmNope}>
+						No thanks
+					</Button>
+					<Button onClick={onVisitStallWebsiteConfirmOK}>OK</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }
