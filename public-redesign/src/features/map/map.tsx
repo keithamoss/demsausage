@@ -6,7 +6,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useCurrentPath } from '../../app/hooks/useCurrentPath';
 import {
+	addURLMapLatLonZoomToCurrentPathAndNavigateAndReplace,
 	navigateToElectionAndReplace,
 	navigateToMapWithoutUpdatingTheView,
 	navigateToPollingPlaceFromFeature,
@@ -25,6 +27,7 @@ import {
 	IMapPollingPlaceGeoJSONFeatureCollection,
 	createMapViewFromURL,
 	createMapViewURLPathComponent,
+	isMapViewParamValid,
 } from './mapHelpers';
 import OpenLayersMap from './olMap/OpenLayersMap';
 import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
@@ -58,23 +61,46 @@ function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
+
+	const mapViewFromURL = getStringParamOrEmptyString(params, 'map_lat_lon_zoom');
+	const lastMatchedRoutePath = useCurrentPath();
 
 	// Force users coming into:
 	// (a) the root of the domain (/) over to the unique URL (with its default extents) for the current default election
 	// (b) the root of an election (/election_name/) over to the unique URL (with its default extents) for their chosen election
+	// (c) a Polling Place Permalink over to the permalink + the default extents for their chose election
 	useEffect(() => {
-		if (election !== undefined && getStringParamOrEmptyString(params, 'map_lat_lon_zoom') === '') {
-			navigateToElectionAndReplace(navigate, election, getViewForElection(election));
+		if (election !== undefined) {
+			if (mapViewFromURL === '') {
+				// Case C
+				if (location.pathname.includes('/polling_places/') === true) {
+					addURLMapLatLonZoomToCurrentPathAndNavigateAndReplace(
+						params,
+						navigate,
+						lastMatchedRoutePath,
+						getViewForElection(election),
+					);
+				} else {
+					// Cases A and B
+					navigateToElectionAndReplace(navigate, election, getViewForElection(election));
+				}
+			} else {
+				if (isMapViewParamValid(mapViewFromURL) === false) {
+					// Let our overall ErrorElement handle this
+					throw new Error(`MapView URL parameter of '${mapViewFromURL}' is invalid`);
+				}
+			}
 		}
-	}, [election, navigate, params]);
+	}, [election, lastMatchedRoutePath, location.pathname, mapViewFromURL, navigate, params]);
 
 	if (election === undefined) {
 		return null;
 	}
 
-	if (window.location.pathname.startsWith(`/${election.name_url_safe}`) === true) {
+	if (location.pathname.startsWith(`/${election.name_url_safe}`) === true) {
 		return <Map election={election} />;
 	}
 }

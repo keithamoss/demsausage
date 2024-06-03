@@ -64,6 +64,10 @@ export const extractMapViewFromString = (str: string) => {
 	return match?.groups?.map_lat_lon_zoom;
 };
 
+export const isMapViewParamValid = (map_lat_lon_zoom: string) => {
+	return map_lat_lon_zoom.match(/^@[0-9.-]+,[0-9.-]+,z[0-9.]+$/) !== null;
+};
+
 export const createMapViewURLPathComponent = (view: View) => {
 	const centre = view.getCenter();
 	const zoom = view.getZoom();
