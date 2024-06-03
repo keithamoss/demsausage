@@ -60,7 +60,7 @@ export const doesTheMapViewMatchThisView = (mapView: View, anotherView: Partial<
 };
 
 export const extractMapViewFromString = (str: string) => {
-	const match = str.match(/\/{1}(?<map_lat_lon_zoom>@[\-0-9,.z]+)\/?/);
+	const match = str.match(/\/{1}(?<map_lat_lon_zoom>@[-0-9,.z]+)\/?/);
 	return match?.groups?.map_lat_lon_zoom;
 };
 
