@@ -5,6 +5,7 @@ import 'ol/ol.css';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCurrentPath } from '../../app/hooks/useCurrentPath';
 import {
@@ -46,7 +47,8 @@ function MapEntrypointLayer1() {
 	}
 
 	if (electionId === undefined) {
-		return null;
+		// Guard to prevent showing the NotFound element while we're still loading
+		return elections.length > 0 ? <NotFound /> : null;
 	}
 
 	return <MapEntrypointLayer2 electionId={electionId} />;
@@ -97,7 +99,7 @@ function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	}, [election, lastMatchedRoutePath, location.pathname, mapViewFromURL, navigate, params]);
 
 	if (election === undefined) {
-		return null;
+		return <NotFound />;
 	}
 
 	if (location.pathname.startsWith(`/${election.name_url_safe}`) === true) {

@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import ErrorElement from '../../ErrorElement';
+import NotFound from '../../NotFound';
 import AboutPage from '../../features/aboutPage/AboutPage';
 import AddStall from '../../features/addStall/AddStall';
 import DebugView from '../../features/debugView/debugView';
@@ -139,5 +140,9 @@ export const router = sentryCreateBrowserRouter([
 				}),
 			},
 		],
+	},
+	{
+		path: '*',
+		element: <NotFound />,
 	},
 ]);
