@@ -245,8 +245,11 @@ function Map(props: Props) {
 				onWheelStart={onWheelStart}
 				onWheelEnd={onWheelEnd}
 			/>
+
 			<LayersSelector electionId={election.id} />
+
 			<AddStallButton />
+
 			<Box
 				sx={{
 					position: 'absolute',
@@ -258,9 +261,11 @@ function Map(props: Props) {
 			>
 				<SearchBarCosmeticNonFunctional />
 			</Box>
+
 			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isMapDataLoading}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
+
 			<Outlet />
 		</React.Fragment>
 	);

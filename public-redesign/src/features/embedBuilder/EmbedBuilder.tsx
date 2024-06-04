@@ -25,7 +25,6 @@ import { getBaseURL } from '../../app/utils';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';
 import {
-	embedPrecannedMapBboxes,
 	getEmbedInteractiveMapHTML,
 	getEmbedInteractiveMapURL,
 	getEmbedStaticMapImageURL,
@@ -109,13 +108,13 @@ function EmbedBuilder(props: Props) {
 	// ######################
 	const [precannedMapBbox, setPrecannedMapBbox] = useState<{ name: string; extent: number[] } | undefined>(undefined);
 
-	const onChoosePrecannedMapBbox = (e: SelectChangeEvent<string>) => {
-		const bbox = embedPrecannedMapBboxes.find((v) => v.name === e.target.value);
+	// const onChoosePrecannedMapBbox = (e: SelectChangeEvent<string>) => {
+	// 	const bbox = embedPrecannedMapBboxes.find((v) => v.name === e.target.value);
 
-		if (bbox !== undefined) {
-			setPrecannedMapBbox(bbox);
-		}
-	};
+	// 	if (bbox !== undefined) {
+	// 		setPrecannedMapBbox(bbox);
+	// 	}
+	// };
 
 	const [isCopyInteractiveMapSnackbarShown, setIsCopyInteractiveMapSnackbarShown] = useState(false);
 
@@ -186,7 +185,7 @@ function EmbedBuilder(props: Props) {
 					Embed an interactive map
 				</Typography>
 
-				<FormControl fullWidth sx={{ mb: 2 }}>
+				{/* <FormControl fullWidth sx={{ mb: 2 }}>
 					<InputLabel id="choose-a-default-starting-point">Choose a default starting point</InputLabel>
 
 					<Select
@@ -201,7 +200,7 @@ function EmbedBuilder(props: Props) {
 							</MenuItem>
 						))}
 					</Select>
-				</FormControl>
+				</FormControl> */}
 
 				<div style={{ height: '472.5px', marginBottom: '8px' }}>
 					<iframe
