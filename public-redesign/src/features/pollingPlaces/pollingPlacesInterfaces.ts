@@ -45,4 +45,7 @@ export interface IPollingPlace {
 	state: string;
 	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	stall: IPollingPlaceStall | null;
+	extras: {
+		[key: string]: string;
+	};
 }

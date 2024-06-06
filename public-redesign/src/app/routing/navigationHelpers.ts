@@ -346,12 +346,20 @@ export const navigateToPollingPlace = (
 	}
 
 	if (typeof name === 'string' && typeof premises === 'string' && typeof state === 'string') {
-		navigate(
-			addComponentToEndOfURLPath(
-				getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state),
-				`m/${urlMapLatLonZoom}`,
-			),
-			{ state: { cameFromInternalNavigation: true } },
-		);
+		if (urlMapLatLonZoom !== undefined) {
+			navigate(
+				addComponentToEndOfURLPath(
+					getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state),
+					`m/${urlMapLatLonZoom}`,
+				),
+				{ state: { cameFromInternalNavigation: true } },
+			);
+		} else {
+			// Used by StallPermalink to come in from outside (e.g. stall approval emails), look up a stall, and redirect us to the PollingPlaceCardDrawer without knowing the map MapLatLonZoom.
+			// map.tsx handles attaching the election's default MapLatLonZoom for us.
+			navigate(getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state), {
+				state: { cameFromInternalNavigation: true },
+			});
+		}
 	}
 };

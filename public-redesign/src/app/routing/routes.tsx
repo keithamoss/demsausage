@@ -10,6 +10,7 @@ import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/searchDrawer/searchDrawer';
+import StallPermalink from '../../features/stalls/stallPermalink';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -123,7 +124,6 @@ export const router = sentryCreateBrowserRouter([
 					{
 						path: '/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/m?/:map_lat_lon_zoom?/',
 						element: <PollingPlaceCardDrawer />,
-						handle: ['Foobar'],
 					},
 					// Occasionally some elections will have no premises names on polling places.
 					{
@@ -131,6 +131,10 @@ export const router = sentryCreateBrowserRouter([
 						element: <PollingPlaceCardDrawer />,
 					},
 				],
+			},
+			{
+				path: '/:election_name/stalls/:stall_id/',
+				element: <StallPermalink />,
 			},
 			{
 				path: '',
