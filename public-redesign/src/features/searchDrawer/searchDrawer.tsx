@@ -4,6 +4,7 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import { useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import {
@@ -75,6 +76,10 @@ function SearchDrawer(props: Props) {
 
 	return (
 		<React.Fragment>
+			<Helmet>
+				<title>Search | {election.name} | Democracy Sausage</title>
+			</Helmet>
+
 			<Drawer
 				anchor="bottom"
 				open={true}

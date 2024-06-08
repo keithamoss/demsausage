@@ -223,11 +223,11 @@ function Map(props: Props) {
 	return (
 		<React.Fragment>
 			<Helmet>
-				<title>Democracy Sausage | {election.name}</title>
+				<title>{election.name} | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
 				<meta property="og:url" content={`${getBaseURL()}/${election.name_url_safe}/`} />
-				<meta property="og:title" content={`Democracy Sausage | ${election.name}`} />
+				<meta property="og:title" content={`${election.name} | Democracy Sausage`} />
 				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
 			</Helmet>
 

@@ -513,11 +513,11 @@ export default function AddStall(props: Props) {
 	return (
 		<Root>
 			<Helmet>
-				<title>Democracy Sausage | Add a sausage sizzle or cake stall to the map</title>
+				<title>Add a sausage sizzle or cake stall to the map | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
 				<meta property="og:url" content={`${getBaseURL()}/add-stall/`} />
-				<meta property="og:title" content="Democracy Sausage | Add a sausage sizzle or cake stall to the map" />
+				<meta property="og:title" content="Add a sausage sizzle or cake stall to the map | Democracy Sausage" />
 			</Helmet>
 
 			<PageWrapper>

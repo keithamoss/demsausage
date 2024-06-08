@@ -143,11 +143,11 @@ function EmbedBuilder(props: Props) {
 	return (
 		<StyledInteractableBoxFullHeight>
 			<Helmet>
-				<title>Democracy Sausage | Embed The Map</title>
+				<title>Embed The Map | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
 				<meta property="og:url" content={`${getBaseURL()}/embed/`} />
-				<meta property="og:title" content="Democracy Sausage | Embed The Map" />
+				<meta property="og:title" content="Embed The Map | Democracy Sausage" />
 			</Helmet>
 
 			<FormControl fullWidth sx={{ mb: 2 }}>

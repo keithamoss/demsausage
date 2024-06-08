@@ -2,6 +2,7 @@ import { Alert, AlertTitle, Drawer, LinearProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import React, { useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers';
@@ -120,24 +121,24 @@ function PollingPlaceCardDrawer(props: Props) {
 
 				{isSuccess === true && pollingPlace !== undefined && (
 					<React.Fragment>
-						{/* <Helmet>
+						<Helmet>
 							<title>
-								Democracy Sausage | {election.name} | {pollingPlace.name}
+								{pollingPlace.name} | {election.name} | Democracy Sausage
 							</title>
 
-							{ Open Graph: Facebook / Twitter }
-							<meta
+							{/* Open Graph: Facebook / Twitter */}
+							{/* <meta
 								property="og:url"
-								content={getPollingPlacePermalinkFromProps(
+								content={`${getBaseURL()}${getPollingPlacePermalinkFromProps(
 									election.name_url_safe,
 									pollingPlace.name,
 									pollingPlace.premises,
 									pollingPlace.state,
-								)}
+								)}`}
 							/>
-							<meta property="og:title" content={`Democracy Sausage | ${election.name} | ${pollingPlace.name}`} />
-							<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
-						</Helmet> */}
+							<meta property="og:title" content={`${election.name} | ${pollingPlace.name} | Democracy Sausage`} />
+							<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} /> */}
+						</Helmet>
 
 						<PollingPlaceCard pollingPlace={pollingPlace} election={election} />
 					</React.Fragment>

@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Helmet } from 'react-helmet-async';
 import './App.css';
 import { demSausageThemeWarningPurple } from './app/ui/theme';
 
@@ -21,6 +22,10 @@ const StyledBox = styled(Box)`
 function ErrorElement() {
 	return (
 		<PageContainer>
+			<Helmet>
+				<title>Error | Democracy Sausage</title>
+			</Helmet>
+
 			<StyledBox>
 				<Typography variant="h1" sx={{ fontWeight: 800, color: demSausageThemeWarningPurple }}>
 					Oops!

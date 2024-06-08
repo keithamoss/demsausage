@@ -50,11 +50,11 @@ export default function AboutPage() {
 	return (
 		<StyledInteractableBoxFullHeight>
 			<Helmet>
-				<title>Democracy Sausage | FAQs and About Us</title>
+				<title>FAQs and About Us | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
 				<meta property="og:url" content={`${getBaseURL()}/about/`} />
-				<meta property="og:title" content="Democracy Sausage | FAQs and About Us" />
+				<meta property="og:title" content="FAQs and About Us | Democracy Sausage" />
 			</Helmet>
 
 			<PageWrapper>
