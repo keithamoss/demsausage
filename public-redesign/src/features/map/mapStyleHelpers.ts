@@ -3,18 +3,26 @@ import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
-import { IMapFilterSettings, spriteIconConfig } from '../icons/noms';
+import { IMapFilterSettings, IMapPollingGeoJSONNoms, spriteIconConfig } from '../icons/noms';
 import sprite from '../icons/sprite.json';
 import { hasFilterOptions, satisfiesMapFilter } from './mapFilterHelpers';
-import { IMapPollingPlaceFeature } from './mapHelpers';
+import { IMapPollingPlaceFeature, getObjectOrUndefinedFromFeature } from './mapHelpers';
 import { NomsReader } from './noms';
 
-// @TODO FIXME This is a shitshow
-const spriteIcons = {};
-const spriteIconsDetailed = {};
+export interface SpriteIcons {
+	[key: string]: Style[];
+}
 
-Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
-	const spriteConfig = sprite.frames.find((config: any) => config.filename === `${iconName}.png`);
+export interface SpriteIconsDetailed {
+	[key: string]: Style;
+}
+
+// @TODO FIXME This is a shitshow
+const spriteIcons: SpriteIcons = {};
+const spriteIconsDetailed: SpriteIconsDetailed = {};
+
+Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]) => {
+	const spriteConfig = sprite.frames.find((config) => config.filename === `${iconName}.png`);
 
 	if (spriteConfig !== undefined) {
 		const iconAttributes = {
@@ -23,7 +31,7 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 			size: [spriteConfig.spriteSourceSize.w, spriteConfig.spriteSourceSize.h],
 			scale: iconConfig.scale,
 			opacity: 'opacity' in iconConfig ? iconConfig.opacity : undefined,
-		} as any; /* IconOptions */
+		}; /* IconOptions */
 
 		// An initial attempt to give icons background colour
 		// It doesn't look great (like Apple Maps), I think in part because our
@@ -38,8 +46,6 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 		) {
 			const width = spriteConfig.spriteSourceSize.w / 2.75;
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore-next-line
 			spriteIcons[iconName] = [
 				new Style({
 					zIndex: iconConfig.zIndex,
@@ -64,8 +70,6 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 				}),
 			];
 		} else {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore-next-line
 			spriteIcons[iconName] = [
 				new Style({
 					image: new Icon(iconAttributes),
@@ -74,8 +78,6 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 			];
 		}
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore-next-line
 		spriteIconsDetailed[iconName] = new Style({
 			image: new Icon({
 				...iconAttributes,
@@ -92,7 +94,14 @@ export const olStyleFunction = (
 	resolution: number,
 	mapFilterSettings: IMapFilterSettings,
 ) => {
-	const nomsReader = new NomsReader(feature.get('noms') as any);
+	const noms = getObjectOrUndefinedFromFeature(feature, 'noms');
+
+	if (noms === undefined) {
+		return null;
+	}
+
+	// @TODO No 'as' casting
+	const nomsReader = new NomsReader(noms as IMapPollingGeoJSONNoms);
 
 	if (nomsReader.hasAnyNoms() === true) {
 		if (hasFilterOptions(mapFilterSettings) === true && satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
@@ -101,12 +110,8 @@ export const olStyleFunction = (
 
 		return resolution >= 7
 			? nomsReader.getIconForNoms(spriteIcons)
-			: nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature, resolution);
+			: nomsReader.getDetailedIconsForNoms(spriteIcons, spriteIconsDetailed, feature /*, resolution*/);
 	}
 
-	return hasFilterOptions(mapFilterSettings) === false
-		? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore-next-line
-			spriteIcons.unknown
-		: null;
+	return hasFilterOptions(mapFilterSettings) === false ? spriteIcons.unknown : null;
 };

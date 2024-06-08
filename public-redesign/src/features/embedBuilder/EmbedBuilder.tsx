@@ -106,7 +106,7 @@ function EmbedBuilder(props: Props) {
 	// ######################
 	// Embed Interactive Map
 	// ######################
-	const [precannedMapBbox, setPrecannedMapBbox] = useState<{ name: string; extent: number[] } | undefined>(undefined);
+	const [precannedMapBbox] = useState<{ name: string; extent: number[] } | undefined>(undefined);
 
 	// const onChoosePrecannedMapBbox = (e: SelectChangeEvent<string>) => {
 	// 	const bbox = embedPrecannedMapBboxes.find((v) => v.name === e.target.value);

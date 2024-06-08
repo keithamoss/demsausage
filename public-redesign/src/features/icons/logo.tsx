@@ -1,7 +1,7 @@
 import { SvgIcon } from '@mui/material';
 import { PureComponent } from 'react';
 
-const svg = (props: any) => (
+const svg = (props: object) => (
 	<SvgIcon {...props}>
 		<svg
 			viewBox="0 0 500 500"
@@ -614,8 +614,8 @@ const svg = (props: any) => (
 	</SvgIcon>
 );
 
-const Logo: any = new PureComponent(svg);
-Logo.displayName = 'Logo';
-Logo.muiName = 'SvgIcon';
+const Logo = new PureComponent(svg);
+// Logo.displayName = 'Logo';
+// Logo.muiName = 'SvgIcon';
 
 export default Logo;

@@ -40,7 +40,7 @@ export const initialState: AppState = {
 
 // Used for storing state in localStorage pollingPlaces is excluded
 // from storage and mapFeatures isn't implemented yet.
-export const isAppState = (o: any): o is AppState => {
+export const isAppState = (o: object): o is AppState => {
 	return 'mapFilterSettings' in o && 'searchBarFilterControlState' in o;
 };
 

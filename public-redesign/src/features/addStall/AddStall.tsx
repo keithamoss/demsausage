@@ -39,7 +39,7 @@ import SearchComponent from '../map/searchBar/searchComponent';
 
 const bottomNav = 56;
 
-interface Props {}
+// interface Props {}
 
 const Root = styled('div')(({ theme }) => ({
 	height: '100%',
@@ -56,11 +56,12 @@ const PageWrapper = styled('div')((/*{ theme }*/) => ({
 	},
 }));
 
-export default function AddStall(props: Props) {
-	const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
-	const toggleSideDrawerOpen = (e: any) => {
-		setSideDrawerOpen(!sideDrawerOpen);
-	};
+export default function AddStall(/*props: Props*/) {
+	// const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
+
+	// const toggleSideDrawerOpen = (e: any) => {
+	// 	setSideDrawerOpen(!sideDrawerOpen);
+	// };
 
 	const [activeStep, setActiveStep] = React.useState(0);
 
@@ -84,10 +85,12 @@ export default function AddStall(props: Props) {
 
 	// @TODO See https://stackoverflow.com/questions/72811784/from-time-and-to-time-validation-in-react-dropdown-react-datepicker-hour
 	// const [startTimeValue, setStartTimeValue] = React.useState<Moment | null>(null);
-	const [startTimeValue, setStartTimeValue] = React.useState<any | null>(null);
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+	const [startTimeValue, setStartTimeValue] = React.useState<any>(null);
 
 	// const [endTimeValue, setEndTimeValue] = React.useState<Moment | null>(null);
-	const [endTimeValue, setEndTimeValue] = React.useState<any | null>(null);
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+	const [endTimeValue, setEndTimeValue] = React.useState<any>(null);
 
 	//   const times = [
 	//     "00:00",
@@ -352,6 +355,7 @@ export default function AddStall(props: Props) {
 					{' '}
 					<TimePicker
 						label="Start time"
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 						value={startTimeValue}
 						onChange={setStartTimeValue}
 						// renderInput={(params: unknown) => (
@@ -373,6 +377,7 @@ export default function AddStall(props: Props) {
 					<br />
 					<TimePicker
 						label="End time"
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 						value={endTimeValue}
 						onChange={setEndTimeValue}
 						// renderInput={(params) => (
@@ -412,7 +417,7 @@ export default function AddStall(props: Props) {
 			<Divider sx={{ mt: 3, mb: 3 }} />
 
 			<Typography gutterBottom variant="h6" component="div">
-				What's on offer?
+				What&apos;s on offer?
 			</Typography>
 			<Typography gutterBottom variant="subtitle1" component="div">
 				Foobar foobar foobar
@@ -696,7 +701,7 @@ export default function AddStall(props: Props) {
 					</Step>
 
 					<Step>
-						<StepLabel optional={<Typography variant="caption">My stall</Typography>}>Who's submitting?</StepLabel>
+						<StepLabel optional={<Typography variant="caption">My stall</Typography>}>Who&apos;s submitting?</StepLabel>
 						<StepContent>
 							{step3Content}
 							<Box sx={{ mb: 2 }}>

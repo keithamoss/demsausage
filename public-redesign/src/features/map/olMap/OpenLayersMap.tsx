@@ -1,38 +1,31 @@
-/* eslint-disable import/extensions */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import { MapBrowserEvent } from 'ol.js';
+import Map from 'ol/Map';
+import * as Observable from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
 import Control from 'ol/control/Control';
 import BaseEvent from 'ol/events/Event';
-import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Map from 'ol/Map';
-import * as Observable from 'ol/Observable';
 import { xhr } from 'ol/featureloader.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
+import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import Interaction from 'ol/interaction/Interaction';
 import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import 'ol/ol.css';
 // c.f. Re proj import https://github.com/openlayers/openlayers/issues/8037
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import VectorTile from 'ol/VectorTile';
+import { MapBrowserEvent } from 'ol';
+import Feature from 'ol/Feature';
 import View from 'ol/View';
 import { EventsKey } from 'ol/events';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
+import { StyleFunction } from 'ol/style/Style';
 import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { getAPIBaseURL } from '../../../app/utils';
 import { OLMapView } from '../../app/appSlice';
 import { IMapFilterSettings } from '../../icons/noms';
-import { IMapPollingPlaceFeature } from '../mapHelpers';
+import { IMapPollingPlaceFeature, IMapPollingPlaceGeoJSONFeatureCollection } from '../mapHelpers';
 import { olStyleFunction } from '../mapStyleHelpers';
 import './OpenLayersMap.css';
 // import { getAPIBaseURL } from '../../redux/modules/app'
@@ -49,14 +42,14 @@ interface IProps {
 	// geojson: IGeoJSONFeatureCollection | undefined
 
 	mapFilterSettings: IMapFilterSettings;
-	onMapBeginLoading: Function;
-	onMapDataLoaded: Function;
-	onMapLoaded: Function;
-	onQueryMap: Function;
-	onMoveEnd?: (event: MapBrowserEvent) => void;
-	onDoubleClick?: (event: MapBrowserEvent) => void;
-	onPointerDown?: (event: MapBrowserEvent) => void;
-	onPointerUp?: (event: MapBrowserEvent) => void;
+	onMapBeginLoading: () => void;
+	onMapDataLoaded: (pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection) => void;
+	onMapLoaded: () => void;
+	onQueryMap: (features: Feature[]) => void;
+	onMoveEnd?: (event: MapBrowserEvent<UIEvent>) => void;
+	onDoubleClick?: (event: MapBrowserEvent<UIEvent>) => void;
+	onPointerDown?: (event: MapBrowserEvent<UIEvent>) => void;
+	onPointerUp?: (event: MapBrowserEvent<UIEvent>) => void;
 	onWheelStart?: () => void;
 	onWheelEnd?: () => void;
 }
@@ -68,13 +61,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 	private eventsKeys: EventsKey[];
 
-	private onPointerDownBound: undefined | ((event: MapBrowserEvent) => void);
+	private onPointerDownBound: undefined | ((event: MapBrowserEvent<UIEvent>) => void);
 
-	private onPointerUpBound: undefined | ((event: MapBrowserEvent) => void);
+	private onPointerUpBound: undefined | ((event: MapBrowserEvent<UIEvent>) => void);
 
 	private wheelEventEndTimeout: number | undefined;
 
-	private onWheelBound: undefined | ((event: MapBrowserEvent) => void);
+	private onWheelBound: undefined | ((event: MapBrowserEvent<UIEvent>) => void);
 
 	private timeoutIds: number[];
 
@@ -108,28 +101,33 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		olMapRef.current = this.map;
 
 		// Accommodate the window resizing
-		window.addEventListener('resize', this.onMapContainerResize);
+		window.addEventListener('resize', this.onMapContainerResize.bind(this));
 
 		// Account for the ElectionAppBar potentially being added/removed and changing the size of our map div
 		this.onMapContainerResize();
 
-		this.map.addLayer(this.getMapDataVectorLayer(this.map));
+		this.map.addLayer(this.getMapDataVectorLayer(/*this.map*/));
 
 		this.eventsKeys.push(this.map.on('singleclick', this.onClickMap.bind(this)));
 
 		this.eventsKeys.push(this.map.on('dblclick', this.onDoubleClick.bind(this)));
 
-		this.eventsKeys.push(this.map.on('moveend', this.onMoveEnd.bind(this)));
+		// @TODO
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		this.eventsKeys.push(this.map.on('moveend' as any, this.onMoveEnd.bind(this)));
 
 		this.onWheelBound = this.onWheel.bind(this);
-		this.map.addEventListener('wheel', this.onWheelBound);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		this.map.addEventListener('wheel', this.onWheelBound as any);
 
 		// The pointer down/up events on OL's PointerInteractions don't do what we expect, so we use the regular 'ol pointerdown/pointerup events
 		this.onPointerDownBound = this.onPointerDown.bind(this);
-		this.map.addEventListener('pointerdown', this.onPointerDownBound);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		this.map.addEventListener('pointerdown', this.onPointerDownBound as any);
 
 		this.onPointerUpBound = this.onPointerUp.bind(this);
-		this.map.addEventListener('pointerup', this.onPointerUpBound);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		this.map.addEventListener('pointerup', this.onPointerUpBound as any);
 	}
 
 	componentDidUpdate(prevProps: IProps) {
@@ -137,7 +135,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			// Allow for elections changing
 			if (prevProps.election !== this.props.election) {
 				this.clearMapDataVectorLayer(this.map);
-				this.map.addLayer(this.getMapDataVectorLayer(this.map));
+				this.map.addLayer(this.getMapDataVectorLayer(/*this.map*/));
 			}
 
 			if (this.props.mapView !== undefined) {
@@ -147,11 +145,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					// The user has changed the noms filter options
 					const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
 					if (sausageLayer !== null) {
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						sausageLayer.setStyle((feature: IMapPollingPlaceFeature, resolution: number) =>
-							olStyleFunction(feature, resolution, this.props.mapFilterSettings),
-						);
+						const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
+							olStyleFunction(feature, resolution, this.props.mapFilterSettings);
+						sausageLayer.setStyle(styleFunction as StyleFunction);
 					}
 				}
 			}
@@ -166,8 +162,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		// ... So we use Observable.unByKey
 		// https://gis.stackexchange.com/a/241531
 		if (this.vectorSourceChangedEventKey !== undefined) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			Observable.unByKey(this.vectorSourceChangedEventKey);
 			this.vectorSourceChangedEventKey = undefined;
 		}
@@ -181,22 +175,26 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.timeoutIds.forEach((timeoutId: number) => window.clearTimeout(timeoutId));
 
 		// 3. Remove the window.onresize event that lets the map know to update its size when the viewport changes
-		window.removeEventListener('resize', this.onMapContainerResize);
+		window.removeEventListener('resize', this.onMapContainerResize.bind(this));
 
 		// 3.1 Remove other map event listeners
 		if (this.map !== null) {
 			if (this.onPointerDownBound !== undefined) {
-				this.map.removeEventListener('pointerdown', this.onPointerDownBound);
+				// @TODO
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				this.map.removeEventListener('pointerdown', this.onPointerDownBound as any);
 				this.onPointerDownBound = undefined;
 			}
 
 			if (this.onPointerUpBound !== undefined) {
-				this.map.removeEventListener('pointerup', this.onPointerUpBound);
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				this.map.removeEventListener('pointerup', this.onPointerUpBound as any);
 				this.onPointerUpBound = undefined;
 			}
 
 			if (this.onWheelBound !== undefined) {
-				this.map.removeEventListener('wheel', this.onWheelBound);
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				this.map.removeEventListener('wheel', this.onWheelBound as any);
 				this.onWheelBound = undefined;
 			}
 		}
@@ -228,9 +226,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		// 5. And finally clean up the map object itself
 		// https://stackoverflow.com/a/25997026
 		if (this.map !== null) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			this.map.setTarget(null);
+			this.map.setTarget(undefined);
 			this.map = null;
 		}
 	}
@@ -263,13 +259,15 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			//   onMapDataLoaded(writer.writeFeaturesObject(vectorSource.getFeatures()))
 			// }
 			const writer = new GeoJSON();
-			onMapDataLoaded(writer.writeFeaturesObject(vectorSource.getFeatures()));
+			const features = vectorSource.getFeatures();
+			// @TODO Fix when we upgrade
+			const geojson = writer.writeFeaturesObject(features) as IMapPollingPlaceGeoJSONFeatureCollection;
+			onMapDataLoaded(geojson);
 
 			// OpenLayers can take some time to actually render larger vector sources (i.e. Federal elections).
 			// Wait for a bit before doing map onLoad things like zooming to search results.
 			// If we don't wait then OpenLayers seems to stop rendering when the zoom starts, so the user sees nothing.
 			const timeoutId = window.setTimeout(
-				// eslint-disable-next-line func-names
 				function (this: OpenLayersMap) {
 					onMapLoaded();
 				}.bind(this),
@@ -280,7 +278,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		}
 	}
 
-	private onMoveEnd(event: MapBrowserEvent) {
+	private onMoveEnd(event: MapBrowserEvent<UIEvent>) {
 		if (this.props.onMoveEnd !== undefined) {
 			this.props.onMoveEnd(event);
 		}
@@ -300,25 +298,25 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		}, 250);
 	}
 
-	private onDoubleClick(event: MapBrowserEvent) {
+	private onDoubleClick(event: MapBrowserEvent<UIEvent>) {
 		if (this.props.onDoubleClick !== undefined) {
 			this.props.onDoubleClick(event);
 		}
 	}
 
-	private onPointerDown(event: MapBrowserEvent) {
+	private onPointerDown(event: MapBrowserEvent<UIEvent>) {
 		if (this.props.onPointerDown !== undefined) {
 			this.props.onPointerDown(event);
 		}
 	}
 
-	private onPointerUp(event: MapBrowserEvent) {
+	private onPointerUp(event: MapBrowserEvent<UIEvent>) {
 		if (this.props.onPointerUp !== undefined) {
 			this.props.onPointerUp(event);
 		}
 	}
 
-	private onClickMap(event: MapBrowserEvent) {
+	private onClickMap(event: MapBrowserEvent<UIEvent>) {
 		const { onQueryMap } = this.props;
 
 		if (this.map !== null) {
@@ -327,11 +325,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			//   action: 'Query Features',
 			// })
 
-			const features: any[] = [];
+			const features: Feature[] = [];
 			this.map.forEachFeatureAtPixel(
 				event.pixel,
-				(feature: any, _layer: any) => {
-					features.push(feature);
+				(feature) => {
+					features.push(feature as Feature);
 				},
 				{
 					hitTolerance: 3,
@@ -359,13 +357,13 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		}
 	}
 
-	private getMapDataVectorLayer(_map: Map) {
+	private getMapDataVectorLayer(/*map: Map*/) {
 		const { election, /*geojson, */ mapFilterSettings, onMapBeginLoading } = this.props;
 		const geojson = undefined;
 
 		const vectorSource = new VectorSource({
 			format: new GeoJSON(),
-			async loader(this: VectorSource<Geometry> | VectorTile, extent: any, resolution: number, projection: any) {
+			loader(this, extent, resolution, projection) {
 				if (geojson === undefined) {
 					// Fetch GeoJSON from remote
 					onMapBeginLoading();
@@ -381,9 +379,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					);
 				} else {
 					// Load GeoJSON from local Redux store
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore-next-line
-					this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson));
+					if ('addFeatures' in this) {
+						this.addFeatures((this.getFormat() as GeoJSON).readFeatures(geojson));
+					}
 				}
 			},
 		});
@@ -394,10 +392,10 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			olStyleFunction(feature, resolution, mapFilterSettings);
 
 		const vectorLayer = new VectorLayer({
-			renderMode: 'image',
+			// renderMode: 'image',
 			source: vectorSource,
-			style: styleFunction,
-		} as any);
+			style: styleFunction as StyleFunction,
+		});
 
 		vectorLayer.setProperties({ isSausageLayer: true });
 
@@ -411,8 +409,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		}
 	}
 
-	// eslint-disable-next-line class-methods-use-this
-	private getLayerByProperties(map: Map, propName: string, propValue: any): VectorLayer<VectorSource<Geometry>> | null {
+	private getLayerByProperties(
+		map: Map,
+		propName: string,
+		propValue: boolean,
+	): VectorLayer<VectorSource<Geometry>> | null {
 		let layer = null;
 		map.getLayers().forEach((l: BaseLayer) => {
 			const props = l.getProperties();
@@ -423,7 +424,6 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		return layer;
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	private getBasemap() {
 		// gaTrack.event({
 		//   category: 'OpenLayersMap',

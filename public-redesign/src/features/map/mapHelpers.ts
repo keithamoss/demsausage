@@ -32,8 +32,23 @@ export interface IMapPollingPlaceFeature {
 	getProperties: () => {
 		[key: string]: string;
 	};
-	get: (key: string) => string;
+	get: (key: string) => unknown;
 }
+
+export const getStringOrEmptyStringFromFeature = (feature: IMapPollingPlaceFeature, propName: string) => {
+	const value = feature.get(propName);
+	return typeof value === 'string' ? value : '';
+};
+
+export const getStringOrUndefinedFromFeature = (feature: IMapPollingPlaceFeature, propName: string) => {
+	const value = feature.get(propName);
+	return typeof value === 'string' ? value : undefined;
+};
+
+export const getObjectOrUndefinedFromFeature = (feature: IMapPollingPlaceFeature, propName: string) => {
+	const value = feature.get(propName);
+	return typeof value === 'object' ? value : undefined;
+};
 
 export const getStandardViewPadding = () => {
 	// top, right, bottom, left

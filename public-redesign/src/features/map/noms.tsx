@@ -4,7 +4,8 @@ import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { stringDivider } from '../../app/utils';
 import { IMapPollingGeoJSONNoms, IMapPollingNoms, NomsOptionsAvailable } from '../icons/noms';
-import { IMapPollingPlaceFeature } from './mapHelpers';
+import { IMapPollingPlaceFeature, getStringOrEmptyStringFromFeature } from './mapHelpers';
+import { SpriteIcons, SpriteIconsDetailed } from './mapStyleHelpers';
 
 export class NomsReader {
 	static coreNomsIcons = Object.values(NomsOptionsAvailable)
@@ -70,7 +71,7 @@ export class NomsReader {
 		);
 	}
 
-	public getIconForNoms(spriteIcons: any) {
+	public getIconForNoms(spriteIcons: SpriteIcons) {
 		const hasMoreOptions = this.hasExtraNoms();
 
 		if (this.isPropertyTrue('nothing') === true) {
@@ -120,10 +121,10 @@ export class NomsReader {
 	}
 
 	public getDetailedIconsForNoms(
-		spriteIcons: any,
-		spriteIconsDetailed: any,
+		spriteIcons: SpriteIcons,
+		spriteIconsDetailed: SpriteIconsDetailed,
 		feature: IMapPollingPlaceFeature,
-		_resolution: number,
+		// _resolution: number,
 	) {
 		const scaleFactor = 0.4;
 		const iconSize = 64;
@@ -137,14 +138,16 @@ export class NomsReader {
 		//    This is used to decorate the actual lat,lon the polling place is at.
 		const primaryIconName = this.getPrimaryIconName();
 		const primaryIcon = spriteIconsDetailed[primaryIconName];
-		primaryIcon.getImage().setAnchor([iconSize * scaleFactor, iconSize * scaleFactor]);
+		// @TODO
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+		(primaryIcon.getImage() as any).setAnchor([iconSize * scaleFactor, iconSize * scaleFactor]);
 		primaryIcon.getImage().setScale(scaleFactor);
 		primaryIcon.setZIndex(0);
 		olStyles.push(primaryIcon);
 
 		// 2. Label the polling place with the name of its premises
 		const fontSize = 16;
-		const [label, replaceCount] = stringDivider(feature.get('premises'), 16, '\n');
+		const [label, replaceCount] = stringDivider(getStringOrEmptyStringFromFeature(feature, 'premises'), 16, '\n');
 		const numberOfLines = replaceCount + 1;
 		olStyles.push(
 			new Style({
@@ -169,9 +172,11 @@ export class NomsReader {
 		// 3. Create a 3x2 grid of all of the noms options available
 		const spriteIconNames: string[] = this.getFoodIconNamesFromNoms().sort();
 
-		spriteIconNames.forEach((iconName: any, index: number) => {
+		spriteIconNames.forEach((iconName, index) => {
 			const icon = spriteIconsDetailed[iconName];
-			icon.getImage().setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
+			// @TODO
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+			(icon.getImage() as any).setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
 			icon.getImage().setScale(scaleFactor);
 			olStyles.push(icon);
 		});
@@ -189,7 +194,6 @@ export class NomsReader {
 		return 'tick';
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	public getIconAnchorPosition(position: number, iconSize: number, scaleFactor: number) {
 		const columnCount = 3;
 		const rowPosition = Math.floor(position / columnCount);
@@ -206,7 +210,6 @@ export class NomsReader {
 		return [anchorX, anchorY];
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	private filterFalsey(noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null) {
 		// For legacy reasons the backend stores falsey values for noms.
 		// e.g. {bbq: false, cake: true} only contains one piece of information
@@ -217,21 +220,11 @@ export class NomsReader {
 			return null;
 		}
 
-		const filtered = {};
-		Object.entries(noms).forEach(([name, value]: [string, boolean]) => {
-			if (value !== false) {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore-next-line
-				filtered[name] = value;
-			}
-		});
-		return filtered;
+		return Object.fromEntries(Object.entries(noms).filter(([, val]) => val === true));
 	}
 
 	private isPropertyTrue(prop: string) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore-next-line
-		return this.noms !== null && prop in this.noms && this.noms[prop] === true;
+		return this.noms !== null && prop in this.noms && this.noms[prop as keyof IMapPollingNoms] === true;
 	}
 
 	private hasAnyPropertiesTrue(props: string[]) {
