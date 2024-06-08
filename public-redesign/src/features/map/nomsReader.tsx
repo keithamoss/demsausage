@@ -3,7 +3,7 @@ import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { stringDivider } from '../../app/utils';
-import { IMapPollingGeoJSONNoms, IMapPollingNoms, NomsOptionsAvailable } from '../icons/noms';
+import { IMapPollingGeoJSONNoms, IPollingPlaceNoms, NomsOptionsAvailable } from '../icons/noms';
 import { IMapPollingPlaceFeature, getStringOrEmptyStringFromFeature } from './mapHelpers';
 import { SpriteIcons, SpriteIconsDetailed } from './mapStyleHelpers';
 
@@ -19,9 +19,9 @@ export class NomsReader {
 		.filter((noms) => noms.is_primary === false)
 		.map((noms) => noms.value);
 
-	noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null;
+	noms: IPollingPlaceNoms | IMapPollingGeoJSONNoms | null;
 
-	constructor(noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null) {
+	constructor(noms: IPollingPlaceNoms | IMapPollingGeoJSONNoms | null) {
 		this.noms = this.filterFalsey(noms);
 	}
 
@@ -210,7 +210,7 @@ export class NomsReader {
 		return [anchorX, anchorY];
 	}
 
-	private filterFalsey(noms: IMapPollingNoms | IMapPollingGeoJSONNoms | null) {
+	private filterFalsey(noms: IPollingPlaceNoms | IMapPollingGeoJSONNoms | null) {
 		// For legacy reasons the backend stores falsey values for noms.
 		// e.g. {bbq: false, cake: true} only contains one piece of information
 		// that we really care about: That the polling place has cake.
@@ -224,7 +224,7 @@ export class NomsReader {
 	}
 
 	private isPropertyTrue(prop: string) {
-		return this.noms !== null && prop in this.noms && this.noms[prop as keyof IMapPollingNoms] === true;
+		return this.noms !== null && prop in this.noms && this.noms[prop as keyof IPollingPlaceNoms] === true;
 	}
 
 	private hasAnyPropertiesTrue(props: string[]) {

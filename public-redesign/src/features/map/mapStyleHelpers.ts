@@ -7,7 +7,7 @@ import { IMapFilterSettings, IMapPollingGeoJSONNoms, spriteIconConfig } from '..
 import sprite from '../icons/sprite.json';
 import { hasFilterOptions, satisfiesMapFilter } from './mapFilterHelpers';
 import { IMapPollingPlaceFeature, getObjectOrUndefinedFromFeature } from './mapHelpers';
-import { NomsReader } from './noms';
+import { NomsReader } from './nomsReader';
 
 export interface SpriteIcons {
 	[key: string]: Style[];

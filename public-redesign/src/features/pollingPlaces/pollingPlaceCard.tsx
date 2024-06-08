@@ -45,7 +45,7 @@ import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/rou
 import { Election } from '../../app/services/elections';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
-import { NomsReader } from '../map/noms';
+import { NomsReader } from '../map/nomsReader';
 import { getNomsIconsForPollingPlace } from '../map/searchBar/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,

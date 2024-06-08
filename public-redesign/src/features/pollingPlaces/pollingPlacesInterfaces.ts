@@ -1,7 +1,7 @@
-import { IMapPollingGeoJSONNoms, IMapPollingNoms } from '../icons/noms';
+import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../icons/noms';
 
 export interface IPollingPlaceStall {
-	noms: IMapPollingNoms;
+	noms: IPollingPlaceNoms;
 	name: string;
 	description: string;
 	opening_hours: string;

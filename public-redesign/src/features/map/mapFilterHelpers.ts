@@ -1,9 +1,9 @@
 import { IMapFilterSettings } from '../icons/noms';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
-import { NomsReader } from './noms';
+import { NomsReader } from './nomsReader';
 
 export const hasFilterOptions = (mapFilterSettings: IMapFilterSettings) =>
-	Object.values(mapFilterSettings).filter((enabled: boolean) => enabled === true).length > 0;
+	Object.values(mapFilterSettings).filter((enabled) => enabled === true).length > 0;
 
 export const satisfiesMapFilter = (noms: NomsReader, mapFilterSettings: IMapFilterSettings) => {
 	if (hasFilterOptions(mapFilterSettings) && noms.hasAnyNoms() === true) {
