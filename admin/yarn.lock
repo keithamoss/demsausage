@@ -5527,7 +5527,7 @@ __metadata:
     redux-form-material-ui: "npm:^4.3.4"
     redux-responsive: "npm:^4.3.8"
     redux-thunk: "npm:^3.1.0"
-    reselect: "npm:^5.1.0"
+    reselect: "npm:^5.1.1"
     styled-components: "npm:^6.1.11"
     typescript: "npm:^5.4.5"
     web-vitals: "npm:^4.1.0"
@@ -18804,10 +18804,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "reselect@npm:5.1.0"
-  checksum: 8/5bc9c5d03d7caea00d0c0e24330bf23d91801227346fec1cef6a60988ab8d3dd7cee76e6994ca0915bc1c20845bb2bd929b95753763e0a9db74c0f9dff5cb845
+"reselect@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "reselect@npm:5.1.1"
+  checksum: 10c0/219c30da122980f61853db3aebd173524a2accd4b3baec770e3d51941426c87648a125ca08d8c57daa6b8b086f2fdd2703cb035dd6231db98cdbe1176a71f489
   languageName: node
   linkType: hard
 
