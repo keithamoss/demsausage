@@ -12,6 +12,7 @@ import {
 	navigateToSearchDrawerRoot,
 } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
 	selectNumberOfMapFilterSettingsApplied,
@@ -122,7 +123,7 @@ export default function SearchBarCosmeticNonFunctional() {
 
 			{searchBarSearchText !== '' && (
 				<IconButton type="button" onClick={onClearSearchBar} sx={{ p: '10px' }} aria-label="Clear search term">
-					<CloseIcon />
+					<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 				</IconButton>
 			)}
 
@@ -132,7 +133,7 @@ export default function SearchBarCosmeticNonFunctional() {
 				sx={{ p: '10px' }}
 				aria-label="Request GPS location from device"
 			>
-				<GpsNotFixedIcon />
+				<GpsNotFixedIcon sx={{ color: mapaThemePrimaryPurple }} />
 			</IconButton>
 
 			<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -145,10 +146,10 @@ export default function SearchBarCosmeticNonFunctional() {
 			>
 				{isMapFiltered === true ? (
 					<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
-						<FilterAltOutlinedIcon />
+						<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
 					</Badge>
 				) : (
-					<FilterAltOffOutlinedIcon />
+					<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
 				)}
 			</IconButton>
 		</Paper>
