@@ -60,12 +60,6 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						</FlexboxIcons>
 					)}
 
-					{/* {pollingPlace.stall === null && (
-						<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-							{pollingPlace.name}
-						</Typography>
-					)} */}
-
 					<Typography
 						variant="h5"
 						component="div"
@@ -75,22 +69,12 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 							textTransform: 'uppercase',
 						}}
 					>
-						{/* Gladstone Views, Gladstone Views Primary School */}
 						{pollingPlace.premises || pollingPlace.name}
 					</Typography>
-					{/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
-						Foobar
-					</Typography> */}
-					<Typography color="text.secondary">
-						{/* Carrick Drive, Gladstone Park 3043 */}
-						{pollingPlace.address}
-					</Typography>
-					{/* <Typography variant="body2">
-						well meaning and kindly.
-						<br />
-						{'"a benevolent smile"'}
-					</Typography> */}
+
+					<Typography color="text.secondary">{pollingPlace.address}</Typography>
 				</StyledCardContent>
+
 				<StyledCardActions>
 					<Button
 						size="small"

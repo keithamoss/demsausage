@@ -4,8 +4,13 @@ import { Polygon } from 'ol/geom';
 import { Election } from '../../app/services/elections';
 import { getStandardViewPadding } from '../map/mapHelpers';
 
-export const isElectionLive = (election: Election) =>
-	DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
+export const isElectionLive = (election: Election) => {
+	if (window.location.pathname === '/debug/' && window.location.search === '?live=true') {
+		return true;
+	}
+
+	return DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
+};
 
 export function getDefaultElection(elections: Election[]) {
 	let defaultElection: Election | undefined;

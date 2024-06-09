@@ -1,6 +1,18 @@
-import { Box, List, ListItem, ListItemText, Stack, styled } from '@mui/material';
+import {
+	Box,
+	FormControl,
+	FormControlLabel,
+	FormGroup,
+	List,
+	ListItem,
+	ListItemText,
+	Stack,
+	Switch,
+	styled,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ListItemButtonLink } from '../../app/ui/link';
 import {
 	PollingPlaceCardDebugViewEntrypointLayer1,
@@ -16,8 +28,23 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 }));
 
 export default function DebugView() {
+	const navigate = useNavigate();
+
+	const onSwitchElectionMode = () => {
+		navigate(window.location.search === '?live=true' ? '?live=false' : '?live=true');
+	};
+
 	return (
 		<StyledInteractableBoxFullHeight>
+			<FormControl component="fieldset" variant="standard">
+				<FormGroup>
+					<FormControlLabel
+						control={<Switch checked={window.location.search === '?live=true'} onChange={onSwitchElectionMode} />}
+						label="Simulate Live Election (Redesign Only)"
+					/>
+				</FormGroup>
+			</FormControl>
+
 			<List>
 				{[
 					{
@@ -85,7 +112,11 @@ export default function DebugView() {
 						return (
 							<React.Fragment key={index}>
 								<ListItem component={'div'}>
-									<ListItemText primary={item.url.split('/')[4].replace(/_/g, ' ')} secondary={item.text} />
+									<ListItemText
+										primary={item.url.split('/')[4].replace(/_/g, ' ')}
+										secondary={item.text}
+										sx={{ '& .MuiListItemText-primary': { fontWeight: 'bold !important' } }}
+									/>
 									<ListItemButtonLink to={item.url} primary="Redesign" target="_blank" />
 									<ListItemButtonLink to={`https://democracysausage.org${item.url}`} primary="Legacy" target="_blank" />
 								</ListItem>
