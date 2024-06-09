@@ -32,7 +32,7 @@ import {
 	navigateToSearchMapboxResults,
 } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { mapaThemeSecondaryBlue } from '../../../app/ui/theme';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
 	selectNumberOfMapFilterSettingsApplied,
@@ -69,7 +69,6 @@ export default function SearchBar(props: Props) {
 
 	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
-	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
 	// When the user navigates back/forward, or reloads the page, we
 	// just need to handle setting the search term based on what's in
@@ -145,10 +144,6 @@ export default function SearchBar(props: Props) {
 		if (searchFieldRef.current !== null && document.activeElement !== searchFieldRef.current) {
 			searchFieldRef.current.focus();
 		}
-	}, [navigate, params]);
-
-	const onDiscardPollingPlaceByIdsSearch = useCallback(() => {
-		navigateToSearchDrawerRoot(params, navigate);
 	}, [navigate, params]);
 	// ######################
 	// Search Field (End)
@@ -301,8 +296,8 @@ export default function SearchBar(props: Props) {
 	// Search Field UI
 	// ######################
 	const searchFieldPlaceholder = useMemo(
-		() => (urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined),
-		[urlLonLatFromGPS, urlPollingPlaceIds],
+		() => (urlLonLatFromGPS === '' ? 'Search here or use GPS →' : undefined),
+		[urlLonLatFromGPS],
 	);
 
 	const searchFieldStartAdornment = useMemo(
@@ -316,24 +311,15 @@ export default function SearchBar(props: Props) {
 						sx={{ cursor: 'auto' }}
 					/>
 				</InputAdornment>
-			) : urlPollingPlaceIds !== '' ? (
-				<InputAdornment position="start">
-					<Chip
-						label="Searching from map"
-						onDelete={onDiscardPollingPlaceByIdsSearch}
-						color="primary"
-						sx={{ cursor: 'auto' }}
-					/>
-				</InputAdornment>
 			) : undefined,
-		[onDiscardGPSSearch, onDiscardPollingPlaceByIdsSearch, urlLonLatFromGPS, urlPollingPlaceIds],
+		[onDiscardGPSSearch, urlLonLatFromGPS],
 	);
 	// ######################
 	// Search Field UI (End)
 	// ######################
 
 	return (
-		<Box sx={{ mb: 2 }}>
+		<Box sx={{ mb: 1.5 }}>
 			{/* NOTE: Any changes to the <Paper> SearchBar component here need to be refleced in <SearchBarCosmeticNonFunctional > as well. We keep these separate to avoid over-complicating an already pretty complex component. */}
 			<Paper
 				sx={{
@@ -370,7 +356,11 @@ export default function SearchBar(props: Props) {
 					sx={{ p: '10px' }}
 					aria-label="Request GPS location from device"
 				>
-					{urlLonLatFromGPS === '' ? <GpsNotFixedIcon /> : <GpsFixedIcon sx={{ color: mapaThemeSecondaryBlue }} />}
+					{urlLonLatFromGPS === '' ? (
+						<GpsNotFixedIcon sx={{ color: mapaThemePrimaryPurple }} />
+					) : (
+						<GpsFixedIcon sx={{ color: mapaThemePrimaryPurple }} />
+					)}
 				</IconButton>
 
 				{enableFiltering === true && (
@@ -385,14 +375,10 @@ export default function SearchBar(props: Props) {
 						>
 							{isMapFiltered === true ? (
 								<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
-									<FilterAltOutlinedIcon
-										sx={{ color: searchBarFilterControlOpen === true ? mapaThemeSecondaryBlue : undefined }}
-									/>
+									<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
 								</Badge>
 							) : (
-								<FilterAltOffOutlinedIcon
-									sx={{ color: searchBarFilterControlOpen === true ? mapaThemeSecondaryBlue : undefined }}
-								/>
+								<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
 							)}
 						</IconButton>
 					</React.Fragment>

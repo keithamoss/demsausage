@@ -1,5 +1,6 @@
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -19,7 +20,6 @@ interface Props {
 const FlexboxIcons = styled('div')(() => ({
 	flexGrow: 1,
 	svg: {
-		paddingLeft: '5px',
 		paddingRight: '5px',
 		paddingBottom: '5px',
 		width: '30px',
@@ -65,24 +65,24 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						component="div"
 						sx={{
 							fontSize: 16,
-							fontWeight: 550,
-							textTransform: 'uppercase',
+							fontWeight: 500,
 						}}
 					>
 						{pollingPlace.premises || pollingPlace.name}
 					</Typography>
 
-					<Typography color="text.secondary">{pollingPlace.address}</Typography>
+					<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+						{pollingPlace.address}
+					</Typography>
 				</StyledCardContent>
 
 				<StyledCardActions>
 					<Button
 						size="small"
-						startIcon={<UnfoldMoreIcon />}
+						startIcon={<ArrowForwardIcon />}
 						sx={{
 							flex: 1,
 							justifyContent: 'flex-start',
-							alignItems: 'flex-start',
 						}}
 					>
 						Learn More

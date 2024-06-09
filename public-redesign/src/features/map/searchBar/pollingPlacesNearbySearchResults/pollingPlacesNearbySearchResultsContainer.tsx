@@ -65,18 +65,11 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 					{numberOfResults} result{numberOfResults === 0 || numberOfResults > 1 ? 's' : ''} nearby
 				</Button>
 
-				<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="contained">
+				<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="outlined">
 					view on map
 				</Button>
 
-				<Button
-					size="small"
-					sx={{
-						color: 'black !important',
-					}}
-					startIcon={<ArrowBackIcon />}
-					onClick={onGoBack}
-				>
+				<Button size="small" startIcon={<ArrowBackIcon />} onClick={onGoBack} variant="outlined">
 					back
 				</Button>
 			</Box>

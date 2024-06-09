@@ -1,4 +1,3 @@
-import { purple } from '@mui/material/colors';
 import Feature from 'ol/Feature';
 import { Election } from '../../app/services/elections';
 import { NomsOptionsAvailable } from '../icons/noms';
@@ -25,23 +24,6 @@ export const getPollingPlacePermalinkFromProps = (
 	return premises !== ''
 		? `/${electionNameURLSafe}/polling_places/${nameEncoded}/${premisesEncoded}/${state}/`
 		: `/${electionNameURLSafe}/polling_places/${nameEncoded}/${state}/`;
-};
-
-export const getSausageChancColourIndicator = (pollingPlace: IPollingPlace) => {
-	switch (pollingPlace.chance_of_sausage) {
-		case PollingPlaceChanceOfSausage.STRONG:
-			return purple[600];
-		case PollingPlaceChanceOfSausage.FAIR:
-			return purple[500];
-		case PollingPlaceChanceOfSausage.MIXED:
-			return purple[400];
-		case PollingPlaceChanceOfSausage.UNLIKELY:
-			return purple[300];
-		case PollingPlaceChanceOfSausage.NO_IDEA:
-		case null:
-		default:
-			return purple[200];
-	}
 };
 
 export const getSausageChanceDescription = (pollingPlace: IPollingPlace) => {
@@ -73,23 +55,6 @@ export const getSausageChanceDescriptionSubheader = (pollingPlace: IPollingPlace
 		default:
 			return 'Let us know what you find!';
 	}
-};
-
-export const pollingPlaceHasReports = (pollingPlace: IPollingPlace) => {
-	if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
-		return false;
-	}
-
-	for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
-		if (key !== 'free_text') {
-			if (value === true) {
-				return true;
-			}
-		} else if (value !== '') {
-			return true;
-		}
-	}
-	return false;
 };
 
 export const pollingPlaceHasReportsOfNoms = (pollingPlace: IPollingPlace) => {

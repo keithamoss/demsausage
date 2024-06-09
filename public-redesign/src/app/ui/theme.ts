@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material';
 
 export const mapaThemePrimaryPurple = '#6740b4';
 
+export const mapaThemePrimaryGrey = '#4D4D4D';
 export const mapaThemePrimaryGreen = '#699222';
 export const mapaThemeSecondaryBlue = '#226992';
 export const mapaThemeSecondaryBlueRGB = '34, 105, 146';
@@ -18,7 +19,7 @@ export const defaultNakedNonFullScreenDialogColour = mapaThemePrimaryGreen;
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: mapaThemeSecondaryBlue,
+			main: mapaThemePrimaryPurple,
 		},
 		secondary: {
 			main: mapaThemePrimaryPurple,
