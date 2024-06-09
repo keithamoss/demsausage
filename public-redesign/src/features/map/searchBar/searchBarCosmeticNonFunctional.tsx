@@ -26,7 +26,6 @@ export default function SearchBarCosmeticNonFunctional() {
 	const navigate = useNavigate();
 
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
-	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
 	const searchBarSearchText = getStringParamOrEmptyString(params, 'search_term');
 
@@ -45,10 +44,6 @@ export default function SearchBarCosmeticNonFunctional() {
 	}, [navigate, params]);
 
 	const onDiscardGPSSearch = useCallback(() => {
-		navigateToSearchDrawerRoot(params, navigate);
-	}, [navigate, params]);
-
-	const onDiscardPollingPlaceByIdsSearch = useCallback(() => {
 		navigateToSearchDrawerRoot(params, navigate);
 	}, [navigate, params]);
 	// ######################
@@ -80,8 +75,8 @@ export default function SearchBarCosmeticNonFunctional() {
 	// Search Field UI
 	// ######################
 	const searchFieldPlaceholder = useMemo(
-		() => (urlLonLatFromGPS === '' && urlPollingPlaceIds === '' ? 'Search here or use GPS →' : undefined),
-		[urlLonLatFromGPS, urlPollingPlaceIds],
+		() => (urlLonLatFromGPS === '' ? 'Search here or use GPS →' : undefined),
+		[urlLonLatFromGPS],
 	);
 
 	const searchFieldStartAdornment = useMemo(
@@ -95,17 +90,8 @@ export default function SearchBarCosmeticNonFunctional() {
 						sx={{ cursor: 'auto' }}
 					/>
 				</InputAdornment>
-			) : urlPollingPlaceIds !== '' ? (
-				<InputAdornment position="start">
-					<Chip
-						label="Searching from map"
-						onDelete={onDiscardPollingPlaceByIdsSearch}
-						color="primary"
-						sx={{ cursor: 'auto' }}
-					/>
-				</InputAdornment>
 			) : undefined,
-		[onDiscardGPSSearch, onDiscardPollingPlaceByIdsSearch, urlLonLatFromGPS, urlPollingPlaceIds],
+		[onDiscardGPSSearch, urlLonLatFromGPS],
 	);
 	// ######################
 	// Search Field UI (End)
