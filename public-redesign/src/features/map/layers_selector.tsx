@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import LayersIcon from '@mui/icons-material/Layers';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
-import { Badge, Button, ListItemButton, useTheme } from '@mui/material';
+import { Badge, Button, Fab, ListItemButton, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -11,7 +11,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import { blueGrey, grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { groupBy, sortBy } from 'lodash-es';
 import * as React from 'react';
@@ -22,13 +21,17 @@ import { navigateToElection } from '../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import {
-	getDefaultElection,
-	getElectionVeryShortName,
-	getViewForElection,
-	isElectionLive,
-} from '../elections/electionHelpers';
+import { getElectionVeryShortName, getViewForElection, isElectionLive } from '../elections/electionHelpers';
 import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
+
+const StyledFab = styled(Fab)(({ theme }) => ({
+	// position: 'absolute',
+	// bottom: `${16 + 48 + 36}px`, // 16 for standard bottom padding, 48 for the height of <SearchBar />, and then 36 more on top
+	// right: '16px',
+	backgroundColor: theme.palette.secondary.main,
+	width: '44px',
+	height: '44px',
+}));
 
 interface Props {
 	electionId: number;
@@ -46,12 +49,12 @@ const StyledLayersBadge = styled(Badge)(({ theme }) => ({
 	},
 }));
 
-const StyledIconButton = styled(IconButton)(() => ({
-	backgroundColor: 'white',
-	'&:hover': {
-		backgroundColor: grey[200],
-	},
-}));
+// const StyledIconButton = styled(IconButton)(() => ({
+// 	backgroundColor: 'white',
+// 	'&:hover': {
+// 		backgroundColor: grey[200],
+// 	},
+// }));
 
 const StyledCloseIconButton = styled(IconButton)(() => ({
 	position: 'absolute',
@@ -84,8 +87,6 @@ export default function LayersSelector(props: Props) {
 	);
 
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
-	const isViewingHistoricalElection =
-		urlElectionName !== undefined && getDefaultElection(elections)?.name_url_safe !== urlElectionName;
 
 	const toggleDrawer = useCallback(
 		(open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -107,38 +108,96 @@ export default function LayersSelector(props: Props) {
 
 	return (
 		<React.Fragment>
-			{isViewingHistoricalElection === true && (
-				<Button
-					size="small"
-					disabled={true}
-					sx={{
-						marginTop: '46px',
-						position: 'absolute',
-						top: '24px',
-						// 24px for the StyledLayersBadge's right offset
-						// 40px for the width of StyledLayersBadge
-						// 24px to ensure even spacing either side of StyledLayersBadge
-						right: '88px', // 24px + 40px + 24px
-						left: '24px',
-						zIndex: 1050,
-						height: '40px',
-						backgroundColor: 'rgb(255, 255, 255, 0.8)',
-						color: `${blueGrey.A700} !important`,
-					}}
-				>
-					{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
-				</Button>
-			)}
+			<Button
+				size="small"
+				disabled={true}
+				sx={{
+					marginTop: '46px',
+					position: 'absolute',
+					top: '28px',
+					// 24px for the StyledLayersBadge's right offset
+					// 40px for the width of StyledLayersBadge
+					// 24px to ensure even spacing either side of StyledLayersBadge
+					right: '44px', // 24px + 40px + 24px
+					left: '24px',
+					zIndex: 1050,
+					height: '36px',
+
+					// Option 1: Purple + White
+					// backgroundColor: mapaThemePrimaryPurple,
+					// color: 'white !important',
+
+					// Option 2: Blue Grey and White
+					// backgroundColor: blueGrey[400],
+					// color: 'white !important',
+
+					// Option 3: White and Purple
+					backgroundColor: 'white',
+					color: `${mapaThemePrimaryPurple} !important`,
+
+					boxShadow:
+						'0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+				}}
+			>
+				{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
+			</Button>
 
 			<StyledLayersBadge
 				badgeContent={activeElections.length > 1 ? activeElections.length : null}
-				color="primary"
-				className="layer-selector"
-				sx={{ marginTop: '46px' }}
+				// color="primary"
+				sx={{
+					marginTop: '46px',
+					// backgroundColor: 'white !important',
+					// color: 'white',
+					'& .MuiBadge-badge': {
+						// border: '1px solid white',
+						// color: 'white',
+
+						// Option 1: Purple and White
+						// backgroundColor: mapaThemePrimaryPurple,
+						// color: 'white',
+
+						// Option 2: Blue Grey and White
+						// backgroundColor: mapaThemePrimaryPurple,
+						// color: 'white',
+
+						// Option 3: White and Purple
+						backgroundColor: 'white',
+						color: mapaThemePrimaryPurple,
+
+						zIndex: 1100,
+					},
+				}}
 			>
-				<StyledIconButton aria-label="layers" onClick={toggleDrawer(true)}>
+				{/* <StyledIconButton
+					aria-label="layers"
+					onClick={toggleDrawer(true)}
+					// sx={{ border: `2px solid ${mapaThemePrimaryPurple}`, color: mapaThemePrimaryPurple }}
+					sx={{ backgroundColor: mapaThemePrimaryPurple, color: 'white' }}
+				>
 					<LayersIcon />
-				</StyledIconButton>
+				</StyledIconButton> */}
+
+				<StyledFab
+					onClick={toggleDrawer(true)}
+					color="primary"
+					// Option 2: Blue Grey and White
+					// color="primary"
+					sx={
+						{
+							// Option 1: Purple and White
+							// backgroundColor: 'white',
+							// color: mapaThemePrimaryPurple,
+							// Option 2: Blue Grey and White
+							// backgroundColor: 'white',
+							// color: mapaThemePrimaryPurple,
+							// Option 3: White and Purple
+							// defaults
+						}
+					}
+				>
+					<LayersIcon />
+				</StyledFab>
 			</StyledLayersBadge>
 
 			<Drawer anchor="bottom" open={state} onClose={toggleDrawer(false)}>
