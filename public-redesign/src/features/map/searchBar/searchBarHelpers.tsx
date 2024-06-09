@@ -111,9 +111,10 @@ export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
 	</Tooltip>
 );
 
-export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace) => {
+export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace, allowRedCrossOfShame: boolean) => {
 	if (pollingPlace.stall?.noms.nothing) {
-		return wrapIconWithTooltip(<RedCrossOfShame />, 'No stalls here');
+		// For PollingPlaceCards, we don't display the Red Cross of Shame in the list of noms icons, it gets displayed as part of other elements of the card
+		return allowRedCrossOfShame === true ? wrapIconWithTooltip(<RedCrossOfShame />, 'No Stall Here') : null;
 	} else {
 		return (
 			<React.Fragment>

@@ -237,7 +237,7 @@ export default function PollingPlaceCard(props: Props) {
 							)} */}
 
 						<FlexboxIcons>
-							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace)}</FlexboxIcons>
+							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace, false)}</FlexboxIcons>
 						</FlexboxIcons>
 
 						{pollingPlace.stall !== null && (

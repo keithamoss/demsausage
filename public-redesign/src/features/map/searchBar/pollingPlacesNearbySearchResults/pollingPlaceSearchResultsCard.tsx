@@ -56,7 +56,7 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 				<StyledCardContent>
 					{pollingPlace.stall !== null && (
 						<FlexboxIcons>
-							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace)}</FlexboxIcons>
+							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace, true)}</FlexboxIcons>
 						</FlexboxIcons>
 					)}
 
