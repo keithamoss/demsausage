@@ -351,8 +351,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			// })
 
 			if (features.length > 0) {
-				// SausageMap.queriedPollingPlaces displays a "Too many polling places - try to zoom/find" if we have more than 20
-				onQueryMap(features.slice(0, 21));
+				onQueryMap(features.slice(0, 20));
 			}
 		}
 	}
