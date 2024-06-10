@@ -8,7 +8,7 @@ import {
 	AlertTitle,
 	Badge,
 	Box,
-	Chip,
+	Button,
 	Divider,
 	IconButton,
 	InputAdornment,
@@ -304,15 +304,19 @@ export default function SearchBar(props: Props) {
 		() =>
 			urlLonLatFromGPS !== '' ? (
 				<InputAdornment position="start">
-					<Chip
-						label="Searching by GPS location"
-						onDelete={onDiscardGPSSearch}
-						color="primary"
-						sx={{ cursor: 'auto' }}
-					/>
+					<Button
+						size="small"
+						variant="outlined"
+						disableRipple
+						sx={{
+							cursor: 'auto',
+						}}
+					>
+						Searching by GPS location
+					</Button>
 				</InputAdornment>
 			) : undefined,
-		[onDiscardGPSSearch, urlLonLatFromGPS],
+		[urlLonLatFromGPS],
 	);
 	// ######################
 	// Search Field UI (End)
@@ -346,7 +350,13 @@ export default function SearchBar(props: Props) {
 
 				{localSearchTerm !== '' && (
 					<IconButton type="button" onClick={onClearSearchBar} sx={{ p: '10px' }} aria-label="Clear search term">
-						<CloseIcon />
+						<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
+					</IconButton>
+				)}
+
+				{urlLonLatFromGPS !== '' && (
+					<IconButton type="button" onClick={onDiscardGPSSearch} sx={{ p: '10px' }} aria-label="Clear GPS search">
+						<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 					</IconButton>
 				)}
 

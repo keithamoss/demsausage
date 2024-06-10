@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
-import { Badge, Chip, Divider, IconButton, InputAdornment, InputBase, Paper } from '@mui/material';
+import { Badge, Button, Divider, IconButton, InputAdornment, InputBase, Paper } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
@@ -84,15 +84,19 @@ export default function SearchBarCosmeticNonFunctional() {
 		() =>
 			urlLonLatFromGPS !== '' ? (
 				<InputAdornment position="start">
-					<Chip
-						label="Searching by GPS location"
-						onDelete={onDiscardGPSSearch}
-						color="primary"
-						sx={{ cursor: 'auto' }}
-					/>
+					<Button
+						size="small"
+						variant="outlined"
+						disableRipple
+						sx={{
+							cursor: 'auto',
+						}}
+					>
+						Searching by GPS location
+					</Button>
 				</InputAdornment>
 			) : undefined,
-		[onDiscardGPSSearch, urlLonLatFromGPS],
+		[urlLonLatFromGPS],
 	);
 	// ######################
 	// Search Field UI (End)
@@ -123,6 +127,12 @@ export default function SearchBarCosmeticNonFunctional() {
 
 			{searchBarSearchText !== '' && (
 				<IconButton type="button" onClick={onClearSearchBar} sx={{ p: '10px' }} aria-label="Clear search term">
+					<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
+				</IconButton>
+			)}
+
+			{urlLonLatFromGPS !== '' && (
+				<IconButton type="button" onClick={onDiscardGPSSearch} sx={{ p: '10px' }} aria-label="Clear GPS search">
 					<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 				</IconButton>
 			)}
