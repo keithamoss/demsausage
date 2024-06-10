@@ -349,23 +349,18 @@ export default function SearchBar(props: Props) {
 				/>
 
 				{localSearchTerm !== '' && (
-					<IconButton type="button" onClick={onClearSearchBar} sx={{ p: '10px' }} aria-label="Clear search term">
+					<IconButton type="button" onClick={onClearSearchBar} aria-label="Clear search term">
 						<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 					</IconButton>
 				)}
 
 				{urlLonLatFromGPS !== '' && (
-					<IconButton type="button" onClick={onDiscardGPSSearch} sx={{ p: '10px' }} aria-label="Clear GPS search">
+					<IconButton type="button" onClick={onDiscardGPSSearch} aria-label="Clear GPS search">
 						<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 					</IconButton>
 				)}
 
-				<IconButton
-					type="button"
-					onClick={onClickGPSControl}
-					sx={{ p: '10px' }}
-					aria-label="Request GPS location from device"
-				>
+				<IconButton type="button" onClick={onClickGPSControl} aria-label="Request GPS location from device">
 					{urlLonLatFromGPS === '' ? (
 						<GpsNotFixedIcon sx={{ color: mapaThemePrimaryPurple }} />
 					) : (
@@ -381,7 +376,6 @@ export default function SearchBar(props: Props) {
 							onClick={onClickFilterControl}
 							color={isMapFiltered === true ? 'secondary' : 'default'}
 							aria-label="Open the filter panel to control which types of polling places are shown on the map"
-							sx={{ pr: 1 }}
 						>
 							{isMapFiltered === true ? (
 								<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
