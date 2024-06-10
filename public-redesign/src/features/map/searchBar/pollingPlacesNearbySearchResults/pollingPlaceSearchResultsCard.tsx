@@ -83,6 +83,7 @@ export default function PollingPlaceSearchResultsCard(props: Props) {
 						sx={{
 							flex: 1,
 							justifyContent: 'flex-start',
+							pl: 1,
 						}}
 					>
 						Learn More
