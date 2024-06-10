@@ -1,3 +1,4 @@
+import { Card } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
@@ -7,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
+import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../../app/appSlice';
 import { IMapFilterSettings, NomsOptionsAvailable } from '../../../icons/noms';
 
@@ -40,36 +42,37 @@ export default function SearchBarFilter() {
 	);
 
 	return (
-		<List
-			dense
+		<Card
+			variant="outlined"
 			sx={{
-				width: '100%',
-				marginTop: 1,
-				bgcolor: 'background.paper',
+				marginTop: 1.5,
 			}}
 		>
-			{Object.values(NomsOptionsAvailable).map((noms) => (
-				<ListItem
-					key={noms.value}
-					secondaryAction={
-						<Checkbox
-							checked={mapFilterSettings[noms.value as keyof IMapFilterSettings] === true}
-							onChange={onChangeFilterOption(noms.value as keyof IMapFilterSettings)}
-							edge="end"
-						/>
-					}
-					disablePadding
-				>
-					<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterSettings)}>
-						<ListItemAvatar>
-							<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent' }}>
-								{noms.icon}
-							</Avatar>
-						</ListItemAvatar>
-						<ListItemText primary={noms.label} />
-					</ListItemButton>
-				</ListItem>
-			))}
-		</List>
+			<List dense>
+				{Object.values(NomsOptionsAvailable).map((noms) => (
+					<ListItem
+						key={noms.value}
+						secondaryAction={
+							<Checkbox
+								checked={mapFilterSettings[noms.value as keyof IMapFilterSettings] === true}
+								onChange={onChangeFilterOption(noms.value as keyof IMapFilterSettings)}
+								edge="end"
+								sx={{ color: mapaThemePrimaryPurple }}
+							/>
+						}
+						disablePadding
+					>
+						<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterSettings)}>
+							<ListItemAvatar>
+								<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent' }}>
+									{noms.icon}
+								</Avatar>
+							</ListItemAvatar>
+							<ListItemText primary={noms.label} />
+						</ListItemButton>
+					</ListItem>
+				))}
+			</List>
+		</Card>
 	);
 }
