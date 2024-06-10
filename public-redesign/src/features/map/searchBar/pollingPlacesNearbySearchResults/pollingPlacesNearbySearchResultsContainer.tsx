@@ -48,7 +48,8 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 			<Box
 				sx={{
 					width: '100%',
-					marginBottom: 1,
+					// Matches the padding on the root <Box> in SearchBar
+					marginBottom: 1.5,
 					display: 'flex',
 				}}
 			>
