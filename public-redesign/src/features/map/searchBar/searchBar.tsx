@@ -374,7 +374,6 @@ export default function SearchBar(props: Props) {
 
 						<IconButton
 							onClick={onClickFilterControl}
-							color={isMapFiltered === true ? 'secondary' : 'default'}
 							aria-label="Open the filter panel to control which types of polling places are shown on the map"
 						>
 							{isMapFiltered === true ? (

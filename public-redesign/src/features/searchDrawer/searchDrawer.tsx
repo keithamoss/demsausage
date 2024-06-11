@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import {
 	navigateToMapUsingURLParamsWithoutUpdatingTheView,
@@ -15,6 +15,7 @@ import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../ap
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import SearchComponent from '../map/searchBar/searchComponent';
+import SearchByIdsStackComponent from '../map/searchByIdsStack/searchByIdsStackComponent';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -58,6 +59,7 @@ function SearchDrawer(props: Props) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
@@ -90,11 +92,15 @@ function SearchDrawer(props: Props) {
 			>
 				<StyledBox>
 					<StyledInteractableBoxFullHeight>
-						<SearchComponent
-							election={election}
-							autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
-							onChoosePollingPlace={onChoosePollingPlace}
-						/>
+						{location.pathname.includes('/by_ids/') === true ? (
+							<SearchByIdsStackComponent election={election} onChoosePollingPlace={onChoosePollingPlace} />
+						) : (
+							<SearchComponent
+								election={election}
+								autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
+								onChoosePollingPlace={onChoosePollingPlace}
+							/>
+						)}
 					</StyledInteractableBoxFullHeight>
 				</StyledBox>
 			</Drawer>

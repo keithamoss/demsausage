@@ -2,27 +2,17 @@ import { Alert, AlertTitle, List, ListItem, ListItemText } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import View from 'ol/View';
-import { transformExtent } from 'ol/proj';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
-import {
-	navigateToMapAndUpdateMapWithNewView,
-	navigateToSearchListOfPollingPlacesFromMapboxResults,
-} from '../../../app/routing/navigationHelpers';
+import { navigateToSearchListOfPollingPlacesFromMapboxResults } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
-import {
-	useGetPollingPlaceByIdsLookupQuery,
-	useGetPollingPlaceByLatLonLookupQuery,
-} from '../../../app/services/pollingPlaces';
-import { getCSVStringsAsFloats } from '../../../app/utils';
+import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { selectMapFilterSettings } from '../../app/appSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { doesPollingPlaceSatisifyFilterCriteria } from '../mapFilterHelpers';
-import { getStandardViewPadding } from '../mapHelpers';
 import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
 import SearchBar from './searchBar';
@@ -30,12 +20,11 @@ import {
 	EMapboxPlaceType,
 	IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
-	getBBoxExtentFromString,
-	getBBoxFromPollingPlaces,
 	getLonLatFromString,
 	getMapboxAPIKey,
 	getMapboxSearchParamsForElection,
 	isSearchingYet,
+	onViewOnMap,
 } from './searchBarHelpers';
 
 interface Props {
@@ -65,8 +54,6 @@ export default function SearchComponent(props: Props) {
 	const urlLonLatFromSearch = getStringParamOrEmptyString(params, 'place_lon_lat');
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
-
-	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(params, 'polling_place_ids'));
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
 
@@ -112,78 +99,22 @@ export default function SearchComponent(props: Props) {
 	} = useGetPollingPlaceByLatLonLookupQuery(
 		urlLonLat !== '' ? { electionId: election.id, ...getLonLatFromString(urlLonLat) } : skipToken,
 	);
-	// ######################
-	// Polling Place Search Query (End)
-	// ######################
 
-	// ######################
-	// Polling Place By Ids Query
-	// ######################
-	const {
-		data: pollingPlaceByIdsResult,
-		error: errorFetchingPollingPlacesByIds,
-		isFetching: isFetchingPollingPlacesByIds,
-		isSuccess: isSuccessFetchingPollingPlacesByIds,
-	} = useGetPollingPlaceByIdsLookupQuery(
-		urlPollingPlaceIds.length >= 1 ? { electionId: election.id, pollingPlaceIds: urlPollingPlaceIds } : skipToken,
-	);
-	// ######################
-	// Polling Place By Ids Query (End)
-	// ######################
-
-	// ######################
-	// Polling Place Search Results Combiner
-	// ######################
-	const pollingPlaceNearbyResultsCombined =
+	const pollingPlaceNearbyResultsFiltered =
 		isFetchingNearbyPollingPlaces === false &&
 		isSuccessFetchingNearbyPollingPlaces === true &&
 		pollingPlaceNearbyResults !== undefined
-			? pollingPlaceNearbyResults
-			: isFetchingPollingPlacesByIds === false &&
-				  isSuccessFetchingPollingPlacesByIds === true &&
-				  pollingPlaceByIdsResult !== undefined
-				? pollingPlaceByIdsResult
-				: undefined;
-
-	const pollingPlaceNearbyResultsFiltered =
-		pollingPlaceNearbyResultsCombined !== undefined
-			? pollingPlaceNearbyResultsCombined.filter(
+			? pollingPlaceNearbyResults.filter(
 					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings) === true,
 				)
 			: undefined;
-	// ######################
-	// Polling Place Search Results Combiner (End)
-	// ######################
 
+	const onClickViewOnMap = useCallback(
+		() => onViewOnMap(params, navigate, pollingPlaceNearbyResultsFiltered),
+		[params, navigate, pollingPlaceNearbyResultsFiltered],
+	);
 	// ######################
-	// Polling Place Search Results
-	// ######################
-	const onViewOnMap = useCallback(() => {
-		if (pollingPlaceNearbyResultsFiltered !== undefined) {
-			const bboxOfPollingPlaces = getBBoxExtentFromString(
-				Object.values(getBBoxFromPollingPlaces(pollingPlaceNearbyResultsFiltered)).join(','),
-			);
-
-			if (bboxOfPollingPlaces !== undefined) {
-				const olMapDOMRect = document.getElementById('openlayers-map')?.getBoundingClientRect();
-
-				const view = new View();
-				view.fit(transformExtent(bboxOfPollingPlaces, 'EPSG:4326', 'EPSG:3857'), {
-					// Fallback to the window if for some weird reason we can't get the size of the OpenLayers Map.
-					// It won't be exatly the same size (because of the header), but it'll do.
-					size:
-						olMapDOMRect !== undefined
-							? [olMapDOMRect.width, olMapDOMRect.height]
-							: [window.innerWidth, window.innerHeight],
-					padding: getStandardViewPadding(),
-				});
-
-				navigateToMapAndUpdateMapWithNewView(params, navigate, view);
-			}
-		}
-	}, [navigate, params, pollingPlaceNearbyResultsFiltered]);
-	// ######################
-	// Polling Place Search Results (End)
+	// Polling Place Search Query (End)
 	// ######################
 
 	return (
@@ -258,7 +189,7 @@ export default function SearchComponent(props: Props) {
 				)}
 
 			{/* Handles not found and all other types of error */}
-			{(errorFetchingNearbyPollingPlaces !== undefined || errorFetchingPollingPlacesByIds !== undefined) && (
+			{errorFetchingNearbyPollingPlaces !== undefined && (
 				<Alert severity="error">
 					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
 					Something went awry when we tried to load your list of polling places.
@@ -269,7 +200,7 @@ export default function SearchComponent(props: Props) {
 				<PollingPlacesNearbySearchResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
 					pollingPlacesLoaded={election.polling_places_loaded}
-					onViewOnMap={onViewOnMap}
+					onViewOnMap={onClickViewOnMap}
 				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
 						<PollingPlaceSearchResultsCard

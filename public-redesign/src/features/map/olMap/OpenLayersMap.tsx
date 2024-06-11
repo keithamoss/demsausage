@@ -138,17 +138,19 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				this.map.addLayer(this.getMapDataVectorLayer(/*this.map*/));
 			}
 
+			// The view has changed and we've asked to update it
 			if (this.props.mapView !== undefined) {
 				this.map.setView(new View(this.props.mapView));
-			} else {
-				if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
-					// The user has changed the noms filter options
-					const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
-					if (sausageLayer !== null) {
-						const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
-							olStyleFunction(feature, resolution, this.props.mapFilterSettings);
-						sausageLayer.setStyle(styleFunction as StyleFunction);
-					}
+			}
+
+			// The user has changed the noms filter options
+			if (JSON.stringify(prevProps.mapFilterSettings) !== JSON.stringify(this.props.mapFilterSettings)) {
+				const sausageLayer = this.getLayerByProperties(this.map, 'isSausageLayer', true);
+
+				if (sausageLayer !== null) {
+					const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
+						olStyleFunction(feature, resolution, this.props.mapFilterSettings);
+					sausageLayer.setStyle(styleFunction as StyleFunction);
 				}
 			}
 		}

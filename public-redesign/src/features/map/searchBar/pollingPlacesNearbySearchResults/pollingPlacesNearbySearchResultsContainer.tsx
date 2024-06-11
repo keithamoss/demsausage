@@ -86,7 +86,7 @@ export default function PollingPlacesNearbySearchResultsContainer(props: Props) 
 			{numberOfResults === 0 && (
 				<Alert severity="info">
 					<AlertTitle>No results found</AlertTitle>
-					Sorry, we didn&lsquo;t find any polling places 😢
+					Sorry, we couldn&lsquo;t find any polling places 😢
 				</Alert>
 			)}
 

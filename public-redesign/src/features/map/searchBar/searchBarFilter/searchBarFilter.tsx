@@ -12,7 +12,13 @@ import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../../app/appSlice';
 import { IMapFilterSettings, NomsOptionsAvailable } from '../../../icons/noms';
 
-export default function SearchBarFilter() {
+interface Props {
+	marginBottom?: number;
+}
+
+export default function SearchBarFilter(props: Props) {
+	const { marginBottom } = props;
+
 	const dispatch = useAppDispatch();
 
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
@@ -46,6 +52,7 @@ export default function SearchBarFilter() {
 			variant="outlined"
 			sx={{
 				marginTop: 1.5,
+				marginBottom,
 			}}
 		>
 			<List dense>

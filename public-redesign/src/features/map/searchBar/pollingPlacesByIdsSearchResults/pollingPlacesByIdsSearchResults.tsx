@@ -1,0 +1,132 @@
+import CloseIcon from '@mui/icons-material/Close';
+import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import MapIcon from '@mui/icons-material/Map';
+import { Alert, AlertTitle, Badge } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { useCallback, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../../app/hooks';
+import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers';
+import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
+import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
+import SearchBarFilter from '../searchBarFilter/searchBarFilter';
+
+interface Props {
+	numberOfResults: number;
+	pollingPlacesLoaded: boolean;
+	onViewOnMap: () => void;
+	children: JSX.Element[];
+}
+
+export default function PollingPlacesByIdsSearchResultsContainer(props: Props) {
+	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
+
+	const params = useParams();
+	const navigate = useNavigate();
+
+	// ######################
+	// Filter Control
+	// ######################
+	const [isSearchBarFilterControlOpen, setIsSearchBarFilterControlOpen] = useState(false);
+	const isMapFiltered = useAppSelector(selectIsMapFiltered);
+	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
+
+	const onClickFilterControl = useCallback(() => {
+		setIsSearchBarFilterControlOpen(!isSearchBarFilterControlOpen);
+	}, [isSearchBarFilterControlOpen]);
+	// ######################
+	// Filter Control (End)
+	// ######################
+
+	// ######################
+	// Close Panel
+	// ######################
+	const onClose = useCallback(() => {
+		// We always arrive here by coming directly from the map, so we can
+		// just send the user right back to their current view of the map.
+		navigateToMapUsingURLParamsWithoutUpdatingTheView(params, navigate);
+	}, [navigate, params]);
+	// ######################
+	// Close Panel (End)
+	// ######################
+
+	return (
+		<Box
+			sx={{
+				width: '100%',
+				// Matches the 12px we have on our <Box> child when add the 8px of padding on the <Box> that's our parent
+				marginTop: 0.5,
+			}}
+		>
+			<Box
+				sx={{
+					width: '100%',
+					marginBottom: 1.5,
+					display: 'flex',
+				}}
+			>
+				<Button
+					size="small"
+					sx={{
+						flex: 1,
+						justifyContent: 'flex-start',
+						alignItems: 'flex-start',
+						color: 'black !important',
+					}}
+					disabled={true}
+				>
+					{numberOfResults} result{numberOfResults === 0 || numberOfResults > 1 ? 's' : ''} nearby
+				</Button>
+
+				<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="outlined">
+					view on map
+				</Button>
+
+				<Button
+					size="small"
+					sx={{ mr: 1 }}
+					startIcon={
+						isMapFiltered === true ? (
+							<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
+								<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+							</Badge>
+						) : (
+							<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+						)
+					}
+					onClick={onClickFilterControl}
+					aria-label="Open the filter panel to control which types of polling places are shown on the map"
+					variant="outlined"
+				>
+					filter
+				</Button>
+
+				<Button size="small" startIcon={<CloseIcon />} onClick={onClose} variant="outlined">
+					close
+				</Button>
+			</Box>
+
+			{isSearchBarFilterControlOpen === true && <SearchBarFilter marginBottom={1} />}
+
+			{pollingPlacesLoaded === false && (
+				<Alert severity="warning" sx={{ mb: 1 }}>
+					<AlertTitle>We don&apos;t have the official list of polling places yet</AlertTitle>
+					So for now, we&apos;re listing stall locations based on reports from the community.
+				</Alert>
+			)}
+
+			{/* Handles not found and all other types of error */}
+			{numberOfResults === 0 && (
+				<Alert severity="info">
+					<AlertTitle>No results found</AlertTitle>
+					Sorry, we couldn&lsquo;t find any polling places 😢
+				</Alert>
+			)}
+
+			<Stack spacing={1}>{children}</Stack>
+		</Box>
+	);
+}

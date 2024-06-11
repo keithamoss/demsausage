@@ -112,23 +112,18 @@ export const navigateToMap = (
 	state?: object,
 ) => {
 	// We handle going to all of these routes:
-	// /:election_name/by_ids/:polling_place_ids/m/:map_lat_lon_zoom/
 	// /:election_name/gps/:gps_lon_lat/m/:map_lat_lon_zoom/
 	// /:election_name/place/:search_term/:place_lon_lat/m/:map_lat_lon_zoom/
 	// /:election_name/place/:search_term/m/:map_lat_lon_zoom/
 	// /:election_name/:map_lat_lon_zoom?/
 
-	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds } = getURLParams(params);
+	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
 		return;
 	}
 
-	if (urlPollingPlaceIds !== undefined) {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/by_ids/${urlPollingPlaceIds}/`, `m/${mapLatLonZoom}`), {
-			state,
-		});
-	} else if (urlGPSLonLat !== undefined) {
+	if (urlGPSLonLat !== undefined) {
 		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/gps/${urlGPSLonLat}/`, `m/${mapLatLonZoom}`), {
 			state,
 		});
@@ -165,27 +160,18 @@ export const navigateToSearchDrawerRoot = (params: Params<string>, navigate: Nav
 
 export const navigateToSearchDrawer = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
-	// /:election_name/search/by_ids/:polling_place_ids/m/:map_lat_lon_zoom/
 	// /:election_name/search/gps/:gps_lon_lat/m/:map_lat_lon_zoom/
 	// /:election_name/search/place/:search_term/m/:map_lat_lon_zoom/
 	// /:election_name/search/place/:search_term/:place_lon_lat/m/:map_lat_lon_zoom/
 	// /:election_name/search/m/:map_lat_lon_zoom/
 
-	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlPollingPlaceIds, urlMapLatLonZoom } =
-		getURLParams(params);
+	const { urlElectionName, urlSearchTerm, urlLonLat, urlGPSLonLat, urlMapLatLonZoom } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
 		return;
 	}
 
-	if (urlPollingPlaceIds !== undefined) {
-		navigate(
-			addComponentToEndOfURLPath(`/${urlElectionName}/search/by_ids/${urlPollingPlaceIds}/`, `m/${urlMapLatLonZoom}`),
-			{
-				state: { cameFromInternalNavigation: true },
-			},
-		);
-	} else if (urlGPSLonLat !== undefined) {
+	if (urlGPSLonLat !== undefined) {
 		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/gps/${urlGPSLonLat}/`, `m/${urlMapLatLonZoom}`), {
 			state: { cameFromInternalNavigation: true },
 		});

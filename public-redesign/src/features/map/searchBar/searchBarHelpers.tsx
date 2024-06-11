@@ -1,5 +1,9 @@
 import { Tooltip } from '@mui/material';
+import { View } from 'ol';
+import { transformExtent } from 'ol/proj';
 import React from 'react';
+import { NavigateFunction, Params } from 'react-router-dom';
+import { navigateToMapAndUpdateMapWithNewView } from '../../../app/routing/navigationHelpers';
 import { Election, IGeoJSONPoylgon } from '../../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../../app/utils';
 import BaconandEggsIcon from '../../icons/bacon-and-eggs';
@@ -11,6 +15,7 @@ import RedCrossOfShame from '../../icons/red-cross-of-shame';
 import SausageIcon from '../../icons/sausage';
 import VegoIcon from '../../icons/vego';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { getStandardViewPadding } from '../mapHelpers';
 
 // https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
 export interface IMapboxGeocodingAPIResponse {
@@ -73,6 +78,33 @@ export interface IMapboxGeocodingAPIResponseFeature {
 		[key: string]: string;
 	};
 }
+
+export const onViewOnMap = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	pollingPlaceNearbyResultsFiltered: IPollingPlace[] | undefined,
+) => {
+	if (pollingPlaceNearbyResultsFiltered !== undefined) {
+		const bboxOfPollingPlaces = getBBoxExtentForPollingPlaces(pollingPlaceNearbyResultsFiltered);
+
+		if (bboxOfPollingPlaces !== undefined) {
+			const olMapDOMRect = document.getElementById('openlayers-map')?.getBoundingClientRect();
+
+			const view = new View();
+			view.fit(transformExtent(bboxOfPollingPlaces, 'EPSG:4326', 'EPSG:3857'), {
+				// Fallback to the window if for some weird reason we can't get the size of the OpenLayers Map.
+				// It won't be exatly the same size (because of the header), but it'll do.
+				size:
+					olMapDOMRect !== undefined
+						? [olMapDOMRect.width, olMapDOMRect.height]
+						: [window.innerWidth, window.innerHeight],
+				padding: getStandardViewPadding(),
+			});
+
+			navigateToMapAndUpdateMapWithNewView(params, navigate, view);
+		}
+	}
+};
 
 // https://docs.mapbox.com/api/search/geocoding/#data-types
 // Note: Only Country and Region data types are excluded from the defaults.
@@ -140,13 +172,19 @@ export const getLonLatFromString = (lonlat: string) => {
 	return { lon, lat };
 };
 
-export const getBBoxFromPollingPlaces = (pollingPlaces: IPollingPlace[]) => {
-	return {
+export const getBBoxExtentForPollingPlaces = (pollingPlaces: IPollingPlace[]) => {
+	const bbox = {
 		lat_top: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[1])),
 		lat_bottom: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[1])),
 		lon_left: Math.min(...pollingPlaces.map((p) => p.geom.coordinates[0])),
 		lon_right: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[0])),
 	};
+
+	if (Object.values(bbox).includes(Infinity) || Object.values(bbox).includes(-Infinity)) {
+		return undefined;
+	}
+
+	return getBBoxExtentFromString(Object.values(bbox).join(','));
 };
 
 export const getBBoxExtentFromString = (bbox?: string): [number, number, number, number] | undefined => {
@@ -161,5 +199,6 @@ export const getBBoxExtentFromString = (bbox?: string): [number, number, number,
 			return [parseFloat(bboxArray[2]), parseFloat(bboxArray[1]), parseFloat(bboxArray[3]), parseFloat(bboxArray[0])];
 		}
 	}
+
 	return undefined;
 };
