@@ -18,20 +18,20 @@ import {
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
-import AddStallButton from '../app/addStallButton';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import SearchBarCosmeticNonFunctional from '../search/searchByAddressOrGPS/searchBar/searchBarCosmeticNonFunctional';
-import LayersSelector from './layers_selector';
+import AddStallButton from './addStallButton/addStallButton';
+import LayersSelector from './layersSelector/layersSelector';
 import {
 	IMapPollingPlaceGeoJSONFeatureCollection,
 	createMapViewFromURL,
 	createMapViewURLPathComponent,
 	isMapViewParamValid,
 } from './mapHelpers';
-import OpenLayersMap from './olMap/OpenLayersMap';
+import OpenLayersMap from './openLayersMap/OpenLayersMap';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypointLayer1() {

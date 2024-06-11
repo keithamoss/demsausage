@@ -16,13 +16,13 @@ import { groupBy, sortBy } from 'lodash-es';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
-import { navigateToElection } from '../../app/routing/navigationHelpers';
-import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Election } from '../../app/services/elections';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import { getElectionVeryShortName, getViewForElection, isElectionLive } from '../elections/electionHelpers';
-import { selectActiveElections, selectAllElections } from '../elections/electionsSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { navigateToElection } from '../../../app/routing/navigationHelpers';
+import { getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
+import { Election } from '../../../app/services/elections';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { getElectionVeryShortName, getViewForElection, isElectionLive } from '../../elections/electionHelpers';
+import { selectActiveElections, selectAllElections } from '../../elections/electionsSlice';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
 	// position: 'absolute',
