@@ -12,7 +12,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
-import SearchBarFilter from '../searchBarFilter/searchBarFilter';
+import SearchFilterComponent from '../../shared/searchFilterComponent';
 
 interface Props {
 	numberOfResults: number;
@@ -21,7 +21,7 @@ interface Props {
 	children: JSX.Element[];
 }
 
-export default function PollingPlacesByIdsSearchResultsContainer(props: Props) {
+export default function SearchByIdsResultsContainer(props: Props) {
 	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
 
 	const params = useParams();
@@ -109,7 +109,7 @@ export default function PollingPlacesByIdsSearchResultsContainer(props: Props) {
 				</Button>
 			</Box>
 
-			{isSearchBarFilterControlOpen === true && <SearchBarFilter marginBottom={1} />}
+			{isSearchBarFilterControlOpen === true && <SearchFilterComponent marginBottom={1} />}
 
 			{pollingPlacesLoaded === false && (
 				<Alert severity="warning" sx={{ mb: 1 }}>

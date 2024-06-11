@@ -7,16 +7,16 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React, { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
-import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
-import { selectMapFilterSettings, setMapFilterSettings } from '../../../app/appSlice';
-import { IMapFilterSettings, NomsOptionsAvailable } from '../../../icons/noms';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { selectMapFilterSettings, setMapFilterSettings } from '../../app/appSlice';
+import { IMapFilterSettings, NomsOptionsAvailable } from '../../icons/noms';
 
 interface Props {
 	marginBottom?: number;
 }
 
-export default function SearchBarFilter(props: Props) {
+export default function SearchFilterComponent(props: Props) {
 	const { marginBottom } = props;
 
 	const dispatch = useAppDispatch();

@@ -8,11 +8,11 @@ import { Election } from '../../../app/services/elections';
 import { useGetPollingPlaceByIdsLookupQuery } from '../../../app/services/pollingPlaces';
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterSettings } from '../../app/appSlice';
+import { doesPollingPlaceSatisifyFilterCriteria } from '../../map/mapFilterHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../mapFilterHelpers';
-import PollingPlacesByIdsSearchResultsContainer from '../searchBar/pollingPlacesByIdsSearchResults/pollingPlacesByIdsSearchResults';
-import PollingPlaceSearchResultsCard from '../searchBar/pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
-import { onViewOnMap } from '../searchBar/searchBarHelpers';
+import { onViewOnMap } from '../searchBarHelpers';
+import SearchResultsPollingPlaceCard from '../shared/searchResultsPollingPlaceCard';
+import SearchByIdsResultsContainer from './searchResultsContainer/searchByIdsResultsContainer';
 
 interface Props {
 	election: Election;
@@ -69,19 +69,19 @@ export default function SearchByIdsStackComponent(props: Props) {
 			)}
 
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<PollingPlacesByIdsSearchResultsContainer
+				<SearchByIdsResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					onViewOnMap={onClickViewOnMap}
 				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
-						<PollingPlaceSearchResultsCard
+						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
 							onChoosePollingPlace={onChoosePollingPlace || undefined}
 						/>
 					))}
-				</PollingPlacesByIdsSearchResultsContainer>
+				</SearchByIdsResultsContainer>
 			)}
 		</React.Fragment>
 	);

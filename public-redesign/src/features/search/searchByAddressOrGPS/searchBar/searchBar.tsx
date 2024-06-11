@@ -23,25 +23,25 @@ import { unByKey } from 'ol/Observable';
 import { EventsKey } from 'ol/events';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
-import { useUnmount } from '../../../app/hooks/useUnmount';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
+import { useUnmount } from '../../../../app/hooks/useUnmount';
 import {
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
 	navigateToSearchMapboxResults,
-} from '../../../app/routing/navigationHelpers';
-import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+} from '../../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
+import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
 	selectNumberOfMapFilterSettingsApplied,
 	selectSearchBarFilterControlState,
 	setSearchBarFilterControlState,
-} from '../../app/appSlice';
+} from '../../../app/appSlice';
+import { isSearchingYet } from '../../searchBarHelpers';
+import SearchFilterComponent from '../../shared/searchFilterComponent';
 import './searchBar.css';
-import SearchBarFilter from './searchBarFilter/searchBarFilter';
-import { isSearchingYet } from './searchBarHelpers';
 
 interface Props {
 	autoFocusSearchField?: boolean;
@@ -390,7 +390,7 @@ export default function SearchBar(props: Props) {
 
 			{(isWaitingForGPSLocation === true || isFetching === true) && <LinearProgress color="secondary" />}
 
-			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchBarFilter />}
+			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchFilterComponent />}
 
 			{isGeolocationErrored === true && (
 				<Alert severity="error" sx={{ mt: 2 }}>

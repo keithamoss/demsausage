@@ -19,7 +19,7 @@ interface Props {
 	children: JSX.Element[];
 }
 
-export default function PollingPlacesNearbySearchResultsContainer(props: Props) {
+export default function SearchByAddressOrGPSResultsContainer(props: Props) {
 	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
 
 	const params = useParams();

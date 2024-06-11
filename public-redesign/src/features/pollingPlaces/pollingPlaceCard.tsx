@@ -45,7 +45,7 @@ import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../
 import { isElectionLive } from '../elections/electionHelpers';
 import RedCrossOfShame from '../icons/red-cross-of-shame';
 import RunOut from '../icons/run-out';
-import { getNomsIconsForPollingPlace } from '../map/searchBar/searchBarHelpers';
+import { getNomsIconsForPollingPlace } from '../search/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,
 	getPollingPlaceNomsDescriptiveText,

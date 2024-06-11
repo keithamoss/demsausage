@@ -9,7 +9,7 @@ import DebugView from '../../features/debugView/debugView';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
-import SearchDrawer from '../../features/searchDrawer/searchDrawer';
+import SearchDrawer from '../../features/search/searchDrawer';
 import StallPermalink from '../../features/stalls/stallPermalink';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);

@@ -35,7 +35,7 @@ import { Helmet } from 'react-helmet-async';
 import { Election } from '../../app/services/elections';
 import { getBaseURL } from '../../app/utils';
 import { NomsOptionsAvailable } from '../icons/noms';
-import SearchComponent from '../map/searchBar/searchComponent';
+import SearchComponent from '../search/searchByAddressOrGPS/searchComponent';
 
 const bottomNav = 56;
 

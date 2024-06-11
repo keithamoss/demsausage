@@ -2,8 +2,8 @@ import { useAppSelector } from '../../app/hooks';
 import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
 import { selectAllElections } from '../elections/electionsSlice';
-import PollingPlaceSearchResultsCard from '../map/searchBar/pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
 import PollingPlaceCard from '../pollingPlaces/pollingPlaceCard';
+import SearchResultsPollingPlaceCard from '../search/shared/searchResultsPollingPlaceCard';
 
 export const getPollingPlacePropsFromURL = (url: string) => {
 	if ((url.match(/\//g) || []).length === 5) {
@@ -148,5 +148,5 @@ function PollingPlaceSearchResultsCardDebugViewEntrypointLayer2(
 		return null;
 	}
 
-	return <PollingPlaceSearchResultsCard pollingPlace={pollingPlace} />;
+	return <SearchResultsPollingPlaceCard pollingPlace={pollingPlace} />;
 }

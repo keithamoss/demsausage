@@ -14,9 +14,9 @@ import {
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import SearchComponent from '../map/searchBar/searchComponent';
-import SearchByIdsStackComponent from '../map/searchByIdsStack/searchByIdsStackComponent';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import SearchComponent from './searchByAddressOrGPS/searchComponent';
+import SearchByIdsStackComponent from './searchByIds/searchByIdsStackComponent';
 
 const StyledBox = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],

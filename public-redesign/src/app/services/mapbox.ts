@@ -1,4 +1,4 @@
-import { IMapboxGeocodingAPIResponse } from '../../features/map/searchBar/searchBarHelpers';
+import { IMapboxGeocodingAPIResponse } from '../../features/search/searchBarHelpers';
 import { api } from './api';
 
 export const mapboxGeocodingApi = api.injectEndpoints({

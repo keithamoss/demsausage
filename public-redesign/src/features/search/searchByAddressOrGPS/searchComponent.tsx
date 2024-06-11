@@ -11,11 +11,8 @@ import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
 import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { selectMapFilterSettings } from '../../app/appSlice';
+import { doesPollingPlaceSatisifyFilterCriteria } from '../../map/mapFilterHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../mapFilterHelpers';
-import PollingPlaceSearchResultsCard from './pollingPlacesNearbySearchResults/pollingPlaceSearchResultsCard';
-import PollingPlacesNearbySearchResultsContainer from './pollingPlacesNearbySearchResults/pollingPlacesNearbySearchResultsContainer';
-import SearchBar from './searchBar';
 import {
 	EMapboxPlaceType,
 	IMapboxGeocodingAPIResponseFeature,
@@ -25,7 +22,10 @@ import {
 	getMapboxSearchParamsForElection,
 	isSearchingYet,
 	onViewOnMap,
-} from './searchBarHelpers';
+} from '../searchBarHelpers';
+import SearchResultsPollingPlaceCard from '../shared/searchResultsPollingPlaceCard';
+import SearchBar from './searchBar/searchBar';
+import SearchByAddressOrGPSResultsContainer from './searchResultsContainer/searchByAddressOrGPSResultsContainer';
 
 interface Props {
 	election: Election;
@@ -197,19 +197,19 @@ export default function SearchComponent(props: Props) {
 			)}
 
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<PollingPlacesNearbySearchResultsContainer
+				<SearchByAddressOrGPSResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					onViewOnMap={onClickViewOnMap}
 				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
-						<PollingPlaceSearchResultsCard
+						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
 							onChoosePollingPlace={onChoosePollingPlace || undefined}
 						/>
 					))}
-				</PollingPlacesNearbySearchResultsContainer>
+				</SearchByAddressOrGPSResultsContainer>
 			)}
 		</React.Fragment>
 	);

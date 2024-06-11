@@ -5,19 +5,19 @@ import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
 import { Badge, Button, Divider, IconButton, InputAdornment, InputBase, Paper } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import {
 	navigateToSearchDrawer,
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
-} from '../../../app/routing/navigationHelpers';
-import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+} from '../../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
+import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
 	selectNumberOfMapFilterSettingsApplied,
 	setSearchBarFilterControlState,
-} from '../../app/appSlice';
+} from '../../../app/appSlice';
 import './searchBar.css';
 
 export default function SearchBarCosmeticNonFunctional() {

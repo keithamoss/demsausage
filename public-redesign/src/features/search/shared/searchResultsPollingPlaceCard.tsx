@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
-import { IPollingPlace } from '../../../pollingPlaces/pollingPlacesInterfaces';
+import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
 interface Props {
@@ -38,7 +38,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 	paddingTop: theme.spacing(0.5),
 }));
 
-export default function PollingPlaceSearchResultsCard(props: Props) {
+export default function SearchResultsPollingPlaceCard(props: Props) {
 	const { pollingPlace, onChoosePollingPlace } = props;
 
 	const onClickPollingPlace = useCallback(

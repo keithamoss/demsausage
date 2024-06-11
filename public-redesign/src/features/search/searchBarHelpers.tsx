@@ -3,19 +3,19 @@ import { View } from 'ol';
 import { transformExtent } from 'ol/proj';
 import React from 'react';
 import { NavigateFunction, Params } from 'react-router-dom';
-import { navigateToMapAndUpdateMapWithNewView } from '../../../app/routing/navigationHelpers';
-import { Election, IGeoJSONPoylgon } from '../../../app/services/elections';
-import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../../app/utils';
-import BaconandEggsIcon from '../../icons/bacon-and-eggs';
-import CakeIcon from '../../icons/cake';
-import CoffeeIcon from '../../icons/coffee';
-import HalalIcon from '../../icons/halal';
-import { NomsOptionsAvailable } from '../../icons/noms';
-import RedCrossOfShame from '../../icons/red-cross-of-shame';
-import SausageIcon from '../../icons/sausage';
-import VegoIcon from '../../icons/vego';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { getStandardViewPadding } from '../mapHelpers';
+import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers';
+import { Election, IGeoJSONPoylgon } from '../../app/services/elections';
+import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
+import BaconandEggsIcon from '../icons/bacon-and-eggs';
+import CakeIcon from '../icons/cake';
+import CoffeeIcon from '../icons/coffee';
+import HalalIcon from '../icons/halal';
+import { NomsOptionsAvailable } from '../icons/noms';
+import RedCrossOfShame from '../icons/red-cross-of-shame';
+import SausageIcon from '../icons/sausage';
+import VegoIcon from '../icons/vego';
+import { getStandardViewPadding } from '../map/mapHelpers';
+import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 // https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
 export interface IMapboxGeocodingAPIResponse {

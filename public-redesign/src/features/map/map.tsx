@@ -23,6 +23,7 @@ import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
+import SearchBarCosmeticNonFunctional from '../search/searchByAddressOrGPS/searchBar/searchBarCosmeticNonFunctional';
 import LayersSelector from './layers_selector';
 import {
 	IMapPollingPlaceGeoJSONFeatureCollection,
@@ -31,7 +32,6 @@ import {
 	isMapViewParamValid,
 } from './mapHelpers';
 import OpenLayersMap from './olMap/OpenLayersMap';
-import SearchBarCosmeticNonFunctional from './searchBar/searchBarCosmeticNonFunctional';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypointLayer1() {
