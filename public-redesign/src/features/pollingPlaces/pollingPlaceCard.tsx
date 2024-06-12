@@ -287,7 +287,7 @@ export default function PollingPlaceCard(props: Props) {
 								)}
 
 								{pollingPlace.stall.description !== '' && (
-									<Typography variant="body2" sx={{ marginBottom: 2 }}>
+									<Typography variant="body2" sx={{ marginBottom: 2, whiteSpace: 'break-spaces' }}>
 										{pollingPlace.stall.description}
 									</Typography>
 								)}
