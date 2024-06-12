@@ -2,8 +2,9 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceStatus, ProfileSettings,
-                                  StallStatus, TaskStatus)
+                                  PollingPlaceStatus,
+                                  PollingPlaceWheelchairAccess,
+                                  ProfileSettings, StallStatus, TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
@@ -127,7 +128,8 @@ class PollingPlaces(models.Model):
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
     state = models.CharField(max_length=8)
-    wheelchair_access = models.TextField(blank=True)
+    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess], default=PollingPlaceStatus.DRAFT)
+    wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)

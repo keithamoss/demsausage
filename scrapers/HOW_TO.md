@@ -30,6 +30,7 @@ There are certain required fields that Democracy Sausage needs to be able to map
 - `lat` and `lon`: The latitude and longitude of the polling place
 - `state`: The abbreviation of the state (e.g. WA)
 - `wheelchair_access`: A description of the level (if any) of wheelchair access available at the polling place (e.g. 'Fully wheelchair accessible')
+- `wheelchair_access_description`: A description of the exact nature of the wheelchair access available at the polling place, including important caveats (optional)
 - `extras`: A JSON data structure we use to store additional information not immediately required for mapping the polling places
 
 ## Optional fields

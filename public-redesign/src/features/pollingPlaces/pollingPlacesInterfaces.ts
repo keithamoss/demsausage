@@ -25,6 +25,13 @@ export enum PollingPlaceChanceOfSausage {
 	STRONG = 4,
 }
 
+export enum PollingPlaceWheelchairAccess {
+	NONE = 'None',
+	ASSISTED = 'Assisted',
+	FULL = 'Full',
+	UNKNOWN = 'Unknown',
+}
+
 export interface IGeoJSON {
 	type: string;
 	coordinates: [number, number];
@@ -36,7 +43,8 @@ export interface IPollingPlace {
 	geom: IGeoJSON;
 	facility_type: string | null;
 	booth_info: string;
-	wheelchair_access: string;
+	wheelchair_access: PollingPlaceWheelchairAccess;
+	wheelchair_access_description: string;
 	entrance_desc: string;
 	opening_hours: string;
 	premises: string;

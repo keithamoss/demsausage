@@ -358,6 +358,19 @@ export default function PollingPlaceCard(props: Props) {
 								<StyledListItemText primary="Wheelchair Access" secondary={pollingPlace.wheelchair_access} />
 							</StyledListItem>
 
+							{pollingPlace.wheelchair_access_description.length >= 1 && (
+								<StyledListItem disableGutters>
+									<StyledListItemIcon>
+										<AccessibleForwardIcon sx={{ color: mapaThemePrimaryGrey }} />
+									</StyledListItemIcon>
+
+									<StyledListItemText
+										primary="Wheelchair Access Information"
+										secondary={pollingPlace.wheelchair_access_description}
+									/>
+								</StyledListItem>
+							)}
+
 							{pollingPlace.divisions.length >= 1 && (
 								<StyledListItem disableGutters>
 									<StyledListItemIcon>

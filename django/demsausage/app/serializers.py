@@ -159,7 +159,7 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "ec_id", "extras")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "ec_id", "extras")
 
     def _update_facility_type(self, validated_data):
         try:
@@ -212,7 +212,7 @@ class PollingPlacesManagementSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "status", "election", "ec_id", "extras")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "status", "election", "ec_id", "extras")
 
 
 class PollingPlacesInfoSerializer(PollingPlacesSerializer):
@@ -291,7 +291,7 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "distance_km")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "distance_km")
 
 
 class StallsSerializer(serializers.ModelSerializer):

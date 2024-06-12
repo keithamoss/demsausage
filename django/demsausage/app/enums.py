@@ -20,6 +20,15 @@ class PollingPlaceStatus(str, EnumBase):
         return self.value
 
 
+class PollingPlaceWheelchairAccess(str, EnumBase):
+    NONE = "None"
+    ASSISTED = "Assisted"
+    FULL = "Full"
+    UNKNOWN = "Unknown"
+
+    def __str__(self):
+        return self.value
+
 class PollingPlaceChanceOfSausage(int, EnumBase):
     NO_IDEA = 0
     UNLIKELY = 1
