@@ -103,6 +103,14 @@ export default function DebugView() {
 						url: '/tasmanian_election_2018/polling_places/Branxholm_Community_Hall/TAS/',
 						text: 'Stall with a BBQ and cake, no stall name, no stall description, no wheelchair access, no booth info, no opening hours, and no division',
 					},
+					{
+						url: '/western_australian_senate_election_2014/polling_places/Dampier/Dampier_Community_Hall/WA/',
+						text: 'Stall with no reports, never any reports for chance of sausage, and some booth info',
+					},
+					{
+						url: '/new_south_wales_election_2019/polling_places/Oran_Park_Public_School/Oran_Park_Public_School/NSW/',
+						text: 'Stall with a really long description and lots of things on offer',
+					},
 				]
 					.filter((item, index) => index >= 0)
 					.map((item, index) => {
