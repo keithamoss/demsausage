@@ -272,66 +272,70 @@ export default function PollingPlaceCard(props: Props) {
 									</List>
 								)}
 
-								{pollingPlace.stall.name !== '' && (
-									<Typography
-										variant="h5"
-										sx={{
-											fontSize: 16,
-											fontWeight: 500,
-											color: 'rgb(0,0,0)',
-											paddingBottom: 1,
-										}}
-									>
-										{pollingPlace.stall.name}
-									</Typography>
-								)}
-
-								{pollingPlace.stall.description !== '' && (
-									<Typography variant="body2" sx={{ marginBottom: 2, whiteSpace: 'break-spaces' }}>
-										{pollingPlace.stall.description}
-									</Typography>
-								)}
-
-								<List dense sx={{ paddingBottom: 0, paddingTop: 0, marginBottom: 0 }}>
-									{pollingPlace.stall.noms.run_out === true && (
-										<StyledListItem disableGutters>
-											<StyledListItemIcon>
-												<RunOut />
-											</StyledListItemIcon>
-
-											<StyledListItemText
-												primary="Sold out!"
-												secondary="Our roving reporters have informed us that they've run out of food."
-											/>
-										</StyledListItem>
-									)}
-
-									{pollingPlaceHasReportsOfNoms(pollingPlace) === true && (
-										<StyledListItem disableGutters>
-											<StyledListItemIcon>
-												<RestaurantIcon sx={{ color: mapaThemePrimaryGrey }} />
-											</StyledListItemIcon>
-
-											<StyledListItemText
-												primary="On Offer"
-												secondary={getPollingPlaceNomsDescriptiveText(pollingPlace)}
+								{pollingPlace.stall.noms.nothing !== true && (
+									<React.Fragment>
+										{pollingPlace.stall.name !== '' && (
+											<Typography
+												variant="h5"
 												sx={{
-													'& .MuiListItemText-secondary:first-letter': { textTransform: 'capitalize' },
+													fontSize: 16,
+													fontWeight: 500,
+													color: 'rgb(0,0,0)',
+													paddingBottom: 1,
 												}}
-											/>
-										</StyledListItem>
-									)}
+											>
+												{pollingPlace.stall.name}
+											</Typography>
+										)}
 
-									{pollingPlace.stall.opening_hours !== '' && (
-										<StyledListItem disableGutters>
-											<StyledListItemIcon>
-												<AccessTimeIcon sx={{ color: mapaThemePrimaryGrey }} />
-											</StyledListItemIcon>
+										{pollingPlace.stall.description !== '' && (
+											<Typography variant="body2" sx={{ marginBottom: 2, whiteSpace: 'break-spaces' }}>
+												{pollingPlace.stall.description}
+											</Typography>
+										)}
 
-											<StyledListItemText primary="Stall Open" secondary={pollingPlace.stall.opening_hours} />
-										</StyledListItem>
-									)}
-								</List>
+										<List dense sx={{ paddingBottom: 0, paddingTop: 0, marginBottom: 0 }}>
+											{pollingPlace.stall.noms.run_out === true && (
+												<StyledListItem disableGutters>
+													<StyledListItemIcon>
+														<RunOut />
+													</StyledListItemIcon>
+
+													<StyledListItemText
+														primary="Sold out!"
+														secondary="Our roving reporters have informed us that they've run out of food."
+													/>
+												</StyledListItem>
+											)}
+
+											{pollingPlaceHasReportsOfNoms(pollingPlace) === true && (
+												<StyledListItem disableGutters>
+													<StyledListItemIcon>
+														<RestaurantIcon sx={{ color: mapaThemePrimaryGrey }} />
+													</StyledListItemIcon>
+
+													<StyledListItemText
+														primary="On Offer"
+														secondary={getPollingPlaceNomsDescriptiveText(pollingPlace)}
+														sx={{
+															'& .MuiListItemText-secondary:first-letter': { textTransform: 'capitalize' },
+														}}
+													/>
+												</StyledListItem>
+											)}
+
+											{pollingPlace.stall.opening_hours !== '' && (
+												<StyledListItem disableGutters>
+													<StyledListItemIcon>
+														<AccessTimeIcon sx={{ color: mapaThemePrimaryGrey }} />
+													</StyledListItemIcon>
+
+													<StyledListItemText primary="Stall Open" secondary={pollingPlace.stall.opening_hours} />
+												</StyledListItem>
+											)}
+										</List>
+									</React.Fragment>
+								)}
 							</React.Fragment>
 						)}
 
