@@ -110,7 +110,7 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
 export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) => {
 	let nomsList = getFoodDescription(pollingPlace);
 
-	if (pollingPlace.stall?.noms.free_text !== undefined) {
+	if (typeof pollingPlace.stall?.noms.free_text === 'string' && pollingPlace.stall?.noms.free_text.length >= 1) {
 		nomsList.push(pollingPlace.stall.noms.free_text);
 	}
 
