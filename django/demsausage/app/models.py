@@ -128,7 +128,7 @@ class PollingPlaces(models.Model):
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
     state = models.CharField(max_length=8)
-    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess], default=PollingPlaceStatus.DRAFT)
+    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess])
     wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
