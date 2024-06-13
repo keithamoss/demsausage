@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.yarn
 /.pnp
 .pnp.js
 
@@ -18,8 +19,9 @@
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 .eslintcache
+
+browserstack.ts
+
+.yarnrc.yml
+.pnp*

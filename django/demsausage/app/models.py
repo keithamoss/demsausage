@@ -2,18 +2,20 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceStatus, ProfileSettings,
-                                  StallStatus, TaskStatus)
+                                  PollingPlaceStatus,
+                                  PollingPlaceWheelchairAccess,
+                                  ProfileSettings, StallStatus, TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.util import make_logger
+from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from django.db.models import JSONField
-from model_utils import FieldTracker
-from simple_history.models import HistoricalRecords
 
 logger = make_logger(__name__)
 
@@ -77,6 +79,7 @@ class Elections(models.Model):
     short_name = models.TextField(unique=True)
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
+    is_federal = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
 
@@ -125,7 +128,8 @@ class PollingPlaces(models.Model):
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
     state = models.CharField(max_length=8)
-    wheelchair_access = models.TextField(blank=True)
+    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess])
+    wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)

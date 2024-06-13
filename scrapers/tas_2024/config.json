@@ -1,0 +1,27 @@
+{
+    "rename_columns": {
+        "Premise Name": "premises",
+        "Polling Place Name": "name",
+        "Premise Latitude": "lat",
+        "Premise Longitude": "lon",
+        "Division": "divisions",
+        "Disabled_Access": "wheelchair_access"
+    },
+    "address_fields": [
+        "Premise_Address_Line_1",
+        "Premise_Address_Line_2",
+        "Premise_Locality",
+        "Premise_Postcode"
+    ],
+    "extras": {
+        "fields": [
+            "Location_Within_Premise",
+            "Access_To_Location",
+            "VI_Vote_service"
+        ]
+    },
+    "address_format": "{Premise_Address_Line_1}, {Premise_Address_Line_2}, {Premise_Locality} {Premise_Postcode}",
+    "geocoding": {
+        "enabled": false
+    }
+}

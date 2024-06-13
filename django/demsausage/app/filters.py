@@ -1,9 +1,9 @@
-from django.db.models import Q
+from demsausage.app.exceptions import BadRequest
+from demsausage.app.models import PollingPlaces
+from demsausage.util import is_one_of_these_things_in_this_other_thing
 from django_filters import rest_framework as filters
 
-from demsausage.app.models import PollingPlaces
-from demsausage.app.exceptions import BadRequest
-from demsausage.util import is_one_of_these_things_in_this_other_thing
+from django.db.models import Q
 
 
 class ValueInFilter(filters.BaseInFilter):
@@ -41,8 +41,9 @@ class LonLatFilter(filters.Filter):
 
     def filter(self, qs, value):
         if value not in (None, ""):
-            from django.contrib.gis.geos import Point
             from demsausage.app.sausage.polling_places import find_by_distance
+
+            from django.contrib.gis.geos import Point
 
             try:
                 lon, lat = [float(v) for v in value[0:1000].split(",")]

@@ -9,7 +9,7 @@ Requirements:
 
 ### First Time
 
-If this is the first time you're running Democracy Sausage you'll need to:
+If this is the first time you're running Democracy Sausage you'll need to do a few things:
 
 #### Hosts file
 
