@@ -39,6 +39,7 @@ export function loadStateFromLocalStorage() {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const parsed = JSON.parse(serializedState);
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		if (isAppState(parsed)) {
 			return { app: { ...initialAppState, ...parsed } };
 		} else {
