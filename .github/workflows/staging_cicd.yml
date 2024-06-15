@@ -1,8 +1,8 @@
 name: Staging CI/CD
 
 on:
-  # push:
-  #   branches: [staging]
+  push:
+    branches: [staging]
   pull_request:
     branches: [staging]
     types: [closed]
