@@ -14,7 +14,7 @@ services:
       - ./secrets/sausage-web.production.env
       - ./secrets/sausage-web-db.dev.env
   public:
-    image: node:16-alpine3.14
+    image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
     command: build
     volumes:
@@ -32,7 +32,7 @@ services:
     env_file:
       - secrets/sausage-public-redesign-frontend.production.env
   admin:
-    image: node:16-alpine3.14
+    image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
     command: build
     volumes:
