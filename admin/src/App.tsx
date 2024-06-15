@@ -8,6 +8,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import { List, ListItem } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
 import Snackbar from 'material-ui/Snackbar'
+import { ToolbarGroup } from 'material-ui/Toolbar'
 import {
   ActionFace,
   ActionGrade,
@@ -17,10 +18,9 @@ import {
   ContentSend,
   ToggleStar,
 } from 'material-ui/svg-icons'
-import { ToolbarGroup } from 'material-ui/Toolbar'
 import * as React from 'react'
-import { browserHistory, Link } from 'react-router'
-import styled from 'styled-components'
+import { Link, browserHistory } from 'react-router'
+import styled, { AnyStyledComponent } from 'styled-components'
 import './App.css'
 import { IModule as IAppModule } from './redux/modules/app'
 import { IElection } from './redux/modules/elections'
@@ -40,12 +40,12 @@ const TitleLogo = styled.img`
   margin-right: 10px;
 `
 
-const HeaderBarButton = styled(FlatButton)`
+const HeaderBarButton = styled(FlatButton as unknown as AnyStyledComponent)`
   color: #ffffff !important;
   margin: 4px 0px !important;
 `
 
-const BottomNavBadgeWithIcon = styled(Badge)`
+const BottomNavBadgeWithIcon = styled(Badge as unknown as AnyStyledComponent)`
   padding: 0px !important;
   width: auto !important;
 
@@ -80,6 +80,7 @@ class MenuListItem extends React.Component<any, any> {
 }
 
 interface IProps {
+  children: React.ReactNode;
   muiThemePalette: any
   app: IAppModule
   user: IUser

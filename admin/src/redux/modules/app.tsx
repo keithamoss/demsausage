@@ -14,12 +14,6 @@ const FINISH_FETCH = 'ealgis/app/FINISH_FETCH'
 const SET_LAST_PAGE = 'ealgis/app/SET_LAST_PAGE'
 const TOGGLE_MODAL = 'ealgis/app/TOGGLE_MODAL'
 
-export enum eAppEnv {
-  DEV = 1,
-  TEST = 2,
-  PROD = 3,
-}
-
 const initialState: IModule = {
   loading: true,
   requestsInProgress: 0,
@@ -113,24 +107,37 @@ export interface IAction {
 
 // Side effects, only as applicable
 // e.g. thunks, epics, et cetera
+export enum eAppEnv {
+	DEVELOPMENT = 1,
+	STAGING = 2,
+	PRODUCTION = 3,
+}
+
 export function getEnvironment(): eAppEnv {
-  return process.env.NODE_ENV === 'development' ? eAppEnv.DEV : eAppEnv.PROD
+	switch (import.meta.env.VITE_ENVIRONMENT) {
+		case 'DEVELOPMENT':
+			return eAppEnv.DEVELOPMENT;
+		case 'STAGING':
+			return eAppEnv.STAGING;
+		case 'PRODUCTION':
+			return eAppEnv.PRODUCTION;
+	}
 }
 
 export function isDevelopment(): boolean {
-  return getEnvironment() !== eAppEnv.PROD
+	return getEnvironment() === eAppEnv.DEVELOPMENT;
 }
 
 export function getAPIBaseURL(): string {
-  return process.env.REACT_APP_API_BASE_URL!
+  return import.meta.env.VITE_API_BASE_URL
 }
 
 export function getBaseURL(): string {
-  return process.env.REACT_APP_SITE_BASE_URL!
+  return import.meta.env.VITE_SITE_BASE_URL
 }
 
 export function getPublicSiteBaseURL(): string {
-  return process.env.REACT_APP_PUBLIC_SITE_BASE_URL!
+  return import.meta.env.VITE_PUBLIC_SITE_BASE_URL
 }
 
 export function fetchInitialAppState() {

@@ -23,11 +23,13 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
@@ -55,16 +57,21 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
           mkdir ./build
           mkdir ./nginx-prod/build
+
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
 
       - name: Public Admin - Build
         run: docker compose --file build_staging.yml run admin
@@ -87,11 +94,13 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
@@ -122,11 +131,13 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
