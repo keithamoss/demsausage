@@ -66,6 +66,9 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
+
       - name: Public Admin - Build
         run: docker compose --file build_staging.yml run admin
 

@@ -1,5 +1,6 @@
 import { setDrawerOpen } from 'material-ui-responsive-drawer'
 import LinearProgress from 'material-ui/LinearProgress'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {
   // deepPurple200,
   deepPurple100,
@@ -15,13 +16,12 @@ import {
   yellow500,
 } from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { fade } from 'material-ui/utils/colorManipulator'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import App from './App'
 import { LoginDialog } from './authentication/login-dialog/LoginDialog'
-import { fetchInitialAppState, IModule as IAppModule, isDevelopment } from './redux/modules/app'
+import { IModule as IAppModule, fetchInitialAppState, isDevelopment } from './redux/modules/app'
 import { IElection, setCurrentElection } from './redux/modules/elections'
 import { IStore } from './redux/modules/reducer'
 import { IModule as ISnackbarsModule, iterate as iterateSnackbar } from './redux/modules/snackbars'
@@ -86,7 +86,7 @@ function isResponsiveAndOverBreakPoint(browser: any, responsiveDrawer: any, brea
   return browser.greaterThan[breakPoint] && responsiveDrawer.responsive
 }
 
-class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps, IStateProps> {
+class AppContainer extends React.Component<IStoreProps & IDispatchProps & IRouteProps & {children: React.ReactNode}, IStateProps> {
   private intervalId: number | undefined
 
   UNSAFE_componentWillMount() {

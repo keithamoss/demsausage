@@ -1,10 +1,10 @@
-version: "3.7"
+version: '3.7'
 services:
   db:
     image: postgis/postgis:15-3.3-alpine
     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     ports:
-      - "5432:5432"
+      - '5432:5432'
     env_file:
       - secrets/sausage-db.dev.env
     volumes:
@@ -21,31 +21,31 @@ services:
   redis:
     image: bitnami/redis:6.2-debian-10
     ports:
-      - "6379:6379"
+      - '6379:6379'
     env_file:
       - secrets/redis.env
     volumes:
       - ./redis:/bitnami/redis/data
     # https://github.com/docker-library/redis/issues/35#issuecomment-360810072
     sysctls:
-      net.core.somaxconn: "511"
+      net.core.somaxconn: '511'
   memcached:
     image: memcached
     expose:
-      - "11211"
+      - '11211'
     command:
       # 5mb to accommodate the larger polling place GeoJSON objects
-      - "--max-item-size=5242880"
+      - '--max-item-size=5242880'
   memcached_gui:
-      # http://localhost/index.php (admin/admin)
-      image: jacksoncage/phpmemcachedadmin
-      environment:
-          - MEMCACHED_HOST=memcached
-          - MEMCACHED_PORT=11211
-      depends_on:
-          - memcached
-      ports:
-          - "80:80"
+    # http://localhost/index.php (admin/admin)
+    image: jacksoncage/phpmemcachedadmin
+    environment:
+      - MEMCACHED_HOST=memcached
+      - MEMCACHED_PORT=11211
+    depends_on:
+      - memcached
+    ports:
+      - '80:80'
   # memcached_gui:
   #     # http://localhost/index.php (admin/admin)
   #     image: bastienm/phpmemadmin
@@ -65,7 +65,7 @@ services:
       - ./data/:/data:delegated
       - ./electoral_boundaries/:/electoral_boundaries:delegated
     ports:
-      - "8000:8000"
+      - '8000:8000'
     env_file:
       - secrets/sausage-web.dev.env
       - secrets/sausage-web-db.dev.env
@@ -90,7 +90,7 @@ services:
     volumes:
       - ./rq-dashboard/:/app:delegated
     ports:
-      - "9181:9181"
+      - '9181:9181'
     env_file:
       - secrets/sausage-rq-dashboard.dev.env
     depends_on:
@@ -114,8 +114,6 @@ services:
     entrypoint: /app/docker-entrypoint.sh
     volumes:
       - ./admin:/app:delegated
-    environment:
-      - PORT=3001
     env_file:
       - secrets/sausage-admin-frontend.dev.env
   nginx:
@@ -130,9 +128,9 @@ services:
       - frontend_public_redesign
       - frontend_admin
     ports:
-      - "443:443"
-      - "3001:3001"
-      - "8001:8001"
+      - '443:443'
+      - '3001:3001'
+      - '8001:8001'
     # So Django can talk to the nginx container for WebDriver screenshot generation
     # Ref: https://stackoverflow.com/a/60026589
     networks:
