@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   django:
     build: django/
@@ -11,8 +10,8 @@ services:
     environment:
       - BUILD=YES
     env_file:
-      - ./secrets/sausage-web.production.env
-      - ./secrets/sausage-web-db.dev.env
+      - ./secrets/prod/sausage-web.production.env
+      - ./secrets/dev/sausage-web-db.dev.env
   public:
     image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
@@ -21,7 +20,7 @@ services:
       - ./public:/app:delegated
       - ./nginx-prod/build/:/build:delegated
     env_file:
-      - secrets/sausage-public-frontend.production.env
+      - secrets/prod/sausage-public-frontend.production.env
   public_redesign:
     image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
@@ -30,7 +29,7 @@ services:
       - ./public-redesign:/app:delegated
       - ./nginx-prod/build/:/build:delegated
     env_file:
-      - secrets/sausage-public-redesign-frontend.production.env
+      - secrets/prod/sausage-public-redesign-frontend.production.env
   admin:
     image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
@@ -39,4 +38,4 @@ services:
       - ./admin:/app:delegated
       - ./nginx-prod/build/:/build:delegated
     env_file:
-      - secrets/sausage-admin-frontend.production.env
+      - secrets/prod/sausage-admin-frontend.production.env
