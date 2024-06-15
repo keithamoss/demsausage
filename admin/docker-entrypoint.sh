@@ -12,8 +12,11 @@ if [ ! -d ".yarn" ]; then
 fi
 
 yarn set version stable
+yarn --version
+which yarn
 
 yarn install
+exit
 
 if [ "$VITE_ENVIRONMENT" = "DEVELOPMENT" ]; then
   yarn run start
