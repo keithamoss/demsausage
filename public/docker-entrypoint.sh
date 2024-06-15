@@ -13,7 +13,9 @@ fi
 
 yarn set version stable
 
-yarn install
+# --no-immutable only to workaround the bug where GHA will change the lockfile (e.g. @adobe/css-tools cacheKey) from what local dev set
+# No idea why, it could be due to the ancient deps we've got. Ignoring it as it only affects public/ and admin/ and we're freezing those parts of the codebase.
+yarn install --no-immutable
 
 if [ "$VITE_ENVIRONMENT" = "DEVELOPMENT" ]; then
   yarn run start
