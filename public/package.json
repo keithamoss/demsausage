@@ -1,6 +1,7 @@
 {
   "name": "public",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
@@ -50,6 +51,7 @@
     "web-vitals": "^3.1.0"
   },
   "devDependencies": {
+    "@sentry/vite-plugin": "^2.18.0",
     "@types/history": "^5.0.0",
     "@types/jest": "^28.1.8",
     "@types/js-cookie": "^3.0.2",
@@ -72,6 +74,8 @@
     "@types/victory": "^35.0.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.6.0",
@@ -83,26 +87,19 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^12.4.2",
-    "prettier": "^2.8.1",
+    "prettier": "^3.2.5",
     "prettier-eslint": "^15.0.1",
-    "react-scripts": "^4.0.3",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vite": "^5.3.1",
+    "vite-plugin-checker": "^0.6.4",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx --cache ./",
-    "fix": "eslint --ext .js,.jsx,.ts,.tsx --cache  --fix ./"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "vite --host",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} --cache --max-warnings=0",
+    "lint:fix": "eslint src/**/*.ts{,x} --fix"
   },
   "browserslist": {
     "production": [
@@ -117,12 +114,5 @@
       "last 1 safari version"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
-  }
+  "packageManager": "yarn@4.3.0"
 }
