@@ -1148,6 +1148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/types@npm:^8.9.2":
+  version: 8.9.2
+  resolution: "@sentry/types@npm:8.9.2"
+  checksum: 10/a38f4dd21330a3d4c848f94ba678ce24ce5489236286247bae351db1d97d49733cd4888b59e1b193077fe38a1bd8e04e72067e749897bfd15d657cc551333657
+  languageName: node
+  linkType: hard
+
 "@sentry/utils@npm:7.117.0":
   version: 7.117.0
   resolution: "@sentry/utils@npm:7.117.0"
@@ -1652,6 +1659,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-is@npm:^18":
+  version: 18.3.0
+  resolution: "@types/react-is@npm:18.3.0"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10/c7c9303a76902ecc2bd38a27047da8ffb9d5a19fe6e1f785e13698e7641e7afff0c6a49ddf1c22fb20b58f4fb689d83a887641f62db4ec2fdea3d04124a84023
+  languageName: node
+  linkType: hard
+
 "@types/react-redux@npm:7.1.24":
   version: 7.1.24
   resolution: "@types/react-redux@npm:7.1.24"
@@ -2021,6 +2037,7 @@ __metadata:
   resolution: "admin@workspace:."
   dependencies:
     "@sentry/browser": "npm:^7.29.0"
+    "@sentry/types": "npm:^8.9.2"
     "@sentry/vite-plugin": "npm:^2.18.0"
     "@testing-library/dom": "npm:^10.1.0"
     "@testing-library/jest-dom": "npm:^5.16.5"
@@ -2037,6 +2054,7 @@ __metadata:
     "@types/qs": "npm:^6.9.7"
     "@types/react": "npm:18"
     "@types/react-dom": "npm:18"
+    "@types/react-is": "npm:^18"
     "@types/react-redux": "npm:7.1.24"
     "@types/react-router": "npm:3.0.28"
     "@types/react-router-redux": "npm:4.0.55"
@@ -2070,10 +2088,12 @@ __metadata:
     ol: "npm:^6.14.1"
     prettier: "npm:^3.2.5"
     prettier-eslint: "npm:^15.0.1"
+    prop-types: "npm:^15.8.1"
     qs: "npm:^6.11.0"
     react: "npm:18"
     react-dom: "npm:18"
     react-google-maps: "npm:^9.4.5"
+    react-is: "npm:^18.3.1"
     react-redux: "npm:^7.2.9"
     react-router: "npm:^3.2.6"
     react-router-redux: "npm:^4.0.8"
@@ -6258,7 +6278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.0.0":
+"react-is@npm:^18.0.0, react-is@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
