@@ -135,7 +135,7 @@ const isFooterNavBarVisible = (content: any) => {
 	return !('muiName' in content.type) || content.type.muiName !== 'SausageMapContainer';
 };
 
-type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps;
+type TComponentProps = IStoreProps & IDispatchProps & IRouterProps & IOwnProps & { children: React.ReactNode };
 class AppContainer extends React.Component<TComponentProps, IStateProps> {
 	async componentDidMount() {
 		const { getInitialAppState, params, setEmbedMapFromRoute, location } = this.props;
