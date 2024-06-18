@@ -269,7 +269,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.9.2":
   version: 7.24.7
   resolution: "@babel/runtime@npm:7.24.7"
   dependencies:
@@ -1648,7 +1648,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4.17.6":
+"@types/lodash-es@npm:^4.17.9":
   version: 4.17.12
   resolution: "@types/lodash-es@npm:4.17.12"
   dependencies:
@@ -1730,15 +1730,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-copy-to-clipboard@npm:^5.0.4":
-  version: 5.0.7
-  resolution: "@types/react-copy-to-clipboard@npm:5.0.7"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10c0/33bea4549fa263b597d0dedb3807f99286d8ccf59adb370e3d82d1c9075195925a343982abd73c63cc47854a7240ddae79873a5cb3590c9b33c1b65bf9d07689
-  languageName: node
-  linkType: hard
-
 "@types/react-dom@npm:18":
   version: 18.3.0
   resolution: "@types/react-dom@npm:18.3.0"
@@ -1766,7 +1757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-is@npm:^18.3.0":
+"@types/react-is@npm:^18":
   version: 18.3.0
   resolution: "@types/react-is@npm:18.3.0"
   dependencies:
@@ -1775,7 +1766,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:^7.1.20, @types/react-redux@npm:^7.1.24":
+"@types/react-redux@npm:7.1.24":
+  version: 7.1.24
+  resolution: "@types/react-redux@npm:7.1.24"
+  dependencies:
+    "@types/hoist-non-react-statics": "npm:^3.3.0"
+    "@types/react": "npm:*"
+    hoist-non-react-statics: "npm:^3.3.0"
+    redux: "npm:^4.0.0"
+  checksum: 10c0/8e08620e31474b96fe49934bd909b00a5200e53284d2997e838476ae29290610b2d88b5a93eb717d4c09e4a07f532b8bd84341b420bf4cc36fd9d3456854dd90
+  languageName: node
+  linkType: hard
+
+"@types/react-redux@npm:^7.1.20":
   version: 7.1.33
   resolution: "@types/react-redux@npm:7.1.33"
   dependencies:
@@ -1787,13 +1790,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-redux@npm:^4.0.55":
-  version: 4.0.58
-  resolution: "@types/react-router-redux@npm:4.0.58"
+"@types/react-router-redux@npm:4.0.55":
+  version: 4.0.55
+  resolution: "@types/react-router-redux@npm:4.0.55"
   dependencies:
     "@types/history": "npm:^3.2.5"
     redux: "npm:^3.6.0"
-  checksum: 10c0/e610c4a81667343d36baceb06432332ad5f49bc486663f19df51e79840bcfb91c173fa96857609267d73f934506cb3ed556db818a27d2b1d20e34786199f5ff0
+  checksum: 10c0/e9a350b622cac38baac44d628ce9866c349ef9cfc1c8f55b004ca85827724b1b3f51b5c3d6f7c6cde517cb0dc25a603c6c64d9ae700f53984c1e9a09fe8c0e43
   languageName: node
   linkType: hard
 
@@ -1807,12 +1810,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:^4":
-  version: 4.4.10
-  resolution: "@types/react-transition-group@npm:4.4.10"
+"@types/react-transition-group@npm:^1":
+  version: 1.1.11
+  resolution: "@types/react-transition-group@npm:1.1.11"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 10c0/3eb9bca143abc21eb781aa5cb1bded0c9335689d515bf0513fb8e63217b7a8122c6a323ecd5644a06938727e1f467ee061d8df1c93b68825a80ff1b47ab777a2
+  checksum: 10c0/0d13d8249744610f417097a06838054f7223ed9d37345b1b468439f3f913a92d8c8f53611dbc25072775f69f5921d94a282f32d32702835b69dac418e67410b0
   languageName: node
   linkType: hard
 
@@ -1871,14 +1874,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:^5.1.26":
-  version: 5.1.34
-  resolution: "@types/styled-components@npm:5.1.34"
+"@types/styled-components@npm:5.1.26":
+  version: 5.1.26
+  resolution: "@types/styled-components@npm:5.1.26"
   dependencies:
     "@types/hoist-non-react-statics": "npm:*"
     "@types/react": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/5bce93ea2c6161fc45daaf863eefdc20672e839ae486597c40b95e7978e249c160c1bc9706f56cb5152a7ef63cf485d15a9502889169ef945281f511e4b2d5a0
+  checksum: 10c0/61c53b035d82bbf6071d3f15348f2e9a43af8c28c630ab472d153277082a578aa60116ddc67bcfea1340d93577d5758c359f0a4d4d1291a419cebb3f8677b63e
   languageName: node
   linkType: hard
 
@@ -3240,16 +3243,6 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.1.2"
   checksum: 10c0/1d2d3e4eadac2c4f4c8c7470a737ab32b7ec28237c4d094ea967ec3184168fd12452196fcc424a5d7860b6176117301aeaecba39467bf1a6e8492a8e5c9639d1
-  languageName: node
-  linkType: hard
-
-"dom-helpers@npm:^5.0.1":
-  version: 5.2.1
-  resolution: "dom-helpers@npm:5.2.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.8.7"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/f735074d66dd759b36b158fa26e9d00c9388ee0e8c9b16af941c38f014a37fc80782de83afefd621681b19ac0501034b4f1c4a3bff5caa1b8667f0212b5e124c
   languageName: node
   linkType: hard
 
@@ -6425,7 +6418,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.5.6, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.5.6, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6465,24 +6458,23 @@ __metadata:
     "@types/history": "npm:^5.0.0"
     "@types/jest": "npm:^28.1.8"
     "@types/js-cookie": "npm:^3.0.2"
-    "@types/lodash-es": "npm:^4.17.6"
+    "@types/lodash-es": "npm:^4.17.9"
     "@types/luxon": "npm:^3.2.0"
     "@types/material-ui": "npm:^0.21.12"
     "@types/node": "npm:^18.11.16"
     "@types/prop-types": "npm:^15.7.5"
     "@types/qs": "npm:^6.9.7"
     "@types/react": "npm:18"
-    "@types/react-copy-to-clipboard": "npm:^5.0.4"
     "@types/react-dom": "npm:18"
     "@types/react-helmet": "npm:^6.1.6"
-    "@types/react-is": "npm:^18.3.0"
-    "@types/react-redux": "npm:^7.1.24"
+    "@types/react-is": "npm:^18"
+    "@types/react-redux": "npm:7.1.24"
     "@types/react-router": "npm:3.0.28"
-    "@types/react-router-redux": "npm:^4.0.55"
-    "@types/react-transition-group": "npm:^4"
+    "@types/react-router-redux": "npm:4.0.55"
+    "@types/react-transition-group": "npm:^1"
     "@types/recompose": "npm:^0.30.10"
     "@types/redux-form": "npm:^8.3.5"
-    "@types/styled-components": "npm:^5.1.26"
+    "@types/styled-components": "npm:5.1.26"
     "@types/victory": "npm:^35.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^4.33.0"
     "@typescript-eslint/parser": "npm:^4.33.0"
@@ -6531,16 +6523,16 @@ __metadata:
     react-router-redux: "npm:^4.0.8"
     react-string-replace: "npm:^1.1.0"
     react-tiny-virtual-list: "npm:^2.2.0"
-    react-transition-group: "npm:^4.4.5"
+    react-transition-group: "npm:^1.2.1"
     recompose: "npm:^0.30.0"
     redux: "npm:^4.2.0"
     redux-devtools-extension: "npm:^2.13.9"
     redux-form: "npm:^8.3.9"
     redux-form-material-ui: "npm:^4.3.4"
     redux-responsive: "npm:^4.3.8"
-    redux-thunk: "npm:^2.4.1"
-    reselect: "npm:^4.1.6"
-    styled-components: "npm:^5.3.6"
+    redux-thunk: "npm:^2.4.2"
+    reselect: "npm:^4.1.7"
+    styled-components: "npm:5.3.6"
     typescript: "npm:^4.7.4"
     usehooks-ts: "npm:^2.9.1"
     victory: "npm:^36.6.8"
@@ -6875,21 +6867,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:^4.4.5":
-  version: 4.4.5
-  resolution: "react-transition-group@npm:4.4.5"
-  dependencies:
-    "@babel/runtime": "npm:^7.5.5"
-    dom-helpers: "npm:^5.0.1"
-    loose-envify: "npm:^1.4.0"
-    prop-types: "npm:^15.6.2"
-  peerDependencies:
-    react: ">=16.6.0"
-    react-dom: ">=16.6.0"
-  checksum: 10c0/2ba754ba748faefa15f87c96dfa700d5525054a0141de8c75763aae6734af0740e77e11261a1e8f4ffc08fd9ab78510122e05c21c2d79066c38bb6861a886c82
-  languageName: node
-  linkType: hard
-
 "react@npm:18":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
@@ -7003,7 +6980,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:^2.4.1, redux-thunk@npm:^2.4.2":
+"redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
   peerDependencies:
@@ -7102,7 +7079,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:^4.1.6, reselect@npm:^4.1.8":
+"reselect@npm:^4.1.7, reselect@npm:^4.1.8":
   version: 4.1.8
   resolution: "reselect@npm:4.1.8"
   checksum: 10c0/06a305a504affcbb67dd0561ddc8306b35796199c7e15b38934c80606938a021eadcf68cfd58e7bb5e17786601c37602a3362a4665c7bf0a96c1041ceee9d0b7
@@ -7699,9 +7676,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^5.3.6":
-  version: 5.3.11
-  resolution: "styled-components@npm:5.3.11"
+"styled-components@npm:5.3.6":
+  version: 5.3.6
+  resolution: "styled-components@npm:5.3.6"
   dependencies:
     "@babel/helper-module-imports": "npm:^7.0.0"
     "@babel/traverse": "npm:^7.4.5"
@@ -7717,7 +7694,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 10c0/90b73479770c5d68e22e6366d210119d7203154a3e49dc828f6f6b4c2d5c077f7548210dfddd0af3cb15b0b63fab3eec8dc995c1734e97a313a9b83ba893668e
+  checksum: 10c0/14c0c1fa2944a753fcdaef10478c340046076163ad419eb7a4a37602e953cf63df3603961abdce7b4e780c2cc828cdf1c7a5f7d96fb07fabc24f23997980d69a
   languageName: node
   linkType: hard
 
