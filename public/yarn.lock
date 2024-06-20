@@ -1506,7 +1506,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-cookie@npm:^3.0.2":
+"@types/js-cookie@npm:^3":
   version: 3.0.6
   resolution: "@types/js-cookie@npm:3.0.6"
   checksum: 10c0/173afaf5ea9d86c22395b9d2a00b6adb0006dcfef165d6dcb0395cdc32f5a5dcf9c3c60f97194119963a15849b8f85121e1ae730b03e40bc0c29b84396ba22f9
@@ -3688,7 +3688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.1":
+"js-cookie@npm:^3.0.5":
   version: 3.0.5
   resolution: "js-cookie@npm:3.0.5"
   checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
@@ -4600,7 +4600,7 @@ __metadata:
     "@testing-library/user-event": "npm:^14.4.3"
     "@types/history": "npm:^5.0.0"
     "@types/jest": "npm:^28.1.8"
-    "@types/js-cookie": "npm:^3.0.2"
+    "@types/js-cookie": "npm:^3"
     "@types/lodash-es": "npm:^4.17.9"
     "@types/luxon": "npm:^3.2.0"
     "@types/material-ui": "npm:^0.21.12"
@@ -4625,7 +4625,7 @@ __metadata:
     copy-to-clipboard: "npm:^3.3.3"
     core-js: "npm:^3.26.1"
     dot-prop-immutable: "npm:^2.1.1"
-    js-cookie: "npm:^3.0.1"
+    js-cookie: "npm:^3.0.5"
     lodash-es: "npm:^4.17.21"
     luxon: "npm:^3.2.1"
     material-ui: "npm:^0.20.2"
