@@ -2,17 +2,25 @@ import CloseIcon from '@mui/icons-material/Close';
 import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import MapIcon from '@mui/icons-material/Map';
-import { Alert, AlertTitle, Badge } from '@mui/material';
+import { Alert, AlertTitle, Badge, styled, useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
 import SearchFilterComponent from '../../shared/searchFilterComponent';
+
+const IconButtonOutlined = styled(Button)({
+	minWidth: '39px',
+	'& .MuiButton-icon': {
+		marginLeft: 0,
+		marginRight: 0,
+	},
+});
 
 interface Props {
 	numberOfResults: number;
@@ -26,6 +34,8 @@ export default function SearchByIdsResultsContainer(props: Props) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+
+	const isMobile = useMediaQuery('(max-width: 485px)');
 
 	// ######################
 	// Filter Control
@@ -85,28 +95,53 @@ export default function SearchByIdsResultsContainer(props: Props) {
 					view on map
 				</Button>
 
-				<Button
-					size="small"
-					sx={{ mr: 1 }}
-					startIcon={
-						isMapFiltered === true ? (
-							<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
-								<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
-							</Badge>
-						) : (
-							<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
-						)
-					}
-					onClick={onClickFilterControl}
-					aria-label="Open the filter panel to control which types of polling places are shown on the map"
-					variant="outlined"
-				>
-					filter
-				</Button>
+				{isMobile === true ? (
+					<React.Fragment>
+						<IconButtonOutlined
+							size="small"
+							sx={{ mr: 1 }}
+							startIcon={
+								isMapFiltered === true ? (
+									<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
+										<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+									</Badge>
+								) : (
+									<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+								)
+							}
+							onClick={onClickFilterControl}
+							aria-label="Open the filter panel to control which types of polling places are shown on the map"
+							variant="outlined"
+						/>
 
-				<Button size="small" startIcon={<CloseIcon />} onClick={onClose} variant="outlined">
-					close
-				</Button>
+						<IconButtonOutlined size="small" startIcon={<CloseIcon />} onClick={onClose} variant="outlined" />
+					</React.Fragment>
+				) : (
+					<React.Fragment>
+						<Button
+							size="small"
+							sx={{ mr: 1 }}
+							startIcon={
+								isMapFiltered === true ? (
+									<Badge badgeContent={numberOfMapFilterSettingsApplied} color="secondary">
+										<FilterAltOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+									</Badge>
+								) : (
+									<FilterAltOffOutlinedIcon sx={{ color: mapaThemePrimaryPurple }} />
+								)
+							}
+							onClick={onClickFilterControl}
+							aria-label="Open the filter panel to control which types of polling places are shown on the map"
+							variant="outlined"
+						>
+							filter
+						</Button>
+
+						<Button size="small" startIcon={<CloseIcon />} onClick={onClose} variant="outlined">
+							close
+						</Button>
+					</React.Fragment>
+				)}
 			</Box>
 
 			{isSearchBarFilterControlOpen === true && <SearchFilterComponent marginBottom={1} />}
