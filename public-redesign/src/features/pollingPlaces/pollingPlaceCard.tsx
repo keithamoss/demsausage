@@ -23,6 +23,7 @@ import {
 	ListItemIcon,
 	Snackbar,
 	useTheme,
+	SvgIcon,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -43,8 +44,6 @@ import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
-import RedCrossOfShame from '../icons/red-cross-of-shame';
-import RunOut from '../icons/run-out';
 import { getNomsIconsForPollingPlace } from '../search/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,
@@ -58,6 +57,7 @@ import {
 	pollingPlaceHasReportsOfNoms,
 } from './pollingPlaceHelpers';
 import { IPollingPlace } from './pollingPlacesInterfaces';
+import { supportingIcons } from '../icons/iconHelpers';
 
 const StyledCardHeader = styled(CardHeader)(() => ({
 	// pointerEvents: "all",
@@ -68,6 +68,8 @@ const FlexboxIcons = styled('div')(() => ({
 	marginLeft: 1,
 	svg: {
 		marginRight: '10px',
+		width: '30px',
+		height: '30px',
 	},
 }));
 
@@ -260,8 +262,16 @@ export default function PollingPlaceCard(props: Props) {
 								{pollingPlace.stall.noms.nothing === true && (
 									<List dense sx={{ paddingTop: 0, paddingBottom: 0, marginBottom: 0 }}>
 										<StyledListItem disableGutters>
-											<StyledListItemIcon>
-												<RedCrossOfShame sx={{ color: mapaThemePrimaryGrey }} />
+											<StyledListItemIcon
+												sx={{
+													'& svg': {
+														width: 48,
+														height: 48,
+													},
+												}}
+											>
+												{supportingIcons.red_cross.icon.react}
+												{/* <RedCrossOfShame sx={{ color: mapaThemePrimaryGrey, width: 64, height: 64 }} /> */}
 											</StyledListItemIcon>
 
 											<StyledListItemText
@@ -297,8 +307,15 @@ export default function PollingPlaceCard(props: Props) {
 										<List dense sx={{ paddingBottom: 0, paddingTop: 0, marginBottom: 0 }}>
 											{pollingPlace.stall.noms.run_out === true && (
 												<StyledListItem disableGutters>
-													<StyledListItemIcon>
-														<RunOut />
+													<StyledListItemIcon
+														sx={{
+															'& svg': {
+																width: 48,
+																height: 48,
+															},
+														}}
+													>
+														{supportingIcons.yellow_minus.icon.react}
 													</StyledListItemIcon>
 
 													<StyledListItemText

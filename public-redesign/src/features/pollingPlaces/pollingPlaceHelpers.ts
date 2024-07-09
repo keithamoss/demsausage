@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature';
 import { Election } from '../../app/services/elections';
-import { NomsOptionsAvailable } from '../icons/noms';
+import { primaryFoodIcons, secondaryFoodIcons } from '../icons/iconHelpers';
 import { IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
 export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
@@ -86,22 +86,22 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
 
 	const noms: Array<string> = [];
 	if (pollingPlace.stall.noms.bbq) {
-		noms.push(NomsOptionsAvailable.bbq.label);
+		noms.push(primaryFoodIcons.bbq.label);
 	}
 	if (pollingPlace.stall.noms.cake) {
-		noms.push(NomsOptionsAvailable.cake.label);
+		noms.push(primaryFoodIcons.cake.label);
 	}
 	if ('bacon_and_eggs' in pollingPlace.stall.noms && pollingPlace.stall.noms.bacon_and_eggs) {
-		noms.push(NomsOptionsAvailable.bacon_and_eggs.label);
+		noms.push(secondaryFoodIcons.bacon_and_eggs.label);
 	}
 	if ('vego' in pollingPlace.stall.noms && pollingPlace.stall.noms.vego) {
-		noms.push(NomsOptionsAvailable.vego.label);
+		noms.push(secondaryFoodIcons.vego.label);
 	}
 	if ('halal' in pollingPlace.stall.noms && pollingPlace.stall.noms.halal) {
-		noms.push(NomsOptionsAvailable.halal.label);
+		noms.push(secondaryFoodIcons.halal.label);
 	}
 	if ('coffee' in pollingPlace.stall.noms && pollingPlace.stall.noms.coffee) {
-		noms.push(NomsOptionsAvailable.coffee.label);
+		noms.push(secondaryFoodIcons.coffee.label);
 	}
 
 	return noms;

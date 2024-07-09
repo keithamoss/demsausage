@@ -3,7 +3,7 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { getBaseURL } from '../../app/utils';
-import { NomsOptionsAvailable } from '../icons/noms';
+import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
 
 // const bottomNav = 56;
 
@@ -118,9 +118,9 @@ export default function AboutPage() {
 				<Question>What do the all of the icons mean?</Question>
 				<Answer>
 					<List>
-						{Object.values(NomsOptionsAvailable).map((noms) => (
+						{getAllFoodsAvailableOnStalls().map((noms) => (
 							<ListItemButton key={noms.value}>
-								<ListItemIcon>{noms.icon}</ListItemIcon>
+								<ListItemIcon sx={{ '& svg': { width: 36, height: 36 } }}>{noms.icon.react}</ListItemIcon>
 								<ListItemText primary={noms.description} />
 							</ListItemButton>
 						))}

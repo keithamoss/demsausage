@@ -1,52 +1,186 @@
-import { Typography } from '@mui/material';
-import React from 'react';
-import { Election } from '../../../app/services/elections';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import EmailIcon from '@mui/icons-material/Email';
+import LinkIcon from '@mui/icons-material/Link';
+import SendIcon from '@mui/icons-material/Send';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {
+	Avatar,
+	Box,
+	Button,
+	Checkbox,
+	Divider,
+	FormControl,
+	FormControlLabel,
+	InputAdornment,
+	List,
+	ListItem,
+	ListItemAvatar,
+	ListItemButton,
+	ListItemText,
+	MobileStepper,
+	Paper,
+	Radio,
+	RadioGroup,
+	Step,
+	StepContent,
+	StepLabel,
+	Stepper,
+	Typography,
+} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { grey } from '@mui/material/colors';
+import { styled, useTheme } from '@mui/material/styles';
+import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import * as React from 'react';
+import { Helmet } from 'react-helmet-async';
 import SearchComponent from '../../search/searchByAddressOrGPS/searchComponent';
+import { Election } from '../../../app/services/elections';
+import { useAppSelector } from '../../../app/hooks/store';
+import { selectActiveElections } from '../../elections/electionsSlice';
+import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import {
+	navigateToAddStallPollingPlace,
+	removeLastComponentFromEndOfURLPath,
+} from '../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 
-interface Props {
-	onDone: () => void;
-}
+const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
+	// padding: theme.spacing(1),
+	overflowY: 'auto',
+	height: `90dvh`,
+}));
 
-export default function AddStallSelectPollingPlace(props: Props) {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { onDone } = props;
+export default function AddStallSelectPollingPlace(/*props: Props*/) {
+	const params = useParams();
+	const navigate = useNavigate();
 
-	// const params = useParams();
-	// const navigate = useNavigate();
-	// const location = useLocation();
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
+
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
+
+	const election = activeElections.find((e) => e.name_url_safe === urlElectionName);
+
+	const handleNext = () => {
+		// setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		// navigate('/add-stall/stall-ownership/');
+	};
+
+	const handleBack = () => {
+		// setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+		navigate('/add-stall/');
+		// navigate(-1);
+
+		// navigate(`/add-stall/${urlElectionName}/`);
+
+		// if (activeElections.length >= 2) {
+		// 	navigate('/add-stall/');
+		// } else {
+		// 	navigate('/add-stall/');
+		// }
+	};
+
+	const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
+	const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) =>
+		setWhoIsSubmitting(value);
+
+	if (activeElections.length === 0) {
+		return null;
+	}
+
+	if (election === undefined) {
+		return null;
+	}
 
 	return (
-		<React.Fragment>
-			<Typography>Foobar foobar foobar</Typography>
-			<br />
-			<SearchComponent
-				//   onSearch={toggleUserHasSearched}
-				//   filterOpen={filterOpen}
-				// onToggleFilter={toggleFilter}
-				// onSearch={() => {}}
-				// filterOpen={false}
-				election={{} as Election}
-				// onToggleFilter={() => {}}
-				// onClick={() => () => {}}
-				// isMapFiltered={false}
-				enableFiltering={false}
-				// styleProps={{}}
-			/>
+		<StyledInteractableBoxFullHeight>
+			{activeElections.length === 1 && (
+				<React.Fragment>
+					<Paper
+						square
+						elevation={0}
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							height: 50,
+							pl: 2,
+							bgcolor: 'grey.200',
+						}}
+					>
+						<Typography variant="h6">Add Stall</Typography>
+					</Paper>
 
-			{/* <Box sx={{ mb: 2 }}>
-    <div>
-      <Button
-        variant="contained"
-        onClick={handleNext}
-        sx={{ mt: 1, mr: 1 }}
-      >
-        Continue
-      </Button>
-      <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-        Back
-      </Button>
-    </div>
-  </Box> */}
-		</React.Fragment>
+					<Box sx={{ minHeight: 300, maxWidth: 400, width: '100%', p: 2 }}>
+						<Typography variant="body1" gutterBottom>
+							Please complete the form below to add your stall to the map. Please do not submit entries that are
+							offensive, political or do not relate to an election day stall. Please also make sure that you have
+							authorisation to run your fundraising event at the polling place. All entries are moderated and subject to
+							approval.
+						</Typography>
+
+						<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+							<ListItemButton>
+								<ListItemAvatar>
+									<Avatar>
+										<EmailIcon />
+									</Avatar>
+								</ListItemAvatar>
+								<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
+							</ListItemButton>
+						</List>
+					</Box>
+				</React.Fragment>
+			)}
+
+			<Paper
+				square
+				elevation={0}
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					height: 50,
+					pl: 2,
+					bgcolor: 'grey.200',
+				}}
+			>
+				<Typography variant="h6">Selecting polling place</Typography>
+			</Paper>
+
+			<Box sx={{ /*minHeight: 300,*/ /*maxWidth: 400, */ width: '100%', p: 2 }}>
+				<React.Fragment>
+					<Typography>Foobar foobar foobar</Typography>
+					<br />
+					<SearchComponent
+						election={election}
+						autoFocusSearchField={true}
+						enableFiltering={false}
+						enableViewOnMap={false}
+						onChoosePollingPlace={(pollingPlace: IPollingPlace) =>
+							navigateToAddStallPollingPlace(params, navigate, pollingPlace)
+						}
+					/>{' '}
+				</React.Fragment>
+			</Box>
+
+			<MobileStepper
+				variant="text"
+				steps={activeElections.length >= 2 ? 4 : 3}
+				position="bottom"
+				activeStep={activeElections.length >= 2 ? 1 : 0}
+				nextButton={
+					<Button size="small" onClick={handleNext} disabled={true} endIcon={<ArrowForwardIcon />}>
+						Next
+					</Button>
+				}
+				backButton={
+					<Button size="small" onClick={handleBack} disabled={false} startIcon={<ArrowBackIcon />}>
+						Back
+					</Button>
+				}
+			/>
+		</StyledInteractableBoxFullHeight>
 	);
 }

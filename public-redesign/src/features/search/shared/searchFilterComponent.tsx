@@ -10,7 +10,8 @@ import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../app/appSlice';
-import { IMapFilterSettings, NomsOptionsAvailable } from '../../icons/noms';
+import { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
 
 interface Props {
 	marginBottom?: number;
@@ -56,7 +57,7 @@ export default function SearchFilterComponent(props: Props) {
 			}}
 		>
 			<List dense>
-				{Object.values(NomsOptionsAvailable).map((noms) => (
+				{Object.values(getAllFoodsAvailableOnStalls()).map((noms) => (
 					<ListItem
 						key={noms.value}
 						secondaryAction={
@@ -71,8 +72,8 @@ export default function SearchFilterComponent(props: Props) {
 					>
 						<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterSettings)}>
 							<ListItemAvatar>
-								<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent' }}>
-									{noms.icon}
+								<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent', '& svg': { width: 36, height: 36 } }}>
+									{noms.icon.react}
 								</Avatar>
 							</ListItemAvatar>
 							<ListItemText primary={noms.label} />

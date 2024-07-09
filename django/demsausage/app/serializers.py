@@ -61,12 +61,67 @@ class ElectionURLSafeNameCharField(serializers.CharField):
     def to_representation(self, value):
         return urllib.parse.quote(re.sub("\s", "_", value).lower())
 
+class ElectionJurisdictionCharField(serializers.CharField):
+    """ Serializer for CharField -- temporarily maps elections to their jurisdictions (until we add it to the backend)"""
+    # 35 (New South Wales Election 2023) to "nsw"
+
+    def to_representation(self, value):
+        mapping = {
+            55: "qld",
+            54: "vic",
+            53: "aus",
+            52: "vic",
+            # Where did the other numbers go?
+            46: "tas",
+            # Where did the other numbers go?
+            37: "aus",
+            36: "nsw",
+            35: "nsw",
+            34: "vic",
+            33: "sa",
+            32: "wa",
+            31: "qld",
+            30: "act",
+            29: "nt",
+            28: "tas",
+            27: "aus",
+            26: "nsw",
+            25: "vic",
+            24: "nsw",
+            23: "qld",
+            22: "sa",
+            21: "tas",
+            20: "wa",
+            19: "wa",
+            18: "wa",
+            17: "vic",
+            16: "sa",
+            15: "tas",
+            # Where is 14?
+            13: "qld",
+            12: "wa",
+            11: "nt",
+            10: "act",
+            9: "aus",
+            8: "wa",
+            7: "nsw",
+            6: "qld",
+            5: "vic",
+            4: "wa",
+            3: "sa",
+            2: "tas",
+            1: "aus"
+        }
+        
+        return mapping[value] if value in mapping else ""
+
 class ElectionsSerializer(serializers.ModelSerializer):
     name_url_safe = ElectionURLSafeNameCharField(source="name", allow_null=False)
+    jurisdiction = ElectionJurisdictionCharField(source="id", allow_null=False)
     
     class Meta:
         model = Elections
-        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "jurisdiction")
 
     # Prevents us from editing existing elections (e.g. When we were setting the new bounding boxes)
     # def validate_election_day(self, value):

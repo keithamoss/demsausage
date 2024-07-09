@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="298.07" height="298.07" viewBox="0 0 298.07 298.07">
+  <rect width="298.07" height="298.07" style="fill: none; stroke-width: 0px;"/>
+  <g id="Plus">
+    <circle cx="152.47" cy="150.01" r="57.7" style="fill: #cd2735; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.14px;"/>
+    <polygon points="188.67 172.59 166.09 150.01 188.67 127.43 175.05 113.81 152.47 136.39 129.89 113.81 116.27 127.43 138.85 150.01 116.27 172.59 129.89 186.21 152.47 163.63 175.05 186.21 188.67 172.59" style="fill: #fff; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 2.14px;"/>
+  </g>
+</svg>

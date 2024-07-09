@@ -1,4 +1,4 @@
-import { Tooltip } from '@mui/material';
+import { Tooltip, SvgIcon } from '@mui/material';
 import { View } from 'ol';
 import { transformExtent } from 'ol/proj';
 import React from 'react';
@@ -6,14 +6,8 @@ import { NavigateFunction, Params } from 'react-router-dom';
 import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers';
 import { Election, IGeoJSONPoylgon } from '../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
-import BaconandEggsIcon from '../icons/bacon-and-eggs';
-import CakeIcon from '../icons/cake';
-import CoffeeIcon from '../icons/coffee';
-import HalalIcon from '../icons/halal';
-import { NomsOptionsAvailable } from '../icons/noms';
-import RedCrossOfShame from '../icons/red-cross-of-shame';
-import SausageIcon from '../icons/sausage';
-import VegoIcon from '../icons/vego';
+import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
+import { supportingIcons } from '../icons/iconHelpers';
 import { getStandardViewPadding } from '../map/mapHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
@@ -137,8 +131,9 @@ export const getMapboxSearchParamsForElection = (election: Election): string =>
 		? `country=au&bbox=${getBBoxFromGeoJSONPolygonCoordinates(election.geom).join('%2C')}`
 		: '';
 
+// https://stackoverflow.com/a/57528471
 export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
-	<Tooltip disableFocusListener enterTouchDelay={0} title={title}>
+	<Tooltip key={title} title={title} disableFocusListener enterTouchDelay={0}>
 		{icon}
 	</Tooltip>
 );
@@ -146,17 +141,25 @@ export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
 export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace, allowRedCrossOfShame: boolean) => {
 	if (pollingPlace.stall?.noms.nothing) {
 		// For PollingPlaceCards, we don't display the Red Cross of Shame in the list of noms icons, it gets displayed as part of other elements of the card
-		return allowRedCrossOfShame === true ? wrapIconWithTooltip(<RedCrossOfShame />, 'No Stall Here') : null;
+		return allowRedCrossOfShame === true
+			? wrapIconWithTooltip(supportingIcons.red_cross.icon.react, supportingIcons.red_cross.description)
+			: null;
 	} else {
+		const foodIcons = getAllFoodsAvailableOnStalls();
+
 		return (
 			<React.Fragment>
-				{pollingPlace.stall?.noms.bbq && wrapIconWithTooltip(<SausageIcon />, NomsOptionsAvailable.bbq.label)}
-				{pollingPlace.stall?.noms.cake && wrapIconWithTooltip(<CakeIcon />, NomsOptionsAvailable.cake.label)}
-				{pollingPlace.stall?.noms.vego && wrapIconWithTooltip(<VegoIcon />, NomsOptionsAvailable.vego.label)}
-				{pollingPlace.stall?.noms.halal && wrapIconWithTooltip(<HalalIcon />, NomsOptionsAvailable.halal.label)}
-				{pollingPlace.stall?.noms.coffee && wrapIconWithTooltip(<CoffeeIcon />, NomsOptionsAvailable.coffee.label)}
-				{pollingPlace.stall?.noms.bacon_and_eggs &&
-					wrapIconWithTooltip(<BaconandEggsIcon />, NomsOptionsAvailable.bacon_and_eggs.label)}
+				{Object.keys(pollingPlace.stall?.noms || {}).map((key) => {
+					const foodIcon = foodIcons.find((i) => i.value === key);
+
+					// @TODO FIXME
+					// This excludes the 'free_text' option because it doesn't have any icon
+					// Likewise for nothing and run_out...hopefully?
+					// Ref: IPollingPlaceStall
+					if (foodIcon !== undefined) {
+						return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
+					}
+				})}
 			</React.Fragment>
 		);
 	}

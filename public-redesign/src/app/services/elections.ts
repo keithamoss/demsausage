@@ -1,5 +1,6 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { api } from './api';
+import { jurisdictionCrests } from '../../features/icons/jurisdictionHelpers';
 
 export interface IGeoJSONPoylgon {
 	type: string;
@@ -17,6 +18,7 @@ export interface Election {
 	is_federal: boolean;
 	election_day: string; // Datetime
 	polling_places_loaded: boolean;
+	jurisdiction: keyof typeof jurisdictionCrests;
 }
 
 type ElectionsResponse = Election[];

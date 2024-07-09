@@ -15,12 +15,13 @@ interface LocationState {
 interface Props {
 	numberOfResults: number;
 	pollingPlacesLoaded: boolean;
+	enableViewOnMap: boolean;
 	onViewOnMap: () => void;
 	children: JSX.Element[];
 }
 
 export default function SearchByAddressOrGPSResultsContainer(props: Props) {
-	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
+	const { numberOfResults, pollingPlacesLoaded, enableViewOnMap, onViewOnMap, children } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -66,9 +67,11 @@ export default function SearchByAddressOrGPSResultsContainer(props: Props) {
 					{numberOfResults} result{numberOfResults === 0 || numberOfResults > 1 ? 's' : ''} nearby
 				</Button>
 
-				<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="outlined">
-					view on map
-				</Button>
+				{enableViewOnMap === true && (
+					<Button size="small" sx={{ mr: 1 }} startIcon={<MapIcon />} onClick={onViewOnMap} variant="outlined">
+						view on map
+					</Button>
+				)}
 
 				<Button size="small" startIcon={<ArrowBackIcon />} onClick={onGoBack} variant="outlined">
 					back
@@ -76,7 +79,19 @@ export default function SearchByAddressOrGPSResultsContainer(props: Props) {
 			</Box>
 
 			{pollingPlacesLoaded === false && (
-				<Alert severity="warning" sx={{ mb: 1 }}>
+				<Alert
+					severity="warning"
+					sx={{
+						mb: 1,
+						// The banner's colour at 50% opacity
+						backgroundColor: 'rgba(249, 205, 95, 0.5)',
+						color: 'rgba(0, 0, 0, 0.87)',
+						'& svg': {
+							// The primary colour on the sausage icon
+							// color: '#ff9000',
+						},
+					}}
+				>
 					<AlertTitle>We don&apos;t have the official list of polling places yet</AlertTitle>
 					So for now, we&apos;re listing stall locations based on reports from the community.
 				</Alert>
