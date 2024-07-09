@@ -20,9 +20,10 @@ interface Props {
 const FlexboxIcons = styled('div')(() => ({
 	flexGrow: 1,
 	svg: {
-		paddingRight: '5px',
-		paddingBottom: '5px',
+		// paddingRight: '5px',
+		// paddingBottom: '5px',
 		width: '30px',
+		height: '30px',
 	},
 }));
 

@@ -3,7 +3,7 @@ import { transform } from 'ol/proj';
 import { Params } from 'react-router-dom';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { OLMapView } from '../app/appSlice';
-import { IMapPollingGeoJSONNoms } from '../icons/noms';
+import { IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface IMapPollingPlaceGeoJSONFeatureCollection {
 	type: 'FeatureCollection';

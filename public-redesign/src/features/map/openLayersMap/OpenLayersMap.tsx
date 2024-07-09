@@ -24,7 +24,7 @@ import * as React from 'react';
 import { Election } from '../../../app/services/elections';
 import { getAPIBaseURL } from '../../../app/utils';
 import { OLMapView } from '../../app/appSlice';
-import { IMapFilterSettings } from '../../icons/noms';
+import { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { IMapPollingPlaceFeature, IMapPollingPlaceGeoJSONFeatureCollection } from '../mapHelpers';
 import { olStyleFunction } from '../mapStyleHelpers';
 import './OpenLayersMap.css';

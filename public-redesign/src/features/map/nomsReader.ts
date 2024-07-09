@@ -3,21 +3,22 @@ import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { stringDivider } from '../../app/utils';
-import { IMapPollingGeoJSONNoms, IPollingPlaceNoms, NomsOptionsAvailable } from '../icons/noms';
+import { IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
+import {
+	getAllFoodsAvailableOnStalls,
+	getPrimaryFoodsAvailableOnStalls,
+	getSecondaryFoodsAvailableOnStalls,
+} from '../icons/iconHelpers';
+import { primaryFoodIcons, secondaryFoodIcons, supportingIcons } from '../icons/iconHelpers';
 import { IMapPollingPlaceFeature, getStringOrEmptyStringFromFeature } from './mapHelpers';
-import { SpriteIcons, SpriteIconsDetailed } from './mapStyleHelpers';
+import { IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export class NomsReader {
-	static coreNomsIcons = Object.values(NomsOptionsAvailable)
-		.filter((noms) => noms.is_primary === true)
-		.map((noms) => noms.value)
-		.concat(['nothing', 'run_out']);
+	static primaryNomsIconValues = getPrimaryFoodsAvailableOnStalls().map((noms) => noms.value);
 
-	static foodNomsIcons = Object.values(NomsOptionsAvailable).map((noms) => noms.value);
+	static secondaryNomsIconValues = getSecondaryFoodsAvailableOnStalls().map((noms) => noms.value);
 
-	static additionalFoodNomsIcons = Object.values(NomsOptionsAvailable)
-		.filter((noms) => noms.is_primary === false)
-		.map((noms) => noms.value);
+	static allNomsIconValues = getAllFoodsAvailableOnStalls().map((noms) => noms.value);
 
 	noms: IPollingPlaceNoms | IMapPollingGeoJSONNoms | null;
 
@@ -42,23 +43,24 @@ export class NomsReader {
 	}
 
 	public hasExtraNoms() {
-		return this.hasAnyPropertiesTrue(NomsReader.additionalFoodNomsIcons);
+		return this.hasAnyPropertiesTrue(NomsReader.secondaryNomsIconValues);
 	}
 
 	public hasCoreNoms() {
-		return this.hasAnyPropertiesTrue(NomsReader.coreNomsIcons);
+		return this.hasAnyPropertiesTrue(NomsReader.primaryNomsIconValues);
 	}
 
 	public onlyHasExtraNoms() {
 		return this.hasExtraNoms() === true && this.hasCoreNoms() === false;
 	}
 
-	public getFoodIconNamesFromNoms() {
+	public getOnlyFoodIconsFromNoms() {
 		if (this.noms === null) {
 			return [];
 		}
 
-		return Object.keys(this.noms).filter((nomsName: string) => NomsReader.foodNomsIcons.includes(nomsName));
+		// This just means we exclude 'free_text' and 'nothing'
+		return Object.keys(this.noms).filter((nomsName: string) => NomsReader.allNomsIconValues.includes(nomsName));
 	}
 
 	public onlyHasFreeText() {
@@ -71,73 +73,78 @@ export class NomsReader {
 		);
 	}
 
-	public getIconForNoms(spriteIcons: SpriteIcons) {
+	public getIconForNoms() {
 		const hasMoreOptions = this.hasExtraNoms();
 
 		if (this.isPropertyTrue('nothing') === true) {
-			return spriteIcons.red_cross_of_shame;
+			return supportingIcons.red_cross.icon.ol;
 		}
 
 		if (this.hasAllPropertiesTrue(['bbq', 'cake'])) {
 			if (this.isPropertyTrue('run_out') === true) {
-				return spriteIcons.bbq_and_cake_run_out;
+				return primaryFoodIcons.bbqandcake.iconSoldOut.ol;
 			}
 			if (hasMoreOptions === true) {
-				return spriteIcons.bbq_and_cake_plus;
+				return primaryFoodIcons.bbqandcake.iconPlus.ol;
 			}
-			return spriteIcons.bbq_and_cake;
+			return primaryFoodIcons.bbqandcake.icon.ol;
 		}
 
 		if (this.isPropertyTrue('bbq') === true) {
 			if (this.isPropertyTrue('run_out') === true) {
-				return spriteIcons.bbq_run_out;
+				return primaryFoodIcons.bbq.iconSoldOut.ol;
 			}
 			if (hasMoreOptions === true) {
-				return spriteIcons.bbq_plus;
+				return primaryFoodIcons.bbq.iconPlus.ol;
 			}
-			return spriteIcons.bbq;
+			return primaryFoodIcons.bbq.icon.ol;
 		}
 
 		if (this.isPropertyTrue('cake') === true) {
 			if (this.isPropertyTrue('run_out') === true) {
-				return spriteIcons.cake_run_out;
+				return primaryFoodIcons.cake.iconSoldOut.ol;
 			}
 			if (hasMoreOptions === true) {
-				return spriteIcons.cake_plus;
+				return primaryFoodIcons.cake.iconPlus.ol;
 			}
-			return spriteIcons.cake;
+			return primaryFoodIcons.cake.icon.ol;
 		}
 
 		if (this.onlyHasExtraNoms()) {
-			const firstExtraNomsIcon = Object.keys(this.noms!)[0];
-			return firstExtraNomsIcon in spriteIcons ? spriteIcons[firstExtraNomsIcon] : spriteIcons.unknown;
+			// @TODO FIXME when we decide how to handle this
+			const firstExtraNomsIcon = Object.keys(this.noms!)[0] as keyof typeof secondaryFoodIcons;
+			return firstExtraNomsIcon in secondaryFoodIcons && secondaryFoodIcons[firstExtraNomsIcon].icon.ol !== undefined
+				? secondaryFoodIcons[firstExtraNomsIcon].icon.ol
+				: supportingIcons.green_plus.icon.ol;
 		}
 
 		if (this.onlyHasFreeText()) {
-			return spriteIcons.tick;
+			return supportingIcons.green_plus.icon.ol;
 		}
 
 		return null;
 	}
 
+	// @TODO
+	// Rewrite all of this from scratch one day.
+	// Do it more based on column/row position than
+	// all of the bodgy hacky math and modifiers
+	// we're using now.
 	public getDetailedIconsForNoms(
-		spriteIcons: SpriteIcons,
-		spriteIconsDetailed: SpriteIconsDetailed,
 		feature: IMapPollingPlaceFeature,
 		// _resolution: number,
 	) {
-		const scaleFactor = 0.4;
-		const iconSize = 64;
+		const scaleFactor = 0.5;
+		const iconSize = 80;
 		const olStyles: Style[] = [];
 
 		if (this.hasRedCrossOfShame() === true) {
-			return spriteIcons.red_cross_of_shame;
+			return supportingIcons.red_cross.icon.olDetailed;
 		}
 
 		// 1. Determine the primary icon to use: The green tick, plus, run out, or red cross of shame.
 		//    This is used to decorate the actual lat,lon the polling place is at.
-		const primaryIconName = this.getPrimaryIconName();
-		const primaryIcon = spriteIconsDetailed[primaryIconName];
+		const primaryIcon = this.getPrimaryIcon();
 		// @TODO
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 		(primaryIcon.getImage() as any).setAnchor([iconSize * scaleFactor, iconSize * scaleFactor]);
@@ -156,7 +163,7 @@ export class NomsReader {
 					font: `${fontSize}px Roboto, sans-serif`,
 					textAlign: 'left',
 					offsetX: -(fontSize * 0.5),
-					offsetY: replaceCount === 0 ? -(fontSize * 1.15) : -(fontSize * numberOfLines) + fontSize * 0.25,
+					offsetY: replaceCount === 0 ? -10 + -(fontSize * 1.15) : -10 + -(fontSize * numberOfLines) + fontSize * 0.25,
 					fill: new Fill({
 						color: '#000',
 					}),
@@ -170,28 +177,36 @@ export class NomsReader {
 		);
 
 		// 3. Create a 3x2 grid of all of the noms options available
-		const spriteIconNames: string[] = this.getFoodIconNamesFromNoms().sort();
+		const nomsIconNames: string[] = this.getOnlyFoodIconsFromNoms();
+		const nomsIconNamesSorted: string[] = [];
 
-		spriteIconNames.forEach((iconName, index) => {
-			const icon = spriteIconsDetailed[iconName];
-			// @TODO
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-			(icon.getImage() as any).setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
-			icon.getImage().setScale(scaleFactor);
-			olStyles.push(icon);
+		NomsReader.primaryNomsIconValues.forEach((iconName) => {
+			if (nomsIconNames.includes(iconName) === true) {
+				nomsIconNamesSorted.push(iconName);
+			}
+		});
+
+		nomsIconNames.forEach((iconName) => {
+			if (nomsIconNamesSorted.includes(iconName) === false) {
+				nomsIconNamesSorted.push(iconName);
+			}
+		});
+
+		nomsIconNamesSorted.forEach((iconName, index) => {
+			const foodIcons = getAllFoodsAvailableOnStalls();
+			const foodIcon = foodIcons.find((i) => i.value === iconName);
+
+			if (foodIcon !== undefined) {
+				const icon = foodIcon.icon.olDetailed;
+				// @TODO
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+				(icon.getImage() as any).setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
+				icon.getImage().setScale(scaleFactor);
+				olStyles.push(icon);
+			}
 		});
 
 		return olStyles;
-	}
-
-	public getPrimaryIconName() {
-		if (this.hasRunOut() === true) {
-			return 'run_out';
-		}
-		if (this.hasExtraNoms() === true) {
-			return 'plus';
-		}
-		return 'tick';
 	}
 
 	public getIconAnchorPosition(position: number, iconSize: number, scaleFactor: number) {
@@ -199,8 +214,8 @@ export class NomsReader {
 		const rowPosition = Math.floor(position / columnCount);
 		const columnPosition = position % columnCount;
 
-		const paddingX = 18;
-		const paddingY = 18;
+		const paddingX = 0;
+		const paddingY = 0;
 		const startX = -iconSize + iconSize * scaleFactor - paddingX;
 		const startY = iconSize * scaleFactor;
 
@@ -208,6 +223,20 @@ export class NomsReader {
 		const anchorY = startY - rowPosition * (iconSize + paddingY);
 
 		return [anchorX, anchorY];
+	}
+
+	public getPrimaryIcon() {
+		if (this.hasRunOut() === true) {
+			return supportingIcons.yellow_minus.icon.olDetailed;
+		}
+
+		if (this.hasExtraNoms() === true) {
+			return supportingIcons.green_plus.icon.olDetailed;
+		}
+
+		// @TODO This is the fallback for polling places with no other noms e.g. just free_text
+		// @TODO Make sure this can't happen at data-entry stage
+		return supportingIcons.green_tick.icon.olDetailed;
 	}
 
 	private filterFalsey(noms: IPollingPlaceNoms | IMapPollingGeoJSONNoms | null) {

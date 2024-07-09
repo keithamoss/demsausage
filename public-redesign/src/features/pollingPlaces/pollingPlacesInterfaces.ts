@@ -1,4 +1,16 @@
-import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../icons/noms';
+import { IMapPollingGeoJSONNoms } from './pollingPlacesInterfaces';
+
+export interface IPollingPlaceNoms {
+	bbq?: boolean;
+	cake?: boolean;
+	vego?: boolean;
+	halal?: boolean;
+	coffee?: boolean;
+	bacon_and_eggs?: boolean;
+	free_text?: string; // When use direct API calls to retrieve individual polling places we get the actual text
+	nothing?: boolean;
+	run_out?: boolean;
+}
 
 export interface IPollingPlaceStall {
 	noms: IPollingPlaceNoms;
@@ -56,4 +68,9 @@ export interface IPollingPlace {
 	extras: {
 		[key: string]: string;
 	};
+}
+export interface IMapFilterSettings extends Omit<IPollingPlaceNoms, 'free_text' | 'nothing' | 'run_out'> {}
+
+export interface IMapPollingGeoJSONNoms extends Omit<IPollingPlaceNoms, 'free_text'> {
+	free_text?: boolean; // Map GeoJSON returns summary info only
 }

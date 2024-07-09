@@ -20,9 +20,10 @@ import { useAppSelector } from '../../../app/hooks';
 import { navigateToElection } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
-import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { getElectionVeryShortName, getViewForElection, isElectionLive } from '../../elections/electionHelpers';
 import { selectActiveElections, selectAllElections } from '../../elections/electionsSlice';
+import { getJurisdictionCrestCircleReact, getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
 	// position: 'absolute',
@@ -81,10 +82,14 @@ export default function LayersSelector(props: Props) {
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
+	const activeElection = activeElections.find((e) => e.id === electionId);
+
 	const elections = useAppSelector((state) => selectAllElections(state));
 	const electionsByYear = groupBy(sortBy(elections, 'election_day').reverse(), (e) =>
 		new Date(e.election_day).getFullYear(),
 	);
+
+	const currentElection = elections.find((e) => e.id === electionId);
 
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
 
@@ -106,8 +111,23 @@ export default function LayersSelector(props: Props) {
 		navigateToElection(navigate, election, getViewForElection(election));
 	};
 
+	// @TODO Entrypoint me
+	if (currentElection === undefined) {
+		return null;
+	}
+
 	return (
 		<React.Fragment>
+			{getJurisdictionCrestCircleReact(currentElection.jurisdiction, {
+				position: 'absolute',
+				top: '26px',
+				left: '12px',
+				marginTop: '46px',
+				zIndex: 1100,
+				width: 50,
+				height: 50,
+			})}
+
 			<Button
 				size="small"
 				disabled={true}
@@ -120,6 +140,7 @@ export default function LayersSelector(props: Props) {
 					// 24px to ensure even spacing either side of StyledLayersBadge
 					right: '44px', // 24px + 40px + 24px
 					left: '24px',
+					// maxWidth: 500,
 					zIndex: 1050,
 					height: '36px',
 
@@ -218,9 +239,10 @@ export default function LayersSelector(props: Props) {
 							position: 'relative',
 							overflow: 'auto',
 							'& ul': { padding: 0 },
-							'& li.MuiListSubheader-root': { zIndex: 2 },
+							'& li.MuiListSubheader-root:not(:first-of-type)': { paddingTop: 2 },
+							'& li.MuiListSubheader-root': { paddingTop: 0, zIndex: 2 },
 						}}
-						subheader={<li />}
+						// subheader={<li />}
 					>
 						{Object.keys(electionsByYear)
 							.sort()
@@ -228,7 +250,19 @@ export default function LayersSelector(props: Props) {
 							.map((year: string) => {
 								return (
 									<React.Fragment key={year}>
-										<ListSubheader>{year}</ListSubheader>
+										<ListSubheader
+											sx={{
+												// Polling Place Name: 16px 500 rgba(0, 0, 0, 0.8)
+												// color="text.primary"
+												fontSize: 16,
+												fontWeight: 700,
+												// color: '#000000',
+												color: 'rgba(0, 0, 0, 0.8)',
+											}}
+										>
+											{year}
+										</ListSubheader>
+
 										{electionsByYear[year].map((election) => {
 											return (
 												<ListItem
@@ -249,18 +283,33 @@ export default function LayersSelector(props: Props) {
 													<ListItemAvatar>
 														<Avatar
 															sx={{
-																width: 50,
-																height: 50,
+																width: 58,
+																height: 58,
 																marginRight: 2,
-																backgroundColor: election.id === electionId ? mapaThemePrimaryPurple : undefined,
+																backgroundColor: 'transparent',
+																// backgroundColor: election.id === electionId ? mapaThemePrimaryPurple : undefined,
+																// backgroundColor: election.id === electionId ? undefined : 'transparent',
+																'& svg': {
+																	width: 50,
+																},
 															}}
 														>
-															{getElectionVeryShortName(election)}
+															{getJurisdictionCrestStandaloneReact(election.jurisdiction)}
 														</Avatar>
 													</ListItemAvatar>
 
 													<ListItemButton onClick={onClickElection(election)}>
 														<ListItemText
+															sx={{
+																'& .MuiListItemText-primary': {
+																	// Polling Place Address: 15px 400 rgba(0, 0, 0, 0.6)
+																	// color="text.secondary"
+																	fontSize: 15,
+																	fontWeight: 700,
+																	// color: mapaThemePrimaryGrey,
+																	color: 'rgba(0, 0, 0, 0.6)',
+																},
+															}}
 															primary={election.name}
 															secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
 																day: 'numeric',

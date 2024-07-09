@@ -8,6 +8,14 @@ import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
 import { getAPIBaseURL, getBaseURL } from './app/utils';
+import DemSausageWhiteCrestGrill from '../public/assets/crest/white_crest_grill.svg?react';
+import DemSausageWhiteCrestGrillRaw from '../public/assets/crest/white_crest_grill.svg?raw';
+import DemSausageColouredCrestGrillRaw from '../public/assets/crest/coloured_crest_grill.svg?raw';
+import DemSausageBanner from '../public/assets/banner/banner.svg?react';
+import DemSausageBannerRaw from '../public/assets/banner/banner.svg?raw';
+import WAJurisdictionCrestCircleRaw from '../public/assets/jurisdictions/wa_circle.svg?raw';
+import { getJurisdictionCrestCircleReact } from './features/icons/jurisdictionHelpers';
+import { prepareRawSVG } from './features/icons/svgHelpers';
 
 const TitleLogo = styled('img')`
 	height: 32px;
@@ -53,13 +61,70 @@ export default function App() {
 						edge="start"
 						color="inherit"
 						aria-label="menu"
-						sx={{ mr: 1 }}
+						sx={{ mr: 0.5 }}
 						onClick={onToggleDrawer(true)}
 					>
 						<MenuIcon />
 					</IconButton>
 
-					<TitleLogo src="/logo/sausage+cake_big.png" />
+					{/* <img
+						src={`data:image/svg+xml;utf8,${prepareRawSVG(DemSausageWhiteCrestGrillRaw, 1, 1, { width: '80%', height: '80%' })}`}
+					/> */}
+
+					{/* {prepareRawSVG(DemSausageWhiteCrestGrillRaw, 1, 1, { width: '40%', height: '40%' })} */}
+
+					{/* <DemSausageWhiteCrestGrill
+						style={{ marginRight: 20, paddingTop: 7, paddingBottom: 7, cursor: 'pointer', maxHeight: 50 }}
+					/> */}
+
+					{/* {getJurisdictionCrestCircleReact('wa', {
+
+					})} */}
+
+					{/* <a href="/" style={{ lineHeight: 'normal' }}> */}
+					<img
+						src={`data:image/svg+xml;utf8,${DemSausageWhiteCrestGrillRaw.replace(
+							'width="174.36"',
+							`width="${174.36 * 0.4}"`,
+						)
+							.replace('height="87.85"', `height="${87.85 * 0.4}"`)
+							.replaceAll('#', '%23')
+							.replaceAll('"', "'")}`}
+						style={{ marginRight: 20, paddingTop: 7, paddingBottom: 7, cursor: 'pointer' }}
+					/>
+					{/* </a> */}
+
+					{/* <img
+						src={`data:image/svg+xml;utf8,${DemSausageColouredCrestGrillRaw.replace(
+							'width="175.59"',
+							`width="${175.59 * 0.4}"`,
+						)
+							.replace('height="88.38"', `height="${88.38 * 0.4}"`)
+							.replaceAll('#', '%23')
+							.replaceAll('"', "'")}`}
+						style={{ marginRight: 20, paddingTop: 7, paddingBottom: 7 }}
+					/> */}
+
+					<img
+						src={`data:image/svg+xml;utf8,${DemSausageBannerRaw.replace('width="495.66"', `width="${495.66 * 0.4}"`)
+							.replace('height="89.63"', `height="${89.63 * 0.4}"`)
+							.replaceAll('#', '%23')
+							.replaceAll('"', "'")}`}
+						style={{ marginRight: 20, paddingTop: 7, paddingBottom: 7 }}
+					/>
+
+					{/* <img
+						src={`data:image/svg+xml;utf8,${WAJurisdictionCrestCircleRaw.replace(
+							'width="298.07"',
+							`width="${298.07 * 0.15}"`,
+						)
+							.replace('height="298.07"', `height="${298.07 * 0.15}"`)
+							.replaceAll('#', '%23')
+							.replaceAll('"', "'")}`}
+						style={{ paddingTop: 7, paddingBottom: 7 }}
+					/> */}
+
+					{/* <TitleLogo src="/logo/sausage+cake_big.png" />
 
 					<Typography
 						variant="h5"
@@ -74,7 +139,7 @@ export default function App() {
 						}}
 					>
 						Democracy Sausage
-					</Typography>
+					</Typography> */}
 				</Toolbar>
 			</AppBar>
 

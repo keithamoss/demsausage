@@ -1,4 +1,4 @@
-import { IMapFilterSettings } from '../icons/noms';
+import { IMapFilterSettings } from '../pollingPlaces/pollingPlacesInterfaces';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { NomsReader } from './nomsReader';
 

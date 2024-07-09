@@ -84,6 +84,8 @@ function PollingPlaceCardDrawer(props: Props) {
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
 	const onToggleDrawer = useCallback(() => {
+		// @TODO Why does duplicating a polling place card page not let us go back?
+
 		// If we've arrived here by searching in the UI, we know we can just
 		// go back and we'll be in a sensible place.
 		// In most cases, this should send them back to the list of
@@ -123,7 +125,7 @@ function PollingPlaceCardDrawer(props: Props) {
 					<React.Fragment>
 						<Helmet>
 							<title>
-								{pollingPlace.name} | {election.name} | Democracy Sausage
+								{pollingPlace.premises || pollingPlace.name} | {election.name} | Democracy Sausage
 							</title>
 
 							{/* Open Graph: Facebook / Twitter */}
