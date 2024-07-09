@@ -5,9 +5,20 @@ import { getPollingPlacePermalinkFromProps } from '../../features/pollingPlaces/
 import { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { Election } from '../services/elections';
 
-const addComponentToEndOfURLPath = (urlPathBase: string, param: string | undefined) => {
+export const addComponentToEndOfURLPath = (urlPathBase: string, param: string | undefined) => {
 	const urlPathBaseWithTrailingSlash = urlPathBase.endsWith('/') === true ? urlPathBase : `${urlPathBase}/`;
 	return param === undefined ? urlPathBaseWithTrailingSlash : `${urlPathBaseWithTrailingSlash}${param}/`;
+};
+
+export const removeLastComponentFromEndOfURLPath = (urlPathBase: string) => {
+	const pathComponents = urlPathBase.split('/').filter((c) => c !== '');
+	pathComponents.pop();
+	return `/${pathComponents.join('/')}/`;
+};
+
+export const removeLastTwoComponentsFromEndOfURLPath = (urlPathBase: string) => {
+	const oneComponentRemoved = removeLastComponentFromEndOfURLPath(urlPathBase);
+	return removeLastComponentFromEndOfURLPath(oneComponentRemoved);
 };
 
 export const getURLParams = (params: Params<string>) => {
@@ -244,6 +255,23 @@ export const navigateToSearchMapboxResults = (
 	navigate(addComponentToEndOfURLPath(`/${urlElectionName}/search/place/${searchTerm}/`, `m/${urlMapLatLonZoom}`));
 };
 
+export const navigateToAddStallSearchMapboxResults = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	searchTerm: string,
+) => {
+	// We handle going to all of these routes:
+	// /add-stall/:election_name/search/place/:search_term/
+
+	const { urlElectionName } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/`);
+};
+
 export const navigateToSearchListOfPollingPlacesFromMapboxResults = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -267,13 +295,33 @@ export const navigateToSearchListOfPollingPlacesFromMapboxResults = (
 	);
 };
 
+export const navigateToAddStallSearchListOfPollingPlacesFromMapboxResults = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	searchTerm: string,
+	lonLat: string,
+) => {
+	// We handle going to all of these routes:
+	// /add-stall/:election_name/search/place/:search_term/:place_lon_lat/
+
+	const { urlElectionName } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/${lonLat}/`, {
+		state: { cameFromInternalNavigation: true },
+	});
+};
+
 export const navigateToSearchPollingPlacesByIds = (
 	params: Params<string>,
 	navigate: NavigateFunction,
 	ids: number[],
 ) => {
 	// We handle going to all of these routes:
-	// //:election_name/search/by_ids/:polling_place_ids/m/:map_lat_lon_zoom/
+	// /:election_name/search/by_ids/:polling_place_ids/m/:map_lat_lon_zoom/
 
 	const { urlElectionName, urlMapLatLonZoom } = getURLParams(params);
 
@@ -347,5 +395,36 @@ export const navigateToPollingPlace = (
 				state: { cameFromInternalNavigation: true },
 			});
 		}
+	}
+};
+
+export const navigateToAddStallPollingPlace = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	pollingPlace: IPollingPlace,
+) => {
+	// We handle going to all of these routes:
+	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/
+	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/
+	const { name, premises, state } = pollingPlace;
+
+	const { urlElectionName, urlMapLatLonZoom } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	if (typeof name === 'string' && typeof premises === 'string' && typeof state === 'string') {
+		// if (urlMapLatLonZoom !== undefined) {
+		// 	navigate(getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state), {
+		// 		state: { cameFromInternalNavigation: true },
+		// 	});
+		// } else {
+		// Used by StallPermalink to come in from outside (e.g. stall approval emails), look up a stall, and redirect us to the PollingPlaceCardDrawer without knowing the map MapLatLonZoom.
+		// map.tsx handles attaching the election's default MapLatLonZoom for us.
+		navigate(`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state)}`, {
+			state: { cameFromInternalNavigation: true },
+		});
+		// }
 	}
 };

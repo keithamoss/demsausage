@@ -26,6 +26,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { useUnmount } from '../../../../app/hooks/useUnmount';
 import {
+	navigateToAddStallSearchMapboxResults,
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
@@ -94,7 +95,12 @@ export default function SearchBar(props: Props) {
 				}
 
 				setIsUserTyping(false);
-				navigateToSearchMapboxResults(params, navigate, searchTerm);
+
+				if (location.pathname.includes('/add-stall') === true) {
+					navigateToAddStallSearchMapboxResults(params, navigate, searchTerm);
+				} else {
+					navigateToSearchMapboxResults(params, navigate, searchTerm);
+				}
 			}, 400),
 		[navigate, params],
 	);

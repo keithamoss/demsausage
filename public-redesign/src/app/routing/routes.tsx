@@ -11,6 +11,11 @@ import Map from '../../features/map/map';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/search/searchDrawer';
 import StallPermalink from '../../features/stalls/stallPermalink';
+import AddStallSelectElection from '../../features/addStall/addStallSelectElection/addStallSelectElection';
+import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
+import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
+import AddStallStallForm from '../../features/addStall/addStallStallForm/addStallStallForm';
+import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -21,28 +26,99 @@ export const router = sentryCreateBrowserRouter([
 		errorElement: <ErrorElement />,
 		children: [
 			{
-				path: 'about',
+				path: '/about',
 				element: <AboutPage />,
 				loader: () => ({
 					name: 'About',
 				}),
 			},
 			{
-				path: 'embed',
+				path: '/embed',
 				element: <EmbedBuilder />,
 				loader: () => ({
 					name: 'Embed The Map',
 				}),
 			},
 			{
-				path: 'add-stall',
+				path: '/add-stall',
 				element: <AddStall />,
 				loader: () => ({
 					name: 'Add Stall',
 				}),
+				children: [
+					{
+						path: '/add-stall',
+						element: <AddStallSelectElection />,
+					},
+					{
+						path: '/add-stall/:election_name/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					{
+						path: '/add-stall/:election_name/search/place/:search_term/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					{
+						path: '/add-stall/:election_name/search/place/:search_term/:place_lon_lat/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					// The more specific route needs to go first because otherwise it will match the [Name] + [State] route first when we don't have `/m?/:map_lat_lon_zoom` on the end (because those are both optional params)
+					{
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
+						element: <AddStallWhoIsSubmitting />,
+					},
+					// Occasionally some elections will have no premises names on polling places.
+					{
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/',
+						element: <AddStallWhoIsSubmitting />,
+					},
+					// The more specific route needs to go first because otherwise it will match the [Name] + [State] route first when we don't have `/m?/:map_lat_lon_zoom` on the end (because those are both optional params)
+					{
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/owner/:stall_ownership/',
+						element: <AddStallStallForm />,
+					},
+					// Occasionally some elections will have no premises names on polling places.
+					{
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/owner/:stall_ownership/',
+						element: <AddStallStallForm />,
+					},
+					{
+						path: '/add-stall/submitted',
+						element: <AddStallSubmitted />,
+					},
+				],
 			},
 			{
-				path: 'debug',
+				path: '/add-stalls',
+				element: <AddStall />,
+				loader: () => ({
+					name: 'Add Stall',
+				}),
+				children: [
+					{
+						path: '/add-stalls/select-election/',
+						element: <AddStallSelectElection />,
+					},
+					{
+						path: '/add-stalls/select-polling-place/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					{
+						path: '/add-stalls/stall-ownership/',
+						element: <AddStallWhoIsSubmitting />,
+					},
+					{
+						path: '/add-stalls/stall-details/',
+						element: <AddStallStallForm />,
+					},
+					{
+						path: '/add-stalls/submitted/',
+						element: <AddStallSubmitted />,
+					},
+				],
+			},
+			{
+				path: '/debug',
 				element: <DebugView />,
 			},
 			{

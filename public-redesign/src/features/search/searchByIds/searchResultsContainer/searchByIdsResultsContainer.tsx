@@ -112,7 +112,19 @@ export default function SearchByIdsResultsContainer(props: Props) {
 			{isSearchBarFilterControlOpen === true && <SearchFilterComponent marginBottom={1} />}
 
 			{pollingPlacesLoaded === false && (
-				<Alert severity="warning" sx={{ mb: 1 }}>
+				<Alert
+					severity="warning"
+					sx={{
+						mb: 1,
+						// The banner's colour at 50% opacity
+						backgroundColor: 'rgba(249, 205, 95, 0.5)',
+						color: 'rgba(0, 0, 0, 0.87)',
+						'& svg': {
+							// The primary colour on the sausage icon
+							// color: '#ff9000',
+						},
+					}}
+				>
 					<AlertTitle>We don&apos;t have the official list of polling places yet</AlertTitle>
 					So for now, we&apos;re listing stall locations based on reports from the community.
 				</Alert>

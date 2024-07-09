@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import {
+	navigateToAddStallPollingPlace,
 	navigateToMapUsingURLParamsWithoutUpdatingTheView,
 	navigateToPollingPlace,
 } from '../../app/routing/navigationHelpers';
@@ -73,7 +74,11 @@ function SearchDrawer(props: Props) {
 	}
 
 	const onChoosePollingPlace = (pollingPlace: IPollingPlace) => {
-		navigateToPollingPlace(params, navigate, pollingPlace);
+		if (location.pathname.includes('/add-stall') === true) {
+			navigateToAddStallPollingPlace(params, navigate, pollingPlace);
+		} else {
+			navigateToPollingPlace(params, navigate, pollingPlace);
+		}
 	};
 
 	return (
