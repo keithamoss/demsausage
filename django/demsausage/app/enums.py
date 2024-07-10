@@ -40,6 +40,21 @@ class PollingPlaceChanceOfSausage(int, EnumBase):
         return self.value
 
 
+class PollingPlaceJurisdiction(str, EnumBase):
+    WA = "wa"
+    SA = "sa"
+    NSW = "nsw"
+    ACT = "act"
+    VIC = "vic"
+    NT = "nt"
+    TAS = "tas"
+    QLD = "qld"
+    AUS = "aus"
+
+    def __str__(self):
+        return self.value
+
+
 class StallStatus(str, EnumBase):
     PENDING = "Pending"
     APPROVED = "Approved"

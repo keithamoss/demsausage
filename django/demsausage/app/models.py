@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceStatus,
+                                  PollingPlaceJurisdiction, PollingPlaceStatus,
                                   PollingPlaceWheelchairAccess,
                                   ProfileSettings, StallStatus, TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
@@ -82,6 +82,7 @@ class Elections(models.Model):
     is_federal = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
+    jurisdiction = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction])
 
     def is_active(self):
         return datetime.now(pytz.utc).date() <= self.election_day.date()
