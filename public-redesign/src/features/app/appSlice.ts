@@ -2,9 +2,8 @@ import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { values } from 'lodash-es';
 import { Coordinate } from 'ol/coordinate';
 import { RootState } from '../../app/store';
-import { IMapFilterSettings } from '../pollingPlaces/pollingPlacesInterfaces';
 import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/mapHelpers';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { IMapFilterSettings, IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterSettings: IMapFilterSettings;

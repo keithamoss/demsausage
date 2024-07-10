@@ -84,7 +84,12 @@ function PollingPlaceCardDrawer(props: Props) {
 	} = useGetPollingPlaceByUniqueDetailsLookupQuery({ electionId: election.id, name, premises, state });
 
 	const onToggleDrawer = useCallback(() => {
-		// @TODO Why does duplicating a polling place card page not let us go back?
+		// NOTE: This doesn't work when the user duplicates the tab and then tries to
+		// close it if cameFromInternalNavigation is true e.g. If they clicked on the
+		// map, loaded this component, duplicated the tab, and then tried to close the
+		// tab by clicking on the map.
+		// There doesn't seem to be a graceful way to handle it or detect duplicated
+		// tabs, so we're ignoring it and letting users click the (x) button to close.
 
 		// If we've arrived here by searching in the UI, we know we can just
 		// go back and we'll be in a sensible place.

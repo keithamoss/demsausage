@@ -23,7 +23,6 @@ import {
 	ListItemIcon,
 	Snackbar,
 	useTheme,
-	SvgIcon,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -44,6 +43,7 @@ import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
+import { supportingIcons } from '../icons/iconHelpers';
 import { getNomsIconsForPollingPlace } from '../search/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,
@@ -57,7 +57,6 @@ import {
 	pollingPlaceHasReportsOfNoms,
 } from './pollingPlaceHelpers';
 import { IPollingPlace } from './pollingPlacesInterfaces';
-import { supportingIcons } from '../icons/iconHelpers';
 
 const StyledCardHeader = styled(CardHeader)(() => ({
 	// pointerEvents: "all",
@@ -67,9 +66,9 @@ const FlexboxIcons = styled('div')(() => ({
 	flexGrow: 1,
 	marginLeft: 1,
 	svg: {
-		marginRight: '10px',
 		width: '30px',
 		height: '30px',
+		marginRight: '5px',
 	},
 }));
 
@@ -271,7 +270,6 @@ export default function PollingPlaceCard(props: Props) {
 												}}
 											>
 												{supportingIcons.red_cross.icon.react}
-												{/* <RedCrossOfShame sx={{ color: mapaThemePrimaryGrey, width: 64, height: 64 }} /> */}
 											</StyledListItemIcon>
 
 											<StyledListItemText

@@ -5,17 +5,17 @@ import ErrorElement from '../../ErrorElement';
 import NotFound from '../../NotFound';
 import AboutPage from '../../features/aboutPage/AboutPage';
 import AddStall from '../../features/addStall/AddStall';
+import AddStallSelectElection from '../../features/addStall/addStallSelectElection/addStallSelectElection';
+import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
+import AddStallStallForm from '../../features/addStall/addStallStallForm/addStallStallForm';
+import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
+import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
 import DebugView from '../../features/debugView/debugView';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/search/searchDrawer';
 import StallPermalink from '../../features/stalls/stallPermalink';
-import AddStallSelectElection from '../../features/addStall/addStallSelectElection/addStallSelectElection';
-import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
-import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
-import AddStallStallForm from '../../features/addStall/addStallStallForm/addStallStallForm';
-import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -84,35 +84,6 @@ export const router = sentryCreateBrowserRouter([
 					},
 					{
 						path: '/add-stall/submitted',
-						element: <AddStallSubmitted />,
-					},
-				],
-			},
-			{
-				path: '/add-stalls',
-				element: <AddStall />,
-				loader: () => ({
-					name: 'Add Stall',
-				}),
-				children: [
-					{
-						path: '/add-stalls/select-election/',
-						element: <AddStallSelectElection />,
-					},
-					{
-						path: '/add-stalls/select-polling-place/',
-						element: <AddStallSelectPollingPlace />,
-					},
-					{
-						path: '/add-stalls/stall-ownership/',
-						element: <AddStallWhoIsSubmitting />,
-					},
-					{
-						path: '/add-stalls/stall-details/',
-						element: <AddStallStallForm />,
-					},
-					{
-						path: '/add-stalls/submitted/',
 						element: <AddStallSubmitted />,
 					},
 				],

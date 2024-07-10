@@ -1,5 +1,4 @@
-import { IMapFilterSettings } from '../pollingPlaces/pollingPlacesInterfaces';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { IMapFilterSettings, IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { NomsReader } from './nomsReader';
 
 export const hasFilterOptions = (mapFilterSettings: IMapFilterSettings) =>

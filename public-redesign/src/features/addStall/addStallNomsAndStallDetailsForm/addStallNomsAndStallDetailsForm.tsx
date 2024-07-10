@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers';
 import React, { useState } from 'react';
-import { NomsOptionsAvailable } from '../../icons/noms';
+import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
 
 interface Props {
 	onDone: () => void;
@@ -255,7 +255,7 @@ export default function AddStallNomsAndStallDetailsForm(props: Props) {
 					//   bgcolor: "background.paper",
 				}}
 			>
-				{Object.values(NomsOptionsAvailable).map((noms) => {
+				{getAllFoodsAvailableOnStalls().map((noms) => {
 					const labelId = `checkbox-list-secondary-label-${noms.value}`;
 					return (
 						<ListItem
@@ -277,7 +277,7 @@ export default function AddStallNomsAndStallDetailsForm(props: Props) {
 										sx={{ backgroundColor: 'transparent' }}
 										// src={`/static/images/avatar/${noms.value + 1}.jpg`}
 									>
-										{noms.icon}
+										{noms.icon.react}
 									</Avatar>
 								</ListItemAvatar>
 								<ListItemText id={labelId} primary={noms.label} />

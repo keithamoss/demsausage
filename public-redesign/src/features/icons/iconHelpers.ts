@@ -1,50 +1,72 @@
-import { SvgIcon } from '@mui/material';
-import React from 'react';
-import Circle from 'ol/style/Circle';
-import Fill from 'ol/style/Fill';
 import Icon from 'ol/style/Icon';
-import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
+import { createReactSvgIcon, prepareRawSVGForOpenLayers } from '../icons/svgHelpers';
 import {
-	Sausage,
-	React_Sausage,
-	Sausage_Plus,
-	React_Sausage_Plus,
-	Sausage_SoldOut,
-	React_Sausage_SoldOut,
-	Cake,
-	React_Cake,
-	Cake_Plus,
-	React_Cake_Plus,
-	Cake_SoldOut,
-	React_Cake_SoldOut,
-	CakeSausage,
-	React_CakeSausage,
-	CakeSausage_Plus,
-	React_CakeSausage_Plus,
-	CakeSausage_SoldOut,
-	React_CakeSausage_SoldOut,
-	Vego,
-	React_Vego,
-	Halal,
-	React_Halal,
 	BaconEggs,
-	React_BaconEggs,
+	Cake,
+	CakeSausage,
+	CakeSausage_Plus,
+	CakeSausage_SoldOut,
+	Cake_Plus,
+	Cake_SoldOut,
 	Coffee,
-	React_Coffee,
 	Green_Plus,
-	React_Green_Plus,
 	Green_Tick,
+	Grey_Question,
+	Halal,
+	React_BaconEggs,
+	React_Cake,
+	React_CakeSausage,
+	React_CakeSausage_Plus,
+	React_CakeSausage_SoldOut,
+	React_Cake_Plus,
+	React_Cake_SoldOut,
+	React_Coffee,
+	React_Green_Plus,
 	React_Green_Tick,
-	Yellow_Minus,
+	React_Grey_Question,
+	React_Halal,
+	React_Red_Cross,
+	React_Sausage,
+	React_Sausage_Plus,
+	React_Sausage_SoldOut,
+	React_Vego,
 	React_Yellow_Minus,
 	Red_Cross,
-	React_Red_Cross,
-	Grey_Question,
-	React_Grey_Question,
+	Sausage,
+	Sausage_Plus,
+	Sausage_SoldOut,
+	Vego,
+	Yellow_Minus,
 } from './icons';
-import { prepareRawSVG, createReactSvgIcon } from './svgHelpers';
-import { createOLIcon, createOLDetailedIcon } from '../map/mapStyleHelpers';
+
+export const createOLIcon = (rawSVG: string, zIndex: number, width: number, height: number, style?: string) =>
+	new Style({
+		image: new Icon({
+			src: `data:image/svg+xml;utf8,${prepareRawSVGForOpenLayers(rawSVG, width, height, style)}`,
+			// According to https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210, this forces the icon to be rendered to a canvas internally (whilst not changing the colour).
+			// This should result in a performance improvement.
+			// Untested, but it doesnt't appear to do any harm.
+			color: 'white',
+			scale: 0.5,
+		}),
+		zIndex,
+	});
+
+export const createOLDetailedIcon = (rawSVG: string) =>
+	new Style({
+		image: new Icon({
+			src: `data:image/svg+xml;utf8,${prepareRawSVGForOpenLayers(rawSVG, 40, 40)}`,
+			// According to https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210, this forces the icon to be rendered to a canvas internally (whilst not changing the colour).
+			// This should result in a performance improvement.
+			// Untested, but it doesnt't appear to do any harm.
+			color: 'white',
+			scale: 0.5,
+			anchorXUnits: 'pixels',
+			anchorYUnits: 'pixels',
+		}),
+		zIndex: 1,
+	});
 
 export const getAllFoodsAvailableOnStalls = () => [
 	...getPrimaryFoodsAvailableOnStalls(),
@@ -58,8 +80,13 @@ export const getSecondaryFoodsAvailableOnStalls = () => [
 	secondaryFoodIcons.halal,
 	secondaryFoodIcons.bacon_and_eggs,
 	secondaryFoodIcons.coffee,
-]; // @TODO Do we need to define a type for this or does it
-// all just somehow magically work?
+];
+
+// #############################################
+// NOTE:
+// If adding any primary or secondary food icons, be sure
+// to also update getFoodDescription() in polling_places.py
+// #############################################
 
 export const primaryFoodIcons /*: {
     [key in keyof IMapFilterSettings]: {
@@ -182,7 +209,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Bacon and eggs',
 		value: 'bacon_and_eggs',
-		description: "There's coffee available",
+		description: "There's bacon and egg rolls or sandwiches",
 	},
 	coffee: {
 		icon: {
@@ -193,7 +220,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Coffee',
 		value: 'coffee',
-		description: "There's bacon and egg rolls or sandwiches",
+		description: "There's coffee available",
 	},
 };
 

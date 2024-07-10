@@ -1,4 +1,4 @@
-import { Tooltip, SvgIcon } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { View } from 'ol';
 import { transformExtent } from 'ol/proj';
 import React from 'react';
@@ -6,8 +6,7 @@ import { NavigateFunction, Params } from 'react-router-dom';
 import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers';
 import { Election, IGeoJSONPoylgon } from '../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
-import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
-import { supportingIcons } from '../icons/iconHelpers';
+import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';
 import { getStandardViewPadding } from '../map/mapHelpers';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
@@ -152,10 +151,6 @@ export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace, allowRe
 				{Object.keys(pollingPlace.stall?.noms || {}).map((key) => {
 					const foodIcon = foodIcons.find((i) => i.value === key);
 
-					// @TODO FIXME
-					// This excludes the 'free_text' option because it doesn't have any icon
-					// Likewise for nothing and run_out...hopefully?
-					// Ref: IPollingPlaceStall
 					if (foodIcon !== undefined) {
 						return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
 					}

@@ -1,5 +1,3 @@
-import { IMapPollingGeoJSONNoms } from './pollingPlacesInterfaces';
-
 export interface IPollingPlaceNoms {
 	bbq?: boolean;
 	cake?: boolean;

@@ -1,18 +1,10 @@
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import SendIcon from '@mui/icons-material/Send';
+import EmailIcon from '@mui/icons-material/Email';
 import {
 	Avatar,
 	Box,
 	Button,
-	Checkbox,
-	Divider,
-	FormControl,
-	FormControlLabel,
-	InputAdornment,
 	List,
 	ListItem,
 	ListItemAvatar,
@@ -20,24 +12,14 @@ import {
 	ListItemText,
 	MobileStepper,
 	Paper,
-	Radio,
-	RadioGroup,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
 	Typography,
 } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { grey } from '@mui/material/colors';
-import { styled, useTheme } from '@mui/material/styles';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
-import { selectActiveElections } from '../../elections/electionsSlice';
-import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { Election } from '../../../app/services/elections';
+import { selectActiveElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({

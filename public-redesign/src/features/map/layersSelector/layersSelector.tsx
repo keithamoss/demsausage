@@ -20,29 +20,36 @@ import { useAppSelector } from '../../../app/hooks';
 import { navigateToElection } from '../../../app/routing/navigationHelpers';
 import { getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
-import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../../app/ui/theme';
-import { getElectionVeryShortName, getViewForElection, isElectionLive } from '../../elections/electionHelpers';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { getViewForElection, isElectionLive } from '../../elections/electionHelpers';
 import { selectActiveElections, selectAllElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestCircleReact, getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 
-const StyledFab = styled(Fab)(({ theme }) => ({
-	// position: 'absolute',
-	// bottom: `${16 + 48 + 36}px`, // 16 for standard bottom padding, 48 for the height of <SearchBar />, and then 36 more on top
-	// right: '16px',
-	backgroundColor: theme.palette.secondary.main,
-	width: '44px',
-	height: '44px',
+// Note: We did start down a path of using flexbox to line all of these elements up, but
+// ultimately abandoned that as this works well enough!
+
+const LayersSelectorContainer = styled(Box)(() => ({
+	position: 'sticky',
+	top: 64, // 48px (AppBar) + 16px (two lots of standard padding)
+	maxWidth: 350 + 48 + 48, // 350 for an iPhone 15 Pro Max + the 48px padding on left and right
+	marginLeft: 'auto',
+	paddingLeft: 48,
+	paddingRight: 48,
+	zIndex: 1050,
 }));
 
-interface Props {
-	electionId: number;
-}
+const StyledLayersButton = styled(Button)(() => ({
+	width: '100%',
+	height: 36,
+	marginTop: 4, // Just enough to line it up with the vertical centre of the other two elements
+	// These next two prevent really long election names from wrapping on smaller screens
+	overflow: 'hidden',
+	whiteSpace: 'nowrap',
+}));
 
 const StyledLayersBadge = styled(Badge)(({ theme }) => ({
 	position: 'absolute',
-	top: '24px',
-	right: '24px',
-	zIndex: 1050,
+	right: 26, // 24px of padding + 2px to get the edge of the <Button> to line up exactly with the centre of the Fab inside this badge
 	'& .MuiBadge-badge': {
 		right: 4,
 		top: 4,
@@ -50,18 +57,10 @@ const StyledLayersBadge = styled(Badge)(({ theme }) => ({
 	},
 }));
 
-// const StyledIconButton = styled(IconButton)(() => ({
-// 	backgroundColor: 'white',
-// 	'&:hover': {
-// 		backgroundColor: grey[200],
-// 	},
-// }));
-
-const StyledCloseIconButton = styled(IconButton)(() => ({
-	position: 'absolute',
-	right: '0px',
-	zIndex: '3',
-	height: '48px',
+const StyledFab = styled(Fab)(({ theme }) => ({
+	backgroundColor: theme.palette.secondary.main,
+	width: '44px',
+	height: '44px',
 }));
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
@@ -69,6 +68,17 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	overflowY: 'auto',
 	height: `90dvh`,
 }));
+
+const StyledCloseIconButton = styled(IconButton)(({ theme }) => ({
+	position: 'absolute',
+	right: '0px',
+	marginRight: theme.spacing(1),
+	zIndex: theme.zIndex.drawer + 1,
+}));
+
+interface Props {
+	electionId: number;
+}
 
 export default function LayersSelector(props: Props) {
 	const { electionId } = props;
@@ -81,8 +91,6 @@ export default function LayersSelector(props: Props) {
 	const [state, setState] = React.useState(false);
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
-
-	const activeElection = activeElections.find((e) => e.id === electionId);
 
 	const elections = useAppSelector((state) => selectAllElections(state));
 	const electionsByYear = groupBy(sortBy(elections, 'election_day').reverse(), (e) =>
@@ -111,115 +119,88 @@ export default function LayersSelector(props: Props) {
 		navigateToElection(navigate, election, getViewForElection(election));
 	};
 
-	// @TODO Entrypoint me
 	if (currentElection === undefined) {
 		return null;
 	}
 
 	return (
 		<React.Fragment>
-			{getJurisdictionCrestCircleReact(currentElection.jurisdiction, {
-				position: 'absolute',
-				top: '26px',
-				left: '12px',
-				marginTop: '46px',
-				zIndex: 1100,
-				width: 50,
-				height: 50,
-			})}
-
-			<Button
-				size="small"
-				disabled={true}
-				sx={{
-					marginTop: '46px',
+			<LayersSelectorContainer>
+				{getJurisdictionCrestCircleReact(currentElection.jurisdiction, {
 					position: 'absolute',
-					top: '28px',
-					// 24px for the StyledLayersBadge's right offset
-					// 40px for the width of StyledLayersBadge
-					// 24px to ensure even spacing either side of StyledLayersBadge
-					right: '44px', // 24px + 40px + 24px
-					left: '24px',
-					// maxWidth: 500,
-					zIndex: 1050,
-					height: '36px',
+					width: 48,
+					height: 48,
+					left: 23, // Just enough to line the visual centre of the crest up with the edge of the <Button>
+					zIndex: 1,
+				})}
 
-					// Option 1: Purple + White
-					// backgroundColor: mapaThemePrimaryPurple,
-					// color: 'white !important',
-
-					// Option 2: Blue Grey and White
-					// backgroundColor: blueGrey[400],
-					// color: 'white !important',
-
-					// Option 3: White and Purple
-					backgroundColor: 'white',
-					color: `${mapaThemePrimaryPurple} !important`,
-
-					boxShadow:
-						'0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
-				}}
-			>
-				{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
-			</Button>
-
-			<StyledLayersBadge
-				badgeContent={activeElections.length > 1 ? activeElections.length : null}
-				// color="primary"
-				sx={{
-					marginTop: '46px',
-					// backgroundColor: 'white !important',
-					// color: 'white',
-					'& .MuiBadge-badge': {
-						// border: '1px solid white',
-						// color: 'white',
-
-						// Option 1: Purple and White
+				<StyledLayersButton
+					size="small"
+					disabled={true}
+					sx={{
+						// Option 1: Purple + White
 						// backgroundColor: mapaThemePrimaryPurple,
-						// color: 'white',
+						// color: 'white !important',
 
 						// Option 2: Blue Grey and White
-						// backgroundColor: mapaThemePrimaryPurple,
-						// color: 'white',
+						// backgroundColor: blueGrey[400],
+						// color: 'white !important',
 
 						// Option 3: White and Purple
 						backgroundColor: 'white',
-						color: mapaThemePrimaryPurple,
+						color: `${mapaThemePrimaryPurple} !important`,
 
-						zIndex: 1100,
-					},
-				}}
-			>
-				{/* <StyledIconButton
-					aria-label="layers"
-					onClick={toggleDrawer(true)}
-					// sx={{ border: `2px solid ${mapaThemePrimaryPurple}`, color: mapaThemePrimaryPurple }}
-					sx={{ backgroundColor: mapaThemePrimaryPurple, color: 'white' }}
+						boxShadow:
+							'0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+					}}
 				>
-					<LayersIcon />
-				</StyledIconButton> */}
+					{elections.find((e) => e.name_url_safe === urlElectionName)?.name}
+				</StyledLayersButton>
 
-				<StyledFab
-					onClick={toggleDrawer(true)}
-					color="primary"
-					// Option 2: Blue Grey and White
+				<StyledLayersBadge
+					badgeContent={activeElections.length > 1 ? activeElections.length : null}
+					// badgeContent={2}
 					// color="primary"
-					sx={
-						{
+					sx={{
+						'& .MuiBadge-badge': {
 							// Option 1: Purple and White
-							// backgroundColor: 'white',
-							// color: mapaThemePrimaryPurple,
+							// backgroundColor: mapaThemePrimaryPurple,
+							// color: 'white',
+
 							// Option 2: Blue Grey and White
-							// backgroundColor: 'white',
-							// color: mapaThemePrimaryPurple,
+							// backgroundColor: mapaThemePrimaryPurple,
+							// color: 'white',
+
 							// Option 3: White and Purple
-							// defaults
-						}
-					}
+							backgroundColor: 'white',
+							color: mapaThemePrimaryPurple,
+
+							zIndex: 1100,
+						},
+					}}
 				>
-					<LayersIcon />
-				</StyledFab>
-			</StyledLayersBadge>
+					<StyledFab
+						onClick={toggleDrawer(true)}
+						color="primary"
+						// Option 2: Blue Grey and White
+						// color="primary"
+						sx={
+							{
+								// Option 1: Purple and White
+								// backgroundColor: 'white',
+								// color: mapaThemePrimaryPurple,
+								// Option 2: Blue Grey and White
+								// backgroundColor: 'white',
+								// color: mapaThemePrimaryPurple,
+								// Option 3: White and Purple
+								// defaults
+							}
+						}
+					>
+						<LayersIcon />
+					</StyledFab>
+				</StyledLayersBadge>
+			</LayersSelectorContainer>
 
 			<Drawer anchor="bottom" open={state} onClose={toggleDrawer(false)}>
 				<StyledInteractableBoxFullHeight
@@ -229,7 +210,7 @@ export default function LayersSelector(props: Props) {
 					onKeyDown={toggleDrawer(false)}
 				>
 					<StyledCloseIconButton aria-label="close-layers" onClick={toggleDrawer(false)}>
-						<CloseIcon />
+						<CloseIcon sx={{ color: mapaThemePrimaryPurple }} />
 					</StyledCloseIconButton>
 
 					<List
@@ -242,7 +223,6 @@ export default function LayersSelector(props: Props) {
 							'& li.MuiListSubheader-root:not(:first-of-type)': { paddingTop: 2 },
 							'& li.MuiListSubheader-root': { paddingTop: 0, zIndex: 2 },
 						}}
-						// subheader={<li />}
 					>
 						{Object.keys(electionsByYear)
 							.sort()
@@ -252,12 +232,9 @@ export default function LayersSelector(props: Props) {
 									<React.Fragment key={year}>
 										<ListSubheader
 											sx={{
-												// Polling Place Name: 16px 500 rgba(0, 0, 0, 0.8)
-												// color="text.primary"
 												fontSize: 16,
-												fontWeight: 700,
-												// color: '#000000',
-												color: 'rgba(0, 0, 0, 0.8)',
+												fontWeight: theme.typography.fontWeightMedium,
+												color: theme.palette.text.primary,
 											}}
 										>
 											{year}
@@ -287,8 +264,6 @@ export default function LayersSelector(props: Props) {
 																height: 58,
 																marginRight: 2,
 																backgroundColor: 'transparent',
-																// backgroundColor: election.id === electionId ? mapaThemePrimaryPurple : undefined,
-																// backgroundColor: election.id === electionId ? undefined : 'transparent',
 																'& svg': {
 																	width: 50,
 																},
@@ -302,12 +277,9 @@ export default function LayersSelector(props: Props) {
 														<ListItemText
 															sx={{
 																'& .MuiListItemText-primary': {
-																	// Polling Place Address: 15px 400 rgba(0, 0, 0, 0.6)
-																	// color="text.secondary"
 																	fontSize: 15,
-																	fontWeight: 700,
-																	// color: mapaThemePrimaryGrey,
-																	color: 'rgba(0, 0, 0, 0.6)',
+																	fontWeight: theme.typography.fontWeightMedium,
+																	color: theme.palette.text.primary,
 																},
 															}}
 															primary={election.name}

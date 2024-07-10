@@ -102,7 +102,7 @@ export default function SearchBar(props: Props) {
 					navigateToSearchMapboxResults(params, navigate, searchTerm);
 				}
 			}, 400),
-		[navigate, params],
+		[location.pathname, navigate, params],
 	);
 
 	const onChangeSearchField = useCallback(

@@ -63,7 +63,7 @@ def getFoodDescription(stall):
                     {"key": "coffee", "descriptor": "coffee"},
                     {"key": "vego", "descriptor": "savoury vegetarian options"},
                     {"key": "halal", "descriptor": "halal options"},
-                    {"key": "bacon_and_eggs", "descriptor": "bacon and egg burgers"}]
+                    {"key": "bacon_and_eggs", "descriptor": "bacon and egg rolls or sandwiches"}]
     noms = []
 
     for description in descriptions:

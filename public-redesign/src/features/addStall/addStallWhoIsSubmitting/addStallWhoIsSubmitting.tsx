@@ -1,48 +1,26 @@
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
-import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import StallOwnershipMyStall from '../../../../public/assets/stalls/submit_mystall.svg?react';
-import StallOwnershipTipOff from '../../../../public/assets/stalls/submit_tipoff.svg?react';
 import {
 	Avatar,
 	Box,
 	Button,
-	Checkbox,
-	Divider,
-	FormControl,
-	FormControlLabel,
-	InputAdornment,
 	List,
-	ListItem,
 	ListItemAvatar,
 	ListItemButton,
 	ListItemText,
 	MobileStepper,
 	Paper,
-	Radio,
-	RadioGroup,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
 	Typography,
 } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { grey } from '@mui/material/colors';
-import { styled, useTheme } from '@mui/material/styles';
-import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { styled } from '@mui/material/styles';
 import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { useLocation, useNavigate } from 'react-router-dom';
+import StallOwnershipMyStall from '../../../../public/assets/stalls/submit_mystall.svg?react';
+import StallOwnershipTipOff from '../../../../public/assets/stalls/submit_tipoff.svg?react';
 import { useAppSelector } from '../../../app/hooks/store';
+import { addComponentToEndOfURLPath } from '../../../app/routing/navigationHelpers';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import {
-	addComponentToEndOfURLPath,
-	removeLastComponentFromEndOfURLPath,
-} from '../../../app/routing/navigationHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -93,7 +71,7 @@ export default function AddStallWhoIsSubmitting(/*props: Props*/) {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">Who's submitting?</Typography>
+				<Typography variant="h6">Who&apos;s submitting?</Typography>
 			</Paper>
 
 			<Box sx={{ /*minHeight: 300,*/ /*maxWidth: 400, */ width: '100%', p: 2 }}>

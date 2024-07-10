@@ -1,50 +1,28 @@
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
-import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import EmailIcon from '@mui/icons-material/Email';
 import {
 	Avatar,
 	Box,
 	Button,
-	Checkbox,
-	Divider,
-	FormControl,
-	FormControlLabel,
-	InputAdornment,
 	List,
-	ListItem,
 	ListItemAvatar,
 	ListItemButton,
 	ListItemText,
 	MobileStepper,
 	Paper,
-	Radio,
-	RadioGroup,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
 	Typography,
 } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { grey } from '@mui/material/colors';
-import { styled, useTheme } from '@mui/material/styles';
-import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { styled } from '@mui/material/styles';
 import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
-import SearchComponent from '../../search/searchByAddressOrGPS/searchComponent';
-import { Election } from '../../../app/services/elections';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
+import { navigateToAddStallPollingPlace } from '../../../app/routing/navigationHelpers';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import {
-	navigateToAddStallPollingPlace,
-	removeLastComponentFromEndOfURLPath,
-} from '../../../app/routing/navigationHelpers';
-import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import SearchComponent from '../../search/searchByAddressOrGPS/searchComponent';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -83,9 +61,9 @@ export default function AddStallSelectPollingPlace(/*props: Props*/) {
 		// }
 	};
 
-	const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
-	const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) =>
-		setWhoIsSubmitting(value);
+	// const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
+	// const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) =>
+	// 	setWhoIsSubmitting(value);
 
 	if (activeElections.length === 0) {
 		return null;

@@ -3,15 +3,16 @@ import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { stringDivider } from '../../app/utils';
-import { IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 import {
 	getAllFoodsAvailableOnStalls,
 	getPrimaryFoodsAvailableOnStalls,
 	getSecondaryFoodsAvailableOnStalls,
+	primaryFoodIcons,
+	secondaryFoodIcons,
+	supportingIcons,
 } from '../icons/iconHelpers';
-import { primaryFoodIcons, secondaryFoodIcons, supportingIcons } from '../icons/iconHelpers';
+import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 import { IMapPollingPlaceFeature, getStringOrEmptyStringFromFeature } from './mapHelpers';
-import { IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export class NomsReader {
 	static primaryNomsIconValues = getPrimaryFoodsAvailableOnStalls().map((noms) => noms.value);

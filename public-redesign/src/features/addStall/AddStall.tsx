@@ -1,39 +1,12 @@
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
-import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
-import {
-	Avatar,
-	Box,
-	Button,
-	List,
-	ListItemAvatar,
-	ListItemButton,
-	ListItemText,
-	MobileStepper,
-	Paper,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
-	Typography,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { styled, useTheme } from '@mui/material/styles';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { getBaseURL } from '../../app/utils';
-import SearchComponent from '../search/searchByAddressOrGPS/searchComponent';
-import AddStallSelectPollingPlace from './addStallSelectPollingPlace/addStallSelectPollingPlace';
-import AddStallStallForm from './addStallStallForm/addStallStallForm';
-import AddStallWhoIsSubmitting from './addStallWhoIsSubmitting/addStallWhoIsSubmitting';
-import AddStallSubmitted from './addStallSubmitted/addStallSubmitted';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
+import { getBaseURL } from '../../app/utils';
 import { selectActiveElections } from '../elections/electionsSlice';
-import AddStallNoLiveElection from './addStallNoLiveElection/addStallNoLiveElection';
-import AddStallSelectElection from './addStallSelectElection/addStallSelectElection';
 
 const bottomNav = 56;
 
@@ -75,15 +48,15 @@ export default function AddStall() {
 		}
 	}, [location, activeElections, navigate]);
 
-	const [activeStep, setActiveStep] = React.useState(0);
+	// const [activeStep, setActiveStep] = React.useState(0);
 
-	const handleNext = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	};
+	// const handleNext = () => {
+	// 	setActiveStep((prevActiveStep) => prevActiveStep + 1);
+	// };
 
-	const handleBack = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep - 1);
-	};
+	// const handleBack = () => {
+	// 	setActiveStep((prevActiveStep) => prevActiveStep - 1);
+	// };
 
 	// eslint-disable-next-line
 	// const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
@@ -111,9 +84,9 @@ export default function AddStall() {
 	// 	},
 	// ];
 
-	const maxSteps = activeElections.length >= 2 ? 6 : 5;
+	// const maxSteps = activeElections.length >= 2 ? 6 : 5;
 
-	const theme = useTheme();
+	// const theme = useTheme();
 
 	return (
 		<Root>

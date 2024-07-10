@@ -1,17 +1,13 @@
-import { KeyboardArrowLeft, KeyboardArrowRight, Send } from '@mui/icons-material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
 import SendIcon from '@mui/icons-material/Send';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
 	Avatar,
 	Box,
 	Button,
 	Checkbox,
 	Divider,
-	FormControl,
-	FormControlLabel,
 	InputAdornment,
 	List,
 	ListItem,
@@ -20,29 +16,18 @@ import {
 	ListItemText,
 	MobileStepper,
 	Paper,
-	Radio,
-	RadioGroup,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
 	Typography,
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { grey } from '@mui/material/colors';
-import { styled, useTheme } from '@mui/material/styles';
-import { NavigationType, Outlet, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
-import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
-import { selectActiveElections } from '../../elections/electionsSlice';
-import {
-	removeLastComponentFromEndOfURLPath,
-	removeLastTwoComponentsFromEndOfURLPath,
-} from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import { selectActiveElections } from '../../elections/electionsSlice';
+import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],

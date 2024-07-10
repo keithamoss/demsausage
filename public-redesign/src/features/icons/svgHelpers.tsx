@@ -1,17 +1,17 @@
 import { SvgIcon } from '@mui/material';
-import React from 'react';
-import Circle from 'ol/style/Circle';
-import Fill from 'ol/style/Fill';
-import Icon from 'ol/style/Icon';
-import Stroke from 'ol/style/Stroke';
-import Style from 'ol/style/Style';
 
 const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) =>
 	Object.entries(attributes).forEach(([attributeName, attributeValue]) =>
 		svg.setAttribute(attributeName, attributeValue),
 	);
 
-export const prepareRawSVG = (rawSvg: string, width: number, height: number, style?: string) => {
+export const createInlinedSVGImage = (
+	rawSVG: string,
+	style: React.CSSProperties,
+	onClick: React.MouseEventHandler<HTMLImageElement>,
+) => <img src={`data:image/svg+xml;utf8,${rawSVG.replaceAll('#', '%23')}`} style={style} onClick={onClick} />;
+
+export const prepareRawSVGForOpenLayers = (rawSvg: string, width?: number, height?: number, style?: string) => {
 	// Wrapping the SVG element in a <div> let's us easily convert the DOM to a string with `.documentElement.innerHTML` later on
 	const svgDOMElementWrapped = new DOMParser().parseFromString(
 		`<div>${rawSvg.replace('<?xml version="1.0" encoding="UTF-8"?>', '')}</div>`,
@@ -20,12 +20,15 @@ export const prepareRawSVG = (rawSvg: string, width: number, height: number, sty
 	const svgDOMElement = svgDOMElementWrapped.getElementsByTagName('svg')[0];
 
 	// Apply our overall icon styling and required attributes to the outer <svg> element
-	setAttributesOnElement(svgDOMElement, {
-		'aria-hidden': 'true',
-		focusable: 'false',
-		width: `${width * 2}`,
-		height: `${height * 2}`,
-	});
+	if (width !== undefined && height !== undefined) {
+		setAttributesOnElement(svgDOMElement, {
+			'aria-hidden': 'true',
+			focusable: 'false',
+			// * 2 here to give us sharper icons (we downscale them to 0.5 in OpenLayers)
+			width: `${width * 2}`,
+			height: `${height * 2}`,
+		});
+	}
 
 	if (style !== undefined) {
 		setAttributesOnElement(svgDOMElement, {
@@ -36,7 +39,7 @@ export const prepareRawSVG = (rawSvg: string, width: number, height: number, sty
 	return svgDOMElementWrapped.documentElement.innerHTML.replaceAll('#', '%23');
 };
 
-export const createReactSvgIcon = (Icon: any) => (
+export const createReactSvgIcon = (Icon: JSX.ElementType) => (
 	<SvgIcon>
 		<Icon width="24" height="24" />
 	</SvgIcon>

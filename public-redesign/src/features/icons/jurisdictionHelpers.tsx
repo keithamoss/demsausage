@@ -1,41 +1,40 @@
-import { default as Grey_Question } from '../../../public/assets/icons/circles/grey_question.svg?raw';
-import { default as React_Grey_Question } from '../../../public/assets/icons/circles/grey_question.svg?react';
+import { default as React_Grey_Question } from '../../../public/assets/icons/circles/grey_question.svg?raw';
 import {
-	WAJurisdictionCrest,
+	ACTJurisdictionCrest,
+	ACTJurisdictionCrestCircle,
+	AUSJurisdictionCrest,
+	AUSJurisdictionCrestCircle,
+	NSWJurisdictionCrest,
+	NSWJurisdictionCrestCircle,
+	NTJurisdictionCrest,
+	NTJurisdictionCrestCircle,
+	QLDJurisdictionCrest,
+	QLDJurisdictionCrestCircle,
+	React_ACTJurisdictionCrest,
+	React_ACTJurisdictionCrestCircle,
+	React_AUSJurisdictionCrest,
+	React_AUSJurisdictionCrestCircle,
+	React_NSWJurisdictionCrest,
+	React_NSWJurisdictionCrestCircle,
+	React_NTJurisdictionCrest,
+	React_QLDJurisdictionCrest,
+	React_QLDJurisdictionCrestCircle,
+	React_SAJurisdictionCrest,
+	React_SAJurisdictionCrestCircle,
+	React_TASJurisdictionCrest,
+	React_TASJurisdictionCrestCircle,
+	React_VICJurisdictionCrest,
+	React_VICJurisdictionCrestCircle,
 	React_WAJurisdictionCrest,
-	WAJurisdictionCrestCircle,
 	React_WAJurisdictionCrestCircle,
 	SAJurisdictionCrest,
-	React_SAJurisdictionCrest,
 	SAJurisdictionCrestCircle,
-	React_SAJurisdictionCrestCircle,
-	NSWJurisdictionCrest,
-	React_NSWJurisdictionCrest,
-	NSWJurisdictionCrestCircle,
-	React_NSWJurisdictionCrestCircle,
-	ACTJurisdictionCrest,
-	React_ACTJurisdictionCrest,
-	ACTJurisdictionCrestCircle,
-	React_ACTJurisdictionCrestCircle,
-	VICJurisdictionCrest,
-	React_VICJurisdictionCrest,
-	VICJurisdictionCrestCircle,
-	React_VICJurisdictionCrestCircle,
-	NTJurisdictionCrest,
-	React_NTJurisdictionCrest,
-	NTJurisdictionCrestCircle,
 	TASJurisdictionCrest,
-	React_TASJurisdictionCrest,
 	TASJurisdictionCrestCircle,
-	React_TASJurisdictionCrestCircle,
-	QLDJurisdictionCrest,
-	React_QLDJurisdictionCrest,
-	QLDJurisdictionCrestCircle,
-	React_QLDJurisdictionCrestCircle,
-	AUSJurisdictionCrest,
-	React_AUSJurisdictionCrest,
-	AUSJurisdictionCrestCircle,
-	React_AUSJurisdictionCrestCircle,
+	VICJurisdictionCrest,
+	VICJurisdictionCrestCircle,
+	WAJurisdictionCrest,
+	WAJurisdictionCrestCircle,
 } from './jurisdictions';
 
 export const jurisdictionCrests = {
@@ -131,20 +130,26 @@ export const jurisdictionCrests = {
 	},
 };
 
-export const getJurisdictionCrestStandaloneReact = (jurisdiction: keyof typeof jurisdictionCrests, style?: object) => {
+export const getJurisdictionCrestStandaloneReact = (
+	jurisdiction: keyof typeof jurisdictionCrests,
+	style?: React.CSSProperties,
+) => {
 	if (jurisdiction in jurisdictionCrests) {
 		const Crest = jurisdictionCrests[jurisdiction].standalone.react;
 		return <Crest style={style} />;
 	}
 
-	return <React_Grey_Question style={style} />;
+	return <React_Grey_Question />;
 };
 
-export const getJurisdictionCrestCircleReact = (jurisdiction: keyof typeof jurisdictionCrests, style?: object) => {
+export const getJurisdictionCrestCircleReact = (
+	jurisdiction: keyof typeof jurisdictionCrests,
+	style?: React.CSSProperties,
+) => {
 	if (jurisdiction in jurisdictionCrests) {
 		const Crest = jurisdictionCrests[jurisdiction].circle.react;
 		return <Crest style={style} />;
 	}
 
-	return <React_Grey_Question style={style} />;
+	return <React_Grey_Question />;
 };
