@@ -12,7 +12,11 @@ import {
 	supportingIcons,
 } from '../icons/iconHelpers';
 import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
-import { IMapPollingPlaceFeature, getStringOrEmptyStringFromFeature } from './mapHelpers';
+import {
+	IMapPollingPlaceFeature,
+	getStringOrEmptyStringFromFeature,
+	getStringOrUndefinedFromFeature,
+} from './mapHelpers';
 
 export class NomsReader {
 	static primaryNomsIconValues = getPrimaryFoodsAvailableOnStalls().map((noms) => noms.value);
@@ -155,7 +159,11 @@ export class NomsReader {
 
 		// 2. Label the polling place with the name of its premises
 		const fontSize = 16;
-		const [label, replaceCount] = stringDivider(getStringOrEmptyStringFromFeature(feature, 'premises'), 16, '\n');
+		const [label, replaceCount] = stringDivider(
+			getStringOrUndefinedFromFeature(feature, 'premises') || getStringOrEmptyStringFromFeature(feature, 'name'),
+			16,
+			'\n',
+		);
 		const numberOfLines = replaceCount + 1;
 		olStyles.push(
 			new Style({
