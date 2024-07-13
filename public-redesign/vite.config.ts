@@ -15,6 +15,16 @@ export default defineConfig(({ command, mode }) => {
 	return {
 		build: {
 			outDir: 'build',
+			rollupOptions: {
+				output: {
+					manualChunks(id: string) {
+						// Creating a chunk for third-party packages
+						if (id.includes('/.yarn/')) {
+							return 'vendor';
+						}
+					},
+				},
+			},
 		},
 		plugins: [
 			react(),
