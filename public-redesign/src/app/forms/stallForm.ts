@@ -21,7 +21,15 @@ export const stallOwnerFormValidationSchema: ObjectSchema<StallOwnerModifiablePr
 		name: yup.string().required(),
 		description: yup.string().required(),
 		opening_hours: yup.string().optional(),
-		website: yup.string().url().optional(),
+		// Yup's regex doesn't allow for URLs wihout the proctol, so this is our pragmatic fix that doesn't involve trying to have a regex that validates URLs. Abandon hope all ye who embark upon that task.
+		website: yup
+			.string()
+			.transform((value: string) =>
+				// In this day and age, let's just assume everything that's likely to be a website link for a stall supports https and tack it on the start
+				value.startsWith('http://') || value.startsWith('https://') ? value : `https://${value}`,
+			)
+			.url()
+			.optional(),
 		noms: stallNomsFieldFormValidationSchema,
 		email: yup.string().email().required(),
 	})

@@ -27,7 +27,7 @@ export default function AddStallSubmitted() {
 				<Typography variant="h6">Stall submitted</Typography>
 			</Paper>
 
-			<Box sx={{ minHeight: 300, maxWidth: 400, width: '100%', p: 2 }}>
+			<Box sx={{ width: '100%', p: 2 }}>
 				<React.Fragment>
 					Thanks for letting us know about your stall! We&apos;ll let you know once it&apos;s approved and it&apos;s
 					appearing on the map.
