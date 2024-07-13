@@ -3,12 +3,12 @@ import { AppBar, IconButton, Toolbar } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Outlet, useNavigate } from 'react-router-dom';
-import DemSausageBannerRaw from '../public/assets/banner/banner.svg?raw';
-import DemSausageWhiteCrestGrillRaw from '../public/assets/crest/white_crest_grill.svg?raw';
 import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
 import { getAPIBaseURL, getBaseURL } from './app/utils';
+import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
+import DemSausageWhiteCrestGrillRaw from './assets/crest/white_crest_grill.svg?raw';
 import { createInlinedSVGImage } from './features/icons/svgHelpers';
 
 export default function App() {

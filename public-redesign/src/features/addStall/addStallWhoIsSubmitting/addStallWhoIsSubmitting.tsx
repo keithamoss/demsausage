@@ -16,14 +16,14 @@ import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import StallSubmitterTypeOwner from '../../../../public/assets/stalls/submit_mystall.svg?react';
-import StallSubmitterTypeTipOff from '../../../../public/assets/stalls/submit_tipoff.svg?react';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
 	navigateToAddStallForm,
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { StallSubmitterType } from '../../../app/services/stalls';
+import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
+import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 

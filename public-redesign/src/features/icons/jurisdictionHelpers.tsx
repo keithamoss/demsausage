@@ -1,4 +1,4 @@
-import { default as React_Grey_Question } from '../../../public/assets/icons/circles/grey_question.svg?raw';
+import { default as React_Grey_Question } from '../../assets/icons/circles/grey_question.svg?raw';
 import {
 	ACTJurisdictionCrest,
 	ACTJurisdictionCrestCircle,
