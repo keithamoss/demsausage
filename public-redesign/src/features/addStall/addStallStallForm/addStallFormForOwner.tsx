@@ -4,7 +4,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
-	Alert,
 	Box,
 	Button,
 	Divider,
@@ -21,6 +20,7 @@ import { isEmpty } from 'lodash-es';
 import { useCallback } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallOwnerFormValidationSchema } from '../../../app/forms/stallForm';
 import { useAppSelector } from '../../../app/hooks/store';
 import { navigateToAddStallWhoIsSubmittingFromURLParams } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
@@ -157,7 +157,7 @@ export default function AddStallFormForOwner(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.name !== undefined && <Alert severity="error">{errors.name.message}</Alert>}
+						{errors.name !== undefined && <FormFieldValidationError error={errors.name} />}
 					</FormControl>
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
@@ -175,7 +175,7 @@ export default function AddStallFormForOwner(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.description !== undefined && <Alert severity="error">{errors.description.message}</Alert>}
+						{errors.description !== undefined && <FormFieldValidationError error={errors.description} />}
 					</FormControl>
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
@@ -193,7 +193,7 @@ export default function AddStallFormForOwner(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.opening_hours !== undefined && <Alert severity="error">{errors.opening_hours.message}</Alert>}
+						{errors.opening_hours !== undefined && <FormFieldValidationError error={errors.opening_hours} />}
 					</FormControl>
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
@@ -211,7 +211,7 @@ export default function AddStallFormForOwner(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.website !== undefined && <Alert severity="error">{errors.website.message}</Alert>}
+						{errors.website !== undefined && <FormFieldValidationError error={errors.website} />}
 					</FormControl>
 					{/* ######################
 							Stall Details (End)
@@ -257,7 +257,7 @@ export default function AddStallFormForOwner(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.email !== undefined && <Alert severity="error">{errors.email.message}</Alert>}
+						{errors.email !== undefined && <FormFieldValidationError error={errors.email} />}
 					</FormControl>
 					{/* ######################
 							Your Details (End)

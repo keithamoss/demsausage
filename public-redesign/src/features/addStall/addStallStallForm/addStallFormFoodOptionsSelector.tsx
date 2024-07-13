@@ -1,5 +1,4 @@
 import {
-	Alert,
 	Avatar,
 	Checkbox,
 	FormControl,
@@ -14,6 +13,7 @@ import {
 import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { useMemo } from 'react';
+import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
 import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
@@ -118,15 +118,15 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 					<TextFieldWithout1Password
 						label="Anything else?"
 						helperText="e.g. We also have yummy gluten free sausage rolls, cold drinks, and pony rides!"
-						// fullWidth
-						// variant="filled"
 						sx={{ mt: 1 }}
 						onChange={onChangeFreeTextFoodOption}
 					/>
 				</FormGroup>
 			</FormControl>
 
-			{errors !== undefined && <Alert severity="error">{errors.message}</Alert>}
+			{errors !== undefined && errors.message !== undefined && (
+				<FormFieldValidationErrorMessageOnly message={errors.message} />
+			)}
 		</React.Fragment>
 	);
 }

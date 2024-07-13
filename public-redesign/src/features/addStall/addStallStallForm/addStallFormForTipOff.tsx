@@ -4,7 +4,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
-	Alert,
 	Box,
 	Button,
 	Divider,
@@ -21,6 +20,7 @@ import { isEmpty } from 'lodash-es';
 import { useCallback } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallFormTipOffValidationSchema } from '../../../app/forms/stallForm';
 import { useAppSelector } from '../../../app/hooks/store';
 import { navigateToAddStallWhoIsSubmittingFromURLParams } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
@@ -166,7 +166,7 @@ export default function AddStallFormForTipOff(props: Props) {
 							/>
 						</FormGroup>
 
-						{errors.email !== undefined && <Alert severity="error">{errors.email.message}</Alert>}
+						{errors.email !== undefined && <FormFieldValidationError error={errors.email} />}
 					</FormControl>
 					{/* ######################
 							Your Details (End)
