@@ -10,7 +10,7 @@ import {
 	navigateToSearchDrawer,
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
-} from '../../../../app/routing/navigationHelpers';
+} from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {

@@ -7,15 +7,17 @@ import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
+import { navigateToPollingPlace } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import {
-	navigateToAddStallPollingPlace,
-	navigateToMapUsingURLParamsWithoutUpdatingTheView,
-	navigateToPollingPlace,
-} from '../../app/routing/navigationHelpers';
+	navigateToSearchListOfPollingPlacesFromMapboxResults,
+	navigateToSearchMapboxResults,
+} from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { IMapboxGeocodingAPIResponseFeature } from './searchBarHelpers';
 import SearchComponent from './searchByAddressOrGPS/searchComponent';
 import SearchByIdsStackComponent from './searchByIds/searchByIdsStackComponent';
 
@@ -65,21 +67,34 @@ function SearchDrawer(props: Props) {
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlPollingPlaceIds = getStringParamOrEmptyString(params, 'polling_place_ids');
 
-	const toggleDrawer = useCallback(() => {
+	const onToggleDrawer = useCallback(() => {
 		navigateToMapUsingURLParamsWithoutUpdatingTheView(params, navigate);
 	}, [navigate, params]);
+
+	const onMapboxSearchTermChange = useCallback(
+		(searchTerm: string) => navigateToSearchMapboxResults(params, navigate, searchTerm),
+		[navigate, params],
+	);
+
+	const onChooseMapboxSearchResult = useCallback(
+		(feature: IMapboxGeocodingAPIResponseFeature) =>
+			navigateToSearchListOfPollingPlacesFromMapboxResults(
+				params,
+				navigate,
+				feature.place_name,
+				feature.geometry.coordinates.join(','),
+			),
+		[navigate, params],
+	);
+
+	const onChoosePollingPlace = useCallback(
+		(pollingPlace: IPollingPlace) => navigateToPollingPlace(params, navigate, pollingPlace),
+		[navigate, params],
+	);
 
 	if (election === undefined) {
 		return null;
 	}
-
-	const onChoosePollingPlace = (pollingPlace: IPollingPlace) => {
-		if (location.pathname.includes('/add-stall') === true) {
-			navigateToAddStallPollingPlace(params, navigate, pollingPlace);
-		} else {
-			navigateToPollingPlace(params, navigate, pollingPlace);
-		}
-	};
 
 	return (
 		<React.Fragment>
@@ -90,7 +105,7 @@ function SearchDrawer(props: Props) {
 			<Drawer
 				anchor="bottom"
 				open={true}
-				onClose={toggleDrawer}
+				onClose={onToggleDrawer}
 				ModalProps={{
 					keepMounted: true,
 				}}
@@ -103,6 +118,8 @@ function SearchDrawer(props: Props) {
 							<SearchComponent
 								election={election}
 								autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
+								onMapboxSearchTermChange={onMapboxSearchTermChange}
+								onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 								onChoosePollingPlace={onChoosePollingPlace}
 							/>
 						)}

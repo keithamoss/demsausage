@@ -349,7 +349,17 @@ class StallsUserEditSerializer(StallsSerializer):
 class StallsManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on")
+        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
+
+
+class StallsOwnerManagementSerializer(StallsManagementSerializer):
+    pass
+
+
+class StallsTipOffManagementSerializer(StallsSerializer):
+    class Meta:
+        model = Stalls
+        fields = ("noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
 
 
 class PendingStallsSerializer(StallsSerializer):

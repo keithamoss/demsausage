@@ -14,7 +14,7 @@ import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
 interface Props {
 	pollingPlace: IPollingPlace;
-	onChoosePollingPlace?: (pollingPlace: IPollingPlace) => void;
+	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
 
 const FlexboxIcons = styled('div')(() => ({
@@ -43,9 +43,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 
 	const onClickPollingPlace = useCallback(
 		(pollingPlace: IPollingPlace) => () => {
-			if (onChoosePollingPlace !== undefined) {
-				onChoosePollingPlace(pollingPlace);
-			}
+			onChoosePollingPlace(pollingPlace);
 		},
 		[onChoosePollingPlace],
 	);

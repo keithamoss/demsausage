@@ -55,6 +55,14 @@ class PollingPlaceJurisdiction(str, EnumBase):
         return self.value
 
 
+class StallSubmitterType(str, EnumBase):
+    OWNER = "owner"
+    TIPOFF = "tipoff"
+
+    def __str__(self):
+        return self.value
+
+
 class StallStatus(str, EnumBase):
     PENDING = "Pending"
     APPROVED = "Approved"

@@ -1,7 +1,8 @@
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import { Fab, styled } from '@mui/material';
-import * as React from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { navigateToAddStallRoot } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
 	position: 'absolute',
@@ -13,8 +14,8 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 export default function AddStallButton() {
 	const navigate = useNavigate();
 
-	const onAddStall = React.useCallback(() => {
-		navigate(`/add-stall`);
+	const onAddStall = useCallback(() => {
+		navigateToAddStallRoot(navigate);
 	}, [navigate]);
 
 	return (

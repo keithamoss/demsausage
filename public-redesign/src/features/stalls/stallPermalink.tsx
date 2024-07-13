@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { navigateToPollingPlace } from '../../app/routing/navigationHelpers';
+import { navigateToPollingPlace } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import { useGetPollingPlaceByStallIdLookupQuery } from '../../app/services/pollingPlaces';
 

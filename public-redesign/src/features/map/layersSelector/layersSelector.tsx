@@ -17,7 +17,7 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
-import { navigateToElection } from '../../../app/routing/navigationHelpers';
+import { navigateToElection } from '../../../app/routing/navigationHelpers/navigationHelpersMap';
 import { getStringParamOrUndefined } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';

@@ -3,7 +3,8 @@ from copy import deepcopy
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import (PollingPlaceStatus, StallStatus,
+                                  StallSubmitterType)
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
                                     PollingPlacesNearbyFilter,
@@ -39,7 +40,9 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         PollingPlacesManagementSerializer,
                                         PollingPlacesSerializer,
                                         StallsManagementSerializer,
+                                        StallsOwnerManagementSerializer,
                                         StallsSerializer,
+                                        StallsTipOffManagementSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
@@ -513,14 +516,24 @@ class StallsViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, format=None):
-        serializer = StallsManagementSerializer(data=request.data)
-        if serializer.is_valid() is True:
-            serializer.save()
+        if "submitter_type" in request.data:
+            if request.data["submitter_type"] == StallSubmitterType.OWNER:
+                serializer = StallsOwnerManagementSerializer(data=request.data)
+            elif request.data["submitter_type"] == StallSubmitterType.TIPOFF:
+                serializer = StallsTipOffManagementSerializer(data=request.data)
 
-            send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
-            return Response({}, status=status.HTTP_201_CREATED)
-        else:
-            raise BadRequest(serializer.errors)
+            if serializer is not None:
+                if serializer.is_valid() is True:
+                    serializer.save()
+
+                    send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
+                    return Response({}, status=status.HTTP_201_CREATED)
+                else:
+                    raise BadRequest(serializer.errors)
+            else:
+                raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
+        
+        raise BadRequest("No submitter_type supplied")
 
     def retrieve(self, request, *args, **kwargs):
         stall = self.get_object()

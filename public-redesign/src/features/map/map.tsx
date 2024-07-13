@@ -12,9 +12,9 @@ import {
 	addURLMapLatLonZoomToCurrentPathAndNavigateAndReplace,
 	navigateToElectionAndReplace,
 	navigateToMapWithoutUpdatingTheView,
-	navigateToPollingPlaceFromFeature,
-	navigateToSearchPollingPlacesByIds,
-} from '../../app/routing/navigationHelpers';
+} from '../../app/routing/navigationHelpers/navigationHelpersMap';
+import { navigateToPollingPlaceFromFeature } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
+import { navigateToSearchPollingPlacesByIds } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';

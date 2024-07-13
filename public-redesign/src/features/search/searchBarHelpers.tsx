@@ -3,7 +3,7 @@ import { View } from 'ol';
 import { transformExtent } from 'ol/proj';
 import React from 'react';
 import { NavigateFunction, Params } from 'react-router-dom';
-import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers';
+import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
 import { Election, IGeoJSONPoylgon } from '../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
 import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';

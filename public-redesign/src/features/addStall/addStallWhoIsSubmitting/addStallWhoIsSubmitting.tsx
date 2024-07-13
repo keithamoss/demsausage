@@ -1,5 +1,4 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
 	Avatar,
 	Box,
@@ -15,12 +14,18 @@ import {
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import StallOwnershipMyStall from '../../../../public/assets/stalls/submit_mystall.svg?react';
-import StallOwnershipTipOff from '../../../../public/assets/stalls/submit_tipoff.svg?react';
+import { useCallback } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import StallSubmitterTypeOwner from '../../../../public/assets/stalls/submit_mystall.svg?react';
+import StallSubmitterTypeTipOff from '../../../../public/assets/stalls/submit_tipoff.svg?react';
 import { useAppSelector } from '../../../app/hooks/store';
-import { addComponentToEndOfURLPath } from '../../../app/routing/navigationHelpers';
+import {
+	navigateToAddStallForm,
+	navigateToAddStallSelectPollingPlace,
+} from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import { StallSubmitterType } from '../../../app/services/stalls';
 import { selectActiveElections } from '../../elections/electionsSlice';
+import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -29,34 +34,48 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	height: `90dvh`,
 }));
 
-export default function AddStallWhoIsSubmitting(/*props: Props*/) {
+interface LocationState {
+	cameFromInternalNavigation?: boolean;
+}
+
+export default function AddStallWhoIsSubmitting() {
+	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
+
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
-	// const handleNext = () => {
-	// 	// setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	// 	// navigate('/add-stall/stall-details/');
+	const onClickBack = useCallback(() => {
+		// If we've arrived here from elsewhere in the add stall interface,
+		// we know we can just go back and we'll remain within it.
+		// In most cases, this should send them back to the list of
+		// polling place search results for them to choose a different place from.
+		//
+		// Note that we can't just go back by constructing the URL from our URL params
+		// here, because the URL on this page is:
+		// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/submitter/:submitter_type/
+		// and the URL on the page before this is:
+		// /add-stall/:election_name/search/place/:search_term/:place_lon_lat/
+		if (cameFromInternalNavigation === true) {
+			navigate(-1);
+		} else {
+			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
+			// be sure where we'll end up, so best just to send the user back to the start of selecting a polling place.
+			navigateToAddStallSelectPollingPlace(params, navigate);
+		}
+	}, [cameFromInternalNavigation, navigate, params]);
 
-	// 	if (stallOwnership !== undefined) {
-	// 		navigate(addComponentToEndOfURLPath(location.pathname, `owner/${stallOwnership}`));
-	// 	}
-	// };
+	const onChooseStallOwner = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.Owner),
+		[navigate, params],
+	);
 
-	const handleBack = () => {
-		// setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-		// navigate(removeLastComponentFromEndOfURLPath(location.pathname));
-
-		// @TODO What if we came directly here?
-		navigate(-1);
-	};
-
-	// const [stallOwnership, setStallOwnership] = React.useState<string | undefined>();
-	const onClick = (value: string) => {
-		navigate(addComponentToEndOfURLPath(location.pathname, `owner/${value}`));
-	};
+	const onChooseStallTipOff = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOff),
+		[navigate, params],
+	);
 
 	return (
 		<StyledInteractableBoxFullHeight>
@@ -74,85 +93,45 @@ export default function AddStallWhoIsSubmitting(/*props: Props*/) {
 				<Typography variant="h6">Who&apos;s submitting?</Typography>
 			</Paper>
 
-			<Box sx={{ /*minHeight: 300,*/ /*maxWidth: 400, */ width: '100%', p: 2 }}>
+			<Box sx={{ width: '100%', p: 2 }}>
 				<React.Fragment>
 					<Typography>Foobar foobar foobar</Typography>
 
-					<List
-						sx={
-							{
-								/*width: '100%', */
-								/*maxWidth: 360,*/
-								/*bgcolor: 'background.paper'*/
-							}
-						}
-					>
-						<ListItemButton sx={{ /*bgcolor: 'background.paper',*/ marginBottom: 0 }} onClick={() => onClick('owner')}>
+					<List>
+						<ListItemButton sx={{ marginBottom: 0 }} onClick={onChooseStallOwner}>
 							<ListItemAvatar>
 								<Avatar sx={{ backgroundColor: 'transparent' }}>
-									<StallOwnershipMyStall style={{ width: 28, height: 28 }} />
+									<StallSubmitterTypeOwner style={{ width: 28, height: 28 }} />
 								</Avatar>
 							</ListItemAvatar>
 
 							<ListItemText primary="I'm involved in running this stall" />
 						</ListItemButton>
 
-						<ListItemButton
-							sx={
-								{
-									/*bgcolor: 'background.paper'*/
-								}
-							}
-							onClick={() => onClick('tipoff')}
-						>
+						<ListItemButton onClick={onChooseStallTipOff}>
 							<ListItemAvatar>
 								<Avatar sx={{ backgroundColor: 'transparent' }}>
-									<StallOwnershipTipOff style={{ width: 28, height: 28 }} />
+									<StallSubmitterTypeTipOff style={{ width: 28, height: 28 }} />
 								</Avatar>
 							</ListItemAvatar>
 
 							<ListItemText primary="I'm sending a tip-off about a stall I've seen" />
 						</ListItemButton>
 					</List>
-
-					{/* <FormControl>
-						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
-							onChange={onChangeWhoIsSubmitting}
-						>
-							<FormControlLabel value="owner" control={<Radio />} label="I'm involved in running this stall" />
-							<FormControlLabel
-								value="tip_off"
-								control={<Radio />}
-								label="I'm sending a tip-off about a stall I've seen"
-							/>
-						</RadioGroup>
-					</FormControl> */}
 				</React.Fragment>
 			</Box>
 
 			<MobileStepper
+				position="bottom"
 				variant="text"
 				steps={activeElections.length >= 2 ? 4 : 3}
-				position="bottom"
 				activeStep={activeElections.length >= 2 ? 2 : 1}
-				nextButton={
-					<Button
-						size="small"
-						// onClick={handleNext}
-						disabled={true}
-						// disabled={stallOwnership === undefined}
-						endIcon={<ArrowForwardIcon />}
-					>
-						Next
-					</Button>
-				}
 				backButton={
-					<Button size="small" onClick={handleBack} disabled={false} startIcon={<ArrowBackIcon />}>
+					<Button size="small" onClick={onClickBack} startIcon={<ArrowBackIcon />}>
 						Back
 					</Button>
 				}
+				nextButton={getHiddenStepperButton()}
 			/>
 		</StyledInteractableBoxFullHeight>
 	);

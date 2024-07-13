@@ -69,3 +69,6 @@ export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator
 
 // https://philna.sh/blog/2017/03/14/the-web-share-api/
 export const isWebShareApiSupported = () => !!('canShare' in navigator && navigator.share);
+
+export const enumFromStringValue = <T>(enm: { [s: string]: T }, value: string): T | undefined =>
+	(Object.values(enm) as unknown as string[]).includes(value) ? (value as unknown as T) : undefined;

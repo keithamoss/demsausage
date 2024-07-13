@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from '@mui/material';
 import * as React from 'react';
 
-export default function AddStallNoLiveElection(/*props: Props*/) {
+export default function AddStallNoLiveElection() {
 	return (
 		<React.Fragment>
 			<Paper
@@ -15,10 +15,17 @@ export default function AddStallNoLiveElection(/*props: Props*/) {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">No live election</Typography>
+				<Typography variant="h6">There aren&apos;t any live elections at the moment</Typography>
 			</Paper>
 
-			<Box sx={{ /*minHeight: 300,*/ /*maxWidth: 400, */ width: '100%', p: 2 }}></Box>
+			<Box sx={{ width: '100%', p: 2 }}>
+				<Typography variant="body2">
+					Thanks for your interest in submitting a stall, but there aren&apos;t any elections coming up that we&apos;re
+					planning to cover. If you know of an election that you think we should cover, please get in touch with us at{' '}
+					<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> and we&apos;ll consider
+					adding it.
+				</Typography>
+			</Box>
 		</React.Fragment>
 	);
 }

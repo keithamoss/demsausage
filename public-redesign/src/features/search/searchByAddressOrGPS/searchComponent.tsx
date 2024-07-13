@@ -5,10 +5,6 @@ import parse from 'autosuggest-highlight/parse';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
-import {
-	navigateToAddStallSearchListOfPollingPlacesFromMapboxResults,
-	navigateToSearchListOfPollingPlacesFromMapboxResults,
-} from '../../../app/routing/navigationHelpers';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
@@ -36,21 +32,31 @@ interface Props {
 	mapboxSearchTypes?: EMapboxPlaceType[];
 	enableFiltering?: boolean;
 	enableViewOnMap?: boolean;
-	onChoosePollingPlace?: (pollingPlace: IPollingPlace) => void;
+	onMapboxSearchTermChange: (searchTerm: string) => void;
+	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
+	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
 
 export default function SearchComponent(props: Props) {
-	const { election, autoFocusSearchField, mapboxSearchTypes, enableFiltering, enableViewOnMap, onChoosePollingPlace } =
-		{
-			...{
-				autoFocusSearchField: false,
-				enableFiltering: true,
-				enableViewOnMap: true,
-				// We allow the types to be overridden so we can further constrain the types e.g. When we're using it to let people add stalls when there are no official polling places available yet.
-				mapboxSearchTypes: defaultMapboxSearchTypes,
-			},
-			...props,
-		};
+	const {
+		election,
+		autoFocusSearchField,
+		mapboxSearchTypes,
+		enableFiltering,
+		enableViewOnMap,
+		onMapboxSearchTermChange,
+		onChooseMapboxSearchResult,
+		onChoosePollingPlace,
+	} = {
+		...{
+			autoFocusSearchField: false,
+			enableFiltering: true,
+			enableViewOnMap: true,
+			// We allow the types to be overridden so we can further constrain the types e.g. When we're using it to let people add stalls when there are no official polling places available yet.
+			mapboxSearchTypes: defaultMapboxSearchTypes,
+		},
+		...props,
+	};
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -81,23 +87,9 @@ export default function SearchComponent(props: Props) {
 
 	const onChoose = useCallback(
 		(feature: IMapboxGeocodingAPIResponseFeature) => () => {
-			if (location.pathname.includes('/add-stall') === true) {
-				navigateToAddStallSearchListOfPollingPlacesFromMapboxResults(
-					params,
-					navigate,
-					feature.place_name,
-					feature.geometry.coordinates.join(','),
-				);
-			} else {
-				navigateToSearchListOfPollingPlacesFromMapboxResults(
-					params,
-					navigate,
-					feature.place_name,
-					feature.geometry.coordinates.join(','),
-				);
-			}
+			onChooseMapboxSearchResult(feature);
 		},
-		[navigate, params],
+		[onChooseMapboxSearchResult],
 	);
 	// ######################
 	// Mapbox Search Query (End)
@@ -138,6 +130,7 @@ export default function SearchComponent(props: Props) {
 				autoFocusSearchField={autoFocusSearchField}
 				enableFiltering={enableFiltering}
 				isFetching={isFetchingNearbyPollingPlaces === true || isFetchingMapboxResults === true}
+				onMapboxSearchTermChange={onMapboxSearchTermChange}
 			/>
 
 			{/* Handles not found and all other types of error */}
@@ -222,7 +215,7 @@ export default function SearchComponent(props: Props) {
 						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
-							onChoosePollingPlace={onChoosePollingPlace || undefined}
+							onChoosePollingPlace={onChoosePollingPlace}
 						/>
 					))}
 				</SearchByAddressOrGPSResultsContainer>

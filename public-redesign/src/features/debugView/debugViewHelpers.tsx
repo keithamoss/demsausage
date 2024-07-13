@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
@@ -144,9 +145,11 @@ function PollingPlaceSearchResultsCardDebugViewEntrypointLayer2(
 		state,
 	});
 
+	const noop = useCallback(() => {}, []);
+
 	if (pollingPlace === undefined) {
 		return null;
 	}
 
-	return <SearchResultsPollingPlaceCard pollingPlace={pollingPlace} />;
+	return <SearchResultsPollingPlaceCard pollingPlace={pollingPlace} onChoosePollingPlace={noop} />;
 }

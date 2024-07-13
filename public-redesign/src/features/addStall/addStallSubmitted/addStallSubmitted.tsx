@@ -10,15 +10,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	height: `100dvh`,
 }));
 
-export default function AddStallSubmitted(/*props: Props*/) {
-	// const navigate = useNavigate();
-
-	// const activeElections = useAppSelector((state) => selectActiveElections(state));
-
-	// const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
-	// const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) =>
-	// 	setWhoIsSubmitting(value);
-
+export default function AddStallSubmitted() {
 	return (
 		<StyledInteractableBoxFullHeight>
 			<Paper
@@ -32,11 +24,14 @@ export default function AddStallSubmitted(/*props: Props*/) {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">Submitted!</Typography>
+				<Typography variant="h6">Stall submitted</Typography>
 			</Paper>
 
 			<Box sx={{ minHeight: 300, maxWidth: 400, width: '100%', p: 2 }}>
-				<React.Fragment>Yay, et cetera...</React.Fragment>
+				<React.Fragment>
+					Thanks for letting us know about your stall! We&apos;ll let you know once it&apos;s approved and it&apos;s
+					appearing on the map.
+				</React.Fragment>
 			</Box>
 		</StyledInteractableBoxFullHeight>
 	);

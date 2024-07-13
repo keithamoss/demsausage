@@ -1,10 +1,6 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import EmailIcon from '@mui/icons-material/Email';
 import {
 	Avatar,
 	Box,
-	Button,
 	List,
 	ListItem,
 	ListItemAvatar,
@@ -16,11 +12,16 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
+import { navigateToAddStallSelectPollingPlaceFromElection } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { Election } from '../../../app/services/elections';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
+import AddStallIntroMessage from '../addStallIntroMessage';
+import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -29,69 +30,19 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	height: `90dvh`,
 }));
 
-export default function AddStallSelectElection(/*props: Props*/) {
+export default function AddStallSelectElection() {
 	const navigate = useNavigate();
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
-	// const handleNext = () => {
-	// 	// setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	// 	if (selectedElection !== undefined) {
-	// 		navigate(`/add-stall/${selectedElection.name_url_safe}`);
-	// 	}
-	// };
-
-	// const [selectedElection, setSelectdElection] = React.useState<Election | undefined>();
-	// const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) => {
-	// 	setSelectdElection(activeElections.find((e) => e.id === Number.parseInt(value)));
-	// };
-
-	const onClick = (election: Election) => navigate(`/add-stall/${election.name_url_safe}`);
-
-	// console.log(selectedElection);
+	const onChooseElection = useCallback(
+		(election: Election) => navigateToAddStallSelectPollingPlaceFromElection(navigate, election),
+		[navigate],
+	);
 
 	return (
 		<StyledInteractableBoxFullHeight>
-			<Paper
-				square
-				elevation={0}
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					height: 50,
-					pl: 2,
-					bgcolor: 'grey.200',
-				}}
-			>
-				<Typography variant="h6">Add Stall</Typography>
-			</Paper>
-
-			<Box sx={{ /*minHeight: 300,*/ /*maxWidth: 400, */ width: '100%', p: 2 }}>
-				<Typography variant="body1" gutterBottom>
-					Please complete the form below to add your stall to the map. Please do not submit entries that are offensive,
-					political or do not relate to an election day stall. Please also make sure that you have authorisation to run
-					your fundraising event at the polling place. All entries are moderated and subject to approval.
-				</Typography>
-
-				<List
-					sx={
-						{
-							/*width: '100%', */
-							/*maxWidth: 360,*/
-							/*bgcolor: 'background.paper'*/
-						}
-					}
-				>
-					<ListItemButton>
-						<ListItemAvatar>
-							<Avatar>
-								<EmailIcon />
-							</Avatar>
-						</ListItemAvatar>
-						<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
-					</ListItemButton>
-				</List>
-			</Box>
+			<AddStallIntroMessage />
 
 			<Paper
 				square
@@ -107,10 +58,10 @@ export default function AddStallSelectElection(/*props: Props*/) {
 				<Typography variant="h6">Select Election</Typography>
 			</Paper>
 
-			<Box sx={{ /*minHeight: 300, maxWidth: 400,*/ width: '100%', p: 2 }}>
+			<Box sx={{ width: '100%', p: 2 }}>
 				<List>
 					{activeElections.map((election) => (
-						<ListItem key={election.id} onClick={() => onClick(election)}>
+						<ListItem key={election.id} onClick={() => onChooseElection(election)}>
 							<ListItemAvatar>
 								<Avatar
 									sx={{
@@ -118,8 +69,7 @@ export default function AddStallSelectElection(/*props: Props*/) {
 										height: 58,
 										marginRight: 2,
 										backgroundColor: 'transparent',
-										// backgroundColor: election.id === electionId ? mapaThemePrimaryPurple : undefined,
-										// backgroundColor: election.id === electionId ? undefined : 'transparent',
+										// backgroundColor: undefined,
 										'& svg': {
 											width: 50,
 										},
@@ -129,16 +79,13 @@ export default function AddStallSelectElection(/*props: Props*/) {
 								</Avatar>
 							</ListItemAvatar>
 
-							<ListItemButton /*onClick={onClickElection(election)}*/>
+							<ListItemButton>
 								<ListItemText
 									sx={{
 										'& .MuiListItemText-primary': {
-											// Polling Place Address: 15px 400 rgba(0, 0, 0, 0.6)
-											// color="text.secondary"
 											fontSize: 15,
 											fontWeight: 700,
-											// color: mapaThemePrimaryGrey,
-											color: 'rgba(0, 0, 0, 0.6)',
+											color: mapaThemePrimaryGrey,
 										},
 									}}
 									primary={election.name}
@@ -147,47 +94,15 @@ export default function AddStallSelectElection(/*props: Props*/) {
 						</ListItem>
 					))}
 				</List>
-
-				{/* <FormControl>
-					<RadioGroup
-						aria-labelledby="demo-radio-buttons-group-label"
-						name="radio-buttons-group"
-						onChange={onChangeWhoIsSubmitting}
-					>
-						{activeElections.map((e) => (
-							<FormControlLabel key={e.id} value={e.id} control={<Radio />} label={e.name} />
-						))}
-					</RadioGroup>
-				</FormControl> */}
 			</Box>
 
 			<MobileStepper
+				position="bottom"
 				variant="text"
 				steps={activeElections.length >= 2 ? 4 : 3}
-				position="bottom"
 				activeStep={0}
-				nextButton={
-					<Button
-						size="small"
-						// onClick={handleNext}
-						disabled={true}
-						// disabled={selectedElection === undefined}
-						endIcon={<ArrowForwardIcon />}
-					>
-						Next
-					</Button>
-				}
-				backButton={
-					<Button
-						size="small"
-						// onClick={handleBack}
-						disabled={true}
-						style={{ color: 'white' }}
-						startIcon={<ArrowBackIcon />}
-					>
-						Back
-					</Button>
-				}
+				backButton={getHiddenStepperButton()}
+				nextButton={getHiddenStepperButton()}
 			/>
 		</StyledInteractableBoxFullHeight>
 	);

@@ -26,12 +26,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { useUnmount } from '../../../../app/hooks/useUnmount';
 import {
-	navigateToAddStallSearchMapboxResults,
 	navigateToSearchDrawerAndInitiateGPSSearch,
 	navigateToSearchDrawerRoot,
 	navigateToSearchListOfPollingPlacesFromGPSSearch,
-	navigateToSearchMapboxResults,
-} from '../../../../app/routing/navigationHelpers';
+} from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
@@ -48,10 +46,11 @@ interface Props {
 	autoFocusSearchField?: boolean;
 	enableFiltering?: boolean;
 	isFetching: boolean;
+	onMapboxSearchTermChange: (searchTerm: string) => void;
 }
 
 export default function SearchBar(props: Props) {
-	const { autoFocusSearchField, enableFiltering, isFetching } = {
+	const { autoFocusSearchField, enableFiltering, isFetching, onMapboxSearchTermChange } = {
 		...{
 			autoFocusSearchField: false,
 			enableFiltering: true,
@@ -96,13 +95,9 @@ export default function SearchBar(props: Props) {
 
 				setIsUserTyping(false);
 
-				if (location.pathname.includes('/add-stall') === true) {
-					navigateToAddStallSearchMapboxResults(params, navigate, searchTerm);
-				} else {
-					navigateToSearchMapboxResults(params, navigate, searchTerm);
-				}
+				onMapboxSearchTermChange(searchTerm);
 			}, 400),
-		[location.pathname, navigate, params],
+		[onMapboxSearchTermChange],
 	);
 
 	const onChangeSearchField = useCallback(

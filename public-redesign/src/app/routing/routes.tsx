@@ -7,7 +7,7 @@ import AboutPage from '../../features/aboutPage/AboutPage';
 import AddStall from '../../features/addStall/AddStall';
 import AddStallSelectElection from '../../features/addStall/addStallSelectElection/addStallSelectElection';
 import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
-import AddStallStallForm from '../../features/addStall/addStallStallForm/addStallStallForm';
+import AddStallStallCreatorForm from '../../features/addStall/addStallStallForm/addStallStallCreatorForm';
 import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
 import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
 import DebugView from '../../features/debugView/debugView';
@@ -74,16 +74,16 @@ export const router = sentryCreateBrowserRouter([
 					},
 					// The more specific route needs to go first because otherwise it will match the [Name] + [State] route first when we don't have `/m?/:map_lat_lon_zoom` on the end (because those are both optional params)
 					{
-						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/owner/:stall_ownership/',
-						element: <AddStallStallForm />,
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/submitter/:submitter_type/',
+						element: <AddStallStallCreatorForm />,
 					},
 					// Occasionally some elections will have no premises names on polling places.
 					{
-						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/owner/:stall_ownership/',
-						element: <AddStallStallForm />,
+						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/submitter/:submitter_type/',
+						element: <AddStallStallCreatorForm />,
 					},
 					{
-						path: '/add-stall/submitted',
+						path: '/add-stall/submitted/',
 						element: <AddStallSubmitted />,
 					},
 				],

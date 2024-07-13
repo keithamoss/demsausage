@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
-import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers';
+import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers/navigationHelpersMap';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
 import SearchFilterComponent from '../../shared/searchFilterComponent';

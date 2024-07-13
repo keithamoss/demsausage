@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { navigateToSearchDrawerRoot } from '../../../../app/routing/navigationHelpers';
+import { navigateToSearchDrawerRoot } from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 
 interface LocationState {
 	cameFromInternalNavigation?: boolean;

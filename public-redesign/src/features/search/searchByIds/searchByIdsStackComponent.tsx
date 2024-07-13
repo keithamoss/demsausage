@@ -16,7 +16,7 @@ import SearchByIdsResultsContainer from './searchResultsContainer/searchByIdsRes
 
 interface Props {
 	election: Election;
-	onChoosePollingPlace?: (pollingPlace: IPollingPlace) => void;
+	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
 
 export default function SearchByIdsStackComponent(props: Props) {
@@ -78,7 +78,7 @@ export default function SearchByIdsStackComponent(props: Props) {
 						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
-							onChoosePollingPlace={onChoosePollingPlace || undefined}
+							onChoosePollingPlace={onChoosePollingPlace}
 						/>
 					))}
 				</SearchByIdsResultsContainer>
