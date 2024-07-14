@@ -77,7 +77,7 @@ export const onViewOnMap = (
 	navigate: NavigateFunction,
 	pollingPlaceNearbyResultsFiltered: IPollingPlace[] | undefined,
 ) => {
-	if (pollingPlaceNearbyResultsFiltered !== undefined) {
+	if (pollingPlaceNearbyResultsFiltered !== undefined && pollingPlaceNearbyResultsFiltered.length >= 1) {
 		const bboxOfPollingPlaces = getBBoxExtentForPollingPlaces(pollingPlaceNearbyResultsFiltered);
 
 		if (bboxOfPollingPlaces !== undefined) {

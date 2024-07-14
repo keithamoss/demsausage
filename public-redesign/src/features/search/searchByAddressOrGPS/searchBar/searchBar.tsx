@@ -20,16 +20,12 @@ import {
 import * as Sentry from '@sentry/react';
 import Geolocation from 'ol/Geolocation';
 import { unByKey } from 'ol/Observable';
+import { Coordinate } from 'ol/coordinate';
 import { EventsKey } from 'ol/events';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { useUnmount } from '../../../../app/hooks/useUnmount';
-import {
-	navigateToSearchDrawerAndInitiateGPSSearch,
-	navigateToSearchDrawerRoot,
-	navigateToSearchListOfPollingPlacesFromGPSSearch,
-} from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
@@ -47,10 +43,21 @@ interface Props {
 	enableFiltering?: boolean;
 	isFetching: boolean;
 	onMapboxSearchTermChange: (searchTerm: string) => void;
+	onGPSControlClicked: () => void;
+	onGPSLocationAcquired: (currentPosition: Coordinate) => void;
+	onDiscardSearch: () => void;
 }
 
 export default function SearchBar(props: Props) {
-	const { autoFocusSearchField, enableFiltering, isFetching, onMapboxSearchTermChange } = {
+	const {
+		autoFocusSearchField,
+		enableFiltering,
+		isFetching,
+		onMapboxSearchTermChange,
+		onGPSControlClicked,
+		onGPSLocationAcquired,
+		onDiscardSearch,
+	} = {
 		...{
 			autoFocusSearchField: false,
 			enableFiltering: true,
@@ -61,7 +68,6 @@ export default function SearchBar(props: Props) {
 	const dispatch = useAppDispatch();
 
 	const params = useParams();
-	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [localSearchTerm, setLocalSearchTerm] = useState('');
@@ -140,12 +146,12 @@ export default function SearchBar(props: Props) {
 	}, 50);
 
 	const onClearSearchBar = useCallback(() => {
-		navigateToSearchDrawerRoot(params, navigate);
+		onDiscardSearch();
 
 		if (searchFieldRef.current !== null && document.activeElement !== searchFieldRef.current) {
 			searchFieldRef.current.focus();
 		}
-	}, [navigate, params]);
+	}, [onDiscardSearch]);
 	// ######################
 	// Search Field (End)
 	// ######################
@@ -189,7 +195,7 @@ export default function SearchBar(props: Props) {
 						setIsGeolocationErrored(false);
 						setGeolocationErrorMessage(undefined);
 
-						navigateToSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(','));
+						onGPSLocationAcquired(currentPosition);
 					} else {
 						setIsGeolocationErrored(true);
 						setGeolocationErrorMessage(
@@ -235,7 +241,7 @@ export default function SearchBar(props: Props) {
 				}),
 			];
 		}
-	}, [navigate, params]);
+	}, [onGPSLocationAcquired]);
 
 	const onDiscardGPSSearch = useCallback(() => {
 		geolocation.current.setTracking(false);
@@ -244,18 +250,18 @@ export default function SearchBar(props: Props) {
 		setIsGeolocationErrored(false);
 		setGeolocationErrorMessage(undefined);
 
-		navigateToSearchDrawerRoot(params, navigate);
-	}, [navigate, params]);
+		onDiscardSearch();
+	}, [onDiscardSearch]);
 
 	const onClickGPSControl = useCallback(() => {
 		// If we haven't got a GPS location, clicking the contol asks for one.
 		if (urlLonLatFromGPS === '') {
-			navigateToSearchDrawerAndInitiateGPSSearch(params, navigate);
+			onGPSControlClicked();
 		} else {
 			// If we have a GPS location, clicking the control discards it.
 			onDiscardGPSSearch();
 		}
-	}, [navigate, onDiscardGPSSearch, params, urlLonLatFromGPS]);
+	}, [onDiscardGPSSearch, onGPSControlClicked, urlLonLatFromGPS]);
 
 	// Let the user come in from the map, click the GPS control there,
 	// and have it initiate a request for their location

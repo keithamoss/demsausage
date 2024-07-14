@@ -35,7 +35,7 @@ export default function AddStallIntroMessage() {
 						</ListItemAvatar>
 						<ListItemText
 							primary="Having trouble submitting a stall?"
-							secondary="mailto:ausdemocracysausage@gmail.com"
+							secondary={<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>}
 						/>
 					</ListItemButton>
 				</List>

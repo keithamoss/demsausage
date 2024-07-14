@@ -63,6 +63,14 @@ export const router = sentryCreateBrowserRouter([
 						element: <AddStallSelectPollingPlace />,
 					},
 					{
+						path: '/add-stall/:election_name/search/gps/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					{
+						path: '/add-stall/:election_name/search/gps/:gps_lon_lat/',
+						element: <AddStallSelectPollingPlace />,
+					},
+					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <AddStallWhoIsSubmitting />,
 					},

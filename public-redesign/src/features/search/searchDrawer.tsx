@@ -2,6 +2,7 @@ import { Drawer } from '@mui/material';
 import Box from '@mui/material/Box';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { Coordinate } from 'ol/coordinate';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -10,6 +11,9 @@ import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
 import { navigateToPollingPlace } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import {
+	navigateToSearchDrawerAndInitiateGPSSearch,
+	navigateToSearchDrawerRoot,
+	navigateToSearchListOfPollingPlacesFromGPSSearch,
 	navigateToSearchListOfPollingPlacesFromMapboxResults,
 	navigateToSearchMapboxResults,
 } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
@@ -76,6 +80,17 @@ function SearchDrawer(props: Props) {
 		[navigate, params],
 	);
 
+	const onGPSControlClicked = useCallback(
+		() => navigateToSearchDrawerAndInitiateGPSSearch(params, navigate),
+		[navigate, params],
+	);
+
+	const onGPSLocationAcquired = useCallback(
+		(currentPosition: Coordinate) =>
+			navigateToSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(',')),
+		[navigate, params],
+	);
+
 	const onChooseMapboxSearchResult = useCallback(
 		(feature: IMapboxGeocodingAPIResponseFeature) =>
 			navigateToSearchListOfPollingPlacesFromMapboxResults(
@@ -91,6 +106,10 @@ function SearchDrawer(props: Props) {
 		(pollingPlace: IPollingPlace) => navigateToPollingPlace(params, navigate, pollingPlace),
 		[navigate, params],
 	);
+
+	const onGoBackFromSearch = useCallback(() => navigateToSearchDrawerRoot(params, navigate), [navigate, params]);
+
+	const onDiscardSearch = useCallback(() => navigateToSearchDrawerRoot(params, navigate), [navigate, params]);
 
 	if (election === undefined) {
 		return null;
@@ -119,8 +138,12 @@ function SearchDrawer(props: Props) {
 								election={election}
 								autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
 								onMapboxSearchTermChange={onMapboxSearchTermChange}
+								onGPSControlClicked={onGPSControlClicked}
+								onGPSLocationAcquired={onGPSLocationAcquired}
 								onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 								onChoosePollingPlace={onChoosePollingPlace}
+								onGoBackFromSearch={onGoBackFromSearch}
+								onDiscardSearch={onDiscardSearch}
 							/>
 						)}
 					</StyledInteractableBoxFullHeight>

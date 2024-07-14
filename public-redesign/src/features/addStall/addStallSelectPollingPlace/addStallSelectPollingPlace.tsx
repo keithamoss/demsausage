@@ -2,15 +2,19 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, MobileStepper, Paper, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { Coordinate } from 'ol/coordinate';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
 	navigateToAddStallRoot,
+	navigateToAddStallSearchDrawerAndInitiateGPSSearch,
+	navigateToAddStallSearchListOfPollingPlacesFromGPSSearch,
+	navigateToAddStallSearchListOfPollingPlacesFromMapboxResults,
 	navigateToAddStallSearchMapboxResults,
+	navigateToAddStallSelectPollingPlace,
 	navigateToAddStallWhoIsSubmitting,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
-import { navigateToAddStallSearchListOfPollingPlacesFromMapboxResults } from '../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { selectActiveElections } from '../../elections/electionsSlice';
@@ -71,10 +75,28 @@ function AddStallSelectPollingPlace(props: Props) {
 		[navigate, params],
 	);
 
+	const onGPSControlClicked = useCallback(
+		() => navigateToAddStallSearchDrawerAndInitiateGPSSearch(params, navigate),
+		[navigate, params],
+	);
+
+	const onGPSLocationAcquired = useCallback(
+		(currentPosition: Coordinate) =>
+			navigateToAddStallSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(',')),
+		[navigate, params],
+	);
+
 	const onChoosePollingPlace = useCallback(
 		(pollingPlace: IPollingPlace) => navigateToAddStallWhoIsSubmitting(params, navigate, pollingPlace),
 		[navigate, params],
 	);
+
+	const onGoBackFromSearch = useCallback(
+		() => navigateToAddStallSelectPollingPlace(params, navigate),
+		[navigate, params],
+	);
+
+	const onDiscardSearch = useCallback(() => navigateToAddStallSelectPollingPlace(params, navigate), [navigate, params]);
 
 	return (
 		<StyledInteractableBoxFullHeight>
@@ -101,8 +123,12 @@ function AddStallSelectPollingPlace(props: Props) {
 					enableFiltering={false}
 					enableViewOnMap={false}
 					onMapboxSearchTermChange={onMapboxSearchTermChange}
+					onGPSControlClicked={onGPSControlClicked}
+					onGPSLocationAcquired={onGPSLocationAcquired}
 					onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 					onChoosePollingPlace={onChoosePollingPlace}
+					onGoBackFromSearch={onGoBackFromSearch}
+					onDiscardSearch={onDiscardSearch}
 				/>
 			</Box>
 

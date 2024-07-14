@@ -5,8 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useCallback } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { navigateToSearchDrawerRoot } from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface LocationState {
 	cameFromInternalNavigation?: boolean;
@@ -17,13 +16,13 @@ interface Props {
 	pollingPlacesLoaded: boolean;
 	enableViewOnMap: boolean;
 	onViewOnMap: () => void;
+	onGoBackFromSearch: () => void;
 	children: JSX.Element[];
 }
 
 export default function SearchByAddressOrGPSResultsContainer(props: Props) {
-	const { numberOfResults, pollingPlacesLoaded, enableViewOnMap, onViewOnMap, children } = props;
+	const { numberOfResults, pollingPlacesLoaded, enableViewOnMap, onViewOnMap, onGoBackFromSearch, children } = props;
 
-	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -40,9 +39,9 @@ export default function SearchByAddressOrGPSResultsContainer(props: Props) {
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back to start a brand new search.
-			navigateToSearchDrawerRoot(params, navigate);
+			onGoBackFromSearch();
 		}
-	}, [cameFromInternalNavigation, navigate, params]);
+	}, [cameFromInternalNavigation, navigate, onGoBackFromSearch]);
 
 	return (
 		<Box sx={{ width: '100%', marginTop: 1 }}>

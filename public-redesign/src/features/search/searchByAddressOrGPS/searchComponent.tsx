@@ -2,6 +2,7 @@ import { Alert, AlertTitle, List, ListItem, ListItemText } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
+import { Coordinate } from 'ol/coordinate';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
@@ -33,8 +34,12 @@ interface Props {
 	enableFiltering?: boolean;
 	enableViewOnMap?: boolean;
 	onMapboxSearchTermChange: (searchTerm: string) => void;
+	onGPSControlClicked: () => void;
+	onGPSLocationAcquired: (currentPosition: Coordinate) => void;
 	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
+	onGoBackFromSearch: () => void;
+	onDiscardSearch: () => void;
 }
 
 export default function SearchComponent(props: Props) {
@@ -45,8 +50,12 @@ export default function SearchComponent(props: Props) {
 		enableFiltering,
 		enableViewOnMap,
 		onMapboxSearchTermChange,
+		onGPSControlClicked,
+		onGPSLocationAcquired,
 		onChooseMapboxSearchResult,
 		onChoosePollingPlace,
+		onGoBackFromSearch,
+		onDiscardSearch,
 	} = {
 		...{
 			autoFocusSearchField: false,
@@ -131,6 +140,9 @@ export default function SearchComponent(props: Props) {
 				enableFiltering={enableFiltering}
 				isFetching={isFetchingNearbyPollingPlaces === true || isFetchingMapboxResults === true}
 				onMapboxSearchTermChange={onMapboxSearchTermChange}
+				onGPSControlClicked={onGPSControlClicked}
+				onGPSLocationAcquired={onGPSLocationAcquired}
+				onDiscardSearch={onDiscardSearch}
 			/>
 
 			{/* Handles not found and all other types of error */}
@@ -210,6 +222,7 @@ export default function SearchComponent(props: Props) {
 					pollingPlacesLoaded={election.polling_places_loaded}
 					enableViewOnMap={enableViewOnMap}
 					onViewOnMap={onClickViewOnMap}
+					onGoBackFromSearch={onGoBackFromSearch}
 				>
 					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
 						<SearchResultsPollingPlaceCard
