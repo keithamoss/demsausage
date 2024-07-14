@@ -15,9 +15,10 @@ from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
+    get_active_elections, get_default_election,
     get_default_election_map_png_cache_key, get_election_map_png_cache_key,
     get_elections_cache_key, get_polling_place_geojson_cache_key,
-    get_polling_place_json_cache_key, getDefaultElection)
+    get_polling_place_json_cache_key)
 from demsausage.app.sausage.loader import RollbackPollingPlaces
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
@@ -397,7 +398,7 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
             cache_key_map_png = get_election_map_png_cache_key(request.data['election_id'])
             cache.delete(cache_key_map_png)
 
-            defaultElection = getDefaultElection()
+            defaultElection = get_default_election()
             if defaultElection is not None and defaultElection.id == request.data['election_id']:
                 cache_key_default_map_png = get_default_election_map_png_cache_key()
                 cache.delete(cache_key_default_map_png)
@@ -452,7 +453,7 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
     def list(self, request, format=None):
         # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
 
-        primaryElection = getDefaultElection()
+        primaryElection = get_default_election()
         if primaryElection is not None:
             # So let's fire off a job to cache an image for this election...
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
@@ -475,7 +476,7 @@ class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
     def get(self, request):
         # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
 
-        primaryElection = getDefaultElection()
+        primaryElection = get_default_election()
         if primaryElection is not None:
             # So let's fire off a job to cache an image for this election...
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
@@ -516,9 +517,13 @@ class StallsViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, format=None):
-        if "submitter_type" in request.data:
-            if request.data["submitter_type"] == StallSubmitterType.OWNER:
-                serializer = StallsOwnerManagementSerializer(data=request.data)
+        if "election" in request.data:
+            if get_active_elections().filter(id=request.data["election"]).count() == 0:
+                raise BadRequest("This election is no longer active")
+
+            if "submitter_type" in request.data:
+                if request.data["submitter_type"] == StallSubmitterType.OWNER:
+                    serializer = StallsOwnerManagementSerializer(data=request.data)
             elif request.data["submitter_type"] == StallSubmitterType.TIPOFF:
                 serializer = StallsTipOffManagementSerializer(data=request.data)
 
@@ -531,9 +536,10 @@ class StallsViewSet(viewsets.ModelViewSet):
                 else:
                     raise BadRequest(serializer.errors)
             else:
-                raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
-        
-        raise BadRequest("No submitter_type supplied")
+                    raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
+            
+            raise BadRequest("No submitter_type supplied")
+        raise BadRequest("No election supplied")
 
     def retrieve(self, request, *args, **kwargs):
         stall = self.get_object()

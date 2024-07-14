@@ -3,10 +3,11 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
 import { useAppSelector } from '../../app/hooks/store';
 import { navigateToAddStallSelectPollingPlaceFromElectionAndReplace } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import { getStringParamOrEmptyString } from '../../app/routing/routingHelpers';
 import { useGetElectionsQuery } from '../../app/services/elections';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { getBaseURL } from '../../app/utils';
@@ -33,8 +34,11 @@ const PageWrapper = styled('div')((/*{ theme }*/) => ({
 export const isBaseAddStallURL = (pathname: string) => pathname === '/add-stall' || pathname === '/add-stall/';
 
 export default function AddStall() {
+	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
 
 	const {
 		isLoading: isGetElectionsLoading,
@@ -63,6 +67,15 @@ export default function AddStall() {
 	}
 
 	if (isGetElectionsSuccessful === true && activeElections.length === 0) {
+		return <AddStallNoLiveElection />;
+	}
+
+	// Stop folks using the Add Stall interface for elections that aren't active
+	if (
+		isGetElectionsSuccessful === true &&
+		urlElectionName !== '' &&
+		activeElections.find((e) => e.name_url_safe === urlElectionName) === undefined
+	) {
 		return <AddStallNoLiveElection />;
 	}
 

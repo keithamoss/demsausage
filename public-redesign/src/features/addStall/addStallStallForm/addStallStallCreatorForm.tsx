@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from 'react';
+import { Alert, AlertTitle } from '@mui/material';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import { useAppSelector } from '../../../app/hooks';
@@ -99,7 +100,10 @@ function AddStallStallCreatorForm(props: Props) {
 
 	const navigate = useNavigate();
 
-	const [addStall, { isLoading: isAddingStallLoading, isSuccess: isAddingStallSuccessful }] = useAddStallMutation();
+	const [
+		addStall,
+		{ isLoading: isAddingStallLoading, isSuccess: isAddingStallSuccessful, isError: isAddingStallErrored },
+	] = useAddStallMutation();
 
 	useEffect(() => {
 		if (isAddingStallSuccessful === true) {
@@ -119,13 +123,30 @@ function AddStallStallCreatorForm(props: Props) {
 		[addStall, election.id, pollingPlace.id, submitterType],
 	);
 
+	return (
+		<React.Fragment>
+			{isAddingStallErrored === true && (
+				<Alert severity="error">
+					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
+					Something went awry when we tried to submit your stall.
+				</Alert>
+			)}
+
+			{submitterType === StallSubmitterType.Owner && (
+				<AddStallFormForOwner isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />
+			)}
+
+			{submitterType === StallSubmitterType.TipOff && (
+				<AddStallFormForTipOff isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />
+			)}
+		</React.Fragment>
+	);
+
 	if (submitterType === StallSubmitterType.Owner) {
 		return <AddStallFormForOwner isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />;
 	} else if (submitterType === StallSubmitterType.TipOff) {
 		return <AddStallFormForTipOff isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />;
 	}
-
-	return null;
 }
 
 export default EntrypointLayer1;

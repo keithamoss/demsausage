@@ -2,10 +2,10 @@ import json
 
 from demsausage.rq.rq_utils import log_task_debug_info
 from demsausage.util import make_logger
-from django.core.cache import cache
 from django_rq import job
-
 from rq import Retry, get_current_job
+
+from django.core.cache import cache
 
 logger = make_logger(__name__)
 
@@ -17,9 +17,9 @@ def task_regenerate_cached_election_data(election_id):
     from demsausage.app.enums import PollingPlaceStatus
     from demsausage.app.models import Elections, PollingPlaces
     from demsausage.app.sausage.elections import (
-        get_default_election_map_png_cache_key, get_election_map_png_cache_key,
-        get_polling_place_geojson_cache_key, get_polling_place_json_cache_key,
-        getDefaultElection)
+        get_default_election, get_default_election_map_png_cache_key,
+        get_election_map_png_cache_key, get_polling_place_geojson_cache_key,
+        get_polling_place_json_cache_key)
     from demsausage.app.serializers import (PollingPlacesFlatJSONSerializer,
                                             PollingPlacesGeoJSONSerializer)
     from demsausage.app.webdriver import get_map_screenshot
@@ -35,7 +35,7 @@ def task_regenerate_cached_election_data(election_id):
     png_image = get_map_screenshot(Elections.objects.get(id=election_id))
     cache.set(get_election_map_png_cache_key(election_id), png_image)
 
-    defaultElection = getDefaultElection()
+    defaultElection = get_default_election()
     if defaultElection is not None and defaultElection.id == election_id:
         cache.set(get_default_election_map_png_cache_key(), png_image)
 
@@ -46,13 +46,13 @@ def task_generate_election_map_screenshot(election_id):
 
     from demsausage.app.models import Elections
     from demsausage.app.sausage.elections import (
-        get_default_election_map_png_cache_key, get_election_map_png_cache_key,
-        getDefaultElection)
+        get_default_election, get_default_election_map_png_cache_key,
+        get_election_map_png_cache_key)
     from demsausage.app.webdriver import get_map_screenshot
 
     png_image = get_map_screenshot(Elections.objects.get(id=election_id))
     cache.set(get_election_map_png_cache_key(election_id), png_image)
 
-    defaultElection = getDefaultElection()
+    defaultElection = get_default_election()
     if defaultElection is not None and defaultElection.id == election_id:
         cache.set(get_default_election_map_png_cache_key(), png_image)
