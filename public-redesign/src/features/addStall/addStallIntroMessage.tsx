@@ -1,8 +1,15 @@
 import EmailIcon from '@mui/icons-material/Email';
 import { Avatar, Box, List, ListItemAvatar, ListItemButton, ListItemText, Paper, Typography } from '@mui/material';
 import React from 'react';
+import { Election } from '../../app/services/elections';
 
-export default function AddStallIntroMessage() {
+interface Props {
+	election?: Election;
+}
+
+export default function AddStallIntroMessage(props: Props) {
+	const { election } = props;
+
 	return (
 		<React.Fragment>
 			<Paper
@@ -16,7 +23,7 @@ export default function AddStallIntroMessage() {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">Add Stall</Typography>
+				<Typography variant="h6">{election !== undefined ? `Add Stall: ${election.name}` : 'Add Stall'}</Typography>
 			</Paper>
 
 			<Box sx={{ width: '100%', p: 2 }}>

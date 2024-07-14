@@ -100,7 +100,7 @@ function AddStallSelectPollingPlace(props: Props) {
 
 	return (
 		<StyledInteractableBoxFullHeight>
-			{activeElections.length === 1 && <AddStallIntroMessage />}
+			{activeElections.length === 1 && <AddStallIntroMessage election={election} />}
 
 			<Paper
 				square
