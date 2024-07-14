@@ -218,7 +218,7 @@ export default function SearchBar(props: Props) {
 						case GeolocationPositionError.PERMISSION_DENIED:
 							// The acquisition of the geolocation information failed because the page didn't have the necessary permissions, for example because it is blocked by a Permissions Policy
 							setGeolocationErrorMessage(
-								'We tried to request your GPS location, but the request was denied. Perhaps you denied it yourself or perhaps your device is set to always block requests for GPS locattion.',
+								'We tried to request your GPS location, but the request was denied. Perhaps you denied it yourself or perhaps your device is set to always block requests for GPS location.',
 							);
 							return;
 						case GeolocationPositionError.POSITION_UNAVAILABLE:
