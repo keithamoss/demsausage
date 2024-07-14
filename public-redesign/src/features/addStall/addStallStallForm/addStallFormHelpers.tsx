@@ -1,17 +1,7 @@
 import { Button } from '@mui/material';
 import { IStallLocationInfo } from '../../../app/services/stalls';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 
 export const getHiddenStepperButton = () => <Button size="small" disabled={true} style={{ color: 'white' }}></Button>;
-
-export const createStallLocationInfoObjectFromPollingPlace = (pollingPlace: IPollingPlace): IStallLocationInfo => {
-	return {
-		name: pollingPlace.name,
-		address: pollingPlace.address,
-		state: pollingPlace.state,
-		geom: pollingPlace.geom,
-	};
-};
 
 export const createStallLocationInfoObjectFromLocationLookup = (
 	location_name: string,

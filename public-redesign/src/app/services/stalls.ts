@@ -45,14 +45,14 @@ export interface StallOwnerModifiableProps extends StallTipOffModifiableProps {
 export interface NewStallTipOff extends StallTipOffModifiableProps {
 	election: number;
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
-	location_info: IStallLocationInfo;
+	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
 }
 
 export interface NewStallOwner extends StallOwnerModifiableProps {
 	election: number;
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
-	location_info: IStallLocationInfo;
+	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
 }
 

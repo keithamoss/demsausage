@@ -20,10 +20,7 @@ import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import AddStallFormForOwner from './addStallFormForOwner';
 import AddStallFormForTipOff from './addStallFormForTipOff';
-import {
-	createStallLocationInfoObjectFromLocationLookup,
-	createStallLocationInfoObjectFromPollingPlace,
-} from './addStallFormHelpers';
+import { createStallLocationInfoObjectFromLocationLookup } from './addStallFormHelpers';
 
 function EntrypointLayer1() {
 	const params = useParams();
@@ -106,20 +103,13 @@ function EntrypointLayer2FromPollingPlace(props: PropsEntrypointLayer2FromPollin
 		return <ErrorElement />;
 	}
 
-	return (
-		<AddStallStallCreatorForm
-			election={election}
-			pollingPlace={pollingPlace}
-			stallLocationInfo={createStallLocationInfoObjectFromPollingPlace(pollingPlace)}
-			submitterType={submitterType}
-		/>
-	);
+	return <AddStallStallCreatorForm election={election} pollingPlace={pollingPlace} submitterType={submitterType} />;
 }
 
 interface Props {
 	election: Election;
-	pollingPlace?: IPollingPlace;
-	stallLocationInfo: IStallLocationInfo;
+	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
+	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
 	submitterType: StallSubmitterType;
 }
 
@@ -146,7 +136,7 @@ function AddStallStallCreatorForm(props: Props) {
 				election: election.id,
 				polling_place:
 					election.polling_places_loaded === true && pollingPlace !== undefined ? pollingPlace.id : undefined,
-				location_info: stallLocationInfo,
+				location_info: election.polling_places_loaded === true ? undefined : stallLocationInfo,
 				submitter_type: submitterType,
 			});
 		},
