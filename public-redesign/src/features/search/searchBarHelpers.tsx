@@ -68,8 +68,12 @@ export interface IMapboxGeocodingAPIResponseFeature {
 		omitted?: boolean;
 	};
 	context: {
-		[key: string]: string;
-	};
+		id: string;
+		mapbox_id?: string;
+		short_code?: string;
+		text?: string;
+		wikidata?: string;
+	}[];
 }
 
 export const onViewOnMap = (
@@ -101,7 +105,17 @@ export const onViewOnMap = (
 
 // https://docs.mapbox.com/api/search/geocoding/#data-types
 // Note: Only Country and Region data types are excluded from the defaults.
-export const defaultMapboxSearchTypes = ['postcode', 'district', 'place', 'locality', 'neighborhood', 'address', 'poi'];
+export const defaultMapboxSearchTypes = [
+	EMapboxPlaceType.postcode,
+	EMapboxPlaceType.district,
+	EMapboxPlaceType.place,
+	EMapboxPlaceType.locality,
+	EMapboxPlaceType.neighborhood,
+	EMapboxPlaceType.address,
+	EMapboxPlaceType.poi,
+];
+
+export const mapboxSearchTypesForElectionsWithoutPollingPlaces = [EMapboxPlaceType.address, EMapboxPlaceType.poi];
 
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
 

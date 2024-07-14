@@ -34,9 +34,9 @@ interface Props {
 	enableFiltering?: boolean;
 	enableViewOnMap?: boolean;
 	onMapboxSearchTermChange: (searchTerm: string) => void;
+	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
 	onGPSControlClicked: () => void;
 	onGPSLocationAcquired: (currentPosition: Coordinate) => void;
-	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 	onGoBackFromSearch: () => void;
 	onDiscardSearch: () => void;
@@ -50,9 +50,9 @@ export default function SearchComponent(props: Props) {
 		enableFiltering,
 		enableViewOnMap,
 		onMapboxSearchTermChange,
+		onChooseMapboxSearchResult,
 		onGPSControlClicked,
 		onGPSLocationAcquired,
-		onChooseMapboxSearchResult,
 		onChoosePollingPlace,
 		onGoBackFromSearch,
 		onDiscardSearch,

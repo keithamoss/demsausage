@@ -14,12 +14,17 @@ import {
 	navigateToAddStallSearchMapboxResults,
 	navigateToAddStallSelectPollingPlace,
 	navigateToAddStallWhoIsSubmitting,
+	navigateToAddStallWhoIsSubmittingFromMapboxFeature,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { IMapboxGeocodingAPIResponseFeature } from '../../search/searchBarHelpers';
+import {
+	IMapboxGeocodingAPIResponseFeature,
+	defaultMapboxSearchTypes,
+	mapboxSearchTypesForElectionsWithoutPollingPlaces,
+} from '../../search/searchBarHelpers';
 import SearchComponent from '../../search/searchByAddressOrGPS/searchComponent';
 import AddStallIntroMessage from '../addStallIntroMessage';
 import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
@@ -65,14 +70,19 @@ function AddStallSelectPollingPlace(props: Props) {
 	);
 
 	const onChooseMapboxSearchResult = useCallback(
-		(feature: IMapboxGeocodingAPIResponseFeature) =>
-			navigateToAddStallSearchListOfPollingPlacesFromMapboxResults(
-				params,
-				navigate,
-				feature.place_name,
-				feature.geometry.coordinates.join(','),
-			),
-		[navigate, params],
+		(feature: IMapboxGeocodingAPIResponseFeature) => {
+			if (election.polling_places_loaded === true) {
+				navigateToAddStallSearchListOfPollingPlacesFromMapboxResults(
+					params,
+					navigate,
+					feature.place_name,
+					feature.geometry.coordinates.join(','),
+				);
+			} else {
+				navigateToAddStallWhoIsSubmittingFromMapboxFeature(params, navigate, feature);
+			}
+		},
+		[election.polling_places_loaded, navigate, params],
 	);
 
 	const onGPSControlClicked = useCallback(
@@ -120,12 +130,17 @@ function AddStallSelectPollingPlace(props: Props) {
 				<SearchComponent
 					election={election}
 					autoFocusSearchField={true}
+					mapboxSearchTypes={
+						election.polling_places_loaded === false
+							? mapboxSearchTypesForElectionsWithoutPollingPlaces
+							: defaultMapboxSearchTypes
+					}
 					enableFiltering={false}
 					enableViewOnMap={false}
 					onMapboxSearchTermChange={onMapboxSearchTermChange}
+					onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 					onGPSControlClicked={onGPSControlClicked}
 					onGPSLocationAcquired={onGPSLocationAcquired}
-					onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 					onChoosePollingPlace={onChoosePollingPlace}
 					onGoBackFromSearch={onGoBackFromSearch}
 					onDiscardSearch={onDiscardSearch}

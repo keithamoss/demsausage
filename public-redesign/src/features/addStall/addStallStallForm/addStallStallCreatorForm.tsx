@@ -8,6 +8,7 @@ import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers
 import { Election } from '../../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../../app/services/pollingPlaces';
 import {
+	IStallLocationInfo,
 	StallOwnerModifiableProps,
 	StallSubmitterType,
 	StallTipOffModifiableProps,
@@ -19,8 +20,11 @@ import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import AddStallFormForOwner from './addStallFormForOwner';
 import AddStallFormForTipOff from './addStallFormForTipOff';
+import {
+	createStallLocationInfoObjectFromLocationLookup,
+	createStallLocationInfoObjectFromPollingPlace,
+} from './addStallFormHelpers';
 
-// The entrypoint handles determining the election that should be displayed based on route changes.
 function EntrypointLayer1() {
 	const params = useParams();
 
@@ -37,10 +41,6 @@ function EntrypointLayer1() {
 		return null;
 	}
 
-	if (params.polling_place_name === undefined || params.polling_place_state === undefined) {
-		return null;
-	}
-
 	// Let our overall ErrorElement handle this
 	if (urlSubmitterType === undefined) {
 		throw new Error(
@@ -48,18 +48,38 @@ function EntrypointLayer1() {
 		);
 	}
 
-	return (
-		<EntrypointLayer2
-			election={election}
-			name={params.polling_place_name}
-			premises={params.polling_place_premises}
-			state={params.polling_place_state}
-			submitterType={urlSubmitterType}
-		/>
-	);
+	if (params.polling_place_name !== undefined && params.polling_place_state !== undefined) {
+		return (
+			<EntrypointLayer2FromPollingPlace
+				election={election}
+				name={params.polling_place_name}
+				premises={params.polling_place_premises}
+				state={params.polling_place_state}
+				submitterType={urlSubmitterType}
+			/>
+		);
+	} else if (
+		params.location_name !== undefined &&
+		params.location_address !== undefined &&
+		params.location_state !== undefined &&
+		params.location_lon_lat !== undefined
+	) {
+		return (
+			<AddStallStallCreatorForm
+				election={election}
+				stallLocationInfo={createStallLocationInfoObjectFromLocationLookup(
+					params.location_name,
+					params.location_address,
+					params.location_state,
+					params.location_lon_lat,
+				)}
+				submitterType={urlSubmitterType}
+			/>
+		);
+	}
 }
 
-interface PropsEntrypointLayer2 {
+interface PropsEntrypointLayer2FromPollingPlace {
 	election: Election;
 	name: string;
 	// Occasionally some elections will have no premises names on polling places
@@ -68,7 +88,7 @@ interface PropsEntrypointLayer2 {
 	submitterType: StallSubmitterType;
 }
 
-function EntrypointLayer2(props: PropsEntrypointLayer2) {
+function EntrypointLayer2FromPollingPlace(props: PropsEntrypointLayer2FromPollingPlace) {
 	const { election, name, premises, state, submitterType } = props;
 
 	const {
@@ -86,17 +106,25 @@ function EntrypointLayer2(props: PropsEntrypointLayer2) {
 		return <ErrorElement />;
 	}
 
-	return <AddStallStallCreatorForm election={election} pollingPlace={pollingPlace} submitterType={submitterType} />;
+	return (
+		<AddStallStallCreatorForm
+			election={election}
+			pollingPlace={pollingPlace}
+			stallLocationInfo={createStallLocationInfoObjectFromPollingPlace(pollingPlace)}
+			submitterType={submitterType}
+		/>
+	);
 }
 
 interface Props {
 	election: Election;
-	pollingPlace: IPollingPlace;
+	pollingPlace?: IPollingPlace;
+	stallLocationInfo: IStallLocationInfo;
 	submitterType: StallSubmitterType;
 }
 
 function AddStallStallCreatorForm(props: Props) {
-	const { election, pollingPlace, submitterType } = props;
+	const { election, pollingPlace, stallLocationInfo, submitterType } = props;
 
 	const navigate = useNavigate();
 
@@ -116,11 +144,13 @@ function AddStallStallCreatorForm(props: Props) {
 			addStall({
 				...stall,
 				election: election.id,
-				polling_place: pollingPlace.id,
+				polling_place:
+					election.polling_places_loaded === true && pollingPlace !== undefined ? pollingPlace.id : undefined,
+				location_info: stallLocationInfo,
 				submitter_type: submitterType,
 			});
 		},
-		[addStall, election.id, pollingPlace.id, submitterType],
+		[addStall, election.id, election.polling_places_loaded, pollingPlace, stallLocationInfo, submitterType],
 	);
 
 	return (
@@ -141,12 +171,6 @@ function AddStallStallCreatorForm(props: Props) {
 			)}
 		</React.Fragment>
 	);
-
-	if (submitterType === StallSubmitterType.Owner) {
-		return <AddStallFormForOwner isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />;
-	} else if (submitterType === StallSubmitterType.TipOff) {
-		return <AddStallFormForTipOff isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />;
-	}
 }
 
 export default EntrypointLayer1;

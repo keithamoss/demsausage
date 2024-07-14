@@ -138,9 +138,9 @@ function SearchDrawer(props: Props) {
 								election={election}
 								autoFocusSearchField={urlLonLatFromGPS === '' && urlPollingPlaceIds === ''}
 								onMapboxSearchTermChange={onMapboxSearchTermChange}
+								onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 								onGPSControlClicked={onGPSControlClicked}
 								onGPSLocationAcquired={onGPSLocationAcquired}
-								onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 								onChoosePollingPlace={onChoosePollingPlace}
 								onGoBackFromSearch={onGoBackFromSearch}
 								onDiscardSearch={onDiscardSearch}

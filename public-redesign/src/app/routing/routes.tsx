@@ -70,6 +70,9 @@ export const router = sentryCreateBrowserRouter([
 						path: '/add-stall/:election_name/search/gps/:gps_lon_lat/',
 						element: <AddStallSelectPollingPlace />,
 					},
+					// ############################
+					// Polling Places
+					// ############################
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <AddStallWhoIsSubmitting />,
@@ -88,6 +91,24 @@ export const router = sentryCreateBrowserRouter([
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/submitter/:submitter_type/',
 						element: <AddStallStallCreatorForm />,
 					},
+					// ############################
+					// Polling Places (End)
+					// ############################
+
+					// ############################
+					// Location Lookup
+					// ############################
+					{
+						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/',
+						element: <AddStallWhoIsSubmitting />,
+					},
+					{
+						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/submitter/:submitter_type/',
+						element: <AddStallStallCreatorForm />,
+					},
+					// ############################
+					// Location Lookup (End)
+					// ############################
 					{
 						path: '/add-stall/submitted/',
 						element: <AddStallSubmitted />,

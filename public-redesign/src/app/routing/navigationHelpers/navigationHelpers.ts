@@ -12,6 +12,10 @@ export const getURLParams = (params: Params<string>) => {
 		urlPollingPlaceIds: params.polling_place_ids,
 		urlMapLatLonZoom: params.map_lat_lon_zoom,
 		urlSubmitterType: params.submitter_type,
+		urlLocationName: params.location_name,
+		urlLocationAddress: params.location_address,
+		urlLocationState: params.location_state,
+		urlLocationLonLat: params.location_lon_lat,
 	};
 };
 
