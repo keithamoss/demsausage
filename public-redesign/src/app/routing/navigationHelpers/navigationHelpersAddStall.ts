@@ -186,7 +186,6 @@ export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 	});
 };
 
-// This doesn't need `cameFromInternalNavigation` because it's used exclusively in the onClickBack() functions on Add Stall Form and can build the new URL from the URL for those pages.
 export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/
@@ -214,6 +213,7 @@ export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<st
 	) {
 		navigate(
 			`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, urlPollingPlaceName, urlPollingPlacePremises, urlPollingPlaceState)}`,
+			{ state: { cameFromInternalNavigation: true } },
 		);
 	} else if (
 		urlLocationName !== undefined &&
@@ -223,6 +223,7 @@ export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<st
 	) {
 		navigate(
 			`/add-stall/${urlElectionName}/location/${urlLocationName}/${urlLocationAddress}/${urlLocationState}/${urlLocationLonLat}/`,
+			{ state: { cameFromInternalNavigation: true } },
 		);
 	}
 };

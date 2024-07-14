@@ -19,11 +19,9 @@ import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
 import { useCallback } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallFormTipOffValidationSchema } from '../../../app/forms/stallForm';
 import { useAppSelector } from '../../../app/hooks/store';
-import { navigateToAddStallWhoIsSubmittingFromURLParams } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { Stall, StallFoodOptions, StallTipOffModifiableProps } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { selectActiveElections } from '../../elections/electionsSlice';
@@ -42,13 +40,11 @@ interface Props {
 	isStallSaving: boolean;
 	onDoneAdding?: (stall: StallTipOffModifiableProps) => void;
 	onDoneEditing?: (stall: Stall) => void;
+	onClickBack: () => void;
 }
 
 export default function AddStallFormForTipOff(props: Props) {
-	const { stall, isStallSaving, onDoneAdding, onDoneEditing } = props;
-
-	const params = useParams();
-	const navigate = useNavigate();
+	const { stall, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -98,16 +94,6 @@ export default function AddStallFormForTipOff(props: Props) {
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
 	// ######################
 	// Form Management (End)
-	// ######################
-
-	// ######################
-	// Navigation
-	// ######################
-	const onClickBack = useCallback(() => {
-		navigateToAddStallWhoIsSubmittingFromURLParams(params, navigate);
-	}, [navigate, params]);
-	// ######################
-	// Navigation (End)
 	// ######################
 
 	return (

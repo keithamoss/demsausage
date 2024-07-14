@@ -1,9 +1,12 @@
 import { Alert, AlertTitle } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import { useAppSelector } from '../../../app/hooks';
-import { navigateToAddStallSubmitted } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import {
+	navigateToAddStallSubmitted,
+	navigateToAddStallWhoIsSubmittingFromURLParams,
+} from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../../app/services/pollingPlaces';
@@ -106,6 +109,10 @@ function EntrypointLayer2FromPollingPlace(props: PropsEntrypointLayer2FromPollin
 	return <AddStallStallCreatorForm election={election} pollingPlace={pollingPlace} submitterType={submitterType} />;
 }
 
+interface LocationState {
+	cameFromInternalNavigation?: boolean;
+}
+
 interface Props {
 	election: Election;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
@@ -116,7 +123,25 @@ interface Props {
 function AddStallStallCreatorForm(props: Props) {
 	const { election, pollingPlace, stallLocationInfo, submitterType } = props;
 
+	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
+
+	const onClickBack = useCallback(() => {
+		// If we've arrived here from elsewhere in the add stall interface,
+		// we know we can just go back and we'll remain within it.
+		// In most cases, this should send them back to the submission
+		// type choice screen.
+		if (cameFromInternalNavigation === true) {
+			navigate(-1);
+		} else {
+			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
+			// be sure where we'll end up, so best just to send the user back manually.
+			navigateToAddStallWhoIsSubmittingFromURLParams(params, navigate);
+		}
+	}, [cameFromInternalNavigation, navigate, params]);
 
 	const [
 		addStall,
@@ -153,11 +178,19 @@ function AddStallStallCreatorForm(props: Props) {
 			)}
 
 			{submitterType === StallSubmitterType.Owner && (
-				<AddStallFormForOwner isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />
+				<AddStallFormForOwner
+					isStallSaving={isAddingStallLoading}
+					onDoneAdding={onDoneAdding}
+					onClickBack={onClickBack}
+				/>
 			)}
 
 			{submitterType === StallSubmitterType.TipOff && (
-				<AddStallFormForTipOff isStallSaving={isAddingStallLoading} onDoneAdding={onDoneAdding} />
+				<AddStallFormForTipOff
+					isStallSaving={isAddingStallLoading}
+					onDoneAdding={onDoneAdding}
+					onClickBack={onClickBack}
+				/>
 			)}
 		</React.Fragment>
 	);
