@@ -151,5 +151,11 @@ function PollingPlaceSearchResultsCardDebugViewEntrypointLayer2(
 		return null;
 	}
 
-	return <SearchResultsPollingPlaceCard pollingPlace={pollingPlace} onChoosePollingPlace={noop} />;
+	return (
+		<SearchResultsPollingPlaceCard
+			pollingPlace={pollingPlace}
+			onChoosePollingPlaceLabel="Nope"
+			onChoosePollingPlace={noop}
+		/>
+	);
 }

@@ -141,6 +141,7 @@ function AddStallSelectPollingPlace(props: Props) {
 					onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 					onGPSControlClicked={onGPSControlClicked}
 					onGPSLocationAcquired={onGPSLocationAcquired}
+					onChoosePollingPlaceLabel="Select Polling Place"
 					onChoosePollingPlace={onChoosePollingPlace}
 					onGoBackFromSearch={onGoBackFromSearch}
 					onDiscardSearch={onDiscardSearch}

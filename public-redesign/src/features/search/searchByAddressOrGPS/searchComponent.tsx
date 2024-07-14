@@ -37,6 +37,7 @@ interface Props {
 	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
 	onGPSControlClicked: () => void;
 	onGPSLocationAcquired: (currentPosition: Coordinate) => void;
+	onChoosePollingPlaceLabel: string;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 	onGoBackFromSearch: () => void;
 	onDiscardSearch: () => void;
@@ -53,6 +54,7 @@ export default function SearchComponent(props: Props) {
 		onChooseMapboxSearchResult,
 		onGPSControlClicked,
 		onGPSLocationAcquired,
+		onChoosePollingPlaceLabel,
 		onChoosePollingPlace,
 		onGoBackFromSearch,
 		onDiscardSearch,
@@ -228,6 +230,7 @@ export default function SearchComponent(props: Props) {
 						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
+							onChoosePollingPlaceLabel={onChoosePollingPlaceLabel}
 							onChoosePollingPlace={onChoosePollingPlace}
 						/>
 					))}

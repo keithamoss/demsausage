@@ -78,6 +78,7 @@ export default function SearchByIdsStackComponent(props: Props) {
 						<SearchResultsPollingPlaceCard
 							key={pollingPlace.id}
 							pollingPlace={pollingPlace}
+							onChoosePollingPlaceLabel="Learn More"
 							onChoosePollingPlace={onChoosePollingPlace}
 						/>
 					))}

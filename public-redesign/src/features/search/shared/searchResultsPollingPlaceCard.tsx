@@ -14,6 +14,7 @@ import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
 interface Props {
 	pollingPlace: IPollingPlace;
+	onChoosePollingPlaceLabel: string;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
 
@@ -39,7 +40,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 export default function SearchResultsPollingPlaceCard(props: Props) {
-	const { pollingPlace, onChoosePollingPlace } = props;
+	const { pollingPlace, onChoosePollingPlaceLabel, onChoosePollingPlace } = props;
 
 	const onClickPollingPlace = useCallback(
 		(pollingPlace: IPollingPlace) => () => {
@@ -84,7 +85,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 							pl: 1,
 						}}
 					>
-						Learn More
+						{onChoosePollingPlaceLabel}
 					</Button>
 
 					<Button

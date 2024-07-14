@@ -141,6 +141,7 @@ function SearchDrawer(props: Props) {
 								onChooseMapboxSearchResult={onChooseMapboxSearchResult}
 								onGPSControlClicked={onGPSControlClicked}
 								onGPSLocationAcquired={onGPSLocationAcquired}
+								onChoosePollingPlaceLabel="Learn More"
 								onChoosePollingPlace={onChoosePollingPlace}
 								onGoBackFromSearch={onGoBackFromSearch}
 								onDiscardSearch={onDiscardSearch}
