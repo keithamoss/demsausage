@@ -179,6 +179,8 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.Owner && (
 				<AddStallFormForOwner
+					election={election}
+					pollingPlace={pollingPlace}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}
@@ -187,6 +189,8 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.TipOff && (
 				<AddStallFormForTipOff
+					election={election}
+					pollingPlace={pollingPlace}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}

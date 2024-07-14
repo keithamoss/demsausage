@@ -22,9 +22,14 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallFormTipOffValidationSchema } from '../../../app/forms/stallForm';
 import { useAppSelector } from '../../../app/hooks/store';
+import { Election } from '../../../app/services/elections';
 import { Stall, StallFoodOptions, StallTipOffModifiableProps } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
+import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
+import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
+import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { AddStallExistingSubmissionWarning } from './addStallExistingSubmissionWarning';
 import AddStallFormFoodOptionsSelector from './addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from './addStallFormPrivacyNotice';
 
@@ -37,6 +42,8 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 
 interface Props {
 	stall?: Stall;
+	election: Election;
+	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
 	isStallSaving: boolean;
 	onDoneAdding?: (stall: StallTipOffModifiableProps) => void;
 	onDoneEditing?: (stall: Stall) => void;
@@ -44,7 +51,7 @@ interface Props {
 }
 
 export default function AddStallFormForTipOff(props: Props) {
-	const { stall, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+	const { stall, election, pollingPlace, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -98,6 +105,12 @@ export default function AddStallFormForTipOff(props: Props) {
 
 	return (
 		<StyledInteractableBoxFullHeight>
+			{pollingPlace !== undefined && pollingPlace?.stall !== null && (
+				<AddStallExistingSubmissionWarning
+					pollingPlaceLinkAbsolute={`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`}
+				/>
+			)}
+
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
 				<Paper
 					square
