@@ -157,7 +157,7 @@ export default function SearchComponent(props: Props) {
 				isSuccessFetchingMapboxResults === true &&
 				mapboxSearchResults !== undefined &&
 				urlLonLat === '' && (
-					<List>
+					<List sx={{ pt: 0 }}>
 						{mapboxSearchResults === null && (
 							<ListItem>
 								<ListItemText primary="An error occurred"></ListItemText>
