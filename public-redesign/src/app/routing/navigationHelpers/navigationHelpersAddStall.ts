@@ -6,14 +6,14 @@ import { Election } from '../../services/elections';
 import { StallSubmitterType } from '../../services/stalls';
 import { getURLParams } from './navigationHelpers';
 
+// This doesn't need `cameFromInternalNavigation` because there's no way back from there
 export const navigateToAddStallRoot = (navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /add-stall/
-	navigate('/add-stall/', {
-		state: { cameFromInternalNavigation: true },
-	});
+	navigate('/add-stall/');
 };
 
+// This doesn't need `cameFromInternalNavigation` because it's used exclusively in onClickBack() functions
 export const navigateToAddStallSelectPollingPlace = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/
@@ -23,17 +23,14 @@ export const navigateToAddStallSelectPollingPlace = (params: Params<string>, nav
 		return;
 	}
 
-	navigate(`/add-stall/${urlElectionName}/`, {
-		state: { cameFromInternalNavigation: true },
-	});
+	navigate(`/add-stall/${urlElectionName}/`);
 };
 
+// This doesn't need `cameFromInternalNavigation` because going back from there just goes to navigateToAddStallRoot()
 export const navigateToAddStallSelectPollingPlaceFromElection = (navigate: NavigateFunction, election: Election) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/
-	navigate(`/add-stall/${election.name_url_safe}/`, {
-		state: { cameFromInternalNavigation: true },
-	});
+	navigate(`/add-stall/${election.name_url_safe}/`);
 };
 
 export const navigateToAddStallSelectPollingPlaceFromElectionAndReplace = (
@@ -47,6 +44,7 @@ export const navigateToAddStallSelectPollingPlaceFromElectionAndReplace = (
 	});
 };
 
+// This doesn't need `cameFromInternalNavigation` because all of the ways to cancel/discard the Mapbox search can navigate directly to where they need to go.
 export const navigateToAddStallSearchMapboxResults = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -60,9 +58,7 @@ export const navigateToAddStallSearchMapboxResults = (
 		return;
 	}
 
-	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/`, {
-		state: { cameFromInternalNavigation: true },
-	});
+	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/`);
 };
 
 export const navigateToAddStallSearchListOfPollingPlacesFromMapboxResults = (
@@ -84,6 +80,7 @@ export const navigateToAddStallSearchListOfPollingPlacesFromMapboxResults = (
 	});
 };
 
+// This doesn't need `cameFromInternalNavigation` because all of the ways to cancel/discard the GPS search can navigate directly to where they need to go.
 export const navigateToAddStallSearchDrawerAndInitiateGPSSearch = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -143,6 +140,28 @@ export const navigateToAddStallWhoIsSubmitting = (
 	}
 };
 
+// The only difference between this and the preceding function is that we don't want to send `cameFromInternalNavigation` because we obviously aren't coming from within the Add Stall interface in this case.
+export const navigateToAddStallWhoIsSubmittingFromPollingPlaceCard = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	pollingPlace: IPollingPlace,
+) => {
+	// We handle going to all of these routes:
+	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/
+	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/
+	const { name, premises, state } = pollingPlace;
+
+	const { urlElectionName } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	if (typeof name === 'string' && typeof premises === 'string' && typeof state === 'string') {
+		navigate(`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state)}`);
+	}
+};
+
 export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -167,6 +186,7 @@ export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 	});
 };
 
+// This doesn't need `cameFromInternalNavigation` because it's used exclusively in the onClickBack() functions on Add Stall Form and can build the new URL from the URL for those pages.
 export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/
@@ -194,9 +214,6 @@ export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<st
 	) {
 		navigate(
 			`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, urlPollingPlaceName, urlPollingPlacePremises, urlPollingPlaceState)}`,
-			{
-				state: { cameFromInternalNavigation: true },
-			},
 		);
 	} else if (
 		urlLocationName !== undefined &&
@@ -206,9 +223,6 @@ export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<st
 	) {
 		navigate(
 			`/add-stall/${urlElectionName}/location/${urlLocationName}/${urlLocationAddress}/${urlLocationState}/${urlLocationLonLat}/`,
-			{
-				state: { cameFromInternalNavigation: true },
-			},
 		);
 	}
 };

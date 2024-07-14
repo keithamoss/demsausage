@@ -38,7 +38,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { navigateToAddStallWhoIsSubmitting } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import { navigateToAddStallWhoIsSubmittingFromPollingPlaceCard } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
 import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
@@ -135,7 +135,7 @@ export default function PollingPlaceCard(props: Props) {
 	// Send Tip-Off
 	// ######################
 	const onSendTipOff = useCallback(
-		() => navigateToAddStallWhoIsSubmitting(params, navigate, pollingPlace),
+		() => navigateToAddStallWhoIsSubmittingFromPollingPlaceCard(params, navigate, pollingPlace),
 		[navigate, params, pollingPlace],
 	);
 	// ######################
