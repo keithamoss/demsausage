@@ -62,7 +62,6 @@ export const router = sentryCreateBrowserRouter([
 						path: '/add-stall/:election_name/search/place/:search_term/:place_lon_lat/',
 						element: <AddStallSelectPollingPlace />,
 					},
-					// The more specific route needs to go first because otherwise it will match the [Name] + [State] route first when we don't have `/m?/:map_lat_lon_zoom` on the end (because those are both optional params)
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
 						element: <AddStallWhoIsSubmitting />,
@@ -72,7 +71,6 @@ export const router = sentryCreateBrowserRouter([
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/',
 						element: <AddStallWhoIsSubmitting />,
 					},
-					// The more specific route needs to go first because otherwise it will match the [Name] + [State] route first when we don't have `/m?/:map_lat_lon_zoom` on the end (because those are both optional params)
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/submitter/:submitter_type/',
 						element: <AddStallStallCreatorForm />,
@@ -93,7 +91,7 @@ export const router = sentryCreateBrowserRouter([
 				element: <DebugView />,
 			},
 			{
-				path: '/:election_name/:map_lat_lon_zoom?/',
+				path: '/:election_name/m/:map_lat_lon_zoom?/',
 				element: <Map />,
 				loader: () => ({
 					name: 'Map',

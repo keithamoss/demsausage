@@ -10,7 +10,7 @@ export const navigateToElection = (navigate: NavigateFunction, election: Electio
 	const mapViewString = createMapViewURLPathComponent(view);
 
 	if (mapViewString !== undefined) {
-		navigate(`/${election.name_url_safe}/${mapViewString}/`, { state: { updateMapView: true } });
+		navigate(`/${election.name_url_safe}/m/${mapViewString}/`, { state: { updateMapView: true } });
 	}
 };
 
@@ -20,7 +20,7 @@ export const navigateToElectionAndReplace = (navigate: NavigateFunction, electio
 	const mapViewString = createMapViewURLPathComponent(view);
 
 	if (mapViewString !== undefined) {
-		navigate(`/${election.name_url_safe}/${mapViewString}/`, { state: { updateMapView: true }, replace: true });
+		navigate(`/${election.name_url_safe}/m/${mapViewString}/`, { state: { updateMapView: true }, replace: true });
 	}
 };
 
@@ -116,7 +116,7 @@ export const navigateToMap = (
 			state,
 		});
 	} else {
-		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/`, mapLatLonZoom), {
+		navigate(addComponentToEndOfURLPath(`/${urlElectionName}/`, `m/${mapLatLonZoom}`), {
 			state,
 		});
 	}
