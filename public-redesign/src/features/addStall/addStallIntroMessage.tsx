@@ -1,7 +1,27 @@
 import EmailIcon from '@mui/icons-material/Email';
-import { Avatar, Box, List, ListItemAvatar, ListItemButton, ListItemText, Paper, Typography } from '@mui/material';
+import {
+	Alert,
+	AlertTitle,
+	Avatar,
+	Box,
+	List,
+	ListItemAvatar,
+	ListItemButton,
+	ListItemText,
+	Paper,
+	Typography,
+	styled,
+} from '@mui/material';
 import React from 'react';
 import { Election } from '../../app/services/elections';
+
+const StyledUnorderedList = styled('ul')(({ theme }) => ({
+	paddingTop: theme.spacing(1),
+	paddingLeft: theme.spacing(2),
+	marginTop: 0,
+	marginBottom: 0,
+	'& li:not(:last-child)': { paddingBottom: theme.spacing(1) },
+}));
 
 interface Props {
 	election?: Election;
@@ -27,23 +47,28 @@ export default function AddStallIntroMessage(props: Props) {
 			</Paper>
 
 			<Box sx={{ width: '100%', p: 2 }}>
-				<Typography variant="body1" gutterBottom>
-					Please complete the form below to add your stall to the map. Please do not submit entries that are offensive,
-					political or do not relate to an election day stall. Please also make sure that you have authorisation to run
-					your fundraising event at the polling place. All entries are moderated and subject to approval.
-				</Typography>
+				<Alert severity="info">
+					<AlertTitle>Please complete the form below to add your stall to the map</AlertTitle>
+					<StyledUnorderedList>
+						<li>
+							Please do not submit entries that are offensive, political or do not relate to an election day stall
+						</li>
+						<li>
+							Please also make sure that you have authorisation to run your fundraising event at the polling place
+						</li>
+						<li>All entries are moderated and subject to approval</li>
+					</StyledUnorderedList>
+				</Alert>
 
 				<List>
-					<ListItemButton>
+					<ListItemButton component="a" href="mailto:ausdemocracysausage@gmail.com">
 						<ListItemAvatar>
 							<Avatar>
 								<EmailIcon />
 							</Avatar>
 						</ListItemAvatar>
-						<ListItemText
-							primary="Having trouble submitting a stall?"
-							secondary={<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>}
-						/>
+
+						<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
 					</ListItemButton>
 				</List>
 			</Box>
