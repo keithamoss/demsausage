@@ -33,7 +33,10 @@ export default function AddStallIntroMessage() {
 								<EmailIcon />
 							</Avatar>
 						</ListItemAvatar>
-						<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
+						<ListItemText
+							primary="Having trouble submitting a stall?"
+							secondary="mailto:ausdemocracysausage@gmail.com"
+						/>
 					</ListItemButton>
 				</List>
 			</Box>
