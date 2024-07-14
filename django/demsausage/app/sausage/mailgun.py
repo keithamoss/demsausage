@@ -141,17 +141,28 @@ def send_stall_edited_email(stall):
     token = str(getrandbits(128))
     signature = make_confirmation_hash(stall.id, token)
 
-    html = get_mail_template("stall_edited", {
-        "POLLING_PLACE_NAME": location_info["name"],
-        "POLLING_PLACE_ADDRESS": location_info["address"],
-        "STALL_NAME": stall.name,
-        "STALL_DESCRIPTION": stall.description,
-        "STALL_OPENING_HOURS": stall.opening_hours,
-        "STALL_WEBSITE": stall.website,
-        "DELICIOUSNESS": getFoodDescription(stall),
-        "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
-        "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
-    })
+    if stall.submitter_type == StallSubmitterType.OWNER:
+         html = get_mail_template("stall_edited_owner", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "STALL_NAME": stall.name,
+            "STALL_DESCRIPTION": stall.description,
+            "STALL_OPENING_HOURS": stall.opening_hours,
+            "STALL_WEBSITE": stall.website,
+            "DELICIOUSNESS": getFoodDescription(stall),
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
+            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+        })
+    elif stall.submitter_type == StallSubmitterType.TIPOFF:
+        html = get_mail_template("stall_edited_tipoff", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "DELICIOUSNESS": getFoodDescription(stall),
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
+            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+        })
+    else:
+        html = "Could not locate a valid email template! No one should ever see this message!"
 
     return send({
         "to": stall.email,
