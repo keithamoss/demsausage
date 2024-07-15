@@ -59,7 +59,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 
 	return (
 		<React.Fragment>
-			<Typography gutterBottom variant="h6" component="div">
+			<Typography gutterBottom variant="h6" component="div" sx={{ mb: 0 }}>
 				What&apos;s on offer?
 			</Typography>
 

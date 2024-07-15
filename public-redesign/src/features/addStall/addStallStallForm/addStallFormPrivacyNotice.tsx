@@ -1,5 +1,5 @@
 import SecurityIcon from '@mui/icons-material/Security';
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const PrivacyNoticeContainer = styled('div')(() => ({
@@ -18,7 +18,6 @@ const StyledListItemText = styled(ListItemText)(() => ({
 }));
 
 const PrivacyMessage = styled('div')(() => ({
-	marginBottom: '25px',
 	fontSize: '14px',
 	lineHeight: '24px',
 }));
@@ -26,7 +25,11 @@ const PrivacyMessage = styled('div')(() => ({
 export default function AddStallFormPrivacyNotice() {
 	return (
 		<PrivacyNoticeContainer>
-			<List dense sx={{ paddingTop: 0, paddingBottom: 0, marginBottom: 0 }}>
+			<Typography gutterBottom variant="h6" component="div" sx={{ mb: 1 }}>
+				A word about privacy
+			</Typography>
+
+			<List dense sx={{ paddingTop: 0, paddingBottom: 0, marginBottom: 0, display: 'none' }}>
 				<ListItem disableGutters>
 					<StyledListItemIcon>
 						<SecurityIcon sx={{ color: 'black' }} />

@@ -48,13 +48,15 @@ export default function AddStallIntroMessage(props: Props) {
 
 			<Box sx={{ width: '100%', p: 2 }}>
 				<Alert severity="info">
-					<AlertTitle>Please complete the form below to add your stall to the map</AlertTitle>
+					<AlertTitle>Guidelines for adding a stall to the map</AlertTitle>
+
 					<StyledUnorderedList>
 						<li>
-							Please do not submit entries that are offensive, political or do not relate to an election day stall
+							Please do not submit entries that are offensive, political, or do not relate to an election day stall
 						</li>
 						<li>
-							Please also make sure that you have authorisation to run your fundraising event at the polling place
+							If you are running a stall, please also make sure that you have authorisation to run your fundraising
+							event at the polling place
 						</li>
 						<li>All entries are moderated and subject to approval</li>
 					</StyledUnorderedList>

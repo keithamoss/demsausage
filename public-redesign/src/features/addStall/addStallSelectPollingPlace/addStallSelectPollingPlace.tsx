@@ -50,6 +50,7 @@ import {
 	mapboxSearchTypesForElectionsWithoutPollingPlaces,
 } from '../../search/searchBarHelpers';
 import SearchComponent from '../../search/searchByAddressOrGPS/searchComponent';
+import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
 import AddStallIntroMessage from '../addStallIntroMessage';
 import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
@@ -57,7 +58,8 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
 // The entrypoint handles determining the election that should be displayed based on route changes.

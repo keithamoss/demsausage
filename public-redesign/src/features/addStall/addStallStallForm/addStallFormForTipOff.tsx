@@ -3,17 +3,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
-import {
-	Box,
-	Button,
-	Divider,
-	FormControl,
-	FormGroup,
-	InputAdornment,
-	MobileStepper,
-	Paper,
-	Typography,
-} from '@mui/material';
+import { Box, Button, FormControl, FormGroup, InputAdornment, MobileStepper, Paper, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
@@ -29,6 +19,7 @@ import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
 import { AddStallExistingSubmissionWarning } from './addStallExistingSubmissionWarning';
 import AddStallFormFoodOptionsSelector from './addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from './addStallFormPrivacyNotice';
@@ -37,7 +28,8 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
 interface Props {
@@ -123,18 +115,16 @@ export default function AddStallFormForTipOff(props: Props) {
 						bgcolor: 'grey.200',
 					}}
 				>
-					<Typography variant="h6">Stall Info</Typography>
+					<Typography variant="h6">Tell us about the stall</Typography>
 				</Paper>
 
 				<Box sx={{ width: '100%', p: 2 }}>
 					<AddStallFormFoodOptionsSelector foodOptions={noms} onChange={onFoodOptionChange} errors={errors.noms} />
 
-					<Divider sx={{ mt: 3, mb: 3 }} />
-
 					{/* ######################
 							Your Details
 					###################### */}
-					<Typography gutterBottom variant="h6" component="div">
+					<Typography gutterBottom variant="h6" component="div" sx={{ mb: 2 }}>
 						Your details
 					</Typography>
 
@@ -166,8 +156,6 @@ export default function AddStallFormForTipOff(props: Props) {
 					{/* ######################
 							Your Details (End)
 					###################### */}
-
-					<Divider sx={{ mt: 3, mb: 3 }} />
 
 					<AddStallFormPrivacyNotice />
 				</Box>

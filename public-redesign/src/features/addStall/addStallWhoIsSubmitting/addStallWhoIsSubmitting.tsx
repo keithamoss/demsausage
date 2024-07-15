@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import * as React from 'react';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
@@ -25,13 +24,15 @@ import { StallSubmitterType } from '../../../app/services/stalls';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
 import { selectActiveElections } from '../../elections/electionsSlice';
+import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
 import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
 interface LocationState {
@@ -94,31 +95,27 @@ export default function AddStallWhoIsSubmitting() {
 			</Paper>
 
 			<Box sx={{ width: '100%', p: 2 }}>
-				<React.Fragment>
-					<Typography>Foobar foobar foobar</Typography>
+				<List>
+					<ListItemButton sx={{ marginBottom: 0 }} onClick={onChooseStallOwner}>
+						<ListItemAvatar>
+							<Avatar sx={{ backgroundColor: 'transparent' }}>
+								<StallSubmitterTypeOwner style={{ width: 28, height: 28 }} />
+							</Avatar>
+						</ListItemAvatar>
 
-					<List>
-						<ListItemButton sx={{ marginBottom: 0 }} onClick={onChooseStallOwner}>
-							<ListItemAvatar>
-								<Avatar sx={{ backgroundColor: 'transparent' }}>
-									<StallSubmitterTypeOwner style={{ width: 28, height: 28 }} />
-								</Avatar>
-							</ListItemAvatar>
+						<ListItemText primary="I'm involved in running this stall" />
+					</ListItemButton>
 
-							<ListItemText primary="I'm involved in running this stall" />
-						</ListItemButton>
+					<ListItemButton onClick={onChooseStallTipOff}>
+						<ListItemAvatar>
+							<Avatar sx={{ backgroundColor: 'transparent' }}>
+								<StallSubmitterTypeTipOff style={{ width: 28, height: 28 }} />
+							</Avatar>
+						</ListItemAvatar>
 
-						<ListItemButton onClick={onChooseStallTipOff}>
-							<ListItemAvatar>
-								<Avatar sx={{ backgroundColor: 'transparent' }}>
-									<StallSubmitterTypeTipOff style={{ width: 28, height: 28 }} />
-								</Avatar>
-							</ListItemAvatar>
-
-							<ListItemText primary="I'm sending a tip-off about a stall I've seen" />
-						</ListItemButton>
-					</List>
-				</React.Fragment>
+						<ListItemText primary="I'm sending a tip-off about a stall I've seen" />
+					</ListItemButton>
+				</List>
 			</Box>
 
 			<MobileStepper

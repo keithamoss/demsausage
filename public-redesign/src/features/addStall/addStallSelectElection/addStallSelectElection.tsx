@@ -17,9 +17,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { navigateToAddStallSelectPollingPlaceFromElection } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { Election } from '../../../app/services/elections';
-import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
+import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
 import AddStallIntroMessage from '../addStallIntroMessage';
 import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
@@ -27,7 +27,8 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
 export default function AddStallSelectElection() {
@@ -81,13 +82,13 @@ export default function AddStallSelectElection() {
 
 							<ListItemButton>
 								<ListItemText
-									sx={{
-										'& .MuiListItemText-primary': {
-											fontSize: 15,
-											fontWeight: 700,
-											color: mapaThemePrimaryGrey,
-										},
-									}}
+									// sx={{
+									// 	// '& .MuiListItemText-primary': {
+									// 	// 	fontSize: 15,
+									// 	// 	fontWeight: 700,
+									// 	// 	color: mapaThemePrimaryGrey,
+									// 	// },
+									// }}
 									primary={election.name}
 								/>
 							</ListItemButton>
@@ -99,6 +100,8 @@ export default function AddStallSelectElection() {
 			<MobileStepper
 				position="bottom"
 				variant="text"
+				// So it's the same height as the bars that have a non-disabled and hidden button
+				sx={{ minHeight: mobileStepperMinHeight }}
 				steps={activeElections.length >= 2 ? 4 : 3}
 				activeStep={0}
 				backButton={getHiddenStepperButton()}
