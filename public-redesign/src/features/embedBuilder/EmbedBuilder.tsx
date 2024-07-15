@@ -22,6 +22,7 @@ import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../../app/hooks';
 import { Election } from '../../app/services/elections';
 import { getBaseURL } from '../../app/utils';
+import { appBarHeight } from '../addStall/addStallHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';
 import {
@@ -32,10 +33,11 @@ import {
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
+	overflowY: 'auto',
+	height: `100vh`,
 	padding: theme.spacing(2),
 	paddingTop: theme.spacing(4),
-	overflowY: 'auto',
-	height: `100dvh`,
+	paddingBottom: appBarHeight,
 }));
 
 const StyledElectionImage = styled('img')(({ theme }) => ({

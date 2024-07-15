@@ -3,6 +3,7 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { getBaseURL } from '../../app/utils';
+import { appBarHeight } from '../addStall/addStallHelpers';
 import { getAllFoodsAvailableOnStalls, getSupportingIconsForAboutPage, standaloneIconSize } from '../icons/iconHelpers';
 
 // const bottomNav = 56;
@@ -15,9 +16,10 @@ import { getAllFoodsAvailableOnStalls, getSupportingIconsForAboutPage, standalon
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
-	padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	padding: theme.spacing(2),
+	paddingBottom: appBarHeight,
 }));
 
 const PageWrapper = styled('div')(({ theme }) => ({
@@ -58,7 +60,7 @@ export default function AboutPage() {
 			</Helmet>
 
 			<PageWrapper>
-				<Question>What is this?</Question>
+				<Question sx={{ mt: 0 }}>What is this?</Question>
 				<Answer>A map of sausage and cake availability on election day.</Answer>
 				<Question>I still don&apos;t understand</Question>
 				<Answer>It&apos;s practically part of the Australian Constitution. Or something.</Answer>

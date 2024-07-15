@@ -14,6 +14,7 @@ import { grey } from '@mui/material/colors';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListItemButtonLink } from '../../app/ui/link';
+import { appBarHeight } from '../addStall/addStallHelpers';
 import {
 	PollingPlaceCardDebugViewEntrypointLayer1,
 	PollingPlaceSearchResultsCardDebugViewEntrypointLayer1,
@@ -22,9 +23,10 @@ import {
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
-	padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: `100vh`,
+	padding: theme.spacing(2),
+	paddingBottom: appBarHeight,
 }));
 
 export default function DebugView() {
