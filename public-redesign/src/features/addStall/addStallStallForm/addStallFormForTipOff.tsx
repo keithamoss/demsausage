@@ -138,10 +138,6 @@ export default function AddStallFormForTipOff(props: Props) {
 						Your details
 					</Typography>
 
-					<Typography gutterBottom variant="subtitle1" component="div">
-						Foobar foobar foobar
-					</Typography>
-
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller

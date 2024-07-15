@@ -149,7 +149,7 @@ export default function AddStallFormForOwner(props: Props) {
 								render={({ field }) => (
 									<TextFieldWithout1Password
 										{...field}
-										label="What is the stall called? (Required)"
+										label="Stall name (required)"
 										helperText="e.g. Smith Hill Primary School Sausage Sizzle"
 									/>
 								)}
@@ -167,7 +167,7 @@ export default function AddStallFormForOwner(props: Props) {
 								render={({ field }) => (
 									<TextFieldWithout1Password
 										{...field}
-										label="Describe the stall"
+										label="Description (required)"
 										helperText="Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
 									/>
 								)}
@@ -183,11 +183,7 @@ export default function AddStallFormForOwner(props: Props) {
 								name="opening_hours"
 								control={control}
 								render={({ field }) => (
-									<TextFieldWithout1Password
-										{...field}
-										label="Stall opening hours (optional)"
-										helperText="e.g. 8AM - 2PM"
-									/>
+									<TextFieldWithout1Password {...field} label="Opening hours" helperText="e.g. 8AM - 2PM" />
 								)}
 							/>
 						</FormGroup>
@@ -227,10 +223,6 @@ export default function AddStallFormForOwner(props: Props) {
 					###################### */}
 					<Typography gutterBottom variant="h6" component="div">
 						Your details
-					</Typography>
-
-					<Typography gutterBottom variant="subtitle1" component="div">
-						Foobar foobar foobar
 					</Typography>
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">

@@ -63,10 +63,6 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 				What&apos;s on offer?
 			</Typography>
 
-			<Typography gutterBottom variant="subtitle1" component="div">
-				Foobar foobar foobar
-			</Typography>
-
 			<FormControl fullWidth={true} component="fieldset" variant="outlined">
 				<FormGroup>
 					<List
