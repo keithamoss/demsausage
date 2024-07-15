@@ -80,34 +80,6 @@ export default function AboutPage() {
 							commissions);
 						</li>
 						<li>
-							Images from <a href="http://openclipart.org">openclipart.org</a>; specifically:{' '}
-							<a href="http://openclipart.org/detail/7983/red-+-green-ok-not-ok-icons-by-tzeeniewheenie">
-								these tick and cross icons
-							</a>
-							, <a href="http://openclipart.org/detail/6165/sausage-by-mcol">this sausage icon</a> and{' '}
-							<a href="http://openclipart.org/detail/181486/cake-by-vectorsme-181486">this cake icon</a> (with our
-							acknowledgements and appreciation to the artists).
-						</li>
-						<li>
-							Additional icons from <a href="https://www.flaticon.com/">flaticon.com</a> under a{' '}
-							<a
-								href="http://creativecommons.org/licenses/by/3.0/"
-								title="Creative Commons BY 3.0"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								CC 3.0 BY
-							</a>{' '}
-							license; specifically{' '}
-							<a href="https://www.flaticon.com/free-icon/question-mark-on-a-circular-black-background_25400">
-								Question mark (by Dave Gandy)
-							</a>
-							, <a href="https://www.flaticon.com/free-icon/remove_189690">Run out (by Roundicons)</a>,{' '}
-							<a href="https://www.flaticon.com/free-icon/vegetarian_723632">Carrot on a bbq fork (by Pixel perfect)</a>
-							, <a href="https://www.flaticon.com/free-icon/coffee_1585293">Coffee cup (by Freepik)</a>, and{' '}
-							<a href="https://www.flaticon.com/free-icon/egg-and-bacon_648653">Eggs and bacons (by Freepik)</a>.
-						</li>
-						<li>
 							Social media icons from <a href="https://fontawesome.com">fontawesome.com</a> under a{' '}
 							<a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
 						</li>
