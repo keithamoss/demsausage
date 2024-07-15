@@ -224,6 +224,12 @@ export const secondaryFoodIcons = {
 	},
 };
 
+export const getSupportingIconsForAboutPage = () => [
+	supportingIcons.yellow_minus,
+	supportingIcons.red_cross,
+	supportingIcons.grey_question,
+];
+
 export const supportingIcons = {
 	// ######################################
 	// These are the supporting icons that
