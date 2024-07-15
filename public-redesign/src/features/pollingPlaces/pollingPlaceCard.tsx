@@ -173,7 +173,11 @@ export default function PollingPlaceCard(props: Props) {
 		};
 
 		if (navigator.canShare(shareData)) {
-			navigator.share(shareData);
+			try {
+				navigator.share(shareData);
+			} catch (e) {
+				/* we don't care about the user aborting sharing, so swallow any errors */
+			}
 		} else {
 			// Don't worry about handling a fail on canShare() or share()
 		}
