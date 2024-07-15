@@ -10,8 +10,8 @@ import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../app/appSlice';
+import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 import { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
 
 interface Props {
 	marginBottom?: number;
@@ -72,7 +72,7 @@ export default function SearchFilterComponent(props: Props) {
 					>
 						<ListItemButton onClick={onClickFilterOptionListItemButton(noms.value as keyof IMapFilterSettings)}>
 							<ListItemAvatar>
-								<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent', '& svg': { width: 36, height: 36 } }}>
+								<Avatar alt={noms.label} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
 									{noms.icon.react}
 								</Avatar>
 							</ListItemAvatar>

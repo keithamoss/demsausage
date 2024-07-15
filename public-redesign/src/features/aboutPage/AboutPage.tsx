@@ -3,7 +3,7 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
 import { getBaseURL } from '../../app/utils';
-import { getAllFoodsAvailableOnStalls, getSupportingIconsForAboutPage } from '../icons/iconHelpers';
+import { getAllFoodsAvailableOnStalls, getSupportingIconsForAboutPage, standaloneIconSize } from '../icons/iconHelpers';
 
 // const bottomNav = 56;
 
@@ -92,13 +92,13 @@ export default function AboutPage() {
 					<List>
 						{getAllFoodsAvailableOnStalls().map((noms) => (
 							<ListItemButton key={noms.value}>
-								<ListItemIcon sx={{ '& svg': { width: 36, height: 36 } }}>{noms.icon.react}</ListItemIcon>
+								<ListItemIcon sx={{ '& svg': standaloneIconSize }}>{noms.icon.react}</ListItemIcon>
 								<ListItemText primary={noms.description} />
 							</ListItemButton>
 						))}
 						{getSupportingIconsForAboutPage().map((noms) => (
 							<ListItemButton key={noms.value}>
-								<ListItemIcon sx={{ '& svg': { width: 36, height: 36 } }}>{noms.icon.react}</ListItemIcon>
+								<ListItemIcon sx={{ '& svg': standaloneIconSize }}>{noms.icon.react}</ListItemIcon>
 								<ListItemText primary={noms.description} />
 							</ListItemButton>
 						))}

@@ -16,7 +16,7 @@ import { useMemo } from 'react';
 import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
 import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
-import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
+import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 
 interface Props {
 	foodOptions: StallFoodOptions;
@@ -92,10 +92,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 								>
 									<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)}>
 										<ListItemAvatar>
-											<Avatar
-												alt={option.value}
-												sx={{ backgroundColor: 'transparent', '& svg': { width: 36, height: 36 } }}
-											>
+											<Avatar alt={option.value} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
 												{option.icon.react}
 											</Avatar>
 										</ListItemAvatar>

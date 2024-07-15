@@ -151,7 +151,11 @@ export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
 	</Tooltip>
 );
 
-export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace, allowRedCrossOfShame: boolean) => {
+export const getNomsIconsForPollingPlace = (
+	pollingPlace: IPollingPlace,
+	allowRedCrossOfShame: boolean,
+	allowSoldOut: boolean,
+) => {
 	if (pollingPlace.stall?.noms.nothing) {
 		// For PollingPlaceCards, we don't display the Red Cross of Shame in the list of noms icons, it gets displayed as part of other elements of the card
 		return allowRedCrossOfShame === true
@@ -169,6 +173,10 @@ export const getNomsIconsForPollingPlace = (pollingPlace: IPollingPlace, allowRe
 						return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
 					}
 				})}
+				{/* For PollingPlaceCards, we don't display the Sold Out icon in the list of noms icons, it gets displayed as part of other elements of the card */}
+				{allowSoldOut === true &&
+					pollingPlace.stall?.noms.run_out === true &&
+					wrapIconWithTooltip(supportingIcons.yellow_minus.icon.react, supportingIcons.yellow_minus.description)}
 			</React.Fragment>
 		);
 	}

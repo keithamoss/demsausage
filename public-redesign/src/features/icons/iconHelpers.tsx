@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+import { SvgIcon } from '@mui/material';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
-import { createReactSvgIcon, prepareRawSVGForOpenLayers } from '../icons/svgHelpers';
 import {
 	BaconEggs,
 	Cake,
@@ -39,6 +40,7 @@ import {
 	Vego,
 	Yellow_Minus,
 } from './icons';
+import { createReactSvgIcon, prepareRawSVGForOpenLayers } from './svgHelpers';
 
 export const createOLIcon = (rawSVG: string, zIndex: number, width: number, height: number, style?: string) =>
 	new Style({
@@ -67,6 +69,19 @@ export const createOLDetailedIcon = (rawSVG: string) =>
 		}),
 		zIndex: 1,
 	});
+
+// Displays a set of small food options icons in a horizontal row
+export const IconsFlexboxHorizontalSummaryRow = styled('div')(() => ({
+	flexGrow: 1,
+	svg: {
+		width: '30px',
+		height: '30px',
+		marginRight: '5px',
+	},
+}));
+
+// Used when we're displaying the icons in a set of stacked rows e.g. the add stall and filter interfaces
+export const standaloneIconSize = { width: 36, height: 36 };
 
 export const getAllFoodsAvailableOnStalls = () => [
 	...getPrimaryFoodsAvailableOnStalls(),
@@ -290,7 +305,7 @@ export const supportingIcons = {
 		},
 		label: 'Sold Out',
 		value: 'yellow_minus',
-		description: 'Our roving reporters have informed us that the stall here has run out of food',
+		description: "Our roving reporters have informed us that they've run out of food here",
 	},
 	red_cross: {
 		// Used to indicate that a polling place has a definite
@@ -302,7 +317,13 @@ export const supportingIcons = {
 		// - On polling place cards
 		icon: {
 			raw: Red_Cross,
-			react: createReactSvgIcon(React_Red_Cross),
+			// react: createReactSvgIcon(React_Red_Cross),
+			// @TODO Temporary until resized icons are available
+			react: (
+				<SvgIcon>
+					<React_Red_Cross width={'36'} height={'36'} />
+				</SvgIcon>
+			),
 			ol: createOLIcon(Red_Cross, 1, 40, 40),
 			olDetailed: createOLDetailedIcon(Red_Cross),
 		},

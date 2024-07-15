@@ -44,7 +44,7 @@ import { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
-import { supportingIcons } from '../icons/iconHelpers';
+import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../icons/iconHelpers';
 import { getNomsIconsForPollingPlace } from '../search/searchBarHelpers';
 import {
 	getPollingPlaceDivisionsDescriptiveText,
@@ -61,16 +61,6 @@ import { IPollingPlace } from './pollingPlacesInterfaces';
 
 const StyledCardHeader = styled(CardHeader)(() => ({
 	// pointerEvents: "all",
-}));
-
-const FlexboxIcons = styled('div')(() => ({
-	flexGrow: 1,
-	marginLeft: 1,
-	svg: {
-		width: '30px',
-		height: '30px',
-		marginRight: '5px',
-	},
 }));
 
 const StyledSectionHeadingDivider = styled(Divider)(({ theme }) => ({
@@ -264,9 +254,9 @@ export default function PollingPlaceCard(props: Props) {
 							</React.Fragment>
 						)}
 
-						<FlexboxIcons>
-							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace, false)}</FlexboxIcons>
-						</FlexboxIcons>
+						<IconsFlexboxHorizontalSummaryRow>
+							{getNomsIconsForPollingPlace(pollingPlace, false, false)}
+						</IconsFlexboxHorizontalSummaryRow>
 
 						{pollingPlace.stall !== null && (
 							<React.Fragment>
@@ -281,8 +271,8 @@ export default function PollingPlaceCard(props: Props) {
 											<StyledListItemIcon
 												sx={{
 													'& svg': {
-														width: 48,
-														height: 48,
+														width: 36,
+														height: 36,
 													},
 												}}
 											>
@@ -295,6 +285,20 @@ export default function PollingPlaceCard(props: Props) {
 											/>
 										</StyledListItem>
 									</List>
+								)}
+
+								{pollingPlace.stall.noms.nothing === true && (
+									<Alert
+										severity="error"
+										icon={supportingIcons.red_cross.icon.react}
+										sx={{
+											// @TODO Temporary until resized icons are available
+											'& svg': { transform: 'scale(2)' },
+										}}
+									>
+										{/* <AlertTitle>Sausageless!</AlertTitle> */}
+										<strong>Sausageless!</strong> Our roving reporters have informed us that there&apos;s no stall here.
+									</Alert>
 								)}
 
 								{pollingPlace.stall.noms.nothing !== true && (
@@ -319,6 +323,21 @@ export default function PollingPlaceCard(props: Props) {
 											</Typography>
 										)}
 
+										{pollingPlace.stall.noms.run_out === true && (
+											<Alert
+												severity="warning"
+												icon={supportingIcons.yellow_minus.icon.react}
+												sx={{
+													// @TODO Temporary until resized icons are available
+													'& svg': { transform: 'scale(1.5)' },
+												}}
+											>
+												{/* <AlertTitle>Sold out!</AlertTitle> */}
+												<strong>Sold out!</strong> Our roving reporters have informed us that they&apos;ve run out of
+												food here.
+											</Alert>
+										)}
+
 										<List dense sx={{ paddingBottom: 0, paddingTop: 0, marginBottom: 0 }}>
 											{pollingPlace.stall.noms.run_out === true && (
 												<StyledListItem disableGutters>
@@ -335,7 +354,7 @@ export default function PollingPlaceCard(props: Props) {
 
 													<StyledListItemText
 														primary="Sold out!"
-														secondary="Our roving reporters have informed us that they've run out of food."
+														secondary="Our roving reporters have informed us that they've run out of food here."
 													/>
 												</StyledListItem>
 											)}

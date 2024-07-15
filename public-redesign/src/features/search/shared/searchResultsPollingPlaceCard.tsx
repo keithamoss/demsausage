@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
+import { IconsFlexboxHorizontalSummaryRow } from '../../icons/iconHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
@@ -16,15 +17,6 @@ interface Props {
 	onChoosePollingPlaceLabel: string;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
-
-const FlexboxIcons = styled('div')(() => ({
-	flexGrow: 1,
-	svg: {
-		width: '30px',
-		height: '30px',
-		marginRight: '5px',
-	},
-}));
 
 const StyledCard = styled(Card)(() => ({
 	cursor: 'pointer',
@@ -53,9 +45,9 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 			<StyledCard variant="outlined" onClick={onClickPollingPlace(pollingPlace)}>
 				<StyledCardContent>
 					{pollingPlace.stall !== null && (
-						<FlexboxIcons>
-							<FlexboxIcons>{getNomsIconsForPollingPlace(pollingPlace, true)}</FlexboxIcons>
-						</FlexboxIcons>
+						<IconsFlexboxHorizontalSummaryRow>
+							{getNomsIconsForPollingPlace(pollingPlace, true, true)}
+						</IconsFlexboxHorizontalSummaryRow>
 					)}
 
 					<Typography
