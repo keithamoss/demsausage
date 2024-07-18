@@ -95,7 +95,7 @@ export default function DebugView() {
 					},
 					{
 						url: '/federal_election_2022/polling_places/Pyrmont/Pyrmont_Community_Centre/NSW/',
-						text: 'Stall with a BBQ and a Red Cross of Shame (how?), free text other noms, a pretty long stall description, a medium length entrance description, as well as wheelchair access, a single division, and opening hours',
+						text: 'Stall with a BBQ, a pretty long stall description, a medium length entrance description, as well as wheelchair access, a single division, and opening hours',
 					},
 					{
 						url: "/federal_election_2022/polling_places/Kings_Cross/St_Johns'_Anglican_Church_Hall/NSW/",
@@ -153,7 +153,8 @@ export default function DebugView() {
 
 								<Stack direction="row" spacing={2} sx={{ marginBottom: 4 }}>
 									<iframe
-										src={`https://public.test.democracysausage.org${item.url}?debugViewShowMiniCard`}
+										// src={`https://public.test.democracysausage.org${item.url}?debugViewShowMiniCard`}
+										src={`https://democracysausage.org${item.url}?debugViewShowMiniCard`}
 										scrolling="no"
 										loading="lazy"
 										width="390"
@@ -161,7 +162,8 @@ export default function DebugView() {
 										style={{ border: '1px solid grey' }}
 									/>
 									<iframe
-										src={`https://public.test.democracysausage.org${item.url}`}
+										// src={`https://public.test.democracysausage.org${item.url}`}
+										src={`https://democracysausage.org${item.url}`}
 										scrolling="no"
 										loading="lazy"
 										width="390"

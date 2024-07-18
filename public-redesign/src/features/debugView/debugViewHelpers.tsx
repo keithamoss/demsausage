@@ -154,7 +154,7 @@ function PollingPlaceSearchResultsCardDebugViewEntrypointLayer2(
 	return (
 		<SearchResultsPollingPlaceCard
 			pollingPlace={pollingPlace}
-			onChoosePollingPlaceLabel="Nope"
+			onChoosePollingPlaceLabel="Learn More"
 			onChoosePollingPlace={noop}
 		/>
 	);
