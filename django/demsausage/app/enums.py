@@ -11,6 +11,21 @@ class ProfileSettings(str, EnumBase):
     pass
 
 
+class PollingPlaceState(str, EnumBase):
+    NSW = "NSW"
+    VIC = "VIC"
+    QLD = "QLD"
+    WA = "WA"
+    SA = "SA"
+    TAS = "TAS"
+    ACT = "ACT"
+    NT = "NT"
+    Overseas = "Overseas"
+
+    def __str__(self):
+        return self.value
+
+
 class PollingPlaceStatus(str, EnumBase):
     ARCHIVED = "Archived"
     ACTIVE = "Active"

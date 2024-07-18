@@ -2,7 +2,8 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceJurisdiction, PollingPlaceStatus,
+                                  PollingPlaceJurisdiction, PollingPlaceState,
+                                  PollingPlaceStatus,
                                   PollingPlaceWheelchairAccess,
                                   ProfileSettings, StallStatus,
                                   StallSubmitterType, TaskStatus)
@@ -129,7 +130,7 @@ class PollingPlaces(models.Model):
     premises = models.TextField(blank=True)
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
-    state = models.CharField(max_length=8)
+    state = models.CharField(choices=[(tag, tag.value) for tag in PollingPlaceState])
     wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess])
     wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
@@ -207,7 +208,7 @@ class ElectoralBoundaries(models.Model):
     geom = models.MultiPolygonField(null=False)
     election_ids = JSONField(default=list, blank=True)
     division_name = models.TextField()
-    state = models.CharField(max_length=8)
+    state = models.CharField(choices=[(tag, tag.value) for tag in PollingPlaceState])
     extras = JSONField(default=dict, blank=True)
     loaded = models.DateField(auto_now_add=True)
 

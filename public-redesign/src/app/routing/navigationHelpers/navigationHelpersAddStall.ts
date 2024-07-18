@@ -178,7 +178,8 @@ export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 
 	const name = feature.text;
 	const address = feature.place_name;
-	const state = feature.context.find((i) => i.id.startsWith('region.') === true)?.text || 'Unknown';
+	const state =
+		feature.context.find((i) => i.id.startsWith('region.') === true)?.short_code?.split('-')[1] || 'Unknown';
 	const lonlat = feature.geometry.coordinates.join(',');
 
 	navigate(`/add-stall/${urlElectionName}/location/${name}/${address}/${state}/${lonlat}/`, {
