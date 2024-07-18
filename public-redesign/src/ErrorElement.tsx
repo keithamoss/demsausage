@@ -1,190 +1,137 @@
 import EmailIcon from '@mui/icons-material/Email';
-import { Box, Button, Typography } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
-import DemSausageColouredCrestGrillRaw from './assets/crest/coloured_crest_grill.svg?raw';
+import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
+import DemSausageCrestBannerRaw from './assets/crest/crest_banner.svg?raw';
+import TilesBackgroundRaw from './assets/tiles/tiles.svg?raw';
+import { appBarHeight } from './features/addStall/addStallHelpers';
 import { createInlinedSVGImage } from './features/icons/svgHelpers';
 
-const PageContainer = styled('div')`
-	height: 100vh;
+const StyledInteractableBoxFullHeight = styled(Box)(() => ({
+	backgroundColor: mapaThemePrimaryPurple,
+	overflowY: 'auto',
+	height: `100vh`,
+	paddingBottom: appBarHeight * 2,
+}));
+
+const ContentContainer = styled('div')`
 	display: flex;
 	align-items: start;
-	justify-content: center;
 	flex-direction: column;
-	background-color: ${mapaThemePrimaryPurple};
 `;
 
 function ErrorElement() {
+	const theme = useTheme();
+
+	const navigate = useNavigate();
+
+	const onNavigateHome = useCallback(() => navigate(''), [navigate]);
+
 	return (
-		<PageContainer>
+		<StyledInteractableBoxFullHeight>
 			<Helmet>
 				<title>Error | Democracy Sausage</title>
 			</Helmet>
 
-			<Box
+			<AppBar
+				position="relative"
+				elevation={0}
 				sx={{
-					width: '100%',
-					backgroundColor: 'white',
-					borderTop: '10px solid white',
-					borderBottom: '10px solid white',
-					// backgroundColor: '#a197c7',
-					height: '250px',
-					// backgroundImage: "url('https://i.sstatic.net/CjzQS.jpg')",
-					// backgroundImage: "url('/logo/sausage+cake_big.png')",
-					// backgroundImage: "url('/big_election_image.png')",
-					// backgroundRepeat: 'no-repeat',
-					// backgroundSize: 'cover',
-					// -webkit-filter: blur(5px);
-					// -moz-filter: blur(5px);
-					// -o-filter: blur(5px);
-					// -ms-filter: blur(5px);
-					// filter: 'blur(5px)',
-					// p: 2,
-					// display: 'flex',
-					// justifyContent: 'center',
+					display: 'flex',
+					alignItems: 'center',
 				}}
 			>
-				<Box
+				<Toolbar
 					sx={{
-						position: 'absolute',
-						width: '100%',
-						// backgroundColor: 'white',
-						// backgroundColor: '#a197c7',
-						height: '225px',
-						// backgroundImage: "url('https://i.sstatic.net/CjzQS.jpg')",
-						// backgroundImage: "url('/logo/sausage+cake_big.png')",
-						// backgroundImage: "url('/big_election_image.png')",
-						backgroundImage: "url('/screenie4.png')",
-						backgroundRepeat: 'no-repeat',
-						backgroundSize: 'cover',
-						backgroundPositionY: 'center',
-						// -webkit-filter: blur(5px);
-						// -moz-filter: blur(5px);
-						// -o-filter: blur(5px);
-						// -ms-filter: blur(5px);
-						filter: 'blur(10px)',
-						p: 2,
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-				></Box>
-
-				<Box
-					sx={{
-						position: 'absolute',
-						width: '100%',
-						// backgroundColor: '#a197c7',
-						height: '225px',
-						// backgroundImage: "url('https://i.sstatic.net/CjzQS.jpg')",
-						// backgroundImage: "url('/logo/sausage+cake_big.png')",
-						// backgroundImage: "url('/big_election_image.png')",
-						// backgroundRepeat: 'no-repeat',
-						// backgroundSize: 'cover',
-						// -webkit-filter: blur(5px);
-						// -moz-filter: blur(5px);
-						// -o-filter: blur(5px);
-						// -ms-filter: blur(5px);
-						// filter: 'blur(5px)',
-						p: 2,
-						display: 'flex',
-						justifyContent: 'center',
+						// Override media queries injected by theme.mixins.toolbar
+						'@media all': {
+							minHeight: appBarHeight * 2,
+						},
 					}}
 				>
 					{createInlinedSVGImage(
-						DemSausageColouredCrestGrillRaw,
+						DemSausageBannerRaw,
 						{
-							width: '70%',
-							minWidth: '400px',
-							// display: 'none',
-							// minHeight: '300px',
+							paddingTop: theme.spacing(1),
+							paddingBottom: theme.spacing(1),
+							cursor: 'pointer',
+							height: 68,
 						},
-						() => {},
+						onNavigateHome,
 					)}
-				</Box>
-			</Box>
+				</Toolbar>
+			</AppBar>
 
-			{/* <Box
-				sx={{
-					width: '100%',
-					// backgroundColor: '#a197c7',
-					height: '200px',
-					// backgroundImage: "url('https://i.sstatic.net/CjzQS.jpg')",
-					// backgroundImage: "url('/logo/sausage+cake_big.png')",
-					backgroundImage: "url('/big_election_image.png')",
-					backgroundRepeat: 'no-repeat',
-					backgroundSize: 'cover',
-					// -webkit-filter: blur(5px);
-					// -moz-filter: blur(5px);
-					// -o-filter: blur(5px);
-					// -ms-filter: blur(5px);
-					filter: 'blur(5px)',
-					p: 2,
-					display: 'flex',
-					justifyContent: 'center',
-				}}
-			>
-				{createInlinedSVGImage(
-					DemSausageColouredCrestGrillRaw,
-					{
-						width: '70%',
-						minWidth: '400px',
-						// display: 'none',
-						// minHeight: '300px',
-					},
-					() => {},
-				)}
-			</Box> */}
-
-			<Box sx={{ mt: 4, pl: 3, pr: 3, color: 'white' }}>
-				<Typography variant="h4" sx={{ fontWeight: 600, mt: 3, mb: 0 }} gutterBottom>
-					Error
-				</Typography>
-
-				<Typography variant="h2" sx={{ fontWeight: 800, mt: 3, mb: 3 }} gutterBottom>
-					Sorry, we hit a snag!
-				</Typography>
-
-				<Typography variant="h5" sx={{ fontWeight: 600, mb: 4 }} gutterBottom>
-					We are currently experiencing technical issues, we hope to be back with you shortly.
-				</Typography>
-
-				<Button
-					variant="outlined"
-					startIcon={<EmailIcon />}
-					sx={{ borderColor: 'white', color: 'white' }}
-					component="a"
-					href="mailto:ausdemocracysausage@gmail.com"
+			<ContentContainer>
+				<Box
+					sx={{
+						width: '100%',
+						height: '225px',
+						position: 'relative',
+					}}
 				>
-					Let us know
-				</Button>
-			</Box>
+					<Box
+						sx={{
+							position: 'absolute',
+							width: '100%',
+							height: '225px',
+							backgroundImage: `url('data:image/svg+xml;base64,${window.btoa(TilesBackgroundRaw)}')`,
+							p: 2,
+						}}
+					></Box>
 
-			{/* <StyledBox>
-				<Typography variant="h1" sx={{ fontWeight: 800, color: mapaThemePrimaryPurple }}>
-					Oops!
-				</Typography>
-			</StyledBox>
+					<Box
+						sx={{
+							position: 'absolute',
+							width: '100%',
+							height: '225px',
+							p: 2,
+							display: 'flex',
+							justifyContent: 'center',
+						}}
+					>
+						{createInlinedSVGImage(
+							DemSausageCrestBannerRaw,
+							{
+								minWidth: '400px',
+								paddingLeft: '30px',
+								paddingRight: '30px',
+							},
+							onNavigateHome,
+						)}
+					</Box>
+				</Box>
 
-			<StyledBox
-				sx={{
-					maxWidth: '30%',
-					minWidth: '250px',
-					marginTop: 1,
-					marginBottom: 2,
-				}}
-			>
-				<Typography variant="body1" sx={{ textAlign: 'center' }}>
-					<strong>We&apos;ve hit a bit of a snag.</strong> Something went wrong and an error has occurred. Please do{' '}
-					<a href="mailto:ausdemocracysausage@gmail.com">email us</a> and let us know.
-				</Typography>
-			</StyledBox>
+				<Box sx={{ mt: 2, pl: 3, pr: 3, color: 'white' }}>
+					<Typography variant="h4" sx={{ fontWeight: 600, mt: 3, mb: 0 }} gutterBottom>
+						Error
+					</Typography>
 
-			<StyledBox sx={{ minWidth: '350px' }}>
-				<img src="/logo/logo512.png" style={{ maxWidth: '50%' }} />
-			</StyledBox> */}
-		</PageContainer>
+					<Typography variant="h2" sx={{ fontWeight: 800, mt: 3, mb: 3 }} gutterBottom>
+						Sorry, we hit a snag!
+					</Typography>
+
+					<Typography variant="h5" sx={{ fontWeight: 600, mb: 4 }} gutterBottom>
+						We are currently experiencing technical issues, we hope to be back with you shortly.
+					</Typography>
+
+					<Button
+						variant="outlined"
+						startIcon={<EmailIcon />}
+						sx={{ borderColor: 'white', color: 'white' }}
+						component="a"
+						href="mailto:ausdemocracysausage@gmail.com"
+					>
+						Let us know
+					</Button>
+				</Box>
+			</ContentContainer>
+		</StyledInteractableBoxFullHeight>
 	);
 }
 
