@@ -161,6 +161,7 @@ export default function AddStallFormForOwner(props: Props) {
 										{...field}
 										label="Description (required)"
 										helperText="Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
+										multiline
 									/>
 								)}
 							/>
