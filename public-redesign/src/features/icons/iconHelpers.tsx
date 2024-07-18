@@ -70,18 +70,18 @@ export const createOLDetailedIcon = (rawSVG: string) =>
 		zIndex: 1,
 	});
 
-// Displays a set of small food options icons in a horizontal row
+// Displays a set of food options icons in a horizontal row
 export const IconsFlexboxHorizontalSummaryRow = styled('div')(() => ({
 	flexGrow: 1,
 	svg: {
-		width: '30px',
-		height: '30px',
+		width: '34px',
+		height: '34px',
 		marginRight: '5px',
 	},
 }));
 
 // Used when we're displaying the icons in a set of stacked rows e.g. the add stall and filter interfaces
-export const standaloneIconSize = { width: 36, height: 36 };
+export const standaloneIconSize = { width: 34, height: 34 };
 
 export const getAllFoodsAvailableOnStalls = () => [
 	...getPrimaryFoodsAvailableOnStalls(),
