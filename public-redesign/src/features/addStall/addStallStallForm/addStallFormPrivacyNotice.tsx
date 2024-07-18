@@ -2,8 +2,8 @@ import SecurityIcon from '@mui/icons-material/Security';
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const PrivacyNoticeContainer = styled('div')(() => ({
-	marginTop: '30px',
+const PrivacyNoticeContainer = styled('div')(({ theme }) => ({
+	marginTop: theme.spacing(2),
 }));
 
 const StyledListItemIcon = styled(ListItemIcon)(() => ({
