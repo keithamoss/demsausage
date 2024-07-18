@@ -3,7 +3,8 @@ from copy import deepcopy
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import (PollingPlaceStatus, StallStatus,
+from demsausage.app.enums import (PollingPlaceStatus,
+                                  PollingPlaceWheelchairAccess, StallStatus,
                                   StallSubmitterType)
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
@@ -627,6 +628,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             "facility_type": None,
             "election": stall.election.id,
             "status": PollingPlaceStatus.ACTIVE,
+            "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN
         })
 
         if pollingPlaceSerializer.is_valid() is True:
