@@ -169,7 +169,6 @@ export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 ) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/
-
 	const { urlElectionName } = getURLParams(params);
 
 	if (urlElectionName === undefined) {
@@ -279,8 +278,14 @@ export const navigateToAddStallForm = (
 	}
 };
 
-export const navigateToAddStallSubmitted = (navigate: NavigateFunction) => {
+export const navigateToAddStallSubmitted = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
-	// /add-stall/submitted/
-	navigate('/add-stall/submitted/');
+	// /add-stall/:election_name/submitted/
+	const { urlElectionName } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(`/add-stall/${urlElectionName}/submitted/`);
 };

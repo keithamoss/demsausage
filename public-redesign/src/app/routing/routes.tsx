@@ -110,7 +110,7 @@ export const router = sentryCreateBrowserRouter([
 					// Location Lookup (End)
 					// ############################
 					{
-						path: '/add-stall/submitted/',
+						path: '/add-stall/:election_name/submitted/',
 						element: <AddStallSubmitted />,
 					},
 				],

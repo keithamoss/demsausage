@@ -2,6 +2,9 @@ import PublicIcon from '@mui/icons-material/Public';
 import { Alert, Box, Button, Paper, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { navigateToElectionFromElectionNameInURL } from '../../../app/routing/navigationHelpers/navigationHelpersMap';
 import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
@@ -13,6 +16,14 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 }));
 
 export default function AddStallSubmitted() {
+	const params = useParams();
+	const navigate = useNavigate();
+
+	const onNavigateToMap = useCallback(
+		() => navigateToElectionFromElectionNameInURL(params, navigate),
+		[navigate, params],
+	);
+
 	return (
 		<StyledInteractableBoxFullHeight>
 			<Paper
@@ -35,7 +46,7 @@ export default function AddStallSubmitted() {
 					appearing on the map.
 				</Alert>
 
-				<Button size="small" variant="outlined" startIcon={<PublicIcon />} href={'/'}>
+				<Button size="small" variant="outlined" startIcon={<PublicIcon />} onClick={onNavigateToMap}>
 					Head Back To The Map
 				</Button>
 			</Box>

@@ -150,9 +150,9 @@ function AddStallStallCreatorForm(props: Props) {
 
 	useEffect(() => {
 		if (isAddingStallSuccessful === true) {
-			navigateToAddStallSubmitted(navigate);
+			navigateToAddStallSubmitted(params, navigate);
 		}
-	}, [isAddingStallSuccessful, navigate]);
+	}, [isAddingStallSuccessful, navigate, params]);
 
 	const onDoneAdding = useCallback(
 		(stall: StallTipOffModifiableProps | StallOwnerModifiableProps) => {

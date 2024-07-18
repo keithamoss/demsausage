@@ -4,9 +4,21 @@ import { createMapViewURLPathComponent } from '../../../features/map/mapHelpers'
 import { Election } from '../../services/elections';
 import { addComponentToEndOfURLPath, getURLParams } from './navigationHelpers';
 
-export const navigateToElection = (navigate: NavigateFunction, election: Election, view: View) => {
+export const navigateToElectionFromElectionNameInURL = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /:election_name/
+	const { urlElectionName } = getURLParams(params);
+
+	if (urlElectionName === undefined) {
+		return;
+	}
+
+	navigate(`/${urlElectionName}/`);
+};
+
+export const navigateToElection = (navigate: NavigateFunction, election: Election, view: View) => {
+	// We handle going to all of these routes:
+	// /:election_name/m/:map_lat_lon_zoom/
 	const mapViewString = createMapViewURLPathComponent(view);
 
 	if (mapViewString !== undefined) {
