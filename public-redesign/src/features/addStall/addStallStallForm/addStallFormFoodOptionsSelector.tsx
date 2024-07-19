@@ -16,6 +16,7 @@ import { useMemo } from 'react';
 import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
 import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 
 interface Props {
@@ -59,7 +60,12 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 
 	return (
 		<React.Fragment>
-			<Typography gutterBottom variant="h6" component="div" sx={{ mb: 0 }}>
+			<Typography
+				gutterBottom
+				variant="h6"
+				component="div"
+				sx={{ mt: 1, mb: 0, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+			>
 				What&apos;s on offer?
 			</Typography>
 
@@ -90,7 +96,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 									}
 									disablePadding
 								>
-									<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)}>
+									<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)} sx={{ pl: 0 }}>
 										<ListItemAvatar>
 											<Avatar alt={option.value} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
 												{option.icon.react}
@@ -106,7 +112,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			</FormControl>
 
 			{/* We can't use <Controller /> here because `control` has a different type for the Owner and TipOff form */}
-			<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+			<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 				<FormGroup>
 					<TextFieldWithout1Password
 						label="Anything else?"

@@ -1,6 +1,7 @@
 import SecurityIcon from '@mui/icons-material/Security';
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 
 const PrivacyNoticeContainer = styled('div')(({ theme }) => ({
 	marginTop: theme.spacing(2),
@@ -25,7 +26,12 @@ const PrivacyMessage = styled('div')(() => ({
 export default function AddStallFormPrivacyNotice() {
 	return (
 		<PrivacyNoticeContainer>
-			<Typography gutterBottom variant="h6" component="div" sx={{ mb: 1 }}>
+			<Typography
+				gutterBottom
+				variant="h6"
+				component="div"
+				sx={{ mt: 1, mb: 1, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+			>
 				A word about privacy
 			</Typography>
 

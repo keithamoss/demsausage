@@ -15,6 +15,7 @@ import { useAppSelector } from '../../../app/hooks/store';
 import { Election } from '../../../app/services/elections';
 import { Stall, StallFoodOptions, StallTipOffModifiableProps } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
@@ -118,17 +119,28 @@ export default function AddStallFormForTipOff(props: Props) {
 					<Typography variant="h6">Tell us about the stall</Typography>
 				</Paper>
 
-				<Box sx={{ width: '100%', p: 2 }}>
+				<Box
+					sx={{
+						width: '100%',
+						p: 2,
+						pt: 1, // Only pt 1 so we keep a consistent 16px with the spacing between sections as with AddStallFormForOwner
+					}}
+				>
 					<AddStallFormFoodOptionsSelector foodOptions={noms} onChange={onFoodOptionChange} errors={errors.noms} />
 
 					{/* ######################
 							Your Details
 					###################### */}
-					<Typography gutterBottom variant="h6" component="div" sx={{ mb: 2 }}>
+					<Typography
+						gutterBottom
+						variant="h6"
+						component="div"
+						sx={{ mt: 1, mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+					>
 						Your details
 					</Typography>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="email"

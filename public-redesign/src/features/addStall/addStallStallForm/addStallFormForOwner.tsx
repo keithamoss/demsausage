@@ -15,6 +15,7 @@ import { useAppSelector } from '../../../app/hooks/store';
 import { Election } from '../../../app/services/elections';
 import { Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
@@ -129,11 +130,16 @@ export default function AddStallFormForOwner(props: Props) {
 					{/* ######################
 							Stall Details
 					###################### */}
-					<Typography gutterBottom variant="h6" component="div" sx={{ mb: 2 }}>
+					<Typography
+						gutterBottom
+						variant="h6"
+						component="div"
+						sx={{ mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+					>
 						Stall details
 					</Typography>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="name"
@@ -151,7 +157,7 @@ export default function AddStallFormForOwner(props: Props) {
 						{errors.name !== undefined && <FormFieldValidationError error={errors.name} />}
 					</FormControl>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="description"
@@ -170,7 +176,7 @@ export default function AddStallFormForOwner(props: Props) {
 						{errors.description !== undefined && <FormFieldValidationError error={errors.description} />}
 					</FormControl>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="opening_hours"
@@ -184,7 +190,7 @@ export default function AddStallFormForOwner(props: Props) {
 						{errors.opening_hours !== undefined && <FormFieldValidationError error={errors.opening_hours} />}
 					</FormControl>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="website"
@@ -210,11 +216,16 @@ export default function AddStallFormForOwner(props: Props) {
 					{/* ######################
 							Your Details
 					###################### */}
-					<Typography gutterBottom variant="h6" component="div" sx={{ mb: 2 }}>
+					<Typography
+						gutterBottom
+						variant="h6"
+						component="div"
+						sx={{ mt: 1, mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+					>
 						Your details
 					</Typography>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
 								name="email"

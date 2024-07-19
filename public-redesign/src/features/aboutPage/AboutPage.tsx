@@ -2,17 +2,10 @@ import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/mate
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
+import { mapaThemePrimaryGrey } from '../../app/ui/theme';
 import { getBaseURL } from '../../app/utils';
 import { appBarHeight } from '../addStall/addStallHelpers';
 import { getAllFoodsAvailableOnStalls, getSupportingIconsForAboutPage, standaloneIconSize } from '../icons/iconHelpers';
-
-// const bottomNav = 56;
-
-// const Root = styled('div')(({ theme }) => ({
-// 	height: '100%',
-// 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
-// 	paddingBottom: `${bottomNav}px`,
-// }));
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -25,26 +18,26 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
+	'& h3:first-child': {
+		marginTop: theme.spacing(1),
+	},
 }));
 
 const Question = styled('h3')(({ theme }) => ({
+	borderTop: `5px solid ${mapaThemePrimaryGrey}`,
+	marginTop: theme.spacing(3),
 	marginBottom: theme.spacing(1),
-	borderBottom: `1px solid ${grey[300]}`,
 }));
 
 const Answer = styled('div')(({ theme }) => ({
-	marginBottom: theme.spacing(3),
 	fontSize: '14px',
 	lineHeight: '24px',
 	color: grey[800],
 	width: '75%',
 
 	'& > p': {
-		marginTop: theme.spacing(1),
+		marginTop: 0,
 		marginBottom: theme.spacing(1),
-	},
-	'& li': {
-		marginTottom: theme.spacing(1),
 	},
 }));
 
@@ -60,10 +53,12 @@ export default function AboutPage() {
 			</Helmet>
 
 			<PageWrapper>
-				<Question sx={{ mt: 0 }}>What is this?</Question>
+				<Question>What is this?</Question>
 				<Answer>A map of sausage and cake availability on election day.</Answer>
+
 				<Question>I still don&apos;t understand</Question>
 				<Answer>It&apos;s practically part of the Australian Constitution. Or something.</Answer>
+
 				<Question>But how do you get all of the sausage sizzles?</Question>
 				<Answer>
 					<p>
@@ -89,8 +84,9 @@ export default function AboutPage() {
 					Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){' '}
 					{new Date().getFullYear()}
 				</Answer>
+
 				<Question>What do the all of the icons mean?</Question>
-				<Answer>
+				<Answer sx={{ '& ul': { paddingTop: 0, paddingBottom: 0 } }}>
 					<List>
 						{getAllFoodsAvailableOnStalls().map((noms) => (
 							<ListItemButton key={noms.value}>
@@ -106,20 +102,24 @@ export default function AboutPage() {
 						))}
 					</List>
 				</Answer>
+
 				<Question>What does the halal symbol indicate?</Question>
 				<Answer>
-					Firstly, it&apos;s important to note that our site can&apos;t actually provide halal certification, and we
-					display the symbol based on information submitted to us by the folks running the stalls themselves.
-					<br />
-					<br />
-					The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is
-					just one of a variation of halal seals / stamps that are used in Australia - though we&apos;re happy to be
-					corrected on that). For the curious, the ABC&apos;s Bush Telegraph has more in their segment{' '}
-					<a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
-						What&apos;s the big fuss about Halal certification?
-					</a>
-					.
+					<p>
+						Firstly, it&apos;s important to note that our site can&apos;t actually provide halal certification, and we
+						display the symbol based on information submitted to us by the folks running the stalls themselves.
+					</p>
+					<p>
+						The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is
+						just one of a variation of halal seals / stamps that are used in Australia - though we&apos;re happy to be
+						corrected on that). For the curious, the ABC&apos;s Bush Telegraph has more in their segment{' '}
+						<a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
+							What&apos;s the big fuss about Halal certification?
+						</a>
+						.
+					</p>
 				</Answer>
+
 				<Question>Who are you?</Question>
 				<Answer>
 					<p>We&apos;re six people, three babies, three cats, and some parrots.</p>
@@ -133,6 +133,7 @@ export default function AboutPage() {
 						<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
 					</p>
 				</Answer>
+
 				<Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
 				<Answer>
 					Well your school, first of all (but you knew that already). Beyond that, your local government may require you
@@ -143,8 +144,10 @@ export default function AboutPage() {
 					</a>
 					.
 				</Answer>
+
 				<Question>Are you part of any political parties?</Question>
 				<Answer>Nope! Democracy Sausage is 100% non-partisan, organic, hormone free, and grass fed.</Answer>
+
 				<Question>Will you share my info with others?</Question>
 				<Answer>
 					<p>
@@ -157,8 +160,6 @@ export default function AboutPage() {
 					</p>
 				</Answer>
 			</PageWrapper>
-
-			{/* <BottomBar /> */}
 		</StyledInteractableBoxFullHeight>
 	);
 }
