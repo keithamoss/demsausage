@@ -13,6 +13,7 @@ import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmit
 import DebugView from '../../features/debugView/debugView';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
+import MediaPage from '../../features/mediaPage/MediaPage';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/search/searchDrawer';
 import StallPermalink from '../../features/stalls/stallPermalink';
@@ -26,6 +27,13 @@ export const router = sentryCreateBrowserRouter([
 		errorElement: <ErrorElement />,
 		children: [
 			{
+				path: '/embed',
+				element: <EmbedBuilder />,
+				loader: () => ({
+					name: 'Embed The Map',
+				}),
+			},
+			{
 				path: '/about',
 				element: <AboutPage />,
 				loader: () => ({
@@ -33,10 +41,10 @@ export const router = sentryCreateBrowserRouter([
 				}),
 			},
 			{
-				path: '/embed',
-				element: <EmbedBuilder />,
+				path: '/media',
+				element: <MediaPage />,
 				loader: () => ({
-					name: 'Embed The Map',
+					name: 'media',
 				}),
 			},
 			{

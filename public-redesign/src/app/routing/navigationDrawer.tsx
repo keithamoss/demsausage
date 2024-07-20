@@ -17,8 +17,9 @@ const navigationItemsTier1 = [
 		path: '/add-stall/',
 		icon: <AddLocationIcon />,
 	},
-	{ text: 'About', path: '/about', icon: <InfoIcon /> },
 	{ text: 'Embed The Map', path: '/embed', icon: <InfoIcon /> },
+	{ text: 'About', path: '/about', icon: <InfoIcon /> },
+	{ text: 'Media', path: '/media', icon: <InfoIcon /> },
 	{ text: 'Item 4', path: '/' },
 	{ text: 'Item 5', path: '/' },
 ];
