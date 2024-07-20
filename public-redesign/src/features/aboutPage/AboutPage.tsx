@@ -33,7 +33,7 @@ const Answer = styled('div')(({ theme }) => ({
 	fontSize: '14px',
 	lineHeight: '24px',
 	color: grey[800],
-	width: '75%',
+	width: '100%',
 
 	'& > p': {
 		marginTop: 0,
