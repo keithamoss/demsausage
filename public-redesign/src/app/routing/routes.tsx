@@ -13,7 +13,7 @@ import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmit
 import DebugView from '../../features/debugView/debugView';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import Map from '../../features/map/map';
-import MediaPage from '../../features/mediaPage/MediaPage';
+import MediaPage from '../../features/mediaPage/mediaPage';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import SearchDrawer from '../../features/search/searchDrawer';
 import StallPermalink from '../../features/stalls/stallPermalink';
