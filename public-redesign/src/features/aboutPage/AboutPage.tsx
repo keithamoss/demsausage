@@ -18,7 +18,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
-	'& h3:first-child': {
+	'& h3:first-of-type': {
 		marginTop: theme.spacing(1),
 	},
 }));
