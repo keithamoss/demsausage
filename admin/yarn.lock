@@ -5476,7 +5476,7 @@ __metadata:
     luxon: "npm:^3.4.4"
     material-ui: "npm:^0.20.2"
     material-ui-responsive-drawer: "npm:^1.19.4"
-    ol: "npm:^9.2.4"
+    ol: "npm:^10.0.0"
     prettier: "npm:^3.3.3"
     prettier-eslint: "npm:^16.3.0"
     qs: "npm:^6.12.3"
@@ -9001,10 +9001,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"earcut@npm:^2.2.3":
-  version: 2.2.4
-  resolution: "earcut@npm:2.2.4"
-  checksum: 8/aea0466cb2f24e0c3c57148d8d28ac9846f53c4f43ee66780826474303ac851b305ef988152d0bdeb31e8f7ca939dc0df737e7505cfb1c1bdf2ff9d7f9ea2faa
+"earcut@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "earcut@npm:3.0.0"
+  checksum: 10c0/20f3d8492f02452648466d2ce98276c9317c4d6980fc2596b1cb119fc3ef2d034724c5721de2af191331fb43610a27995b0f1b611d3386976b770ae9af7b3bbe
   languageName: node
   linkType: hard
 
@@ -12386,7 +12386,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.12, ieee754@npm:^1.1.4":
+"ieee754@npm:^1.1.4":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 8/5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -16051,17 +16051,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^9.2.4":
-  version: 9.2.4
-  resolution: "ol@npm:9.2.4"
+"ol@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "ol@npm:10.0.0"
   dependencies:
     color-rgba: "npm:^3.0.0"
     color-space: "npm:^2.0.1"
-    earcut: "npm:^2.2.3"
+    earcut: "npm:^3.0.0"
     geotiff: "npm:^2.0.7"
-    pbf: "npm:3.2.1"
-    rbush: "npm:^3.0.1"
-  checksum: 10c0/6eb288d03908ef7276760011867836b737b7508c56a966013dbee6184e4c6b54a458c2efd2dfec08aa86b5cffc3d90488746737b64ef2c05b772ad6ee9bbbfd5
+    pbf: "npm:4.0.1"
+    rbush: "npm:^4.0.0"
+  checksum: 10c0/0d9ec40818e63014024dfacf13a156f842e309c908fdff76c125c4a589280279739ecb5ff8abb0f7671d5cb7d9746eb543e3d59a62e13002ee38fb8dd831b498
   languageName: node
   linkType: hard
 
@@ -16524,15 +16524,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pbf@npm:3.2.1":
-  version: 3.2.1
-  resolution: "pbf@npm:3.2.1"
+"pbf@npm:4.0.1":
+  version: 4.0.1
+  resolution: "pbf@npm:4.0.1"
   dependencies:
-    ieee754: "npm:^1.1.12"
     resolve-protobuf-schema: "npm:^2.1.0"
   bin:
     pbf: bin/pbf
-  checksum: 8/8033f5e21fffdc485e85d50bbff07ab3313c6841c3630a4ba9bc9e82d2e9005ab92000a1a90cb911223caa44316293e367bab607dd8110d5c771e6c8aaad63e1
+  checksum: 10c0/1a95cc3bdc61ee01d4728f4a57a9f1233732d183a8568818b714a747fd8b957d99b63e1c67f0f72dc5623657c42f88a1a7e44e1fbcd06e2fe2ef9a85a964832e
   languageName: node
   linkType: hard
 
@@ -17978,12 +17977,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rbush@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "rbush@npm:3.0.1"
+"rbush@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "rbush@npm:4.0.0"
   dependencies:
     quickselect: "npm:^2.0.0"
-  checksum: 8/b7def5ba762ca01b6c7c032098ef61b86bd4fef4afb82e4a1d70a07a929b39e779290446c2d4730f577e8a1c8fd0dfd349605b5ea0229258d5f013debdffa65a
+  checksum: 10c0/a2d407ea87e11eb0ae7b924acb2094994a60c503a892421313a48d2073aa9f1201fe0413b576e81d2c41954d97e78ee507a9ddbf361cc613f33efcce83a85b0a
   languageName: node
   linkType: hard
 
