@@ -12,16 +12,13 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 // The page names here must match what's in routes.tsx if we want the link to show as active
 const navigationItemsTier1 = [
 	{ text: 'Map', path: '/', icon: <PublicIcon /> },
-	{
-		text: 'Add Stall',
-		path: '/add-stall/',
-		icon: <AddLocationIcon />,
-	},
+	{ text: 'Add Stall', path: '/add-stall/', icon: <AddLocationIcon /> },
+	{ text: 'Stats', path: '/sausagelytics/', icon: <InfoIcon /> },
 	{ text: 'Embed The Map', path: '/embed', icon: <InfoIcon /> },
 	{ text: 'About', path: '/about', icon: <InfoIcon /> },
 	{ text: 'Media', path: '/media', icon: <InfoIcon /> },
-	{ text: 'Item 4', path: '/' },
-	{ text: 'Item 5', path: '/' },
+	{ text: 'Social Item 1', path: '/' },
+	{ text: 'Social Item 2', path: '/' },
 ];
 
 const navigationItemsTier2 = ['Item 5', 'Item 6', 'Item 7'];

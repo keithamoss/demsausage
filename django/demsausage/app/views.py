@@ -217,11 +217,12 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.is_federal is True:
-            stats = FederalSausagelytics(election)
-        elif election.id in [29]:
+        if election.id in [1, 29]:
+            # No data for the first election because we don't have the vote counts in the 'extras' field
             # No data for the 2020 NT Election because COVID :(
             return HttpResponseNotFound()
+        elif election.is_federal is True:
+            stats = FederalSausagelytics(election)
         else:
             stats = StateSausagelytics(election)
         return Response(stats.get_stats())

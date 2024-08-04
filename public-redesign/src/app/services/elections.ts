@@ -1,6 +1,7 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { jurisdictionCrests } from '../../features/icons/jurisdictionHelpers';
 import { api } from './api';
+import { ISausagelyticsFederalStats, ISausagelyticsStateStats } from './electionsStats';
 
 export interface IGeoJSONPoylgon {
 	type: string;
@@ -38,8 +39,7 @@ export const electionsApi = api.injectEndpoints({
 			// Provides a list of `Elections` by `id`.
 			// If any mutation is executed that `invalidate`s any of these tags, this query will re-run to be always up-to-date.
 			// The `LIST` id is a "virtual id" we just made up to be able to invalidate this query specifically if a new `Elections` element was added.
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			providesTags: (result, _error, _arg) => [
+			providesTags: (result) => [
 				// Always invalidate the election list, so when errors occur we still force a refresh on the LIST
 				{ type: 'Election', id: 'LIST' },
 				...(result !== undefined ? result.ids.map((id) => ({ type: 'Election' as const, id })) : []),
@@ -49,6 +49,9 @@ export const electionsApi = api.injectEndpoints({
 			// 	const defaultElection = getDefaultElection((Object.values(result.data.entities) as Election[]) || []);
 			// 	dispatch(setActiveElectionId(defaultElection?.id));
 			// },
+		}),
+		getElectionStats: builder.query<ISausagelyticsFederalStats | ISausagelyticsStateStats, number>({
+			query: (electionId) => `elections/${electionId}/stats/`,
 		}),
 		// addMap: builder.mutation<Map, Partial<Map>>({
 		// 	query: (initialMap) => ({
@@ -85,4 +88,7 @@ export const electionsApi = api.injectEndpoints({
 	}),
 });
 
-export const { useGetElectionsQuery /*, useAddMapMutation, useUpdateMapMutation, usePatchMapMutation*/ } = electionsApi;
+export const {
+	useGetElectionsQuery,
+	useGetElectionStatsQuery /*, useAddMapMutation, useUpdateMapMutation, usePatchMapMutation*/,
+} = electionsApi;
