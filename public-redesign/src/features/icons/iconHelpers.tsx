@@ -201,7 +201,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Savoury vegetarian options',
 		value: 'vego',
-		description: 'This booth has savoury vegetarian options',
+		description: "There's savoury vegetarian options here",
 	},
 	halal: {
 		icon: {
@@ -212,7 +212,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Halal options',
 		value: 'halal',
-		description: 'This booth has halal food',
+		description: "There's halal options here",
 	},
 	bacon_and_eggs: {
 		icon: {
