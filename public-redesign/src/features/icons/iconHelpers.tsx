@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { SvgIcon } from '@mui/material';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import {
@@ -317,13 +316,7 @@ export const supportingIcons = {
 		// - On polling place cards
 		icon: {
 			raw: Red_Cross,
-			// react: createReactSvgIcon(React_Red_Cross),
-			// @TODO Temporary until resized icons are available
-			react: (
-				<SvgIcon>
-					<React_Red_Cross width={'36'} height={'36'} />
-				</SvgIcon>
-			),
+			react: createReactSvgIcon(React_Red_Cross),
 			ol: createOLIcon(Red_Cross, 1, 40, 40),
 			olDetailed: createOLDetailedIcon(Red_Cross),
 		},

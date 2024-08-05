@@ -271,8 +271,13 @@ export default function PollingPlaceCard(props: Props) {
 											<StyledListItemIcon
 												sx={{
 													'& svg': {
-														width: 36,
-														height: 36,
+														// 10px larger than the standard MUI SvgIcon size of 24px
+														// to account for the padding around our 'circle' icons.
+														width: 34,
+														height: 34,
+														position: 'relative',
+														top: '-5px',
+														left: '-5px',
 													},
 												}}
 											>
@@ -285,20 +290,6 @@ export default function PollingPlaceCard(props: Props) {
 											/>
 										</StyledListItem>
 									</List>
-								)}
-
-								{pollingPlace.stall.noms.nothing === true && (
-									<Alert
-										severity="error"
-										icon={supportingIcons.red_cross.icon.react}
-										sx={{
-											// @TODO Temporary until resized icons are available
-											'& svg': { transform: 'scale(2)' },
-										}}
-									>
-										{/* <AlertTitle>Sausageless!</AlertTitle> */}
-										<strong>Sausageless!</strong> Our roving reporters have informed us that there&apos;s no stall here.
-									</Alert>
 								)}
 
 								{pollingPlace.stall.noms.nothing !== true && (
@@ -323,29 +314,19 @@ export default function PollingPlaceCard(props: Props) {
 											</Typography>
 										)}
 
-										{pollingPlace.stall.noms.run_out === true && (
-											<Alert
-												severity="warning"
-												icon={supportingIcons.yellow_minus.icon.react}
-												sx={{
-													// @TODO Temporary until resized icons are available
-													'& svg': { transform: 'scale(1.5)' },
-												}}
-											>
-												{/* <AlertTitle>Sold out!</AlertTitle> */}
-												<strong>Sold out!</strong> Our roving reporters have informed us that they&apos;ve run out of
-												food here.
-											</Alert>
-										)}
-
 										<List dense sx={{ paddingBottom: 0, paddingTop: 0, marginBottom: 0 }}>
 											{pollingPlace.stall.noms.run_out === true && (
 												<StyledListItem disableGutters>
 													<StyledListItemIcon
 														sx={{
 															'& svg': {
-																width: 48,
-																height: 48,
+																// 10px larger than the standard MUI SvgIcon size of 24px
+																// to account for the padding around our 'circle' icons.
+																width: 34,
+																height: 34,
+																position: 'relative',
+																top: '-5px',
+																left: '-5px',
 															},
 														}}
 													>
