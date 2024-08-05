@@ -70,15 +70,12 @@ export default function AboutPage() {
 						<a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a
 						Direct Message. We&apos;ll be keeping an eye out.
 					</p>
-					<p>To make this work, we&apos;ve also used:</p>
-					<ul>
-						<li>
-							Australian Electoral Commission polling place data (likewise from the various state electoral
-							commissions);
-						</li>
-					</ul>
+					<p>
+						To make this work, we&apos;ve also used Australian Electoral Commission polling place data (likewise from
+						the various state electoral commissions).
+					</p>
 					Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){' '}
-					{new Date().getFullYear()}
+					{new Date().getFullYear()}.
 				</Answer>
 
 				<Question>What do the all of the icons mean?</Question>
