@@ -45,14 +45,14 @@ export const router = sentryCreateBrowserRouter([
 				path: '/about',
 				element: <AboutPage />,
 				loader: () => ({
-					name: 'About',
+					name: 'About and FAQs',
 				}),
 			},
 			{
 				path: '/media',
 				element: <MediaPage />,
 				loader: () => ({
-					name: 'media',
+					name: 'Media',
 				}),
 			},
 			{

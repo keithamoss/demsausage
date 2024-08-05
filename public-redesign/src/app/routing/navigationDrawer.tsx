@@ -1,7 +1,14 @@
 import AddLocationIcon from '@mui/icons-material/AddLocation';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import CodeIcon from '@mui/icons-material/Code';
+import EmailIcon from '@mui/icons-material/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import InfoIcon from '@mui/icons-material/Info';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import PublicIcon from '@mui/icons-material/Public';
+import StoreIcon from '@mui/icons-material/Store';
+import TvIcon from '@mui/icons-material/Tv';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import { Divider, Drawer, List } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
@@ -13,15 +20,24 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 const navigationItemsTier1 = [
 	{ text: 'Map', path: '/', icon: <PublicIcon /> },
 	{ text: 'Add Stall', path: '/add-stall/', icon: <AddLocationIcon /> },
-	{ text: 'Stats', path: '/sausagelytics/', icon: <InfoIcon /> },
-	{ text: 'Embed The Map', path: '/embed', icon: <InfoIcon /> },
-	{ text: 'About', path: '/about', icon: <InfoIcon /> },
-	{ text: 'Media', path: '/media', icon: <InfoIcon /> },
-	{ text: 'Social Item 1', path: '/' },
-	{ text: 'Social Item 2', path: '/' },
+	{ text: 'Stats', path: '/sausagelytics/', icon: <BarChartIcon /> },
+	{ text: 'Embed The Map', path: '/embed', icon: <CodeIcon /> },
+	{ text: 'About and FAQs', path: '/about', icon: <InfoIcon /> },
+	{ text: 'Media', path: '/media', icon: <TvIcon /> },
+	{
+		text: 'Redbubble Store',
+		path: 'https://www.redbubble.com/people/demsausage/shop',
+		icon: <StoreIcon />,
+		target: '_blank',
+	},
 ];
 
-const navigationItemsTier2 = ['Item 5', 'Item 6', 'Item 7'];
+const navigationItemsTier2 = [
+	{ text: 'Email', path: 'mailto:ausdemocracysausage@gmail.com', icon: <EmailIcon /> },
+	{ text: 'Twitter', path: 'https://twitter.com/DemSausage', icon: <TwitterIcon /> },
+	{ text: 'Facebook', path: 'https://www.facebook.com/AusDemocracySausage', icon: <FacebookIcon /> },
+	{ text: 'Instagram', path: 'https://www.instagram.com/ausdemocracysausage/', icon: <InstagramIcon /> },
+];
 
 interface UIMatchData {
 	name?: string;
@@ -51,10 +67,11 @@ export default function NavigationDrawer(props: Props) {
 					{navigationItemsTier1.map((item) => (
 						<ListItemButtonLink
 							key={item.text}
-							icon={item.icon === undefined ? <InboxIcon /> : item.icon}
+							icon={item.icon}
 							colour={isThisPageActive(matches, item.text) === true ? mapaThemePrimaryPurple : undefined}
 							primary={item.text}
 							to={item.path}
+							target={item.target}
 						/>
 					))}
 				</List>
@@ -62,8 +79,8 @@ export default function NavigationDrawer(props: Props) {
 				<Divider />
 
 				<List>
-					{navigationItemsTier2.map((text) => (
-						<ListItemButtonLink key={text} to="/about" primary={text} />
+					{navigationItemsTier2.map((item) => (
+						<ListItemButtonLink key={item.text} icon={item.icon} primary={item.text} to={item.path} target="_blank" />
 					))}
 				</List>
 			</Box>
