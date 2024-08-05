@@ -30,7 +30,7 @@ export default function AddStallFormPrivacyNotice() {
 				gutterBottom
 				variant="h6"
 				component="div"
-				sx={{ mt: 1, mb: 1, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+				sx={{ mt: 1, mb: 1, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
 				A word about privacy
 			</Typography>

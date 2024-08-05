@@ -135,7 +135,7 @@ export default function AddStallFormForTipOff(props: Props) {
 						gutterBottom
 						variant="h6"
 						component="div"
-						sx={{ mt: 1, mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+						sx={{ mt: 1, mb: 2, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 					>
 						Your details
 					</Typography>

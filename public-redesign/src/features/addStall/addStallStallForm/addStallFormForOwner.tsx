@@ -134,7 +134,7 @@ export default function AddStallFormForOwner(props: Props) {
 						gutterBottom
 						variant="h6"
 						component="div"
-						sx={{ mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+						sx={{ mb: 2, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 					>
 						Stall details
 					</Typography>
@@ -220,7 +220,7 @@ export default function AddStallFormForOwner(props: Props) {
 						gutterBottom
 						variant="h6"
 						component="div"
-						sx={{ mt: 1, mb: 2, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+						sx={{ mt: 1, mb: 2, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 					>
 						Your details
 					</Typography>

@@ -64,7 +64,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 				gutterBottom
 				variant="h6"
 				component="div"
-				sx={{ mt: 1, mb: 0, borderTop: `5px solid ${mapaThemePrimaryGrey}` }}
+				sx={{ mt: 1, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
 				What&apos;s on offer?
 			</Typography>

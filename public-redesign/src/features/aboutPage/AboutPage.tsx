@@ -24,7 +24,7 @@ const PageWrapper = styled('div')(({ theme }) => ({
 }));
 
 const Question = styled('h3')(({ theme }) => ({
-	borderTop: `5px solid ${mapaThemePrimaryGrey}`,
+	borderTop: `3px solid ${mapaThemePrimaryGrey}`,
 	marginTop: theme.spacing(3),
 	marginBottom: theme.spacing(1),
 }));
