@@ -76,10 +76,6 @@ export default function AboutPage() {
 							Australian Electoral Commission polling place data (likewise from the various state electoral
 							commissions);
 						</li>
-						<li>
-							Social media icons from <a href="https://fontawesome.com">fontawesome.com</a> under a{' '}
-							<a href="https://fontawesome.com/license">Creative Commons Attribution 4.0 license</a>
-						</li>
 					</ul>
 					Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){' '}
 					{new Date().getFullYear()}
