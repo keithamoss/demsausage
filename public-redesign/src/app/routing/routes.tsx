@@ -12,6 +12,7 @@ import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStal
 import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
 import DebugView from '../../features/debugView/debugView';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
+import ElectionsList from '../../features/map/layersSelector/electionsList';
 import Map from '../../features/map/map';
 import MediaPage from '../../features/mediaPage/mediaPage';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
@@ -27,6 +28,13 @@ export const router = sentryCreateBrowserRouter([
 		element: <App />,
 		errorElement: <ErrorElement />,
 		children: [
+			{
+				path: '/elections',
+				element: <ElectionsList />,
+				loader: () => ({
+					name: 'Elections',
+				}),
+			},
 			{
 				path: '/sausagelytics/:election_name?/',
 				element: <Sausagelytics />,

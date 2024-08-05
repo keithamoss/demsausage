@@ -5,6 +5,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InfoIcon from '@mui/icons-material/Info';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import LayersIcon from '@mui/icons-material/Layers';
 import PublicIcon from '@mui/icons-material/Public';
 import StoreIcon from '@mui/icons-material/Store';
 import TvIcon from '@mui/icons-material/Tv';
@@ -20,6 +21,7 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 const navigationItemsTier1 = [
 	{ text: 'Map', path: '/', icon: <PublicIcon /> },
 	{ text: 'Add Stall', path: '/add-stall/', icon: <AddLocationIcon /> },
+	{ text: 'Elections', path: '/elections', icon: <LayersIcon /> },
 	{ text: 'Stats', path: '/sausagelytics/', icon: <BarChartIcon /> },
 	{ text: 'Embed The Map', path: '/embed', icon: <CodeIcon /> },
 	{ text: 'About and FAQs', path: '/about', icon: <InfoIcon /> },
