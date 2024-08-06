@@ -124,7 +124,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			</FormControl>
 
 			{errors !== undefined && errors.message !== undefined && (
-				<FormFieldValidationErrorMessageOnly message={errors.message} />
+				<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
 			)}
 		</React.Fragment>
 	);
