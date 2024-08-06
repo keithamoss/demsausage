@@ -15,7 +15,7 @@ import EditStall from '../../features/editStall/EditStall';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import ElectionsList from '../../features/map/layersSelector/electionsList';
 import Map from '../../features/map/map';
-import MediaPage from '../../features/mediaPage/mediaPage';
+import MediaPage from '../../features/mediaPage/MediaPage';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import Sausagelytics from '../../features/sausagelytics/Sausagelytics';
 import SearchDrawer from '../../features/search/searchDrawer';
