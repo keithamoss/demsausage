@@ -70,6 +70,8 @@ export interface IStallLocationInfo {
 
 export interface Stall extends StallOwnerModifiableProps {
 	id: number;
+	// @TODO We temporarily added this for the preliminary EditStall work, but I'm not sure if it's present on the interface for other occurences. Also, it should be called election_id.
+	election: number;
 }
 
 // type StallsResponse = Stall[];
@@ -81,6 +83,17 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
+		// @TODO Should Stall inherit from NewStallOwner instead or will that bugger up the expectations of other places that use Stall?
+		// polling_place is an object, not a number
+		// location_info is null, not undefined
+		// submitter_type is not present
+		// status is missing
+		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
+			query: ({ stallId, token, signature }) => ({
+				url: `stalls/${stallId}/`,
+				params: { token, signature },
+			}),
+		}),
 		addStall: builder.mutation<{}, NewStallTipOff | NewStallOwner>({
 			query: (stall) => ({
 				url: 'stalls/',
@@ -91,4 +104,4 @@ export const stallsApi = api.injectEndpoints({
 	}),
 });
 
-export const { useAddStallMutation } = stallsApi;
+export const { useGetStallQuery, useAddStallMutation } = stallsApi;

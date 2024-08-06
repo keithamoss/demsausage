@@ -11,6 +11,7 @@ import AddStallStallCreatorForm from '../../features/addStall/addStallStallForm/
 import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
 import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
 import DebugView from '../../features/debugView/debugView';
+import EditStall from '../../features/editStall/EditStall';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import ElectionsList from '../../features/map/layersSelector/electionsList';
 import Map from '../../features/map/map';
@@ -61,6 +62,14 @@ export const router = sentryCreateBrowserRouter([
 				element: <MediaPage />,
 				loader: () => ({
 					name: 'Media',
+				}),
+			},
+
+			{
+				path: '/edit-stall',
+				element: <EditStall />,
+				loader: () => ({
+					name: 'Edit Stall',
 				}),
 			},
 			{
