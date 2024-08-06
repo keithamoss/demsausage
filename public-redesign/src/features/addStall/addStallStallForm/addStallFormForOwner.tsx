@@ -3,11 +3,22 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Button, FormControl, FormGroup, InputAdornment, MobileStepper, Paper, Typography } from '@mui/material';
+import {
+	Alert,
+	Box,
+	Button,
+	FormControl,
+	FormGroup,
+	InputAdornment,
+	MobileStepper,
+	Paper,
+	Snackbar,
+	Typography,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallOwnerFormValidationSchema } from '../../../app/forms/stallForm';
@@ -98,6 +109,16 @@ export default function AddStallFormForOwner(props: Props) {
 	);
 
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
+
+	useEffect(() => {
+		if (JSON.stringify(errors) !== '{}') {
+			setIsErrorSnackbarShown(true);
+		}
+	}, [errors]);
+
+	const [isErrorSnackbarShown, setIsErrorSnackbarShown] = useState(false);
+
+	const onSnackbarClose = useCallback(() => setIsErrorSnackbarShown(false), []);
 	// ######################
 	// Form Management (End)
 	// ######################
@@ -281,6 +302,12 @@ export default function AddStallFormForOwner(props: Props) {
 					}
 				/>
 			</form>
+
+			<Snackbar open={isErrorSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
+				<Alert severity="error" variant="standard" sx={{ width: '100%' }}>
+					One or more fields have errors.
+				</Alert>
+			</Snackbar>
 		</StyledInteractableBoxFullHeight>
 	);
 }

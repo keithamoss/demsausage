@@ -14,7 +14,7 @@ export const stallNomsFieldFormValidationSchema: ObjectSchema<StallFoodOptions> 
 		free_text: yup.string().optional(),
 	})
 	.required()
-	.test('not-empty', 'One or more food option must be selected', (value) => Object.keys(value).length >= 1);
+	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1);
 
 export const stallOwnerFormValidationSchema: ObjectSchema<StallOwnerModifiableProps> = yup
 	.object({
