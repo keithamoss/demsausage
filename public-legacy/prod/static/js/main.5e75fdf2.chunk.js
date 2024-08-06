@@ -204,7 +204,7 @@
 			}
 			var re = Object(f.a)({
 					reducerPath: 'sausageApi',
-					baseQuery: Object(h.d)({ baseUrl: ''.concat('https://public-legacy.democracysausage.org/api', '/0.1/') }),
+					baseQuery: Object(h.d)({ baseUrl: ''.concat('https://legacy.democracysausage.org/api', '/0.1/') }),
 					endpoints: function (e) {
 						return {
 							getNearbyPollingPlaces: e.query({
@@ -2391,7 +2391,7 @@
 									(a = t.pollingPlace),
 									encodeURI(
 										''
-											.concat('https://public-legacy.democracysausage.org', '/')
+											.concat('https://legacy.democracysausage.org', '/')
 											.concat(D(n), '/polling_places/')
 											.concat(a.name, '/')
 											.concat(a.premises, '/')
@@ -2534,11 +2534,11 @@
 					REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 					REACT_APP_ENVIRONMENT: 'PRODUCTION',
 					REACT_APP_RAVEN_SITE_NAME: 'DemSausage Public',
-					REACT_APP_API_BASE_URL: 'https://public-legacy.democracysausage.org/api',
+					REACT_APP_API_BASE_URL: 'https://legacy.democracysausage.org/api',
 					REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 					REACT_APP_MAPBOX_API_KEY_DEV:
 						'pk.eyJ1IjoiYXVzZGVtb2NyYWN5c2F1c2FnZSIsImEiOiJjamVwYXNldnExZmQxMnpwbWJiODI5Y2R0In0.PtxxMO-qppmcivwcegWKYA',
-					REACT_APP_SITE_BASE_URL: 'https://public-legacy.democracysausage.org',
+					REACT_APP_SITE_BASE_URL: 'https://legacy.democracysausage.org',
 				}) && oa.b('UA-48888573-1');
 			var ca = new ((function () {
 				function e() {
@@ -4106,7 +4106,7 @@
 													}),
 													Object(Bt.jsx)('meta', {
 														property: 'og:url',
-														content: ''.concat('https://public-legacy.democracysausage.org', '/add-stall'),
+														content: ''.concat('https://legacy.democracysausage.org', '/add-stall'),
 													}),
 													Object(Bt.jsx)('meta', {
 														property: 'og:title',
@@ -4684,7 +4684,7 @@
 																		Object(Bt.jsx)(tc, { src: '/icons/sausage+cake_big.png' }),
 																		' ',
 																		Object(Bt.jsx)(nc, {
-																			href: ''.concat('https://public-legacy.democracysausage.org'),
+																			href: ''.concat('https://legacy.democracysausage.org'),
 																			target: '_parent',
 																			children: 'Democracy Sausage',
 																		}),
@@ -5618,15 +5618,12 @@
 														Object(Bt.jsx)('meta', { property: 'og:type', content: 'website' }),
 														Object(Bt.jsx)('meta', {
 															property: 'og:url',
-															content: 'https://public-legacy.democracysausage.org',
+															content: 'https://legacy.democracysausage.org',
 														}),
 														Object(Bt.jsx)('meta', { property: 'og:title', content: 'Democracy Sausage' }),
 														Object(Bt.jsx)('meta', {
 															property: 'og:image',
-															content: ''.concat(
-																'https://public-legacy.democracysausage.org/api',
-																'/0.1/current_map_image/',
-															),
+															content: ''.concat('https://legacy.democracysausage.org/api', '/0.1/current_map_image/'),
 														}),
 														Object(Bt.jsx)('meta', {
 															property: 'og:description',
@@ -6249,7 +6246,7 @@
 															}),
 															Object(Bt.jsx)('meta', {
 																property: 'og:url',
-																content: 'https://public-legacy.democracysausage.org',
+																content: 'https://legacy.democracysausage.org',
 															}),
 															Object(Bt.jsx)('meta', {
 																property: 'og:title',
@@ -6413,7 +6410,7 @@
 															Object(Bt.jsx)('title', { children: n.pageTitle }),
 															Object(Bt.jsx)('meta', {
 																property: 'og:url',
-																content: ''.concat('https://public-legacy.democracysausage.org').concat(n.pageBaseURL),
+																content: ''.concat('https://legacy.democracysausage.org').concat(n.pageBaseURL),
 															}),
 															Object(Bt.jsx)('meta', { property: 'og:title', content: n.pageTitle }),
 														],
@@ -6492,7 +6489,7 @@
 					},
 				],
 				Cs = function (e, t) {
-					var n = ''.concat('https://public-legacy.democracysausage.org', '/').concat(D(e), '?embed');
+					var n = ''.concat('https://legacy.democracysausage.org', '/').concat(D(e), '?embed');
 					return null !== t ? ''.concat(n, '&extent=').concat(t) : n;
 				};
 			function ws() {
@@ -6513,7 +6510,7 @@
 					p = Object(bs.a)(),
 					u = Object(le.a)(p, 2)[1];
 				if (void 0 === s) return null;
-				var m = ''.concat('https://public-legacy.democracysausage.org/api', '/0.1/map_image/').concat(s.id, '/'),
+				var m = ''.concat('https://legacy.democracysausage.org/api', '/0.1/map_image/').concat(s.id, '/'),
 					j = '<iframe src="'.concat(
 						Cs(s, l),
 						'" title="Democracy Sausage"\n  scrolling="no"\n  loading="lazy"\n  allowTransparency="false"\n  allowFullScreen="true"\n  width="100%"\n  height="472.5"\n  style="border: none;"></iframe>',
@@ -7103,10 +7100,7 @@
 																		void 0 === a
 																			? (c(),
 																				(i = ''
-																					.concat(
-																						'https://public-legacy.democracysausage.org/api',
-																						'/0.1/map/?election_id=',
-																					)
+																					.concat('https://legacy.democracysausage.org/api', '/0.1/map/?election_id=')
 																					.concat(n.id, '&s=')
 																					.concat(Date.now())),
 																				Object(Js.a)(i, s.getFormat()).call(
@@ -7810,13 +7804,13 @@
 													Object(Bt.jsx)('title', { children: _r(n) }),
 													Object(Bt.jsx)('meta', {
 														property: 'og:url',
-														content: ''.concat('https://public-legacy.democracysausage.org', '/').concat(D(n)),
+														content: ''.concat('https://legacy.democracysausage.org', '/').concat(D(n)),
 													}),
 													Object(Bt.jsx)('meta', { property: 'og:title', content: _r(n) }),
 													Object(Bt.jsx)('meta', {
 														property: 'og:image',
 														content: ''
-															.concat('https://public-legacy.democracysausage.org/api', '/0.1/map_image/')
+															.concat('https://legacy.democracysausage.org/api', '/0.1/map_image/')
 															.concat(n.id, '/'),
 													}),
 												],
@@ -9223,7 +9217,7 @@
 													Object(Bt.jsx)('title', { children: 'Democracy Sausage | FAQs and About Us' }),
 													Object(Bt.jsx)('meta', {
 														property: 'og:url',
-														content: ''.concat('https://public-legacy.democracysausage.org', '/about'),
+														content: ''.concat('https://legacy.democracysausage.org', '/about'),
 													}),
 													Object(Bt.jsx)('meta', {
 														property: 'og:title',
@@ -9511,7 +9505,7 @@
 													Object(Bt.jsx)('title', { children: 'Democracy Sausage | Media' }),
 													Object(Bt.jsx)('meta', {
 														property: 'og:url',
-														content: ''.concat('https://public-legacy.democracysausage.org', '/media'),
+														content: ''.concat('https://legacy.democracysausage.org', '/media'),
 													}),
 													Object(Bt.jsx)('meta', { property: 'og:title', content: 'Democracy Sausage | Media' }),
 												],
@@ -9633,9 +9627,7 @@
 				Wl = n(840),
 				Vl = (function () {
 					function e() {
-						Object(je.a)(this, e),
-							(this.baseURL = void 0),
-							(this.baseURL = 'https://public-legacy.democracysausage.org/api');
+						Object(je.a)(this, e), (this.baseURL = void 0), (this.baseURL = 'https://legacy.democracysausage.org/api');
 					}
 					return (
 						Object(fe.a)(e, [
@@ -9844,11 +9836,11 @@
 					REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 					REACT_APP_ENVIRONMENT: 'PRODUCTION',
 					REACT_APP_RAVEN_SITE_NAME: 'DemSausage Public',
-					REACT_APP_API_BASE_URL: 'https://public-legacy.democracysausage.org/api',
+					REACT_APP_API_BASE_URL: 'https://legacy.democracysausage.org/api',
 					REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 					REACT_APP_MAPBOX_API_KEY_DEV:
 						'pk.eyJ1IjoiYXVzZGVtb2NyYWN5c2F1c2FnZSIsImEiOiJjamVwYXNldnExZmQxMnpwbWJiODI5Y2R0In0.PtxxMO-qppmcivwcegWKYA',
-					REACT_APP_SITE_BASE_URL: 'https://public-legacy.democracysausage.org',
+					REACT_APP_SITE_BASE_URL: 'https://legacy.democracysausage.org',
 				}) &&
 				(a.a({
 					dsn: 'https://8d31580cc3314ca0812ff9d72c4d996f@sentry.io/291819',
@@ -9871,11 +9863,11 @@
 						REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 						REACT_APP_ENVIRONMENT: 'PRODUCTION',
 						REACT_APP_RAVEN_SITE_NAME: 'DemSausage Public',
-						REACT_APP_API_BASE_URL: 'https://public-legacy.democracysausage.org/api',
+						REACT_APP_API_BASE_URL: 'https://legacy.democracysausage.org/api',
 						REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 						REACT_APP_MAPBOX_API_KEY_DEV:
 							'pk.eyJ1IjoiYXVzZGVtb2NyYWN5c2F1c2FnZSIsImEiOiJjamVwYXNldnExZmQxMnpwbWJiODI5Y2R0In0.PtxxMO-qppmcivwcegWKYA',
-						REACT_APP_SITE_BASE_URL: 'https://public-legacy.democracysausage.org',
+						REACT_APP_SITE_BASE_URL: 'https://legacy.democracysausage.org',
 					}) &&
 					Hl.push(function (e) {
 						return function (e) {
@@ -9954,11 +9946,11 @@
 								REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 								REACT_APP_ENVIRONMENT: 'PRODUCTION',
 								REACT_APP_RAVEN_SITE_NAME: 'DemSausage Public',
-								REACT_APP_API_BASE_URL: 'https://public-legacy.democracysausage.org/api',
+								REACT_APP_API_BASE_URL: 'https://legacy.democracysausage.org/api',
 								REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 								REACT_APP_MAPBOX_API_KEY_DEV:
 									'pk.eyJ1IjoiYXVzZGVtb2NyYWN5c2F1c2FnZSIsImEiOiJjamVwYXNldnExZmQxMnpwbWJiODI5Y2R0In0.PtxxMO-qppmcivwcegWKYA',
-								REACT_APP_SITE_BASE_URL: 'https://public-legacy.democracysausage.org',
+								REACT_APP_SITE_BASE_URL: 'https://legacy.democracysausage.org',
 							})
 								? function () {
 										ca.pageview(window.location.pathname + window.location.search);
