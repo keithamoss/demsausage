@@ -54,8 +54,10 @@ export default function AddStallFormForTipOff(props: Props) {
 	} = useForm<StallTipOffModifiableProps>({
 		resolver: yupResolver(stallFormTipOffValidationSchema),
 		defaultValues: {
-			noms: stall?.noms || { bbq: true },
-			email: stall?.email || 'keithamoss@gmail.com',
+			// noms: stall?.noms || { bbq: true },
+			noms: stall?.noms || {},
+			// email: stall?.email || 'keithamoss@gmail.com',
+			email: stall?.email || '',
 		},
 	});
 

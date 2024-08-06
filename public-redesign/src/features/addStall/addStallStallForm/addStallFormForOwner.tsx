@@ -58,8 +58,10 @@ export default function AddStallFormForOwner(props: Props) {
 			description: stall?.description || '',
 			opening_hours: stall?.opening_hours || '',
 			website: stall?.website || '',
-			noms: stall?.noms || { bbq: true },
-			email: stall?.email || 'keithamoss@gmail.com',
+			// noms: stall?.noms || { bbq: true },
+			noms: stall?.noms || {},
+			// email: stall?.email || 'keithamoss@gmail.com',
+			email: stall?.email || '',
 		},
 	});
 
