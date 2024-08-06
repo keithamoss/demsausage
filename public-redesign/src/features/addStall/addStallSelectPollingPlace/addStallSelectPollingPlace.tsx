@@ -171,15 +171,15 @@ function AddStallSelectPollingPlace(props: Props) {
 				<DialogContent>
 					<Alert severity="info" icon={<EditIcon />} sx={{ mb: 2 }}>
 						<AlertTitle>Would you like to edit it?</AlertTitle>
-						If this was you and you&apos;d like to make a change, check your inbox for the confirmation email we sent
-						you. There&apos;s a link in there that will let you edit your stall.
+						If you submitted this stall previously and you&apos;d now like to make a change, check your inbox for the
+						confirmation email we sent you. There&apos;s a link in there that will let you edit your stall.
 					</Alert>
 
 					<Alert severity="success" icon={<FiberNewIcon />}>
 						<AlertTitle>Have another stall to add?</AlertTitle>
-						If this wasn&apos;t you, or if you&apos;re running another stall at this booth, please review what&apos;s
-						already here and consider if you need to list your stall in addition to the existing one. If you still want
-						to add content, you can do so below.
+						If this wasn&apos;t submitted by you, or if you&apos;re running another stall at this booth, please review
+						what&apos;s already here (just click &apos;Open Polling Place&apos; below) and consider if you still need to
+						list your stall. If you do still want to send in your submission, just hit &apos;Continue&apos; below.
 					</Alert>
 
 					<List sx={{ display: 'none' }}>

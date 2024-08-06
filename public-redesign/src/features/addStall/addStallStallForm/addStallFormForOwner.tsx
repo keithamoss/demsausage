@@ -16,12 +16,9 @@ import { Election } from '../../../app/services/elections';
 import { Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
-import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
-import { AddStallExistingSubmissionWarning } from './addStallExistingSubmissionWarning';
 import AddStallFormFoodOptionsSelector from './addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from './addStallFormPrivacyNotice';
 
@@ -105,11 +102,11 @@ export default function AddStallFormForOwner(props: Props) {
 
 	return (
 		<StyledInteractableBoxFullHeight>
-			{pollingPlace !== undefined && pollingPlace?.stall !== null && (
+			{/* {pollingPlace !== undefined && pollingPlace?.stall !== null && (
 				<AddStallExistingSubmissionWarning
 					pollingPlaceLinkAbsolute={`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`}
 				/>
-			)}
+			)} */}
 
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
 				<Paper
