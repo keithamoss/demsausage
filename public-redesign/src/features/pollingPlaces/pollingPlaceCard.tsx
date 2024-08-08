@@ -156,7 +156,7 @@ export default function PollingPlaceCard(props: Props) {
 	// ######################
 	// Share Link
 	// ######################
-	const onShareLink = useCallback(() => {
+	const onShareLink = useCallback(async () => {
 		const shareData = {
 			title: `${pollingPlace.premises || pollingPlace.name} | Democracy Sausage | ${election.name}`,
 			url: `${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`,
@@ -164,7 +164,7 @@ export default function PollingPlaceCard(props: Props) {
 
 		if (navigator.canShare(shareData)) {
 			try {
-				navigator.share(shareData);
+				await navigator.share(shareData);
 			} catch (e) {
 				/* we don't care about the user aborting sharing, so swallow any errors */
 			}
