@@ -131,7 +131,7 @@ export default function AddStallWhoIsSubmitting() {
 							</Avatar>
 						</ListItemAvatar>
 
-						<ListItemText primary="I'm sending a tip-off about a stall I've seen" />
+						<ListItemText primary="I want to let you know about a stall I've heard about or seen" />
 					</ListItemButton>
 				</List>
 			</Box>
