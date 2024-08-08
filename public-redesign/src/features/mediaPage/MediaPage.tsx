@@ -20,7 +20,7 @@ import { appBarHeight } from '../addStall/addStallHelpers';
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	overflowY: 'auto',
-	height: `100vh`,
+	height: `100dvh`,
 	padding: theme.spacing(2),
 	paddingBottom: appBarHeight,
 }));
