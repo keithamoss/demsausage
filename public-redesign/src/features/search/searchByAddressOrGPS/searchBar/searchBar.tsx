@@ -209,7 +209,6 @@ export default function SearchBar(props: Props) {
 				}),
 
 				geolocation.current.on('error', function (evt) {
-					geolocation.current.setTracking(false);
 					setIsWaitingForGPSLocation(false);
 
 					setIsGeolocationErrored(true);
