@@ -1,0 +1,172 @@
+{
+  "Jabiru -  Community Hall": {
+    "name": "Jabiru",
+    "premises": "Jabiru Community Hall",
+    "address": "Jabiru Community Hall, Leichhardt St, Jabiru"
+  },
+  "Alyangula -  ASEC Hall": {
+    "name": "Alyangula",
+    "premises": "ASEC Hall",
+    "address": "ASEC Hall, Poinciana St, Alyangula"
+  },
+  "Mataranka -  Community Hall": {
+    "name": "Mataranka",
+    "premises": "Mataranka Community Hall",
+    "address": "Warloch St, Mataranka NT 0852"
+  },
+  "Alice Plaza Shopping Centre": {
+    "name": "Alice Springs",
+    "premises": "Alice Plaza Shopping Centre",
+    "address": "36 Todd Mall, Alice Springs NT 0870"
+  },
+  "Barkly Regional Council": {
+    "name": "Tennant Cree",
+    "premises": "Barkly Regional Council",
+    "address": "41 Peko Rd, Tennant Creek NT 0860"
+  },
+  "Berry Springs Shopping Village": {
+    "name": "Berry Springs",
+    "premises": "Berry Springs Shopping Village",
+    "address": "10 Doris Rd, Berry Springs NT 0838"
+  },
+  "Casuarina Square Shopping Complex": {
+    "name": "Casuarina",
+    "premises": "Casuarina Square Shopping Complex",
+    "address": "247 Trower Rd, Casuarina NT 0810"
+  },
+  "Coolalinga Central": {
+    "name": "Coolalinga",
+    "premises": "Coolalinga Central",
+    "address": "425 Stuart Hwy, Coolalinga NT 0839"
+  },
+  "Darwin Entertainment Centre": {
+    "name": "Darwin",
+    "premises": "Darwin Entertainment Centre",
+    "address": "93 Mitchell St, Darwin City NT 0800"
+  },
+  "Eaton (Old Flip Out site)": {
+    "name": "Darwin (Eaton)",
+    "premises": "Eaton (Old Flip Out Site)",
+    "address": "Osgood Dr, Eaton NT 0820"
+  },
+  "Katherine Central Shopping Centre": {
+    "name": "Katherine",
+    "premises": "Katherine Central Shopping Centre",
+    "address": "Katherine Terrace, Katherine South NT 0850"
+  },
+  "Nhulunbuy Town Hall": {
+    "name": "Nhulunbuy",
+    "premises": "Nhulunbuy Town Hall",
+    "address": "89 Chesterfield Cct, Nhulunbuy NT 0880"
+  },
+  "Palmerston Shopping Centre": {
+    "name": "Darwin (Palmerston)",
+    "premises": "Palmerston Shopping Centre",
+    "address": "10 Temple Terrace, Palmerston City NT 0830"
+  },
+  "Parap Primary School": {
+    "name": "Darwin (Parap)",
+    "premises": "Parap Primary School",
+    "address": "Urquhart St, Parap NT 0820"
+  },
+  "Gateway Shopping Centre": {
+    "name": "Darwin (Yarrawonga)",
+    "premises": "Gateway Shopping Centre",
+    "address": "1 Roystonea Ave, Yarrawonga NT 0830"
+  },
+  "Braitling Primary School": {
+    "name": "Alice Springs",
+    "premises": "Braitling Primary School",
+    "address": "80 Head St, Braitling NT 0870"
+  },
+  "Gillen Primary School": {
+    "name": "Alice Springs",
+    "premises": "Gillen Primary School",
+    "address": "55 Milner Rd, Alice Springs NT 0871"
+  },
+  "Blatherskite Park": {
+    "name": "Alice Springs",
+    "premises": "Blatherskite Park",
+    "address": "Len Kittle Dr, Ilparpa NT 0873"
+  },
+  "Living Waters Lutheran School": {
+    "name": "Larapinta",
+    "premises": "Living Waters Lutheran School",
+    "address": "5 Albrecht Dr, Larapinta NT 0875"
+  },
+  "Centralian Senior College": {
+    "name": "Alice Springs",
+    "premises": "Centralian Senior College",
+    "address": "10 Grevillea Dr, Alice Springs NT 0870"
+  },
+  "Haileybury Rendall": {
+    "name": "Darwin (Berrimah)",
+    "premises": "Haileybury Rendall School",
+    "address": "6057 Berrimah Road, 1049 Berrimah Rd, Berrimah NT 0828"
+  },
+  "Whitewood Hall": {
+    "name": "Howard Springs",
+    "premises": "Whitewood Hall",
+    "address": "315 Whitewood Rd, Howard Springs NT 0835"
+  },
+  "Taminmin College": {
+    "name": "Humpty Doo",
+    "premises": "Taminmin College",
+    "address": "70 Challoner Cct, Humpty Doo NT 0836"
+  },
+  "O'Loughlin Catholic College": {
+    "name": "Darwin (Karama)",
+    "premises": "O'Loughlin Catholic College",
+    "address": "70 Mueller Rd, Karama NT 0812"
+  },
+  "Leanyer Primary School": {
+    "name": "Darwin (Leanyer)",
+    "premises": "Leanyer Primary School",
+    "address": "114 Leanyer Dr, Leanyer NT 0812"
+  },
+  "Ludmilla Primary School": {
+    "name": "Darwin (Ludmilla)",
+    "premises": "Ludmilla Primary School",
+    "address": "Narrows Rd, Ludmilla NT 0820"
+  },
+  "Sanderson Middle School": {
+    "name": "Darwin (Malak)",
+    "premises": "Sanderson Middle School",
+    "address": "60 Matthews Rd, Malak NT 0812"
+  },
+  "Moil Primary School": {
+    "name": "Darwin (Moil)",
+    "premises": "Moil Primary School",
+    "address": "37 Lanyon Terrace, Moil NT 0810"
+  },
+  "Nightcliff Middle School": {
+    "name": "Darwin (Rapid Creek)",
+    "premises": "Nightcliff Middle School",
+    "address": "90 Nightcliff Rd, Rapid Creek NT 0810"
+  },
+  "Palmerston College - Middle School Campus": {
+    "name": "Darwin (Palmerston)",
+    "premises": "Palmerston College - Middle School Campus",
+    "address": "185 Forrest Parade, Rosebery NT 0832"
+  },
+  "Tindal Community Hall": {
+    "name": "Tindal",
+    "premises": "Tindal Community Hall",
+    "address": "Newham Cct, Tindal NT 0853"
+  },
+  "Wagait Community Centre": {
+    "name": "Wagait Beach",
+    "premises": "Wagait Community Centre",
+    "address": "62 Wagait Tower Rd, Wagait Beach NT 0822"
+  },
+  "Sacred Heart Primary School": {
+    "name": "Darwin (Woodroffe)",
+    "premises": "Sacred Heart Primary School",
+    "address": "34 Emery Ave, Woodroffe NT 0830"
+  },
+  "Zuccoli Primary School": {
+    "name": "Zuccoli",
+    "premises": "Zuccoli Primary School",
+    "address": "130 Zuccoli Parade, Zuccoli NT 0832"
+  }
+}
