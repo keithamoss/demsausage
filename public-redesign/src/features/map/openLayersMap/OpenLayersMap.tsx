@@ -92,10 +92,11 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			layers: this.getBasemap(),
 			target: 'openlayers-map',
 			controls: [new Attribution()],
-			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
-				new DblClickDragZoom(),
-				new MouseWheelZoom(),
-			]),
+			interactions: defaultInteractions({
+				mouseWheelZoom: false,
+				pinchRotate: false,
+				altShiftDragRotate: false,
+			}).extend([new DblClickDragZoom(), new MouseWheelZoom()]),
 			view: initialMapView !== undefined ? new View(initialMapView) : undefined,
 		});
 		olMapRef.current = this.map;
