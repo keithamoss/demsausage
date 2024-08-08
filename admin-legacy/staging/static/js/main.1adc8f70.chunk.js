@@ -1094,7 +1094,7 @@
 										open: e,
 										children: Object(Ot.jsx)(kt, {
 											providerName: 'Google',
-											providerUrl: ''.concat('https://admin.staging.democracysausage.org/api', '/login/google-oauth2/'),
+											providerUrl: ''.concat('https://staging-admin.democracysausage.org/api', '/login/google-oauth2/'),
 											colour: '#DD4B39',
 										}),
 									});
@@ -1665,7 +1665,7 @@
 														Object(Ot.jsx)('br', {}),
 														Object(Ot.jsx)('img', {
 															src: ''
-																.concat('https://admin.staging.democracysausage.org/api', '/0.1/map_image/')
+																.concat('https://staging-admin.democracysausage.org/api', '/0.1/map_image/')
 																.concat(t.id, '/'),
 														}),
 													],
@@ -2397,7 +2397,7 @@
 							onDownloadElection: function (e) {
 								window.location.href = ''
 									.concat(
-										'https://admin.staging.democracysausage.org/api',
+										'https://staging-admin.democracysausage.org/api',
 										'/0.1/polling_places/?format=csv&election_id=',
 									)
 									.concat(e.id);
@@ -6406,7 +6406,7 @@
 					function e() {
 						Object(Ge.a)(this, e),
 							(this.baseURL = void 0),
-							(this.baseURL = 'https://admin.staging.democracysausage.org/api');
+							(this.baseURL = 'https://staging-admin.democracysausage.org/api');
 					}
 					return (
 						Object(We.a)(e, [
@@ -6614,10 +6614,10 @@
 					REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 					REACT_APP_ENVIRONMENT: 'PRODUCTION',
 					REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-					REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+					REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 					REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 					REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-					REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+					REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 				}) &&
 				(c.a({
 					dsn: 'https://8d31580cc3314ca0812ff9d72c4d996f@sentry.io/291819',

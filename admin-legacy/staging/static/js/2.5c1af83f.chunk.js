@@ -7732,10 +7732,10 @@
 								REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 								REACT_APP_ENVIRONMENT: 'PRODUCTION',
 								REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-								REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+								REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 								REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 								REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-								REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+								REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 							}).REACT_APP_SC_ATTR ||
 								Object({
 									NODE_ENV: 'production',
@@ -7748,10 +7748,10 @@
 									REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 									REACT_APP_ENVIRONMENT: 'PRODUCTION',
 									REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-									REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+									REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 									REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 									REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-									REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+									REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 								}).SC_ATTR)) ||
 						'data-styled',
 					E = 'undefined' != typeof window && 'HTMLElement' in window,
@@ -7771,10 +7771,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).REACT_APP_SC_DISABLE_SPEEDY &&
 								  '' !==
 										Object({
@@ -7788,10 +7788,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).REACT_APP_SC_DISABLE_SPEEDY
 								? 'false' !==
 										Object({
@@ -7805,10 +7805,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).REACT_APP_SC_DISABLE_SPEEDY &&
 									Object({
 										NODE_ENV: 'production',
@@ -7821,10 +7821,10 @@
 										REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 										REACT_APP_ENVIRONMENT: 'PRODUCTION',
 										REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-										REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+										REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 										REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 										REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-										REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+										REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 									}).REACT_APP_SC_DISABLE_SPEEDY
 								: 'undefined' != typeof e &&
 									void 0 !==
@@ -7839,10 +7839,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).SC_DISABLE_SPEEDY &&
 									'' !==
 										Object({
@@ -7856,10 +7856,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).SC_DISABLE_SPEEDY &&
 									'false' !==
 										Object({
@@ -7873,10 +7873,10 @@
 											REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 											REACT_APP_ENVIRONMENT: 'PRODUCTION',
 											REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-											REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+											REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 											REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 											REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-											REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+											REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 										}).SC_DISABLE_SPEEDY &&
 									Object({
 										NODE_ENV: 'production',
@@ -7889,10 +7889,10 @@
 										REACT_APP_GOOGLE_ANALYTICS_UA: 'UA-48888573-1',
 										REACT_APP_ENVIRONMENT: 'PRODUCTION',
 										REACT_APP_RAVEN_SITE_NAME: 'DemSausage Admin',
-										REACT_APP_API_BASE_URL: 'https://admin.staging.democracysausage.org/api',
+										REACT_APP_API_BASE_URL: 'https://staging-admin.democracysausage.org/api',
 										REACT_APP_GOOGLE_MAPS_API_KEY: 'AIzaSyBuOuavKmg0pKmdGEPdugThfnKQ7v1sSH0',
 										REACT_APP_PUBLIC_SITE_BASE_URL: 'https://democracysausage.org',
-										REACT_APP_SITE_BASE_URL: 'https://admin.staging.democracysausage.org',
+										REACT_APP_SITE_BASE_URL: 'https://staging-admin.democracysausage.org',
 									}).SC_DISABLE_SPEEDY,
 					);
 				function O(e) {
