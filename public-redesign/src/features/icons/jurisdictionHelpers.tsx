@@ -17,6 +17,7 @@ import {
 	React_NSWJurisdictionCrest,
 	React_NSWJurisdictionCrestCircle,
 	React_NTJurisdictionCrest,
+	React_NTJurisdictionCrestCircle,
 	React_QLDJurisdictionCrest,
 	React_QLDJurisdictionCrestCircle,
 	React_SAJurisdictionCrest,
@@ -95,7 +96,7 @@ export const jurisdictionCrests = {
 		},
 		circle: {
 			raw: NTJurisdictionCrestCircle,
-			react: React_WAJurisdictionCrestCircle,
+			react: React_NTJurisdictionCrestCircle,
 		},
 	},
 	tas: {
