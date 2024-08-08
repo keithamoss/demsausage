@@ -141,17 +141,6 @@ export default function DebugView() {
 										/>
 									</Box>
 
-									<Box sx={{ width: 390, border: '1px solid grey' }}>
-										<PollingPlaceCardDebugViewEntrypointLayer1
-											electionName={electionName}
-											name={pollinPlaceName}
-											premises={pollingPlacePremises}
-											state={pollingPlaceState}
-										/>
-									</Box>
-								</Stack>
-
-								<Stack direction="row" spacing={2} sx={{ marginBottom: 4 }}>
 									<iframe
 										// src={`https://public.test.democracysausage.org${item.url}?debugViewShowMiniCard`}
 										src={`https://democracysausage.org${item.url}?debugViewShowMiniCard`}
@@ -161,6 +150,18 @@ export default function DebugView() {
 										height="844"
 										style={{ border: '1px solid grey' }}
 									/>
+								</Stack>
+
+								<Stack direction="row" spacing={2} sx={{ marginBottom: 4 }}>
+									<Box sx={{ width: 390, border: '1px solid grey' }}>
+										<PollingPlaceCardDebugViewEntrypointLayer1
+											electionName={electionName}
+											name={pollinPlaceName}
+											premises={pollingPlacePremises}
+											state={pollingPlaceState}
+										/>
+									</Box>
+
 									<iframe
 										// src={`https://public.test.democracysausage.org${item.url}`}
 										src={`https://democracysausage.org${item.url}`}
