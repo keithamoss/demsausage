@@ -116,7 +116,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 				<FormGroup>
 					<TextFieldWithout1Password
 						label="Anything else?"
-						helperText="e.g. We also have yummy gluten free sausage rolls, cold drinks, and pony rides!"
+						helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
 						sx={{ mt: 1 }}
 						onChange={onChangeFreeTextFoodOption}
 					/>
