@@ -146,7 +146,7 @@ def _write_csv(polling_places: list[PollingPlace]):
                          'lat', 'lon', 'state', 'wheelchair_access', 'wheelchair_access_description'])
         
         for pp in polling_places:
-            writer.writerow(['', pp.name, ', '.join(pp.districts), pp.premises, pp.address, 
+            writer.writerow(['', pp.name, ', '.join(list(set(pp.districts))), pp.premises, pp.address, 
                              pp.lat, pp.lon, 'NSW', pp.wheelchair_access, pp.wheelchair_access_description])
 
 
