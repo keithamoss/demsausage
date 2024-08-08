@@ -334,7 +334,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 					features.push(feature as Feature);
 				},
 				{
-					hitTolerance: 3,
+					hitTolerance: 5,
 					layerFilter: (layer: BaseLayer) => {
 						const props = layer.getProperties();
 						if ('isSausageLayer' in props && props.isSausageLayer === true) {
