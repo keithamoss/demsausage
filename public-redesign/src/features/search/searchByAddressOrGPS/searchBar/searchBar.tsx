@@ -115,6 +115,12 @@ export default function SearchBar(props: Props) {
 		[debouncedNavigateOnSearchTermChange],
 	);
 
+	const onKeyUpSearchField = useCallback((event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		if (event.key === 'Enter' && event.target instanceof HTMLElement) {
+			event.target.blur();
+		}
+	}, []);
+
 	// For some reason autoFocus={autoFocusSearchField} on InputBase
 	// isn't working when the user comes from the <Map> using the 'Clear'
 	// button. Oddly, it works if the user clicks on the InputBase in
@@ -344,6 +350,7 @@ export default function SearchBar(props: Props) {
 					inputRef={searchFieldRef}
 					value={localSearchTerm}
 					onChange={onChangeSearchField}
+					onKeyUp={onKeyUpSearchField}
 					autoFocus={autoFocusSearchField}
 					placeholder={searchFieldPlaceholder}
 					inputProps={{
