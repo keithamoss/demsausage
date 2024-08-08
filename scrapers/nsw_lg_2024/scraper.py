@@ -10,6 +10,9 @@ from dataclasses import dataclass
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 
 OUTPUT_FILE = f'nsw-{datetime.date.today().isoformat()}.csv'
 INDEX_PAGE = 'https://elections.nsw.gov.au/elections/find-my-electorate'
@@ -27,12 +30,21 @@ class PollingPlace:
 
 
 def scrape():
-    driver = webdriver.Firefox()
+    # USE FOR LINUX
+    # driver = webdriver.Firefox()
+
+    # USE FOR MACOS
+    firefox_options = FirefoxOptions()
+    firefox_options.add_argument("--headless")
+    firefox_options.add_argument("--kiosk")  # Ensures the window size we set is the actual output size of the screenshot
+    firefox_options.binary_location = '/Applications/Firefox.app/Contents/MacOS/firefox'
+    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=firefox_options)
+
     driver.get(INDEX_PAGE)
             
     district_links = [
         (elem.get_attribute('textContent'), elem.get_attribute('href'))
-        for elem in driver.find_elements(By.CSS_SELECTOR, '#az-district li a')
+        for elem in driver.find_elements(By.CSS_SELECTOR, '#elec-councils-panel li a')
     ]
     
     try:
@@ -49,7 +61,7 @@ def _scrape_district(driver, polling_places: dict[str,PollingPlace], district_na
     print(f'district {district_name}: {href}')
     driver.get(href)
     
-    match = re.search(f'eventcode = "(SG[0-9]+-[0-9]+)"', driver.page_source)
+    match = re.search(f'"(LG[0-9]+-[0-9]+)"', driver.page_source)
     if match is None:
         #with open('last_page', 'w') as f:
         #    f.write(driver.page_source)
