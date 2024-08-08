@@ -58,7 +58,9 @@ export const navigateToAddStallSearchMapboxResults = (
 		return;
 	}
 
-	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/`);
+	navigate(`/add-stall/${urlElectionName}/search/place/${searchTerm}/`, {
+		state: { cameFromInternalNavigation: true },
+	});
 };
 
 export const navigateToAddStallSearchListOfPollingPlacesFromMapboxResults = (
@@ -93,7 +95,9 @@ export const navigateToAddStallSearchDrawerAndInitiateGPSSearch = (
 		return;
 	}
 
-	navigate(`/add-stall/${urlElectionName}/search/gps/`);
+	navigate(`/add-stall/${urlElectionName}/search/gps/`, {
+		state: { cameFromInternalNavigation: true },
+	});
 };
 
 export const navigateToAddStallSearchListOfPollingPlacesFromGPSSearch = (
@@ -114,6 +118,7 @@ export const navigateToAddStallSearchListOfPollingPlacesFromGPSSearch = (
 		// Without replace, it just automatically retriggers another GPS search.
 		// Since we're replacing, no need for cameFromInternalNavigation here.
 		replace: true,
+		state: { cameFromInternalNavigation: true },
 	});
 };
 
@@ -158,7 +163,9 @@ export const navigateToAddStallWhoIsSubmittingFromPollingPlaceCard = (
 	}
 
 	if (typeof name === 'string' && typeof premises === 'string' && typeof state === 'string') {
-		navigate(`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state)}`);
+		navigate(`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, name, premises, state)}`, {
+			state: { cameFromInternalNavigation: false },
+		});
 	}
 };
 
@@ -287,5 +294,7 @@ export const navigateToAddStallSubmitted = (params: Params<string>, navigate: Na
 		return;
 	}
 
-	navigate(`/add-stall/${urlElectionName}/submitted/`);
+	navigate(`/add-stall/${urlElectionName}/submitted/`, {
+		state: { cameFromInternalNavigation: true },
+	});
 };

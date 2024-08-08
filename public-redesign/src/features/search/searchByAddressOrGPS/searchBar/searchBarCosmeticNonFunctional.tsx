@@ -7,9 +7,9 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import {
-	navigateToSearchDrawer,
-	navigateToSearchDrawerAndInitiateGPSSearch,
-	navigateToSearchDrawerRoot,
+	navigateToSearchDrawerAndInitiateGPSSearchFromExternalToSearchBar,
+	navigateToSearchDrawerFromExternalToSearchBar,
+	navigateToSearchDrawerRootFromExternalToSearchBar,
 } from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
@@ -37,15 +37,15 @@ export default function SearchBarCosmeticNonFunctional() {
 	// Search Field
 	// ######################
 	const onClickSearchField = useCallback(() => {
-		navigateToSearchDrawer(params, navigate);
+		navigateToSearchDrawerFromExternalToSearchBar(params, navigate);
 	}, [navigate, params]);
 
 	const onClearSearchBar = useCallback(() => {
-		navigateToSearchDrawerRoot(params, navigate);
+		navigateToSearchDrawerRootFromExternalToSearchBar(params, navigate);
 	}, [navigate, params]);
 
 	const onDiscardGPSSearch = useCallback(() => {
-		navigateToSearchDrawerRoot(params, navigate);
+		navigateToSearchDrawerRootFromExternalToSearchBar(params, navigate);
 	}, [navigate, params]);
 	// ######################
 	// Search Field (End)
@@ -55,7 +55,7 @@ export default function SearchBarCosmeticNonFunctional() {
 	// GPS Control
 	// ######################
 	const onClickGPSControl = useCallback(() => {
-		navigateToSearchDrawerAndInitiateGPSSearch(params, navigate);
+		navigateToSearchDrawerAndInitiateGPSSearchFromExternalToSearchBar(params, navigate);
 	}, [navigate, params]);
 	// ######################
 	// GPS Control (End)
@@ -66,7 +66,7 @@ export default function SearchBarCosmeticNonFunctional() {
 	// ######################
 	const onClickFilterControl = useCallback(() => {
 		dispatch(setSearchBarFilterControlState(true));
-		navigateToSearchDrawer(params, navigate);
+		navigateToSearchDrawerFromExternalToSearchBar(params, navigate);
 	}, [dispatch, navigate, params]);
 	// ######################
 	// Filter Control (End)
