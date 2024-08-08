@@ -180,7 +180,7 @@ def send_pending_stall_reminder_email(pending_stall_count):
     if len(admin_emails) > 0:
         return send({
             "to": ", ".join(admin_emails),
-            "subject": "Reminder: There are {} Democracy Sausage stalls waiting to be reviewed".format(pending_stall_count),
+            "subject": f"Reminder: There are {pending_stall_count} Democracy Sausage stalls waiting to be reviewed ({get_env('ENVIRONMENT')})",
             "html": get_mail_template("pending_stall_reminder"),
         })
 
