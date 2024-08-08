@@ -20,6 +20,7 @@ import {
 	navigateToAddStallForm,
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { StallSubmitterType } from '../../../app/services/stalls';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
@@ -43,6 +44,9 @@ export default function AddStallWhoIsSubmitting() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const urlPollingPlacePremises = getStringParamOrEmptyString(params, 'polling_place_premises').replaceAll('_', ' ');
+	const urlPollingPlaceName = getStringParamOrEmptyString(params, 'polling_place_name').replaceAll('_', ' ');
 
 	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
 
@@ -80,6 +84,20 @@ export default function AddStallWhoIsSubmitting() {
 
 	return (
 		<StyledInteractableBoxFullHeight>
+			<Paper
+				square
+				elevation={0}
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					height: 50,
+					pl: 2,
+					bgcolor: 'grey.200',
+				}}
+			>
+				<Typography variant="h6">{urlPollingPlacePremises || urlPollingPlaceName}</Typography>
+			</Paper>
+
 			<Paper
 				square
 				elevation={0}

@@ -143,6 +143,20 @@ export default function AddStallFormForOwner(props: Props) {
 						bgcolor: 'grey.200',
 					}}
 				>
+					<Typography variant="h6">{pollingPlace?.premises || pollingPlace?.name}</Typography>
+				</Paper>
+
+				<Paper
+					square
+					elevation={0}
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						height: 50,
+						pl: 2,
+						bgcolor: 'grey.200',
+					}}
+				>
 					<Typography variant="h6">Tell us about the stall</Typography>
 				</Paper>
 
