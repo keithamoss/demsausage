@@ -1,7 +1,6 @@
 import EmailIcon from '@mui/icons-material/Email';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
-	Box,
 	IconButton,
 	List,
 	ListItem,
@@ -11,19 +10,10 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
+import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { getBaseURL } from '../../app/utils';
-import { appBarHeight } from '../addStall/addStallHelpers';
-
-const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
-	overflowY: 'auto',
-	height: `100dvh`,
-	padding: theme.spacing(2),
-	paddingBottom: appBarHeight,
-}));
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingLeft: theme.spacing(1),

@@ -1,7 +1,6 @@
 import {
 	Alert,
 	AlertTitle,
-	Box,
 	FormControl,
 	InputLabel,
 	LinearProgress,
@@ -9,7 +8,6 @@ import {
 	Select,
 	SelectChangeEvent,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -18,20 +16,12 @@ import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election, useGetElectionStatsQuery } from '../../app/services/elections';
+import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { getBaseURL } from '../../app/utils';
-import { appBarHeight } from '../addStall/addStallHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import SausagelyticsFederal from './SausagelyticsFederal';
 import SausagelyticsState from './SausagelyticsState';
-
-const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
-	overflowY: 'auto',
-	height: `100vh`,
-	padding: theme.spacing(2),
-	paddingBottom: appBarHeight,
-}));
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),

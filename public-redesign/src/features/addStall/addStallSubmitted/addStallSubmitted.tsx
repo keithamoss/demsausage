@@ -11,7 +11,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `100vh`,
+	height: `100dvh`,
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
