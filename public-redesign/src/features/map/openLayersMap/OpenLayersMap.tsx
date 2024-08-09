@@ -438,7 +438,9 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 				source: new OSM({
 					// https://carto.com/location-data-services/basemaps/
 					url: 'https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-					attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
+					attributions: [
+						'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+					],
 				}),
 			}),
 		];
