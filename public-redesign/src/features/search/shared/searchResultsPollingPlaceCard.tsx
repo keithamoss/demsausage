@@ -1,5 +1,6 @@
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -17,10 +18,6 @@ interface Props {
 	onChoosePollingPlaceLabel: string;
 	onChoosePollingPlace: (pollingPlace: IPollingPlace) => void;
 }
-
-const StyledCard = styled(Card)(() => ({
-	cursor: 'pointer',
-}));
 
 const StyledCardContent = styled(CardContent)(() => ({
 	paddingBottom: 0,
@@ -42,7 +39,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 
 	return (
 		<React.Fragment>
-			<StyledCard variant="outlined" onClick={onClickPollingPlace(pollingPlace)}>
+			<Card variant="outlined">
 				<StyledCardContent>
 					{pollingPlace.stall !== null && (
 						<IconsFlexboxHorizontalSummaryRow>
@@ -50,20 +47,22 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 						</IconsFlexboxHorizontalSummaryRow>
 					)}
 
-					<Typography
-						variant="h5"
-						component="div"
-						sx={{
-							fontSize: 16,
-							fontWeight: 500,
-						}}
-					>
-						{pollingPlace.premises || pollingPlace.name}
-					</Typography>
+					<Box onClick={onClickPollingPlace(pollingPlace)} sx={{ cursor: 'pointer' }}>
+						<Typography
+							variant="h5"
+							component="div"
+							sx={{
+								fontSize: 16,
+								fontWeight: 500,
+							}}
+						>
+							{pollingPlace.premises || pollingPlace.name}
+						</Typography>
 
-					<Typography color="text.secondary" sx={{ fontSize: 15 }}>
-						{pollingPlace.address}
-					</Typography>
+						<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+							{pollingPlace.address}
+						</Typography>
+					</Box>
 				</StyledCardContent>
 
 				<StyledCardActions>
@@ -75,6 +74,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 							justifyContent: 'flex-start',
 							pl: 1,
 						}}
+						onClick={onClickPollingPlace(pollingPlace)}
 					>
 						{onChoosePollingPlaceLabel}
 					</Button>
@@ -88,7 +88,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 						{pollingPlace.wheelchair_access}
 					</Button>
 				</StyledCardActions>
-			</StyledCard>
+			</Card>
 		</React.Fragment>
 	);
 }
