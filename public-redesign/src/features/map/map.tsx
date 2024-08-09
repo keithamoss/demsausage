@@ -31,6 +31,7 @@ import {
 	createMapViewURLPathComponent,
 	isMapViewParamValid,
 } from './mapHelpers';
+import { MapWelcomeToTheNewWebsite } from './mapWelcomeToTheNewWebsite';
 import OpenLayersMap from './openLayersMap/OpenLayersMap';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
@@ -263,6 +264,8 @@ function Map(props: Props) {
 			>
 				<SearchBarCosmeticNonFunctional />
 			</Box>
+
+			<MapWelcomeToTheNewWebsite />
 
 			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isMapDataLoading}>
 				<CircularProgress color="inherit" />
