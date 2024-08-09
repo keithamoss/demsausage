@@ -8,7 +8,7 @@ import { Election } from '../../../app/services/elections';
 import { useGetPollingPlaceByIdsLookupQuery } from '../../../app/services/pollingPlaces';
 import { getCSVStringsAsFloats } from '../../../app/utils';
 import { selectMapFilterSettings } from '../../app/appSlice';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../../map/mapFilterHelpers';
+import { doesPollingPlaceSatisifyFilterCriteria, hasFilterOptions } from '../../map/mapFilterHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { onViewOnMap } from '../searchBarHelpers';
 import SearchResultsPollingPlaceCard from '../shared/searchResultsPollingPlaceCard';
@@ -71,6 +71,7 @@ export default function SearchByIdsStackComponent(props: Props) {
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
 				<SearchByIdsResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+					isFiltered={hasFilterOptions(mapFilterSettings) === true}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					onViewOnMap={onClickViewOnMap}
 				>

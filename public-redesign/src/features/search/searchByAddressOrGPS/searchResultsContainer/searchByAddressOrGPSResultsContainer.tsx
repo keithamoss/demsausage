@@ -13,6 +13,8 @@ interface LocationState {
 
 interface Props {
 	numberOfResults: number;
+	isFiltered: boolean;
+	isSearchingByGPS: boolean;
 	pollingPlacesLoaded: boolean;
 	enableViewOnMap: boolean;
 	onViewOnMap: () => void;
@@ -21,7 +23,16 @@ interface Props {
 }
 
 export default function SearchByAddressOrGPSResultsContainer(props: Props) {
-	const { numberOfResults, pollingPlacesLoaded, enableViewOnMap, onViewOnMap, onGoBackFromSearch, children } = props;
+	const {
+		numberOfResults,
+		isFiltered,
+		isSearchingByGPS,
+		pollingPlacesLoaded,
+		enableViewOnMap,
+		onViewOnMap,
+		onGoBackFromSearch,
+		children,
+	} = props;
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -100,7 +111,11 @@ export default function SearchByAddressOrGPSResultsContainer(props: Props) {
 			{numberOfResults === 0 && (
 				<Alert severity="info">
 					<AlertTitle>No results found</AlertTitle>
-					Sorry, we couldn&lsquo;t find any polling places 😢
+					{isSearchingByGPS === true
+						? "Sorry, we couldn't find any polling places close to your GPS location 😢"
+						: isFiltered === true
+							? "Sorry, we couldn't find any polling places that match your filter criteria 😢"
+							: "Sorry, we couldn't find any polling places 😢"}
 				</Alert>
 			)}
 

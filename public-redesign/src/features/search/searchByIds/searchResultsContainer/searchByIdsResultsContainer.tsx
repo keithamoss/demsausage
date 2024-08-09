@@ -24,13 +24,14 @@ const IconButtonOutlined = styled(Button)({
 
 interface Props {
 	numberOfResults: number;
+	isFiltered: boolean;
 	pollingPlacesLoaded: boolean;
 	onViewOnMap: () => void;
 	children: JSX.Element[];
 }
 
 export default function SearchByIdsResultsContainer(props: Props) {
-	const { numberOfResults, pollingPlacesLoaded, onViewOnMap, children } = props;
+	const { numberOfResults, isFiltered, pollingPlacesLoaded, onViewOnMap, children } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -169,7 +170,9 @@ export default function SearchByIdsResultsContainer(props: Props) {
 			{numberOfResults === 0 && (
 				<Alert severity="info">
 					<AlertTitle>No results found</AlertTitle>
-					Sorry, we couldn&lsquo;t find any polling places 😢
+					{isFiltered === true
+						? "Sorry, we couldn't find any polling places that match your filter criteria 😢"
+						: "Sorry, we couldn't find any polling places 😢"}
 				</Alert>
 			)}
 

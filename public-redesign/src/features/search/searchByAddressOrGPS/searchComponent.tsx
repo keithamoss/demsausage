@@ -11,7 +11,7 @@ import { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
 import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { selectMapFilterSettings } from '../../app/appSlice';
-import { doesPollingPlaceSatisifyFilterCriteria } from '../../map/mapFilterHelpers';
+import { doesPollingPlaceSatisifyFilterCriteria, hasFilterOptions } from '../../map/mapFilterHelpers';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
 	EMapboxPlaceType,
@@ -221,6 +221,8 @@ export default function SearchComponent(props: Props) {
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
 				<SearchByAddressOrGPSResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+					isFiltered={hasFilterOptions(mapFilterSettings) === true}
+					isSearchingByGPS={urlLonLatFromGPS !== ''}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					enableViewOnMap={enableViewOnMap}
 					onViewOnMap={onClickViewOnMap}
