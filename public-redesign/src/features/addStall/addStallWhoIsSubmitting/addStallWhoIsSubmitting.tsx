@@ -113,7 +113,15 @@ export default function AddStallWhoIsSubmitting() {
 			</Paper>
 
 			<Box sx={{ width: '100%', p: 2 }}>
-				<List>
+				<List
+					// This ensures the padding here matches whats on AddStallStallCreatorForm
+					sx={{
+						pt: 0,
+						'& .MuiListItemButton-root:first-of-type': {
+							pt: 0,
+						},
+					}}
+				>
 					<ListItemButton sx={{ marginBottom: 0 }} onClick={onChooseStallOwner}>
 						<ListItemAvatar>
 							<Avatar sx={{ backgroundColor: 'transparent' }}>
