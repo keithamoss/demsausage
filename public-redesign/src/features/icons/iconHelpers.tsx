@@ -299,7 +299,7 @@ export const supportingIcons = {
 		icon: {
 			raw: Yellow_Minus,
 			react: createReactSvgIcon(React_Yellow_Minus),
-			ol: createOLIcon(Yellow_Minus, 2, 40, 40),
+			ol: createOLIcon(Yellow_Minus, 2, 24, 24),
 			olDetailed: createOLDetailedIcon(Yellow_Minus),
 		},
 		label: 'Sold Out',
@@ -317,7 +317,7 @@ export const supportingIcons = {
 		icon: {
 			raw: Red_Cross,
 			react: createReactSvgIcon(React_Red_Cross),
-			ol: createOLIcon(Red_Cross, 1, 40, 40),
+			ol: createOLIcon(Red_Cross, 1, 24, 24),
 			olDetailed: createOLDetailedIcon(Red_Cross),
 		},
 		label: 'Red Cross of Shame',
