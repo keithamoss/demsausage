@@ -8,6 +8,9 @@ import {
 	IconButton,
 	InputBase,
 	InputLabel,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
 	MenuItem,
 	Paper,
 	Select,
@@ -15,6 +18,7 @@ import {
 	Snackbar,
 	Typography,
 	styled,
+	useTheme,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useCallback, useState } from 'react';
@@ -25,6 +29,7 @@ import { getBaseURL } from '../../app/utils';
 import { appBarHeight } from '../addStall/addStallHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';
+import { getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
 import {
 	getEmbedInteractiveMapHTML,
 	getEmbedInteractiveMapURL,
@@ -69,6 +74,8 @@ interface Props {
 
 function EmbedBuilder(props: Props) {
 	const { elections } = props;
+
+	const theme = useTheme();
 
 	const [election, setElection] = useState<Election | undefined>(getDefaultElection(elections));
 
@@ -158,7 +165,16 @@ function EmbedBuilder(props: Props) {
 				<Select labelId="choose-an-election" value={election.id} label="Choose an election" onChange={onChooseElection}>
 					{elections.map((e) => (
 						<MenuItem key={e.id} value={e.id}>
-							{e.name}
+							<ListItem disablePadding disableGutters>
+								<ListItemIcon sx={{ minWidth: 36 }}>
+									{getJurisdictionCrestCircleReact(e.jurisdiction, {
+										width: 36,
+										height: 36,
+										paddingRight: theme.spacing(1),
+									})}
+								</ListItemIcon>
+								<ListItemText primary={e.name} />
+							</ListItem>
 						</MenuItem>
 					))}
 				</Select>

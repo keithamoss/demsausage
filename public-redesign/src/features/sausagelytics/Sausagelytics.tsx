@@ -4,11 +4,15 @@ import {
 	FormControl,
 	InputLabel,
 	LinearProgress,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useTheme } from '@mui/system';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +24,7 @@ import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractable
 import { getBaseURL } from '../../app/utils';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
+import { getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
 import SausagelyticsFederal from './SausagelyticsFederal';
 import SausagelyticsState from './SausagelyticsState';
 
@@ -90,6 +95,8 @@ interface Props {
 function Sausagelytics(props: Props) {
 	const { elections, election } = props;
 
+	const theme = useTheme();
+
 	const navigate = useNavigate();
 
 	const onChooseElection = (e: SelectChangeEvent<number | string>) => {
@@ -131,7 +138,16 @@ function Sausagelytics(props: Props) {
 					>
 						{elections.map((e) => (
 							<MenuItem key={e.id} value={e.id}>
-								{e.name}
+								<ListItem disablePadding disableGutters>
+									<ListItemIcon sx={{ minWidth: 36 }}>
+										{getJurisdictionCrestCircleReact(e.jurisdiction, {
+											width: 36,
+											height: 36,
+											paddingRight: theme.spacing(1),
+										})}
+									</ListItemIcon>
+									<ListItemText primary={e.name} />
+								</ListItem>
 							</MenuItem>
 						))}
 					</Select>
