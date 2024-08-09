@@ -6,6 +6,11 @@ if ('VITE_SENTRY_DSN' in import.meta.env === false) {
 	throw new Error('VITE_SENTRY_DSN not found');
 }
 
+export const sentryFeedback = Sentry.feedbackIntegration({
+	autoInject: false,
+	colorScheme: 'light',
+});
+
 export const sentryInit = () => {
 	Sentry.init({
 		dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -23,6 +28,7 @@ export const sentryInit = () => {
 				matchRoutes,
 				// stripBasename,
 			}),
+			sentryFeedback,
 		],
 
 		// Set tracesSampleRate to 1.0 to capture 100%

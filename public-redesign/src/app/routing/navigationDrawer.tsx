@@ -1,5 +1,6 @@
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import CampaignIcon from '@mui/icons-material/Campaign';
 import CodeIcon from '@mui/icons-material/Code';
 import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -10,10 +11,11 @@ import PublicIcon from '@mui/icons-material/Public';
 import StoreIcon from '@mui/icons-material/Store';
 import TvIcon from '@mui/icons-material/Tv';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Divider, Drawer, List } from '@mui/material';
+import { Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { UIMatch, useMatches } from 'react-router-dom';
+import { sentryFeedback } from '../sentry';
 import { ListItemButtonLink } from '../ui/link';
 import { mapaThemePrimaryPurple } from '../ui/theme';
 
@@ -62,6 +64,12 @@ export default function NavigationDrawer(props: Props) {
 
 	const matches = useMatches() as UIMatch<UIMatchData | undefined, unknown>[];
 
+	const onClickSendBugReport = async () => {
+		const form = await sentryFeedback.createForm();
+		form.appendToDom();
+		form.open();
+	};
+
 	return (
 		<Drawer open={open} onClose={onToggleDrawer(false)}>
 			<Box sx={{ width: 250 }} role="presentation" onClick={onToggleDrawer(false)} onKeyDown={onToggleDrawer(false)}>
@@ -76,6 +84,14 @@ export default function NavigationDrawer(props: Props) {
 							target={item.target}
 						/>
 					))}
+
+					<ListItemButton>
+						<ListItemIcon>
+							<CampaignIcon />
+						</ListItemIcon>
+
+						<ListItemText primary="Send Bug Report" onClick={onClickSendBugReport} />
+					</ListItemButton>
 				</List>
 
 				<Divider />
