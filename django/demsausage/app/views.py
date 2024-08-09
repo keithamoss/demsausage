@@ -147,7 +147,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         cache_key = get_elections_cache_key()
 
         if request.method == "GET":
-            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
+            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-election_day"), many=True)
 
             cache.set(cache_key, json.dumps(serializer.data))
             return Response(serializer.data)

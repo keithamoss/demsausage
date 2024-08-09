@@ -10,7 +10,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import { styled } from '@mui/material/styles';
-import { groupBy, sortBy } from 'lodash-es';
+import { groupBy } from 'lodash-es';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
@@ -46,9 +46,7 @@ export default function ElectionsList(props: Props) {
 	const navigate = useNavigate();
 
 	const elections = useAppSelector((state) => selectAllElections(state));
-	const electionsByYear = groupBy(sortBy(elections, 'election_day').reverse(), (e) =>
-		new Date(e.election_day).getFullYear(),
-	);
+	const electionsByYear = groupBy(elections, (e) => new Date(e.election_day).getFullYear());
 
 	const onClickElection = (election: Election) => () => {
 		navigateToElection(navigate, election, getViewForElection(election));
