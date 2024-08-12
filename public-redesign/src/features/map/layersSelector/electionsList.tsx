@@ -76,8 +76,12 @@ export default function ElectionsList(props: Props) {
 					position: 'relative',
 					overflow: 'auto',
 					'& ul': { padding: 0 },
+					// The first subheading doesn't need any top padding
 					'& li.MuiListSubheader-root:not(:first-of-type)': { paddingTop: 2 },
-					'& li.MuiListSubheader-root': { paddingTop: 0, zIndex: 2 },
+					// This was when the "scroll and keep the subheading pinned" code was working. Left for posterity in case we ever revisti to fix that.
+					'& li.MuiListSubheader-root': { zIndex: 2 },
+					// The first election in each year doesn't need any top padding either
+					'& li.MuiListSubheader-root + li.MuiListItem-root': { paddingTop: 0 },
 				}}
 			>
 				{Object.keys(electionsByYear)
