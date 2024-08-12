@@ -1,28 +1,34 @@
-import { CssBaseline } from "@mui/material";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { store } from "./app/store";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import routes from "./routes";
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './app/routing/routes';
+import { electionsApi } from './app/services/elections';
+import { store } from './app/store';
+import { theme } from './app/ui/theme';
+// import "./browserstack";
 
-const container = document.getElementById("root")!;
+const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <CssBaseline />
-        {routes()}
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
-);
+store.dispatch(electionsApi.endpoints.getElections.initiate());
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+root.render(
+	<React.StrictMode>
+		<Provider store={store}>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<HelmetProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<RouterProvider router={router} />
+					</ThemeProvider>
+				</HelmetProvider>
+			</LocalizationProvider>
+		</Provider>
+	</React.StrictMode>,
+);

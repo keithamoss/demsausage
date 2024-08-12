@@ -1,86 +1,95 @@
-import * as React from "react";
+import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, IconButton, Toolbar } from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Outlet, useNavigate } from 'react-router-dom';
+import './App.css';
+import NavigationDrawer from './app/routing/navigationDrawer';
+import { mapaThemePrimaryPurple } from './app/ui/theme';
+import { getAPIBaseURL, getBaseURL } from './app/utils';
+import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
+import DemSausageWhiteCrestGrillRaw from './assets/crest/white_crest_grill.svg?raw';
+import { createInlinedSVGImage } from './features/icons/svgHelpers';
 
-import { grey } from "@mui/material/colors";
-import CssBaseline from "@mui/material/CssBaseline";
-import Fab from "@mui/material/Fab";
-import { styled } from "@mui/material/styles";
-// import BottomBar from "./swipe/bottom_bar";
-import BottomDrawer from "./pages/swipe/bottom_drawer";
-import Map from "./pages/swipe/map";
+export default function App() {
+	const navigate = useNavigate();
 
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { IMapFilterOptions } from "./pages/swipe/infra/map_stuff";
-import LayersSelector from "./pages/swipe/layers_selector";
-import SideMenuDrawer from "./pages/swipe/side_menu_drawer";
+	const onNavigateHome = useCallback(() => navigate(''), [navigate]);
 
-// const bottomNav = 56;
-// const drawerBleeding = 175 + bottomNav;
-export const drawerBleeding = 245;
-// const fixedBarHeightWithTopPadding = 56;
-// const magicNumber = 30;
+	const [drawerOpen, setDrawerOpen] = useState(false);
 
-interface Props {}
+	const onToggleDrawer = useCallback(
+		(open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+			if (
+				event.type === 'keydown' &&
+				((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+			) {
+				return;
+			}
 
-const Root = styled("div")(({ theme }) => ({
-  height: "100%",
-  backgroundColor:
-    theme.palette.mode === "light"
-      ? grey[100]
-      : theme.palette.background.default,
-}));
+			setDrawerOpen(open);
+		},
+		[],
+	);
 
-const AddStallFab = styled(Fab)(() => ({
-  position: "absolute",
-  //   bottom: `${drawerBleeding + bottomNav + 16}px`,
-  bottom: `${drawerBleeding + 16}px`,
-  right: "16px",
-  backgroundColor: "#6740b4",
-}));
+	return (
+		<div className="App">
+			<Helmet>
+				<title>Democracy Sausage</title>
 
-export default function SwipeableEdgeDrawerSimple(props: Props) {
-  const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
-  const toggleSideDrawerOpen = (e: any) => {
-    setSideDrawerOpen(!sideDrawerOpen);
-  };
+				{/* Open Graph: Facebook / Twitter */}
+				<meta property="og:url" content={getBaseURL()} />
+				<meta property="og:title" content="Democracy Sausage" />
+				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/current_map_image/`} />
+			</Helmet>
 
-  const [mapSearchResults, setMapSearchResults] = React.useState<number | null>(
-    null
-  );
-  const toggleMapSearchResults = (resultSet: number) => {
-    setMapSearchResults(resultSet);
-  };
+			<AppBar
+				position="sticky"
+				sx={{
+					backgroundColor: mapaThemePrimaryPurple,
+				}}
+			>
+				<Toolbar variant="dense">
+					<IconButton
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="menu"
+						sx={{ mr: 0.5 }}
+						onClick={onToggleDrawer(true)}
+					>
+						<MenuIcon />
+					</IconButton>
 
-  const [mapFilterOptions, setMapFilterOptions] =
-    React.useState<IMapFilterOptions>({});
+					{createInlinedSVGImage(
+						DemSausageWhiteCrestGrillRaw,
+						{
+							marginRight: 20,
+							paddingTop: 7,
+							paddingBottom: 7,
+							cursor: 'pointer',
+							height: 48,
+						},
+						onNavigateHome,
+					)}
 
-  return (
-    <Root>
-      <CssBaseline />
+					{createInlinedSVGImage(
+						DemSausageBannerRaw,
+						{
+							marginRight: 20,
+							paddingTop: 7,
+							paddingBottom: 7,
+							cursor: 'pointer',
+							height: 48,
+						},
+						onNavigateHome,
+					)}
+				</Toolbar>
+			</AppBar>
 
-      <SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
+			<Outlet />
 
-      <Map
-        mapSearchResults={mapSearchResults}
-        mapFilterOptions={mapFilterOptions}
-      />
-
-      <LayersSelector />
-
-      <AddStallFab
-        color="primary"
-        aria-label="add"
-        onClick={() => (document.location.href = "/add-stall")}
-      >
-        <AddLocationIcon />
-      </AddStallFab>
-
-      <BottomDrawer
-        toggleSideDrawerOpen={toggleSideDrawerOpen}
-        toggleMapSearchResults={toggleMapSearchResults}
-        onChangeFilter={setMapFilterOptions}
-      />
-
-      {/* <BottomBar /> */}
-    </Root>
-  );
+			<NavigationDrawer open={drawerOpen} onToggleDrawer={onToggleDrawer} />
+		</div>
+	);
 }

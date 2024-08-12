@@ -1,10 +1,11 @@
 {
   "name": "public",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
-    "@sentry/browser": "^7.27.0",
+    "@sentry/browser": "^7.29.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
@@ -12,9 +13,9 @@
     "copy-to-clipboard": "^3.3.3",
     "core-js": "^3.26.1",
     "dot-prop-immutable": "^2.1.1",
-    "js-cookie": "^3.0.1",
+    "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.1.1",
+    "luxon": "^3.2.1",
     "material-ui": "^0.20.2",
     "material-ui-bottom-sheet": "^0.5.1",
     "material-ui-fullscreen-dialog": "^0.7.2",
@@ -23,10 +24,10 @@
     "ol": "^7.1.0",
     "qs": "^6.11.0",
     "raf": "^3.4.1",
-    "react": "^17.0.2",
+    "react": "^18.3.1",
     "react-app-polyfill": "^2.0.0",
     "react-custom-scrollbars": "^4.2.1",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.3.1",
     "react-ga": "^3.3.1",
     "react-google-maps": "^9.4.5",
     "react-google-maps-loader": "^4.3.0",
@@ -36,73 +37,59 @@
     "react-router-redux": "^4.0.8",
     "react-string-replace": "^1.1.0",
     "react-tiny-virtual-list": "^2.2.0",
+    "react-transition-group": "^1.2.1",
     "recompose": "^0.30.0",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-form": "^8.3.9",
     "redux-form-material-ui": "^4.3.4",
     "redux-responsive": "^4.3.8",
-    "redux-thunk": "^2.4.1",
-    "reselect": "^4.1.6",
-    "styled-components": "^5.3.6",
-    "usehooks-ts": "2.6.0",
+    "redux-thunk": "^2.4.2",
+    "reselect": "^4.1.7",
+    "styled-components": "5.3.6",
+    "usehooks-ts": "^2.9.1",
     "victory": "^36.6.8",
     "web-vitals": "^3.1.0"
   },
   "devDependencies": {
+    "@sentry/types": "^8.9.2",
+    "@sentry/vite-plugin": "^2.18.0",
+    "@testing-library/dom": "^10.1.0",
     "@types/history": "^5.0.0",
     "@types/jest": "^28.1.8",
-    "@types/js-cookie": "^3.0.2",
-    "@types/lodash-es": "^4.17.6",
-    "@types/luxon": "^3.1.0",
+    "@types/js-cookie": "^3",
+    "@types/lodash-es": "^4.17.9",
+    "@types/luxon": "^3.2.0",
     "@types/material-ui": "^0.21.12",
     "@types/node": "^18.11.16",
     "@types/prop-types": "^15.7.5",
     "@types/qs": "^6.9.7",
-    "@types/react": "^17.0.43",
-    "@types/react-copy-to-clipboard": "^5.0.4",
-    "@types/react-dom": "^18.0.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@types/react-helmet": "^6.1.6",
-    "@types/react-redux": "^7.1.24",
+    "@types/react-is": "^18",
+    "@types/react-redux": "7.1.24",
     "@types/react-router": "3.0.28",
-    "@types/react-router-redux": "^4.0.55",
+    "@types/react-router-redux": "4.0.55",
+    "@types/react-transition-group": "^1",
     "@types/recompose": "^0.30.10",
     "@types/redux-form": "^8.3.5",
-    "@types/styled-components": "^5.1.26",
+    "@types/styled-components": "5.1.26",
     "@types/victory": "^35.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-flowtype": "^5.10.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-mui-unused-classes": "^1.0.3",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.4.2",
-    "prettier": "^2.8.1",
-    "prettier-eslint": "^15.0.1",
-    "react-scripts": "^4.0.3",
-    "typescript": "^4.7.4"
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "prettier": "^3.2.5",
+    "prop-types": "^15.8.1",
+    "react-is": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vite-plugin-checker": "^0.6.4",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx --cache ./",
-    "fix": "eslint --ext .js,.jsx,.ts,.tsx --cache  --fix ./"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "vite --host",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -117,12 +104,5 @@
       "last 1 safari version"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
-  }
+  "packageManager": "yarn@4.3.1"
 }

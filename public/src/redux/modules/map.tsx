@@ -146,7 +146,7 @@ Object.entries(spriteIconConfig).forEach(([iconName, iconConfig]: any) => {
 
   if (spriteConfig !== undefined) {
     const iconAttributes = {
-      src: `./icons/sprite_${sprite.meta.hash}.png`,
+      src: `/icons/sprite_${sprite.meta.hash}.png`,
       offset: [Math.abs(spriteConfig.frame.x), Math.abs(spriteConfig.frame.y)],
       size: [spriteConfig.spriteSourceSize.w, spriteConfig.spriteSourceSize.h],
       scale: iconConfig.scale,

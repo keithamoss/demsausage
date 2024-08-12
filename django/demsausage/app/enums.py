@@ -11,6 +11,21 @@ class ProfileSettings(str, EnumBase):
     pass
 
 
+class PollingPlaceState(str, EnumBase):
+    NSW = "NSW"
+    VIC = "VIC"
+    QLD = "QLD"
+    WA = "WA"
+    SA = "SA"
+    TAS = "TAS"
+    ACT = "ACT"
+    NT = "NT"
+    Overseas = "Overseas"
+
+    def __str__(self):
+        return self.value
+
+
 class PollingPlaceStatus(str, EnumBase):
     ARCHIVED = "Archived"
     ACTIVE = "Active"
@@ -20,6 +35,15 @@ class PollingPlaceStatus(str, EnumBase):
         return self.value
 
 
+class PollingPlaceWheelchairAccess(str, EnumBase):
+    NONE = "None"
+    ASSISTED = "Assisted"
+    FULL = "Full"
+    UNKNOWN = "Unknown"
+
+    def __str__(self):
+        return self.value
+
 class PollingPlaceChanceOfSausage(int, EnumBase):
     NO_IDEA = 0
     UNLIKELY = 1
@@ -28,6 +52,29 @@ class PollingPlaceChanceOfSausage(int, EnumBase):
     STRONG = 4
 
     def __int__(self):
+        return self.value
+
+
+class PollingPlaceJurisdiction(str, EnumBase):
+    WA = "wa"
+    SA = "sa"
+    NSW = "nsw"
+    ACT = "act"
+    VIC = "vic"
+    NT = "nt"
+    TAS = "tas"
+    QLD = "qld"
+    AUS = "aus"
+
+    def __str__(self):
+        return self.value
+
+
+class StallSubmitterType(str, EnumBase):
+    OWNER = "owner"
+    TIPOFF = "tipoff"
+
+    def __str__(self):
         return self.value
 
 

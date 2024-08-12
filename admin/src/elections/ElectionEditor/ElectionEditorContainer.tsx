@@ -65,7 +65,7 @@ const fromFormValues = (formValues: any): IElectionFormValues => {
     name: formValues.name,
     short_name: formValues.short_name,
     is_hidden: formValues.is_hidden,
-    election_day: electionDayInUTC.toISO(),
+    election_day: electionDayInUTC.toISO() as string,
   }
 }
 

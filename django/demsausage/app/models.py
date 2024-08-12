@@ -2,18 +2,22 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceStatus, ProfileSettings,
-                                  StallStatus, TaskStatus)
+                                  PollingPlaceJurisdiction, PollingPlaceState,
+                                  PollingPlaceStatus,
+                                  PollingPlaceWheelchairAccess,
+                                  ProfileSettings, StallStatus,
+                                  StallSubmitterType, TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.util import make_logger
+from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import GinIndex
 from django.db.models import JSONField
-from model_utils import FieldTracker
-from simple_history.models import HistoricalRecords
 
 logger = make_logger(__name__)
 
@@ -77,8 +81,10 @@ class Elections(models.Model):
     short_name = models.TextField(unique=True)
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
+    is_federal = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
+    jurisdiction = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction])
 
     def is_active(self):
         return datetime.now(pytz.utc).date() <= self.election_day.date()
@@ -124,8 +130,9 @@ class PollingPlaces(models.Model):
     premises = models.TextField(blank=True)
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
-    state = models.CharField(max_length=8)
-    wheelchair_access = models.TextField(blank=True)
+    state = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceState])
+    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess])
+    wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
@@ -173,6 +180,7 @@ class Stalls(models.Model):
     approved_on = models.DateTimeField(null=True)
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
     mail_confirmed = models.BooleanField(default=True)
+    submitter_type = models.TextField(choices=[(tag, tag.value) for tag in StallSubmitterType], blank=True)
 
     history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
     tracker = FieldTracker()
@@ -200,7 +208,7 @@ class ElectoralBoundaries(models.Model):
     geom = models.MultiPolygonField(null=False)
     election_ids = JSONField(default=list, blank=True)
     division_name = models.TextField()
-    state = models.CharField(max_length=8)
+    state = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceState])
     extras = JSONField(default=dict, blank=True)
     loaded = models.DateField(auto_now_add=True)
 

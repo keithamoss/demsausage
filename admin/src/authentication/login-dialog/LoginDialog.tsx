@@ -19,6 +19,11 @@ export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialog
           providerUrl={`${getAPIBaseURL()}/login/google-oauth2/`}
           colour="#DD4B39"
         />
+        <SocialLoginButton
+          providerName="Microsoft"
+          providerUrl={`${getAPIBaseURL()}/login/azuread-oauth2/`}
+          colour="#00A4EF"
+        />
       </Dialog>
     )
   }

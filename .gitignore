@@ -1,5 +1,4 @@
 .DS_Store
-/.vscode
 *.code-workspace
 /v3-test/*
 build/
@@ -11,7 +10,12 @@ logs/
 *.pyc
 initial-data/emails.csv
 TODO*.md
+REDESIGN.md
+WSL.md
 redis/*
 demsausage-logs-federal-2022/
 db-a-logs-federal-election-2022/
 .dccache
+.iac-data/
+
+frontend/

@@ -1,4 +1,5 @@
-
+import re
+import urllib.parse
 from datetime import datetime
 
 import pytz
@@ -9,11 +10,12 @@ from demsausage.app.models import (Elections, MailgunEvents,
                                    PollingPlaces, Profile, Stalls)
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none
-from django.contrib.auth.models import User
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
+from django.contrib.auth.models import User
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -52,11 +54,19 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'is_approved',
             'settings')
 
+class ElectionURLSafeNameCharField(serializers.CharField):
+    """ Serializer for CharField -- creates a URL safe version of the election name"""
+    # "New South Wales Election 2023" to "new_south_wales_election_2023"
+
+    def to_representation(self, value):
+        return urllib.parse.quote(re.sub("\s", "_", value).lower())
 
 class ElectionsSerializer(serializers.ModelSerializer):
+    name_url_safe = ElectionURLSafeNameCharField(source="name", allow_null=False)
+    
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded")
+        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "jurisdiction")
 
     # Prevents us from editing existing elections (e.g. When we were setting the new bounding boxes)
     # def validate_election_day(self, value):
@@ -70,7 +80,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
 
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "election_day", "polling_places_loaded", "stats")
+        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "stats")
 
     def get_stats(self, obj):
         return {
@@ -149,7 +159,7 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "ec_id", "extras")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "ec_id", "extras")
 
     def _update_facility_type(self, validated_data):
         try:
@@ -202,7 +212,7 @@ class PollingPlacesManagementSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "status", "election", "ec_id", "extras")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "stall", "facility_type", "status", "election", "ec_id", "extras")
 
 
 class PollingPlacesInfoSerializer(PollingPlacesSerializer):
@@ -218,7 +228,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "noms", "name", "premises", "ec_id")
+        fields = ("id", "noms", "name", "premises", "state", "ec_id")
 
     def get_properties(self, instance, fields):
         props = {"noms": None}
@@ -281,7 +291,7 @@ class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
         model = PollingPlaces
         geo_field = "geom"
 
-        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "distance_km")
+        fields = ("id", "name", "geom", "facility_type", "booth_info", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "premises", "address", "divisions", "state", "chance_of_sausage", "stall", "facility_type", "distance_km")
 
 
 class StallsSerializer(serializers.ModelSerializer):
@@ -339,7 +349,17 @@ class StallsUserEditSerializer(StallsSerializer):
 class StallsManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on")
+        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
+
+
+class StallsOwnerManagementSerializer(StallsManagementSerializer):
+    pass
+
+
+class StallsTipOffManagementSerializer(StallsSerializer):
+    class Meta:
+        model = Stalls
+        fields = ("noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
 
 
 class PendingStallsSerializer(StallsSerializer):

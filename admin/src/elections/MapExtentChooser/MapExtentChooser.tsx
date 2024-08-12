@@ -2,7 +2,7 @@
 import { MenuItem, SelectField } from 'material-ui'
 import GeoJSON from 'ol/format/GeoJSON'
 import Geometry from 'ol/geom/Geometry'
-import GeometryType from 'ol/geom/GeometryType'
+// import GeometryType from 'ol/geom/GeometryType'
 import Polygon from 'ol/geom/Polygon'
 import Draw from 'ol/interaction/Draw'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -91,7 +91,8 @@ class MapExtentChooser extends React.PureComponent<TComponentProps, {}> {
     if (this.map !== undefined && source !== null) {
       const draw = new Draw({
         source,
-        type: GeometryType.CIRCLE,
+        // type: GeometryType.CIRCLE,
+        type: 'Circle',
         geometryFunction: createBox(),
       })
       draw.on('drawstart', (_event: DrawEvent) => {

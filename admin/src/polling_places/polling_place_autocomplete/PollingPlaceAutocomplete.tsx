@@ -4,10 +4,9 @@ import AutoComplete from 'material-ui/AutoComplete'
 import { ListItem } from 'material-ui/List'
 import MenuItem from 'material-ui/MenuItem'
 import * as React from 'react'
+import reactStringReplace from 'react-string-replace'
 import styled from 'styled-components'
 import { getPollingPlaceLongName, IPollingPlace } from '../../redux/modules/polling_places'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const reactStringReplace = require('react-string-replace')
 
 interface IProps {
   searchText: string
