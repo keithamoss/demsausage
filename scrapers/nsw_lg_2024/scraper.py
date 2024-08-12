@@ -14,7 +14,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
-USE_CACHE = True
+USE_CACHE = False
 OUTPUT_FILE = f'nsw-{datetime.date.today().isoformat()}.csv'
 INDEX_PAGE = 'https://elections.nsw.gov.au/elections/find-my-electorate'
 
