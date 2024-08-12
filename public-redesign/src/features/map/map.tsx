@@ -21,6 +21,7 @@ import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
+import { isEmbedModeActive } from '../embedBuilder/embedBuilderHelpers';
 import { getPollingPlaceIdsFromFeatures } from '../pollingPlaces/pollingPlaceHelpers';
 import SearchBarCosmeticNonFunctional from '../search/searchByAddressOrGPS/searchBar/searchBarCosmeticNonFunctional';
 import AddStallButton from './addStallButton/addStallButton';
@@ -265,7 +266,7 @@ function Map(props: Props) {
 				<SearchBarCosmeticNonFunctional />
 			</Box>
 
-			<MapWelcomeToTheNewWebsite />
+			{isEmbedModeActive() === false && <MapWelcomeToTheNewWebsite />}
 
 			<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isMapDataLoading}>
 				<CircularProgress color="inherit" />
