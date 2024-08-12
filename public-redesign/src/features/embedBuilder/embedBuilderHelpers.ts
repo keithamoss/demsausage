@@ -1,6 +1,8 @@
 import { Election } from '../../app/services/elections';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 
+export const isEmbedModeActive = () => navigator.userAgent.includes('Demsausage-Webdriver-Screenshot-Service');
+
 export const getEmbedStaticMapImageURL = (election: Election) => `${getAPIBaseURL()}/0.1/map_image/${election.id}/`;
 
 // export const embedPrecannedMapBboxes = [
