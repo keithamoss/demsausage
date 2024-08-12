@@ -1,4 +1,4 @@
-import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
@@ -45,14 +45,6 @@ export default function AboutPage() {
 			</Helmet>
 
 			<PageWrapper>
-				<Button
-					onClick={() => {
-						throw new Error('Foobar');
-					}}
-				>
-					Click Me!
-				</Button>
-
 				<Question>What is this?</Question>
 				<Answer>A map of sausage and cake availability on election day.</Answer>
 
