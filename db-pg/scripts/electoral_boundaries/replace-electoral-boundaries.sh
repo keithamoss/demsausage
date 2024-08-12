@@ -25,7 +25,7 @@ if [[ -f $dev_db_dump_file && -s $dev_db_dump_file ]]; then
 
   echo "Backup electoral boundaries table from production (host=$DB_HOST)"
 
-  prod_db_dump_file="digitalocean_db-a_electoralboundaries_${DB_SCHEMA}_${now}.dump"
+  prod_db_dump_file="aws-db_electoralboundaries_${DB_SCHEMA}_${now}.dump"
   table_name="app_electoralboundaries"
 
   pg_dump --host=$DB_HOST --username=$DB_USERNAME --format=custom --schema=$DB_SCHEMA --table $DB_SCHEMA.$table_name --verbose $DB_NAME > $prod_db_dump_file
