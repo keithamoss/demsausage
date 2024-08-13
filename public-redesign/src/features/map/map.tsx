@@ -17,6 +17,7 @@ import { navigateToPollingPlaceFromFeature } from '../../app/routing/navigationH
 import { navigateToSearchPollingPlacesByIds } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
@@ -228,6 +229,7 @@ function Map(props: Props) {
 				<title>{election.name} | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/${election.name_url_safe}/`} />
 				<meta property="og:title" content={`${election.name} | Democracy Sausage`} />
 				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
