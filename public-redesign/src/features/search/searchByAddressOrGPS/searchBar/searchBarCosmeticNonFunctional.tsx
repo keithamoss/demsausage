@@ -129,8 +129,9 @@ export default function SearchBarCosmeticNonFunctional(props: Props) {
 					'aria-label': 'Search for polling places',
 					disabled: true,
 					className: 'searchBar',
+					style: { color: 'red', opacity: '1 !important' },
 				}}
-				sx={{ ml: 1, flex: 1 }}
+				sx={{ ml: 1, flex: 1, color: 'purple', opacity: '1 !important' }}
 				startAdornment={searchFieldStartAdornment}
 			/>
 
