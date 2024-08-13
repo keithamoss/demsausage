@@ -78,7 +78,7 @@ export default function SearchComponent(props: Props) {
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 	const urlLonLat = urlLonLatFromGPS !== '' ? urlLonLatFromGPS : urlLonLatFromSearch;
 
-	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	// ######################
 	// Mapbox Search Query
@@ -123,7 +123,8 @@ export default function SearchComponent(props: Props) {
 		isSuccessFetchingNearbyPollingPlaces === true &&
 		pollingPlaceNearbyResults !== undefined
 			? pollingPlaceNearbyResults.filter(
-					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings) === true,
+					(pollingPlace) =>
+						doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings, election.id) === true,
 				)
 			: undefined;
 
@@ -138,6 +139,7 @@ export default function SearchComponent(props: Props) {
 	return (
 		<React.Fragment>
 			<SearchBar
+				election={election}
 				autoFocusSearchField={autoFocusSearchField}
 				enableFiltering={enableFiltering}
 				isFetching={isFetchingNearbyPollingPlaces === true || isFetchingMapboxResults === true}
@@ -221,7 +223,7 @@ export default function SearchComponent(props: Props) {
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
 				<SearchByAddressOrGPSResultsContainer
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
-					isFiltered={hasFilterOptions(mapFilterSettings) === true}
+					isFiltered={hasFilterOptions(mapFilterSettings, election.id) === true}
 					isSearchingByGPS={urlLonLatFromGPS !== ''}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					enableViewOnMap={enableViewOnMap}

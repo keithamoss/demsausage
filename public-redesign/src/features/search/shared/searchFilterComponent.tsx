@@ -8,44 +8,52 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
+import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../app/appSlice';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 import { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
 
 interface Props {
+	election: Election;
 	marginBottom?: number;
 }
 
 export default function SearchFilterComponent(props: Props) {
-	const { marginBottom } = props;
+	const { election, marginBottom } = props;
 
 	const dispatch = useAppDispatch();
 
-	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	const onClickFilterOptionListItemButton = useCallback(
 		(value: keyof IMapFilterSettings) => () => {
 			dispatch(
 				setMapFilterSettings({
-					...mapFilterSettings,
-					[value]: !mapFilterSettings[value],
+					mapFilterSettings: {
+						...mapFilterSettings,
+						[value]: !mapFilterSettings[value],
+					},
+					electionId: election.id,
 				}),
 			);
 		},
-		[dispatch, mapFilterSettings],
+		[dispatch, election.id, mapFilterSettings],
 	);
 
 	const onChangeFilterOption = useCallback(
 		(value: keyof IMapFilterSettings) => (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
 			dispatch(
 				setMapFilterSettings({
-					...mapFilterSettings,
-					[value]: checked,
+					mapFilterSettings: {
+						...mapFilterSettings,
+						[value]: checked,
+					},
+					electionId: election.id,
 				}),
 			);
 		},
-		[dispatch, mapFilterSettings],
+		[dispatch, election.id, mapFilterSettings],
 	);
 
 	return (

@@ -10,6 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers/navigationHelpersMap';
+import { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
 import SearchFilterComponent from '../../shared/searchFilterComponent';
@@ -23,6 +24,7 @@ const IconButtonOutlined = styled(Button)({
 });
 
 interface Props {
+	election: Election;
 	numberOfResults: number;
 	isFiltered: boolean;
 	pollingPlacesLoaded: boolean;
@@ -31,7 +33,7 @@ interface Props {
 }
 
 export default function SearchByIdsResultsContainer(props: Props) {
-	const { numberOfResults, isFiltered, pollingPlacesLoaded, onViewOnMap, children } = props;
+	const { election, numberOfResults, isFiltered, pollingPlacesLoaded, onViewOnMap, children } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -42,8 +44,10 @@ export default function SearchByIdsResultsContainer(props: Props) {
 	// Filter Control
 	// ######################
 	const [isSearchBarFilterControlOpen, setIsSearchBarFilterControlOpen] = useState(false);
-	const isMapFiltered = useAppSelector(selectIsMapFiltered);
-	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
+	const isMapFiltered = useAppSelector((state) => selectIsMapFiltered(state, election.id));
+	const numberOfMapFilterSettingsApplied = useAppSelector((state) =>
+		selectNumberOfMapFilterSettingsApplied(state, election.id),
+	);
 
 	const onClickFilterControl = useCallback(() => {
 		setIsSearchBarFilterControlOpen(!isSearchBarFilterControlOpen);
@@ -145,7 +149,7 @@ export default function SearchByIdsResultsContainer(props: Props) {
 				)}
 			</Box>
 
-			{isSearchBarFilterControlOpen === true && <SearchFilterComponent marginBottom={1} />}
+			{isSearchBarFilterControlOpen === true && <SearchFilterComponent election={election} marginBottom={1} />}
 
 			{pollingPlacesLoaded === false && (
 				<Alert

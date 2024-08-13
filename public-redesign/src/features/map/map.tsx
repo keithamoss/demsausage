@@ -138,7 +138,7 @@ function Map(props: Props) {
 	const mapViewFromURL = createMapViewFromURL(params);
 	const [initialMapView] = useState(mapViewFromURL);
 
-	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	// ######################
 	// Map Loading
@@ -263,7 +263,7 @@ function Map(props: Props) {
 					margin: '8px',
 				}}
 			>
-				<SearchBarCosmeticNonFunctional />
+				<SearchBarCosmeticNonFunctional election={election} />
 			</Box>
 
 			{isEmbedModeActive() === false && <MapWelcomeToTheNewWebsite />}
