@@ -252,19 +252,21 @@ function Map(props: Props) {
 
 			<LayersSelector electionId={election.id} />
 
-			<AddStallButton />
+			{isEmbedModeActive() === false && <AddStallButton />}
 
-			<Box
-				sx={{
-					position: 'absolute',
-					bottom: '24px',
-					width: '96%',
-					zIndex: 1050,
-					margin: '8px',
-				}}
-			>
-				<SearchBarCosmeticNonFunctional election={election} />
-			</Box>
+			{isEmbedModeActive() === false && (
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: '24px',
+						width: '96%',
+						zIndex: 1050,
+						margin: '8px',
+					}}
+				>
+					<SearchBarCosmeticNonFunctional election={election} />
+				</Box>
+			)}
 
 			{isEmbedModeActive() === false && <MapWelcomeToTheNewWebsite />}
 
