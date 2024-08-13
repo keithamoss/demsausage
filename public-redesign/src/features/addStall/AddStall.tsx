@@ -9,6 +9,7 @@ import { useAppSelector } from '../../app/hooks/store';
 import { navigateToAddStallSelectPollingPlaceFromElectionAndReplace } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../app/routing/routingHelpers';
 import { useGetElectionsQuery } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { getBaseURL } from '../../app/utils';
 import { selectActiveElections } from '../elections/electionsSlice';
@@ -91,6 +92,7 @@ export default function AddStall() {
 				<title>Add a sausage sizzle or cake stall | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/about/`} />
 				<meta property="og:title" content="Add a sausage sizzle or cake stall | Democracy Sausage" />
 			</Helmet>

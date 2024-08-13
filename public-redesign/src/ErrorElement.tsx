@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
+import { getDefaultOGMetaTags } from './app/ui/socialSharingTagsHelpers';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
 import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
 import DemSausageCrestBannerRaw from './assets/crest/crest_banner.svg?raw';
@@ -36,6 +37,8 @@ function ErrorElement() {
 		<StyledInteractableBoxFullHeight>
 			<Helmet>
 				<title>Error | Democracy Sausage</title>
+
+				{getDefaultOGMetaTags()}
 			</Helmet>
 
 			<AppBar

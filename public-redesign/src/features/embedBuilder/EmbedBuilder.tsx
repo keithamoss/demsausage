@@ -25,6 +25,7 @@ import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../../app/hooks';
 import { Election } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { getBaseURL } from '../../app/utils';
 import { appBarHeight } from '../addStall/addStallHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
@@ -155,6 +156,7 @@ function EmbedBuilder(props: Props) {
 				<title>Embed The Map | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/embed/`} />
 				<meta property="og:title" content="Embed The Map | Democracy Sausage" />
 			</Helmet>
