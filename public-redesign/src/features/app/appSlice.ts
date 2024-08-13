@@ -6,7 +6,9 @@ import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/mapHelpers';
 import { IMapFilterSettings, IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
-	mapFilterSettings: IMapFilterSettings;
+	mapFilterSettings: {
+		[key: number]: IMapFilterSettings;
+	};
 	searchBarFilterControlState: boolean;
 	pollingPlaces: IMapPollingPlaceGeoJSONFeatureCollection | undefined;
 	mapFeatures: IPollingPlace | null | undefined;
@@ -76,8 +78,11 @@ export const appSlice = createSlice({
 		// setActiveElectionId: (state, action: PayloadAction<number | undefined>) => {
 		// 	state.electionId = action.payload;
 		// },
-		setMapFilterSettings: (state, action: PayloadAction<IMapFilterSettings>) => {
-			state.mapFilterSettings = action.payload;
+		setMapFilterSettings: (
+			state,
+			action: PayloadAction<{ mapFilterSettings: IMapFilterSettings; electionId: number }>,
+		) => {
+			state.mapFilterSettings[action.payload.electionId] = action.payload.mapFilterSettings;
 		},
 		setSearchBarFilterControlState: (state, action: PayloadAction<boolean>) => {
 			state.searchBarFilterControlState = action.payload;
@@ -138,16 +143,32 @@ export const { setMapFilterSettings, setSearchBarFilterControlState, setPollingP
 
 export const selectMapFeatures = (state: RootState) => state.app.mapFeatures;
 
-export const selectMapFilterSettings = (state: RootState) => state.app.mapFilterSettings;
+// These selectors for the map filter settings accept electionId into the selector as an external parameter
+// Ref: https://stackoverflow.com/a/61220891/7368493
+export const selectMapFilterSettings = createSelector(
+	[
+		// First input selector extracts filter settings from the state
+		(state: RootState) => state.app.mapFilterSettings,
+		// Second input selector forwards the electionId argument
+		(mapFilterSettings, electionId: number) => electionId,
+	],
+	(mapFilterSettings, electionId) => mapFilterSettings[electionId] || {},
+);
 
 export const selectIsMapFiltered = createSelector(
-	selectMapFilterSettings,
-	(mapFilterSettings) => values(mapFilterSettings).find((option) => option === true) || false,
+	[
+		// First input selector extracts forwards the electionId argument to selectMapFilterSettings
+		(state: RootState, electionId: number) => selectMapFilterSettings(state, electionId),
+	],
+	(mapFilterSettingsForElection) => values(mapFilterSettingsForElection).find((option) => option === true) || false,
 );
 
 export const selectNumberOfMapFilterSettingsApplied = createSelector(
-	selectMapFilterSettings,
-	(mapFilterSettings) => values(mapFilterSettings).filter((option) => option === true).length,
+	[
+		// First input selector extracts forwards the electionId argument to selectMapFilterSettings
+		(state: RootState, electionId: number) => selectMapFilterSettings(state, electionId),
+	],
+	(mapFilterSettingsForElection) => values(mapFilterSettingsForElection).filter((option) => option === true).length,
 );
 
 export const selectSearchBarFilterControlState = (state: RootState) => state.app.searchBarFilterControlState;

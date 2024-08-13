@@ -8,6 +8,7 @@ export const olStyleFunction = (
 	feature: IMapPollingPlaceFeature,
 	resolution: number,
 	mapFilterSettings: IMapFilterSettings,
+	electionId: number,
 ) => {
 	const noms = getObjectOrUndefinedFromFeature(feature, 'noms');
 
@@ -18,12 +19,15 @@ export const olStyleFunction = (
 	const nomsReader = new NomsReader(noms as IMapPollingGeoJSONNoms);
 
 	if (nomsReader.hasAnyNoms() === true) {
-		if (hasFilterOptions(mapFilterSettings) === true && satisfiesMapFilter(nomsReader, mapFilterSettings) === false) {
+		if (
+			hasFilterOptions(mapFilterSettings, electionId) === true &&
+			satisfiesMapFilter(nomsReader, mapFilterSettings, electionId) === false
+		) {
 			return null;
 		}
 
 		return resolution >= 7 ? nomsReader.getIconForNoms() : nomsReader.getDetailedIconsForNoms(feature /*, resolution*/);
 	}
 
-	return hasFilterOptions(mapFilterSettings) === false ? supportingIcons.grey_question.icon.ol : null;
+	return hasFilterOptions(mapFilterSettings, electionId) === false ? supportingIcons.grey_question.icon.ol : null;
 };

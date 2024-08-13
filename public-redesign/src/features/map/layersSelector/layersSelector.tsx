@@ -99,8 +99,18 @@ export default function LayersSelector(props: Props) {
 
 				<StyledLayersButton
 					size="small"
-					disabled={true}
+					onClick={toggleDrawer(true)}
+					disableTouchRipple
+					disableFocusRipple
+					disableRipple
 					sx={{
+						// Disable all visual on hover effects
+						'&.MuiButtonBase-root:hover': {
+							backgroundColor: 'white',
+							boxShadow:
+								'0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+						},
+
 						// Option 1: Purple + White
 						// backgroundColor: mapaThemePrimaryPurple,
 						// color: 'white !important',

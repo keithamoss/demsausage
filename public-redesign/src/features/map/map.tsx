@@ -17,6 +17,7 @@ import { navigateToPollingPlaceFromFeature } from '../../app/routing/navigationH
 import { navigateToSearchPollingPlacesByIds } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
 import { getDefaultElection, getViewForElection } from '../elections/electionHelpers';
@@ -138,7 +139,7 @@ function Map(props: Props) {
 	const mapViewFromURL = createMapViewFromURL(params);
 	const [initialMapView] = useState(mapViewFromURL);
 
-	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	// ######################
 	// Map Loading
@@ -228,6 +229,7 @@ function Map(props: Props) {
 				<title>{election.name} | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/${election.name_url_safe}/`} />
 				<meta property="og:title" content={`${election.name} | Democracy Sausage`} />
 				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
@@ -252,19 +254,21 @@ function Map(props: Props) {
 
 			<LayersSelector electionId={election.id} />
 
-			<AddStallButton />
+			{isEmbedModeActive() === false && <AddStallButton />}
 
-			<Box
-				sx={{
-					position: 'absolute',
-					bottom: '24px',
-					width: '96%',
-					zIndex: 1050,
-					margin: '8px',
-				}}
-			>
-				<SearchBarCosmeticNonFunctional />
-			</Box>
+			{isEmbedModeActive() === false && (
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: '24px',
+						width: '96%',
+						zIndex: 1050,
+						margin: '8px',
+					}}
+				>
+					<SearchBarCosmeticNonFunctional election={election} />
+				</Box>
+			)}
 
 			{isEmbedModeActive() === false && <MapWelcomeToTheNewWebsite />}
 

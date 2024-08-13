@@ -12,6 +12,7 @@ import {
 	navigateToSearchDrawerRootFromExternalToSearchBar,
 } from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
+import { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
@@ -20,7 +21,13 @@ import {
 } from '../../../app/appSlice';
 import './searchBar.css';
 
-export default function SearchBarCosmeticNonFunctional() {
+interface Props {
+	election: Election;
+}
+
+export default function SearchBarCosmeticNonFunctional(props: Props) {
+	const { election } = props;
+
 	const dispatch = useAppDispatch();
 
 	const params = useParams();
@@ -30,8 +37,10 @@ export default function SearchBarCosmeticNonFunctional() {
 
 	const searchBarSearchText = getStringParamOrEmptyString(params, 'search_term');
 
-	const isMapFiltered = useAppSelector(selectIsMapFiltered);
-	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
+	const isMapFiltered = useAppSelector((state) => selectIsMapFiltered(state, election.id));
+	const numberOfMapFilterSettingsApplied = useAppSelector((state) =>
+		selectNumberOfMapFilterSettingsApplied(state, election.id),
+	);
 
 	// ######################
 	// Search Field

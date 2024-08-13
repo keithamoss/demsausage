@@ -27,7 +27,7 @@ export default function SearchByIdsStackComponent(props: Props) {
 
 	const urlPollingPlaceIds = getCSVStringsAsFloats(getStringParamOrEmptyString(params, 'polling_place_ids'));
 
-	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state));
+	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	// ######################
 	// Polling Place By Ids Query
@@ -46,7 +46,8 @@ export default function SearchByIdsStackComponent(props: Props) {
 		isSuccessFetchingPollingPlacesByIds === true &&
 		pollingPlaceByIdsResult !== undefined
 			? pollingPlaceByIdsResult.filter(
-					(pollingPlace) => doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings) === true,
+					(pollingPlace) =>
+						doesPollingPlaceSatisifyFilterCriteria(pollingPlace, mapFilterSettings, election.id) === true,
 				)
 			: undefined;
 
@@ -70,8 +71,9 @@ export default function SearchByIdsStackComponent(props: Props) {
 
 			{pollingPlaceNearbyResultsFiltered !== undefined && (
 				<SearchByIdsResultsContainer
+					election={election}
 					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
-					isFiltered={hasFilterOptions(mapFilterSettings) === true}
+					isFiltered={hasFilterOptions(mapFilterSettings, election.id) === true}
 					pollingPlacesLoaded={election.polling_places_loaded}
 					onViewOnMap={onClickViewOnMap}
 				>

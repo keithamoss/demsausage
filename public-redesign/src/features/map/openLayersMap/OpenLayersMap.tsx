@@ -150,7 +150,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 
 				if (sausageLayer !== null) {
 					const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
-						olStyleFunction(feature, resolution, this.props.mapFilterSettings);
+						olStyleFunction(feature, resolution, this.props.mapFilterSettings, this.props.election.id);
 					sausageLayer.setStyle(styleFunction as StyleFunction);
 				}
 			}
@@ -391,7 +391,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.vectorSourceChangedEventKey = vectorSource.once('change', this.onVectorSourceChanged.bind(this));
 
 		const styleFunction = (feature: IMapPollingPlaceFeature, resolution: number) =>
-			olStyleFunction(feature, resolution, mapFilterSettings);
+			olStyleFunction(feature, resolution, mapFilterSettings, this.props.election.id);
 
 		const vectorLayer = new VectorLayer({
 			// renderMode: 'image',

@@ -27,6 +27,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { useUnmount } from '../../../../app/hooks/useUnmount';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
+import { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
@@ -39,6 +40,7 @@ import SearchFilterComponent from '../../shared/searchFilterComponent';
 import './searchBar.css';
 
 interface Props {
+	election: Election;
 	autoFocusSearchField?: boolean;
 	enableFiltering?: boolean;
 	isFetching: boolean;
@@ -50,6 +52,7 @@ interface Props {
 
 export default function SearchBar(props: Props) {
 	const {
+		election,
 		autoFocusSearchField,
 		enableFiltering,
 		isFetching,
@@ -84,8 +87,11 @@ export default function SearchBar(props: Props) {
 	}
 
 	const searchBarFilterControlOpen = useAppSelector((state) => selectSearchBarFilterControlState(state));
-	const isMapFiltered = useAppSelector(selectIsMapFiltered);
-	const numberOfMapFilterSettingsApplied = useAppSelector(selectNumberOfMapFilterSettingsApplied);
+	const isMapFiltered = useAppSelector((state) => selectIsMapFiltered(state, election.id));
+
+	const numberOfMapFilterSettingsApplied = useAppSelector((state) =>
+		selectNumberOfMapFilterSettingsApplied(state, election.id),
+	);
 
 	// ######################
 	// Search Field
@@ -403,7 +409,7 @@ export default function SearchBar(props: Props) {
 
 			{(isWaitingForGPSLocation === true || isFetching === true) && <LinearProgress color="secondary" />}
 
-			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchFilterComponent />}
+			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchFilterComponent election={election} />}
 
 			{isGeolocationErrored === true && (
 				<Alert severity="error" sx={{ mt: 2 }}>

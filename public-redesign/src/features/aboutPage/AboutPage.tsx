@@ -2,6 +2,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
 import { getBaseURL } from '../../app/utils';
@@ -40,6 +41,7 @@ export default function AboutPage() {
 				<title>FAQs and About Us | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/about/`} />
 				<meta property="og:title" content="FAQs and About Us | Democracy Sausage" />
 			</Helmet>
