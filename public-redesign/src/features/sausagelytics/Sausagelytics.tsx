@@ -20,6 +20,7 @@ import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { Election, useGetElectionStatsQuery } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { getBaseURL } from '../../app/utils';
 import { getDefaultElection } from '../elections/electionHelpers';
@@ -122,6 +123,7 @@ function Sausagelytics(props: Props) {
 				<title>Sausagelytics | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/sausagelytics/`} />
 				<meta property="og:title" content="Sausagelytics | Democracy Sausage" />
 			</Helmet>

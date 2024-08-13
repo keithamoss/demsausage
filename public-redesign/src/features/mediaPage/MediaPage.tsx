@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Helmet } from 'react-helmet-async';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { getBaseURL } from '../../app/utils';
 
@@ -75,6 +76,7 @@ export default function MediaPage() {
 				<title>Media | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/media/`} />
 				<meta property="og:title" content="Media | Democracy Sausage" />
 			</Helmet>

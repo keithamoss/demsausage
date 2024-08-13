@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import ErrorElement from '../../ErrorElement';
 import { useAppSelector } from '../../app/hooks/store';
 import { useGetStallQuery } from '../../app/services/stalls';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { getBaseURL } from '../../app/utils';
 import { selectActiveElections } from '../elections/electionsSlice';
@@ -74,6 +75,7 @@ export default function EditStall() {
 				<title>Edit a sausage sizzle or cake stall | Democracy Sausage</title>
 
 				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
 				<meta property="og:url" content={`${getBaseURL()}/about/`} />
 				<meta property="og:title" content="Edit a sausage sizzle or cake stall | Democracy Sausage" />
 			</Helmet>
