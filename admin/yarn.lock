@@ -4410,6 +4410,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/rbush@npm:^3.0.3":
+  version: 3.0.4
+  resolution: "@types/rbush@npm:3.0.4"
+  checksum: 10c0/430f60878b46feb68b2a50ddac684844ed895d73ada8932c421a2b8ef56cca8b9211109250d00a760a1f7a5c4ec6fb05992d1b235f3d48b5ba8528ec517c3861
+  languageName: node
+  linkType: hard
+
 "@types/react-addons-linked-state-mixin@npm:*":
   version: 0.14.21
   resolution: "@types/react-addons-linked-state-mixin@npm:0.14.21"
@@ -5473,7 +5480,7 @@ __metadata:
     luxon: "npm:^3.5.0"
     material-ui: "npm:^0.20.2"
     material-ui-responsive-drawer: "npm:^1.19.4"
-    ol: "npm:^10.0.0"
+    ol: "npm:^10.1.0"
     prettier: "npm:^3.3.3"
     prettier-eslint: "npm:^16.3.0"
     qs: "npm:^6.13.0"
@@ -16054,17 +16061,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "ol@npm:10.0.0"
+"ol@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "ol@npm:10.1.0"
   dependencies:
+    "@types/rbush": "npm:^3.0.3"
     color-rgba: "npm:^3.0.0"
     color-space: "npm:^2.0.1"
     earcut: "npm:^3.0.0"
     geotiff: "npm:^2.0.7"
     pbf: "npm:4.0.1"
     rbush: "npm:^4.0.0"
-  checksum: 10c0/0d9ec40818e63014024dfacf13a156f842e309c908fdff76c125c4a589280279739ecb5ff8abb0f7671d5cb7d9746eb543e3d59a62e13002ee38fb8dd831b498
+  checksum: 10c0/9d0342806f20373dd7500cce1ea4bddf44e1626c486800f8fe1da374f923e349a2222d97d5a9d4ea493a87154fab272fdd384361d3521f28a8c3fbcf7f74bff8
   languageName: node
   linkType: hard
 
