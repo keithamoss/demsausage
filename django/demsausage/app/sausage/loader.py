@@ -19,10 +19,11 @@ from demsausage.app.serializers import (PollingPlaceLoaderEventsSerializer,
 from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import (convert_string_to_number, get_env, is_numeric,
                              make_logger, merge_and_sum_dicts)
+from rq import get_current_job
+
 from django.contrib.gis.geos import Point
 from django.db import transaction
 from django.db.models import Q
-from rq import get_current_job
 
 logger = make_logger(__name__)
 
@@ -706,7 +707,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 return results
             else:
                 self.logger.info(f"Doing noms migration by distance for {polling_place.name}")
-                return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.1, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+                return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.125, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
