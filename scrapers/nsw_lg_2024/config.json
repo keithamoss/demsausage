@@ -1,5 +1,31 @@
 {
     "geocoding": {
         "enabled": false
-    }
+    },
+    "overwrite_distance_thresholds": [
+        {
+            "name": "Thornton Public School",
+            "threshold": 0.025
+        },
+        {
+            "name": "St Michael's Anglican Church",
+            "threshold": 0.025
+        }
+    ],
+    "fix_data_issues": [
+        {
+            "field": "name",
+            "value": "Ingleburn Public School",
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -34.0005437
+                },
+                {
+                    "field": "lon",
+                    "value": 150.8655947
+                }
+            ]
+        }
+    ]
 }
