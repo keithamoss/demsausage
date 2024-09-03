@@ -132,7 +132,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.dry_run = dry_run
         self.logger = self.make_logger()
 
-        allowed_fields = ["filters", "exclude_columns", "rename_columns", "add_columns", "extras", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "geocoding", "bbox_validation", "multiple_division_handling"]
+        allowed_fields = ["filters", "exclude_columns", "rename_columns", "add_columns", "extras", "cleaning_regexes", "address_fields", "address_format", "division_fields", "fix_data_issues", "overwrite_distance_thresholds", "geocoding", "bbox_validation", "multiple_division_handling"]
         self.has_config = True if config is not None and check_config_is_valid(config) else False
         self.raise_exception_if_errors()
         for field_name in allowed_fields:
@@ -697,6 +697,17 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.logger.error("Polling place invalid: {}".format(serialiser.errors))
 
     def migrate_noms(self):
+        def _getDistanceThreshold(polling_place):
+                threshold = 0.1
+                
+                # @TOOD Allow by ec_id where those exist, rather than just name
+                if self.overwrite_distance_thresholds is not None:
+                    item = next((i for i in self.overwrite_distance_thresholds if i["name"] == polling_place.name), None)
+                    if item is not None:
+                        threshold = item["threshold"]
+                
+                return threshold
+
         def _fetch_matching(polling_place):
             if polling_place.ec_id is not None:
                 self.logger.info(f"Doing noms migration by ec_id for {polling_place.name}")
@@ -707,11 +718,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 return results
             else:
                 self.logger.info(f"Doing noms migration by distance for {polling_place.name}")
-                return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=0.125, limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
+                return self.safe_find_by_distance("Noms Migration", polling_place.geom, distance_threshold_km=_getDistanceThreshold(polling_place), limit=None, qs=PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.DRAFT))
 
         # Migrate polling places with attached noms (and their stalls)
         queryset = PollingPlaces.objects.filter(election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=False)
-        polling_places_to_update = []
+        polling_places_to_update_active = []
+        polling_places_to_update_draft = []
 
         for polling_place in queryset:
             # start = timer()
@@ -726,10 +738,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 noms_id = polling_place.noms
 
                 polling_place.noms = None
-                polling_places_to_update.append(polling_place)
+                polling_places_to_update_active.append(polling_place)
 
                 matching_polling_places[0].noms = noms_id
-                polling_places_to_update.append(matching_polling_places[0])
+                polling_places_to_update_draft.append(matching_polling_places[0])
 
                 # Repoint stalls table
                 stalls_updated = Stalls.objects.filter(election_id=self.election.id, polling_place=polling_place.id).update(polling_place=matching_polling_places[0].id)
@@ -746,7 +758,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
 
         # Update polling place noms en masse
-        PollingPlaces.objects.bulk_update(polling_places_to_update, ["noms"])
+        # Remove noms from the active polling places first to avoid the uniquness constraint on noms_id triggering in certain circumstances.
+        # This only came up in the NSW LG 2024 elections - before this there was a single bulk_update() call here.
+        # Not sure why it happened, but this is just doing what we wanted to do anyway (wipe each stall and then replace) - it's just doing it in a more obvious manner.
+        PollingPlaces.objects.bulk_update(polling_places_to_update_active, ["noms"])
+        PollingPlaces.objects.bulk_update(polling_places_to_update_draft, ["noms"])
 
         self.logger.info("Noms Migration: Migrated {} polling places".format(queryset.count()))
 
