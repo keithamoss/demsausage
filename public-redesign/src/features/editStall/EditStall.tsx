@@ -63,7 +63,7 @@ export default function EditStall() {
 	if (
 		isGetStallSuccessful === true &&
 		stall !== undefined &&
-		activeElections.find((e) => e.id !== stall.election) === undefined
+		activeElections.find((e) => e.id === stall.election) === undefined
 	) {
 		return <EditStallNoLiveElection />;
 	}
