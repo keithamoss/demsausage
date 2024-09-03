@@ -2,6 +2,16 @@
     "geocoding": {
         "enabled": false
     },
+    "overwrite_distance_thresholds": [
+        {
+            "name": "Thornton Public School",
+            "threshold": 0.025
+        },
+        {
+            "name": "St Michael's Anglican Church",
+            "threshold": 0.025
+        }
+    ],
     "fix_data_issues": [
         {
             "field": "name",
@@ -14,20 +24,6 @@
                 {
                     "field": "lon",
                     "value": 150.8655947
-                }
-            ]
-        },
-        {
-            "field": "name",
-            "value": "Thornton Public School",
-            "overwrite": [
-                {
-                    "field": "lat",
-                    "value": -32.7796597
-                },
-                {
-                    "field": "lon",
-                    "value": 151.6408342
                 }
             ]
         }
