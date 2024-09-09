@@ -39,9 +39,7 @@ export const navigateToAddStallSelectPollingPlaceFromElectionAndReplace = (
 ) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/
-	navigate(`/add-stall/${election.name_url_safe}/`, {
-		state: { replace: true },
-	});
+	navigate(`/add-stall/${election.name_url_safe}/`, { replace: true });
 };
 
 // This doesn't need `cameFromInternalNavigation` because all of the ways to cancel/discard the Mapbox search can navigate directly to where they need to go.
