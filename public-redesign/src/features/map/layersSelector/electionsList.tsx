@@ -18,7 +18,7 @@ import { navigateToElection } from '../../../app/routing/navigationHelpers/navig
 import { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { getViewForElection, isElectionLive } from '../../elections/electionHelpers';
-import { selectAllElections } from '../../elections/electionsSlice';
+import { selectAllElectionsSorted } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
@@ -45,7 +45,7 @@ export default function ElectionsList(props: Props) {
 
 	const navigate = useNavigate();
 
-	const elections = useAppSelector((state) => selectAllElections(state));
+	const elections = useAppSelector((state) => selectAllElectionsSorted(state));
 	const electionsByYear = groupBy(elections, (e) => new Date(e.election_day).getFullYear());
 
 	const onClickElection = (election: Election) => () => {

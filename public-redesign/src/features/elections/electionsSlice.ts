@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { orderBy } from 'lodash-es';
 import { electionsAdapter, electionsApi, initialElectionsState } from '../../app/services/elections';
 import { RootState } from '../../app/store';
 import { isElectionLive } from './electionHelpers';
@@ -15,6 +16,14 @@ export const { selectAll: selectAllElections, selectById: selectElectionById } =
 	(state: RootState) => selectElectionsData(state) ?? initialElectionsState,
 );
 
+export const selectAllElectionsSorted = createSelector(selectAllElections, (elections) =>
+	orderBy(elections, (e) => e.election_day, ['desc']),
+);
+
 export const selectActiveElections = createSelector(selectAllElections, (elections) =>
 	elections.filter((e) => isElectionLive(e) === true),
+);
+
+export const selectActiveElectionsSorted = createSelector(selectActiveElections, (elections) =>
+	orderBy(elections, (e) => e.election_day, ['asc']),
 );
