@@ -303,7 +303,7 @@ export const supportingIcons = {
 			olDetailed: createOLDetailedIcon(Yellow_Minus),
 		},
 		label: 'Sold Out',
-		value: 'yellow_minus',
+		value: 'run_out',
 		description: "Our roving reporters have informed us that they've run out of food here",
 	},
 	red_cross: {
@@ -321,7 +321,7 @@ export const supportingIcons = {
 			olDetailed: createOLDetailedIcon(Red_Cross),
 		},
 		label: 'Red Cross of Shame',
-		value: 'red_cross',
+		value: 'nothing',
 		description: "Our roving reporters have informed us that there's no stall here",
 	},
 	grey_question: {

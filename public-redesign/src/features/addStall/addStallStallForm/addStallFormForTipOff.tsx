@@ -9,9 +9,14 @@ import {
 	Button,
 	FormControl,
 	FormGroup,
+	FormHelperText,
 	InputAdornment,
+	InputLabel,
+	MenuItem,
 	MobileStepper,
+	OutlinedInput,
 	Paper,
+	Select,
 	Snackbar,
 	Typography,
 } from '@mui/material';
@@ -24,7 +29,13 @@ import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { stallFormTipOffValidationSchema } from '../../../app/forms/stallForm';
 import { useAppSelector } from '../../../app/hooks/store';
 import { Election } from '../../../app/services/elections';
-import { Stall, StallFoodOptions, StallTipOffModifiableProps } from '../../../app/services/stalls';
+import {
+	Stall,
+	StallFoodOptions,
+	StallTipOffModifiableProps,
+	StallTipOffSource,
+	getStallSourceDescription,
+} from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { selectActiveElections } from '../../elections/electionsSlice';
@@ -65,14 +76,14 @@ export default function AddStallFormForTipOff(props: Props) {
 	} = useForm<StallTipOffModifiableProps>({
 		resolver: yupResolver(stallFormTipOffValidationSchema),
 		defaultValues: {
-			// noms: stall?.noms || { bbq: true },
 			noms: stall?.noms || {},
-			// email: stall?.email || 'keithamoss@gmail.com',
 			email: stall?.email || '',
+			tipoff_source: stall?.tipoff_source || undefined,
+			tipoff_source_other: stall?.tipoff_source_other || '',
 		},
 	});
 
-	const { noms } = watch();
+	const { noms, tipoff_source } = watch();
 
 	// ######################
 	// Food Options
@@ -88,6 +99,10 @@ export default function AddStallFormForTipOff(props: Props) {
 	const onDoneWithForm: SubmitHandler<StallTipOffModifiableProps> = useCallback(
 		(data) => {
 			if (isEmpty(data) === false) {
+				if (data.tipoff_source !== StallTipOffSource.Other) {
+					data.tipoff_source_other = '';
+				}
+
 				if (stall === undefined && onDoneAdding !== undefined) {
 					onDoneAdding({ ...data });
 				} else if (stall !== undefined && onDoneEditing !== undefined) {
@@ -199,6 +214,48 @@ export default function AddStallFormForTipOff(props: Props) {
 
 						{errors.email !== undefined && <FormFieldValidationError error={errors.email} />}
 					</FormControl>
+
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<InputLabel>Source</InputLabel>
+
+							<Controller
+								name="tipoff_source"
+								control={control}
+								render={({ field }) => (
+									<Select {...field} input={<OutlinedInput label="Source" />} value={tipoff_source || ''}>
+										{Object.entries(StallTipOffSource).map(([, id]) => (
+											<MenuItem key={id} value={id}>
+												{getStallSourceDescription(id)}
+											</MenuItem>
+										))}
+									</Select>
+								)}
+							/>
+
+							<FormHelperText>Let us know where you saw or heard about this stall</FormHelperText>
+						</FormGroup>
+
+						{errors.tipoff_source !== undefined && <FormFieldValidationError error={errors.tipoff_source} />}
+					</FormControl>
+
+					{tipoff_source === StallTipOffSource.Other && (
+						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<Controller
+									name="tipoff_source_other"
+									control={control}
+									render={({ field }) => (
+										<TextFieldWithout1Password {...field} helperText="Where did you see or hear about the stall?" />
+									)}
+								/>
+							</FormGroup>
+
+							{errors.tipoff_source_other !== undefined && (
+								<FormFieldValidationError error={errors.tipoff_source_other} />
+							)}
+						</FormControl>
+					)}
 					{/* ######################
 							Your Details (End)
 					###################### */}

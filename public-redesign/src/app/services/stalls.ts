@@ -7,6 +7,27 @@ export enum StallSubmitterType {
 	TipOff = 'tipoff',
 }
 
+export enum StallTipOffSource {
+	In_Person = 'in-person',
+	Online = 'online',
+	Newsletter = 'newsletter',
+	Other = 'other',
+}
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSourceDescription = (enumName: StallTipOffSource): string => {
+	switch (enumName) {
+		case StallTipOffSource.In_Person:
+			return 'I saw it at a polling booth';
+		case StallTipOffSource.Online:
+			return 'I heard about it online (including social media)';
+		case StallTipOffSource.Newsletter:
+			return 'I saw it in the school, church, et cetera newsletter';
+		case StallTipOffSource.Other:
+			return 'Other';
+	}
+};
+
 export interface StallFoodOptions {
 	bbq?: boolean;
 	cake?: boolean;
@@ -33,9 +54,13 @@ export type StallFoodOptionsErrors = Merge<
 export interface StallTipOffModifiableProps {
 	noms: StallFoodOptions;
 	email: string;
+	tipoff_source?: StallTipOffSource;
+	tipoff_source_other: string;
 }
 
-export interface StallOwnerModifiableProps extends StallTipOffModifiableProps {
+export interface StallOwnerModifiableProps {
+	noms: StallFoodOptions;
+	email: string;
 	name: string;
 	description: string;
 	opening_hours?: string;
@@ -72,6 +97,9 @@ export interface Stall extends StallOwnerModifiableProps {
 	id: number;
 	// @TODO We temporarily added this for the preliminary EditStall work, but I'm not sure if it's present on the interface for other occurences. Also, it should be called election_id.
 	election: number;
+	// Added here because these still come through on non-tip-off stalls, they're just not modifiable
+	tipoff_source: StallTipOffSource;
+	tipoff_source_other: string;
 }
 
 // type StallsResponse = Stall[];

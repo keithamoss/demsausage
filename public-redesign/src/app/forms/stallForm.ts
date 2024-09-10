@@ -1,6 +1,11 @@
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
-import { StallFoodOptions, StallOwnerModifiableProps, StallTipOffModifiableProps } from '../services/stalls';
+import {
+	StallFoodOptions,
+	StallOwnerModifiableProps,
+	StallTipOffModifiableProps,
+	StallTipOffSource,
+} from '../services/stalls';
 import { booleanTrueOrUndefined } from './yupValidation';
 
 export const stallNomsFieldFormValidationSchema: ObjectSchema<StallFoodOptions> = yup
@@ -12,6 +17,21 @@ export const stallNomsFieldFormValidationSchema: ObjectSchema<StallFoodOptions> 
 		bacon_and_eggs: booleanTrueOrUndefined,
 		coffee: booleanTrueOrUndefined,
 		free_text: yup.string().optional(),
+	})
+	.required()
+	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1);
+
+export const stallNomsFieldFormValidationSchemaForTipOff: ObjectSchema<StallFoodOptions> = yup
+	.object({
+		bbq: booleanTrueOrUndefined,
+		cake: booleanTrueOrUndefined,
+		vego: booleanTrueOrUndefined,
+		halal: booleanTrueOrUndefined,
+		bacon_and_eggs: booleanTrueOrUndefined,
+		coffee: booleanTrueOrUndefined,
+		free_text: yup.string().optional(),
+		nothing: booleanTrueOrUndefined,
+		run_out: booleanTrueOrUndefined,
 	})
 	.required()
 	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1);
@@ -41,7 +61,9 @@ export const stallOwnerFormValidationSchema: ObjectSchema<StallOwnerModifiablePr
 
 export const stallFormTipOffValidationSchema: ObjectSchema<StallTipOffModifiableProps> = yup
 	.object({
-		noms: stallNomsFieldFormValidationSchema,
+		noms: stallNomsFieldFormValidationSchemaForTipOff,
 		email: yup.string().email().required(),
+		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)),
+		tipoff_source_other: yup.string().optional().ensure(),
 	})
 	.required();

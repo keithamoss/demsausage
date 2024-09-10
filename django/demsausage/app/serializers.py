@@ -306,7 +306,7 @@ class StallsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "tipoff_source", "tipoff_source_other")
 
     def create(self, validated_data):
         return Stalls.objects.create(**validated_data)
@@ -340,16 +340,18 @@ class StallsUserEditSerializer(StallsSerializer):
     election = serializers.PrimaryKeyRelatedField(read_only=True)
     polling_place = PollingPlacesInfoSerializer(read_only=True)
     status = serializers.CharField()
+    tipoff_source = serializers.CharField()
+    tipoff_source_other = serializers.CharField()
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "tipoff_source", "tipoff_source_other")
 
 
 class StallsManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
+        fields = ("name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type", "tipoff_source", "tipoff_source_other")
 
 
 class StallsOwnerManagementSerializer(StallsManagementSerializer):
@@ -359,7 +361,7 @@ class StallsOwnerManagementSerializer(StallsManagementSerializer):
 class StallsTipOffManagementSerializer(StallsSerializer):
     class Meta:
         model = Stalls
-        fields = ("noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type")
+        fields = ("noms", "location_info", "email", "election", "polling_place", "status", "approved_on", "submitter_type", "tipoff_source", "tipoff_source_other")
 
 
 class PendingStallsSerializer(StallsSerializer):
@@ -369,7 +371,7 @@ class PendingStallsSerializer(StallsSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election_id", "approved_on", "polling_place", "current_stall", "diff")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election_id", "approved_on", "submitter_type", "tipoff_source", "tipoff_source_other", "polling_place", "current_stall", "diff")
 
     def get_diff(self, obj):
         fields_to_include_in_diff = ("name", "description", "opening_hours", "website", "noms", "email")

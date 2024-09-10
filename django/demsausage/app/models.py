@@ -6,7 +6,8 @@ from demsausage.app.enums import (PollingPlaceChanceOfSausage,
                                   PollingPlaceStatus,
                                   PollingPlaceWheelchairAccess,
                                   ProfileSettings, StallStatus,
-                                  StallSubmitterType, TaskStatus)
+                                  StallSubmitterType, StallTipOffSource,
+                                  TaskStatus)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
@@ -181,6 +182,8 @@ class Stalls(models.Model):
     status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
     mail_confirmed = models.BooleanField(default=True)
     submitter_type = models.TextField(choices=[(tag, tag.value) for tag in StallSubmitterType], blank=True)
+    tipoff_source = models.TextField(choices=[(tag, tag.value) for tag in StallTipOffSource], blank=True)
+    tipoff_source_other = models.TextField(blank=True)
 
     history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
     tracker = FieldTracker()

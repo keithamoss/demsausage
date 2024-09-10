@@ -6,7 +6,7 @@ from random import getrandbits
 import requests
 from demsausage.app.admin import (get_admins, get_super_admins, is_development,
                                   is_production)
-from demsausage.app.enums import StallSubmitterType
+from demsausage.app.enums import StallSubmitterType, StallTipOffSource
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env, get_url_safe_election_name
 from rest_framework.exceptions import APIException
@@ -75,6 +75,7 @@ def send_stall_submitted_email(stall):
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
             "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
         })
     else:
@@ -116,6 +117,7 @@ def send_stall_approved_email(stall):
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
             "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
             "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
             "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
@@ -158,6 +160,7 @@ def send_stall_edited_email(stall):
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
             "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
             "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
         })

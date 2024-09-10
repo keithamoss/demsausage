@@ -78,6 +78,16 @@ class StallSubmitterType(str, EnumBase):
         return self.value
 
 
+class StallTipOffSource(str, EnumBase):
+    In_Person = 'in-person'
+    Online = 'online'
+    Newsletter = 'newsletter'
+    Other = 'other'
+
+    def __str__(self):
+        return self.value
+
+
 class StallStatus(str, EnumBase):
     PENDING = "Pending"
     APPROVED = "Approved"
