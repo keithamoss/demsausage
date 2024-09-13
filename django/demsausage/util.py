@@ -3,15 +3,18 @@ import functools
 import json
 import logging
 import os
+import re
 import string
 import sys
 import threading
 import time
 import traceback
 import unicodedata
+import urllib.parse
 from urllib.parse import quote
 
 import pytz
+
 from django.conf import settings
 
 
@@ -184,7 +187,7 @@ def merge_and_sum_dicts(dict_list):
 
 
 def get_url_safe_election_name(election):
-    return quote(election.name.lower().replace(" ", "_"))
+    return urllib.parse.quote(re.sub("\s", "_", election.name).lower())
 
 
 def threaded(func):

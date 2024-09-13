@@ -1,12 +1,11 @@
-import EmailIcon from '@mui/icons-material/Email';
-import { Alert, AlertTitle, Avatar, Box, List, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
+import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { Helmet } from 'react-helmet-async';
+import { Outlet } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
 import { useAppSelector } from '../../app/hooks/store';
-import { useGetStallQuery } from '../../app/services/stalls';
+import { useGetElectionsQuery } from '../../app/services/elections';
 import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { getBaseURL } from '../../app/utils';
@@ -22,53 +21,37 @@ const Root = styled('div')(({ theme }) => ({
 	paddingBottom: `${bottomNav}px`,
 }));
 
-const PageWrapper = styled('div')(({ theme }) => ({
-	paddingLeft: theme.spacing(1),
-	paddingRight: theme.spacing(1),
+const PageWrapper = styled('div')((/*{ theme }*/) => ({
+	//   paddingLeft: theme.spacing(1),
+	//   paddingRight: theme.spacing(1),
 	'.MuiMobileStepper-positionStatic': {
 		backgroundColor: grey[200],
 	},
 }));
 
 export default function EditStall() {
-	// const params = useParams();
-	// const navigate = useNavigate();
-	// const location = useLocation();
-
-	const parsed = new URL(window.location.href);
-	const stallId = parseInt(parsed.searchParams.get('stall_id') || '');
-	const token = parsed.searchParams.get('token');
-	const signature = parsed.searchParams.get('signature');
-
 	const {
-		data: stall,
-		isLoading: isGetStallLoading,
-		isSuccess: isGetStallSuccessful,
-		isError: isGetStallErrored,
-	} = useGetStallQuery(
-		Number.isNaN(stallId) == false && token !== null && signature !== null ? { stallId, token, signature } : skipToken,
-	);
+		isLoading: isGetElectionsLoading,
+		isSuccess: isGetElectionsSuccessful,
+		isError: isGetElectionsErrored,
+	} = useGetElectionsQuery();
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
-	if (isGetStallLoading === true) {
+	// Stop folks using the Edit Stall interface for elections that aren't active
+	if (isGetElectionsLoading === true) {
 		return <WholeScreenLoadingIndicator />;
 	}
 
-	if (isGetStallErrored === true || (isGetStallSuccessful === true && stall === undefined)) {
+	if (isGetElectionsErrored === true) {
 		return <ErrorElement />;
 	}
 
-	// Stop folks using the Edit Stall interface for elections that aren't active
-	if (
-		isGetStallSuccessful === true &&
-		stall !== undefined &&
-		activeElections.find((e) => e.id === stall.election) === undefined
-	) {
+	if (isGetElectionsSuccessful === true && activeElections.length === 0) {
 		return <EditStallNoLiveElection />;
 	}
 
-	// If we've loaded elections successfully, and have more than one active election, let everything continue as normal so the user lands on the 'Choose an election' screen.
+	// If we've loaded elections successfully, and have more than one active election, let everything continue as normal so the user lands on the 'Edit Stall' screen and we do the checking to see if their `token` and `signature` are valid
 	return (
 		<Root>
 			<Helmet>
@@ -81,29 +64,8 @@ export default function EditStall() {
 			</Helmet>
 
 			<PageWrapper>
-				<Box sx={{ flexGrow: 1, mt: 2 }}>
-					{/* <Outlet /> */}
-
-					{/* See the @TODO in stalls.ts re the Stall interface */}
-
-					<Alert severity="info">
-						<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-						We haven&lsquo;t yet rebuilt the stall editing page of the new Democracy Sausage website. Not to worry
-						though, just shoot us an email with the changes you&lsquo;d like to make and we&lsquo;ll get them done for
-						you!
-					</Alert>
-
-					<List>
-						<ListItemButton component="a" href="mailto:ausdemocracysausage@gmail.com">
-							<ListItemAvatar>
-								<Avatar>
-									<EmailIcon />
-								</Avatar>
-							</ListItemAvatar>
-
-							<ListItemText primary="Email us" secondary="ausdemocracysausage@gmail.com" />
-						</ListItemButton>
-					</List>
+				<Box sx={{ flexGrow: 1 }}>
+					<Outlet />
 				</Box>
 			</PageWrapper>
 		</Root>

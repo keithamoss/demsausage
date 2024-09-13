@@ -21,8 +21,8 @@ import { WholeScreenLoadingIndicator } from '../../../app/ui/wholeScreenLoadingI
 import { enumFromStringValue } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import AddStallFormForOwner from './addStallFormForOwner';
-import AddStallFormForTipOff from './addStallFormForTipOff';
+import StallOwnerForm from '../../stalls/stallOwnerForm';
+import StallTipOffForm from '../../stalls/stallTipOffForm';
 import { createStallLocationInfoObjectFromLocationLookup } from './addStallFormHelpers';
 
 function EntrypointLayer1() {
@@ -177,20 +177,18 @@ function AddStallStallCreatorForm(props: Props) {
 				</Alert>
 			)}
 
-			{submitterType === StallSubmitterType.Owner && (
-				<AddStallFormForOwner
-					election={election}
+			{submitterType === StallSubmitterType.Owner ? (
+				<StallOwnerForm
 					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}
 				/>
-			)}
-
-			{submitterType === StallSubmitterType.TipOff && (
-				<AddStallFormForTipOff
-					election={election}
+			) : (
+				<StallTipOffForm
 					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}

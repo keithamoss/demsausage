@@ -1,5 +1,3 @@
-import re
-import urllib.parse
 from datetime import datetime
 
 import pytz
@@ -9,7 +7,7 @@ from demsausage.app.models import (Elections, MailgunEvents,
                                    PollingPlaceLoaderEvents, PollingPlaceNoms,
                                    PollingPlaces, Profile, Stalls)
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.util import get_or_none
+from demsausage.util import get_or_none, get_url_safe_election_name
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
@@ -59,7 +57,7 @@ class ElectionURLSafeNameCharField(serializers.CharField):
     # "New South Wales Election 2023" to "new_south_wales_election_2023"
 
     def to_representation(self, value):
-        return urllib.parse.quote(re.sub("\s", "_", value).lower())
+        return get_url_safe_election_name(value)
 
 class ElectionsSerializer(serializers.ModelSerializer):
     name_url_safe = ElectionURLSafeNameCharField(source="name", allow_null=False)
@@ -321,7 +319,7 @@ class StallsSerializer(serializers.ModelSerializer):
             election = get_or_none(Elections, id=self.initial_data["election"])
             if election is not None:
                 if election.polling_places_loaded is True:
-                    if "location_info" in self.initial_data:
+                    if "location_info" in self.initial_data and self.initial_data["location_info"] is not None:
                         raise serializers.ValidationError("Stall location information not required when polling places are loaded")
 
                     if "polling_place" not in self.initial_data:
@@ -340,13 +338,21 @@ class StallsUserEditSerializer(StallsSerializer):
     election = serializers.PrimaryKeyRelatedField(read_only=True)
     polling_place = PollingPlacesInfoSerializer(read_only=True)
     status = serializers.CharField()
-    tipoff_source = serializers.CharField()
-    tipoff_source_other = serializers.CharField()
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "tipoff_source", "tipoff_source_other")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "submitter_type")
 
+class StallsOwnerUserEditSerializer(StallsUserEditSerializer):
+    pass
+
+class StallsTipOffUserEditSerializer(StallsUserEditSerializer):
+    tipoff_source = serializers.CharField(required=False, allow_blank=True)
+    tipoff_source_other = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = Stalls
+        fields = ("id", "noms", "location_info", "email", "election", "polling_place", "status", "submitter_type", "tipoff_source", "tipoff_source_other")
 
 class StallsManagementSerializer(StallsSerializer):
     class Meta:

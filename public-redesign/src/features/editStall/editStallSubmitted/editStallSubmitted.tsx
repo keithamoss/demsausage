@@ -16,7 +16,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
-export default function AddStallSubmitted() {
+export default function EditStallSubmitted() {
 	const params = useParams();
 	const navigate = useNavigate();
 
@@ -38,13 +38,13 @@ export default function AddStallSubmitted() {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">Stall submitted</Typography>
+				<Typography variant="h6">Stall changes submitted</Typography>
 			</Paper>
 
 			<Box sx={{ width: '100%', p: 2 }}>
 				<Alert severity="success" sx={{ mb: 2 }}>
-					Thanks for letting us know about the stall! We&apos;ll let you know once it&apos;s approved and it&apos;s
-					appearing on the map.
+					Thanks for telling us about the changes to the stall! We&apos;ll let you know once they&apos;re approved and
+					are appearing on the map.
 				</Alert>
 
 				<Button size="small" variant="outlined" startIcon={<PublicIcon />} onClick={onNavigateToMap}>

@@ -41,3 +41,4 @@ export const setThemeColour = (themeColour: string) => {
 		el.setAttribute('content', themeColour);
 	}
 };
+export const appBarHeight = 48;

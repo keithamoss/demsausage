@@ -43,8 +43,10 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         PollingPlacesSerializer,
                                         StallsManagementSerializer,
                                         StallsOwnerManagementSerializer,
+                                        StallsOwnerUserEditSerializer,
                                         StallsSerializer,
                                         StallsTipOffManagementSerializer,
+                                        StallsTipOffUserEditSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
@@ -513,8 +515,14 @@ class StallsViewSet(viewsets.ModelViewSet):
     schema = None
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
-            return StallsUserEditSerializer
+        # @TODO Once the legacy site is gone, use the code below in create() that requires a submitter_type
+        if self.action == "retrieve" or self.action == "update_and_resubmit":
+            stall = self.get_object()
+
+            if stall.submitter_type == StallSubmitterType.TIPOFF:
+                return StallsTipOffUserEditSerializer
+            else:
+                return StallsOwnerUserEditSerializer
         return super(StallsViewSet, self).get_serializer_class()
 
     @transaction.atomic
@@ -564,7 +572,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         stall = self.get_object()
 
         if stall.election.is_active() is False:
-            raise BadRequest("The {election_name} election has already finished.".format(election_name=stall.election.name))
+            return Response({"error": "The {election_name} election has finished.".format(election_name=stall.election.name)}, status=status.HTTP_418_IM_A_TEAPOT)
 
         return super(StallsViewSet, self).retrieve(request, *args, **kwargs)
 
@@ -574,7 +582,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         stall = self.get_object()
 
         if stall.election.is_active() is False:
-            raise BadRequest("The {election_name} election has already finished.".format(election_name=stall.election.name))
+            return Response({"error": "The {election_name} election has finished.".format(election_name=stall.election.name)}, status=status.HTTP_418_IM_A_TEAPOT)
 
         data = deepcopy(request.data)
         del data["token"]
@@ -582,7 +590,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         if stall.status == StallStatus.APPROVED or stall.status == StallStatus.DECLINED:
             data["status"] = StallStatus.PENDING
 
-        serializer = StallsUserEditSerializer(stall, data, partial=True)
+        serializer = self.get_serializer_class()(stall, data, partial=True)
         if serializer.is_valid() is True:
             serializer.save()
 

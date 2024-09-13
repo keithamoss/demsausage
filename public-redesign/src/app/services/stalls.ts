@@ -1,5 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export enum StallSubmitterType {
@@ -67,19 +68,16 @@ export interface StallOwnerModifiableProps {
 	website?: string;
 }
 
-export interface NewStallTipOff extends StallTipOffModifiableProps {
+export interface NewStallNonFormModifiableProps {
 	election: number;
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
 	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
 }
 
-export interface NewStallOwner extends StallOwnerModifiableProps {
-	election: number;
-	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
-	location_info?: IStallLocationInfo;
-	submitter_type: StallSubmitterType;
-}
+export interface NewStallTipOff extends StallTipOffModifiableProps, NewStallNonFormModifiableProps {}
+
+export interface NewStallOwner extends StallOwnerModifiableProps, NewStallNonFormModifiableProps {}
 
 // For some reason elections with official polling places loaded still need this to be sent.
 // No idea why...it's on the list to untangle during the admin redesign.
@@ -93,13 +91,19 @@ export interface IStallLocationInfo {
 	state: string;
 }
 
-export interface Stall extends StallOwnerModifiableProps {
+export enum StallStatus {
+	Pending = 'Pending',
+	Approved = 'Approved',
+	Declined = 'Declined',
+}
+
+export interface Stall
+	extends Omit<NewStallOwner, 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOff, 'polling_place' | 'location_info'> {
 	id: number;
-	// @TODO We temporarily added this for the preliminary EditStall work, but I'm not sure if it's present on the interface for other occurences. Also, it should be called election_id.
-	election: number;
-	// Added here because these still come through on non-tip-off stalls, they're just not modifiable
-	tipoff_source: StallTipOffSource;
-	tipoff_source_other: string;
+	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
+	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
+	status: StallStatus;
 }
 
 // type StallsResponse = Stall[];
@@ -111,11 +115,6 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		// @TODO Should Stall inherit from NewStallOwner instead or will that bugger up the expectations of other places that use Stall?
-		// polling_place is an object, not a number
-		// location_info is null, not undefined
-		// submitter_type is not present
-		// status is missing
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
 			query: ({ stallId, token, signature }) => ({
 				url: `stalls/${stallId}/`,
@@ -129,7 +128,14 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
+		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
+			query: (stall) => ({
+				url: `stalls/${stall.id}/update_and_resubmit/`,
+				method: 'PATCH',
+				body: stall,
+			}),
+		}),
 	}),
 });
 
-export const { useGetStallQuery, useAddStallMutation } = stallsApi;
+export const { useGetStallQuery, useAddStallMutation, useUpdateStallWithCredentialsMutation } = stallsApi;

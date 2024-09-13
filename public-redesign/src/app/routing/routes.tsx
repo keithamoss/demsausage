@@ -12,6 +12,8 @@ import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStal
 import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
 import DebugView from '../../features/debugView/debugView';
 import EditStall from '../../features/editStall/EditStall';
+import EditStallStallEditorForm from '../../features/editStall/editStallStallForm/editStallStallEditorForm';
+import EditStallSubmitted from '../../features/editStall/editStallSubmitted/editStallSubmitted';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import ElectionsList from '../../features/map/layersSelector/electionsList';
 import Map from '../../features/map/map';
@@ -62,14 +64,6 @@ export const router = sentryCreateBrowserRouter([
 				element: <MediaPage />,
 				loader: () => ({
 					name: 'Media',
-				}),
-			},
-
-			{
-				path: '/edit-stall',
-				element: <EditStall />,
-				loader: () => ({
-					name: 'Edit Stall',
 				}),
 			},
 			{
@@ -129,7 +123,7 @@ export const router = sentryCreateBrowserRouter([
 					// ############################
 
 					// ############################
-					// Location Lookup
+					// Polling Place Location Lookup
 					// ############################
 					{
 						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/',
@@ -140,11 +134,28 @@ export const router = sentryCreateBrowserRouter([
 						element: <AddStallStallCreatorForm />,
 					},
 					// ############################
-					// Location Lookup (End)
+					// Polling Place Location Lookup (End)
 					// ############################
 					{
 						path: '/add-stall/:election_name/submitted/',
 						element: <AddStallSubmitted />,
+					},
+				],
+			},
+			{
+				path: '/edit-stall',
+				element: <EditStall />,
+				loader: () => ({
+					name: 'Edit Stall',
+				}),
+				children: [
+					{
+						path: '/edit-stall/:election_name/',
+						element: <EditStallStallEditorForm />,
+					},
+					{
+						path: '/edit-stall/:election_name/submitted/',
+						element: <EditStallSubmitted />,
 					},
 				],
 			},

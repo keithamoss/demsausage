@@ -67,6 +67,15 @@ export interface IPollingPlace {
 		[key: string]: string;
 	};
 }
+
+export interface IPollingPlaceStubForStalls {
+	id: number;
+	name: string;
+	premises: string;
+	address: string;
+	state: string;
+}
+
 export interface IMapFilterSettings extends Omit<IPollingPlaceNoms, 'free_text' | 'nothing' | 'run_out'> {}
 
 export interface IMapPollingGeoJSONNoms extends Omit<IPollingPlaceNoms, 'free_text'> {

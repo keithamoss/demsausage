@@ -17,11 +17,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { navigateToAddStallSelectPollingPlaceFromElection } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { Election } from '../../../app/services/elections';
+import { appBarHeight } from '../../../app/ui/theme';
 import { selectActiveElectionsSorted } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
+import { getHiddenStepperButton, mobileStepperMinHeight } from '../../stalls/stallFormHelpers';
 import AddStallIntroMessage from '../addStallIntroMessage';
-import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],

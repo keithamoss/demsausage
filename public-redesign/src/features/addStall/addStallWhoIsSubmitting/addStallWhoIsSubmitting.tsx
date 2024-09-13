@@ -22,11 +22,11 @@ import {
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { StallSubmitterType } from '../../../app/services/stalls';
+import { appBarHeight } from '../../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
-import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
+import { getHiddenStepperButton, mobileStepperMinHeight } from '../../stalls/stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -47,6 +47,7 @@ export default function AddStallWhoIsSubmitting() {
 
 	const urlPollingPlacePremises = getStringParamOrEmptyString(params, 'polling_place_premises').replaceAll('_', ' ');
 	const urlPollingPlaceName = getStringParamOrEmptyString(params, 'polling_place_name').replaceAll('_', ' ');
+	const urlLocationName = getStringParamOrEmptyString(params, 'location_name').replaceAll('_', ' '); // For elections with no polling places
 
 	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
 
@@ -95,7 +96,7 @@ export default function AddStallWhoIsSubmitting() {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">{urlPollingPlacePremises || urlPollingPlaceName}</Typography>
+				<Typography variant="h6">{urlPollingPlacePremises || urlPollingPlaceName || urlLocationName}</Typography>
 			</Paper>
 
 			<Paper
