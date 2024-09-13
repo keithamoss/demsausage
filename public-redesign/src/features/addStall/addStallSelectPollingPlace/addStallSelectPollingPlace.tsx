@@ -35,8 +35,8 @@ import {
 	navigateToAddStallSearchListOfPollingPlacesFromMapboxResults,
 	navigateToAddStallSearchMapboxResults,
 	navigateToAddStallSelectPollingPlace,
-	navigateToAddStallWhoIsSubmitting,
-	navigateToAddStallWhoIsSubmittingFromMapboxFeature,
+	navigateToAddStallSubmitterType,
+	navigateToAddStallSubmitterTypeFromMapboxFeature,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
@@ -109,7 +109,7 @@ function AddStallSelectPollingPlace(props: Props) {
 					feature.geometry.coordinates.join(','),
 				);
 			} else {
-				navigateToAddStallWhoIsSubmittingFromMapboxFeature(params, navigate, feature);
+				navigateToAddStallSubmitterTypeFromMapboxFeature(params, navigate, feature);
 			}
 		},
 		[election.polling_places_loaded, navigate, params],
@@ -139,7 +139,7 @@ function AddStallSelectPollingPlace(props: Props) {
 	const onChoosePollingPlace = useCallback(
 		(pollingPlace: IPollingPlace) => {
 			if (pollingPlace.stall === null) {
-				navigateToAddStallWhoIsSubmitting(params, navigate, pollingPlace);
+				navigateToAddStallSubmitterType(params, navigate, pollingPlace);
 			} else {
 				setSelectedPollingPlace(pollingPlace);
 			}
@@ -155,7 +155,7 @@ function AddStallSelectPollingPlace(props: Props) {
 
 	const onChoosePollingPlaceAndContinue = useCallback(() => {
 		if (selectedPollingPlace !== undefined) {
-			navigateToAddStallWhoIsSubmitting(params, navigate, selectedPollingPlace);
+			navigateToAddStallSubmitterType(params, navigate, selectedPollingPlace);
 		}
 	}, [navigate, params, selectedPollingPlace]);
 	// ######################

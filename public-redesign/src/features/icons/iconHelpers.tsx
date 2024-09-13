@@ -302,7 +302,7 @@ export const supportingIcons = {
 			ol: createOLIcon(Yellow_Minus, 2, 24, 24),
 			olDetailed: createOLDetailedIcon(Yellow_Minus),
 		},
-		label: 'Sold Out',
+		label: "They've sold out of everything!",
 		value: 'run_out',
 		description: "Our roving reporters have informed us that they've run out of food here",
 	},

@@ -93,10 +93,20 @@ function EditStallStallEditorForm(props: Props) {
 				</Alert>
 			)}
 
-			{stall.submitter_type === StallSubmitterType.Owner ? (
+			{stall.submitter_type === StallSubmitterType.Owner && (
 				<StallOwnerForm stall={stall} isStallSaving={isEditingStallLoading} onDoneEditing={onDoneEditing} />
-			) : (
+			)}
+
+			{stall.submitter_type === StallSubmitterType.TipOff && (
 				<StallTipOffForm stall={stall} isStallSaving={isEditingStallLoading} onDoneEditing={onDoneEditing} />
+			)}
+
+			{(stall.submitter_type === StallSubmitterType.TipOffRunOut ||
+				stall.submitter_type === StallSubmitterType.TipOffRedCrossOfShame) && (
+				<Alert severity="warning">
+					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
+					Tip offs for a stall that&apos;ve run out of food, or polling places without stalls, can&apos;t be edited.
+				</Alert>
 			)}
 		</React.Fragment>
 	);

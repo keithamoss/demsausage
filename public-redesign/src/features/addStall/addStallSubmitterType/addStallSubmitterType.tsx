@@ -21,6 +21,7 @@ import {
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import { Election } from '../../../app/services/elections';
 import { StallSubmitterType } from '../../../app/services/stalls';
 import { appBarHeight } from '../../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
@@ -36,11 +37,31 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
+function AddStallSubmitterTypeEntrypoint() {
+	const params = useParams();
+
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
+	const election = activeElections.find((e) => e.name_url_safe === urlElectionName);
+
+	if (election === undefined) {
+		return null;
+	}
+
+	return <AddStallSubmitterType election={election} />;
+}
+
 interface LocationState {
 	cameFromInternalNavigation?: boolean;
 }
 
-export default function AddStallWhoIsSubmitting() {
+interface Props {
+	election: Election;
+}
+
+function AddStallSubmitterType(props: Props) {
+	const { election } = props;
+
 	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -80,6 +101,16 @@ export default function AddStallWhoIsSubmitting() {
 
 	const onChooseStallTipOff = useCallback(
 		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOff),
+		[navigate, params],
+	);
+
+	const onChooseStallTipOffRunOut = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOffRunOut),
+		[navigate, params],
+	);
+
+	const onChooseStallTipOffRedCrossOfShame = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOffRedCrossOfShame),
 		[navigate, params],
 	);
 
@@ -140,8 +171,39 @@ export default function AddStallWhoIsSubmitting() {
 							</Avatar>
 						</ListItemAvatar>
 
-						<ListItemText primary="I've seen or heard about a stall" />
+						<ListItemText primary="I've seen or heard about a stall here" />
 					</ListItemButton>
+
+					{/* Disabled until the admin interface can support these on the Pending Stalls interface */}
+					{/* {isItElectionDay(election) === true && (
+						<React.Fragment>
+							<ListItemButton onClick={onChooseStallTipOffRunOut}>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.yellow_minus.value}
+										sx={{ backgroundColor: 'transparent', '& svg': { width: 28, height: 28 } }}
+									>
+										{supportingIcons.yellow_minus.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+
+								<ListItemText primary="I'm reporting that the stall here has run out of food" />
+							</ListItemButton>
+
+							<ListItemButton onClick={onChooseStallTipOffRedCrossOfShame}>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.red_cross.value}
+										sx={{ backgroundColor: 'transparent', '& svg': { width: 28, height: 28 } }}
+									>
+										{supportingIcons.red_cross.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+
+								<ListItemText primary="I'm reporting that there's definitely no stall here" />
+							</ListItemButton>
+						</React.Fragment>
+					)} */}
 				</List>
 			</Box>
 
@@ -160,3 +222,5 @@ export default function AddStallWhoIsSubmitting() {
 		</StyledInteractableBoxFullHeight>
 	);
 }
+
+export default AddStallSubmitterTypeEntrypoint;

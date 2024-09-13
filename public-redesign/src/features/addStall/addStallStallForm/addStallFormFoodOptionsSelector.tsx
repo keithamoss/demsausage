@@ -17,7 +17,7 @@ import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelp
 import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
-import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../../icons/iconHelpers';
+import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 
 interface Props {
 	foodOptions: StallFoodOptions;
@@ -80,35 +80,33 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 							// bgcolor: 'background.paper',
 						}}
 					>
-						{[...getAllFoodsAvailableOnStalls(), supportingIcons.red_cross, supportingIcons.yellow_minus].map(
-							(option) => {
-								const labelId = `checkbox-list-secondary-label-${option.value}`;
-								return (
-									<ListItem
-										key={option.value}
-										secondaryAction={
-											<Checkbox
-												value={option.value}
-												checked={foodOptions[option.value as keyof StallFoodOptions] === true ? true : false}
-												onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
-												edge="end"
-												inputProps={{ 'aria-labelledby': labelId }}
-											/>
-										}
-										disablePadding
-									>
-										<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)} sx={{ pl: 0 }}>
-											<ListItemAvatar>
-												<Avatar alt={option.value} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
-													{option.icon.react}
-												</Avatar>
-											</ListItemAvatar>
-											<ListItemText id={labelId} primary={option.label} />
-										</ListItemButton>
-									</ListItem>
-								);
-							},
-						)}
+						{getAllFoodsAvailableOnStalls().map((option) => {
+							const labelId = `checkbox-list-secondary-label-${option.value}`;
+							return (
+								<ListItem
+									key={option.value}
+									secondaryAction={
+										<Checkbox
+											value={option.value}
+											checked={foodOptions[option.value as keyof StallFoodOptions] === true ? true : false}
+											onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
+											edge="end"
+											inputProps={{ 'aria-labelledby': labelId }}
+										/>
+									}
+									disablePadding
+								>
+									<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)} sx={{ pl: 0 }}>
+										<ListItemAvatar>
+											<Avatar alt={option.value} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
+												{option.icon.react}
+											</Avatar>
+										</ListItemAvatar>
+										<ListItemText id={labelId} primary={option.label} />
+									</ListItemButton>
+								</ListItem>
+							);
+						})}
 					</List>
 				</FormGroup>
 			</FormControl>

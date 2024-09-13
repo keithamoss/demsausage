@@ -6,6 +6,8 @@ import { api } from './api';
 export enum StallSubmitterType {
 	Owner = 'owner',
 	TipOff = 'tipoff',
+	TipOffRunOut = 'tipoff_run_out',
+	TipOffRedCrossOfShame = 'tipoff_red_cross_of_shame',
 }
 
 export enum StallTipOffSource {
@@ -39,6 +41,11 @@ export interface StallFoodOptions {
 	free_text?: string;
 }
 
+export interface StallNonFoodOptions {
+	run_out?: boolean;
+	nothing?: boolean;
+}
+
 export type StallFoodOptionsErrors = Merge<
 	FieldError,
 	FieldErrorsImpl<{
@@ -52,13 +59,6 @@ export type StallFoodOptionsErrors = Merge<
 	}>
 >;
 
-export interface StallTipOffModifiableProps {
-	noms: StallFoodOptions;
-	email: string;
-	tipoff_source?: StallTipOffSource;
-	tipoff_source_other: string;
-}
-
 export interface StallOwnerModifiableProps {
 	noms: StallFoodOptions;
 	email: string;
@@ -68,6 +68,27 @@ export interface StallOwnerModifiableProps {
 	website?: string;
 }
 
+export interface StallTipOffModifiableProps {
+	noms: StallFoodOptions;
+	email: string;
+	tipoff_source?: StallTipOffSource;
+	tipoff_source_other: string;
+}
+
+export interface StallTipOffRunOutModifiableProps {
+	noms: StallFoodOptions & { run_out: true };
+	email: string;
+	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
+	tipoff_source_other: string;
+}
+
+export interface StallTipOffRedCrossOfShameModifiableProps {
+	noms: { nothing: true };
+	email: string;
+	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
+	tipoff_source_other: string;
+}
+
 export interface NewStallNonFormModifiableProps {
 	election: number;
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
@@ -75,9 +96,15 @@ export interface NewStallNonFormModifiableProps {
 	submitter_type: StallSubmitterType;
 }
 
+export interface NewStallOwner extends StallOwnerModifiableProps, NewStallNonFormModifiableProps {}
+
 export interface NewStallTipOff extends StallTipOffModifiableProps, NewStallNonFormModifiableProps {}
 
-export interface NewStallOwner extends StallOwnerModifiableProps, NewStallNonFormModifiableProps {}
+export interface NewStallTipOffRunOut extends StallTipOffRunOutModifiableProps, NewStallNonFormModifiableProps {}
+
+export interface NewStallTipOffRedCrossOfShame
+	extends StallTipOffRedCrossOfShameModifiableProps,
+		NewStallNonFormModifiableProps {}
 
 // For some reason elections with official polling places loaded still need this to be sent.
 // No idea why...it's on the list to untangle during the admin redesign.
@@ -98,9 +125,12 @@ export enum StallStatus {
 }
 
 export interface Stall
-	extends Omit<NewStallOwner, 'polling_place' | 'location_info'>,
-		Omit<NewStallTipOff, 'polling_place' | 'location_info'> {
+	extends Omit<NewStallOwner, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOff, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOffRunOut, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOffRedCrossOfShame, 'noms' | 'polling_place' | 'location_info'> {
 	id: number;
+	noms: StallFoodOptions & StallNonFoodOptions;
 	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
 	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
 	status: StallStatus;
@@ -121,7 +151,10 @@ export const stallsApi = api.injectEndpoints({
 				params: { token, signature },
 			}),
 		}),
-		addStall: builder.mutation<{}, NewStallTipOff | NewStallOwner>({
+		addStall: builder.mutation<
+			{},
+			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
+		>({
 			query: (stall) => ({
 				url: 'stalls/',
 				method: 'POST',

@@ -519,10 +519,12 @@ class StallsViewSet(viewsets.ModelViewSet):
         if self.action == "retrieve" or self.action == "update_and_resubmit":
             stall = self.get_object()
 
-            if stall.submitter_type == StallSubmitterType.TIPOFF:
+            if stall.submitter_type in [StallSubmitterType.TIPOFF, StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
                 return StallsTipOffUserEditSerializer
-            else:
+            elif stall.submitter_type == StallSubmitterType.OWNER:
                 return StallsOwnerUserEditSerializer
+            else:
+                raise BadRequest(f"Unhandled submitter_type '{stall.submitter_type}'")
         return super(StallsViewSet, self).get_serializer_class()
 
     @transaction.atomic
@@ -532,10 +534,12 @@ class StallsViewSet(viewsets.ModelViewSet):
                 raise BadRequest("This election is no longer active")
             
             # @TODO Once the legacy site is gone, use the code below that requires a submitter_type
-            if "submitter_type" in request.data and request.data["submitter_type"] == StallSubmitterType.TIPOFF:
+            if "submitter_type" in request.data and request.data["submitter_type"] in [StallSubmitterType.TIPOFF, StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
                 serializer = StallsTipOffManagementSerializer(data=request.data)
-            else:
+            elif "submitter_type" in request.data and request.data["submitter_type"] == StallSubmitterType.OWNER:
                 serializer = StallsOwnerManagementSerializer(data=request.data)
+            else:
+                raise BadRequest(f"Unhandled submitter_type '{request.data['submitter_type']}'")
             
             if serializer is not None:
                 if serializer.is_valid() is True:
@@ -548,11 +552,13 @@ class StallsViewSet(viewsets.ModelViewSet):
             else:
                 raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
 
+            # @TODO This needs to support TipOffRunOut and TipOffRedCrossOfShame
             # if "submitter_type" in request.data:
             #     if request.data["submitter_type"] == StallSubmitterType.OWNER:
             #         serializer = StallsOwnerManagementSerializer(data=request.data)
             #     elif request.data["submitter_type"] == StallSubmitterType.TIPOFF:
             #         serializer = StallsTipOffManagementSerializer(data=request.data)
+            # @TODO This needs to support failing for unhandled submitter_types
 
             #     if serializer is not None:
             #         if serializer.is_valid() is True:
@@ -583,6 +589,9 @@ class StallsViewSet(viewsets.ModelViewSet):
 
         if stall.election.is_active() is False:
             return Response({"error": "The {election_name} election has finished.".format(election_name=stall.election.name)}, status=status.HTTP_418_IM_A_TEAPOT)
+        
+        if stall.submitter_type in [StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
+            raise BadRequest("Tip offs for a stall that've run out of food, or polling places without stalls, can't be edited.")
 
         data = deepcopy(request.data)
         del data["token"]

@@ -9,7 +9,7 @@ import AddStallSelectElection from '../../features/addStall/addStallSelectElecti
 import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
 import AddStallStallCreatorForm from '../../features/addStall/addStallStallForm/addStallStallCreatorForm';
 import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
-import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
+import AddStallSubmitterType from '../../features/addStall/addStallSubmitterType/addStallSubmitterType';
 import DebugView from '../../features/debugView/debugView';
 import EditStall from '../../features/editStall/EditStall';
 import EditStallStallEditorForm from '../../features/editStall/editStallStallForm/editStallStallEditorForm';
@@ -102,12 +102,12 @@ export const router = sentryCreateBrowserRouter([
 					// ############################
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					// Occasionally some elections will have no premises names on polling places.
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/submitter/:submitter_type/',
@@ -127,7 +127,7 @@ export const router = sentryCreateBrowserRouter([
 					// ############################
 					{
 						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					{
 						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/submitter/:submitter_type/',
