@@ -87,7 +87,7 @@ export const stallFormTipOffRunOutValidationSchema: ObjectSchema<StallTipOffRunO
 		noms: stallNomsFieldFormValidationSchemaForTipOffRunOut,
 		email: yup.string().email().required(),
 		tipoff_source: yup.mixed<StallTipOffSource.Other>().oneOf([StallTipOffSource.Other]).required(),
-		tipoff_source_other: yup.string().required().ensure(),
+		tipoff_source_other: yup.string().required('This is a required field, ta!').ensure(),
 	})
 	.required();
 
@@ -97,6 +97,6 @@ export const stallFormTipOffRedCrossOfShameValidationSchema: ObjectSchema<StallT
 			noms: yup.object({ nothing: yup.boolean().isTrue().required() }).required(),
 			email: yup.string().email().required(),
 			tipoff_source: yup.mixed<StallTipOffSource.Other>().oneOf([StallTipOffSource.Other]).required(),
-			tipoff_source_other: yup.string().required().ensure(),
+			tipoff_source_other: yup.string().required('This is a required field, ta!').ensure(),
 		})
 		.required();
