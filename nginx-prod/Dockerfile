@@ -15,4 +15,5 @@ ADD build/public-legacy/ /frontend/demsausage-public-legacy/
 ADD build/public-redesign.tgz /frontend/demsausage-redesign/
 # ADD build/admin.tgz /frontend/demsausage-admin/
 ADD build/admin-legacy/ /frontend/demsausage-admin-legacy/
+ADD build/admin-redesign.tgz /frontend/demsausage-admin-redesign/
 ADD build/django.tgz /frontend/demsausage-api/

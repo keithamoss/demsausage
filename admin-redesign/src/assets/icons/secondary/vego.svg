@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="298.07" height="298.07" viewBox="0 0 298.07 298.07">
+  <rect width="298.07" height="298.07" style="fill: none; stroke-width: 0px;"/>
+  <g>
+    <g>
+      <path d="M143.44,180.87s-4.75-26.89,2.53-52.8c0,0-26.31-46.94-79.73-47.3,0,0-38.34,100.99,77.2,120.15,0,0-19.39-49.79-49.52-80.93,0,0,22.19,10.38,49.52,60.88Z" style="fill: #849324; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.19px;"/>
+      <path d="M150.32,193.65S117.57,57.52,262.93,45.81c0,0,36.56,137.19-101.61,155.12,0,0,14.11-49.69,66.82-110.66,0,0-66.02,58.3-77.83,103.38Z" style="fill: #849324; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.19px;"/>
+    </g>
+    <g>
+      <g id="Plus">
+        <circle cx="74.54" cy="199.96" r="55.23" style="fill: #fff; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.19px;"/>
+      </g>
+      <path d="M103.06,168.35l-20.53,67.95h-17.11l-20.41-67.95h16.95l13.59,48.58,14.16-48.58h13.35Z" style="fill: #000; stroke-width: 0px;"/>
+    </g>
+  </g>
+</svg>
