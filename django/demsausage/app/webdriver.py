@@ -37,7 +37,7 @@ def get_map_screenshot(election):
         # driver.set_window_size(2560, 1440)
         # driver.set_window_size(1920, 1080)
         driver.set_window_size(1200, 630)
-        driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election)}?embed=1')
+        driver.get(f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election.name)}?embed=1')
 
         # Give the map and basemap tiles time to load
         sleep(8)
