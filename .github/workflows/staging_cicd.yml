@@ -1,8 +1,8 @@
 name: Staging CI/CD
 
 on:
-  # push:
-  #   branches: [staging]
+  push:
+    branches: [staging]
   pull_request:
     branches: [staging]
     types: [closed]
@@ -11,98 +11,107 @@ env:
   LATEST_IMAGE_TAG: latest-staging
 
 jobs:
-  build-public:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # build-public:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "16.x"
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20.x'
 
-      - name: Setup Env Vars
-        run: |
-          mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+  #     - name: Setup Env Vars
+  #       run: |
+  #         mkdir secrets
+  #         mkdir secrets/staging/
+  #         mkdir secrets/dev/
+  #         echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+  #         echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+  #         echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+  #         echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+  #         echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
-      - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
+  #     - name: Build - Prep
+  #       run: |
+  #         mkdir ./build
+  #         mkdir ./nginx-prod/build
 
-      - name: Public Frontend - Build
-        run: docker compose --file build_staging.yml run public
+  #     - name: Public Frontend - Build
+  #       run: docker compose --file build_staging.yml run public
 
-      - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-public
-          path: ./nginx-prod/build/public.tgz
+  #     - name: Upload artifact for container build jobs
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: build-public
+  #         path: ./nginx-prod/build/public.tgz
 
-  build-admin:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # build-admin:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "16.x"
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20.x'
 
-      - name: Setup Env Vars
-        run: |
-          mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+  #     - name: Setup Env Vars
+  #       run: |
+  #         mkdir secrets
+  #         mkdir secrets/staging/
+  #         mkdir secrets/dev/
+  #         echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+  #         echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+  #         echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+  #         echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+  #         echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
-      - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
+  #     - name: Build - Prep
+  #       run: |
+  #         mkdir ./build
+  #         mkdir ./nginx-prod/build
 
-      - name: Public Admin - Build
-        run: docker compose --file build_staging.yml run admin
+  #     - name: Public Admin - Build
+  #       run: docker compose --file build_staging.yml run admin
 
-      - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-admin
-          path: ./nginx-prod/build/admin.tgz
+  #     - name: Upload artifact for container build jobs
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: build-admin
+  #         path: ./nginx-prod/build/admin.tgz
 
   build-public-redesign:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: "16.x"
+          node-version: '20.x'
 
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
           mkdir ./build
           mkdir ./nginx-prod/build
+
+      # - name: Setup Debug Session
+      #   uses: csexton/debugger-action@master
 
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_staging.yml run public_redesign
 
       - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-public-redesign
           path: ./nginx-prod/build/public-redesign.tgz
@@ -110,20 +119,22 @@ jobs:
   build-django-static:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: "16.x"
+          node-version: '20.x'
 
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-frontend.staging.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/sausage-public-redesign-frontend.staging.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/sausage-admin-frontend.staging.env
+          mkdir secrets/staging/
+          mkdir secrets/dev/
+          echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-frontend.staging.env
+          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-frontend.staging.env
 
       - name: Build - Prep
         run: |
@@ -134,20 +145,20 @@ jobs:
         run: docker compose --file build_staging.yml run django
 
       - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-django
           path: ./nginx-prod/build/django.tgz
 
   build-nginx:
     runs-on: ubuntu-latest
-    needs:
-      [build-public, build-admin, build-public-redesign, build-django-static]
+    # needs: [build-public, build-admin, build-public-redesign, build-django-static]
+    needs: [build-public-redesign, build-django-static]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -158,14 +169,14 @@ jobs:
           mkdir ./nginx-prod/build
 
       - name: Download artifacts for container building
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4
         with:
           path: ./build/
 
       - name: Move artifacts
         run: |
-          mv ./build/build-public/public.tgz ./nginx-prod/build/public.tgz
-          mv ./build/build-admin/admin.tgz ./nginx-prod/build/admin.tgz
+          cp -r ./public-legacy/staging/ ./nginx-prod/build/public-legacy/
+          cp -r ./admin-legacy/staging/ ./nginx-prod/build/admin-legacy/
           mv ./build/build-public-redesign/public-redesign.tgz ./nginx-prod/build/public-redesign.tgz
           mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
 
@@ -180,10 +191,10 @@ jobs:
   build-django:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -199,10 +210,10 @@ jobs:
   build-rq-dashboard:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}

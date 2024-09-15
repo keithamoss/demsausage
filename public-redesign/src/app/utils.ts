@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {
 	DEVELOPMENT = 1,
 	TEST = 2,
@@ -28,28 +27,6 @@ export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
 }
 
-// Modified from https://stackoverflow.com/a/8817473
-export const deepValue = (obj: object, searchPath: string) => {
-	const path = searchPath.split('.');
-	for (let i = 0, len = path.length; i < len; i += 1) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore-next-line
-		if (obj[path[i]] === null) {
-			return null;
-		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore-next-line
-		if (obj[path[i]] === undefined) {
-			return undefined;
-		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore-next-line
-		// eslint-disable-next-line no-param-reassign
-		obj = obj[path[i]];
-	}
-	return obj;
-};
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-next-line
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
@@ -77,3 +54,21 @@ export function stringDivider(str: string, width: number, spaceReplacer: string,
 	}
 	return [str, replaceCount];
 }
+
+export const getCSVStringsAsFloats = (s: string) => {
+	if (s.length === 0) {
+		return [];
+	}
+
+	const arrayOfStrings = s.includes(',') ? s.split(',') : [s];
+	return arrayOfStrings.map((v) => parseFloat(v)).filter((v) => Number.isNaN(v) === false);
+};
+
+// https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
+export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator.clipboard.writeText);
+
+// https://philna.sh/blog/2017/03/14/the-web-share-api/
+export const isWebShareApiSupported = () => !!('canShare' in navigator && navigator.share);
+
+export const enumFromStringValue = <T>(enm: { [s: string]: T }, value: string): T | undefined =>
+	(Object.values(enm) as unknown as string[]).includes(value) ? (value as unknown as T) : undefined;

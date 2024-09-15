@@ -3,7 +3,9 @@ from copy import deepcopy
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import (PollingPlaceStatus,
+                                  PollingPlaceWheelchairAccess, StallStatus,
+                                  StallSubmitterType)
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
                                     PollingPlacesNearbyFilter,
@@ -14,9 +16,10 @@ from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
+    get_active_elections, get_default_election,
     get_default_election_map_png_cache_key, get_election_map_png_cache_key,
     get_elections_cache_key, get_polling_place_geojson_cache_key,
-    get_polling_place_json_cache_key, getDefaultElection)
+    get_polling_place_json_cache_key)
 from demsausage.app.sausage.loader import RollbackPollingPlaces
 from demsausage.app.sausage.mailgun import (make_confirmation_hash,
                                             send_stall_approved_email,
@@ -39,7 +42,9 @@ from demsausage.app.serializers import (ElectionsSerializer,
                                         PollingPlacesManagementSerializer,
                                         PollingPlacesSerializer,
                                         StallsManagementSerializer,
+                                        StallsOwnerManagementSerializer,
                                         StallsSerializer,
+                                        StallsTipOffManagementSerializer,
                                         StallsUserEditSerializer,
                                         UserSerializer)
 from demsausage.app.webdriver import get_map_screenshot
@@ -48,14 +53,6 @@ from demsausage.rq.jobs import (task_generate_election_map_screenshot,
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
-from django.contrib.auth import logout
-from django.contrib.auth.models import User
-from django.contrib.gis.db.models import Extent
-from django.contrib.gis.geos import Point
-from django.core.cache import cache
-from django.db import transaction
-from django.db.models import Func
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
@@ -66,6 +63,15 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer
 from rq.job import Job
+
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models import Extent
+from django.contrib.gis.geos import Point
+from django.core.cache import cache
+from django.db import transaction
+from django.db.models import Func
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
 
@@ -141,7 +147,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         cache_key = get_elections_cache_key()
 
         if request.method == "GET":
-            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-id"), many=True)
+            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-election_day"), many=True)
 
             cache.set(cache_key, json.dumps(serializer.data))
             return Response(serializer.data)
@@ -211,15 +217,14 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     def stats(self, request, pk=None, format=None):
         election = self.get_object()
 
-        if election.id in [27, 37, 53]:
-            stats = FederalSausagelytics(election)
-        elif election.id in [29]:
+        if election.id in [1, 29]:
+            # No data for the first election because we don't have the vote counts in the 'extras' field
             # No data for the 2020 NT Election because COVID :(
             return HttpResponseNotFound()
-        elif election.short_name.startswith("FED ") == False:
-            stats = StateSausagelytics(election)
+        elif election.is_federal is True:
+            stats = FederalSausagelytics(election)
         else:
-            return HttpResponseNotFound()
+            stats = StateSausagelytics(election)
         return Response(stats.get_stats())
 
     @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))
@@ -339,10 +344,12 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         if lonlat is None or lonlat == "":
             raise BadRequest("No lonlat provided.")
 
-        polling_places_filter = LonLatFilter().filter(PollingPlaces.objects.filter(election_id=election_id).filter(status=PollingPlaceStatus.ACTIVE), lonlat)
+        polling_places_filter = LonLatFilter().filter(get_active_polling_place_queryset().filter(election_id=election_id), lonlat)
         extent = polling_places_filter.annotate(geom_as_geometry=Func("geom", template="geom::geometry")).aggregate(Extent("geom_as_geometry"))
 
-        return Response({"extent_wgs84": extent["geom_as_geometry__extent"]})
+        pollingPlaceSerializer = PollingPlaceSearchResultsSerializer(polling_places_filter, many=True)
+
+        return Response({"extent_wgs84": extent["geom_as_geometry__extent"], "polling_places": pollingPlaceSerializer.data})
 
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
@@ -393,7 +400,7 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
             cache_key_map_png = get_election_map_png_cache_key(request.data['election_id'])
             cache.delete(cache_key_map_png)
 
-            defaultElection = getDefaultElection()
+            defaultElection = get_default_election()
             if defaultElection is not None and defaultElection.id == request.data['election_id']:
                 cache_key_default_map_png = get_default_election_map_png_cache_key()
                 cache.delete(cache_key_default_map_png)
@@ -448,7 +455,7 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
     def list(self, request, format=None):
         # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
 
-        primaryElection = getDefaultElection()
+        primaryElection = get_default_election()
         if primaryElection is not None:
             # So let's fire off a job to cache an image for this election...
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
@@ -471,7 +478,7 @@ class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
     def get(self, request):
         # We've gotten past the NGINX caching layer, so we can assume there's nothing in memcached right now
 
-        primaryElection = getDefaultElection()
+        primaryElection = get_default_election()
         if primaryElection is not None:
             # So let's fire off a job to cache an image for this election...
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
@@ -512,14 +519,46 @@ class StallsViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, format=None):
-        serializer = StallsManagementSerializer(data=request.data)
-        if serializer.is_valid() is True:
-            serializer.save()
+        if "election" in request.data:
+            if get_active_elections().filter(id=request.data["election"]).count() == 0:
+                raise BadRequest("This election is no longer active")
+            
+            # @TODO Once the legacy site is gone, use the code below that requires a submitter_type
+            if "submitter_type" in request.data and request.data["submitter_type"] == StallSubmitterType.TIPOFF:
+                serializer = StallsTipOffManagementSerializer(data=request.data)
+            else:
+                serializer = StallsOwnerManagementSerializer(data=request.data)
+            
+            if serializer is not None:
+                if serializer.is_valid() is True:
+                    serializer.save()
 
-            send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
-            return Response({}, status=status.HTTP_201_CREATED)
-        else:
-            raise BadRequest(serializer.errors)
+                    send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
+                    return Response({}, status=status.HTTP_201_CREATED)
+                else:
+                    raise BadRequest(serializer.errors)
+            else:
+                raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
+
+            # if "submitter_type" in request.data:
+            #     if request.data["submitter_type"] == StallSubmitterType.OWNER:
+            #         serializer = StallsOwnerManagementSerializer(data=request.data)
+            #     elif request.data["submitter_type"] == StallSubmitterType.TIPOFF:
+            #         serializer = StallsTipOffManagementSerializer(data=request.data)
+
+            #     if serializer is not None:
+            #         if serializer.is_valid() is True:
+            #             serializer.save()
+
+            #             send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
+            #             return Response({}, status=status.HTTP_201_CREATED)
+            #         else:
+            #             raise BadRequest(serializer.errors)
+            #     else:
+            #         raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
+            
+            # raise BadRequest("No submitter_type supplied")
+        raise BadRequest("No election supplied")
 
     def retrieve(self, request, *args, **kwargs):
         stall = self.get_object()
@@ -590,6 +629,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             "facility_type": None,
             "election": stall.election.id,
             "status": PollingPlaceStatus.ACTIVE,
+            "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN
         })
 
         if pollingPlaceSerializer.is_valid() is True:
@@ -682,6 +722,7 @@ class MailManagementViewSet(viewsets.ViewSet):
             "event_type": event_type,
             "payload": event_data,
         })
+
         if serializer.is_valid() is True:
             serializer.save()
             return Response({"status": "OK"})

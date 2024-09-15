@@ -6,7 +6,6 @@ from demsausage.util import get_env, get_url_safe_election_name
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
@@ -20,7 +19,8 @@ def get_map_screenshot(election):
     firefox_options.add_argument("--kiosk")  # Ensures the window size we set is the actual output size of the screenshot
     # firefox_options.add_argument("--start-fullscreen")
     # firefox_options.add_argument("--start-maximized")
-    firefox_options.binary_location = FirefoxBinary('/usr/lib/firefox-esr/firefox-esr')
+    firefox_options.binary_location = '/usr/lib/firefox-esr/firefox-esr'
+    firefox_options.set_preference("general.useragent.override", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0; Demsausage-Webdriver-Screenshot-Service")
 
     if os.path.isfile('/app/logs/webdriver/geckodriver.log') is False:
         Path('/app/logs/webdriver/').mkdir(parents=True, exist_ok=True)

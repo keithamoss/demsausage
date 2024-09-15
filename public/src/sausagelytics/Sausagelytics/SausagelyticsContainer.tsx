@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
-	fetchElectionStats,
 	IElection,
 	ISausagelyticsStateStats,
 	ISausagelyticsStats,
+	fetchElectionStats,
 } from '../../redux/modules/elections';
 import { IStore } from '../../redux/modules/reducer';
 import SausagelyticsFederal from './SausagelyticsFederal';
@@ -63,12 +63,12 @@ class SausagelyticsContainer extends React.Component<TComponentProps, IStateProp
 			return <div>No stats are available for this election 😢</div>;
 		}
 
-		return currentElection.id === 27 || currentElection.id === 37 || currentElection.id === 53 ? (
-			<SausagelyticsFederal election={currentElection} stats={stats as ISausagelyticsStats} />
-		) : (
-			<SausagelyticsState election={currentElection} stats={stats as ISausagelyticsStateStats} />
-		);
-	}
+    return currentElection.id === 27 || currentElection.id === 37 || currentElection.id === 53 ? (
+      <SausagelyticsFederal election={currentElection} stats={stats as ISausagelyticsStats} />
+    ) : (
+      <SausagelyticsState election={currentElection} stats={stats as ISausagelyticsStateStats} />
+    )
+  }
 }
 
 const mapStateToProps = (state: IStore): IStoreProps => {

@@ -1,8 +1,18 @@
 import { DateTime } from 'luxon';
+import { View } from 'ol';
+import { Polygon } from 'ol/geom';
 import { Election } from '../../app/services/elections';
+import { getStandardViewPadding } from '../map/mapHelpers';
 
-export const isElectionLive = (election: Election) =>
-	DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
+export const isElectionLive = (election: Election) => {
+	// return true;
+
+	if (window.location.pathname === '/debug/' && window.location.search === '?live=true') {
+		return true;
+	}
+
+	return DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
+};
 
 export function getDefaultElection(elections: Election[]) {
 	let defaultElection: Election | undefined;
@@ -47,4 +57,23 @@ export const getElectionKindaNotSoShortName = (election: Election) =>
 export const getElectionVeryShortName = (election: Election) => {
 	const veryShortName = election.short_name.replace(/\s[0-9]{4}$/, '');
 	return veryShortName.length <= 3 ? veryShortName : veryShortName.slice(0, 3);
+};
+
+export const getViewForElection = (election: Election) => {
+	// Determine the size of the map.
+	// Fallback to the window if for some weird reason we can't get the size of the OpenLayers Map.
+	// It won't be exatly the same size (because of the header), but it'll do.
+	const olMapDOMRect = document.getElementById('openlayers-map')?.getBoundingClientRect();
+	const size =
+		olMapDOMRect !== undefined ? [olMapDOMRect.width, olMapDOMRect.height] : [window.innerWidth, window.innerHeight];
+
+	const view = new View();
+	const polygon = new Polygon(election.geom.coordinates).transform('EPSG:4326', 'EPSG:3857');
+
+	view.fit(polygon.getExtent(), {
+		size,
+		padding: getStandardViewPadding(),
+	});
+
+	return view;
 };

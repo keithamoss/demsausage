@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="298.07" height="298.07" viewBox="0 0 298.07 298.07">
+  <rect width="298.07" height="298.07" style="fill: none; stroke-width: 0px;"/>
+  <g>
+    <g id="Cupcake">
+      <path d="M162.66,59.19c5.6,6.71,17.32,18.7,36.07,24.74,6.51,2.1,12.54,3.05,17.66,3.43-4.22,3.32-19.62,14.58-40.99,13.19-10.4-.68-18.47-4.1-23.39-6.72" style="fill: #ede8e4; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+      <path d="M242.54,145.53s-2.15-27.64-17.82-35.23c0,0-36.87,24.97-73.75,35.23h91.57Z" style="fill: #f9cd5f; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+      <path d="M73.06,144.38s-5.33-22.07,21.33-27.25c26.66-5.18,70.52-1.29,98.87-12.08,28.35-10.78,27.38-15.31,27.38-15.31,0,0,10.66,7.76,9.94,19.63s-13.09,16.39-13.09,16.39l-49.92,18.62h-94.51Z" style="fill: #fff; stroke: #000; stroke-miterlimit: 10; stroke-width: 1.51px;"/>
+      <g id="Cupcake_col" data-name="Cupcake col">
+        <path d="M204.69,238.32l17.41-92.79,20.06,1.02c-11.55,36.42-22.65,88.48-30.14,90.97" style="fill: #6230b0; stroke-width: 0px;"/>
+        <polyline points="104.86 238.32 86.35 144.67 109.93 144.39 118.3 238.32" style="fill: #6230b0; stroke-width: 0px;"/>
+      </g>
+      <ellipse cx="155.59" cy="72.62" rx="21.66" ry="21.2" style="fill: #cc2936; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+      <path d="M99.68,116.05s-5.32-10.21,0-19.81,24.99-18.78,34.93-20.01c0,0,1.39,4.08,14.58,9.19s64.55,1.02,64.55,1.02c0,0,6.94-1.23,6.48,3.68-.46,4.9-37.25,33.89-120.53,25.93Z" style="fill: #fff; stroke: #000; stroke-miterlimit: 10; stroke-width: 1.51px;"/>
+      <g>
+        <path d="M242.6,144.54c0-5.8-4.5-10.5-10.06-10.5s-9.73,4.37-10.04,9.87h-.02s-10.45,93.86-10.45,93.86c7.5-2.49,19.14-56.76,30.69-93.18" style="fill: #6230b0; stroke-width: 0px;"/>
+        <path d="M201.47,144.87c-.28-6.38-5.54-11.48-12-11.48s-11.72,5.09-12,11.48h-.22l-2.09,93.69h16.75l9.7-93.69h-.14Z" style="fill: #6230b0; stroke-width: 0px;"/>
+        <path d="M154.6,144.9h-.56s.53,0,.53,0c0-6.63-6.16-12.61-12.74-12.61s-10.92,5.84-11.02,12.38h-.16s3.74,93.65,3.74,93.65h20.33l-.13-93.42Z" style="fill: #6230b0; stroke-width: 0px;"/>
+        <path d="M86.22,144.93c0-6.63,5.26-12.01,11.75-12.01s11.75,5.38,11.75,12.01" style="fill: #6230b0; stroke-width: 0px;"/>
+        <path d="M86.85,144.73h-.13c-.14-6.54-4.42-11.79-9.68-11.79s-9.69,5.42-9.69,12.12h.21c1.27,5.05,20.4,85.63,28.69,91.6l9.11,1.73-18.51-93.65Z" style="fill: #a197c6; stroke-width: 0px;"/>
+        <path d="M130.78,143.84h-.29c-.39-5.96-4.82-10.67-10.24-10.67s-9.85,4.7-10.24,10.67h-.29l8.58,94.48,16.09.48-3.62-94.96Z" style="fill: #a197c6; stroke-width: 0px;"/>
+        <path d="M165.86,133.33c-6.22,0-11.26,5.15-11.26,11.51l.13,93.74h20.44l2.3-93.7c0-6.36-5.38-11.54-11.6-11.54Z" style="fill: #a197c6; stroke-width: 0px;"/>
+        <path d="M222.64,144.9c0-6.36-4.74-11.51-10.58-11.51s-10.58,5.15-10.58,11.51h.1l-9.67,93.42h12.78l17.73-93.42h.22Z" style="fill: #a197c6; stroke-width: 0px;"/>
+      </g>
+      <g>
+        <polygon points="85.27 144.71 105.36 238.38 87.43 144.71 85.27 144.71" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="108.79 144.67 118.3 238.32 110.95 144.67 108.79 144.67" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="129.58 144.67 134.39 238.8 131.71 144.58 129.58 144.67" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="153.64 144.5 154.79 238.55 155.81 144.52 153.64 144.5" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="176.15 144.67 175.16 238.55 178.31 144.67 176.15 144.67" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="200.53 144.55 191.91 238.32 202.67 144.63 200.53 144.55" style="fill: #000; stroke-width: 0px;"/>
+        <polygon points="221.71 144.51 204.69 238.32 223.84 144.63 221.71 144.51" style="fill: #000; stroke-width: 0px;"/>
+      </g>
+      <g>
+        <path d="M177.25,144.63c0-6.56,5.45-11.87,12.18-11.87s12.18,5.31,12.18,11.87" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M130.65,144.42c0-6.44,5.39-11.65,12.04-11.65s12.04,5.22,12.04,11.65" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M86.35,144.67c0-6.57,5.26-11.9,11.75-11.9s11.75,5.33,11.75,11.9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M222.77,144.63c0-5.9,4.47-10.69,9.98-10.69s9.98,4.79,9.98,10.69v.03s-25.23,86.26-25.23,86.26c0,0-1.6,5.5-6.71,7.66h-109.1s-4.78-.34-8.27-4.94c-3.35-4.4-25.3-80.65-26.45-88.39l.02-.53c0-6.63,4.34-12.01,9.69-12.01s9.69,5.38,9.69,12.01" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M109.85,144.67c0-6.44,4.66-11.65,10.4-11.65s10.4,5.22,10.4,11.65" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M154.72,144.63c0-6.3,5.04-11.41,11.26-11.41s11.26,5.11,11.26,11.41" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+        <path d="M201.61,144.63c0-6.3,4.74-11.41,10.58-11.41s10.58,5.11,10.58,11.41" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+      </g>
+    </g>
+    <g id="Plus">
+      <circle cx="66.96" cy="102.77" r="58.3" style="fill: #f9cd5f; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+    </g>
+    <rect x="24.96" y="93.39" width="83.99" height="19.67" style="fill: #fff; stroke: #000; stroke-miterlimit: 10; stroke-width: 2.16px;"/>
+  </g>
+</svg>

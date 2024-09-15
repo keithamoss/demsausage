@@ -1,0 +1,256 @@
+ec_id,Division,Polling Place Name,Premise_Address_Line_1,Premise_Address_Line_2,Premise_Locality,state,Premise_Postcode,Location_Within_Premise,Access_To_Location,Disabled_Access,VI_Vote_service,Premise Latitude,Premise Longitude,Premise Name
+,Bass,Beaconsfield,92 Weld St,,Beaconsfield,TAS,7270,,Beaconsfield Community Centre,Assistance,,-41.202855,146.81868,Beaconsfield Senior Citizens' Hall
+,Bass,Beauty Point,7 Beatty St,,Beauty Point,TAS,7270,,,Assistance,,-41.148875,146.8174034,Beauty Point Uniting Church Hall
+,Bass,Branxholm,9 Stoke St,,Branxholm,TAS,7261,,,Assistance,,-41.16713,147.73628,Branxholm Community Hall
+,Bass,Bridport,Main St,,Bridport,TAS,7262,Sports hall,,Assistance,,-41.00278,147.3948,Bridport Hall
+,Bass,Dilston,308 John Lees Dr,,Dilston,TAS,7252,,,Assistance,,-41.33693,147.08171,Dilston War Memorial Hall
+,Bass,East Launceston,18 Mary St,,East Launceston,TAS,7250,Gilligan Hall,,Assistance,,-41.44152,147.15203,East Launceston Primary School
+,Bass,Exeter,28 Glen Ard Mohr Rd,,Exeter,TAS,7275,Gymnasium,,Assistance,,-41.30062,146.95752,Exeter High School
+,Bass,George Town,29-67 Macquarie St,,George Town,TAS,7253,,,Assistance,,-41.10686,146.82194,George Town Memorial Hall
+,Bass,George Town South,48-70 Franklin St,,George Town,TAS,7253,Gymnasium,,Assistance,,-41.1126,146.83307,George Town South Primary School
+,Bass,Gladstone,1 Carr St,,Gladstone,TAS,7264,,,Assistance,,-40.96024,148.00863,Gladstone Hall
+,Bass,Glengarry,33 Glengarry Rd,,Glengarry,TAS,7275,,,Assistance,,-41.33496863,146.8706875,St Canice Church Hall
+,Bass,Gravelly Beach,401 Gravelly Beach Rd,,Gravelly Beach,TAS,7276,,,Assistance,,-41.28332,146.97134,"Gravelly Beach Main Hall, Edinburgh Park"
+,Bass,Hillwood,280 Jetty Rd,,Hillwood,TAS,7252,,,Assistance,,-41.23623,146.97495,Hillwood Memorial Hall
+,Bass,Invermay,4 Invermay Road,,Inveresk,TAS,7248,Tram Room 28,,Assistance,,-41.428417,147.138618,The Tramsheds Function Centre
+,Bass,Inveresk,35-43 Mayne St,,Invermay,TAS,7248,,Also via Holbrook St,Assistance,,-41.42136,147.1316,Invermay Primary School
+,Bass,Karoola,1126 Pipers River Rd,,Karoola,TAS,7267,,,Assistance,,-41.25423,147.14806,Karoola Hall
+,Bass,Kelso,Foreshore Rd,,Kelso,TAS,7270,,,Assistance,,-41.10353,146.79368,Kelso Community Centre
+,Bass,Lady Barron,10 Main St,,Lady Barron,TAS,7255,,,Assistance,,-40.21062673,148.2393381,Lady Barron Memorial Hall
+,Bass,Launceston Central,163 St John St,,Launceston,TAS,7250,,,Assistance,,-41.440961,147.142126,Chalmers Hall
+,Bass,Launceston,Cornwall Square,182-192 Cimitiere St,Launceston,TAS,7250,,,Assistance,,-41.43491442,147.1360385,Launceston Voting Centre
+,Bass,Prospect,30-32 Ralph St,,Launceston,TAS,7250,Gymnasium,,None,,-41.47551688,147.1310605,Prospect High School
+,Bass,Lebrina,905 Golconda Rd,,Lebrina,TAS,7254,,,Assistance,,-41.17742811,147.2274391,Lebrina Memorial Hall
+,Bass,Legana,43 Fulton St,,Legana,TAS,7277,,,Assistance,,-41.36317,147.04658,Legana Memorial Hall
+,Bass,Lilydale,1949 Main Rd,,Lilydale,TAS,7268,,,Assistance,,-41.25235,147.21586,Lilydale Memorial Hall
+,Bass,Mowbray,36 Button St,,Mowbray,TAS,7248,Sinclair Trust Tower Building,,Assistance,,-41.40867,147.12816,Launceston Church Grammar School
+,Bass,Newnham,128 George Town Rd,,Newnham,TAS,7248,,,Assistance,1,-41.38729,147.12779,Launceston North Uniting Church
+,Bass,Newstead,148 Abbott St,,Newstead,TAS,7250,Basketball court,Entrance off Wentworth St,Assistance,,-41.4470206,147.1572394,Police Citizens & Youth Club
+,Bass,Kings Meadows,146 Punchbowl Rd,,Newstead,TAS,7250,Multipurpose hall,,Assistance,,-41.45307449,147.1646544,Punchbowl Primary School
+,Bass,Norwood,103 Norwood Ave,,Norwood,TAS,7250,Hall,,Assistance,,-41.46282,147.17329,Norwood Primary School
+,Bass,Nunamara,39461 Tasman Hwy,,Nunamara,TAS,7259,,,Assistance,,-41.3948,147.29453,Nunamara Hall
+,Bass,Pipers River,76 School Rd,,Pipers River,TAS,7252,,,Assistance,,-41.10039,147.09152,Pipers River Fire Station
+,Bass,Ravenswood,27 Prossers Forest Rd,,Ravenswood,TAS,7250,Gymnasium,,Assistance,,-41.41627,147.17662,Ravenswood Heights Primary School
+,Bass,Ringarooma,4 Charles St,,Ringarooma,TAS,7263,,,Assistance,,-41.24219,147.73579,Ringarooma Hall
+,Bass,Riverside,354 West Tamar Hwy,,Riverside,TAS,7250,Gymnasium,,Assistance,,-41.40874,147.09891,Riverside High School
+,Bass,Rocherlea,41 Archer St,,Rocherlea,TAS,7248,,,Assistance,,-41.37392464,147.1317273,Rocherlea Memorial Hall
+,Bass,Scottsdale,20 Coplestone St,,Scottsdale,TAS,7260,,,Assistance,,-41.15479201,147.5099324,Scottsdale High School
+,Bass,Sidmouth,255 Batman Hwy,,Sidmouth,TAS,7270,,,Assistance,,-41.22195,146.88767,Sidmouth Community Centre
+,Bass,South Launceston,50 Glen Dhu St,,South Launceston,TAS,7249,Auditorium,,None,,-41.45564437,147.1412667,Launceston Conference Centre (Door of Hope Complex)
+,Bass,Five Ways,6 Hobart Rd,,South Launceston,TAS,7249,,,Assistance,,-41.45903,147.1537,St Mark's Church Hall
+,Bass,St Leonards,330-342 St Leonards Rd,,St Leonards,TAS,7250,Roberts Room,Car park via Station Rd,Assistance,,-41.4597,147.20031,St Leonards Primary School
+,Bass,Summerhill,87 Stanley St,,Summerhill,TAS,7250,,,Assistance,,-41.46734935,147.1303817,Summerhill Baptist Church
+,Bass,Riverside West,34 Pitt Ave,,Trevallyn,TAS,7250,Auditorium,,Assistance,,-41.43059,147.10612,Trevallyn Life Church
+,Bass,Trevallyn,55 Gorge Rd,,Trevallyn,TAS,7250,Multipurpose room,,Full,,-41.43784,147.11397,Trevallyn Primary School
+,Bass,Waverley,6 Naroo St,,Waverley,TAS,7250,,,Assistance,,-41.43332,147.19002,Waverley Primary School
+,Bass,West Launceston,24-38 Basin Rd,,West Launceston,TAS,7250,,,Assistance,,-41.44964,147.1285,West Launceston Primary School
+,Bass,Weymouth,18 Major St,,Weymouth,TAS,7252,,,Assistance,,-41.01518,147.15443,Weymouth Hall
+,Bass,Whitemark,9 Patrick St,,Whitemark,TAS,7255,,,Assistance,,-40.1220889,148.0169627,Flinders Arts & Entertainment Centre (FAEC)
+,Bass,Winnaleah,20 Main St,,Winnaleah,TAS,7263,,,Assistance,,-41.09807,147.82404,Winnaleah Memorial Hall
+,Bass,Youngtown,Cnr Victoria & Napier Sts,,Youngtown,TAS,7249,General purpose hall,,Assistance,,-41.48235,147.16386,Youngtown Primary School
+,Braddon,Acton,36 Thorne St,,Acton,TAS,7320,Hall,,Assistance,,-41.07219,145.89258,Burnie Child and Family Centre
+,Braddon,Boat Harbour,17386 Bass Hwy,,Boat Harbour,TAS,7321,Hall,,Assistance,,-40.94507,145.63715,Boat Harbour Primary School
+,Braddon,Burnie,80 Wilson St,,Burnie,TAS,7320,Atrium on ground floor,,Assistance,1,-41.05317,145.90595,Burnie City Council Offices
+,Braddon,Calder,1320 Calder Rd,,Calder,TAS,7325,Main area,,Assistance,,-41.06851,145.63121,Calder Hall
+,Braddon,Cooee,Bass Hwy,,Cooee,TAS,7320,Multipurpose room,,Assistance,,-41.040894,145.868525,Cooee Primary School
+,Braddon,Currie,Cnr Meech & George Sts,,Currie,TAS,7256,,,Assistance,,-39.92984,143.85416,Currie Town Hall
+,Braddon,Devonport Central,57A Stewart St,,Devonport,TAS,7310,Gymnasium,,Assistance,,-41.17993727,146.3577969,Devonport Primary School
+,Braddon,Devonport North West,60 Nixon St,,Devonport,TAS,7310,Gymnasium,,Assistance,,-41.1727705,146.3374857,Nixon St Primary School
+,Braddon,Devonport South,41-43 Middle Rd,,Devonport,TAS,7310,Staff room,,Assistance,,-41.18904,146.35208,Reece High School
+,Braddon,Devonport West,20-36 Valley Rd,,Devonport,TAS,7310,Canteen,,Assistance,,-41.18583,146.34549,TasTafe
+,Braddon,Don,17 Forth Rd,,Don,TAS,7310,,,Assistance,,-41.18256,146.31804,Don Memorial Hall
+,Braddon,East Devonport,19-31 Thomas St,,East Devonport,TAS,7310,Multipurpose room,,Assistance,,-41.17836,146.37111,East Devonport Primary School
+,Braddon,Edith Creek,1282 Trowutta Rd,,Edith Creek,TAS,7330,Hall,,Assistance,,-40.96994,145.09329,Edith Creek Primary School
+,Braddon,Elliott,829 Murchison Hwy,,Elliott,TAS,7325,Main hall,,Assistance,,-41.09211,145.78229,Elliott Community Centre
+,Braddon,Forest,422 Mengha Rd,,Forest,TAS,7330,Multipurpose room,,Assistance,,-40.84865,145.24893,Forest Primary School
+,Braddon,Forth,680 Forth Rd,,Forth,TAS,7315,,,Assistance,,-41.18916759,146.248552,Forth Town Hall
+,Braddon,Gawler,15 Top Gawler Rd,,Gawler,TAS,7315,,,Assistance,,-41.18548,146.16007,Gawler Hall
+,Braddon,Grassy,6 Fern Tree Dr,,Grassy,TAS,7256,,,Assistance,,-40.04806384,144.0508167,Grassy Fire Station
+,Braddon,Havenview,15 Marriott St,,Havenview,TAS,7320,Multipurpose room/hall,,Assistance,,-41.08346,145.91081,Havenview Primary School
+,Braddon,Heybridge,1 Sice Ave,,Heybridge,TAS,7316,,,Assistance,,-41.07515,145.98616,Blythe Heads Hall
+,Braddon,Highclere,1558 Ridgley Hwy,,Highclere,TAS,7321,Front of hall,,None,,-41.19046,145.8061,Highclere Function Centre
+,Braddon,Irishtown,602 Irishtown Rd,,Irishtown,TAS,7330,,,Assistance,,-40.91220617,145.1442312,Irishtown Community Centre
+,Braddon,Latrobe,23 Lewis St,,Latrobe,TAS,7307,Enrichment Centre,Access from Bradshaw St,Assistance,,-41.23912,146.41612,Latrobe Primary School
+,Braddon,Marrawah,844 Comeback Rd,,Marrawah,TAS,7330,,,Assistance,,-40.92299,144.69693,Marrawah Memorial Hall
+,Braddon,Melrose,673 Melrose Rd,,Melrose,TAS,7310,,,Assistance,,-41.24115487,146.2884587,Melrose Memorial Hall
+,Braddon,Montello,83 Bird St,,Montello,TAS,7320,Hall,,Assistance,,-41.05996,145.89764,Montello Primary School
+,Braddon,Moorleah,720 Preolenna Rd,,Moorleah,TAS,7321,Main hall,,Assistance,,-40.98099,145.61629,Moorleah Community Centre
+,Braddon,Natone,100 Upper Natone Rd,,Natone,TAS,7321,Front entrance foyer,,Assistance,,-41.17022,145.92209,Natone Primary School
+,Braddon,North Motton,578 Preston Rd,,North Motton,TAS,7315,,,Assistance,,-41.20705,146.10952,North Motton Hall
+,Braddon,Penguin,50 Main Rd,,Penguin,TAS,7316,,,Assistance,,-41.11192,146.07072,Penguin Uniting Church Hall
+,Braddon,Port Sorell,Cnr Darling and Meredith Sts,,Port Sorell,TAS,7307,,,Assistance,,-41.16525,146.5558,Port Sorell Memorial Hall
+,Braddon,Queenstown,53 Orr St,,Queenstown,TAS,7467,,,Assistance,,-42.080415,145.557426,Queenstown Memorial Hall
+,Braddon,Riana,1225 Pine Rd,,Riana,TAS,7316,Hall,,None,,-41.2022834,145.9993611,Riana Primary School
+,Braddon,Ridgley,904 Ridgley Hwy,,Ridgley,TAS,7321,Multipurpose room,,Assistance,,-41.13937,145.83787,Ridgley Primary School
+,Braddon,Rocky Cape,19074 Bass Hwy,,Rocky Cape,TAS,7321,Supper room,,Assistance,,-40.90489,145.48664,Rocky Cape Public Hall
+,Braddon,Romaine,Cnr Roslyn Ave and Mount St,,Romaine,TAS,7320,Multipurpose room,,Assistance,,-41.07761,145.90144,Romaine Park Primary School
+,Braddon,Rosebery,8 Agnes St,,Rosebery,TAS,7470,Back room,Entrance via carpark,Assistance,,-41.78006,145.53919,Rosebery Neighbourhood Centre
+,Braddon,Sassafras,50 School Rd,,Sassafras,TAS,7307,Gym/hall,,Assistance,,-41.28689,146.50295,Sassafras Primary School
+,Braddon,Shorewell Park,41-43 Mooreville Rd,,Shorewell Park,TAS,7320,Cafeteria K Block,,Assistance,,-41.06122,145.88163,Hellyer College
+,Braddon,Sisters Beach,Honeysuckle Ave,,Sisters Beach,TAS,7325,,,None,,-40.91818,145.56498,Sisters Beach Fire Station
+,Braddon,Sisters Creek,Myalla Recreation Ground,29 Myalla Rd,Sisters Creek,TAS,7325,,,Assistance,,-40.964713,145.573222,Myalla Community Centre
+,Braddon,Smithton,27- 43 Grant St,,Smithton,TAS,7330,Assembly hall,,Assistance,,-40.84289,145.12672,Smithton Primary School
+,Braddon,Somerset,30A Beaufort St,,Somerset,TAS,7322,Multipurpose room,,Assistance,,-41.03815,145.82063,Somerset Primary School
+,Braddon,South Riana,776 South Riana Rd,,South Riana,TAS,7316,,,Assistance,,-41.23446,145.97709,South Riana Hall
+,Braddon,Sprent,1245 Castra Rd,,Sprent,TAS,7315,Main hall,,Assistance,,-41.26221,146.15948,Sprent Primary School
+,Braddon,Spreyton,1 Mersey Main Rd,,Spreyton,TAS,7310,Multipurpose room,,Assistance,,-41.21202,146.34454,Spreyton Primary School
+,Braddon,Stanley,Wilson St,,Stanley,TAS,7330,Multipurpose room,Access from Pearse St,Assistance,,-40.7595,145.29099,Stanley Primary School
+,Braddon,Stowport,580 Stowport Rd,,Stowport,TAS,7321,Main area,,Assistance,,-41.11224,145.92863,Stowport Public Hall
+,Braddon,Strahan,2 Bay St,,Strahan,TAS,7468,Hall,,Assistance,,-42.153392,145.320432,Strahan Primary School
+,Braddon,Sulphur Creek,310 Preservation Dr,,Sulphur Creek,TAS,7316,Kitchen,,Assistance,,-41.09328,146.02373,Sulphur Creek Hall
+,Braddon,Tullah,24 Farrell St,,Tullah,TAS,7321,,,Assistance,,-41.73767801,145.6163906,Tullah Town Hall
+,Braddon,Turners Beach,Henry St,,Turners Beach,TAS,7315,Main hall,,Assistance,,-41.15871,146.2447,Turners Beach Community Centre
+,Braddon,Ulverstone East,18 Crawford St,,Ulverstone,TAS,7315,Multipurpose room,,Assistance,,-41.15494,146.19089,East Ulverstone Primary School
+,Braddon,Ulverstone South,38 Leven St,,Ulverstone,TAS,7315,Multipurpose hall,,Assistance,,-41.16199,146.17143,Ulverstone Secondary College
+,Braddon,Ulverstone Central,16 King Edward St,,Ulverstone,TAS,7315,Main area,,Assistance,,-41.155037,146.171973,Ulverstone Senior Citizens Club
+,Braddon,Waratah,12-14 Smith St,,Waratah,TAS,7321,Council Chambers,,Assistance,,-41.44462,145.53128,Waratah Municipal Chambers
+,Braddon,Wesley Vale,20 Westwind Dr,,Wesley Vale,TAS,7307,Bottom classroom,,Assistance,,-41.1887792,146.4562247,Andrews Creek Primary School
+,Braddon,West Ulverstone,34 Maud St,,West Ulverstone,TAS,7315,Hall,Josephine St entrance,Assistance,,-41.14851,146.15899,West Ulverstone Primary School
+,Braddon,Wivenhoe,Stowport Rd,,Wivenhoe,TAS,7320,Multipurpose hall,Car park via Hull St ,Assistance,,-41.06907,145.93613,Wivenhoe Campus Leighland Christian School
+,Braddon,Wynyard West,30 Church St,,Wynyard,TAS,7325,Student centre,,Assistance,,-40.98684,145.71684,Wynyard High School
+,Braddon,Wynyard Central,28 Jackson St,,Wynyard,TAS,7325,Entrance foyer,,Assistance,,-40.99088,145.72865,Wynyard Senior Citizens Clubrooms
+,Braddon,Yolla,School La,,Yolla,TAS,7325,Classroom D1,,Assistance,,-41.12363,145.71977,Yolla District High School
+,Braddon,Zeehan,7 Belstead St,,Zeehan,TAS,7469,Stadium,,Assistance,,-41.88794,145.33998,Zeehan Primary School
+,Clark,Austins Ferry,195 Main Rd,,Austins Ferry,TAS,7011,Edmund Rice Hall,,None,,-42.77386,147.25087,St Virgil's College
+,Clark,Battery Point West,Albuera St,,Battery Point,TAS,7004,Multipurpose room,,Assistance,,-42.89108,147.32598,Albuera Street Primary School
+,Clark,Battery Point,28 Cromwell St,,Battery Point,TAS,7004,Parish Hall,Access from 30 Cromwell St,Assistance,,-42.89152,147.33268,St George's Church Hall
+,Clark,Chigwell,10 Bucaan St,,Chigwell,TAS,7011,,,Assistance,,-42.81133,147.24084,Chigwell Barn
+,Clark,Roseneath,16A Cammeray Rd,,Claremont,TAS,7011,,,Assistance,,-42.78521,147.24012,Austins Ferry Primary School
+,Clark,Claremont,61 Claremont Link Rd,,Claremont,TAS,7011,Gymnasium,,Assistance,,-42.79416018,147.2497183,Claremont College
+,Clark,Windermere,2 Cadbury Rd,,Claremont,TAS,7011,Multipurpose room,,Full,,-42.79934,147.25846,Windermere Primary School
+,Clark,Collinsvale,508 Collinsvale Rd,,Collinsvale,TAS,7012,General purpose room,,Assistance,,-42.83696,147.19837,Collinsvale Primary School
+,Clark,Glenorchy Central,286-294 Main Rd,,Glenorchy,TAS,7010,,Access from Felicity Lane,Assistance,,-42.8365061,147.283187,Cosgrove High School
+,Clark,Goodwood,454/458 Brooker Hwy,,Derwent Park,TAS,7009,Gymnasium,,Assistance,,-42.83189,147.29333,Goodwood Primary School
+,Clark,Dynnyrne,Randall St,,Sandy Bay,TAS,7005,Hall,Lord St entrance,Assistance,,-42.89913,147.31855,Princes Street Primary School
+,Clark,Fern Tree,8 Stephenson Pl,,Fern Tree,TAS,7054,,,Assistance,,-42.922346,147.260859,Fern Tree Community Centre
+,Clark,Glenorchy,Kensington St,,Glenorchy,TAS,7010,Gymnasium,Access from Hull St,Assistance,,-42.830908,147.267619,Glenorchy Primary School
+,Clark,Merton,148 Tolosa St,,Glenorchy,TAS,7010,,,Assistance,,-42.84555,147.26505,Tolosa Hall
+,Clark,Hobart City,57-63 Macquarie St,,Hobart,TAS,7000,Main ballroom floor,,Assistance,1,-42.88072266,147.3318282,Hobart City Hall
+,Clark,West Hobart,Cnr Brisbane and Harrington Sts,,Hobart,TAS,7000,St Mary's College,,Assistance,,-42.88159,147.32031,St Peter's Hall
+,Clark,Lenah Valley,11 Creek Rd,,Lenah Valley,TAS,7008,Hall,Access from Colebrook St,Assistance,,-42.861704,147.291106,Lenah Valley Primary School
+,Clark,Moonah East,35 Bowen Rd,,Moonah,TAS,7009,Gymnasium,,Assistance,,-42.8472392,147.3072554,Bowen Road Primary School
+,Clark,Moonah,7 Gormanston Rd,,Moonah,TAS,7009,Gymnasium/court,,Assistance,,-42.84612742,147.2997299,Moonah Community Centre
+,Clark,Moonah North,40 Derwent Park Rd,,Derwent Park,TAS,7009,Hall,,Assistance,,-42.83843,147.29633,Moonah Primary School
+,Clark,Mount Nelson,388 Nelson Rd,,Mount Nelson,TAS,7007,Hall,,Assistance,,-42.91353,147.32305,Mt Nelson Primary School
+,Clark,Mount Stuart,106 Gillon Cres,,Mount Stuart,TAS,7000,General purpose room,,Assistance,,-42.87507,147.29906,Mt Stuart Primary School
+,Clark,New Town West,2 Cross St,,New Town,TAS,7008,Mackillop Court,,None,,-42.86136,147.30396,Sacred Heart College
+,Clark,New Town,395 Argyle St,,North Hobart,TAS,7000,The Farrall Centre,Access from 393 Argyle St,Assistance,,-42.865999,147.313782,The Friends' School
+,Clark,North Hobart Central,Swan St,,North Hobart,TAS,7000,Cross/Hopkins Room,,Assistance,,-42.87271,147.31425,Hobart North Uniting Church
+,Clark,Rosetta,865 Brooker Ave,,Rosetta,TAS,7010,Gymnasium,"Access from Foreshore Rd, Glenorchy",Assistance,,-42.819487,147.265325,Montrose Bay High School
+,Clark,Sandy Bay Beach,1 Southerwood Dr,,Sandy Bay,TAS,7005,,,Assistance,,-42.91389,147.35476,Harold Gregg Centre (Sandown Village)
+,Clark,Lower Sandy Bay,568 Sandy Bay Rd,,Sandy Bay,TAS,7005,General purpose hall,,Assistance,,-42.909612,147.349511,Sandy Bay Infant School
+,Clark,Waimea Heights,12 Balfour Ct,,Sandy Bay,TAS,7005,General purpose room,,Assistance,,-42.90873,147.33711,Waimea Heights Primary School
+,Clark,Sandy Bay,43-47 Grosvenor St,,Sandy Bay,TAS,7005,,,Assistance,,-42.89916,147.3266,Wellspring Anglican Church Hall
+,Clark,Cascades,59 Anglesea St,,South Hobart,TAS,7004,Hall,,Assistance,,-42.89286681,147.3099678,South Hobart Primary School
+,Clark,South Hobart,34 Anglesea St,,South Hobart,TAS,7004,,,Assistance,,-42.89497,147.31223,St Francis Xavier's Church Hall
+,Clark,Taroona,104 Channel Hwy,,Taroona,TAS,7053,General purpose hall,,Assistance,,-42.94294,147.35492,Taroona Primary School
+,Clark,West Hobart South,Forest Rd,,West Hobart,TAS,7000,School Hall,,Assistance,,-42.88763,147.31741,Goulburn Street Primary School
+,Clark,West Hobart Central,15 Gourlay St,,West Hobart,TAS,7000,GP room,,Assistance,,-42.88187,147.30889,Lansdowne Crescent Primary School
+,Franklin,Adventure Bay,Adventure Bay Rd,,Adventure Bay,TAS,7150,,,None,,-43.36172,147.32839,Adventure Bay Hall
+,Franklin,Alonnah,15 School Rd,,Alonnah,TAS,7150,,,Assistance,,-43.31727,147.24625,Bruny Island District School
+,Franklin,Clarence,25 Wentworth St,,Bellerive,TAS,7018,ET Smith Hall - gymnasium,,Assistance,,-42.87885,147.38962,Clarence High School
+,Franklin,Bellerive,10 Scott St,,Bellerive,TAS,7018,Hall area,,Assistance,,-42.87607,147.37101,Clarence Police & Community Youth Club Inc
+,Franklin,Blackmans Bay,177 Roslyn Ave,,Blackmans Bay,TAS,7052,Gymnasium,Alternative access from Opal Dr,Assistance,,-42.996627,147.321846,Blackmans Bay Primary School
+,Franklin,Blackmans Bay South,6 Tinderbox Rd,,Blackmans Bay,TAS,7052,General purpose room,Access from Thornton Close,Assistance,,-43.008365,147.319521,Illawarra Primary School
+,Franklin,Cambridge,976 Cambridge Rd,,Cambridge,TAS,7170,Multipurpose room,,Assistance,,-42.83624,147.44195,Cambridge Primary School
+,Franklin,Clarendon Vale,25 Mockridge Rd,,Clarendon Vale,TAS,7019,Hall/gymnasium,,Assistance,,-42.8864538,147.4430762,Clarendon Vale Primary School
+,Franklin,Cradoc,8243 Channel Hwy,,Cradoc,TAS,7109,,,Assistance,,-43.10599,147.03397,Cradoc Park
+,Franklin,Cygnet,19 Louisa St,,Cygnet,TAS,7112,Multi court,,None,,-43.15823579,147.0713781,Cygnet Sports Centre
+,Franklin,Dover,6940 Huon Hwy,,Dover,TAS,7117,Hall,,Assistance,,-43.31059,147.01313,Dover District School
+,Franklin,Geeveston,63 Arve Rd,,Geeveston,TAS,7116,Hall/gymnasium,Access from School Rd,Assistance,,-43.162271,146.922048,Geeveston Primary School
+,Franklin,Geilston Bay,271 East Derwent Hwy,,Geilston Bay,TAS,7015,Gymnasium,,Assistance,,-42.838335,147.349976,Lindisfarne North Primary School
+,Franklin,Glen Huon,801 Glen Huon Rd,,Glen Huon,TAS,7109,Multipurpose hall,,Assistance,,-43.02819,146.9624,Glen Huon Primary School
+,Franklin,Howden,392 Howden Rd,,Howden,TAS,7054,,,Assistance,,-43.02331,147.29143,Howden Fire Station
+,Franklin,Howrah,Howrah Primary School,Howrah Rd,Howrah,TAS,7018,,,Assistance,,-42.88177,147.40387,Howrah Scout Hall
+,Franklin,Tranmere,27 Tranmere Rd,,Howrah,TAS,7018,,,Assistance,,-42.891,147.40872,Tranmere Hall
+,Franklin,Huonville,74 Wilmot Rd,,Huonville,TAS,7109,Multipurpose room,,Assistance,,-43.023734,147.046989,Huonville Primary School
+,Franklin,Judbury,1273 Glen Huon Rd,,Judbury,TAS,7109,,,Assistance,,-42.9981,146.92811,Judbury Community Centre
+,Franklin,Kettering,2963 Channel Hwy,,Kettering,TAS,7050,,,Assistance,,-43.12566,147.2467,Kettering Community Centre
+,Franklin,Kingston,7 Goshawk Way,,Kingston,TAS,7050,Auditorium,,Assistance,,-42.9742845,147.307944,Kingborough Community Hub
+,Franklin,Maranoa Heights,150 Redwood Rd,,Kingston,TAS,7050,Lower hall,,Assistance,,-42.99049,147.3089,Southern Christian College
+,Franklin,Kingston Beach,20 Beach Rd,,Kingston Beach,TAS,7050,,,Assistance,,-42.98102,147.32245,Kingston Beach Community Hall
+,Franklin,Lauderdale,Lauderdale Primary School,3 Acton Rd,Lauderdale,TAS,7021,Gymnasium,,None,,-42.90361386,147.4802177,Lauderdale Primary Sports Centre
+,Franklin,Lindisfarne,17 Loatta Rd,,Lindisfarne,TAS,7015,General purpose room,,Assistance,,-42.85178,147.36341,Lindisfarne Primary School
+,Franklin,Lindisfarne Village,54 Lincoln St,,Lindisfarne,TAS,7015,,,Assistance,,-42.846653,147.355727,St Aidans Church Hall
+,Franklin,Margate,7 Van Morey Rd,,Margate,TAS,7054,Gymnasium,,Assistance,,-43.02826429,147.2609717,Margate Primary School
+,Franklin,Middleton,McDowall St,,Middleton,TAS,7163,,,Assistance,,-43.2313,147.25573,South Channel Community Centre
+,Franklin,Montagu Bay,10 Conara Rd,,Montagu Bay,TAS,7018,Hall,,Assistance,,-42.86439,147.35336,Montagu Bay Primary School
+,Franklin,Mornington,400 Cambridge Rd,,Mornington,TAS,7018,Rosny Room,,Assistance,,-42.85588,147.40216,Citywide Baptist Church
+,Franklin,Mountain River,263 Mountain River Rd,,Mountain River,TAS,7109,,,Assistance,,-42.96129,147.10932,Mountain River Memorial Hall
+,Franklin,Ranelagh,40 Marguerite St,,Ranelagh,TAS,7109,,,Assistance,,-43.00901,147.03856,Ranelagh Soldiers Memorial Hall
+,Franklin,Risdon Vale,2 Heather Rd,,Risdon Vale,TAS,7016,,,Assistance,,-42.81283,147.35367,Risdon Vale Primary School
+,Franklin,Rokeby,1 Chipmans Rd,,Rokeby,TAS,7019,Foyer,,Assistance,,-42.900608,147.439002,Emmanuel Christian School
+,Franklin,Sandfly,811 Sandfly Rd,,Sandfly,TAS,7150,,,Assistance,,-42.98497,147.19567,Sandfly Hall
+,Franklin,Sandford,949 South Arm Rd,,Sandford,TAS,7020,,,None,,-42.94002,147.49566,Sandford Hall
+,Franklin,Snug,2208 Channel Hwy,,Snug,TAS,7054,Hall,,Assistance,,-43.06542,147.25411,Snug Primary School
+,Franklin,South Arm,32 Harmony Lane,,South Arm,TAS,7022,Gymnasium,,Assistance,,-43.02613,147.42013,South Arm Primary School
+,Franklin,Southport,8606 Huon Hwy,,Southport,TAS,7109,,,Assistance,,-43.415763,146.961547,Southport Community Centre
+,Franklin,Warrane,213 Cambridge Rd,,Warrane,TAS,7018,Hall,,Assistance,,-42.86044,147.38279,Warrane Primary School
+,Franklin,Woodbridge,3445 Channel Hwy,,Woodbridge,TAS,7162,,,Assistance,,-43.15999,147.23914,Woodbridge Hall
+,Lyons,Avoca,3 Falmouth St,,Avoca,TAS,7213,,,Assistance,,-41.78247345,147.7192787,Avoca War Memorial Hall
+,Lyons,Bagdad,46-48 School Rd,,Bagdad,TAS,7030,Hall,,Assistance,,-42.62434,147.22359,Bagdad Primary School
+,Lyons,Bicheno,78 Burgess St,,Bicheno,TAS,7215,Hall,,Assistance,,-41.87260055,148.3046221,Bicheno War Memorial Hall
+,Lyons,Bothwell,Alexander St,,Bothwell,TAS,7030,,,Assistance,,-42.38228,147.00629,Bothwell Town Hall
+,Lyons,Bracknell,29 Louisa St,,Bracknell,TAS,7302,Bracknell Town Hall,,Assistance,,-41.6510594,146.9431686,Bracknell Boys & Girls Club Building
+,Lyons,Bridgewater,55 Eddington St,,Bridgewater,TAS,7030,Gymnasium,,Assistance,,-42.73867118,147.2409414,JRLF Senior School
+,Lyons,Brighton,27 Downie St,,Brighton,TAS,7030,Hall,Off admin area,None,,-42.69909,147.25845,Brighton Primary School
+,Lyons,Broadmarsh,1218 Elderslie Rd,,Broadmarsh,TAS,7030,,,Assistance,,-42.65642747,147.1264896,Broadmarsh Fire Station
+,Lyons,Campania,45 Reeve St,,Campania,TAS,7026,,,Assistance,,-42.66717,147.42106,Campania Hall
+,Lyons,Campbell Town,75 High St,,Campbell Town,TAS,7210,,,Assistance,,-41.927,147.49458,Campbell Town Town Hall
+,Lyons,Carrick,29 Meander Valley Rd,,Carrick,TAS,7291,,,Assistance,,-41.53099,147.01128,Carrick Public Hall
+,Lyons,Chudleigh,54 Sorell St,,Chudleigh,TAS,7304,,,Assistance,,-41.55698,146.48139,Chudleigh Memorial Hall
+,Lyons,Claude Road,787 Claude Rd,,Claude Road,TAS,7306,,,Assistance,,-41.43442,146.27413,Claude Road Memorial Hall
+,Lyons,Colebrook,45 Richmond St,,Colebrook,TAS,7027,,,Assistance,,-42.53304333,147.3627427,Colebrook Memorial Hall
+,Lyons,Coles Bay,Harold St,,Coles Bay,TAS,7215,,,Assistance,,-42.12505,148.28572,Coles Bay Community Hall
+,Lyons,Copping,69 Allanby St,,Copping,TAS,7174,,,Assistance,,-42.82049,147.80428,Copping Hall
+,Lyons,Cressy,67 Main St,,Cressy,TAS,7302,,,Assistance,,-41.68551,147.08074,Cressy Community Hall
+,Lyons,Deloraine,24 Lansdowne Pl,,Deloraine,TAS,7304,,Access from East Barrack St,Assistance,,-41.52934,146.65926,Deloraine High School Hall
+,Lyons,Dodges Ferry,532 Old Forcett Rd,,Dodges Ferry,TAS,7173,Within Dodges Ferry Primary School,,Assistance,,-42.84863,147.62373,Dodges Ferry Community Recreation Centre
+,Lyons,Dromedary,14 Millvale Rd,,Dromedary,TAS,7030,,,None,,-42.72826,147.1787,Dromedary (Millvale) Community Hall
+,Lyons,Dunalley,5 Franklin St,,Dunalley,TAS,7177,,,Assistance,,-42.88716415,147.812685,Dunalley Community Hall
+,Lyons,Elizabeth Town,5816 Bass Hwy,,Elizabeth Town,TAS,7304,,,Assistance,,-41.46167,146.56389,Elizabeth Town Fire Station
+,Lyons,Epping,13515 Midland Hwy,,Epping Forest,TAS,7211,,,Assistance,,-41.75814,147.34904,Epping Forest Public Hall
+,Lyons,Evandale,5/8 Barclay St,,Evandale,TAS,7212,General purpose room,,Assistance,,-41.56717,147.24676,Evandale Primary School
+,Lyons,Fingal,20 Talbot Street,,Fingal,TAS,7214,,,Assistance,,-41.63843418,147.9709241,Fingal Neighbourhood House
+,Lyons,Gagebrook,4 Tottenham Rd,,Gagebrook,TAS,7030,Gymnasium,Access from Ashburton Rd,Assistance,,-42.74903,147.27517,Gagebrook Primary School
+,Lyons,Glenora,620 Gordon River Rd,,Glenora,TAS,7140,Year 7 classroom,Admin Block,None,,-42.69655,146.88985,Glenora District High School
+,Lyons,Granton,Lyell Hwy,,Granton,TAS,7030,,,Assistance,,-42.74976,147.22395,Granton Memorial Hall
+,Lyons,Hadspen,47 Main St,,Hadspen,TAS,7290,,,Assistance,,-41.50623,147.06347,Hadspen Uniting Church Centre
+,Lyons,Hagley,2508 Meander Valley Rd,,Hagley,TAS,7292,Hall at front of school,,Assistance,,-41.5247212,146.9019556,Hagley Farm Primary School
+,Lyons,Kempton,85 Main St,,Kempton,TAS,7030,,,Assistance,,-42.53226,147.20088,Kempton Council Chambers
+,Lyons,Lachlan,511 Lachlan Rd,,Lachlan,TAS,7140,,,Assistance,,-42.83039,147.0426,Lachlan Community Hall
+,Lyons,Longford,Catherine & William Sts,,Longford,TAS,7301,GP hall,,Assistance,,-41.59592537,147.1168638,Longford Primary School
+,Lyons,Lower Barrington,1027 Sheffield Rd,,Lower Barrington,TAS,7306,,,None,,-41.29085,146.29118,Lower Barrington Public Hall
+,Lyons,Magra,Back River Rd,,Magra,TAS,7140,,Cnr of Back River and Saddle Rds,Assistance,,-42.73504,147.07053,Magra CWA Building
+,Lyons,Meander,124 Main Rd,,Meander,TAS,7304,,,Full,,-41.652762,146.609387,Meander Memorial Hall
+,Lyons,Midway Point,Raynors Rd,,Midway Point,TAS,7171,,,Assistance,,-42.79979,147.53265,Midway Point Community Hall
+,Lyons,Miena,55-57 Cider Gum Rd,,Miena,TAS,7030,,,Assistance,,-41.9937,146.70828,Great Lake Community Centre
+,Lyons,Mole Creek,4 Caveside Rd,,Mole Creek,TAS,7304,Open area,,Assistance,,-41.5572934,146.4077532,Mole Creek Primary School
+,Lyons,Molesworth,560 Molesworth Rd,,Molesworth,TAS,7140,,,Assistance,,-42.8043361,147.1602846,Molesworth Community Hall
+,Lyons,New Norfolk North,211 Back River Rd,,New Norfolk,TAS,7140,General hall,,Assistance,,-42.774295,147.050038,Fairview Primary School
+,Lyons,New Norfolk,8 Pioneer Ave,,New Norfolk,TAS,7140,,Alternative access from Hillside Cres,Assistance,,-42.779,147.06366,New Norfolk Primary School
+,Lyons,Nubeena,21 Clarke St,,Nubeena,TAS,7184,,,Assistance,,-43.09998,147.74416,Tasman Civic Centre
+,Lyons,Oatlands,27 Church St,,Oatlands,TAS,7120,Multipurpose room,Access from Wellington St,Assistance,,-42.30141666,147.3703108,Oatlands District High School
+,Lyons,Old Beach,Jetty Rd,,Old Beach,TAS,7017,,,Assistance,,-42.7743122,147.2661143,Old Beach Community Centre
+,Lyons,Orford,35 Charles St,,Orford,TAS,7190,Performing Arts Centre,,Assistance,,-42.563525,147.873845,Orford Primary School
+,Lyons,Ouse,6947 Lyell Hwy,,Ouse,TAS,7140,,,Assistance,,-42.48523,146.71076,Ouse Online Access Centre
+,Lyons,Perth,173 Fairtlough St,,Perth,TAS,7300,Hall and function room,,Assistance,,-41.57255,147.17365,Perth Community Centre
+,Lyons,Pontville,244 Brighton Rd,,Pontville,TAS,7030,,,Assistance,,-42.68722595,147.2634687,Pontville Memorial Hall
+,Lyons,Primrose Sands,570 Primrose Sands Rd,,Primrose Sands,TAS,7173,,,Assistance,,-42.89213,147.67292,Primrose Sands Community Hall
+,Lyons,Prospect Vale,12 Casino Rise,,Prospect Vale,TAS,7250,,,Assistance,,-41.47909,147.10972,Residential Retirement Village Clubrooms
+,Lyons,Railton,94 Foster St,,Railton,TAS,7305,General purpose hall,,Assistance,,-41.3529486,146.4145571,Sheffield School (Railton Campus)
+,Lyons,Richmond,Commercial Rd,,Richmond,TAS,7025,Hall,,Assistance,,-42.73937,147.43748,Richmond Primary School
+,Lyons,Ross,12 Bridge St,,Ross,TAS,7209,,Access from Church St,Assistance,,-42.03136,147.49244,Ross Town Hall
+,Lyons,Scamander,Coach Rd,,Scamander,TAS,7215,Dining room,,Assistance,,-41.45419039,148.2592652,Scamander Sports Complex
+,Lyons,Sheffield,12 Henry St,,Sheffield,TAS,7306,Music room - related arts building,,Assistance,,-41.38166,146.3289,Sheffield School
+,Lyons,Sorell,49 Cole St,,Sorell,TAS,7172,,,Assistance,,-42.7809503,147.5606303,Sorell Memorial Hall
+,Lyons,St Helens,39 Cecilia St,,St Helens,TAS,7216,,,Assistance,,-41.32219509,148.2494296,Portland Memorial Hall
+,Lyons,St Marys,23 Main St,,St Marys,TAS,7215,Supper room,,Assistance,,-41.57939,148.18508,St Marys Community Hall
+,Lyons,Swansea,12 Franklin St,,Swansea,TAS,7190,,,Assistance,,-42.12448289,148.0768285,Swansea Town Hall
+,Lyons,Taranna,33 Amy St,,Taranna,TAS,7180,Hall,Access from Gourlay Rd,Assistance,,-43.03802462,147.866748,Tasman Community Centre
+,Lyons,Tea Tree,596 Tea Tree Rd,,Tea Tree,TAS,7017,,Access from Briar Banks Rd,Assistance,,-42.69026,147.31894,Tea Tree Community Hall
+,Lyons,Triabunna,3 Vicary St,,Triabunna,TAS,7190,,,Assistance,,-42.508166,147.909631,Triabunna Hall
+,Lyons,Tunnack,Tunnack Rd,,Tunnack,TAS,7120,,,Assistance,,-42.45592,147.46179,Tunnack Public Hall
+,Lyons,Westbury,26 Lyall St,,Westbury,TAS,7303,Supper room,,Assistance,,-41.528113,146.831023,Westbury Town Hall
+,Lyons,Westerway,1619 Gordon River Rd,,Westerway,TAS,7140,GP room,,Assistance,,-42.67788,146.78779,Westerway Primary School
+,Lyons,Wilmot,61 Main Rd,,Wilmot,TAS,7310,Music room,,Assistance,,-41.387,146.17606,Wilmot Primary School

@@ -6,6 +6,11 @@ if ('VITE_SENTRY_DSN' in import.meta.env === false) {
 	throw new Error('VITE_SENTRY_DSN not found');
 }
 
+export const sentryFeedback = Sentry.feedbackIntegration({
+	autoInject: false,
+	colorScheme: 'light',
+});
+
 export const sentryInit = () => {
 	Sentry.init({
 		dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -15,14 +20,18 @@ export const sentryInit = () => {
 		site: import.meta.env.VITE_SENTRY_SITE_NAME,
 		attachStacktrace: true,
 		integrations: [
-			new Sentry.BrowserTracing({
-				routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-					useEffect,
-					useLocation,
-					useNavigationType,
-					createRoutesFromChildren,
-					matchRoutes,
-				),
+			Sentry.reactRouterV6BrowserTracingIntegration({
+				useEffect,
+				useLocation,
+				useNavigationType,
+				createRoutesFromChildren,
+				matchRoutes,
+				// stripBasename,
+			}),
+			sentryFeedback,
+			Sentry.replayIntegration({
+				maskAllText: true,
+				blockAllMedia: true,
 			}),
 		],
 
@@ -34,10 +43,19 @@ export const sentryInit = () => {
 		// Or however deep you want your Redux state context to be
 		normalizeDepth: 10,
 
+		// This sets the sample rate to be 10%. You may want this to be 100% while
+		// in development and sample at a lower rate in production
+		replaysSessionSampleRate: 0.1,
+
+		// If the entire session is not sampled, use the below sample rate to sample
+		// sessions when an error occurs.
+		replaysOnErrorSampleRate: 1.0,
+
 		beforeSend(event) {
 			if (event.exception) {
 				Sentry.showReportDialog({ eventId: event.event_id });
 			}
+
 			return event;
 		},
 	});

@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1336.46 665.42">
+  <g id="Tiles">
+    <g>
+      <g id="Base">
+        <rect id="Base-2" width="668.24" height="332.45" style="fill: #ddd7f7; stroke-width: 0px;"/>
+        <rect id="Base-3" x="667.96" y="332.45" width="668.24" height="332.45" style="fill: #ddd7f7; stroke-width: 0px;"/>
+        <rect id="Base-4" y="332.45" width="668.24" height="332.45" style="fill: #ddd7f7; stroke-width: 0px;"/>
+        <rect id="Base-5" x="667.96" width="668.24" height="332.45" style="fill: #ddd7f7; stroke-width: 0px;"/>
+      </g>
+      <g id="Deepshade">
+        <g id="Deepshade-2">
+          <g>
+            <rect x="583.31" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="417.54" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="416.18" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="250.41" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="249.19" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="83.42" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="82.19" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="331.23" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="584.52" y="331.23" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="583.31" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="417.54" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="416.18" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="250.41" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="249.19" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="83.42" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="82.19" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="164.76" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="584.52" y="164.76" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="501.03" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="501.03" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="334.05" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="334.05" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="167.06" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="167.06" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="501.35" y=".07" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="501.35" width="166.59" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="334.36" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="334.36" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="167.1" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="167.1" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+        </g>
+        <g id="Deepshade-3">
+          <g>
+            <rect x="1251.27" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1085.5" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1084.14" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="918.37" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="917.16" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="751.39" y="331.23" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="750.16" y="249.83" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="331.23" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1252.49" y="331.23" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1251.27" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1085.5" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1084.14" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="918.37" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="917.16" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="751.39" y="164.76" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="750.16" y="83.36" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="164.76" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1252.49" y="164.76" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1168.99" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1168.99" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1002.01" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1002.01" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="835.02" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="835.02" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="667.96" y="166.22" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="166.22" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1169.31" y=".07" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1169.31" width="166.59" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1002.33" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1002.33" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="835.06" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="835.06" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="667.96" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+        </g>
+        <g id="Deepshade-4">
+          <g>
+            <rect x="583.31" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="417.54" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="416.18" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="250.41" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="249.19" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="83.42" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="82.19" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="663.68" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="584.52" y="663.68" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="583.31" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="417.54" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="416.18" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="250.41" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="249.19" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="83.42" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="82.19" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="497.21" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="584.52" y="497.21" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="501.03" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="501.03" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="334.05" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="334.05" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="167.06" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="167.06" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="501.35" y="332.51" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="501.35" y="332.45" width="166.59" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="334.36" y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="334.36" y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="167.1" y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="167.1" y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+        </g>
+        <g id="Deepshade-5">
+          <g>
+            <rect x="1251.27" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1085.5" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1084.14" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="918.37" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="917.16" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="751.39" y="663.68" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="750.16" y="582.27" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="663.68" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1252.49" y="663.68" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1251.27" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1085.5" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1084.14" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="918.37" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="917.16" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="751.39" y="497.21" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="750.16" y="415.8" width="1.22" height="82.62" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="497.21" width="83.41" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1252.49" y="497.21" width="83.72" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1168.99" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1168.99" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1002.01" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1002.01" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="835.02" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="835.02" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="667.96" y="498.67" width="1.22" height="83.6" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="498.67" width="166.99" height="1.23" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1169.31" y="332.51" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1169.31" y="332.45" width="166.59" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="1002.33" y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="1002.33" y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="835.06" y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="835.06" y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+          <g>
+            <rect x="667.96" y="332.45" width="1.22" height="83.11" style="fill: #a197c6; stroke-width: 0px;"/>
+            <rect x="667.96" y="332.45" width="166.99" height="1.22" style="fill: #a197c6; stroke-width: 0px;"/>
+          </g>
+        </g>
+      </g>
+      <g id="Bevels">
+        <g id="Bevel">
+          <g id="Bevel-2">
+            <polygon points="250.44 332.19 265.79 316.84 402.19 316.84 417.54 332.19 250.44 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="402.19 265.29 417.54 249.94 417.54 332.19 402.19 316.84 402.19 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="265.79 265.29 402.19 265.29 417.54 249.94 250.44 249.94 265.79 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="265.79 316.84 265.79 265.29 250.44 249.94 250.44 332.19 265.79 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-3">
+            <polygon points="82.78 332.19 98.13 316.84 234.52 316.84 249.87 332.19 82.78 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="234.52 265.29 249.87 249.94 249.87 332.19 234.52 316.84 234.52 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="98.13 265.29 234.52 265.29 249.87 249.94 82.78 249.94 98.13 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="98.13 316.84 98.13 265.29 82.78 249.94 82.78 332.19 98.13 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-4">
+            <polygon points=".57 249.52 15.92 234.17 152.32 234.17 167.67 249.52 .57 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="152.32 182.62 167.67 167.27 167.67 249.52 152.32 234.17 152.32 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="15.92 182.62 152.32 182.62 167.67 167.27 .57 167.27 15.92 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="15.92 234.17 15.92 182.62 .57 167.27 .57 249.52 15.92 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-5">
+            <polygon points="166.86 249.52 182.21 234.17 318.61 234.17 333.96 249.52 166.86 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="318.61 182.62 333.96 167.27 333.96 249.52 318.61 234.17 318.61 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="182.21 182.62 318.61 182.62 333.96 167.27 166.86 167.27 182.21 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="182.21 234.17 182.21 182.62 166.86 167.27 166.86 249.52 182.21 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-6">
+            <polygon points="333.99 249.52 349.34 234.17 485.74 234.17 501.09 249.52 333.99 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="485.74 182.62 501.09 167.27 501.09 249.52 485.74 234.17 485.74 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="349.34 182.62 485.74 182.62 501.09 167.27 333.99 167.27 349.34 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="349.34 234.17 349.34 182.62 333.99 167.27 333.99 249.52 349.34 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-7">
+            <polygon points="500.85 249.52 516.2 234.17 652.6 234.17 667.95 249.52 500.85 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="652.6 182.62 667.95 167.27 667.95 249.52 652.6 234.17 652.6 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="516.2 182.62 652.6 182.62 667.95 167.27 500.85 167.27 516.2 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="516.2 234.17 516.2 182.62 500.85 167.27 500.85 249.52 516.2 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-8">
+            <polygon points="417.3 332.19 432.65 316.84 569.05 316.84 584.4 332.19 417.3 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="569.05 265.29 584.4 249.94 584.4 332.19 569.05 316.84 569.05 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="432.65 265.29 569.05 265.29 584.4 249.94 417.3 249.94 432.65 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="432.65 316.84 432.65 265.29 417.3 249.94 417.3 332.19 432.65 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="599.87 316.91 599.87 265.36 584.52 250.01 584.52 332.26 599.87 316.91" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="599.87 265.36 584.52 250.01 668.24 250.01 668.24 265.36 599.87 265.36" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="584.52 332.26 599.87 316.91 668.24 316.91 668.24 332.45 584.52 332.26" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 265.36 82.8 250.01 82.8 332.26 67.45 316.91 67.45 265.36" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="67.45 316.91 0 316.91 0 332.45 82.8 332.45 67.45 316.91" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 265.36 82.8 250.01 0 250.01 0 265.29 67.45 265.36" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <g id="Bevel-9">
+            <polygon points="250.44 165.45 265.79 150.1 402.19 150.1 417.54 165.45 250.44 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="402.19 98.54 417.54 83.19 417.54 165.45 402.19 150.1 402.19 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="265.79 98.54 402.19 98.54 417.54 83.19 250.44 83.19 265.79 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="265.79 150.1 265.79 98.54 250.44 83.19 250.44 165.45 265.79 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-10">
+            <polygon points="82.78 165.45 98.13 150.1 234.52 150.1 249.87 165.45 82.78 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="234.52 98.54 249.87 83.19 249.87 165.45 234.52 150.1 234.52 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="98.13 98.54 234.52 98.54 249.87 83.19 82.78 83.19 98.13 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="98.13 150.1 98.13 98.54 82.78 83.19 82.78 165.45 98.13 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-11">
+            <polygon points=".57 82.78 15.92 67.43 152.32 67.43 167.67 82.78 .57 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="152.32 15.87 167.67 .52 167.67 82.78 152.32 67.43 152.32 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="15.92 15.87 152.32 15.87 167.67 .52 .57 .52 15.92 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="15.92 67.43 15.92 15.87 .57 .52 .57 82.78 15.92 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-12">
+            <polygon points="166.86 82.78 182.21 67.43 318.61 67.43 333.96 82.78 166.86 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="318.61 15.87 333.96 .52 333.96 82.78 318.61 67.43 318.61 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="182.21 15.87 318.61 15.87 333.96 .52 166.86 .52 182.21 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="182.21 67.43 182.21 15.87 166.86 .52 166.86 82.78 182.21 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-13">
+            <polygon points="333.99 82.78 349.34 67.43 485.74 67.43 501.09 82.78 333.99 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="485.74 15.87 501.09 .52 501.09 82.78 485.74 67.43 485.74 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="349.34 15.87 485.74 15.87 501.09 .52 333.99 .52 349.34 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="349.34 67.43 349.34 15.87 333.99 .52 333.99 82.78 349.34 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-14">
+            <polygon points="500.85 82.78 516.2 67.43 652.6 67.43 667.95 82.78 500.85 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="652.6 15.87 667.95 .52 667.95 82.78 652.6 67.43 652.6 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="516.2 15.87 652.6 15.87 667.95 .52 500.85 .52 516.2 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="516.2 67.43 516.2 15.87 500.85 .52 500.85 82.78 516.2 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-15">
+            <polygon points="417.3 165.45 432.65 150.1 569.05 150.1 584.4 165.45 417.3 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="569.05 98.54 584.4 83.19 584.4 165.45 569.05 150.1 569.05 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="432.65 98.54 569.05 98.54 584.4 83.19 417.3 83.19 432.65 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="432.65 150.1 432.65 98.54 417.3 83.19 417.3 165.45 432.65 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="599.87 150.17 599.87 98.61 584.52 83.26 584.52 165.52 599.87 150.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="599.87 98.61 584.52 83.26 668.24 83.26 668.24 98.61 599.87 98.61" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="584.52 165.52 599.87 150.17 668.24 150.17 668.24 165.7 584.52 165.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 98.61 82.8 83.26 82.8 165.52 67.45 150.17 67.45 98.61" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="67.45 150.17 0 150.17 0 165.7 82.8 165.7 67.45 150.17" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 98.61 82.8 83.26 0 83.26 0 98.54 67.45 98.61" style="fill: #bcbcdd; stroke-width: 0px;"/>
+        </g>
+        <g id="Bevel-16">
+          <g id="Bevel-17">
+            <polygon points="918.41 332.19 933.76 316.84 1070.15 316.84 1085.5 332.19 918.41 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1070.15 265.29 1085.5 249.94 1085.5 332.19 1070.15 316.84 1070.15 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="933.76 265.29 1070.15 265.29 1085.5 249.94 918.41 249.94 933.76 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="933.76 316.84 933.76 265.29 918.41 249.94 918.41 332.19 933.76 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-18">
+            <polygon points="750.74 332.19 766.09 316.84 902.49 316.84 917.84 332.19 750.74 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="902.49 265.29 917.84 249.94 917.84 332.19 902.49 316.84 902.49 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="766.09 265.29 902.49 265.29 917.84 249.94 750.74 249.94 766.09 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="766.09 316.84 766.09 265.29 750.74 249.94 750.74 332.19 766.09 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-19">
+            <polygon points="668.54 249.52 683.89 234.17 820.28 234.17 835.63 249.52 668.54 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="820.28 182.62 835.63 167.27 835.63 249.52 820.28 234.17 820.28 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="683.89 182.62 820.28 182.62 835.63 167.27 668.54 167.27 683.89 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="683.89 234.17 683.89 182.62 668.54 167.27 668.54 249.52 683.89 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-20">
+            <polygon points="834.83 249.52 850.18 234.17 986.57 234.17 1001.92 249.52 834.83 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="986.57 182.62 1001.92 167.27 1001.92 249.52 986.57 234.17 986.57 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="850.18 182.62 986.57 182.62 1001.92 167.27 834.83 167.27 850.18 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="850.18 234.17 850.18 182.62 834.83 167.27 834.83 249.52 850.18 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-21">
+            <polygon points="1001.95 249.52 1017.31 234.17 1153.7 234.17 1169.05 249.52 1001.95 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1153.7 182.62 1169.05 167.27 1169.05 249.52 1153.7 234.17 1153.7 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1017.31 182.62 1153.7 182.62 1169.05 167.27 1001.95 167.27 1017.31 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1017.31 234.17 1017.31 182.62 1001.95 167.27 1001.95 249.52 1017.31 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-22">
+            <polygon points="1168.81 249.52 1184.17 234.17 1320.56 234.17 1335.91 249.52 1168.81 249.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1320.56 182.62 1335.91 167.27 1335.91 249.52 1320.56 234.17 1320.56 182.62" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1184.17 182.62 1320.56 182.62 1335.91 167.27 1168.81 167.27 1184.17 182.62" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1184.17 234.17 1184.17 182.62 1168.81 167.27 1168.81 249.52 1184.17 234.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-23">
+            <polygon points="1085.27 332.19 1100.62 316.84 1237.01 316.84 1252.36 332.19 1085.27 332.19" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1237.01 265.29 1252.36 249.94 1252.36 332.19 1237.01 316.84 1237.01 265.29" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1100.62 265.29 1237.01 265.29 1252.36 249.94 1085.27 249.94 1100.62 265.29" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1100.62 316.84 1100.62 265.29 1085.27 249.94 1085.27 332.19 1100.62 316.84" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="1267.84 316.91 1267.84 265.36 1252.49 250.01 1252.49 332.26 1267.84 316.91" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="1267.84 265.36 1252.49 250.01 1336.21 250.01 1336.21 265.36 1267.84 265.36" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="1252.49 332.26 1267.84 316.91 1336.21 316.91 1336.21 332.45 1252.49 332.26" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 265.36 750.76 250.01 750.76 332.26 735.41 316.91 735.41 265.36" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="735.41 316.91 667.96 316.91 667.96 332.45 750.76 332.45 735.41 316.91" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 265.36 750.76 250.01 667.96 250.01 667.96 265.29 735.41 265.36" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <g id="Bevel-24">
+            <polygon points="918.41 165.45 933.76 150.1 1070.15 150.1 1085.5 165.45 918.41 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1070.15 98.54 1085.5 83.19 1085.5 165.45 1070.15 150.1 1070.15 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="933.76 98.54 1070.15 98.54 1085.5 83.19 918.41 83.19 933.76 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="933.76 150.1 933.76 98.54 918.41 83.19 918.41 165.45 933.76 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-25">
+            <polygon points="750.74 165.45 766.09 150.1 902.49 150.1 917.84 165.45 750.74 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="902.49 98.54 917.84 83.19 917.84 165.45 902.49 150.1 902.49 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="766.09 98.54 902.49 98.54 917.84 83.19 750.74 83.19 766.09 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="766.09 150.1 766.09 98.54 750.74 83.19 750.74 165.45 766.09 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-26">
+            <polygon points="668.54 82.78 683.89 67.43 820.28 67.43 835.63 82.78 668.54 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="820.28 15.87 835.63 .52 835.63 82.78 820.28 67.43 820.28 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="683.89 15.87 820.28 15.87 835.63 .52 668.54 .52 683.89 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="683.89 67.43 683.89 15.87 668.54 .52 668.54 82.78 683.89 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-27">
+            <polygon points="834.83 82.78 850.18 67.43 986.57 67.43 1001.92 82.78 834.83 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="986.57 15.87 1001.92 .52 1001.92 82.78 986.57 67.43 986.57 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="850.18 15.87 986.57 15.87 1001.92 .52 834.83 .52 850.18 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="850.18 67.43 850.18 15.87 834.83 .52 834.83 82.78 850.18 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-28">
+            <polygon points="1001.95 82.78 1017.31 67.43 1153.7 67.43 1169.05 82.78 1001.95 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1153.7 15.87 1169.05 .52 1169.05 82.78 1153.7 67.43 1153.7 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1017.31 15.87 1153.7 15.87 1169.05 .52 1001.95 .52 1017.31 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1017.31 67.43 1017.31 15.87 1001.95 .52 1001.95 82.78 1017.31 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-29">
+            <polygon points="1168.81 82.78 1184.17 67.43 1320.56 67.43 1335.91 82.78 1168.81 82.78" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1320.56 15.87 1335.91 .52 1335.91 82.78 1320.56 67.43 1320.56 15.87" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1184.17 15.87 1320.56 15.87 1335.91 .52 1168.81 .52 1184.17 15.87" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1184.17 67.43 1184.17 15.87 1168.81 .52 1168.81 82.78 1184.17 67.43" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-30">
+            <polygon points="1085.27 165.45 1100.62 150.1 1237.01 150.1 1252.36 165.45 1085.27 165.45" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1237.01 98.54 1252.36 83.19 1252.36 165.45 1237.01 150.1 1237.01 98.54" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1100.62 98.54 1237.01 98.54 1252.36 83.19 1085.27 83.19 1100.62 98.54" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1100.62 150.1 1100.62 98.54 1085.27 83.19 1085.27 165.45 1100.62 150.1" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="1267.84 150.17 1267.84 98.61 1252.49 83.26 1252.49 165.52 1267.84 150.17" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="1267.84 98.61 1252.49 83.26 1336.21 83.26 1336.21 98.61 1267.84 98.61" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="1252.49 165.52 1267.84 150.17 1336.21 150.17 1336.21 165.7 1252.49 165.52" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 98.61 750.76 83.26 750.76 165.52 735.41 150.17 735.41 98.61" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="735.41 150.17 667.96 150.17 667.96 165.7 750.76 165.7 735.41 150.17" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 98.61 750.76 83.26 667.96 83.26 667.96 98.54 735.41 98.61" style="fill: #bcbcdd; stroke-width: 0px;"/>
+        </g>
+        <g id="Bevel-31">
+          <g id="Bevel-32">
+            <polygon points="250.44 664.64 265.79 649.29 402.19 649.29 417.54 664.64 250.44 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="402.19 597.73 417.54 582.38 417.54 664.64 402.19 649.29 402.19 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="265.79 597.73 402.19 597.73 417.54 582.38 250.44 582.38 265.79 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="265.79 649.29 265.79 597.73 250.44 582.38 250.44 664.64 265.79 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-33">
+            <polygon points="82.78 664.64 98.13 649.29 234.52 649.29 249.87 664.64 82.78 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="234.52 597.73 249.87 582.38 249.87 664.64 234.52 649.29 234.52 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="98.13 597.73 234.52 597.73 249.87 582.38 82.78 582.38 98.13 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="98.13 649.29 98.13 597.73 82.78 582.38 82.78 664.64 98.13 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-34">
+            <polygon points=".57 581.97 15.92 566.62 152.32 566.62 167.67 581.97 .57 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="152.32 515.06 167.67 499.71 167.67 581.97 152.32 566.62 152.32 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="15.92 515.06 152.32 515.06 167.67 499.71 .57 499.71 15.92 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="15.92 566.62 15.92 515.06 .57 499.71 .57 581.97 15.92 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-35">
+            <polygon points="166.86 581.97 182.21 566.62 318.61 566.62 333.96 581.97 166.86 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="318.61 515.06 333.96 499.71 333.96 581.97 318.61 566.62 318.61 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="182.21 515.06 318.61 515.06 333.96 499.71 166.86 499.71 182.21 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="182.21 566.62 182.21 515.06 166.86 499.71 166.86 581.97 182.21 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-36">
+            <polygon points="333.99 581.97 349.34 566.62 485.74 566.62 501.09 581.97 333.99 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="485.74 515.06 501.09 499.71 501.09 581.97 485.74 566.62 485.74 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="349.34 515.06 485.74 515.06 501.09 499.71 333.99 499.71 349.34 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="349.34 566.62 349.34 515.06 333.99 499.71 333.99 581.97 349.34 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-37">
+            <polygon points="500.85 581.97 516.2 566.62 652.6 566.62 667.95 581.97 500.85 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="652.6 515.06 667.95 499.71 667.95 581.97 652.6 566.62 652.6 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="516.2 515.06 652.6 515.06 667.95 499.71 500.85 499.71 516.2 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="516.2 566.62 516.2 515.06 500.85 499.71 500.85 581.97 516.2 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-38">
+            <polygon points="417.3 664.64 432.65 649.29 569.05 649.29 584.4 664.64 417.3 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="569.05 597.73 584.4 582.38 584.4 664.64 569.05 649.29 569.05 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="432.65 597.73 569.05 597.73 584.4 582.38 417.3 582.38 432.65 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="432.65 649.29 432.65 597.73 417.3 582.38 417.3 664.64 432.65 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="599.87 649.36 599.87 597.8 584.52 582.45 584.52 664.71 599.87 649.36" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="599.87 597.8 584.52 582.45 668.24 582.45 668.24 597.8 599.87 597.8" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="584.52 664.71 599.87 649.36 668.24 649.36 668.24 664.89 584.52 664.71" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 597.8 82.8 582.45 82.8 664.71 67.45 649.36 67.45 597.8" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="67.45 649.36 0 649.36 0 664.89 82.8 664.89 67.45 649.36" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 597.8 82.8 582.45 0 582.45 0 597.73 67.45 597.8" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <g id="Bevel-39">
+            <polygon points="250.44 497.9 265.79 482.54 402.19 482.54 417.54 497.9 250.44 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="402.19 430.99 417.54 415.64 417.54 497.9 402.19 482.54 402.19 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="265.79 430.99 402.19 430.99 417.54 415.64 250.44 415.64 265.79 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="265.79 482.54 265.79 430.99 250.44 415.64 250.44 497.9 265.79 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-40">
+            <polygon points="82.78 497.9 98.13 482.54 234.52 482.54 249.87 497.9 82.78 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="234.52 430.99 249.87 415.64 249.87 497.9 234.52 482.54 234.52 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="98.13 430.99 234.52 430.99 249.87 415.64 82.78 415.64 98.13 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="98.13 482.54 98.13 430.99 82.78 415.64 82.78 497.9 98.13 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-41">
+            <polygon points=".57 415.22 15.92 399.87 152.32 399.87 167.67 415.22 .57 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="152.32 348.32 167.67 332.97 167.67 415.22 152.32 399.87 152.32 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="15.92 348.32 152.32 348.32 167.67 332.97 .57 332.97 15.92 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="15.92 399.87 15.92 348.32 .57 332.97 .57 415.22 15.92 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-42">
+            <polygon points="166.86 415.22 182.21 399.87 318.61 399.87 333.96 415.22 166.86 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="318.61 348.32 333.96 332.97 333.96 415.22 318.61 399.87 318.61 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="182.21 348.32 318.61 348.32 333.96 332.97 166.86 332.97 182.21 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="182.21 399.87 182.21 348.32 166.86 332.97 166.86 415.22 182.21 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-43">
+            <polygon points="333.99 415.22 349.34 399.87 485.74 399.87 501.09 415.22 333.99 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="485.74 348.32 501.09 332.97 501.09 415.22 485.74 399.87 485.74 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="349.34 348.32 485.74 348.32 501.09 332.97 333.99 332.97 349.34 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="349.34 399.87 349.34 348.32 333.99 332.97 333.99 415.22 349.34 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-44">
+            <polygon points="500.85 415.22 516.2 399.87 652.6 399.87 667.95 415.22 500.85 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="652.6 348.32 667.95 332.97 667.95 415.22 652.6 399.87 652.6 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="516.2 348.32 652.6 348.32 667.95 332.97 500.85 332.97 516.2 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="516.2 399.87 516.2 348.32 500.85 332.97 500.85 415.22 516.2 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-45">
+            <polygon points="417.3 497.9 432.65 482.54 569.05 482.54 584.4 497.9 417.3 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="569.05 430.99 584.4 415.64 584.4 497.9 569.05 482.54 569.05 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="432.65 430.99 569.05 430.99 584.4 415.64 417.3 415.64 432.65 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="432.65 482.54 432.65 430.99 417.3 415.64 417.3 497.9 432.65 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="599.87 482.61 599.87 431.06 584.52 415.71 584.52 497.96 599.87 482.61" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="599.87 431.06 584.52 415.71 668.24 415.71 668.24 431.06 599.87 431.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="584.52 497.96 599.87 482.61 668.24 482.61 668.24 498.15 584.52 497.96" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 431.06 82.8 415.71 82.8 497.96 67.45 482.61 67.45 431.06" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="67.45 482.61 0 482.61 0 498.15 82.8 498.15 67.45 482.61" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="67.45 431.06 82.8 415.71 0 415.71 0 430.99 67.45 431.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+        </g>
+        <g id="Bevel-46">
+          <g id="Bevel-47">
+            <polygon points="918.41 664.64 933.76 649.29 1070.15 649.29 1085.5 664.64 918.41 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1070.15 597.73 1085.5 582.38 1085.5 664.64 1070.15 649.29 1070.15 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="933.76 597.73 1070.15 597.73 1085.5 582.38 918.41 582.38 933.76 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="933.76 649.29 933.76 597.73 918.41 582.38 918.41 664.64 933.76 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-48">
+            <polygon points="750.74 664.64 766.09 649.29 902.49 649.29 917.84 664.64 750.74 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="902.49 597.73 917.84 582.38 917.84 664.64 902.49 649.29 902.49 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="766.09 597.73 902.49 597.73 917.84 582.38 750.74 582.38 766.09 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="766.09 649.29 766.09 597.73 750.74 582.38 750.74 664.64 766.09 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-49">
+            <polygon points="668.54 581.97 683.89 566.62 820.28 566.62 835.63 581.97 668.54 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="820.28 515.06 835.63 499.71 835.63 581.97 820.28 566.62 820.28 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="683.89 515.06 820.28 515.06 835.63 499.71 668.54 499.71 683.89 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="683.89 566.62 683.89 515.06 668.54 499.71 668.54 581.97 683.89 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-50">
+            <polygon points="834.83 581.97 850.18 566.62 986.57 566.62 1001.92 581.97 834.83 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="986.57 515.06 1001.92 499.71 1001.92 581.97 986.57 566.62 986.57 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="850.18 515.06 986.57 515.06 1001.92 499.71 834.83 499.71 850.18 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="850.18 566.62 850.18 515.06 834.83 499.71 834.83 581.97 850.18 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-51">
+            <polygon points="1001.95 581.97 1017.31 566.62 1153.7 566.62 1169.05 581.97 1001.95 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1153.7 515.06 1169.05 499.71 1169.05 581.97 1153.7 566.62 1153.7 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1017.31 515.06 1153.7 515.06 1169.05 499.71 1001.95 499.71 1017.31 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1017.31 566.62 1017.31 515.06 1001.95 499.71 1001.95 581.97 1017.31 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-52">
+            <polygon points="1168.81 581.97 1184.17 566.62 1320.56 566.62 1335.91 581.97 1168.81 581.97" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1320.56 515.06 1335.91 499.71 1335.91 581.97 1320.56 566.62 1320.56 515.06" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1184.17 515.06 1320.56 515.06 1335.91 499.71 1168.81 499.71 1184.17 515.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1184.17 566.62 1184.17 515.06 1168.81 499.71 1168.81 581.97 1184.17 566.62" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-53">
+            <polygon points="1085.27 664.64 1100.62 649.29 1237.01 649.29 1252.36 664.64 1085.27 664.64" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1237.01 597.73 1252.36 582.38 1252.36 664.64 1237.01 649.29 1237.01 597.73" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1100.62 597.73 1237.01 597.73 1252.36 582.38 1085.27 582.38 1100.62 597.73" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1100.62 649.29 1100.62 597.73 1085.27 582.38 1085.27 664.64 1100.62 649.29" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="1267.84 649.36 1267.84 597.8 1252.49 582.45 1252.49 664.71 1267.84 649.36" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="1267.84 597.8 1252.49 582.45 1336.21 582.45 1336.21 597.8 1267.84 597.8" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="1252.49 664.71 1267.84 649.36 1336.21 649.36 1336.21 664.89 1252.49 664.71" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 597.8 750.76 582.45 750.76 664.71 735.41 649.36 735.41 597.8" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="735.41 649.36 667.96 649.36 667.96 664.89 750.76 664.89 735.41 649.36" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 597.8 750.76 582.45 667.96 582.45 667.96 597.73 735.41 597.8" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <g id="Bevel-54">
+            <polygon points="918.41 497.9 933.76 482.54 1070.15 482.54 1085.5 497.9 918.41 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1070.15 430.99 1085.5 415.64 1085.5 497.9 1070.15 482.54 1070.15 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="933.76 430.99 1070.15 430.99 1085.5 415.64 918.41 415.64 933.76 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="933.76 482.54 933.76 430.99 918.41 415.64 918.41 497.9 933.76 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-55">
+            <polygon points="750.74 497.9 766.09 482.54 902.49 482.54 917.84 497.9 750.74 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="902.49 430.99 917.84 415.64 917.84 497.9 902.49 482.54 902.49 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="766.09 430.99 902.49 430.99 917.84 415.64 750.74 415.64 766.09 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="766.09 482.54 766.09 430.99 750.74 415.64 750.74 497.9 766.09 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-56">
+            <polygon points="668.54 415.22 683.89 399.87 820.28 399.87 835.63 415.22 668.54 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="820.28 348.32 835.63 332.97 835.63 415.22 820.28 399.87 820.28 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="683.89 348.32 820.28 348.32 835.63 332.97 668.54 332.97 683.89 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="683.89 399.87 683.89 348.32 668.54 332.97 668.54 415.22 683.89 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-57">
+            <polygon points="834.83 415.22 850.18 399.87 986.57 399.87 1001.92 415.22 834.83 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="986.57 348.32 1001.92 332.97 1001.92 415.22 986.57 399.87 986.57 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="850.18 348.32 986.57 348.32 1001.92 332.97 834.83 332.97 850.18 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="850.18 399.87 850.18 348.32 834.83 332.97 834.83 415.22 850.18 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-58">
+            <polygon points="1001.95 415.22 1017.31 399.87 1153.7 399.87 1169.05 415.22 1001.95 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1153.7 348.32 1169.05 332.97 1169.05 415.22 1153.7 399.87 1153.7 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1017.31 348.32 1153.7 348.32 1169.05 332.97 1001.95 332.97 1017.31 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1017.31 399.87 1017.31 348.32 1001.95 332.97 1001.95 415.22 1017.31 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-59">
+            <polygon points="1168.81 415.22 1184.17 399.87 1320.56 399.87 1335.91 415.22 1168.81 415.22" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1320.56 348.32 1335.91 332.97 1335.91 415.22 1320.56 399.87 1320.56 348.32" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1184.17 348.32 1320.56 348.32 1335.91 332.97 1168.81 332.97 1184.17 348.32" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1184.17 399.87 1184.17 348.32 1168.81 332.97 1168.81 415.22 1184.17 399.87" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <g id="Bevel-60">
+            <polygon points="1085.27 497.9 1100.62 482.54 1237.01 482.54 1252.36 497.9 1085.27 497.9" style="fill: #a8a1ce; stroke-width: 0px;"/>
+            <polygon points="1237.01 430.99 1252.36 415.64 1252.36 497.9 1237.01 482.54 1237.01 430.99" style="fill: #b1add8; stroke-width: 0px;"/>
+            <polygon points="1100.62 430.99 1237.01 430.99 1252.36 415.64 1085.27 415.64 1100.62 430.99" style="fill: #bcbcdd; stroke-width: 0px;"/>
+            <polygon points="1100.62 482.54 1100.62 430.99 1085.27 415.64 1085.27 497.9 1100.62 482.54" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          </g>
+          <polygon points="1267.84 482.61 1267.84 431.06 1252.49 415.71 1252.49 497.96 1267.84 482.61" style="fill: #b4b2d8; stroke-width: 0px;"/>
+          <polygon points="1267.84 431.06 1252.49 415.71 1336.21 415.71 1336.21 431.06 1267.84 431.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+          <polygon points="1252.49 497.96 1267.84 482.61 1336.21 482.61 1336.21 498.15 1252.49 497.96" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 431.06 750.76 415.71 750.76 497.96 735.41 482.61 735.41 431.06" style="fill: #b1add8; stroke-width: 0px;"/>
+          <polygon points="735.41 482.61 667.96 482.61 667.96 498.15 750.76 498.15 735.41 482.61" style="fill: #a8a1ce; stroke-width: 0px;"/>
+          <polygon points="735.41 431.06 750.76 415.71 667.96 415.71 667.96 430.99 735.41 431.06" style="fill: #bcbcdd; stroke-width: 0px;"/>
+        </g>
+      </g>
+      <g id="LLines">
+        <g id="Lines">
+          <polyline points="0 249.83 667.96 249.83 667.96 166.22 0 166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <polyline points="667.96 0 667.96 83.11 0 83.11" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line y1="332.45" x2="668.24" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="333.97" y1="249.83" x2="333.97" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="83.53" y1="332.45" x2="83.53" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="83.53" y1="166.22" x2="83.53" y2="83.11" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="167.06" y1="166.22" x2="167.06" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="250.59" y1="83.11" x2="250.59" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="250.59" y1="249.83" x2="250.59" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="167.06" y1="83.11" x2="167.06" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="334.12" y1="83.11" x2="334.12" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="501.11" y1="166.22" x2="501.11" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="501.11" y1="83.11" x2="501.11" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="417.54" y1="83.11" x2="417.54" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="417.54" y1="249.83" x2="417.54" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="584.52" y1="83.11" x2="584.52" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="584.52" y1="249.83" x2="584.52" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+        </g>
+        <g id="Lines-2">
+          <polyline points="667.96 249.83 1335.68 249.83 1335.68 166.22 667.96 166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <polyline points="1335.68 0 1335.68 83.11 667.96 83.11" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="667.96" y1="332.45" x2="1336.21" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1001.93" y1="249.83" x2="1001.93" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="751.49" y1="332.45" x2="751.49" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="751.49" y1="166.22" x2="751.49" y2="83.11" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="835.02" y1="166.22" x2="835.02" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="918.56" y1="83.11" x2="918.56" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="918.56" y1="249.83" x2="918.56" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="835.02" y1="83.11" x2="835.02" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1002.09" y1="83.11" x2="1002.09" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1169.07" y1="166.22" x2="1169.07" y2="249.83" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1169.07" y1="83.11" x2="1169.07" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1085.5" y1="83.11" x2="1085.5" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1085.5" y1="249.83" x2="1085.5" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1252.49" y1="83.11" x2="1252.49" y2="166.22" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1252.49" y1="249.83" x2="1252.49" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+        </g>
+        <g id="Lines-3">
+          <polyline points="0 582.27 667.96 582.27 667.96 498.67 0 498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <polyline points="667.96 332.45 667.96 415.56 0 415.56" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line y1="664.89" x2="668.24" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="333.97" y1="582.27" x2="333.97" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="83.53" y1="664.89" x2="83.53" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="83.53" y1="498.67" x2="83.53" y2="415.56" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="167.06" y1="498.67" x2="167.06" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="250.59" y1="415.56" x2="250.59" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="250.59" y1="582.27" x2="250.59" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="167.06" y1="415.56" x2="167.06" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="334.12" y1="415.56" x2="334.12" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="501.11" y1="498.67" x2="501.11" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="501.11" y1="415.56" x2="501.11" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="417.54" y1="415.56" x2="417.54" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="417.54" y1="582.27" x2="417.54" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="584.52" y1="415.56" x2="584.52" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="584.52" y1="582.27" x2="584.52" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+        </g>
+        <g id="Lines-4">
+          <polyline points="667.96 582.27 1335.69 582.27 1335.68 498.67 667.96 498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <polyline points="1335.93 332.45 1335.68 415.56 667.96 415.56" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="667.96" y1="664.89" x2="1336.21" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1001.93" y1="582.27" x2="1001.93" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="751.49" y1="664.89" x2="751.49" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="751.49" y1="498.67" x2="751.49" y2="415.56" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="835.02" y1="498.67" x2="835.02" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="918.56" y1="415.56" x2="918.56" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="918.56" y1="582.27" x2="918.56" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="835.02" y1="415.56" x2="835.02" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1002.09" y1="415.56" x2="1002.09" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1169.07" y1="498.67" x2="1169.07" y2="582.27" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1169.07" y1="415.56" x2="1169.07" y2="332.45" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1085.5" y1="415.56" x2="1085.5" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1085.5" y1="582.27" x2="1085.5" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1252.49" y1="415.56" x2="1252.49" y2="498.67" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+          <line x1="1252.49" y1="582.27" x2="1252.49" y2="664.89" style="fill: none; stroke: #6230b0; stroke-miterlimit: 10; stroke-width: 1.05px;"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

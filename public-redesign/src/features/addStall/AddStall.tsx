@@ -1,47 +1,21 @@
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
-import SendIcon from '@mui/icons-material/Send';
-import {
-	Avatar,
-	Box,
-	Button,
-	Checkbox,
-	Divider,
-	FormControl,
-	FormControlLabel,
-	InputAdornment,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemButton,
-	ListItemText,
-	MobileStepper,
-	Paper,
-	Radio,
-	RadioGroup,
-	Step,
-	StepContent,
-	StepLabel,
-	Stepper,
-	Typography,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import CssBaseline from '@mui/material/CssBaseline';
-import { styled, useTheme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import * as React from 'react';
-import { nomsData } from '../icons/noms';
-import DSAppBar from '../app/app_bar';
-import SearchBar from '../app/search_bar';
-import SideMenuDrawer from '../app/side_menu_drawer';
+import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import ErrorElement from '../../ErrorElement';
+import { useAppSelector } from '../../app/hooks/store';
+import { navigateToAddStallSelectPollingPlaceFromElectionAndReplace } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
+import { getStringParamOrEmptyString } from '../../app/routing/routingHelpers';
+import { useGetElectionsQuery } from '../../app/services/elections';
+import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
+import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
+import { getBaseURL } from '../../app/utils';
+import { selectActiveElections } from '../elections/electionsSlice';
+import AddStallNoLiveElection from './addStallNoLiveElection/addStallNoLiveElection';
 
 const bottomNav = 56;
-
-interface Props {}
 
 const Root = styled('div')(({ theme }) => ({
 	height: '100%',
@@ -58,701 +32,76 @@ const PageWrapper = styled('div')((/*{ theme }*/) => ({
 	},
 }));
 
-export default function AddStall(props: Props) {
-	const [sideDrawerOpen, setSideDrawerOpen] = React.useState(false);
-	const toggleSideDrawerOpen = (e: any) => {
-		setSideDrawerOpen(!sideDrawerOpen);
-	};
+export const isBaseAddStallURL = (pathname: string) => pathname === '/add-stall' || pathname === '/add-stall/';
 
-	const [activeStep, setActiveStep] = React.useState(0);
+export default function AddStall() {
+	const params = useParams();
+	const navigate = useNavigate();
+	const location = useLocation();
 
-	const handleNext = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	};
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
 
-	const handleBack = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep - 1);
-	};
+	const {
+		isLoading: isGetElectionsLoading,
+		isSuccess: isGetElectionsSuccessful,
+		isError: isGetElectionsErrored,
+	} = useGetElectionsQuery();
 
-	//   const handleReset = () => {
-	//     setActiveStep(0);
-	//   };
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
-	//   // TODO Vary if only one election is active
-	//   const numberOfSteps = 5 - 1;
+	const isEligbleToSkipToSelectPollingPlace =
+		isBaseAddStallURL(location.pathname) && isGetElectionsSuccessful === true && activeElections.length === 1;
 
-	// eslint-disable-next-line
-	const [isStallOwner, setIsStallOwner] = React.useState<boolean | null>(false);
+	// If there's only one active election, we can skip the 'Choose an election' step and send the user straight to choosing a polling place.
+	useEffect(() => {
+		if (isEligbleToSkipToSelectPollingPlace === true) {
+			navigateToAddStallSelectPollingPlaceFromElectionAndReplace(navigate, activeElections[0]);
+		}
+	}, [activeElections, isEligbleToSkipToSelectPollingPlace, navigate]);
 
-	// @TODO See https://stackoverflow.com/questions/72811784/from-time-and-to-time-validation-in-react-dropdown-react-datepicker-hour
-	// const [startTimeValue, setStartTimeValue] = React.useState<Moment | null>(null);
-	const [startTimeValue, setStartTimeValue] = React.useState<any | null>(null);
+	if (isGetElectionsLoading === true) {
+		return <WholeScreenLoadingIndicator />;
+	}
 
-	// const [endTimeValue, setEndTimeValue] = React.useState<Moment | null>(null);
-	const [endTimeValue, setEndTimeValue] = React.useState<any | null>(null);
+	if (isGetElectionsErrored === true) {
+		return <ErrorElement />;
+	}
 
-	//   const times = [
-	//     "00:00",
-	//     "00:30",
-	//     "1:00",
-	//     "1:30",
-	//     "2:00",
-	//     "2:30",
-	//     "3:00",
-	//     "3:30",
-	//     "4:00",
-	//     "4:30",
-	//     "5:00",
-	//     "5:30",
-	//     "6:00",
-	//     "6:30",
-	//     "7:00",
-	//     "7:30",
-	//     "8:00",
-	//     "8:30",
-	//     "9:00",
-	//     "9:30",
-	//     "10:00",
-	//     "10:30",
-	//     "11:00",
-	//     "11:30",
-	//     "12:00",
-	//   ];
+	if (isGetElectionsSuccessful === true && activeElections.length === 0) {
+		return <AddStallNoLiveElection />;
+	}
 
-	const steps = [
-		{
-			label: 'Add a sausage sizzle or cake stall',
-			description: ``,
-		},
-		{
-			label: 'Where is the stall?',
-			description: '',
-		},
-		{
-			label: "Who's submitting?",
-			description: ``,
-		},
-		{
-			label: 'Tell us about the stall',
-			description: ``,
-		},
-		{
-			label: 'Stall submitted',
-			description: ``,
-		},
-	];
-	const maxSteps = steps.length;
+	// Stop folks using the Add Stall interface for elections that aren't active
+	if (
+		isGetElectionsSuccessful === true &&
+		urlElectionName !== '' &&
+		activeElections.find((e) => e.name_url_safe === urlElectionName) === undefined
+	) {
+		return <AddStallNoLiveElection />;
+	}
 
-	const theme = useTheme();
-	//   const [activeStep, setActiveStep] = React.useState(0);
-	//   const maxSteps = steps.length;
+	// Don't render anything because our navigate() in the useEffect() above will be sending us off to choose a polling place.
+	if (isEligbleToSkipToSelectPollingPlace === true) {
+		return null;
+	}
 
-	//   const handleNext = () => {
-	//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	//   };
-
-	//   const handleBack = () => {
-	//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-	//   };
-
-	const [whoIsSubmitting, setWhoIsSubmitting] = React.useState<string>();
-	const onChangeWhoIsSubmitting = (input: React.ChangeEvent<HTMLInputElement>, value: string) =>
-		setWhoIsSubmitting(value);
-
-	const step1Content = (
-		<React.Fragment>
-			<Typography variant="body1" gutterBottom>
-				Please complete the form below to add your stall to the map. Please do not submit entries that are offensive,
-				political or do not relate to an election day stall. Please also make sure that you have authorisation to run
-				your fundraising event at the polling place. All entries are moderated and subject to approval.
-			</Typography>
-
-			<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-				<ListItemButton>
-					<ListItemAvatar>
-						<Avatar>
-							<EmailIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
-				</ListItemButton>
-			</List>
-		</React.Fragment>
-	);
-
-	const step2Content = (
-		<React.Fragment>
-			<Typography>Foobar foobar foobar</Typography>
-			<br />
-			<SearchBar
-				//   onSearch={toggleUserHasSearched}
-				//   filterOpen={filterOpen}
-				// onToggleFilter={toggleFilter}
-				onSearch={() => {}}
-				filterOpen={false}
-				onToggleFilter={() => {}}
-				onClick={() => {}}
-				isMapFiltered={false}
-				showFilter={false}
-				styleProps={{}}
-			/>
-
-			{/* <Box sx={{ mb: 2 }}>
-    <div>
-      <Button
-        variant="contained"
-        onClick={handleNext}
-        sx={{ mt: 1, mr: 1 }}
-      >
-        Continue
-      </Button>
-      <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-        Back
-      </Button>
-    </div>
-  </Box> */}
-		</React.Fragment>
-	);
-
-	const step3Content = (
-		<React.Fragment>
-			<Typography>Foobar foobar foobar</Typography>
-			<FormControl>
-				{/* <FormLabel id="demo-radio-buttons-group-label">
-    Gender
-  </FormLabel> */}
-				<RadioGroup
-					aria-labelledby="demo-radio-buttons-group-label"
-					name="radio-buttons-group"
-					onChange={onChangeWhoIsSubmitting}
-				>
-					<FormControlLabel value="owner" control={<Radio />} label="I'm involved in running this stall" />
-					<FormControlLabel value="tip_off" control={<Radio />} label="I'm sending a tip-off about a stall I've seen" />
-				</RadioGroup>
-			</FormControl>
-			{/* <Box sx={{ mb: 2 }}>
-    <div>
-      <Button
-        variant="contained"
-        onClick={handleNext}
-        sx={{ mt: 1, mr: 1 }}
-      >
-        Continue
-      </Button>
-      <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-        Back
-      </Button>
-    </div>
-  </Box> */}
-		</React.Fragment>
-	);
-
-	const step4Content = (
-		<React.Fragment>
-			<Typography gutterBottom variant="h6" component="div">
-				Stall details
-			</Typography>
-
-			<TextField
-				label="What is the stall called? (Required)"
-				helperText="e.g. Smith Hill Primary School Sausage Sizzle"
-				fullWidth
-				sx={{ mb: 2 }}
-				variant="filled"
-				required
-			/>
-
-			<TextField
-				label="Describe the stall"
-				helperText="Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
-				fullWidth
-				sx={{ mb: 2 }}
-				variant="filled"
-			/>
-
-			{/* <TextField
-  label="When will the stall be open?"
-  helperText="e.g. 8AM - 2PM"
-  fullWidth
-  sx={{ mb: 2 }}
-  />
-  
-  <TextField
-  id="standard-select-currency"
-  select
-  label="Start time"
-  defaultValue="8:00"
-  helperText="Please select your opening hours"
-  variant="standard"
-  InputProps={{
-    startAdornment: (
-      <InputAdornment position="start">
-        <AccessTimeIcon />
-      </InputAdornment>
-    ),
-  }}
-  >
-  {times.map((option) => (
-    <MenuItem key={option} value={option}>
-      {option}
-    </MenuItem>
-  ))}
-  </TextField>
-  
-  <TextField
-  id="standard-select-currency"
-  select
-  value="AM"
-  //   label="Start time"
-  // defaultValue="EUR"
-  //   helperText="Please select your opening hours"
-  variant="standard"
-  //   InputProps={{
-  //     startAdornment: (
-  //       <InputAdornment position="start">
-  //         <AccessTimeIcon />
-  //       </InputAdornment>
-  //     ),
-  //   }}
-  >
-  <MenuItem value="AM">AM</MenuItem>
-  <MenuItem>PM</MenuItem>
-  </TextField>
-  <br />
-  <br />
-  
-  <Select
-  labelId="demo-simple-select-helper-label"
-  id="demo-simple-select-helper"
-  value="8:00"
-  label="Start time"
-  //   onChange={handleChange}
-  sx={{ mb: 4 }}
-  >
-  {times.map((option) => (
-    <MenuItem key={option} value={option}>
-      {option}
-    </MenuItem>
-  ))}
-  </Select>
-  
-  <Select
-  labelId="demo-simple-select-helper-label"
-  id="demo-simple-select-helper"
-  value={"AM"}
-  label="Start time am/pm"
-  //   onChange={handleChange}
-  sx={{ mb: 4 }}
-  >
-  <MenuItem value="AM">AM</MenuItem>
-  <MenuItem>PM</MenuItem>
-  </Select> */}
-
-			{whoIsSubmitting === 'owner' && (
-				<React.Fragment>
-					{' '}
-					<TimePicker
-						label="Start time"
-						value={startTimeValue}
-						onChange={setStartTimeValue}
-						// renderInput={(params: unknown) => (
-						// 	<TextField
-						// 		{...params}
-						// 		fullWidth
-						// 		variant="filled"
-						// 		InputProps={{
-						// 			startAdornment: (
-						// 				<InputAdornment position="start">
-						// 					<AccessTimeIcon />
-						// 				</InputAdornment>
-						// 			),
-						// 		}}
-						// 	/>
-						// )}
-					/>
-					<br />
-					<br />
-					<TimePicker
-						label="End time"
-						value={endTimeValue}
-						onChange={setEndTimeValue}
-						// renderInput={(params) => (
-						// 	<TextField
-						// 		{...params}
-						// 		fullWidth
-						// 		variant="filled"
-						// 		InputProps={{
-						// 			startAdornment: (
-						// 				<InputAdornment position="start">
-						// 					<AccessTimeIcon />
-						// 				</InputAdornment>
-						// 			),
-						// 		}}
-						// 	/>
-						// )}
-					/>
-					<br />
-					<br />
-					<TextField
-						label="Website or social media page link"
-						helperText="We'll include a link to your site as part of your stall's information"
-						fullWidth
-						variant="filled"
-						// sx={{ mb: 2 }}
-						InputProps={{
-							startAdornment: (
-								<InputAdornment position="start">
-									<LinkIcon />
-								</InputAdornment>
-							),
-						}}
-					/>
-				</React.Fragment>
-			)}
-
-			<Divider sx={{ mt: 3, mb: 3 }} />
-
-			<Typography gutterBottom variant="h6" component="div">
-				What's on offer?
-			</Typography>
-			<Typography gutterBottom variant="subtitle1" component="div">
-				Foobar foobar foobar
-			</Typography>
-
-			<List
-				dense
-				sx={{
-					width: '100%',
-					pt: 0,
-					// marginBottom: 1,
-					/*maxWidth: 360, */
-					//   bgcolor: "background.paper",
-				}}
-			>
-				{Object.values(nomsData).map((noms) => {
-					const labelId = `checkbox-list-secondary-label-${noms.value}`;
-					return (
-						<ListItem
-							key={noms.value}
-							secondaryAction={
-								<Checkbox
-									edge="end"
-									// onChange={handleToggle(noms.value, noms.label)}
-									// checked={checked.indexOf(noms.value) !== -1}
-									inputProps={{ 'aria-labelledby': labelId }}
-								/>
-							}
-							disablePadding
-						>
-							<ListItemButton>
-								<ListItemAvatar>
-									<Avatar
-										alt={`Avatar n°${noms.value + 1}`}
-										sx={{ backgroundColor: 'transparent' }}
-										// src={`/static/images/avatar/${noms.value + 1}.jpg`}
-									>
-										{noms.icon}
-									</Avatar>
-								</ListItemAvatar>
-								<ListItemText id={labelId} primary={noms.label} />
-							</ListItemButton>
-						</ListItem>
-					);
-				})}
-			</List>
-
-			<TextField
-				label="Anything else?"
-				helperText="e.g. We also have yummy gluten free sausage rolls, cold drinks, and pony rides!"
-				fullWidth
-				variant="filled"
-				sx={{ mt: 1 }}
-			/>
-
-			<Divider sx={{ mt: 3, mb: 3 }} />
-
-			<Typography gutterBottom variant="h6" component="div">
-				Your details
-			</Typography>
-			<Typography gutterBottom variant="subtitle1" component="div">
-				Foobar foobar foobar
-			</Typography>
-
-			<TextField
-				label="What's your email address?"
-				helperText="So we can let you know when we've added the stall to the map"
-				fullWidth
-				variant="filled"
-				// sx={{ mb: 2 }}
-				InputProps={{
-					startAdornment: (
-						<InputAdornment position="start">
-							<EmailIcon />
-						</InputAdornment>
-					),
-				}}
-			/>
-
-			{/* <Box sx={{ mb: 2 }}>
-    <div>
-      <Button
-        variant="contained"
-        onClick={handleNext}
-        sx={{ mt: 1, mr: 1 }}
-        endIcon={<SendIcon />}
-      >
-        Submit Stall
-      </Button>
-      <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-        Back
-      </Button>
-    </div>
-  </Box> */}
-		</React.Fragment>
-	);
-
+	// If we've loaded elections successfully, and have more than one active election, let everything continue as normal so the user lands on the 'Choose an election' screen.
 	return (
 		<Root>
-			<CssBaseline />
+			<Helmet>
+				<title>Add a sausage sizzle or cake stall | Democracy Sausage</title>
 
-			<SideMenuDrawer open={sideDrawerOpen} onToggle={toggleSideDrawerOpen} />
-
-			<DSAppBar toggleSideDrawerOpen={toggleSideDrawerOpen} topPadding={false} />
-
-			{/* <Helmet>
-            <title>Democracy Sausage | FAQs and About Us</title>
-  
-            {/* Open Graph / Facebook / Twitter *}
-            <meta property="og:url" content={`${getBaseURL()}/about`} />
-            <meta property="og:title" content="Democracy Sausage | FAQs and About Us" />
-          </Helmet> */}
+				{/* Open Graph: Facebook / Twitter */}
+				{getDefaultOGMetaTags()}
+				<meta property="og:url" content={`${getBaseURL()}/about/`} />
+				<meta property="og:title" content="Add a sausage sizzle or cake stall | Democracy Sausage" />
+			</Helmet>
 
 			<PageWrapper>
-				{/* <div>
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            id dignissim justo. Nulla ut facilisis ligula. Interdum et malesuada
-            fames ac ante ipsum primis in faucibus. Sed malesuada lobortis
-            pretium
-            <Button variant="contained" endIcon={<SendIcon />}>
-              I'm running a stall
-            </Button>
-          </div>
-          <Divider>
-            <Chip label="OR" />
-          </Divider>
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            id dignissim justo. Nulla ut facilisis ligula. Interdum et malesuada
-            fames ac ante ipsum primis in faucibus. Sed malesuada lobortis
-            pretium
-            <Button variant="contained" endIcon={<SendIcon />}>
-              I'm sending a tip-off about someone else's stall
-            </Button>
-          </div>
-        </div> */}
-
-				{/* <Typography variant="h5" gutterBottom>
-          Victorian Election 2022
-              </Typography> */}
-
-				<Box sx={{ /*maxWidth: 400, */ flexGrow: 1 /*, height: "70vh"*/ }}>
-					<Paper
-						square
-						elevation={0}
-						sx={{
-							display: 'flex',
-							alignItems: 'center',
-							height: 50,
-							pl: 2,
-							bgcolor: 'grey.200',
-						}}
-					>
-						<Typography variant="h6">{steps[activeStep].label}</Typography>
-					</Paper>
-					<Box sx={{ minHeight: 300, maxWidth: 400, width: '100%', p: 2 }}>
-						{activeStep === 0 && step1Content}
-
-						{activeStep === 1 && step2Content}
-
-						{activeStep === 2 && step3Content}
-
-						{activeStep === 3 && step4Content}
-
-						{activeStep === 4 && <React.Fragment>Yay!</React.Fragment>}
-
-						{/* {activeStep === 4 && (
-              <React.Fragment>
-                <Box sx={{ mb: 2 }}>
-                  <div>
-                    <Button
-                      variant="contained"
-                      onClick={handleNext}
-                      sx={{ mt: 1, mr: 1 }}
-                      endIcon={<SendIcon />}
-                    >
-                      Submit Stall
-                    </Button>
-                    <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                      Back
-                    </Button>
-                  </div>
-                </Box>
-              </React.Fragment>
-            )} */}
-					</Box>
-
-					<MobileStepper
-						variant="text"
-						steps={maxSteps}
-						position="bottom"
-						activeStep={activeStep}
-						nextButton={
-							<Button
-								size="small"
-								onClick={handleNext}
-								disabled={activeStep === maxSteps - 1}
-								endIcon={
-									theme.direction === 'rtl' ? (
-										<KeyboardArrowLeft />
-									) : activeStep === maxSteps - 1 ? (
-										<SendIcon />
-									) : (
-										<KeyboardArrowRight />
-									)
-								}
-							>
-								{activeStep === maxSteps - 1 || activeStep === maxSteps - 2 ? 'Submit' : 'Next'}
-							</Button>
-						}
-						backButton={
-							<Button
-								size="small"
-								onClick={handleBack}
-								disabled={activeStep === 0}
-								startIcon={theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-							>
-								Back
-							</Button>
-						}
-					/>
+				<Box sx={{ flexGrow: 1 }}>
+					<Outlet />
 				</Box>
-
-				<Stepper activeStep={activeStep} orientation="vertical" sx={{ display: 'none' }}>
-					<Step>
-						<StepLabel>Add a sausage sizzle or cake stall</StepLabel>
-						<StepContent>
-							{step1Content}
-							<Box sx={{ mb: 2 }}>
-								<div>
-									<Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-										Continue
-									</Button>
-								</div>
-							</Box>
-						</StepContent>
-					</Step>
-
-					{/* <Step>
-            <StepLabel
-              optional={
-                <Typography variant="caption">
-                  Victorian Election 2022
-                </Typography>
-              }
-            >
-              Choose an election
-            </StepLabel>
-            <StepContent>
-              <Typography>Foobar foobar foobar</Typography>
-              <Box sx={{ mb: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Continue
-                  </Button>
-                  <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step> */}
-
-					<Step>
-						<StepLabel optional={<Typography variant="caption">123 Fake Street, Fake Place</Typography>}>
-							Where is the stall?
-						</StepLabel>
-						<StepContent>
-							{step2Content}
-
-							<Box sx={{ mb: 2 }}>
-								<div>
-									<Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-										Continue
-									</Button>
-									<Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-										Back
-									</Button>
-								</div>
-							</Box>
-						</StepContent>
-					</Step>
-
-					<Step>
-						<StepLabel optional={<Typography variant="caption">My stall</Typography>}>Who's submitting?</StepLabel>
-						<StepContent>
-							{step3Content}
-							<Box sx={{ mb: 2 }}>
-								<div>
-									<Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-										Continue
-									</Button>
-									<Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-										Back
-									</Button>
-								</div>
-							</Box>
-						</StepContent>
-					</Step>
-
-					<Step>
-						<StepLabel optional={<Typography variant="caption">Last step</Typography>}>
-							Tell us about the stall
-						</StepLabel>
-						<StepContent>
-							{isStallOwner === false && <div>Foobar</div>}
-
-							{step3Content}
-
-							<Box sx={{ mb: 2 }}>
-								<div>
-									<Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }} endIcon={<SendIcon />}>
-										Submit Stall
-									</Button>
-									<Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-										Back
-									</Button>
-								</div>
-							</Box>
-						</StepContent>
-					</Step>
-				</Stepper>
-
-				{/* {activeStep === numberOfSteps && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
-            </Button>
-          </Paper>
-        )} */}
 			</PageWrapper>
-
-			{/* <BottomBar /> */}
 		</Root>
 	);
 }
