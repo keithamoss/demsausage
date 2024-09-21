@@ -66,7 +66,7 @@
     "@vitejs/plugin-react-swc": "^3.7.0",
     "prettier": "^3.2.5",
     "typescript": "^5.6.2",
-    "vite": "^5.3.1",
+    "vite": "^5.4.7",
     "vite-plugin-checker": "^0.6.4",
     "vite-tsconfig-paths": "^4.3.2"
   },
