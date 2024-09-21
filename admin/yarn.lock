@@ -1400,13 +1400,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-redux@npm:4.0.55":
-  version: 4.0.55
-  resolution: "@types/react-router-redux@npm:4.0.55"
+"@types/react-router-redux@npm:4.0.58":
+  version: 4.0.58
+  resolution: "@types/react-router-redux@npm:4.0.58"
   dependencies:
     "@types/history": "npm:^3.2.5"
     redux: "npm:^3.6.0"
-  checksum: 10c0/e9a350b622cac38baac44d628ce9866c349ef9cfc1c8f55b004ca85827724b1b3f51b5c3d6f7c6cde517cb0dc25a603c6c64d9ae700f53984c1e9a09fe8c0e43
+  checksum: 10c0/e610c4a81667343d36baceb06432332ad5f49bc486663f19df51e79840bcfb91c173fa96857609267d73f934506cb3ed556db818a27d2b1d20e34786199f5ff0
   languageName: node
   linkType: hard
 
@@ -1575,7 +1575,7 @@ __metadata:
     "@types/react-is": "npm:^18"
     "@types/react-redux": "npm:7.1.24"
     "@types/react-router": "npm:3.0.28"
-    "@types/react-router-redux": "npm:4.0.55"
+    "@types/react-router-redux": "npm:4.0.58"
     "@types/recompose": "npm:^0.30.10"
     "@types/redux-form": "npm:^8.3.5"
     "@types/styled-components": "npm:5.1.26"
