@@ -43,7 +43,7 @@
   "devDependencies": {
     "@sentry/types": "^8.9.2",
     "@sentry/vite-plugin": "^2.18.0",
-    "@testing-library/dom": "^10.1.0",
+    "@testing-library/dom": "^10.4.0",
     "@types/history": "^5.0.0",
     "@types/jest": "^29.5.13",
     "@types/js-cookie": "^3",
