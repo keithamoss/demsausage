@@ -2,7 +2,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, IconButton, Toolbar } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
@@ -61,29 +61,34 @@ export default function App() {
 						<MenuIcon />
 					</IconButton>
 
-					{createInlinedSVGImage(
-						DemSausageWhiteCrestGrillRaw,
-						{
-							marginRight: 20,
-							paddingTop: 7,
-							paddingBottom: 7,
-							cursor: 'pointer',
-							height: 48,
-						},
-						onNavigateHome,
-					)}
+					{/* `fontSize: 0` ensures the logo and banner are both clickable links that don't take up extra vertical space */}
+					<Link to={getBaseURL()} style={{ fontSize: 0 }}>
+						{createInlinedSVGImage(
+							DemSausageWhiteCrestGrillRaw,
+							{
+								marginRight: 20,
+								paddingTop: 7,
+								paddingBottom: 7,
+								cursor: 'pointer',
+								height: 48,
+							},
+							onNavigateHome,
+						)}
+					</Link>
 
-					{createInlinedSVGImage(
-						DemSausageBannerRaw,
-						{
-							marginRight: 20,
-							paddingTop: 7,
-							paddingBottom: 7,
-							cursor: 'pointer',
-							height: 48,
-						},
-						onNavigateHome,
-					)}
+					<Link to={getBaseURL()} style={{ fontSize: 0 }}>
+						{createInlinedSVGImage(
+							DemSausageBannerRaw,
+							{
+								marginRight: 20,
+								paddingTop: 7,
+								paddingBottom: 7,
+								cursor: 'pointer',
+								height: 48,
+							},
+							onNavigateHome,
+						)}
+					</Link>
 				</Toolbar>
 			</AppBar>
 

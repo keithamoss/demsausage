@@ -94,13 +94,6 @@ services:
       - secrets/dev/sausage-rq-dashboard.dev.env
     depends_on:
       - redis
-  # frontend_public:
-  #   image: node:20-alpine3.16
-  #   entrypoint: /app/docker-entrypoint.sh
-  #   volumes:
-  #     - ./public:/app:delegated
-  #   env_file:
-  #     - secrets/dev/sausage-public-frontend.dev.env
   frontend_public_redesign:
     image: node:20-alpine3.16
     entrypoint: /app/docker-entrypoint.sh
@@ -108,13 +101,13 @@ services:
       - ./public-redesign:/app:delegated
     env_file:
       - secrets/dev/sausage-public-redesign-frontend.dev.env
-  # frontend_admin:
-  #   image: node:20-alpine3.16
-  #   entrypoint: /app/docker-entrypoint.sh
-  #   volumes:
-  #     - ./admin:/app:delegated
-  #   env_file:
-  #     - secrets/dev/sausage-admin-frontend.dev.env
+  frontend_admin_redesign:
+    image: node:20-alpine3.16
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./admin-redesign:/app:delegated
+    env_file:
+      - secrets/dev/sausage-admin-redesign-frontend.dev.env
   nginx:
     build: nginx/
     volumes:
@@ -125,9 +118,8 @@ services:
       - ./admin-legacy/:/frontend/admin-legacy/
     depends_on:
       - django
-      # - frontend_public
       - frontend_public_redesign
-      # - frontend_admin
+      - frontend_admin_redesign
     ports:
       - '443:443'
       - '3001:3001'

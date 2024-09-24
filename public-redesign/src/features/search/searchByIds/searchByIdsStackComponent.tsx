@@ -1,4 +1,4 @@
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Box, LinearProgress, styled } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,6 +13,10 @@ import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { onViewOnMap } from '../searchBarHelpers';
 import SearchResultsPollingPlaceCard from '../shared/searchResultsPollingPlaceCard';
 import SearchByIdsResultsContainer from './searchResultsContainer/searchByIdsResultsContainer';
+
+const StyledBox = styled(Box)(({ theme }) => ({
+	padding: theme.spacing(1),
+}));
 
 interface Props {
 	election: Election;
@@ -61,32 +65,36 @@ export default function SearchByIdsStackComponent(props: Props) {
 
 	return (
 		<React.Fragment>
-			{/* Handles not found and all other types of error */}
-			{errorFetchingPollingPlacesByIds !== undefined && (
-				<Alert severity="error">
-					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-					Something went awry when we tried to load your list of polling places.
-				</Alert>
-			)}
+			{isFetchingPollingPlacesByIds === true && <LinearProgress color="secondary" />}
 
-			{pollingPlaceNearbyResultsFiltered !== undefined && (
-				<SearchByIdsResultsContainer
-					election={election}
-					numberOfResults={pollingPlaceNearbyResultsFiltered.length}
-					isFiltered={hasFilterOptions(mapFilterSettings, election.id) === true}
-					pollingPlacesLoaded={election.polling_places_loaded}
-					onViewOnMap={onClickViewOnMap}
-				>
-					{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
-						<SearchResultsPollingPlaceCard
-							key={pollingPlace.id}
-							pollingPlace={pollingPlace}
-							onChoosePollingPlaceLabel="Learn More"
-							onChoosePollingPlace={onChoosePollingPlace}
-						/>
-					))}
-				</SearchByIdsResultsContainer>
-			)}
+			<StyledBox>
+				{/* Handles not found and all other types of error */}
+				{errorFetchingPollingPlacesByIds !== undefined && (
+					<Alert severity="error">
+						<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
+						Something went awry when we tried to load your list of polling places.
+					</Alert>
+				)}
+
+				{pollingPlaceNearbyResultsFiltered !== undefined && (
+					<SearchByIdsResultsContainer
+						election={election}
+						numberOfResults={pollingPlaceNearbyResultsFiltered.length}
+						isFiltered={hasFilterOptions(mapFilterSettings, election.id) === true}
+						pollingPlacesLoaded={election.polling_places_loaded}
+						onViewOnMap={onClickViewOnMap}
+					>
+						{pollingPlaceNearbyResultsFiltered.map((pollingPlace) => (
+							<SearchResultsPollingPlaceCard
+								key={pollingPlace.id}
+								pollingPlace={pollingPlace}
+								onChoosePollingPlaceLabel="Learn More"
+								onChoosePollingPlace={onChoosePollingPlace}
+							/>
+						))}
+					</SearchByIdsResultsContainer>
+				)}
+			</StyledBox>
 		</React.Fragment>
 	);
 }

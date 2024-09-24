@@ -6,7 +6,7 @@ from random import getrandbits
 import requests
 from demsausage.app.admin import (get_admins, get_super_admins, is_development,
                                   is_production)
-from demsausage.app.enums import StallSubmitterType
+from demsausage.app.enums import StallSubmitterType, StallTipOffSource
 from demsausage.app.sausage.polling_places import getFoodDescription
 from demsausage.util import get_env, get_url_safe_election_name
 from rest_framework.exceptions import APIException
@@ -17,12 +17,12 @@ from django.forms.models import model_to_dict
 class MailgunException(APIException):
     pass
 
+def create_stall_edit_url(site_url, election_name_url_safe, stall_id, token, signature):
+    return f"{site_url}/edit-stall/{election_name_url_safe}/?stall_id={stall_id}&token={token}&signature={signature}"
 
 def send(body):
-    # Warning: This assumes that body["to"] is a string representing a single email address
-    # If we're in development we still want to send emails to the super admins so we can still test that flow
-    if is_development() is True and body["to"] not in get_super_admins():
-        print(f"Mailgun Dev Wrapper: Subject = {body['subject']}, To = {body['to']}, HTML = {body['html'][:100]}")
+    if is_development() is True:
+        print(f"Mailgun Dev Wrapper: Subject = {body['subject']}, To = {body['to']}, HTML = {body['html']}")
         return True
 
     else:
@@ -60,6 +60,7 @@ def send_stall_submitted_email(stall):
     signature = make_confirmation_hash(stall.id, token)
 
     if stall.submitter_type == StallSubmitterType.OWNER:
+        subject = f"Your Democracy Sausage stall for {stall_name} has been received!"
         html = get_mail_template("stall_submitted_owner", {
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
@@ -68,21 +69,39 @@ def send_stall_submitted_email(stall):
             "STALL_OPENING_HOURS": stall.opening_hours,
             "STALL_WEBSITE": stall.website,
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
         })
     elif stall.submitter_type == StallSubmitterType.TIPOFF:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been received!"
         html = get_mail_template("stall_submitted_tipoff", {
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
+        })
+    elif stall.submitter_type == StallSubmitterType.TIPOFF_RUN_OUT:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been received!"
+        html = get_mail_template("stall_submitted_tipoff_run_out", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "TIPOFF_SOURCE": stall.tipoff_source_other,
+        })
+    
+    elif stall.submitter_type == StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been received!"
+        html = get_mail_template("stall_submitted_tipoff_red_cross_of_shame", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "TIPOFF_SOURCE": stall.tipoff_source_other,
         })
     else:
-        html = "Could not locate a valid email template! No one should ever see this message!"
+        subject = "Democracy Sausage error! No one should ever see this messsage!"
+        html = "Could not locate a valid email template for! No one should ever see this message!"
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall for {} has been received!".format(stall_name),
+        "subject": subject,
         "html": html,
     })
 
@@ -99,6 +118,7 @@ def send_stall_approved_email(stall):
     signature = make_confirmation_hash(stall.id, token)
 
     if stall.submitter_type == StallSubmitterType.OWNER:
+        subject = f"Your Democracy Sausage stall for {stall_name} has been approved!"
         html = get_mail_template("stall_approved_with_mail_optout_owner", {
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
@@ -107,25 +127,47 @@ def send_stall_approved_email(stall):
             "STALL_OPENING_HOURS": stall.opening_hours,
             "STALL_WEBSITE": stall.website,
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
             "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
         })
     elif stall.submitter_type == StallSubmitterType.TIPOFF:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been approved!"
         html = get_mail_template("stall_approved_with_mail_optout_tipoff", {
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
+            "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
+        })
+    elif stall.submitter_type == StallSubmitterType.TIPOFF_RUN_OUT:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been approved!"
+        html = get_mail_template("stall_approved_with_mail_optout_tipoff_run_out", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "TIPOFF_SOURCE": stall.tipoff_source_other,
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
+            "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
+        })
+    
+    elif stall.submitter_type == StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME:
+        subject = f"Your Democracy Sausage stall tip off for {stall_name} has been approved!"
+        html = get_mail_template("stall_approved_with_mail_optout_tipoff_red_cross_of_shame", {
+            "POLLING_PLACE_NAME": location_info["name"],
+            "POLLING_PLACE_ADDRESS": location_info["address"],
+            "TIPOFF_SOURCE": stall.tipoff_source_other,
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
             "CONFIRM_OPTOUT_URL": "{api_url}/0.1/mail/opt_out/?format=json&stall_id={stall_id}&token={token}&signature={signature}".format(api_url=get_env("PUBLIC_API_BASE_URL"), stall_id=stall.id, token=token, signature=signature),
         })
     else:
-        html = "Could not locate a valid email template! No one should ever see this message!"
+        subject = "Democracy Sausage error! No one should ever see this messsage!"
+        html = "Could not locate a valid email template for the approval email! No one should ever see this message!"
 
     return send({
         "to": stall.email,
-        "subject": "Your Democracy Sausage stall for {} has been approved!".format(stall_name),
+        "subject": subject,
         "html": html,
     })
 
@@ -150,17 +192,21 @@ def send_stall_edited_email(stall):
             "STALL_OPENING_HOURS": stall.opening_hours,
             "STALL_WEBSITE": stall.website,
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
         })
     elif stall.submitter_type == StallSubmitterType.TIPOFF:
         html = get_mail_template("stall_edited_tipoff", {
             "POLLING_PLACE_NAME": location_info["name"],
             "POLLING_PLACE_ADDRESS": location_info["address"],
             "DELICIOUSNESS": getFoodDescription(stall),
-            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election)),
-            "STALL_EDIT_URL": "{site_url}/edit-stall?stall_id={stall_id}&token={token}&signature={signature}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, token=token, signature=signature),
+            "TIPOFF_SOURCE": stall.tipoff_source.title() if stall.tipoff_source != StallTipOffSource.Other else f"{stall.tipoff_source.title()} ({stall.tipoff_source_other})",
+            "STALL_PERMALINK": "{site_url}/{election_name}/stalls/{stall_id}".format(site_url=get_env("PUBLIC_SITE_URL"), stall_id=stall.id, election_name=get_url_safe_election_name(stall.election.name)),
+            "STALL_EDIT_URL": create_stall_edit_url(get_env("PUBLIC_SITE_URL"), get_url_safe_election_name(stall.election.name), stall.id, token, signature),
         })
+    elif stall.submitter_type == StallSubmitterType.TIPOFF_RUN_OUT or stall.submitter_type == StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME:
+        # Note: We don't allow stall editing for stalls that were Run Out or Red Cross of Shame Tip Offs.
+        return
     else:
         html = "Could not locate a valid email template! No one should ever see this message!"
 

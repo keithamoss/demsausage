@@ -1,11 +1,35 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export enum StallSubmitterType {
 	Owner = 'owner',
 	TipOff = 'tipoff',
+	TipOffRunOut = 'tipoff_run_out',
+	TipOffRedCrossOfShame = 'tipoff_red_cross_of_shame',
 }
+
+export enum StallTipOffSource {
+	In_Person = 'in-person',
+	Online = 'online',
+	Newsletter = 'newsletter',
+	Other = 'other',
+}
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSourceDescription = (enumName: StallTipOffSource): string => {
+	switch (enumName) {
+		case StallTipOffSource.In_Person:
+			return 'I saw it at a polling booth';
+		case StallTipOffSource.Online:
+			return 'I heard about it online (including social media)';
+		case StallTipOffSource.Newsletter:
+			return 'I saw it in the school, church, et cetera newsletter';
+		case StallTipOffSource.Other:
+			return 'Other';
+	}
+};
 
 export interface StallFoodOptions {
 	bbq?: boolean;
@@ -15,6 +39,11 @@ export interface StallFoodOptions {
 	bacon_and_eggs?: boolean;
 	coffee?: boolean;
 	free_text?: string;
+}
+
+export interface StallNonFoodOptions {
+	run_out?: boolean;
+	nothing?: boolean;
 }
 
 export type StallFoodOptionsErrors = Merge<
@@ -30,31 +59,52 @@ export type StallFoodOptionsErrors = Merge<
 	}>
 >;
 
-export interface StallTipOffModifiableProps {
+export interface StallOwnerModifiableProps {
 	noms: StallFoodOptions;
 	email: string;
-}
-
-export interface StallOwnerModifiableProps extends StallTipOffModifiableProps {
 	name: string;
 	description: string;
 	opening_hours?: string;
 	website?: string;
 }
 
-export interface NewStallTipOff extends StallTipOffModifiableProps {
+export interface StallTipOffModifiableProps {
+	noms: StallFoodOptions;
+	email: string;
+	tipoff_source?: StallTipOffSource;
+	tipoff_source_other: string;
+}
+
+export interface StallTipOffRunOutModifiableProps {
+	noms: StallFoodOptions & { run_out: true };
+	email: string;
+	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
+	tipoff_source_other: string;
+}
+
+export interface StallTipOffRedCrossOfShameModifiableProps {
+	noms: { nothing: true };
+	email: string;
+	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
+	tipoff_source_other: string;
+}
+
+export interface NewStallNonFormModifiableProps {
 	election: number;
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
 	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
 }
 
-export interface NewStallOwner extends StallOwnerModifiableProps {
-	election: number;
-	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
-	location_info?: IStallLocationInfo;
-	submitter_type: StallSubmitterType;
-}
+export interface NewStallOwner extends StallOwnerModifiableProps, NewStallNonFormModifiableProps {}
+
+export interface NewStallTipOff extends StallTipOffModifiableProps, NewStallNonFormModifiableProps {}
+
+export interface NewStallTipOffRunOut extends StallTipOffRunOutModifiableProps, NewStallNonFormModifiableProps {}
+
+export interface NewStallTipOffRedCrossOfShame
+	extends StallTipOffRedCrossOfShameModifiableProps,
+		NewStallNonFormModifiableProps {}
 
 // For some reason elections with official polling places loaded still need this to be sent.
 // No idea why...it's on the list to untangle during the admin redesign.
@@ -68,10 +118,22 @@ export interface IStallLocationInfo {
 	state: string;
 }
 
-export interface Stall extends StallOwnerModifiableProps {
+export enum StallStatus {
+	Pending = 'Pending',
+	Approved = 'Approved',
+	Declined = 'Declined',
+}
+
+export interface Stall
+	extends Omit<NewStallOwner, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOff, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOffRunOut, 'noms' | 'polling_place' | 'location_info'>,
+		Omit<NewStallTipOffRedCrossOfShame, 'noms' | 'polling_place' | 'location_info'> {
 	id: number;
-	// @TODO We temporarily added this for the preliminary EditStall work, but I'm not sure if it's present on the interface for other occurences. Also, it should be called election_id.
-	election: number;
+	noms: StallFoodOptions & StallNonFoodOptions;
+	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
+	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
+	status: StallStatus;
 }
 
 // type StallsResponse = Stall[];
@@ -83,25 +145,30 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		// @TODO Should Stall inherit from NewStallOwner instead or will that bugger up the expectations of other places that use Stall?
-		// polling_place is an object, not a number
-		// location_info is null, not undefined
-		// submitter_type is not present
-		// status is missing
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
 			query: ({ stallId, token, signature }) => ({
 				url: `stalls/${stallId}/`,
 				params: { token, signature },
 			}),
 		}),
-		addStall: builder.mutation<{}, NewStallTipOff | NewStallOwner>({
+		addStall: builder.mutation<
+			{},
+			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
+		>({
 			query: (stall) => ({
 				url: 'stalls/',
 				method: 'POST',
 				body: stall,
 			}),
 		}),
+		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
+			query: (stall) => ({
+				url: `stalls/${stall.id}/update_and_resubmit/`,
+				method: 'PATCH',
+				body: stall,
+			}),
+		}),
 	}),
 });
 
-export const { useGetStallQuery, useAddStallMutation } = stallsApi;
+export const { useGetStallQuery, useAddStallMutation, useUpdateStallWithCredentialsMutation } = stallsApi;

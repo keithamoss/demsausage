@@ -9,9 +9,14 @@ import {
 	Button,
 	FormControl,
 	FormGroup,
+	FormHelperText,
 	InputAdornment,
+	InputLabel,
+	MenuItem,
 	MobileStepper,
+	OutlinedInput,
 	Paper,
+	Select,
 	Snackbar,
 	Typography,
 } from '@mui/material';
@@ -20,18 +25,24 @@ import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { FormFieldValidationError } from '../../../app/forms/formHelpers';
-import { stallFormTipOffValidationSchema } from '../../../app/forms/stallForm';
-import { useAppSelector } from '../../../app/hooks/store';
-import { Election } from '../../../app/services/elections';
-import { Stall, StallFoodOptions, StallTipOffModifiableProps } from '../../../app/services/stalls';
-import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
-import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
-import { selectActiveElections } from '../../elections/electionsSlice';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
-import AddStallFormFoodOptionsSelector from './addStallFormFoodOptionsSelector';
-import AddStallFormPrivacyNotice from './addStallFormPrivacyNotice';
+import { FormFieldValidationError } from '../../app/forms/formHelpers';
+import { stallFormTipOffValidationSchema } from '../../app/forms/stallForm';
+import { useAppSelector } from '../../app/hooks/store';
+import {
+	IStallLocationInfo,
+	Stall,
+	StallFoodOptions,
+	StallTipOffModifiableProps,
+	StallTipOffSource,
+	getStallSourceDescription,
+} from '../../app/services/stalls';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
+import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
+import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
+import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
+import { selectActiveElections } from '../elections/electionsSlice';
+import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -43,16 +54,16 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 
 interface Props {
 	stall?: Stall;
-	election: Election;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
+	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
 	isStallSaving: boolean;
 	onDoneAdding?: (stall: StallTipOffModifiableProps) => void;
 	onDoneEditing?: (stall: Stall) => void;
-	onClickBack: () => void;
+	onClickBack?: () => void;
 }
 
-export default function AddStallFormForTipOff(props: Props) {
-	const { stall, election, pollingPlace, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+export default function StallTipOffForm(props: Props) {
+	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -61,23 +72,26 @@ export default function AddStallFormForTipOff(props: Props) {
 		setValue,
 		handleSubmit,
 		control,
-		formState: { errors },
+		formState: { errors, isDirty },
 	} = useForm<StallTipOffModifiableProps>({
 		resolver: yupResolver(stallFormTipOffValidationSchema),
 		defaultValues: {
-			// noms: stall?.noms || { bbq: true },
 			noms: stall?.noms || {},
-			// email: stall?.email || 'keithamoss@gmail.com',
 			email: stall?.email || '',
+			tipoff_source: stall?.tipoff_source || undefined,
+			tipoff_source_other: stall?.tipoff_source_other || '',
 		},
 	});
 
-	const { noms } = watch();
+	const { noms, tipoff_source } = watch();
 
 	// ######################
 	// Food Options
 	// ######################
-	const onFoodOptionChange = useCallback((foodOptions: StallFoodOptions) => setValue('noms', foodOptions), [setValue]);
+	const onFoodOptionChange = useCallback(
+		(foodOptions: StallFoodOptions) => setValue('noms', foodOptions, { shouldDirty: true }),
+		[setValue],
+	);
 	// ######################
 	// Food Options (End)
 	// ######################
@@ -88,6 +102,10 @@ export default function AddStallFormForTipOff(props: Props) {
 	const onDoneWithForm: SubmitHandler<StallTipOffModifiableProps> = useCallback(
 		(data) => {
 			if (isEmpty(data) === false) {
+				if (data.tipoff_source !== StallTipOffSource.Other) {
+					data.tipoff_source_other = '';
+				}
+
 				if (stall === undefined && onDoneAdding !== undefined) {
 					onDoneAdding({ ...data });
 				} else if (stall !== undefined && onDoneEditing !== undefined) {
@@ -118,12 +136,6 @@ export default function AddStallFormForTipOff(props: Props) {
 
 	return (
 		<StyledInteractableBoxFullHeight>
-			{/* {pollingPlace !== undefined && pollingPlace?.stall !== null && (
-				<AddStallExistingSubmissionWarning
-					pollingPlaceLinkAbsolute={`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`}
-				/>
-			)} */}
-
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
 				<Paper
 					square
@@ -136,7 +148,7 @@ export default function AddStallFormForTipOff(props: Props) {
 						bgcolor: 'grey.200',
 					}}
 				>
-					<Typography variant="h6">{pollingPlace?.premises || pollingPlace?.name}</Typography>
+					<Typography variant="h6">{getPollingPlaceFormHeading(stall, pollingPlace, stallLocationInfo)}</Typography>
 				</Paper>
 
 				<Paper
@@ -199,6 +211,48 @@ export default function AddStallFormForTipOff(props: Props) {
 
 						{errors.email !== undefined && <FormFieldValidationError error={errors.email} />}
 					</FormControl>
+
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<InputLabel>Source</InputLabel>
+
+							<Controller
+								name="tipoff_source"
+								control={control}
+								render={({ field }) => (
+									<Select {...field} input={<OutlinedInput label="Source" />} value={tipoff_source || ''}>
+										{Object.entries(StallTipOffSource).map(([, id]) => (
+											<MenuItem key={id} value={id}>
+												{getStallSourceDescription(id)}
+											</MenuItem>
+										))}
+									</Select>
+								)}
+							/>
+
+							<FormHelperText>Let us know where you saw or heard about this stall</FormHelperText>
+						</FormGroup>
+
+						{errors.tipoff_source !== undefined && <FormFieldValidationError error={errors.tipoff_source} />}
+					</FormControl>
+
+					{tipoff_source === StallTipOffSource.Other && (
+						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<Controller
+									name="tipoff_source_other"
+									control={control}
+									render={({ field }) => (
+										<TextFieldWithout1Password {...field} helperText="Where did you see or hear about the stall?" />
+									)}
+								/>
+							</FormGroup>
+
+							{errors.tipoff_source_other !== undefined && (
+								<FormFieldValidationError error={errors.tipoff_source_other} />
+							)}
+						</FormControl>
+					)}
 					{/* ######################
 							Your Details (End)
 					###################### */}
@@ -211,15 +265,25 @@ export default function AddStallFormForTipOff(props: Props) {
 					variant="text"
 					steps={activeElections.length >= 2 ? 4 : 3}
 					activeStep={activeElections.length >= 2 ? 3 : 2}
+					sx={{
+						// Stall Editing doesn't have any steps, so let's hide that indicator
+						color: stall !== undefined ? 'transparent' : undefined,
+					}}
 					backButton={
-						<Button size="small" onClick={onClickBack} startIcon={<ArrowBackIcon />}>
-							Back
-						</Button>
+						stall === undefined ? (
+							<Button size="small" onClick={onClickBack} startIcon={<ArrowBackIcon />}>
+								Back
+							</Button>
+						) : (
+							// Stall Editing doesn't need a 'Back' button
+							getHiddenStepperButton()
+						)
 					}
 					nextButton={
 						<LoadingButton
 							loading={isStallSaving}
 							loadingPosition="end"
+							disabled={isDirty === false}
 							size="small"
 							color="primary"
 							endIcon={<SendIcon />}

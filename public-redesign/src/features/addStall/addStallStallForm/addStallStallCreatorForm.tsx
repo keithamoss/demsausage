@@ -5,7 +5,7 @@ import ErrorElement from '../../../ErrorElement';
 import { useAppSelector } from '../../../app/hooks';
 import {
 	navigateToAddStallSubmitted,
-	navigateToAddStallWhoIsSubmittingFromURLParams,
+	navigateToAddStallSubmitterTypeFromURLParams,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import { Election } from '../../../app/services/elections';
@@ -15,14 +15,18 @@ import {
 	StallOwnerModifiableProps,
 	StallSubmitterType,
 	StallTipOffModifiableProps,
+	StallTipOffRedCrossOfShameModifiableProps,
+	StallTipOffRunOutModifiableProps,
 	useAddStallMutation,
 } from '../../../app/services/stalls';
 import { WholeScreenLoadingIndicator } from '../../../app/ui/wholeScreenLoadingIndicator';
 import { enumFromStringValue } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import AddStallFormForOwner from './addStallFormForOwner';
-import AddStallFormForTipOff from './addStallFormForTipOff';
+import StallOwnerForm from '../../stalls/stallOwnerForm';
+import StallTipOffForm from '../../stalls/stallTipOffForm';
+import StallTipOffFormRunOut from '../../stalls/stallTipOffFormRunOut';
+import StallTipOffFormRedCrossOfShame from '../../stalls/stallTipOffRedCrossOfShameForm';
 import { createStallLocationInfoObjectFromLocationLookup } from './addStallFormHelpers';
 
 function EntrypointLayer1() {
@@ -139,7 +143,7 @@ function AddStallStallCreatorForm(props: Props) {
 		} else {
 			// However if we've not, e.g. if the user has navigated here directly using a link, then we can't
 			// be sure where we'll end up, so best just to send the user back manually.
-			navigateToAddStallWhoIsSubmittingFromURLParams(params, navigate);
+			navigateToAddStallSubmitterTypeFromURLParams(params, navigate);
 		}
 	}, [cameFromInternalNavigation, navigate, params]);
 
@@ -155,7 +159,13 @@ function AddStallStallCreatorForm(props: Props) {
 	}, [isAddingStallSuccessful, navigate, params]);
 
 	const onDoneAdding = useCallback(
-		(stall: StallTipOffModifiableProps | StallOwnerModifiableProps) => {
+		(
+			stall:
+				| StallTipOffModifiableProps
+				| StallOwnerModifiableProps
+				| StallTipOffRunOutModifiableProps
+				| StallTipOffRedCrossOfShameModifiableProps,
+		) => {
 			addStall({
 				...stall,
 				election: election.id,
@@ -178,9 +188,9 @@ function AddStallStallCreatorForm(props: Props) {
 			)}
 
 			{submitterType === StallSubmitterType.Owner && (
-				<AddStallFormForOwner
-					election={election}
+				<StallOwnerForm
 					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}
@@ -188,9 +198,29 @@ function AddStallStallCreatorForm(props: Props) {
 			)}
 
 			{submitterType === StallSubmitterType.TipOff && (
-				<AddStallFormForTipOff
-					election={election}
+				<StallTipOffForm
 					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
+					isStallSaving={isAddingStallLoading}
+					onDoneAdding={onDoneAdding}
+					onClickBack={onClickBack}
+				/>
+			)}
+
+			{submitterType === StallSubmitterType.TipOffRunOut && (
+				<StallTipOffFormRunOut
+					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
+					isStallSaving={isAddingStallLoading}
+					onDoneAdding={onDoneAdding}
+					onClickBack={onClickBack}
+				/>
+			)}
+
+			{submitterType === StallSubmitterType.TipOffRedCrossOfShame && (
+				<StallTipOffFormRedCrossOfShame
+					pollingPlace={pollingPlace}
+					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
 					onDoneAdding={onDoneAdding}
 					onClickBack={onClickBack}

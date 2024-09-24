@@ -73,6 +73,18 @@ class PollingPlaceJurisdiction(str, EnumBase):
 class StallSubmitterType(str, EnumBase):
     OWNER = "owner"
     TIPOFF = "tipoff"
+    TIPOFF_RUN_OUT = "tipoff_run_out"
+    TIPOFF_RED_CROSS_OF_SHAME = "tipoff_red_cross_of_shame"
+
+    def __str__(self):
+        return self.value
+
+
+class StallTipOffSource(str, EnumBase):
+    In_Person = 'in-person'
+    Online = 'online'
+    Newsletter = 'newsletter'
+    Other = 'other'
 
     def __str__(self):
         return self.value

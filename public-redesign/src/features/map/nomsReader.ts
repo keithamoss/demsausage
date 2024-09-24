@@ -47,12 +47,16 @@ export class NomsReader {
 		return this.isPropertyTrue(prop);
 	}
 
+	public hasCoreNoms() {
+		return this.hasAnyPropertiesTrue(NomsReader.primaryNomsIconValues);
+	}
+
 	public hasExtraNoms() {
 		return this.hasAnyPropertiesTrue(NomsReader.secondaryNomsIconValues);
 	}
 
-	public hasCoreNoms() {
-		return this.hasAnyPropertiesTrue(NomsReader.primaryNomsIconValues);
+	public hasAtLeastOneFoodOptionSelected() {
+		return this.hasCoreNoms() === true || this.hasExtraNoms() === true;
 	}
 
 	public onlyHasExtraNoms() {

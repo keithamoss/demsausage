@@ -1,9 +1,9 @@
-import { Alert, AlertTitle, List, ListItem, ListItemText } from '@mui/material';
+import { Alert, AlertTitle, Box, List, ListItem, ListItemText, styled } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { Coordinate } from 'ol/coordinate';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
@@ -26,6 +26,10 @@ import {
 import SearchResultsPollingPlaceCard from '../shared/searchResultsPollingPlaceCard';
 import SearchBar from './searchBar/searchBar';
 import SearchByAddressOrGPSResultsContainer from './searchResultsContainer/searchByAddressOrGPSResultsContainer';
+
+const StyledBox = styled(Box)(({ theme }) => ({
+	padding: theme.spacing(1),
+}));
 
 interface Props {
 	election: Election;
@@ -137,7 +141,7 @@ export default function SearchComponent(props: Props) {
 	// ######################
 
 	return (
-		<React.Fragment>
+		<StyledBox>
 			<SearchBar
 				election={election}
 				autoFocusSearchField={autoFocusSearchField}
@@ -240,6 +244,6 @@ export default function SearchComponent(props: Props) {
 					))}
 				</SearchByAddressOrGPSResultsContainer>
 			)}
-		</React.Fragment>
+		</StyledBox>
 	);
 }

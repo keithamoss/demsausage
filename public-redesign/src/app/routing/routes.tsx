@@ -9,9 +9,11 @@ import AddStallSelectElection from '../../features/addStall/addStallSelectElecti
 import AddStallSelectPollingPlace from '../../features/addStall/addStallSelectPollingPlace/addStallSelectPollingPlace';
 import AddStallStallCreatorForm from '../../features/addStall/addStallStallForm/addStallStallCreatorForm';
 import AddStallSubmitted from '../../features/addStall/addStallSubmitted/addStallSubmitted';
-import AddStallWhoIsSubmitting from '../../features/addStall/addStallWhoIsSubmitting/addStallWhoIsSubmitting';
+import AddStallSubmitterType from '../../features/addStall/addStallSubmitterType/addStallSubmitterType';
 import DebugView from '../../features/debugView/debugView';
 import EditStall from '../../features/editStall/EditStall';
+import EditStallStallEditorForm from '../../features/editStall/editStallStallForm/editStallStallEditorForm';
+import EditStallSubmitted from '../../features/editStall/editStallSubmitted/editStallSubmitted';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import ElectionsList from '../../features/map/layersSelector/electionsList';
 import Map from '../../features/map/map';
@@ -64,14 +66,6 @@ export const router = sentryCreateBrowserRouter([
 					name: 'Media',
 				}),
 			},
-
-			{
-				path: '/edit-stall',
-				element: <EditStall />,
-				loader: () => ({
-					name: 'Edit Stall',
-				}),
-			},
 			{
 				path: '/add-stall',
 				element: <AddStall />,
@@ -108,12 +102,12 @@ export const router = sentryCreateBrowserRouter([
 					// ############################
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					// Occasionally some elections will have no premises names on polling places.
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					{
 						path: '/add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/submitter/:submitter_type/',
@@ -129,22 +123,39 @@ export const router = sentryCreateBrowserRouter([
 					// ############################
 
 					// ############################
-					// Location Lookup
+					// Polling Place Location Lookup
 					// ############################
 					{
 						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/',
-						element: <AddStallWhoIsSubmitting />,
+						element: <AddStallSubmitterType />,
 					},
 					{
 						path: '/add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/submitter/:submitter_type/',
 						element: <AddStallStallCreatorForm />,
 					},
 					// ############################
-					// Location Lookup (End)
+					// Polling Place Location Lookup (End)
 					// ############################
 					{
 						path: '/add-stall/:election_name/submitted/',
 						element: <AddStallSubmitted />,
+					},
+				],
+			},
+			{
+				path: '/edit-stall',
+				element: <EditStall />,
+				loader: () => ({
+					name: 'Edit Stall',
+				}),
+				children: [
+					{
+						path: '/edit-stall/:election_name/',
+						element: <EditStallStallEditorForm />,
+					},
+					{
+						path: '/edit-stall/:election_name/submitted/',
+						element: <EditStallSubmitted />,
 					},
 				],
 			},

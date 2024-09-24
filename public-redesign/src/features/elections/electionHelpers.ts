@@ -14,6 +14,14 @@ export const isElectionLive = (election: Election) => {
 	return DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
 };
 
+export const isItElectionDay = (election: Election) => {
+	const now = new Date();
+	return (
+		now >= new Date(election.election_day) &&
+		now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
+	);
+};
+
 export function getDefaultElection(elections: Election[]) {
 	let defaultElection: Election | undefined;
 

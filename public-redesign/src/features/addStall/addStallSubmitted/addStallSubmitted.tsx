@@ -5,7 +5,8 @@ import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { navigateToElectionFromElectionNameInURL } from '../../../app/routing/navigationHelpers/navigationHelpersMap';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
+import { appBarHeight } from '../../../app/ui/theme';
+import { mobileStepperMinHeight } from '../../stalls/stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],

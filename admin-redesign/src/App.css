@@ -1,0 +1,12 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100dvw;
+	height: 100dvh;
+	background-color: #f7f7f7;
+}
+
+.sentry-error-embed-wrapper {
+	z-index: 10000 !important;
+}

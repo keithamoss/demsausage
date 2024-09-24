@@ -39,9 +39,7 @@ export const navigateToAddStallSelectPollingPlaceFromElectionAndReplace = (
 ) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/
-	navigate(`/add-stall/${election.name_url_safe}/`, {
-		state: { replace: true },
-	});
+	navigate(`/add-stall/${election.name_url_safe}/`, { replace: true });
 };
 
 // This doesn't need `cameFromInternalNavigation` because all of the ways to cancel/discard the Mapbox search can navigate directly to where they need to go.
@@ -122,7 +120,7 @@ export const navigateToAddStallSearchListOfPollingPlacesFromGPSSearch = (
 	});
 };
 
-export const navigateToAddStallWhoIsSubmitting = (
+export const navigateToAddStallSubmitterType = (
 	params: Params<string>,
 	navigate: NavigateFunction,
 	pollingPlace: IPollingPlace,
@@ -146,7 +144,7 @@ export const navigateToAddStallWhoIsSubmitting = (
 };
 
 // The only difference between this and the preceding function is that we don't want to send `cameFromInternalNavigation` because we obviously aren't coming from within the Add Stall interface in this case.
-export const navigateToAddStallWhoIsSubmittingFromPollingPlaceCard = (
+export const navigateToAddStallSubmitterTypeFromPollingPlaceCard = (
 	params: Params<string>,
 	navigate: NavigateFunction,
 	pollingPlace: IPollingPlace,
@@ -169,7 +167,7 @@ export const navigateToAddStallWhoIsSubmittingFromPollingPlaceCard = (
 	}
 };
 
-export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
+export const navigateToAddStallSubmitterTypeFromMapboxFeature = (
 	params: Params<string>,
 	navigate: NavigateFunction,
 	feature: IMapboxGeocodingAPIResponseFeature,
@@ -193,7 +191,7 @@ export const navigateToAddStallWhoIsSubmittingFromMapboxFeature = (
 	});
 };
 
-export const navigateToAddStallWhoIsSubmittingFromURLParams = (params: Params<string>, navigate: NavigateFunction) => {
+export const navigateToAddStallSubmitterTypeFromURLParams = (params: Params<string>, navigate: NavigateFunction) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_premises/:polling_place_state/
 	// /add-stall/:election_name/polling_places/:polling_place_name/:polling_place_state/

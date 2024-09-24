@@ -20,18 +20,17 @@ import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { FormFieldValidationError } from '../../../app/forms/formHelpers';
-import { stallOwnerFormValidationSchema } from '../../../app/forms/stallForm';
-import { useAppSelector } from '../../../app/hooks/store';
-import { Election } from '../../../app/services/elections';
-import { Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../../app/services/stalls';
-import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
-import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
-import { selectActiveElections } from '../../elections/electionsSlice';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
-import AddStallFormFoodOptionsSelector from './addStallFormFoodOptionsSelector';
-import AddStallFormPrivacyNotice from './addStallFormPrivacyNotice';
+import { FormFieldValidationError } from '../../app/forms/formHelpers';
+import { stallOwnerFormValidationSchema } from '../../app/forms/stallForm';
+import { useAppSelector } from '../../app/hooks/store';
+import { IStallLocationInfo, Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../app/services/stalls';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
+import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
+import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
+import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
+import { selectActiveElections } from '../elections/electionsSlice';
+import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -43,16 +42,16 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 
 interface Props {
 	stall?: Stall;
-	election: Election;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
+	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
 	isStallSaving: boolean;
 	onDoneAdding?: (stall: StallOwnerModifiableProps) => void;
 	onDoneEditing?: (stall: Stall) => void;
-	onClickBack: () => void;
+	onClickBack?: () => void;
 }
 
-export default function AddStallFormForOwner(props: Props) {
-	const { stall, election, pollingPlace, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+export default function StallOwnerForm(props: Props) {
+	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -61,7 +60,7 @@ export default function AddStallFormForOwner(props: Props) {
 		setValue,
 		handleSubmit,
 		control,
-		formState: { errors },
+		formState: { errors, isDirty },
 	} = useForm<StallOwnerModifiableProps>({
 		resolver: yupResolver(stallOwnerFormValidationSchema),
 		defaultValues: {
@@ -125,12 +124,6 @@ export default function AddStallFormForOwner(props: Props) {
 
 	return (
 		<StyledInteractableBoxFullHeight>
-			{/* {pollingPlace !== undefined && pollingPlace?.stall !== null && (
-				<AddStallExistingSubmissionWarning
-					pollingPlaceLinkAbsolute={`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`}
-				/>
-			)} */}
-
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
 				<Paper
 					square
@@ -143,7 +136,7 @@ export default function AddStallFormForOwner(props: Props) {
 						bgcolor: 'grey.200',
 					}}
 				>
-					<Typography variant="h6">{pollingPlace?.premises || pollingPlace?.name}</Typography>
+					<Typography variant="h6">{getPollingPlaceFormHeading(stall, pollingPlace, stallLocationInfo)}</Typography>
 				</Paper>
 
 				<Paper
@@ -296,15 +289,25 @@ export default function AddStallFormForOwner(props: Props) {
 					variant="text"
 					steps={activeElections.length >= 2 ? 4 : 3}
 					activeStep={activeElections.length >= 2 ? 3 : 2}
+					sx={{
+						// Stall Editing doesn't have any steps, so let's hide that indicator
+						color: stall !== undefined ? 'transparent' : undefined,
+					}}
 					backButton={
-						<Button size="small" onClick={onClickBack} startIcon={<ArrowBackIcon />}>
-							Back
-						</Button>
+						stall === undefined ? (
+							<Button size="small" onClick={onClickBack} startIcon={<ArrowBackIcon />}>
+								Back
+							</Button>
+						) : (
+							// Stall Editing doesn't need a 'Back' button
+							getHiddenStepperButton()
+						)
 					}
 					nextButton={
 						<LoadingButton
 							loading={isStallSaving}
 							loadingPosition="end"
+							disabled={isDirty === false}
 							size="small"
 							color="primary"
 							endIcon={<SendIcon />}

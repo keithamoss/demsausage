@@ -39,3 +39,12 @@ services:
       - ./nginx-prod/build/:/build:delegated
     env_file:
       - secrets/prod/sausage-admin-frontend.production.env
+  admin_redesign:
+    image: node:20-alpine3.19
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./admin-redesign:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/prod/sausage-admin-redesign-frontend.production.env

@@ -1,7 +1,4 @@
-import { Button } from '@mui/material';
 import { IStallLocationInfo } from '../../../app/services/stalls';
-
-export const getHiddenStepperButton = () => <Button size="small" disabled={true} style={{ color: 'white' }}></Button>;
 
 export const createStallLocationInfoObjectFromLocationLookup = (
 	location_name: string,

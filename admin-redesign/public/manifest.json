@@ -1,0 +1,26 @@
+{
+  "short_name": "Democracy Sausage Administration",
+  "name": "Democracy Sausage Administration",
+  "description": "A real-time crowd-sourced map of sausage and cake availability at Australian elections. It's practically part of the Australian Constitution. Or something. #demsausage",
+  "icons": [
+    {
+      "src": "/app-icon/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#fafaf8",
+  "background_color": "#673ab7"
+}

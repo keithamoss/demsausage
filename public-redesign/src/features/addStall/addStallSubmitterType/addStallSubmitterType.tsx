@@ -21,12 +21,13 @@ import {
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import { Election } from '../../../app/services/elections';
 import { StallSubmitterType } from '../../../app/services/stalls';
+import { appBarHeight } from '../../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import { appBarHeight, mobileStepperMinHeight } from '../addStallHelpers';
-import { getHiddenStepperButton } from '../addStallStallForm/addStallFormHelpers';
+import { getHiddenStepperButton, mobileStepperMinHeight } from '../../stalls/stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
@@ -36,17 +37,38 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
+function AddStallSubmitterTypeEntrypoint() {
+	const params = useParams();
+
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
+	const election = activeElections.find((e) => e.name_url_safe === urlElectionName);
+
+	if (election === undefined) {
+		return null;
+	}
+
+	return <AddStallSubmitterType election={election} />;
+}
+
 interface LocationState {
 	cameFromInternalNavigation?: boolean;
 }
 
-export default function AddStallWhoIsSubmitting() {
+interface Props {
+	election: Election;
+}
+
+function AddStallSubmitterType(props: Props) {
+	const { election } = props;
+
 	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const urlPollingPlacePremises = getStringParamOrEmptyString(params, 'polling_place_premises').replaceAll('_', ' ');
 	const urlPollingPlaceName = getStringParamOrEmptyString(params, 'polling_place_name').replaceAll('_', ' ');
+	const urlLocationName = getStringParamOrEmptyString(params, 'location_name').replaceAll('_', ' '); // For elections with no polling places
 
 	const cameFromInternalNavigation = (location.state as LocationState)?.cameFromInternalNavigation === true;
 
@@ -82,6 +104,16 @@ export default function AddStallWhoIsSubmitting() {
 		[navigate, params],
 	);
 
+	const onChooseStallTipOffRunOut = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOffRunOut),
+		[navigate, params],
+	);
+
+	const onChooseStallTipOffRedCrossOfShame = useCallback(
+		() => navigateToAddStallForm(params, navigate, StallSubmitterType.TipOffRedCrossOfShame),
+		[navigate, params],
+	);
+
 	return (
 		<StyledInteractableBoxFullHeight>
 			<Paper
@@ -95,7 +127,7 @@ export default function AddStallWhoIsSubmitting() {
 					bgcolor: 'grey.200',
 				}}
 			>
-				<Typography variant="h6">{urlPollingPlacePremises || urlPollingPlaceName}</Typography>
+				<Typography variant="h6">{urlPollingPlacePremises || urlPollingPlaceName || urlLocationName}</Typography>
 			</Paper>
 
 			<Paper
@@ -139,8 +171,39 @@ export default function AddStallWhoIsSubmitting() {
 							</Avatar>
 						</ListItemAvatar>
 
-						<ListItemText primary="I want to let you know about a stall I've heard about or seen" />
+						<ListItemText primary="I've seen or heard about a stall here" />
 					</ListItemButton>
+
+					{/* Disabled until the admin interface can support these on the Pending Stalls interface */}
+					{/* {isItElectionDay(election) === true && (
+						<React.Fragment>
+							<ListItemButton onClick={onChooseStallTipOffRunOut}>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.yellow_minus.value}
+										sx={{ backgroundColor: 'transparent', '& svg': { width: 28, height: 28 } }}
+									>
+										{supportingIcons.yellow_minus.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+
+								<ListItemText primary="I'm reporting that the stall here has run out of food" />
+							</ListItemButton>
+
+							<ListItemButton onClick={onChooseStallTipOffRedCrossOfShame}>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.red_cross.value}
+										sx={{ backgroundColor: 'transparent', '& svg': { width: 28, height: 28 } }}
+									>
+										{supportingIcons.red_cross.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+
+								<ListItemText primary="I'm reporting that there's definitely no stall here" />
+							</ListItemButton>
+						</React.Fragment>
+					)} */}
 				</List>
 			</Box>
 
@@ -159,3 +222,5 @@ export default function AddStallWhoIsSubmitting() {
 		</StyledInteractableBoxFullHeight>
 	);
 }
+
+export default AddStallSubmitterTypeEntrypoint;

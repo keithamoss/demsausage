@@ -6,11 +6,10 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import { getDefaultOGMetaTags } from './app/ui/socialSharingTagsHelpers';
-import { mapaThemePrimaryPurple } from './app/ui/theme';
+import { appBarHeight, mapaThemePrimaryPurple } from './app/ui/theme';
 import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
 import DemSausageCrestBannerRaw from './assets/crest/crest_banner.svg?raw';
 import TilesBackgroundRaw from './assets/tiles/tiles.svg?raw';
-import { appBarHeight } from './features/addStall/addStallHelpers';
 import { createInlinedSVGImage } from './features/icons/svgHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(() => ({
