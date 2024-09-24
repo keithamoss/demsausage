@@ -145,6 +145,11 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
+		getPendingStalls: builder.query<Stall[], void>({
+			query: () => ({
+				url: `stalls/pending/`,
+			}),
+		}),
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
 			query: ({ stallId, token, signature }) => ({
 				url: `stalls/${stallId}/`,
@@ -171,4 +176,9 @@ export const stallsApi = api.injectEndpoints({
 	}),
 });
 
-export const { useGetStallQuery, useAddStallMutation, useUpdateStallWithCredentialsMutation } = stallsApi;
+export const {
+	useGetPendingStallsQuery,
+	useGetStallQuery,
+	useAddStallMutation,
+	useUpdateStallWithCredentialsMutation,
+} = stallsApi;

@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './App.css';
 import NavigationDrawer from './app/routing/navigationDrawer';
+import { useGetPendingStallsQuery } from './app/services/stalls';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
 import { getBaseURL } from './app/utils';
 import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
@@ -31,6 +32,13 @@ export default function App() {
 		},
 		[],
 	);
+
+	const {
+		data: pendingStalls,
+		isLoading: isGetPendingStallsLoading,
+		isSuccess: isGetPendingStallsSuccessful,
+		isError: isGetPendingStallsErrored,
+	} = useGetPendingStallsQuery();
 
 	return (
 		<div className="App">
@@ -89,7 +97,9 @@ export default function App() {
 
 			<Outlet />
 
-			<Typography variant="h6">Work in Progress: Admin Console Redesign</Typography>
+			{isGetPendingStallsSuccessful === true && (
+				<Typography variant="h6">We have {pendingStalls.length} pending stalls</Typography>
+			)}
 
 			<NavigationDrawer open={drawerOpen} onToggleDrawer={onToggleDrawer} />
 		</div>
