@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
-    "@sentry/browser": "^7.29.0",
+    "@sentry/browser": "^8.33.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
