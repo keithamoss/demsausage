@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import requests
 
@@ -59,4 +60,4 @@ for item in r.json()["venues"]:
     })
 
 df = pd.DataFrame(polling_places)
-df.to_csv("data/qld_2024.csv", index=False)
+df.to_csv(f"data/qld_2024-{datetime.date.today().isoformat()}.csv", index=False)
