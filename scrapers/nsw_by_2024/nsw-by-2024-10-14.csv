@@ -1,0 +1,69 @@
+ec_id,name,divisions,premises,address,lat,lon,state,wheelchair_access,wheelchair_access_description
+,Beecroft Community Centre,Epping,Beecroft Community Centre,"111 Beecroft Road, Beecroft 2119",-33.7512928,151.0654869,NSW,Full,
+,Beecroft Public School,Epping,Beecroft Public School,"Mary Street, Beecroft 2119",-33.7517360,151.0649670,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult
+,Boronia Grove Community Centre,Epping,Boronia Grove Community Centre,"40 Victoria Street, Enter via Rawson Street Carpark, Epping 2121",-33.7732290,151.0796970,NSW,Full,
+,Burnside Gardens Community Centre,Epping,Burnside Gardens Community Centre,"3 Blackwood Place, Oatlands 2117",-33.7944934,151.0178534,NSW,Full,
+,Carlingford Public School,Epping,Carlingford Public School,"Rickard Street, Carlingford 2118",-33.7802660,151.0555080,NSW,Assisted,No designated accessible parking spot
+,Cheltenham Girls High School,Epping,Cheltenham Girls High School,"The Promenade, Cheltenham 2119",-33.7564540,151.0747690,NSW,Assisted,Access ramp does not meet standards; Path of travel from car park may be difficult
+,Dundas Public School,Epping,Dundas Public School,"85 Kissing Point Road, Dundas 2117",-33.8035120,151.0367550,NSW,Assisted,No designated accessible parking spot
+,Epping Heights Public School,Epping,Epping Heights Public School,"128 Kent Street, Epping 2121",-33.7627420,151.0730220,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult
+,Epping North Public School,Epping,Epping North Public School,"Boundary Road, North Epping 2121",-33.7570490,151.0957380,NSW,Full,
+,Epping Public School,Epping,Epping Public School,"Norfolk Road, Epping 2121",-33.7707420,151.0874360,NSW,Assisted,Path of travel from car park may be difficult
+,Epping West Public School,Epping,Epping West Public School,"96 Carlingford Road, Epping West 2121",-33.7735270,151.0683130,NSW,Assisted,Path of travel from car park may be difficult
+,James Ruse Agricultural High School,Epping,James Ruse Agricultural High School,"17-31 Felton Road, Carlingford 2118",-33.7812960,151.0427730,NSW,Assisted,No accessible toilet; No designated accessible parking spot; Path of travel from car park may be difficult
+,Muirfield High School,Epping,Muirfield High School,"Barclay Road, North Rocks 2151",-33.7658070,151.0224130,NSW,Assisted,Building has lips and/or steps; No accessible toilet; No designated accessible parking spot; Access ramp does not meet standards
+,Murray Farm Public School,Epping,Murray Farm Public School,"Dryden Avenue, Carlingford 2118",-33.7656570,151.0390790,NSW,Assisted,Path of travel from car park may be difficult
+,North Rocks Public School,Epping,North Rocks Public School,"359 North Rocks Road, North Rocks 2151",-33.7685640,151.0259100,NSW,Assisted,No designated accessible parking spot; Building has lips and/or steps; No accessible toilet
+,North Rocks Senior Citizens Centre,Epping,North Rocks Senior Citizens Centre,"358Z North Rocks Road, Carlingford 2118",-33.7707756,151.0385695,NSW,Full,
+,Oatlands Public School,Epping,Oatlands Public School,"Belmore Street East, Oatlands 2117",-33.7999960,151.0229810,NSW,None,
+,Roselea Public School,Epping,Roselea Public School,"549 North Rocks Road, Carlingford 2118",-33.7651570,151.0543150,NSW,Full,
+,St Bernadettes School,Epping,St Bernadettes School,"Cox Crescent, Dundas Valley 2117",-33.7908360,151.0508050,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult; Access ramp does not meet standards
+,Telopea Public School,Epping,Telopea Public School,"Chestnut Avenue, Telopea 2117",-33.7972340,151.0431780,NSW,None,
+,West Pennant Hills Public School,"Hornsby, Epping",West Pennant Hills Public School,"Church Street, West Pennant Hills 2125",-33.7459020,151.0504130,NSW,Assisted,No designated accessible parking spot; No accessible toilet
+,Yates Avenue Public School,Epping,Yates Avenue Public School,"Yates Avenue, Dundas Valley 2117",-33.7958850,151.0578970,NSW,Assisted,No designated accessible parking spot; No accessible toilet; Path of travel from car park may be difficult
+,Arcadia Community Hall,Hornsby,Arcadia Community Hall,"136 Arcadia Rd, Arcadia 2159",-33.6228915,151.0511637,NSW,Full,
+,Asquith Public School,Hornsby,Asquith Public School,"Dudley Street, Asquith 2077",-33.6861480,151.1121080,NSW,Assisted,Path of travel from car park may be difficult
+,Berowra Public School,Hornsby,Berowra Public School,"Hillcrest Road, Berowra 2081",-33.6187350,151.1471720,NSW,Assisted,No designated accessible parking spot
+,Brooklyn Public School,Hornsby,Brooklyn Public School,"106 Brooklyn Road, Brooklyn 2083",-33.5479910,151.2151970,NSW,Assisted,No accessible toilet; No designated accessible parking spot; Building has lips and/or steps
+,Cherrybrook Girl Guide Hall,Hornsby,Cherrybrook Girl Guide Hall,"Shepherds Drive, Cherrybrook 2126",-33.7205750,151.0460030,NSW,None,
+,Cherrybrook Public School,Hornsby,Cherrybrook Public School,"131 New Line Road, Cherrybrook 2126",-33.7313320,151.0429450,NSW,Assisted,Building has lips and/or steps; No designated accessible parking spot; Path of travel from car park may be difficult
+,Cherrybrook Scout Hall,Hornsby,Cherrybrook Scout Hall,"6-8 Appletree Drive, Cherrybrook 2126",-33.7146009,151.0513775,NSW,Assisted,Building has lips and/or steps; No accessible toilet; No designated accessible parking spot; Path of travel from car park may be difficult
+,Cherrybrook Technology High School,Hornsby,Cherrybrook Technology High School,"28-44 Purchase Road, Cherrybrook 2126",-33.7201570,151.0374610,NSW,Assisted,Path of travel from car park may be difficult
+,Cowan Public School,Hornsby,Cowan Public School,"Chandler Avenue, Cowan 2081",-33.5888580,151.1691330,NSW,Assisted,No designated accessible parking spot
+,Dural Public School,Hornsby,Dural Public School,"622 Old Northern Road, Dural 2158",-33.6860090,151.0272550,NSW,Full,
+,Galston Public School,Hornsby,Galston Public School,"School Road, Galston 2159",-33.6475530,151.0450620,NSW,Full,
+,Glenorie Public School,Hornsby,Glenorie Public School,"1731 Old Northern Road, Glenorie 2157",-33.5990160,151.0069190,NSW,Assisted,Building has lips and/or steps; Path of travel from car park may be difficult; No accessible toilet
+,Hornsby Council Admin Centre - Function Halls,Hornsby,Hornsby Council Admin Centre - Function Halls,"298 Peats Ferry Road, Hornsby 2077",-33.6997312,151.0976964,NSW,Full,
+,Hornsby Girls High School,Hornsby,Hornsby Girls High School,"Edgeworth David Avenue, Hornsby 2077",-33.7058610,151.1013880,NSW,None,
+,Hornsby Heights Public School,Hornsby,Hornsby Heights Public School,"Somerville Road, Hornsby Heights 2077",-33.6702170,151.0966500,NSW,Full,
+,Hornsby North Public School,Hornsby,Hornsby North Public School,"Ida Street, Hornsby 2077",-33.6834760,151.0984130,NSW,None,
+,Hornsby Salvation Army Hall,Hornsby,Hornsby Salvation Army Hall,"29-31 Burdett Street, Hornsby 2077",-33.7029030,151.1050800,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult
+,Hornsby South Public School,Hornsby,Hornsby South Public School,"57-63 Clarke Road, Hornsby 2077",-33.7127380,151.0955730,NSW,Full,
+,Hornsby War Memorial Hall,Hornsby,Hornsby War Memorial Hall,"2 High Street, Hornsby 2077",-33.7044890,151.0973580,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult
+,Middle Dural Public School,Hornsby,Middle Dural Public School,"1251 Old Northern Road, Middle Dural 2158",-33.6441950,151.0229020,NSW,Assisted,No accessible toilet; Door width less than 850mm but more than 740mm; Path of travel from car park may be difficult; Building has lips and/or steps
+,Mount Colah Public School,Hornsby,Mount Colah Public School,"Telopea Street, Mount Colah 2079",-33.6725660,151.1168600,NSW,Assisted,Path of travel from car park may be difficult
+,Mount Colah Uniting Church,Hornsby,Mount Colah Uniting Church,"Amaroo Avenue, Mount Colah 2079",-33.6735669,151.1115262,NSW,Full,
+,Mount Kuring-gai Public School,Hornsby,Mount Kuring-gai Public School,"Leeming Street, Mount Kuring-gai 2080",-33.6577560,151.1358070,NSW,Assisted,No accessible toilet
+,Oakhill Drive Public School,Hornsby,Oakhill Drive Public School,"Oakhill Drive, Castle Hill 2154",-33.7214360,151.0232420,NSW,Assisted,Path of travel from car park may be difficult; No accessible toilet; No designated accessible parking spot
+,West Pennant Hills Scout Hall,Hornsby,West Pennant Hills Scout Hall,"Campbell Park, 3 Wilga Street, West Pennant Hills 2125",-33.7382264,151.0512294,NSW,Assisted,Access ramp does not meet standards; No accessible toilet; Path of travel from car park may be difficult; Building has lips and/or steps
+,Wideview Public School,Hornsby,Wideview Public School,"Wideview Road, Berowra Heights 2082",-33.6090940,151.1423970,NSW,Assisted,No accessible toilet; Path of travel from car park may be difficult
+,Wisemans Ferry Public School,Hornsby,Wisemans Ferry Public School,"Old Northern Road, Wisemans Ferry 2775",-33.3859820,150.9845430,NSW,Assisted,Path of travel from car park may be difficult; No accessible toilet; Building has lips and/or steps
+,Avalon Public School,Pittwater,Avalon Public School,"Old Barrenjoey Rd, Avalon Beach 2107",-33.6391840,151.3271540,NSW,None,
+,Avalon Recreation Centre,Pittwater,Avalon Recreation Centre,"59A Old Barrenjoey Road, Avalon 2107",-33.6357270,151.3294440,NSW,Full,
+,Barrenjoey High School,Pittwater,Barrenjoey High School,"Tasman Road, Avalon 2107",-33.6324830,151.3349170,NSW,Full,
+,Bayview Sea Scout Hall,Pittwater,Bayview Sea Scout Hall,"Bayview Park, 1672 Pittwater Road, Bayview 2104",-33.6602230,151.3008040,NSW,None,
+,Bilgola Plateau Public School,Pittwater,Bilgola Plateau Public School,"Plateau Road, Bilgola Plateau 2107",-33.6445230,151.3142410,NSW,Full,
+,Elanora Heights Public School,Pittwater,Elanora Heights Public School,"43 Elanora Road, Elanora Heights 2101",-33.7027710,151.2832980,NSW,None,
+,Mona Vale Memorial Hall,Pittwater,Mona Vale Memorial Hall,"Pittwater Road, Mona Vale 2103",-33.6765460,151.3039970,NSW,Full,
+,Mona Vale Public School,Pittwater,Mona Vale Public School,"Waratah Street, Mona Vale 2103",-33.6767877,151.3003935,NSW,None,
+,Mona Vale Scout Hall,Pittwater,Mona Vale Scout Hall,"Cnr Barrenjoey Rd and Golf Ave, Mona Vale 2103",-33.6775953,151.3054711,NSW,Assisted,No accessible toilet; Path of travel from car park may be difficult
+,Narrabeen Lakes Public School,Pittwater,Narrabeen Lakes Public School,"1299 Pittwater Road, Narrabeen 2101",-33.7202350,151.2977190,NSW,Assisted,Path of travel from car park may be difficult
+,Narrabeen Sports High School,Pittwater,Narrabeen Sports High School,"10 Namona Street, North Narrabeen 2101",-33.7000570,151.2972760,NSW,Assisted,No accessible toilet
+,Newport Public School,Pittwater,Newport Public School,"Stuart Street, Newport 2106",-33.6606780,151.3127520,NSW,Assisted,No designated accessible parking spot
+,Palm Beach Kindergarten,Pittwater,Palm Beach Kindergarten,"1053 Barrenjoey Road, Palm Beach 2108",-33.6025140,151.3191170,NSW,Assisted,No accessible toilet
+,Pittwater High School,Pittwater,Pittwater High School,"Mona Street, Mona Vale 2103",-33.6689810,151.3033690,NSW,Assisted,Building has lips and/or steps; No designated accessible parking spot; Path of travel from car park may be difficult
+,Pittwater Presbyterian Church,Pittwater,Pittwater Presbyterian Church,"3 Ocean Ave, Enter from Roberston Road, Newport 2106",-33.6539044,151.3189748,NSW,None,
+,RSL Lifecare,Pittwater,RSL Lifecare,"90 Veterans Parade, Narrabeen 2101",-33.7215810,151.2848710,NSW,Full,
+,Ted Blackwood Community Centre,Pittwater,Ted Blackwood Community Centre,"Boondah Road, Warriewood 2102",-33.6971060,151.2988280,NSW,Full,
+,Terrey Hills Community Centre,Pittwater,Terrey Hills Community Centre,"6 Booralie Road, Enter from Yulong Avenue, Terrey Hills 2084",-33.6820775,151.2280825,NSW,Full,
+,The Lakes Parish Hall,Pittwater,The Lakes Parish Hall,"21 Lagoon Street, Narrabeen 2101",-33.7127910,151.2988410,NSW,Assisted,No designated accessible parking spot; Path of travel from car park may be difficult; Building has lips and/or steps
