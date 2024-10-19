@@ -2,7 +2,7 @@ import { Drawer } from '@mui/material';
 import Box from '@mui/material/Box';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -20,8 +20,8 @@ import {
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
-import { IMapboxGeocodingAPIResponseFeature } from './searchBarHelpers';
+import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IMapboxGeocodingAPIResponseFeature } from './searchBarHelpers';
 import SearchComponent from './searchByAddressOrGPS/searchComponent';
 import SearchByIdsStackComponent from './searchByIds/searchByIdsStackComponent';
 

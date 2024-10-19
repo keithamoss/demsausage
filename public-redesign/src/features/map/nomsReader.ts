@@ -11,9 +11,9 @@ import {
 	secondaryFoodIcons,
 	supportingIcons,
 } from '../icons/iconHelpers';
-import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 import {
-	IMapPollingPlaceFeature,
+	type IMapPollingPlaceFeature,
 	getStringOrEmptyStringFromFeature,
 	getStringOrUndefinedFromFeature,
 } from './mapHelpers';

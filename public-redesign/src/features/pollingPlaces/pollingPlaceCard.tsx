@@ -40,7 +40,7 @@ import React, { useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { navigateToAddStallSubmitterTypeFromPollingPlaceCard } from '../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
 import { isElectionLive } from '../elections/electionHelpers';
@@ -57,7 +57,7 @@ import {
 	isStallWebsiteValid,
 	pollingPlaceHasReportsOfNoms,
 } from './pollingPlaceHelpers';
-import { IPollingPlace } from './pollingPlacesInterfaces';
+import type { IPollingPlace } from './pollingPlacesInterfaces';
 
 const StyledCardHeader = styled(CardHeader)(() => ({
 	// pointerEvents: "all",

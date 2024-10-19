@@ -1,7 +1,7 @@
 import { supportingIcons } from '../icons/iconHelpers';
-import { IMapFilterSettings, IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IMapFilterSettings, IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 import { hasFilterOptions, satisfiesMapFilter } from './mapFilterHelpers';
-import { IMapPollingPlaceFeature, getObjectOrUndefinedFromFeature } from './mapHelpers';
+import { type IMapPollingPlaceFeature, getObjectOrUndefinedFromFeature } from './mapHelpers';
 import { NomsReader } from './nomsReader';
 
 export const olStyleFunction = (

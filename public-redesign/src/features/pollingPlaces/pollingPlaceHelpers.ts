@@ -1,7 +1,7 @@
-import Feature from 'ol/Feature';
-import { Election } from '../../app/services/elections';
+import type Feature from 'ol/Feature';
+import type { Election } from '../../app/services/elections';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
-import { IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
+import { type IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
 export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
 	getPollingPlacePermalinkFromProps(

@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { styled } from '@mui/system';
 import React from 'react';
-import { Election } from '../../app/services/elections';
-import { ISausagelyticsStateStats } from '../../app/services/electionsStats';
+import type { Election } from '../../app/services/elections';
+import type { ISausagelyticsStateStats } from '../../app/services/electionsStats';
 
 const SausagelyticsContainer = styled('div')`
 	padding-top: 10px;

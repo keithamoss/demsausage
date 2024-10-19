@@ -2,8 +2,8 @@ import { Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/mate
 import { styled } from '@mui/system';
 import React from 'react';
 import { VictoryBar, VictoryChart, VictoryGroup, VictoryLabel, VictoryPie } from 'victory';
-import { Election } from '../../app/services/elections';
-import { IElectionStats, ISausagelyticsFederalStats } from '../../app/services/electionsStats';
+import type { Election } from '../../app/services/elections';
+import type { IElectionStats, ISausagelyticsFederalStats } from '../../app/services/electionsStats';
 import { theme } from './sausagelyticsFederalHelpers';
 
 const SausagelyticsContainer = styled('div')`

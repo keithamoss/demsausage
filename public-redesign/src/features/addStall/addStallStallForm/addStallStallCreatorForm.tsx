@@ -8,21 +8,21 @@ import {
 	navigateToAddStallSubmitterTypeFromURLParams,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../../app/services/pollingPlaces';
 import {
-	IStallLocationInfo,
-	StallOwnerModifiableProps,
+	type IStallLocationInfo,
+	type StallOwnerModifiableProps,
 	StallSubmitterType,
-	StallTipOffModifiableProps,
-	StallTipOffRedCrossOfShameModifiableProps,
-	StallTipOffRunOutModifiableProps,
+	type StallTipOffModifiableProps,
+	type StallTipOffRedCrossOfShameModifiableProps,
+	type StallTipOffRunOutModifiableProps,
 	useAddStallMutation,
 } from '../../../app/services/stalls';
 import { WholeScreenLoadingIndicator } from '../../../app/ui/wholeScreenLoadingIndicator';
 import { enumFromStringValue } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import StallOwnerForm from '../../stalls/stallOwnerForm';
 import StallTipOffForm from '../../stalls/stallTipOffForm';
 import StallTipOffFormRunOut from '../../stalls/stallTipOffFormRunOut';

@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { orderBy } from 'lodash-es';
 import { electionsAdapter, electionsApi, initialElectionsState } from '../../app/services/elections';
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 import { isElectionLive } from './electionHelpers';
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return

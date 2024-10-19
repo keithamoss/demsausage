@@ -13,7 +13,7 @@ import {
 	styled,
 } from '@mui/material';
 import React from 'react';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 
 const StyledUnorderedList = styled('ul')(({ theme }) => ({
 	paddingTop: theme.spacing(1),

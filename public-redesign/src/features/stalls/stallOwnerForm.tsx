@@ -19,17 +19,17 @@ import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { stallOwnerFormValidationSchema } from '../../app/forms/stallForm';
 import { useAppSelector } from '../../app/hooks/store';
-import { IStallLocationInfo, Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../app/services/stalls';
+import type { IStallLocationInfo, Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
 import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
 import { selectActiveElections } from '../elections/electionsSlice';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({

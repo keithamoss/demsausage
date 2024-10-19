@@ -1,9 +1,9 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
+import { type PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { values } from 'lodash-es';
-import { Coordinate } from 'ol/coordinate';
-import { RootState } from '../../app/store';
-import { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/mapHelpers';
-import { IMapFilterSettings, IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { Coordinate } from 'ol/coordinate';
+import type { RootState } from '../../app/store';
+import type { IMapPollingPlaceGeoJSONFeatureCollection } from '../map/mapHelpers';
+import type { IMapFilterSettings, IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface AppState {
 	mapFilterSettings: {
@@ -27,9 +27,9 @@ export interface OLMapView {
 }
 
 export enum eMapFeaturesLoadingStatus {
-	LOADING,
-	SUCCEEDED,
-	FAILED,
+	LOADING = 0,
+	SUCCEEDED = 1,
+	FAILED = 2,
 }
 
 export const initialState: AppState = {

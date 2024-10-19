@@ -2,13 +2,13 @@ import { Tooltip } from '@mui/material';
 import { View } from 'ol';
 import { transformExtent } from 'ol/proj';
 import React from 'react';
-import { NavigateFunction, Params } from 'react-router-dom';
+import type { NavigateFunction, Params } from 'react-router-dom';
 import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
-import { Election, IGeoJSONPoylgon } from '../../app/services/elections';
+import type { Election, IGeoJSONPoylgon } from '../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
 import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';
 import { getStandardViewPadding } from '../map/mapHelpers';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 // https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
 export interface IMapboxGeocodingAPIResponse {
@@ -200,7 +200,10 @@ export const getBBoxExtentForPollingPlaces = (pollingPlaces: IPollingPlace[]) =>
 		lon_right: Math.max(...pollingPlaces.map((p) => p.geom.coordinates[0])),
 	};
 
-	if (Object.values(bbox).includes(Infinity) || Object.values(bbox).includes(-Infinity)) {
+	if (
+		Object.values(bbox).includes(Number.POSITIVE_INFINITY) ||
+		Object.values(bbox).includes(Number.NEGATIVE_INFINITY)
+	) {
 		return undefined;
 	}
 
@@ -216,7 +219,12 @@ export const getBBoxExtentFromString = (bbox?: string): [number, number, number,
 			// ['-31.88573783', '-31.9441543633231', '115.88422', '115.944482222191']
 			// becomes
 			// [115.88422, -31.9441543633231, 115.944482222191, -31.88573783]
-			return [parseFloat(bboxArray[2]), parseFloat(bboxArray[1]), parseFloat(bboxArray[3]), parseFloat(bboxArray[0])];
+			return [
+				Number.parseFloat(bboxArray[2]),
+				Number.parseFloat(bboxArray[1]),
+				Number.parseFloat(bboxArray[3]),
+				Number.parseFloat(bboxArray[0]),
+			];
 		}
 	}
 

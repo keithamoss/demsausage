@@ -1,5 +1,5 @@
 import { initialState as initialAppState, isAppState } from '../features/app/appSlice';
-import { RootState } from './store';
+import type { RootState } from './store';
 
 const localStorageKey = 'public_site_redux_state';
 

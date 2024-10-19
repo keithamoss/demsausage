@@ -1,11 +1,11 @@
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
+import type { ObjectSchema } from 'yup';
 import {
-	StallFoodOptions,
-	StallOwnerModifiableProps,
-	StallTipOffModifiableProps,
-	StallTipOffRedCrossOfShameModifiableProps,
-	StallTipOffRunOutModifiableProps,
+	type StallFoodOptions,
+	type StallOwnerModifiableProps,
+	type StallTipOffModifiableProps,
+	type StallTipOffRedCrossOfShameModifiableProps,
+	type StallTipOffRunOutModifiableProps,
 	StallTipOffSource,
 } from '../services/stalls';
 import { booleanTrueOrUndefined } from './yupValidation';

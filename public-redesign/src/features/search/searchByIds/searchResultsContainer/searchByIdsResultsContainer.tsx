@@ -10,7 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../../../app/routing/navigationHelpers/navigationHelpersMap';
-import { Election } from '../../../../app/services/elections';
+import type { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import { selectIsMapFiltered, selectNumberOfMapFilterSettingsApplied } from '../../../app/appSlice';
 import SearchFilterComponent from '../../shared/searchFilterComponent';

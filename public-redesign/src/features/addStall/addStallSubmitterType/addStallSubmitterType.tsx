@@ -21,7 +21,7 @@ import {
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { StallSubmitterType } from '../../../app/services/stalls';
 import { appBarHeight } from '../../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';

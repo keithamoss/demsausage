@@ -1,5 +1,5 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export const pollingPlacesAdapter = createEntityAdapter<IPollingPlace>();

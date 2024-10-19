@@ -1,4 +1,4 @@
-import { NavigateFunction, Params } from 'react-router-dom';
+import type { NavigateFunction, Params } from 'react-router-dom';
 import { getURLParams } from './navigationHelpers';
 
 export const navigateToEditStallSubmitted = (params: Params<string>, navigate: NavigateFunction) => {

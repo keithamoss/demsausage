@@ -1,9 +1,9 @@
-import View from 'ol/View';
+import type View from 'ol/View';
 import { transform } from 'ol/proj';
-import { Params } from 'react-router-dom';
+import type { Params } from 'react-router-dom';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { OLMapView } from '../app/appSlice';
-import { IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { OLMapView } from '../app/appSlice';
+import type { IMapPollingGeoJSONNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export interface IMapPollingPlaceGeoJSONFeatureCollection {
 	type: 'FeatureCollection';
@@ -106,9 +106,9 @@ export const createMapViewFromURL = (params: Params<string>): Partial<OLMapView>
 	// @-33.83689,151.1098,z12.38029
 	const [lat, lon, zoom] = mapViewFromURL.substring(1).split(',');
 
-	const latNumber = parseFloat(lat);
-	const lonNumber = parseFloat(lon);
-	const zoomNumber = parseFloat(zoom.substring(1));
+	const latNumber = Number.parseFloat(lat);
+	const lonNumber = Number.parseFloat(lon);
+	const zoomNumber = Number.parseFloat(zoom.substring(1));
 
 	if (Number.isNaN(latNumber) === true || Number.isNaN(lonNumber) === true || Number.isNaN(zoomNumber) === true) {
 		return undefined;

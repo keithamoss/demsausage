@@ -1,7 +1,7 @@
-import { Feature } from 'ol';
-import { NavigateFunction, Params } from 'react-router-dom';
+import type { Feature } from 'ol';
+import type { NavigateFunction, Params } from 'react-router-dom';
 import { getPollingPlacePermalinkFromProps } from '../../../features/pollingPlaces/pollingPlaceHelpers';
-import { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
 import { addComponentToEndOfURLPath, getURLParams } from './navigationHelpers';
 
 export const navigateToPollingPlaceFromFeature = (

@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
-import { IStallLocationInfo, Stall } from '../../app/services/stalls';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IStallLocationInfo, Stall } from '../../app/services/stalls';
+import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export const mobileStepperMinHeight = 46.75;
 

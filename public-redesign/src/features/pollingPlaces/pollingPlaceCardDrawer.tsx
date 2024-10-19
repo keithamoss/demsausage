@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections } from '../elections/electionsSlice';

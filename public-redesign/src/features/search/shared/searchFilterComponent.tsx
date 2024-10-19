@@ -6,13 +6,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import React, { useCallback } from 'react';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { selectMapFilterSettings, setMapFilterSettings } from '../../app/appSlice';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
-import { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
 
 interface Props {
 	election: Election;

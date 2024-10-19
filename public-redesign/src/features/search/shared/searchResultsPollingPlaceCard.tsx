@@ -10,7 +10,7 @@ import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { IconsFlexboxHorizontalSummaryRow } from '../../icons/iconHelpers';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import { getNomsIconsForPollingPlace } from '../searchBarHelpers';
 
 interface Props {

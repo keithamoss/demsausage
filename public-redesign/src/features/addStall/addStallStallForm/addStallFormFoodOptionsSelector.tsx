@@ -14,7 +14,7 @@ import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
-import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
+import type { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';

@@ -12,7 +12,7 @@ import {
 	navigateToSearchDrawerRootFromExternalToSearchBar,
 } from '../../../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
-import { Election } from '../../../../app/services/elections';
+import type { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,

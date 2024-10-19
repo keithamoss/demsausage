@@ -1,6 +1,6 @@
 import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { debounce } from 'lodash-es';
-import { Feature, MapEvent, Map as olMap } from 'ol';
+import type { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -16,7 +16,7 @@ import {
 import { navigateToPollingPlaceFromFeature } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { navigateToSearchPollingPlacesByIds } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
@@ -28,7 +28,7 @@ import SearchBarCosmeticNonFunctional from '../search/searchByAddressOrGPS/searc
 import AddStallButton from './addStallButton/addStallButton';
 import LayersSelector from './layersSelector/layersSelector';
 import {
-	IMapPollingPlaceGeoJSONFeatureCollection,
+	type IMapPollingPlaceGeoJSONFeatureCollection,
 	createMapViewFromURL,
 	createMapViewURLPathComponent,
 	isMapViewParamValid,

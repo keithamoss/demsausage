@@ -2,20 +2,20 @@ import { Alert, AlertTitle, Box, List, ListItem, ListItemText, styled } from '@m
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
 import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { selectMapFilterSettings } from '../../app/appSlice';
 import { doesPollingPlaceSatisifyFilterCriteria, hasFilterOptions } from '../../map/mapFilterHelpers';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
-	EMapboxPlaceType,
-	IMapboxGeocodingAPIResponseFeature,
+	type EMapboxPlaceType,
+	type IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
 	getLonLatFromString,
 	getMapboxAPIKey,
