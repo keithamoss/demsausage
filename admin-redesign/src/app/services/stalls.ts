@@ -147,7 +147,7 @@ export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getPendingStalls: builder.query<Stall[], void>({
 			query: () => ({
-				url: `stalls/pending/`,
+				url: 'stalls/pending/',
 			}),
 		}),
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({

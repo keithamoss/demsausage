@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { Link as RouterLink, type LinkProps as RouterLinkProps } from 'react-router-dom';
 
 const Link = forwardRef<HTMLAnchorElement, RouterLinkProps>(function Link(itemProps, ref) {
-	return <RouterLink ref={ref} {...itemProps} role={undefined} />;
+	return <RouterLink ref={ref} {...itemProps} />;
 });
 
 interface ListItemLinkProps {

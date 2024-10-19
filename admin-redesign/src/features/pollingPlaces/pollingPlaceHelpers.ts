@@ -36,8 +36,6 @@ export const getSausageChanceDescription = (pollingPlace: IPollingPlace) => {
 			return 'This booth has a MIXED chance of having food.';
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'This booth is UNLIKELY to have food.';
-		case PollingPlaceChanceOfSausage.NO_IDEA:
-		case null:
 		default:
 			return 'We have never had reports from this booth.';
 	}
@@ -50,8 +48,6 @@ export const getSausageChanceDescriptionSubheader = (pollingPlace: IPollingPlace
 		case PollingPlaceChanceOfSausage.MIXED:
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'Based on reports from past elections';
-		case PollingPlaceChanceOfSausage.NO_IDEA:
-		case null:
 		default:
 			return 'Let us know what you find!';
 	}
@@ -109,13 +105,14 @@ export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) 
 
 	if (nomsList.length >= 3) {
 		return `${nomsList.slice(0, -1).join(', ')}, and ${nomsList.pop()}`;
-	} else if (nomsList.length === 2) {
-		return nomsList.join(' and ');
-	} else if (nomsList.length === 1) {
-		return nomsList[0];
-	} else {
-		return '';
 	}
+	if (nomsList.length === 2) {
+		return nomsList.join(' and ');
+	}
+	if (nomsList.length === 1) {
+		return nomsList[0];
+	}
+	return '';
 };
 
 export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPlace) => {
