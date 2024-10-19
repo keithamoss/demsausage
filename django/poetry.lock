@@ -1159,13 +1159,13 @@ websocket-client = ">=1.8,<2.0"
 
 [[package]]
 name = "sentry-sdk"
-version = "2.15.0"
+version = "2.17.0"
 description = "Python client for Sentry (https://sentry.io)"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "sentry_sdk-2.15.0-py2.py3-none-any.whl", hash = "sha256:8fb0d1a4e1a640172f31502e4503543765a1fe8a9209779134a4ac52d4677303"},
-    {file = "sentry_sdk-2.15.0.tar.gz", hash = "sha256:a599e7d3400787d6f43327b973e55a087b931ba2c592a7a7afa691f8eb5e75e2"},
+    {file = "sentry_sdk-2.17.0-py2.py3-none-any.whl", hash = "sha256:625955884b862cc58748920f9e21efdfb8e0d4f98cca4ab0d3918576d5b606ad"},
+    {file = "sentry_sdk-2.17.0.tar.gz", hash = "sha256:dd0a05352b78ffeacced73a94e86f38b32e2eae15fff5f30ca5abb568a72eacf"},
 ]
 
 [package.dependencies]
@@ -1188,6 +1188,7 @@ falcon = ["falcon (>=1.4)"]
 fastapi = ["fastapi (>=0.79.0)"]
 flask = ["blinker (>=1.1)", "flask (>=0.11)", "markupsafe"]
 grpcio = ["grpcio (>=1.21.1)", "protobuf (>=3.8.0)"]
+http2 = ["httpcore[http2] (==1.*)"]
 httpx = ["httpx (>=0.16.0)"]
 huey = ["huey (>=2)"]
 huggingface-hub = ["huggingface-hub (>=0.22)"]
@@ -1535,4 +1536,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "104b648ea04c374feee96e9163a9716515f266e21d887288cd6341176711e29b"
+content-hash = "154a91fc7073eb5c15a127aafd5dc77c21e7f32d6192e246fccd69fc9a497c24"
