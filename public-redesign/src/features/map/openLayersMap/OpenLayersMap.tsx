@@ -176,7 +176,9 @@ class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
 		}
 
 		// 2. Cancel any window.setTimeout() calls that may be running
-		this.timeoutIds.forEach((timeoutId: number) => window.clearTimeout(timeoutId));
+		for (const timeoutId of this.timeoutIds) {
+			window.clearTimeout(timeoutId);
+		}
 
 		// 3. Remove the window.onresize event that lets the map know to update its size when the viewport changes
 		window.removeEventListener('resize', this.onMapContainerResize.bind(this));
@@ -206,25 +208,25 @@ class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
 		// 4. Remove all layers, controls, and interactions on the map
 		if (this.map !== null) {
 			const layers = [...this.map.getLayers().getArray()];
-			layers.forEach((l: BaseLayer) => {
+			for (const l of layers) {
 				if (this.map !== null) {
 					this.map.removeLayer(l);
 				}
-			});
+			}
 
 			const controls = [...this.map.getControls().getArray()];
-			controls.forEach((c: Control) => {
+			for (const c of controls) {
 				if (this.map !== null) {
 					this.map.removeControl(c);
 				}
-			});
+			}
 
 			const interactions = [...this.map.getInteractions().getArray()];
-			interactions.forEach((i: Interaction) => {
+			for (const i of interactions) {
 				if (this.map !== null) {
 					this.map.removeInteraction(i);
 				}
-			});
+			}
 		}
 
 		// 5. And finally clean up the map object itself
@@ -418,6 +420,8 @@ class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
 		propValue: boolean,
 	): VectorLayer<VectorSource<Geometry>> | null {
 		let layer = null;
+
+		// biome-ignore lint/complexity/noForEach: <explanation>
 		map.getLayers().forEach((l: BaseLayer) => {
 			const props = l.getProperties();
 			if (propName in props && props[propName] === propValue) {

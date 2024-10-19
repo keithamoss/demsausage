@@ -83,13 +83,13 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
 	const foodLabels: Array<string> = [];
 	const foodIcons = getAllFoodsAvailableOnStalls();
 
-	Object.keys(pollingPlace.stall.noms).forEach((foodName) => {
+	for (const foodName of Object.keys(pollingPlace.stall.noms)) {
 		const foodDefinition = foodIcons.find((i) => i.value === foodName);
 
 		if (foodDefinition !== undefined) {
 			foodLabels.push(foodDefinition.label);
 		}
-	});
+	}
 
 	return foodLabels;
 }
@@ -132,13 +132,14 @@ export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPl
 
 export const getPollingPlaceIdsFromFeatures = (features: Feature[]) => {
 	const ids: number[] = [];
-	features.forEach((f) => {
+
+	for (const f of features) {
 		const id = f.getId();
 
 		if (typeof id === 'number') {
 			ids.push(id);
 		}
-	});
+	}
 
 	return ids;
 };

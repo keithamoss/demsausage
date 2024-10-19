@@ -194,7 +194,7 @@ export default function SausagelyticsFederal(props: Props) {
 			}[];
 		} = {};
 
-		stats.states.forEach((stateStats: IElectionStats) => {
+		for (const stateStats of stats.states) {
 			for (const [nomsName, nomsStats] of Object.entries(stateStats.data.all_booths_by_noms)) {
 				if (!(nomsName in statsGrouped)) {
 					statsGrouped[nomsName] = [];
@@ -205,8 +205,7 @@ export default function SausagelyticsFederal(props: Props) {
 					y: nomsStats.booth_count,
 				});
 			}
-		});
-
+		}
 		return statsGrouped;
 	};
 

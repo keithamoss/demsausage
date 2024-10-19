@@ -1,9 +1,10 @@
 import { SvgIcon } from '@mui/material';
 
-const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) =>
-	Object.entries(attributes).forEach(([attributeName, attributeValue]) =>
-		svg.setAttribute(attributeName, attributeValue),
-	);
+const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) => {
+	for (const [attributeName, attributeValue] of Object.entries(attributes)) {
+		svg.setAttribute(attributeName, attributeValue);
+	}
+};
 
 export const createInlinedSVGImage = (
 	rawSVG: string,

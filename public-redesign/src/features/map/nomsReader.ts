@@ -193,17 +193,17 @@ export class NomsReader {
 		const nomsIconNames: string[] = this.getOnlyFoodIconsFromNoms();
 		const nomsIconNamesSorted: string[] = [];
 
-		NomsReader.primaryNomsIconValues.forEach((iconName) => {
+		for (const iconName of NomsReader.primaryNomsIconValues) {
 			if (nomsIconNames.includes(iconName) === true) {
 				nomsIconNamesSorted.push(iconName);
 			}
-		});
+		}
 
-		nomsIconNames.forEach((iconName) => {
+		for (const iconName of nomsIconNames) {
 			if (nomsIconNamesSorted.includes(iconName) === false) {
 				nomsIconNamesSorted.push(iconName);
 			}
-		});
+		}
 
 		nomsIconNamesSorted.forEach((iconName, index) => {
 			const foodIcons = getAllFoodsAvailableOnStalls();
