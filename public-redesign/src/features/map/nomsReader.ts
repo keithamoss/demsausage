@@ -121,6 +121,7 @@ export class NomsReader {
 
 		if (this.onlyHasExtraNoms()) {
 			// @TODO FIXME when we decide how to handle this
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			const firstExtraNomsIcon = Object.keys(this.noms!)[0] as keyof typeof secondaryFoodIcons;
 			return firstExtraNomsIcon in secondaryFoodIcons && secondaryFoodIcons[firstExtraNomsIcon].icon.ol !== undefined
 				? secondaryFoodIcons[firstExtraNomsIcon].icon.ol

@@ -264,9 +264,9 @@ export default function SausagelyticsFederal(props: Props) {
 									{/* eslint-disable-next-line @typescript-eslint/no-shadow */}
 									{stats.divisions.top.map((stats: IElectionStats) => (
 										<TableRow key={stats.domain}>
-											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank!}.</TableCell>
+											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank}.</TableCell>
 											<TableCell>{stats.domain}</TableCell>
-											<TableCell>{stats.metadata?.state!}</TableCell>
+											<TableCell>{stats.metadata?.state}</TableCell>
 											<TableCell>
 												{new Intl.NumberFormat('en-AU', {
 													style: 'percent',
@@ -290,9 +290,9 @@ export default function SausagelyticsFederal(props: Props) {
 									{/* eslint-disable-next-line @typescript-eslint/no-shadow */}
 									{stats.divisions.bottom.map((stats: IElectionStats) => (
 										<TableRow key={stats.domain}>
-											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank!}.</TableCell>
+											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank}.</TableCell>
 											<TableCell>{stats.domain}</TableCell>
-											<TableCell>{stats.metadata?.state!}</TableCell>
+											<TableCell>{stats.metadata?.state}</TableCell>
 											<TableCell>
 												{new Intl.NumberFormat('en-AU', {
 													style: 'percent',
