@@ -1,20 +1,9 @@
 {
-    "eslint.workingDirectories": [
-        "./public-redesign"
-    ],
-    "prettier.configPath": "./public-redesign/.prettierrc.json",
-    "prettier.prettierPath": "./public-redesign/.yarn/sdks/prettier/index.cjs",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "search.exclude": {
-        "**/.yarn": true,
-        "**/.pnp.*": true
-    },
-    "eslint.nodePath": "./public-redesign/.yarn/sdks",
-    "typescript.tsdk": "./public-redesign/.yarn/sdks/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
+    "editor.formatOnSave": true,
     "errorLens.onSave": true,
-    "[xml]": {
-        "editor.defaultFormatter": "redhat.vscode-xml"
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome"
     },
+    "biome.lspBin": "/Users/keithmoss/Projects/GitHub/demsausage/public-redesign/node_modules/@biomejs/biome/bin/biome",
 }
