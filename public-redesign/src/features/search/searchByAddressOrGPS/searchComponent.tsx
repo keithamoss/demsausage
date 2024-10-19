@@ -198,6 +198,7 @@ export default function SearchComponent(props: Props) {
 												<span>
 													{parts.map((part, index) => (
 														<span
+															// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 															key={index}
 															style={{
 																fontWeight: part.highlight ? 700 : 400,

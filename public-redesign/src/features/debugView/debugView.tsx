@@ -110,6 +110,7 @@ export default function DebugView() {
 							getPollingPlacePropsFromURL(item.url);
 
 						return (
+							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							<React.Fragment key={index}>
 								<ListItem component={'div'}>
 									<ListItemText
@@ -131,6 +132,7 @@ export default function DebugView() {
 										/>
 									</Box>
 
+									{/* biome-ignore lint/a11y/useIframeTitle: <explanation> */}
 									<iframe
 										// src={`https://public.test.democracysausage.org${item.url}?debugViewShowMiniCard`}
 										src={`https://democracysausage.org${item.url}?debugViewShowMiniCard`}
@@ -152,6 +154,7 @@ export default function DebugView() {
 										/>
 									</Box>
 
+									{/* biome-ignore lint/a11y/useIframeTitle: <explanation> */}
 									<iframe
 										// src={`https://public.test.democracysausage.org${item.url}`}
 										src={`https://democracysausage.org${item.url}`}
