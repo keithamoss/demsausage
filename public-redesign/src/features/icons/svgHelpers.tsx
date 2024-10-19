@@ -10,6 +10,8 @@ export const createInlinedSVGImage = (
 	rawSVG: string,
 	style: React.CSSProperties,
 	onClick: React.MouseEventHandler<HTMLImageElement>,
+	// biome-ignore lint/a11y/useAltText: <explanation>
+	// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 ) => <img src={`data:image/svg+xml;utf8,${rawSVG.replaceAll('#', '%23')}`} style={style} onClick={onClick} />;
 
 export const prepareRawSVGForOpenLayers = (rawSvg: string, width?: number, height?: number, style?: string) => {
