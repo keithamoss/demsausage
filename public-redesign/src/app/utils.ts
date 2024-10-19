@@ -39,14 +39,14 @@ export function stringDivider(str: string, width: number, spaceReplacer: string,
 			p -= 1;
 		}
 		if (p > 0) {
-			let left;
+			let left: string;
 			if (str.substring(p, p + 1) === '-') {
 				left = str.substring(0, p + 1);
 			} else {
 				left = str.substring(0, p);
 			}
 			const right = str.substring(p + 1);
-			// eslint-disable-next-line no-param-reassign
+			// biome-ignore lint/style/noParameterAssign: <explanation>
 			replaceCount += 1;
 			const [newText, newReplaceCount] = stringDivider(right, width, spaceReplacer, replaceCount);
 			return [left + spaceReplacer + newText, newReplaceCount];

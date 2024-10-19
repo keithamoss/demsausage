@@ -54,6 +54,7 @@ interface IProps {
 	onWheelEnd?: () => void;
 }
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	private map: Map | null;
 
@@ -114,20 +115,20 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		this.eventsKeys.push(this.map.on('dblclick', this.onDoubleClick.bind(this)));
 
 		// @TODO
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		this.eventsKeys.push(this.map.on('moveend' as any, this.onMoveEnd.bind(this)));
 
 		this.onWheelBound = this.onWheel.bind(this);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		this.map.addEventListener('wheel', this.onWheelBound as any);
 
 		// The pointer down/up events on OL's PointerInteractions don't do what we expect, so we use the regular 'ol pointerdown/pointerup events
 		this.onPointerDownBound = this.onPointerDown.bind(this);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		this.map.addEventListener('pointerdown', this.onPointerDownBound as any);
 
 		this.onPointerUpBound = this.onPointerUp.bind(this);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		this.map.addEventListener('pointerup', this.onPointerUpBound as any);
 	}
 
@@ -184,19 +185,19 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		if (this.map !== null) {
 			if (this.onPointerDownBound !== undefined) {
 				// @TODO
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				this.map.removeEventListener('pointerdown', this.onPointerDownBound as any);
 				this.onPointerDownBound = undefined;
 			}
 
 			if (this.onPointerUpBound !== undefined) {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				this.map.removeEventListener('pointerup', this.onPointerUpBound as any);
 				this.onPointerUpBound = undefined;
 			}
 
 			if (this.onWheelBound !== undefined) {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				this.map.removeEventListener('wheel', this.onWheelBound as any);
 				this.onWheelBound = undefined;
 			}

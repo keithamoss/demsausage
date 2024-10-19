@@ -155,7 +155,7 @@ export class NomsReader {
 		//    This is used to decorate the actual lat,lon the polling place is at.
 		const primaryIcon = this.getPrimaryIcon();
 		// @TODO
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		(primaryIcon.getImage() as any).setAnchor([iconSize * scaleFactor, iconSize * scaleFactor]);
 		primaryIcon.getImage().setScale(scaleFactor);
 		primaryIcon.setZIndex(0);
@@ -212,7 +212,7 @@ export class NomsReader {
 			if (foodIcon !== undefined) {
 				const icon = foodIcon.icon.olDetailed;
 				// @TODO
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				(icon.getImage() as any).setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
 				icon.getImage().setScale(scaleFactor);
 				olStyles.push(icon);
