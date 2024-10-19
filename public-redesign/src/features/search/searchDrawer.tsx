@@ -31,7 +31,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: '90dvh',
 }));
 
 // The entrypoint handles determining the election that should be displayed based on route changes.

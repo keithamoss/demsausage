@@ -24,7 +24,7 @@ import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHel
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: '90dvh',
 }));
 
 const StyledCloseIconButton = styled(IconButton)(({ theme }) => ({

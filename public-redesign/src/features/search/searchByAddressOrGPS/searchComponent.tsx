@@ -168,7 +168,7 @@ export default function SearchComponent(props: Props) {
 					<List sx={{ pt: 0 }}>
 						{mapboxSearchResults === null && (
 							<ListItem>
-								<ListItemText primary="An error occurred"></ListItemText>
+								<ListItemText primary="An error occurred" />
 							</ListItem>
 						)}
 
@@ -176,7 +176,7 @@ export default function SearchComponent(props: Props) {
 							mapboxSearchResults !== null &&
 							mapboxSearchResults.features.length === 0 && (
 								<ListItem>
-									<ListItemText primary="No results found"></ListItemText>
+									<ListItemText primary="No results found" />
 								</ListItem>
 							)}
 
@@ -209,7 +209,7 @@ export default function SearchComponent(props: Props) {
 												</span>
 											}
 											secondary={place_name_rest.join(', ')}
-										></ListItemText>
+										/>
 									</ListItem>
 								);
 							})}

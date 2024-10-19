@@ -161,25 +161,24 @@ export const getNomsIconsForPollingPlace = (
 		return allowRedCrossOfShame === true
 			? wrapIconWithTooltip(supportingIcons.red_cross.icon.react, supportingIcons.red_cross.description)
 			: null;
-	} else {
-		const foodIcons = getAllFoodsAvailableOnStalls();
-
-		return (
-			<React.Fragment>
-				{Object.keys(pollingPlace.stall?.noms || {}).map((key) => {
-					const foodIcon = foodIcons.find((i) => i.value === key);
-
-					if (foodIcon !== undefined) {
-						return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
-					}
-				})}
-				{/* For PollingPlaceCards, we don't display the Sold Out icon in the list of noms icons, it gets displayed as part of other elements of the card */}
-				{allowSoldOut === true &&
-					pollingPlace.stall?.noms.run_out === true &&
-					wrapIconWithTooltip(supportingIcons.yellow_minus.icon.react, supportingIcons.yellow_minus.description)}
-			</React.Fragment>
-		);
 	}
+	const foodIcons = getAllFoodsAvailableOnStalls();
+
+	return (
+		<React.Fragment>
+			{Object.keys(pollingPlace.stall?.noms || {}).map((key) => {
+				const foodIcon = foodIcons.find((i) => i.value === key);
+
+				if (foodIcon !== undefined) {
+					return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
+				}
+			})}
+			{/* For PollingPlaceCards, we don't display the Sold Out icon in the list of noms icons, it gets displayed as part of other elements of the card */}
+			{allowSoldOut === true &&
+				pollingPlace.stall?.noms.run_out === true &&
+				wrapIconWithTooltip(supportingIcons.yellow_minus.icon.react, supportingIcons.yellow_minus.description)}
+		</React.Fragment>
+	);
 };
 
 export const getLonLatFromString = (lonlat: string) => {

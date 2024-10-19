@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 
 export const MapWelcomeToTheNewWebsite = () => {
-	const [isShown, setIsShown] = useState(Cookies.get('hasSeenNewWebsiteWelcomeMessage') === 'true' ? false : true);
+	const [isShown, setIsShown] = useState(Cookies.get('hasSeenNewWebsiteWelcomeMessage') !== 'true');
 
 	const onClickGotcha = () => {
 		setIsShown(false);

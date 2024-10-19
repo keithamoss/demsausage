@@ -62,7 +62,8 @@ function EntrypointLayer1() {
 				submitterType={urlSubmitterType}
 			/>
 		);
-	} else if (
+	}
+	if (
 		params.location_name !== undefined &&
 		params.location_address !== undefined &&
 		params.location_state !== undefined &&

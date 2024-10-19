@@ -36,10 +36,9 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 	const onToggleFoodOption = (foodOptionName: keyof StallFoodOptions) => {
 		if (foodOptions[foodOptionName] === undefined) {
 			return onChange({ ...foodOptions, [foodOptionName]: true });
-		} else {
-			const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
-			return onChange(rest);
 		}
+		const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
+		return onChange(rest);
 	};
 
 	const onChangeFreeTextFoodOption = useMemo(
@@ -47,10 +46,9 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			debounce((e: React.ChangeEvent<HTMLInputElement>) => {
 				if (e.target.value.length >= 1) {
 					return onChange({ ...foodOptions, free_text: e.target.value });
-				} else {
-					const { free_text, ...rest } = foodOptions;
-					return onChange(rest);
 				}
+				const { free_text, ...rest } = foodOptions;
+				return onChange(rest);
 			}, 500),
 		[foodOptions, onChange],
 	);
@@ -88,7 +86,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 									secondaryAction={
 										<Checkbox
 											value={option.value}
-											checked={foodOptions[option.value as keyof StallFoodOptions] === true ? true : false}
+											checked={foodOptions[option.value as keyof StallFoodOptions] === true}
 											onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
 											edge="end"
 											inputProps={{ 'aria-labelledby': labelId }}

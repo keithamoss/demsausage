@@ -42,10 +42,9 @@ export function loadStateFromLocalStorage() {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		if (isAppState(parsed)) {
 			return { app: { ...initialAppState, ...parsed } };
-		} else {
-			// Invalid JSON format
-			return undefined;
 		}
+		// Invalid JSON format
+		return undefined;
 	} catch (e) {
 		return undefined;
 	}

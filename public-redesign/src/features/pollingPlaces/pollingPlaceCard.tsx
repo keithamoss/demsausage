@@ -438,7 +438,7 @@ export default function PollingPlaceCard(props: Props) {
 							)}
 						</List>
 
-						<Divider sx={{ paddingTop: 2, paddingBottom: 0, mb: 0 }}></Divider>
+						<Divider sx={{ paddingTop: 2, paddingBottom: 0, mb: 0 }} />
 					</CardContent>
 
 					<CardActions sx={{ pl: 2, pt: 0 }}>

@@ -27,7 +27,7 @@ function EntrypointLayer1() {
 		isError: isGetStallErrored,
 		error,
 	} = useGetStallQuery(
-		Number.isNaN(stallId) == false && token !== null && signature !== null ? { stallId, token, signature } : skipToken,
+		Number.isNaN(stallId) === false && token !== null && signature !== null ? { stallId, token, signature } : skipToken,
 	);
 
 	if (isGetStallLoading === true) {
