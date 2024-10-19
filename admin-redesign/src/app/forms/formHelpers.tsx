@@ -1,6 +1,6 @@
-import { Alert, SxProps, Theme } from '@mui/material';
+import { Alert, type SxProps, type Theme } from '@mui/material';
 import { upperFirst } from 'lodash-es';
-import { FieldError } from 'react-hook-form';
+import type { FieldError } from 'react-hook-form';
 
 export const FormFieldValidationError = (props: { error: FieldError }) => (
 	<Alert severity="error" sx={{ marginTop: 1 }}>

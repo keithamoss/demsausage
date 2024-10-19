@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface AppState {}
+export type AppState = {};
 
 export const initialState: AppState = {};
 

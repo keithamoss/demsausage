@@ -1,4 +1,4 @@
-import { Params } from 'react-router-dom';
+import type { Params } from 'react-router-dom';
 
 export const getURLParams = (params: Params<string>) => {
 	return {

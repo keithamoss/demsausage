@@ -1,5 +1,5 @@
-import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
-import { jurisdictionCrests } from '../../features/icons/jurisdictionHelpers';
+import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
+import type { jurisdictionCrests } from '../../features/icons/jurisdictionHelpers';
 import { api } from './api';
 
 export interface IGeoJSONPoylgon {

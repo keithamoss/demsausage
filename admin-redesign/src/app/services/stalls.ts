@@ -1,6 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
-import { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export enum StallSubmitterType {

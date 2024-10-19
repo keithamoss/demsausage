@@ -61,7 +61,7 @@ export const getCSVStringsAsFloats = (s: string) => {
 	}
 
 	const arrayOfStrings = s.includes(',') ? s.split(',') : [s];
-	return arrayOfStrings.map((v) => parseFloat(v)).filter((v) => Number.isNaN(v) === false);
+	return arrayOfStrings.map((v) => Number.parseFloat(v)).filter((v) => Number.isNaN(v) === false);
 };
 
 // https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
