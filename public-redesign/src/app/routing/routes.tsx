@@ -16,7 +16,7 @@ import EditStallStallEditorForm from '../../features/editStall/editStallStallFor
 import EditStallSubmitted from '../../features/editStall/editStallSubmitted/editStallSubmitted';
 import EmbedBuilder from '../../features/embedBuilder/EmbedBuilder';
 import ElectionsList from '../../features/map/layersSelector/electionsList';
-import Map from '../../features/map/map';
+import DemSausageMap from '../../features/map/map';
 import MediaPage from '../../features/mediaPage/MediaPage';
 import PollingPlaceCardDrawer from '../../features/pollingPlaces/pollingPlaceCardDrawer';
 import Sausagelytics from '../../features/sausagelytics/Sausagelytics';
@@ -165,42 +165,42 @@ export const router = sentryCreateBrowserRouter([
 			},
 			{
 				path: '/:election_name/m/:map_lat_lon_zoom?/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
 			},
 			{
 				path: '/:election_name/place/:search_term/m/:map_lat_lon_zoom/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
 			},
 			{
 				path: '/:election_name/place/:search_term/:place_lon_lat/m/:map_lat_lon_zoom/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
 			},
 			{
 				path: '/:election_name/gps/:gps_lon_lat/m/:map_lat_lon_zoom/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
 			},
 			{
 				path: '/:election_name/by_ids/:polling_place_ids/m/:map_lat_lon_zoom/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
 			},
 			{
 				path: '/:election_name/search/',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
@@ -233,7 +233,7 @@ export const router = sentryCreateBrowserRouter([
 			},
 			{
 				path: '/:election_name',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),
@@ -256,7 +256,7 @@ export const router = sentryCreateBrowserRouter([
 			},
 			{
 				path: '',
-				element: <Map />,
+				element: <DemSausageMap />,
 				loader: () => ({
 					name: 'Map',
 				}),

@@ -34,7 +34,7 @@ import {
 	isMapViewParamValid,
 } from './mapHelpers';
 import { MapWelcomeToTheNewWebsite } from './mapWelcomeToTheNewWebsite';
-import OpenLayersMap from './openLayersMap/OpenLayersMap';
+import DemSausageOpenLayersMap from './openLayersMap/OpenLayersMap';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypointLayer1() {
@@ -106,7 +106,7 @@ function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	}
 
 	if (location.pathname.startsWith(`/${election.name_url_safe}`) === true) {
-		return <Map election={election} />;
+		return <DemSausageMap election={election} />;
 	}
 }
 
@@ -118,7 +118,7 @@ interface Props {
 	election: Election;
 }
 
-function Map(props: Props) {
+function DemSausageMap(props: Props) {
 	const { election } = props;
 
 	const dispatch = useAppDispatch();
@@ -235,7 +235,7 @@ function Map(props: Props) {
 				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
 			</Helmet>
 
-			<OpenLayersMap
+			<DemSausageOpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
 				initialMapView={initialMapView}

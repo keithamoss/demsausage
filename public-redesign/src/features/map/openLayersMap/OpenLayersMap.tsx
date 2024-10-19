@@ -1,4 +1,4 @@
-import Map from 'ol/Map';
+import OpenLayersMap from 'ol/Map';
 import * as Observable from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
 import type Control from 'ol/control/Control';
@@ -36,7 +36,7 @@ import './OpenLayersMap.css';
 
 interface IProps {
 	election: Election;
-	olMapRef: React.MutableRefObject<Map | undefined>;
+	olMapRef: React.MutableRefObject<OpenLayersMap | undefined>;
 	initialMapView: Partial<OLMapView> | undefined;
 	mapView: Partial<OLMapView> | undefined;
 	// geojson: IGeoJSONFeatureCollection | undefined
@@ -55,8 +55,8 @@ interface IProps {
 }
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
-class OpenLayersMap extends React.PureComponent<IProps, {}> {
-	private map: Map | null;
+class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
+	private map: OpenLayersMap | null;
 
 	private vectorSourceChangedEventKey: EventsKey | undefined;
 
@@ -89,7 +89,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	componentDidMount() {
 		const { olMapRef, initialMapView } = this.props;
 
-		this.map = new Map({
+		this.map = new OpenLayersMap({
 			layers: this.getBasemap(),
 			target: 'openlayers-map',
 			controls: [new Attribution()],
@@ -240,7 +240,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		// https://gis.stackexchange.com/questions/31409/openlayers-redrawing-map-after-container-resize
 
 		const timeoutId = window.setTimeout(
-			(map: Map | undefined | null) => {
+			(map: OpenLayersMap | undefined | null) => {
 				if (map !== undefined && map !== null) {
 					map.updateSize();
 				}
@@ -272,7 +272,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 			// Wait for a bit before doing map onLoad things like zooming to search results.
 			// If we don't wait then OpenLayers seems to stop rendering when the zoom starts, so the user sees nothing.
 			const timeoutId = window.setTimeout(
-				function (this: OpenLayersMap) {
+				function (this: DemSausageOpenLayersMap) {
 					onMapLoaded();
 				}.bind(this),
 				750,
@@ -405,7 +405,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 		return vectorLayer;
 	}
 
-	private clearMapDataVectorLayer(map: Map) {
+	private clearMapDataVectorLayer(map: OpenLayersMap) {
 		const vectorLayer = this.getLayerByProperties(map, 'isSausageLayer', true);
 		if (vectorLayer !== null) {
 			map.removeLayer(vectorLayer);
@@ -413,7 +413,7 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private getLayerByProperties(
-		map: Map,
+		map: OpenLayersMap,
 		propName: string,
 		propValue: boolean,
 	): VectorLayer<VectorSource<Geometry>> | null {
@@ -452,4 +452,4 @@ class OpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 }
 
-export default OpenLayersMap;
+export default DemSausageOpenLayersMap;
