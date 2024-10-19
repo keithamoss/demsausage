@@ -157,6 +157,7 @@ export const stallsApi = api.injectEndpoints({
 			}),
 		}),
 		addStall: builder.mutation<
+			// biome-ignore lint/complexity/noBannedTypes: <explanation>
 			{},
 			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
 		>({
@@ -166,6 +167,7 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
+		// biome-ignore lint/complexity/noBannedTypes: <explanation>
 		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
 			query: (stall) => ({
 				url: `stalls/${stall.id}/update_and_resubmit/`,

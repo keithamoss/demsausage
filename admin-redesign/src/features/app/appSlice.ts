@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type AppState = {};
 
 export const initialState: AppState = {};

@@ -1,14 +1,17 @@
 import { SvgIcon } from '@mui/material';
 
-const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) =>
-	Object.entries(attributes).forEach(([attributeName, attributeValue]) =>
-		svg.setAttribute(attributeName, attributeValue),
-	);
+const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) => {
+	for (const [attributeName, attributeValue] of Object.entries(attributes)) {
+		svg.setAttribute(attributeName, attributeValue);
+	}
+};
 
 export const createInlinedSVGImage = (
 	rawSVG: string,
 	style: React.CSSProperties,
 	onClick: React.MouseEventHandler<HTMLImageElement>,
+	// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+	// biome-ignore lint/a11y/useAltText: <explanation>
 ) => <img src={`data:image/svg+xml;utf8,${rawSVG.replaceAll('#', '%23')}`} style={style} onClick={onClick} />;
 
 export const prepareRawSVGForOpenLayers = (rawSvg: string, width?: number, height?: number, style?: string) => {
