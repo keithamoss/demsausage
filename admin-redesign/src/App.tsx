@@ -1,20 +1,35 @@
+import GoogleIcon from '@mui/icons-material/Google';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, IconButton, Toolbar, styled } from '@mui/material';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './App.css';
+import { useAppSelector } from './app/hooks/store';
 import NavigationDrawer from './app/routing/navigationDrawer';
-import { useGetPendingStallsQuery } from './app/services/stalls';
+import { stallsApi } from './app/services/stalls';
+import { store } from './app/store';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
-import { getBaseURL } from './app/utils';
+import { getAPIBaseURL, getBaseURL } from './app/utils';
 import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
 import DemSausageWhiteCrestGrillRaw from './assets/crest/white_crest_grill.svg?raw';
+import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import { createInlinedSVGImage } from './features/icons/svgHelpers';
+
+const LoginContainer = styled('div')`
+	height: 100dvh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
 
 export default function App() {
 	const navigate = useNavigate();
+
+	const user = useAppSelector(selectUser);
+
+	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
 	const onNavigateHome = useCallback(() => navigate(''), [navigate]);
 
@@ -34,12 +49,30 @@ export default function App() {
 		[],
 	);
 
-	const {
-		data: pendingStalls,
-		isLoading: isGetPendingStallsLoading,
-		isSuccess: isGetPendingStallsSuccessful,
-		isError: isGetPendingStallsErrored,
-	} = useGetPendingStallsQuery();
+	// So we don't show the login button while we're waiting to see if the user is logged in
+	if (isLoggedIn === undefined) {
+		return null;
+	}
+
+	if (user === null) {
+		return (
+			<LoginContainer>
+				<Button
+					variant="contained"
+					size="large"
+					startIcon={<GoogleIcon />}
+					// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+					onClick={() => (window.location.href = `${getAPIBaseURL()}/login/google-oauth2/`)}
+				>
+					Login
+				</Button>
+			</LoginContainer>
+		);
+	}
+
+	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
+	// Important: We're pre-fetching *after* we have a user object to avoid 403s
+	void store.dispatch(stallsApi.endpoints.getPendingStalls.initiate());
 
 	return (
 		<div className="App">
@@ -97,10 +130,6 @@ export default function App() {
 			</AppBar>
 
 			<Outlet />
-
-			{isGetPendingStallsSuccessful === true && (
-				<Typography variant="h6">We have {pendingStalls.length} pending stalls</Typography>
-			)}
 
 			<NavigationDrawer open={drawerOpen} onToggleDrawer={onToggleDrawer} />
 		</div>

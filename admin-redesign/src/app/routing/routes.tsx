@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import ErrorElement from '../../ErrorElement';
 import NotFound from '../../NotFound';
+import PendingStalls from '../../features/pendingStalls/PendingStalls';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -12,13 +13,13 @@ export const router = sentryCreateBrowserRouter([
 		element: <App />,
 		errorElement: <ErrorElement />,
 		children: [
-			// {
-			// 	path: '',
-			// 	element: <Map />,
-			// 	loader: () => ({
-			// 		name: 'Map',
-			// 	}),
-			// },
+			{
+				path: '',
+				element: <PendingStalls />,
+				loader: () => ({
+					name: 'Pending Stalls',
+				}),
+			},
 		],
 	},
 	{

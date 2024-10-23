@@ -7,6 +7,7 @@ import { getAPIBaseURL, isDevelopment } from '../utils';
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${getAPIBaseURL()}/0.1/`,
+		credentials: 'include',
 		prepareHeaders: (headers) => {
 			const token = Cookies.get('csrftoken');
 			if (token) {
