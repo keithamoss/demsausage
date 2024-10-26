@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useGetPendingStallsQuery } from '../../app/services/stalls';
 
 const PageWrapper = styled('div')(({ theme }) => ({
+	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
 	'& h3:first-of-type': {

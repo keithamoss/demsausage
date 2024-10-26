@@ -1,5 +1,6 @@
 import CampaignIcon from '@mui/icons-material/Campaign';
-import PublicIcon from '@mui/icons-material/Public';
+import HomeIcon from '@mui/icons-material/Home';
+import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Box } from '@mui/system';
 import type React from 'react';
@@ -9,7 +10,10 @@ import { ListItemButtonLink } from '../ui/link';
 import { mapaThemePrimaryPurple } from '../ui/theme';
 
 // The page names here must match what's in routes.tsx if we want the link to show as active
-const navigationItemsTier1 = [{ text: 'Home', path: '/', icon: <PublicIcon /> }];
+const navigationItemsTier1 = [
+	{ text: 'Pending Stalls', path: '/', icon: <HomeIcon /> },
+	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
+];
 
 interface UIMatchData {
 	name?: string;

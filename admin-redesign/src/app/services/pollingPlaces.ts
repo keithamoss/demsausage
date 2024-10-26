@@ -31,6 +31,12 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { election_id: electionId, ids: pollingPlaceIds },
 			}),
 		}),
+		getPollingPlaceBySearchTerm: builder.query<IPollingPlace[], { electionId: number; searchTerm: string }>({
+			query: ({ electionId, searchTerm }) => ({
+				url: 'polling_places/search/',
+				params: { election_id: electionId, search_term: searchTerm },
+			}),
+		}),
 		getPollingPlaceByStallIdLookup: builder.query<IPollingPlace, number>({
 			query: (stallId) => ({
 				url: 'polling_places/stall_lookup/',
@@ -44,5 +50,7 @@ export const {
 	useGetPollingPlaceByLatLonLookupQuery,
 	useGetPollingPlaceByUniqueDetailsLookupQuery,
 	useGetPollingPlaceByIdsLookupQuery,
+	useGetPollingPlaceBySearchTermQuery,
+	useLazyGetPollingPlaceBySearchTermQuery,
 	useGetPollingPlaceByStallIdLookupQuery,
 } = pollingPlacesApi;
