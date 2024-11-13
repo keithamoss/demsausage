@@ -147,6 +147,25 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
 
         fields = ("noms", "name", "description", "opening_hours", "favourited", "website", "extra_info", "first_report", "latest_report", "source", "polling_place")
 
+    def _check_noms_validity(self, validated_data):
+        if ("noms" in validated_data and len(validated_data["noms"]) == 0) or "noms" not in validated_data:
+            raise serializers.ValidationError("Polling place noms validation error: Noms cannot be empty")
+    
+        if "noms" in validated_data:
+            if "nothing" in validated_data["noms"] and len(validated_data["noms"]) > 1:
+                raise serializers.ValidationError("Polling place noms validation error: 'Red Cross of Shame' cannot be mixed with other types of noms")
+
+            if "run_out" in validated_data["noms"] and len(validated_data["noms"]) < 2:
+                raise serializers.ValidationError("Polling place noms validation error: 'Run Out' requires at least one other type of noms")
+
+    def update(self, instance, validated_data):
+        self._check_noms_validity(validated_data)
+        return super(PollingPlaceNomsSerializer, self).update(instance, validated_data)
+
+    def create(self, validated_data):
+        self._check_noms_validity(validated_data)
+        return super(PollingPlaceNomsSerializer, self).create(validated_data)
+
 
 class PollingPlacesSerializer(serializers.ModelSerializer):
     chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)

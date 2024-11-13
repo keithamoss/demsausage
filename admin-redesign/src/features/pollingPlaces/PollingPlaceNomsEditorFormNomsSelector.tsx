@@ -1,6 +1,7 @@
 import {
 	Avatar,
 	Checkbox,
+	Divider,
 	FormControl,
 	FormGroup,
 	List,
@@ -13,11 +14,11 @@ import {
 import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { useMemo } from 'react';
-import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
-import type { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
-import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
-import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
-import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
+import { FormFieldValidationErrorMessageOnly } from '../../app/forms/formHelpers';
+import type { StallFoodOptions, StallFoodOptionsErrors } from '../../app/services/stalls';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
+import { mapaThemePrimaryGrey } from '../../app/ui/theme';
+import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../icons/iconHelpers';
 
 interface Props {
 	foodOptions: StallFoodOptions;
@@ -25,7 +26,7 @@ interface Props {
 	errors: StallFoodOptionsErrors | undefined;
 }
 
-export default function AddStallFormFoodOptionsSelector(props: Props) {
+export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 	const { foodOptions, onChange, errors } = props;
 
 	// ######################
@@ -37,6 +38,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 		if (foodOptions[foodOptionName] === undefined) {
 			return onChange({ ...foodOptions, [foodOptionName]: true });
 		}
+
 		const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
 		return onChange(rest);
 	};
@@ -48,8 +50,9 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 					return onChange({ ...foodOptions, free_text: e.target.value });
 				}
 
-				// Ensures we remove 'free_text' from the list of noms when it's empty
 				const { free_text, ...rest } = foodOptions;
+
+				// Ensures we remove 'free_text' from the list of noms when it's empty
 				return onChange(rest);
 			}, 500),
 		[foodOptions, onChange],
@@ -80,6 +83,39 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 							// bgcolor: 'background.paper',
 						}}
 					>
+						<ListItem
+							secondaryAction={
+								<Checkbox
+									value={supportingIcons.red_cross.value}
+									checked={foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true}
+									onChange={onClickFoodOption(supportingIcons.red_cross.value as keyof StallFoodOptions)}
+									edge="end"
+									inputProps={{ 'aria-labelledby': 'checkbox-list-secondary-label-red-cross-of-shame' }}
+								/>
+							}
+							disablePadding
+						>
+							<ListItemButton
+								onClick={onClickFoodOption(supportingIcons.red_cross.value as keyof StallFoodOptions)}
+								sx={{ pl: 0 }}
+							>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.red_cross.value}
+										sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}
+									>
+										{supportingIcons.red_cross.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+								<ListItemText
+									id={'checkbox-list-secondary-label-red-cross-of-shame'}
+									primary={supportingIcons.red_cross.label}
+								/>
+							</ListItemButton>
+						</ListItem>
+
+						<Divider />
+
 						{getAllFoodsAvailableOnStalls().map((option) => {
 							const labelId = `checkbox-list-secondary-label-${option.value}`;
 							return (
@@ -107,6 +143,37 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 								</ListItem>
 							);
 						})}
+
+						<ListItem
+							secondaryAction={
+								<Checkbox
+									value={supportingIcons.yellow_minus.value}
+									checked={foodOptions[supportingIcons.yellow_minus.value as keyof StallFoodOptions] === true}
+									onChange={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
+									edge="end"
+									inputProps={{ 'aria-labelledby': 'checkbox-list-secondary-label-run-out' }}
+								/>
+							}
+							disablePadding
+						>
+							<ListItemButton
+								onClick={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
+								sx={{ pl: 0 }}
+							>
+								<ListItemAvatar>
+									<Avatar
+										alt={supportingIcons.yellow_minus.value}
+										sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}
+									>
+										{supportingIcons.yellow_minus.icon.react}
+									</Avatar>
+								</ListItemAvatar>
+								<ListItemText
+									id={'checkbox-list-secondary-label-run-out'}
+									primary={supportingIcons.yellow_minus.label}
+								/>
+							</ListItemButton>
+						</ListItem>
 					</List>
 				</FormGroup>
 			</FormControl>

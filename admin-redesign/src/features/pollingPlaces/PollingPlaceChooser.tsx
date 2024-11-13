@@ -7,6 +7,8 @@ import {
 	InputAdornment,
 	InputLabel,
 	LinearProgress,
+	List,
+	ListItem,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
@@ -15,18 +17,23 @@ import {
 	type SelectChangeEvent,
 	Stack,
 	debounce,
+	styled,
 	useTheme,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { skipToken } from '@reduxjs/toolkit/query';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
-import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
+import {
+	navigateToPollingPlaceEditFromSearchScreen,
+	navigateToPollingPlaceSearch,
+	navigateToPollingPlaceSearchResults,
+} from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
+import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
-import { useLazyGetPollingPlaceBySearchTermQuery } from '../../app/services/pollingPlaces';
-import { navigateToPollingPlaceEdit } from '../app/routing/navigationHelpers/navigationHelpersPollingPlace';
+import { useGetPollingPlaceBySearchTermQuery } from '../../app/services/pollingPlaces';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
@@ -38,9 +45,6 @@ const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
-	'& h3:first-of-type': {
-		marginTop: theme.spacing(1),
-	},
 }));
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
@@ -93,6 +97,10 @@ function EntrypointLayer2(props: PropsEntrypointLayer2) {
 	}
 }
 
+interface LocationState {
+	disableAutoFocus?: boolean;
+}
+
 interface Props {
 	elections: Election[];
 	election: Election;
@@ -105,12 +113,29 @@ function PollingPlaceChooser(props: Props) {
 
 	const params = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const [localSearchTerm, setLocalSearchTerm] = useState('');
+	const [isUserTyping, setIsUserTyping] = useState(false);
+
+	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
+
+	const disableAutoFocus = (location.state as LocationState)?.disableAutoFocus === true;
+
+	if (isUserTyping === false && localSearchTerm !== urlSearchTerm) {
+		// When the user navigates back/forward, or reloads the page, we
+		// just need to handle setting the search term based on what's in
+		// the URL of the page.
+		setLocalSearchTerm(urlSearchTerm);
+	}
 
 	const onChooseElection = useCallback(
-		() => (e: SelectChangeEvent<number | string>) => {
+		(e: SelectChangeEvent<number | string>) => {
 			const electionId = Number.parseInt(`${e.target.value}`);
+
 			if (Number.isNaN(electionId) === false) {
 				const election = elections.find((e) => e.id === electionId);
+
 				if (election !== undefined) {
 					navigate(`/polling-places/${election.name_url_safe}/`);
 				}
@@ -120,31 +145,8 @@ function PollingPlaceChooser(props: Props) {
 	);
 
 	// ######################
-	// Polling Place Query
-	// ######################
-	const [
-		trigger,
-		{
-			isFetching: isFetchingPollingPlacesBySearchTerm,
-			isSuccess: isSuccessFetchingPollingPlacesBySearchTerm,
-			error: errorFetchingPollingPlacesBySearchTerm,
-			data: pollingPlaceBySearchTermResult,
-		},
-	] = useLazyGetPollingPlaceBySearchTermQuery();
-
-	const onChoosePollingPlace = useCallback(
-		(pollingPlace: IPollingPlace) => navigateToPollingPlaceEdit(params, navigate, pollingPlace),
-		[navigate, params],
-	);
-	// ######################
-	// Polling Place Query (End)
-	// ######################
-
-	// ######################
 	// Search Field
 	// ######################
-	const [localSearchTerm, setLocalSearchTerm] = useState('');
-
 	const searchFieldRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
 
 	const debouncedNavigateOnSearchTermChange = useMemo(
@@ -154,129 +156,143 @@ function PollingPlaceChooser(props: Props) {
 					return;
 				}
 
-				trigger({ electionId: election.id, searchTerm });
-			}, 400),
-		[trigger, election.id],
-	);
+				setIsUserTyping(false);
 
+				navigateToPollingPlaceSearchResults(params, navigate, searchTerm);
+			}, 400),
+		[params, navigate],
+	);
 	const onChangeSearchField = useCallback(
 		(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 			debouncedNavigateOnSearchTermChange(event.target.value);
+			setIsUserTyping(true);
 			setLocalSearchTerm(event.target.value);
 		},
 		[debouncedNavigateOnSearchTermChange],
 	);
 
-	const onKeyUpSearchField = useCallback(
-		(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-			if (
-				event.key === 'Enter' &&
-				(event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement)
-			) {
-				event.target.blur();
-
-				if (isSearchingYet(event.target.value) === true) {
-					trigger({ electionId: election.id, searchTerm: event.target.value });
-				}
-			}
-		},
-		[trigger, election.id],
-	);
+	// Pretty sure there's no need to trigger a search query here, as that's taken care of with the logic elsewhere in this component. So all we need to do is blur (i.e. take focus away from the input) to meet user expectations on how search boxes behave.
+	const onKeyUpSearchField = useCallback((event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		if (
+			event.key === 'Enter' &&
+			(event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement)
+		) {
+			event.target.blur();
+		}
+	}, []);
 
 	const onClearSearchBar = useCallback(() => {
-		setLocalSearchTerm('');
+		navigateToPollingPlaceSearch(params, navigate);
 
 		if (searchFieldRef.current !== null && document.activeElement !== searchFieldRef.current) {
 			searchFieldRef.current.focus();
 		}
-	}, []);
+	}, [params, navigate]);
 	// ######################
 	// Search Field (End)
 	// ######################
 
+	// ######################
+	// Polling Place Query
+	// ######################
+	const {
+		data: pollingPlaceBySearchTermResult,
+		error: errorFetchingPollingPlacesBySearchTerm,
+		isFetching: isFetchingPollingPlacesBySearchTerm,
+		isSuccess: isSuccessFetchingPollingPlacesBySearchTerm,
+	} = useGetPollingPlaceBySearchTermQuery(
+		isSearchingYet(urlSearchTerm) === true ? { electionId: election.id, searchTerm: urlSearchTerm } : skipToken,
+	);
+
+	const onChoosePollingPlace = useCallback(
+		(pollingPlace: IPollingPlace) => navigateToPollingPlaceEditFromSearchScreen(params, navigate, pollingPlace),
+		[navigate, params],
+	);
+	// ######################
+	// Polling Place Query (End)
+	// ######################
+
 	return (
-		<React.Fragment>
-			<Helmet>
-				<title>Polling Places | Democracy Sausage</title>
-			</Helmet>
+		<PageWrapper>
+			<FormControl fullWidth sx={{ mb: 3 }}>
+				<InputLabel id="choose-an-election">Choose an election</InputLabel>
 
-			<PageWrapper>
-				<FormControl fullWidth sx={{ mb: 3 }}>
-					<InputLabel id="choose-an-election">Choose an election</InputLabel>
+				<Select labelId="choose-an-election" value={election.id} label="Choose an election" onChange={onChooseElection}>
+					{elections.map((e) => (
+						<MenuItem key={e.id} value={e.id}>
+							<div style={{ display: 'flex', alignItems: 'center' }}>
+								<ListItemIcon sx={{ minWidth: 36 }}>
+									{getJurisdictionCrestCircleReact(e.jurisdiction, {
+										width: 36,
+										height: 36,
+										paddingRight: theme.spacing(1),
+									})}
+								</ListItemIcon>
+								<ListItemText primary={e.name} />
+							</div>
+						</MenuItem>
+					))}
+				</Select>
+			</FormControl>
 
-					<Select
-						labelId="choose-an-election"
-						value={election.id}
-						label="Choose an election"
-						onChange={onChooseElection}
-					>
-						{elections.map((e) => (
-							<MenuItem key={e.id} value={e.id}>
-								<div style={{ display: 'flex', alignItems: 'center' }}>
-									<ListItemIcon sx={{ minWidth: 36 }}>
-										{getJurisdictionCrestCircleReact(e.jurisdiction, {
-											width: 36,
-											height: 36,
-											paddingRight: theme.spacing(1),
-										})}
-									</ListItemIcon>
-									<ListItemText primary={e.name} />
-								</div>
-							</MenuItem>
+			<FormControl fullWidth sx={{ mb: 2 }}>
+				<InputLabel htmlFor="input-search-for-polling-place">Search for a polling place</InputLabel>
+
+				<OutlinedInput
+					id="input-search-for-polling-place"
+					inputRef={searchFieldRef}
+					value={localSearchTerm}
+					onChange={onChangeSearchField}
+					onKeyUp={onKeyUpSearchField}
+					autoFocus={disableAutoFocus !== true}
+					endAdornment={
+						localSearchTerm.length > 0 ? (
+							<InputAdornment position="end">
+								<IconButton edge="end" onClick={onClearSearchBar}>
+									<Close />
+								</IconButton>
+							</InputAdornment>
+						) : undefined
+					}
+					inputProps={{ spellCheck: false }}
+					label="Search for a polling place"
+				/>
+
+				{isFetchingPollingPlacesBySearchTerm === true && <LinearProgress color="secondary" />}
+			</FormControl>
+
+			{/* Handles not found and all other types of error */}
+			{errorFetchingPollingPlacesBySearchTerm !== undefined && (
+				<Alert severity="error">
+					<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
+					Something went awry while searching for polling places.
+				</Alert>
+			)}
+
+			{isFetchingPollingPlacesBySearchTerm === false &&
+				isSuccessFetchingPollingPlacesBySearchTerm === true &&
+				pollingPlaceBySearchTermResult !== undefined && (
+					<Stack spacing={1}>
+						{pollingPlaceBySearchTermResult.length === 0 && (
+							<List disablePadding>
+								<ListItem>
+									<ListItemText primary="No results found" />
+								</ListItem>
+							</List>
+						)}
+
+						{pollingPlaceBySearchTermResult.map((pollingPlace) => (
+							<SearchResultsPollingPlaceCard
+								key={pollingPlace.id}
+								pollingPlace={pollingPlace}
+								searchTerm={localSearchTerm}
+								onChoosePollingPlaceLabel="Select Polling Place"
+								onChoosePollingPlace={onChoosePollingPlace}
+							/>
 						))}
-					</Select>
-				</FormControl>
-
-				<FormControl fullWidth sx={{ mb: 2 }}>
-					<InputLabel htmlFor="input-search-for-polling-place">Search for a polling place</InputLabel>
-
-					<OutlinedInput
-						id="input-search-for-polling-place"
-						inputRef={searchFieldRef}
-						value={localSearchTerm}
-						onChange={onChangeSearchField}
-						onKeyUp={onKeyUpSearchField}
-						autoFocus={true}
-						endAdornment={
-							localSearchTerm.length > 0 ? (
-								<InputAdornment position="end">
-									<IconButton edge="end" onClick={onClearSearchBar}>
-										<Close />
-									</IconButton>
-								</InputAdornment>
-							) : undefined
-						}
-						label="Search for a polling place"
-					/>
-
-					{isFetchingPollingPlacesBySearchTerm === true && <LinearProgress color="secondary" />}
-				</FormControl>
-
-				{/* Handles not found and all other types of error */}
-				{errorFetchingPollingPlacesBySearchTerm !== undefined && (
-					<Alert severity="error">
-						<AlertTitle>Sorry, we&lsquo;ve hit a snag</AlertTitle>
-						Something went awry while searching for polling places.
-					</Alert>
+					</Stack>
 				)}
-
-				{isFetchingPollingPlacesBySearchTerm === false &&
-					isSuccessFetchingPollingPlacesBySearchTerm === true &&
-					pollingPlaceBySearchTermResult !== undefined && (
-						<Stack spacing={1}>
-							{pollingPlaceBySearchTermResult.map((pollingPlace) => (
-								<SearchResultsPollingPlaceCard
-									key={pollingPlace.id}
-									pollingPlace={pollingPlace}
-									searchTerm={localSearchTerm}
-									onChoosePollingPlaceLabel="Select Polling Place"
-									onChoosePollingPlace={onChoosePollingPlace}
-								/>
-							))}
-						</Stack>
-					)}
-			</PageWrapper>
-		</React.Fragment>
+		</PageWrapper>
 	);
 }
 

@@ -10,7 +10,7 @@ export interface IPollingPlaceNoms {
 	run_out?: boolean;
 }
 
-export interface IPollingPlaceStall {
+export interface IPollingPlaceStallModifiableProps {
 	noms: IPollingPlaceNoms;
 	name: string;
 	description: string;
@@ -18,9 +18,12 @@ export interface IPollingPlaceStall {
 	favourited: boolean;
 	website: string;
 	extra_info: string;
+	source: string;
+}
+
+export interface IPollingPlaceStall extends IPollingPlaceStallModifiableProps {
 	first_report: string | null; // Datetime
 	latest_report: string | null; // Datetime
-	source: string;
 }
 
 export type IPollingPlaceStallGeoJSON = Omit<IPollingPlaceStall, 'noms'> & {

@@ -1,5 +1,8 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import type { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type {
+	IPollingPlace,
+	IPollingPlaceStallModifiableProps,
+} from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export const pollingPlacesAdapter = createEntityAdapter<IPollingPlace>();
@@ -43,6 +46,25 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { stall_id: stallId },
 			}),
 		}),
+		addOrEditPollingBoothNoms: builder.mutation<
+			void,
+			{ pollingPlaceId: number; stall: Partial<IPollingPlaceStallModifiableProps> }
+		>({
+			query: ({ pollingPlaceId, stall }) => ({
+				url: `polling_places/${pollingPlaceId}/`,
+				method: 'PATCH',
+				body: {
+					id: pollingPlaceId,
+					stall,
+				},
+			}),
+		}),
+		deletePollingBoothNoms: builder.mutation<void, number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/delete_polling_place_noms/`,
+				method: 'DELETE',
+			}),
+		}),
 	}),
 });
 
@@ -53,4 +75,6 @@ export const {
 	useGetPollingPlaceBySearchTermQuery,
 	useLazyGetPollingPlaceBySearchTermQuery,
 	useGetPollingPlaceByStallIdLookupQuery,
+	useAddOrEditPollingBoothNomsMutation,
+	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;

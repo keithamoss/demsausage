@@ -152,8 +152,7 @@ export const stallsApi = api.injectEndpoints({
 			}),
 		}),
 		addStall: builder.mutation<
-			// biome-ignore lint/complexity/noBannedTypes: <explanation>
-			{},
+			void,
 			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
 		>({
 			query: (stall) => ({
@@ -162,8 +161,7 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
-		// biome-ignore lint/complexity/noBannedTypes: <explanation>
-		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
+		updateStallWithCredentials: builder.mutation<void, Stall & { token: string; signature: string }>({
 			query: (stall) => ({
 				url: `stalls/${stall.id}/update_and_resubmit/`,
 				method: 'PATCH',

@@ -11,7 +11,7 @@ from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
                                     PollingPlacesNearbyFilter,
                                     PollingPlacesSearchFilter)
 from demsausage.app.models import (Elections, PollingPlaceFacilityType,
-                                   PollingPlaces, Stalls)
+                                   PollingPlaceNoms, PollingPlaces, Stalls)
 from demsausage.app.permissions import (AnonymousOnlyGET,
                                         StallEditingPermissions)
 from demsausage.app.renderers import PNGRenderer
@@ -275,6 +275,27 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
                 response["Content-Disposition"] = "attachment; filename={}".format(filename)
 
         return response
+
+    @action(detail=True, methods=["delete"])
+    @transaction.atomic
+    def delete_polling_place_noms(self, request, pk=None, format=None):
+        pollingPlace = self.get_object()
+
+        if pollingPlace.noms is not None:
+            pollingPlaceNomsId = pollingPlace.noms.id
+
+            # First up, detach the Noms record from the Polling Place
+            pollingPlace.noms = None
+            pollingPlace.save()
+
+            # Second, delete the Noms record itself
+            PollingPlaceNoms.objects.get(pk=pollingPlaceNomsId).delete()
+
+            # Regenerate the election data here because the @post_delete signal 
+            # won't know the election_id once the record is deleted
+            task_regenerate_cached_election_data.delay(election_id=pollingPlace.election_id)
+
+        return Response()
 
     @action(detail=False, methods=["get"])
     def without_facility_type(self, request, format=None):
