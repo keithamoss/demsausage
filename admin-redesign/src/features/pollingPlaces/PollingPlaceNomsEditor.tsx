@@ -1,4 +1,5 @@
-import { Alert, AlertTitle, styled } from '@mui/material';
+import { ArrowBack, History } from '@mui/icons-material';
+import { Alert, AlertTitle, Box, Button, Card, CardContent, Typography, styled } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
@@ -16,12 +17,17 @@ import {
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { selectAllElections } from '../elections/electionsSlice';
 import PollingPlaceNomsEditorForm from './PollingPlaceNomsEditorForm';
+import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
 import type { IPollingPlace, IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
 
 const PageWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(1),
-	paddingLeft: theme.spacing(1),
-	paddingRight: theme.spacing(1),
+	paddingTop: theme.spacing(2),
+	paddingLeft: theme.spacing(2),
+	paddingRight: theme.spacing(2),
+}));
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+	paddingBottom: `${theme.spacing(2)} !important`,
 }));
 
 function EntrypointLayer1() {
@@ -163,9 +169,39 @@ function PollingPlaceNomsEditor(props: Props) {
 
 	return (
 		<PageWrapper>
+			<Card variant="outlined">
+				<StyledCardContent>
+					<Box>
+						<Typography
+							variant="h5"
+							component="div"
+							sx={{
+								fontSize: 16,
+								fontWeight: 500,
+							}}
+						>
+							{getPollingPlaceNameForFormHeading(pollingPlace)}
+						</Typography>
+
+						<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+							{pollingPlace.address}
+						</Typography>
+					</Box>
+				</StyledCardContent>
+			</Card>
+
+			<Box sx={{ pt: 2 }}>
+				<Button variant="outlined" size="small" onClick={onClickBack} startIcon={<ArrowBack />}>
+					Back
+				</Button>
+
+				<Button variant="outlined" size="small" onClick={() => {}} startIcon={<History />} sx={{ ml: 1 }}>
+					History
+				</Button>
+			</Box>
+
 			<PollingPlaceNomsEditorForm
 				pollingPlace={pollingPlace}
-				onClickBack={onClickBack}
 				onDoneCreatingOrEditing={onDoneCreatingOrEditing}
 				isSaving={isAddingOrEditingPollingPlaceNomsLoading}
 				onDelete={onDelete}

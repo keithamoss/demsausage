@@ -1,7 +1,6 @@
 import {
 	Avatar,
 	Checkbox,
-	Divider,
 	FormControl,
 	FormGroup,
 	List,
@@ -28,6 +27,8 @@ interface Props {
 
 export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 	const { foodOptions, onChange, errors } = props;
+
+	const isRedCrossOfShameChosen = foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true;
 
 	// ######################
 	// Food Options
@@ -67,7 +68,7 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 				gutterBottom
 				variant="h6"
 				component="div"
-				sx={{ mt: 1, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
+				sx={{ mt: 0, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
 				What&apos;s on offer?
 			</Typography>
@@ -79,15 +80,85 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 						sx={{
 							width: '100%',
 							pt: 0,
+							pb: 0,
 							// marginBottom: 1,
 							// bgcolor: 'background.paper',
 						}}
 					>
+						{isRedCrossOfShameChosen === false && (
+							<React.Fragment>
+								{getAllFoodsAvailableOnStalls().map((option) => {
+									const labelId = `checkbox-list-secondary-label-${option.value}`;
+									return (
+										<ListItem
+											key={option.value}
+											secondaryAction={
+												<Checkbox
+													value={option.value}
+													checked={foodOptions[option.value as keyof StallFoodOptions] === true}
+													onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
+													edge="end"
+													inputProps={{ 'aria-labelledby': labelId }}
+												/>
+											}
+											disablePadding
+										>
+											<ListItemButton
+												onClick={onClickFoodOption(option.value as keyof StallFoodOptions)}
+												sx={{ pl: 0 }}
+											>
+												<ListItemAvatar>
+													<Avatar
+														alt={option.value}
+														sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}
+													>
+														{option.icon.react}
+													</Avatar>
+												</ListItemAvatar>
+												<ListItemText id={labelId} primary={option.label} />
+											</ListItemButton>
+										</ListItem>
+									);
+								})}
+
+								<ListItem
+									secondaryAction={
+										<Checkbox
+											value={supportingIcons.yellow_minus.value}
+											checked={foodOptions[supportingIcons.yellow_minus.value as keyof StallFoodOptions] === true}
+											onChange={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
+											edge="end"
+											inputProps={{ 'aria-labelledby': 'checkbox-list-secondary-label-run-out' }}
+										/>
+									}
+									disablePadding
+								>
+									<ListItemButton
+										onClick={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
+										sx={{ pl: 0 }}
+									>
+										<ListItemAvatar>
+											<Avatar
+												alt={supportingIcons.yellow_minus.value}
+												sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}
+											>
+												{supportingIcons.yellow_minus.icon.react}
+											</Avatar>
+										</ListItemAvatar>
+										<ListItemText
+											id={'checkbox-list-secondary-label-run-out'}
+											primary={supportingIcons.yellow_minus.label}
+										/>
+									</ListItemButton>
+								</ListItem>
+							</React.Fragment>
+						)}
+
 						<ListItem
 							secondaryAction={
 								<Checkbox
 									value={supportingIcons.red_cross.value}
-									checked={foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true}
+									checked={isRedCrossOfShameChosen}
 									onChange={onClickFoodOption(supportingIcons.red_cross.value as keyof StallFoodOptions)}
 									edge="end"
 									inputProps={{ 'aria-labelledby': 'checkbox-list-secondary-label-red-cross-of-shame' }}
@@ -113,85 +184,28 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 								/>
 							</ListItemButton>
 						</ListItem>
-
-						<Divider />
-
-						{getAllFoodsAvailableOnStalls().map((option) => {
-							const labelId = `checkbox-list-secondary-label-${option.value}`;
-							return (
-								<ListItem
-									key={option.value}
-									secondaryAction={
-										<Checkbox
-											value={option.value}
-											checked={foodOptions[option.value as keyof StallFoodOptions] === true}
-											onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
-											edge="end"
-											inputProps={{ 'aria-labelledby': labelId }}
-										/>
-									}
-									disablePadding
-								>
-									<ListItemButton onClick={onClickFoodOption(option.value as keyof StallFoodOptions)} sx={{ pl: 0 }}>
-										<ListItemAvatar>
-											<Avatar alt={option.value} sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}>
-												{option.icon.react}
-											</Avatar>
-										</ListItemAvatar>
-										<ListItemText id={labelId} primary={option.label} />
-									</ListItemButton>
-								</ListItem>
-							);
-						})}
-
-						<ListItem
-							secondaryAction={
-								<Checkbox
-									value={supportingIcons.yellow_minus.value}
-									checked={foodOptions[supportingIcons.yellow_minus.value as keyof StallFoodOptions] === true}
-									onChange={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
-									edge="end"
-									inputProps={{ 'aria-labelledby': 'checkbox-list-secondary-label-run-out' }}
-								/>
-							}
-							disablePadding
-						>
-							<ListItemButton
-								onClick={onClickFoodOption(supportingIcons.yellow_minus.value as keyof StallFoodOptions)}
-								sx={{ pl: 0 }}
-							>
-								<ListItemAvatar>
-									<Avatar
-										alt={supportingIcons.yellow_minus.value}
-										sx={{ backgroundColor: 'transparent', '& svg': standaloneIconSize }}
-									>
-										{supportingIcons.yellow_minus.icon.react}
-									</Avatar>
-								</ListItemAvatar>
-								<ListItemText
-									id={'checkbox-list-secondary-label-run-out'}
-									primary={supportingIcons.yellow_minus.label}
-								/>
-							</ListItemButton>
-						</ListItem>
 					</List>
 				</FormGroup>
 			</FormControl>
 
-			{/* We can't use <Controller /> here because `control` has a different type for the Owner and TipOff form */}
-			<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
-				<FormGroup>
-					<TextFieldWithout1Password
-						label="Anything else?"
-						helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
-						sx={{ mt: 1 }}
-						onChange={onChangeFreeTextFoodOption}
-					/>
-				</FormGroup>
-			</FormControl>
+			{isRedCrossOfShameChosen === false && (
+				<React.Fragment>
+					{/* We can't use <Controller /> here because `control` has a different type for the Owner and TipOff form */}
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<TextFieldWithout1Password
+								label="Anything else?"
+								helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
+								sx={{ mt: 1 }}
+								onChange={onChangeFreeTextFoodOption}
+							/>
+						</FormGroup>
+					</FormControl>
 
-			{errors !== undefined && errors.message !== undefined && (
-				<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
+					{errors !== undefined && errors.message !== undefined && (
+						<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
+					)}
+				</React.Fragment>
 			)}
 		</React.Fragment>
 	);
