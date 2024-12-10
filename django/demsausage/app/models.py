@@ -110,7 +110,9 @@ class PollingPlaceNoms(models.Model):
     first_report = models.DateTimeField(auto_now_add=True, null=True)
     latest_report = models.DateTimeField(auto_now=True, null=True)
     source = models.TextField(blank=True)
+    deleted = models.BooleanField(default=False)
 
+    history = HistoricalRecords()
     tracker = FieldTracker()
 
     class Meta:

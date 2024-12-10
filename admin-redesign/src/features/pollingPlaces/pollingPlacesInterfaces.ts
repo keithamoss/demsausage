@@ -79,6 +79,32 @@ export interface IPollingPlaceStubForStalls {
 	state: string;
 }
 
+export enum eNomsHistoryChangeReason {
+	APPROVED_STALL = 'Approved stall',
+	EDITED_DIRECTLY = 'Edited directly',
+	DELETED_DIRECTLY = 'Deleted directly',
+}
+
+export enum eNomsHistoryChangeType {
+	ADDED = '+',
+	EDITED = '~',
+	DELETED = '-',
+}
+
+export interface IPollingPlaceNomsHistory {
+	history_id: number;
+	history_date: string; // ISO27001 date
+	history_change_reason: eNomsHistoryChangeReason;
+	history_type: eNomsHistoryChangeType;
+	history_user_name: string;
+	changed_fields?: string[];
+	changes?: {
+		field: string;
+		old: unknown;
+		new: unknown;
+	}[];
+}
+
 export interface IMapFilterSettings extends Omit<IPollingPlaceNoms, 'free_text' | 'nothing' | 'run_out'> {}
 
 export interface IMapPollingGeoJSONNoms extends Omit<IPollingPlaceNoms, 'free_text'> {

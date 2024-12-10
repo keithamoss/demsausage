@@ -1,6 +1,7 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import type {
 	IPollingPlace,
+	IPollingPlaceNomsHistory,
 	IPollingPlaceStallModifiableProps,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
@@ -46,6 +47,11 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { stall_id: stallId },
 			}),
 		}),
+		getPollingPlaceNomsHistoryById: builder.query<IPollingPlaceNomsHistory[], number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/noms_history/`,
+			}),
+		}),
 		addOrEditPollingBoothNoms: builder.mutation<
 			void,
 			{ pollingPlaceId: number; stall: Partial<IPollingPlaceStallModifiableProps> }
@@ -75,6 +81,7 @@ export const {
 	useGetPollingPlaceBySearchTermQuery,
 	useLazyGetPollingPlaceBySearchTermQuery,
 	useGetPollingPlaceByStallIdLookupQuery,
+	useGetPollingPlaceNomsHistoryByIdQuery,
 	useAddOrEditPollingBoothNomsMutation,
 	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;

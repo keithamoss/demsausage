@@ -16,6 +16,12 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from django.contrib.auth.models import User
 
 
+class HistoricalRecordField(serializers.ListField):
+    child = serializers.DictField()
+
+    def to_representation(self, data):
+        return super().to_representation(data.values())
+
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
@@ -129,7 +135,6 @@ class PollingPlaceFacilityTypeSerializer(serializers.ModelSerializer):
 
         fields = ("name",)
 
-
 class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     noms = JSONSchemaField(noms_schema, default=dict)
     name = serializers.CharField(default="", allow_blank=True)
@@ -141,6 +146,12 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     first_report = serializers.DateTimeField(allow_null=True, read_only=True)
     latest_report = serializers.DateTimeField(allow_null=True, read_only=True)
     source = serializers.CharField(default="", allow_blank=True)
+
+    # Important! Ensure records flagged as deleted aren't surfaced anywhere
+    # This seems like the best way to do it? It seems fiddly / impossible to do it
+    # at query-level in get_active_polling_place_queryset()
+    def to_representation(self, obj):
+        return super().to_representation(obj) if obj.deleted is False else None
 
     class Meta:
         model = PollingPlaceNoms
@@ -165,6 +176,16 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         self._check_noms_validity(validated_data)
         return super(PollingPlaceNomsSerializer, self).create(validated_data)
+
+
+# Ref: https://stackoverflow.com/a/47717079/7368493
+class PollingPlaceNomsWithHistorySerializer(PollingPlaceNomsSerializer):
+    history = HistoricalRecordField(read_only=True)
+
+    class Meta:
+        model = PollingPlaceNoms
+
+        fields = PollingPlaceNomsSerializer.Meta.fields + ("history",)
 
 
 class PollingPlacesSerializer(serializers.ModelSerializer):

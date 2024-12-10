@@ -7,6 +7,7 @@ import PendingStalls from '../../features/pendingStalls/PendingStalls';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
 import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNomsEditor';
+import PollingPlaceNomsHistory from '../../features/pollingPlaces/PollingPlaceNomsHistory';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -30,14 +31,19 @@ export const router = sentryCreateBrowserRouter([
 					name: 'Polling Places',
 				}),
 				children: [
+					// Root page: Redirects to the current default election
 					{
 						path: '/polling-places/:election_name?/',
 						element: <PollingPlaceChooser />,
 					},
+					// Polling place search interface
 					{
 						path: '/polling-places/:election_name/search/:search_term/',
 						element: <PollingPlaceChooser />,
 					},
+					// ############################
+					// Polling Places Noms Editor
+					// ############################
 					{
 						path: '/polling-places/:election_name/search/:search_term/:polling_place_id/',
 						element: <PollingPlaceNomsEditor />,
@@ -45,6 +51,17 @@ export const router = sentryCreateBrowserRouter([
 					{
 						path: '/polling-places/:election_name/:polling_place_id/',
 						element: <PollingPlaceNomsEditor />,
+					},
+					// ############################
+					// Polling Places Noms History
+					// ############################
+					{
+						path: '/polling-places/:election_name/search/:search_term/:polling_place_id/history/',
+						element: <PollingPlaceNomsHistory />,
+					},
+					{
+						path: '/polling-places/:election_name/:polling_place_id/history/',
+						element: <PollingPlaceNomsHistory />,
 					},
 				],
 			},

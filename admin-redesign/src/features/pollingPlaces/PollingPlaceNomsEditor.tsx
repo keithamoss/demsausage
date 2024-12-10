@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
 import { useAppSelector } from '../../app/hooks';
 import {
+	navigateToPollingPlaceHistory,
 	navigateToPollingPlaceSearch,
 	navigateToPollingPlaceSearchResultsFromURLSearchTerm,
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
@@ -163,6 +164,10 @@ function PollingPlaceNomsEditor(props: Props) {
 			navigateToPollingPlaceSearch(params, navigate);
 		}
 	}, [urlSearchTerm, params, navigate]);
+
+	const onClickHistory = useCallback(() => {
+		navigateToPollingPlaceHistory(params, navigate, pollingPlace);
+	}, [params, navigate, pollingPlace]);
 	// ######################
 	// Navigation (End)
 	// ######################
@@ -195,7 +200,7 @@ function PollingPlaceNomsEditor(props: Props) {
 					Back
 				</Button>
 
-				<Button variant="outlined" size="small" onClick={() => {}} startIcon={<History />} sx={{ ml: 1 }}>
+				<Button variant="outlined" size="small" onClick={onClickHistory} startIcon={<History />} sx={{ ml: 1 }}>
 					History
 				</Button>
 			</Box>

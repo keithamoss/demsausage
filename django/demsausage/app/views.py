@@ -65,6 +65,7 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer
 from rq.job import Job
+from simple_history.utils import update_change_reason
 
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -248,7 +249,6 @@ class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericVie
     serializer_class = PollingPlaceFacilityTypeSerializer
     permission_classes = (IsAuthenticated,)
 
-
 class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     API endpoint that allows polling places to be viewed and edited.
@@ -276,24 +276,63 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
         return response
 
+    @transaction.atomic
+    def update(self, request, pk=None, *args, **kwargs):
+        pollingPlace = self.get_object()
+
+        # Note: This handles both Creates *and* Updates
+        response = super(PollingPlacesViewSet, self).update(request, pk, *args, **kwargs)
+
+        if pollingPlace.noms is None:
+            update_change_reason(self.get_object().noms, 'Added directly')
+        else:
+            update_change_reason(self.get_object().noms, 'Edited directly')
+
+        return response
+    
+    @action(detail=True, methods=["get"])
+    def noms_history(self, request, pk=None, format=None):
+        def get_user_name(userId):
+            user = User.objects.get(pk=record.history_user_id)
+            return f"{user.first_name} {user.last_name}" if user.first_name is not None and user.last_name is not None else "Unknown User"
+        
+        historyDiff = []
+        pollingPlace = self.get_object()
+
+        if pollingPlace.noms is not None:
+            history = pollingPlace.noms.history.all()
+            
+            for idx, record in enumerate(history):
+                deltaRecord = {
+                    "history_id": record.history_id,
+                    "history_date": record.history_date,
+                    "history_change_reason": record.history_change_reason,
+                    "history_type": record.history_type,
+                    "history_user_name": get_user_name(record.history_user_id)
+                    }
+                
+                if record.prev_record is not None:
+                    # Ref: https://django-simple-history.readthedocs.io/en/latest/history_diffing.html
+                    delta = record.diff_against(record.prev_record)
+
+                    deltaRecord.update({
+                        "changed_fields": delta.changed_fields,
+                        "changes": [{"field": i.field, "old": i.old, "new": i.new} for i in delta.changes],
+                    })
+                
+                historyDiff.append(deltaRecord)
+
+        return Response(historyDiff)
+    
     @action(detail=True, methods=["delete"])
     @transaction.atomic
     def delete_polling_place_noms(self, request, pk=None, format=None):
         pollingPlace = self.get_object()
 
         if pollingPlace.noms is not None:
-            pollingPlaceNomsId = pollingPlace.noms.id
-
-            # First up, detach the Noms record from the Polling Place
-            pollingPlace.noms = None
-            pollingPlace.save()
-
-            # Second, delete the Noms record itself
-            PollingPlaceNoms.objects.get(pk=pollingPlaceNomsId).delete()
-
-            # Regenerate the election data here because the @post_delete signal 
-            # won't know the election_id once the record is deleted
-            task_regenerate_cached_election_data.delay(election_id=pollingPlace.election_id)
+            pollingPlace.noms.deleted = True
+            pollingPlace.noms._change_reason = 'Deleted directly'
+            pollingPlace.noms.save()
 
         return Response()
 

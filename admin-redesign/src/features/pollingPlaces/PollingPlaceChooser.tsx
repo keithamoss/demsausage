@@ -27,7 +27,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
 import {
-	navigateToPollingPlaceEditFromSearchScreen,
+	navigateToPollingPlaceEditorForm,
 	navigateToPollingPlaceSearch,
 	navigateToPollingPlaceSearchResults,
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
@@ -205,7 +205,7 @@ function PollingPlaceChooser(props: Props) {
 	);
 
 	const onChoosePollingPlace = useCallback(
-		(pollingPlace: IPollingPlace) => navigateToPollingPlaceEditFromSearchScreen(params, navigate, pollingPlace),
+		(pollingPlace: IPollingPlace) => navigateToPollingPlaceEditorForm(params, navigate, pollingPlace),
 		[navigate, params],
 	);
 	// ######################
