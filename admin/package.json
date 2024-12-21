@@ -25,7 +25,7 @@
     "react-google-maps": "^9.4.5",
     "react-is": "^18.3.1",
     "react-redux": "^9.1.2",
-    "react-router": "^7.0.1",
+    "react-router": "^7.1.0",
     "react-router-redux": "^4.0.8",
     "react-string-replace": "^1.1.1",
     "react-tiny-virtual-list": "^2.2.0",

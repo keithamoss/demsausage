@@ -1789,7 +1789,7 @@ __metadata:
     react-google-maps: "npm:^9.4.5"
     react-is: "npm:^18.3.1"
     react-redux: "npm:^9.1.2"
-    react-router: "npm:^7.0.1"
+    react-router: "npm:^7.1.0"
     react-router-redux: "npm:^4.0.8"
     react-string-replace: "npm:^1.1.1"
     react-tiny-virtual-list: "npm:^2.2.0"
@@ -4107,9 +4107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "react-router@npm:7.0.1"
+"react-router@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "react-router@npm:7.1.0"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^1.0.1"
@@ -4121,7 +4121,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/aac4c9989ae6b9cf989b5ddcda88f505ba0704a4e4b37ae04c819c2bd02f080361f9eb1793695e3ecf41080d91b79aee454c3163b586d1b19ceca13f6eacec0e
+  checksum: 10c0/c4f4c76dc885cb2b351575052417f0a95ad454ae7cc27f42e5dcde993697b206eab9f5eb3f9a3acb1284331d41f8667bd4d10e246d463c3debd7d4de3edaa50b
   languageName: node
   linkType: hard
 
