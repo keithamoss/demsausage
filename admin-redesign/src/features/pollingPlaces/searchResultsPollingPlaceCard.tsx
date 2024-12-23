@@ -11,7 +11,7 @@ import parse from 'autosuggest-highlight/parse';
 import React, { useCallback } from 'react';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { IconsFlexboxHorizontalSummaryRow } from '../icons/iconHelpers';
-import { getNomsIconsForPollingPlace } from './pollingPlaceSearchHelpers';
+import { getNomsIconsBar } from './pollingPlaceSearchHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
 
 interface Props {
@@ -45,7 +45,7 @@ export default function SearchResultsPollingPlaceCard(props: Props) {
 				<StyledCardContent>
 					{pollingPlace.stall !== null && (
 						<IconsFlexboxHorizontalSummaryRow>
-							{getNomsIconsForPollingPlace(pollingPlace, true, true)}
+							{getNomsIconsBar(pollingPlace.stall.noms, true, true)}
 						</IconsFlexboxHorizontalSummaryRow>
 					)}
 

@@ -1,12 +1,6 @@
-import { ArrowBack } from '@mui/icons-material';
-import EditIcon from '@mui/icons-material/Edit';
 import {
 	Alert,
 	AlertTitle,
-	Box,
-	Button,
-	Card,
-	CardContent,
 	LinearProgress,
 	List,
 	ListItem,
@@ -25,6 +19,7 @@ import {
 	navigateToPollingPlaceEditorForm,
 	navigateToPollingPlaceSearch,
 	navigateToPollingPlaceSearchResultsFromURLSearchTerm,
+	navigateToPollingPlaceStalls,
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { getIntegerParamOrUndefined, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
@@ -34,7 +29,7 @@ import {
 } from '../../app/services/pollingPlaces';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
-import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
+import { getPollingPlaceNavTabs, getPollingPlaceSummaryCardForHeading } from './pollingPlaceHelpers';
 import { getNomsHistoryChangeFieldsString, getNomsHistoryIcon } from './pollingPlaceNomsHistoryHelpers';
 import { type IPollingPlace, eNomsHistoryChangeType } from './pollingPlacesInterfaces';
 
@@ -46,10 +41,6 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const ContentWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-	paddingBottom: `${theme.spacing(2)} !important`,
 }));
 
 function EntrypointLayer1() {
@@ -146,42 +137,27 @@ function PollingPlaceNomsHistory(props: Props) {
 		() => navigateToPollingPlaceEditorForm(params, navigate, pollingPlace),
 		[params, navigate, pollingPlace],
 	);
+
+	const onClickGoToStalls = useCallback(() => {
+		navigateToPollingPlaceStalls(params, navigate, pollingPlace);
+	}, [params, navigate, pollingPlace]);
+
+	const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
+		if (newValue === 0) {
+			onClickGoToForm();
+		} else if (newValue === 2) {
+			onClickGoToStalls();
+		}
+	};
 	// ######################
 	// Navigation (End)
 	// ######################
 
 	return (
 		<PageWrapper>
-			<Card variant="outlined">
-				<StyledCardContent>
-					<Box>
-						<Typography
-							variant="h5"
-							component="div"
-							sx={{
-								fontSize: 16,
-								fontWeight: 500,
-							}}
-						>
-							{getPollingPlaceNameForFormHeading(pollingPlace)}
-						</Typography>
+			{getPollingPlaceSummaryCardForHeading(pollingPlace)}
 
-						<Typography color="text.secondary" sx={{ fontSize: 15 }}>
-							{pollingPlace.address}
-						</Typography>
-					</Box>
-				</StyledCardContent>
-			</Card>
-
-			<Box sx={{ pt: 2 }}>
-				<Button variant="outlined" size="small" onClick={onClickBack} startIcon={<ArrowBack />}>
-					Back
-				</Button>
-
-				<Button variant="outlined" size="small" onClick={onClickGoToForm} startIcon={<EditIcon />} sx={{ ml: 1 }}>
-					Form
-				</Button>
-			</Box>
+			{getPollingPlaceNavTabs('History', onClickBack, onTabChange)}
 
 			<ContentWrapper>
 				{isFetchingNomsHistory === true && <LinearProgress color="secondary" />}

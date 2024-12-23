@@ -344,7 +344,7 @@ class StallsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stalls
-        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "tipoff_source", "tipoff_source_other")
+        fields = ("id", "name", "description", "opening_hours", "website", "noms", "location_info", "email", "election", "polling_place", "status", "reported_timestamp", "submitter_type", "tipoff_source", "tipoff_source_other")
 
     def create(self, validated_data):
         return Stalls.objects.create(**validated_data)

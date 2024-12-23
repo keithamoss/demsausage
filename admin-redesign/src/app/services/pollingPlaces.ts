@@ -5,6 +5,7 @@ import type {
 	IPollingPlaceStallModifiableProps,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
+import type { Stall } from './stalls';
 
 export const pollingPlacesAdapter = createEntityAdapter<IPollingPlace>();
 
@@ -52,6 +53,11 @@ export const pollingPlacesApi = api.injectEndpoints({
 				url: `polling_places/${pollingPlaceId}/noms_history/`,
 			}),
 		}),
+		getPollingPlaceStallsById: builder.query<Stall[], number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/related_stalls/`,
+			}),
+		}),
 		addOrEditPollingBoothNoms: builder.mutation<
 			void,
 			{ pollingPlaceId: number; stall: Partial<IPollingPlaceStallModifiableProps> }
@@ -82,6 +88,7 @@ export const {
 	useLazyGetPollingPlaceBySearchTermQuery,
 	useGetPollingPlaceByStallIdLookupQuery,
 	useGetPollingPlaceNomsHistoryByIdQuery,
+	useGetPollingPlaceStallsByIdQuery,
 	useAddOrEditPollingBoothNomsMutation,
 	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;

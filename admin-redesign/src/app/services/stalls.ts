@@ -134,6 +134,8 @@ export interface Stall
 	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
 	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
 	status: StallStatus;
+	reported_timestamp: string; // ISO date
+	submitter_type: StallSubmitterType;
 }
 
 // type StallsResponse = Stall[];

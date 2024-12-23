@@ -324,6 +324,14 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
         return Response(historyDiff)
     
+    @action(detail=True, methods=["get"])
+    def related_stalls(self, request, pk=None, format=None):
+        pollingPlace = self.get_object()
+        stalls = Stalls.objects.filter(polling_place_id=pollingPlace.id).order_by("-reported_timestamp")
+
+        serializer = StallsSerializer(stalls, many=True)
+        return Response(serializer.data)
+    
     @action(detail=True, methods=["delete"])
     @transaction.atomic
     def delete_polling_place_noms(self, request, pk=None, format=None):

@@ -1,5 +1,4 @@
-import { ArrowBack, History } from '@mui/icons-material';
-import { Alert, AlertTitle, Box, Button, Card, CardContent, Typography, styled } from '@mui/material';
+import { Alert, AlertTitle, styled } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
@@ -8,6 +7,7 @@ import {
 	navigateToPollingPlaceHistory,
 	navigateToPollingPlaceSearch,
 	navigateToPollingPlaceSearchResultsFromURLSearchTerm,
+	navigateToPollingPlaceStalls,
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { getIntegerParamOrUndefined, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import {
@@ -18,17 +18,13 @@ import {
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { selectAllElections } from '../elections/electionsSlice';
 import PollingPlaceNomsEditorForm from './PollingPlaceNomsEditorForm';
-import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
+import { getPollingPlaceNavTabs, getPollingPlaceSummaryCardForHeading } from './pollingPlaceHelpers';
 import type { IPollingPlace, IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(2),
 	paddingRight: theme.spacing(2),
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-	paddingBottom: `${theme.spacing(2)} !important`,
 }));
 
 function EntrypointLayer1() {
@@ -165,45 +161,30 @@ function PollingPlaceNomsEditor(props: Props) {
 		}
 	}, [urlSearchTerm, params, navigate]);
 
-	const onClickHistory = useCallback(() => {
+	const onClickGoToHistory = useCallback(() => {
 		navigateToPollingPlaceHistory(params, navigate, pollingPlace);
 	}, [params, navigate, pollingPlace]);
+
+	const onClickGoToStalls = useCallback(() => {
+		navigateToPollingPlaceStalls(params, navigate, pollingPlace);
+	}, [params, navigate, pollingPlace]);
+
+	const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
+		if (newValue === 1) {
+			onClickGoToHistory();
+		} else if (newValue === 2) {
+			onClickGoToStalls();
+		}
+	};
 	// ######################
 	// Navigation (End)
 	// ######################
 
 	return (
 		<PageWrapper>
-			<Card variant="outlined">
-				<StyledCardContent>
-					<Box>
-						<Typography
-							variant="h5"
-							component="div"
-							sx={{
-								fontSize: 16,
-								fontWeight: 500,
-							}}
-						>
-							{getPollingPlaceNameForFormHeading(pollingPlace)}
-						</Typography>
+			{getPollingPlaceSummaryCardForHeading(pollingPlace)}
 
-						<Typography color="text.secondary" sx={{ fontSize: 15 }}>
-							{pollingPlace.address}
-						</Typography>
-					</Box>
-				</StyledCardContent>
-			</Card>
-
-			<Box sx={{ pt: 2 }}>
-				<Button variant="outlined" size="small" onClick={onClickBack} startIcon={<ArrowBack />}>
-					Back
-				</Button>
-
-				<Button variant="outlined" size="small" onClick={onClickHistory} startIcon={<History />} sx={{ ml: 1 }}>
-					History
-				</Button>
-			</Box>
+			{getPollingPlaceNavTabs('Form', onClickBack, onTabChange)}
 
 			<PollingPlaceNomsEditorForm
 				pollingPlace={pollingPlace}

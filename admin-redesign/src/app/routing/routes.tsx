@@ -8,6 +8,7 @@ import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChoose
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
 import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNomsEditor';
 import PollingPlaceNomsHistory from '../../features/pollingPlaces/PollingPlaceNomsHistory';
+import PollingPlaceStalls from '../../features/pollingPlaces/PollingPlaceStalls';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -62,6 +63,17 @@ export const router = sentryCreateBrowserRouter([
 					{
 						path: '/polling-places/:election_name/:polling_place_id/history/',
 						element: <PollingPlaceNomsHistory />,
+					},
+					// ############################
+					// Polling Places Stalls
+					// ############################
+					{
+						path: '/polling-places/:election_name/search/:search_term/:polling_place_id/stalls/',
+						element: <PollingPlaceStalls />,
+					},
+					{
+						path: '/polling-places/:election_name/:polling_place_id/stalls/',
+						element: <PollingPlaceStalls />,
 					},
 				],
 			},

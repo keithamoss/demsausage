@@ -85,3 +85,23 @@ export const navigateToPollingPlaceHistory = (
 		navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/${id}/history/`);
 	}
 };
+
+export const navigateToPollingPlaceStalls = (
+	params: Params<string>,
+	navigate: NavigateFunction,
+	pollingPlace: IPollingPlace,
+) => {
+	// We handle going to all of these routes:
+	// /polling-places/:election_name/search/:search_term/:polling_place_id/stalls/
+	const { id } = pollingPlace;
+
+	const { urlElectionName, urlSearchTerm } = getURLParams(params);
+
+	if (urlElectionName === undefined || urlSearchTerm === undefined) {
+		return;
+	}
+
+	if (Number.isInteger(id) === true) {
+		navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/${id}/stalls/`);
+	}
+};

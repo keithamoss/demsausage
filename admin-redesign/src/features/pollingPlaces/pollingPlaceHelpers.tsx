@@ -1,7 +1,59 @@
+import { ArrowBack } from '@mui/icons-material';
+import { Box, Card, CardContent, IconButton, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import type Feature from 'ol/Feature';
 import type { Election } from '../../app/services/elections';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
+import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
 import { type IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
+
+export const getPollingPlaceSummaryCardForHeading = (pollingPlace: IPollingPlace) => {
+	const theme = useTheme();
+
+	return (
+		<Card variant="outlined">
+			<CardContent sx={{ pb: `${theme.spacing(2)} !important` }}>
+				<Box>
+					<Typography
+						variant="h5"
+						component="div"
+						sx={{
+							fontSize: 16,
+							fontWeight: 500,
+						}}
+					>
+						{getPollingPlaceNameForFormHeading(pollingPlace)}
+					</Typography>
+
+					<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+						{pollingPlace.address}
+					</Typography>
+				</Box>
+			</CardContent>
+		</Card>
+	);
+};
+
+export const getPollingPlaceNavTabs = (
+	selectedTabName: string,
+	onClickBack: () => void,
+	onTabChange: (event: React.SyntheticEvent, newValue: number) => void,
+) => {
+	const selectedTabIndex = selectedTabName === 'Form' ? 0 : selectedTabName === 'History' ? 1 : 2;
+
+	return (
+		<Box sx={{ borderBottom: 0, borderColor: 'divider', display: 'flex' }}>
+			<IconButton onClick={onClickBack}>
+				<ArrowBack fontSize="inherit" />
+			</IconButton>
+
+			<Tabs value={selectedTabIndex} onChange={onTabChange}>
+				<Tab label="Form" />
+				<Tab label="History" />
+				<Tab label="Stalls" />
+			</Tabs>
+		</Box>
+	);
+};
 
 export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
 	getPollingPlacePermalinkFromProps(
