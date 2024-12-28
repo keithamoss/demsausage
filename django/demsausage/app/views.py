@@ -138,7 +138,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
-    queryset = Elections.objects.order_by("-id")
+    queryset = Elections.objects.order_by("-election_day")
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
 

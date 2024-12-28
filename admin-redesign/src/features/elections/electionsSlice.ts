@@ -1,8 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { orderBy } from 'lodash-es';
 import { electionsAdapter, electionsApi, initialElectionsState } from '../../app/services/elections';
 import type { RootState } from '../../app/store';
-import { isElectionLive } from './electionHelpers';
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
 // the query result object for a query with those parameters.
@@ -16,14 +14,6 @@ export const { selectAll: selectAllElections, selectById: selectElectionById } =
 	(state: RootState) => selectElectionsData(state) ?? initialElectionsState,
 );
 
-export const selectAllElectionsSorted = createSelector(selectAllElections, (elections) =>
-	orderBy(elections, (e) => e.election_day, ['desc']),
-);
-
-export const selectActiveElections = createSelector(selectAllElections, (elections) =>
-	elections.filter((e) => isElectionLive(e) === true),
-);
-
-export const selectActiveElectionsSorted = createSelector(selectActiveElections, (elections) =>
-	orderBy(elections, (e) => e.election_day, ['asc']),
+export const selectVisibleElections = createSelector(selectAllElections, (elections) =>
+	elections.filter((e) => e.is_hidden === false),
 );

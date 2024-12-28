@@ -1,5 +1,5 @@
 import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
-import type { jurisdictionCrests } from '../../features/icons/jurisdictionHelpers';
+import type { eJurisdiction } from '../../features/icons/jurisdictionHelpers';
 import { api } from './api';
 
 export interface IGeoJSONPoylgon {
@@ -7,18 +7,27 @@ export interface IGeoJSONPoylgon {
 	coordinates: number[][][];
 }
 
-export interface Election {
-	id: number;
+export interface ElectionModifiableProps {
 	name: string;
-	name_url_safe: string;
 	short_name: string;
 	geom: IGeoJSONPoylgon;
 	is_hidden: boolean;
 	is_primary: boolean;
 	is_federal: boolean;
 	election_day: string; // Datetime
+	jurisdiction: eJurisdiction;
+}
+
+export type NewElection = ElectionModifiableProps;
+
+export interface Election extends ElectionModifiableProps {
+	id: number;
+	name_url_safe: string;
 	polling_places_loaded: boolean;
-	jurisdiction: keyof typeof jurisdictionCrests;
+	stats: {
+		with_data: number;
+		total: number;
+	};
 }
 
 type ElectionsResponse = Election[];
@@ -31,7 +40,7 @@ export { initialState as initialElectionsState };
 export const electionsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getElections: builder.query<EntityState<Election, number>, void>({
-			query: () => 'elections/public/',
+			query: () => 'elections/',
 			transformResponse: (res: ElectionsResponse) => {
 				return electionsAdapter.setAll(initialState, res);
 			},
@@ -49,39 +58,41 @@ export const electionsApi = api.injectEndpoints({
 			// 	dispatch(setActiveElectionId(defaultElection?.id));
 			// },
 		}),
-		// addMap: builder.mutation<Map, Partial<Map>>({
-		// 	query: (initialMap) => ({
-		// 		url: 'maps/',
-		// 		method: 'POST',
-		// 		body: initialMap,
-		// 	}),
-		// 	// Invalidates all Map-type queries providing the `LIST` id - after all, depending of the sort order,
-		// 	// that newly created map could show up in any lists.
-		// 	invalidatesTags: [{ type: 'Map', id: 'LIST' }],
-		// }),
-		// updateMap: builder.mutation<Map, Partial<Map>>({
-		// 	query: (map) => ({
-		// 		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-		// 		url: `maps/${map.id}/`,
-		// 		method: 'PUT',
-		// 		body: map,
-		// 	}),
-		// 	// Invalidates all queries that subscribe to this Map `id` only.
-		// 	// In this case, `getMap` will be re-run. `getMaps` *might*  rerun, if this id was under its results.
-		// 	invalidatesTags: (result, error, { id }) => [{ type: 'Map', id }],
-		// }),
-		// patchMap: builder.mutation<Map, Partial<Map>>({
-		// 	query: (map) => ({
-		// 		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-		// 		url: `maps/${map.id}/`,
+		addElection: builder.mutation<Election, NewElection>({
+			query: (initialElection) => ({
+				url: 'election/',
+				method: 'POST',
+				body: initialElection,
+			}),
+			// Invalidates all Election-type queries providing the `LIST` id - after all, depending of the sort order,
+			// that newly created election could show up in any lists.
+			invalidatesTags: [{ type: 'Election', id: 'LIST' }],
+		}),
+		updateElection: builder.mutation<Election, Partial<Election>>({
+			query: (election) => ({
+				url: `election/${election.id}/`,
+				method: 'PUT',
+				body: election,
+			}),
+			// Invalidates all queries that subscribe to this Election `id` only.
+			// In this case, `getElections` *might*  rerun, if this id was under its results.
+			invalidatesTags: (result, error, { id }) => [{ type: 'Election', id }],
+		}),
+		// patchElection: builder.mutation<Election, Partial<Election>>({
+		// 	query: (election) => ({
+		// 		url: `elections/${election.id}/`,
 		// 		method: 'PATCH',
-		// 		body: map,
+		// 		body: election,
 		// 	}),
-		// 	// Invalidates all queries that subscribe to this Map `id` only.
-		// 	// In this case, `getMap` will be re-run. `getMaps` *might*  rerun, if this id was under its results.
-		// 	invalidatesTags: (result, error, { id }) => [{ type: 'Map', id }],
+		// 	// Invalidates all queries that subscribe to this Election `id` only.
+		// 	// In this case, `getElections` *might*  rerun, if this id was under its results.
+		// 	invalidatesTags: (result, error, { id }) => [{ type: 'Election', id }],
 		// }),
 	}),
 });
 
-export const { useGetElectionsQuery /*, useAddMapMutation, useUpdateMapMutation, usePatchMapMutation*/ } = electionsApi;
+export const {
+	useGetElectionsQuery,
+	useAddElectionMutation,
+	useUpdateElectionMutation /*, usePatchElectionMutation*/,
+} = electionsApi;

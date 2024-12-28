@@ -1,3 +1,4 @@
+import BallotIcon from '@mui/icons-material/Ballot';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import HomeIcon from '@mui/icons-material/Home';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
@@ -13,6 +14,7 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 const navigationItemsTier1 = [
 	{ text: 'Pending Stalls', path: '/', icon: <HomeIcon /> },
 	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
+	{ text: 'Elections', path: '/elections/', icon: <BallotIcon /> },
 ];
 
 interface UIMatchData {

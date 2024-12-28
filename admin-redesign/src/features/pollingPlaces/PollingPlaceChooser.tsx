@@ -35,7 +35,7 @@ import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../ap
 import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceBySearchTermQuery } from '../../app/services/pollingPlaces';
 import { getDefaultElection } from '../elections/electionHelpers';
-import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
+import { selectElectionById, selectVisibleElections } from '../elections/electionsSlice';
 import { getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
 import { isSearchingYet } from './pollingPlaceSearchHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
@@ -52,7 +52,7 @@ function EntrypointLayer1() {
 	const navigate = useNavigate();
 
 	// Fallback to our default election if the route hasn't specified an election
-	const elections = useAppSelector(selectAllElections);
+	const elections = useAppSelector(selectVisibleElections);
 	const defaultElection = getDefaultElection(elections);
 	let electionId = defaultElection?.id;
 
@@ -85,7 +85,7 @@ function EntrypointLayer2(props: PropsEntrypointLayer2) {
 
 	const location = useLocation();
 
-	const elections = useAppSelector((state) => selectAllElections(state));
+	const elections = useAppSelector((state) => selectVisibleElections(state));
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
 
 	if (election === undefined) {
@@ -214,7 +214,7 @@ function PollingPlaceChooser(props: Props) {
 
 	return (
 		<PageWrapper>
-			<FormControl fullWidth sx={{ mb: 3 }}>
+			<FormControl fullWidth sx={{ mb: 2 }}>
 				<InputLabel id="choose-an-election">Choose an election</InputLabel>
 
 				<Select labelId="choose-an-election" value={election.id} label="Choose an election" onChange={onChooseElection}>

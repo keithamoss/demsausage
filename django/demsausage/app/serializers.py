@@ -84,7 +84,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
 
     class Meta:
         model = Elections
-        fields = ("id", "name", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "stats")
+        fields = ("id", "name", "name_url_safe", "short_name", "geom", "is_hidden", "is_primary", "is_federal", "election_day", "polling_places_loaded", "jurisdiction", "stats")
 
     def get_stats(self, obj):
         return {

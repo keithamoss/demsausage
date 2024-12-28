@@ -38,8 +38,20 @@ import {
 	WAJurisdictionCrestCircle,
 } from './jurisdictions';
 
+export enum eJurisdiction {
+	wa = 'wa',
+	sa = 'sa',
+	nsw = 'nsw',
+	act = 'act',
+	vic = 'vic',
+	nt = 'nt',
+	tas = 'tas',
+	qld = 'qld',
+	aus = 'aus',
+}
+
 export const jurisdictionCrests = {
-	wa: {
+	[eJurisdiction.wa]: {
 		standalone: {
 			raw: WAJurisdictionCrest,
 			react: React_WAJurisdictionCrest,
@@ -49,7 +61,7 @@ export const jurisdictionCrests = {
 			react: React_WAJurisdictionCrestCircle,
 		},
 	},
-	sa: {
+	[eJurisdiction.sa]: {
 		standalone: {
 			raw: SAJurisdictionCrest,
 			react: React_SAJurisdictionCrest,
@@ -59,7 +71,7 @@ export const jurisdictionCrests = {
 			react: React_SAJurisdictionCrestCircle,
 		},
 	},
-	nsw: {
+	[eJurisdiction.nsw]: {
 		standalone: {
 			raw: NSWJurisdictionCrest,
 			react: React_NSWJurisdictionCrest,
@@ -69,7 +81,7 @@ export const jurisdictionCrests = {
 			react: React_NSWJurisdictionCrestCircle,
 		},
 	},
-	act: {
+	[eJurisdiction.act]: {
 		standalone: {
 			raw: ACTJurisdictionCrest,
 			react: React_ACTJurisdictionCrest,
@@ -79,7 +91,7 @@ export const jurisdictionCrests = {
 			react: React_ACTJurisdictionCrestCircle,
 		},
 	},
-	vic: {
+	[eJurisdiction.vic]: {
 		standalone: {
 			raw: VICJurisdictionCrest,
 			react: React_VICJurisdictionCrest,
@@ -89,7 +101,7 @@ export const jurisdictionCrests = {
 			react: React_VICJurisdictionCrestCircle,
 		},
 	},
-	nt: {
+	[eJurisdiction.nt]: {
 		standalone: {
 			raw: NTJurisdictionCrest,
 			react: React_NTJurisdictionCrest,
@@ -99,7 +111,7 @@ export const jurisdictionCrests = {
 			react: React_NTJurisdictionCrestCircle,
 		},
 	},
-	tas: {
+	[eJurisdiction.tas]: {
 		standalone: {
 			raw: TASJurisdictionCrest,
 			react: React_TASJurisdictionCrest,
@@ -109,7 +121,7 @@ export const jurisdictionCrests = {
 			react: React_TASJurisdictionCrestCircle,
 		},
 	},
-	qld: {
+	[eJurisdiction.qld]: {
 		standalone: {
 			raw: QLDJurisdictionCrest,
 			react: React_QLDJurisdictionCrest,
@@ -119,7 +131,7 @@ export const jurisdictionCrests = {
 			react: React_QLDJurisdictionCrestCircle,
 		},
 	},
-	aus: {
+	[eJurisdiction.aus]: {
 		standalone: {
 			raw: AUSJurisdictionCrest,
 			react: React_AUSJurisdictionCrest,

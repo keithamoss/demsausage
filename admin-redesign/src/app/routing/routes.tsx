@@ -3,6 +3,10 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import ErrorElement from '../../ErrorElement';
 import NotFound from '../../NotFound';
+import ElectionCreator from '../../features/elections/ElectionCreator';
+import ElectionEditor from '../../features/elections/ElectionEditor';
+import ElectionsManager from '../../features/elections/ElectionsManager';
+import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import PendingStalls from '../../features/pendingStalls/PendingStalls';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
@@ -74,6 +78,30 @@ export const router = sentryCreateBrowserRouter([
 					{
 						path: '/polling-places/:election_name/:polling_place_id/stalls/',
 						element: <PollingPlaceStalls />,
+					},
+				],
+			},
+			{
+				path: '/elections',
+				element: <ElectionsManagerRoot />,
+				loader: () => ({
+					name: 'Elections',
+				}),
+				children: [
+					// Root page: Displays the lists of future, current, and past elections
+					{
+						path: '/elections/',
+						element: <ElectionsManager />,
+					},
+					// Election creation
+					{
+						path: '/elections/create/',
+						element: <ElectionCreator />,
+					},
+					// Election editing
+					{
+						path: '/elections/edit/:election_name/',
+						element: <ElectionEditor />,
 					},
 				],
 			},
