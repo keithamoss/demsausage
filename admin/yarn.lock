@@ -1555,12 +1555,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-is@npm:^18":
-  version: 18.3.0
-  resolution: "@types/react-is@npm:18.3.0"
+"@types/react-is@npm:^19":
+  version: 19.0.0
+  resolution: "@types/react-is@npm:19.0.0"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 10c0/0fdc950981c36100cc3c1692081d62538671c8e4a431b64f80c452c6f67b7bcd569542dffeb6b4a4b13565a2037bc963b6bf64c4ae5623c64ffa2935b6ecfb21
+  checksum: 10c0/d5fa0294f95cf301540f3e28fb44c00524c74a7de3ef9757703d76067206f3ecc002da6486e1581f23b54173b6449db8631acc3088009116e4569ff216df3ecc
   languageName: node
   linkType: hard
 
@@ -1748,7 +1748,7 @@ __metadata:
     "@types/qs": "npm:^6.9.16"
     "@types/react": "npm:^18.3.12"
     "@types/react-dom": "npm:^18.3.1"
-    "@types/react-is": "npm:^18"
+    "@types/react-is": "npm:^19"
     "@types/react-redux": "npm:7.1.34"
     "@types/react-router": "npm:3.0.28"
     "@types/react-router-redux": "npm:4.0.58"
@@ -1773,7 +1773,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-google-maps: "npm:^9.4.5"
-    react-is: "npm:^18.3.1"
+    react-is: "npm:^19.0.0"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.1.1"
     react-router-redux: "npm:^4.0.8"
@@ -4046,10 +4046,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.0.0, react-is@npm:^18.3.1":
+"react-is@npm:^18.0.0":
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "react-is@npm:19.0.0"
+  checksum: 10c0/d1be8e8500cf04f76df71942a21ef3a71266397a383d7ec8885f35190df818d35c65efd35aed7be47a89ad99aaff2c52e0c4e39e8930844a6b997622e50625a8
   languageName: node
   linkType: hard
 
