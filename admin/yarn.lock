@@ -1480,13 +1480,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/material-ui@npm:0.21.17":
-  version: 0.21.17
-  resolution: "@types/material-ui@npm:0.21.17"
+"@types/material-ui@npm:0.21.18":
+  version: 0.21.18
+  resolution: "@types/material-ui@npm:0.21.18"
   dependencies:
-    "@types/react": "npm:*"
+    "@types/react": "npm:^18"
     "@types/react-addons-linked-state-mixin": "npm:*"
-  checksum: 10c0/136a3dfdad885df1fd4fcac6fe7791407633b86d33e167e118c259c19269449885febfc748fd9555298e8c623073ce617c108099242b64fb2e6753600137861f
+  checksum: 10c0/e4e38928e0b70c61feaad2f45e68f1ebea9364b2f08ed31f3e0381d26da90933ecd0531f6b09b75d9542245c307fe3da4e3b28bc18c2039cf7e323dae5edc4cb
   languageName: node
   linkType: hard
 
@@ -1603,6 +1603,16 @@ __metadata:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/fe455f805c5da13b89964c3d68060cebd43e73ec15001a68b34634604a78140e6fc202f3f61679b9d809dde6d7a7c2cb3ed51e0fd1462557911db09879b55114
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18":
+  version: 18.3.18
+  resolution: "@types/react@npm:18.3.18"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/8fb2b00672072135d0858dc9db07873ea107cc238b6228aaa2a9afd1ef7a64a7074078250db38afbeb19064be8ea6af5eac32d404efdd5f45e093cc4829d87f8
   languageName: node
   linkType: hard
 
@@ -1742,7 +1752,7 @@ __metadata:
     "@types/js-cookie": "npm:^3"
     "@types/lodash-es": "npm:^4.17.9"
     "@types/luxon": "npm:^3.2.0"
-    "@types/material-ui": "npm:0.21.17"
+    "@types/material-ui": "npm:0.21.18"
     "@types/node": "npm:^22.10.2"
     "@types/prop-types": "npm:^15.7.14"
     "@types/qs": "npm:^6.9.16"
