@@ -10,18 +10,18 @@ export interface IGeoJSONPoylgon {
 export interface ElectionModifiableProps {
 	name: string;
 	short_name: string;
-	geom: IGeoJSONPoylgon;
-	is_hidden: boolean;
-	is_primary: boolean;
-	is_federal: boolean;
 	election_day: string; // Datetime
 	jurisdiction: eJurisdiction;
+	geom: IGeoJSONPoylgon;
+	is_federal: boolean;
+	is_hidden: boolean;
 }
 
 export type NewElection = ElectionModifiableProps;
 
 export interface Election extends ElectionModifiableProps {
 	id: number;
+	is_primary: boolean;
 	name_url_safe: string;
 	polling_places_loaded: boolean;
 	stats: {
@@ -60,7 +60,7 @@ export const electionsApi = api.injectEndpoints({
 		}),
 		addElection: builder.mutation<Election, NewElection>({
 			query: (initialElection) => ({
-				url: 'election/',
+				url: 'elections/',
 				method: 'POST',
 				body: initialElection,
 			}),
@@ -68,10 +68,10 @@ export const electionsApi = api.injectEndpoints({
 			// that newly created election could show up in any lists.
 			invalidatesTags: [{ type: 'Election', id: 'LIST' }],
 		}),
-		updateElection: builder.mutation<Election, Partial<Election>>({
-			query: (election) => ({
-				url: `election/${election.id}/`,
-				method: 'PUT',
+		updateElection: builder.mutation<Election, { id: number; election: ElectionModifiableProps }>({
+			query: ({ id, election }) => ({
+				url: `elections/${id}/`,
+				method: 'PATCH',
 				body: election,
 			}),
 			// Invalidates all queries that subscribe to this Election `id` only.
@@ -88,6 +88,13 @@ export const electionsApi = api.injectEndpoints({
 		// 	// In this case, `getElections` *might*  rerun, if this id was under its results.
 		// 	invalidatesTags: (result, error, { id }) => [{ type: 'Election', id }],
 		// }),
+		setPrimaryElection: builder.mutation<void, number>({
+			query: (electionId) => ({
+				url: `elections/${electionId}/set_primary/`,
+				method: 'POST',
+			}),
+			invalidatesTags: [{ type: 'Election', id: 'LIST' }],
+		}),
 	}),
 });
 
@@ -95,4 +102,5 @@ export const {
 	useGetElectionsQuery,
 	useAddElectionMutation,
 	useUpdateElectionMutation /*, usePatchElectionMutation*/,
+	useSetPrimaryElectionMutation,
 } = electionsApi;

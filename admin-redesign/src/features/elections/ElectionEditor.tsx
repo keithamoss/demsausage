@@ -1,18 +1,19 @@
+import { Save } from '@mui/icons-material';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToElections } from '../../app/routing/navigationHelpers/navigationHelpersElections';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { type Election, useUpdateElectionMutation } from '../../app/services/elections';
+import { type Election, type ElectionModifiableProps, useUpdateElectionMutation } from '../../app/services/elections';
 import ElectionForm from './ElectionForm';
-import { selectVisibleElections } from './electionsSlice';
+import { selectAllElections } from './electionsSlice';
 
 function ElectionEditorEntrypoint() {
 	const params = useParams();
 	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
 
-	const elections = useAppSelector(selectVisibleElections);
+	const elections = useAppSelector(selectAllElections);
 	const election = elections.find((e) => e.name_url_safe === urlElectionName);
 
 	// Just in case the user loads the page directly via the URL and the UI renders before we get the API response
@@ -47,14 +48,20 @@ function ElectionEditor(props: Props) {
 	}, [isUpdatingElectionSuccessful, navigate]);
 
 	const onDoneEditing = useCallback(
-		(election: Election) => {
-			updateElection(election);
+		(id: number, election: ElectionModifiableProps) => {
+			updateElection({ id, election });
 		},
 		[updateElection],
 	);
 
 	return (
-		<ElectionForm election={election} isElectionSaving={isUpdatingElectionLoading} onDoneEditing={onDoneEditing} />
+		<ElectionForm
+			election={election}
+			isElectionSaving={isUpdatingElectionLoading}
+			onDoneEditing={onDoneEditing}
+			primaryFormButtonLabel="Save"
+			primaryFormButtonIcon={<Save />}
+		/>
 	);
 }
 

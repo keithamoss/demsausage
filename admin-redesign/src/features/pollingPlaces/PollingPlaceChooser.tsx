@@ -9,12 +9,8 @@ import {
 	LinearProgress,
 	List,
 	ListItem,
-	ListItemIcon,
 	ListItemText,
-	MenuItem,
 	OutlinedInput,
-	Select,
-	type SelectChangeEvent,
 	Stack,
 	debounce,
 	styled,
@@ -29,14 +25,15 @@ import { useAppSelector } from '../../app/hooks';
 import {
 	navigateToPollingPlaceEditorForm,
 	navigateToPollingPlaceSearch,
+	navigateToPollingPlaceSearchFromElection,
 	navigateToPollingPlaceSearchResults,
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceBySearchTermQuery } from '../../app/services/pollingPlaces';
+import { SelectElection } from '../../app/ui/selectElection';
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectElectionById, selectVisibleElections } from '../elections/electionsSlice';
-import { getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
 import { isSearchingYet } from './pollingPlaceSearchHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
 import SearchResultsPollingPlaceCard from './searchResultsPollingPlaceCard';
@@ -65,7 +62,7 @@ function EntrypointLayer1() {
 	// Force users coming into the root of the page (/polling-places/) over to the unique URL for the current default election
 	useEffect(() => {
 		if (urlElectionName === undefined && defaultElection !== undefined) {
-			navigate(`/polling-places/${defaultElection.name_url_safe}/`);
+			navigateToPollingPlaceSearchFromElection(navigate, defaultElection);
 		}
 	}, [defaultElection, navigate, urlElectionName]);
 
@@ -129,20 +126,7 @@ function PollingPlaceChooser(props: Props) {
 		setLocalSearchTerm(urlSearchTerm);
 	}
 
-	const onChooseElection = useCallback(
-		(e: SelectChangeEvent<number | string>) => {
-			const electionId = Number.parseInt(`${e.target.value}`);
-
-			if (Number.isNaN(electionId) === false) {
-				const election = elections.find((e) => e.id === electionId);
-
-				if (election !== undefined) {
-					navigate(`/polling-places/${election.name_url_safe}/`);
-				}
-			}
-		},
-		[navigate, elections],
-	);
+	const onChooseElection = (election: Election) => navigateToPollingPlaceSearchFromElection(navigate, election);
 
 	// ######################
 	// Search Field
@@ -214,26 +198,12 @@ function PollingPlaceChooser(props: Props) {
 
 	return (
 		<PageWrapper>
-			<FormControl fullWidth sx={{ mb: 2 }}>
-				<InputLabel id="choose-an-election">Choose an election</InputLabel>
-
-				<Select labelId="choose-an-election" value={election.id} label="Choose an election" onChange={onChooseElection}>
-					{elections.map((e) => (
-						<MenuItem key={e.id} value={e.id}>
-							<div style={{ display: 'flex', alignItems: 'center' }}>
-								<ListItemIcon sx={{ minWidth: 36 }}>
-									{getJurisdictionCrestCircleReact(e.jurisdiction, {
-										width: 36,
-										height: 36,
-										paddingRight: theme.spacing(1),
-									})}
-								</ListItemIcon>
-								<ListItemText primary={e.name} />
-							</div>
-						</MenuItem>
-					))}
-				</Select>
-			</FormControl>
+			<SelectElection
+				election={election}
+				label="Choose an election"
+				elections={elections}
+				onChooseElection={onChooseElection}
+			/>
 
 			<FormControl fullWidth sx={{ mb: 2 }}>
 				<InputLabel htmlFor="input-search-for-polling-place">Search for a polling place</InputLabel>

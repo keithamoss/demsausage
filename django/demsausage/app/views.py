@@ -31,7 +31,8 @@ from demsausage.app.sausage.polling_places import (
     get_active_polling_place_queryset)
 from demsausage.app.sausage.sausagelytics import (FederalSausagelytics,
                                                   StateSausagelytics)
-from demsausage.app.serializers import (ElectionsSerializer,
+from demsausage.app.serializers import (ElectionsCreationSerializer,
+                                        ElectionsSerializer,
                                         ElectionsStatsSerializer,
                                         MailgunEventsSerializer,
                                         PendingStallsSerializer,
@@ -141,6 +142,11 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     queryset = Elections.objects.order_by("-election_day")
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return ElectionsCreationSerializer
+        return super(ElectionsViewSet, self).get_serializer_class()
 
     @action(detail=False, methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,), serializer_class=ElectionsSerializer)
     def public(self, request, format=None):

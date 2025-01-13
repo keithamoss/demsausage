@@ -293,7 +293,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 					###################### */}
 
 				<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
-					<Toolbar>
+					<Toolbar sx={{ justifyContent: 'flex-end' }}>
 						<LoadingButton
 							loading={isSaving}
 							loadingPosition="end"

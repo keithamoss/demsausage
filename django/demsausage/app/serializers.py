@@ -79,6 +79,12 @@ class ElectionsSerializer(serializers.ModelSerializer):
     #     return value
 
 
+class ElectionsCreationSerializer(ElectionsSerializer):
+    class Meta:
+        model = Elections
+        fields = ("name", "short_name", "geom", "is_hidden", "is_federal", "election_day", "jurisdiction")
+
+
 class ElectionsStatsSerializer(ElectionsSerializer):
     stats = serializers.SerializerMethodField()
 

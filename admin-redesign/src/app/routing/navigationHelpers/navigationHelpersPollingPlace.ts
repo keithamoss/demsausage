@@ -1,5 +1,6 @@
 import type { NavigateFunction, Params } from 'react-router-dom';
 import type { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { Election } from '../../services/elections';
 import { getURLParams } from './navigationHelpers';
 
 export const navigateToPollingPlaceSearch = (params: Params<string>, navigate: NavigateFunction) => {
@@ -12,6 +13,13 @@ export const navigateToPollingPlaceSearch = (params: Params<string>, navigate: N
 	}
 
 	navigate(`/polling-places/${urlElectionName}/`);
+};
+
+export const navigateToPollingPlaceSearchFromElection = (navigate: NavigateFunction, election: Election) => {
+	// We handle going to all of these routes:
+	// /polling-places/:election_name/
+
+	navigate(`/polling-places/${election.name_url_safe}/`);
 };
 
 export const navigateToPollingPlaceSearchResults = (

@@ -1,3 +1,4 @@
+import { Add } from '@mui/icons-material';
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { navigateToElections } from '../../app/routing/navigationHelpers/navigationHelpersElections';
@@ -24,7 +25,14 @@ function ElectionCreator() {
 		[addElection],
 	);
 
-	return <ElectionForm isElectionSaving={isAddingElectionLoading} onDoneAdding={onDoneAdding} />;
+	return (
+		<ElectionForm
+			isElectionSaving={isAddingElectionLoading}
+			onDoneAdding={onDoneAdding}
+			primaryFormButtonLabel="Create"
+			primaryFormButtonIcon={<Add />}
+		/>
+	);
 }
 
 export default ElectionCreator;
