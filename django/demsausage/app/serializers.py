@@ -14,6 +14,7 @@ from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 
 class HistoricalRecordField(serializers.ListField):
@@ -96,6 +97,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         return {
             "with_data": PollingPlaces.objects.filter(election=obj.id, status=PollingPlaceStatus.ACTIVE).filter(noms__isnull=False).count(),
             "total": PollingPlaces.objects.filter(election=obj.id, status=PollingPlaceStatus.ACTIVE).count(),
+            "by_source": PollingPlaceNoms.objects.filter(polling_place__election_id=obj.id, polling_place__status=PollingPlaceStatus.ACTIVE).values('source').annotate(count=Count('source')).order_by('-count')
         }
 
 

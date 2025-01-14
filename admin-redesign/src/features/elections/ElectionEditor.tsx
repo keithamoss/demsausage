@@ -1,13 +1,30 @@
 import { Save } from '@mui/icons-material';
+import { styled } from '@mui/material';
+import type React from 'react';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
-import { navigateToElections } from '../../app/routing/navigationHelpers/navigationHelpersElections';
+import {
+	navigateToElectionControls,
+	navigateToElectionStats,
+	navigateToElections,
+} from '../../app/routing/navigationHelpers/navigationHelpersElections';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { type Election, type ElectionModifiableProps, useUpdateElectionMutation } from '../../app/services/elections';
 import ElectionForm from './ElectionForm';
+import { getElectionEditorNavTabs } from './electionHelpers';
 import { selectAllElections } from './electionsSlice';
+
+const PageWrapper = styled('div')(({ theme }) => ({
+	paddingTop: theme.spacing(2),
+	paddingLeft: theme.spacing(2),
+	paddingRight: theme.spacing(2),
+}));
+
+const ContentWrapper = styled('div')(({ theme }) => ({
+	paddingTop: theme.spacing(2),
+}));
 
 function ElectionEditorEntrypoint() {
 	const params = useParams();
@@ -54,14 +71,46 @@ function ElectionEditor(props: Props) {
 		[updateElection],
 	);
 
+	// ######################
+	// Navigation
+	// ######################
+	const onClickBack = useCallback(() => {
+		navigateToElections(navigate);
+	}, [navigate]);
+
+	const onClickGoToControls = useCallback(() => {
+		navigateToElectionControls(navigate, election);
+	}, [navigate, election]);
+
+	const onClickGoToStats = useCallback(() => {
+		navigateToElectionStats(navigate, election);
+	}, [navigate, election]);
+
+	const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
+		if (newValue === 1) {
+			onClickGoToControls();
+		} else if (newValue === 2) {
+			onClickGoToStats();
+		}
+	};
+	// ######################
+	// Navigation (End)
+	// ######################
+
 	return (
-		<ElectionForm
-			election={election}
-			isElectionSaving={isUpdatingElectionLoading}
-			onDoneEditing={onDoneEditing}
-			primaryFormButtonLabel="Save"
-			primaryFormButtonIcon={<Save />}
-		/>
+		<PageWrapper>
+			{getElectionEditorNavTabs('Form', onClickBack, onTabChange)}
+
+			<ContentWrapper>
+				<ElectionForm
+					election={election}
+					isElectionSaving={isUpdatingElectionLoading}
+					onDoneEditing={onDoneEditing}
+					primaryFormButtonLabel="Save"
+					primaryFormButtonIcon={<Save />}
+				/>
+			</ContentWrapper>
+		</PageWrapper>
 	);
 }
 

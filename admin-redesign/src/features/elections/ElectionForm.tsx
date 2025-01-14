@@ -111,7 +111,7 @@ function ElectionForm(props: Props) {
 	return (
 		<React.Fragment>
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
-				<Paper elevation={0} sx={{ m: 2 }}>
+				<Paper elevation={0} sx={{ mt: 1 }}>
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller

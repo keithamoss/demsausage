@@ -27,6 +27,10 @@ export interface Election extends ElectionModifiableProps {
 	stats: {
 		with_data: number;
 		total: number;
+		by_source: {
+			source: string;
+			count: number;
+		}[];
 	};
 }
 
@@ -95,6 +99,13 @@ export const electionsApi = api.injectEndpoints({
 			}),
 			invalidatesTags: [{ type: 'Election', id: 'LIST' }],
 		}),
+		clearElectionMapDataCache: builder.mutation<void, number>({
+			query: (electionId) => ({
+				url: 'map/clear_cache/',
+				method: 'DELETE',
+				body: { election_id: electionId },
+			}),
+		}),
 	}),
 });
 
@@ -103,4 +114,5 @@ export const {
 	useAddElectionMutation,
 	useUpdateElectionMutation /*, usePatchElectionMutation*/,
 	useSetPrimaryElectionMutation,
+	useClearElectionMapDataCacheMutation,
 } = electionsApi;
