@@ -28,7 +28,7 @@ import { electionFormValidationSchema } from '../../app/forms/electionForm';
 import type { Election, ElectionModifiableProps, NewElection } from '../../app/services/elections';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { theme } from '../../app/ui/theme';
-import { eJurisdiction, getJurisdictionCrestCircleReact } from '../icons/jurisdictionHelpers';
+import { eJurisdiction, getJurisdictionCrestCircleReact, jurisdictions } from '../icons/jurisdictionHelpers';
 
 dayjs.extend(utc);
 
@@ -58,25 +58,18 @@ function ElectionForm(props: Props) {
 			short_name: election?.short_name || '',
 			election_day: election?.election_day || undefined,
 			jurisdiction: election?.jurisdiction || undefined,
-			// @TODO Remove this once we've built the UI for it
-			geom: {
-				type: 'Polygon',
-				coordinates: [
-					[
-						[140.2734375, -39.232253141714885],
-						[150.73242187500003, -39.232253141714885],
-						[150.73242187500003, -33.28461996888768],
-						[140.2734375, -33.28461996888768],
-						[140.2734375, -39.232253141714885],
-					],
-				],
-			},
 			is_federal: election?.is_federal || false,
 			is_hidden: election?.is_hidden || false,
 		},
 	});
 
-	const { election_day, jurisdiction, is_federal, is_hidden } = watch();
+	const { election_day, jurisdiction, geom, is_federal, is_hidden } = watch();
+
+	useEffect(() => {
+		if (jurisdiction !== undefined) {
+			setValue('geom', jurisdictions[jurisdiction].geom, { shouldDirty: true });
+		}
+	}, [jurisdiction, setValue]);
 
 	// ######################
 	// Form Management
@@ -168,18 +161,18 @@ function ElectionForm(props: Props) {
 								control={control}
 								render={({ field }) => (
 									<Select {...field} input={<OutlinedInput label="Jurisdiction" />} value={jurisdiction || ''}>
-										{Object.values(eJurisdiction).map((jurisdictionShortName) => (
-											<MenuItem key={jurisdictionShortName} value={jurisdictionShortName}>
+										{Object.values(eJurisdiction).map((jurisdiction) => (
+											<MenuItem key={jurisdiction} value={jurisdiction}>
 												<div style={{ display: 'flex', alignItems: 'center' }}>
 													<ListItemIcon sx={{ minWidth: 36 }}>
-														{getJurisdictionCrestCircleReact(jurisdictionShortName, {
+														{getJurisdictionCrestCircleReact(jurisdiction, {
 															width: 36,
 															height: 36,
 															paddingRight: theme.spacing(1),
 														})}
 													</ListItemIcon>
 
-													<ListItemText primary={jurisdictionShortName.toUpperCase()} />
+													<ListItemText primary={jurisdictions[jurisdiction].name} />
 												</div>
 											</MenuItem>
 										))}
