@@ -92,6 +92,47 @@ export const electionsApi = api.injectEndpoints({
 		// 	// In this case, `getElections` *might*  rerun, if this id was under its results.
 		// 	invalidatesTags: (result, error, { id }) => [{ type: 'Election', id }],
 		// }),
+		loadPollingPlaceFile: builder.mutation<
+			{ job_id: string },
+			{ electionId: number; jsonConfig: string | undefined; isDryRun: boolean; file: File }
+		>({
+			query: ({ electionId, jsonConfig, isDryRun, file }) => ({
+				url: `elections/${electionId}/polling_places/`,
+				method: 'PUT',
+				headers: { 'Content-Disposition': 'attachment; filename=polling_places.csv' },
+				formData: true,
+				body: (() => {
+					const data = new FormData();
+					data.append('file', file);
+					data.append('dry_run', isDryRun === true ? '1' : '0');
+					if (jsonConfig !== undefined) {
+						data.append('config', jsonConfig);
+					}
+
+					return data;
+				})(),
+			}),
+		}),
+		getPollingPlaceLoaderJobInfo: builder.query<
+			{
+				status: 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
+				stages_log: string[] | null;
+				response: {
+					message: string;
+					logs: {
+						errors: string[];
+						warnings: string[];
+						info: string[];
+					};
+				} | null;
+			},
+			{ electionId: number; jobId: string }
+		>({
+			query: ({ electionId, jobId }) => ({
+				url: `elections/${electionId}/polling_place_loader_job/`,
+				params: { job_id: jobId },
+			}),
+		}),
 		setPrimaryElection: builder.mutation<void, number>({
 			query: (electionId) => ({
 				url: `elections/${electionId}/set_primary/`,
@@ -113,6 +154,8 @@ export const {
 	useGetElectionsQuery,
 	useAddElectionMutation,
 	useUpdateElectionMutation /*, usePatchElectionMutation*/,
+	useLoadPollingPlaceFileMutation,
+	useGetPollingPlaceLoaderJobInfoQuery,
 	useSetPrimaryElectionMutation,
 	useClearElectionMapDataCacheMutation,
 } = electionsApi;
