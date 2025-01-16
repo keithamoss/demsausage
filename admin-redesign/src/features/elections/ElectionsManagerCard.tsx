@@ -45,7 +45,7 @@ export default function ElectionsManagerCard(props: Props) {
 			<CardContent sx={{ pl: 0, pb: `${theme.spacing(2)} !important` }}>
 				<List disablePadding>
 					<ListItem sx={{ pt: 0, pb: 0 }} onClick={() => onChooseElection(election)}>
-						<ListItemAvatar sx={{ minWidth: 36 }}>
+						<ListItemAvatar sx={{ minWidth: 36, cursor: 'pointer' }}>
 							<Avatar
 								sx={{
 									backgroundColor: 'transparent',
@@ -58,7 +58,15 @@ export default function ElectionsManagerCard(props: Props) {
 							</Avatar>
 						</ListItemAvatar>
 
-						<ListItemButton sx={{ pt: 0 }}>
+						<ListItemButton
+							sx={{
+								pt: 0,
+								// Disable all visual on hover effects
+								'&.MuiButtonBase-root:hover': {
+									backgroundColor: 'inherit',
+								},
+							}}
+						>
 							<ListItemText
 								primary={election.name}
 								secondary={dayjs(election.election_day).format('dddd DD MMMM YYYY')}

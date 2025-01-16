@@ -24,7 +24,7 @@ import ElectionsManagerCard from './ElectionsManagerCard';
 import { isElectionLive } from './electionHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
+	paddingTop: theme.spacing(4),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
 }));
