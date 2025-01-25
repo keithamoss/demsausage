@@ -1,6 +1,9 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
-import type { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type {
+	IPollingPlaceStall,
+	IPollingPlaceStubForStalls,
+} from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export enum StallSubmitterType {
@@ -90,7 +93,7 @@ export interface StallTipOffRedCrossOfShameModifiableProps {
 }
 
 export interface NewStallNonFormModifiableProps {
-	election: number;
+	election: number; // @TODO Why not election_id?
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
 	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
@@ -138,6 +141,39 @@ export interface Stall
 	submitter_type: StallSubmitterType;
 }
 
+export interface PendingStall extends Stall {
+	election_id: number;
+	approved_on: string; // ISO date
+	current_stall: IPollingPlaceStall & {
+		polling_place: number; // @TODO Why not polling_place_id?
+	};
+	diff: {
+		field: string;
+		old: string | number | StallFoodOptions;
+		new: string | number | StallFoodOptions;
+	};
+}
+
+export interface PollingPlaceWithPendingStall {
+	id: number;
+	election_id: number;
+	name: string;
+	premises: string;
+	address: string;
+	state: string;
+	stall: IPollingPlaceStall | null;
+	pending_stalls: PendingStall[];
+	previous_subs_count: number;
+}
+
+export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
+	id_unofficial: string;
+	election_id: number;
+	premises: string;
+	stall: null;
+	pending_stalls: PendingStall[];
+}
+
 // type StallsResponse = Stall[];
 
 export const stallsAdapter = createEntityAdapter<Stall>();
@@ -147,7 +183,7 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getPendingStalls: builder.query<Stall[], void>({
+		getPendingStalls: builder.query<PollingPlaceWithPendingStall[] | UnofficialPollingPlaceWithPendingStall[], void>({
 			query: () => ({
 				url: 'stalls/pending/',
 			}),

@@ -20,7 +20,7 @@ from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 
 
 class HistoricalRecordField(serializers.ListField):
@@ -388,7 +388,7 @@ class PollingPlacesInfoSerializer(PollingPlacesSerializer):
 
 
 class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
-    approved_stalls_count = serializers.SerializerMethodField()
+    previous_subs_count = serializers.SerializerMethodField()
 
     class Meta:
         model = PollingPlaces
@@ -400,10 +400,10 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
             "address",
             "state",
             "stall",
-            "approved_stalls_count",
+            "previous_subs_count",
         )
 
-    def get_approved_stalls_count(self, obj):
+    def get_previous_subs_count(self, obj):
         return (
             Stalls.objects.filter(election_id=obj.election_id)
             .filter(polling_place_id=obj.id)

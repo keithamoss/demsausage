@@ -33,28 +33,44 @@ export const getStallStatusElement = (stallStatus: StallStatus): JSX.Element => 
 	}
 };
 
-export const getStallSubmitterTypeElement = (stall: Stall): JSX.Element => {
-	const createButton = (icon: JSX.Element, label: string) => (
-		<Button
-			size="small"
-			disabled={true}
-			startIcon={icon}
-			sx={{ color: `${blueGrey.A700} !important`, flex: 1, justifyContent: 'flex-end' }}
-		>
-			{label}
-		</Button>
+export const isStallATipOff = (stall: Stall) =>
+	[StallSubmitterType.TipOff, StallSubmitterType.TipOffRunOut, StallSubmitterType.TipOffRedCrossOfShame].includes(
+		stall.submitter_type,
 	);
 
+export const getStallSubmitterTypeInfo = (stall: Stall) => {
 	switch (stall.submitter_type) {
 		case StallSubmitterType.Owner:
-			return createButton(<StallSubmitterTypeOwner style={{ width: 18, height: 18 }} />, 'Stall Owner');
+			return {
+				icon: <StallSubmitterTypeOwner style={{ width: 18, height: 18 }} />,
+				label: 'Stall Owner',
+			};
 
 		case StallSubmitterType.TipOff:
 		case StallSubmitterType.TipOffRunOut:
 		case StallSubmitterType.TipOffRedCrossOfShame:
-			return createButton(
-				<StallSubmitterTypeTipOff style={{ width: 18, height: 18 }} />,
-				`Tip-off (${stall.tipoff_source_other || stall.tipoff_source})`,
-			);
+			return {
+				icon: <StallSubmitterTypeTipOff style={{ width: 18, height: 18 }} />,
+				label: `Tip-off (${stall.tipoff_source_other || stall.tipoff_source})`,
+			};
 	}
 };
+
+export const getStallSubmitterTypeElement = (stall: Stall): JSX.Element => {
+	const data = getStallSubmitterTypeInfo(stall);
+
+	return (
+		<Button
+			size="small"
+			disabled={true}
+			startIcon={data.icon}
+			sx={{ color: `${blueGrey.A700} !important`, flex: 1, justifyContent: 'flex-end' }}
+		>
+			{data.label}
+		</Button>
+	);
+};
+
+export const getStallSubmitterTypeElementIcon = (stall: Stall) => getStallSubmitterTypeInfo(stall).icon;
+
+export const getStallSubmitterTypeElementLabel = (stall: Stall) => getStallSubmitterTypeInfo(stall).label;

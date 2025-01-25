@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import { default as React_Grey_Question } from '../../assets/icons/circles/grey_question.svg?raw';
 import {
 	ACTJurisdictionCrest,
@@ -289,6 +290,22 @@ export const getJurisdictionCrestStandaloneReact = (
 
 	return <React_Grey_Question />;
 };
+
+export const getJurisdictionCrestStandaloneReactAvatar = (jurisdiction: keyof typeof jurisdictions) => (
+	<Avatar
+		sx={{
+			width: 58,
+			height: 58,
+			marginRight: 2,
+			backgroundColor: 'transparent',
+			'& svg': {
+				width: 50,
+			},
+		}}
+	>
+		{getJurisdictionCrestStandaloneReact(jurisdiction)}
+	</Avatar>
+);
 
 export const getJurisdictionCrestCircleReact = (
 	jurisdiction: keyof typeof jurisdictions,

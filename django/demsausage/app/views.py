@@ -943,9 +943,65 @@ class PendingStallsViewSet(generics.ListAPIView):
     """
     API endpoint that allows pending stalls to be viewed and edited.
     """
+
     queryset = Stalls.objects.filter(status=StallStatus.PENDING).order_by("-id")
     serializer_class = PendingStallsSerializer
     permission_classes = (IsAuthenticated,)
+
+    def list(self, request, *args, **kwargs):
+        stalls = self.serializer_class(self.get_queryset(), many=True).data
+
+        response = {}
+
+        # This reshapes the stall-centric view of the world to be polling-place based so
+        # we can show pending stalls on the same polling places grouped together in the UI
+        for stall in stalls:
+            # Support elections WITH polling places loaded
+            # NOTE: In future this will need to support follow-up submissions on unofficial polling places that have already been approved
+            if stall["polling_place"] is not None:
+                if stall["polling_place"]["id"] not in response:
+                    response[stall["polling_place"]["id"]] = stall["polling_place"] | {
+                        "pending_stalls": []
+                    }
+
+                stallSansPollingPlace = stall.copy()
+                del stallSansPollingPlace["polling_place"]
+                response[stall["polling_place"]["id"]]["pending_stalls"].append(
+                    stallSansPollingPlace
+                )
+
+            # Support elections WITHOUT polling places loaded
+            else:
+                if stall["location_info"]["address"] not in response:
+                    response[stall["location_info"]["address"]] = stall[
+                        "location_info"
+                    ] | {
+                        "id_unofficial": sha256(
+                            stall["location_info"]["address"].encode("utf-8")
+                        ).hexdigest(),
+                        "election_id": stall["election_id"],
+                        "premises": "",
+                        "stall": None,
+                        "pending_stalls": [],
+                        "previous_subs_count": Stalls.objects.filter(
+                            election_id=stall["election_id"]
+                        )
+                        .filter(location_info=stall["location_info"])
+                        .filter(
+                            Q(status=StallStatus.APPROVED)
+                            | Q(status=StallStatus.PENDING)
+                            & Q(approved_on__isnull=False)
+                        )
+                        .count(),
+                    }
+
+                stallSansPollingPlace = stall.copy()
+                del stallSansPollingPlace["location_info"]
+                response[stall["location_info"]["address"]]["pending_stalls"].append(
+                    stallSansPollingPlace
+                )
+
+        return Response(response.values())
 
 
 class MailManagementViewSet(viewsets.ViewSet):

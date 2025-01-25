@@ -12,7 +12,7 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 
 // The page names here must match what's in routes.tsx if we want the link to show as active
 const navigationItemsTier1 = [
-	{ text: 'Pending Stalls', path: '/', icon: <HomeIcon /> },
+	{ text: 'Pending Submissions', path: '/', icon: <HomeIcon /> },
 	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
 	{ text: 'Elections', path: '/elections/', icon: <BallotIcon /> },
 ];

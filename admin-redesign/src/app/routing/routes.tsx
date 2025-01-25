@@ -29,8 +29,9 @@ export const router = sentryCreateBrowserRouter([
 				path: '',
 				element: <PendingStalls />,
 				loader: () => ({
-					name: 'Pending Stalls',
+					name: 'Pending Submissions',
 				}),
+				children: [],
 			},
 			{
 				path: '/polling-places',
