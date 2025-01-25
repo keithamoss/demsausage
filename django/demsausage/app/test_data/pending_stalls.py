@@ -326,6 +326,36 @@ def polling_place_with_with_an_approved_tip_off_that_has_pending_edits_and_a_new
     create_owner_submission_stall(pollingPlace, "Stall")
 
 
+def polling_place_with_two_approved_owner_submissions_with_pending_edits_to_both():
+    pollingPlace = get_next_polling_place(
+        "Two approved owner submissions with pending edits to both"
+    )
+
+    stall1 = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stall2Edits = Stalls.objects.get(id=stall1.id)
+    stall2Edits.status = StallStatus.PENDING
+    stall2Edits.noms = {
+        "cake": True,
+    }
+    stall2Edits.save()
+
+    stall2 = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stall2Edits = Stalls.objects.get(id=stall2.id)
+    stall2Edits.status = StallStatus.PENDING
+    stall2Edits.noms = {
+        "halal": True,
+    }
+    stall2Edits.save()
+
+
 def polling_place_with_two_approved_owner_submissions_and_a_new_tip_off():
     pollingPlace = get_next_polling_place(
         "Two approved owner submissions and a new tip-off"
@@ -599,6 +629,7 @@ polling_place_with_with_an_approved_tip_off_that_has_pending_edits()
 polling_place_with_with_an_approved_tip_off_that_has_pending_edits_and_an_other_tip_off()
 polling_place_with_with_an_approved_tip_off_that_has_pending_edits_and_a_new_stall_owner_submission()
 
+polling_place_with_two_approved_owner_submissions_with_pending_edits_to_both()
 polling_place_with_two_approved_owner_submissions_and_a_new_tip_off()
 polling_place_with_an_approved_owner_submission_with_pending_edits_and_an_approved_tip_off()
 polling_place_with_an_approved_owner_submission_with_pending_edits_and_an_approved_owner_submission_and_a_new_owner_submission()
