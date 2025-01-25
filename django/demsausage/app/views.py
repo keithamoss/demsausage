@@ -1,58 +1,76 @@
 import json
 from copy import deepcopy
 from datetime import datetime
+from hashlib import sha256
 
 import pytz
-from demsausage.app.enums import (PollingPlaceStatus,
-                                  PollingPlaceWheelchairAccess, StallStatus,
-                                  StallSubmitterType)
+from demsausage.app.enums import (
+    PollingPlaceStatus,
+    PollingPlaceWheelchairAccess,
+    StallStatus,
+    StallSubmitterType,
+)
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.filters import (LonLatFilter, PollingPlacesBaseFilter,
-                                    PollingPlacesNearbyFilter,
-                                    PollingPlacesSearchFilter)
-from demsausage.app.models import (Elections, PollingPlaceFacilityType,
-                                   PollingPlaceNoms, PollingPlaces, Stalls)
-from demsausage.app.permissions import (AnonymousOnlyGET,
-                                        StallEditingPermissions)
+from demsausage.app.filters import (
+    LonLatFilter,
+    PollingPlacesBaseFilter,
+    PollingPlacesNearbyFilter,
+    PollingPlacesSearchFilter,
+)
+from demsausage.app.models import Elections, PollingPlaceFacilityType, Stalls
+from demsausage.app.permissions import AnonymousOnlyGET, StallEditingPermissions
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
-    get_active_elections, get_default_election,
-    get_default_election_map_png_cache_key, get_election_map_png_cache_key,
-    get_elections_cache_key, get_polling_place_geojson_cache_key,
-    get_polling_place_json_cache_key)
+    get_active_elections,
+    get_default_election,
+    get_default_election_map_png_cache_key,
+    get_election_map_png_cache_key,
+    get_elections_cache_key,
+    get_polling_place_geojson_cache_key,
+    get_polling_place_json_cache_key,
+)
 from demsausage.app.sausage.loader import RollbackPollingPlaces
-from demsausage.app.sausage.mailgun import (make_confirmation_hash,
-                                            send_stall_approved_email,
-                                            send_stall_edited_email,
-                                            send_stall_submitted_email,
-                                            verify_webhook)
+from demsausage.app.sausage.mailgun import (
+    make_confirmation_hash,
+    send_stall_approved_email,
+    send_stall_edited_email,
+    send_stall_submitted_email,
+    verify_webhook,
+)
 from demsausage.app.sausage.polling_places import (
-    data_quality, find_by_distance, find_by_lookup_terms, find_by_stall,
-    get_active_polling_place_queryset)
-from demsausage.app.sausage.sausagelytics import (FederalSausagelytics,
-                                                  StateSausagelytics)
-from demsausage.app.serializers import (ElectionsCreationSerializer,
-                                        ElectionsSerializer,
-                                        ElectionsStatsSerializer,
-                                        MailgunEventsSerializer,
-                                        PendingStallsSerializer,
-                                        PollingPlaceFacilityTypeSerializer,
-                                        PollingPlaceSearchResultsSerializer,
-                                        PollingPlacesFlatJSONSerializer,
-                                        PollingPlacesGeoJSONSerializer,
-                                        PollingPlacesManagementSerializer,
-                                        PollingPlacesSerializer,
-                                        StallsManagementSerializer,
-                                        StallsOwnerManagementSerializer,
-                                        StallsOwnerUserEditSerializer,
-                                        StallsSerializer,
-                                        StallsTipOffManagementSerializer,
-                                        StallsTipOffUserEditSerializer,
-                                        StallsUserEditSerializer,
-                                        UserSerializer)
-from demsausage.app.webdriver import get_map_screenshot
-from demsausage.rq.jobs import (task_generate_election_map_screenshot,
-                                task_regenerate_cached_election_data)
+    data_quality,
+    find_by_lookup_terms,
+    find_by_stall,
+    get_active_polling_place_queryset,
+)
+from demsausage.app.sausage.sausagelytics import (
+    FederalSausagelytics,
+    StateSausagelytics,
+)
+from demsausage.app.serializers import (
+    ElectionsCreationSerializer,
+    ElectionsSerializer,
+    ElectionsStatsSerializer,
+    MailgunEventsSerializer,
+    PendingStallsSerializer,
+    PollingPlaceFacilityTypeSerializer,
+    PollingPlaceSearchResultsSerializer,
+    PollingPlacesFlatJSONSerializer,
+    PollingPlacesGeoJSONSerializer,
+    PollingPlacesManagementSerializer,
+    PollingPlacesSerializer,
+    StallsManagementSerializer,
+    StallsOwnerManagementSerializer,
+    StallsOwnerUserEditSerializer,
+    StallsSerializer,
+    StallsTipOffManagementSerializer,
+    StallsTipOffUserEditSerializer,
+    UserSerializer,
+)
+from demsausage.rq.jobs import (
+    task_generate_election_map_screenshot,
+    task_regenerate_cached_election_data,
+)
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
 from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
@@ -71,10 +89,9 @@ from simple_history.utils import update_change_reason
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
-from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Func
+from django.db.models import Func, Q
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
@@ -90,19 +107,11 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         if request.user.is_authenticated:
-            serializer = UserSerializer(
-                request.user, context={"request": request}
-            )
+            serializer = UserSerializer(request.user, context={"request": request})
 
-            return Response({
-                "is_logged_in": True,
-                "user": serializer.data
-            })
+            return Response({"is_logged_in": True, "user": serializer.data})
         else:
-            return Response({
-                "is_logged_in": False,
-                "user": None
-            })
+            return Response({"is_logged_in": False, "user": None})
 
 
 class LogoutUserView(APIView):
@@ -117,6 +126,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+
     queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
     permission_classes = (IsAdminUser,)
@@ -126,6 +136,7 @@ class ProfileViewSet(viewsets.ViewSet):
     """
     API endpoint that allows user profiles to be viewed and edited.
     """
+
     permission_classes = (IsAuthenticated,)
 
     @action(detail=False, methods=["post"])
@@ -139,6 +150,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows elections to be viewed and edited.
     """
+
     queryset = Elections.objects.order_by("-election_day")
     serializer_class = ElectionsStatsSerializer
     permission_classes = (IsAuthenticated,)
@@ -148,7 +160,12 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             return ElectionsCreationSerializer
         return super(ElectionsViewSet, self).get_serializer_class()
 
-    @action(detail=False, methods=["get", "delete"], permission_classes=(AnonymousOnlyGET,), serializer_class=ElectionsSerializer)
+    @action(
+        detail=False,
+        methods=["get", "delete"],
+        permission_classes=(AnonymousOnlyGET,),
+        serializer_class=ElectionsSerializer,
+    )
     def public(self, request, format=None):
         """
         Retrieve a list of all publicly visible elections that have been, or will be, available.
@@ -156,7 +173,10 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         cache_key = get_elections_cache_key()
 
         if request.method == "GET":
-            serializer = ElectionsSerializer(Elections.objects.filter(is_hidden=False).order_by("-election_day"), many=True)
+            serializer = ElectionsSerializer(
+                Elections.objects.filter(is_hidden=False).order_by("-election_day"),
+                many=True,
+            )
 
             cache.set(cache_key, json.dumps(serializer.data))
             return Response(serializer.data)
@@ -165,19 +185,31 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             cache.delete(cache_key)
             return Response()
 
-    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,), serializer_class=ElectionsSerializer)
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=(IsAuthenticated,),
+        serializer_class=ElectionsSerializer,
+    )
     @transaction.atomic
     def set_primary(self, request, pk=None, format=None):
         self.get_queryset().filter(is_primary=True).update(is_primary=False)
 
-        serializer = ElectionsSerializer(self.get_object(), data={"is_primary": True}, partial=True)
+        serializer = ElectionsSerializer(
+            self.get_object(), data={"is_primary": True}, partial=True
+        )
         if serializer.is_valid() is True:
             serializer.save()
             return Response({})
         else:
             raise BadRequest(serializer.errors)
 
-    @action(detail=True, methods=["put"], permission_classes=(IsAuthenticated,), parser_classes=(MultiPartParser,))
+    @action(
+        detail=True,
+        methods=["put"],
+        permission_classes=(IsAuthenticated,),
+        parser_classes=(MultiPartParser,),
+    )
     def polling_places(self, request, pk=None, format=None):
         election = self.get_object()
         dry_run = True if str(request.data.get("dry_run", 0)) == "1" else False
@@ -188,7 +220,12 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         except ValueError as e:
             raise BadRequest("Could not parse config: {}".format(e))
 
-        job = task_refresh_polling_place_data.delay(election_id=election.id, file=request.data["file"], dry_run=dry_run, config=config)
+        job = task_refresh_polling_place_data.delay(
+            election_id=election.id,
+            file=request.data["file"],
+            dry_run=dry_run,
+            config=config,
+        )
         return Response({"job_id": job.id if job is not None else None})
 
     @action(detail=True, methods=["get"], permission_classes=(IsAuthenticated,))
@@ -201,9 +238,20 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
             response = None
             if jobStatus == "finished":
-                response = {"message": "Done", "logs": job.meta.get("_polling_place_loading_results", None)}
+                response = {
+                    "message": "Done",
+                    "logs": job.meta.get("_polling_place_loading_results", None),
+                }
 
-            return Response({"status": jobStatus, "stages_log": job.meta.get("_polling_place_loading_stages_log", None), "response": response})
+            return Response(
+                {
+                    "status": jobStatus,
+                    "stages_log": job.meta.get(
+                        "_polling_place_loading_stages_log", None
+                    ),
+                    "response": response,
+                }
+            )
         raise BadRequest("No job_id provided")
 
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
@@ -251,34 +299,51 @@ class PollingPlaceFacilityTypeViewSet(mixins.ListModelMixin, viewsets.GenericVie
     """
     API endpoint that allows polling place facility types to be viewed.
     """
+
     queryset = PollingPlaceFacilityType.objects
     serializer_class = PollingPlaceFacilityTypeSerializer
     permission_classes = (IsAuthenticated,)
 
-class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+
+class PollingPlacesViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     API endpoint that allows polling places to be viewed and edited.
     """
+
     queryset = get_active_polling_place_queryset().all().order_by("-id")
     serializer_class = PollingPlacesSerializer
     permission_classes = (IsAuthenticated,)
-    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer, )
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer,)
 
     def list(self, request, *args, **kwargs):
         self.filter_class = PollingPlacesBaseFilter
         return super(PollingPlacesViewSet, self).list(request, *args, **kwargs)
 
     def finalize_response(self, request, response, *args, **kwargs):
-        response = super(PollingPlacesViewSet, self).finalize_response(request, response, *args, **kwargs)
+        response = super(PollingPlacesViewSet, self).finalize_response(
+            request, response, *args, **kwargs
+        )
 
         # Customise the filename for CSV downloads
         if response.status_code == 200 and "text/csv" in response.accepted_media_type:
-            election = get_or_none(Elections, id=request.query_params.get("election_id", None))
+            election = get_or_none(
+                Elections, id=request.query_params.get("election_id", None)
+            )
             if election is not None:
                 filename = add_datetime_to_filename("{}.csv".format(election.name))
 
-                response["Content-Type"] = "Content-Type: text/csv; name=\"{}\"".format(filename)
-                response["Content-Disposition"] = "attachment; filename={}".format(filename)
+                response["Content-Type"] = 'Content-Type: text/csv; name="{}"'.format(
+                    filename
+                )
+                response["Content-Disposition"] = "attachment; filename={}".format(
+                    filename
+                )
 
         return response
 
@@ -287,57 +352,70 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         pollingPlace = self.get_object()
 
         # Note: This handles both Creates *and* Updates
-        response = super(PollingPlacesViewSet, self).update(request, pk, *args, **kwargs)
+        response = super(PollingPlacesViewSet, self).update(
+            request, pk, *args, **kwargs
+        )
 
         if pollingPlace.noms is None:
-            update_change_reason(self.get_object().noms, 'Added directly')
+            update_change_reason(self.get_object().noms, "Added directly")
         else:
-            update_change_reason(self.get_object().noms, 'Edited directly')
+            update_change_reason(self.get_object().noms, "Edited directly")
 
         return response
-    
+
     @action(detail=True, methods=["get"])
     def noms_history(self, request, pk=None, format=None):
         def get_user_name(userId):
             user = User.objects.get(pk=record.history_user_id)
-            return f"{user.first_name} {user.last_name}" if user.first_name is not None and user.last_name is not None else "Unknown User"
-        
+            return (
+                f"{user.first_name} {user.last_name}"
+                if user.first_name is not None and user.last_name is not None
+                else "Unknown User"
+            )
+
         historyDiff = []
         pollingPlace = self.get_object()
 
         if pollingPlace.noms is not None:
             history = pollingPlace.noms.history.all()
-            
+
             for idx, record in enumerate(history):
                 deltaRecord = {
                     "history_id": record.history_id,
                     "history_date": record.history_date,
                     "history_change_reason": record.history_change_reason,
                     "history_type": record.history_type,
-                    "history_user_name": get_user_name(record.history_user_id)
-                    }
-                
+                    "history_user_name": get_user_name(record.history_user_id),
+                }
+
                 if record.prev_record is not None:
                     # Ref: https://django-simple-history.readthedocs.io/en/latest/history_diffing.html
                     delta = record.diff_against(record.prev_record)
 
-                    deltaRecord.update({
-                        "changed_fields": delta.changed_fields,
-                        "changes": [{"field": i.field, "old": i.old, "new": i.new} for i in delta.changes],
-                    })
-                
+                    deltaRecord.update(
+                        {
+                            "changed_fields": delta.changed_fields,
+                            "changes": [
+                                {"field": i.field, "old": i.old, "new": i.new}
+                                for i in delta.changes
+                            ],
+                        }
+                    )
+
                 historyDiff.append(deltaRecord)
 
         return Response(historyDiff)
-    
+
     @action(detail=True, methods=["get"])
     def related_stalls(self, request, pk=None, format=None):
         pollingPlace = self.get_object()
-        stalls = Stalls.objects.filter(polling_place_id=pollingPlace.id).order_by("-reported_timestamp")
+        stalls = Stalls.objects.filter(polling_place_id=pollingPlace.id).order_by(
+            "-reported_timestamp"
+        )
 
         serializer = StallsSerializer(stalls, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=True, methods=["delete"])
     @transaction.atomic
     def delete_polling_place_noms(self, request, pk=None, format=None):
@@ -345,7 +423,7 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
 
         if pollingPlace.noms is not None:
             pollingPlace.noms.deleted = True
-            pollingPlace.noms._change_reason = 'Deleted directly'
+            pollingPlace.noms._change_reason = "Deleted directly"
             pollingPlace.noms.save()
 
         return Response()
@@ -354,7 +432,12 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     def without_facility_type(self, request, format=None):
         election_id = request.query_params.get("election_id", None)
         if election_id is not None:
-            serializer = self.serializer_class(self.queryset.filter(election_id=election_id).filter(facility_type__isnull=True), many=True)
+            serializer = self.serializer_class(
+                self.queryset.filter(election_id=election_id).filter(
+                    facility_type__isnull=True
+                ),
+                many=True,
+            )
             return Response(serializer.data)
         else:
             raise BadRequest("No election_id provided.")
@@ -363,7 +446,12 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     def favourited(self, request, format=None):
         election_id = request.query_params.get("election_id", None)
         if election_id is not None:
-            serializer = self.serializer_class(self.queryset.filter(election_id=election_id).filter(noms__isnull=False, noms__favourited=True).order_by("-noms__id"), many=True)
+            serializer = self.serializer_class(
+                self.queryset.filter(election_id=election_id)
+                .filter(noms__isnull=False, noms__favourited=True)
+                .order_by("-noms__id"),
+                many=True,
+            )
             return Response(serializer.data)
         else:
             raise BadRequest("No election_id provided.")
@@ -382,7 +470,9 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         }
 
         if election_id is not None:
-            pollingPlace = find_by_lookup_terms(election_id, lookup_terms, self.queryset)
+            pollingPlace = find_by_lookup_terms(
+                election_id, lookup_terms, self.queryset
+            )
             if pollingPlace is not None:
                 return Response(self.serializer_class(pollingPlace).data)
             return HttpResponseNotFound()
@@ -420,18 +510,30 @@ class PollingPlacesViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         if lonlat is None or lonlat == "":
             raise BadRequest("No lonlat provided.")
 
-        polling_places_filter = LonLatFilter().filter(get_active_polling_place_queryset().filter(election_id=election_id), lonlat)
-        extent = polling_places_filter.annotate(geom_as_geometry=Func("geom", template="geom::geometry")).aggregate(Extent("geom_as_geometry"))
+        polling_places_filter = LonLatFilter().filter(
+            get_active_polling_place_queryset().filter(election_id=election_id), lonlat
+        )
+        extent = polling_places_filter.annotate(
+            geom_as_geometry=Func("geom", template="geom::geometry")
+        ).aggregate(Extent("geom_as_geometry"))
 
-        pollingPlaceSerializer = PollingPlaceSearchResultsSerializer(polling_places_filter, many=True)
+        pollingPlaceSerializer = PollingPlaceSearchResultsSerializer(
+            polling_places_filter, many=True
+        )
 
-        return Response({"extent_wgs84": extent["geom_as_geometry__extent"], "polling_places": pollingPlaceSerializer.data})
+        return Response(
+            {
+                "extent_wgs84": extent["geom_as_geometry__extent"],
+                "polling_places": pollingPlaceSerializer.data,
+            }
+        )
 
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """
     Search the polling places for an election.
     """
+
     queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlacesSerializer
     permission_classes = (AllowAny,)
@@ -442,6 +544,7 @@ class PollingPlacesNearbyViewSet(generics.ListAPIView):
     """
     Retrieve a list of all polling places that are close to a given latitude, longitude.
     """
+
     queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlaceSearchResultsSerializer
     permission_classes = (AllowAny,)
@@ -452,6 +555,7 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
     """
     Retrieve a list of all polling places and their food stall attributes for a given election in GeoJSON format.
     """
+
     queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlacesGeoJSONSerializer
     permission_classes = (AllowAny,)
@@ -460,28 +564,41 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
     def list(self, request, format=None):
         response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
 
-        cache_key = get_polling_place_geojson_cache_key(request.query_params.get("election_id"))
+        cache_key = get_polling_place_geojson_cache_key(
+            request.query_params.get("election_id")
+        )
         cache.set(cache_key, json.dumps(response.data))
         return response
 
     @action(methods=["delete"], permission_classes=(IsAuthenticated,), detail=False)
     def clear_cache(self, request, format=None):
-        if 'election_id' in request.data:
-            cache_key_geojson = get_polling_place_geojson_cache_key(request.data['election_id'])
+        if "election_id" in request.data:
+            cache_key_geojson = get_polling_place_geojson_cache_key(
+                request.data["election_id"]
+            )
             cache.delete(cache_key_geojson)
 
-            cache_key_json = get_polling_place_json_cache_key(request.data['election_id'])
+            cache_key_json = get_polling_place_json_cache_key(
+                request.data["election_id"]
+            )
             cache.delete(cache_key_json)
 
-            cache_key_map_png = get_election_map_png_cache_key(request.data['election_id'])
+            cache_key_map_png = get_election_map_png_cache_key(
+                request.data["election_id"]
+            )
             cache.delete(cache_key_map_png)
 
             defaultElection = get_default_election()
-            if defaultElection is not None and defaultElection.id == request.data['election_id']:
+            if (
+                defaultElection is not None
+                and defaultElection.id == request.data["election_id"]
+            ):
                 cache_key_default_map_png = get_default_election_map_png_cache_key()
                 cache.delete(cache_key_default_map_png)
 
-            task_regenerate_cached_election_data.delay(election_id=request.data['election_id'])
+            task_regenerate_cached_election_data.delay(
+                election_id=request.data["election_id"]
+            )
 
             return Response({})
         else:
@@ -492,6 +609,7 @@ class PollingPlacesJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     Retrieve a list of all polling places and their food stall attributes for a given election as a set of flat JSON objects.
     """
+
     queryset = get_active_polling_place_queryset()
     serializer_class = PollingPlacesFlatJSONSerializer
     permission_classes = (AllowAny,)
@@ -500,7 +618,9 @@ class PollingPlacesJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def list(self, request, format=None):
         response = super(PollingPlacesJSONViewSet, self).list(request, format)
 
-        cache_key = get_polling_place_json_cache_key(request.query_params.get("election_id"))
+        cache_key = get_polling_place_json_cache_key(
+            request.query_params.get("election_id")
+        )
         cache.set(cache_key, json.dumps(response.data))
         return response
 
@@ -509,6 +629,7 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
     """
     Retrieve a static embeddable image of an election map.
     """
+
     queryset = Elections.objects
     renderer_classes = (PNGRenderer,)
     permission_classes = (AllowAny,)
@@ -521,7 +642,9 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
 
         # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
         try:
-            with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+            with open(
+                "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
+            ) as f:
                 default_map_png = f.read()
                 return Response(default_map_png)
         except:
@@ -538,7 +661,9 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
 
             # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
             try:
-                with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+                with open(
+                    "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
+                ) as f:
                     default_map_png = f.read()
                     return Response(default_map_png)
             except:
@@ -561,7 +686,9 @@ class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
 
             # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
             try:
-                with open('/app/demsausage/static_maps/federal_2019_australia.png', 'rb') as f:
+                with open(
+                    "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
+                ) as f:
                     default_map_png = f.read()
                     return Response(default_map_png)
             except:
@@ -583,6 +710,7 @@ class StallsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows stalls to be viewed and edited.
     """
+
     queryset = Stalls.objects
     serializer_class = StallsSerializer
     permission_classes = (StallEditingPermissions,)
@@ -593,7 +721,11 @@ class StallsViewSet(viewsets.ModelViewSet):
         if self.action == "retrieve" or self.action == "update_and_resubmit":
             stall = self.get_object()
 
-            if stall.submitter_type in [StallSubmitterType.TIPOFF, StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
+            if stall.submitter_type in [
+                StallSubmitterType.TIPOFF,
+                StallSubmitterType.TIPOFF_RUN_OUT,
+                StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
+            ]:
                 return StallsTipOffUserEditSerializer
             elif stall.submitter_type == StallSubmitterType.OWNER:
                 return StallsOwnerUserEditSerializer
@@ -606,25 +738,40 @@ class StallsViewSet(viewsets.ModelViewSet):
         if "election" in request.data:
             if get_active_elections().filter(id=request.data["election"]).count() == 0:
                 raise BadRequest("This election is no longer active")
-            
+
             # @TODO Once the legacy site is gone, use the code below that requires a submitter_type
-            if "submitter_type" in request.data and request.data["submitter_type"] in [StallSubmitterType.TIPOFF, StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
+            if "submitter_type" in request.data and request.data["submitter_type"] in [
+                StallSubmitterType.TIPOFF,
+                StallSubmitterType.TIPOFF_RUN_OUT,
+                StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
+            ]:
                 serializer = StallsTipOffManagementSerializer(data=request.data)
-            elif "submitter_type" in request.data and request.data["submitter_type"] == StallSubmitterType.OWNER:
+            elif (
+                "submitter_type" in request.data
+                and request.data["submitter_type"] == StallSubmitterType.OWNER
+            ):
                 serializer = StallsOwnerManagementSerializer(data=request.data)
             else:
-                raise BadRequest(f"Unhandled submitter_type '{request.data['submitter_type']}'")
-            
+                raise BadRequest(
+                    f"Unhandled submitter_type '{request.data['submitter_type']}'"
+                )
+
             if serializer is not None:
                 if serializer.is_valid() is True:
                     serializer.save()
 
-                    send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
+                    send_stall_submitted_email(
+                        Stalls.objects.get(id=serializer.instance.id)
+                    )
                     return Response({}, status=status.HTTP_201_CREATED)
                 else:
                     raise BadRequest(serializer.errors)
             else:
-                raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
+                raise BadRequest(
+                    "Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(
+                        request.data["submitter_type"]
+                    )
+                )
 
             # @TODO This needs to support TipOffRunOut and TipOffRedCrossOfShame
             # if "submitter_type" in request.data:
@@ -644,7 +791,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             #             raise BadRequest(serializer.errors)
             #     else:
             #         raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
-            
+
             # raise BadRequest("No submitter_type supplied")
         raise BadRequest("No election supplied")
 
@@ -652,7 +799,14 @@ class StallsViewSet(viewsets.ModelViewSet):
         stall = self.get_object()
 
         if stall.election.is_active() is False:
-            return Response({"error": "The {election_name} election has finished.".format(election_name=stall.election.name)}, status=status.HTTP_418_IM_A_TEAPOT)
+            return Response(
+                {
+                    "error": "The {election_name} election has finished.".format(
+                        election_name=stall.election.name
+                    )
+                },
+                status=status.HTTP_418_IM_A_TEAPOT,
+            )
 
         return super(StallsViewSet, self).retrieve(request, *args, **kwargs)
 
@@ -662,10 +816,22 @@ class StallsViewSet(viewsets.ModelViewSet):
         stall = self.get_object()
 
         if stall.election.is_active() is False:
-            return Response({"error": "The {election_name} election has finished.".format(election_name=stall.election.name)}, status=status.HTTP_418_IM_A_TEAPOT)
-        
-        if stall.submitter_type in [StallSubmitterType.TIPOFF_RUN_OUT, StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME]:
-            raise BadRequest("Tip offs for a stall that've run out of food, or polling places without stalls, can't be edited.")
+            return Response(
+                {
+                    "error": "The {election_name} election has finished.".format(
+                        election_name=stall.election.name
+                    )
+                },
+                status=status.HTTP_418_IM_A_TEAPOT,
+            )
+
+        if stall.submitter_type in [
+            StallSubmitterType.TIPOFF_RUN_OUT,
+            StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
+        ]:
+            raise BadRequest(
+                "Tip offs for a stall that've run out of food, or polling places without stalls, can't be edited."
+            )
 
         data = deepcopy(request.data)
         del data["token"]
@@ -689,10 +855,14 @@ class StallsViewSet(viewsets.ModelViewSet):
         if stall.status != StallStatus.PENDING:
             raise BadRequest("Stall is not pending")
 
-        serializer = StallsManagementSerializer(self.get_object(), data={
-            "status": StallStatus.APPROVED,
-            "approved_on": datetime.now(pytz.utc)
-        }, partial=True)
+        serializer = StallsManagementSerializer(
+            self.get_object(),
+            data={
+                "status": StallStatus.APPROVED,
+                "approved_on": datetime.now(pytz.utc),
+            },
+            partial=True,
+        )
         if serializer.is_valid() is True:
             serializer.save()
 
@@ -712,16 +882,18 @@ class StallsViewSet(viewsets.ModelViewSet):
             raise BadRequest("Election polling places already loaded")
 
         # Create polling place based on user-submitted location info
-        pollingPlaceSerializer = PollingPlacesManagementSerializer(data={
-            "geom": stall.location_info["geom"],
-            "name": stall.location_info["name"],
-            "address": stall.location_info["address"],
-            "state": stall.location_info["state"],
-            "facility_type": None,
-            "election": stall.election.id,
-            "status": PollingPlaceStatus.ACTIVE,
-            "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN
-        })
+        pollingPlaceSerializer = PollingPlacesManagementSerializer(
+            data={
+                "geom": stall.location_info["geom"],
+                "name": stall.location_info["name"],
+                "address": stall.location_info["address"],
+                "state": stall.location_info["state"],
+                "facility_type": None,
+                "election": stall.election.id,
+                "status": PollingPlaceStatus.ACTIVE,
+                "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN,
+            }
+        )
 
         if pollingPlaceSerializer.is_valid() is True:
             pollingPlaceSerializer.save()
@@ -729,13 +901,19 @@ class StallsViewSet(viewsets.ModelViewSet):
             raise BadRequest(pollingPlaceSerializer.errors)
 
         # Now that we have a polling place, add noms
-        pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(pollingPlaceSerializer.instance, data={"stall": {
-            "noms": stall.noms,
-            "name": stall.name,
-            "description": stall.description,
-            "opening_hours": stall.opening_hours,
-            "website": stall.website,
-        }, }, partial=True)
+        pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(
+            pollingPlaceSerializer.instance,
+            data={
+                "stall": {
+                    "noms": stall.noms,
+                    "name": stall.name,
+                    "description": stall.description,
+                    "opening_hours": stall.opening_hours,
+                    "website": stall.website,
+                },
+            },
+            partial=True,
+        )
 
         if pollingPlaceWithNomsSerializer.is_valid() is True:
             pollingPlaceWithNomsSerializer.save()
@@ -743,11 +921,15 @@ class StallsViewSet(viewsets.ModelViewSet):
             raise BadRequest(pollingPlaceWithNomsSerializer.errors)
 
         # Approve stall and link it to the new unofficial polling place we just added
-        serializer = StallsManagementSerializer(stall, data={
-            "status": StallStatus.APPROVED,
-            "approved_on": datetime.now(pytz.utc),
-            "polling_place": pollingPlaceSerializer.instance.id
-        }, partial=True)
+        serializer = StallsManagementSerializer(
+            stall,
+            data={
+                "status": StallStatus.APPROVED,
+                "approved_on": datetime.now(pytz.utc),
+                "polling_place": pollingPlaceSerializer.instance.id,
+            },
+            partial=True,
+        )
         if serializer.is_valid() is True:
             serializer.save()
 
@@ -788,7 +970,10 @@ class MailManagementViewSet(viewsets.ViewSet):
                 stall.mail_confirmed = False
                 stall.save()
 
-        return Response("No worries, we've removed you from our mailing list :)", content_type="text/html")
+        return Response(
+            "No worries, we've removed you from our mailing list :)",
+            content_type="text/html",
+        )
 
     @action(detail=False, methods=["post"])
     def mailgun_webhook(self, request, format=None):
@@ -808,11 +993,15 @@ class MailManagementViewSet(viewsets.ViewSet):
         if verify_webhook(token, timestamp, signature) is False:
             return Response({"status": 2}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        serializer = MailgunEventsSerializer(data={
-            "timestamp": datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%dT%H:%M:%S"),
-            "event_type": event_type,
-            "payload": event_data,
-        })
+        serializer = MailgunEventsSerializer(
+            data={
+                "timestamp": datetime.utcfromtimestamp(timestamp).strftime(
+                    "%Y-%m-%dT%H:%M:%S"
+                ),
+                "event_type": event_type,
+                "payload": event_data,
+            }
+        )
 
         if serializer.is_valid() is True:
             serializer.save()
