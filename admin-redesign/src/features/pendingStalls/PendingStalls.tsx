@@ -110,7 +110,7 @@ function PendingStalls(props: Props) {
 
 				{isGetPendingStallsSuccessful === true && (
 					<React.Fragment>
-						{electionsWithPendingStalls.length === 0 && <PendingStallsAllCaughtUp />}
+						{pollingPlaceWithPendingStalls.length === 0 && <PendingStallsAllCaughtUp />}
 
 						<List
 							sx={{
