@@ -259,11 +259,10 @@ export const navigateToAddStallForm = (
 
 	if (
 		urlPollingPlaceName !== undefined &&
-		urlPollingPlacePremises !== undefined &&
 		urlPollingPlaceState !== undefined
 	) {
 		navigate(
-			`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, urlPollingPlaceName, urlPollingPlacePremises, urlPollingPlaceState)}submitter/${submitterType}/`,
+			`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, urlPollingPlaceName, urlPollingPlacePremises || '', urlPollingPlaceState)}submitter/${submitterType}/`,
 			{
 				state: { cameFromInternalNavigation: true },
 			},
