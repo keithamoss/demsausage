@@ -11,6 +11,7 @@ import ElectionEditorStats from '../../features/elections/ElectionEditorStats';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import PendingStalls from '../../features/pendingStalls/PendingStalls';
+import PendingStallsPollingPlace from '../../features/pendingStalls/PendingStallsPollingPlace';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
 import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNomsEditor';
@@ -31,7 +32,13 @@ export const router = sentryCreateBrowserRouter([
 				loader: () => ({
 					name: 'Pending Submissions',
 				}),
-				children: [],
+			},
+			{
+				path: '/pending_stalls/:polling_place_id/',
+				element: <PendingStallsPollingPlace />,
+				loader: () => ({
+					name: 'Pending Submissions',
+				}),
 			},
 			{
 				path: '/polling-places',

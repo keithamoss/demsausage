@@ -2,11 +2,14 @@ import { ArrowBack } from '@mui/icons-material';
 import { Box, Card, CardContent, IconButton, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import type Feature from 'ol/Feature';
 import type { Election } from '../../app/services/elections';
+import type { PollingPlaceWithPendingStall, UnofficialPollingPlaceWithPendingStall } from '../../app/services/stalls';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
 import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
-import { type IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
+import { type IPollingPlace, type IPollingPlaceNoms, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
-export const getPollingPlaceSummaryCardForHeading = (pollingPlace: IPollingPlace) => {
+export const getPollingPlaceSummaryCardForHeading = (
+	pollingPlace: IPollingPlace | PollingPlaceWithPendingStall | UnofficialPollingPlaceWithPendingStall,
+) => {
 	const theme = useTheme();
 
 	return (
@@ -21,7 +24,7 @@ export const getPollingPlaceSummaryCardForHeading = (pollingPlace: IPollingPlace
 							fontWeight: 500,
 						}}
 					>
-						{getPollingPlaceNameForFormHeading(pollingPlace)}
+						{getPollingPlaceNameForFormHeading(pollingPlace.premises, pollingPlace.name)}
 					</Typography>
 
 					<Typography color="text.secondary" sx={{ fontSize: 15 }}>
@@ -105,12 +108,8 @@ export const getSausageChanceDescriptionSubheader = (pollingPlace: IPollingPlace
 	}
 };
 
-export const pollingPlaceHasReportsOfNoms = (pollingPlace: IPollingPlace) => {
-	if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
-		return false;
-	}
-
-	for (const [key, value] of Object.entries(pollingPlace.stall.noms)) {
+export const stallHasReportsOfNoms = (noms: IPollingPlaceNoms) => {
+	for (const [key, value] of Object.entries(noms)) {
 		if (key === 'run_out' || key === 'nothing') {
 			// eslint-disable-next-line no-continue
 			continue;
@@ -127,15 +126,19 @@ export const pollingPlaceHasReportsOfNoms = (pollingPlace: IPollingPlace) => {
 	return false;
 };
 
-export function getFoodDescription(pollingPlace: IPollingPlace) {
+export const pollingPlaceHasReportsOfNoms = (pollingPlace: IPollingPlace) => {
 	if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
-		return [];
+		return false;
 	}
 
+	return stallHasReportsOfNoms(pollingPlace.stall.noms);
+};
+
+export function getFoodDescription(noms: IPollingPlaceNoms) {
 	const foodLabels: Array<string> = [];
 	const foodIcons = getAllFoodsAvailableOnStalls();
 
-	for (const foodName of Object.keys(pollingPlace.stall.noms)) {
+	for (const foodName of Object.keys(noms)) {
 		const foodDefinition = foodIcons.find((i) => i.value === foodName);
 
 		if (foodDefinition !== undefined) {
@@ -146,11 +149,19 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
 	return foodLabels;
 }
 
-export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) => {
-	let nomsList = getFoodDescription(pollingPlace);
+export function getFoodDescriptionFromPollingPlace(pollingPlace: IPollingPlace) {
+	if (pollingPlace.stall === null || pollingPlace.stall.noms === null) {
+		return [];
+	}
 
-	if (typeof pollingPlace.stall?.noms.free_text === 'string' && pollingPlace.stall?.noms.free_text.length >= 1) {
-		nomsList.push(pollingPlace.stall.noms.free_text);
+	return getFoodDescription(pollingPlace.stall.noms);
+}
+
+export const getNomsDescriptiveText = (noms: IPollingPlaceNoms) => {
+	let nomsList = getFoodDescription(noms);
+
+	if (typeof noms.free_text === 'string' && noms.free_text.length >= 1) {
+		nomsList.push(noms.free_text);
 	}
 
 	nomsList = nomsList.map((s) => s.toLowerCase());
@@ -165,6 +176,14 @@ export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) 
 		return nomsList[0];
 	}
 	return '';
+};
+
+export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) => {
+	if (pollingPlace.stall === null) {
+		return '';
+	}
+
+	return getNomsDescriptiveText(pollingPlace.stall.noms);
 };
 
 export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPlace) => {

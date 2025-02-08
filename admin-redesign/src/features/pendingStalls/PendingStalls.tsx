@@ -47,6 +47,7 @@ const StyledCardContent = styled(CardContent)(() => ({
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
 	paddingTop: theme.spacing(0.5),
+	paddingLeft: theme.spacing(2),
 }));
 
 function EntrypointLayer1() {

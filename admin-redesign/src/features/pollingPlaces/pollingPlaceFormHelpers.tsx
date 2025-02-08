@@ -1,9 +1,7 @@
-import type { IPollingPlace } from './pollingPlacesInterfaces';
-
-export const getPollingPlaceNameForFormHeading = (pollingPlace: IPollingPlace | null | undefined) => {
+export const getPollingPlaceNameForFormHeading = (premises: string, name: string) => {
 	// For elections with polling places
-	if (pollingPlace !== null && pollingPlace !== undefined) {
-		return pollingPlace.premises || pollingPlace.name;
+	if (premises !== '' || name !== '') {
+		return premises || name;
 	}
 
 	return '!! Unable to determine polling place name !!';

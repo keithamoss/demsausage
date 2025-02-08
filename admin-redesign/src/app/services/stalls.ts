@@ -34,6 +34,20 @@ export const getStallSourceDescription = (enumName: StallTipOffSource): string =
 	}
 };
 
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSourceDescriptionFromAdminPOV = (enumName: StallTipOffSource, otherDescrption: string): string => {
+	switch (enumName) {
+		case StallTipOffSource.In_Person:
+			return 'They saw it at a polling booth';
+		case StallTipOffSource.Online:
+			return 'They heard about it online (including social media)';
+		case StallTipOffSource.Newsletter:
+			return 'They saw it in the school, church, et cetera newsletter';
+		case StallTipOffSource.Other:
+			return `Other: ${otherDescrption}`;
+	}
+};
+
 export interface StallFoodOptions {
 	bbq?: boolean;
 	cake?: boolean;
