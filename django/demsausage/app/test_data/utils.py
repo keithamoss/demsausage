@@ -120,7 +120,8 @@ def create_polling_place_with_an_approved_owner_submission_stall(
     sleep(2)
     baseStallPending = Stalls.objects.get(id=baseStall.id)
     baseStallPending.status = StallStatus.APPROVED
-    baseStallPending.approved_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_by_id = 1
     baseStallPending.save()
 
     # Update Polling Place
@@ -146,6 +147,8 @@ def create_polling_place_with_a_denied_owner_submission_stall(pollingPlace, stal
     sleep(2)
     baseStallPending = Stalls.objects.get(id=baseStall.id)
     baseStallPending.status = StallStatus.DECLINED
+    baseStallPending.triaged_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_by_id = 1
     baseStallPending.save()
 
     return baseStall
@@ -156,7 +159,8 @@ def approve_tip_off(pollingPlace, baseStall):
     sleep(2)
     baseStallPending = Stalls.objects.get(id=baseStall.id)
     baseStallPending.status = StallStatus.APPROVED
-    baseStallPending.approved_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_by_id = 1
     baseStallPending.save()
 
     # Update Polling Place
@@ -208,6 +212,8 @@ def create_polling_place_with_a_denied_tip_off(
     sleep(2)
     baseStallPending = Stalls.objects.get(id=baseStall.id)
     baseStallPending.status = StallStatus.DECLINED
+    baseStallPending.triaged_on = datetime.now(pytz.utc)
+    baseStallPending.triaged_by_id = 1
     baseStallPending.save()
 
     return baseStall
@@ -349,7 +355,8 @@ def approve_unofficial_polling_place_tip_off(baseStall):
     sleep(2)
     stall = Stalls.objects.get(id=baseStall.id)
     stall.status = StallStatus.APPROVED
-    stall.approved_on = datetime.now(pytz.utc)
+    stall.triaged_on = datetime.now(pytz.utc)
+    stall.triaged_by_id = 1
     stall.polling_place_id = pollingPlace.id
     stall.save()
 

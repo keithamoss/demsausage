@@ -151,21 +151,25 @@ export interface Stall
 	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
 	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
 	status: StallStatus;
+	previous_status: StallStatus;
 	reported_timestamp: string; // ISO date
 	submitter_type: StallSubmitterType;
 }
 
 export interface PendingStall extends Stall {
 	election_id: number;
-	approved_on: string; // ISO date
+	triaged_on: string; // ISO date
+	triaged_by: string;
 	current_stall: IPollingPlaceStall & {
 		polling_place: number; // @TODO Why not polling_place_id?
 	};
-	diff: {
-		field: string;
-		old: string | number | StallFoodOptions;
-		new: string | number | StallFoodOptions;
-	};
+	diff:
+		| {
+				field: string;
+				old: string | number | StallFoodOptions;
+				new: string | number | StallFoodOptions;
+		  }[]
+		| null;
 }
 
 export interface PollingPlaceWithPendingStall {

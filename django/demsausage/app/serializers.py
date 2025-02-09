@@ -400,7 +400,7 @@ class PollingPlacesInfoSerializer(PollingPlacesSerializer):
 
 
 class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
-    previous_subs_count = serializers.SerializerMethodField()
+    previous_subs = serializers.SerializerMethodField()
 
     class Meta:
         model = PollingPlaces
@@ -412,19 +412,24 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
             "address",
             "state",
             "stall",
-            "previous_subs_count",
+            "previous_subs",
         )
 
-    def get_previous_subs_count(self, obj):
-        return (
-            Stalls.objects.filter(election_id=obj.election_id)
+    def get_previous_subs(self, obj):
+        return {
+            "approved": Stalls.objects.filter(election_id=obj.election_id)
             .filter(polling_place_id=obj.id)
             .filter(
-                Q(status=StallStatus.APPROVED)
-                | Q(status=StallStatus.PENDING) & Q(approved_on__isnull=False)
+                Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             )
-            .count()
-        )
+            .count(),
+            "denied": Stalls.objects.filter(election_id=obj.election_id)
+            .filter(polling_place_id=obj.id)
+            .filter(
+                Q(status=StallStatus.DECLINED) | Q(previous_status=StallStatus.DECLINED)
+            )
+            .count(),
+        }
 
 
 class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
@@ -675,7 +680,9 @@ class StallsManagementSerializer(StallsSerializer):
             "election",
             "polling_place",
             "status",
-            "approved_on",
+            "previous_status",
+            "triaged_on",
+            "triaged_by",
             "submitter_type",
             "tipoff_source",
             "tipoff_source_other",
@@ -696,7 +703,7 @@ class StallsTipOffManagementSerializer(StallsSerializer):
             "election",
             "polling_place",
             "status",
-            "approved_on",
+            "triaged_on",
             "submitter_type",
             "tipoff_source",
             "tipoff_source_other",
@@ -705,6 +712,7 @@ class StallsTipOffManagementSerializer(StallsSerializer):
 
 class PendingStallsSerializer(StallsSerializer):
     polling_place = PollingPlacesInfoWithNomsSerializer(read_only=True)
+    triaged_by = serializers.SerializerMethodField()
     diff = serializers.SerializerMethodField()
 
     class Meta:
@@ -719,12 +727,23 @@ class PendingStallsSerializer(StallsSerializer):
             "location_info",
             "email",
             "election_id",
-            "approved_on",
+            "reported_timestamp",
+            "status",
+            "previous_status",
+            "triaged_on",
+            "triaged_by",
             "submitter_type",
             "tipoff_source",
             "tipoff_source_other",
             "polling_place",
             "diff",
+        )
+
+    def get_triaged_by(self, obj):
+        return (
+            f"{obj.triaged_by.first_name} {obj.triaged_by.last_name}"
+            if obj.triaged_by is not None
+            else None
         )
 
     def get_diff(self, obj):
@@ -737,8 +756,8 @@ class PendingStallsSerializer(StallsSerializer):
             "email",
         )
 
-        if obj.approved_on is not None:
-            filter = obj.history.all().filter(history_date__gt=obj.approved_on)
+        if obj.triaged_on is not None:
+            filter = obj.history.all().filter(history_date__gt=obj.triaged_on)
             most_recent = filter.first()
             least_recent = filter.last()
 

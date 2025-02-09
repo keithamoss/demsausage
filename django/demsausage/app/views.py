@@ -859,7 +859,8 @@ class StallsViewSet(viewsets.ModelViewSet):
             self.get_object(),
             data={
                 "status": StallStatus.APPROVED,
-                "approved_on": datetime.now(pytz.utc),
+                "triaged_on": datetime.now(pytz.utc),
+                "triaged_by": request.user,
             },
             partial=True,
         )
@@ -925,7 +926,8 @@ class StallsViewSet(viewsets.ModelViewSet):
             stall,
             data={
                 "status": StallStatus.APPROVED,
-                "approved_on": datetime.now(pytz.utc),
+                "triaged_on": datetime.now(pytz.utc),
+                "triaged_by": request.user,
                 "polling_place": pollingPlaceSerializer.instance.id,
             },
             partial=True,
@@ -983,16 +985,26 @@ class PendingStallsViewSet(generics.ListAPIView):
                         "premises": "",
                         "stall": None,
                         "pending_stalls": [],
-                        "previous_subs_count": Stalls.objects.filter(
-                            election_id=stall["election_id"]
-                        )
-                        .filter(location_info=stall["location_info"])
-                        .filter(
-                            Q(status=StallStatus.APPROVED)
-                            | Q(status=StallStatus.PENDING)
-                            & Q(approved_on__isnull=False)
-                        )
-                        .count(),
+                        "previous_subs": {
+                            "approved": Stalls.objects.filter(
+                                election_id=stall["election_id"]
+                            )
+                            .filter(location_info=stall["location_info"])
+                            .filter(
+                                Q(status=StallStatus.APPROVED)
+                                | Q(previous_status=StallStatus.APPROVED)
+                            )
+                            .count(),
+                            "denied": Stalls.objects.filter(
+                                election_id=stall["election_id"]
+                            )
+                            .filter(location_info=stall["location_info"])
+                            .filter(
+                                Q(status=StallStatus.DECLINED)
+                                | Q(previous_status=StallStatus.DECLINED)
+                            )
+                            .count(),
+                        },
                     }
 
                 stallSansPollingPlace = stall.copy()

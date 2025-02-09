@@ -75,3 +75,13 @@ def pre_create_historical_record_callback(sender, **kwargs):
             history_instance.ip_address = forwarded_for
     else:
         history_instance.ip_address = None
+
+
+@receiver(pre_save, sender=Stalls)
+def pre_save_stall_track_previous_status(sender, instance, **kwargs):
+    if instance.tracker.has_changed("status") is True:
+        try:
+            old_instance = Stalls.objects.get(id=instance.id)
+            instance.previous_status = old_instance.status
+        except Stalls.DoesNotExist:  # Handle initial object creation
+            return None

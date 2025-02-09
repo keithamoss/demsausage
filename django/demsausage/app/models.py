@@ -180,8 +180,14 @@ class Stalls(models.Model):
     email = models.EmailField()
     polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT, null=True)
     reported_timestamp = models.DateTimeField(auto_now_add=True)
-    approved_on = models.DateTimeField(null=True)
-    status = models.TextField(choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING)
+    triaged_on = models.DateTimeField(null=True)
+    triaged_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    status = models.TextField(
+        choices=[(tag, tag.value) for tag in StallStatus], default=StallStatus.PENDING
+    )
+    previous_status = models.TextField(
+        choices=[(tag, tag.value) for tag in StallStatus], default=None, null=True
+    )
     mail_confirmed = models.BooleanField(default=True)
     submitter_type = models.TextField(choices=[(tag, tag.value) for tag in StallSubmitterType], blank=True)
     tipoff_source = models.TextField(choices=[(tag, tag.value) for tag in StallTipOffSource], blank=True)
