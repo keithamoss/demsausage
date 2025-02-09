@@ -1,6 +1,11 @@
 from demsausage.app.enums import PollingPlaceStatus
-from demsausage.app.models import (Elections, PollingPlaceNoms, PollingPlaces,
-                                   Profile)
+from demsausage.app.models import (
+    Elections,
+    PollingPlaceNoms,
+    PollingPlaces,
+    Profile,
+    Stalls,
+)
 from demsausage.app.sausage.elections import clear_elections_cache
 from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import is_iterable
@@ -8,7 +13,7 @@ from simple_history.models import HistoricalRecords
 from simple_history.signals import pre_create_historical_record
 
 from django.contrib.auth.models import User
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
 
@@ -18,7 +23,9 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
     # The other post_save() and post_delete() signals below takes care of regenerating GeoJSON for
     # newly created or deleted noms records. We handle it this way because this post_save() triggers before the post_save() that actually links the polling_place and noms records.
     if created is False and instance.tracker.has_changed("noms") is True:
-        task_regenerate_cached_election_data.delay(election_id=instance.polling_place.election_id)
+        task_regenerate_cached_election_data.delay(
+            election_id=instance.polling_place.election_id
+        )
 
 
 # I'm not actually sure if this ever runs into the if branch - since a delete noms would never know it's election_id
@@ -28,14 +35,18 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=PollingPlaceNoms)
 def regenerate_geojson_for_noms_deletion(sender, instance, **kwargs):
     if hasattr(instance, "polling_place") and instance.polling_place is not None:
-        task_regenerate_cached_election_data.delay(election_id=instance.polling_place.election_id)
+        task_regenerate_cached_election_data.delay(
+            election_id=instance.polling_place.election_id
+        )
 
 
 # I think this is only for when we have unofficial polling places?
 # The usual polling place loading process triggers the function, but
 # the logic prevents it getting to cache regeneration.
 @receiver(post_save, sender=PollingPlaces)
-def regenerate_geojson_for_new_polling_place_or_noms_link(sender, instance, created, **kwargs):
+def regenerate_geojson_for_new_polling_place_or_noms_link(
+    sender, instance, created, **kwargs
+):
     if instance.status == PollingPlaceStatus.ACTIVE:
         if created is True or instance.tracker.has_changed("noms") is True:
             task_regenerate_cached_election_data.delay(election_id=instance.election_id)

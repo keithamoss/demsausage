@@ -1,13 +1,18 @@
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import (PollingPlaceChanceOfSausage,
-                                  PollingPlaceJurisdiction, PollingPlaceState,
-                                  PollingPlaceStatus,
-                                  PollingPlaceWheelchairAccess,
-                                  ProfileSettings, StallStatus,
-                                  StallSubmitterType, StallTipOffSource,
-                                  TaskStatus)
+from demsausage.app.enums import (
+    PollingPlaceChanceOfSausage,
+    PollingPlaceJurisdiction,
+    PollingPlaceState,
+    PollingPlaceStatus,
+    PollingPlaceWheelchairAccess,
+    ProfileSettings,
+    StallStatus,
+    StallSubmitterType,
+    StallTipOffSource,
+    TaskStatus,
+)
 from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
@@ -30,9 +35,7 @@ class CompilationError(Exception):
 
 
 def default_profile_settings():
-    return {
-
-    }
+    return {}
 
 
 class Profile(models.Model):
@@ -85,7 +88,9 @@ class Elections(models.Model):
     is_federal = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
-    jurisdiction = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction])
+    jurisdiction = models.TextField(
+        choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction]
+    )
 
     def is_active(self):
         return datetime.now(pytz.utc).date() <= self.election_day.date()
@@ -100,7 +105,11 @@ class PollingPlaceFacilityType(models.Model):
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
-    noms = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=noms_schema)])
+    noms = JSONField(
+        default=None,
+        blank=True,
+        validators=[JSONSchemaValidator(limit_value=noms_schema)],
+    )
     name = models.TextField(blank=True)
     description = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
@@ -116,9 +125,7 @@ class PollingPlaceNoms(models.Model):
     tracker = FieldTracker()
 
     class Meta:
-        indexes = [
-            GinIndex(fields=['noms'])
-        ]
+        indexes = [GinIndex(fields=["noms"])]
 
 
 class PollingPlaces(models.Model):
@@ -126,21 +133,35 @@ class PollingPlaces(models.Model):
 
     old_id = models.IntegerField(null=True)
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
-    noms = models.OneToOneField(PollingPlaceNoms, on_delete=models.PROTECT, null=True, related_name="polling_place")
+    noms = models.OneToOneField(
+        PollingPlaceNoms,
+        on_delete=models.PROTECT,
+        null=True,
+        related_name="polling_place",
+    )
     geom = models.PointField(geography=True)
     name = models.TextField()
-    facility_type = models.ForeignKey(PollingPlaceFacilityType, on_delete=models.PROTECT, null=True)
+    facility_type = models.ForeignKey(
+        PollingPlaceFacilityType, on_delete=models.PROTECT, null=True
+    )
     premises = models.TextField(blank=True)
     address = models.TextField()
     divisions = JSONField(default=list, blank=True)
     state = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceState])
-    wheelchair_access = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess])
+    wheelchair_access = models.TextField(
+        choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess]
+    )
     wheelchair_access_description = models.TextField(blank=True)
     entrance_desc = models.TextField(blank=True)
     opening_hours = models.TextField(blank=True)
     booth_info = models.TextField(blank=True)
-    status = models.TextField(choices=[(tag, tag.value) for tag in PollingPlaceStatus], default=PollingPlaceStatus.DRAFT)
-    chance_of_sausage = models.IntegerField(choices=[(tag, tag.value) for tag in PollingPlaceChanceOfSausage], null=True)
+    status = models.TextField(
+        choices=[(tag, tag.value) for tag in PollingPlaceStatus],
+        default=PollingPlaceStatus.DRAFT,
+    )
+    chance_of_sausage = models.IntegerField(
+        choices=[(tag, tag.value) for tag in PollingPlaceChanceOfSausage], null=True
+    )
     extras = JSONField(default=dict, blank=True)
     ec_id = models.IntegerField(null=True)
 
@@ -148,15 +169,14 @@ class PollingPlaces(models.Model):
     objects = PollingPlacesManager()
 
     class Meta:
-        indexes = [
-            models.Index(fields=["election"])
-        ]
+        indexes = [models.Index(fields=["election"])]
 
 
 class IPAddressHistoricalModel(models.Model):
     """
     Abstract model for history models tracking the IP address.
     """
+
     # Doesn't work with CloudFlare in production (we get two comma separated IP addresses - CloudFlare's and the users)
     # This is just for record keeping, so we'll just store it as a text field for now.
     # ip_address = models.GenericIPAddressField(_('IP address'), null=True)
@@ -175,10 +195,18 @@ class Stalls(models.Model):
     description = models.TextField()
     opening_hours = models.TextField(blank=True)
     website = models.TextField(blank=True)
-    noms = JSONField(default=None, validators=[JSONSchemaValidator(limit_value=noms_schema)])
-    location_info = JSONField(default=None, null=True, validators=[JSONSchemaValidator(limit_value=stall_location_info_schema)])
+    noms = JSONField(
+        default=None, validators=[JSONSchemaValidator(limit_value=noms_schema)]
+    )
+    location_info = JSONField(
+        default=None,
+        null=True,
+        validators=[JSONSchemaValidator(limit_value=stall_location_info_schema)],
+    )
     email = models.EmailField()
-    polling_place = models.ForeignKey(PollingPlaces, on_delete=models.PROTECT, null=True)
+    polling_place = models.ForeignKey(
+        PollingPlaces, on_delete=models.PROTECT, null=True
+    )
     reported_timestamp = models.DateTimeField(auto_now_add=True)
     triaged_on = models.DateTimeField(null=True)
     triaged_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
@@ -189,11 +217,19 @@ class Stalls(models.Model):
         choices=[(tag, tag.value) for tag in StallStatus], default=None, null=True
     )
     mail_confirmed = models.BooleanField(default=True)
-    submitter_type = models.TextField(choices=[(tag, tag.value) for tag in StallSubmitterType], blank=True)
-    tipoff_source = models.TextField(choices=[(tag, tag.value) for tag in StallTipOffSource], blank=True)
+    submitter_type = models.TextField(
+        choices=[(tag, tag.value) for tag in StallSubmitterType], blank=True
+    )
+    tipoff_source = models.TextField(
+        choices=[(tag, tag.value) for tag in StallTipOffSource], blank=True
+    )
     tipoff_source_other = models.TextField(blank=True)
 
-    history = HistoricalRecords(bases=[IPAddressHistoricalModel, ])
+    history = HistoricalRecords(
+        bases=[
+            IPAddressHistoricalModel,
+        ]
+    )
     tracker = FieldTracker()
 
 
