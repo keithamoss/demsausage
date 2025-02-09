@@ -19,6 +19,7 @@ import {
 } from '../../app/routing/navigationHelpers/navigationHelpersElections';
 import { type Election, useSetPrimaryElectionMutation } from '../../app/services/elections';
 import { SelectElection } from '../../app/ui/selectElection';
+import { pluralise } from '../../app/utils';
 import { selectAllElections } from '../elections/electionsSlice';
 import ElectionsManagerCard from './ElectionsManagerCard';
 import { isElectionLive } from './electionHelpers';
@@ -43,7 +44,7 @@ const createElectionsAccordion = (
 			</Typography>
 
 			<Typography component="span" sx={{ color: 'text.secondary' }}>
-				{elections.length} election{elections.length > 1 ? 's' : undefined}
+				{elections.length} {pluralise('election', elections.length)}
 			</Typography>
 		</AccordionSummary>
 

@@ -72,3 +72,5 @@ export const isWebShareApiSupported = () => !!('canShare' in navigator && naviga
 
 export const enumFromStringValue = <T>(enm: { [s: string]: T }, value: string): T | undefined =>
 	(Object.values(enm) as unknown as string[]).includes(value) ? (value as unknown as T) : undefined;
+
+export const pluralise = (word: string, count: number) => `${word}${count > 1 ? 's' : ''}`;
