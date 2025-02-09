@@ -155,10 +155,10 @@ function PendingStalls(props: Props) {
 											.filter((p) => p.election_id === e.id)
 											.map((pollingPlace) => {
 												const countOfNewPendingStalls = pollingPlace.pending_stalls.filter(
-													(s) => s.approved_on === null,
+													(s) => s.triaged_on === null,
 												).length;
 												const countOfEditedPendingStalls = pollingPlace.pending_stalls.filter(
-													(s) => s.approved_on !== null,
+													(s) => s.triaged_on !== null,
 												).length;
 
 												return (
