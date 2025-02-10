@@ -120,6 +120,22 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_a
     create_owner_submission_stall(pollingPlace, "Stall")
 
 
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_free_text_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits to free_text noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.noms = {"bbq": True, "cake": True, "free_text": "And pony rides!"}
+    stallEdits.save()
+
+
 def polling_place_with_a_denied_owner_submission_and_a_new_other_tip_off():
     pollingPlace = get_next_polling_place(
         "Denied owner submission and a new other tip-off"
@@ -610,6 +626,7 @@ polling_place_with_an_approved_owner_submission_and_a_new_newsletter_tip_off()
 polling_place_with_an_approved_owner_submission_that_has_pending_edits()
 polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_an_other_tip_off()
 polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_a_new_stall_owner_submission()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_free_text_noms()
 
 polling_place_with_a_denied_owner_submission_and_a_new_other_tip_off()
 polling_place_with_a_denied_owner_submission_that_has_pending_edits()
