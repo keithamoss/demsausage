@@ -237,6 +237,24 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
+		approveStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/approve/`,
+				method: 'POST',
+			}),
+		}),
+		approveUnofficialStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/approve_and_add/`,
+				method: 'POST',
+			}),
+		}),
+		declineStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/decline/`,
+				method: 'POST',
+			}),
+		}),
 	}),
 });
 
@@ -245,4 +263,7 @@ export const {
 	useGetStallQuery,
 	useAddStallMutation,
 	useUpdateStallWithCredentialsMutation,
+	useApproveStallMutation,
+	useApproveUnofficialStallMutation,
+	useDeclineStallMutation,
 } = stallsApi;

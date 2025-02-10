@@ -848,7 +848,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @action(detail=True, methods=["patch"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
         stall = self.get_object()
@@ -872,7 +872,7 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @action(detail=True, methods=["patch"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve_and_add(self, request, pk=None, format=None):
         stall = self.get_object()
