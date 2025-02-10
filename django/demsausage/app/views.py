@@ -940,6 +940,29 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
+    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
+    @transaction.atomic
+    def decline(self, request, pk=None, format=None):
+        stall = self.get_object()
+        if stall.status != StallStatus.PENDING:
+            raise BadRequest("Stall is not pending")
+
+        serializer = StallsManagementSerializer(
+            self.get_object(),
+            data={
+                "status": StallStatus.DECLINED,
+                "triaged_on": datetime.now(pytz.utc),
+                "triaged_by": request.user,
+            },
+            partial=True,
+        )
+        if serializer.is_valid() is True:
+            serializer.save()
+
+            return Response({})
+        else:
+            raise BadRequest(serializer.errors)
+
 
 class PendingStallsViewSet(generics.ListAPIView):
     """
