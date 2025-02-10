@@ -221,7 +221,7 @@ function PendingStalls(props: Props) {
 																}}
 															/>
 
-															{pollingPlace.stall === null && (
+															{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied === 0 && (
 																<Button
 																	size="small"
 																	disabled={true}
@@ -235,17 +235,22 @@ function PendingStalls(props: Props) {
 																</Button>
 															)}
 
-															{pollingPlace.stall !== null && (
+															{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied > 0 && (
 																<Button
 																	size="small"
 																	disabled={true}
-																	startIcon={getCountOfExistingStallsIcon(pollingPlace.previous_subs_count)}
+																	startIcon={getCountOfExistingStallsIcon(
+																		pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied,
+																	)}
 																	sx={{
 																		color: `${blueGrey.A700} !important`,
 																		ml: '0px !important',
 																	}}
 																>
-																	Previous {pollingPlace.previous_subs_count > 1 ? 'Subs' : 'Sub'}
+																	Previous{' '}
+																	{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied > 1
+																		? 'Subs'
+																		: 'Sub'}
 																</Button>
 															)}
 														</StyledCardActions>

@@ -181,15 +181,23 @@ export interface PollingPlaceWithPendingStall {
 	state: string;
 	stall: IPollingPlaceStall | null;
 	pending_stalls: PendingStall[];
-	previous_subs_count: number;
+	previous_subs: {
+		approved: number;
+		denied: number;
+	};
 }
 
 export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
+	id: number; // @TODO DO NOT COMMIT THIS
 	id_unofficial: string;
 	election_id: number;
 	premises: string;
 	stall: null;
 	pending_stalls: PendingStall[];
+	previous_subs: {
+		approved: number;
+		denied: number;
+	};
 }
 
 // type StallsResponse = Stall[];
