@@ -153,7 +153,7 @@ export interface Stall
 	status: StallStatus;
 	previous_status: StallStatus;
 	reported_timestamp: string; // ISO date
-	owner_edit_timestamp: string; // ISO date
+	owner_edit_timestamp: string | null; // ISO date
 	submitter_type: StallSubmitterType;
 }
 
