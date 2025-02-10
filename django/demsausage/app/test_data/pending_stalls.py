@@ -1,5 +1,7 @@
 import os
+from datetime import datetime
 
+import pytz
 from demsausage.app.test_data.utils import (
     cleanup,
     create_owner_submission_stall,
@@ -67,6 +69,7 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits():
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "bbq": True,
         "cake": True,
@@ -86,6 +89,7 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_a
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.name = "New name!"
     stallEdits.website = ""
     stallEdits.noms = {
@@ -110,6 +114,7 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_a
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.name = "Coffee and Cake Van"
     stallEdits.noms = {
         "cake": True,
@@ -132,6 +137,7 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_fr
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {"bbq": True, "cake": True, "free_text": "And pony rides!"}
     stallEdits.save()
 
@@ -160,6 +166,7 @@ def polling_place_with_a_denied_owner_submission_that_has_pending_edits():
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "bbq": True,
         "cake": True,
@@ -179,6 +186,7 @@ def polling_place_with_a_denied_owner_submission_that_has_pending_edits_and_a_ne
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "bbq": True,
         "cake": True,
@@ -251,6 +259,7 @@ def polling_place_with_no_stall_and_a_single_new_online_tip_off_that_has_pending
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "bbq": True,
         "cake": True,
@@ -295,6 +304,7 @@ def polling_place_with_with_an_approved_tip_off_that_has_pending_edits():
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "bbq": True,
         "halal": True,
@@ -314,6 +324,7 @@ def polling_place_with_with_an_approved_tip_off_that_has_pending_edits_and_an_ot
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "cake": True,
     }
@@ -334,6 +345,7 @@ def polling_place_with_with_an_approved_tip_off_that_has_pending_edits_and_a_new
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "coffee": True,
     }
@@ -354,6 +366,7 @@ def polling_place_with_two_approved_owner_submissions_with_pending_edits_to_both
     # Submit Stall Edit
     stall2Edits = Stalls.objects.get(id=stall1.id)
     stall2Edits.status = StallStatus.PENDING
+    stall2Edits.owner_edit_timestamp = datetime.now(pytz.utc)
     stall2Edits.noms = {
         "cake": True,
     }
@@ -366,6 +379,7 @@ def polling_place_with_two_approved_owner_submissions_with_pending_edits_to_both
     # Submit Stall Edit
     stall2Edits = Stalls.objects.get(id=stall2.id)
     stall2Edits.status = StallStatus.PENDING
+    stall2Edits.owner_edit_timestamp = datetime.now(pytz.utc)
     stall2Edits.noms = {
         "halal": True,
     }
@@ -399,6 +413,7 @@ def polling_place_with_an_approved_owner_submission_with_pending_edits_and_an_ap
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {
         "cake": True,
     }
@@ -417,6 +432,7 @@ def polling_place_with_an_approved_owner_submission_with_pending_edits_and_an_ap
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.name = "Something something"
     stallEdits.noms = {
         "vego": True,
@@ -554,6 +570,7 @@ def unofficial_polling_place_owner_submission_approved_with_pending_edits():
     # Submit Stall Edit
     stallEdits = Stalls.objects.get(id=stall.id)
     stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.description = "More info"
     stallEdits.noms = {
         "vego": True,

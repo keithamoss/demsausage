@@ -836,8 +836,11 @@ class StallsViewSet(viewsets.ModelViewSet):
         data = deepcopy(request.data)
         del data["token"]
         del data["signature"]
+
         if stall.status == StallStatus.APPROVED or stall.status == StallStatus.DECLINED:
             data["status"] = StallStatus.PENDING
+
+        data["owner_edit_timestamp"] = datetime.now(pytz.utc)
 
         serializer = self.get_serializer_class()(stall, data, partial=True)
         if serializer.is_valid() is True:

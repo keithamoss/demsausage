@@ -208,6 +208,7 @@ class Stalls(models.Model):
         PollingPlaces, on_delete=models.PROTECT, null=True
     )
     reported_timestamp = models.DateTimeField(auto_now_add=True)
+    owner_edit_timestamp = models.DateTimeField(null=True)
     triaged_on = models.DateTimeField(null=True)
     triaged_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     status = models.TextField(
