@@ -5,7 +5,10 @@ import { type Stall, StallStatus, StallSubmitterType } from '../../app/services/
 import StallSubmitterTypeOwner from '../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../assets/stalls/submit_tipoff.svg?react';
 
-export const getStallStatusElement = (stallStatus: StallStatus): JSX.Element => {
+export const getStallStatusElement = (
+	stallStatus: StallStatus,
+	stallPreviousStatus: StallStatus | null,
+): JSX.Element => {
 	const createButton = (icon: JSX.Element, colour: string, label: string) => (
 		<Button
 			size="small"
@@ -29,7 +32,20 @@ export const getStallStatusElement = (stallStatus: StallStatus): JSX.Element => 
 			return createButton(<ThumbDownOffAlt />, '#922269', 'Denied');
 
 		case StallStatus.Pending:
-			return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending');
+			console.log(stallPreviousStatus);
+			if (stallPreviousStatus === StallStatus.Approved) {
+				return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending (Previously Approved)');
+			}
+
+			if (stallPreviousStatus === StallStatus.Declined) {
+				return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending (Previously Declined)');
+			}
+
+			if (stallPreviousStatus === null) {
+				return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending');
+			}
+
+			return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending (Previously INVALID_STATUS)');
 	}
 };
 

@@ -267,7 +267,7 @@ function PollingPlaceStalls(props: Props) {
 									</StyledCardContent>
 
 									<StyledCardActions>
-										{getStallStatusElement(stall.status)}
+										{getStallStatusElement(stall.status, stall.previous_status)}
 
 										{getStallSubmitterTypeElement(stall)}
 									</StyledCardActions>
