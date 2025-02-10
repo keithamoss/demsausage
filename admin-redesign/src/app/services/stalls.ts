@@ -188,7 +188,6 @@ export interface PollingPlaceWithPendingStall {
 }
 
 export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
-	id: number; // @TODO DO NOT COMMIT THIS
 	id_unofficial: string;
 	election_id: number;
 	premises: string;
