@@ -7,6 +7,7 @@ from demsausage.app.test_data.utils import (
     create_owner_submission_stall,
     create_polling_place_with_a_denied_owner_submission_stall,
     create_polling_place_with_a_denied_tip_off,
+    create_polling_place_with_admin_sourced_info,
     create_polling_place_with_an_approved_owner_submission_stall,
     create_polling_place_with_an_approved_RCOS_tip_off,
     create_polling_place_with_an_approved_RunOut_tip_off,
@@ -518,6 +519,68 @@ def polling_place_with_an_approved_owner_submission_and_a_new_run_out_tip_off():
     )
 
 
+def polling_place_with_admin_sourced_info_and_a_new_stall_owner_submission():
+    pollingPlace = get_next_polling_place(
+        "Admin sourced info and a new stall owner submission"
+    )
+
+    create_polling_place_with_admin_sourced_info(pollingPlace)
+
+    create_owner_submission_stall(pollingPlace, "Stall")
+
+
+def polling_place_with_admin_sourced_info_with_only_free_text_and_a_new_stall_owner_submission():
+    pollingPlace = get_next_polling_place(
+        "Admin sourced info (with only free text) and a new stall owner submission"
+    )
+
+    create_polling_place_with_admin_sourced_info(
+        pollingPlace,
+        {"free_text": "Donkey rides!!!"},
+    )
+
+    create_owner_submission_stall(pollingPlace, "Stall")
+
+
+def polling_place_with_admin_sourced_info_and_two_new_stall_owner_submissions():
+    pollingPlace = get_next_polling_place(
+        "Admin sourced info and two new stall owner submissions"
+    )
+
+    create_polling_place_with_admin_sourced_info(pollingPlace)
+
+    create_owner_submission_stall(pollingPlace, "Stall")
+    create_owner_submission_stall(pollingPlace, "Stall")
+
+
+def polling_place_with_admin_sourced_info_and_two_new_stall_owner_submissions_one_with_edits():
+    pollingPlace = get_next_polling_place(
+        "Admin sourced info and two new stall owner submissions (one with edits)"
+    )
+
+    create_polling_place_with_admin_sourced_info(pollingPlace)
+
+    create_owner_submission_stall(pollingPlace, "Stall")
+
+    stall = create_owner_submission_stall(pollingPlace, "Stall")
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.name = "Something something"
+    stallEdits.noms = {"vego": True, "bacon_and_eggs": True}
+    stallEdits.save()
+
+
+def polling_place_with_admin_sourced_info_and_a_new_tip_off():
+    pollingPlace = get_next_polling_place("Admin sourced info and a new tip-off")
+
+    create_polling_place_with_admin_sourced_info(pollingPlace)
+
+    create_tipoff_stall(pollingPlace, StallTipOffSource.Newsletter)
+
+
 def unofficial_polling_place_owner_submission():
     create_unofficial_polling_place_owner_submission_stall(
         "One unofficial polling place owner submission", "Stall"
@@ -677,15 +740,21 @@ polling_place_with_no_stall_and_a_run_out_tip_off()
 polling_place_with_with_an_approved_run_out_tip_off_and_a_new_owner_submission()
 polling_place_with_an_approved_owner_submission_and_a_new_run_out_tip_off()
 
-unofficial_polling_place_owner_submission()
-unofficial_polling_place_two_owner_submissions()
-unofficial_polling_place_tip_off()
-unofficial_polling_place_two_tip_offs()
-unofficial_polling_place_red_cross_of_shame_tip_off()
-unofficial_polling_place_run_out_tip_off()
+polling_place_with_admin_sourced_info_and_a_new_stall_owner_submission()
+polling_place_with_admin_sourced_info_with_only_free_text_and_a_new_stall_owner_submission()
+polling_place_with_admin_sourced_info_and_two_new_stall_owner_submissions()
+polling_place_with_admin_sourced_info_and_two_new_stall_owner_submissions_one_with_edits()
+polling_place_with_admin_sourced_info_and_a_new_tip_off()
 
-unofficial_polling_place_owner_submission_approved_with_pending_edits()
-unofficial_polling_place_submission_approved_with_a_second_pending_owner_submission()
-unofficial_polling_place_approved_tip_off_with_a_pending_owner_submisison()
-unofficial_polling_place_approved_red_cross_of_shame_tip_off_with_a_second_tip_off()
-unofficial_polling_place_run_out_approved_tip_off_with_a_new_owner_submission()
+# unofficial_polling_place_owner_submission()
+# unofficial_polling_place_two_owner_submissions()
+# unofficial_polling_place_tip_off()
+# unofficial_polling_place_two_tip_offs()
+# unofficial_polling_place_red_cross_of_shame_tip_off()
+# unofficial_polling_place_run_out_tip_off()
+
+# unofficial_polling_place_owner_submission_approved_with_pending_edits()
+# unofficial_polling_place_submission_approved_with_a_second_pending_owner_submission()
+# unofficial_polling_place_approved_tip_off_with_a_pending_owner_submisison()
+# unofficial_polling_place_approved_red_cross_of_shame_tip_off_with_a_second_tip_off()
+# unofficial_polling_place_run_out_approved_tip_off_with_a_new_owner_submission()

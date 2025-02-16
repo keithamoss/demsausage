@@ -154,6 +154,26 @@ def create_polling_place_with_a_denied_owner_submission_stall(pollingPlace, stal
     return baseStall
 
 
+def create_polling_place_with_admin_sourced_info(
+    pollingPlace,
+    noms={
+        "bbq": True,
+        "coffee": True,
+    },
+):
+    # Update Polling Place
+    pollingPlaceNoms = PollingPlaceNoms(
+        noms=noms,
+        source="Helen",
+    )
+    pollingPlaceNoms.save()
+
+    pollingPlace.noms_id = pollingPlaceNoms.id
+    pollingPlace.save()
+
+    return pollingPlaceNoms
+
+
 def approve_tip_off(pollingPlace, baseStall):
     # Approve Stall
     sleep(2)
