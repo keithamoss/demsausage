@@ -1,0 +1,723 @@
+ec_id,name,premises,address,lat,lon,divisions,state,wheelchair_access
+,Albany District - Election Day and Early Polling Place,,"Dog Rock Boulevarde, Shop 10, 302 Middleton Road, ALBANY WA 6330",-35.019321,117.884819,Albany,WA,Full
+,Albany PCYC,,"77 Sanford Road, CENTENNIAL PARK WA 6330",-35.01046000,117.88208000,Albany,WA,Full
+,Albany Primary School,,"32 Suffolk Street, MOUNT CLARENCE WA 6330",-35.01821000,117.89078000,Albany,WA,Full
+,Albany Sea Rescue Hall,,"1 Swarbrick Street, EMU POINT WA 6330",-34.99427000,117.94353000,Albany,WA,None
+,Albany Town Hall,,"Albany Town Hall, 217 York Street, ALBANY WA 6330",-35.023733,117.88336,Albany,WA,None
+,Elleker Hall,,"19 Hassell Street, ELLEKER WA 6330",-35.00847000,117.72988000,Albany,WA,None
+,Flinders Park Primary School,,"51 Yatana Road, BAYONET HEAD WA 6330",-34.97843000,117.93083000,Albany,WA,Full
+,Great Southern Grammar,,"244 Nanarup Road, KALGAN WA 6330",-34.94764000,117.97064000,Albany,WA,Full
+,Kendenup Agricultural Pavilion,,"150 Beverley Road, KENDENUP WA 6323",-34.49088300,117.59395100,Albany,WA,None
+,King River Hall,,"1520 Millbrook Road, KING RIVER WA 6330",-34.93391000,117.89681000,Albany,WA,Full
+,Little Grove Primary School,,"33 Gordon Street, LITTLE GROVE WA 6330",-35.06664500,117.86726700,Albany,WA,Full
+,Mount Lockyer Primary School,,"43 Admiral Street, LOCKYER WA 6330",-35.00205000,117.85608000,Albany,WA,Full
+,Napier Hall,,"2151 Chester Pass Road, NAPIER WA 6330",-34.83330000,117.96080000,Albany,WA,None
+,Narrikup District Hall,,"Shire of Plantagenet, Beech Road, NARRIKUP WA 6326",-34.77251000,117.70245000,Albany,WA,None
+,North Albany Senior High School,,"47 Anson Road, ORANA WA 6330",-34.99085000,117.86263000,Albany,WA,None
+,Plantagenet District Hall,,"Memorial Road, MOUNT BARKER WA 6324",-34.62467000,117.66271000,Albany,WA,None
+,Porongurup District Hall,,"2257 Porongurup Road, PORONGURUP WA 6324",-34.67380300,117.90638700,Albany,WA,None
+,Redmond Hall,,"830 Redmond-Hay River Road, REDMOND WA 6327",-34.88647000,117.69151000,Albany,WA,None
+,Spencer Park Primary School,,"26 Hardie Road, SPENCER PARK WA 6330",-35.00519000,117.90087000,Albany,WA,None
+,Wellstead Community Resource Centre,,"49 Windsor Road, WELLSTEAD WA 6328",-34.49287119,118.605617,Albany,WA,None
+,Yakamia Primary School,,"26 Beaufort Road, YAKAMIA WA 6330",-35.00250000,117.87299000,Albany,WA,Full
+,Youngs Siding Hall,,"29 Station Street, YOUNGS SIDING WA 6330",-35.01241300,117.52228600,Albany,WA,None
+,Armadale District - Election Day and Early Polling Place,,"2 & 3/36-40 Commerce Avenue, ARMADALE WA 6112",-32.1553734,116.0132768,Armadale,WA,Full
+,Armadale Primary School,,"1 Carradine Road, BEDFORDALE WA 6112",-32.14763000,116.02618000,Darling Range,WA,None
+,Armadale Senior High School,,"169 South Western Highway, ARMADALE WA 6112",-32.15842300,116.01359200,Armadale,WA,Full
+,Cecil Andrews College,,"39 Seville Drive, SEVILLE GROVE WA 6112",-32.14080000,115.99240000,Armadale,WA,Full
+,Challis Community Primary School,,"40 Braemore Street, ARMADALE WA 6112",-32.13903000,115.99975000,Armadale,WA,Full
+,Clifton Hills Primary School,,"1 Butler Pass, KELMSCOTT WA 6111",-32.10903300,116.02152000,Armadale,WA,Full
+,Dale Christian College,,"150 Forrest Road, ARMADALE WA 6112",-32.15932600,115.99873600,Oakford,WA,Full
+,Free Reformed Church,,"84 Fifth Road, ARMADALE WA 6112",-32.14992000,116.00490000,Armadale,WA,Full
+,Grovelands Primary School,,"14 Grovelands Drive, CAMILLO WA 6111",-32.11952000,115.99868000,Armadale,WA,None
+,Kelmscott Primary School,,"River Road, KELMSCOTT WA 6111",-32.11959000,116.02049000,Armadale,WA,Full
+,Kelmscott Senior High School,,"50 Third Avenue, KELMSCOTT WA 6111",-32.12035000,116.00989000,Armadale,WA,None
+,Kingsley Primary School,,"11 Lathwell Street, ARMADALE WA 6112",-32.13432000,116.01545000,Armadale,WA,None
+,Westfield Park Primary School,,"11 Hemingway Drive, CAMILLO WA 6111",-32.11032000,116.00533000,Armadale,WA,Full
+,Balcatta District - Election Day and Early Polling Place,,"Osborne Park Agricultural Society Hall, 209 Main Street, OSBORNE PARK WA 6017",-31.897585,115.8280748,Balcatta,WA,None
+,Balcatta Primary School,,"387 Main Street, BALCATTA WA 6021",-31.88110000,115.82798000,Balcatta,WA,None
+,Balcatta Senior High School,,"56 Amelia Street, BALCATTA WA 6021",-31.87603000,115.81320000,Balcatta,WA,Full
+,Osborne Park Community Centre,,"11 Royal Street, TUART HILL WA 6017",-31.89629000,115.82953000,Balcatta,WA,None
+,Osborne Primary School,,"155 Albert Street, OSBORNE PARK WA 6017",-31.89978000,115.82533000,Balcatta,WA,Full
+,St Denis School,,"2 Orchid Street, JOONDANA WA 6060",-31.90999000,115.84410000,Balcatta,WA,None
+,Takari Primary School,,"5 Rickman Street, BALCATTA WA 6021",-31.86981000,115.82153000,Balcatta,WA,None
+,Tuart Hill Primary School,,"134 Banksia Street, TUART HILL WA 6060",-31.90123800,115.84013100,Balcatta,WA,None
+,Westminster Primary School,,"30 Marloo Road, WESTMINISTER WA 6061",-31.86963100,115.83815700,Balcatta,WA,Full
+,Koorana Primary School,,"109 Coronata Drive, WARNBRO WA 6169",-32.34276200,115.76481400,Baldivis,WA,Full
+,Makybe Rise Primary School,,"Makybe Drive, BALDIVIS WA 6171",-32.34505300,115.81763500,Baldivis,WA,None
+,Rivergums Primary School,,"1 Avoca Chase, BALDIVIS WA 6171",-32.33600000,115.82991000,Baldivis,WA,None
+,South Coast Baptist College,,"30 Gnangara Drive, WAIKIKI WA 6169",-32.31479000,115.75694000,Baldivis,WA,Full
+,Tranby College,,"90 Arpenteur Drive, BALDIVIS WA 6171",-32.34053000,115.80156000,Baldivis,WA,None
+,Tuart Rise Primary School,,"31 Kempeana Way, BALDIVIS WA 6171",-32.35404400,115.81414600,Baldivis,WA,Full
+,Waikiki Primary School,,"12 Arnside Bend, WAIKIKI WA 6169",-32.31958600,115.76233300,Baldivis,WA,Full
+,Warnbro Community High School,,"2 Swallowtail Parade, WARNBRO WA 6169",-32.34541600,115.75787500,Baldivis,WA,Full
+,Warnbro Primary School,,"45 Axminster Street, WARNBRO WA 6169",-32.33507300,115.75462500,Baldivis,WA,None
+,Anzac Terrace Primary School,,"176 Anzac Terrace, BASSENDEAN WA 6054",-31.89768000,115.93692000,Bassendean,WA,None
+,Bassendean District - Election Day and Early Polling Place,,"Springs Shopping Centre, Shop 30, 130 Bridgeman Drive, BENNETT SPRINGS WA 6063",-31.858181,115.925087,Bassendean,WA,None
+,Bassendean Primary School,,"70 West Road, BASSENDEAN WA 6054",-31.90770500,115.95384300,Bassendean,WA,None
+,Beechboro Primary School,,"20 King Road, BEECHBORO WA 6063",-31.86847000,115.93609000,Bassendean,WA,Full
+,Cyril Jackson Senior Campus,,"67 Reid Street, BASSENDEAN WA 6054",-31.91291000,115.94246500,Bassendean,WA,Full
+,East Beechboro Primary School,,"Brockmill Avenue, BEECHBORO WA 6063",-31.87285000,115.95089800,Bassendean,WA,None
+,Eden Hill Primary School,,"83 A Ivanhoe Street, EDEN HILL WA 6054",-31.89300400,115.94596000,Bassendean,WA,Full
+,Hampton Senior High School,,"60 Morley Drive East, MORLEY WA 6062",-31.89010000,115.92653000,Bassendean,WA,Full
+,Kiara College,,"368 Benara Road, KIARA WA 6054",-31.87597,115.93500,Bassendean,WA,None
+,Lockridge Primary School,,"48 Rosher Road, LOCKRIDGE WA 6054",-31.88315000,115.95118000,Bassendean,WA,Full
+,West Beechboro Primary School,,"30 Avignon Way , BEECHBORO WA 6063",-31.8696969989066,115.926787183512,Bassendean,WA,None
+,Applecross Primary School,,"65 Kintail Road, APPLECROSS WA 6153",-32.01127000,115.83897000,Bateman,WA,Full
+,Ardross Primary School,,"46 LINKS Road, ARDROSS WA 6153",-32.02740000,115.83382000,Bateman,WA,None
+,Bateman District - Election Day and Early Polling Place,,"1-7 Sleat Road, APPLECROSS WA 6156",-32.0126800,115.846028,Bateman,WA,None
+,Booragoon Primary School,,"10 Clements Road, BOORAGOON WA 6154",-32.03481000,115.82626000,Bateman,WA,None
+,Brentwood Primary School,,"2 Dawson Road, BRENTWOOD WA 6153",-32.04172000,115.84764000,Bateman,WA,Full
+,Corpus Christi College,,"50 Murdoch Drive, BATEMAN WA 6150",-32.05664000,115.84190000,Bateman,WA,Full
+,Kardinya Primary School,,"OCHILTREE WAY, KARDINYA WA 6163",-32.06204800,115.82301800,Bateman,WA,None
+,Mount Pleasant Primary School,,"29 Queens Road, MOUNT PLEASANT WA 6153",-32.02984200,115.84594600,Bateman,WA,None
+,St Benedict's Primary School,,"70 Alness Street, ARDROSS WA 6153",-32.01863000,115.83894000,Bateman,WA,Full
+,Winthrop Primary School,,"70-80 Jackson Avenue, WINTHROP WA 6150",-32.05488000,115.83353000,Bateman,WA,Full
+,Belmay Primary School,,"410 Sydneham Street, CLOVERDALE WA 6105",-31.949498,115.947412,Belmont,WA,Full
+,Belmont City College,,"106 Fisher Street, BELMONT WA 6104",-31.95806000,115.93413000,Belmont,WA,Full
+,Belmont District - Election Day and Early Polling Place,,"Unit 4/10 Marchesi Street, KEWDALE WA 6105",-31.978275,115.9600312,Belmont,WA,None
+,Belmont Park Tennis Club,,"351/353 Robinson Avenue, CLOVERDALE WA 6105",-31.97187000,115.94483000,Belmont,WA,None
+,Belmont Primary School,,"213 Great Eastern Highway, BELMONT WA 6104",-31.94426000,115.92270000,Belmont,WA,Full
+,Carlisle Primary School,,"1 Wright Street, KEWDALE WA 6105",-31.97346000,115.92221000,Belmont,WA,Full
+,Hazelmere Hall,,"Bruce Elliott Reserve, Bushmead Road, HAZELMERE WA 6055",-31.90257200,115.99421800,Belmont,WA,Full
+,Kewdale Primary School,,"264 Kew Street, KEWDALE WA 6105",-31.97528000,115.94398000,Belmont,WA,Full
+,St Augustine's School,,"34 Gladstone Road, RIVERVALE WA 6103",-31.95988200,115.90647500,Belmont,WA,Full
+,Bibra Lake District - Election Day and Early Polling Place,,"The Wetlands Centre, 184 Hope Road, BIBRA LAKE WA 6163",-32.086251,115.830801,Bibra Lake,WA,None
+,Bibra Lake Primary School,,"29 Annois Road, BIBRA LAKE WA 6163",-32.09420000,115.83978000,Bibra Lake,WA,None
+,Coolbellup Community School,,"15 Waverley Road, COOLBELLUP WA 6163",-32.08217000,115.80867000,Bibra Lake,WA,None
+,East Hamilton Hill Primary School,,"27 Bradbury Road, HAMILTON HILL WA 6163",-32.07695000,115.78954000,Bibra Lake,WA,None
+,Lakeland Senior High School,,"106 South Lake Drive, SOUTH LAKE WA 6164",-32.10794000,115.84617000,Bibra Lake,WA,Full
+,Newton Primary School,,"4 Marvell Avenue, SPEARWOOD WA 6163",-32.11146000,115.78898000,Bibra Lake,WA,Full
+,North Lake Senior Campus,,"188-200 Winterfold Road, KARDINYA WA 6163",-32.07395000,115.81405000,Bibra Lake,WA,None
+,Phoenix Primary School,,"28 Phoenix Road, HAMILTON HILL WA 6163",-32.09247600,115.77892300,Fremantle,WA,None
+,Samson Primary School,,"22 Lawrence Way, SAMSON WA 6163",-32.07271000,115.80273000,Bibra Lake,WA,Full
+,South Lake Primary School,,"62 Mason Court, SOUTH LAKE WA 6164",-32.10552000,115.83457000,Bibra Lake,WA,Full
+,Southwell Primary School,,"26 Grandpre Crescent, HAMILTON HILL WA 6163",-32.09019000,115.78447000,Bibra Lake,WA,None
+,Spearwood Primary School,,"73 Gerald Street, SPEARWOOD WA 6163",-32.101155,115.787647,Bibra Lake,WA,None
+,Attadale Primary School,,"Wichmann Road, ATTADALE WA 6156",-32.02521000,115.80181000,Bicton,WA,None
+,Bicton District - Election Day and Early Polling Place,,"9/89 Petra Street, EAST FREMANTLE WA 6158",-32.0391367,115.775740,Bicton,WA,None
+,Bicton Primary School,,"Cnr Foss Street and View Terrace, BICTON WA 6157",-32.03289000,115.78685300,Bicton,WA,None
+,Caralee Community School,,"24 Winnacott Street, WILLAGEE WA 6156",-32.05156000,115.80500000,Bicton,WA,None
+,Melville Primary School,,"70 Curtis Road, MELVILLE WA 6156",-32.03919000,115.80693000,Bicton,WA,Full
+,Melville Recreation Centre,,"431 Canning Highway, MELVILLE WA 6156",-32.03439000,115.79504000,Bicton,WA,Full
+,Melville Senior High School,,"18 Potts Street, MELVILLE WA 6156",-32.04600000,115.80444000,Bicton,WA,Full
+,Palmyra Primary School,,"60 McKimmie Road, PALMYRA WA 6157",-32.04548000,115.78549000,Bicton,WA,None
+,Richmond Primary School,,"37 Windsor Road, EAST FREMANTLE WA 6158",-32.03630000,115.77026000,Bicton,WA,None
+,Southern Districts Senior Centre,,"Corner North Lake Road and Archibald Street , WILLAGEE WA 6156",-32.05357400,115.81493000,Bicton,WA,Full
+,St Peter's Anglican Church Hall,,"2 Hammad Street, PALMYRA WA 6157",-32.03942000,115.77693000,Bicton,WA,None
+,Adam Road Primary School,,"Hotchin Street, SOUTH BUNBURY WA 6230",-33.35792900,115.63401100,Bunbury,WA,Full
+,Bunbury Catholic College,,"Rodsted Street, EAST BUNBURY WA 6230",-33.34337000,115.66183000,Bunbury,WA,Full
+,Bunbury District - Election Day and Early Polling Place,,"Bunbury Homemaker Centre, Unit 2E/42 Strickland Street, BUNBURY WA 6230",-33.333607,115.64734,Bunbury,WA,Full
+,Bunbury Primary School – Kindergarten,,"2-18 Lovegrove Avenue, BUNBURY WA 6230",-33.33316100,115.63779800,Bunbury,WA,Full
+,Carey Park Primary School,,"36 Ecclestone Street, CAREY PARK WA 6230",-33.34900000,115.65088000,Bunbury,WA,Full
+,Cooinda Primary School,,"10 Allen Street, EAST BUNBURY WA 6230",-33.33466000,115.65233000,Bunbury,WA,Full
+,Dalyellup Primary School,,"14 Hartog Road, DALYELLUP WA 6230",-33.40018500,115.62218200,Bunbury,WA,None
+,Maidens Park Primary School,,"Westwood Street, WITHERS WA 6230",-33.36920000,115.62827000,Bunbury,WA,None
+,Milligan Community Learning and Resource Centre,,"35 Milligan Street, CAREY PARK WA 6230",-33.35889100,115.65759600,Bunbury,WA,Full
+,Picton Primary School,,"125 Jeffrey Road, GLEN IRIS WA 6230",-33.34016000,115.68816000,Bunbury,WA,Full
+,South Bunbury Pre-Primary Centre,,"19 Prosser Street, SOUTH BUNBURY WA 6230",-33.34031000,115.64260000,Bunbury,WA,Full
+,Tuart Forest Primary School,,"Crystal Bend, DALYELLUP WA 6230",-33.392132,115.634369,Bunbury,WA,Full
+,Alkimos Beach Primary School,,"200 Leatherback Boulevard, ALKIMOS WA 6038",-31.62509809,115.6784839,Butler,WA,Full
+,Butler College,,"15 McCormack Boulevard, BUTLER WA 6036",-31.65166400,115.70870100,Butler,WA,Full
+,Butler Primary School,,"30 Tollesbury Avenue, BUTLER WA 6036",-31.64572100,115.70257600,Butler,WA,Full
+,East Butler Primary School,,"7 Amersham Crescent, BUTLER WA 6036",-31.64460000,115.71171000,Butler,WA,Full
+,Shorehaven Primary School,,"91 Shorehaven Boulevard, ALKIMOS WA 6038",-31.6018800079406,115.67471984809,Butler,WA,Full
+,Two Rocks Primary School,,"51 Resolute Drive, TWO ROCKS WA 6037",-31.48878900,115.59182000,Butler,WA,Full
+,Yanchep Beach Primary School,,"100 Lindsay Beach Boulevard, YANCHEP WA 6035",-31.544071,115.631774,Butler,WA,Full
+,Yanchep Secondary College,,"21 Ravensbourne Street, YANCHEP WA 6035",-31.55252300,115.64342900,Butler,WA,Full
+,Bannister Creek Primary School,,"92 Purley Crescent, LYNWOOD WA 6147",-32.03903000,115.92848000,Cannington,WA,Full
+,Beckenham Community Church,,"3 Saturn Street, BECKENHAM WA 6107",-32.02597600,115.96231900,Cannington,WA,Full
+,Brookman Primary School,,"34 Brookman Avenue, LANGFORD WA 6147",-32.03749000,115.93884000,Cannington,WA,Full
+,East Kenwick Primary School,,"96 Kenwick Road, KENWICK WA 6107",-32.03230900,115.98032700,Cannington,WA,Full
+,Fountain College,,"12 Karri Way, FERNDALE WA 6148",-32.03632000,115.92035000,Cannington,WA,Full
+,Gibbs Street Primary School,,"79-93 Gibbs Street, EAST CANNINGTON WA 6107",-32.00825000,115.95317000,Cannington,WA,Full
+,Lynwood Christian Church,,"32 Latham Road, FERNDALE WA 6148",-32.02899200,115.93011100,Cannington,WA,Full
+,Sevenoaks Senior College,,"275 Sevenoaks Street, CANNINGTON WA 6107",-32.01194500,115.94241400,Cannington,WA,Full
+,St Norbert College,,"135 Treasure Road, QUEENS PARK WA 6107",-32.00472600,115.93881200,Cannington,WA,Full
+,Carine Senior High School,,"51 Everingham Street, CARINE WA 6020",-31.85266000,115.77662000,Carine,WA,Full
+,Davallia Primary School,,"6 Juniper Way, DUNCRAIG WA 6023",-31.84117000,115.78725000,Carine,WA,Full
+,Duncraig Primary School,,"21 Roche Road, DUNCRAIG WA 6023",-31.83227000,115.77091000,Carine,WA,Full
+,Glengarry Primary School,,"25 Doveridge Drive, DUNCRAIG WA 6023",-31.82705700,115.78262400,Carine,WA,Full
+,Lake Gwelup Primary School,,"59 Porter Street, GWELUP WA 6018",-31.87106400,115.79724500,Scarborough,WA,Full
+,Marmion Primary School,,"7 Cliverton Court, MARMION WA 6020",-31.84405000,115.75865000,Carine,WA,Full
+,North Beach Primary School,,"75 North Beach Road, NORTH BEACH WA 6020",-31.86028000,115.76108000,Scarborough,WA,Full
+,Poynter Primary School,,"39 Poynter Drive, DUNCRAIG WA 6023",-31.84205000,115.77537000,Carine,WA,None
+,Sacred Heart College,,"15 Hocking Parade, SORRENTO WA 6020",-31.82664000,115.74766000,Carine,WA,Full
+,Sorrento Primary School,,"14 Elfreda Avenue, SORRENTO WA 6020",-31.83104000,115.76071000,Carine,WA,Full
+,South Padbury Primary School,,"56 Warburton Avenue, PADBURY WA 6025",-31.81174000,115.76420000,Hillarys,WA,Full
+,Bakers Hill Primary School,,"33 St George Street, BAKERS HILL WA 6562",-31.74772500,116.46233600,Central Wheatbelt,WA,Full
+,Bencubbin Community Resource Centre,,"283 Monger Street, BENCUBBIN WA 6477",-30.80948900,117.85924400,Central Wheatbelt,WA,Full
+,Beverley Community Resource Centre,,"141 Vincent Street, BEVERLEY WA 6304",-32.11000000,116.92472200,Central Wheatbelt,WA,Full
+,Boddington District High School,,"25 Pollard Street, BODDINGTON WA 6390",-32.801258,116.467017,Central Wheatbelt,WA,Full
+,Brookton District High School,,"20 Tiller Street, BROOKTON WA 6306",-32.37238000,117.00921000,Central Wheatbelt,WA,Full
+,Bruce Rock Shire Hall,,"56 Johnson Street, BRUCE ROCK WA 6418",-31.873756,118.148770,Central Wheatbelt,WA,Full
+,Calingiri Primary School,,"18 Cavell Street, CALINGIRI WA 6569",-31.09015400,116.44917700,Central Wheatbelt,WA,None
+,Central Wheatbelt District - Election Day and Early Polling Place - Merredin,,"Merredin Community Resource Centre, 110 Barrack Street, MERREDIN WA 6415",-31.482102,118.28085,Central Wheatbelt,WA,None
+,Central Wheatbelt District - Election Day and Early Polling Place - Northam,,"Northam Town Hall, 83 Wellington Street, NORTHAM WA 6401",-31.656031,116.67150607,Central Wheatbelt,WA,Full
+,Corrigin Senior Citizens Centre,,"8 Lynch Street, CORRIGIN WA 6375",-32.33191100,117.87598400,Central Wheatbelt,WA,Full
+,Cunderdin District High School,,"Cubbine Street, CUNDERDIN WA 6407",-31.65534000,117.24454000,Central Wheatbelt,WA,None
+,Dowerin Lesser Hall,,"15 Cottrell Street, DOWERIN WA 6461",-31.19495700,117.03103500,Central Wheatbelt,WA,None
+,Goomalling Primary School,,"65 Hoddy Street, GOOMALLING WA 6460",-31.305354,116.829881,Central Wheatbelt,WA,None
+,Greenhills Hall,,"460 Greenhills Road, GREENHILLS WA 6302",-31.92070000,116.96393900,Central Wheatbelt,WA,None
+,Kellerberrin Memorial Hall,,"110 Massingham Street, KELLERBERRIN WA 6410",-31.63363000,117.72171000,Central Wheatbelt,WA,Full
+,Koorda Emergency Centre,,"21 Ninghan Road, KOORDA WA 6475",-30.82600000,117.48444000,Central Wheatbelt,WA,None
+,Mukinbudin Shire Chambers,,"15 Maddock Street, MUKINBUDIN WA 6479",-30.91595000,118.20748000,Central Wheatbelt,WA,None
+,Narembeen District High School,,"7 Ada Street, NAREMBEEN WA 6369",-32.06311000,118.39134000,Central Wheatbelt,WA,Full
+,New Norcia Institute Study Hall,,"New Norcia Road, NEW NORCIA WA 6509",-30.96852000,116.21604000,Central Wheatbelt,WA,None
+,Pingelly Recreation and Cultural Centre,,"4 Somerset Street, PINGELLY WA 6308",-32.52997800,117.09063500,Central Wheatbelt,WA,Full
+,Quairading Town Hall,,"2 Jennaberring Road, QUAIRADING WA 6383",-32.00728000,117.39896000,Central Wheatbelt,WA,None
+,Southern Cross Community Centre,,"25-27 Antares Street, SOUTHERN CROSS WA 6426",-31.23124300,119.32816900,Central Wheatbelt,WA,None
+,Tammin Lesser Hall,,"1 Donnan Street, TAMMIN WA 6409",-31.64144200,117.48406200,Central Wheatbelt,WA,None
+,Toodyay Memorial Hall,,"117 Stirling Terrace, TOODYAY WA 6566",-31.55024500,116.46683100,Central Wheatbelt,WA,None
+,Trayning Primary School,,"30 Adam Street, TRAYNING WA 6488",-31.11426057,117.7905257,Central Wheatbelt,WA,None
+,Wandering Primary School,,"2 Watts Street, WANDERING WA 6308",-32.67728700,116.67286800,Central Wheatbelt,WA,None
+,Westonia Leisure Centre,,"Corner Gold and Diorite Streets, WESTONIA WA 6423",-31.300212,118.695728,Central Wheatbelt,WA,None
+,Wongan Hills Community Resource Centre,,"1 Wongan Road, WONGAN HILLS WA 6603",-30.89305000,116.71624000,Central Wheatbelt,WA,Full
+,Wundowie Primary School,,"216 Boronia Street, WUNDOWIE WA 6560",-31.761234,116.382921,Central Wheatbelt,WA,None
+,Wyalkatchem Community Resource Centre,,"5700 Railway Terrace, WYALKATCHEM WA 6485",-31.17983000,117.37947000,Central Wheatbelt,WA,Full
+,York District High School,,"2 Trews Road, YORK WA 6302",-31.89306500,116.75992500,Central Wheatbelt,WA,None
+,Churchlands District - Election Day and Early Polling Place,,"A2/4 King Edward Road, OSBORNE PARK WA 6017",-31.903696,115.804987,Churchlands,WA,None
+,Churchlands Primary School,,"Cromarty Road, FLOREAT WA 6014",-31.92682000,115.79479100,Churchlands,WA,Full
+,Doubleview Primary School,,"273 Flamborough Street, DOUBLEVIEW WA 6018",-31.89749400,115.77727600,Scarborough,WA,None
+,Floreat Park Primary School,,"38 Chandler Avenue West , FLOREAT WA 6014",-31.93674000,115.79141000,Churchlands,WA,Full
+,Floreat Park Primary School Early Learning Centre,,"124 Birkdale Street, FLOREAT WA 6014",-31.93907100,115.80156700,Churchlands,WA,Full
+,Kapinara Primary School,,"2 Catesby Street, CITY BEACH WA 6015",-31.92549000,115.76243000,Churchlands,WA,Full
+,Lake Monger Primary School,,"Dodd Street, WEMBLEY WA 6014",-31.92438000,115.82164000,Churchlands,WA,Full
+,Wembley Downs Primary School,,"39 Bournemouth Crescent, WEMBLEY DOWNS WA 6019",-31.91095000,115.77102000,Churchlands,WA,None
+,Wembley Primary School,,"41 Grantham Street, WEMBLEY WA 6014",-31.93462000,115.80972000,Churchlands,WA,Full
+,West Leederville Primary School,,"58 Northwood Street, WEST LEEDERVILLE WA 6007",-31.93914000,115.83247000,Churchlands,WA,None
+,Woodlands Primary School,,"7 Bentwood Avenue, WOODLANDS WA 6018",-31.91029000,115.78965000,Churchlands,WA,Full
+,Yuluma Primary School,,"21 Ambrose Street, INNALOO WA 6018",-31.89179700,115.78967300,Scarborough,WA,Full
+,Beeliar Primary School,,"86 The Grange , BEELIAR WA 6164",-32.13237000,115.82130000,Cockburn,WA,None
+,Cockburn District - Election Day and Early Polling Place,,"Cockburn Gateway Shopping Centre - Shop 25, 816 Beeliar Drive, SUCCESS WA 6164",-32.1316654,115.8562801,Cockburn,WA,None
+,Coogee Primary School,,"22 Mayor Road, COOGEE WA 6166",-32.12648000,115.77172000,Cockburn,WA,None
+,Hammond Park Primary School,,"10 Eucalyptus Drive, HAMMOND PARK WA 6164",-32.16638200,115.84429800,Cockburn,WA,Full
+,Jandakot Primary School,,"53 Baningan Avenue, SUCCESS WA 6164",-32.13889700,115.84642900,Cockburn,WA,None
+,South Coogee Primary School,,"40 Ivankovich Avenue, BEELIAR WA 6164",-32.12909000,115.79767000,Cockburn,WA,Full
+,St Jerome's School,,"38 Troode Street, MUNSTER WA 6166",-32.12115000,115.78257000,Cockburn,WA,Full
+,Success Primary School,,"390 Wentworth Parade, SUCCESS WA 6164",-32.15304000,115.84964000,Cockburn,WA,Full
+,Yangebup Primary School,,"55 Moorhen Drive, YANGEBUP WA 6164",-32.11967000,115.81949000,Cockburn,WA,None
+,Allanson Primary School,,"15 Cameron Street, ALLANSON WA 6225",-33.33587100,116.09857000,Collie-Preston,WA,Full
+,Australind Primary School,,"Barnes Avenue, AUSTRALIND WA 6233",-33.28059900,115.72713700,Murray-Wellington,WA,None
+,Balingup Primary School,,"2 Steere Street, BALINGUP WA 6253",-33.78680500,115.98215900,Collie-Preston,WA,Full
+,Boyanup Primary School,,"45 Thomas Street, BOYANUP WA 6237",-33.48606000,115.73001000,Collie-Preston,WA,Full
+,Capel Community Centre,,"35 Forrest Road, CAPEL WA 6271",-33.55373600,115.56278200,Collie-Preston,WA,Full
+,Clifton Park Primary School,,"139 Lucy Victoria Avenue, CLIFTON PARK WA 6233",-33.30850000,115.71100000,Collie-Preston,WA,Full
+,Collie-Preston District - Election Day and Early Polling Place,,"Collie Club Inc, 55 Wittenoom Street, COLLIE WA 6225",-33.36201,116.15467,Collie-Preston,WA,None
+,Dardanup Primary School,,"48 Hayward Street, DARDANUP WA 6236",-33.40089700,115.75758100,Collie-Preston,WA,Full
+,Donnybrook Soldiers Memorial Hall,,"1 Bentley Street, DONNYBROOK WA 6239",-33.57594500,115.82317400,Collie-Preston,WA,Full
+,Eaton Community College,,"20 Recreation Drive, EATON WA 6232",-33.31865000,115.72104000,Collie-Preston,WA,Full
+,Eaton Primary School,,"35 Diadem Street, EATON WA 6232",-33.32166667,115.70222220,Collie-Preston,WA,Full
+,Fairview Primary School,,"Vernon Street, COLLIE WA 6225",-33.34865,116.16790,Collie-Preston,WA,Full
+,Ferguson Hall,,"945 Ferguson Road, FERGUSON WA 6236",-33.43163800,115.83758500,Collie-Preston,WA,Full
+,Gelorup Community Centre,,"40 Hasties Road, GELORUP WA 6230",-33.40991600,115.64164500,Collie-Preston,WA,Full
+,Kirup Hall,,"39 South Western Highway, KIRUP WA 6251",-33.70580000,115.89300000,Collie-Preston,WA,None
+,River Valley Primary School,,"51 Russell Road, BUREKUP WA 6227",-33.30844000,115.81494000,Collie-Preston,WA,Full
+,Treendale Primary School,,"5 Opal Drive, AUSTRALIND WA 6233",-33.28194700,115.73555900,Collie-Preston,WA,Full
+,Yabberup Hall,,"5 Yabberup Road, LOWDEN WA 6240",-33.53718900,116.00736900,Collie-Preston,WA,None
+,Alf Adams Pavilion,,"Soloman Street, MOSMAN PARK WA 6012",-32.00948000,115.76339200,Cottesloe,WA,Full
+,City Beach Primary School,,"30 Marapana Road, CITY BEACH WA 6015",-31.93599000,115.76495000,Cottesloe,WA,Full
+,Cottesloe District - Election Day and Early Polling Place,,"War Memorial Hall, 109 Broome Street, COTTESLOE WA 6011",-31.993577,115.755641,Cottesloe,WA,None
+,Cottesloe Primary School,,"530 Stirling Highway, PEPPERMINT GROVE WA 6011",-32.00204600,115.76097200,Cottesloe,WA,None
+,Freshwater Bay Primary School,,"Bay View Terrace, CLAREMONT WA 6010",-31.98585700,115.78194000,Nedlands,WA,None
+,Mount Claremont Primary School,,"103 Alfred Road, MOUNT CLAREMONT WA 6010",-31.96840500,115.78311200,Cottesloe,WA,None
+,North Cottesloe Primary School,,"100 Eric Street, COTTESLOE WA 6011",-31.98943000,115.76542000,Cottesloe,WA,None
+,North Fremantle Primary School,,"30 John Street, NORTH FREMANTLE WA 6159",-32.03450000,115.75697800,Cottesloe,WA,None
+,Saint Hilda's Anglican School for Girls - Chidley Campus,,"McCabe Street, MOSMAN PARK WA 6012",-32.02038700,115.77325000,Cottesloe,WA,Full
+,Swanbourne Primary School,,"3 Narla Road, SWANBOURNE WA 6010",-31.97337100,115.77023000,Cottesloe,WA,Full
+,Byford Primary School,,"36 Clifton Street, BYFORD WA 6122",-32.219434,116.011714,Darling Range,WA,Full
+,Byford Secondary College,,"57 Abernethy Road, BYFORD WA 6122",-32.222006,116.001639,Darling Range,WA,Full
+,Casuarina Wellard Community Hall,,"Corner Mortimer & Barker Roads, WELLARD WA 6170",-32.25566300,115.87254600,Darling Range,WA,Full
+,Darling Range District - Election Day and Early Polling Place,,"2/821 South Western Highway, BYFORD WA 6122",-32.217249,116.008566,Darling Range,WA,Full
+,Jarrahdale Primary School,,"20 Wanliss Street, JARRAHDALE WA 6124",-32.33928500,116.06229500,Darling Range,WA,None
+,Mundijong Primary School,,"Livesey Street, MUNDIJONG WA 6123",-32.29068800,115.98517100,Darling Range,WA,Full
+,Roleystone Community College,,"90 Raeburn Road, ROLEYSTONE WA 6111",-32.102961,116.084162,Darling Range,WA,Full
+,Roleystone Family Centre,,"19 Wygonda Road, ROLEYSTONE WA 6111",-32.112338,116.068048,Darling Range,WA,Full
+,Serpentine Primary School,,"45 Lefroy Street, SERPENTINE WA 6125",-32.36578000,115.98092000,Darling Range,WA,Full
+,Southern Hills Christian College,,"86 Admiral Road, BEDFORDALE WA 6112",-32.182039,116.049307,Darling Range,WA,Full
+,West Byford Primary School,,"101 Kardan Boulevard, BYFORD WA 6122",-32.21527400,115.97906400,Darling Range,WA,Full
+,Dawesville District - Election Day and Early Polling Place,,"10/2 Rutland Drive, HALLS HEAD WA 6210",-32.546828,115.705905,Dawesville,WA,None
+,Elevation Church Hall,,"240 McLarty Road, HALLS HEAD WA 6210",-32.53963400,115.69374700,Dawesville,WA,Full
+,Falcon Primary School,,"30 Baloo Crescent, FALCON WA 6210",-32.59302000,115.64322000,Dawesville,WA,None
+,Falcon Reserve Football Pavilion,,"49 Lynda Street, FALCON WA 6210",-32.57904400,115.66104500,Dawesville,WA,Full
+,Glencoe Primary School,,"Glencoe Parade, HALLS HEAD WA 6210",-32.542175,115.70402,Dawesville,WA,None
+,Halls Head Primary School,,"21 Oleander Place, HALLS HEAD WA 6210",-32.55072000,115.69552000,Dawesville,WA,None
+,Ocean Road Primary School,,"15 Ocean Road, DAWESVILLE WA 6211",-32.62423000,115.63044000,Dawesville,WA,None
+,South Halls Head Primary School,,"38 Karon Vista, HALLS HEAD WA 6210",-32.56410000,115.67874000,Dawesville,WA,Full
+,Darling Range Sports College,,"A Block/117 Berkshire Road, FORRESTFIELD WA 6058",-31.97593000,116.00966800,Forrestfield,WA,None
+,Edney Primary School,,"204 Newburn Road, HIGH WYCOMBE WA 6057",-31.94738900,116.00703700,Forrestfield,WA,Full
+,Forrestfield Primary School,,"45 Sussex Road, FORRESTFIELD WA 6058",-31.99081000,116.00824000,Forrestfield,WA,Full
+,Gooseberry Hill Primary School,,"24 Ledger Road, GOOSEBERRY HILL WA 6076",-31.95611300,116.05606600,Forrestfield,WA,Full
+,Helena Valley Primary School,,"3700 Helena Valley Road, HELENA VALLEY WA 6056",-31.92468200,116.04909600,Midland,WA,None
+,High Wycombe Primary School,,"60 Newburn Road, HIGH WYCOMBE WA 6057",-31.94029700,116.00279100,Forrestfield,WA,None
+,Maida Vale Primary School,,"310 Kalamunda Road, MAIDA VALE WA 6057",-31.94943100,116.02287600,Forrestfield,WA,Full
+,Wattle Grove Primary School,,"73 St John Road, WATTLE GROVE WA 6107",-31.99660500,115.98315400,Forrestfield,WA,Full
+,Woodlupine Primary School,,"29 Solandra Way, FORRESTFIELD WA 6058",-31.98429100,116.00413500,Forrestfield,WA,Full
+,Beaconsfield Primary School,,"5 Hale Street, BEACONSFIELD WA 6162",-32.069074,115.759048,Fremantle,WA,None
+,Christ The King School,,"87 York Street, BEACONSFIELD WA 6162",-32.07212500,115.77335700,Fremantle,WA,Full
+,East Fremantle Primary School,,"8 Forrest Street, EAST FREMANTLE WA 6158",-32.04824000,115.75961000,Fremantle,WA,None
+,Fremantle District - Election Day and Early Polling Place,,"3 Josephson Street, FREMANTLE WA 6160",-32.052535,115.749760,Fremantle,WA,None
+,Fremantle Primary School,,"1 Brennan Street, FREMANTLE WA 6160",-32.05863400,115.75306600,Fremantle,WA,Full
+,Hilton Primary School,,"21 Rennie Crescent North , HILTON WA 6163",-32.06803000,115.78455000,Fremantle,WA,Full
+,White Gum Valley Primary School,,"29 Hope Street, WHITE GUM VALLEY WA 6162",-32.05905500,115.76562200,Fremantle,WA,None
+,Allendale Primary School,,"52 Wittenoom Street, GERALDTON WA 6530",-28.76407000,114.62322000,Geraldton,WA,Full
+,Bluff Point Primary School,,"18 Mitchell Street, BLUFF POINT WA 6530",-28.73974000,114.62270000,Geraldton,WA,Full
+,Cape Burney Volunteer Fire Brigade,,"5 Hull Street, CAPE BURNEY WA 6532",-28.86075900,114.64186600,Geraldton,WA,None
+,Geraldton District - Election Day and Early Polling Place,,"Sanford Plaza Geraldton - Shop 5, 58 Durlacher Street, GERALDTON WA 6530",-28.7741243,114.6124983,Geraldton,WA,Full
+,Geraldton Primary School,,"75 Fitzgerald Street, GERALDTON WA 6530",-28.77889500,114.60805500,Geraldton,WA,Full
+,John Batten Drummond Cove Community Centre,,"62 Whitehill Road, DRUMMOND COVE WA 6532",-28.67039300,114.61229300,Geraldton,WA,None
+,Kalbarri District High School,,"Hackney Street, KALBARRI WA 6536",-27.71251000,114.16368000,Geraldton,WA,Full
+,Moonyoonooka Polocrosse Club,,"Geraldton-Mount Magnet Road, MOONYOONOOKA WA 6532",-28.78212000,114.73445000,Geraldton,WA,None
+,Mount Tarcoola Primary School,,"57 Forden Street, MOUNT TARCOOLA WA 6530",-28.80037000,114.62875000,Geraldton,WA,Full
+,Mullewa District High School,,"Jose Street, MULLEWA WA 6630",-28.53676000,115.51240000,Geraldton,WA,Full
+,Nabawa Community Centre,,"Chapman Valley Road, NABAWA WA 6532",-28.49911300,114.79279000,Geraldton,WA,Full
+,Northampton RSL Hall,,"Essex Street, NORTHAMPTON WA 6535",-28.34778800,114.63102000,Geraldton,WA,Full
+,Rangeway Primary School,,"4 Cassia Street, RANGEWAY WA 6530",-28.77983000,114.62863000,Geraldton,WA,Full
+,Spalding Family Centre,,"75 Mitchell Street, SPALDING WA 6530",-28.74152000,114.62996100,Geraldton,WA,Full
+,Waggrakine Primary School,,"9 Hall Road, WAGGRAKINE WA 6530",-28.71826400,114.63750300,Geraldton,WA,Full
+,Walkaway Primary School,,"8 Evans Road, WALKAWAY WA 6528",-28.93975200,114.79922200,Geraldton,WA,None
+,Wandina Primary School,,"29 Ajax Drive, WANDINA WA 6530",-28.81693300,114.63564900,Geraldton,WA,Full
+,Alexander Heights Community Hall,,"18 Linto Way, ALEXANDER HEIGHTS WA 6064",-31.82852900,115.85360100,Girrawheen,WA,None
+,Alinjarra Primary School,,"33 Northumberland Avenue, ALEXANDER HEIGHTS WA 6064",-31.83007400,115.87032200,Girrawheen,WA,None
+,Balga Primary School,,"11 Fernhurst Crescent, BALGA WA 6061",-31.86099000,115.84478000,Girrawheen,WA,None
+,Boyare Primary School,,"9 Threadleaf Way, MIRRABOOKA WA 6061",-31.85771000,115.87345700,Girrawheen,WA,None
+,Girrawheen District - Election Day and Early Polling Place,,"Hawaiian's Newpark Shopping Centre - Shop 3MA, 64 Marangaroo Drive, GIRRAWHEEN WA 6061",-31.835552,115.829589,Girrawheen,WA,Full
+,Hudson Park Primary School,,"23 Arnos Way, GIRRAWHEEN WA 6064",-31.83985000,115.83706000,Girrawheen,WA,Full
+,Koondoola Primary School,,"50 Burbridge Avenue, KOONDOOLA WA 6064",-31.83790200,115.86236100,Girrawheen,WA,None
+,North Balga Primary School,,"30 Maitland Road, BALGA WA 6061",-31.85243000,115.83413000,Girrawheen,WA,None
+,Rawlinson Primary School,,"27 Rawlinson Drive, MARANGAROO WA 6064",-31.82784000,115.84409000,Girrawheen,WA,Full
+,Roseworth Primary School,,"30 Stebbing Way, GIRRAWHEEN WA 6064",-31.84076000,115.85322000,Girrawheen,WA,Full
+,The Hepburn Centre,,"46 Highclere Boulevard, MARANGAROO WA 6064",-31.83060100,115.83952500,Girrawheen,WA,Full
+,Beldon Primary School,,"10 Pacific Way, BELDON WA 6027",-31.77422000,115.75742000,Hillarys,WA,None
+,Craigie Heights Primary School,,"47 Spinaway Street, CRAIGIE WA 6025",-31.78955000,115.76075000,Hillarys,WA,None
+,Flinders Park Community Hall,,"Broadbeach Boulevard, HILLARYS WA 6025",-31.80818500,115.73650000,Hillarys,WA,Full
+,Hillarys Primary School,,"75 Lymburner Drive, HILLARYS WA 6025",-31.81260300,115.75286000,Hillarys,WA,Full
+,Mullaloo Heights Primary School,,"27 Charonia Road, MULLALOO WA 6027",-31.77744000,115.74872000,Hillarys,WA,None
+,Ocean Reef Senior High School,,"21 Venturi Drive, OCEAN REEF WA 6027",-31.75974000,115.73890000,Hillarys,WA,Full
+,Padbury Primary School,,"MacDonald Avenue, PADBURY WA 6025",-31.80478000,115.76064000,Hillarys,WA,Full
+,Rob Baddock Community Hall,,"160 Dampier Avenue, KALLAROO WA 6025",-31.786179,115.743752,Hillarys,WA,Full
+,St Mark's Anglican Community School,,"20 St Marks Drive, HILLARYS WA 6025",-31.79848700,115.74287300,Hillarys,WA,None
+,Atwell Primary School,,"160 Lydon Boulevard, ATWELL WA 6164",-32.13562000,115.86853000,Jandakot,WA,Full
+,Banksia Park Primary School,,"2 Hicks Street, LEEMING WA 6149",-32.07211000,115.87495000,Jandakot,WA,Full
+,Canning Vale Primary School,,"The Ramble , CANNING VALE WA 6155",-32.07606000,115.91252000,Jandakot,WA,None
+,Harmony Primary School,,"60 Aurora Drive, ATWELL WA 6164",-32.15076000,115.86484000,Jandakot,WA,Full
+,Jandakot District - Election Day and Early Polling Place,,"1/10 Chifley Brace, JANDAKOT WA 6164",-32.1211176,115.8672708,Jandakot,WA,None
+,Leeming Primary School,,"10 Meharry Road, LEEMING WA 6149",-32.07605000,115.86302000,Jandakot,WA,None
+,Ranford Primary School,,"10 Orkney Crescent, CANNING VALE WA 6155",-32.09374800,115.91089100,Jandakot,WA,Full
+,Treeby Primary School,,"15 Sapphire Drive, TREEBY WA 6164",-32.1178889241172,115.88077117654,Jandakot,WA,Full
+,West Leeming Primary School,,"50 Westall Terrace, LEEMING WA 6149",-32.07039000,115.85615000,Jandakot,WA,None
+,Beaumaris Community Centre,,"66 Constellation Drive, OCEAN REEF WA 6027",-31.75107700,115.73482100,Joondalup,WA,Full
+,Burns Beach Primary School,,"10 Watcombe Avenue, BURNS BEACH WA 6028",-31.72707138,115.7293128,Joondalup,WA,Full
+,Connolly Primary School,,"169 Fairway Circle, CONNOLLY WA 6027",-31.74707000,115.75788000,Joondalup,WA,None
+,Currambine Primary School,,"28 Ambassador Drive, CURRAMBINE WA 6028",-31.73304000,115.74892000,Joondalup,WA,Full
+,Eddystone Primary School,,"Littorina Avenue, HEATHRIDGE WA 6027",-31.76668000,115.76863000,Joondalup,WA,Full
+,Edgewater Primary School,,"76 Treetop Avenue, EDGEWATER WA 6027",-31.76341000,115.78043000,Joondalup,WA,None
+,Joondalup Primary School,,"150 Blue Mountain Drive, JOONDALUP WA 6027",-31.72328000,115.76142400,Joondalup,WA,Full
+,Joondalup Public Library,,"102 Boas Avenue, JOONDALUP WA 6027",-31.74360000,115.77342000,Joondalup,WA,None
+,Poseidon Primary School,,"97 Poseidon Road, HEATHRIDGE WA 6027",-31.76099000,115.75188000,Joondalup,WA,Full
+,Chidlow Primary School,,"450 Lilydale Road, CHIDLOW WA 6556",-31.85702000,116.26828000,Kalamunda,WA,Full
+,Churches of Christ in WA,,"1470 Stoneville Road, MUNDARING WA 6073",-31.88377600,116.17149000,Kalamunda,WA,Full
+,Darlington Hall,,"Owen Road, DARLINGTON WA 6070",-31.91812800,116.07475300,Kalamunda,WA,Full
+,Falls Road Primary School,,"50 Falls Road, LESMURDIE WA 6076",-31.99247400,116.04769900,Kalamunda,WA,Full
+,Glen Forrest Primary School,,"34 Tillbrook Street, GLEN FORREST WA 6071",-31.91555700,116.10089800,Kalamunda,WA,Full
+,Kalamunda Primary School,,"32 Heath Road, KALAMUNDA WA 6076",-31.97140000,116.05147000,Kalamunda,WA,Full
+,Lesmurdie Primary School,,"49 Sanderson Road, LESMURDIE WA 6076",-32.00445700,116.04572200,Kalamunda,WA,None
+,Mahogany Creek Hall,,"3060 Strettle Road, MAHOGANY CREEK WA 6072",-31.90624700,116.13755600,Kalamunda,WA,Full
+,Mount Helena Recreation Centre,,"Lot 289 Keane Street East , MT HELENA WA 6082",-31.87529600,116.22059700,Kalamunda,WA,Full
+,Mundaring Hall,,"Corner Jacoby Street and Nichol Street , MUNDARING WA 6073",-31.90330800,116.16549300,Kalamunda,WA,Full
+,Mundaring Primary School,,"855 Stevens Street, MUNDARING WA 6073",-31.89503600,116.17233300,Kalamunda,WA,Full
+,Parkerville Primary School,,"16 Parker Road, PARKERVILLE WA 6081",-31.88329900,116.13308400,Kalamunda,WA,Full
+,Pickering Brook Primary School,,"241 Pickering Brook Road, PICKERING BROOK WA 6076",-32.03487600,116.13155500,Kalamunda,WA,Full
+,Sawyers Valley Primary School,,"235 Sawyers Road, SAWYERS VALLEY WA 6074",-31.90170200,116.20362900,Kalamunda,WA,Full
+,Walliston Primary School,,"11 Dianella Road, WALLISTON WA 6076",-31.99878000,116.07019000,Kalamunda,WA,Full
+,Wooroloo Primary School,,"Wade Street, WOOROLOO WA 6558",-31.80383900,116.31226900,Kalamunda,WA,Full
+,Boulder Primary School,,"200 Lane Street, BOULDER WA 6432",-30.77972700,121.48845800,Kalgoorlie,WA,None
+,Coolgardie Community Recreation Centre,,"69 Sylvester Street, COOLGARDIE WA 6429",-30.95370400,121.16417900,Kalgoorlie,WA,Full
+,Goldfields Arts Centre,,"35 Cheetham Street, KALGOORLIE WA 6430",-30.75040000,121.47602000,Kalgoorlie,WA,Full
+,Hannans Primary School,,"2 A Nankiville Road, KALGOORLIE WA 6430",-30.72423000,121.45171000,Kalgoorlie,WA,Full
+,John Paul College,,"44 Lionel Street, SOUTH KALGOORLIE WA 6430",-30.76360000,121.47896000,Kalgoorlie,WA,None
+,Kalgoorlie District - Election Day and Early Polling Place,,"1/102 Brookman Street, KALGOORLIE WA 6430",-30.7483246,121.4691720,Kalgoorlie,WA,Full
+,Kambalda West District High School,,"Salmon Gums Road, KAMBALDA WEST WA 6442",-31.20617000,121.61909000,Kalgoorlie,WA,None
+,Laverton Primary School,,"Lancefield Street, LAVERTON WA 6440",-28.62730000,122.40380000,Kalgoorlie,WA,None
+,Leinster Community Hall,,"Link Road, LEINSTER WA 6437",-27.91328000,120.69769000,Kalgoorlie,WA,None
+,Leonora Recreation Centre,,"Tower Street, LEONORA WA 6438",-28.88199900,121.33109300,Kalgoorlie,WA,Full
+,Norseman Town Hall,,"88-92 Prinsep Street, NORSEMAN WA 6443",-32.19884000,121.77913000,Kalgoorlie,WA,Full
+,North Kalgoorlie Primary School,,"Campbell Street, LAMINGTON WA 6430",-30.73868700,121.46016300,Kalgoorlie,WA,None
+,O'Connor Primary School,,"235 Johnston Street, KALGOORLIE WA 6430",-30.77741000,121.46585000,Kalgoorlie,WA,Full
+,Wiluna Remote Community School,,"Scotia Street, WILUNA WA 6646",-26.59865800,120.22723500,Kalgoorlie,WA,Full
+,Broome North Primary School,,"1/100 Tanami Drive, BROOME WA 6725",-17.92663700,122.23014200,Kimberley,WA,None
+,Cable Beach Primary School,,"39 Dakas Street, CABLE BEACH WA 6726",-17.95933800,122.21680600,Kimberley,WA,None
+,Derby District High School,,"10 Anderson Street, DERBY WA 6728",-17.30814500,123.63354700,Kimberley,WA,None
+,Fitzroy Valley District High School,,"Flynn Drive, FITZROY CROSSING WA 6765",-18.18808200,125.56431500,Kimberley,WA,Full
+,Halls Creek District High School,,"Thomas Street, HALLS CREEK WA 6770",-18.22515000,127.66905000,Kimberley,WA,None
+,Kimberley District - Election Day and Early Polling Place - Broome,,"Broome Convention Centre, Frederick Street, BROOME WA 6725",-17.95606,122.241951,Kimberley,WA,Full
+,Kimberley District - Election Day and Early Polling Place - Kununurra,,"Kimberley Grande Resort, 20 Victoria Highway, KUNUNURRA WA 6743",-15.78303,128.73693,Kimberley,WA,Full
+,Roebuck Bay Primary School,,"Spoonbill Avenue, BROOME WA 6725",-17.93988000,122.23247000,Kimberley,WA,None
+,Wyndham District High School,,"16 Coverley Street, WYNDHAM WA 6740",-15.48800400,128.12083100,Kimberley,WA,None
+,Creaney Primary School,,"6 Creaney Drive, KINGSLEY WA 6026",-31.80365000,115.78842000,Kingsley,WA,Full
+,East Hamersley Primary School,,"20 Doon Way, HAMERSLEY WA 6022",-31.84777700,115.81791700,Kingsley,WA,None
+,Glendale Primary School,,"21 Glendale Avenue, HAMERSLEY WA 6022",-31.84851300,115.80764400,Kingsley,WA,None
+,Goollelal Primary School,,"30 Cadogan Street, KINGSLEY WA 6026",-31.81516000,115.80116000,Kingsley,WA,Full
+,Greenwood Primary School,,"12 Merivale Way, GREENWOOD WA 6024",-31.82876800,115.80845900,Kingsley,WA,Full
+,Halidon Primary School,,"38 Halidon Street, KINGSLEY WA 6026",-31.80828000,115.80150000,Kingsley,WA,Full
+,Hawker Park Primary School,,"47 Hawker Avenue, WARWICK WA 6024",-31.84019000,115.79710000,Kingsley,WA,None
+,West Greenwood Primary School,,"101 Coolibah Drive, GREENWOOD WA 6024",-31.82528199,115.7899632,Kingsley,WA,None
+,Woodvale Primary School,,"44 Keatley Crescent, WOODVALE WA 6026",-31.79431500,115.79369500,Kingsley,WA,None
+,Woodvale Secondary College,,"110 Woodvale Drive, WOODVALE WA 6026",-31.79130000,115.80048000,Kingsley,WA,Full
+,Baldivis Gardens Primary School,,"1 Nadine Promenade, BALDIVIS WA 6171",-32.30082300,115.81006200,Kwinana,WA,Full
+,Baldivis Primary School,,"214 Fifty Road, BALDIVIS WA 6171",-32.30767600,115.81767000,Kwinana,WA,None
+,Bertram Primary School,,"Champion Drive, BERTRAM WA 6167",-32.24695000,115.84320000,Kwinana,WA,Full
+,Calista Primary School,,"22/50 Harlow Road (cnr Chilcott St) Road, CALISTA WA 6167",-32.24559000,115.81067000,Kwinana,WA,None
+,Kwinana District - Election Day and Early Polling Place,,"Kwinana Professional Centre, Unit 2/4 Challenger Avenue, KWINANA WA 6167",-32.2471798,115.815580,Kwinana,WA,Full
+,Leda Primary School,,"1/25 Feilman Drive, LEDA WA 6170",-32.26021800,115.80396700,Kwinana,WA,None
+,Medina Primary School,,"2 Westcott Road, MEDINA WA 6167",-32.23592700,115.80477100,Kwinana,WA,None
+,North Parmelia Primary School,,"15-35 Durrant Avenue, PARMELIA WA 6167",-32.23544000,115.83616000,Kwinana,WA,None
+,Sheoak Grove Primary School,,"Nyilla Approach, BALDIVIS WA 6171",-32.32388400,115.82192300,Kwinana,WA,Full
+,St Vincent's School,,"114 Parmelia Avenue, PARMELIA WA 6167",-32.25254200,115.82616700,Kwinana,WA,None
+,Wellard Primary School,,"25 Breccia Parade, WELLARD WA 6170",-32.266228,115.8463352,Kwinana,WA,Full
+,Wellard Village Primary School,,"22 Brentford Parade, WELLARD WA 6170",-32.2710034,115.8202831,Kwinana,WA,Full
+,Ashdale Primary School,,"51 Ashdale Boulevard, DARCH WA 6065",-31.80856000,115.84383000,Landsdale,WA,None
+,Carnaby Rise Primary School,,"Pomodora Avenue, LANDSDALE WA 6065",-31.814674,115.873262,Landsdale,WA,None
+,Hocking Primary School,,"50 Gungurru Avenue, HOCKING WA 6065",-31.76971000,115.81685000,Landsdale,WA,None
+,Kingsway Christian College,,"157 Kingsway , DARCH WA 6065",-31.81156700,115.83740400,Landsdale,WA,None
+,Landsdale District - Election Day and Early Polling Place,,"Unit 1, 98 (96A) Callaway Street, WANGARA WA 6065",-31.790466,115.843492,Landsdale,WA,None
+,Landsdale Gardens Primary School,,"50 Amistad Road, LANDSDALE WA 6065",-31.81612812,115.8567922,Landsdale,WA,None
+,Landsdale Primary School,,"The Broadview , LANDSDALE WA 6065",-31.80382000,115.86241000,Landsdale,WA,None
+,Madeley Primary School,,"41 Martindale Avenue, MADELEY WA 6065",-31.80663900,115.82973700,Landsdale,WA,None
+,Marangaroo Primary School,,"88 Giralt Road, MARANGAROO WA 6064",-31.82843000,115.82705000,Landsdale,WA,None
+,Pearsall Primary School,,"95 Willespie Drive, PEARSALL WA 6065",-31.78096000,115.81768000,Wanneroo,WA,None
+,Assumption Catholic Primary School,,"22-34 Gordon Road, MANDURAH WA 6210",-32.51048000,115.74697000,Mandurah,WA,Full
+,Billy Dower Youth Centre,,"41 Dower Street, MANDURAH WA 6210",-32.53231300,115.74030700,Mandurah,WA,Full
+,Coodanup College,,"158 Wanjeep Street, COODANUP WA 6210",-32.54713000,115.75025000,Mandurah,WA,Full
+,Dudley Park Primary School,,"64 Gillark Street, MANDURAH WA 6210",-32.54182000,115.73561000,Mandurah,WA,Full
+,Eastlake Church,,"99 Lakes Road, GREENFIELDS WA 6210",-32.53092300,115.76194000,Mandurah,WA,Full
+,Mandurah District - Election Day and Early Polling Place,,"1/65 Reserve Drive Drive, MANDURAH WA 6210",-32.5123312,115.742521,Mandurah,WA,Full
+,Mandurah Seniors Centre,,"41 Ormsby Terrace, MANDURAH WA 6210",-32.52669300,115.72015000,Mandurah,WA,Full
+,RAAFA Meadow Springs Estate,,"41 Portrush Parade, MEADOW SPRINGS WA 6210",-32.50288000,115.75345000,Mandurah,WA,Full
+,Riverside Primary School,,"1 Minilya Parkway, GREENFIELDS WA 6210",-32.53179000,115.76789000,Mandurah,WA,Full
+,Bayswater Primary School,,"15 Murray Street, BAYSWATER WA 6053",-31.920830,115.910968,Maylands,WA,None
+,Embleton Primary School,,"51 Priestly Street, EMBLETON WA 6062",-31.90188000,115.90980200,Maylands,WA,None
+,Filipino Australian Club of Perth Inc,,"1 Catherine Street, BEDFORD WA 6052",-31.91267200,115.88771900,Maylands,WA,None
+,Hillcrest Primary School,,"2 Bay View Street, BAYSWATER WA 6053",-31.90977700,115.90207400,Maylands,WA,None
+,Inglewood Freemasons Hall,,"23 Carrington Street, INGLEWOOD WA 6052",-31.92465000,115.88842900,Maylands,WA,Full
+,Inglewood Primary School,,"34 Normanby Road, INGLEWOOD WA 6052",-31.91723500,115.88642600,Maylands,WA,None
+,Maylands District - Election Day and Early Polling Place,,"132 Beecbhoro Road South, BAYSWATER WA 6053",-31.9034763,115.916761,Maylands,WA,None
+,Maylands Peninsula Primary School,,"60 Kelvin Street, MAYLANDS WA 6051",-31.93230100,115.90388700,Maylands,WA,Full
+,School of Instrumental Music,,"150 Guildford Road, MAYLANDS WA 6051",-31.93181300,115.89153100,Maylands,WA,None
+,Caversham Valley Primary School,,"60 Summerville Boulevard, CAVERSHAM WA 6055",-31.86790100,115.96887900,Midland,WA,Full
+,Clayton View Primary School,,"211 Clayton Street, KOONGAMIA WA 6056",-31.90530200,116.04060400,Midland,WA,Full
+,Goodstart Early Learning Stratton,,"165 Talbot Road, STRATTON WA 6056",-31.86221700,116.04564200,Midland,WA,Full
+,Greenmount Primary School,,"50-68 Innamincka Road, GREENMOUNT WA 6056",-31.89710500,116.04680600,Midland,WA,None
+,Guildford Town Hall,,"97 James Street, GUILDFORD WA 6055",-31.89957000,115.97201000,Midland,WA,None
+,Middle Swan Primary School,,"Cockman Cross, STRATTON WA 6056",-31.866964,116.036555,Midland,WA,Full
+,Midland District - Election Day and Early Polling Place,,"48 A James Street, GUILDFORD WA 6055",-31.898954,115.977174,Midland,WA,Full
+,Midland Town Hall,,"312 Great Eastern Highway, MIDLAND WA 6056",-31.88948000,116.00214000,Midland,WA,None
+,North Metropolitan TAFE Midland Campus,,"C-Block, Corner Lloyd St and Eddie Barron Drive, MIDDLE SWAN WA 6056",-31.87806800,116.01929800,Midland,WA,Full
+,Swan View Senior High School,,"39 Gladstone Avenue, SWAN VIEW WA 6056",-31.88843000,116.04381000,Midland,WA,None
+,Badgingarra Community Centre,,"2 North West Road, BADGINGARRA WA 6521",-30.38721000,115.49866000,Mid-West,WA,None
+,Bindoon Town Hall,,"6180 Great Northern Highway, BINDOON WA 6502",-31.38602600,116.09680800,Mid-West,WA,None
+,Carnamah District High School,,"48 McPherson Street, CARNAMAH WA 6517",-29.68695000,115.89191000,Mid-West,WA,None
+,Carnarvon Community College (Marmion Street Campus),,"27 Marmion Street, EAST CARNARVON WA 6701",-24.86678000,113.67744000,Mid-West,WA,Full
+,Cervantes Community Recreation Centre,,"2 Aragon Street, CERVANTES WA 6511",-30.49958600,115.07020500,Mid-West,WA,Full
+,Coorow District Hall,,"22 Main Street, COOROW WA 6515",-29.88094400,116.02397500,Mid-West,WA,Full
+,Coral Bay Learning Centre,,"64 Banksia Drive, CORAL BAY WA 6701",-23.145188,113.771870,Mid-West,WA,None
+,Cue Primary School,,"Simpson Street, CUE WA 6640",-27.420925,117.896618,Mid-West,WA,None
+,Dalwallinu District High School,,"97 Johnston Street, DALWALLINU WA 6609",-30.27029400,116.66203700,Mid-West,WA,None
+,Dandaragan Primary School,,"Dandaragan Road, DANDARAGAN WA 6507",-30.67287000,115.70262000,Mid-West,WA,None
+,Denham Hall,,"Corner Hughes and Durlacher Street , DENHAM WA 6537",-25.92724200,113.53586700,Mid-West,WA,Full
+,Eneabba Primary School,,"20 Dewar Street, ENEABBA WA 6518",-29.81944000,115.26876900,Mid-West,WA,None
+,Gingin District High School Performing Arts Centre,,"1 Daw Street, GINGIN WA 6503",-31.34427600,115.91236900,Mid-West,WA,None
+,Green Head Community Centre,,"Corner The Lakes and Green Head Road, GREEN HEAD WA 6514",-30.06727400,114.96817100,Mid-West,WA,None
+,Guilderton Hall,,"Wedge Street, GUILDERTON WA 6041",-31.34877200,115.50437500,Mid-West,WA,Full
+,Immaculate Heart College,,"34 Santa Gertrudis Drive, LOWER CHITTERING WA 6084",-31.56069000,116.07813000,Mid-West,WA,None
+,Irwin Recreation Centre,,"Ridley Street, PORT DENISON WA 6525",-29.26529300,114.92460400,Mid-West,WA,Full
+,Jurien Bay District High School,,"19 Hamersley Street, JURIEN BAY WA 6516",-30.30761000,115.03962000,Mid-West,WA,Full
+,Lancelin Primary School,,"53 Gingin Road, LANCELIN WA 6044",-31.01148300,115.32985000,Mid-West,WA,Full
+,Ledge Point Community Hall,,"381 Turner Street, LEDGE POINT WA 6043",-31.10870000,115.37788000,Mid-West,WA,None
+,Leeman Primary School,,"10 Spencer Street, LEEMAN WA 6514",-29.94823000,114.97841000,Mid-West,WA,None
+,Meekatharra Shire Hall,,"Main Street, MEEKATHARRA WA 6642",-26.59301200,118.49575600,Mid-West,WA,None
+,Mid-West District - Election Day and Early Polling Place,,"Carnarvon Woolshed, 21 Robinson Street, CARNARVON WA 6701",-24.883873,113.656210,Mid-West,WA,Full
+,Miling Town Hall,,"Old Great Northern Highway, MILING WA 6575",-30.49217600,116.36222900,Mid-West,WA,None
+,Mingenew Primary School,,"70 Phillip Street, MINGENEW WA 6522",-29.194401,115.440919,Mid-West,WA,None
+,Moora Performing Arts Centre,,"34 Padbury Street, MOORA WA 6510",-30.64187400,116.00801000,Mid-West,WA,None
+,Morawa District High School,,"34 Gill Street, MORAWA WA 6623",-29.21120100,116.00591300,Mid-West,WA,Full
+,Mount Magnet Anzac Memorial Hall,,"Naughton Street, MOUNT MAGNET WA 6638",-28.059663,117.845866,Mid-West,WA,Full
+,Muchea Recreation Centre,,"48 Archibald Street, MUCHEA WA 6501",-31.58197000,115.97096000,Mid-West,WA,Full
+,Perenjori Primary School,,"1 Carnamah-Perenjori Road, PERENJORI WA 6620",-29.44367100,116.28611000,Mid-West,WA,Full
+,Three Springs Primary School,,"30 Carter Street, THREE SPRINGS WA 6519",-29.53460600,115.76123400,Mid-West,WA,None
+,Woodridge Community Centre,,"13 King Drive, WOODRIDGE WA 6041",-31.33754000,115.59856000,Mid-West,WA,None
+,Clarkson Community High School,,"16 Walyunga Boulevard, CLARKSON WA 6030",-31.67623800,115.72626000,Mindarie,WA,Full
+,Clarkson Primary School,,"8 Aldersea Circle, CLARKSON WA 6030",-31.677893,115.7177027,Mindarie,WA,Full
+,Kinross Primary School,,"64 Kinross Drive, KINROSS WA 6028",-31.71846600,115.73623300,Mindarie,WA,Full
+,Merriwa Primary School,,"67 Baltimore Parade, MERRIWA WA 6030",-31.66817000,115.71336000,Mindarie,WA,Full
+,Mindarie District - Election Day and Early Polling Place,,"Kinross Central Shopping Centre - Shop 17, Corner Selkirk Drive and Connolly Drive, KINROSS WA 6028",-31.718415,115.741508,Mindarie,WA,None
+,Mindarie Primary School,,"90 Rothesay Heights, MINDARIE WA 6030",-31.68700000,115.70893000,Mindarie,WA,Full
+,Mindarie Senior College,,"14 Elliston Parade, MINDARIE WA 6030",-31.67720000,115.70615000,Mindarie,WA,Full
+,Quinns Beach Primary School,,"5 James Cook Avenue, QUINNS ROCKS WA 6030",-31.65820300,115.69532100,Mindarie,WA,Full
+,RAAFA Estate - Merriwa,,"19 Hughie Edwards Drive, MERRIWA WA 6030",-31.65797100,115.70775600,Mindarie,WA,Full
+,Somerly Primary School,,"15 Somerly Drive, CLARKSON WA 6030",-31.68481000,115.72782000,Mindarie,WA,Full
+,Camboon Primary School,,"30 Forder Road, NORANDA WA 6062",-31.87691000,115.89090000,Morley,WA,None
+,Dianella Heights Primary School,,"9 Beaman Street, DIANELLA WA 6059",-31.88364200,115.86600200,Morley,WA,Full
+,Dianella Secondary College,,"180 Nollamara Avenue, DIANELLA WA 6059",-31.87822000,115.85274000,Morley,WA,Full
+,Hampton Park Primary School,,"1 Paine Road, MORLEY WA 6062",-31.88658100,115.91710200,Morley,WA,None
+,Morley District - Election Day and Early Polling Place,,"9 Cobbler Place, MIRRABOOKA WA 6062",-31.8745954,115.862725,Morley,WA,None
+,Morley Primary School,,"36 Wellington Road, MORLEY WA 6062",-31.89212000,115.89537000,Morley,WA,None
+,Nollamara Primary School,,"101 Harrison Street, NOLLAMARA WA 6061",-31.88463000,115.83962000,Morley,WA,None
+,Noranda Primary School,,"25 Walmsley Drive, NORANDA WA 6062",-31.87713000,115.90798000,Morley,WA,None
+,North Morley Primary School,,"81 Gordon Road West, DIANELLA WA 6059",-31.87846000,115.87845000,Morley,WA,Full
+,St Andrew's Grammar School,,"2 Hellenic Drive, DIANELLA WA 6059",-31.87006600,115.87486800,Morley,WA,None
+,Australian Islamic College - Dianella,,"81 Cleveland Street, DIANELLA WA 6059",-31.90275000,115.87489000,Mount Lawley,WA,Full
+,Coolbinia Primary School,,"104 Bradford Street, COOLBINIA WA 6050",-31.91367000,115.85971000,Mount Lawley,WA,Full
+,Mount Lawley District - Election Day and Early Polling Place,,"Edith Cowan University - Gallery 25, Building 10, 2 Bradford Street, MT LAWLEY WA 6050",-31.918867,115.868096,Mount Lawley,WA,None
+,Mount Lawley Primary School,,"92 Second Avenue, MOUNT LAWLEY WA 6050",-31.92580800,115.87634200,Mount Lawley,WA,Full
+,North Metropolitan TAFE Mount Lawley Campus,,"397 Lord Street, MOUNT LAWLEY WA 6050",-31.93956000,115.87588000,Mount Lawley,WA,Full
+,North Perth Primary School,,"3 Albert Street, NORTH PERTH WA 6006",-31.92999800,115.85628400,Perth,WA,None
+,St Patrick's Anglican Church,,"65 First Avenue, MOUNT LAWLEY WA 6050",-31.92872700,115.87641700,Mount Lawley,WA,None
+,St Paul's Primary School,,"7 Learoyd Street, MOUNT LAWLEY WA 6050",-31.92547200,115.86438200,Mount Lawley,WA,None
+,Sutherland Dianella Primary School,,"5 Sutherland Avenue, DIANELLA WA 6059",-31.89383500,115.86494700,Mount Lawley,WA,Full
+,Vedanta Church,,"51 Golf View Street, YOKINE WA 6060",-31.89738900,115.84586500,Mount Lawley,WA,None
+,West Morley Primary School,,"Fitzroy Street, DIANELLA WA 6059",-31.89078000,115.88597000,Mount Lawley,WA,Full
+,Yokine Community Playgroup,,"26 Ranger Road, YOKINE WA 6060",-31.90197000,115.85194300,Mount Lawley,WA,None
+,Yokine Primary School,,"39 Woodrow Avenue, YOKINE WA 6060",-31.90145000,115.85944000,Mount Lawley,WA,None
+,Binningup Community Hall,,"14 Driftwood Way, BINNINGUP WA 6233",-33.15046900,115.69470900,Murray-Wellington,WA,Full
+,Brunswick Junction Primary School,,"6 Vincent Street, BRUNSWICK JUNCTION WA 6224",-33.252447,115.833924,Murray-Wellington,WA,Full
+,Carcoola Primary School,,"7 Wisteria Crescent, NORTH PINJARRA WA 6208",-32.60554500,115.89344500,Murray-Wellington,WA,Full
+,Coolup Community Hall,,"186 Murray Street, COOLUP WA 6214",-32.73963800,115.87466200,Murray-Wellington,WA,None
+,Dwellingup Primary School,,"10 Newton Street, DWELLINGUP WA 6213",-32.71531000,116.06358000,Murray-Wellington,WA,None
+,Kingston Primary School,,"75 Macquarie Drive, AUSTRALIND WA 6233",-33.25960500,115.74408600,Murray-Wellington,WA,Full
+,Lake Clifton Community Centre,,"114 Tuart Grove Avenue, LAKE CLIFTON WA 6215",-32.80116000,115.69047000,Murray-Wellington,WA,Full
+,Murray-Wellington District - Election Day and Early Polling Place,,"Leschenault Leisure Centre, Leisure Drive , AUSTRALIND WA 6233",-33.2700097,115.7382003,Murray-Wellington,WA,Full
+,North Dandalup Community Hall,,"4209 South Western Highway, NORTH DANDALUP WA 6207",-32.51807600,115.97237200,Murray-Wellington,WA,None
+,North Yunderup CWA Hall,,"45 Culeenup Road, NORTH YUNDERUP WA 6208",-32.58010700,115.78834300,Murray-Wellington,WA,None
+,Parkfield Primary School,,"Chapple Drive, AUSTRALIND WA 6233",-33.26555000,115.72633500,Murray-Wellington,WA,Full
+,Pinjarra Senior High School,,"16 McLarty Road, PINJARRA WA 6208",-32.63306000,115.87207000,Murray-Wellington,WA,Full
+,Settlers Hall,,"20 A Marine Drive, LESCHENAULT WA 6233",-33.25140000,115.73443600,Murray-Wellington,WA,Full
+,St Anne's Primary School,,"27 Young Street, HARVEY WA 6220",-33.08275000,115.89157000,Murray-Wellington,WA,None
+,Waroona Senior Citizens Centre,,"Millar Street, WAROONA WA 6215",-32.84503100,115.92294700,Murray-Wellington,WA,Full
+,West Murray Community Hall,,"2977 Pinjarra Road (Corner Goodooga Road) , FURNISSDALE WA 6210",-32.55847000,115.78686000,Murray-Wellington,WA,None
+,Yarloop Primary School,,"22 School Road, YARLOOP WA 6218",-32.96199600,115.90366800,Murray-Wellington,WA,Full
+,Yunderup Sports & Recreation Club,,"2 Corner Delta Drive & South Yunderup Road, SOUTH YUNDERUP WA 6208",-32.585663,115.795028,Murray-Wellington,WA,None
+,Constitutional Centre,,"40 Havelock Street, WEST PERTH WA 6005",-31.95143400,115.84393400,Nedlands,WA,None
+,Dalkeith Primary School,,"44 Circe Circle, DALKEITH WA 6009",-31.99638000,115.79772000,Nedlands,WA,Full
+,Hollywood Primary School,,"117 Monash Avenue, NEDLANDS WA 6009",-31.97019600,115.80737800,Nedlands,WA,None
+,Jolimont Primary School,,"657 Hay Street, JOLIMONT WA 6014",-31.94823500,115.80830500,Nedlands,WA,None
+,Nedlands District - Election Day and Early Polling Place,,"John Leckie Pavilion, Melvista Avenue, NEDLANDS WA 6009",-31.98810,115.791202,Nedlands,WA,None
+,Nedlands Primary School,,"35 Kingsway , NEDLANDS WA 6009",-31.98434100,115.81252400,Nedlands,WA,None
+,Palms Community Centre,,"430 Rokeby Road, SUBIACO WA 6008",-31.9571336,115.824590,Nedlands,WA,None
+,Shenton Park Community Centre,,"240 Onslow Road, SHENTON PARK WA 6008",-31.96072400,115.81065200,Nedlands,WA,None
+,Sir Charles Gairdner Hospital,,"E Block Outpatients, Verdun Street, NEDLANDS WA 6009",-31.96755,115.815901,Nedlands,WA,Full
+,Subiaco Primary School,,"271 Bagot Road, SUBIACO WA 6008",-31.95074400,115.82277000,Nedlands,WA,None
+,University of Western Australia - Nedlands Campus,,"Clifton Street, NEDLANDS WA 6009",-31.976887,115.812023,Nedlands,WA,Full
+,Aspiri Primary School,,"30 Sunray Avenue, PIARA WATERS WA 6112",-32.1384515005571,115.9122927,Oakford,WA,Full
+,Aubin Grove Primary School,,"85 Camden Boulevard, AUBIN GROVE WA 6164",-32.17272000,115.86136200,Oakford,WA,None
+,Forrestdale Primary School,,"35 Broome Street, FORRESTDALE WA 6112",-32.15301800,115.94853800,Oakford,WA,Full
+,Harrisdale Primary School,,"7 Fairhaven Avenue, HARRISDALE WA 6112",-32.12481000,115.93703000,Oakford,WA,Full
+,Honeywood Primary School,,"Windjana Rise, WANDI WA 6167",-32.19664764,115.8617665,Oakford,WA,Full
+,North Harrisdale Primary School,,"100 Reilly Road, HARRISDALE WA 6112",-32.1156966,115.9385442,Oakford,WA,Full
+,Oakford Community Hall,,"53 Foxton Drive, OAKFORD WA 6121",-32.19056000,115.91778000,Oakford,WA,Full
+,Oakford District - Election Day and Early Polling Place,,"1/6 Marchetti Way, FORRESTDALE WA 6112",-32.129626,115.959874,Oakford,WA,Full
+,Piara Waters Primary School,,"440 Wright Road, PIARA WATERS WA 6112",-32.12697000,115.91625000,Oakford,WA,Full
+,Aranmore Catholic College,,"41 Franklin Street, LEEDERVILLE WA 6007",-31.92706900,115.84317000,Perth,WA,None
+,Greek Orthodox Church,,"59 Carr Street, WEST PERTH WA 6005",-31.94016000,115.85201000,Perth,WA,None
+,Highgate Primary School,,"147 Lincoln Street, HIGHGATE WA 6003",-31.94067800,115.86678400,Perth,WA,None
+,Kyilla Primary School,,"4 Selkirk Street, NORTH PERTH WA 6006",-31.91928000,115.85170000,Perth,WA,None
+,Mount Hawthorn Baptist Church Hall,,"98 Hobart Street, MOUNT HAWTHORN WA 6016",-31.92174300,115.84189800,Perth,WA,None
+,Mount Hawthorn Community Centre Lesser Hall,,"197 Scarborough Beach Road, MOUNT HAWTHORN WA 6016",-31.91960300,115.83525700,Perth,WA,None
+,Mount Hawthorn Primary School,,"1 Killarney Street, MOUNT HAWTHORN WA 6016",-31.91777000,115.83547000,Perth,WA,None
+,North Metropolitan TAFE Leederville Campus,,"196-244 Richmond Street, LEEDERVILLE WA 6007",-31.93374000,115.84170000,Perth,WA,None
+,North Metropolitan TAFE Northbridge Campus,,"25 Aberdeen Street, NORTHBRIDGE WA 6003",-31.94788000,115.86136000,Perth,WA,None
+,Perth District - Election Day and Early Polling Place - North Perth,,"299 Charles Street, NORTH PERTH WA 6006",-31.929668,115.852460,Perth,WA,None
+,Perth District - Election Day and Early Polling Place - Perth CBD,,"772 Hay Street, PERTH WA 6000",-31.953197,115.856135,Perth,WA,None
+,Baler Primary School,,"Baler Close, SOUTH HEDLAND WA 6722",-20.40474000,118.61282000,Pilbara,WA,Full
+,Dampier Primary School,,"42 Church Road, DAMPIER WA 6713",-20.66449200,116.70715200,Pilbara,WA,Full
+,Exmouth Shire Hall,,"22 Maidstone Crescent, EXMOUTH WA 6707",-21.929021,114.123920,Pilbara,WA,Full
+,Hedland Senior High School,,"78 Hamilton Road, SOUTH HEDLAND WA 6722",-20.39952000,118.59729000,Pilbara,WA,Full
+,Millars Well Primary School,,"45 Gawthorne Drive, KARRATHA WA 6714",-20.74246400,116.81750400,Pilbara,WA,Full
+,Newman Primary School,,"26 Hilditch Avenue, NEWMAN WA 6753",-23.35440000,119.73163000,Pilbara,WA,Full
+,Newman Senior High School,,"Gregory Avenue, NEWMAN WA 6753",-23.36146000,119.73377000,Pilbara,WA,Full
+,Onslow Primary School,,"Simpson Street, ONSLOW WA 6710",-21.63809200,115.11027200,Pilbara,WA,Full
+,Pannawonica Primary School,,"1 Sports Way, PANNAWONICA WA 6716",-21.63714000,116.32444000,Pilbara,WA,Full
+,Paraburdoo Primary School,,"De Grey Road, PARABURDOO WA 6754",-23.19735900,117.67307200,Pilbara,WA,Full
+,PCYC Roebourne,,"1 Sholl Street, ROEBOURNE WA 6718",-20.76727500,117.14453500,Pilbara,WA,None
+,Pilbara District - Election Day and Early Polling Place - Karratha,,"Frank Butler Community Centre, Hunt Way, BULGARRA WA 6714",-20.729523,116.864530,Pilbara,WA,Full
+,Pilbara District - Election Day and Early Polling Place - Port Hedland,,"3B Wedge St, PORT HEDLAND WA 6721",-20.3117835,118.575587,Pilbara,WA,None
+,Port Hedland Primary School,,"Corney Street, PORT HEDLAND WA 6721",-20.30435000,118.63414000,Pilbara,WA,Full
+,Tambrey Primary School,,"25 Tambrey Drive, KARRATHA WA 6714",-20.74238000,116.80094000,Pilbara,WA,Full
+,Tom Price Recreation Centre,,"Milpera Street, TOM PRICE WA 6751",-22.68754000,117.79325600,Pilbara,WA,None
+,Wickham Primary School,,"289 Tamarind Place, WICKHAM WA 6720",-20.68013000,117.14076000,Pilbara,WA,None
+,Bull Creek Primary School,,"32 Hardy Street, BULL CREEK WA 6149",-32.06058000,115.86070000,Riverton,WA,None
+,Herald Avenue Senior Citizens Centre,,"2 Herald Avenue, WILLETTON WA 6155",-32.03933100,115.88875100,Riverton,WA,Full
+,Oberthur Primary School,,"21 Nicholls Crescent, BULL CREEK WA 6149",-32.05924000,115.86920000,Riverton,WA,Full
+,Parkwood Primary School,,"9 Zelkova Road, PARKWOOD WA 6147",-32.04267000,115.91409000,Riverton,WA,None
+,Riverton District - Election Day and Early Polling Place,,"18/14 Whyalla Street, WILLETTON WA 6155",-32.0420130,115.882532,Riverton,WA,None
+,Riverton Primary School,,"255 Corinthian Road East, RIVERTON WA 6148",-32.03426000,115.89951000,Riverton,WA,None
+,Rossmoyne Primary School,,"90 Second Avenue, ROSSMOYNE WA 6148",-32.04032000,115.86610000,Riverton,WA,Full
+,Rostrata Primary School,,"Rostrata Avenue, WILLETTON WA 6155",-32.05157000,115.89886000,Riverton,WA,None
+,Shelley Primary School,,"Monota Avenue, SHELLEY WA 6148",-32.03154300,115.88556700,Riverton,WA,Full
+,Willetton Primary School,,"14 Woodpecker Avenue, WILLETTON WA 6155",-32.04889000,115.88279000,Riverton,WA,None
+,Willetton Senior High School,,"120 Pinetree Gully Road, WILLETTON WA 6155",-32.06112000,115.87776000,Riverton,WA,Full
+,Bungaree Primary School,,"9 Centaurus Street, ROCKINGHAM WA 6168",-32.29065000,115.73766000,Rockingham,WA,Full
+,Charthouse Primary School,,"43 Rand Avenue, WAIKIKI WA 6169",-32.31793000,115.75129000,Rockingham,WA,Full
+,Cooloongup Primary School,,"21 Westerly Way, COOLOONGUP WA 6168",-32.29864100,115.75433900,Rockingham,WA,Full
+,East Waikiki Primary School,,"21 Gibb Road, COOLOONGUP WA 6168",-32.30421900,115.76105900,Rockingham,WA,None
+,Hillman Primary School,,"35 Unnaro Street, HILLMAN WA 6168",-32.28340500,115.76301500,Rockingham,WA,Full
+,Rockingham Beach Primary School,,"30 Bay View Street, ROCKINGHAM WA 6168",-32.28261100,115.72262900,Rockingham,WA,Full
+,Rockingham District - Election Day and Early Polling Place,,"1/31 Council Avenue, ROCKINGHAM WA 6168",-32.288880,115.750251,Rockingham,WA,Full
+,Rockingham Senior High School,,"15 Read Street, ROCKINGHAM WA 6168",-32.28423000,115.73628000,Rockingham,WA,Full
+,Safety Bay Primary School,,"2 Waimea Road, SAFETY BAY WA 6169",-32.29819000,115.71408000,Rockingham,WA,Full
+,Safety Bay Senior High School,,"80 Malibu Road, SAFETY BAY WA 6169",-32.30401000,115.74022000,Rockingham,WA,Full
+,Bremer Bay Community Resource Centre,,"7 Mary Street, BREMER BAY WA 6338",-34.39236700,119.37907800,Roe,WA,Full
+,Broomehill Town Hall,,"30364 Great Southern Highway, BROOMEHILL WA 6318",-33.84518600,117.63860800,Roe,WA,Full
+,Castletown Primary School,,"43 Easton Road, CASTLETOWN WA 6450",-33.83254000,121.90840000,Roe,WA,None
+,Condingup Primary School,,"Sutcliffe Street, CONDINGUP WA 6450",-33.75503000,122.52715000,Roe,WA,None
+,Cranbrook Memorial Hall,,"17 Gathorne Street, CRANBROOK WA 6321",-34.29598000,117.55379000,Roe,WA,None
+,Cuballing Agricultural Hall,,"189 Campbell Street, CUBALLING WA 6311",-32.81908000,117.17769000,Roe,WA,None
+,Dumbleyung Town Hall,,"32 Harvey Street, DUMBLEYUNG WA 6350",-33.31300600,117.74034800,Roe,WA,Full
+,East Narrogin Primary School,,"37-41 Homer Street, NARROGIN WA 6312",-32.93617600,117.18805100,Roe,WA,Full
+,Frankland River Community Centre,,"55 Wingebellup Road, FRANKLAND RIVER WA 6396",-34.36248900,117.08174100,Roe,WA,Full
+,Gibson Football Club,,"Starr Street, GIBSON WA 6448",-33.64717800,121.80591900,Roe,WA,Full
+,Gnowangerup Community Resource Centre,,"47 Yougenup Road, GNOWANGERUP WA 6335",-33.93695400,118.00737200,Roe,WA,None
+,Hopetoun Community Centre,,"46 Veal Street, HOPETOUN WA 6348",-33.94480000,120.12960000,Roe,WA,Full
+,Hyden Community Resource Centre,,"40 Naughton Street, HYDEN WA 6359",-32.44857400,118.86052900,Roe,WA,None
+,Jerramungup District High School,,"2 Lancaster Road, JERRAMUNGUP WA 6337",-33.94272100,118.91785000,Roe,WA,None
+,Kojonup Town Hall,,"95 Albany Highway, KOJONUP WA 6395",-33.83253200,117.15922200,Roe,WA,None
+,Kondinin Primary School,,"75 Graham Street, KONDININ WA 6367",-32.49388000,118.26443000,Roe,WA,None
+,Kulin Community Resource Centre,,"38 Johnston Street, KULIN WA 6365",-32.67131000,118.15454000,Roe,WA,Full
+,Lake Grace Community Resource Centre,,"1 Bishop Street , LAKE GRACE WA 6353",-33.10351600,118.45863700,Roe,WA,None
+,Lake King Primary School,,"35 Newdegate-Ravensthorpe Road, LAKE KING WA 6356",-33.08885400,119.67447700,Roe,WA,None
+,Munglinup Primary School,,"3 Budjan Street, MUNGLINUP WA 6450",-33.70402500,120.85820300,Roe,WA,None
+,Muradup Hall,,"23 Piesse Street, MURADUP WA 6394",-33.84114000,116.98181000,Roe,WA,None
+,Narrogin Senior Citizens Centre,,"Unit 1/1 to 3 Fathom Street, NARROGIN WA 6312",-32.93600000,117.17516800,Roe,WA,Full
+,Newdegate Community Resource Centre,,"22 Collier Street, NEWDEGATE WA 6355",-33.09369900,119.02203500,Roe,WA,None
+,Nulsen Primary School,,"11 Victoria Street, ESPERANCE WA 6450",-33.85828800,121.87346800,Roe,WA,None
+,Nyabing Town Hall,,"14 Richmond Street, NYABING WA 6341",-33.54132300,118.14846900,Roe,WA,None
+,Ongerup Primary School,,"97 Lamont Street, ONGERUP WA 6336",-33.96344000,118.48653000,Roe,WA,Full
+,Ravensthorpe District High School,,"102 Morgans Street, RAVENSTHORPE WA 6346",-33.58219800,120.05196100,Roe,WA,None
+,Roe District - Election Day and Early Polling Place - Esperance,,"Noel White Centre, Esperance Greater Sports Ground, 21 Black Street, ESPERANCE WA 6450",-33.856249,121.884306,Roe,WA,Full
+,Roe District - Election Day and Early Polling Place - Katanning,,"Katanning Town Hall, 22 Austral Terrace, KATANNING WA 6317",-33.69029100,117.55424500,Roe,WA,None
+,Tambellup Shire Lesser Hall,,"42 Norrish Street, TAMBELLUP WA 6320",-34.04417200,117.64131500,Roe,WA,None
+,Wagin District High School,,"10 Ranford Street, WAGIN WA 6315",-33.311513,117.342950,Roe,WA,Full
+,West Arthur Community Resource Centre,,"27 Burrowes Street, DARKAN WA 6392",-33.33678000,116.74093700,Roe,WA,None
+,Wickepin Community Centre,,"49 Campbell Street, WICKEPIN WA 6370",-32.785312,117.500942,Roe,WA,None
+,Williams RSL Hall,,"Growse Street, WILLIAMS WA 6391",-33.02587100,116.88115500,Roe,WA,None
+,Woodanilling Recreation Centre,,"Yairabin Street, WOODANILLING WA 6316",-33.5600293,117.433081,Roe,WA,Full
+,Deanmore Primary School,,"21 Deanmore Road, KARRINYUP WA 6018",-31.88303000,115.76725000,Scarborough,WA,Full
+,Karrinyup Primary School,,"15 Hampton Street, KARRINYUP WA 6018",-31.87046000,115.77588000,Scarborough,WA,None
+,Newborough Primary School,,"178 Newborough Street, KARRINYUP WA 6018",-31.88461400,115.78064800,Scarborough,WA,Full
+,Scarborough District - Election Day and Early Polling Place,,"B2/488 Scarborough Beach Road, OSBORNE PARK WA 6017",-31.90418054,115.8052355,Scarborough,WA,None
+,Scarborough Primary School,,"34 Hinderwell Street, SCARBOROUGH WA 6019",-31.89706200,115.76685600,Scarborough,WA,Full
+,Uniting Church - Scarborough,,"121 Northstead Street, SCARBOROUGH WA 6019",-31.89060600,115.77257100,Scarborough,WA,Full
+,Coastal Lakes College,,"135 Badgerup Avenue, LAKELANDS WA 6180",-32.46819300,115.76273700,Secret Harbour,WA,Full
+,Comet Bay College,,"2 Allatoona Avenue, SECRET HARBOUR WA 6173",-32.41570000,115.76461000,Secret Harbour,WA,Full
+,Golden Bay Primary School,,"9 Thundelarra Drive, GOLDEN BAY WA 6174",-32.42313800,115.75968400,Secret Harbour,WA,Full
+,Madora Bay Community Hall,,"Orelia Street, MADORA BAY WA 6210",-32.47271500,115.75206600,Secret Harbour,WA,None
+,Port Kennedy Primary School,,"1 La Manche Avenue, PORT KENNEDY WA 6172",-32.35881100,115.75581600,Secret Harbour,WA,Full
+,Rockingham Lakes Primary School,,"26 Laguardia Loop, PORT KENNEDY WA 6172",-32.35797800,115.76787500,Secret Harbour,WA,Full
+,Secret Harbour District - Election Day and Early Polling Place,,"Unit 2/5 Crowley Street, PORT KENNEDY WA 6172",-32.366714,115.7589409,Secret Harbour,WA,None
+,Secret Harbour Primary School,,"178 Maratea Parade, SECRET HARBOUR WA 6173",-32.40454500,115.75866700,Secret Harbour,WA,Full
+,Singleton Primary School,,"Naval Avenue, SINGLETON WA 6175",-32.43997700,115.75727500,Secret Harbour,WA,Full
+,Challenger Reserve Pavillion,,"Challenger Avenue, MANNING WA 6152",-32.01731,115.87424,South Perth,WA,Full
+,Collier Primary School,,"17 Hobbs Avenue, COMO WA 6152",-31.99109800,115.87299600,South Perth,WA,Full
+,Como Primary School,,"206 Labouchere Road, COMO WA 6152",-31.99662000,115.86160000,South Perth,WA,Full
+,John McGrath Pavilion,,"97 Hensman Street, SOUTH PERTH WA 6151",-31.98649500,115.86599700,South Perth,WA,Full
+,Kensington Primary School,,"73 Banksia Terrace, KENSINGTON WA 6151",-31.98142000,115.88292500,South Perth,WA,Full
+,Manning Primary School,,"60-80 Ley Street, MANNING WA 6152",-32.015423,115.864336,South Perth,WA,Full
+,South Perth District - Election Day and Early Polling Place,,"John Hardwick Centre, 19 Pether Road, MANNING WA 6152",-32.010746,115.869245,South Perth,WA,Full
+,South Perth Primary School,,"51 Forrest Street, SOUTH PERTH WA 6151",-31.98114500,115.85972400,South Perth,WA,Full
+,St Augustine's Church Hall,,"21 Cale Street, COMO WA 6152",-32.00345600,115.86267300,South Perth,WA,None
+,Uniting Church - South Perth,,"2 Sandgate Street, SOUTH PERTH WA 6151",-31.98176000,115.86806000,South Perth,WA,Full
+,Ashburton Drive Primary School,,"6 Nullagine Way, GOSNELLS WA 6110",-32.08664000,115.98477000,Southern River,WA,Full
+,Bletchley Park Primary School,,"Lot 5003 Balfour Street, SOUTHERN RIVER WA 6110",-32.10206000,115.94715000,Southern River,WA,Full
+,Caladenia Primary School,,"89 Boardman Road, CANNING VALE WA 6155",-32.07577000,115.93350000,Southern River,WA,Full
+,Campbell Primary School,,"161 Comrie Road, CANNING VALE WA 6155",-32.08827000,115.93101000,Southern River,WA,None
+,Canning Vale College,,"26 Dumbarton Road, CANNING VALE WA 6155",-32.08287000,115.92209000,Southern River,WA,Full
+,Excelsior Primary School,,"63 Shreeve Road, CANNING VALE WA 6155",-32.08154200,115.94288200,Southern River,WA,Full
+,Huntingdale Primary School,,"85 Matilda Street, HUNTINGDALE WA 6110",-32.07718600,115.97263700,Southern River,WA,Full
+,Southern Grove Primary School,,"34 Lockway Street, SOUTHERN RIVER WA 6110",-32.09931400,115.95920400,Southern River,WA,Full
+,Southern River District - Election Day and Early Polling Place,,"Southern River Shopping Centre, 4D/712 Ranford Road, SOUTHERN RIVER WESTERN AUSTRALIA 6110",-32.1044143,115.9358497,Southern River,WA,Full
+,Wirrabirra Primary School,,"71 Corfield Street, GOSNELLS WA 6110",-32.07465400,115.98038900,Thornlie,WA,Full
+,Anne Hamersley Primary School,,"16 Dunnett Drive, ELLENBROOK WA 6069",-31.74539600,116.00871700,Swan Hills,WA,Full
+,Arbor Grove Primary School,,"Brookmount Drive, ELLENBROOK WA 6069",-31.77024600,115.96257100,West Swan,WA,None
+,Bullsbrook College,,"207 Chittering Road, BULLSBROOK WA 6084",-31.66158000,116.03378000,Swan Hills,WA,None
+,Ellen Stirling Primary School,,"23 Strathmore Parkway, ELLENBROOK WA 6069",-31.77022100,115.97528400,Swan Hills,WA,Full
+,Ellenbrook Primary School,,"65 Fortescue Place, ELLENBROOK WA 6069",-31.791765,115.974607,West Swan,WA,None
+,Ellenbrook Secondary College,,"100 Main Street, ELLENBROOK WA 6069",-31.78475000,115.96527000,West Swan,WA,None
+,Gidgegannup Shire Hall,,"2171 Old Toodyay Road, GIDGEGANNUP WA 6083",-31.79124800,116.20137600,Swan Hills,WA,Full
+,Herne Hill Primary School,,"60 Argyle Street, HERNE HILL WA 6056",-31.82956100,116.02365000,Swan Hills,WA,Full
+,Malvern Springs Primary School,,"3 Chandala Turn, ELLENBROOK WA 6069",-31.75782400,115.97997100,Swan Hills,WA,None
+,Swan Hills District - Election Day and Early Polling Place,,"Unit C/308 The Broadway , ELLENBROOK WA 6069",-31.766823,115.984510,Swan Hills,WA,Full
+,Swan Valley Anglican Community School,,"Swanleigh Parade, AVELEY WA 6069",-31.79450000,115.98633000,West Swan,WA,None
+,Upper Swan Primary School,,"1204 Great Northern Highway, UPPER SWAN WA 6069",-31.78697000,116.02396000,Swan Hills,WA,None
+,Addie Mills Centre,,"2 Astley Street, GOSNELLS WA 6110",-32.07107000,116.00349000,Thornlie,WA,Full
+,East Maddington Primary School,,"79 Pitchford Avenue, MADDINGTON WA 6109",-32.05484000,116.00380000,Thornlie,WA,Full
+,Forest Crescent Primary School,,"83 Forest Crescent, THORNLIE WA 6108",-32.07609000,115.94922000,Thornlie,WA,Full
+,Gosnells Primary School,,"173 Hicks Street, GOSNELLS WA 6110",-32.07738700,116.00311900,Thornlie,WA,None
+,Thornlie District - Election Day and Early Polling Place,,"1/2328 Albany Highway, GOSNELLS WA 6110",-32.074282,116.005710,Thornlie,WA,Full
+,Thornlie Primary School,,"86 Thornlie Avenue, THORNLIE WA 6108",-32.05349200,115.96515800,Thornlie,WA,Full
+,Thornlie Senior High School,,"2 Ovens Road, THORNLIE WA 6108",-32.06503000,115.96006000,Thornlie,WA,None
+,Yale Primary School,,"Sage Road, THORNLIE WA 6108",-32.05000700,115.95177200,Thornlie,WA,None
+,Yule Brook College,,"61 Dellar Road, MADDINGTON WA 6109",-32.04815000,116.00851000,Thornlie,WA,Full
+,Acton Park Hall,,"804 Acton Park Road, ACTON PARK WA 6280",-33.76749100,115.38091000,Vasse,WA,None
+,Busselton Primary School,,"23-25 Avocet Boulevard, BUSSELTON WA 6280",-33.64003000,115.37683000,Vasse,WA,Full
+,Busselton Senior High School,,"136-156 Bussell Highway, BUSSELTON WA 6280",-33.65734000,115.32464000,Vasse,WA,None
+,Churchill Park Hall,,"85 Adelaide Street, BUSSELTON WA 6280",-33.64666200,115.35029000,Vasse,WA,None
+,Georgiana Molloy Anglican School,,"2 Hawker Approach, YALYALUP WA 6280",-33.66160000,115.38220000,Vasse,WA,Full
+,Naturaliste Community Centre,,"21 Dunsborough Lakes Drive, DUNSBOROUGH WA 6281",-33.62105900,115.10513800,Vasse,WA,Full
+,Lady of the Cape Primary School,,"245 Cape Naturaliste Road, DUNSBOROUGH WA 6281",-33.59792600,115.08956500,Vasse,WA,None
+,Vasse District - Election Day and Early Polling Place,,"2/38-44 Albert Street, BUSSELTON WA 6280",-33.652157,115.346119,Vasse,WA,Full
+,Vasse Primary School,,"17 Kaloorup Road, VASSE WA 6280",-33.6793854,115.2486833,Vasse,WA,None
+,West Busselton Primary School,,"11-17 Bower Road, BUSSELTON WA 6280",-33.65457000,115.31450000,Vasse,WA,None
+,Yallingup Hall,,"2305 Caves Road, YALLINGUP WA 6282",-33.64654000,115.03425600,Vasse,WA,None
+,Bentley Baptist Church,,"59 Chapman Road, BENTLEY WA 6102",-32.00795200,115.91638900,Victoria Park,WA,Full
+,Bentley Community Centre,,"Nyamup Way, BENTLEY WA 6102",-32.00991900,115.91012800,Victoria Park,WA,Full
+,East Victoria Park Primary School,,"30 Beatty Avenue, EAST VICTORIA PARK WA 6101",-31.97937700,115.90798500,Victoria Park,WA,Full
+,Harold Hawthorne Community Centre,,"2 Memorial Avenue, CARLISLE WA 6101",-31.98106200,115.91231800,Victoria Park,WA,Full
+,Kent Street Senior High School,,"74 Rathay Street (use Kent Street Entrance) , KENSINGTON WA 6004",-31.986546,115.893337,Victoria Park,WA,Full
+,Lathlain Primary School,,"120 Howick Street, LATHLAIN WA 6100",-31.96997300,115.90828000,Victoria Park,WA,Full
+,Leisurelife Centre,,"248 Gloucester Street, EAST VICTORIA PARK WA 6101",-31.98387000,115.89903000,Victoria Park,WA,None
+,Millen Primary School,,"100 Etwell Street, EAST VICTORIA PARK WA 6101",-31.99754000,115.90233000,Victoria Park,WA,Full
+,Swan Village of Care,,"26 Plantation Drive, BENTLEY WA 6102",-32.00381400,115.90087300,Victoria Park,WA,Full
+,Wilson Primary School,,"60 Armstrong Road, WILSON WA 6107",-32.01726000,115.91132000,Victoria Park,WA,Full
+,Banksia Grove Primary School,,"14 Viridian Drive, BANKSIA GROVE WA 6031",-31.70206000,115.80887000,Wanneroo,WA,None
+,Carramar Primary School,,"71 Houghton Drive, CARRAMAR WA 6031",-31.71166000,115.78508000,Wanneroo,WA,None
+,Joseph Banks Secondary College,,"40 Joseph Banks Boulevard, BANKSIA GROVE WA 6031",-31.69895900,115.79714700,Wanneroo,WA,None
+,Spring Hill Primary School,,"50 Spring Hill Street, TAPPING WA 6065",-31.72371300,115.79189300,Wanneroo,WA,Full
+,St Anthony's School,,"7 Servite Terrace, WANNEROO WA 6065",-31.74929000,115.80454000,Wanneroo,WA,Full
+,Tapping Primary School,,"87 St Stephens Crescent, TAPPING WA 6065",-31.71530400,115.79272500,Wanneroo,WA,Full
+,Wanneroo District - Election Day and Early Polling Place,,"Unit 1/42 Pinnacle Drive, NEERABUP WA 6031",-31.682199,115.7841606,Wanneroo,WA,Full
+,Wanneroo Recreation Centre,,"275 Scenic Drive, WANNEROO WA 6065",-31.75362800,115.79499300,Wanneroo,WA,Full
+,Wanneroo Secondary College,,"56 Quarkum Street, WANNEROO WA 6065",-31.75772000,115.81400000,Wanneroo,WA,None
+,Augusta Community Resource Centre,,"66 Allnutt Terrace, AUGUSTA WA 6290",-34.31411000,115.15629000,Warren-Blackwood,WA,Full
+,Boyup Brook Town Hall,,"55 Abel Street, BOYUP BROOK WA 6244",-33.83215200,116.38644100,Warren-Blackwood,WA,Full
+,Bridgetown High School,,"58 Steere Street, BRIDGETOWN WA 6255",-33.9606523,116.1412845,Warren-Blackwood,WA,Full
+,Cowaramup Primary School,,"24 Waverley Road, COWARAMUP WA 6284",-33.85128100,115.10690600,Warren-Blackwood,WA,Full
+,Denmark Recreation Centre,,"Brazier Street, DENMARK WA 6333",-34.96724100,117.35922700,Warren-Blackwood,WA,Full
+,East Manjimup Primary School,,"46 O'Connor Street, MANJIMUP WA 6258",-34.24579,116.15079,Warren-Blackwood,WA,None
+,Greenbushes Primary School,,"7 Blackwood Road, GREENBUSHES WA 6254",-33.85110000,116.05913000,Warren-Blackwood,WA,None
+,Karridale Primary School,,"12612 Bussell Highway, KARRIDALE WA 6288",-34.21807000,115.09600000,Warren-Blackwood,WA,Full
+,Manjimup Primary School,,"19 Finch Street, MANJIMUP WA 6258",-34.23407743,116.1359258,Warren-Blackwood,WA,Full
+,Nannup RSL Hall,,"7 Cross Street, NANNUP WA 6275",-33.98082696,115.76357721,Warren-Blackwood,WA,None
+,Northcliffe District High School,,"26 Zamia Street, NORTHCLIFFE WA 6262",-34.63330000,116.11805000,Warren-Blackwood,WA,None
+,Parryville Hall,,"2830 South Coast Highway, PARRYVILLE WA 6333",-34.99210700,117.18792200,Warren-Blackwood,WA,None
+,Pemberton Sports Club,,"1 Club Road, PEMBERTON WA 6260",-34.44673000,116.02794000,Warren-Blackwood,WA,None
+,Rapids Landing Primary School,,"42 Tonkin Boulevard, MARGARET RIVER WA 6285",-33.963962,115.084347,Warren-Blackwood,WA,Full
+,Rosa Brook Hall,,"1230 Rosa Brook Road, ROSA BROOK WA 6285",-33.94040900,115.19790300,Warren-Blackwood,WA,None
+,Scotsdale Hall,,"891 Scotsdale Road, SCOTSDALE WA 6333",-34.92911000,117.30160000,Warren-Blackwood,WA,None
+,Tingledale Hall,,"976 Valley of the Giants Road, TINGLEDALE WA 6333",-34.95693000,116.88998000,Warren-Blackwood,WA,None
+,Walpole Community Centre,,"4 Pier Street, WALPOLE WA 6398",-34.97766300,116.73252300,Warren-Blackwood,WA,Full
+,Warren-Blackwood District - Election Day and Early Polling Place - Manjimup,,"Manjimup Town Hall, 37-39 Rose Street, MANJIMUP WA 6258",-34.240853,116.145044,Warren-Blackwood,WA,None
+,Warren-Blackwood District - Election Day and Early Polling Place - Margaret River,,"South Regional TAFE - Margaret River Campus, 272 Bussell Highway, MARGARET RIVER WA 6285",-33.957126,115.073706,Warren-Blackwood,WA,None
+,Witchcliffe Druids Hall,,"10418 Bussell Highway, WITCHCLIFFE WA 6286",-34.02562300,115.09997800,Warren-Blackwood,WA,None
+,Yornup Hall,,"25481 South Western Highway, YORNUP WA 6256",-34.05297000,116.16863000,Warren-Blackwood,WA,None
+,Ballajura Community College,,"265 Illawarra Crescent South, BALLAJURA WA 6066",-31.84520000,115.89092000,West Swan,WA,None
+,Ballajura Primary School,,"175 Illawarra Crescent South, BALLAJURA WA 6066",-31.83563000,115.89154000,West Swan,WA,None
+,Brabham Primary School,,"31 Lakefield Drive, BRABHAM WA 6055",-31.82170508,115.9720304,West Swan,WA,Full
+,Caversham Primary School,,"65 Coast Road, WEST SWAN WA 6055",-31.85800900,115.98333100,West Swan,WA,Full
+,Dayton Primary School,,"290 Arthur Street, DAYTON WA 6055",-31.85080776,115.9739452,West Swan,WA,Full
+,Henley Brook Primary School,,"61 Splendour Avenue, HENLEY BROOK WA 6055",-31.81230927,115.96781,West Swan,WA,Full
+,Illawarra Primary School,,"60 Illawarra Crescent North, BALLAJURA WA 6066",-31.82825000,115.88183000,West Swan,WA,None
+,South Ballajura Primary School,,"Unit 34/2 Wyperfeld Gardens, BALLAJURA WA 6066",-31.84942000,115.91095700,West Swan,WA,None
+,West Swan District - Election Day and Early Polling Place,,"4/63 Oxleigh Drive, MALAGA WA 6066",-31.8471257,115.8855212,West Swan,WA,None
+,Cannington and Victoria Park Districts - Election Day and Early Polling Place,,"Cannington Exhibition Centre & Showgrounds, Gate 1, Corner Albany Highway & Station Street , CANNINGTON WA 6107",-32.024396,115.941719,"Cannington, Victoria Park",WA,Full
+,Kingsley and Carine Districts - Election Day and Early Polling Place,,"Units A & B, 22 Dugdale Street, WARWICK WA 6024",-31.842623,115.808451,"Kingsley, Carine",WA,None
+,Joondalup and Hillarys Districts - Election Day and Early Polling Place,,"3/209 Winton Road, JOONDALUP WA 6027",-31.7484606,115.764524,"Joondalup, Hillarys",WA,None

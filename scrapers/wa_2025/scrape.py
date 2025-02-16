@@ -163,11 +163,27 @@ for dupe_polling_places in polling_places_dupe_pairs.values():
                     f"Unexpected polling place found in a predefined duplicate pair: {polling_place["name"]} found for {latlon}"
                 )
 
+        for name in expected_dupes_pairs[latlon]["names"]:
+            if name not in [
+                polling_place["name"] for polling_place in dupe_polling_places
+            ]:
+                raise Exception(
+                    f"Expected polling place not found in a predefined duplicate pair: {name} found for {latlon}"
+                )
+
         merged_polling_place = dupe_polling_places[0]
         merged_polling_place["name"] = expected_dupes_pairs[latlon]["merged_name"]
         merged_polling_place["divisions"] = expected_dupes_pairs[latlon]["divisions"]
 
         polling_places[latlon] = merged_polling_place
+
+        del expected_dupes_pairs[latlon]
+
+if len(expected_dupes_pairs.values()) != 0:
+    print(expected_dupes_pairs)
+    raise Exception(
+        "There are expected duplicate pairs remaining when there shouldn't be"
+    )
 
 df = pd.DataFrame.from_dict(polling_places, orient="index")
 df.to_csv(f"data/wa_2025 ({datetime.today().strftime("%Y%m%d")}).csv", index=False)
