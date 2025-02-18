@@ -2,14 +2,12 @@ import { ArrowBack } from '@mui/icons-material';
 import { Box, Card, CardContent, IconButton, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import type Feature from 'ol/Feature';
 import type { Election } from '../../app/services/elections';
-import type { PollingPlaceWithPendingStall, UnofficialPollingPlaceWithPendingStall } from '../../app/services/stalls';
+import type { PollingPlaceWithPendingStall } from '../../app/services/stalls';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
 import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
 import { type IPollingPlace, type IPollingPlaceNoms, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
-export const getPollingPlaceSummaryCardForHeading = (
-	pollingPlace: IPollingPlace | PollingPlaceWithPendingStall | UnofficialPollingPlaceWithPendingStall,
-) => {
+export const getPollingPlaceSummaryCardForHeading = (pollingPlace: IPollingPlace | PollingPlaceWithPendingStall) => {
 	const theme = useTheme();
 
 	return (

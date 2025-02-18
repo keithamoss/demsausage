@@ -2,9 +2,15 @@ import { createEntityAdapter } from '@reduxjs/toolkit';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import type {
 	IPollingPlaceStall,
+	IPollingPlaceStallModifiableProps,
 	IPollingPlaceStubForStalls,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
+
+export enum StallApprovalType {
+	ApproveAndMegeAutomatically = 'merged automatically',
+	ApproveAndMergeByHand = 'merged by hand',
+}
 
 export enum StallSubmitterType {
 	Owner = 'owner',
@@ -159,8 +165,8 @@ export interface Stall
 
 export interface PendingStall extends Stall {
 	election_id: number;
-	triaged_on: string; // ISO date
-	triaged_by: string;
+	triaged_on: string | null; // ISO date
+	triaged_by: string | null;
 	current_stall: IPollingPlaceStall & {
 		polling_place: number; // @TODO Why not polling_place_id?
 	};
@@ -173,6 +179,12 @@ export interface PendingStall extends Stall {
 		| null;
 }
 
+export interface PollingPlacePreviousSubsStats {
+	approved: number;
+	approved_owner_subs: number;
+	denied: number;
+}
+
 export interface PollingPlaceWithPendingStall {
 	id: number;
 	election_id: number;
@@ -182,23 +194,17 @@ export interface PollingPlaceWithPendingStall {
 	state: string;
 	stall: IPollingPlaceStall | null;
 	pending_stalls: PendingStall[];
-	previous_subs: {
-		approved: number;
-		denied: number;
-	};
+	previous_subs: PollingPlacePreviousSubsStats;
 }
 
-export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
-	id_unofficial: string;
-	election_id: number;
-	premises: string;
-	stall: null;
-	pending_stalls: PendingStall[];
-	previous_subs: {
-		approved: number;
-		denied: number;
-	};
-}
+// export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
+// 	id_unofficial: string;
+// 	election_id: number;
+// 	premises: string;
+// 	stall: null;
+// 	pending_stalls: PendingStall[];
+// 	previous_subs: PollingPlacePreviousSubsStats;
+// }
 
 // type StallsResponse = Stall[];
 
@@ -209,10 +215,12 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getPendingStalls: builder.query<PollingPlaceWithPendingStall[] | UnofficialPollingPlaceWithPendingStall[], void>({
+		// getPendingStalls: builder.query<PollingPlaceWithPendingStall[] | UnofficialPollingPlaceWithPendingStall[], void>({
+		getPendingStalls: builder.query<PollingPlaceWithPendingStall[], void>({
 			query: () => ({
 				url: 'stalls/pending/',
 			}),
+			providesTags: ['PendingStalls'],
 		}),
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
 			query: ({ stallId, token, signature }) => ({
@@ -237,23 +245,33 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
-		approveStall: builder.mutation<void, number>({
-			query: (stallId) => ({
+		approveStall: builder.mutation<
+			void,
+			{ stallId: number; pollingPlaceNoms: Partial<IPollingPlaceStallModifiableProps>; approvalType: StallApprovalType }
+		>({
+			query: ({ stallId, pollingPlaceNoms, approvalType }) => ({
 				url: `stalls/${stallId}/approve/`,
 				method: 'POST',
+				body: {
+					pollingPlaceNoms,
+					approvalType,
+				},
 			}),
+			invalidatesTags: ['PendingStalls'],
 		}),
-		approveUnofficialStall: builder.mutation<void, number>({
-			query: (stallId) => ({
-				url: `stalls/${stallId}/approve_and_add/`,
-				method: 'POST',
-			}),
-		}),
+		// approveUnofficialStall: builder.mutation<void, number>({
+		// 	query: (stallId) => ({
+		// 		url: `stalls/${stallId}/approve_and_add/`,
+		// 		method: 'POST',
+		// 	}),
+		// 	invalidatesTags: ['PendingStalls'],
+		// }),
 		declineStall: builder.mutation<void, number>({
 			query: (stallId) => ({
 				url: `stalls/${stallId}/decline/`,
 				method: 'POST',
 			}),
+			invalidatesTags: ['PendingStalls'],
 		}),
 	}),
 });
@@ -264,6 +282,6 @@ export const {
 	useAddStallMutation,
 	useUpdateStallWithCredentialsMutation,
 	useApproveStallMutation,
-	useApproveUnofficialStallMutation,
+	// useApproveUnofficialStallMutation,
 	useDeclineStallMutation,
 } = stallsApi;

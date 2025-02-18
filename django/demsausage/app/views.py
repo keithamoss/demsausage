@@ -17,7 +17,13 @@ from demsausage.app.filters import (
     PollingPlacesNearbyFilter,
     PollingPlacesSearchFilter,
 )
-from demsausage.app.models import Elections, PollingPlaceFacilityType, Stalls
+from demsausage.app.models import (
+    Elections,
+    PollingPlaceFacilityType,
+    PollingPlaceNoms,
+    PollingPlaces,
+    Stalls,
+)
 from demsausage.app.permissions import AnonymousOnlyGET, StallEditingPermissions
 from demsausage.app.renderers import PNGRenderer
 from demsausage.app.sausage.elections import (
@@ -54,6 +60,7 @@ from demsausage.app.serializers import (
     MailgunEventsSerializer,
     PendingStallsSerializer,
     PollingPlaceFacilityTypeSerializer,
+    PollingPlaceNomsSerializer,
     PollingPlaceSearchResultsSerializer,
     PollingPlacesFlatJSONSerializer,
     PollingPlacesGeoJSONSerializer,
@@ -854,19 +861,39 @@ class StallsViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
+
         stall = self.get_object()
         if stall.status != StallStatus.PENDING:
             raise BadRequest("Stall is not pending")
 
+        # Update the PollingPlaceNoms with the data included from the noms form
+        serializer = PollingPlaceNomsSerializer(
+            stall.polling_place.noms,
+            data=request.data.get("pollingPlaceNoms", None),
+            partial=True,
+        )
+
+        if serializer.is_valid() is True:
+            noms = serializer.save()
+
+            update_change_reason(
+                noms,
+                f"Approved and {request.data.get('approvalType', None)}",
+            )
+        else:
+            raise BadRequest(serializer.errors)
+
+        # Approve the Stall itself
         serializer = StallsManagementSerializer(
             self.get_object(),
             data={
                 "status": StallStatus.APPROVED,
                 "triaged_on": datetime.now(pytz.utc),
-                "triaged_by": request.user,
+                "triaged_by_id": request.user.id,
             },
             partial=True,
         )
+
         if serializer.is_valid() is True:
             serializer.save()
 
@@ -875,73 +902,75 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
-    @transaction.atomic
-    def approve_and_add(self, request, pk=None, format=None):
-        stall = self.get_object()
-        if stall.status != StallStatus.PENDING:
-            raise BadRequest("Stall is not pending")
+    # @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
+    # @transaction.atomic
+    # def approve_and_add(self, request, pk=None, format=None):
+    #     stall = self.get_object()
+    #     if stall.status != StallStatus.PENDING:
+    #         raise BadRequest("Stall is not pending")
 
-        if stall.election.polling_places_loaded is True:
-            raise BadRequest("Election polling places already loaded")
+    #     if stall.election.polling_places_loaded is True:
+    #         raise BadRequest("Election polling places already loaded")
 
-        # Create polling place based on user-submitted location info
-        pollingPlaceSerializer = PollingPlacesManagementSerializer(
-            data={
-                "geom": stall.location_info["geom"],
-                "name": stall.location_info["name"],
-                "address": stall.location_info["address"],
-                "state": stall.location_info["state"],
-                "facility_type": None,
-                "election": stall.election.id,
-                "status": PollingPlaceStatus.ACTIVE,
-                "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN,
-            }
-        )
+    #     # @TODO Handle updating PollingPlaceNomsSerializer as per approve()
 
-        if pollingPlaceSerializer.is_valid() is True:
-            pollingPlaceSerializer.save()
-        else:
-            raise BadRequest(pollingPlaceSerializer.errors)
+    #     # Create polling place based on user-submitted location info
+    #     pollingPlaceSerializer = PollingPlacesManagementSerializer(
+    #         data={
+    #             "geom": stall.location_info["geom"],
+    #             "name": stall.location_info["name"],
+    #             "address": stall.location_info["address"],
+    #             "state": stall.location_info["state"],
+    #             "facility_type": None,
+    #             "election": stall.election.id,
+    #             "status": PollingPlaceStatus.ACTIVE,
+    #             "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN,
+    #         }
+    #     )
 
-        # Now that we have a polling place, add noms
-        pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(
-            pollingPlaceSerializer.instance,
-            data={
-                "stall": {
-                    "noms": stall.noms,
-                    "name": stall.name,
-                    "description": stall.description,
-                    "opening_hours": stall.opening_hours,
-                    "website": stall.website,
-                },
-            },
-            partial=True,
-        )
+    #     if pollingPlaceSerializer.is_valid() is True:
+    #         pollingPlaceSerializer.save()
+    #     else:
+    #         raise BadRequest(pollingPlaceSerializer.errors)
 
-        if pollingPlaceWithNomsSerializer.is_valid() is True:
-            pollingPlaceWithNomsSerializer.save()
-        else:
-            raise BadRequest(pollingPlaceWithNomsSerializer.errors)
+    #     # Now that we have a polling place, add noms
+    #     pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(
+    #         pollingPlaceSerializer.instance,
+    #         data={
+    #             "stall": {
+    #                 "noms": stall.noms,
+    #                 "name": stall.name,
+    #                 "description": stall.description,
+    #                 "opening_hours": stall.opening_hours,
+    #                 "website": stall.website,
+    #             },
+    #         },
+    #         partial=True,
+    #     )
 
-        # Approve stall and link it to the new unofficial polling place we just added
-        serializer = StallsManagementSerializer(
-            stall,
-            data={
-                "status": StallStatus.APPROVED,
-                "triaged_on": datetime.now(pytz.utc),
-                "triaged_by": request.user,
-                "polling_place": pollingPlaceSerializer.instance.id,
-            },
-            partial=True,
-        )
-        if serializer.is_valid() is True:
-            serializer.save()
+    #     if pollingPlaceWithNomsSerializer.is_valid() is True:
+    #         pollingPlaceWithNomsSerializer.save()
+    #     else:
+    #         raise BadRequest(pollingPlaceWithNomsSerializer.errors)
 
-            send_stall_approved_email(Stalls.objects.get(id=stall.id))
-            return Response({})
-        else:
-            raise BadRequest(serializer.errors)
+    #     # Approve stall and link it to the new unofficial polling place we just added
+    #     serializer = StallsManagementSerializer(
+    #         stall,
+    #         data={
+    #             "status": StallStatus.APPROVED,
+    #             "triaged_on": datetime.now(pytz.utc),
+    #             "triaged_by_id": request.user.id,
+    #             "polling_place": pollingPlaceSerializer.instance.id,
+    #         },
+    #         partial=True,
+    #     )
+    #     if serializer.is_valid() is True:
+    #         serializer.save()
+
+    #         send_stall_approved_email(Stalls.objects.get(id=stall.id))
+    #         return Response({})
+    #     else:
+    #         raise BadRequest(serializer.errors)
 
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
@@ -955,7 +984,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             data={
                 "status": StallStatus.DECLINED,
                 "triaged_on": datetime.now(pytz.utc),
-                "triaged_by": request.user,
+                "triaged_by_id": request.user.id,
             },
             partial=True,
         )
@@ -999,45 +1028,45 @@ class PendingStallsViewSet(generics.ListAPIView):
                 )
 
             # Support elections WITHOUT polling places loaded
-            else:
-                if stall["location_info"]["address"] not in response:
-                    response[stall["location_info"]["address"]] = stall[
-                        "location_info"
-                    ] | {
-                        "id_unofficial": sha256(
-                            stall["location_info"]["address"].encode("utf-8")
-                        ).hexdigest(),
-                        "election_id": stall["election_id"],
-                        "premises": "",
-                        "stall": None,
-                        "pending_stalls": [],
-                        "previous_subs": {
-                            "approved": Stalls.objects.filter(
-                                election_id=stall["election_id"]
-                            )
-                            .filter(location_info=stall["location_info"])
-                            .filter(
-                                Q(status=StallStatus.APPROVED)
-                                | Q(previous_status=StallStatus.APPROVED)
-                            )
-                            .count(),
-                            "denied": Stalls.objects.filter(
-                                election_id=stall["election_id"]
-                            )
-                            .filter(location_info=stall["location_info"])
-                            .filter(
-                                Q(status=StallStatus.DECLINED)
-                                | Q(previous_status=StallStatus.DECLINED)
-                            )
-                            .count(),
-                        },
-                    }
+            # else:
+            #     pollingPlaceStalls = Stalls.objects.filter(
+            #         election_id=stall["election_id"]
+            #     ).filter(location_info=stall["location_info"])
 
-                stallSansPollingPlace = stall.copy()
-                del stallSansPollingPlace["location_info"]
-                response[stall["location_info"]["address"]]["pending_stalls"].append(
-                    stallSansPollingPlace
-                )
+            #     if stall["location_info"]["address"] not in response:
+            #         response[stall["location_info"]["address"]] = stall[
+            #             "location_info"
+            #         ] | {
+            #             "id_unofficial": sha256(
+            #                 stall["location_info"]["address"].encode("utf-8")
+            #             ).hexdigest(),
+            #             "election_id": stall["election_id"],
+            #             "premises": "",
+            #             "stall": None,
+            #             "pending_stalls": [],
+            #             "previous_subs": {
+            #                 "approved": pollingPlaceStalls.filter(
+            #                     Q(status=StallStatus.APPROVED)
+            #                     | Q(previous_status=StallStatus.APPROVED)
+            #                 ).count(),
+            #                 "approved_owner_subs": pollingPlaceStalls.filter(
+            #                     Q(status=StallStatus.APPROVED)
+            #                     | Q(previous_status=StallStatus.APPROVED)
+            #                 )
+            #                 .filter(Q(submitter_type=StallSubmitterType.OWNER))
+            #                 .count(),
+            #                 "denied": pollingPlaceStalls.filter(
+            #                     Q(status=StallStatus.DECLINED)
+            #                     | Q(previous_status=StallStatus.DECLINED)
+            #                 ).count(),
+            #             },
+            #         }
+
+            #     stallSansPollingPlace = stall.copy()
+            #     del stallSansPollingPlace["location_info"]
+            #     response[stall["location_info"]["address"]]["pending_stalls"].append(
+            #         stallSansPollingPlace
+            #     )
 
         return Response(response.values())
 

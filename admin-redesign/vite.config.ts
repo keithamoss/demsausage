@@ -13,6 +13,9 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
 	return {
+		server: {
+			allowedHosts: ["admin-redesign.test.democracysausage.org"]
+		},
 		build: {
 			outDir: 'build',
 			sourcemap: true,

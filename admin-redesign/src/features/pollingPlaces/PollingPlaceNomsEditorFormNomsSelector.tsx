@@ -10,23 +10,25 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
-import { debounce } from 'lodash-es';
 import * as React from 'react';
-import { useMemo } from 'react';
-import { FormFieldValidationErrorMessageOnly } from '../../app/forms/formHelpers';
+import { type Control, Controller } from 'react-hook-form';
+import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import type { StallFoodOptions, StallFoodOptionsErrors } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../icons/iconHelpers';
+import type { IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
 
 interface Props {
 	foodOptions: StallFoodOptions;
 	onChange: (foodOptions: StallFoodOptions) => void;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	control: Control<IPollingPlaceStallModifiableProps, any>;
 	errors: StallFoodOptionsErrors | undefined;
 }
 
 export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
-	const { foodOptions, onChange, errors } = props;
+	const { foodOptions, onChange, control, errors } = props;
 
 	const isRedCrossOfShameChosen = foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true;
 
@@ -43,21 +45,6 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 		const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
 		return onChange(rest);
 	};
-
-	const onChangeFreeTextFoodOption = useMemo(
-		() =>
-			debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-				if (e.target.value.length >= 1) {
-					return onChange({ ...foodOptions, free_text: e.target.value });
-				}
-
-				const { free_text, ...rest } = foodOptions;
-
-				// Ensures we remove 'free_text' from the list of noms when it's empty
-				return onChange(rest);
-			}, 500),
-		[foodOptions, onChange],
-	);
 	// ######################
 	// Food Options (End)
 	// ######################
@@ -189,24 +176,30 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 			</FormControl>
 
 			{isRedCrossOfShameChosen === false && (
-				<React.Fragment>
-					{/* We can't use <Controller /> here because `control` has a different type for the Owner and TipOff form */}
-					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
-						<FormGroup>
-							<TextFieldWithout1Password
-								label="Anything else?"
-								helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
-								sx={{ mt: 1 }}
-								onChange={onChangeFreeTextFoodOption}
-							/>
-						</FormGroup>
-					</FormControl>
+				<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+					<FormGroup>
+						<Controller
+							name="noms.free_text"
+							control={control}
+							render={({ field }) => (
+								<TextFieldWithout1Password
+									{...field}
+									value={field.value || ''}
+									label="Anything else?"
+									helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
+									sx={{ mt: 1 }}
+								/>
+							)}
+						/>
+					</FormGroup>
 
-					{errors !== undefined && errors.message !== undefined && (
-						<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
+					{errors !== undefined && errors.free_text !== undefined && (
+						<FormFieldValidationError error={errors.free_text} />
 					)}
-				</React.Fragment>
+				</FormControl>
 			)}
+
+			{errors !== undefined && errors.root !== undefined && <FormFieldValidationError error={errors.root} />}
 		</React.Fragment>
 	);
 }

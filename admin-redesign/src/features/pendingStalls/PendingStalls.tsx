@@ -24,13 +24,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToPendingStallsPollingPlaceById } from '../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
 import type { Election } from '../../app/services/elections';
-import {
-	type PollingPlaceWithPendingStall,
-	type UnofficialPollingPlaceWithPendingStall,
-	useGetPendingStallsQuery,
-} from '../../app/services/stalls';
+import { type PollingPlaceWithPendingStall, useGetPendingStallsQuery } from '../../app/services/stalls';
 import { theme } from '../../app/ui/theme';
-import { isDevelopment } from '../../app/utils';
+import { isDevelopment, pluralise } from '../../app/utils';
 import { selectAllElections } from '../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReactAvatar } from '../icons/jurisdictionHelpers';
 import { PendingStallsAllCaughtUp, getCountOfExistingStallsIcon } from './pendingStallsHelpers';
@@ -81,13 +77,8 @@ function PendingStalls(props: Props) {
 	);
 
 	const onClickPollingPlace = useCallback(
-		(pollingPlace: PollingPlaceWithPendingStall | UnofficialPollingPlaceWithPendingStall) => () => {
-			// @TODO Support unofficial polling places...somehow
-			// 'id' in pollingPlace ? pollingPlace.id : pollingPlace.id_unofficial
-			if ('id' in pollingPlace) {
-				navigateToPendingStallsPollingPlaceById(navigate, pollingPlace.id);
-			}
-		},
+		(pollingPlace: PollingPlaceWithPendingStall) => () =>
+			navigateToPendingStallsPollingPlaceById(navigate, pollingPlace.id),
 		[navigate],
 	);
 
@@ -164,7 +155,8 @@ function PendingStalls(props: Props) {
 												return (
 													<Card
 														variant="outlined"
-														key={'id' in pollingPlace ? pollingPlace.id : pollingPlace.id_unofficial}
+														key={pollingPlace.id}
+														// key={'id_unofficial' in pollingPlace ? pollingPlace.id_unofficial : pollingPlace.id}
 													>
 														<StyledCardContent>
 															<Box onClick={onClickPollingPlace(pollingPlace)} sx={{ cursor: 'pointer' }}>
@@ -196,7 +188,7 @@ function PendingStalls(props: Props) {
 																		backgroundColor: '#0389d1 !important',
 																	}}
 																>
-																	{countOfNewPendingStalls} New {countOfNewPendingStalls > 1 ? 'Subs' : 'Sub'}
+																	{`${countOfNewPendingStalls} New ${pluralise('Sub', countOfNewPendingStalls)}`}
 																</Button>
 															)}
 
@@ -210,7 +202,7 @@ function PendingStalls(props: Props) {
 																		backgroundColor: '#0389d1 !important',
 																	}}
 																>
-																	{countOfEditedPendingStalls} New {countOfEditedPendingStalls > 1 ? 'Edits' : 'Edit'}
+																	{`${countOfEditedPendingStalls} New ${pluralise('Edit', countOfEditedPendingStalls)}`}
 																</Button>
 															)}
 
@@ -231,7 +223,7 @@ function PendingStalls(props: Props) {
 																		ml: '0px !important',
 																	}}
 																>
-																	First {pollingPlace.pending_stalls.length > 1 ? 'Subs' : 'Sub'}
+																	{`First ${pluralise('Sub', pollingPlace.pending_stalls.length)}`}
 																</Button>
 															)}
 
@@ -247,10 +239,7 @@ function PendingStalls(props: Props) {
 																		ml: '0px !important',
 																	}}
 																>
-																	Previous{' '}
-																	{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied > 1
-																		? 'Subs'
-																		: 'Sub'}
+																	{`Previous ${pluralise('Sub', pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied)}`}
 																</Button>
 															)}
 														</StyledCardActions>

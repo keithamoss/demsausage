@@ -1,4 +1,5 @@
 import { Alert, AlertTitle, styled } from '@mui/material';
+import { useNotifications } from '@toolpad/core';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
@@ -88,6 +89,8 @@ function PollingPlaceNomsEditor(props: Props) {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const notifications = useNotifications();
+
 	const urlSearchTerm = getStringParamOrUndefined(params, 'search_term');
 
 	// ######################
@@ -104,9 +107,14 @@ function PollingPlaceNomsEditor(props: Props) {
 
 	useEffect(() => {
 		if (isAddingOrEditingPollingPlaceNomsSuccessful === true) {
+			notifications.show('Polling place stall updated', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
+
 			navigateToPollingPlaceSearch(params, navigate);
 		}
-	}, [isAddingOrEditingPollingPlaceNomsSuccessful, navigate, params]);
+	}, [isAddingOrEditingPollingPlaceNomsSuccessful, notifications.show, navigate, params]);
 
 	const onDoneCreatingOrEditing = useCallback(
 		(pollingPlaceId: number, stall: Partial<IPollingPlaceStallModifiableProps>) => {
@@ -132,9 +140,14 @@ function PollingPlaceNomsEditor(props: Props) {
 
 	useEffect(() => {
 		if (isDeletingPollingPlaceNomsSuccessful === true) {
+			notifications.show('Polling place stall deleted', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
+
 			navigateToPollingPlaceSearch(params, navigate);
 		}
-	}, [isDeletingPollingPlaceNomsSuccessful, navigate, params]);
+	}, [isDeletingPollingPlaceNomsSuccessful, notifications.show, navigate, params]);
 
 	const onDelete = useCallback(
 		(pollingPlaceId: number) => {
@@ -192,6 +205,7 @@ function PollingPlaceNomsEditor(props: Props) {
 				isSaving={isAddingOrEditingPollingPlaceNomsLoading}
 				onDelete={onDelete}
 				isDeleting={isDeletingPollingPlaceNomsLoading}
+				allowPasteOnTextFields={false}
 			/>
 
 			{isAddingOrEditingPollingPlaceNomsErrored === true && (

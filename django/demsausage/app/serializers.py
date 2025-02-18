@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import PollingPlaceStatus, StallStatus, StallSubmitterType
 from demsausage.app.models import (
     Elections,
     MailgunEvents,
@@ -233,6 +233,7 @@ class PollingPlaceNomsSerializer(serializers.ModelSerializer):
             "latest_report",
             "source",
             "polling_place",
+            "deleted",
         )
 
     def _check_noms_validity(self, validated_data):
@@ -416,19 +417,22 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
         )
 
     def get_previous_subs(self, obj):
+        pollingPlaceStalls = Stalls.objects.filter(election_id=obj.election_id).filter(
+            polling_place_id=obj.id
+        )
+
         return {
-            "approved": Stalls.objects.filter(election_id=obj.election_id)
-            .filter(polling_place_id=obj.id)
-            .filter(
+            "approved": pollingPlaceStalls.filter(
+                Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
+            ).count(),
+            "approved_owner_subs": pollingPlaceStalls.filter(
                 Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             )
+            .filter(Q(submitter_type=StallSubmitterType.OWNER))
             .count(),
-            "denied": Stalls.objects.filter(election_id=obj.election_id)
-            .filter(polling_place_id=obj.id)
-            .filter(
+            "denied": pollingPlaceStalls.filter(
                 Q(status=StallStatus.DECLINED) | Q(previous_status=StallStatus.DECLINED)
-            )
-            .count(),
+            ).count(),
         }
 
 

@@ -46,7 +46,8 @@ def cleanup():
 
     for pp in pollingPlaces:
         pp.noms_id = None
-    PollingPlaces.objects.bulk_update(pollingPlaces, ["noms_id"])
+        pp.booth_info = ""
+    PollingPlaces.objects.bulk_update(pollingPlaces, ["noms_id", "booth_info"])
 
     pollingPlaceNoms = PollingPlaceNoms.objects.filter(id__in=pollingPlaceNomsIds)
     print(f"Deleted {pollingPlaceNoms.count()} polling place noms entries")
@@ -239,16 +240,20 @@ def create_polling_place_with_a_denied_tip_off(
     return baseStall
 
 
-def create_owner_submission_stall(pollingPlace, stallName):
+def create_owner_submission_stall(
+    pollingPlace,
+    stallName,
+    noms={
+        "bbq": True,
+    },
+):
     stall = Stalls(
         election_id=get_election_id(),
         name=stallName,
         description="",
         opening_hours="8AM-4PM",
         website="https://admin-redesign.test.democracysausage.org",
-        noms={
-            "bbq": True,
-        },
+        noms=noms,
         email="keithamoss@gmail.com",
         polling_place_id=pollingPlace.id,
         submitter_type=StallSubmitterType.OWNER,
@@ -258,14 +263,19 @@ def create_owner_submission_stall(pollingPlace, stallName):
     return stall
 
 
-def create_tipoff_stall(pollingPlace, tipoff_source, tipoff_source_other=""):
+def create_tipoff_stall(
+    pollingPlace,
+    tipoff_source,
+    tipoff_source_other="",
+    noms={
+        "bbq": True,
+        "cake": True,
+        "vego": True,
+    },
+):
     stall = Stalls(
         election_id=get_election_id(),
-        noms={
-            "bbq": True,
-            "cake": True,
-            "vego": True,
-        },
+        noms=noms,
         email="keithamoss@gmail.com",
         polling_place_id=pollingPlace.id,
         submitter_type=StallSubmitterType.TIPOFF,

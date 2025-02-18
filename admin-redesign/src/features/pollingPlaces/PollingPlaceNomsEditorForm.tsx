@@ -21,13 +21,21 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
-import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import {
+	Controller,
+	type SubmitHandler,
+	type UseFormHandleSubmit,
+	type UseFormSetValue,
+	useForm,
+} from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { pollingPlaceNomsFormValidationSchema } from '../../app/forms/pollingPlaceForm';
-import type { StallFoodOptions } from '../../app/services/stalls';
+import type { PollingPlaceWithPendingStall, StallFoodOptions } from '../../app/services/stalls';
+import TextFieldWithPasteAdornment from '../../app/ui/textFieldWithPasteAdornment';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
 import PollingPlaceNomsEditorFormNomsSelector from './PollingPlaceNomsEditorFormNomsSelector';
+import { getNomsFormDefaultValues } from './pollingPlaceNomsEditorFormHelpers';
 import type { IPollingPlace, IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
 
 const PageWrapper = styled('div')(({ theme }) => ({
@@ -35,35 +43,53 @@ const PageWrapper = styled('div')(({ theme }) => ({
 }));
 
 interface Props {
-	pollingPlace: IPollingPlace;
+	pollingPlace: IPollingPlace | PollingPlaceWithPendingStall;
 	onDoneCreatingOrEditing: (pollingPlaceId: number, stall: Partial<IPollingPlaceStallModifiableProps>) => void;
 	isSaving: boolean;
 	onDelete: (pollingPlaceId: number) => void;
 	isDeleting: boolean;
+	allowPasteOnTextFields: boolean;
+	allowAppBarControl?: boolean;
+	handleSubmitRef?: React.MutableRefObject<UseFormHandleSubmit<IPollingPlaceStallModifiableProps> | undefined>;
+	setValueRef?: React.MutableRefObject<UseFormSetValue<IPollingPlaceStallModifiableProps> | undefined>;
+	isDirtyRef?: React.MutableRefObject<boolean | undefined>;
 }
 
 export default function PollingPlaceNomsEditorForm(props: Props) {
-	const { pollingPlace, onDoneCreatingOrEditing, isSaving, onDelete, isDeleting } = props;
+	const {
+		pollingPlace,
+		onDoneCreatingOrEditing,
+		isSaving,
+		onDelete,
+		isDeleting,
+		allowPasteOnTextFields: allowPasteOnTextField,
+		allowAppBarControl,
+		handleSubmitRef,
+		setValueRef,
+		isDirtyRef,
+	} = props;
 
 	const {
 		watch,
 		setValue,
 		handleSubmit,
 		control,
+		trigger,
 		formState: { errors, isDirty },
 	} = useForm<IPollingPlaceStallModifiableProps>({
 		resolver: yupResolver(pollingPlaceNomsFormValidationSchema),
-		defaultValues: {
-			noms: pollingPlace.stall?.noms || {},
-			name: pollingPlace.stall?.name || '',
-			description: pollingPlace.stall?.description || '',
-			opening_hours: pollingPlace.stall?.opening_hours || '',
-			website: pollingPlace.stall?.website || '',
-			extra_info: pollingPlace.stall?.extra_info || '',
-			source: pollingPlace.stall?.source || '',
-			favourited: pollingPlace.stall?.favourited || false,
-		},
+		defaultValues: getNomsFormDefaultValues(pollingPlace),
 	});
+
+	if (handleSubmitRef !== undefined) {
+		handleSubmitRef.current = handleSubmit;
+	}
+	if (setValueRef !== undefined) {
+		setValueRef.current = setValue;
+	}
+	if (isDirtyRef !== undefined) {
+		isDirtyRef.current = isDirty;
+	}
 
 	const { noms, favourited } = watch();
 
@@ -93,13 +119,29 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 	// Form Management
 	// ######################
 	const onDoneWithForm: SubmitHandler<IPollingPlaceStallModifiableProps> = useCallback(
-		(data) => {
+		async (data) => {
 			if (isEmpty(data) === false) {
 				// Unlike most other components like this, there's no need to include pollingPlace.stall as the base here because we're doing a genuine PATCH request.
-				onDoneCreatingOrEditing(pollingPlace.id, data);
+
+				// Ensures we remove 'free_text' from the list of noms when it's empty
+				if (data.noms.free_text === '') {
+					// biome-ignore lint/performance/noDelete: <explanation>
+					delete data.noms.free_text;
+
+					// Trigger form validation to warn if the noms are now empty
+					if ((await trigger()) === false) {
+						setIsErrorSnackbarShown(true);
+					}
+				}
+
+				// Ensure we don't try and save a polling place with an empty noms.
+				// If it's empty, the user can delete it instead.
+				if (isEmpty(data.noms) === false) {
+					onDoneCreatingOrEditing(pollingPlace.id, data);
+				}
 			}
 		},
-		[onDoneCreatingOrEditing, pollingPlace.id /*, pollingPlace.stall*/],
+		[onDoneCreatingOrEditing, trigger, pollingPlace.id],
 	);
 
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
@@ -134,10 +176,30 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 	// Delete Polling Place Noms (End)
 	// ######################
 
+	// ######################
+	// Paste To Field From Clipboard
+	// ######################
+	const onPasteNameFromClipboard = (pastedText: string) => setValue('name', pastedText, { shouldDirty: true });
+	const onPasteDescriptionFromClipboard = (pastedText: string) =>
+		setValue('description', pastedText, { shouldDirty: true });
+	const onPasteOpeningHoursFromClipboard = (pastedText: string) =>
+		setValue('opening_hours', pastedText, { shouldDirty: true });
+	const onPasteWebsiteFromClipboard = (pastedText: string) => setValue('website', pastedText, { shouldDirty: true });
+	const onPasteExtraInfoFromClipboard = (pastedText: string) =>
+		setValue('extra_info', pastedText, { shouldDirty: true });
+	// ######################
+	// Paste To Field From Clipboard (End)
+	// ######################
+
 	return (
 		<PageWrapper>
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
-				<PollingPlaceNomsEditorFormNomsSelector foodOptions={noms} onChange={onFoodOptionChange} errors={errors.noms} />
+				<PollingPlaceNomsEditorFormNomsSelector
+					foodOptions={noms}
+					onChange={onFoodOptionChange}
+					control={control}
+					errors={errors.noms}
+				/>
 
 				{/* ######################
 							Stall Details
@@ -157,10 +219,12 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							name="name"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password
+								<TextFieldWithPasteAdornment
 									{...field}
-									label="Stall name (required)"
-									helperText="e.g. Smith Hill Primary School Sausage Sizzle"
+									label="Stall name"
+									helperText="e.g. Hillcrest Primary School Sausage Sizzle"
+									onPasteFromClipboard={onPasteNameFromClipboard}
+									pastingDisabled={allowPasteOnTextField === false}
 								/>
 							)}
 						/>
@@ -175,11 +239,13 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							name="description"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password
+								<TextFieldWithPasteAdornment
 									{...field}
-									label="Description (required)"
+									label="Description"
 									helperText="Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
 									multiline
+									onPasteFromClipboard={onPasteDescriptionFromClipboard}
+									pastingDisabled={allowPasteOnTextField === false}
 								/>
 							)}
 						/>
@@ -194,7 +260,13 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							name="opening_hours"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password {...field} label="Opening hours" helperText="e.g. 8AM - 2PM" />
+								<TextFieldWithPasteAdornment
+									{...field}
+									label="Opening hours"
+									helperText="e.g. 8AM - 2PM"
+									onPasteFromClipboard={onPasteOpeningHoursFromClipboard}
+									pastingDisabled={allowPasteOnTextField === false}
+								/>
 							)}
 						/>
 					</FormGroup>
@@ -208,10 +280,12 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							name="website"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password
+								<TextFieldWithPasteAdornment
 									{...field}
 									label="Website or social media page link"
 									helperText="We'll include a link to your site as part of your stall's information"
+									onPasteFromClipboard={onPasteWebsiteFromClipboard}
+									pastingDisabled={allowPasteOnTextField === false}
 								/>
 							)}
 						/>
@@ -226,10 +300,12 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							name="extra_info"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password
+								<TextFieldWithPasteAdornment
 									{...field}
 									label="Extra information"
 									helperText="Is there any other information to add that doesn't relate to what's on offer at the stall?"
+									onPasteFromClipboard={onPasteExtraInfoFromClipboard}
+									pastingDisabled={allowPasteOnTextField === false}
 								/>
 							)}
 						/>
@@ -292,38 +368,40 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							Metadata (End)
 					###################### */}
 
-				<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
-					<Toolbar sx={{ justifyContent: 'flex-end' }}>
-						<LoadingButton
-							loading={isSaving}
-							loadingPosition="end"
-							disabled={isDirty === false}
-							size="small"
-							color="primary"
-							endIcon={<Save />}
-							onClick={onClickSubmit}
-						>
-							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
-							<span>Save</span>
-						</LoadingButton>
-
-						{pollingPlace.stall !== null && (
+				{allowAppBarControl !== false && (
+					<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
+						<Toolbar sx={{ justifyContent: 'flex-end' }}>
 							<LoadingButton
-								loading={isDeleting}
+								loading={isSaving}
 								loadingPosition="end"
-								disabled={pollingPlace.stall === null}
+								disabled={isDirty === false}
 								size="small"
 								color="primary"
-								endIcon={<Delete />}
-								onClick={onClickDelete}
-								sx={{ ml: 1 }}
+								endIcon={<Save />}
+								onClick={onClickSubmit}
 							>
 								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
-								<span>Delete</span>
+								<span>Save</span>
 							</LoadingButton>
-						)}
-					</Toolbar>
-				</AppBar>
+
+							{pollingPlace.stall !== null && (
+								<LoadingButton
+									loading={isDeleting}
+									loadingPosition="end"
+									disabled={pollingPlace.stall === null}
+									size="small"
+									color="primary"
+									endIcon={<Delete />}
+									onClick={onClickDelete}
+									sx={{ ml: 1 }}
+								>
+									{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+									<span>Delete</span>
+								</LoadingButton>
+							)}
+						</Toolbar>
+					</AppBar>
+				)}
 			</form>
 
 			{isDeleteConfirmDialogShown === true && (

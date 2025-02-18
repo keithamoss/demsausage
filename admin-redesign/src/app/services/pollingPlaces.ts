@@ -30,6 +30,11 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { election_id: electionId, name, premises, state },
 			}),
 		}),
+		getPollingPlaceByIdLookup: builder.query<IPollingPlace, number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/`,
+			}),
+		}),
 		getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
 			query: ({ electionId, pollingPlaceIds }) => ({
 				url: 'polling_places/search/',
@@ -67,7 +72,7 @@ export const pollingPlacesApi = api.injectEndpoints({
 				method: 'PATCH',
 				body: {
 					id: pollingPlaceId,
-					stall,
+					stall: { ...stall, deleted: false },
 				},
 			}),
 		}),
@@ -83,6 +88,7 @@ export const pollingPlacesApi = api.injectEndpoints({
 export const {
 	useGetPollingPlaceByLatLonLookupQuery,
 	useGetPollingPlaceByUniqueDetailsLookupQuery,
+	useGetPollingPlaceByIdLookupQuery,
 	useGetPollingPlaceByIdsLookupQuery,
 	useGetPollingPlaceBySearchTermQuery,
 	useLazyGetPollingPlaceBySearchTermQuery,
