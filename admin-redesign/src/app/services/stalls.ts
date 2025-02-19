@@ -50,7 +50,7 @@ export const getStallSourceDescriptionFromAdminPOV = (enumName: StallTipOffSourc
 		case StallTipOffSource.Newsletter:
 			return 'They saw it in the school, church, et cetera newsletter';
 		case StallTipOffSource.Other:
-			return `Other: ${otherDescrption}`;
+			return `Other: ${otherDescrption || 'No description provided'}`;
 	}
 };
 

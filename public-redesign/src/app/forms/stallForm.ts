@@ -1,5 +1,5 @@
-import * as yup from 'yup';
 import type { ObjectSchema } from 'yup';
+import * as yup from 'yup';
 import {
 	type StallFoodOptions,
 	type StallOwnerModifiableProps,
@@ -77,7 +77,7 @@ export const stallFormTipOffValidationSchema: ObjectSchema<StallTipOffModifiable
 	.object({
 		noms: stallNomsFieldFormValidationSchemaForTipOff,
 		email: yup.string().email().required(),
-		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)),
+		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)).required(),
 		tipoff_source_other: yup.string().optional().ensure(),
 	})
 	.required();
