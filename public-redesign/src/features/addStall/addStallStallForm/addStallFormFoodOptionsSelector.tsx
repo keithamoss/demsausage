@@ -115,6 +115,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 				<FormGroup>
 					<TextFieldWithout1Password
+						defaultValue={foodOptions.free_text || ''}
 						label="Anything else?"
 						helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
 						sx={{ mt: 1 }}
