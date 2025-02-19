@@ -675,6 +675,7 @@ class StallsTipOffUserEditSerializer(StallsUserEditSerializer):
             "submitter_type",
             "tipoff_source",
             "tipoff_source_other",
+            "owner_edit_timestamp",
         )
 
 
