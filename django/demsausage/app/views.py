@@ -34,6 +34,7 @@ from demsausage.app.sausage.elections import (
     get_elections_cache_key,
     get_polling_place_geojson_cache_key,
     get_polling_place_json_cache_key,
+    is_it_election_day,
 )
 from demsausage.app.sausage.loader import RollbackPollingPlaces
 from demsausage.app.sausage.mailgun import (
@@ -724,7 +725,6 @@ class StallsViewSet(viewsets.ModelViewSet):
     schema = None
 
     def get_serializer_class(self):
-        # @TODO Once the legacy site is gone, use the code below in create() that requires a submitter_type
         if self.action == "retrieve" or self.action == "update_and_resubmit":
             stall = self.get_object()
 
@@ -746,22 +746,34 @@ class StallsViewSet(viewsets.ModelViewSet):
             if get_active_elections().filter(id=request.data["election"]).count() == 0:
                 raise BadRequest("This election is no longer active")
 
-            # @TODO Once the legacy site is gone, use the code below that requires a submitter_type
-            if "submitter_type" in request.data and request.data["submitter_type"] in [
-                StallSubmitterType.TIPOFF,
-                StallSubmitterType.TIPOFF_RUN_OUT,
-                StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
-            ]:
-                serializer = StallsTipOffManagementSerializer(data=request.data)
-            elif (
-                "submitter_type" in request.data
-                and request.data["submitter_type"] == StallSubmitterType.OWNER
-            ):
-                serializer = StallsOwnerManagementSerializer(data=request.data)
+            if "submitter_type" in request.data:
+                if request.data["submitter_type"] in [
+                    StallSubmitterType.TIPOFF,
+                    StallSubmitterType.TIPOFF_RUN_OUT,
+                    StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
+                ]:
+                    serializer = StallsTipOffManagementSerializer(data=request.data)
+                elif request.data["submitter_type"] == StallSubmitterType.OWNER:
+                    serializer = StallsOwnerManagementSerializer(data=request.data)
+                else:
+                    raise BadRequest(
+                        f"Unhandled submitter_type '{request.data['submitter_type']}'"
+                    )
             else:
-                raise BadRequest(
-                    f"Unhandled submitter_type '{request.data['submitter_type']}'"
-                )
+                raise BadRequest("No submitter_type supplied")
+
+            if (
+                request.data["submitter_type"]
+                in [
+                    StallSubmitterType.TIPOFF_RUN_OUT,
+                    StallSubmitterType.TIPOFF_RED_CROSS_OF_SHAME,
+                ]
+                and is_it_election_day(request.data["election"]) is False
+            ):
+                raise BadRequest("These tip-offs can only be submitted on election day")
+
+            if request.data["submitter_type"] == StallSubmitterType.TIPOFF_RUN_OUT:
+                request.data["noms"].update({"run_out": True})
 
             if serializer is not None:
                 if serializer.is_valid() is True:
@@ -779,27 +791,6 @@ class StallsViewSet(viewsets.ModelViewSet):
                         request.data["submitter_type"]
                     )
                 )
-
-            # @TODO This needs to support TipOffRunOut and TipOffRedCrossOfShame
-            # if "submitter_type" in request.data:
-            #     if request.data["submitter_type"] == StallSubmitterType.OWNER:
-            #         serializer = StallsOwnerManagementSerializer(data=request.data)
-            #     elif request.data["submitter_type"] == StallSubmitterType.TIPOFF:
-            #         serializer = StallsTipOffManagementSerializer(data=request.data)
-            # @TODO This needs to support failing for unhandled submitter_types
-
-            #     if serializer is not None:
-            #         if serializer.is_valid() is True:
-            #             serializer.save()
-
-            #             send_stall_submitted_email(Stalls.objects.get(id=serializer.instance.id))
-            #             return Response({}, status=status.HTTP_201_CREATED)
-            #         else:
-            #             raise BadRequest(serializer.errors)
-            #     else:
-            #         raise BadRequest("Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(request.data["submitter_type"]))
-
-            # raise BadRequest("No submitter_type supplied")
         raise BadRequest("No election supplied")
 
     def retrieve(self, request, *args, **kwargs):

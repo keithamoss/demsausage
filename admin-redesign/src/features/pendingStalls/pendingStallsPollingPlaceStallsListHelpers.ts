@@ -6,9 +6,15 @@ export const isApproveAndMergeAutomaticallyAllowed = (
 	pollingPlace: PollingPlaceWithPendingStall,
 ) => {
 	// Business rules:
-	// 1. DON'T allow automatic merging of 'Stall Owner' submissions when there is already another 'Stall Owner' submission (humans need to handle this manually)
-	// 2. DON'T allow automatic merging for an edited submission (humans need to handle this manually)
-	// 3. DO allow automatic merging when there is 1 'Stall Owner' submission and 1 or more 'Tip-off Submissions'
+	// 1. DON'T allow automatic merging for polling places that already have a Red Cross of Shame or Run Out (due to their complexity)
+	// 2. DON'T allow automatic merging of 'Stall Owner' submissions when there is already another 'Stall Owner' submission (humans need to handle this manually)
+	// 3. DON'T allow automatic merging for an edited submission (humans need to handle this manually)
+	// 4. DO allow automatic merging when there is 1 'Stall Owner' submission and 1 or more 'Tip-off Submissions'
+
+	// Polling places with RCOS or Run Out need more careful human attention
+	if (pollingPlace.stall?.noms.nothing === true || pollingPlace.stall?.noms.run_out === true) {
+		return false;
+	}
 
 	// Allow unedited Tip-off Submissions
 	if (isStallATipOff(stall) === true && stall.triaged_on === null) {
@@ -41,6 +47,16 @@ export const getWhyApproveAndMergeAutomaticallyNotAllowed = (
 	pollingPlace: PollingPlaceWithPendingStall,
 ) => {
 	// "Automatic merging has been disabled because...""
+
+	// The polling place has an RCOS or...
+	if (pollingPlace.stall?.noms.nothing === true) {
+		return 'this submission has a Red Cross of Shame.';
+	}
+
+	// ...has been flaged as run out
+	if (pollingPlace.stall?.noms.run_out === true) {
+		return 'this submission has already been flagged as having run out of food.';
+	}
 
 	// It's an edited submission
 	if (stall.triaged_on !== null) {

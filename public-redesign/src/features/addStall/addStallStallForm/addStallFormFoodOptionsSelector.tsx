@@ -21,12 +21,13 @@ import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/ic
 
 interface Props {
 	foodOptions: StallFoodOptions;
+	pastTense?: boolean;
 	onChange: (foodOptions: StallFoodOptions) => void;
 	errors: StallFoodOptionsErrors | undefined;
 }
 
 export default function AddStallFormFoodOptionsSelector(props: Props) {
-	const { foodOptions, onChange, errors } = props;
+	const { foodOptions, pastTense, onChange, errors } = props;
 
 	// ######################
 	// Food Options
@@ -66,7 +67,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 				component="div"
 				sx={{ mt: 1, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
-				What&apos;s on offer?
+				{pastTense === true ? 'What was on offer?' : "What's on offer?"}
 			</Typography>
 
 			<FormControl fullWidth={true} component="fieldset" variant="outlined">

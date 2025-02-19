@@ -89,3 +89,15 @@ export const getStallSubmitterTypeElement = (stall: Stall): JSX.Element => {
 export const getStallSubmitterTypeElementIcon = (stall: Stall) => getStallSubmitterTypeInfo(stall).icon;
 
 export const getStallSubmitterTypeElementLabel = (stall: Stall) => getStallSubmitterTypeInfo(stall).label;
+
+export const doesStallHaveNomsToShowOnOffer = (stall: Stall) => {
+	if (stall.noms.nothing === true) {
+		return false;
+	}
+
+	if (stall.noms.run_out === true && Object.keys(stall.noms).length === 1) {
+		return false;
+	}
+
+	return Object.keys(stall.noms).length >= 1;
+};

@@ -76,7 +76,7 @@ export interface StallTipOffModifiableProps {
 }
 
 export interface StallTipOffRunOutModifiableProps {
-	noms: StallFoodOptions & { run_out: true };
+	noms: StallFoodOptions;
 	email: string;
 	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
 	tipoff_source_other: string;

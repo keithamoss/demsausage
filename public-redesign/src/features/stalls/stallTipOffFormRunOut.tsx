@@ -10,6 +10,9 @@ import {
 	FormControl,
 	FormGroup,
 	InputAdornment,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
 	MobileStepper,
 	Paper,
 	Snackbar,
@@ -26,13 +29,16 @@ import { useAppSelector } from '../../app/hooks/store';
 import {
 	type IStallLocationInfo,
 	type Stall,
+	type StallFoodOptions,
 	type StallTipOffRunOutModifiableProps,
 	StallTipOffSource,
 } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
+import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
 import { selectActiveElections } from '../elections/electionsSlice';
+import { supportingIcons } from '../icons/iconHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
@@ -42,6 +48,21 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	overflowY: 'auto',
 	height: '100dvh',
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
+}));
+
+const StyledListItem = styled(ListItem)(() => ({ alignItems: 'start' }));
+
+const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
+	marginTop: theme.spacing(0.25),
+	paddingLeft: theme.spacing(1),
+}));
+
+const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+	marginTop: theme.spacing(0),
+	'& .MuiListItemText-primary': {
+		color: mapaThemePrimaryGrey,
+		fontWeight: 700,
+	},
 }));
 
 interface Props {
@@ -60,18 +81,33 @@ export default function StallTipOffFormRunOut(props: Props) {
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
 	const {
+		watch,
+		setValue,
 		handleSubmit,
 		control,
 		formState: { errors, isDirty },
 	} = useForm<StallTipOffRunOutModifiableProps>({
 		resolver: yupResolver(stallFormTipOffRunOutValidationSchema),
 		defaultValues: {
-			noms: { run_out: true },
+			noms: stall?.noms || {},
 			email: stall?.email || '',
 			tipoff_source: StallTipOffSource.Other,
 			tipoff_source_other: stall?.tipoff_source_other || '',
 		},
 	});
+
+	const { noms } = watch();
+
+	// ######################
+	// Food Options
+	// ######################
+	const onFoodOptionChange = useCallback(
+		(foodOptions: StallFoodOptions) => setValue('noms', foodOptions, { shouldDirty: true }),
+		[setValue],
+	);
+	// ######################
+	// Food Options (End)
+	// ######################
 
 	// ######################
 	// Form Management
@@ -145,6 +181,36 @@ export default function StallTipOffFormRunOut(props: Props) {
 						pt: 1, // Only pt 1 so we keep a consistent 16px with the spacing between sections as with AddStallFormForOwner
 					}}
 				>
+					<StyledListItem disableGutters sx={{ mt: 1 }}>
+						<StyledListItemIcon
+							sx={{
+								'& svg': {
+									// 10px larger than the standard MUI SvgIcon size of 24px
+									// to account for the padding around our 'circle' icons.
+									width: 34,
+									height: 34,
+									position: 'relative',
+									top: '-5px',
+									left: '-5px',
+								},
+							}}
+						>
+							{supportingIcons.yellow_minus.icon.react}
+						</StyledListItemIcon>
+
+						<StyledListItemText
+							primary="Sold out!"
+							secondary="We're sorry to hear that they've run out of food here."
+						/>
+					</StyledListItem>
+
+					<AddStallFormFoodOptionsSelector
+						foodOptions={noms}
+						pastTense={true}
+						onChange={onFoodOptionChange}
+						errors={errors.noms}
+					/>
+
 					{/* ######################
 							Your Details
 					###################### */}
@@ -167,7 +233,7 @@ export default function StallTipOffFormRunOut(props: Props) {
 										{...field}
 										type="email"
 										label="Email address"
-										helperText="So we can let you know when we've added the stall to the map"
+										helperText="So we can let you know when we've updated the stall on the map"
 										InputProps={{
 											startAdornment: (
 												<InputAdornment position="start">

@@ -29,13 +29,14 @@ import {
 	type PollingPlaceWithPendingStall,
 	StallStatus,
 	StallSubmitterType,
-	getStallSourceDescriptionFromAdminPOV,
+	getStallSubmitterTypeTipOffName,
+	getStallTipOffSourceDescriptionFromAdminPOV,
 } from '../../app/services/stalls';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../assets/stalls/submit_tipoff.svg?react';
 import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../icons/iconHelpers';
-import { isStallATipOff } from '../pollingPlaces/pollingPlaceStallsHelpers';
+import { doesStallHaveNomsToShowOnOffer, isStallATipOff } from '../pollingPlaces/pollingPlaceStallsHelpers';
 import PendingStallsPollingPlaceStallFieldListItem from './PendingStallsPollingPlaceStallFieldListItem';
 import { getNomsIconsForPendingStall } from './pendingStallsHelpers';
 import {
@@ -158,10 +159,14 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 									</StyledListItemIcon>
 
 									<StyledListItemText
-										primary="Tip-off"
+										primary={getStallSubmitterTypeTipOffName(stall.submitter_type)}
 										secondary={
 											stall.tipoff_source !== undefined
-												? getStallSourceDescriptionFromAdminPOV(stall.tipoff_source, stall.tipoff_source_other)
+												? getStallTipOffSourceDescriptionFromAdminPOV(
+														stall.submitter_type,
+														stall.tipoff_source,
+														stall.tipoff_source_other,
+													)
 												: 'INVALID_TIPOFF_SOURCE'
 										}
 										sx={{
@@ -239,7 +244,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 								</StyledListItem>
 							)}
 
-							{stall.noms.nothing !== true && (
+							{doesStallHaveNomsToShowOnOffer(stall) === true && (
 								<PendingStallsPollingPlaceStallFieldListItem fieldName="noms" fieldLabel="On Offer" stall={stall} />
 							)}
 							{/* 

@@ -11,6 +11,9 @@ import {
 	FormControl,
 	FormGroup,
 	InputAdornment,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
 	MobileStepper,
 	Paper,
 	Snackbar,
@@ -34,6 +37,7 @@ import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
 import { selectActiveElections } from '../elections/electionsSlice';
+import { supportingIcons } from '../icons/iconHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
@@ -43,6 +47,21 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	overflowY: 'auto',
 	height: '100dvh',
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
+}));
+
+const StyledListItem = styled(ListItem)(() => ({ alignItems: 'start' }));
+
+const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
+	marginTop: theme.spacing(0.25),
+	paddingLeft: theme.spacing(1),
+}));
+
+const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+	marginTop: theme.spacing(0),
+	'& .MuiListItemText-primary': {
+		color: mapaThemePrimaryGrey,
+		fontWeight: 700,
+	},
 }));
 
 interface Props {
@@ -152,6 +171,26 @@ export default function StallTipOffFormRedCrossOfShame(props: Props) {
 						care in reporting a lack of a stall while it&apos;s still early in the day.
 					</Alert>
 
+					<StyledListItem disableGutters sx={{ mt: 1 }}>
+						<StyledListItemIcon
+							sx={{
+								'& svg': {
+									// 10px larger than the standard MUI SvgIcon size of 24px
+									// to account for the padding around our 'circle' icons.
+									width: 34,
+									height: 34,
+									position: 'relative',
+									top: '-5px',
+									left: '-5px',
+								},
+							}}
+						>
+							{supportingIcons.red_cross.icon.react}
+						</StyledListItemIcon>
+
+						<StyledListItemText primary="Sausageless!" secondary="We're sorry to hear that there's no stall here." />
+					</StyledListItem>
+
 					{/* ######################
 							Your Details
 					###################### */}
@@ -174,7 +213,7 @@ export default function StallTipOffFormRedCrossOfShame(props: Props) {
 										{...field}
 										type="email"
 										label="Email address"
-										helperText="So we can let you know when we've added the stall to the map"
+										helperText="So we can let you know when we've updated the stall on the map"
 										InputProps={{
 											startAdornment: (
 												<InputAdornment position="start">

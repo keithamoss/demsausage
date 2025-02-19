@@ -27,6 +27,20 @@ export enum StallTipOffSource {
 }
 
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSubmitterTypeTipOffName = (enumName: StallSubmitterType): string => {
+	switch (enumName) {
+		case StallSubmitterType.Owner:
+			return 'INVALID_SUBMITTER_TYPE_FOR_TIP_OFF';
+		case StallSubmitterType.TipOff:
+			return 'Tip-off';
+		case StallSubmitterType.TipOffRunOut:
+			return 'Run Out Tip-off';
+		case StallSubmitterType.TipOffRedCrossOfShame:
+			return 'Red Cross of Shame Tip-off';
+	}
+};
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
 export const getStallSourceDescription = (enumName: StallTipOffSource): string => {
 	switch (enumName) {
 		case StallTipOffSource.In_Person:
@@ -41,7 +55,16 @@ export const getStallSourceDescription = (enumName: StallTipOffSource): string =
 };
 
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
-export const getStallSourceDescriptionFromAdminPOV = (enumName: StallTipOffSource, otherDescrption: string): string => {
+export const getStallTipOffSourceDescriptionFromAdminPOV = (
+	submitterType: StallSubmitterType,
+	enumName: StallTipOffSource,
+	otherDescrption: string,
+): string => {
+	// RCOS and Run Out tip-offs don't ask the user to identify the soruce, we only ask them to provide a description (in tipoff_source_other)
+	if (submitterType === StallSubmitterType.TipOffRedCrossOfShame || submitterType === StallSubmitterType.TipOffRunOut) {
+		return otherDescrption || 'No description provided';
+	}
+
 	switch (enumName) {
 		case StallTipOffSource.In_Person:
 			return 'They saw it at a polling booth';
