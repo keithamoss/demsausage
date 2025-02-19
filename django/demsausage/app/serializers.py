@@ -651,6 +651,7 @@ class StallsUserEditSerializer(StallsSerializer):
             "polling_place",
             "status",
             "submitter_type",
+            "owner_edit_timestamp",
         )
 
 
