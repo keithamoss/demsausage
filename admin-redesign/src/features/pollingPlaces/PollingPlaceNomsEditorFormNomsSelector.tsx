@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import { type Control, Controller } from 'react-hook-form';
-import { FormFieldValidationError } from '../../app/forms/formHelpers';
+import { FormFieldValidationError, FormFieldValidationErrorMessageOnly } from '../../app/forms/formHelpers';
 import type { StallFoodOptions, StallFoodOptionsErrors } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
@@ -197,6 +197,10 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 						<FormFieldValidationError error={errors.free_text} />
 					)}
 				</FormControl>
+			)}
+
+			{errors !== undefined && errors.message !== undefined && (
+				<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
 			)}
 
 			{errors !== undefined && errors.root !== undefined && <FormFieldValidationError error={errors.root} />}

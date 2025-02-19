@@ -1,4 +1,14 @@
-import { Approval, DoNotDisturbOn, Edit, FiberNew, History, House, NewReleases, Radar } from '@mui/icons-material';
+import {
+	Approval,
+	DoNotDisturbOn,
+	Edit,
+	FiberNew,
+	History,
+	House,
+	NewReleases,
+	OpenInNew,
+	Radar,
+} from '@mui/icons-material';
 import {
 	Alert,
 	Button,
@@ -13,7 +23,8 @@ import {
 } from '@mui/material';
 import { type PollingPlaceWithPendingStall, StallStatus } from '../../app/services/stalls';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
-import { pluralise } from '../../app/utils';
+import { getPublicSiteBaseURL, pluralise } from '../../app/utils';
+import { getPollingPlacePermalinkFromProps } from '../pollingPlaces/pollingPlaceHelpers';
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
 	padding: theme.spacing(1),
@@ -130,6 +141,19 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 
 				<Button size="small" startIcon={<House />} onClick={onOpenPollingPlaceSubmissions}>
 					Submissions
+				</Button>
+
+				<Button
+					startIcon={<OpenInNew />}
+					href={`${getPublicSiteBaseURL()}${getPollingPlacePermalinkFromProps(
+						pollingPlace.election_name_url_safe,
+						pollingPlace.name,
+						pollingPlace.premises,
+						pollingPlace.state,
+					)}`}
+					target="_blank"
+				>
+					Open
 				</Button>
 			</CardActions>
 		</Card>

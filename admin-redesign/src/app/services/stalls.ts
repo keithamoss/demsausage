@@ -188,6 +188,7 @@ export interface PollingPlacePreviousSubsStats {
 export interface PollingPlaceWithPendingStall {
 	id: number;
 	election_id: number;
+	election_name_url_safe: string;
 	name: string;
 	premises: string;
 	address: string;

@@ -27,6 +27,10 @@ export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
 }
 
+export function getPublicSiteBaseURL(): string {
+	return import.meta.env.VITE_PUBLIC_SITE_BASE_URL;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-next-line
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;

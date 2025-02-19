@@ -239,7 +239,9 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 								</StyledListItem>
 							)}
 
-							<PendingStallsPollingPlaceStallFieldListItem fieldName="noms" fieldLabel="On Offer" stall={stall} />
+							{stall.noms.nothing !== true && (
+								<PendingStallsPollingPlaceStallFieldListItem fieldName="noms" fieldLabel="On Offer" stall={stall} />
+							)}
 							{/* 
               // ######################
               // Noms Information (End)

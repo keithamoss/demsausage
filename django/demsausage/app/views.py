@@ -861,7 +861,6 @@ class StallsViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
-
         stall = self.get_object()
         if stall.status != StallStatus.PENDING:
             raise BadRequest("Stall is not pending")
@@ -880,6 +879,11 @@ class StallsViewSet(viewsets.ModelViewSet):
                 noms,
                 f"Approved and {request.data.get('approvalType', None)}",
             )
+
+            # If we've created the noms, we need to link it up to the polling place
+            if stall.polling_place.noms is None:
+                stall.polling_place.noms_id = noms.id
+                stall.polling_place.save()
         else:
             raise BadRequest(serializer.errors)
 

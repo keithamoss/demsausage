@@ -14,11 +14,11 @@ export const isStallMergedWithPollingPlace = (
 		const value = stall.noms[key];
 
 		if (key === 'free_text') {
-			if (key in pollingPlaceStall.noms === false || pollingPlaceStall.noms[key] !== value) {
+			if (pollingPlaceStall.noms[key] === undefined || pollingPlaceStall.noms[key] === '') {
 				return false;
 			}
 		} else {
-			if (key in pollingPlaceStall.noms === false || pollingPlaceStall.noms[key] !== true) {
+			if (pollingPlaceStall.noms[key] === undefined || pollingPlaceStall.noms[key] !== true) {
 				return false;
 			}
 		}

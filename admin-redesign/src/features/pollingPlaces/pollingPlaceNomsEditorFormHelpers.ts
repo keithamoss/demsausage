@@ -27,13 +27,32 @@ export const mergeStallWithPollingPlaceFormNomsAndUpdateForm = (
 	};
 
 	if (isEmpty(stall.noms) === false) {
-		setValue('noms', { ...(pollingPlace.stall?.noms || {}), ...stall.noms }, { shouldDirty: true });
-	}
+		// If the stall is setting a Red Cross of Shame, wipe out everything else
+		if (stall.noms.nothing === true) {
+			setValue('noms', { nothing: true }, { shouldDirty: true });
+			setValue('name', '');
+			setValue('description', '');
+			setValue('opening_hours', '');
+			setValue('website', '');
+		} else {
+			// If the polling place already has a Red Cross of Shame, but the stall doesn't, remove the RCOS
+			if (pollingPlace.stall?.noms.nothing === true && stall.noms.nothing === undefined) {
+				setValue(
+					'noms',
+					{ ...(pollingPlace.stall?.noms || {}), ...stall.noms, nothing: undefined },
+					{ shouldDirty: true },
+				);
+			} else {
+				// Otherwise, just merge the stall's noms over the top of the polling place
+				setValue('noms', { ...(pollingPlace.stall?.noms || {}), ...stall.noms }, { shouldDirty: true });
+			}
 
-	setValueIfPresent('name', stall.name);
-	setValueIfPresent('description', stall.description);
-	setValueIfPresent('opening_hours', stall.opening_hours);
-	setValueIfPresent('website', stall.website);
+			setValueIfPresent('name', stall.name);
+			setValueIfPresent('description', stall.description);
+			setValueIfPresent('opening_hours', stall.opening_hours);
+			setValueIfPresent('website', stall.website);
+		}
+	}
 
 	// Note: extra_info, source, and favourited are not here because users can't submit that info. Only admins can set it.
 };

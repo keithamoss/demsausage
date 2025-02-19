@@ -401,6 +401,9 @@ class PollingPlacesInfoSerializer(PollingPlacesSerializer):
 
 
 class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
+    election_name_url_safe = ElectionURLSafeNameCharField(
+        source="election.name", allow_null=False
+    )
     previous_subs = serializers.SerializerMethodField()
 
     class Meta:
@@ -408,6 +411,7 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
         fields = (
             "id",
             "election_id",
+            "election_name_url_safe",
             "name",
             "premises",
             "address",

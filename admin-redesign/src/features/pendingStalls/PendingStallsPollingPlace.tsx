@@ -119,11 +119,12 @@ function PendingStallsPollingPlace(props: Props) {
 
 			try {
 				// We await here (rather than the usual pattern) because these actions cause a refresh of pending stalls, which means this page shows an error (per Entrypoint above) if the polling place doesn't have any more pending stalls to process.
+				// unwrap() ensures we catch errors from the API.
 				await approveStall({
 					stallId,
 					pollingPlaceNoms: stall,
 					approvalType,
-				});
+				}).unwrap();
 
 				setIsLoadingScreenShown(false);
 
@@ -176,6 +177,17 @@ function PendingStallsPollingPlace(props: Props) {
 				if (confirmed === false) {
 					return;
 				}
+			} else if (approvalType === StallApprovalType.ApproveAndMergeByHand) {
+				// Prompt to confirm because isStallMergedWithPollingPlace() is very MVP
+				const confirmed = await dialogs.confirm('Have you made all of the necessary changes to the polling place?', {
+					title: 'Are you sure?',
+					okText: 'Go Ahead',
+					cancelText: 'Cancel',
+				});
+
+				if (confirmed === false) {
+					return;
+				}
 			}
 
 			if (isEmpty(data) === false) {
@@ -206,7 +218,8 @@ function PendingStallsPollingPlace(props: Props) {
 
 				try {
 					// We await here (rather than the usual pattern) because these actions cause a refresh of pending stalls, which means this page shows an error (per Entrypoint above) if the polling place doesn't have any more pending stalls to process.
-					await declineStall(stall.id);
+					// unwrap() ensures we catch errors from the API.
+					await declineStall(stall.id).unwrap();
 
 					setIsLoadingScreenShown(false);
 

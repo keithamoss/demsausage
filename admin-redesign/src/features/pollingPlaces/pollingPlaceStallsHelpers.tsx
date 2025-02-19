@@ -32,7 +32,6 @@ export const getStallStatusElement = (
 			return createButton(<ThumbDownOffAlt />, '#922269', 'Denied');
 
 		case StallStatus.Pending:
-			console.log(stallPreviousStatus);
 			if (stallPreviousStatus === StallStatus.Approved) {
 				return createButton(<HourglassEmptyOutlined />, '#0389d1', 'Pending (Previously Approved)');
 			}
