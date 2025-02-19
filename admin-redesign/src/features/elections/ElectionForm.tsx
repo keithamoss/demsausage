@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -31,6 +32,7 @@ import { theme } from '../../app/ui/theme';
 import { eJurisdiction, getJurisdictionCrestCircleReact, jurisdictions } from '../icons/jurisdictionHelpers';
 
 dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
 	election?: Election;
@@ -141,7 +143,7 @@ function ElectionForm(props: Props) {
 								render={({ field }) => (
 									<DatePicker
 										{...field}
-										timezone="UTC"
+										timezone="Australia/Perth"
 										value={election_day !== undefined ? dayjs(election_day) : null}
 										label="What day is election day?"
 									/>
