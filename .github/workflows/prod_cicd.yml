@@ -1,8 +1,8 @@
 name: Production CI/CD
 
 on:
-  # push:
-  #   branches: [production]
+  push:
+    branches: [production]
   pull_request:
     branches: [production]
     types: [closed]
