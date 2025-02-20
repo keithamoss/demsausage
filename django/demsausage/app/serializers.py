@@ -451,9 +451,10 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
 
     def get_properties(self, instance, fields):
         props = {"noms": None}
+
         for field in fields:
             if field.source == "noms.noms":
-                if instance.noms is not None:
+                if instance.noms is not None and instance.noms.deleted is not True:
                     props = {
                         **props,
                         "noms": field.to_representation(instance.noms.noms),
@@ -470,6 +471,7 @@ class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
                         )
                     },
                 }
+
         return props
 
 
@@ -484,7 +486,10 @@ class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
 
         stall_representation = representation.pop("stall")
         if stall_representation is not None:
-            if "noms" in stall_representation:
+            if "noms" in stall_representation and (
+                "deleted" not in stall_representation["noms"]
+                or stall_representation["noms"]["deleted"] is not True
+            ):
                 noms_representation = stall_representation.pop("noms")
                 for noms_name, prop in noms_schema["properties"].items():
                     if noms_name == "free_text":

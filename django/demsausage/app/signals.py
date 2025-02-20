@@ -28,6 +28,15 @@ def regenerate_geojson_for_noms_change(sender, instance, created, **kwargs):
         )
 
 
+@receiver(post_save, sender=PollingPlaceNoms)
+def regenerate_geojson_for_noms_soft_delete(sender, instance, created, **kwargs):
+    # Regenerate GeoJSON when a noms gets soft deleted by an admin
+    if created is False and instance.tracker.has_changed("deleted") is True:
+        task_regenerate_cached_election_data.delay(
+            election_id=instance.polling_place.election_id
+        )
+
+
 # I'm not actually sure if this ever runs into the if branch - since a delete noms would never know it's election_id
 # @TODO The better approach in future might be to change this from a OneToOneField to something else that doesn't mean .delete() cascades to delete either the PollingPlace or the Noms when the other is deleted - since that's not really our intent.
 # i.e. We want to delete Noms without deleting a PollingPlace and we never delete PollingPlaces.
