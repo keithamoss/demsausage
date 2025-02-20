@@ -884,7 +884,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             data={
                 "status": StallStatus.APPROVED,
                 "triaged_on": datetime.now(pytz.utc),
-                "triaged_by_id": request.user.id,
+                "triaged_by": request.user.id,
             },
             partial=True,
         )
@@ -954,7 +954,7 @@ class StallsViewSet(viewsets.ModelViewSet):
     #         data={
     #             "status": StallStatus.APPROVED,
     #             "triaged_on": datetime.now(pytz.utc),
-    #             "triaged_by_id": request.user.id,
+    #             "triaged_by": request.user.id,
     #             "polling_place": pollingPlaceSerializer.instance.id,
     #         },
     #         partial=True,
@@ -979,7 +979,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             data={
                 "status": StallStatus.DECLINED,
                 "triaged_on": datetime.now(pytz.utc),
-                "triaged_by_id": request.user.id,
+                "triaged_by": request.user.id,
             },
             partial=True,
         )
