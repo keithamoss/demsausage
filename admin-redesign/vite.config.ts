@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
 
 	return {
 		server: {
-			allowedHosts: ["admin-redesign.test.democracysausage.org"]
+			allowedHosts: ["admin.test.democracysausage.org"]
 		},
 		build: {
 			outDir: 'build',
