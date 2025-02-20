@@ -1,9 +1,9 @@
-import { NavigateFunction, Params } from 'react-router-dom';
+import type { NavigateFunction, Params } from 'react-router-dom';
 import { getPollingPlacePermalinkFromProps } from '../../../features/pollingPlaces/pollingPlaceHelpers';
-import { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
-import { IMapboxGeocodingAPIResponseFeature } from '../../../features/search/searchBarHelpers';
-import { Election } from '../../services/elections';
-import { StallSubmitterType } from '../../services/stalls';
+import type { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { IMapboxGeocodingAPIResponseFeature } from '../../../features/search/searchBarHelpers';
+import type { Election } from '../../services/elections';
+import type { StallSubmitterType } from '../../services/stalls';
 import { getURLParams } from './navigationHelpers';
 
 // This doesn't need `cameFromInternalNavigation` because there's no way back from there
@@ -257,10 +257,7 @@ export const navigateToAddStallForm = (
 		return;
 	}
 
-	if (
-		urlPollingPlaceName !== undefined &&
-		urlPollingPlaceState !== undefined
-	) {
+	if (urlPollingPlaceName !== undefined && urlPollingPlaceState !== undefined) {
 		navigate(
 			`/add-stall${getPollingPlacePermalinkFromProps(urlElectionName, urlPollingPlaceName, urlPollingPlacePremises || '', urlPollingPlaceState)}submitter/${submitterType}/`,
 			{

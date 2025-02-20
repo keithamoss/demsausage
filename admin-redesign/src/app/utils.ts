@@ -27,6 +27,10 @@ export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
 }
 
+export function getPublicSiteBaseURL(): string {
+	return import.meta.env.VITE_PUBLIC_SITE_BASE_URL;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-next-line
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
@@ -39,14 +43,14 @@ export function stringDivider(str: string, width: number, spaceReplacer: string,
 			p -= 1;
 		}
 		if (p > 0) {
-			let left;
+			let left: string;
 			if (str.substring(p, p + 1) === '-') {
 				left = str.substring(0, p + 1);
 			} else {
 				left = str.substring(0, p);
 			}
 			const right = str.substring(p + 1);
-			// eslint-disable-next-line no-param-reassign
+			// biome-ignore lint/style/noParameterAssign: <explanation>
 			replaceCount += 1;
 			const [newText, newReplaceCount] = stringDivider(right, width, spaceReplacer, replaceCount);
 			return [left + spaceReplacer + newText, newReplaceCount];
@@ -61,14 +65,16 @@ export const getCSVStringsAsFloats = (s: string) => {
 	}
 
 	const arrayOfStrings = s.includes(',') ? s.split(',') : [s];
-	return arrayOfStrings.map((v) => parseFloat(v)).filter((v) => Number.isNaN(v) === false);
+	return arrayOfStrings.map((v) => Number.parseFloat(v)).filter((v) => Number.isNaN(v) === false);
 };
 
 // https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
-export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator.clipboard.writeText);
+export const isClipboardApiSupported = () => !!navigator.clipboard?.writeText;
 
 // https://philna.sh/blog/2017/03/14/the-web-share-api/
 export const isWebShareApiSupported = () => !!('canShare' in navigator && navigator.share);
 
 export const enumFromStringValue = <T>(enm: { [s: string]: T }, value: string): T | undefined =>
 	(Object.values(enm) as unknown as string[]).includes(value) ? (value as unknown as T) : undefined;
+
+export const pluralise = (word: string, count: number) => `${word}${count > 1 ? 's' : ''}`;

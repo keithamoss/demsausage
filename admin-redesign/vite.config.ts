@@ -13,6 +13,9 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
 	return {
+		server: {
+			allowedHosts: ["admin.test.democracysausage.org"]
+		},
 		build: {
 			outDir: 'build',
 			sourcemap: true,
@@ -20,7 +23,7 @@ export default defineConfig(({ command, mode }) => {
 				output: {
 					manualChunks(id: string) {
 						// Creating a chunk for third-party packages
-						if (id.includes('/.yarn/')) {
+						if (id.includes('/node_modules/')) {
 							return 'vendor';
 						}
 					},

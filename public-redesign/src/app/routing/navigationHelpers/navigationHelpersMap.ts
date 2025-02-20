@@ -1,7 +1,7 @@
-import { View } from 'ol';
-import { NavigateFunction, Params, generatePath } from 'react-router-dom';
+import type { View } from 'ol';
+import { type NavigateFunction, type Params, generatePath } from 'react-router-dom';
 import { createMapViewURLPathComponent } from '../../../features/map/mapHelpers';
-import { Election } from '../../services/elections';
+import type { Election } from '../../services/elections';
 import { addComponentToEndOfURLPath, getURLParams } from './navigationHelpers';
 
 export const navigateToElectionFromElectionNameInURL = (params: Params<string>, navigate: NavigateFunction) => {

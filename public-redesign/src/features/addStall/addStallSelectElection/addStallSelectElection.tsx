@@ -16,7 +16,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { navigateToAddStallSelectPollingPlaceFromElection } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { appBarHeight } from '../../../app/ui/theme';
 import { selectActiveElectionsSorted } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
@@ -27,7 +27,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `100dvh`,
+	height: '100dvh',
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 

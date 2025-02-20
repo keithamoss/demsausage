@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { View } from 'ol';
 import { Polygon } from 'ol/geom';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { getStandardViewPadding } from '../map/mapHelpers';
 
 export const isElectionLive = (election: Election) => {

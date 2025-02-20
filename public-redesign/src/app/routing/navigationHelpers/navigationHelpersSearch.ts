@@ -1,4 +1,4 @@
-import { NavigateFunction, Params } from 'react-router-dom';
+import type { NavigateFunction, Params } from 'react-router-dom';
 import { addComponentToEndOfURLPath, getURLParams } from './navigationHelpers';
 
 export const navigateToSearchDrawerRoot = (params: Params<string>, navigate: NavigateFunction) => {

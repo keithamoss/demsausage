@@ -1,4 +1,4 @@
-import { IStallLocationInfo } from '../../../app/services/stalls';
+import type { IStallLocationInfo } from '../../../app/services/stalls';
 
 export const createStallLocationInfoObjectFromLocationLookup = (
 	location_name: string,
@@ -12,7 +12,10 @@ export const createStallLocationInfoObjectFromLocationLookup = (
 		state: location_state,
 		geom: {
 			type: 'Point',
-			coordinates: [parseFloat(location_lon_lat.split(',')[0]), parseFloat(location_lon_lat.split(',')[1])],
+			coordinates: [
+				Number.parseFloat(location_lon_lat.split(',')[0]),
+				Number.parseFloat(location_lon_lat.split(',')[1]),
+			],
 		},
 	};
 };

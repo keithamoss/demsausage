@@ -1,15 +1,21 @@
+import { Storefront } from '@mui/icons-material';
+import BallotIcon from '@mui/icons-material/Ballot';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import PublicIcon from '@mui/icons-material/Public';
+import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
-import { UIMatch, useMatches } from 'react-router-dom';
+import type React from 'react';
+import { type UIMatch, useMatches } from 'react-router-dom';
 import { sentryFeedback } from '../sentry';
 import { ListItemButtonLink } from '../ui/link';
 import { mapaThemePrimaryPurple } from '../ui/theme';
 
 // The page names here must match what's in routes.tsx if we want the link to show as active
-const navigationItemsTier1 = [{ text: 'Home', path: '/', icon: <PublicIcon /> }];
+const navigationItemsTier1 = [
+	{ text: 'Pending Submissions', path: '/', icon: <Storefront /> },
+	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
+	{ text: 'Elections', path: '/elections/', icon: <BallotIcon /> },
+];
 
 interface UIMatchData {
 	name?: string;

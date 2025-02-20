@@ -115,9 +115,9 @@ export default function MediaPage() {
 				</Typography>
 
 				<List>
-					{mediaReleases.map((item, index) => (
+					{mediaReleases.map((item) => (
 						<ListItem
-							key={index}
+							key={item.filename}
 							disablePadding
 							sx={{
 								'& .MuiListItemText-primary': {

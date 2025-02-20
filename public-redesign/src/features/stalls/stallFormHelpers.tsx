@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
-import { IStallLocationInfo, Stall } from '../../app/services/stalls';
-import { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IStallLocationInfo, Stall } from '../../app/services/stalls';
+import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export const mobileStepperMinHeight = 46.75;
 
@@ -24,7 +24,8 @@ export const getPollingPlaceFormHeading = (
 		if (stall.polling_place !== null) {
 			// On elections with polling places
 			return stall.polling_place.premises || stall.polling_place.name;
-		} else if (stall.location_info !== null) {
+		}
+		if (stall.location_info !== null) {
 			// On elections with no polling places
 			return stall.location_info.name;
 		}
@@ -33,4 +34,4 @@ export const getPollingPlaceFormHeading = (
 	return '!! Unable to determine polling place name !!';
 };
 
-export const getHiddenStepperButton = () => <Button size="small" disabled={true} style={{ color: 'white' }}></Button>;
+export const getHiddenStepperButton = () => <Button size="small" disabled={true} style={{ color: 'white' }} />;

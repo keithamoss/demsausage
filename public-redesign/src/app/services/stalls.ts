@@ -1,6 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
-import { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
 export enum StallSubmitterType {
@@ -76,7 +76,7 @@ export interface StallTipOffModifiableProps {
 }
 
 export interface StallTipOffRunOutModifiableProps {
-	noms: StallFoodOptions & { run_out: true };
+	noms: StallFoodOptions;
 	email: string;
 	tipoff_source?: StallTipOffSource; // Actually it's always StallTipOffSource.Other, but we need this here for the Stall interface construction to work
 	tipoff_source_other: string;
@@ -152,7 +152,7 @@ export const stallsApi = api.injectEndpoints({
 			}),
 		}),
 		addStall: builder.mutation<
-			{},
+			void,
 			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
 		>({
 			query: (stall) => ({
@@ -161,7 +161,7 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
-		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
+		updateStallWithCredentials: builder.mutation<void, Stall & { token: string; signature: string }>({
 			query: (stall) => ({
 				url: `stalls/${stall.id}/update_and_resubmit/`,
 				method: 'PATCH',

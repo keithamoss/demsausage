@@ -14,19 +14,20 @@ import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
-import { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
+import type { StallFoodOptions, StallFoodOptionsErrors } from '../../../app/services/stalls';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize } from '../../icons/iconHelpers';
 
 interface Props {
 	foodOptions: StallFoodOptions;
+	pastTense?: boolean;
 	onChange: (foodOptions: StallFoodOptions) => void;
 	errors: StallFoodOptionsErrors | undefined;
 }
 
 export default function AddStallFormFoodOptionsSelector(props: Props) {
-	const { foodOptions, onChange, errors } = props;
+	const { foodOptions, pastTense, onChange, errors } = props;
 
 	// ######################
 	// Food Options
@@ -36,10 +37,9 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 	const onToggleFoodOption = (foodOptionName: keyof StallFoodOptions) => {
 		if (foodOptions[foodOptionName] === undefined) {
 			return onChange({ ...foodOptions, [foodOptionName]: true });
-		} else {
-			const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
-			return onChange(rest);
 		}
+		const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
+		return onChange(rest);
 	};
 
 	const onChangeFreeTextFoodOption = useMemo(
@@ -47,10 +47,11 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			debounce((e: React.ChangeEvent<HTMLInputElement>) => {
 				if (e.target.value.length >= 1) {
 					return onChange({ ...foodOptions, free_text: e.target.value });
-				} else {
-					const { free_text, ...rest } = foodOptions;
-					return onChange(rest);
 				}
+
+				// Ensures we remove 'free_text' from the list of noms when it's empty
+				const { free_text, ...rest } = foodOptions;
+				return onChange(rest);
 			}, 500),
 		[foodOptions, onChange],
 	);
@@ -66,7 +67,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 				component="div"
 				sx={{ mt: 1, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
-				What&apos;s on offer?
+				{pastTense === true ? 'What was on offer?' : "What's on offer?"}
 			</Typography>
 
 			<FormControl fullWidth={true} component="fieldset" variant="outlined">
@@ -88,7 +89,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 									secondaryAction={
 										<Checkbox
 											value={option.value}
-											checked={foodOptions[option.value as keyof StallFoodOptions] === true ? true : false}
+											checked={foodOptions[option.value as keyof StallFoodOptions] === true}
 											onChange={onClickFoodOption(option.value as keyof StallFoodOptions)}
 											edge="end"
 											inputProps={{ 'aria-labelledby': labelId }}
@@ -115,6 +116,7 @@ export default function AddStallFormFoodOptionsSelector(props: Props) {
 			<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 				<FormGroup>
 					<TextFieldWithout1Password
+						defaultValue={foodOptions.free_text || ''}
 						label="Anything else?"
 						helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
 						sx={{ mt: 1 }}

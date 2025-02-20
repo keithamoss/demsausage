@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
@@ -21,19 +21,21 @@ import {
 	navigateToAddStallSelectPollingPlace,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { StallSubmitterType } from '../../../app/services/stalls';
 import { appBarHeight } from '../../../app/ui/theme';
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
+import { isItElectionDay } from '../../elections/electionHelpers';
 import { selectActiveElections } from '../../elections/electionsSlice';
+import { supportingIcons } from '../../icons/iconHelpers';
 import { getHiddenStepperButton, mobileStepperMinHeight } from '../../stalls/stallFormHelpers';
 
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `100dvh`,
+	height: '100dvh',
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 
@@ -174,8 +176,7 @@ function AddStallSubmitterType(props: Props) {
 						<ListItemText primary="I've seen or heard about a stall here" />
 					</ListItemButton>
 
-					{/* Disabled until the admin interface can support these on the Pending Stalls interface */}
-					{/* {isItElectionDay(election) === true && (
+					{isItElectionDay(election) === true && (
 						<React.Fragment>
 							<ListItemButton onClick={onChooseStallTipOffRunOut}>
 								<ListItemAvatar>
@@ -203,7 +204,7 @@ function AddStallSubmitterType(props: Props) {
 								<ListItemText primary="I'm reporting that there's definitely no stall here" />
 							</ListItemButton>
 						</React.Fragment>
-					)} */}
+					)}
 				</List>
 			</Box>
 

@@ -11,9 +11,9 @@ import {
 	secondaryFoodIcons,
 	supportingIcons,
 } from '../icons/iconHelpers';
-import { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
+import type { IMapPollingGeoJSONNoms, IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 import {
-	IMapPollingPlaceFeature,
+	type IMapPollingPlaceFeature,
 	getStringOrEmptyStringFromFeature,
 	getStringOrUndefinedFromFeature,
 } from './mapHelpers';
@@ -121,6 +121,7 @@ export class NomsReader {
 
 		if (this.onlyHasExtraNoms()) {
 			// @TODO FIXME when we decide how to handle this
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			const firstExtraNomsIcon = Object.keys(this.noms!)[0] as keyof typeof secondaryFoodIcons;
 			return firstExtraNomsIcon in secondaryFoodIcons && secondaryFoodIcons[firstExtraNomsIcon].icon.ol !== undefined
 				? secondaryFoodIcons[firstExtraNomsIcon].icon.ol
@@ -155,7 +156,7 @@ export class NomsReader {
 		//    This is used to decorate the actual lat,lon the polling place is at.
 		const primaryIcon = this.getPrimaryIcon();
 		// @TODO
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		(primaryIcon.getImage() as any).setAnchor([iconSize * scaleFactor, iconSize * scaleFactor]);
 		primaryIcon.getImage().setScale(scaleFactor);
 		primaryIcon.setZIndex(0);
@@ -193,17 +194,17 @@ export class NomsReader {
 		const nomsIconNames: string[] = this.getOnlyFoodIconsFromNoms();
 		const nomsIconNamesSorted: string[] = [];
 
-		NomsReader.primaryNomsIconValues.forEach((iconName) => {
+		for (const iconName of NomsReader.primaryNomsIconValues) {
 			if (nomsIconNames.includes(iconName) === true) {
 				nomsIconNamesSorted.push(iconName);
 			}
-		});
+		}
 
-		nomsIconNames.forEach((iconName) => {
+		for (const iconName of nomsIconNames) {
 			if (nomsIconNamesSorted.includes(iconName) === false) {
 				nomsIconNamesSorted.push(iconName);
 			}
-		});
+		}
 
 		nomsIconNamesSorted.forEach((iconName, index) => {
 			const foodIcons = getAllFoodsAvailableOnStalls();
@@ -212,7 +213,7 @@ export class NomsReader {
 			if (foodIcon !== undefined) {
 				const icon = foodIcon.icon.olDetailed;
 				// @TODO
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				(icon.getImage() as any).setAnchor(this.getIconAnchorPosition(index, iconSize, scaleFactor));
 				icon.getImage().setScale(scaleFactor);
 				olStyles.push(icon);

@@ -1,4 +1,3 @@
-
 from datetime import timedelta
 
 from demsausage.app.models import Elections
@@ -34,13 +33,27 @@ def get_default_election_map_png_cache_key():
 def get_elections_cache_key():
     return "elections_list"
 
+
 def get_default_election():
     return Elections.objects.filter(is_primary=True).get()
 
+
 def get_active_elections():
-    return Elections.objects.filter(is_hidden=False, election_day__gte=timezone.now() - timedelta(days=1))
+    return Elections.objects.filter(
+        is_hidden=False, election_day__gte=timezone.now() - timedelta(days=1)
+    )
+
+
+def is_it_election_day(electionId):
+    return (
+        Elections.objects.filter(
+            id=electionId, election_day__date=timezone.now()
+        ).count()
+        == 1
+    )
+
 
 def cache_rehydration_on_init_tasks():
     # Rehydrate the cache for all active elections (starting with the primary election)
     for election in get_active_elections().order_by("-is_primary").values("id"):
-        task_regenerate_cached_election_data.delay(election_id=election['id'])
+        task_regenerate_cached_election_data.delay(election_id=election["id"])

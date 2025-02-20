@@ -1,6 +1,6 @@
 import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { debounce } from 'lodash-es';
-import { Feature, MapEvent, Map as olMap } from 'ol';
+import type { Feature, MapEvent, Map as olMap } from 'ol';
 import 'ol/ol.css';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -16,7 +16,7 @@ import {
 import { navigateToPollingPlaceFromFeature } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { navigateToSearchPollingPlacesByIds } from '../../app/routing/navigationHelpers/navigationHelpersSearch';
 import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 import { selectMapFilterSettings, setPollingPlaces } from '../app/appSlice';
@@ -28,12 +28,12 @@ import SearchBarCosmeticNonFunctional from '../search/searchByAddressOrGPS/searc
 import AddStallButton from './addStallButton/addStallButton';
 import LayersSelector from './layersSelector/layersSelector';
 import {
-	IMapPollingPlaceGeoJSONFeatureCollection,
+	type IMapPollingPlaceGeoJSONFeatureCollection,
 	createMapViewFromURL,
 	createMapViewURLPathComponent,
 	isMapViewParamValid,
 } from './mapHelpers';
-import OpenLayersMap from './openLayersMap/OpenLayersMap';
+import DemSausageOpenLayersMap from './openLayersMap/OpenLayersMap';
 
 // The entrypoint handles determining the election that should be displayed based on route changes.
 function MapEntrypointLayer1() {
@@ -105,7 +105,7 @@ function MapEntrypointLayer2(props: PropsEntrypointLayer2) {
 	}
 
 	if (location.pathname.startsWith(`/${election.name_url_safe}`) === true) {
-		return <Map election={election} />;
+		return <DemSausageMap election={election} />;
 	}
 }
 
@@ -117,7 +117,7 @@ interface Props {
 	election: Election;
 }
 
-function Map(props: Props) {
+function DemSausageMap(props: Props) {
 	const { election } = props;
 
 	const dispatch = useAppDispatch();
@@ -234,7 +234,7 @@ function Map(props: Props) {
 				<meta property="og:image" content={`${getAPIBaseURL()}/0.1/map_image/${election.id}/`} />
 			</Helmet>
 
-			<OpenLayersMap
+			<DemSausageOpenLayersMap
 				election={election}
 				olMapRef={olMapRef}
 				initialMapView={initialMapView}

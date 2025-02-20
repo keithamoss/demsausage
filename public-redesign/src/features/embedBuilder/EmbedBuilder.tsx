@@ -14,7 +14,7 @@ import {
 	MenuItem,
 	Paper,
 	Select,
-	SelectChangeEvent,
+	type SelectChangeEvent,
 	Snackbar,
 	Typography,
 	styled,
@@ -24,7 +24,7 @@ import { grey } from '@mui/material/colors';
 import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../../app/hooks';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { appBarHeight } from '../../app/ui/theme';
 import { getBaseURL } from '../../app/utils';
@@ -40,7 +40,7 @@ import {
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	overflowY: 'auto',
-	height: `100dvh`,
+	height: '100dvh',
 	padding: theme.spacing(2),
 	paddingTop: theme.spacing(4),
 	paddingBottom: appBarHeight,
@@ -81,7 +81,7 @@ function EmbedBuilder(props: Props) {
 	const [election, setElection] = useState<Election | undefined>(getDefaultElection(elections));
 
 	const onChooseElection = (e: SelectChangeEvent<number | string>) => {
-		const electionId = parseInt(`${e.target.value}`);
+		const electionId = Number.parseInt(`${e.target.value}`);
 		if (Number.isNaN(electionId) === false) {
 			const election = elections.find((e) => e.id === electionId);
 			if (election !== undefined) {

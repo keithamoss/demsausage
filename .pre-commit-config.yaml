@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: local-biome-check-public
+        name: biome check public
+        entry: bash -c 'cd public-redesign && pnpm biome check --write --files-ignore-unknown=true --no-errors-on-unmatched'
+        language: system
+        types: [text]
+  - repo: local
+    hooks:
+      - id: local-biome-check-admin
+        name: biome check admin
+        entry: bash -c 'cd admin-redesign && pnpm biome check --write --files-ignore-unknown=true --no-errors-on-unmatched'
+        language: system
+        types: [text]

@@ -1,6 +1,11 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type {
+	IPollingPlace,
+	IPollingPlaceNomsHistory,
+	IPollingPlaceStallModifiableProps,
+} from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
+import type { Stall } from './stalls';
 
 export const pollingPlacesAdapter = createEntityAdapter<IPollingPlace>();
 
@@ -25,10 +30,21 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { election_id: electionId, name, premises, state },
 			}),
 		}),
+		getPollingPlaceByIdLookup: builder.query<IPollingPlace, number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/`,
+			}),
+		}),
 		getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
 			query: ({ electionId, pollingPlaceIds }) => ({
 				url: 'polling_places/search/',
 				params: { election_id: electionId, ids: pollingPlaceIds },
+			}),
+		}),
+		getPollingPlaceBySearchTerm: builder.query<IPollingPlace[], { electionId: number; searchTerm: string }>({
+			query: ({ electionId, searchTerm }) => ({
+				url: 'polling_places/search/',
+				params: { election_id: electionId, search_term: searchTerm },
 			}),
 		}),
 		getPollingPlaceByStallIdLookup: builder.query<IPollingPlace, number>({
@@ -37,12 +53,48 @@ export const pollingPlacesApi = api.injectEndpoints({
 				params: { stall_id: stallId },
 			}),
 		}),
+		getPollingPlaceNomsHistoryById: builder.query<IPollingPlaceNomsHistory[], number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/noms_history/`,
+			}),
+		}),
+		getPollingPlaceStallsById: builder.query<Stall[], number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/related_stalls/`,
+			}),
+		}),
+		addOrEditPollingBoothNoms: builder.mutation<
+			void,
+			{ pollingPlaceId: number; stall: Partial<IPollingPlaceStallModifiableProps> }
+		>({
+			query: ({ pollingPlaceId, stall }) => ({
+				url: `polling_places/${pollingPlaceId}/`,
+				method: 'PATCH',
+				body: {
+					id: pollingPlaceId,
+					stall: { ...stall, deleted: false },
+				},
+			}),
+		}),
+		deletePollingBoothNoms: builder.mutation<void, number>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/delete_polling_place_noms/`,
+				method: 'DELETE',
+			}),
+		}),
 	}),
 });
 
 export const {
 	useGetPollingPlaceByLatLonLookupQuery,
 	useGetPollingPlaceByUniqueDetailsLookupQuery,
+	useGetPollingPlaceByIdLookupQuery,
 	useGetPollingPlaceByIdsLookupQuery,
+	useGetPollingPlaceBySearchTermQuery,
+	useLazyGetPollingPlaceBySearchTermQuery,
 	useGetPollingPlaceByStallIdLookupQuery,
+	useGetPollingPlaceNomsHistoryByIdQuery,
+	useGetPollingPlaceStallsByIdQuery,
+	useAddOrEditPollingBoothNomsMutation,
+	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;

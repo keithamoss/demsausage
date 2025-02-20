@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
@@ -39,15 +39,15 @@ import {
 	navigateToAddStallSubmitterTypeFromMapboxFeature,
 } from '../../../app/routing/navigationHelpers/navigationHelpersAddStall';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { appBarHeight } from '../../../app/ui/theme';
 import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
-import { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
-	IMapboxGeocodingAPIResponseFeature,
+	type IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
 	mapboxSearchTypesForElectionsWithoutPollingPlaces,
 } from '../../search/searchBarHelpers';
@@ -59,7 +59,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'light' ? grey[100] : grey[800],
 	// padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `100dvh`,
+	height: '100dvh',
 	paddingBottom: appBarHeight + mobileStepperMinHeight,
 }));
 

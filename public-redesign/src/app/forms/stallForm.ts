@@ -1,11 +1,11 @@
+import type { ObjectSchema } from 'yup';
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
 import {
-	StallFoodOptions,
-	StallOwnerModifiableProps,
-	StallTipOffModifiableProps,
-	StallTipOffRedCrossOfShameModifiableProps,
-	StallTipOffRunOutModifiableProps,
+	type StallFoodOptions,
+	type StallOwnerModifiableProps,
+	type StallTipOffModifiableProps,
+	type StallTipOffRedCrossOfShameModifiableProps,
+	type StallTipOffRunOutModifiableProps,
 	StallTipOffSource,
 } from '../services/stalls';
 import { booleanTrueOrUndefined } from './yupValidation';
@@ -36,7 +36,8 @@ export const stallNomsFieldFormValidationSchemaForTipOff: ObjectSchema<StallFood
 	.required()
 	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1);
 
-export const stallNomsFieldFormValidationSchemaForTipOffRunOut: ObjectSchema<StallFoodOptions & { run_out: true }> = yup
+// We don't require run_out here because we force that in views.py, all we need them to do is choose at least one noms
+export const stallNomsFieldFormValidationSchemaForTipOffRunOut: ObjectSchema<StallFoodOptions> = yup
 	.object({
 		bbq: booleanTrueOrUndefined,
 		cake: booleanTrueOrUndefined,
@@ -45,7 +46,6 @@ export const stallNomsFieldFormValidationSchemaForTipOffRunOut: ObjectSchema<Sta
 		bacon_and_eggs: booleanTrueOrUndefined,
 		coffee: booleanTrueOrUndefined,
 		free_text: yup.string().optional(),
-		run_out: yup.boolean().isTrue().required(),
 	})
 	.required()
 	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1);
@@ -77,7 +77,7 @@ export const stallFormTipOffValidationSchema: ObjectSchema<StallTipOffModifiable
 	.object({
 		noms: stallNomsFieldFormValidationSchemaForTipOff,
 		email: yup.string().email().required(),
-		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)),
+		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)).required(),
 		tipoff_source_other: yup.string().optional().ensure(),
 	})
 	.required();
@@ -87,7 +87,7 @@ export const stallFormTipOffRunOutValidationSchema: ObjectSchema<StallTipOffRunO
 		noms: stallNomsFieldFormValidationSchemaForTipOffRunOut,
 		email: yup.string().email().required(),
 		tipoff_source: yup.mixed<StallTipOffSource.Other>().oneOf([StallTipOffSource.Other]).required(),
-		tipoff_source_other: yup.string().required('This is a required field, ta!').ensure(),
+		tipoff_source_other: yup.string().required('This is a required field, cheers!').ensure(),
 	})
 	.required();
 
@@ -97,6 +97,6 @@ export const stallFormTipOffRedCrossOfShameValidationSchema: ObjectSchema<StallT
 			noms: yup.object({ nothing: yup.boolean().isTrue().required() }).required(),
 			email: yup.string().email().required(),
 			tipoff_source: yup.mixed<StallTipOffSource.Other>().oneOf([StallTipOffSource.Other]).required(),
-			tipoff_source_other: yup.string().required('This is a required field, ta!').ensure(),
+			tipoff_source_other: yup.string().required('This is a required field, cheers!').ensure(),
 		})
 		.required();

@@ -9,6 +9,7 @@ interface ImportMetaEnv {
 	readonly SSR: boolean;
 	readonly VITE_ENVIRONMENT: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
 	readonly VITE_SITE_BASE_URL: string;
+	readonly VITE_PUBLIC_SITE_BASE_URL: string;
 	readonly VITE_API_BASE_URL: string;
 	readonly VITE_SENTRY_DSN: string;
 	readonly VITE_SENTRY_ORGANISATION_NAME: string;

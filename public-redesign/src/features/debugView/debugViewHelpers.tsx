@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByUniqueDetailsLookupQuery } from '../../app/services/pollingPlaces';
 import { selectAllElections } from '../elections/electionsSlice';
 import PollingPlaceCard from '../pollingPlaces/pollingPlaceCard';

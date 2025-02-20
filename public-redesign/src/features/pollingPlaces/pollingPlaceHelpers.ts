@@ -1,7 +1,7 @@
-import Feature from 'ol/Feature';
-import { Election } from '../../app/services/elections';
+import type Feature from 'ol/Feature';
+import type { Election } from '../../app/services/elections';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
-import { IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
+import { type IPollingPlace, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
 
 export const getPollingPlacePermalinkFromElectionAndPollingPlace = (election: Election, pollingPlace: IPollingPlace) =>
 	getPollingPlacePermalinkFromProps(
@@ -36,8 +36,6 @@ export const getSausageChanceDescription = (pollingPlace: IPollingPlace) => {
 			return 'This booth has a MIXED chance of having food.';
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'This booth is UNLIKELY to have food.';
-		case PollingPlaceChanceOfSausage.NO_IDEA:
-		case null:
 		default:
 			return 'We have never had reports from this booth.';
 	}
@@ -50,8 +48,6 @@ export const getSausageChanceDescriptionSubheader = (pollingPlace: IPollingPlace
 		case PollingPlaceChanceOfSausage.MIXED:
 		case PollingPlaceChanceOfSausage.UNLIKELY:
 			return 'Based on reports from past elections';
-		case PollingPlaceChanceOfSausage.NO_IDEA:
-		case null:
 		default:
 			return 'Let us know what you find!';
 	}
@@ -87,13 +83,13 @@ export function getFoodDescription(pollingPlace: IPollingPlace) {
 	const foodLabels: Array<string> = [];
 	const foodIcons = getAllFoodsAvailableOnStalls();
 
-	Object.keys(pollingPlace.stall.noms).forEach((foodName) => {
+	for (const foodName of Object.keys(pollingPlace.stall.noms)) {
 		const foodDefinition = foodIcons.find((i) => i.value === foodName);
 
 		if (foodDefinition !== undefined) {
 			foodLabels.push(foodDefinition.label);
 		}
-	});
+	}
 
 	return foodLabels;
 }
@@ -109,13 +105,14 @@ export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) 
 
 	if (nomsList.length >= 3) {
 		return `${nomsList.slice(0, -1).join(', ')}, and ${nomsList.pop()}`;
-	} else if (nomsList.length === 2) {
-		return nomsList.join(' and ');
-	} else if (nomsList.length === 1) {
-		return nomsList[0];
-	} else {
-		return '';
 	}
+	if (nomsList.length === 2) {
+		return nomsList.join(' and ');
+	}
+	if (nomsList.length === 1) {
+		return nomsList[0];
+	}
+	return '';
 };
 
 export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPlace) => {
@@ -135,13 +132,14 @@ export const getPollingPlaceDivisionsDescriptiveText = (pollingPlace: IPollingPl
 
 export const getPollingPlaceIdsFromFeatures = (features: Feature[]) => {
 	const ids: number[] = [];
-	features.forEach((f) => {
+
+	for (const f of features) {
 		const id = f.getId();
 
 		if (typeof id === 'number') {
 			ids.push(id);
 		}
-	});
+	}
 
 	return ids;
 };

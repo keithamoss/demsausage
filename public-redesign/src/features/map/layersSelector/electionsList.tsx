@@ -15,7 +15,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { navigateToElection } from '../../../app/routing/navigationHelpers/navigationHelpersMap';
-import { Election } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import { getViewForElection, isElectionLive } from '../../elections/electionHelpers';
 import { selectAllElectionsSorted } from '../../elections/electionsSlice';
@@ -24,7 +24,7 @@ import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHel
 const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 	padding: theme.spacing(1),
 	overflowY: 'auto',
-	height: `90dvh`,
+	height: '90dvh',
 }));
 
 const StyledCloseIconButton = styled(IconButton)(({ theme }) => ({

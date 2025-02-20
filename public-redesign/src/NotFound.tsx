@@ -15,7 +15,7 @@ import { createInlinedSVGImage } from './features/icons/svgHelpers';
 const StyledInteractableBoxFullHeight = styled(Box)(() => ({
 	backgroundColor: mapaThemePrimaryPurple,
 	overflowY: 'auto',
-	height: `100dvh`,
+	height: '100dvh',
 	paddingBottom: appBarHeight * 2,
 }));
 
@@ -85,7 +85,7 @@ function NotFound() {
 							backgroundImage: `url('data:image/svg+xml;base64,${window.btoa(TilesBackgroundRaw)}')`,
 							p: 2,
 						}}
-					></Box>
+					/>
 
 					<Box
 						sx={{

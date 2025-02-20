@@ -1,4 +1,4 @@
-import { Election } from '../../app/services/elections';
+import type { Election } from '../../app/services/elections';
 import { getAPIBaseURL, getBaseURL } from '../../app/utils';
 
 export const isEmbedModeActive = () => navigator.userAgent.includes('Demsausage-Webdriver-Screenshot-Service');

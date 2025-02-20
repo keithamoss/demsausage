@@ -1,7 +1,16 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
-import { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
+import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type {
+	IPollingPlaceStall,
+	IPollingPlaceStallModifiableProps,
+	IPollingPlaceStubForStalls,
+} from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
+
+export enum StallApprovalType {
+	ApproveAndMegeAutomatically = 'merged automatically',
+	ApproveAndMergeByHand = 'merged by hand',
+}
 
 export enum StallSubmitterType {
 	Owner = 'owner',
@@ -18,6 +27,20 @@ export enum StallTipOffSource {
 }
 
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSubmitterTypeTipOffName = (enumName: StallSubmitterType): string => {
+	switch (enumName) {
+		case StallSubmitterType.Owner:
+			return 'INVALID_SUBMITTER_TYPE_FOR_TIP_OFF';
+		case StallSubmitterType.TipOff:
+			return 'Tip-off';
+		case StallSubmitterType.TipOffRunOut:
+			return 'Run Out Tip-off';
+		case StallSubmitterType.TipOffRedCrossOfShame:
+			return 'Red Cross of Shame Tip-off';
+	}
+};
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
 export const getStallSourceDescription = (enumName: StallTipOffSource): string => {
 	switch (enumName) {
 		case StallTipOffSource.In_Person:
@@ -28,6 +51,29 @@ export const getStallSourceDescription = (enumName: StallTipOffSource): string =
 			return 'I saw it in the school, church, et cetera newsletter';
 		case StallTipOffSource.Other:
 			return 'Other';
+	}
+};
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallTipOffSourceDescriptionFromAdminPOV = (
+	submitterType: StallSubmitterType,
+	enumName: StallTipOffSource,
+	otherDescrption: string,
+): string => {
+	// RCOS and Run Out tip-offs don't ask the user to identify the soruce, we only ask them to provide a description (in tipoff_source_other)
+	if (submitterType === StallSubmitterType.TipOffRedCrossOfShame || submitterType === StallSubmitterType.TipOffRunOut) {
+		return otherDescrption || 'No description provided';
+	}
+
+	switch (enumName) {
+		case StallTipOffSource.In_Person:
+			return 'They saw it at a polling booth';
+		case StallTipOffSource.Online:
+			return 'They heard about it online (including social media)';
+		case StallTipOffSource.Newsletter:
+			return 'They saw it in the school, church, et cetera newsletter';
+		case StallTipOffSource.Other:
+			return `Other: ${otherDescrption || 'No description provided'}`;
 	}
 };
 
@@ -90,7 +136,7 @@ export interface StallTipOffRedCrossOfShameModifiableProps {
 }
 
 export interface NewStallNonFormModifiableProps {
-	election: number;
+	election: number; // @TODO Why not election_id?
 	polling_place?: number; // Elections without official polling places loaded don't have polling place ids
 	location_info?: IStallLocationInfo;
 	submitter_type: StallSubmitterType;
@@ -134,7 +180,55 @@ export interface Stall
 	polling_place: IPollingPlaceStubForStalls | null; // Becomes an object after submission; null if the election has no polling places yet
 	location_info: IStallLocationInfo | null; // Undefined becomes null after submission; null if the election has polling places
 	status: StallStatus;
+	previous_status: StallStatus;
+	reported_timestamp: string; // ISO date
+	owner_edit_timestamp: string | null; // ISO date
+	submitter_type: StallSubmitterType;
 }
+
+export interface PendingStall extends Stall {
+	election_id: number;
+	triaged_on: string | null; // ISO date
+	triaged_by: string | null;
+	current_stall: IPollingPlaceStall & {
+		polling_place: number; // @TODO Why not polling_place_id?
+	};
+	diff:
+		| {
+				field: string;
+				old: string | number | StallFoodOptions;
+				new: string | number | StallFoodOptions;
+		  }[]
+		| null;
+}
+
+export interface PollingPlacePreviousSubsStats {
+	approved: number;
+	approved_owner_subs: number;
+	denied: number;
+}
+
+export interface PollingPlaceWithPendingStall {
+	id: number;
+	election_id: number;
+	election_name_url_safe: string;
+	name: string;
+	premises: string;
+	address: string;
+	state: string;
+	stall: IPollingPlaceStall | null;
+	pending_stalls: PendingStall[];
+	previous_subs: PollingPlacePreviousSubsStats;
+}
+
+// export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {
+// 	id_unofficial: string;
+// 	election_id: number;
+// 	premises: string;
+// 	stall: null;
+// 	pending_stalls: PendingStall[];
+// 	previous_subs: PollingPlacePreviousSubsStats;
+// }
 
 // type StallsResponse = Stall[];
 
@@ -145,10 +239,12 @@ export { initialState as initialStallsState };
 
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getPendingStalls: builder.query<Stall[], void>({
+		// getPendingStalls: builder.query<PollingPlaceWithPendingStall[] | UnofficialPollingPlaceWithPendingStall[], void>({
+		getPendingStalls: builder.query<PollingPlaceWithPendingStall[], void>({
 			query: () => ({
-				url: `stalls/pending/`,
+				url: 'stalls/pending/',
 			}),
+			providesTags: ['PendingStalls'],
 		}),
 		getStall: builder.query<Stall, { stallId: number; token: string; signature: string }>({
 			query: ({ stallId, token, signature }) => ({
@@ -157,7 +253,7 @@ export const stallsApi = api.injectEndpoints({
 			}),
 		}),
 		addStall: builder.mutation<
-			{},
+			void,
 			NewStallOwner | NewStallTipOff | NewStallTipOffRunOut | NewStallTipOffRedCrossOfShame
 		>({
 			query: (stall) => ({
@@ -166,12 +262,40 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
-		updateStallWithCredentials: builder.mutation<{}, Stall & { token: string; signature: string }>({
+		updateStallWithCredentials: builder.mutation<void, Stall & { token: string; signature: string }>({
 			query: (stall) => ({
 				url: `stalls/${stall.id}/update_and_resubmit/`,
 				method: 'PATCH',
 				body: stall,
 			}),
+		}),
+		approveStall: builder.mutation<
+			void,
+			{ stallId: number; pollingPlaceNoms: Partial<IPollingPlaceStallModifiableProps>; approvalType: StallApprovalType }
+		>({
+			query: ({ stallId, pollingPlaceNoms, approvalType }) => ({
+				url: `stalls/${stallId}/approve/`,
+				method: 'POST',
+				body: {
+					pollingPlaceNoms,
+					approvalType,
+				},
+			}),
+			invalidatesTags: ['PendingStalls'],
+		}),
+		// approveUnofficialStall: builder.mutation<void, number>({
+		// 	query: (stallId) => ({
+		// 		url: `stalls/${stallId}/approve_and_add/`,
+		// 		method: 'POST',
+		// 	}),
+		// 	invalidatesTags: ['PendingStalls'],
+		// }),
+		declineStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/decline/`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['PendingStalls'],
 		}),
 	}),
 });
@@ -181,4 +305,7 @@ export const {
 	useGetStallQuery,
 	useAddStallMutation,
 	useUpdateStallWithCredentialsMutation,
+	useApproveStallMutation,
+	// useApproveUnofficialStallMutation,
+	useDeclineStallMutation,
 } = stallsApi;

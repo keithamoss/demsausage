@@ -2,9 +2,6 @@
 
 # dependencies
 /node_modules
-/.yarn
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -19,9 +16,6 @@
 .env.test.local
 .env.production.local
 
-.eslintcache
-
 browserstack.ts
 
-.yarnrc.yml
-.pnp*
+.pnpm-store/

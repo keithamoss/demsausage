@@ -1,7 +1,8 @@
-import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AppProvider } from '@toolpad/core';
+import 'dayjs/locale/en-au';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
@@ -14,6 +15,7 @@ import { store } from './app/store';
 import { theme } from './app/ui/theme';
 // import "./browserstack";
 
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
@@ -23,14 +25,14 @@ store.dispatch(authApi.endpoints.checkLoginStatus.initiate());
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				<HelmetProvider>
-					<ThemeProvider theme={theme}>
+			<AppProvider theme={theme}>
+				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-au">
+					<HelmetProvider>
 						<CssBaseline />
 						<RouterProvider router={router} />
-					</ThemeProvider>
-				</HelmetProvider>
-			</LocalizationProvider>
+					</HelmetProvider>
+				</LocalizationProvider>
+			</AppProvider>
 		</Provider>
 	</React.StrictMode>,
 );

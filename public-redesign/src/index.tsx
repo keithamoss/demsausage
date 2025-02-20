@@ -13,6 +13,7 @@ import { store } from './app/store';
 import { theme } from './app/ui/theme';
 // import "./browserstack";
 
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 

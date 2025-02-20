@@ -1,4 +1,5 @@
-import { Action, configureStore, StoreEnhancer, ThunkAction } from '@reduxjs/toolkit';
+import { type Action, type StoreEnhancer, type ThunkAction, configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 import appReducer from '../features/app/appSlice';
 import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';
@@ -20,6 +21,10 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware, rtkQueryErrorLogger),
 	enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(...Middleware),
 });
+
+// Required for "only poll if focussed" to work for pending stalls
+// Ref: https://redux-toolkit.js.org/rtk-query/usage/polling
+setupListeners(store.dispatch);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

@@ -9,7 +9,7 @@ import {
 	ListItemText,
 	MenuItem,
 	Select,
-	SelectChangeEvent,
+	type SelectChangeEvent,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/system';
@@ -19,7 +19,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Election, useGetElectionStatsQuery } from '../../app/services/elections';
+import { type Election, useGetElectionStatsQuery } from '../../app/services/elections';
 import { getDefaultOGMetaTags } from '../../app/ui/socialSharingTagsHelpers';
 import { StyledInteractableBoxFullHeight } from '../../app/ui/styledInteractableBoxFullHeight';
 import { getBaseURL } from '../../app/utils';
@@ -101,7 +101,7 @@ function Sausagelytics(props: Props) {
 	const navigate = useNavigate();
 
 	const onChooseElection = (e: SelectChangeEvent<number | string>) => {
-		const electionId = parseInt(`${e.target.value}`);
+		const electionId = Number.parseInt(`${e.target.value}`);
 		if (Number.isNaN(electionId) === false) {
 			const election = elections.find((e) => e.id === electionId);
 			if (election !== undefined) {

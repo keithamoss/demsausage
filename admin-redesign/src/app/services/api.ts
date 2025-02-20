@@ -1,4 +1,4 @@
-import { isAction, isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { type Middleware, type MiddlewareAPI, isAction, isRejectedWithValue } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import * as Sentry from '@sentry/browser';
 import Cookies from 'js-cookie';
@@ -7,6 +7,7 @@ import { getAPIBaseURL, isDevelopment } from '../utils';
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${getAPIBaseURL()}/0.1/`,
+		credentials: 'include',
 		prepareHeaders: (headers) => {
 			const token = Cookies.get('csrftoken');
 			if (token) {
@@ -23,7 +24,7 @@ export const api = createApi({
 	 * Tag types must be defined in the original API definition
 	 * for any tags that would be provided by injected endpoints
 	 */
-	tagTypes: ['User', 'Election'],
+	tagTypes: ['User', 'Election', 'PendingStalls'],
 });
 
 // Global API error handling

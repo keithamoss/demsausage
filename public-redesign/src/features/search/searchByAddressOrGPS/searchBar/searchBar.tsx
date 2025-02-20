@@ -20,14 +20,14 @@ import {
 import * as Sentry from '@sentry/react';
 import Geolocation from 'ol/Geolocation';
 import { unByKey } from 'ol/Observable';
-import { Coordinate } from 'ol/coordinate';
-import { EventsKey } from 'ol/events';
+import type { Coordinate } from 'ol/coordinate';
+import type { EventsKey } from 'ol/events';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { useUnmount } from '../../../../app/hooks/useUnmount';
 import { getStringParamOrEmptyString } from '../../../../app/routing/routingHelpers';
-import { Election } from '../../../../app/services/elections';
+import type { Election } from '../../../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../../../app/ui/theme';
 import {
 	selectIsMapFiltered,
@@ -220,7 +220,7 @@ export default function SearchBar(props: Props) {
 					}
 				}),
 
-				geolocation.current.on('error', function (evt) {
+				geolocation.current.on('error', (evt) => {
 					setIsWaitingForGPSLocation(false);
 
 					setIsGeolocationErrored(true);

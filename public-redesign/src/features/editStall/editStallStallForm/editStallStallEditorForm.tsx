@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import { navigateToEditStallSubmitted } from '../../../app/routing/navigationHelpers/navigationHelpersEditStall';
 import {
-	Stall,
+	type Stall,
 	StallSubmitterType,
 	useGetStallQuery,
 	useUpdateStallWithCredentialsMutation,
@@ -16,7 +16,7 @@ import StallTipOffForm from '../../stalls/stallTipOffForm';
 
 function EntrypointLayer1() {
 	const parsed = new URL(window.location.href);
-	const stallId = parseInt(parsed.searchParams.get('stall_id') || '');
+	const stallId = Number.parseInt(parsed.searchParams.get('stall_id') || '');
 	const token = parsed.searchParams.get('token');
 	const signature = parsed.searchParams.get('signature');
 
@@ -27,7 +27,7 @@ function EntrypointLayer1() {
 		isError: isGetStallErrored,
 		error,
 	} = useGetStallQuery(
-		Number.isNaN(stallId) == false && token !== null && signature !== null ? { stallId, token, signature } : skipToken,
+		Number.isNaN(stallId) === false && token !== null && signature !== null ? { stallId, token, signature } : skipToken,
 	);
 
 	if (isGetStallLoading === true) {

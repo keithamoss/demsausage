@@ -2,8 +2,8 @@ import { Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/mate
 import { styled } from '@mui/system';
 import React from 'react';
 import { VictoryBar, VictoryChart, VictoryGroup, VictoryLabel, VictoryPie } from 'victory';
-import { Election } from '../../app/services/elections';
-import { IElectionStats, ISausagelyticsFederalStats } from '../../app/services/electionsStats';
+import type { Election } from '../../app/services/elections';
+import type { IElectionStats, ISausagelyticsFederalStats } from '../../app/services/electionsStats';
 import { theme } from './sausagelyticsFederalHelpers';
 
 const SausagelyticsContainer = styled('div')`
@@ -194,7 +194,7 @@ export default function SausagelyticsFederal(props: Props) {
 			}[];
 		} = {};
 
-		stats.states.forEach((stateStats: IElectionStats) => {
+		for (const stateStats of stats.states) {
 			for (const [nomsName, nomsStats] of Object.entries(stateStats.data.all_booths_by_noms)) {
 				if (!(nomsName in statsGrouped)) {
 					statsGrouped[nomsName] = [];
@@ -205,8 +205,7 @@ export default function SausagelyticsFederal(props: Props) {
 					y: nomsStats.booth_count,
 				});
 			}
-		});
-
+		}
 		return statsGrouped;
 	};
 
@@ -265,9 +264,9 @@ export default function SausagelyticsFederal(props: Props) {
 									{/* eslint-disable-next-line @typescript-eslint/no-shadow */}
 									{stats.divisions.top.map((stats: IElectionStats) => (
 										<TableRow key={stats.domain}>
-											<TableCell style={{ width: '40px' }}>{stats.metadata!.rank!}.</TableCell>
+											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank}.</TableCell>
 											<TableCell>{stats.domain}</TableCell>
-											<TableCell>{stats.metadata!.state!}</TableCell>
+											<TableCell>{stats.metadata?.state}</TableCell>
 											<TableCell>
 												{new Intl.NumberFormat('en-AU', {
 													style: 'percent',
@@ -291,9 +290,9 @@ export default function SausagelyticsFederal(props: Props) {
 									{/* eslint-disable-next-line @typescript-eslint/no-shadow */}
 									{stats.divisions.bottom.map((stats: IElectionStats) => (
 										<TableRow key={stats.domain}>
-											<TableCell style={{ width: '40px' }}>{stats.metadata!.rank!}.</TableCell>
+											<TableCell style={{ width: '40px' }}>{stats.metadata?.rank}.</TableCell>
 											<TableCell>{stats.domain}</TableCell>
-											<TableCell>{stats.metadata!.state!}</TableCell>
+											<TableCell>{stats.metadata?.state}</TableCell>
 											<TableCell>
 												{new Intl.NumberFormat('en-AU', {
 													style: 'percent',
