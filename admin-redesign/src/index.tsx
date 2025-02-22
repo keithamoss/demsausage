@@ -10,7 +10,6 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/routing/routes';
 import { authApi } from './app/services/auth';
-import { electionsApi } from './app/services/elections';
 import { store } from './app/store';
 import { theme } from './app/ui/theme';
 // import "./browserstack";
@@ -19,7 +18,7 @@ import { theme } from './app/ui/theme';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-store.dispatch(electionsApi.endpoints.getElections.initiate());
+// store.dispatch(electionsApi.endpoints.getElections.initiate());
 store.dispatch(authApi.endpoints.checkLoginStatus.initiate());
 
 root.render(

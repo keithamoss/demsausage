@@ -14,9 +14,10 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import ErrorElement from '../../ErrorElement';
 import { useAppSelector } from '../../app/hooks';
 import { navigateToPendingStallsPollingPlaceById } from '../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
-import type { Election } from '../../app/services/elections';
+import { type Election, useGetElectionsQuery } from '../../app/services/elections';
 import { type PollingPlaceWithPendingStall, useGetPendingStallsQuery } from '../../app/services/stalls';
 import { theme } from '../../app/ui/theme';
 import { isDevelopment } from '../../app/utils';
@@ -35,6 +36,20 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 function EntrypointLayer1() {
 	const elections = useAppSelector((state) => selectAllElections(state));
+
+	const {
+		isLoading: isGetElectionsLoading,
+		isSuccess: isGetElectionsSuccessful,
+		isError: isGetElectionsErrored,
+	} = useGetElectionsQuery();
+
+	if (isGetElectionsLoading === true) {
+		return null;
+	}
+
+	if (isGetElectionsErrored === true || isGetElectionsSuccessful === false) {
+		return <ErrorElement />;
+	}
 
 	return <PendingStalls elections={elections} />;
 }
