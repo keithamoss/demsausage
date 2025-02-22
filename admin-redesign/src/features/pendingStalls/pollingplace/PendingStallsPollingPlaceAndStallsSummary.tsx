@@ -21,10 +21,10 @@ import {
 	ListItemText,
 	styled,
 } from '@mui/material';
-import { type PollingPlaceWithPendingStall, StallStatus } from '../../app/services/stalls';
-import { mapaThemePrimaryGrey } from '../../app/ui/theme';
-import { getPublicSiteBaseURL, pluralise } from '../../app/utils';
-import { getPollingPlacePermalinkFromProps } from '../pollingPlaces/pollingPlaceHelpers';
+import { type PollingPlaceWithPendingStall, StallStatus } from '../../../app/services/stalls';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
+import { getPublicSiteBaseURL, pluralise } from '../../../app/utils';
+import { getPollingPlacePermalinkFromProps } from '../../pollingPlaces/pollingPlaceHelpers';
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
 	padding: theme.spacing(1),

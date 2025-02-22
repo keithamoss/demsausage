@@ -1,7 +1,7 @@
 import { Construction } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, AppBar, IconButton, Paper, Toolbar, Typography } from '@mui/material';
-import { DialogWithTransition } from '../../app/ui/dialog';
+import { DialogWithTransition } from '../../../app/ui/dialog';
 
 interface Props {
 	onClose: () => void;

@@ -8,10 +8,10 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import type { UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import ErrorElement from '../../ErrorElement';
-import NotFound from '../../NotFound';
-import { navigateToPendingStallsRoot } from '../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
-import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
+import ErrorElement from '../../../ErrorElement';
+import NotFound from '../../../NotFound';
+import { navigateToPendingStallsRoot } from '../../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
+import { getIntegerParamOrUndefined } from '../../../app/routing/routingHelpers';
 import {
 	type PendingStall,
 	type PollingPlaceWithPendingStall,
@@ -19,16 +19,16 @@ import {
 	useApproveStallMutation,
 	useDeclineStallMutation,
 	useGetPendingStallsQuery,
-} from '../../app/services/stalls';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import PollingPlaceNomsEditorForm from '../pollingPlaces/PollingPlaceNomsEditorForm';
-import { getPollingPlaceSummaryCardForHeading } from '../pollingPlaces/pollingPlaceHelpers';
-import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../pollingPlaces/pollingPlaceNomsEditorFormHelpers';
-import type { IPollingPlaceStallModifiableProps } from '../pollingPlaces/pollingPlacesInterfaces';
+} from '../../../app/services/stalls';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import PollingPlaceNomsEditorForm from '../../pollingPlaces/PollingPlaceNomsEditorForm';
+import { getPollingPlaceSummaryCardForHeading } from '../../pollingPlaces/pollingPlaceHelpers';
+import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../../pollingPlaces/pollingPlaceNomsEditorFormHelpers';
+import type { IPollingPlaceStallModifiableProps } from '../../pollingPlaces/pollingPlacesInterfaces';
+import { isStallMergedWithPollingPlace } from '../pendingStallsPollingPlaceHelpers';
 import PendingStallPollingPlaceHistory from './PendingStallPollingPlaceHistory';
 import PendingStallPollingPlaceSubmissions from './PendingStallPollingPlaceSubmissions';
 import PendingStallsPollingPlaceAndStallsSummary from './PendingStallsPollingPlaceAndStallsSummary';
-import { isStallMergedWithPollingPlace } from './PendingStallsPollingPlaceHelpers';
 import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStallsList';
 
 // const bottomNav = 56;

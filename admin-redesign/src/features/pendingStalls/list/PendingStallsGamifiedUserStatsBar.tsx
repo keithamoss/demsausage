@@ -1,6 +1,6 @@
 import { Avatar, Box, Fab, Tooltip } from '@mui/material';
-import type { ElectionPendingStallsGamifiedUserStats } from '../../app/services/stalls';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
+import type { ElectionPendingStallsGamifiedUserStats } from '../../../app/services/stalls';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 
 interface Props {
 	stats: ElectionPendingStallsGamifiedUserStats[];

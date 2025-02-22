@@ -2,9 +2,9 @@ import { FiberNewOutlined } from '@mui/icons-material';
 import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import type { PollingPlaceWithPendingStall } from '../../app/services/stalls';
-import { pluralise } from '../../app/utils';
-import { getCountOfExistingStallsIcon } from './pendingStallsHelpers';
+import type { PollingPlaceWithPendingStall } from '../../../app/services/stalls';
+import { pluralise } from '../../../app/utils';
+import { getCountOfExistingStallsIcon } from '../pendingStallsHelpers';
 
 const StyledCardContent = styled(CardContent)(() => ({
 	paddingBottom: 0,

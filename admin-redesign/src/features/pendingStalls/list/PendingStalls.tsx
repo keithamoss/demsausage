@@ -4,22 +4,22 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import ErrorElement from '../../ErrorElement';
-import { useAppSelector } from '../../app/hooks';
-import { navigateToPendingStallsPollingPlaceById } from '../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
-import { type Election, useGetElectionsQuery } from '../../app/services/elections';
+import ErrorElement from '../../../ErrorElement';
+import { useAppSelector } from '../../../app/hooks';
+import { navigateToPendingStallsPollingPlaceById } from '../../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
+import { type Election, useGetElectionsQuery } from '../../../app/services/elections';
 import {
 	type ElectionPendingStalls,
 	type PollingPlaceWithPendingStall,
 	useGetPendingStallsQuery,
-} from '../../app/services/stalls';
-import { theme } from '../../app/ui/theme';
-import { isDevelopment } from '../../app/utils';
-import { selectAllElections } from '../elections/electionsSlice';
-import { getJurisdictionCrestStandaloneReactAvatar } from '../icons/jurisdictionHelpers';
+} from '../../../app/services/stalls';
+import { theme } from '../../../app/ui/theme';
+import { isDevelopment } from '../../../app/utils';
+import { selectAllElections } from '../../elections/electionsSlice';
+import { getJurisdictionCrestStandaloneReactAvatar } from '../../icons/jurisdictionHelpers';
+import { PendingStallsAllCaughtUp } from '../pendingStallsHelpers';
 import PendingStallsBoothCard from './PendingStallsBoothCard';
 import PendingStallsGamifiedUserStatsBar from './PendingStallsGamifiedUserStatsBar';
-import { PendingStallsAllCaughtUp } from './pendingStallsHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	backgroundColor: grey[100],

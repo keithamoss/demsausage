@@ -10,8 +10,8 @@ import ElectionEditorLoadPollingPlaces from '../../features/elections/ElectionEd
 import ElectionEditorStats from '../../features/elections/ElectionEditorStats';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
-import PendingStalls from '../../features/pendingStalls/PendingStalls';
-import PendingStallsPollingPlace from '../../features/pendingStalls/PendingStallsPollingPlace';
+import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
+import PendingStallsPollingPlace from '../../features/pendingStalls/pollingplace/PendingStallsPollingPlace';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
 import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNomsEditor';

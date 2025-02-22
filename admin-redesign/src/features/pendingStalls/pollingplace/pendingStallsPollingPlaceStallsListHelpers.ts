@@ -1,5 +1,5 @@
-import { type PendingStall, type PollingPlaceWithPendingStall, StallSubmitterType } from '../../app/services/stalls';
-import { isStallATipOff } from '../pollingPlaces/pollingPlaceStallsHelpers';
+import { type PendingStall, type PollingPlaceWithPendingStall, StallSubmitterType } from '../../../app/services/stalls';
+import { isStallATipOff } from '../../pollingPlaces/pollingPlaceStallsHelpers';
 
 export const isApproveAndMergeAutomaticallyAllowed = (
 	stall: PendingStall,
