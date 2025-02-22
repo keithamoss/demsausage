@@ -73,6 +73,10 @@ function EntrypointLayer2(props: EntrypointLayer2Props) {
 		return <ErrorElement />;
 	}
 
+	if (electionsWithPendingStalls.length === 0) {
+		return <PendingStallsAllCaughtUp />;
+	}
+
 	return <PendingStalls elections={elections} electionsWithPendingStalls={electionsWithPendingStalls} />;
 }
 
@@ -99,8 +103,6 @@ function PendingStalls(props: Props) {
 			</Helmet>
 
 			<PageWrapper>
-				{electionsWithPendingStalls.length === 0 && <PendingStallsAllCaughtUp />}
-
 				<List
 					sx={{
 						pt: 0,
