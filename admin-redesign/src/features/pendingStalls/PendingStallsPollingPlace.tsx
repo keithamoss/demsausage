@@ -53,7 +53,7 @@ function EntrypointLayer1() {
 	const urlPollingPlaceId = getIntegerParamOrUndefined(useParams(), 'polling_place_id');
 
 	const {
-		data: pollingPlaceWithPendingStalls,
+		data: electionsWithPendingStalls,
 		isLoading: isGetPendingStallsLoading,
 		isSuccess: isGetPendingStallsSuccessful,
 		isError: isGetPendingStallsErrored,
@@ -71,7 +71,14 @@ function EntrypointLayer1() {
 		return <ErrorElement />;
 	}
 
-	const pollingPlace = pollingPlaceWithPendingStalls?.find((p) => ('id' in p ? p.id === urlPollingPlaceId : undefined));
+	let pollingPlace: PollingPlaceWithPendingStall | undefined;
+	for (const item of electionsWithPendingStalls) {
+		pollingPlace = item.booths.find((p) => ('id' in p ? p.id === urlPollingPlaceId : undefined));
+
+		if (pollingPlace !== undefined) {
+			break;
+		}
+	}
 
 	if (pollingPlace === undefined) {
 		return <NotFound />;

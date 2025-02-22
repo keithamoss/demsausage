@@ -208,6 +208,20 @@ export interface PollingPlacePreviousSubsStats {
 	denied: number;
 }
 
+export interface ElectionPendingStallsGamifiedUserStats {
+	id: number;
+	name: string;
+	initial: string;
+	image_url: string;
+	total: number;
+}
+
+export interface ElectionPendingStalls {
+	election_id: number;
+	stats: ElectionPendingStallsGamifiedUserStats[];
+	booths: PollingPlaceWithPendingStall[];
+}
+
 export interface PollingPlaceWithPendingStall {
 	id: number;
 	election_id: number;
@@ -240,7 +254,7 @@ export { initialState as initialStallsState };
 export const stallsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		// getPendingStalls: builder.query<PollingPlaceWithPendingStall[] | UnofficialPollingPlaceWithPendingStall[], void>({
-		getPendingStalls: builder.query<PollingPlaceWithPendingStall[], void>({
+		getPendingStalls: builder.query<ElectionPendingStalls[], void>({
 			query: () => ({
 				url: 'stalls/pending/',
 			}),

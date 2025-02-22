@@ -1,23 +1,15 @@
-import { FiberNewOutlined } from '@mui/icons-material';
 import {
 	Alert,
 	AlertTitle,
 	Box,
-	Button,
-	Card,
-	CardActions,
-	CardContent,
 	LinearProgress,
 	List,
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
 	Stack,
-	Typography,
 } from '@mui/material';
-import { blueGrey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { sortBy } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
@@ -26,24 +18,17 @@ import { navigateToPendingStallsPollingPlaceById } from '../../app/routing/navig
 import type { Election } from '../../app/services/elections';
 import { type PollingPlaceWithPendingStall, useGetPendingStallsQuery } from '../../app/services/stalls';
 import { theme } from '../../app/ui/theme';
-import { isDevelopment, pluralise } from '../../app/utils';
+import { isDevelopment } from '../../app/utils';
 import { selectAllElections } from '../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReactAvatar } from '../icons/jurisdictionHelpers';
-import { PendingStallsAllCaughtUp, getCountOfExistingStallsIcon } from './pendingStallsHelpers';
+import PendingStallsBoothCard from './PendingStallsBoothCard';
+import PendingStallsGamifiedUserStatsBar from './PendingStallsGamifiedUserStatsBar';
+import { PendingStallsAllCaughtUp } from './pendingStallsHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
-}));
-
-const StyledCardContent = styled(CardContent)(() => ({
-	paddingBottom: 0,
-}));
-
-const StyledCardActions = styled(CardActions)(({ theme }) => ({
-	paddingTop: theme.spacing(0.5),
-	paddingLeft: theme.spacing(2),
 }));
 
 function EntrypointLayer1() {
@@ -62,7 +47,7 @@ function PendingStalls(props: Props) {
 	const navigate = useNavigate();
 
 	const {
-		data: pollingPlaceWithPendingStalls,
+		data: electionsWithPendingStalls,
 		isLoading: isGetPendingStallsLoading,
 		isSuccess: isGetPendingStallsSuccessful,
 		isError: isGetPendingStallsErrored,
@@ -70,11 +55,6 @@ function PendingStalls(props: Props) {
 		pollingInterval: isDevelopment() === true ? 30000 : 5000,
 		skipPollingIfUnfocused: true,
 	});
-
-	const electionsWithPendingStalls = sortBy(
-		elections.filter((e) => [...new Set(pollingPlaceWithPendingStalls?.map((p) => p.election_id))].includes(e.id)),
-		['election_day'],
-	);
 
 	const onClickPollingPlace = useCallback(
 		(pollingPlace: PollingPlaceWithPendingStall) => () =>
@@ -102,7 +82,7 @@ function PendingStalls(props: Props) {
 
 				{isGetPendingStallsSuccessful === true && (
 					<React.Fragment>
-						{pollingPlaceWithPendingStalls.length === 0 && <PendingStallsAllCaughtUp />}
+						{electionsWithPendingStalls.length === 0 && <PendingStallsAllCaughtUp />}
 
 						<List
 							sx={{
@@ -115,140 +95,58 @@ function PendingStalls(props: Props) {
 								},
 							}}
 						>
-							{electionsWithPendingStalls.map((e) => (
-								<React.Fragment key={e.id}>
-									<ListItem>
-										<ListItemAvatar>{getJurisdictionCrestStandaloneReactAvatar(e.jurisdiction)}</ListItemAvatar>
+							{electionsWithPendingStalls.map((data) => {
+								const election = elections.find((elec) => elec.id === data.election_id);
 
-										<ListItemText
-											sx={{
-												'& .MuiListItemText-primary': {
-													fontSize: 15,
-													fontWeight: theme.typography.fontWeightMedium,
-													color: theme.palette.text.primary,
-												},
-												pl: 2,
-												pr: 2,
-												pt: 1,
-												pb: 1,
-											}}
-											primary={e.name}
-											secondary={new Date(e.election_day).toLocaleDateString('en-AU', {
-												day: 'numeric',
-												month: 'long',
-												year: 'numeric',
-											})}
-										/>
-									</ListItem>
+								if (election === undefined) {
+									return;
+								}
 
-									<Stack spacing={1}>
-										{pollingPlaceWithPendingStalls
-											.filter((p) => p.election_id === e.id)
-											.map((pollingPlace) => {
-												const countOfNewPendingStalls = pollingPlace.pending_stalls.filter(
-													(s) => s.triaged_on === null,
-												).length;
-												const countOfEditedPendingStalls = pollingPlace.pending_stalls.filter(
-													(s) => s.triaged_on !== null,
-												).length;
+								return (
+									<React.Fragment key={election.id}>
+										<Box sx={{ mb: 2, p: 2, pr: 1, pt: 0, pb: 1 }}>
+											<ListItem sx={{ p: 0 }}>
+												<ListItemAvatar>
+													{getJurisdictionCrestStandaloneReactAvatar(election.jurisdiction)}
+												</ListItemAvatar>
 
-												return (
-													<Card
-														variant="outlined"
-														key={pollingPlace.id}
-														// key={'id_unofficial' in pollingPlace ? pollingPlace.id_unofficial : pollingPlace.id}
-													>
-														<StyledCardContent>
-															<Box onClick={onClickPollingPlace(pollingPlace)} sx={{ cursor: 'pointer' }}>
-																<Typography
-																	variant="h5"
-																	component="div"
-																	sx={{
-																		fontSize: 16,
-																		fontWeight: 500,
-																	}}
-																>
-																	{pollingPlace.premises || pollingPlace.name}
-																</Typography>
+												<ListItemText
+													sx={{
+														'& .MuiListItemText-primary': {
+															fontSize: 15,
+															fontWeight: theme.typography.fontWeightMedium,
+															color: theme.palette.text.primary,
+														},
+														pl: 2,
+														pr: 2,
+														pt: 1,
+														pb: 1,
+													}}
+													primary={election.name}
+													secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
+														day: 'numeric',
+														month: 'long',
+														year: 'numeric',
+													})}
+												/>
+											</ListItem>
 
-																<Typography color="text.secondary" sx={{ fontSize: 15 }}>
-																	{pollingPlace.address}
-																</Typography>
-															</Box>
-														</StyledCardContent>
+											<PendingStallsGamifiedUserStatsBar stats={data.stats} />
+										</Box>
 
-														<StyledCardActions>
-															{countOfNewPendingStalls > 0 && (
-																<Button
-																	size="small"
-																	variant="contained"
-																	disabled={true}
-																	sx={{
-																		color: 'white !important',
-																		backgroundColor: '#0389d1 !important',
-																	}}
-																>
-																	{`${countOfNewPendingStalls} New ${pluralise('Sub', countOfNewPendingStalls)}`}
-																</Button>
-															)}
-
-															{countOfEditedPendingStalls > 0 && (
-																<Button
-																	size="small"
-																	variant="contained"
-																	disabled={true}
-																	sx={{
-																		color: 'white !important',
-																		backgroundColor: '#0389d1 !important',
-																	}}
-																>
-																	{`${countOfEditedPendingStalls} New ${pluralise('Edit', countOfEditedPendingStalls)}`}
-																</Button>
-															)}
-
-															<Box
-																sx={{
-																	flex: 1,
-																	justifyContent: 'flex-start',
-																}}
-															/>
-
-															{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied === 0 && (
-																<Button
-																	size="small"
-																	disabled={true}
-																	startIcon={<FiberNewOutlined />}
-																	sx={{
-																		color: `${blueGrey.A700} !important`,
-																		ml: '0px !important',
-																	}}
-																>
-																	{`First ${pluralise('Sub', pollingPlace.pending_stalls.length)}`}
-																</Button>
-															)}
-
-															{pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied > 0 && (
-																<Button
-																	size="small"
-																	disabled={true}
-																	startIcon={getCountOfExistingStallsIcon(
-																		pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied,
-																	)}
-																	sx={{
-																		color: `${blueGrey.A700} !important`,
-																		ml: '0px !important',
-																	}}
-																>
-																	{`Previous ${pluralise('Sub', pollingPlace.previous_subs.approved + pollingPlace.previous_subs.denied)}`}
-																</Button>
-															)}
-														</StyledCardActions>
-													</Card>
-												);
-											})}
-									</Stack>
-								</React.Fragment>
-							))}
+										<Stack spacing={1}>
+											{data.booths.map((pollingPlace) => (
+												<PendingStallsBoothCard
+													key={pollingPlace.id}
+													// key={'id_unofficial' in pollingPlace ? pollingPlace.id_unofficial : pollingPlace.id}
+													pollingPlace={pollingPlace}
+													onClickPollingPlace={onClickPollingPlace}
+												/>
+											))}
+										</Stack>
+									</React.Fragment>
+								);
+							})}
 						</List>
 					</React.Fragment>
 				)}
