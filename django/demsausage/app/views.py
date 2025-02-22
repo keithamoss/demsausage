@@ -99,7 +99,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Func, Q
+from django.db.models import Count, Func, Q
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
@@ -1000,27 +1000,66 @@ class PendingStallsViewSet(generics.ListAPIView):
     serializer_class = PendingStallsSerializer
     permission_classes = (IsAuthenticated,)
 
+    @staticmethod
+    def _getGamifiedElectionStats(electionId):
+        """
+        Retrieve stats on who's made changes to polling booths for a given election.
+        """
+        user_stats = []
+
+        nomsChangesByUser = (
+            PollingPlaceNoms.history.filter(
+                id__in=PollingPlaces.objects.filter(
+                    election_id=electionId, status="Active"
+                )
+                .exclude(noms_id__isnull=True)
+                .values("noms_id")
+            )
+            .values("history_user_id")
+            .annotate(total=Count("history_user_id"))
+            .order_by("total")
+        )
+
+        for history in nomsChangesByUser:
+            user = User.objects.get(id=history["history_user_id"])
+
+            user_stats.append(
+                {
+                    "id": user.id,
+                    # Handle people with two first names
+                    "name": user.first_name.split(" ")[0],
+                    "initials": f"{user.first_name[:1]}{user.last_name[:1]}",
+                    "image_url": user.profile.profile_image_url,
+                    "total": history["total"],
+                }
+            )
+
+        return user_stats
+
     def list(self, request, *args, **kwargs):
         stalls = self.serializer_class(self.get_queryset(), many=True).data
 
-        response = {}
+        data = {}
 
         # This reshapes the stall-centric view of the world to be polling-place based so
         # we can show pending stalls on the same polling places grouped together in the UI
         for stall in stalls:
+            if stall["election_id"] not in data:
+                data[stall["election_id"]] = {}
+
             # Support elections WITH polling places loaded
             # NOTE: In future this will need to support follow-up submissions on unofficial polling places that have already been approved
             if stall["polling_place"] is not None:
-                if stall["polling_place"]["id"] not in response:
-                    response[stall["polling_place"]["id"]] = stall["polling_place"] | {
-                        "pending_stalls": []
-                    }
+                if stall["polling_place"]["id"] not in data[stall["election_id"]]:
+                    data[stall["election_id"]][stall["polling_place"]["id"]] = stall[
+                        "polling_place"
+                    ] | {"pending_stalls": []}
 
                 stallSansPollingPlace = stall.copy()
                 del stallSansPollingPlace["polling_place"]
-                response[stall["polling_place"]["id"]]["pending_stalls"].append(
-                    stallSansPollingPlace
-                )
+                data[stall["election_id"]][stall["polling_place"]["id"]][
+                    "pending_stalls"
+                ].append(stallSansPollingPlace)
 
             # Support elections WITHOUT polling places loaded
             # else:
@@ -1063,7 +1102,17 @@ class PendingStallsViewSet(generics.ListAPIView):
             #         stallSansPollingPlace
             #     )
 
-        return Response(response.values())
+        response = []
+        for electionId in data:
+            response.append(
+                {
+                    "election_id": electionId,
+                    "stats": self._getGamifiedElectionStats(electionId),
+                    "booths": data[electionId].values(),
+                }
+            )
+
+        return Response(response)
 
 
 class MailManagementViewSet(viewsets.ViewSet):

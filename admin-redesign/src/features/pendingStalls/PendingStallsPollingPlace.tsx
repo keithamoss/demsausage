@@ -1,5 +1,6 @@
 import { MapsHomeWork } from '@mui/icons-material';
 import { Avatar, Backdrop, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
@@ -40,6 +41,7 @@ import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStal
 // }));
 
 const PageWrapper = styled('div')(({ theme }) => ({
+	backgroundColor: grey[100],
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
@@ -53,7 +55,7 @@ function EntrypointLayer1() {
 	const urlPollingPlaceId = getIntegerParamOrUndefined(useParams(), 'polling_place_id');
 
 	const {
-		data: pollingPlaceWithPendingStalls,
+		data: electionsWithPendingStalls,
 		isLoading: isGetPendingStallsLoading,
 		isSuccess: isGetPendingStallsSuccessful,
 		isError: isGetPendingStallsErrored,
@@ -71,7 +73,14 @@ function EntrypointLayer1() {
 		return <ErrorElement />;
 	}
 
-	const pollingPlace = pollingPlaceWithPendingStalls?.find((p) => ('id' in p ? p.id === urlPollingPlaceId : undefined));
+	let pollingPlace: PollingPlaceWithPendingStall | undefined;
+	for (const item of electionsWithPendingStalls) {
+		pollingPlace = item.booths.find((p) => ('id' in p ? p.id === urlPollingPlaceId : undefined));
+
+		if (pollingPlace !== undefined) {
+			break;
+		}
+	}
 
 	if (pollingPlace === undefined) {
 		return <NotFound />;
@@ -122,7 +131,10 @@ function PendingStallsPollingPlace(props: Props) {
 				// unwrap() ensures we catch errors from the API.
 				await approveStall({
 					stallId,
-					pollingPlaceNoms: stall,
+					pollingPlaceNoms: {
+						...stall,
+						source: typeof stall.source === 'string' && stall.source.length > 0 ? stall.source : 'Direct',
+					},
 					approvalType,
 				}).unwrap();
 

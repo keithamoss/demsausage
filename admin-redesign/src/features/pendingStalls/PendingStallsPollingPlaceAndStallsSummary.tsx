@@ -30,6 +30,8 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 	padding: theme.spacing(1),
 }));
 
+const StyledListItem = styled(ListItem)(({ theme }) => ({ paddingLeft: theme.spacing(1) }));
+
 const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
 	marginTop: theme.spacing(0.25),
 	paddingLeft: theme.spacing(1),
@@ -71,7 +73,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 
 				<List dense sx={{ pt: 0, pb: 0 }}>
 					{pendingStallsNewCount > 0 && (
-						<ListItem>
+						<StyledListItem>
 							<StyledListItemIcon>
 								<FiberNew sx={{ color: mapaThemePrimaryGrey }} />
 							</StyledListItemIcon>
@@ -79,7 +81,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 							<ListItemText
 								primary={`${pendingStallsNewCount} new ${pluralise('submission', pendingStallsNewCount)}`}
 							/>
-						</ListItem>
+						</StyledListItem>
 					)}
 
 					{pendingStallsApprovedWithEditsCount > 0 && (
