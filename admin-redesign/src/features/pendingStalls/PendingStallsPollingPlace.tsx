@@ -131,7 +131,10 @@ function PendingStallsPollingPlace(props: Props) {
 				// unwrap() ensures we catch errors from the API.
 				await approveStall({
 					stallId,
-					pollingPlaceNoms: stall,
+					pollingPlaceNoms: {
+						...stall,
+						source: typeof stall.source === 'string' && stall.source.length > 0 ? stall.source : 'Direct',
+					},
 					approvalType,
 				}).unwrap();
 
