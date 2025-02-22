@@ -1,5 +1,6 @@
 import { MapsHomeWork } from '@mui/icons-material';
 import { Avatar, Backdrop, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
@@ -40,6 +41,7 @@ import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStal
 // }));
 
 const PageWrapper = styled('div')(({ theme }) => ({
+	backgroundColor: grey[100],
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),

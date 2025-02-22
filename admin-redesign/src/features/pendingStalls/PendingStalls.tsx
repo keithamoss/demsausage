@@ -9,6 +9,7 @@ import {
 	ListItemText,
 	Stack,
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -26,6 +27,7 @@ import PendingStallsGamifiedUserStatsBar from './PendingStallsGamifiedUserStatsB
 import { PendingStallsAllCaughtUp } from './pendingStallsHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
+	backgroundColor: grey[100],
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
