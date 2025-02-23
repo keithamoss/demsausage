@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Delete, Save, Star, StarBorder } from '@mui/icons-material';
 import {
-	Alert,
 	AppBar,
 	Button,
 	Dialog,
@@ -13,11 +12,11 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	Snackbar,
 	Toolbar,
 	Typography,
 	styled,
 } from '@mui/material';
+import { useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -67,6 +66,8 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 		setValueRef,
 		isDirtyRef,
 	} = props;
+
+	const notifications = useNotifications();
 
 	const {
 		watch,
@@ -129,7 +130,10 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 
 					// Trigger form validation to warn if the noms are now empty
 					if ((await trigger()) === false) {
-						setIsErrorSnackbarShown(true);
+						notifications.show('One or more fields have errors.', {
+							severity: 'error',
+							autoHideDuration: 6000,
+						});
 					}
 				}
 
@@ -140,20 +144,19 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				}
 			}
 		},
-		[onDoneCreatingOrEditing, trigger, pollingPlace.id],
+		[onDoneCreatingOrEditing, trigger, notifications.show, pollingPlace.id],
 	);
 
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
 
 	useEffect(() => {
 		if (JSON.stringify(errors) !== '{}') {
-			setIsErrorSnackbarShown(true);
+			notifications.show('One or more fields have errors.', {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
 		}
-	}, [errors]);
-
-	const [isErrorSnackbarShown, setIsErrorSnackbarShown] = useState(false);
-
-	const onSnackbarClose = useCallback(() => setIsErrorSnackbarShown(false), []);
+	}, [errors, notifications.show]);
 	// ######################
 	// Form Management (End)
 	// ######################
@@ -412,12 +415,6 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 					</DialogActions>
 				</Dialog>
 			)}
-
-			<Snackbar open={isErrorSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
-				<Alert severity="error" variant="standard" sx={{ width: '100%' }}>
-					One or more fields have errors.
-				</Alert>
-			</Snackbar>
 		</PageWrapper>
 	);
 }

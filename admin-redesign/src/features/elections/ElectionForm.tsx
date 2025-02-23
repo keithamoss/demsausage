@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-	Alert,
 	AppBar,
 	Button,
 	Checkbox,
@@ -15,15 +14,15 @@ import {
 	OutlinedInput,
 	Paper,
 	Select,
-	Snackbar,
 	Toolbar,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useNotifications } from '@toolpad/core';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { isEmpty } from 'lodash-es';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { electionFormValidationSchema } from '../../app/forms/electionForm';
 import type { Election, ElectionModifiableProps, NewElection } from '../../app/services/elections';
@@ -46,6 +45,8 @@ interface Props {
 function ElectionForm(props: Props) {
 	const { election, isElectionSaving, onDoneAdding, onDoneEditing, primaryFormButtonLabel, primaryFormButtonIcon } =
 		props;
+
+	const notifications = useNotifications();
 
 	const {
 		watch,
@@ -92,13 +93,12 @@ function ElectionForm(props: Props) {
 
 	useEffect(() => {
 		if (JSON.stringify(errors) !== '{}') {
-			setIsErrorSnackbarShown(true);
+			notifications.show('One or more fields have errors.', {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
 		}
-	}, [errors]);
-
-	const [isErrorSnackbarShown, setIsErrorSnackbarShown] = useState(false);
-
-	const onSnackbarClose = useCallback(() => setIsErrorSnackbarShown(false), []);
+	}, [errors, notifications.show]);
 	// ######################
 	// Form Management (End)
 	// ######################
@@ -221,13 +221,6 @@ function ElectionForm(props: Props) {
 					</FormControl>
 				</Paper>
 			</form>
-
-			{/* 56 + 8 = AppBar height + one unit of padding */}
-			<Snackbar open={isErrorSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose} sx={{ bottom: 56 + 8 }}>
-				<Alert severity="error" variant="standard" sx={{ width: '100%' }}>
-					One or more fields have errors.
-				</Alert>
-			</Snackbar>
 
 			<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
 				<Toolbar sx={{ justifyContent: 'flex-end' }}>

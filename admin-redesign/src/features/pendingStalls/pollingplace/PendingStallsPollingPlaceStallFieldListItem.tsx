@@ -1,6 +1,7 @@
 import { AccessTimeFilled, ContentCopy, Description, QuestionMark, Restaurant, Title, Web } from '@mui/icons-material';
-import { Alert, IconButton, ListItem, ListItemIcon, ListItemText, Snackbar, styled } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import { IconButton, ListItem, ListItemIcon, ListItemText, styled } from '@mui/material';
+import { useNotifications } from '@toolpad/core';
+import React, { useCallback } from 'react';
 import type { PendingStall, StallFoodOptions } from '../../../app/services/stalls';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { isClipboardApiSupported } from '../../../app/utils';
@@ -84,11 +85,7 @@ interface Props {
 export default function PendingStallsPollingPlaceStallFieldListItem(props: Props) {
 	const { fieldLabel, fieldName, stall } = props;
 
-	const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(false);
-	const onSuccessSnackbarClose = () => setIsSuccessSnackbarOpen(false);
-
-	const [errorSnackbarMessage, setErrorSnackbarMessage] = useState<string | undefined>(undefined);
-	const onErrorSnackbarClose = () => setErrorSnackbarMessage(undefined);
+	const notifications = useNotifications();
 
 	const fieldValue = fieldName === 'noms' ? getNomsDescriptiveText(stall.noms) : stall[fieldName] || '';
 
@@ -100,15 +97,22 @@ export default function PendingStallsPollingPlaceStallFieldListItem(props: Props
 		if (isClipboardApiSupported() === true) {
 			try {
 				await navigator.clipboard.writeText(fieldValue);
-				setIsSuccessSnackbarOpen(true);
+
+				notifications.show('Field copied', {
+					severity: 'success',
+					autoHideDuration: 2000,
+				});
 			} catch {
 				// Rather than messing about trying to query permissions (Firefox and Safari don't support the standard methods), let's just ask for it and assume any errors are permisson denied.
 				// Ref: https://stackoverflow.com/questions/64541534/check-whether-user-granted-clipboard-permisssion-or-not
 				// Ref: https://stackoverflow.com/questions/75067090/safari-clipboard-permissions-checking
-				setErrorSnackbarMessage(`You haven't granted permissions to write to your clipboard yet.`);
+				notifications.show("You haven't granted permissions to write to your clipboard yet.", {
+					severity: 'error',
+					autoHideDuration: 2000,
+				});
 			}
 		}
-	}, [fieldValue]);
+	}, [fieldValue, notifications.show]);
 
 	return (
 		<React.Fragment>
@@ -151,18 +155,6 @@ export default function PendingStallsPollingPlaceStallFieldListItem(props: Props
 					/>
 				</StyledListItem>
 			)}
-
-			<Snackbar open={isSuccessSnackbarOpen} autoHideDuration={2000} onClose={onSuccessSnackbarClose}>
-				<Alert severity="success" sx={{ width: '100%' }}>
-					Field copied
-				</Alert>
-			</Snackbar>
-
-			<Snackbar open={errorSnackbarMessage !== undefined} autoHideDuration={2000} onClose={onErrorSnackbarClose}>
-				<Alert severity="error" sx={{ width: '100%' }}>
-					{errorSnackbarMessage}
-				</Alert>
-			</Snackbar>
 		</React.Fragment>
 	);
 }

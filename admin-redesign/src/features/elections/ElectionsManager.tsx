@@ -1,16 +1,7 @@
 import { Add, ExpandMore, HistoryEdu, LiveTv, VisibilityOff } from '@mui/icons-material';
-import {
-	Accordion,
-	AccordionDetails,
-	AccordionSummary,
-	Alert,
-	Button,
-	Snackbar,
-	Stack,
-	Typography,
-	styled,
-} from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Button, Stack, Typography, styled } from '@mui/material';
+import { useNotifications } from '@toolpad/core';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import {
@@ -78,6 +69,7 @@ function ElectionsManager(props: Props) {
 	const { elections } = props;
 
 	const navigate = useNavigate();
+	const notifications = useNotifications();
 
 	const onClickAddElection = () => navigateToAddElection(navigate);
 
@@ -100,12 +92,12 @@ function ElectionsManager(props: Props) {
 
 	useEffect(() => {
 		if (isSetPrimaryElectionSuccessful === true) {
-			setIsSetPrimaryElectionSnackbarShown(true);
+			notifications.show('Primary election updated', {
+				severity: 'success',
+				autoHideDuration: 6000,
+			});
 		}
-	}, [isSetPrimaryElectionSuccessful]);
-
-	const [isSetPrimaryElectionSnackbarShown, setIsSetPrimaryElectionSnackbarShown] = useState(false);
-	const onSnackbarClose = useCallback(() => setIsSetPrimaryElectionSnackbarShown(false), []);
+	}, [isSetPrimaryElectionSuccessful, notifications.show]);
 	// ######################
 	// Set Primary Election (End)
 	// ######################
@@ -130,12 +122,6 @@ function ElectionsManager(props: Props) {
 			{createElectionsAccordion('Hidden', hiddenElections, onChooseElection)}
 
 			{createElectionsAccordion('Historical', historicalElections, onChooseElection)}
-
-			<Snackbar open={isSetPrimaryElectionSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
-				<Alert severity="success" variant="standard" sx={{ width: '100%' }}>
-					Primary election updated
-				</Alert>
-			</Snackbar>
 		</PageWrapper>
 	);
 }
