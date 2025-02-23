@@ -36,7 +36,7 @@ export const AddStallExistingSubmissionWarning = (props: Props) => {
 					</Alert>
 
 					<Alert severity="success" icon={<FiberNewIcon />}>
-						<AlertTitle>Have another stall to add?</AlertTitle>
+						<AlertTitle>Have more information to add about this stall?</AlertTitle>
 						If this wasn&apos;t submitted by you, or if you&apos;re running another stall at this booth, please review
 						what&apos;s already here (just click &apos;Open Polling Place&apos; below) and consider if you still need to
 						list your stall. If you do still want to send in your submission, just hit &apos;Continue&apos; below.
