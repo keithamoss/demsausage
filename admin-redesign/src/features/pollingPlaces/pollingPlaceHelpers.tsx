@@ -50,7 +50,7 @@ export const getPollingPlaceNavTabs = (
 			<Tabs value={selectedTabIndex} onChange={onTabChange}>
 				<Tab label="Form" />
 				<Tab label="History" />
-				<Tab label="Stalls" />
+				<Tab label="Submissions" />
 			</Tabs>
 		</Box>
 	);
