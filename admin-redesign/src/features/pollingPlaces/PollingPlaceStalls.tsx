@@ -1,23 +1,5 @@
-import EmailIcon from '@mui/icons-material/Email';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import {
-	Alert,
-	AlertTitle,
-	Box,
-	Card,
-	CardActions,
-	CardContent,
-	LinearProgress,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Stack,
-	Typography,
-	styled,
-} from '@mui/material';
+import { CardActions, CardContent, ListItem, ListItemIcon, ListItemText, styled } from '@mui/material';
 import blueGrey from '@mui/material/colors/blueGrey';
-import dayjs from 'dayjs';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../ErrorElement';
@@ -30,16 +12,11 @@ import {
 } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import { getIntegerParamOrUndefined, getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
-import {
-	useGetPollingPlaceByIdsLookupQuery,
-	useGetPollingPlaceStallsByIdQuery,
-} from '../../app/services/pollingPlaces';
+import { useGetPollingPlaceByIdsLookupQuery } from '../../app/services/pollingPlaces';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import { selectElectionById, selectVisibleElections } from '../elections/electionsSlice';
-import { IconsFlexboxHorizontalSummaryRow } from '../icons/iconHelpers';
+import PollingPlaceStallsList from './PollingPlaceStallsList';
 import { getPollingPlaceNavTabs, getPollingPlaceSummaryCardForHeading } from './pollingPlaceHelpers';
-import { getNomsIconsBar, wrapIconWithTooltip } from './pollingPlaceSearchHelpers';
-import { getStallStatusElement, getStallSubmitterTypeElement } from './pollingPlaceStallsHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
 
 const PageWrapper = styled('div')(({ theme }) => ({
@@ -143,12 +120,6 @@ function PollingPlaceStalls(props: Props) {
 
 	const urlSearchTerm = getStringParamOrUndefined(params, 'search_term');
 
-	const {
-		data: pollingPlaceStalls,
-		isFetching: isFetchingPollingPlaceStalls,
-		isSuccess: isSuccessFetchingPollingPlaceStalls,
-	} = useGetPollingPlaceStallsByIdQuery(pollingPlace.id);
-
 	// ######################
 	// Navigation
 	// ######################
@@ -191,90 +162,7 @@ function PollingPlaceStalls(props: Props) {
 			{getPollingPlaceNavTabs('Submissions', onClickBack, onTabChange)}
 
 			<ContentWrapper>
-				{isFetchingPollingPlaceStalls === true && <LinearProgress color="secondary" />}
-
-				{isFetchingPollingPlaceStalls === false &&
-					isSuccessFetchingPollingPlaceStalls === true &&
-					pollingPlaceStalls.length === 0 && (
-						<Alert severity="info">
-							<AlertTitle>No stalls found</AlertTitle>
-							There haven&apos;t been any stalls have been submitted yet for this polling place during this election.
-						</Alert>
-					)}
-
-				{isFetchingPollingPlaceStalls === false &&
-					isSuccessFetchingPollingPlaceStalls === true &&
-					pollingPlaceStalls.length > 0 && (
-						<Stack spacing={1}>
-							{pollingPlaceStalls.map((stall) => (
-								<Card key={stall.id} variant="outlined">
-									<StyledCardContent>
-										<Box>
-											<IconsFlexboxHorizontalSummaryRow>
-												{getNomsIconsBar(stall.noms, true, true)}
-											</IconsFlexboxHorizontalSummaryRow>
-
-											<Typography
-												variant="h5"
-												component="div"
-												sx={{
-													fontSize: 16,
-													fontWeight: 500,
-												}}
-											>
-												{stall.name || <em>No stall name supplied</em>}
-											</Typography>
-
-											<Typography color="text.secondary" sx={{ fontSize: 15 }}>
-												{stall.description || <em>No stall description supplied</em>}
-											</Typography>
-										</Box>
-
-										<List dense sx={{ paddingBottom: 1, paddingTop: 1 }}>
-											<StyledListItem disableGutters>
-												{wrapIconWithTooltip(
-													<StyledListItemIcon>
-														<EmailIcon
-															sx={{
-																color: blueGrey.A700,
-															}}
-														/>
-													</StyledListItemIcon>,
-													'Reported by',
-												)}
-
-												<StyledListItemText primary={stall.email} />
-											</StyledListItem>
-
-											<StyledListItem disableGutters>
-												{wrapIconWithTooltip(
-													<StyledListItemIcon>
-														<WatchLaterIcon
-															sx={{
-																color: blueGrey.A700,
-															}}
-														/>
-													</StyledListItemIcon>,
-													'Reported on',
-												)}
-
-												<StyledListItemText
-													primary={`${dayjs(stall.reported_timestamp).format('D MMMM YYYY')} at
-											${dayjs(stall.reported_timestamp).format('HH:mm')}`}
-												/>
-											</StyledListItem>
-										</List>
-									</StyledCardContent>
-
-									<StyledCardActions>
-										{getStallStatusElement(stall.status, stall.previous_status)}
-
-										{getStallSubmitterTypeElement(stall)}
-									</StyledCardActions>
-								</Card>
-							))}
-						</Stack>
-					)}
+				<PollingPlaceStallsList pollingPlaceId={pollingPlace.id} />
 			</ContentWrapper>
 		</PageWrapper>
 	);

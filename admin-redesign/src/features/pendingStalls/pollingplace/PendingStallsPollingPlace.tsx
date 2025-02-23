@@ -435,7 +435,11 @@ function PendingStallsPollingPlace(props: Props) {
 			{isPollingPlaceHistoryOpen === true && <PendingStallPollingPlaceHistory onClose={onClosePollingPlaceHistory} />}
 
 			{isPollingPlaceSubmissionsOpen === true && (
-				<PendingStallPollingPlaceSubmissions onClose={onClosePollingPlaceSubmissions} />
+				<PendingStallPollingPlaceSubmissions
+					electionId={pollingPlace.election_id}
+					pollingPlaceId={pollingPlace.id}
+					onClose={onClosePollingPlaceSubmissions}
+				/>
 			)}
 		</React.Fragment>
 	);

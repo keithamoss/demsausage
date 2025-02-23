@@ -1,14 +1,16 @@
-import { Construction } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, AlertTitle, AppBar, IconButton, Paper, Toolbar, Typography } from '@mui/material';
+import { AppBar, IconButton, Paper, Toolbar, Typography } from '@mui/material';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import PollingPlaceStallsList from '../../pollingPlaces/PollingPlaceStallsList';
 
 interface Props {
+	electionId: number;
+	pollingPlaceId: number;
 	onClose: () => void;
 }
 
 function PendingStallPollingPlaceSubmissions(props: Props) {
-	const { onClose } = props;
+	const { electionId, pollingPlaceId, onClose } = props;
 
 	return (
 		<DialogWithTransition onClose={onClose}>
@@ -24,11 +26,8 @@ function PendingStallPollingPlaceSubmissions(props: Props) {
 				</Toolbar>
 			</AppBar>
 
-			<Paper elevation={0} sx={{ m: 3 }}>
-				<Alert severity="warning" icon={<Construction />}>
-					<AlertTitle>under_construction.gif</AlertTitle>
-					This page will contain a list of the submissions for the polling place.
-				</Alert>
+			<Paper elevation={0} sx={{ p: 2 }}>
+				<PollingPlaceStallsList pollingPlaceId={pollingPlaceId} />
 			</Paper>
 		</DialogWithTransition>
 	);
