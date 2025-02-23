@@ -86,7 +86,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '23.x'
 
       - name: Setup Env Vars
         run: |
@@ -124,7 +124,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '23.x'
 
       - name: Setup Env Vars
         run: |
@@ -159,7 +159,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '23.x'
 
       - name: Setup Env Vars
         run: |
