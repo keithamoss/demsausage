@@ -1,6 +1,6 @@
-import { Avatar, Box, Fab, Tooltip } from '@mui/material';
-import type { ElectionPendingStallsGamifiedUserStats } from '../../app/services/stalls';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
+import { Avatar, Badge, Box, Fab } from '@mui/material';
+import type { ElectionPendingStallsGamifiedUserStats } from '../../../app/services/stalls';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
 
 interface Props {
 	stats: ElectionPendingStallsGamifiedUserStats[];
@@ -34,20 +34,21 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 				}}
 			>
 				{stats.map((item) => (
-					<Tooltip key={item.id} title={`${item.name}: ${item.total}`}>
-						<Fab
-							color="primary"
-							sx={{
-								position: 'absolute',
-								width: avatarFabDiameter,
-								height: avatarFabDiameter,
-								// Take 3% off to (roughly) accommodate the width of 36px
-								left: `${(item.total / userStatsGrandTotal) * 100 - 3}%`,
-							}}
-						>
+					<Fab
+						key={item.id}
+						color="primary"
+						sx={{
+							position: 'absolute',
+							width: avatarFabDiameter,
+							height: avatarFabDiameter,
+							// Take 3% off to (roughly) accommodate the width of 36px
+							left: `${(item.total / userStatsGrandTotal) * 100 - 3}%`,
+						}}
+					>
+						<Badge badgeContent={item.total} max={999} color="primary">
 							<Avatar src={item.image_url} alt={item.initial} sx={{ width: 24, height: 24 }} />
-						</Fab>
-					</Tooltip>
+						</Badge>
+					</Fab>
 				))}
 			</Box>
 		</Box>

@@ -10,8 +10,6 @@ const bottomNav = 56;
 
 const Root = styled('div')(({ theme }) => ({
 	height: '100%',
-	// Bg for light was grey[100]
-	backgroundColor: theme.palette.mode === 'light' ? 'white' : theme.palette.background.default,
 	paddingBottom: `${bottomNav}px`,
 }));
 

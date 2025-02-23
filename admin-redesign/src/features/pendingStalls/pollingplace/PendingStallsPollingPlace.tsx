@@ -1,6 +1,5 @@
 import { MapsHomeWork } from '@mui/icons-material';
 import { Avatar, Backdrop, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
@@ -8,27 +7,28 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import type { UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import ErrorElement from '../../ErrorElement';
-import NotFound from '../../NotFound';
-import { navigateToPendingStallsRoot } from '../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
-import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
+import ErrorElement from '../../../ErrorElement';
+import NotFound from '../../../NotFound';
+import { navigateToPendingStallsRoot } from '../../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
+import { getIntegerParamOrUndefined } from '../../../app/routing/routingHelpers';
 import {
 	type PendingStall,
 	type PollingPlaceWithPendingStall,
 	StallApprovalType,
+	type StallFoodOptions,
+	type StallNonFoodOptions,
 	useApproveStallMutation,
 	useDeclineStallMutation,
 	useGetPendingStallsQuery,
-} from '../../app/services/stalls';
-import { mapaThemePrimaryPurple } from '../../app/ui/theme';
-import PollingPlaceNomsEditorForm from '../pollingPlaces/PollingPlaceNomsEditorForm';
-import { getPollingPlaceSummaryCardForHeading } from '../pollingPlaces/pollingPlaceHelpers';
-import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../pollingPlaces/pollingPlaceNomsEditorFormHelpers';
-import type { IPollingPlaceStallModifiableProps } from '../pollingPlaces/pollingPlacesInterfaces';
+} from '../../../app/services/stalls';
+import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import PollingPlaceNomsEditorForm from '../../pollingPlaces/PollingPlaceNomsEditorForm';
+import { getPollingPlaceSummaryCardForHeading } from '../../pollingPlaces/pollingPlaceHelpers';
+import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../../pollingPlaces/pollingPlaceNomsEditorFormHelpers';
+import type { IPollingPlaceStallModifiableProps } from '../../pollingPlaces/pollingPlacesInterfaces';
 import PendingStallPollingPlaceHistory from './PendingStallPollingPlaceHistory';
 import PendingStallPollingPlaceSubmissions from './PendingStallPollingPlaceSubmissions';
 import PendingStallsPollingPlaceAndStallsSummary from './PendingStallsPollingPlaceAndStallsSummary';
-import { isStallMergedWithPollingPlace } from './PendingStallsPollingPlaceHelpers';
 import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStallsList';
 
 // const bottomNav = 56;
@@ -41,7 +41,6 @@ import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStal
 // }));
 
 const PageWrapper = styled('div')(({ theme }) => ({
-	backgroundColor: grey[100],
 	paddingTop: theme.spacing(2),
 	paddingLeft: theme.spacing(1),
 	paddingRight: theme.spacing(1),
@@ -50,6 +49,30 @@ const PageWrapper = styled('div')(({ theme }) => ({
 	// See above
 	// paddingBottom: theme.spacing(8),
 }));
+
+const isStallMergedWithPollingPlace = (stall: PendingStall, pollingPlaceStall: IPollingPlaceStallModifiableProps) => {
+	// This is a quick and dirty merge check:
+	// If the noms on the stall match the polling place, we'll consider the submission merged,
+
+	let key: keyof (StallFoodOptions & StallNonFoodOptions);
+
+	for (key in stall.noms) {
+		const value = stall.noms[key];
+
+		if (key === 'free_text') {
+			if (pollingPlaceStall.noms[key] === undefined || pollingPlaceStall.noms[key] === '') {
+				return false;
+			}
+		} else {
+			if (pollingPlaceStall.noms[key] === undefined || pollingPlaceStall.noms[key] !== true) {
+				return false;
+			}
+		}
+	}
+
+	// All of the noms have been applied, so we're good!
+	return true;
+};
 
 function EntrypointLayer1() {
 	const urlPollingPlaceId = getIntegerParamOrUndefined(useParams(), 'polling_place_id');

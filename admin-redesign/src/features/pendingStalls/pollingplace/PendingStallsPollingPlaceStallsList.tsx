@@ -20,8 +20,8 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	styled,
 } from '@mui/material';
+import { styled } from '@mui/system';
 import dayjs from 'dayjs';
 import React from 'react';
 import {
@@ -31,14 +31,14 @@ import {
 	StallSubmitterType,
 	getStallSubmitterTypeTipOffName,
 	getStallTipOffSourceDescriptionFromAdminPOV,
-} from '../../app/services/stalls';
-import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
-import StallSubmitterTypeOwner from '../../assets/stalls/submit_mystall.svg?react';
-import StallSubmitterTypeTipOff from '../../assets/stalls/submit_tipoff.svg?react';
-import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../icons/iconHelpers';
-import { doesStallHaveNomsToShowOnOffer, isStallATipOff } from '../pollingPlaces/pollingPlaceStallsHelpers';
+} from '../../../app/services/stalls';
+import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
+import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
+import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../../icons/iconHelpers';
+import { doesStallHaveNomsToShowOnOffer, isStallATipOff } from '../../pollingPlaces/pollingPlaceStallsHelpers';
+import { getNomsIconsForPendingStall } from '../pendingStallsHelpers';
 import PendingStallsPollingPlaceStallFieldListItem from './PendingStallsPollingPlaceStallFieldListItem';
-import { getNomsIconsForPendingStall } from './pendingStallsHelpers';
 import {
 	getWhyApproveAndMergeAutomaticallyNotAllowed,
 	isApproveAndMergeAutomaticallyAllowed,

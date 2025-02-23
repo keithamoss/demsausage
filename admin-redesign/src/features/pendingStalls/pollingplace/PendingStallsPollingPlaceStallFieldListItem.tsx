@@ -1,10 +1,10 @@
 import { AccessTimeFilled, ContentCopy, Description, QuestionMark, Restaurant, Title, Web } from '@mui/icons-material';
 import { Alert, IconButton, ListItem, ListItemIcon, ListItemText, Snackbar, styled } from '@mui/material';
 import React, { useCallback, useState } from 'react';
-import type { PendingStall, StallFoodOptions } from '../../app/services/stalls';
-import { mapaThemePrimaryGrey } from '../../app/ui/theme';
-import { isClipboardApiSupported } from '../../app/utils';
-import { getNomsDescriptiveText, isStallWebsiteValid } from '../pollingPlaces/pollingPlaceHelpers';
+import type { PendingStall, StallFoodOptions } from '../../../app/services/stalls';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
+import { isClipboardApiSupported } from '../../../app/utils';
+import { getNomsDescriptiveText, isStallWebsiteValid } from '../../pollingPlaces/pollingPlaceHelpers';
 
 const StyledListItem = styled(ListItem)(() => ({ alignItems: 'start' }));
 
