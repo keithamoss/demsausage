@@ -367,7 +367,7 @@ function PendingStallsPollingPlace(props: Props) {
 								<MapsHomeWork />
 							</Avatar>
 						}
-						title="Polling Place"
+						title="Stall"
 					/>
 
 					<CardContent

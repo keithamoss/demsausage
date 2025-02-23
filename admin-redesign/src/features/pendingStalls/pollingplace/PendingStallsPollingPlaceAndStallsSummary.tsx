@@ -61,13 +61,13 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 			<StyledCardContent>
 				{pollingPlace.stall === null && (
 					<Alert severity="success" icon={<NewReleases />} sx={{ mb: 1 }}>
-						This polling place doesn&apos;t have any data yet.
+						This polling place doesn&apos;t have any stall data yet.
 					</Alert>
 				)}
 
 				{pollingPlace.stall !== null && pollingPlace.previous_subs.approved === 0 && (
 					<Alert severity="success" icon={<Radar />} sx={{ mb: 1 }}>
-						This polling place already has some data that was sourced by one of us.
+						This polling place already has some stall data that was sourced by one of us.
 					</Alert>
 				)}
 
