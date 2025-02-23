@@ -4,10 +4,10 @@ import {
 	Edit,
 	FiberNew,
 	History,
-	House,
 	NewReleases,
 	OpenInNew,
 	Radar,
+	Storefront,
 } from '@mui/icons-material';
 import {
 	Alert,
@@ -141,7 +141,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 					History
 				</Button>
 
-				<Button size="small" startIcon={<House />} onClick={onOpenPollingPlaceSubmissions}>
+				<Button size="small" startIcon={<Storefront />} onClick={onOpenPollingPlaceSubmissions}>
 					Submissions
 				</Button>
 

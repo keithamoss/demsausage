@@ -44,6 +44,7 @@ class PollingPlaceWheelchairAccess(str, EnumBase):
     def __str__(self):
         return self.value
 
+
 class PollingPlaceChanceOfSausage(int, EnumBase):
     NO_IDEA = 0
     UNLIKELY = 1
@@ -81,10 +82,10 @@ class StallSubmitterType(str, EnumBase):
 
 
 class StallTipOffSource(str, EnumBase):
-    In_Person = 'in-person'
-    Online = 'online'
-    Newsletter = 'newsletter'
-    Other = 'other'
+    In_Person = "in-person"
+    Online = "online"
+    Newsletter = "newsletter"
+    Other = "other"
 
     def __str__(self):
         return self.value
@@ -102,6 +103,19 @@ class StallStatus(str, EnumBase):
 class TaskStatus(str, EnumBase):
     SUCCESS = "Success"
     FAILED = "Failed"
+
+    def __str__(self):
+        return self.value
+
+
+class PollingPlaceHistoryEventType(str, EnumBase):
+    ADDED_DIRECTLY = "Added Directly"
+    EDITED_DIRECTLY = "Edited Directly"
+    SUBMISSION_RECEIVED = "Submission Received"
+    SUBMISSION_APPROVED = "Submission Approved"
+    SUBMISSION_DECLINED = "Submission Declined"
+    SUBMISSION_EDITED = "Submission Edited"
+    UNKNOWN = "UNKNOWN_HISTORY_EVENT_TYPE"
 
     def __str__(self):
         return self.value

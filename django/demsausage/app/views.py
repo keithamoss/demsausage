@@ -5,6 +5,7 @@ from hashlib import sha256
 
 import pytz
 from demsausage.app.enums import (
+    PollingPlaceHistoryEventType,
     PollingPlaceStatus,
     PollingPlaceWheelchairAccess,
     StallStatus,
@@ -423,6 +424,98 @@ class PollingPlacesViewSet(
 
         serializer = StallsSerializer(stalls, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def history(self, request, pk=None, format=None):
+        pollingPlace = self.get_object()
+        history = []
+
+        # Polling place noms change history
+        if pollingPlace.noms is not None:
+            for item in PollingPlaceNoms.history.filter(id=pollingPlace.noms_id):
+                if item.history_change_reason == "Added directly":
+                    history.append(
+                        {
+                            "timestamp": item.history_date,
+                            "message": f"Noms added directly by {item.history_user.first_name.split(' ')[0]}",
+                            "type": PollingPlaceHistoryEventType.ADDED_DIRECTLY,
+                        }
+                    )
+                elif item.history_change_reason == "Edited directly":
+                    history.append(
+                        {
+                            "timestamp": item.history_date,
+                            "message": f"Noms edited directly by {item.history_user.first_name.split(' ')[0]}",
+                            "type": PollingPlaceHistoryEventType.EDITED_DIRECTLY,
+                        }
+                    )
+                elif item.history_change_reason in [
+                    "Approved and merged automatically",
+                    "Approved and merged by hand",
+                ]:
+                    # These are handled by the stall history below
+                    pass
+                else:
+                    history.append(
+                        {
+                            "timestamp": item.history_date,
+                            "message": "Noms UNKNOWN_HISTORY_EVENT",
+                            "type": PollingPlaceHistoryEventType.UNKNOWN,
+                        }
+                    )
+
+        # Stall change history
+        for item in Stalls.history.filter(polling_place_id=pollingPlace.id):
+            if item.status == StallStatus.PENDING and item.previous_status is None:
+                history.append(
+                    {
+                        "timestamp": item.history_date,
+                        "message": f"Submission #{item.id} received",
+                        "type": PollingPlaceHistoryEventType.SUBMISSION_RECEIVED,
+                    }
+                )
+            elif (
+                item.status == StallStatus.PENDING
+                and item.owner_edit_timestamp is not None
+            ):
+                history.append(
+                    {
+                        "timestamp": item.history_date,
+                        "message": f"Submission #{item.id} was edited by its owner",
+                        "type": PollingPlaceHistoryEventType.SUBMISSION_EDITED,
+                    }
+                )
+            elif item.status == StallStatus.APPROVED:
+                history.append(
+                    {
+                        "timestamp": item.history_date,
+                        "message": f"Submission #{item.id} approved by {item.history_user.first_name.split(' ')[0]}",
+                        "type": PollingPlaceHistoryEventType.SUBMISSION_APPROVED,
+                    }
+                )
+            elif item.status == StallStatus.DECLINED:
+                history.append(
+                    {
+                        "timestamp": item.history_date,
+                        "message": f"Submission #{item.id} declined by {item.history_user.first_name.split(' ')[0]}",
+                        "type": PollingPlaceHistoryEventType.SUBMISSION_DECLINED,
+                    }
+                )
+            else:
+                history.append(
+                    {
+                        "timestamp": item.history_date,
+                        "message": f"Submission #{item.id} UNKNOWN_HISTORY_EVENT",
+                        "type": PollingPlaceHistoryEventType.UNKNOWN,
+                    }
+                )
+
+        history.sort(key=lambda x: x["timestamp"])
+
+        for idx, item in enumerate(history):
+            item.update({"id": idx + 1})
+
+        return Response(reversed(history))
 
     @action(detail=True, methods=["delete"])
     @transaction.atomic

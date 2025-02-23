@@ -432,7 +432,9 @@ function PendingStallsPollingPlace(props: Props) {
 				<CircularProgress color="inherit" />
 			</Backdrop>
 
-			{isPollingPlaceHistoryOpen === true && <PendingStallPollingPlaceHistory onClose={onClosePollingPlaceHistory} />}
+			{isPollingPlaceHistoryOpen === true && (
+				<PendingStallPollingPlaceHistory pollingPlaceId={pollingPlace.id} onClose={onClosePollingPlaceHistory} />
+			)}
 
 			{isPollingPlaceSubmissionsOpen === true && (
 				<PendingStallPollingPlaceSubmissions
