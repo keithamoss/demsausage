@@ -28,7 +28,12 @@ root.render(
 				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-au">
 					<HelmetProvider>
 						<CssBaseline />
-						<RouterProvider router={router} />
+						<RouterProvider
+							router={router}
+							future={{
+								v7_startTransition: true,
+							}}
+						/>
 					</HelmetProvider>
 				</LocalizationProvider>
 			</AppProvider>

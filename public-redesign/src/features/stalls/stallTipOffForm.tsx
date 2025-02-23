@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
-import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	Alert,
 	Box,
@@ -280,7 +279,7 @@ export default function StallTipOffForm(props: Props) {
 						)
 					}
 					nextButton={
-						<LoadingButton
+						<Button
 							loading={isStallSaving}
 							loadingPosition="end"
 							disabled={isDirty === false}
@@ -291,7 +290,7 @@ export default function StallTipOffForm(props: Props) {
 						>
 							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 							<span>Submit</span>
-						</LoadingButton>
+						</Button>
 					}
 				/>
 			</form>

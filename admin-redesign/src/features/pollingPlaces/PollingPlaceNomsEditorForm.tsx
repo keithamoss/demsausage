@@ -1,26 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Delete, Save, Star, StarBorder } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
 import {
-	Alert,
 	AppBar,
 	Button,
-	Dialog,
-	DialogActions,
-	DialogTitle,
 	FormControl,
 	FormGroup,
 	List,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	Snackbar,
 	Toolbar,
 	Typography,
 	styled,
 } from '@mui/material';
+import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
 	Controller,
 	type SubmitHandler,
@@ -68,6 +63,9 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 		setValueRef,
 		isDirtyRef,
 	} = props;
+
+	const notifications = useNotifications();
+	const dialogs = useDialogs();
 
 	const {
 		watch,
@@ -130,7 +128,10 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 
 					// Trigger form validation to warn if the noms are now empty
 					if ((await trigger()) === false) {
-						setIsErrorSnackbarShown(true);
+						notifications.show('One or more fields have errors.', {
+							severity: 'error',
+							autoHideDuration: 6000,
+						});
 					}
 				}
 
@@ -141,20 +142,19 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				}
 			}
 		},
-		[onDoneCreatingOrEditing, trigger, pollingPlace.id],
+		[onDoneCreatingOrEditing, trigger, notifications.show, pollingPlace.id],
 	);
 
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
 
 	useEffect(() => {
 		if (JSON.stringify(errors) !== '{}') {
-			setIsErrorSnackbarShown(true);
+			notifications.show('One or more fields have errors.', {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
 		}
-	}, [errors]);
-
-	const [isErrorSnackbarShown, setIsErrorSnackbarShown] = useState(false);
-
-	const onSnackbarClose = useCallback(() => setIsErrorSnackbarShown(false), []);
+	}, [errors, notifications.show]);
 	// ######################
 	// Form Management (End)
 	// ######################
@@ -162,16 +162,16 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 	// ######################
 	// Delete Polling Place Noms
 	// ######################
-	const [isDeleteConfirmDialogShown, setIsDeleteConfirmDialogShown] = useState(false);
+	const onClickDelete = useCallback(async () => {
+		const confirmed = await dialogs.confirm('Delete polling place noms?', {
+			okText: 'Yes',
+			cancelText: 'No',
+		});
 
-	const onClickDelete = useCallback(() => setIsDeleteConfirmDialogShown(true), []);
-
-	const onConfirmDelete = useCallback(() => {
-		onDelete(pollingPlace.id);
-		setIsDeleteConfirmDialogShown(false);
-	}, [onDelete, pollingPlace.id]);
-
-	const onCancelDelete = useCallback(() => setIsDeleteConfirmDialogShown(false), []);
+		if (confirmed === true) {
+			onDelete(pollingPlace.id);
+		}
+	}, [dialogs.confirm, onDelete, pollingPlace.id]);
 	// ######################
 	// Delete Polling Place Noms (End)
 	// ######################
@@ -371,7 +371,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				{allowAppBarControl !== false && (
 					<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
 						<Toolbar sx={{ justifyContent: 'flex-end' }}>
-							<LoadingButton
+							<Button
 								loading={isSaving}
 								loadingPosition="end"
 								disabled={isDirty === false}
@@ -382,10 +382,10 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							>
 								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 								<span>Save</span>
-							</LoadingButton>
+							</Button>
 
 							{pollingPlace.stall !== null && (
-								<LoadingButton
+								<Button
 									loading={isDeleting}
 									loadingPosition="end"
 									disabled={pollingPlace.stall === null}
@@ -397,28 +397,12 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 								>
 									{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 									<span>Delete</span>
-								</LoadingButton>
+								</Button>
 							)}
 						</Toolbar>
 					</AppBar>
 				)}
 			</form>
-
-			{isDeleteConfirmDialogShown === true && (
-				<Dialog open={true} onClose={onCancelDelete} fullWidth>
-					<DialogTitle>Delete polling place noms?</DialogTitle>
-					<DialogActions>
-						<Button onClick={onCancelDelete}>No</Button>
-						<Button onClick={onConfirmDelete}>Yes</Button>
-					</DialogActions>
-				</Dialog>
-			)}
-
-			<Snackbar open={isErrorSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
-				<Alert severity="error" variant="standard" sx={{ width: '100%' }}>
-					One or more fields have errors.
-				</Alert>
-			</Snackbar>
 		</PageWrapper>
 	);
 }

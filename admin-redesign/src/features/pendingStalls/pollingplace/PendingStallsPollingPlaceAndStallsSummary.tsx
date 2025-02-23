@@ -85,7 +85,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 					)}
 
 					{pendingStallsApprovedWithEditsCount > 0 && (
-						<ListItem>
+						<StyledListItem>
 							<StyledListItemIcon>
 								<Edit sx={{ color: mapaThemePrimaryGrey }} />
 							</StyledListItemIcon>
@@ -93,12 +93,12 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 							<ListItemText
 								primary={`${pendingStallsApprovedWithEditsCount} approved ${pluralise('submission', pendingStallsApprovedWithEditsCount)} with edits`}
 							/>
-						</ListItem>
+						</StyledListItem>
 					)}
 
 					{pollingPlace.previous_subs.approved > 0 &&
 						pollingPlace.previous_subs.approved > pendingStallsApprovedWithEditsCount && (
-							<ListItem>
+							<StyledListItem>
 								<StyledListItemIcon>
 									<Approval sx={{ color: mapaThemePrimaryGrey }} />
 								</StyledListItemIcon>
@@ -106,11 +106,11 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 								<ListItemText
 									primary={`${pollingPlace.previous_subs.approved - pendingStallsApprovedWithEditsCount} approved ${pluralise('submission', pollingPlace.previous_subs.approved - pendingStallsApprovedWithEditsCount)}`}
 								/>
-							</ListItem>
+							</StyledListItem>
 						)}
 
 					{pendingStallsDeclinedWithEditsCount > 0 && (
-						<ListItem>
+						<StyledListItem>
 							<StyledListItemIcon>
 								<Edit sx={{ color: mapaThemePrimaryGrey }} />
 							</StyledListItemIcon>
@@ -118,12 +118,12 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 							<ListItemText
 								primary={`${pendingStallsDeclinedWithEditsCount} declined ${pluralise('submission', pendingStallsDeclinedWithEditsCount)} with edits`}
 							/>
-						</ListItem>
+						</StyledListItem>
 					)}
 
 					{pollingPlace.previous_subs.denied > 0 &&
 						pollingPlace.previous_subs.denied > pendingStallsDeclinedWithEditsCount && (
-							<ListItem>
+							<StyledListItem>
 								<StyledListItemIcon>
 									<DoNotDisturbOn sx={{ color: mapaThemePrimaryGrey }} />
 								</StyledListItemIcon>
@@ -131,7 +131,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 								<ListItemText
 									primary={`${pollingPlace.previous_subs.denied - pendingStallsDeclinedWithEditsCount} declined ${pluralise('submission', pollingPlace.previous_subs.denied - pendingStallsDeclinedWithEditsCount)}`}
 								/>
-							</ListItem>
+							</StyledListItem>
 						)}
 				</List>
 			</StyledCardContent>

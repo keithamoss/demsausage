@@ -1,7 +1,8 @@
 import { Download, Refresh, Upload } from '@mui/icons-material';
-import { Alert, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Snackbar, styled } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled } from '@mui/material';
+import { useNotifications } from '@toolpad/core';
 import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
@@ -50,6 +51,7 @@ function ElectionEditorControls(props: Props) {
 	const { election } = props;
 
 	const navigate = useNavigate();
+	const notifications = useNotifications();
 
 	// ######################
 	// Controls
@@ -82,13 +84,12 @@ function ElectionEditorControls(props: Props) {
 	// updating a component while another is being rendered.
 	useEffect(() => {
 		if (isMapDataCacheClearingSuccessful === true) {
-			setIsMapDataClearingConfirmationSnackbarShown(true);
+			notifications.show('Polling place data is being regenerated! 🌭🎉', {
+				severity: 'success',
+				autoHideDuration: 6000,
+			});
 		}
-	}, [isMapDataCacheClearingSuccessful]);
-
-	const [isMapDataClearingConfirmationSnackbarShown, setIsMapDataClearingConfirmationSnackbarShown] = useState(false);
-
-	const onSnackbarClose = useCallback(() => setIsMapDataClearingConfirmationSnackbarShown(false), []);
+	}, [isMapDataCacheClearingSuccessful, notifications.show]);
 	// ######################
 	// Map Data Cache Clearing (End)
 	// ######################
@@ -153,12 +154,6 @@ function ElectionEditorControls(props: Props) {
 					</ListItem>
 				</List>
 			</ContentWrapper>
-
-			<Snackbar open={isMapDataClearingConfirmationSnackbarShown} autoHideDuration={6000} onClose={onSnackbarClose}>
-				<Alert severity="success" variant="standard" sx={{ width: '100%' }}>
-					Polling place data is being regenerated! 🌭🎉
-				</Alert>
-			</Snackbar>
 		</PageWrapper>
 	);
 }

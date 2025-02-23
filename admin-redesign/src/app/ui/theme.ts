@@ -10,11 +10,11 @@ export const demSausageThemeWarningPurple = '#922269';
 
 export const defaultAppMapColour = '#f7f7f7';
 
-export const defaultAppBarColour = mapaThemePrimaryGreen;
+export const defaultAppBarColour = mapaThemePrimaryPurple;
 
 export const defaultNakedDialogColour = '#FFFFFF';
 
-export const defaultNakedNonFullScreenDialogColour = mapaThemePrimaryGreen;
+export const defaultNakedNonFullScreenDialogColour = mapaThemePrimaryPurple;
 
 export const theme = createTheme({
 	palette: {
