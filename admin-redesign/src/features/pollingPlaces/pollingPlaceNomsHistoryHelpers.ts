@@ -30,7 +30,7 @@ export const getNomsHistoryChangeFieldsString = (historyItem: IPollingPlaceNomsH
 		}
 
 		if (historyItem.changed_fields.length > 2) {
-			const lastItem = historyItem.changed_fields.splice(-1);
+			const lastItem = [...historyItem.changed_fields].splice(-1);
 			return `${historyItem.changed_fields.join(', ')}, and ${lastItem}`;
 		}
 	}
