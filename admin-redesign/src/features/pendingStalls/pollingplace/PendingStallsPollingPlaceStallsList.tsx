@@ -349,7 +349,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 						// ###################### 
 						*/}
 						<StyledSectionHeadingDivider>
-							<StyledSectionHeadingChip label="ACTIONS" />
+							<StyledSectionHeadingChip label="SUBMISSION ACTIONS" />
 						</StyledSectionHeadingDivider>
 
 						<List
@@ -371,8 +371,8 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 									</ListItemIcon>
 
 									<ListItemText
-										primary="Approve and merge automatically"
-										secondary="Approve the submission and automatically apply its changes to the polling place. The submitter is notified."
+										primary="Automerge"
+										secondary="Automatically adds new checked food/drink options (but doesn't remove already checked ones), populates blank text fields, and overwrites populated text fields. The submitter is notified."
 									/>
 								</ListItemButton>
 							</ListItem>
@@ -398,8 +398,8 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 									</ListItemIcon>
 
 									<ListItemText
-										primary="Approve and merge by hand"
-										secondary="Approve the submission, but first you will have manually applied its changes to the polling place. The submitter is notified."
+										primary="Apply my manual edits to the polling place"
+										secondary="You need to compare this submission with the polling place data below and make any changes manually before applying. The submitter is notified."
 									/>
 								</ListItemButton>
 							</ListItem>
