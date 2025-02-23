@@ -1,14 +1,37 @@
-import { Construction } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, AlertTitle, AppBar, IconButton, Paper, Toolbar, Typography } from '@mui/material';
+import {
+	Alert,
+	AlertTitle,
+	AppBar,
+	IconButton,
+	LinearProgress,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Paper,
+	Toolbar,
+	Typography,
+} from '@mui/material';
+import dayjs from 'dayjs';
+import { useGetPollingPlaceHistoryByIdQuery } from '../../../app/services/pollingPlaces';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
+import { getPollingPlaceHistoryEventIcon } from './pendingStallsPollingPlaceHelpers';
 
 interface Props {
+	pollingPlaceId: number;
 	onClose: () => void;
 }
 
 function PendingStallPollingPlaceHistory(props: Props) {
-	const { onClose } = props;
+	const { pollingPlaceId, onClose } = props;
+
+	const {
+		data: pollingPlaceHistory,
+		isFetching: isFetchingPollingPlaceHistory,
+		isSuccess: isSuccessFetchingPollingPlaceHistory,
+	} = useGetPollingPlaceHistoryByIdQuery(pollingPlaceId);
 
 	return (
 		<DialogWithTransition onClose={onClose}>
@@ -24,11 +47,40 @@ function PendingStallPollingPlaceHistory(props: Props) {
 				</Toolbar>
 			</AppBar>
 
-			<Paper elevation={0} sx={{ m: 3 }}>
-				<Alert severity="warning" icon={<Construction />}>
-					<AlertTitle>under_construction.gif</AlertTitle>
-					This page will contain a timeline of events relating to the polling place.
-				</Alert>
+			{isFetchingPollingPlaceHistory === true && <LinearProgress color="secondary" />}
+
+			<Paper elevation={0} sx={{ p: 2, pt: 0 }}>
+				{isFetchingPollingPlaceHistory === false &&
+					isSuccessFetchingPollingPlaceHistory === true &&
+					pollingPlaceHistory.length === 0 && (
+						<Alert severity="info">
+							<AlertTitle>No history found</AlertTitle>
+							There haven&apos;t been any changes made to this polling place. Ever.
+						</Alert>
+					)}
+
+				{isFetchingPollingPlaceHistory === false &&
+					isSuccessFetchingPollingPlaceHistory === true &&
+					pollingPlaceHistory.length > 0 && (
+						<List>
+							{pollingPlaceHistory?.map((item) => {
+								const HistoryEventTypeIcon = getPollingPlaceHistoryEventIcon(item.type);
+
+								return (
+									<ListItem key={item.id}>
+										<ListItemIcon>
+											<HistoryEventTypeIcon sx={{ color: mapaThemePrimaryGrey }} />
+										</ListItemIcon>
+
+										<ListItemText
+											primary={item.message}
+											secondary={`${dayjs(item.timestamp).format('D MMMM YYYY')} at ${dayjs(item.timestamp).format('HH:mm')}`}
+										/>
+									</ListItem>
+								);
+							})}
+						</List>
+					)}
 			</Paper>
 		</DialogWithTransition>
 	);

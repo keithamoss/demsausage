@@ -110,3 +110,13 @@ export interface IMapFilterSettings extends Omit<IPollingPlaceNoms, 'free_text' 
 export interface IMapPollingGeoJSONNoms extends Omit<IPollingPlaceNoms, 'free_text'> {
 	free_text?: boolean; // Map GeoJSON returns summary info only
 }
+
+export enum PollingPlaceHistoryEventType {
+	ADDED_DIRECTLY = 'Added Directly',
+	EDITED_DIRECTLY = 'Edited Directly',
+	SUBMISSION_RECEIVED = 'Submission Received',
+	SUBMISSION_APPROVED = 'Submission Approved',
+	SUBMISSION_DECLINED = 'Submission Declined',
+	SUBMISSION_EDITED = 'Submission Edited',
+	UNKNOWN = 'UNKNOWN_HISTORY_EVENT_TYPE',
+}

@@ -3,6 +3,7 @@ import type {
 	IPollingPlace,
 	IPollingPlaceNomsHistory,
 	IPollingPlaceStallModifiableProps,
+	PollingPlaceHistoryEventType,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 import type { Stall } from './stalls';
@@ -63,6 +64,14 @@ export const pollingPlacesApi = api.injectEndpoints({
 				url: `polling_places/${pollingPlaceId}/related_stalls/`,
 			}),
 		}),
+		getPollingPlaceHistoryById: builder.query<
+			{ id: number; type: PollingPlaceHistoryEventType; timestamp: string; message: string }[],
+			number
+		>({
+			query: (pollingPlaceId) => ({
+				url: `polling_places/${pollingPlaceId}/history/`,
+			}),
+		}),
 		addOrEditPollingBoothNoms: builder.mutation<
 			void,
 			{ pollingPlaceId: number; stall: Partial<IPollingPlaceStallModifiableProps> }
@@ -95,6 +104,7 @@ export const {
 	useGetPollingPlaceByStallIdLookupQuery,
 	useGetPollingPlaceNomsHistoryByIdQuery,
 	useGetPollingPlaceStallsByIdQuery,
+	useGetPollingPlaceHistoryByIdQuery,
 	useAddOrEditPollingBoothNomsMutation,
 	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;
