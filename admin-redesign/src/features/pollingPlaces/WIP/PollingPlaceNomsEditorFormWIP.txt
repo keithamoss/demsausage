@@ -481,7 +481,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							Sub 2
 						</Button>
 
-						<LoadingButton
+						<Button
 							loading={isSaving}
 							loadingPosition="end"
 							disabled={isDirty === false}
@@ -492,10 +492,10 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 						>
 							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 							<span>Save</span>
-						</LoadingButton>
+						</Button>
 
 						{pollingPlace.stall !== null && (
-							<LoadingButton
+							<Button
 								loading={isDeleting}
 								loadingPosition="end"
 								disabled={pollingPlace.stall === null}
@@ -507,7 +507,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							>
 								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 								<span>Delete</span>
-							</LoadingButton>
+							</Button>
 						)}
 					</Toolbar>
 				</AppBar>

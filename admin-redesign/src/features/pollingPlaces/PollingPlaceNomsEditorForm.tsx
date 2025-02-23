@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Delete, Save, Star, StarBorder } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
 import {
 	Alert,
 	AppBar,
@@ -371,7 +370,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				{allowAppBarControl !== false && (
 					<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
 						<Toolbar sx={{ justifyContent: 'flex-end' }}>
-							<LoadingButton
+							<Button
 								loading={isSaving}
 								loadingPosition="end"
 								disabled={isDirty === false}
@@ -382,10 +381,10 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 							>
 								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 								<span>Save</span>
-							</LoadingButton>
+							</Button>
 
 							{pollingPlace.stall !== null && (
-								<LoadingButton
+								<Button
 									loading={isDeleting}
 									loadingPosition="end"
 									disabled={pollingPlace.stall === null}
@@ -397,7 +396,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 								>
 									{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 									<span>Delete</span>
-								</LoadingButton>
+								</Button>
 							)}
 						</Toolbar>
 					</AppBar>

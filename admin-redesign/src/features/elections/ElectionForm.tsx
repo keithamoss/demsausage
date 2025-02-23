@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	Alert,
 	AppBar,
+	Button,
 	Checkbox,
 	FormControl,
 	FormControlLabel,
@@ -231,7 +231,7 @@ function ElectionForm(props: Props) {
 
 			<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
 				<Toolbar sx={{ justifyContent: 'flex-end' }}>
-					<LoadingButton
+					<Button
 						loading={isElectionSaving}
 						loadingPosition="end"
 						disabled={isDirty === false}
@@ -242,7 +242,7 @@ function ElectionForm(props: Props) {
 					>
 						{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 						<span>{primaryFormButtonLabel}</span>
-					</LoadingButton>
+					</Button>
 				</Toolbar>
 			</AppBar>
 		</React.Fragment>
