@@ -106,7 +106,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 								<Storefront />
 							</Avatar>
 						}
-						title={`Stall #${stall.id}`}
+						title={`Submission #${stall.id}`}
 					/>
 
 					<StyledCardContent sx={{ pt: 1 }}>
@@ -398,8 +398,8 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 									</ListItemIcon>
 
 									<ListItemText
-										primary="Apply my manual edits to the polling place"
-										secondary="You need to compare this submission with the polling place data below and make any changes manually before applying. The submitter is notified."
+										primary="Apply my manual edits to the stall"
+										secondary="You need to compare this submission with the stall data below and make any changes manually before applying. The submitter is notified."
 									/>
 								</ListItemButton>
 							</ListItem>
@@ -412,7 +412,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 
 									<ListItemText
 										primary="Decline"
-										secondary="Decline the submission and don't make any changes to the polling place. The submitter is not notified."
+										secondary="Decline the submission and don't make any changes to the stall. The submitter is not notified."
 									/>
 								</ListItemButton>
 							</ListItem>

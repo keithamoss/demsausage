@@ -188,7 +188,7 @@ function PollingPlaceStalls(props: Props) {
 		<PageWrapper>
 			{getPollingPlaceSummaryCardForHeading(pollingPlace)}
 
-			{getPollingPlaceNavTabs('Stalls', onClickBack, onTabChange)}
+			{getPollingPlaceNavTabs('Submissions', onClickBack, onTabChange)}
 
 			<ContentWrapper>
 				{isFetchingPollingPlaceStalls === true && <LinearProgress color="secondary" />}
