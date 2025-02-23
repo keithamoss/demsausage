@@ -18,7 +18,7 @@ import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNom
 import PollingPlaceNomsHistory from '../../features/pollingPlaces/PollingPlaceNomsHistory';
 import PollingPlaceStalls from '../../features/pollingPlaces/PollingPlaceStalls';
 
-const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
+const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV6(createBrowserRouter);
 
 export const router = sentryCreateBrowserRouter(
 	[
