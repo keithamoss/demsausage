@@ -3,9 +3,6 @@ import { Delete, Save, Star, StarBorder } from '@mui/icons-material';
 import {
 	AppBar,
 	Button,
-	Dialog,
-	DialogActions,
-	DialogTitle,
 	FormControl,
 	FormGroup,
 	List,
@@ -16,9 +13,9 @@ import {
 	Typography,
 	styled,
 } from '@mui/material';
-import { useNotifications } from '@toolpad/core';
+import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
 	Controller,
 	type SubmitHandler,
@@ -68,6 +65,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 	} = props;
 
 	const notifications = useNotifications();
+	const dialogs = useDialogs();
 
 	const {
 		watch,
@@ -164,16 +162,16 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 	// ######################
 	// Delete Polling Place Noms
 	// ######################
-	const [isDeleteConfirmDialogShown, setIsDeleteConfirmDialogShown] = useState(false);
+	const onClickDelete = useCallback(async () => {
+		const confirmed = await dialogs.confirm('Delete polling place noms?', {
+			okText: 'Yes',
+			cancelText: 'No',
+		});
 
-	const onClickDelete = useCallback(() => setIsDeleteConfirmDialogShown(true), []);
-
-	const onConfirmDelete = useCallback(() => {
-		onDelete(pollingPlace.id);
-		setIsDeleteConfirmDialogShown(false);
-	}, [onDelete, pollingPlace.id]);
-
-	const onCancelDelete = useCallback(() => setIsDeleteConfirmDialogShown(false), []);
+		if (confirmed === true) {
+			onDelete(pollingPlace.id);
+		}
+	}, [dialogs.confirm, onDelete, pollingPlace.id]);
 	// ######################
 	// Delete Polling Place Noms (End)
 	// ######################
@@ -405,16 +403,6 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 					</AppBar>
 				)}
 			</form>
-
-			{isDeleteConfirmDialogShown === true && (
-				<Dialog open={true} onClose={onCancelDelete} fullWidth>
-					<DialogTitle>Delete polling place noms?</DialogTitle>
-					<DialogActions>
-						<Button onClick={onCancelDelete}>No</Button>
-						<Button onClick={onConfirmDelete}>Yes</Button>
-					</DialogActions>
-				</Dialog>
-			)}
 		</PageWrapper>
 	);
 }
