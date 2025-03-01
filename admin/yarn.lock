@@ -1072,13 +1072,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:9.1.0":
-  version: 9.1.0
-  resolution: "@sentry/core@npm:9.1.0"
-  checksum: 10c0/d4a4a77e4054358be64361f75c18f00107e447eb1a494d03971458bc3b7e37cb97ba37542aad0a83f78804741f75e47d97649cd776863346a3256b2eeb362c7e
-  languageName: node
-  linkType: hard
-
 "@sentry/core@npm:9.3.0":
   version: 9.3.0
   resolution: "@sentry/core@npm:9.3.0"
@@ -1086,12 +1079,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "@sentry/types@npm:9.1.0"
+"@sentry/types@npm:^9.3.0":
+  version: 9.3.0
+  resolution: "@sentry/types@npm:9.3.0"
   dependencies:
-    "@sentry/core": "npm:9.1.0"
-  checksum: 10c0/b1c61ec9ef146140757e55e3fc6c57b1ad4cf256f7e361399e07fd394262ce81c3f19e677cc4f315af0a6e90496f88b557cd74f883b6b735379bdf3e94012687
+    "@sentry/core": "npm:9.3.0"
+  checksum: 10c0/d74d5de251835616b1155ca511999e4819d9faa6b50d42d422cdc63e0d709dca203de1ea3ab6c062ee4f26af4e123381aa74b6a21e65e0ee7bd80e22729b1226
   languageName: node
   linkType: hard
 
@@ -1727,7 +1720,7 @@ __metadata:
   resolution: "admin@workspace:."
   dependencies:
     "@sentry/browser": "npm:^9.3.0"
-    "@sentry/types": "npm:^9.1.0"
+    "@sentry/types": "npm:^9.3.0"
     "@sentry/vite-plugin": "npm:^3.2.1"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
