@@ -123,6 +123,7 @@ export default function SearchComponent(props: Props) {
 	);
 
 	const pollingPlaceNearbyResultsFiltered =
+		urlLonLat !== '' &&
 		isFetchingNearbyPollingPlaces === false &&
 		isSuccessFetchingNearbyPollingPlaces === true &&
 		pollingPlaceNearbyResults !== undefined
