@@ -108,7 +108,7 @@ export default function SearchBar(props: Props) {
 				setIsUserTyping(false);
 
 				onMapboxSearchTermChange(searchTerm);
-			}, 400),
+			}, 800),
 		[onMapboxSearchTermChange],
 	);
 
