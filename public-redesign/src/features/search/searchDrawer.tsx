@@ -21,7 +21,7 @@ import { getStringParamOrEmptyString, getStringParamOrUndefined } from '../../ap
 import { getDefaultElection } from '../elections/electionHelpers';
 import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
-import type { IMapboxGeocodingAPIResponseFeature } from './searchBarHelpers';
+import type { IMapboxSearchboxAPIV1ResponseFeature } from './searchBarHelpers';
 import SearchComponent from './searchByAddressOrGPS/searchComponent';
 import SearchByIdsStackComponent from './searchByIds/searchByIdsStackComponent';
 
@@ -91,11 +91,11 @@ function SearchDrawer(props: Props) {
 	);
 
 	const onChooseMapboxSearchResult = useCallback(
-		(feature: IMapboxGeocodingAPIResponseFeature) =>
+		(feature: IMapboxSearchboxAPIV1ResponseFeature) =>
 			navigateToSearchListOfPollingPlacesFromMapboxResults(
 				params,
 				navigate,
-				feature.place_name,
+				feature.properties.name,
 				feature.geometry.coordinates.join(','),
 			),
 		[navigate, params],

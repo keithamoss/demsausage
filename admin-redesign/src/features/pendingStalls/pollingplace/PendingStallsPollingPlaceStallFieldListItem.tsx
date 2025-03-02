@@ -1,11 +1,21 @@
-import { AccessTimeFilled, ContentCopy, Description, QuestionMark, Restaurant, Title, Web } from '@mui/icons-material';
+import {
+	AccessTimeFilled,
+	ContentCopy,
+	Description,
+	More,
+	QuestionMark,
+	Restaurant,
+	Title,
+	Web,
+} from '@mui/icons-material';
 import { IconButton, ListItem, ListItemIcon, ListItemText, styled } from '@mui/material';
 import { useNotifications } from '@toolpad/core';
+import { isEqual } from 'lodash-es';
 import React, { useCallback } from 'react';
 import type { PendingStall, StallFoodOptions } from '../../../app/services/stalls';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { isClipboardApiSupported } from '../../../app/utils';
-import { getNomsDescriptiveText, isStallWebsiteValid } from '../../pollingPlaces/pollingPlaceHelpers';
+import { getNomsDescriptiveTextWithoutFreeText, isStallWebsiteValid } from '../../pollingPlaces/pollingPlaceHelpers';
 
 const StyledListItem = styled(ListItem)(() => ({ alignItems: 'start' }));
 
@@ -39,6 +49,8 @@ const getFieldIcon = (fieldName: string) => {
 	switch (fieldName) {
 		case 'noms':
 			return <Restaurant sx={{ color: mapaThemePrimaryGrey }} />;
+		case 'noms.free_text':
+			return <More sx={{ color: mapaThemePrimaryGrey }} />;
 		case 'name':
 			return <Title sx={{ color: mapaThemePrimaryGrey }} />;
 		case 'description':
@@ -52,13 +64,34 @@ const getFieldIcon = (fieldName: string) => {
 	}
 };
 
+const getFieldValue = (
+	fieldName: 'noms' | 'name' | 'description' | 'opening_hours' | 'website' | 'noms.free_text',
+	stall: PendingStall,
+) => {
+	if (fieldName === 'noms') {
+		return getNomsDescriptiveTextWithoutFreeText(stall.noms);
+	}
+
+	if (fieldName === 'noms.free_text') {
+		return stall.noms.free_text || '';
+	}
+
+	return stall[fieldName] || '';
+};
+
 const getFieldValueForDisplay = (fieldName: string, fieldValue: string | number | StallFoodOptions | undefined) => {
 	if (fieldValue === undefined) {
 		return undefined;
 	}
 
-	if (fieldName === 'noms') {
-		return getNomsDescriptiveText(fieldValue as StallFoodOptions);
+	// Support translating noms to text for the diff'd view (the current view already gets translated by getFieldValue())
+	if (fieldName === 'noms' && typeof fieldValue !== 'string') {
+		return getNomsDescriptiveTextWithoutFreeText(fieldValue as StallFoodOptions);
+	}
+
+	// Support translating free_text noms to text for the diff'd view (the current view already gets translated by getFieldValue())
+	if (fieldName === 'noms.free_text' && typeof fieldValue !== 'string') {
+		return (fieldValue as StallFoodOptions).free_text;
 	}
 
 	if (fieldName === 'website') {
@@ -76,8 +109,34 @@ const getFieldValueForDisplay = (fieldName: string, fieldValue: string | number 
 	return `${fieldValue}` || <em>Not provided</em>;
 };
 
+const getFieldDiff = (
+	fieldName: 'noms' | 'name' | 'description' | 'opening_hours' | 'website' | 'noms.free_text',
+	stall: PendingStall,
+) => {
+	const fieldDiff = stall.diff?.find((d) => d.field === (fieldName === 'noms.free_text' ? 'noms' : fieldName));
+
+	if (fieldDiff === undefined) {
+		return undefined;
+	}
+
+	if (fieldName === 'noms') {
+		const { free_text: free_text_old, ...restOld } = fieldDiff.old as StallFoodOptions;
+		const { free_text: free_text_new, ...restNew } = fieldDiff.new as StallFoodOptions;
+
+		return isEqual(restOld, restNew) === true ? undefined : fieldDiff;
+	}
+
+	if (fieldName === 'noms.free_text') {
+		return (fieldDiff.old as StallFoodOptions).free_text === (fieldDiff.new as StallFoodOptions).free_text
+			? undefined
+			: fieldDiff;
+	}
+
+	return fieldDiff;
+};
+
 interface Props {
-	fieldName: 'noms' | 'name' | 'description' | 'opening_hours' | 'website';
+	fieldName: 'noms' | 'name' | 'description' | 'opening_hours' | 'website' | 'noms.free_text';
 	fieldLabel: string;
 	stall: PendingStall;
 }
@@ -87,9 +146,9 @@ export default function PendingStallsPollingPlaceStallFieldListItem(props: Props
 
 	const notifications = useNotifications();
 
-	const fieldValue = fieldName === 'noms' ? getNomsDescriptiveText(stall.noms) : stall[fieldName] || '';
+	const fieldValue = getFieldValue(fieldName, stall);
 
-	const fieldDiff = stall.diff?.find((d) => d.field === fieldName);
+	const fieldDiff = getFieldDiff(fieldName, stall);
 
 	const isFieldCopyable = fieldName !== 'noms' && fieldValue !== '';
 
@@ -134,7 +193,7 @@ export default function PendingStallsPollingPlaceStallFieldListItem(props: Props
 						'& .MuiListItemText-secondary:first-letter': fieldName !== 'website' ? { textTransform: 'capitalize' } : {},
 					}}
 					primary={fieldLabel}
-					secondary={getFieldValueForDisplay(fieldName, stall[fieldName])}
+					secondary={getFieldValueForDisplay(fieldName, fieldValue)}
 				/>
 			</StyledListItem>
 

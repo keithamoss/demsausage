@@ -46,7 +46,7 @@ expected_dupes = [
 ]
 
 expected_dupes_pairs = {
-    "-32.024396,115.941719": {
+    "-32.022722,115.943447": {
         "merged_name": "Cannington and Victoria Park Districts - Election Day and Early Polling Place",
         "divisions": "Cannington, Victoria Park",
         "names": [
@@ -154,7 +154,7 @@ for dupe_polling_places in polling_places_dupe_pairs.values():
 
         if latlon not in expected_dupes_pairs:
             raise Exception(
-                f"Unexpected set of duplicate polling places found: {", ".join([pp["name"] for pp in dupe_polling_places])}"
+                f"Unexpected set of duplicate polling places found: {", ".join([pp["name"] for pp in dupe_polling_places])} ({latlon})"
             )
 
         for polling_place in dupe_polling_places:

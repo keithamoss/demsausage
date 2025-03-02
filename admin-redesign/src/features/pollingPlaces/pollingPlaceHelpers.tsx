@@ -155,10 +155,10 @@ export function getFoodDescriptionFromPollingPlace(pollingPlace: IPollingPlace) 
 	return getFoodDescription(pollingPlace.stall.noms);
 }
 
-export const getNomsDescriptiveText = (noms: IPollingPlaceNoms) => {
+export const getNomsDescriptiveText = (noms: IPollingPlaceNoms, suppressFreeText = false) => {
 	let nomsList = getFoodDescription(noms);
 
-	if (typeof noms.free_text === 'string' && noms.free_text.length >= 1) {
+	if (suppressFreeText === false && typeof noms.free_text === 'string' && noms.free_text.length >= 1) {
 		nomsList.push(noms.free_text);
 	}
 
@@ -175,6 +175,8 @@ export const getNomsDescriptiveText = (noms: IPollingPlaceNoms) => {
 	}
 	return '';
 };
+
+export const getNomsDescriptiveTextWithoutFreeText = (noms: IPollingPlaceNoms) => getNomsDescriptiveText(noms, true);
 
 export const getPollingPlaceNomsDescriptiveText = (pollingPlace: IPollingPlace) => {
 	if (pollingPlace.stall === null) {
