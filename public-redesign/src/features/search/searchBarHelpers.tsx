@@ -10,15 +10,21 @@ import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelp
 import { getStandardViewPadding } from '../map/mapHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 
-// https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
-export interface IMapboxGeocodingAPIResponse {
+// https://docs.mapbox.com/api/search/search-box/#response-search-request
+export interface IMapboxSearchboxAPIV1Response {
 	type: 'FeatureCollection';
-	query: string[];
-	features: IMapboxGeocodingAPIResponseFeature[];
+	features: IMapboxSearchboxAPIV1ResponseFeature[];
 	attribution: string;
 }
 
-export enum EMapboxPlaceType {
+// https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object
+export interface IMapboxGeocodingAPIV6Response {
+	type: 'FeatureCollection';
+	features: IMapboxGeocodingAPIV6ResponseFeature[];
+	attribution: string;
+}
+
+export enum EMapboxFeatureType {
 	country = 'country',
 	region = 'region',
 	postcode = 'postcode',
@@ -26,54 +32,79 @@ export enum EMapboxPlaceType {
 	place = 'place',
 	locality = 'locality',
 	neighborhood = 'neighborhood',
+	street = 'street',
 	address = 'address',
 	poi = 'poi',
 }
 
-export enum EMapboxPropertiesAccuracy {
-	rooftop = 'rooftop',
-	parcel = 'parcel',
-	point = 'point',
-	interpolated = 'interpolated',
-	intersection = 'intersection',
-	street = 'street',
-}
-
-export interface IMapboxGeocodingAPIResponseFeature {
-	id: string;
+export interface IMapboxSearchboxAPIV1ResponseFeature {
 	type: 'Feature';
-	place_type: EMapboxPlaceType[];
-	relevance: number;
-	address?: string;
-	properties: {
-		mapbox_id?: string;
-		accuracy?: EMapboxPropertiesAccuracy;
-		address?: string;
-		category?: string;
-		maki?: string;
-		wikidata?: string;
-		short_code?: string;
-		foursquare?: string;
-	};
-	text: string;
-	place_name: string;
-	matching_text?: string;
-	matching_place_name?: string;
-	bbox: [number, number, number, number];
-	center: [number, number];
 	geometry: {
 		type: 'Point';
 		coordinates: [number, number];
-		interpolated?: boolean;
-		omitted?: boolean;
 	};
-	context: {
-		id: string;
-		mapbox_id?: string;
-		short_code?: string;
-		text?: string;
-		wikidata?: string;
-	}[];
+	properties: {
+		name: string;
+		mapbox_id: string;
+		feature_type: EMapboxFeatureType;
+		address?: string;
+		full_address?: string;
+		place_formatted: string;
+		coordinates: {
+			longitude: number;
+			latitude: number;
+		};
+		bbox: [number, number, number, number];
+		context: {
+			[key: string]: {
+				name: string;
+				id?: string;
+				wikidata_id?: string;
+				address_number?: string;
+				street_name?: string;
+				region_code?: string;
+				region_code_full?: string;
+				country_code?: string;
+				country_code_full?: string;
+			};
+		};
+	};
+}
+
+export interface IMapboxGeocodingAPIV6ResponseFeature {
+	type: 'Feature';
+	id: string;
+	geometry: {
+		type: 'Point';
+		coordinates: [number, number];
+	};
+	properties: {
+		mapbox_id: string;
+		feature_type: EMapboxFeatureType;
+		full_address: string;
+		name: string;
+		name_preferred: string;
+		place_formatted: string;
+		coordinates: {
+			longitude: number;
+			latitude: number;
+			accuracy?: string;
+		};
+		bbox: [number, number, number, number];
+		context: {
+			[key: string]: {
+				mapbox_id: string;
+				name: string;
+				wikidata_id?: string;
+				address_number?: string;
+				street_name?: string;
+				region_code?: string;
+				region_code_full?: string;
+				country_code?: string;
+				country_code_full?: string;
+			};
+		};
+	};
 }
 
 export const onViewOnMap = (
@@ -106,16 +137,21 @@ export const onViewOnMap = (
 // https://docs.mapbox.com/api/search/geocoding/#data-types
 // Note: Only Country and Region data types are excluded from the defaults.
 export const defaultMapboxSearchTypes = [
-	EMapboxPlaceType.postcode,
-	EMapboxPlaceType.district,
-	EMapboxPlaceType.place,
-	EMapboxPlaceType.locality,
-	EMapboxPlaceType.neighborhood,
-	EMapboxPlaceType.address,
-	EMapboxPlaceType.poi,
+	EMapboxFeatureType.postcode,
+	EMapboxFeatureType.district,
+	EMapboxFeatureType.place,
+	EMapboxFeatureType.locality,
+	EMapboxFeatureType.neighborhood,
+	EMapboxFeatureType.address,
+	EMapboxFeatureType.street,
+	EMapboxFeatureType.poi,
 ];
 
-export const mapboxSearchTypesForElectionsWithoutPollingPlaces = [EMapboxPlaceType.address, EMapboxPlaceType.poi];
+export const mapboxSearchTypesForElectionsWithoutPollingPlaces = [
+	EMapboxFeatureType.address,
+	EMapboxFeatureType.street,
+	EMapboxFeatureType.poi,
+];
 
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
 
@@ -137,6 +173,21 @@ export const getBBoxFromGeoJSONPolygonCoordinates = (geometry: IGeoJSONPoylgon):
 		Math.max(...geometry.coordinates[0].map((coord) => coord[1])),
 	];
 };
+
+// Partial list taken from a chunk of https://api.mapbox.com/search/searchbox/v1/list/category
+export const getMapboxPOICategories = (): string =>
+	[
+		'school',
+		'education',
+		'place_of_worship',
+		'temple',
+		'church',
+		'outdoors',
+		'park',
+		'government',
+		'social_club',
+		'community_center',
+	].join('%2C');
 
 // https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
 export const getMapboxSearchParamsForElection = (election: Election): string =>

@@ -1,7 +1,7 @@
 import type { NavigateFunction, Params } from 'react-router-dom';
 import { getPollingPlacePermalinkFromProps } from '../../../features/pollingPlaces/pollingPlaceHelpers';
 import type { IPollingPlace } from '../../../features/pollingPlaces/pollingPlacesInterfaces';
-import type { IMapboxGeocodingAPIResponseFeature } from '../../../features/search/searchBarHelpers';
+import type { IMapboxSearchboxAPIV1ResponseFeature } from '../../../features/search/searchBarHelpers';
 import type { Election } from '../../services/elections';
 import type { StallSubmitterType } from '../../services/stalls';
 import { getURLParams } from './navigationHelpers';
@@ -170,7 +170,7 @@ export const navigateToAddStallSubmitterTypeFromPollingPlaceCard = (
 export const navigateToAddStallSubmitterTypeFromMapboxFeature = (
 	params: Params<string>,
 	navigate: NavigateFunction,
-	feature: IMapboxGeocodingAPIResponseFeature,
+	feature: IMapboxSearchboxAPIV1ResponseFeature,
 ) => {
 	// We handle going to all of these routes:
 	// /add-stall/:election_name/location/:location_name/:location_address/:location_state/:location_lon_lat/
@@ -180,10 +180,10 @@ export const navigateToAddStallSubmitterTypeFromMapboxFeature = (
 		return;
 	}
 
-	const name = feature.text;
-	const address = feature.place_name;
+	const name = feature.properties.name;
+	const address = feature.properties.full_address || feature.properties.place_formatted;
 	const state =
-		feature.context.find((i) => i.id.startsWith('region.') === true)?.short_code?.split('-')[1] || 'Unknown';
+		feature.properties.context.region?.region_code || feature.properties.context.locality?.name || 'Unknown';
 	const lonlat = feature.geometry.coordinates.join(',');
 
 	navigate(`/add-stall/${urlElectionName}/location/${name}/${address}/${state}/${lonlat}/`, {

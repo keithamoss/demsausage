@@ -8,17 +8,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
 import type { Election } from '../../../app/services/elections';
-import { useFetchMapboxGeocodingResultsQuery } from '../../../app/services/mapbox';
+import { useFetchMapboxSearchboxResultsQuery } from '../../../app/services/mapbox';
 import { useGetPollingPlaceByLatLonLookupQuery } from '../../../app/services/pollingPlaces';
 import { selectMapFilterSettings } from '../../app/appSlice';
 import { doesPollingPlaceSatisifyFilterCriteria, hasFilterOptions } from '../../map/mapFilterHelpers';
 import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
-	type EMapboxPlaceType,
-	type IMapboxGeocodingAPIResponseFeature,
+	type EMapboxFeatureType,
+	type IMapboxSearchboxAPIV1ResponseFeature,
 	defaultMapboxSearchTypes,
 	getLonLatFromString,
 	getMapboxAPIKey,
+	getMapboxPOICategories,
 	getMapboxSearchParamsForElection,
 	isSearchingYet,
 	onViewOnMap,
@@ -34,11 +35,11 @@ const StyledBox = styled(Box)(({ theme }) => ({
 interface Props {
 	election: Election;
 	autoFocusSearchField?: boolean;
-	mapboxSearchTypes?: EMapboxPlaceType[];
+	mapboxSearchTypes?: EMapboxFeatureType[];
 	enableFiltering?: boolean;
 	enableViewOnMap?: boolean;
 	onMapboxSearchTermChange: (searchTerm: string) => void;
-	onChooseMapboxSearchResult: (feature: IMapboxGeocodingAPIResponseFeature) => void;
+	onChooseMapboxSearchResult: (feature: IMapboxSearchboxAPIV1ResponseFeature) => void;
 	onGPSControlClicked: () => void;
 	onGPSLocationAcquired: (currentPosition: Coordinate) => void;
 	onChoosePollingPlaceLabel: string;
@@ -87,7 +88,7 @@ export default function SearchComponent(props: Props) {
 	// ######################
 	// Mapbox Search Query
 	// ######################
-	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${urlSearchTerm}.json?limit=10&proximity=ip&types=${mapboxSearchTypes.join(
+	const url = `https://api.mapbox.com/search/searchbox/v1/forward?q=${urlSearchTerm}&limit=10&proximity=ip&poi_category=${getMapboxPOICategories()}&auto_complete=true&types=${mapboxSearchTypes.join(
 		'%2C',
 	)}&access_token=${getMapboxAPIKey()}&${getMapboxSearchParamsForElection(election)}`;
 
@@ -96,12 +97,12 @@ export default function SearchComponent(props: Props) {
 		error: errorFetchingMapboxResults,
 		isFetching: isFetchingMapboxResults,
 		isSuccess: isSuccessFetchingMapboxResults,
-	} = useFetchMapboxGeocodingResultsQuery(
+	} = useFetchMapboxSearchboxResultsQuery(
 		isSearchingYet(urlSearchTerm) === true && urlLonLat === '' ? { url } : skipToken,
 	);
 
 	const onChoose = useCallback(
-		(feature: IMapboxGeocodingAPIResponseFeature) => () => {
+		(feature: IMapboxSearchboxAPIV1ResponseFeature) => () => {
 			onChooseMapboxSearchResult(feature);
 		},
 		[onChooseMapboxSearchResult],
@@ -186,14 +187,15 @@ export default function SearchComponent(props: Props) {
 							mapboxSearchResults !== null &&
 							mapboxSearchResults.features.length > 0 &&
 							mapboxSearchResults.features.map((feature) => {
-								const [place_name_first_part, ...place_name_rest] = feature.place_name.split(', ');
-								const matches = match(place_name_first_part, urlSearchTerm, {
+								const matches = match(feature.properties.name, urlSearchTerm, {
 									insideWords: true,
 								});
-								const parts = parse(place_name_first_part, matches);
+								const parts = parse(feature.properties.name, matches);
+
+								const secondaryText = feature.properties.full_address || feature.properties.place_formatted;
 
 								return (
-									<ListItem key={feature.id} onClick={onChoose(feature)} sx={{ cursor: 'pointer' }}>
+									<ListItem key={feature.properties.mapbox_id} onClick={onChoose(feature)} sx={{ cursor: 'pointer' }}>
 										<ListItemText
 											primary={
 												<span>
@@ -210,7 +212,12 @@ export default function SearchComponent(props: Props) {
 													))}
 												</span>
 											}
-											secondary={place_name_rest.join(', ')}
+											// Searches for specific street addresses need to remove the start of the street address from the secondary address line
+											secondary={
+												secondaryText.startsWith(feature.properties.name) === true
+													? secondaryText.split(',').slice(1)
+													: secondaryText
+											}
 										/>
 									</ListItem>
 								);

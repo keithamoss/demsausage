@@ -47,7 +47,7 @@ import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHel
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
 import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
-	type IMapboxGeocodingAPIResponseFeature,
+	type IMapboxSearchboxAPIV1ResponseFeature,
 	defaultMapboxSearchTypes,
 	mapboxSearchTypesForElectionsWithoutPollingPlaces,
 } from '../../search/searchBarHelpers';
@@ -100,12 +100,12 @@ function AddStallSelectPollingPlace(props: Props) {
 	);
 
 	const onChooseMapboxSearchResult = useCallback(
-		(feature: IMapboxGeocodingAPIResponseFeature) => {
+		(feature: IMapboxSearchboxAPIV1ResponseFeature) => {
 			if (election.polling_places_loaded === true) {
 				navigateToAddStallSearchListOfPollingPlacesFromMapboxResults(
 					params,
 					navigate,
-					feature.place_name,
+					feature.properties.name,
 					feature.geometry.coordinates.join(','),
 				);
 			} else {
