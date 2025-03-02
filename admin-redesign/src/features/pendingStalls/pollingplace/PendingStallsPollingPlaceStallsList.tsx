@@ -247,6 +247,16 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 							{doesStallHaveNomsToShowOnOffer(stall) === true && (
 								<PendingStallsPollingPlaceStallFieldListItem fieldName="noms" fieldLabel="On Offer" stall={stall} />
 							)}
+
+							{doesStallHaveNomsToShowOnOffer(stall) === true &&
+								typeof stall.noms.free_text === 'string' &&
+								stall.noms.free_text.length > 0 && (
+									<PendingStallsPollingPlaceStallFieldListItem
+										fieldName="noms.free_text"
+										fieldLabel="Other Things On Offer"
+										stall={stall}
+									/>
+								)}
 							{/* 
               // ######################
               // Noms Information (End)
