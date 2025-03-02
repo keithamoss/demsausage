@@ -14,7 +14,7 @@ import * as React from 'react';
 import { type Control, Controller } from 'react-hook-form';
 import { FormFieldValidationError, FormFieldValidationErrorMessageOnly } from '../../app/forms/formHelpers';
 import type { StallFoodOptions, StallFoodOptionsErrors } from '../../app/services/stalls';
-import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
+import TextFieldWithPasteAdornment from '../../app/ui/textFieldWithPasteAdornment';
 import { mapaThemePrimaryGrey } from '../../app/ui/theme';
 import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../icons/iconHelpers';
 import type { IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
@@ -22,13 +22,14 @@ import type { IPollingPlaceStallModifiableProps } from './pollingPlacesInterface
 interface Props {
 	foodOptions: StallFoodOptions;
 	onChange: (foodOptions: StallFoodOptions) => void;
+	allowPasteOnTextFields: boolean;
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	control: Control<IPollingPlaceStallModifiableProps, any>;
 	errors: StallFoodOptionsErrors | undefined;
 }
 
 export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
-	const { foodOptions, onChange, control, errors } = props;
+	const { foodOptions, onChange, allowPasteOnTextFields, control, errors } = props;
 
 	const isRedCrossOfShameChosen = foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true;
 
@@ -45,6 +46,8 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 		const { [foodOptionName]: foodOptionNameValue, ...rest } = foodOptions;
 		return onChange(rest);
 	};
+
+	const onPasteFreeTextNomsFromClipboard = (pastedText: string) => onChange({ ...foodOptions, free_text: pastedText });
 	// ######################
 	// Food Options (End)
 	// ######################
@@ -182,11 +185,13 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 							name="noms.free_text"
 							control={control}
 							render={({ field }) => (
-								<TextFieldWithout1Password
+								<TextFieldWithPasteAdornment
 									{...field}
 									value={field.value || ''}
 									label="Anything else?"
 									helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
+									onPasteFromClipboard={onPasteFreeTextNomsFromClipboard}
+									pastingDisabled={allowPasteOnTextFields === false}
 									sx={{ mt: 1 }}
 								/>
 							)}

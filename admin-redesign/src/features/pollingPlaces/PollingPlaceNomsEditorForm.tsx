@@ -57,7 +57,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 		isSaving,
 		onDelete,
 		isDeleting,
-		allowPasteOnTextFields: allowPasteOnTextField,
+		allowPasteOnTextFields,
 		allowAppBarControl,
 		handleSubmitRef,
 		setValueRef,
@@ -197,6 +197,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				<PollingPlaceNomsEditorFormNomsSelector
 					foodOptions={noms}
 					onChange={onFoodOptionChange}
+					allowPasteOnTextFields={allowPasteOnTextFields}
 					control={control}
 					errors={errors.noms}
 				/>
@@ -224,7 +225,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									label="Stall name"
 									helperText="e.g. Hillcrest Primary School Sausage Sizzle"
 									onPasteFromClipboard={onPasteNameFromClipboard}
-									pastingDisabled={allowPasteOnTextField === false}
+									pastingDisabled={allowPasteOnTextFields === false}
 								/>
 							)}
 						/>
@@ -245,7 +246,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									helperText="Who's running it and why you're running it e.g. The P&C is running the stall to raise funds for the Year 7 school camp"
 									multiline
 									onPasteFromClipboard={onPasteDescriptionFromClipboard}
-									pastingDisabled={allowPasteOnTextField === false}
+									pastingDisabled={allowPasteOnTextFields === false}
 								/>
 							)}
 						/>
@@ -265,7 +266,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									label="Opening hours"
 									helperText="e.g. 8AM - 2PM"
 									onPasteFromClipboard={onPasteOpeningHoursFromClipboard}
-									pastingDisabled={allowPasteOnTextField === false}
+									pastingDisabled={allowPasteOnTextFields === false}
 								/>
 							)}
 						/>
@@ -285,7 +286,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									label="Website or social media page link"
 									helperText="We'll include a link to your site as part of your stall's information"
 									onPasteFromClipboard={onPasteWebsiteFromClipboard}
-									pastingDisabled={allowPasteOnTextField === false}
+									pastingDisabled={allowPasteOnTextFields === false}
 								/>
 							)}
 						/>
@@ -305,7 +306,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									label="Extra information"
 									helperText="Is there any other information to add that doesn't relate to what's on offer at the stall?"
 									onPasteFromClipboard={onPasteExtraInfoFromClipboard}
-									pastingDisabled={allowPasteOnTextField === false}
+									pastingDisabled={allowPasteOnTextFields === false}
 								/>
 							)}
 						/>
