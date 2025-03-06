@@ -1,4 +1,8 @@
-from demsausage.app.enums import PollingPlaceStatus
+import json
+
+import requests
+from demsausage.app.admin import is_production
+from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.models import (
     Elections,
     PollingPlaceNoms,
@@ -8,7 +12,7 @@ from demsausage.app.models import (
 )
 from demsausage.app.sausage.elections import clear_elections_cache
 from demsausage.rq.jobs import task_regenerate_cached_election_data
-from demsausage.util import is_iterable
+from demsausage.util import get_env, is_iterable
 from simple_history.models import HistoricalRecords
 from simple_history.signals import pre_create_historical_record
 
@@ -105,3 +109,37 @@ def pre_save_stall_track_previous_status(sender, instance, **kwargs):
             instance.previous_status = old_instance.status
         except Stalls.DoesNotExist:  # Handle initial object creation
             return None
+
+
+@receiver(post_save, sender=Stalls)
+def post_save_stall_status_changed_to_pending(sender, instance, created, **kwargs):
+    if (
+        instance.tracker.has_changed("status") is True
+        and instance.status == StallStatus.PENDING
+    ):
+        messagePrefix = (
+            f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
+        )
+        messageStart = (
+            "We've just received a new submission."
+            if created is True
+            else "We've just received edits to a submission."
+        )
+
+        discordWebhookURL = get_env("DISCORD_WEBHOOK_URL_PENDING_STALLS_BOT")
+        if discordWebhookURL is not None:
+            try:
+                requests.post(
+                    url=discordWebhookURL,
+                    headers={
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    data=json.dumps(
+                        {
+                            "content": f"{messagePrefix}{messageStart} There are {Stalls.objects.filter(status=StallStatus.PENDING).count()} waiting in the queue now!",
+                        }
+                    ),
+                )
+            except:
+                # Fail silently because we don't want to surface this sort of non-critical error to the user
+                pass
