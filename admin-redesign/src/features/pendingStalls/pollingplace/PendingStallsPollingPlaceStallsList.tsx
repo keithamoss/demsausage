@@ -1,14 +1,7 @@
+import { Approval, DoNotDisturb, Edit, FiberNew, Person, PunchClockOutlined, Storefront } from '@mui/icons-material';
 import {
-	Approval,
-	DoNotDisturb,
-	Edit,
-	EmailOutlined,
-	FiberNew,
-	Person,
-	PunchClockOutlined,
-	Storefront,
-} from '@mui/icons-material';
-import {
+	Alert,
+	AlertTitle,
 	Avatar,
 	Card,
 	CardContent,
@@ -191,7 +184,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
               // ###################### 
               */}
 							<IconsFlexboxHorizontalSummaryRow>
-								{getNomsIconsForPendingStall(stall, false, false)}
+								{getNomsIconsForPendingStall(stall, pollingPlace, false, false)}
 							</IconsFlexboxHorizontalSummaryRow>
 
 							{stall.noms.nothing === true && (
@@ -248,15 +241,21 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 								<PendingStallsPollingPlaceStallFieldListItem fieldName="noms" fieldLabel="On Offer" stall={stall} />
 							)}
 
-							{doesStallHaveNomsToShowOnOffer(stall) === true &&
-								typeof stall.noms.free_text === 'string' &&
-								stall.noms.free_text.length > 0 && (
-									<PendingStallsPollingPlaceStallFieldListItem
-										fieldName="noms.free_text"
-										fieldLabel="Other Things On Offer"
-										stall={stall}
-									/>
+							{doesStallHaveNomsToShowOnOffer(stall) === false &&
+								stall.noms.nothing !== true &&
+								stall.noms.run_out !== true && (
+									<Alert severity="warning">
+										<AlertTitle>Danger Will Robinson, danger!</AlertTitle>
+										It looks like this submission doesn't have any noms on offer. This should be impossible, so if you
+										do see this message, please let Keith know.
+									</Alert>
 								)}
+
+							<PendingStallsPollingPlaceStallFieldListItem
+								fieldName="noms.free_text"
+								fieldLabel="Other Stuff On Offer"
+								stall={stall}
+							/>
 							{/* 
               // ######################
               // Noms Information (End)
@@ -306,13 +305,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 								<StyledSectionHeadingChip label="METADATA" />
 							</StyledSectionHeadingDivider>
 
-							<StyledListItem disableGutters>
-								<StyledListItemIcon>
-									<EmailOutlined sx={{ color: mapaThemePrimaryGrey }} />
-								</StyledListItemIcon>
-
-								<StyledListItemText primary="Email" secondary={stall.email} />
-							</StyledListItem>
+							<PendingStallsPollingPlaceStallFieldListItem fieldName="email" fieldLabel="Email" stall={stall} />
 
 							<StyledListItem disableGutters>
 								<StyledListItemIcon>

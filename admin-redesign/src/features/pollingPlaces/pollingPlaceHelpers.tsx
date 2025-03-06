@@ -3,6 +3,7 @@ import { Box, Card, CardContent, IconButton, Tab, Tabs, Typography, useTheme } f
 import type Feature from 'ol/Feature';
 import type { Election } from '../../app/services/elections';
 import type { PollingPlaceWithPendingStall } from '../../app/services/stalls';
+import { mergeTextualItemsWithOxfordComma } from '../../app/utils';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
 import { getPollingPlaceNameForFormHeading } from './pollingPlaceFormHelpers';
 import { type IPollingPlace, type IPollingPlaceNoms, PollingPlaceChanceOfSausage } from './pollingPlacesInterfaces';
@@ -164,16 +165,7 @@ export const getNomsDescriptiveText = (noms: IPollingPlaceNoms, suppressFreeText
 
 	nomsList = nomsList.map((s) => s.toLowerCase());
 
-	if (nomsList.length >= 3) {
-		return `${nomsList.slice(0, -1).join(', ')}, and ${nomsList.pop()}`;
-	}
-	if (nomsList.length === 2) {
-		return nomsList.join(' and ');
-	}
-	if (nomsList.length === 1) {
-		return nomsList[0];
-	}
-	return '';
+	return mergeTextualItemsWithOxfordComma(nomsList);
 };
 
 export const getNomsDescriptiveTextWithoutFreeText = (noms: IPollingPlaceNoms) => getNomsDescriptiveText(noms, true);

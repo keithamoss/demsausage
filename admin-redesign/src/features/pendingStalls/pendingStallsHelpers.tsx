@@ -9,9 +9,10 @@ import {
 import { Tooltip, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React from 'react';
-import type { PendingStall } from '../../app/services/stalls';
+import type { PendingStall, PollingPlaceWithPendingStall } from '../../app/services/stalls';
 import { default as Owl } from '../../assets/illustrations/illlustrations.co/owl.svg?react';
 import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';
+import type { IPollingPlaceNoms } from '../pollingPlaces/pollingPlacesInterfaces';
 
 export const getCountOfExistingStallsIcon = (count: number) => {
 	switch (count) {
@@ -56,14 +57,21 @@ export const PendingStallsAllCaughtUp = () => (
 );
 
 // https://stackoverflow.com/a/57528471
-export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
-	<Tooltip key={title} title={title} disableFocusListener enterTouchDelay={0}>
+export const wrapIconWithTooltip = (icon: JSX.Element, title: string, showFaded = false) => (
+	<Tooltip
+		key={title}
+		title={title}
+		disableFocusListener
+		enterTouchDelay={0}
+		sx={showFaded === true ? { filter: 'grayscale(1) sepia(30%) opacity(60%)' } : undefined}
+	>
 		{icon}
 	</Tooltip>
 );
 
 export const getNomsIconsForPendingStall = (
 	stall: PendingStall,
+	pollingPlace: PollingPlaceWithPendingStall,
 	allowRedCrossOfShame: boolean,
 	allowSoldOut: boolean,
 ) => {
@@ -81,9 +89,14 @@ export const getNomsIconsForPendingStall = (
 				const foodIcon = foodIcons.find((i) => i.value === key);
 
 				if (foodIcon !== undefined) {
-					return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label);
+					const isAlreadyOnPollingPlaceNoms =
+						pollingPlace.stall?.noms !== undefined &&
+						pollingPlace.stall.noms[foodIcon.value as keyof IPollingPlaceNoms] === true;
+
+					return wrapIconWithTooltip(foodIcon.icon.react, foodIcon.label, isAlreadyOnPollingPlaceNoms === true);
 				}
 			})}
+
 			{/* For PollingPlaceCards, we don't display the Sold Out icon in the list of noms icons, it gets displayed as part of other elements of the card */}
 			{allowSoldOut === true &&
 				stall.noms.run_out === true &&
