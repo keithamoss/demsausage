@@ -251,11 +251,13 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 									</Alert>
 								)}
 
-							<PendingStallsPollingPlaceStallFieldListItem
-								fieldName="noms.free_text"
-								fieldLabel="Other Stuff On Offer"
-								stall={stall}
-							/>
+							{stall.noms.nothing !== true && (
+								<PendingStallsPollingPlaceStallFieldListItem
+									fieldName="noms.free_text"
+									fieldLabel="Other Stuff On Offer"
+									stall={stall}
+								/>
+							)}
 							{/* 
               // ######################
               // Noms Information (End)
