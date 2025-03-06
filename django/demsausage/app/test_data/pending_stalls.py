@@ -475,6 +475,23 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_ma
     stallEdits.save()
 
 
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_email():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with edits to the email"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.email = "keithamoss@foobar.com"
+    stallEdits.save()
+
+
 def polling_place_with_a_denied_owner_submission_and_a_new_other_tip_off():
     pollingPlace = get_next_polling_place(
         "Denied owner submission and a new other tip-off"
@@ -1059,6 +1076,8 @@ polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_st
 polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_opening_hours()
 polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_website()
 polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_many_stall_text_fields()
+
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_email()
 
 # polling_place_with_a_denied_owner_submission_and_a_new_other_tip_off()
 # polling_place_with_a_denied_owner_submission_that_has_pending_edits()

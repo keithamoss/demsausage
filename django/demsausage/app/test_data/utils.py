@@ -125,9 +125,16 @@ def create_polling_place_with_an_approved_owner_submission_stall(
     stallDescription="",
     stallOpeningHours="8AM-4PM",
     stallWebsite="https://admin-redesign.test.democracysausage.org",
+    email="keithamoss@gmail.com",
 ):
     baseStall = create_owner_submission_stall(
-        pollingPlace, stallName, noms, stallDescription, stallOpeningHours, stallWebsite
+        pollingPlace,
+        stallName,
+        noms,
+        stallDescription,
+        stallOpeningHours,
+        stallWebsite,
+        email,
     )
 
     # Approve Stall
@@ -262,6 +269,7 @@ def create_owner_submission_stall(
     stallDescription="",
     stallOpeningHours="8AM-4PM",
     stallWebsite="https://admin-redesign.test.democracysausage.org",
+    email="keithamoss@gmail.com",
 ):
     stall = Stalls(
         election_id=get_election_id(),
@@ -270,7 +278,7 @@ def create_owner_submission_stall(
         opening_hours=stallOpeningHours,
         website=stallWebsite,
         noms=noms,
-        email="keithamoss@gmail.com",
+        email=email,
         polling_place_id=pollingPlace.id,
         submitter_type=StallSubmitterType.OWNER,
     )
