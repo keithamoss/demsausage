@@ -78,3 +78,50 @@ export const enumFromStringValue = <T>(enm: { [s: string]: T }, value: string): 
 	(Object.values(enm) as unknown as string[]).includes(value) ? (value as unknown as T) : undefined;
 
 export const pluralise = (word: string, count: number) => `${word}${count > 1 ? 's' : ''}`;
+
+export const mergeTextualItemsWithOxfordComma = (items: string[]) => {
+	if (items.length >= 3) {
+		return `${items.slice(0, -1).join(', ')}, and ${items.pop()}`;
+	}
+
+	if (items.length === 2) {
+		return items.join(' and ');
+	}
+
+	if (items.length === 1) {
+		return items[0];
+	}
+
+	return '';
+};
+
+export const mergeJSXElementsItemsWithOxfordComma = (items: JSX.Element[]) => {
+	if (items.length >= 3) {
+		const newItems: (JSX.Element | string)[] = [];
+
+		items.map((item, index) => {
+			if (index < items.length - 1) {
+				newItems.push(item);
+				newItems.push(', ');
+			}
+
+			// Oxford comma, baby!
+			if (index === items.length - 1) {
+				newItems.push('and ');
+				newItems.push(item);
+			}
+		});
+
+		return newItems;
+	}
+
+	if (items.length === 2) {
+		return [items[0], ' and ', items[1]];
+	}
+
+	if (items.length === 1) {
+		return items;
+	}
+
+	return '';
+};

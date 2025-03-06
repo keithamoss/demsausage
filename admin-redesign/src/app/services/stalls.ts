@@ -186,6 +186,18 @@ export interface Stall
 	submitter_type: StallSubmitterType;
 }
 
+export interface PendingStallDiffTextOrNumberField {
+	field: 'name' | 'description' | 'opening_hours' | 'website' | 'email';
+	old: string;
+	new: string;
+}
+
+export interface PendingStallDiffNomsField {
+	field: 'noms';
+	old: StallFoodOptions;
+	new: StallFoodOptions;
+}
+
 export interface PendingStall extends Stall {
 	election_id: number;
 	triaged_on: string | null; // ISO date
@@ -193,13 +205,7 @@ export interface PendingStall extends Stall {
 	current_stall: IPollingPlaceStall & {
 		polling_place: number; // @TODO Why not polling_place_id?
 	};
-	diff:
-		| {
-				field: string;
-				old: string | number | StallFoodOptions;
-				new: string | number | StallFoodOptions;
-		  }[]
-		| null;
+	diff: PendingStallDiffTextOrNumberField[] | PendingStallDiffNomsField[] | null;
 }
 
 export interface PollingPlacePreviousSubsStats {

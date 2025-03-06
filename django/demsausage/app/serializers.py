@@ -767,6 +767,7 @@ class PendingStallsSerializer(StallsSerializer):
         )
 
     def get_diff(self, obj):
+        # Important: If you update these, be sure to update the PendingStallDiffTextOrNumberField interface, FieldNames type, and <PendingStallsPollingPlaceStallFieldListItem />
         fields_to_include_in_diff = (
             "name",
             "description",

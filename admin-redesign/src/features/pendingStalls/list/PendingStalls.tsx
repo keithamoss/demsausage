@@ -149,7 +149,7 @@ function PendingStalls(props: Props) {
 									<PendingStallsGamifiedUserStatsBar stats={data.stats} />
 								</Box>
 
-								<Stack spacing={1}>
+								<Stack spacing={1} sx={{ mb: 2 }}>
 									{data.booths.map((pollingPlace) => (
 										<PendingStallsBoothCard
 											key={pollingPlace.id}

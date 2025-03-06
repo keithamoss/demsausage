@@ -32,7 +32,14 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
 from demsausage.app.enums import StallStatus, StallTipOffSource
-from demsausage.app.models import Stalls
+from demsausage.app.models import PollingPlaceNoms, Stalls
+
+from django.contrib.auth.models import User
+
+# Monkey patching so it looks like changes by real users
+PollingPlaceNoms._history_user = property(lambda self: User.objects.get(id=1))
+
+# @TODO We don't do Stalls and we should, but we'd need to distinguish between having no User for stalls submitted by folks and having a User where it's an admin doing the approving
 
 # Cleanup
 cleanup()
@@ -155,6 +162,333 @@ def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_fr
     stallEdits.status = StallStatus.PENDING
     stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
     stallEdits.noms = {"bbq": True, "cake": True, "free_text": "And pony rides!"}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_new_selectable_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with ONE new selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "cake": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_removed_and_one_new_selectable_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with ONE removed and ONE new selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"cake": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_removed_selectable_noms():
+    # Note: This is impossible because form validation stop its, but including it to make sure nothing blows up if it did happen.
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with ONE removed selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_two_new_selectable_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with TWO new selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "cake": True, "coffee": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_two_new_and_two_removed_selectable_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with TWO new and TWO removed selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace,
+        "Stall",
+        {"bbq": True, "vego": True},
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"cake": True, "coffee": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_three_new_selectable_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with THREE new selectable noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "cake": True, "coffee": True, "halal": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_new_free_text_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with only new free_text noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "free_text": "And pony rides!"}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_edited_free_text_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with only edited free_text noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall", {"bbq": True, "free_text": "And donkey rides!"}
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "free_text": "And pony rides!?!?"}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_removed_free_text_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with only removed free_text noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall", {"bbq": True, "free_text": "And donkey rides!"}
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_new_free_text_and_cake_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with new free_text and cake noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "cake": True, "free_text": "And cat rides!"}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_edited_free_text_and_cake_noms():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with edited free_text and cake noms"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall", {"bbq": True, "free_text": "And donkey rides!"}
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.noms = {"bbq": True, "cake": True, "free_text": "And pony rides!"}
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_name():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with an edited stall name"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.name = "My Awesome Stall of Awesomeness!"
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_description():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with an edited stall description"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace,
+        "Stall",
+        {
+            "bbq": True,
+        },
+        "My first stall.",
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.description = """My first stall.
+
+How awesome is my stall?
+
+Look, an emoji ===> 🎉
+"""
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_opening_hours():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with an edited stall opening hours"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace,
+        "Stall",
+        {
+            "bbq": True,
+        },
+        "My first stall.",
+        "9AM to 4PM",
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.opening_hours = "7AM to 4PM"
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_website():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with an edited stall website"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace,
+        "Stall",
+        {
+            "bbq": True,
+        },
+        "My first stall.",
+        "9AM to 4PM",
+        "https://admin-redesign.test.democracysausage.org",
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.website = (
+        "https://admin.test.democracysausage.org/pending_stalls/406025/"
+    )
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_many_stall_text_fields():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with edits to many stall text fields"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace,
+        "Stall",
+        {
+            "bbq": True,
+        },
+        "My first stall.",
+        "9AM to 4PM",
+        "https://admin-redesign.test.democracysausage.org",
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.name = "Highgate Primary Snausage Sizzle"
+    stallEdits.description = "We will have the best snausages!"
+    stallEdits.opening_hours = "7AM - 5PM"
+    stallEdits.website = "https://google.com"
+    stallEdits.save()
+
+
+def polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_email():
+    pollingPlace = get_next_polling_place(
+        "Approved owner submission that has pending edits with edits to the email"
+    )
+
+    stall = create_polling_place_with_an_approved_owner_submission_stall(
+        pollingPlace, "Stall"
+    )
+
+    # Submit Stall Edit
+    stallEdits = Stalls.objects.get(id=stall.id)
+    stallEdits.status = StallStatus.PENDING
+    stallEdits.owner_edit_timestamp = datetime.now(pytz.utc)
+    stallEdits.email = "keithamoss@foobar.com"
     stallEdits.save()
 
 
@@ -723,6 +1057,27 @@ def unofficial_polling_place_run_out_approved_tip_off_with_a_new_owner_submissio
 # polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_an_other_tip_off()
 # polling_place_with_an_approved_owner_submission_that_has_pending_edits_and_a_new_stall_owner_submission()
 # polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_free_text_noms()
+
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_new_selectable_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_removed_and_one_new_selectable_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_one_removed_selectable_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_two_new_selectable_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_two_new_and_two_removed_selectable_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_three_new_selectable_noms()
+
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_new_free_text_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_edited_free_text_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_only_removed_free_text_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_new_free_text_and_cake_noms()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_with_edited_free_text_and_cake_noms()
+
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_name()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_description()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_opening_hours()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_the_stall_website()
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_many_stall_text_fields()
+
+polling_place_with_an_approved_owner_submission_that_has_pending_edits_to_email()
 
 # polling_place_with_a_denied_owner_submission_and_a_new_other_tip_off()
 # polling_place_with_a_denied_owner_submission_that_has_pending_edits()

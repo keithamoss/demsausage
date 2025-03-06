@@ -21,7 +21,7 @@ from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces, St
 
 
 def get_election_id():
-    return 60
+    return 58
 
 
 def get_election():
@@ -104,6 +104,10 @@ def get_next_polling_place(name):
         .order_by("-id")
         .first()
     )
+
+    if pp is None:
+        raise Exception("Failed to find a polling place")
+
     pp.premises = name
     pp.booth_info = "Used!"
     pp.save()
@@ -113,9 +117,25 @@ def get_next_polling_place(name):
 
 
 def create_polling_place_with_an_approved_owner_submission_stall(
-    pollingPlace, stallName
+    pollingPlace,
+    stallName,
+    noms={
+        "bbq": True,
+    },
+    stallDescription="",
+    stallOpeningHours="8AM-4PM",
+    stallWebsite="https://admin-redesign.test.democracysausage.org",
+    email="keithamoss@gmail.com",
 ):
-    baseStall = create_owner_submission_stall(pollingPlace, stallName)
+    baseStall = create_owner_submission_stall(
+        pollingPlace,
+        stallName,
+        noms,
+        stallDescription,
+        stallOpeningHours,
+        stallWebsite,
+        email,
+    )
 
     # Approve Stall
     sleep(2)
@@ -246,15 +266,19 @@ def create_owner_submission_stall(
     noms={
         "bbq": True,
     },
+    stallDescription="",
+    stallOpeningHours="8AM-4PM",
+    stallWebsite="https://admin-redesign.test.democracysausage.org",
+    email="keithamoss@gmail.com",
 ):
     stall = Stalls(
         election_id=get_election_id(),
         name=stallName,
-        description="",
-        opening_hours="8AM-4PM",
-        website="https://admin-redesign.test.democracysausage.org",
+        description=stallDescription,
+        opening_hours=stallOpeningHours,
+        website=stallWebsite,
         noms=noms,
-        email="keithamoss@gmail.com",
+        email=email,
         polling_place_id=pollingPlace.id,
         submitter_type=StallSubmitterType.OWNER,
     )
