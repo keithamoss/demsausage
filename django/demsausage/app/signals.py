@@ -1,7 +1,7 @@
 import json
 
 import requests
-from demsausage.app.admin import is_production
+from demsausage.app.admin import is_development, is_production
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.models import (
     Elections,
@@ -116,10 +116,12 @@ def post_save_stall_status_changed_to_pending(sender, instance, created, **kwarg
     if (
         instance.tracker.has_changed("status") is True
         and instance.status == StallStatus.PENDING
+        # and is_development() is False
     ):
-        messagePrefix = (
-            f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
-        )
+        # messagePrefix = (
+        #     f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
+        # )
+        messagePrefix = f"[{get_env('ENVIRONMENT')}] "
         messageStart = (
             "We've just received a new submission."
             if created is True
