@@ -97,7 +97,7 @@ function PendingStalls(props: Props) {
 	return (
 		<React.Fragment>
 			<Helmet>
-				<title>Pending Submissions | Democracy Sausage</title>
+				<title>🚨 Pending Submissions | Democracy Sausage</title>
 			</Helmet>
 
 			<PageWrapper>
