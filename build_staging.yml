@@ -12,15 +12,6 @@ services:
     env_file:
       - ./secrets/staging/sausage-web.staging.env
       - ./secrets/dev/sausage-web-db.dev.env
-  public:
-    image: node:20-alpine3.19
-    entrypoint: /app/docker-entrypoint.sh
-    command: build
-    volumes:
-      - ./public:/app:delegated
-      - ./nginx-prod/build/:/build:delegated
-    env_file:
-      - secrets/staging/sausage-public-frontend.staging.env
   public_redesign:
     image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
@@ -30,15 +21,6 @@ services:
       - ./nginx-prod/build/:/build:delegated
     env_file:
       - secrets/staging/sausage-public-redesign-frontend.staging.env
-  admin:
-    image: node:20-alpine3.19
-    entrypoint: /app/docker-entrypoint.sh
-    command: build
-    volumes:
-      - ./admin:/app:delegated
-      - ./nginx-prod/build/:/build:delegated
-    env_file:
-      - secrets/staging/sausage-admin-frontend.staging.env
   admin_redesign:
     image: node:20-alpine3.19
     entrypoint: /app/docker-entrypoint.sh
