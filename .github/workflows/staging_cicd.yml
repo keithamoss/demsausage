@@ -20,19 +20,24 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
           mkdir secrets/staging/
+          mkdir secrets/dev/
           echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-public-redesign-frontend.staging.env
+          touch secrets/staging/sausage-web.staging.env
+          touch secrets/dev/sausage-web-db.dev.env
+          touch secrets/staging/sausage-admin-redesign-frontend.staging.env
 
       - name: Build - Prep
         run: |
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Setup Debug Session
-        uses: csexton/debugger-action@master
+      # - name: Setup Debug Session
+      #   uses: csexton/debugger-action@master
 
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_staging.yml run public_redesign
@@ -52,11 +57,16 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
           mkdir secrets/staging/
+          mkdir secrets/dev/
           echo "${{secrets.SAUSAGE_ADMIN_REDESIGN_FRONTEND_STAGING_ENV }}" > secrets/staging/sausage-admin-redesign-frontend.staging.env
+          touch secrets/staging/sausage-web.staging.env
+          touch secrets/dev/sausage-web-db.dev.env
+          touch secrets/staging/sausage-public-redesign-frontend.staging.env
 
       - name: Build - Prep
         run: |
@@ -81,12 +91,16 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
           mkdir secrets/staging/
+          mkdir secrets/dev/
           echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
           echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/staging/sausage-web-db.dev.env
+          touch secrets/staging/sausage-public-redesign-frontend.staging.env
+          touch secrets/staging/sausage-admin-redesign-frontend.staging.env
 
       - name: Build - Prep
         run: |
