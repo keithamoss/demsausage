@@ -41,12 +41,13 @@ export const PendingStallsAllCaughtUp = () => (
 		sx={{
 			justifyContent: 'center',
 			alignItems: 'center',
+			mb: 3,
 			'& > *': { maxWidth: 400 },
 		}}
 	>
-		<Owl />
+		<Owl style={{ width: '75%', marginTop: '-50px' }} />
 
-		<Box sx={{ textAlign: 'center', marginTop: '-40px !important' }}>
+		<Box sx={{ textAlign: 'center', marginTop: '-50px !important' }}>
 			<Typography variant="h4" gutterBottom>
 				We're all caught up! There are no pending submissions.
 			</Typography>

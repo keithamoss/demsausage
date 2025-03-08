@@ -1,6 +1,7 @@
 import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import type { eJurisdiction } from '../../features/icons/jurisdictionHelpers';
 import { api } from './api';
+import type { ElectionPendingStallsGamifiedUserStats } from './stalls';
 
 export interface IGeoJSONPoylgon {
 	type: string;
@@ -31,6 +32,7 @@ export interface Election extends ElectionModifiableProps {
 			source: string;
 			count: number;
 		}[];
+		pending_subs: ElectionPendingStallsGamifiedUserStats[];
 	};
 }
 

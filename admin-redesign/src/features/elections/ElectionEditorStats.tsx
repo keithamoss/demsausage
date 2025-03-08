@@ -1,4 +1,6 @@
 import {
+	Card,
+	CardContent,
 	LinearProgress,
 	Paper,
 	Table,
@@ -23,6 +25,7 @@ import {
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
+import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
 import { getElectionEditorNavTabs } from './electionHelpers';
 import { selectAllElections } from './electionsSlice';
 
@@ -143,6 +146,12 @@ function ElectionEditorControls(props: Props) {
 						</Table>
 					</TableContainer>
 				)}
+
+				<Card variant="outlined" sx={{ mt: 2 }}>
+					<CardContent sx={{ p: 2, pb: '16px !important' }}>
+						<PendingStallsGamifiedUserStatsBar stats={election.stats.pending_subs} />
+					</CardContent>
+				</Card>
 			</ContentWrapper>
 		</PageWrapper>
 	);

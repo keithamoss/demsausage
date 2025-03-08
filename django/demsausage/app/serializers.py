@@ -12,6 +12,7 @@ from demsausage.app.models import (
     Profile,
     Stalls,
 )
+from demsausage.app.sausage.elections import getGamifiedElectionStats
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none, get_url_safe_election_name
 from jsonschema import validate
@@ -154,6 +155,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             .values("source")
             .annotate(count=Count("source"))
             .order_by("-count"),
+            "pending_subs": getGamifiedElectionStats(obj.id),
         }
 
 

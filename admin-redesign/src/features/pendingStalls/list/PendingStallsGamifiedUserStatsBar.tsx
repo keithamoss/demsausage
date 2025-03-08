@@ -9,12 +9,16 @@ interface Props {
 export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 	const { stats } = props;
 
+	if (stats.length === 0) {
+		return undefined;
+	}
+
 	const userStatsGrandTotal = stats.map((item) => item.total).reduce((sum, item) => sum + item);
 	const userStatsSingleUserTotal = stats.map((item) => item.total).reduce((max, item) => (item > max ? item : max));
 	const avatarFabDiameter = 36;
 
 	return (
-		<Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 1 }}>
+		<Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0.5, ml: 1 }}>
 			<Box
 				sx={{
 					width: `${(userStatsSingleUserTotal / userStatsGrandTotal) * 100}%`,
@@ -42,7 +46,7 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 							width: avatarFabDiameter,
 							height: avatarFabDiameter,
 							// Take 3% off to (roughly) accommodate the width of 36px
-							left: `${(item.total / userStatsGrandTotal) * 100 - 3}%`,
+							left: `${(item.total / userStatsGrandTotal) * 100 - 2}%`,
 						}}
 					>
 						<Badge badgeContent={item.total} max={999} color="primary">
