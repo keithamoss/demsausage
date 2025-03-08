@@ -8,10 +8,9 @@ from demsausage.util import get_env
 def send_discord_webhook_message(content):
     discordWebhookURL = get_env("DISCORD_WEBHOOK_URL_PENDING_STALLS_BOT")
 
-    # environmentPrefix = (
-    #     f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
-    # )
-    environmentPrefix = f"[{get_env('ENVIRONMENT')}] "
+    environmentPrefix = (
+        f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
+    )
 
     if discordWebhookURL is not None:
         try:

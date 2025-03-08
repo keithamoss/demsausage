@@ -113,7 +113,6 @@ def post_save_stall_status_changed_to_pending(sender, instance, created, **kwarg
     if (
         instance.tracker.has_changed("status") is True
         and instance.status == StallStatus.PENDING
-        and is_development() is False
     ):
         messageSubmissionType = (
             "We've just received a new submission."
@@ -134,7 +133,6 @@ def post_save_stall_status_changed_to_not_pending(sender, instance, created, **k
     if (
         instance.tracker.has_changed("status") is True
         and instance.status != StallStatus.PENDING
-        and is_development() is False
     ):
         triagerName = (
             instance.triaged_by.first_name.split(" ")[0]
