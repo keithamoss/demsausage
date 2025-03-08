@@ -98,7 +98,7 @@ jobs:
           mkdir secrets/staging/
           mkdir secrets/dev/
           echo "${{secrets.SAUSAGE_WEB_STAGING_ENV }}" > secrets/staging/sausage-web.staging.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/staging/sausage-web-db.dev.env
+          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
           touch secrets/staging/sausage-public-redesign-frontend.staging.env
           touch secrets/staging/sausage-admin-redesign-frontend.staging.env
 
