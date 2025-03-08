@@ -1747,7 +1747,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.3.4"
     "@vitejs/plugin-react-swc": "npm:^3.8.0"
     copy-to-clipboard: "npm:^3.3.3"
-    core-js: "npm:^3.40.0"
+    core-js: "npm:^3.41.0"
     deep-object-diff: "npm:^1.1.9"
     dot-prop-immutable: "npm:^2.1.1"
     js-cookie: "npm:^3.0.5"
@@ -2226,10 +2226,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.40.0":
-  version: 3.40.0
-  resolution: "core-js@npm:3.40.0"
-  checksum: 10c0/db7946ada881e845d8b157061945b1187618fa45cf162f392a151e8a497962aed2da688c982eaa1d444c864be97a70f8be4d73385294b515d224dd164d19f1d4
+"core-js@npm:^3.41.0":
+  version: 3.41.0
+  resolution: "core-js@npm:3.41.0"
+  checksum: 10c0/a29ed0b7fe81acf49d04ce5c17a1947166b1c15197327a5d12f95bbe84b46d60c3c13de701d808f41da06fa316285f3f55ce5903abc8d5642afc1eac4457afc8
   languageName: node
   linkType: hard
 
