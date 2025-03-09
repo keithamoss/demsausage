@@ -86,6 +86,7 @@ class Elections(models.Model):
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     is_federal = models.BooleanField(default=False)
+    is_state = models.BooleanField(default=False)
     polling_places_loaded = models.BooleanField(default=False)
     election_day = models.DateTimeField()
     jurisdiction = models.TextField(

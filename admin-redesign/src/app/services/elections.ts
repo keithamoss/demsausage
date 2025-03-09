@@ -15,6 +15,7 @@ export interface ElectionModifiableProps {
 	jurisdiction: eJurisdiction;
 	geom: IGeoJSONPoylgon;
 	is_federal: boolean;
+	is_state: boolean;
 	is_hidden: boolean;
 }
 

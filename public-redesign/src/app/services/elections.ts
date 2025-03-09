@@ -17,6 +17,7 @@ export interface Election {
 	is_hidden: boolean;
 	is_primary: boolean;
 	is_federal: boolean;
+	is_state: boolean;
 	election_day: string; // Datetime
 	polling_places_loaded: boolean;
 	jurisdiction: keyof typeof jurisdictionCrests;

@@ -22,6 +22,7 @@ export const electionFormValidationSchema: ObjectSchema<ElectionModifiableProps>
 			.required(),
 		// @TODO How is this set? Why not use jurisidiction?
 		is_federal: yup.boolean().required(),
+		is_state: yup.boolean().required(),
 		is_hidden: yup.boolean().required(),
 	})
 	.required();

@@ -92,6 +92,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
             "is_hidden",
             "is_primary",
             "is_federal",
+            "is_state",
             "election_day",
             "polling_places_loaded",
             "jurisdiction",
@@ -113,6 +114,7 @@ class ElectionsCreationSerializer(ElectionsSerializer):
             "geom",
             "is_hidden",
             "is_federal",
+            "is_state",
             "election_day",
             "jurisdiction",
         )
@@ -132,6 +134,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "is_hidden",
             "is_primary",
             "is_federal",
+            "is_state",
             "election_day",
             "polling_places_loaded",
             "jurisdiction",
@@ -139,9 +142,9 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
-        return {
-            "with_data": PollingPlaces.objects.filter(
-                election=obj.id, status=PollingPlaceStatus.ACTIVE
+            return {
+                "with_data": PollingPlaces.objects.filter(
+                    election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
             .filter(noms__isnull=False)
             .count(),
