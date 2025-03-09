@@ -1,4 +1,5 @@
 import {
+	AlertTitle,
 	Box,
 	Card,
 	CardContent,
@@ -16,8 +17,7 @@ import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
 import { useNotifications } from '@toolpad/core';
 import { round } from 'lodash-es';
-import type React from 'react';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
@@ -182,7 +182,10 @@ function ElectionEditorStats(props: Props) {
 						onItemClick={(event, d) => {
 							const data = dataset[d.dataIndex];
 							notifications.show(
-								`${data.election}: ${data.data}% (${data.with_data} of ${data.total} polling places)`,
+								<React.Fragment>
+									<AlertTitle>{data.election}</AlertTitle>
+									{`${data.data}% (${data.with_data} of ${data.total} polling places)`}
+								</React.Fragment>,
 								{
 									severity: 'info',
 									autoHideDuration: 3000,
@@ -193,7 +196,14 @@ function ElectionEditorStats(props: Props) {
 						margin={{ top: 0 }}
 						grid={{ vertical: true }}
 						slotProps={{ legend: { hidden: true } }}
-						barLabel={(item) => `${item.value}%`}
+						barLabel={(item) => {
+							// Hide the label until there's enough space for it to fit in the bar
+							if (item.value !== null && item.value >= 15) {
+								return `${item.value}%`;
+							}
+
+							return undefined;
+						}}
 						axisHighlight={{
 							x: 'line',
 						}}
