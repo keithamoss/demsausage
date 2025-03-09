@@ -1,8 +1,11 @@
+import { AutoGraph } from '@mui/icons-material';
 import {
 	AlertTitle,
+	Avatar,
 	Box,
 	Card,
 	CardContent,
+	CardHeader,
 	Paper,
 	Table,
 	TableBody,
@@ -10,13 +13,14 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Typography,
 	styled,
 	tableCellClasses,
 } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
 import { useNotifications } from '@toolpad/core';
-import { round } from 'lodash-es';
+import { round, sortBy } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
@@ -247,9 +251,53 @@ function ElectionEditorStats(props: Props) {
 				)}
 
 				{election.stats.pending_subs.length > 0 && (
-					<Card variant="outlined" sx={{ mt: 2 }}>
+					<Card variant="outlined" sx={{ mt: 3 }}>
+						<CardHeader
+							sx={{
+								p: 1,
+								pb: 0,
+								'& .MuiCardHeader-title': {
+									fontSize: 18,
+									fontWeight: 700,
+								},
+							}}
+							avatar={
+								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
+									<AutoGraph />
+								</Avatar>
+							}
+							title="Stats for Nerds"
+						/>
 						<CardContent sx={{ p: 2, pb: '16px !important' }}>
+							<Typography variant="body1" sx={{ mb: 2 }}>
+								Data on who has approved the most stalls and added the most data points.
+							</Typography>
+
 							<PendingStallsGamifiedUserStatsBar stats={election.stats.pending_subs} />
+
+							<TableContainer component={Paper} sx={{ mt: 3 }}>
+								<Table size="small">
+									<TableHead>
+										<TableRow>
+											<StyledTableCell>Who</StyledTableCell>
+											<StyledTableCell align="right">Total</StyledTableCell>
+										</TableRow>
+									</TableHead>
+
+									<TableBody>
+										{sortBy(election.stats.pending_subs, 'total')
+											.reverse()
+											.map((row) => (
+												<StyledTableRow key={row.id}>
+													<StyledTableCell component="th" scope="row">
+														{row.name}
+													</StyledTableCell>
+													<StyledTableCell align="right">{row.total}</StyledTableCell>
+												</StyledTableRow>
+											))}
+									</TableBody>
+								</Table>
+							</TableContainer>
 						</CardContent>
 					</Card>
 				)}
