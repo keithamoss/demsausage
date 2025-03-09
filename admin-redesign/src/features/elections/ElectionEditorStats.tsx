@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
+import { useNotifications } from '@toolpad/core';
 import { round } from 'lodash-es';
 import type React from 'react';
 import { useCallback } from 'react';
@@ -88,6 +89,7 @@ function ElectionEditorStats(props: Props) {
 	const { election, elections } = props;
 
 	const navigate = useNavigate();
+	const notifications = useNotifications();
 
 	// ######################
 	// Navigation
@@ -177,6 +179,16 @@ function ElectionEditorStats(props: Props) {
 								},
 							},
 						]}
+						onItemClick={(event, d) => {
+							const data = dataset[d.dataIndex];
+							notifications.show(
+								`${data.election}: ${data.data}% (${data.with_data} of ${data.total} polling places)`,
+								{
+									severity: 'info',
+									autoHideDuration: 3000,
+								},
+							);
+						}}
 						layout="horizontal"
 						margin={{ top: 0 }}
 						grid={{ vertical: true }}
