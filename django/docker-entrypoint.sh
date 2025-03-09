@@ -89,7 +89,6 @@ fi
 if [ "$CMD" = "supervisord" ]; then
   waitfordb
 
-  export ENVIRONMENT=PRODUCTION
   django-admin migrate
 
   /usr/bin/supervisord -c /app/supervisord.conf

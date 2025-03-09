@@ -1,7 +1,4 @@
-import json
-
-import requests
-from demsausage.app.admin import is_development, is_production
+from demsausage.app.admin import is_development
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.models import (
     Elections,
@@ -10,9 +7,9 @@ from demsausage.app.models import (
     Profile,
     Stalls,
 )
+from demsausage.app.sausage.discord import send_discord_webhook_message
 from demsausage.app.sausage.elections import clear_elections_cache
 from demsausage.rq.jobs import task_regenerate_cached_election_data
-from demsausage.util import get_env, is_iterable
 from simple_history.models import HistoricalRecords
 from simple_history.signals import pre_create_historical_record
 
@@ -116,32 +113,34 @@ def post_save_stall_status_changed_to_pending(sender, instance, created, **kwarg
     if (
         instance.tracker.has_changed("status") is True
         and instance.status == StallStatus.PENDING
-        # and is_development() is False
     ):
-        # messagePrefix = (
-        #     f"[{get_env('ENVIRONMENT')}] " if is_production() is False else ""
-        # )
-        messagePrefix = f"[{get_env('ENVIRONMENT')}] "
-        messageStart = (
+        messageSubmissionType = (
             "We've just received a new submission."
             if created is True
             else "We've just received edits to a submission."
         )
 
-        discordWebhookURL = get_env("DISCORD_WEBHOOK_URL_PENDING_STALLS_BOT")
-        if discordWebhookURL is not None:
-            try:
-                requests.post(
-                    url=discordWebhookURL,
-                    headers={
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                    data=json.dumps(
-                        {
-                            "content": f"{messagePrefix}{messageStart} There are {Stalls.objects.filter(status=StallStatus.PENDING).count()} waiting in the queue now!",
-                        }
-                    ),
-                )
-            except:
-                # Fail silently because we don't want to surface this sort of non-critical error to the user
-                pass
+        pendingStallsCount = Stalls.objects.filter(status=StallStatus.PENDING).count()
+        messagePendingStallsStatus = f"There {'are' if pendingStallsCount > 1 else 'is'} {pendingStallsCount} waiting in the queue now!"
+
+        send_discord_webhook_message(
+            f"{messageSubmissionType} {messagePendingStallsStatus}"
+        )
+
+
+@receiver(post_save, sender=Stalls)
+def post_save_stall_status_changed_to_not_pending(sender, instance, created, **kwargs):
+    if (
+        instance.tracker.has_changed("status") is True
+        and instance.status != StallStatus.PENDING
+    ):
+        triagerName = (
+            instance.triaged_by.first_name.split(" ")[0]
+            if instance.triaged_by is not None
+            else "Unknown"
+        )
+
+        if Stalls.objects.filter(status=StallStatus.PENDING).count() == 0:
+            send_discord_webhook_message(
+                f"{triagerName} just cleared out the queue, we're all good now 🙂"
+            )

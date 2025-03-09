@@ -12,6 +12,7 @@ from demsausage.app.models import (
     Profile,
     Stalls,
 )
+from demsausage.app.sausage.elections import getGamifiedElectionStats
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import get_or_none, get_url_safe_election_name
 from jsonschema import validate
@@ -91,6 +92,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
             "is_hidden",
             "is_primary",
             "is_federal",
+            "is_state",
             "election_day",
             "polling_places_loaded",
             "jurisdiction",
@@ -112,6 +114,7 @@ class ElectionsCreationSerializer(ElectionsSerializer):
             "geom",
             "is_hidden",
             "is_federal",
+            "is_state",
             "election_day",
             "jurisdiction",
         )
@@ -131,6 +134,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "is_hidden",
             "is_primary",
             "is_federal",
+            "is_state",
             "election_day",
             "polling_places_loaded",
             "jurisdiction",
@@ -138,9 +142,9 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
-        return {
-            "with_data": PollingPlaces.objects.filter(
-                election=obj.id, status=PollingPlaceStatus.ACTIVE
+            return {
+                "with_data": PollingPlaces.objects.filter(
+                    election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
             .filter(noms__isnull=False)
             .count(),
@@ -154,6 +158,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             .values("source")
             .annotate(count=Count("source"))
             .order_by("-count"),
+            "pending_subs": getGamifiedElectionStats(obj.id),
         }
 
 

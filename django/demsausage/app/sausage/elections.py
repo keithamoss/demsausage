@@ -1,10 +1,12 @@
 from datetime import timedelta
 
-from demsausage.app.models import Elections
+from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces
 from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import make_logger
 
+from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db.models import Count
 from django.utils import timezone
 
 logger = make_logger(__name__)
@@ -57,3 +59,37 @@ def cache_rehydration_on_init_tasks():
     # Rehydrate the cache for all active elections (starting with the primary election)
     for election in get_active_elections().order_by("-is_primary").values("id"):
         task_regenerate_cached_election_data.delay(election_id=election["id"])
+
+
+def getGamifiedElectionStats(electionId):
+    """
+    Retrieve stats on who's made changes to polling booths for a given election.
+    """
+    user_stats = []
+
+    nomsChangesByUser = (
+        PollingPlaceNoms.history.filter(
+            id__in=PollingPlaces.objects.filter(election_id=electionId, status="Active")
+            .exclude(noms_id__isnull=True)
+            .values("noms_id")
+        )
+        .values("history_user_id")
+        .annotate(total=Count("history_user_id"))
+        .order_by("total")
+    )
+
+    for history in nomsChangesByUser:
+        user = User.objects.get(id=history["history_user_id"])
+
+        user_stats.append(
+            {
+                "id": user.id,
+                # Handle people with two first names
+                "name": user.first_name.split(" ")[0],
+                "initials": f"{user.first_name[:1]}{user.last_name[:1]}",
+                "image_url": user.profile.profile_image_url,
+                "total": history["total"],
+            }
+        )
+
+    return user_stats

@@ -62,11 +62,12 @@ function ElectionForm(props: Props) {
 			election_day: election?.election_day || undefined,
 			jurisdiction: election?.jurisdiction || undefined,
 			is_federal: election?.is_federal || false,
+			is_state: election?.is_state || false,
 			is_hidden: election?.is_hidden || false,
 		},
 	});
 
-	const { election_day, jurisdiction, geom, is_federal, is_hidden } = watch();
+	const { election_day, jurisdiction, geom, is_federal, is_state, is_hidden } = watch();
 
 	useEffect(() => {
 		if (jurisdiction !== undefined) {
@@ -201,6 +202,23 @@ function ElectionForm(props: Props) {
 						</FormGroup>
 
 						{errors.is_federal && <FormHelperText error>{errors.is_federal.message}</FormHelperText>}
+					</FormControl>
+
+					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<FormControlLabel
+								control={
+									<Controller
+										name="is_state"
+										control={control}
+										render={({ field }) => <Checkbox {...field} checked={is_state === true} />}
+									/>
+								}
+								label="State election"
+							/>
+						</FormGroup>
+
+						{errors.is_state && <FormHelperText error>{errors.is_state.message}</FormHelperText>}
 					</FormControl>
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">

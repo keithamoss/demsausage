@@ -1,13 +1,10 @@
 import json
 from copy import deepcopy
 from datetime import datetime
-from hashlib import sha256
 
 import pytz
 from demsausage.app.enums import (
     PollingPlaceHistoryEventType,
-    PollingPlaceStatus,
-    PollingPlaceWheelchairAccess,
     StallStatus,
     StallSubmitterType,
 )
@@ -35,6 +32,7 @@ from demsausage.app.sausage.elections import (
     get_elections_cache_key,
     get_polling_place_geojson_cache_key,
     get_polling_place_json_cache_key,
+    getGamifiedElectionStats,
     is_it_election_day,
 )
 from demsausage.app.sausage.loader import RollbackPollingPlaces
@@ -66,7 +64,6 @@ from demsausage.app.serializers import (
     PollingPlaceSearchResultsSerializer,
     PollingPlacesFlatJSONSerializer,
     PollingPlacesGeoJSONSerializer,
-    PollingPlacesManagementSerializer,
     PollingPlacesSerializer,
     StallsManagementSerializer,
     StallsOwnerManagementSerializer,
@@ -100,7 +97,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, Func, Q
+from django.db.models import Count, Func
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
@@ -1093,46 +1090,14 @@ class PendingStallsViewSet(generics.ListAPIView):
     serializer_class = PendingStallsSerializer
     permission_classes = (IsAuthenticated,)
 
-    @staticmethod
-    def _getGamifiedElectionStats(electionId):
-        """
-        Retrieve stats on who's made changes to polling booths for a given election.
-        """
-        user_stats = []
-
-        nomsChangesByUser = (
-            PollingPlaceNoms.history.filter(
-                id__in=PollingPlaces.objects.filter(
-                    election_id=electionId, status="Active"
-                )
-                .exclude(noms_id__isnull=True)
-                .values("noms_id")
-            )
-            .values("history_user_id")
-            .annotate(total=Count("history_user_id"))
-            .order_by("total")
-        )
-
-        for history in nomsChangesByUser:
-            user = User.objects.get(id=history["history_user_id"])
-
-            user_stats.append(
-                {
-                    "id": user.id,
-                    # Handle people with two first names
-                    "name": user.first_name.split(" ")[0],
-                    "initials": f"{user.first_name[:1]}{user.last_name[:1]}",
-                    "image_url": user.profile.profile_image_url,
-                    "total": history["total"],
-                }
-            )
-
-        return user_stats
-
     def list(self, request, *args, **kwargs):
         stalls = self.serializer_class(self.get_queryset(), many=True).data
 
         data = {}
+
+        # Initialise with containers for each of the active elections
+        for e in get_active_elections():
+            data[e.id] = {}
 
         # This reshapes the stall-centric view of the world to be polling-place based so
         # we can show pending stalls on the same polling places grouped together in the UI
@@ -1200,7 +1165,7 @@ class PendingStallsViewSet(generics.ListAPIView):
             response.append(
                 {
                     "election_id": electionId,
-                    "stats": self._getGamifiedElectionStats(electionId),
+                    "stats": getGamifiedElectionStats(electionId),
                     "booths": data[electionId].values(),
                 }
             )

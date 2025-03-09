@@ -1,5 +1,7 @@
 import {
-	LinearProgress,
+	Box,
+	Card,
+	CardContent,
 	Paper,
 	Table,
 	TableBody,
@@ -10,6 +12,10 @@ import {
 	styled,
 	tableCellClasses,
 } from '@mui/material';
+import { BarChart } from '@mui/x-charts';
+import type {} from '@mui/x-charts/themeAugmentation';
+import { useNotifications } from '@toolpad/core';
+import { round } from 'lodash-es';
 import type React from 'react';
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,6 +29,7 @@ import {
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
+import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
 import { getElectionEditorNavTabs } from './electionHelpers';
 import { selectAllElections } from './electionsSlice';
 
@@ -68,17 +75,21 @@ function ElectionEditorEntrypoint() {
 		return <NotFound />;
 	}
 
-	return <ElectionEditorControls election={election} />;
+	return <ElectionEditorStats election={election} elections={elections} />;
 }
 
 interface Props {
 	election: Election;
+	elections: Election[];
 }
 
-function ElectionEditorControls(props: Props) {
-	const { election } = props;
+const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1);
+
+function ElectionEditorStats(props: Props) {
+	const { election, elections } = props;
 
 	const navigate = useNavigate();
+	const notifications = useNotifications();
 
 	// ######################
 	// Navigation
@@ -106,19 +117,100 @@ function ElectionEditorControls(props: Props) {
 	// Navigation (End)
 	// ######################
 
-	const pctOfPollingPlaceWithData = (election.stats.with_data / election.stats.total) * 100;
+	const dataset = elections
+		.filter((e) => {
+			if (e.id === election.id) {
+				return true;
+			}
+
+			if (e.jurisdiction === election.jurisdiction && e.is_hidden === false) {
+				if (election.is_federal === true && e.is_federal === true) {
+					return true;
+				}
+
+				if (election.is_state === true && e.is_state === true) {
+					return true;
+				}
+			}
+			return false;
+		})
+		.map((e) => ({
+			data: calcPercentageOfPollingPlaceWithData(e),
+			with_data: e.stats.with_data,
+			total: e.stats.total,
+			election: e.name,
+		}));
 
 	return (
 		<PageWrapper>
 			{getElectionEditorNavTabs('Stats', onClickBack, onTabChange)}
 
 			<ContentWrapper>
-				<div>
-					{election.stats.with_data} of {election.stats.total} polling places have data (
-					{Math.round(pctOfPollingPlaceWithData)}%)
-				</div>
+				<Box
+					sx={{
+						mt: 1,
+						mb: 2,
+					}}
+				>
+					<BarChart
+						dataset={dataset}
+						yAxis={[
+							{
+								scaleType: 'band',
+								dataKey: 'election',
+								tickPlacement: 'middle',
+								tickLabelPlacement: 'middle',
+								valueFormatter: (value, context) => {
+									if (context.location === 'tick') {
+										return value.split(' ').pop();
+									}
 
-				<LinearProgress variant="determinate" value={pctOfPollingPlaceWithData} sx={{ height: 12, mt: 1, mb: 3 }} />
+									return value;
+								},
+							},
+						]}
+						series={[
+							{
+								dataKey: 'data',
+								color: mapaThemePrimaryPurple,
+								valueFormatter: (value, { dataIndex }) => {
+									const data = dataset[dataIndex];
+									return `${value}% (${data.with_data} of ${data.total} polling places)`;
+								},
+							},
+						]}
+						onItemClick={(event, d) => {
+							const data = dataset[d.dataIndex];
+							notifications.show(
+								`${data.election}: ${data.data}% (${data.with_data} of ${data.total} polling places)`,
+								{
+									severity: 'info',
+									autoHideDuration: 3000,
+								},
+							);
+						}}
+						layout="horizontal"
+						margin={{ top: 0 }}
+						grid={{ vertical: true }}
+						slotProps={{ legend: { hidden: true } }}
+						barLabel={(item) => `${item.value}%`}
+						axisHighlight={{
+							x: 'line',
+						}}
+						xAxis={[
+							{
+								label: '% of polling places with data',
+								max: 100,
+							},
+						]}
+						sx={{
+							'& .MuiBarLabel-root': {
+								fill: 'white',
+							},
+						}}
+						height={Math.max(150, dataset.length * 40)}
+					/>
+				</Box>
 
 				{election.stats.by_source.length > 0 && (
 					<TableContainer component={Paper}>
@@ -142,6 +234,14 @@ function ElectionEditorControls(props: Props) {
 							</TableBody>
 						</Table>
 					</TableContainer>
+				)}
+
+				{election.stats.pending_subs.length > 0 && (
+					<Card variant="outlined" sx={{ mt: 2 }}>
+						<CardContent sx={{ p: 2, pb: '16px !important' }}>
+							<PendingStallsGamifiedUserStatsBar stats={election.stats.pending_subs} />
+						</CardContent>
+					</Card>
 				)}
 			</ContentWrapper>
 		</PageWrapper>

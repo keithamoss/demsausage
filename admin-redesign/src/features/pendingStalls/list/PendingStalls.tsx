@@ -1,4 +1,4 @@
-import { Box, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
+import { Card, CardContent, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -71,12 +71,18 @@ function EntrypointLayer2(props: EntrypointLayer2Props) {
 		return <ErrorElement />;
 	}
 
-	if (electionsWithPendingStalls.length === 0) {
-		return <PendingStallsAllCaughtUp />;
-	}
-
 	return <PendingStalls elections={elections} electionsWithPendingStalls={electionsWithPendingStalls} />;
 }
+
+const areThereAnyPendingStalls = (electionsWithPendingStalls: ElectionPendingStalls[]) => {
+	for (const data of electionsWithPendingStalls) {
+		if (data.booths.length > 0) {
+			return true;
+		}
+	}
+
+	return false;
+};
 
 interface Props {
 	elections: Election[];
@@ -88,6 +94,9 @@ function PendingStalls(props: Props) {
 
 	const navigate = useNavigate();
 
+	const pendingStalls = areThereAnyPendingStalls(electionsWithPendingStalls);
+	const pageTitle = `${pendingStalls === true ? '🚨 ' : ''}Pending Submissions | Democracy Sausage`;
+
 	const onClickPollingPlace = useCallback(
 		(pollingPlace: PollingPlaceWithPendingStall) => () =>
 			navigateToPendingStallsPollingPlaceById(navigate, pollingPlace.id),
@@ -97,10 +106,12 @@ function PendingStalls(props: Props) {
 	return (
 		<React.Fragment>
 			<Helmet>
-				<title>Pending Submissions | Democracy Sausage</title>
+				<title>{pageTitle}</title>
 			</Helmet>
 
 			<PageWrapper>
+				{pendingStalls === false && <PendingStallsAllCaughtUp />}
+
 				<List
 					sx={{
 						pt: 0,
@@ -121,35 +132,39 @@ function PendingStalls(props: Props) {
 
 						return (
 							<React.Fragment key={election.id}>
-								<Box sx={{ mb: 2, p: 2, pr: 1, pt: 0, pb: 1 }}>
-									<ListItem sx={{ p: 0 }}>
-										<ListItemAvatar>{getJurisdictionCrestStandaloneReactAvatar(election.jurisdiction)}</ListItemAvatar>
+								<Card variant="outlined" sx={{ mb: 1 }}>
+									<CardContent sx={{ p: 1, pb: '8px !important' }}>
+										<ListItem sx={{ p: 0 }}>
+											<ListItemAvatar>
+												{getJurisdictionCrestStandaloneReactAvatar(election.jurisdiction)}
+											</ListItemAvatar>
 
-										<ListItemText
-											sx={{
-												'& .MuiListItemText-primary': {
-													fontSize: 15,
-													fontWeight: theme.typography.fontWeightMedium,
-													color: theme.palette.text.primary,
-												},
-												pl: 2,
-												pr: 2,
-												pt: 1,
-												pb: 1,
-											}}
-											primary={election.name}
-											secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
-												day: 'numeric',
-												month: 'long',
-												year: 'numeric',
-											})}
-										/>
-									</ListItem>
+											<ListItemText
+												sx={{
+													'& .MuiListItemText-primary': {
+														fontSize: 15,
+														fontWeight: theme.typography.fontWeightMedium,
+														color: theme.palette.text.primary,
+													},
+													pl: 2,
+													pr: 2,
+													pt: 1,
+													pb: 1,
+												}}
+												primary={election.name}
+												secondary={new Date(election.election_day).toLocaleDateString('en-AU', {
+													day: 'numeric',
+													month: 'long',
+													year: 'numeric',
+												})}
+											/>
+										</ListItem>
 
-									<PendingStallsGamifiedUserStatsBar stats={data.stats} />
-								</Box>
+										<PendingStallsGamifiedUserStatsBar stats={data.stats} />
+									</CardContent>
+								</Card>
 
-								<Stack spacing={1} sx={{ mb: 2 }}>
+								<Stack spacing={1} sx={{ mb: 3 }}>
 									{data.booths.map((pollingPlace) => (
 										<PendingStallsBoothCard
 											key={pollingPlace.id}

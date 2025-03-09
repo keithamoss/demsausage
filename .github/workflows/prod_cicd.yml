@@ -11,74 +11,6 @@ env:
   LATEST_IMAGE_TAG: latest-production
 
 jobs:
-  # build-public:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20.x'
-
-  #     - name: Setup Env Vars
-  #       run: |
-  #         mkdir secrets
-  #         mkdir secrets/prod/
-  #         mkdir secrets/dev/
-  #         echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/prod/sausage-web.production.env
-  #         echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
-  #         echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-frontend.production.env
-  #         echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-redesign-frontend.production.env
-  #         echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-frontend.production.env
-
-  #     - name: Build - Prep
-  #       run: |
-  #         mkdir ./build
-  #         mkdir ./nginx-prod/build
-
-  #     - name: Public Frontend - Build
-  #       run: docker compose --file build_production.yml run public
-
-  #     - name: Upload artifact for container build jobs
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build-public
-  #         path: ./nginx-prod/build/public.tgz
-
-  # build-admin:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20.x'
-
-  #     - name: Setup Env Vars
-  #       run: |
-  #         mkdir secrets
-  #         mkdir secrets/prod/
-  #         mkdir secrets/dev/
-  #         echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/prod/sausage-web.production.env
-  #         echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
-  #         echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-frontend.production.env
-  #         echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-redesign-frontend.production.env
-  #         echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-frontend.production.env
-
-  #     - name: Build - Prep
-  #       run: |
-  #         mkdir ./build
-  #         mkdir ./nginx-prod/build
-
-  #     - name: Public Admin - Build
-  #       run: docker compose --file build_production.yml run admin
-
-  #     - name: Upload artifact for container build jobs
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build-admin
-  #         path: ./nginx-prod/build/admin.tgz
-
   build-public-redesign:
     runs-on: ubuntu-latest
     steps:
@@ -88,17 +20,16 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
           mkdir secrets/prod/
           mkdir secrets/dev/
-          echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/prod/sausage-web.production.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-frontend.production.env
           echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-redesign-frontend.production.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-frontend.production.env
-          echo "${{secrets.SAUSAGE_ADMIN_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-redesign-frontend.production.env
+          touch secrets/prod/sausage-web.production.env
+          touch secrets/dev/sausage-web-db.dev.env
+          touch secrets/prod/sausage-admin-redesign-frontend.production.env
 
       - name: Build - Prep
         run: |
@@ -123,17 +54,16 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
           mkdir secrets/prod/
           mkdir secrets/dev/
-          echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/prod/sausage-web.production.env
-          echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-frontend.production.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-redesign-frontend.production.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-frontend.production.env
           echo "${{secrets.SAUSAGE_ADMIN_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-redesign-frontend.production.env
+          touch secrets/prod/sausage-web.production.env
+          touch secrets/dev/sausage-web-db.dev.env
+          touch secrets/prod/sausage-public-redesign-frontend.production.env
 
       - name: Build - Prep
         run: |
@@ -158,6 +88,7 @@ jobs:
         with:
           node-version: '23.x'
 
+      # We need ALL .env files to exist to be able to use docker compose
       - name: Setup Env Vars
         run: |
           mkdir secrets
@@ -165,10 +96,8 @@ jobs:
           mkdir secrets/dev/
           echo "${{secrets.SAUSAGE_WEB_PRODUCTION_ENV }}" > secrets/prod/sausage-web.production.env
           echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
-          echo "${{secrets.SAUSAGE_PUBLIC_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-frontend.production.env
-          echo "${{secrets.SAUSAGE_PUBLIC_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-public-redesign-frontend.production.env
-          echo "${{secrets.SAUSAGE_ADMIN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-frontend.production.env
-          echo "${{secrets.SAUSAGE_ADMIN_REDESIGN_FRONTEND_PRODUCTION_ENV }}" > secrets/prod/sausage-admin-redesign-frontend.production.env
+          touch secrets/prod/sausage-public-redesign-frontend.production.env
+          touch secrets/prod/sausage-admin-redesign-frontend.production.env
 
       - name: Build - Prep
         run: |
