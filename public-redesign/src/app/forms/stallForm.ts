@@ -77,7 +77,10 @@ export const stallFormTipOffValidationSchema: ObjectSchema<StallTipOffModifiable
 	.object({
 		noms: stallNomsFieldFormValidationSchemaForTipOff,
 		email: yup.string().email().required(),
-		tipoff_source: yup.mixed<StallTipOffSource>().oneOf(Object.values(StallTipOffSource)).required(),
+		tipoff_source: yup
+			.mixed<StallTipOffSource>()
+			.oneOf(Object.values(StallTipOffSource))
+			.required('This is a required field, cheers!'),
 		tipoff_source_other: yup.string().optional().ensure(),
 	})
 	.required();
@@ -86,7 +89,10 @@ export const stallFormTipOffRunOutValidationSchema: ObjectSchema<StallTipOffRunO
 	.object({
 		noms: stallNomsFieldFormValidationSchemaForTipOffRunOut,
 		email: yup.string().email().required(),
-		tipoff_source: yup.mixed<StallTipOffSource.Other>().oneOf([StallTipOffSource.Other]).required(),
+		tipoff_source: yup
+			.mixed<StallTipOffSource.Other>()
+			.oneOf([StallTipOffSource.Other])
+			.required('This is a required field, cheers!'),
 		tipoff_source_other: yup.string().required('This is a required field, cheers!').ensure(),
 	})
 	.required();
