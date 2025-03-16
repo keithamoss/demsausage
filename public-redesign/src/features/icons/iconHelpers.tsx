@@ -137,7 +137,7 @@ export const primaryFoodIcons /*: {
 		},
 		value: 'bbq',
 		label: 'Sausage sizzle',
-		description: "There's a sausage sizzle here",
+		description: 'There is a sausage sizzle here',
 	},
 	cake: {
 		icon: {
@@ -158,7 +158,7 @@ export const primaryFoodIcons /*: {
 		},
 		label: 'Cake stall',
 		value: 'cake',
-		description: "There's a cake stall here",
+		description: 'There is a cake stall here',
 	},
 	bbqandcake: {
 		icon: {
@@ -179,7 +179,7 @@ export const primaryFoodIcons /*: {
 		},
 		label: 'Sausage sizzle and cake stall',
 		value: 'bbqandcake',
-		description: "There's a sausage sizzle and a cake stall here",
+		description: 'There is a sausage sizzle and a cake stall here',
 	},
 };
 
@@ -201,7 +201,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Savoury vegetarian options',
 		value: 'vego',
-		description: "There's savoury vegetarian options here",
+		description: 'There are savoury vegetarian options here',
 	},
 	halal: {
 		icon: {
@@ -212,7 +212,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Halal options',
 		value: 'halal',
-		description: "There's halal options here",
+		description: 'There are halal options here',
 	},
 	bacon_and_eggs: {
 		icon: {
@@ -223,7 +223,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Bacon and eggs',
 		value: 'bacon_and_eggs',
-		description: "There's bacon and egg rolls or sandwiches",
+		description: 'There are bacon and egg rolls or sandwiches here',
 	},
 	coffee: {
 		icon: {
@@ -234,7 +234,7 @@ export const secondaryFoodIcons = {
 		},
 		label: 'Coffee',
 		value: 'coffee',
-		description: "There's coffee available",
+		description: 'There is coffee available here',
 	},
 };
 
