@@ -18,8 +18,6 @@ import {
 	type IMapboxSearchboxAPIV1ResponseFeature,
 	defaultMapboxSearchTypes,
 	getLonLatFromString,
-	getMapboxAPIKey,
-	getMapboxPOICategories,
 	getMapboxSearchParamsForElection,
 	isSearchingYet,
 	onViewOnMap,
@@ -88,17 +86,19 @@ export default function SearchComponent(props: Props) {
 	// ######################
 	// Mapbox Search Query
 	// ######################
-	const url = `https://api.mapbox.com/search/searchbox/v1/forward?q=${urlSearchTerm}&limit=10&proximity=ip&poi_category=${getMapboxPOICategories()}&auto_complete=true&types=${mapboxSearchTypes.join(
-		'%2C',
-	)}&access_token=${getMapboxAPIKey()}&${getMapboxSearchParamsForElection(election)}`;
-
 	const {
 		data: mapboxSearchResults,
 		error: errorFetchingMapboxResults,
 		isFetching: isFetchingMapboxResults,
 		isSuccess: isSuccessFetchingMapboxResults,
 	} = useFetchMapboxSearchboxResultsQuery(
-		isSearchingYet(urlSearchTerm) === true && urlLonLat === '' ? { url } : skipToken,
+		isSearchingYet(urlSearchTerm) === true && urlLonLat === ''
+			? {
+					searchTerm: urlSearchTerm,
+					types: mapboxSearchTypes,
+					...getMapboxSearchParamsForElection(election),
+				}
+			: skipToken,
 	);
 
 	const onChoose = useCallback(

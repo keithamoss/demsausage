@@ -190,10 +190,13 @@ export const getMapboxPOICategories = (): string =>
 	].join('%2C');
 
 // https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
-export const getMapboxSearchParamsForElection = (election: Election): string =>
+export const getMapboxSearchParamsForElection = (election: Election) =>
 	election.is_federal === false
-		? `country=au&bbox=${getBBoxFromGeoJSONPolygonCoordinates(election.geom).join('%2C')}`
-		: '';
+		? {
+				country: 'au',
+				bbox: getBBoxFromGeoJSONPolygonCoordinates(election.geom),
+			}
+		: {};
 
 // https://stackoverflow.com/a/57528471
 export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
