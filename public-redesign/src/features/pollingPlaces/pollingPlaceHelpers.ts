@@ -1,3 +1,4 @@
+import 'core-js/actual/url/can-parse';
 import type Feature from 'ol/Feature';
 import type { Election } from '../../app/services/elections';
 import { getAllFoodsAvailableOnStalls } from '../icons/iconHelpers';
