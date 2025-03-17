@@ -211,6 +211,7 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.TipOffRunOut && (
 				<StallTipOffFormRunOut
+					election={election}
 					pollingPlace={pollingPlace}
 					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
@@ -221,6 +222,7 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.TipOffRedCrossOfShame && (
 				<StallTipOffFormRedCrossOfShame
+					election={election}
 					pollingPlace={pollingPlace}
 					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}

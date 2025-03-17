@@ -14,11 +14,15 @@ export const isElectionLive = (election: Election) => {
 	return DateTime.local().endOf('day') <= DateTime.fromISO(election.election_day).endOf('day');
 };
 
-export const isItElectionDay = (election: Election) => {
+export const isItElectionDay = (election: Election) =>
+	new Date().toDateString() === new Date(election.election_day).toDateString();
+
+export const isItTimeForElectionDaySpecialTipOffs = (election: Election) => {
 	const now = new Date();
+
+	// Warn users about early RCOS and Run Out tip-offs until 09:30 on election day in the user's local timezone
 	return (
-		now >= new Date(election.election_day) &&
-		now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
+		isItElectionDay(election) === true && ((now.getHours() >= 9 && now.getMinutes() >= 30) || now.getHours() >= 10)
 	);
 };
 

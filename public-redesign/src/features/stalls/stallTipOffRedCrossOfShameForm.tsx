@@ -26,6 +26,7 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { stallFormTipOffRedCrossOfShameValidationSchema } from '../../app/forms/stallForm';
 import { useAppSelector } from '../../app/hooks/store';
+import type { Election } from '../../app/services/elections';
 import {
 	type IStallLocationInfo,
 	type Stall,
@@ -35,6 +36,7 @@ import {
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
+import { isItTimeForElectionDaySpecialTipOffs } from '../elections/electionHelpers';
 import { selectActiveElections } from '../elections/electionsSlice';
 import { supportingIcons } from '../icons/iconHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
@@ -64,6 +66,7 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
 }));
 
 interface Props {
+	election: Election;
 	stall?: Stall;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
 	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
@@ -74,7 +77,8 @@ interface Props {
 }
 
 export default function StallTipOffFormRedCrossOfShame(props: Props) {
-	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+	const { election, stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } =
+		props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -189,6 +193,14 @@ export default function StallTipOffFormRedCrossOfShame(props: Props) {
 
 						<StyledListItemText primary="Sausageless!" secondary="We're sorry to hear that there's no stall here." />
 					</StyledListItem>
+
+					{isItTimeForElectionDaySpecialTipOffs(election) === false && (
+						<Alert icon={'🤔'} severity="warning">
+							<AlertTitle>It's a bit early in the day yet</AlertTitle>
+							Sometimes stalls don't setup until a bit after polls open. Are you certain there's not going to be
+							anything here?
+						</Alert>
+					)}
 
 					{/* ######################
 							Your Details
