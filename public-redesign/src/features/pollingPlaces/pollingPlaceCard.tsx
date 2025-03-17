@@ -20,6 +20,7 @@ import {
 	DialogTitle,
 	Divider,
 	IconButton,
+	ListItemButton,
 	ListItemIcon,
 	Snackbar,
 	useTheme,
@@ -214,21 +215,21 @@ export default function PollingPlaceCard(props: Props) {
 					/>
 
 					{isElectionLive(election) === true && pollingPlace.stall === null && (
-						<CardContent sx={{ paddingBottom: 1 }}>
+						<CardContent sx={{ paddingBottom: 0, textWrap: 'pretty' }}>
 							<Button
 								startIcon={<SendIcon />}
 								variant="contained"
 								size="large"
 								color="secondary"
-								style={{ float: 'right', marginLeft: theme.spacing(2) }}
+								style={{ float: 'right', marginLeft: theme.spacing(1.25), marginBottom: theme.spacing(0.5) }}
 								onClick={onSendTipOff}
 							>
 								Send tip-off
 							</Button>
 
-							<Typography component={'p'} sx={{ fontSize: 14 }} color="text.secondary">
-								We don&lsquo;t have any reports for the polling place yet. If you find any stalls here, be sure to let
-								us know!
+							<Typography component={'span'} sx={{ fontSize: 14 }} color="text.secondary">
+								We don't have any reports for the polling place yet. If you find any stalls here, be sure to let us
+								know!
 							</Typography>
 						</CardContent>
 					)}
@@ -363,6 +364,24 @@ export default function PollingPlaceCard(props: Props) {
 													</StyledListItemIcon>
 
 													<StyledListItemText primary="Stall Open" secondary={pollingPlace.stall.opening_hours} />
+												</StyledListItem>
+											)}
+
+											{isElectionLive(election) === true && (
+												<StyledListItem
+													secondaryAction={
+														<IconButton edge="end" onClick={onSendTipOff} sx={{ color: mapaThemePrimaryPurple }}>
+															<SendIcon />
+														</IconButton>
+													}
+													disablePadding
+												>
+													<ListItemButton dense sx={{ pl: 1 }}>
+														<StyledListItemText
+															primary="Send us a tip-off!"
+															secondary="Have you found something else on the stalls at this polling place? Be sure to let us know!"
+														/>
+													</ListItemButton>
 												</StyledListItem>
 											)}
 										</List>
