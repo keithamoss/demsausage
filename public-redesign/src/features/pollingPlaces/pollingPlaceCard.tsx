@@ -44,7 +44,7 @@ import { navigateToMapUsingURLParamsWithoutUpdatingTheView } from '../../app/rou
 import type { Election } from '../../app/services/elections';
 import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../app/ui/theme';
 import { getBaseURL, isClipboardApiSupported, isWebShareApiSupported } from '../../app/utils';
-import { isElectionLive } from '../elections/electionHelpers';
+import { isElectionLive, isItElectionDay } from '../elections/electionHelpers';
 import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../icons/iconHelpers';
 import { getNomsIconsForPollingPlace } from '../search/searchBarHelpers';
 import {
@@ -228,8 +228,9 @@ export default function PollingPlaceCard(props: Props) {
 							</Button>
 
 							<Typography component={'span'} sx={{ fontSize: 14 }} color="text.secondary">
-								We don't have any reports for the polling place yet. If you find any stalls here, be sure to let us
-								know!
+								{isItElectionDay(election) === true
+									? "We don't have any reports for the polling place yet. If you find any stalls here, be sure to let us know!"
+									: "We don't have any reports for the polling place yet. If you know about any stalls happening here, be sure to let us know!"}
 							</Typography>
 						</CardContent>
 					)}
@@ -379,7 +380,11 @@ export default function PollingPlaceCard(props: Props) {
 													<ListItemButton dense sx={{ pl: 1 }}>
 														<StyledListItemText
 															primary="Send us a tip-off!"
-															secondary="Have you found something else on the stalls at this polling place? Be sure to let us know!"
+															secondary={
+																isItElectionDay(election) === true
+																	? 'Have you found something else on the stalls at this polling place? Be sure to let us know!'
+																	: 'Do you know about something else happening at this polling place? Be sure to let us know!'
+															}
 														/>
 													</ListItemButton>
 												</StyledListItem>
