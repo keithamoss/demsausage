@@ -219,9 +219,15 @@ export default function StallTipOffForm(props: Props) {
 								name="tipoff_source"
 								control={control}
 								render={({ field }) => (
-									<Select {...field} input={<OutlinedInput label="Source" />} value={tipoff_source || ''}>
+									<Select
+										{...field}
+										input={<OutlinedInput label="Source" />}
+										value={tipoff_source || ''}
+										// Needed so that longer source labels get text-overflow: ellipsis properly applied when they're selected
+										sx={{ width: '100%' }}
+									>
 										{Object.entries(StallTipOffSource).map(([, id]) => (
-											<MenuItem key={id} value={id}>
+											<MenuItem key={id} value={id} sx={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
 												{getStallSourceDescription(id)}
 											</MenuItem>
 										))}
