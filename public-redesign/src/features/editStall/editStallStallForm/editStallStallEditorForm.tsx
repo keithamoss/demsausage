@@ -3,7 +3,10 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
+import { useAppSelector } from '../../../app/hooks';
 import { navigateToEditStallSubmitted } from '../../../app/routing/navigationHelpers/navigationHelpersEditStall';
+import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
+import type { Election } from '../../../app/services/elections';
 import {
 	type Stall,
 	StallSubmitterType,
@@ -11,6 +14,7 @@ import {
 	useUpdateStallWithCredentialsMutation,
 } from '../../../app/services/stalls';
 import { WholeScreenLoadingIndicator } from '../../../app/ui/wholeScreenLoadingIndicator';
+import { selectActiveElections } from '../../elections/electionsSlice';
 import StallOwnerForm from '../../stalls/stallOwnerForm';
 import StallTipOffForm from '../../stalls/stallTipOffForm';
 
@@ -49,19 +53,41 @@ function EntrypointLayer1() {
 	}
 
 	if (stall !== undefined && token !== null && signature !== null) {
-		return <EditStallStallEditorForm stall={stall} token={token} signature={signature} />;
+		return <EntrypointLayer2 stall={stall} token={token} signature={signature} />;
 	}
 }
 
-interface Props {
+interface EntrypointLayer2Props {
 	stall: Stall;
 	token: string;
 	signature: string;
-	// election: Election;
+}
+
+function EntrypointLayer2(props: EntrypointLayer2Props) {
+	const { stall, token, signature } = props;
+
+	const params = useParams();
+
+	const urlElectionName = getStringParamOrEmptyString(params, 'election_name');
+	const activeElections = useAppSelector((state) => selectActiveElections(state));
+	const election = activeElections.find((e) => e.name_url_safe === urlElectionName);
+
+	if (election === undefined) {
+		return null;
+	}
+
+	return <EditStallStallEditorForm election={election} stall={stall} token={token} signature={signature} />;
+}
+
+interface Props {
+	election: Election;
+	stall: Stall;
+	token: string;
+	signature: string;
 }
 
 function EditStallStallEditorForm(props: Props) {
-	const { stall, token, signature } = props;
+	const { election, stall, token, signature } = props;
 
 	const params = useParams();
 	const navigate = useNavigate();
@@ -98,7 +124,12 @@ function EditStallStallEditorForm(props: Props) {
 			)}
 
 			{stall.submitter_type === StallSubmitterType.TipOff && (
-				<StallTipOffForm stall={stall} isStallSaving={isEditingStallLoading} onDoneEditing={onDoneEditing} />
+				<StallTipOffForm
+					election={election}
+					stall={stall}
+					isStallSaving={isEditingStallLoading}
+					onDoneEditing={onDoneEditing}
+				/>
 			)}
 
 			{(stall.submitter_type === StallSubmitterType.TipOffRunOut ||

@@ -27,6 +27,7 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { stallFormTipOffValidationSchema } from '../../app/forms/stallForm';
 import { useAppSelector } from '../../app/hooks/store';
+import type { Election } from '../../app/services/elections';
 import {
 	type IStallLocationInfo,
 	type Stall,
@@ -34,6 +35,7 @@ import {
 	type StallTipOffModifiableProps,
 	StallTipOffSource,
 	getStallSourceDescription,
+	getStallTipOffOptions,
 } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
@@ -52,6 +54,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 }));
 
 interface Props {
+	election: Election;
 	stall?: Stall;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
 	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
@@ -62,7 +65,8 @@ interface Props {
 }
 
 export default function StallTipOffForm(props: Props) {
-	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+	const { election, stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } =
+		props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -226,7 +230,7 @@ export default function StallTipOffForm(props: Props) {
 										// Needed so that longer source labels get text-overflow: ellipsis properly applied when they're selected
 										sx={{ width: '100%' }}
 									>
-										{Object.entries(StallTipOffSource).map(([, id]) => (
+										{getStallTipOffOptions(election).map(([, id]) => (
 											<MenuItem key={id} value={id} sx={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
 												{getStallSourceDescription(id)}
 											</MenuItem>

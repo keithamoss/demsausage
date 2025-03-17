@@ -200,6 +200,7 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.TipOff && (
 				<StallTipOffForm
+					election={election}
 					pollingPlace={pollingPlace}
 					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}
