@@ -84,6 +84,7 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 						mt: 2, // To accommodate <PollingPlaceSummaryCardForHeading /> above this element
 						mb: 2,
 					}}
+					id={`sub_${stall.id}`}
 				>
 					<CardHeader
 						sx={{
