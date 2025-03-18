@@ -4,6 +4,7 @@ import type {
 	IPollingPlaceStall,
 	IPollingPlaceStallModifiableProps,
 	IPollingPlaceStubForStalls,
+	PollingPlaceChanceOfSausage,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
@@ -237,6 +238,7 @@ export interface PollingPlaceWithPendingStall {
 	address: string;
 	state: string;
 	stall: IPollingPlaceStall | null;
+	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	pending_stalls: PendingStall[];
 	previous_subs: PollingPlacePreviousSubsStats;
 }

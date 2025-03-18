@@ -142,9 +142,9 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
-            return {
-                "with_data": PollingPlaces.objects.filter(
-                    election=obj.id, status=PollingPlaceStatus.ACTIVE
+        return {
+            "with_data": PollingPlaces.objects.filter(
+                election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
             .filter(noms__isnull=False)
             .count(),
@@ -423,6 +423,7 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
             "state",
             "stall",
             "previous_subs",
+            "chance_of_sausage",
         )
 
     def get_previous_subs(self, obj):

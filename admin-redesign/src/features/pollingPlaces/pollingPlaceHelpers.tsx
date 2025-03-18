@@ -80,6 +80,21 @@ export const getPollingPlacePermalinkFromProps = (
 		: `/${electionNameURLSafe}/polling_places/${nameEncoded}/${state}/`;
 };
 
+export const getSausageChanceLabel = (chanceOfSausage: PollingPlaceChanceOfSausage | null) => {
+	switch (chanceOfSausage) {
+		case PollingPlaceChanceOfSausage.STRONG:
+			return 'Strong';
+		case PollingPlaceChanceOfSausage.FAIR:
+			return 'Fair';
+		case PollingPlaceChanceOfSausage.MIXED:
+			return 'Mixed';
+		case PollingPlaceChanceOfSausage.UNLIKELY:
+			return 'Unlikely';
+		default:
+			return 'Unknown';
+	}
+};
+
 export const getSausageChanceDescription = (pollingPlace: IPollingPlace) => {
 	switch (pollingPlace.chance_of_sausage) {
 		case PollingPlaceChanceOfSausage.STRONG:
