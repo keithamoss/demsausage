@@ -121,6 +121,7 @@ class PollingPlaceNoms(models.Model):
     latest_report = models.DateTimeField(auto_now=True, null=True)
     source = models.TextField(blank=True)
     deleted = models.BooleanField(default=False)
+    internal_notes = models.TextField(blank=True)
 
     history = HistoricalRecords()
     tracker = FieldTracker()

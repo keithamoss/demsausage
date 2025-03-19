@@ -405,11 +405,14 @@ class PollingPlacesInfoSerializer(PollingPlacesSerializer):
         fields = ("id", "name", "premises", "address", "state")
 
 
-class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
+class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
     election_name_url_safe = ElectionURLSafeNameCharField(
         source="election.name", allow_null=False
     )
     previous_subs = serializers.SerializerMethodField()
+    internal_notes = serializers.CharField(
+        source="noms.internal_notes", required=False, allow_blank=True
+    )
 
     class Meta:
         model = PollingPlaces
@@ -424,7 +427,24 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
             "stall",
             "previous_subs",
             "chance_of_sausage",
+            "internal_notes",
         )
+
+    def to_representation(self, obj):
+        representation = super().to_representation(obj)
+
+        stall_representation = representation.pop("stall")
+
+        # Shift internal_notes off of its temporary home on the top-level representation (i.e. PollingPlace) and down on to the PollingPlaceNoms (where it is on the model).
+        # We do this this way because we DO NOT want any other serializers (e.g. those used for public-facing API endpoints) to expose internal_notes, hence it living on this special PendingStalls-related serializers.
+        # This is a bit icky, so it's is something we should look at when we rewrite the backend.
+        if stall_representation is not None:
+            stall_representation["internal_notes"] = representation["internal_notes"]
+            del representation["internal_notes"]
+
+        representation["stall"] = stall_representation
+
+        return representation
 
     def get_previous_subs(self, obj):
         pollingPlaceStalls = Stalls.objects.filter(election_id=obj.election_id).filter(
@@ -736,7 +756,7 @@ class StallsTipOffManagementSerializer(StallsSerializer):
 
 
 class PendingStallsSerializer(StallsSerializer):
-    polling_place = PollingPlacesInfoWithNomsSerializer(read_only=True)
+    polling_place = PendingStallsPollingPlacesInfoWithNomsSerializer(read_only=True)
     triaged_by = serializers.SerializerMethodField()
     diff = serializers.SerializerMethodField()
 

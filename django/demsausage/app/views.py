@@ -626,6 +626,20 @@ class PollingPlacesViewSet(
             }
         )
 
+    @action(detail=True, methods=["patch"])
+    @transaction.atomic
+    def update_internal_notes(self, request, pk=None, format=None):
+        pollingPlace = self.get_object()
+
+        # This probably should be using a serializer, but whatevs.
+        if "internal_notes" in request.data and pollingPlace.noms is not None:
+            pollingPlace.noms.internal_notes = request.data["internal_notes"]
+            pollingPlace.noms.save()
+
+            update_change_reason(self.get_object().noms, "Internal notes updated")
+
+        return Response()
+
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
     """

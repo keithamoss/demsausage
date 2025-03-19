@@ -38,6 +38,7 @@ import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../../pollingPl
 import type { IPollingPlaceStallModifiableProps } from '../../pollingPlaces/pollingPlacesInterfaces';
 import PendingStallPollingPlaceHistory from './PendingStallPollingPlaceHistory';
 import PendingStallPollingPlaceSubmissions from './PendingStallPollingPlaceSubmissions';
+import PendingStallsInternalNotes from './PendingStallsInternalNotes';
 import PendingStallsPollingPlaceAndStallsSummary from './PendingStallsPollingPlaceAndStallsSummary';
 import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStallsList';
 import { getSubmissionBottomNavIcon } from './pendingStallsPollingPlaceHelpers';
@@ -372,6 +373,8 @@ function PendingStallsPollingPlace(props: Props) {
 					onOpenPollingPlaceHistory={onOpenPollingPlaceHistory}
 					onOpenPollingPlaceSubmissions={onOpenPollingPlaceSubmissions}
 				/>
+
+				<PendingStallsInternalNotes pollingPlace={pollingPlace} />
 
 				<PendingStallsPollingPlaceStallsList
 					pollingPlace={pollingPlace}
