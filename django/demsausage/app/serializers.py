@@ -451,17 +451,32 @@ class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializ
             polling_place_id=obj.id
         )
 
+        pollingPlaceStallsHistory = Stalls.history.filter(
+            election_id=obj.election_id
+        ).filter(polling_place_id=obj.id)
+
         return {
             "approved": pollingPlaceStalls.filter(
                 Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             ).count(),
+            "approved_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.APPROVED
+            ).count(),
             "approved_owner_subs": pollingPlaceStalls.filter(
                 Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             )
-            .filter(Q(submitter_type=StallSubmitterType.OWNER))
+            .filter(submitter_type=StallSubmitterType.OWNER)
+            .count(),
+            "approved_owner_subs_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.APPROVED
+            )
+            .filter(submitter_type=StallSubmitterType.OWNER)
             .count(),
             "denied": pollingPlaceStalls.filter(
                 Q(status=StallStatus.DECLINED) | Q(previous_status=StallStatus.DECLINED)
+            ).count(),
+            "denied_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.DECLINED
             ).count(),
         }
 

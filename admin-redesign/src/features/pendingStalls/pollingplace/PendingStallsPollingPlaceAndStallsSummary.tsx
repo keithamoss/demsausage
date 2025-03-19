@@ -66,7 +66,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 					</Alert>
 				)}
 
-				{pollingPlace.stall !== null && pollingPlace.previous_subs.approved === 0 && (
+				{pollingPlace.stall !== null && pollingPlace.previous_subs.approved_all_time === 0 && (
 					<Alert severity="success" icon={<Radar />} sx={{ mb: 1 }}>
 						This polling place already has some stall data that was sourced by one of us.
 					</Alert>

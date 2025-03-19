@@ -211,8 +211,11 @@ export interface PendingStall extends Stall {
 
 export interface PollingPlacePreviousSubsStats {
 	approved: number;
+	approved_all_time: number;
 	approved_owner_subs: number;
+	approved_owner_subs_all_time: number;
 	denied: number;
+	denied_all_time: number;
 }
 
 export interface ElectionPendingStallsGamifiedUserStats {
