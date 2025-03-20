@@ -145,7 +145,10 @@ function ElectionEditorLoadPollingPlaces(props: Props) {
 	);
 
 	useEffect(() => {
-		if (isGetJobInfoSuccessful === true && jobInfo.status !== 'started') {
+		if (
+			isGetJobInfoSuccessful === true &&
+			['finished', 'failed', 'stopped', 'canceled', 'cancelled'].includes(jobInfo.status)
+		) {
 			setIsPollingForJobInfo(false);
 		}
 	}, [isGetJobInfoSuccessful, jobInfo]);

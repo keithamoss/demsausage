@@ -118,7 +118,7 @@ export const electionsApi = api.injectEndpoints({
 		}),
 		getPollingPlaceLoaderJobInfo: builder.query<
 			{
-				status: 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
+				status: 'queued' | 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
 				stages_log: string[] | null;
 				response: {
 					message: string;
