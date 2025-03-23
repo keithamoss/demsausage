@@ -92,6 +92,7 @@ class Elections(models.Model):
     jurisdiction = models.TextField(
         choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction]
     )
+    analytics_stats_saved = models.BooleanField(default=False, blank=True, null=True)
 
     def is_active(self):
         return datetime.now(pytz.utc).date() <= self.election_day.date()

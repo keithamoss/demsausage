@@ -23,6 +23,9 @@ export const isItElectionDay = (election: Election) => {
 	);
 };
 
+export const isItAfterElectionDay = (election: Election) =>
+	new Date() > new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000);
+
 export function getDefaultElection(elections: Election[]) {
 	let defaultElection: Election | undefined;
 

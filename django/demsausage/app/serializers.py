@@ -137,6 +137,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "is_state",
             "election_day",
             "polling_places_loaded",
+            "analytics_stats_saved",
             "jurisdiction",
             "stats",
         )

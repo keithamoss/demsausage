@@ -26,6 +26,7 @@ export interface Election extends ElectionModifiableProps {
 	is_primary: boolean;
 	name_url_safe: string;
 	polling_places_loaded: boolean;
+	analytics_stats_saved: boolean | null;
 	stats: {
 		with_data: number;
 		total: number;
