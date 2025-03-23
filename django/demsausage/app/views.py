@@ -24,6 +24,7 @@ from demsausage.app.models import (
 )
 from demsausage.app.permissions import AnonymousOnlyGET, StallEditingPermissions
 from demsausage.app.renderers import PNGRenderer
+from demsausage.app.sausage.chance_of_sausage import calculate_chance_of_sausage_stats
 from demsausage.app.sausage.elections import (
     get_active_elections,
     get_default_election,
@@ -97,7 +98,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, Func
+from django.db.models import Func
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 logger = make_logger(__name__)
@@ -341,6 +342,30 @@ class PollingPlacesViewSet(
             election = get_or_none(
                 Elections, id=request.query_params.get("election_id", None)
             )
+
+            chance_of_sausage_calculations = calculate_chance_of_sausage_stats(
+                election,
+                PollingPlaces.objects.filter(id__in=[i["id"] for i in response.data]),
+            )
+
+            responseDataFinal = []
+
+            for polling_place in response.data:
+                if (
+                    polling_place["id"] not in chance_of_sausage_calculations
+                    or chance_of_sausage_calculations[polling_place["id"]] is None
+                ):
+                    raise BadRequest(
+                        f"Could not find the expected Chance of Sausage calculation result for {polling_place['id']}"
+                    )
+                else:
+                    responseDataFinal.append(
+                        {
+                            **polling_place,
+                            **chance_of_sausage_calculations[polling_place["id"]],
+                        }
+                    )
+
             if election is not None:
                 filename = add_datetime_to_filename("{}.csv".format(election.name))
 
@@ -351,6 +376,7 @@ class PollingPlacesViewSet(
                     filename
                 )
 
+        response.data = responseDataFinal
         return response
 
     @transaction.atomic

@@ -78,6 +78,10 @@ def calculate_score(polling_places):
 
 def calculate_stats(polling_places):
     data = {
+        # Ensures we represent it as a human readable string in the Excel export for ALL booths, not just those without noms (which is what polling place loading does)
+        "chance_of_sausage": (
+            calculate_score(polling_places) if len(polling_places) > 0 else None
+        ),
         "count_of_matching_polling_places": len(polling_places),
         "count_of_previous_reports": 0,
         "count_of_previous_reports_with_noms": 0,
@@ -171,4 +175,4 @@ def calculate_chance_of_sausage_stats(election, polling_places):
 
         response[polling_place.id] = calculate_stats(matching_polling_places)
 
-    return response.values()
+    return response
