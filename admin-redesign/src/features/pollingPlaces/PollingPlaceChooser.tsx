@@ -14,7 +14,6 @@ import {
 	Stack,
 	debounce,
 	styled,
-	useTheme,
 } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type React from 'react';
@@ -106,25 +105,22 @@ interface Props {
 function PollingPlaceChooser(props: Props) {
 	const { elections, election } = props;
 
-	const theme = useTheme();
-
 	const params = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [localSearchTerm, setLocalSearchTerm] = useState('');
-	const [isUserTyping, setIsUserTyping] = useState(false);
 
 	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 
 	const disableAutoFocus = (location.state as LocationState)?.disableAutoFocus === true;
 
-	if (isUserTyping === false && localSearchTerm !== urlSearchTerm) {
-		// When the user navigates back/forward, or reloads the page, we
-		// just need to handle setting the search term based on what's in
-		// the URL of the page.
+	// When the URL search term changes from the user navigating back/forward,
+	// or reloading the page, we just need to handle setting the search term
+	// based on what's in the URL of the page.
+	useEffect(() => {
 		setLocalSearchTerm(urlSearchTerm);
-	}
+	}, [urlSearchTerm]);
 
 	const onChooseElection = (election: Election) => navigateToPollingPlaceSearchFromElection(navigate, election);
 
@@ -140,16 +136,13 @@ function PollingPlaceChooser(props: Props) {
 					return;
 				}
 
-				setIsUserTyping(false);
-
 				navigateToPollingPlaceSearchResults(params, navigate, searchTerm);
-			}, 400),
+			}, 800),
 		[params, navigate],
 	);
 	const onChangeSearchField = useCallback(
 		(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 			debouncedNavigateOnSearchTermChange(event.target.value);
-			setIsUserTyping(true);
 			setLocalSearchTerm(event.target.value);
 		},
 		[debouncedNavigateOnSearchTermChange],
