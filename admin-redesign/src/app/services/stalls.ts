@@ -221,7 +221,7 @@ export interface PollingPlacePreviousSubsStats {
 export interface ElectionPendingStallsGamifiedUserStats {
 	id: number;
 	name: string;
-	initial: string;
+	initials: string;
 	image_url: string;
 	total: number;
 }
