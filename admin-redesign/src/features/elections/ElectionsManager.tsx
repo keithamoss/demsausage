@@ -89,7 +89,6 @@ function ElectionsManager(props: Props) {
 	const completedElectionsWithoutAnalyticsStatsSaved = elections.filter(
 		(e) => isItAfterElectionDay(e) === true && e.analytics_stats_saved === false,
 	);
-	console.log(completedElectionsWithoutAnalyticsStatsSaved);
 
 	const onChooseElection = useCallback((election: Election) => navigateToElection(navigate, election), [navigate]);
 
