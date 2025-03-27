@@ -376,7 +376,7 @@ class PollingPlacesViewSet(
                     filename
                 )
 
-        response.data = responseDataFinal
+            response.data = responseDataFinal
         return response
 
     @transaction.atomic
@@ -1131,6 +1131,28 @@ class PendingStallsViewSet(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def list(self, request, *args, **kwargs):
+        def _get_latest_changes(electionId):
+            data = []
+
+            for stall in (
+                Stalls.history.filter(election_id=electionId)
+                .filter(status__in=[StallStatus.APPROVED, StallStatus.DECLINED])
+                .order_by("-triaged_on")[:24]
+            ):
+                data.append(
+                    {
+                        "history_id": stall.history_id,
+                        "datetime": stall.triaged_on,
+                        "triaged_by": stall.triaged_by.first_name.split(" ")[0],
+                        "status": stall.status,
+                        "stall_id": stall.id,
+                        "polling_place_name": stall.polling_place.name,
+                        "polling_place_id": stall.polling_place.id,
+                    }
+                )
+
+            return data
+
         stalls = self.serializer_class(self.get_queryset(), many=True).data
 
         data = {}
@@ -1205,6 +1227,7 @@ class PendingStallsViewSet(generics.ListAPIView):
             response.append(
                 {
                     "election_id": electionId,
+                    "latest_changes": _get_latest_changes(electionId),
                     "stats": getGamifiedElectionStats(electionId),
                     "booths": data[electionId].values(),
                 }

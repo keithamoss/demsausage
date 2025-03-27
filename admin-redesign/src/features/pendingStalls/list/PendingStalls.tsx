@@ -1,12 +1,24 @@
-import { Card, CardContent, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
+import { QueryStats, Schedule } from '@mui/icons-material';
+import {
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	LinearProgress,
+	List,
+	ListItem,
+	ListItemAvatar,
+	ListItemText,
+	Stack,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import { useAppSelector } from '../../../app/hooks';
 import { navigateToPendingStallsPollingPlaceById } from '../../../app/routing/navigationHelpers/navigationHelpersPendingStalls';
-import { type Election, useGetElectionsQuery } from '../../../app/services/elections';
+import type { Election } from '../../../app/services/elections';
 import {
 	type ElectionPendingStalls,
 	type PollingPlaceWithPendingStall,
@@ -14,6 +26,8 @@ import {
 } from '../../../app/services/stalls';
 import { theme } from '../../../app/ui/theme';
 import { isDevelopment } from '../../../app/utils';
+import ElectionPendingStallsLatestChangesList from '../../elections/ElectionPendingStallsLatestChangesList';
+import ElectionStats from '../../elections/ElectionStats';
 import { selectAllElections } from '../../elections/electionsSlice';
 import { getJurisdictionCrestStandaloneReactAvatar } from '../../icons/jurisdictionHelpers';
 import { PendingStallsAllCaughtUp } from '../pendingStallsHelpers';
@@ -26,32 +40,9 @@ const PageWrapper = styled('div')(({ theme }) => ({
 	paddingRight: theme.spacing(1),
 }));
 
-function EntrypointLayer1() {
+function Entrypoint() {
+	// Note: There's no need to check the loading status or errored state here, we already do that in App.tsx
 	const elections = useAppSelector((state) => selectAllElections(state));
-
-	const {
-		isLoading: isGetElectionsLoading,
-		isSuccess: isGetElectionsSuccessful,
-		isError: isGetElectionsErrored,
-	} = useGetElectionsQuery();
-
-	if (isGetElectionsLoading === true) {
-		return <LinearProgress color="secondary" />;
-	}
-
-	if (isGetElectionsErrored === true || isGetElectionsSuccessful === false) {
-		return <ErrorElement />;
-	}
-
-	return <EntrypointLayer2 elections={elections} />;
-}
-
-interface EntrypointLayer2Props {
-	elections: Election[];
-}
-
-function EntrypointLayer2(props: EntrypointLayer2Props) {
-	const { elections } = props;
 
 	const {
 		data: electionsWithPendingStalls,
@@ -103,6 +94,50 @@ function PendingStalls(props: Props) {
 		[navigate],
 	);
 
+	const [selectedElection, setSelectedElection] = useState<Election | undefined>(undefined);
+
+	// ######################
+	// Latest Changes Dialog
+	// ######################
+	const [isLatestChangesDialogOpen, setIsLatestChangesDialogOpen] = useState(false);
+
+	const onOpenLatestChangesDialog = useCallback(
+		(election: Election) => () => {
+			setIsLatestChangesDialogOpen(true);
+			setSelectedElection(election);
+		},
+		[],
+	);
+
+	const onCloseLatestChangesDialog = useCallback(() => {
+		setIsLatestChangesDialogOpen(true);
+		setSelectedElection(undefined);
+	}, []);
+	// ######################
+	// Latest Changes Dialog (End)
+	// ######################
+
+	// ######################
+	// Stats Dialog
+	// ######################
+	const [isStatsDialogOpen, setIsStatsDialogOpen] = useState(false);
+
+	const onOpenStatsDialog = useCallback(
+		(election: Election) => () => {
+			setIsStatsDialogOpen(true);
+			setSelectedElection(election);
+		},
+		[],
+	);
+
+	const onCloseStatsDialog = useCallback(() => {
+		setIsStatsDialogOpen(false);
+		setSelectedElection(undefined);
+	}, []);
+	// ######################
+	// Stats Dialog (End)
+	// ######################
+
 	return (
 		<React.Fragment>
 			<Helmet>
@@ -133,8 +168,8 @@ function PendingStalls(props: Props) {
 						return (
 							<React.Fragment key={election.id}>
 								<Card variant="outlined" sx={{ mb: 1 }}>
-									<CardContent sx={{ p: 1, pb: '8px !important' }}>
-										<ListItem sx={{ p: 0 }}>
+									<CardContent sx={{ p: 1 }}>
+										<ListItem sx={{ p: 0, pb: 1 }}>
 											<ListItemAvatar>
 												{getJurisdictionCrestStandaloneReactAvatar(election.jurisdiction)}
 											</ListItemAvatar>
@@ -162,6 +197,16 @@ function PendingStalls(props: Props) {
 
 										<PendingStallsGamifiedUserStatsBar stats={data.stats} />
 									</CardContent>
+
+									<CardActions>
+										<Button startIcon={<Schedule />} onClick={onOpenLatestChangesDialog(election)}>
+											Latest Changes
+										</Button>
+
+										<Button startIcon={<QueryStats />} onClick={onOpenStatsDialog(election)}>
+											Stats
+										</Button>
+									</CardActions>
 								</Card>
 
 								<Stack spacing={1} sx={{ mb: 3 }}>
@@ -179,8 +224,16 @@ function PendingStalls(props: Props) {
 					})}
 				</List>
 			</PageWrapper>
+
+			{isLatestChangesDialogOpen === true && selectedElection !== undefined && (
+				<ElectionPendingStallsLatestChangesList election={selectedElection} onClose={onCloseLatestChangesDialog} />
+			)}
+
+			{isStatsDialogOpen === true && selectedElection !== undefined && (
+				<ElectionStats election={selectedElection} onClose={onCloseStatsDialog} />
+			)}
 		</React.Fragment>
 	);
 }
 
-export default EntrypointLayer1;
+export default Entrypoint;

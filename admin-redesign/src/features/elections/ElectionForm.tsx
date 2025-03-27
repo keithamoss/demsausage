@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	AppBar,
+	Box,
 	Button,
 	Checkbox,
 	FormControl,
@@ -12,7 +13,6 @@ import {
 	ListItemText,
 	MenuItem,
 	OutlinedInput,
-	Paper,
 	Select,
 	Toolbar,
 } from '@mui/material';
@@ -107,7 +107,7 @@ function ElectionForm(props: Props) {
 	return (
 		<React.Fragment>
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
-				<Paper elevation={0} sx={{ mt: 1 }}>
+				<Box sx={{ mt: 1 }}>
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
@@ -221,7 +221,7 @@ function ElectionForm(props: Props) {
 						{errors.is_state && <FormHelperText error>{errors.is_state.message}</FormHelperText>}
 					</FormControl>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 0 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<FormControlLabel
 								control={
@@ -237,7 +237,7 @@ function ElectionForm(props: Props) {
 
 						{errors.is_hidden && <FormHelperText error>{errors.is_hidden.message}</FormHelperText>}
 					</FormControl>
-				</Paper>
+				</Box>
 			</form>
 
 			<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>

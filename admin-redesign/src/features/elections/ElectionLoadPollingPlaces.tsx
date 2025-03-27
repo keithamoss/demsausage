@@ -1,7 +1,7 @@
 import {
-	ArrowBack,
 	Check,
 	CheckCircle,
+	Close,
 	Error as ErrorIcon,
 	InfoOutlined,
 	InsertDriveFile,
@@ -9,7 +9,7 @@ import {
 	Upload,
 } from '@mui/icons-material';
 import {
-	Box,
+	AppBar,
 	Button,
 	Checkbox,
 	FormControlLabel,
@@ -20,56 +20,27 @@ import {
 	ListItemIcon,
 	ListItemText,
 	ListSubheader,
+	Paper,
 	TextField,
-	styled,
+	Toolbar,
+	Typography,
 } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { type ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import NotFound from '../../NotFound';
-import { useAppSelector } from '../../app/hooks';
-import { navigateToElectionControls } from '../../app/routing/navigationHelpers/navigationHelpersElections';
-import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
+import React, { type ChangeEvent, useEffect, useState } from 'react';
 import {
 	type Election,
 	useGetPollingPlaceLoaderJobInfoQuery,
 	useLoadPollingPlaceFileMutation,
 } from '../../app/services/elections';
-import { selectAllElections } from './electionsSlice';
-
-const PageWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
-	paddingLeft: theme.spacing(2),
-	paddingRight: theme.spacing(2),
-}));
-
-const ContentWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
-}));
-
-function ElectionEditorEntrypoint() {
-	const params = useParams();
-	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
-
-	const elections = useAppSelector(selectAllElections);
-	const election = elections.find((e) => e.name_url_safe === urlElectionName);
-
-	// Just in case the user loads the page directly via the URL and the UI renders before we get the API response
-	if (election === undefined) {
-		return <NotFound />;
-	}
-
-	return <ElectionEditorLoadPollingPlaces election={election} />;
-}
+import { DialogWithTransition } from '../../app/ui/dialog';
 
 interface Props {
 	election: Election;
+	onClose: () => void;
 }
 
-function ElectionEditorLoadPollingPlaces(props: Props) {
-	const { election } = props;
-
-	const navigate = useNavigate();
+export default function ElectionLoadPollingPlaces(props: Props) {
+	const { election, onClose } = props;
 
 	const [jsonConfig, setJSONConfig] = useState<string | undefined>();
 	const [isDryRun, setIsDryRun] = useState(true);
@@ -156,25 +127,21 @@ function ElectionEditorLoadPollingPlaces(props: Props) {
 	// Get Job Info (End)
 	// ######################
 
-	// ######################
-	// Navigation
-	// ######################
-	const onClickBack = useCallback(() => {
-		navigateToElectionControls(navigate, election);
-	}, [navigate, election]);
-	// ######################
-	// Navigation (End)
-	// ######################
-
 	return (
-		<PageWrapper>
-			<Box sx={{ borderBottom: 0, borderColor: 'divider', display: 'flex' }}>
-				<IconButton onClick={onClickBack}>
-					<ArrowBack fontSize="inherit" />
-				</IconButton>
-			</Box>
+		<DialogWithTransition onClose={onClose}>
+			<AppBar color="secondary" sx={{ position: 'sticky' }}>
+				<Toolbar>
+					<IconButton edge="start" color="inherit" onClick={onClose}>
+						<Close />
+					</IconButton>
 
-			<ContentWrapper>
+					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+						Load Polling Place Data
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			<Paper elevation={0} sx={{ p: 2 }}>
 				<TextField label="JSON config" multiline fullWidth onChange={onJSONConfigChange} />
 
 				<FormGroup sx={{ mt: 2, mb: 2 }}>
@@ -308,9 +275,7 @@ function ElectionEditorLoadPollingPlaces(props: Props) {
 						)}
 					</List>
 				)}
-			</ContentWrapper>
-		</PageWrapper>
+			</Paper>
+		</DialogWithTransition>
 	);
 }
-
-export default ElectionEditorEntrypoint;

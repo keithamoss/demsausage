@@ -87,25 +87,16 @@ const isStallMergedWithPollingPlace = (stall: PendingStall, pollingPlaceStall: I
 };
 
 function EntrypointLayer1() {
+	// Note: There's no need to check the loading status or errored state here, we already do that in App.tsx
+	const { data: electionsWithPendingStalls } = useGetPendingStallsQuery();
+
+	if (electionsWithPendingStalls === undefined) {
+		return <ErrorElement />;
+	}
+
 	const urlPollingPlaceId = getIntegerParamOrUndefined(useParams(), 'polling_place_id');
-
-	const {
-		data: electionsWithPendingStalls,
-		isLoading: isGetPendingStallsLoading,
-		isSuccess: isGetPendingStallsSuccessful,
-		isError: isGetPendingStallsErrored,
-	} = useGetPendingStallsQuery();
-
 	if (urlPollingPlaceId === undefined) {
 		return <NotFound />;
-	}
-
-	if (isGetPendingStallsLoading === true) {
-		return null;
-	}
-
-	if (isGetPendingStallsErrored === true || isGetPendingStallsSuccessful === false) {
-		return <ErrorElement />;
 	}
 
 	let pollingPlace: PollingPlaceWithPendingStall | undefined;

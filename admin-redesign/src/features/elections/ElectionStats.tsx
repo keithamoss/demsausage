@@ -1,11 +1,13 @@
-import { AutoGraph } from '@mui/icons-material';
+import { AutoGraph, Close } from '@mui/icons-material';
 import {
 	AlertTitle,
+	AppBar,
 	Avatar,
 	Box,
 	Card,
 	CardContent,
 	CardHeader,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -13,6 +15,7 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Toolbar,
 	Typography,
 	styled,
 	tableCellClasses,
@@ -21,31 +24,13 @@ import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
 import { useNotifications } from '@toolpad/core';
 import { round, sortBy } from 'lodash-es';
-import React, { useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import NotFound from '../../NotFound';
+import React from 'react';
 import { useAppSelector } from '../../app/hooks';
-import {
-	navigateToElection,
-	navigateToElectionControls,
-	navigateToElections,
-} from '../../app/routing/navigationHelpers/navigationHelpersElections';
-import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import type { Election } from '../../app/services/elections';
+import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
-import { getElectionEditorNavTabs } from './electionHelpers';
 import { selectAllElections } from './electionsSlice';
-
-const PageWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
-	paddingLeft: theme.spacing(2),
-	paddingRight: theme.spacing(2),
-}));
-
-const ContentWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
-}));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
 	'&:nth-of-type(odd)': {
@@ -67,59 +52,31 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	},
 }));
 
-function ElectionEditorEntrypoint() {
-	const params = useParams();
-	const urlElectionName = getStringParamOrUndefined(params, 'election_name');
+interface EntrypointProps {
+	election: Election;
+	onClose: () => void;
+}
+
+function ElectionStatsEntrypoint(props: EntrypointProps) {
+	const { election, onClose } = props;
 
 	const elections = useAppSelector(selectAllElections);
-	const election = elections.find((e) => e.name_url_safe === urlElectionName);
 
-	// Just in case the user loads the page directly via the URL and the UI renders before we get the API response
-	if (election === undefined) {
-		return <NotFound />;
-	}
-
-	return <ElectionEditorStats election={election} elections={elections} />;
+	return <ElectionStats election={election} elections={elections} onClose={onClose} />;
 }
 
 interface Props {
 	election: Election;
 	elections: Election[];
+	onClose: () => void;
 }
 
 const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1);
 
-function ElectionEditorStats(props: Props) {
-	const { election, elections } = props;
+function ElectionStats(props: Props) {
+	const { election, elections, onClose } = props;
 
-	const navigate = useNavigate();
 	const notifications = useNotifications();
-
-	// ######################
-	// Navigation
-	// ######################
-	const onClickBack = useCallback(() => {
-		navigateToElections(navigate);
-	}, [navigate]);
-
-	const onClickGoToForm = useCallback(() => {
-		navigateToElection(navigate, election);
-	}, [navigate, election]);
-
-	const onClickGoToControls = useCallback(() => {
-		navigateToElectionControls(navigate, election);
-	}, [navigate, election]);
-
-	const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
-		if (newValue === 0) {
-			onClickGoToForm();
-		} else if (newValue === 1) {
-			onClickGoToControls();
-		}
-	};
-	// ######################
-	// Navigation (End)
-	// ######################
 
 	const dataset = elections
 		.filter((e) => {
@@ -146,10 +103,20 @@ function ElectionEditorStats(props: Props) {
 		}));
 
 	return (
-		<PageWrapper>
-			{getElectionEditorNavTabs('Stats', onClickBack, onTabChange)}
+		<DialogWithTransition onClose={onClose}>
+			<AppBar color="secondary" sx={{ position: 'sticky' }}>
+				<Toolbar>
+					<IconButton edge="start" color="inherit" onClick={onClose}>
+						<Close />
+					</IconButton>
 
-			<ContentWrapper>
+					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+						Election Stats
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			<Paper elevation={0} sx={{ p: 2 }}>
 				<Box
 					sx={{
 						mt: 1,
@@ -268,6 +235,7 @@ function ElectionEditorStats(props: Props) {
 							}
 							title="Stats for Nerds"
 						/>
+
 						<CardContent sx={{ p: 2, pb: '16px !important' }}>
 							<Typography variant="body1" sx={{ mb: 2 }}>
 								Data on who has approved the most stalls and added the most data points.
@@ -301,9 +269,9 @@ function ElectionEditorStats(props: Props) {
 						</CardContent>
 					</Card>
 				)}
-			</ContentWrapper>
-		</PageWrapper>
+			</Paper>
+		</DialogWithTransition>
 	);
 }
 
-export default ElectionEditorEntrypoint;
+export default ElectionStatsEntrypoint;

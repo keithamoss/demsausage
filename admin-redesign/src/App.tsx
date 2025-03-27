@@ -1,15 +1,16 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Button, IconButton, Toolbar, styled } from '@mui/material';
+import { AppBar, Button, IconButton, LinearProgress, Toolbar, styled } from '@mui/material';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './App.css';
+import ErrorElement from './ErrorElement';
 import { useAppSelector } from './app/hooks/store';
 import NavigationDrawer from './app/routing/navigationDrawer';
-import { stallsApi } from './app/services/stalls';
-import { store } from './app/store';
+import { useGetElectionsQuery } from './app/services/elections';
+import { useGetPendingStallsQuery } from './app/services/stalls';
 import { mapaThemePrimaryPurple } from './app/ui/theme';
 import { getAPIBaseURL, getBaseURL } from './app/utils';
 import DemSausageBannerRaw from './assets/banner/banner.svg?raw';
@@ -24,33 +25,13 @@ const LoginContainer = styled('div')`
 	justify-content: center;
 `;
 
-export default function App() {
-	const navigate = useNavigate();
-
+function AppEntrypoint() {
 	const user = useAppSelector(selectUser);
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
-	const onNavigateHome = useCallback(() => navigate(''), [navigate]);
-
-	const [drawerOpen, setDrawerOpen] = useState(false);
-
-	const onToggleDrawer = useCallback(
-		(open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-			if (
-				event.type === 'keydown' &&
-				((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-			) {
-				return;
-			}
-
-			setDrawerOpen(open);
-		},
-		[],
-	);
-
-	// So we don't show the login button while we're waiting to see if the user is logged in
 	if (isLoggedIn === undefined) {
+		// So we don't show the login button while we're waiting to see if the user is logged in
 		return null;
 	}
 
@@ -70,9 +51,60 @@ export default function App() {
 		);
 	}
 
-	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
-	// Important: We're pre-fetching *after* we have a user object to avoid 403s
-	void store.dispatch(stallsApi.endpoints.getPendingStalls.initiate());
+	return <AppEntrypointLayer2 />;
+}
+
+function AppEntrypointLayer2() {
+	// Most endpoints expect both Pending Stalls and Elections to be pre-populated, so let's just do that here!
+	// Important: We're initiating this pre-fetching *after* we have a user object to avoid 403s
+	const {
+		isLoading: isGetPendingStallsLoading,
+		isSuccess: isGetPendingStallsSuccessful,
+		isError: isGetPendingStallsErrored,
+	} = useGetPendingStallsQuery();
+
+	const {
+		isLoading: isGetElectionsLoading,
+		isSuccess: isGetElectionsSuccessful,
+		isError: isGetElectionsErrored,
+	} = useGetElectionsQuery();
+
+	if (isGetPendingStallsLoading === true || isGetElectionsLoading === true) {
+		return <LinearProgress color="secondary" />;
+	}
+
+	if (
+		isGetPendingStallsErrored === true ||
+		isGetPendingStallsSuccessful === false ||
+		isGetElectionsErrored === true ||
+		isGetElectionsSuccessful === false
+	) {
+		return <ErrorElement />;
+	}
+
+	return <App />;
+}
+
+function App() {
+	const navigate = useNavigate();
+
+	const onNavigateHome = useCallback(() => navigate(''), [navigate]);
+
+	const [drawerOpen, setDrawerOpen] = useState(false);
+
+	const onToggleDrawer = useCallback(
+		(open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+			if (
+				event.type === 'keydown' &&
+				((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+			) {
+				return;
+			}
+
+			setDrawerOpen(open);
+		},
+		[],
+	);
 
 	return (
 		<div className="App">
@@ -135,3 +167,5 @@ export default function App() {
 		</div>
 	);
 }
+
+export default AppEntrypoint;

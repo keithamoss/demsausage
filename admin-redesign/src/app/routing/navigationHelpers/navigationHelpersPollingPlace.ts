@@ -54,6 +54,17 @@ export const navigateToPollingPlaceSearchResultsFromURLSearchTerm = (
 	navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/`, { state: { disableAutoFocus: true } });
 };
 
+export const navigateToPollingPlaceSearchResultsFromElectionAndSearchTermDirectly = (
+	navigate: NavigateFunction,
+	election: Election,
+	searchTerm: string,
+) => {
+	// We handle going to all of these routes:
+	// /polling-places/:election_name/search/:search_term/
+
+	navigate(`/polling-places/${election.name_url_safe}/search/${searchTerm}/`);
+};
+
 export const navigateToPollingPlaceEditorForm = (
 	params: Params<string>,
 	navigate: NavigateFunction,

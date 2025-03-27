@@ -218,6 +218,16 @@ export interface PollingPlacePreviousSubsStats {
 	denied_all_time: number;
 }
 
+export interface ElectionPendingStallsLatestChanges {
+	history_id: number;
+	datetime: string;
+	triaged_by: string;
+	status: StallStatus;
+	stall_id: number;
+	polling_place_name: string;
+	polling_place_id: number;
+}
+
 export interface ElectionPendingStallsGamifiedUserStats {
 	id: number;
 	name: string;
@@ -228,6 +238,7 @@ export interface ElectionPendingStallsGamifiedUserStats {
 
 export interface ElectionPendingStalls {
 	election_id: number;
+	latest_changes: ElectionPendingStallsLatestChanges[];
 	stats: ElectionPendingStallsGamifiedUserStats[];
 	booths: PollingPlaceWithPendingStall[];
 }
