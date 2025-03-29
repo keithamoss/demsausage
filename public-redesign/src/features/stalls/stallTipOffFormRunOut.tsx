@@ -4,6 +4,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
 import {
 	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	FormControl,
@@ -25,6 +26,7 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { stallFormTipOffRunOutValidationSchema } from '../../app/forms/stallForm';
 import { useAppSelector } from '../../app/hooks/store';
+import type { Election } from '../../app/services/elections';
 import {
 	type IStallLocationInfo,
 	type Stall,
@@ -36,6 +38,7 @@ import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
 import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
+import { isItTimeForElectionDaySpecialTipOffs } from '../elections/electionHelpers';
 import { selectActiveElections } from '../elections/electionsSlice';
 import { supportingIcons } from '../icons/iconHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
@@ -65,6 +68,7 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
 }));
 
 interface Props {
+	election: Election;
 	stall?: Stall;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
 	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
@@ -75,7 +79,8 @@ interface Props {
 }
 
 export default function StallTipOffFormRunOut(props: Props) {
-	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+	const { election, stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } =
+		props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -202,6 +207,13 @@ export default function StallTipOffFormRunOut(props: Props) {
 							secondary="We're sorry to hear that they've run out of food here."
 						/>
 					</StyledListItem>
+
+					{isItTimeForElectionDaySpecialTipOffs(election) === false && (
+						<Alert icon={'🤔'} severity="warning">
+							<AlertTitle>It's a bit early in the day yet</AlertTitle>
+							Are you certain they've run out of food?
+						</Alert>
+					)}
 
 					<AddStallFormFoodOptionsSelector
 						foodOptions={noms}

@@ -83,6 +83,7 @@ class Elections(models.Model):
     geom = models.PolygonField(null=False)
     name = models.TextField(unique=True)
     short_name = models.TextField(unique=True)
+    is_test = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     is_federal = models.BooleanField(default=False)
@@ -92,6 +93,7 @@ class Elections(models.Model):
     jurisdiction = models.TextField(
         choices=[(tag, tag.value) for tag in PollingPlaceJurisdiction]
     )
+    analytics_stats_saved = models.BooleanField(default=False, blank=True, null=True)
 
     def is_active(self):
         return datetime.now(pytz.utc).date() <= self.election_day.date()
@@ -121,6 +123,7 @@ class PollingPlaceNoms(models.Model):
     latest_report = models.DateTimeField(auto_now=True, null=True)
     source = models.TextField(blank=True)
     deleted = models.BooleanField(default=False)
+    internal_notes = models.TextField(blank=True)
 
     history = HistoricalRecords()
     tracker = FieldTracker()

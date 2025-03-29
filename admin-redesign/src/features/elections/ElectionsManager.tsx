@@ -1,5 +1,15 @@
 import { Add, ExpandMore, HistoryEdu, LiveTv, VisibilityOff } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Button, Stack, Typography, styled } from '@mui/material';
+import {
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
+	Alert,
+	AlertTitle,
+	Button,
+	Stack,
+	Typography,
+	styled,
+} from '@mui/material';
 import { useNotifications } from '@toolpad/core';
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +23,7 @@ import { SelectElection } from '../../app/ui/selectElection';
 import { pluralise } from '../../app/utils';
 import { selectAllElections } from '../elections/electionsSlice';
 import ElectionsManagerCard from './ElectionsManagerCard';
-import { isElectionLive } from './electionHelpers';
+import { isElectionLive, isItAfterElectionDay } from './electionHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(4),
@@ -76,6 +86,9 @@ function ElectionsManager(props: Props) {
 	const liveElections = elections.filter((e) => isElectionLive(e) === true && e.is_hidden === false);
 	const hiddenElections = elections.filter((e) => e.is_hidden === true);
 	const historicalElections = elections.filter((e) => isElectionLive(e) === false);
+	const completedElectionsWithoutAnalyticsStatsSaved = elections.filter(
+		(e) => isItAfterElectionDay(e) === true && e.analytics_stats_saved === false,
+	);
 
 	const onChooseElection = useCallback((election: Election) => navigateToElection(navigate, election), [navigate]);
 
@@ -116,6 +129,14 @@ function ElectionsManager(props: Props) {
 			<Button variant="contained" endIcon={<Add />} onClick={onClickAddElection}>
 				Add Election
 			</Button>
+
+			{completedElectionsWithoutAnalyticsStatsSaved.length > 0 && (
+				<Alert severity="warning" sx={{ mt: 2 }}>
+					<AlertTitle>Danger Will Robinson, danger!</AlertTitle>
+					{completedElectionsWithoutAnalyticsStatsSaved.length} completed election(s) don't have their analytics stats
+					saved yet: {completedElectionsWithoutAnalyticsStatsSaved.map((e) => e.name).join(', ')}
+				</Alert>
+			)}
 
 			{createElectionsAccordion('Live', liveElections, onChooseElection)}
 

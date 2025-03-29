@@ -4,6 +4,7 @@ import type {
 	IPollingPlaceStall,
 	IPollingPlaceStallModifiableProps,
 	IPollingPlaceStubForStalls,
+	PollingPlaceChanceOfSausage,
 } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
@@ -25,6 +26,20 @@ export enum StallTipOffSource {
 	Newsletter = 'newsletter',
 	Other = 'other',
 }
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSubmitterTypeName = (enumName: StallSubmitterType): string => {
+	switch (enumName) {
+		case StallSubmitterType.Owner:
+			return 'Owner';
+		case StallSubmitterType.TipOff:
+			return 'Tip-off';
+		case StallSubmitterType.TipOffRunOut:
+			return 'Run Out Tip-off';
+		case StallSubmitterType.TipOffRedCrossOfShame:
+			return 'Red Cross of Shame Tip-off';
+	}
+};
 
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
 export const getStallSubmitterTypeTipOffName = (enumName: StallSubmitterType): string => {
@@ -210,20 +225,34 @@ export interface PendingStall extends Stall {
 
 export interface PollingPlacePreviousSubsStats {
 	approved: number;
+	approved_all_time: number;
 	approved_owner_subs: number;
+	approved_owner_subs_all_time: number;
 	denied: number;
+	denied_all_time: number;
+}
+
+export interface ElectionPendingStallsLatestChanges {
+	history_id: number;
+	datetime: string;
+	triaged_by: string;
+	status: StallStatus;
+	stall_id: number;
+	polling_place_name: string;
+	polling_place_id: number;
 }
 
 export interface ElectionPendingStallsGamifiedUserStats {
 	id: number;
 	name: string;
-	initial: string;
+	initials: string;
 	image_url: string;
 	total: number;
 }
 
 export interface ElectionPendingStalls {
 	election_id: number;
+	latest_changes: ElectionPendingStallsLatestChanges[];
 	stats: ElectionPendingStallsGamifiedUserStats[];
 	booths: PollingPlaceWithPendingStall[];
 }
@@ -237,6 +266,7 @@ export interface PollingPlaceWithPendingStall {
 	address: string;
 	state: string;
 	stall: IPollingPlaceStall | null;
+	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	pending_stalls: PendingStall[];
 	previous_subs: PollingPlacePreviousSubsStats;
 }

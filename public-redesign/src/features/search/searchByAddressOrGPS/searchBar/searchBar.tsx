@@ -74,17 +74,24 @@ export default function SearchBar(props: Props) {
 	const location = useLocation();
 
 	const [localSearchTerm, setLocalSearchTerm] = useState('');
-	const [isUserTyping, setIsUserTyping] = useState(false);
 
 	const urlSearchTerm = getStringParamOrEmptyString(params, 'search_term');
 	const urlLonLatFromGPS = getStringParamOrEmptyString(params, 'gps_lon_lat');
 
-	// When the user navigates back/forward, or reloads the page, we
-	// just need to handle setting the search term based on what's in
-	// the URL of the page.
-	if (isUserTyping === false && localSearchTerm !== urlSearchTerm) {
+	// When the URL search term changes from the user navigating back/forward,
+	// or reloading the page, we just need to handle setting the search term
+	// based on what's in the URL of the page.
+	// Note that we don't use isUserTyping here, because that causes the issue
+	// described in https://github.com/keithamoss/demsausage/issues/3520
+	// Note that we also tried an alternative approach here listening for
+	// changes to `location` and then parsing the term from that, but figure
+	// that this is doing the same thing anyway and we don't need to reinvent
+	// what react-router is doing for us with useParams()
+	// Note also that including the old isUserTyping === false check here
+	// results in the behaviour described in #3520.
+	useEffect(() => {
 		setLocalSearchTerm(urlSearchTerm);
-	}
+	}, [urlSearchTerm]);
 
 	const searchBarFilterControlOpen = useAppSelector((state) => selectSearchBarFilterControlState(state));
 	const isMapFiltered = useAppSelector((state) => selectIsMapFiltered(state, election.id));
@@ -105,8 +112,6 @@ export default function SearchBar(props: Props) {
 					return;
 				}
 
-				setIsUserTyping(false);
-
 				onMapboxSearchTermChange(searchTerm);
 			}, 800),
 		[onMapboxSearchTermChange],
@@ -115,7 +120,6 @@ export default function SearchBar(props: Props) {
 	const onChangeSearchField = useCallback(
 		(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 			debouncedNavigateOnSearchTermChange(event.target.value);
-			setIsUserTyping(true);
 			setLocalSearchTerm(event.target.value);
 		},
 		[debouncedNavigateOnSearchTermChange],

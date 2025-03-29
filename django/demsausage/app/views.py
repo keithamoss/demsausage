@@ -1,6 +1,6 @@
 import json
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 from demsausage.app.enums import (
@@ -24,6 +24,7 @@ from demsausage.app.models import (
 )
 from demsausage.app.permissions import AnonymousOnlyGET, StallEditingPermissions
 from demsausage.app.renderers import PNGRenderer
+from demsausage.app.sausage.chance_of_sausage import calculate_chance_of_sausage_stats
 from demsausage.app.sausage.elections import (
     get_active_elections,
     get_default_election,
@@ -97,8 +98,9 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, Func
+from django.db.models import Func
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django.utils.timezone import make_aware
 
 logger = make_logger(__name__)
 
@@ -190,6 +192,25 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         elif request.method == "DELETE":
             cache.delete(cache_key)
             return Response()
+
+    @action(
+        detail=False,
+        methods=["get"],
+        permission_classes=(AnonymousOnlyGET,),
+        serializer_class=ElectionsSerializer,
+    )
+    def upcoming(self, request, format=None):
+        """
+        Retrieve a list of all elections coming up in the near future.
+        """
+        serializer = ElectionsSerializer(
+            Elections.objects.filter(is_hidden=True, is_test=False)
+            .filter(election_day__lte=make_aware(datetime.now()) + timedelta(weeks=12))
+            .order_by("-election_day"),
+            many=True,
+        )
+
+        return Response(serializer.data)
 
     @action(
         detail=True,
@@ -341,6 +362,30 @@ class PollingPlacesViewSet(
             election = get_or_none(
                 Elections, id=request.query_params.get("election_id", None)
             )
+
+            chance_of_sausage_calculations = calculate_chance_of_sausage_stats(
+                election,
+                PollingPlaces.objects.filter(id__in=[i["id"] for i in response.data]),
+            )
+
+            responseDataFinal = []
+
+            for polling_place in response.data:
+                if (
+                    polling_place["id"] not in chance_of_sausage_calculations
+                    or chance_of_sausage_calculations[polling_place["id"]] is None
+                ):
+                    raise BadRequest(
+                        f"Could not find the expected Chance of Sausage calculation result for {polling_place['id']}"
+                    )
+                else:
+                    responseDataFinal.append(
+                        {
+                            **polling_place,
+                            **chance_of_sausage_calculations[polling_place["id"]],
+                        }
+                    )
+
             if election is not None:
                 filename = add_datetime_to_filename("{}.csv".format(election.name))
 
@@ -351,6 +396,7 @@ class PollingPlacesViewSet(
                     filename
                 )
 
+            response.data = responseDataFinal
         return response
 
     @transaction.atomic
@@ -625,6 +671,20 @@ class PollingPlacesViewSet(
                 "polling_places": pollingPlaceSerializer.data,
             }
         )
+
+    @action(detail=True, methods=["patch"])
+    @transaction.atomic
+    def update_internal_notes(self, request, pk=None, format=None):
+        pollingPlace = self.get_object()
+
+        # This probably should be using a serializer, but whatevs.
+        if "internal_notes" in request.data and pollingPlace.noms is not None:
+            pollingPlace.noms.internal_notes = request.data["internal_notes"]
+            pollingPlace.noms.save()
+
+            update_change_reason(self.get_object().noms, "Internal notes updated")
+
+        return Response()
 
 
 class PollingPlacesSearchViewSet(generics.ListAPIView):
@@ -1091,6 +1151,28 @@ class PendingStallsViewSet(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def list(self, request, *args, **kwargs):
+        def _get_latest_changes(electionId):
+            data = []
+
+            for stall in (
+                Stalls.history.filter(election_id=electionId)
+                .filter(status__in=[StallStatus.APPROVED, StallStatus.DECLINED])
+                .order_by("-triaged_on")[:24]
+            ):
+                data.append(
+                    {
+                        "history_id": stall.history_id,
+                        "datetime": stall.triaged_on,
+                        "triaged_by": stall.triaged_by.first_name.split(" ")[0],
+                        "status": stall.status,
+                        "stall_id": stall.id,
+                        "polling_place_name": stall.polling_place.name,
+                        "polling_place_id": stall.polling_place.id,
+                    }
+                )
+
+            return data
+
         stalls = self.serializer_class(self.get_queryset(), many=True).data
 
         data = {}
@@ -1165,6 +1247,7 @@ class PendingStallsViewSet(generics.ListAPIView):
             response.append(
                 {
                     "election_id": electionId,
+                    "latest_changes": _get_latest_changes(electionId),
                     "stats": getGamifiedElectionStats(electionId),
                     "booths": data[electionId].values(),
                 }

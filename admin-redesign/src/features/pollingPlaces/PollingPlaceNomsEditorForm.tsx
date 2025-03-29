@@ -339,7 +339,7 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 								<TextFieldWithout1Password
 									{...field}
 									label="Source of the report"
-									helperText="Where did this report come frm? (e.g. Twitter, Facebook, School Newsletter)"
+									helperText="Where did this report come from? (e.g. Twitter, Facebook, School Newsletter)"
 								/>
 							)}
 						/>

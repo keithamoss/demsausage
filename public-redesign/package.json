@@ -21,6 +21,7 @@
 		"@sentry/browser": "^9.1.0",
 		"@sentry/react": "^9.1.0",
 		"autosuggest-highlight": "^3.3.4",
+		"core-js": "^3.41.0",
 		"dayjs": "^1.11.13",
 		"js-cookie": "^3.0.5",
 		"lodash-es": "^4.17.21",

@@ -17,6 +17,7 @@ export interface ElectionModifiableProps {
 	is_federal: boolean;
 	is_state: boolean;
 	is_hidden: boolean;
+	is_test: boolean;
 }
 
 export type NewElection = ElectionModifiableProps;
@@ -26,12 +27,17 @@ export interface Election extends ElectionModifiableProps {
 	is_primary: boolean;
 	name_url_safe: string;
 	polling_places_loaded: boolean;
+	analytics_stats_saved: boolean | null;
 	stats: {
 		with_data: number;
 		total: number;
 		by_source: {
 			source: string;
 			count: number;
+		}[];
+		subs_by_type_and_day: {
+			day: string; // Datetime
+			[key: string]: number | string; // Only string because of 'day'
 		}[];
 		pending_subs: ElectionPendingStallsGamifiedUserStats[];
 	};
@@ -118,7 +124,7 @@ export const electionsApi = api.injectEndpoints({
 		}),
 		getPollingPlaceLoaderJobInfo: builder.query<
 			{
-				status: 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
+				status: 'queued' | 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
 				stages_log: string[] | null;
 				response: {
 					message: string;

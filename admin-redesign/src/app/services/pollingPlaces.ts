@@ -85,6 +85,16 @@ export const pollingPlacesApi = api.injectEndpoints({
 				},
 			}),
 		}),
+		updateInternalNotes: builder.mutation<void, { pollingPlaceId: number; internal_notes: string }>({
+			query: ({ pollingPlaceId, internal_notes }) => ({
+				url: `polling_places/${pollingPlaceId}/update_internal_notes/`,
+				method: 'PATCH',
+				body: {
+					id: pollingPlaceId,
+					internal_notes,
+				},
+			}),
+		}),
 		deletePollingBoothNoms: builder.mutation<void, number>({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/delete_polling_place_noms/`,
@@ -106,5 +116,6 @@ export const {
 	useGetPollingPlaceStallsByIdQuery,
 	useGetPollingPlaceHistoryByIdQuery,
 	useAddOrEditPollingBoothNomsMutation,
+	useUpdateInternalNotesMutation,
 	useDeletePollingBoothNomsMutation,
 } = pollingPlacesApi;

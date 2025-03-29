@@ -23,7 +23,9 @@ def make_logger(name, handler=logging.StreamHandler(), formatter=None):
     logger.setLevel(logging.DEBUG)
     # handler = logging.StreamHandler()
     if formatter is None:
-        fmt = logging.Formatter("%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)")
+        fmt = logging.Formatter(
+            "%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)"
+        )
     else:
         fmt = formatter
     handler.setFormatter(fmt)
@@ -65,13 +67,13 @@ def timeit(method):
         ts = time.time()
         result = method(*args, **kw)
         te = time.time()
-        if 'log_time' in kw:
-            name = kw.get('log_name', method.__name__.upper())
-            kw['log_time'][name] = int((te - ts) * 1000)
+        if "log_time" in kw:
+            name = kw.get("log_name", method.__name__.upper())
+            kw["log_time"][name] = int((te - ts) * 1000)
         else:
-            print('%r  %2.2f ms' %
-                  (method.__name__, (te - ts) * 1000))
+            print("%r  %2.2f ms" % (method.__name__, (te - ts) * 1000))
         return result
+
     return timed
 
 
@@ -88,8 +90,17 @@ def get_or_none(classmodel, **kwargs):
 
 def add_datetime_to_filename(filename):
     filename, file_extension = os.path.splitext(filename)
-    datetime_str = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(microsecond=0).replace(tzinfo=None).isoformat()
-    return clean_filename("{filename}_{datetime}.{ext}".format(filename=filename, datetime=datetime_str, ext=file_extension[1:]))
+    datetime_str = (
+        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        .replace(microsecond=0)
+        .replace(tzinfo=None)
+        .isoformat()
+    )
+    return clean_filename(
+        "{filename}_{datetime}.{ext}".format(
+            filename=filename, datetime=datetime_str, ext=file_extension[1:]
+        )
+    )
 
 
 def clean_filename(filename, whitelist=None, replace=" "):
@@ -102,15 +113,21 @@ def clean_filename(filename, whitelist=None, replace=" "):
 
     # replace spaces
     for r in replace:
-        filename = filename.replace(r, '_')
+        filename = filename.replace(r, "_")
 
     # keep only valid ascii chars
-    cleaned_filename = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore').decode()
+    cleaned_filename = (
+        unicodedata.normalize("NFKD", filename).encode("ASCII", "ignore").decode()
+    )
 
     # keep only whitelisted chars
-    cleaned_filename = ''.join(c for c in cleaned_filename if c in whitelist)
+    cleaned_filename = "".join(c for c in cleaned_filename if c in whitelist)
     if len(cleaned_filename) > char_limit:
-        print("Warning, filename truncated because it was over {}. Filenames may no longer be unique".format(char_limit))
+        print(
+            "Warning, filename truncated because it was over {}. Filenames may no longer be unique".format(
+                char_limit
+            )
+        )
 
     return cleaned_filename[:char_limit]
 
@@ -172,7 +189,9 @@ def merge_and_sum_dicts(dict_list):
                 if value is None or isinstance(value, bool):
                     merged_dict[key] = value
                 elif is_numeric(value) is True:
-                    merged_dict[key] = merged_dict[key] + convert_string_to_number(value)
+                    merged_dict[key] = merged_dict[key] + convert_string_to_number(
+                        value
+                    )
                 elif isinstance(value, str):
                     merged_dict[key].append(value)
                 else:
@@ -192,6 +211,7 @@ def get_url_safe_election_name(name):
 
 def threaded(func):
     """Decorator to automatically launch a function in a thread"""
+
     # Ref: https://stackoverflow.com/a/67071996
     @functools.wraps(func)
     def wrapper(*args, **kwargs):  # replaces original function...
@@ -199,6 +219,7 @@ def threaded(func):
         thread = threading.Thread(target=func, args=args, kwargs=kwargs)
         thread.start()
         return thread
+
     return wrapper
 
 
@@ -236,6 +257,15 @@ def get_stracktrace_string_for_current_exception():
     stack_trace = list()
 
     for trace in trace_back:
-        stack_trace.append("File \"%s\", line : %d, in \"%s\", message: %s" % (trace[0], trace[1], trace[2], trace[3]))
+        stack_trace.append(
+            'File "%s", line : %d, in "%s", message: %s'
+            % (trace[0], trace[1], trace[2], trace[3])
+        )
 
     return "\r\n".join(stack_trace)
+
+
+def daterange(start_date: datetime.date, end_date: datetime.date):
+    days = int((end_date - start_date).days)
+    for n in range(days):
+        yield start_date + datetime.timedelta(n)

@@ -1,6 +1,3 @@
-from datetime import datetime
-
-import pytz
 from demsausage.app.enums import PollingPlaceStatus, StallStatus, StallSubmitterType
 from demsausage.app.models import (
     Elections,
@@ -14,7 +11,7 @@ from demsausage.app.models import (
 )
 from demsausage.app.sausage.elections import getGamifiedElectionStats
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.util import get_or_none, get_url_safe_election_name
+from demsausage.util import daterange, get_or_none, get_url_safe_election_name
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
@@ -22,6 +19,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
+from django.db.models.functions import TruncDay
 
 
 class HistoricalRecordField(serializers.ListField):
@@ -89,6 +87,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
             "name_url_safe",
             "short_name",
             "geom",
+            "is_test",
             "is_hidden",
             "is_primary",
             "is_federal",
@@ -112,6 +111,7 @@ class ElectionsCreationSerializer(ElectionsSerializer):
             "name",
             "short_name",
             "geom",
+            "is_test",
             "is_hidden",
             "is_federal",
             "is_state",
@@ -131,20 +131,62 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "name_url_safe",
             "short_name",
             "geom",
+            "is_test",
             "is_hidden",
             "is_primary",
             "is_federal",
             "is_state",
             "election_day",
             "polling_places_loaded",
+            "analytics_stats_saved",
             "jurisdiction",
             "stats",
         )
 
     def get_stats(self, obj):
-            return {
-                "with_data": PollingPlaces.objects.filter(
-                    election=obj.id, status=PollingPlaceStatus.ACTIVE
+        def _get_subs_by_type_and_day():
+            min_date = None
+            max_date = None
+            data = {}
+
+            for item in (
+                Stalls.objects.filter(election_id=obj.id)
+                .exclude(submitter_type="")
+                .annotate(day=TruncDay("reported_timestamp"))
+                .values("submitter_type", "day")
+                .annotate(count=Count("id"))
+            ):
+                if item["day"] not in data:
+                    data[item["day"]] = {"day": item["day"]}
+
+                    # Fill with empty fields for each status
+                    for tag in StallSubmitterType:
+                        data[item["day"]][tag] = None
+
+                data[item["day"]][item["submitter_type"]] = item["count"]
+
+                if min_date is None or item["day"] < min_date:
+                    min_date = item["day"]
+                if max_date is None or item["day"] > max_date:
+                    max_date = item["day"]
+
+            # Fill in any blank days so the series is continuous
+            if min_date is not None and max_date is not None:
+                for date in daterange(min_date, max_date):
+                    if date not in data:
+                        data[date] = {"day": date}
+
+                        # Fill with empty fields for each status
+                        for tag in StallSubmitterType:
+                            data[date][tag] = None
+
+            # Sort in descending order so the chart runs in the right order
+            sorted_data = {key: data[key] for key in sorted(data)}
+            return sorted_data.values()
+
+        return {
+            "with_data": PollingPlaces.objects.filter(
+                election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
             .filter(noms__isnull=False)
             .count(),
@@ -156,8 +198,9 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                 polling_place__status=PollingPlaceStatus.ACTIVE,
             )
             .values("source")
-            .annotate(count=Count("source"))
+            .annotate(count=Count("id"))
             .order_by("-count"),
+            "subs_by_type_and_day": _get_subs_by_type_and_day(),
             "pending_subs": getGamifiedElectionStats(obj.id),
         }
 
@@ -405,11 +448,14 @@ class PollingPlacesInfoSerializer(PollingPlacesSerializer):
         fields = ("id", "name", "premises", "address", "state")
 
 
-class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
+class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
     election_name_url_safe = ElectionURLSafeNameCharField(
         source="election.name", allow_null=False
     )
     previous_subs = serializers.SerializerMethodField()
+    internal_notes = serializers.CharField(
+        source="noms.internal_notes", required=False, allow_blank=True
+    )
 
     class Meta:
         model = PollingPlaces
@@ -423,24 +469,57 @@ class PollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializer):
             "state",
             "stall",
             "previous_subs",
+            "chance_of_sausage",
+            "internal_notes",
         )
+
+    def to_representation(self, obj):
+        representation = super().to_representation(obj)
+
+        stall_representation = representation.pop("stall")
+
+        # Shift internal_notes off of its temporary home on the top-level representation (i.e. PollingPlace) and down on to the PollingPlaceNoms (where it is on the model).
+        # We do this this way because we DO NOT want any other serializers (e.g. those used for public-facing API endpoints) to expose internal_notes, hence it living on this special PendingStalls-related serializers.
+        # This is a bit icky, so it's is something we should look at when we rewrite the backend.
+        if stall_representation is not None:
+            stall_representation["internal_notes"] = representation["internal_notes"]
+            del representation["internal_notes"]
+
+        representation["stall"] = stall_representation
+
+        return representation
 
     def get_previous_subs(self, obj):
         pollingPlaceStalls = Stalls.objects.filter(election_id=obj.election_id).filter(
             polling_place_id=obj.id
         )
 
+        pollingPlaceStallsHistory = Stalls.history.filter(
+            election_id=obj.election_id
+        ).filter(polling_place_id=obj.id)
+
         return {
             "approved": pollingPlaceStalls.filter(
                 Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             ).count(),
+            "approved_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.APPROVED
+            ).count(),
             "approved_owner_subs": pollingPlaceStalls.filter(
                 Q(status=StallStatus.APPROVED) | Q(previous_status=StallStatus.APPROVED)
             )
-            .filter(Q(submitter_type=StallSubmitterType.OWNER))
+            .filter(submitter_type=StallSubmitterType.OWNER)
+            .count(),
+            "approved_owner_subs_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.APPROVED
+            )
+            .filter(submitter_type=StallSubmitterType.OWNER)
             .count(),
             "denied": pollingPlaceStalls.filter(
                 Q(status=StallStatus.DECLINED) | Q(previous_status=StallStatus.DECLINED)
+            ).count(),
+            "denied_all_time": pollingPlaceStallsHistory.filter(
+                status=StallStatus.DECLINED
             ).count(),
         }
 
@@ -735,7 +814,7 @@ class StallsTipOffManagementSerializer(StallsSerializer):
 
 
 class PendingStallsSerializer(StallsSerializer):
-    polling_place = PollingPlacesInfoWithNomsSerializer(read_only=True)
+    polling_place = PendingStallsPollingPlacesInfoWithNomsSerializer(read_only=True)
     triaged_by = serializers.SerializerMethodField()
     diff = serializers.SerializerMethodField()
 

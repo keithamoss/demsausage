@@ -23,8 +23,8 @@ export const isApproveAndMergeAutomaticallyAllowed = (
 
 	// Allow unedited Owner Submissions...
 	if (stall.submitter_type === StallSubmitterType.Owner && stall.triaged_on === null) {
-		// if there isn't already an approved, or edited and previously approved, Owner Submission
-		if ('previous_subs' in pollingPlace && pollingPlace.previous_subs.approved_owner_subs === 0) {
+		// if there isn't already an approved, or edited and previously approved, or approved, edited, and previousyl declined Owner Submission
+		if ('previous_subs' in pollingPlace && pollingPlace.previous_subs.approved_owner_subs_all_time === 0) {
 			return true;
 		}
 
@@ -66,7 +66,7 @@ export const getWhyApproveAndMergeAutomaticallyNotAllowed = (
 	// It's an edited Owner Submission and...
 	if (stall.submitter_type === StallSubmitterType.Owner) {
 		// There is already another approved 'Stall Owner' submission
-		if ('previous_subs' in pollingPlace && pollingPlace.previous_subs.approved_owner_subs !== 0) {
+		if ('previous_subs' in pollingPlace && pollingPlace.previous_subs.approved_owner_subs_all_time !== 0) {
 			return 'there is already another approved owner submission.';
 		}
 

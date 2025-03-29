@@ -1,19 +1,16 @@
-import { Save } from '@mui/icons-material';
-import { styled } from '@mui/material';
-import type React from 'react';
-import { useCallback, useEffect } from 'react';
+import { QueryStats, Save, Schedule, Tune } from '@mui/icons-material';
+import { Button, Paper, styled } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks';
-import {
-	navigateToElectionControls,
-	navigateToElectionStats,
-	navigateToElections,
-} from '../../app/routing/navigationHelpers/navigationHelpersElections';
+import { navigateToElections } from '../../app/routing/navigationHelpers/navigationHelpersElections';
 import { getStringParamOrUndefined } from '../../app/routing/routingHelpers';
 import { type Election, type ElectionModifiableProps, useUpdateElectionMutation } from '../../app/services/elections';
+import ElectionControls from './ElectionControls';
 import ElectionForm from './ElectionForm';
-import { getElectionEditorNavTabs } from './electionHelpers';
+import ElectionPendingStallsLatestChangesList from './ElectionPendingStallsLatestChangesList';
+import ElectionStats from './ElectionStats';
 import { selectAllElections } from './electionsSlice';
 
 const PageWrapper = styled('div')(({ theme }) => ({
@@ -72,36 +69,38 @@ function ElectionEditor(props: Props) {
 	);
 
 	// ######################
-	// Navigation
+	// Dialog Management
 	// ######################
-	const onClickBack = useCallback(() => {
-		navigateToElections(navigate);
-	}, [navigate]);
+	const [isControlsDialogOpen, setIsControlsDialogOpen] = useState(false);
+	const onOpenControlsDialog = useCallback(() => setIsControlsDialogOpen(true), []);
+	const onCloseControlsDialog = useCallback(() => setIsControlsDialogOpen(false), []);
 
-	const onClickGoToControls = useCallback(() => {
-		navigateToElectionControls(navigate, election);
-	}, [navigate, election]);
+	const [isLatestChangesDialogOpen, setIsLatestChangesDialogOpen] = useState(false);
+	const onOpenLatestChangesDialog = useCallback(() => setIsLatestChangesDialogOpen(true), []);
+	const onCloseLatestChangesDialog = useCallback(() => setIsLatestChangesDialogOpen(false), []);
 
-	const onClickGoToStats = useCallback(() => {
-		navigateToElectionStats(navigate, election);
-	}, [navigate, election]);
-
-	const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
-		if (newValue === 1) {
-			onClickGoToControls();
-		} else if (newValue === 2) {
-			onClickGoToStats();
-		}
-	};
+	const [isStatsDialogOpen, setIsStatsDialogOpen] = useState(false);
+	const onOpenStatsDialog = useCallback(() => setIsStatsDialogOpen(true), []);
+	const onCloseStatsDialog = useCallback(() => setIsStatsDialogOpen(false), []);
 	// ######################
-	// Navigation (End)
+	// Dialog Management (End)
 	// ######################
 
 	return (
 		<PageWrapper>
-			{getElectionEditorNavTabs('Form', onClickBack, onTabChange)}
+			<Button startIcon={<Tune />} onClick={onOpenControlsDialog}>
+				Controls
+			</Button>
 
-			<ContentWrapper>
+			<Button startIcon={<Schedule />} onClick={onOpenLatestChangesDialog}>
+				Latest Changes
+			</Button>
+
+			<Button startIcon={<QueryStats />} onClick={onOpenStatsDialog}>
+				Stats
+			</Button>
+
+			<Paper variant="outlined" sx={{ mt: 1, p: 2 }}>
 				<ElectionForm
 					election={election}
 					isElectionSaving={isUpdatingElectionLoading}
@@ -109,7 +108,15 @@ function ElectionEditor(props: Props) {
 					primaryFormButtonLabel="Save"
 					primaryFormButtonIcon={<Save />}
 				/>
-			</ContentWrapper>
+			</Paper>
+
+			{isControlsDialogOpen === true && <ElectionControls election={election} onClose={onCloseControlsDialog} />}
+
+			{isLatestChangesDialogOpen === true && (
+				<ElectionPendingStallsLatestChangesList election={election} onClose={onCloseLatestChangesDialog} />
+			)}
+
+			{isStatsDialogOpen === true && <ElectionStats election={election} onClose={onCloseStatsDialog} />}
 		</PageWrapper>
 	);
 }

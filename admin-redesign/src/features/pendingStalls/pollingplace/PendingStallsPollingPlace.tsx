@@ -1,5 +1,15 @@
-import { MapsHomeWork } from '@mui/icons-material';
-import { Avatar, Backdrop, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
+import { MapsHomeWork, VerticalAlignTop } from '@mui/icons-material';
+import {
+	Avatar,
+	Backdrop,
+	BottomNavigation,
+	BottomNavigationAction,
+	Card,
+	CardContent,
+	CardHeader,
+	CircularProgress,
+	Paper,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
@@ -21,15 +31,17 @@ import {
 	useDeclineStallMutation,
 	useGetPendingStallsQuery,
 } from '../../../app/services/stalls';
-import { mapaThemePrimaryPurple } from '../../../app/ui/theme';
+import { appBarHeight, mapaThemePrimaryPurple } from '../../../app/ui/theme';
 import PollingPlaceNomsEditorForm from '../../pollingPlaces/PollingPlaceNomsEditorForm';
 import { getPollingPlaceSummaryCardForHeading } from '../../pollingPlaces/pollingPlaceHelpers';
 import { mergeStallWithPollingPlaceFormNomsAndUpdateForm } from '../../pollingPlaces/pollingPlaceNomsEditorFormHelpers';
 import type { IPollingPlaceStallModifiableProps } from '../../pollingPlaces/pollingPlacesInterfaces';
 import PendingStallPollingPlaceHistory from './PendingStallPollingPlaceHistory';
 import PendingStallPollingPlaceSubmissions from './PendingStallPollingPlaceSubmissions';
+import PendingStallsInternalNotes from './PendingStallsInternalNotes';
 import PendingStallsPollingPlaceAndStallsSummary from './PendingStallsPollingPlaceAndStallsSummary';
 import PendingStallsPollingPlaceStallsList from './PendingStallsPollingPlaceStallsList';
+import { getSubmissionBottomNavIcon } from './pendingStallsPollingPlaceHelpers';
 
 // const bottomNav = 56;
 
@@ -75,25 +87,16 @@ const isStallMergedWithPollingPlace = (stall: PendingStall, pollingPlaceStall: I
 };
 
 function EntrypointLayer1() {
+	// Note: There's no need to check the loading status or errored state here, we already do that in App.tsx
+	const { data: electionsWithPendingStalls } = useGetPendingStallsQuery();
+
+	if (electionsWithPendingStalls === undefined) {
+		return <ErrorElement />;
+	}
+
 	const urlPollingPlaceId = getIntegerParamOrUndefined(useParams(), 'polling_place_id');
-
-	const {
-		data: electionsWithPendingStalls,
-		isLoading: isGetPendingStallsLoading,
-		isSuccess: isGetPendingStallsSuccessful,
-		isError: isGetPendingStallsErrored,
-	} = useGetPendingStallsQuery();
-
 	if (urlPollingPlaceId === undefined) {
 		return <NotFound />;
-	}
-
-	if (isGetPendingStallsLoading === true) {
-		return null;
-	}
-
-	if (isGetPendingStallsErrored === true || isGetPendingStallsSuccessful === false) {
-		return <ErrorElement />;
 	}
 
 	let pollingPlace: PollingPlaceWithPendingStall | undefined;
@@ -115,6 +118,24 @@ function EntrypointLayer1() {
 const onDoneCreatingOrEditingNoop = () => {};
 
 const onDeleteNoop = () => {};
+
+const scrollToTop = () => {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const scrollToSubmission = (stallId: number) => () => {
+	window.scrollTo({
+		top: (document.getElementById(`sub_${stallId}`)?.offsetTop || 0) - appBarHeight - 8,
+		behavior: 'smooth',
+	});
+};
+
+const scrollToStall = () => {
+	window.scrollTo({
+		top: (document.getElementById('stall')?.offsetTop || 0) - appBarHeight - 8,
+		behavior: 'smooth',
+	});
+};
 
 type Props = {
 	pollingPlace: PollingPlaceWithPendingStall;
@@ -344,6 +365,8 @@ function PendingStallsPollingPlace(props: Props) {
 					onOpenPollingPlaceSubmissions={onOpenPollingPlaceSubmissions}
 				/>
 
+				<PendingStallsInternalNotes pollingPlace={pollingPlace} />
+
 				<PendingStallsPollingPlaceStallsList
 					pollingPlace={pollingPlace}
 					stalls={pollingPlace.pending_stalls}
@@ -352,7 +375,7 @@ function PendingStallsPollingPlace(props: Props) {
 					onDecline={onDecline}
 				/>
 
-				<Card variant="outlined">
+				<Card variant="outlined" id="stall">
 					<CardHeader
 						sx={{
 							p: 1,
@@ -390,42 +413,23 @@ function PendingStallsPollingPlace(props: Props) {
 					</CardContent>
 				</Card>
 
-				{/* @TODO Navigation bar */}
-				{/* <AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
-					<Toolbar sx={{ justifyContent: 'flex-start' }}>
-						<Button
-							size="small"
-							startIcon={<FiberNewOutlined />}
-							// sx={{
-							// 	color: `${blueGrey.A700} !important`,
-							// 	ml: '0px !important',
-							// }}
-						>
-							Top
-						</Button>
+				<Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
+					<BottomNavigation>
+						<BottomNavigationAction icon={<VerticalAlignTop />} onClick={scrollToTop} />
 
-						<Button
-							size="small"
-							startIcon={<FiberNewOutlined />}
-						>
-							Sub 1
-						</Button>
+						{pollingPlace.pending_stalls.slice(0, 4).map((stall, key) => {
+							return (
+								<BottomNavigationAction
+									key={stall.id}
+									icon={getSubmissionBottomNavIcon(key)}
+									onClick={scrollToSubmission(stall.id)}
+								/>
+							);
+						})}
 
-						<Button
-							size="small"
-							startIcon={<FiberNewOutlined />}
-						>
-							Sub 2
-						</Button>
-
-						<Button
-							size="small"
-							startIcon={<FiberNewOutlined />}
-						>
-							Booth
-						</Button>
-					</Toolbar>
-				</AppBar> */}
+						<BottomNavigationAction icon={<MapsHomeWork />} onClick={scrollToStall} />
+					</BottomNavigation>
+				</Paper>
 			</PageWrapper>
 
 			<Backdrop open={isLoadingScreenShown} sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}>

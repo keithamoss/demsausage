@@ -116,7 +116,7 @@ ITEM demsausage_:1:elections_list [4321 b; 0 s]
 
 # Logs
 
-scp -r demsausage:/apps/digitalocean-stack/logs/ .
+scp -r demsausage-production:/apps/digitalocean-stack/logs/ .
 
 docker compose logs service_name
 

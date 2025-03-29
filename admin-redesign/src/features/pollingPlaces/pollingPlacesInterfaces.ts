@@ -19,11 +19,15 @@ export interface IPollingPlaceStallModifiableProps {
 	website: string;
 	extra_info: string;
 	source: string;
+	internal_notes: string;
 }
 
 export interface IPollingPlaceStall extends IPollingPlaceStallModifiableProps {
 	first_report: string | null; // Datetime
 	latest_report: string | null; // Datetime
+	polling_place: number; // @TODO This should be polling_place_id
+	deleted: boolean;
+	internal_notes: string;
 }
 
 export type IPollingPlaceStallGeoJSON = Omit<IPollingPlaceStall, 'noms'> & {

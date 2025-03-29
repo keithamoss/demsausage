@@ -1,7 +1,9 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { isItElectionDay } from '../../features/elections/electionHelpers';
 import type { IPollingPlaceStubForStalls } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
+import type { Election } from './elections';
 
 export enum StallSubmitterType {
 	Owner = 'owner',
@@ -17,15 +19,25 @@ export enum StallTipOffSource {
 	Other = 'other',
 }
 
+export const getStallTipOffOptions = (election: Election) => {
+	return Object.entries(StallTipOffSource).filter(([, id]) => {
+		if (id === StallTipOffSource.In_Person) {
+			return isItElectionDay(election) === true;
+		}
+
+		return true;
+	});
+};
+
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
 export const getStallSourceDescription = (enumName: StallTipOffSource): string => {
 	switch (enumName) {
 		case StallTipOffSource.In_Person:
-			return 'I saw it at a polling booth';
+			return 'I saw it at the polling booth';
 		case StallTipOffSource.Online:
 			return 'I heard about it online (including social media)';
 		case StallTipOffSource.Newsletter:
-			return 'I saw it in the school, church, et cetera newsletter';
+			return 'I saw it in the newsletter for the school, church, et cetera';
 		case StallTipOffSource.Other:
 			return 'Other';
 	}

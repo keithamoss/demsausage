@@ -1,6 +1,3 @@
-import { ArrowBack } from '@mui/icons-material';
-import { IconButton, Tab, Tabs } from '@mui/material';
-import { Box } from '@mui/system';
 import { DateTime } from 'luxon';
 import type { Election } from '../../app/services/elections';
 // import { getStandardViewPadding } from '../map/mapHelpers';
@@ -22,6 +19,9 @@ export const isItElectionDay = (election: Election) => {
 		now <= new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000)
 	);
 };
+
+export const isItAfterElectionDay = (election: Election) =>
+	new Date() > new Date(new Date(election.election_day).getTime() + 60 * 60 * 24 * 1000);
 
 export function getDefaultElection(elections: Election[]) {
 	let defaultElection: Election | undefined;
@@ -86,25 +86,3 @@ export const getElectionVeryShortName = (election: Election) => {
 
 // 	return view;
 // };
-
-export const getElectionEditorNavTabs = (
-	selectedTabName: string,
-	onClickBack: () => void,
-	onTabChange: (event: React.SyntheticEvent, newValue: number) => void,
-) => {
-	const selectedTabIndex = selectedTabName === 'Form' ? 0 : selectedTabName === 'Controls' ? 1 : 2;
-
-	return (
-		<Box sx={{ borderBottom: 0, borderColor: 'divider', display: 'flex' }}>
-			<IconButton onClick={onClickBack}>
-				<ArrowBack fontSize="inherit" />
-			</IconButton>
-
-			<Tabs value={selectedTabIndex} onChange={onTabChange}>
-				<Tab label="Form" />
-				<Tab label="Controls" />
-				<Tab label="Stats" />
-			</Tabs>
-		</Box>
-	);
-};

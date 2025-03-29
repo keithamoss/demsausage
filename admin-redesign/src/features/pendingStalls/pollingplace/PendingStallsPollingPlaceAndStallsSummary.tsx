@@ -1,5 +1,6 @@
 import {
 	Approval,
+	Casino,
 	DoNotDisturbOn,
 	Edit,
 	FiberNew,
@@ -24,7 +25,7 @@ import {
 import { type PollingPlaceWithPendingStall, StallStatus } from '../../../app/services/stalls';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { getPublicSiteBaseURL, pluralise } from '../../../app/utils';
-import { getPollingPlacePermalinkFromProps } from '../../pollingPlaces/pollingPlaceHelpers';
+import { getPollingPlacePermalinkFromProps, getSausageChanceLabel } from '../../pollingPlaces/pollingPlaceHelpers';
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
 	padding: theme.spacing(1),
@@ -65,7 +66,7 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 					</Alert>
 				)}
 
-				{pollingPlace.stall !== null && pollingPlace.previous_subs.approved === 0 && (
+				{pollingPlace.stall !== null && pollingPlace.previous_subs.approved_all_time === 0 && (
 					<Alert severity="success" icon={<Radar />} sx={{ mb: 1 }}>
 						This polling place already has some stall data that was sourced by one of us.
 					</Alert>
@@ -133,6 +134,14 @@ export default function PendingStallsPollingPlaceAndStallsSummary(props: Props) 
 								/>
 							</StyledListItem>
 						)}
+
+					<StyledListItem>
+						<StyledListItemIcon>
+							<Casino sx={{ color: mapaThemePrimaryGrey }} />
+						</StyledListItemIcon>
+
+						<ListItemText primary={`${getSausageChanceLabel(pollingPlace.chance_of_sausage)} chance of sausage`} />
+					</StyledListItem>
 				</List>
 			</StyledCardContent>
 

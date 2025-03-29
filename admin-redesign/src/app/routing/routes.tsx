@@ -5,9 +5,6 @@ import ErrorElement from '../../ErrorElement';
 import NotFound from '../../NotFound';
 import ElectionCreator from '../../features/elections/ElectionCreator';
 import ElectionEditor from '../../features/elections/ElectionEditor';
-import ElectionEditorControls from '../../features/elections/ElectionEditorControls';
-import ElectionEditorLoadPollingPlaces from '../../features/elections/ElectionEditorLoadPollingPlaces';
-import ElectionEditorStats from '../../features/elections/ElectionEditorStats';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
@@ -114,21 +111,6 @@ export const router = sentryCreateBrowserRouter(
 						{
 							path: '/elections/edit/:election_name/',
 							element: <ElectionEditor />,
-						},
-						// Election editing: Controls
-						{
-							path: '/elections/edit/:election_name/controls/',
-							element: <ElectionEditorControls />,
-						},
-						// Election editing: Load Polling Places
-						{
-							path: '/elections/edit/:election_name/load_polling_places/',
-							element: <ElectionEditorLoadPollingPlaces />,
-						},
-						// Election editing: Stats
-						{
-							path: '/elections/edit/:election_name/stats/',
-							element: <ElectionEditorStats />,
 						},
 					],
 				},

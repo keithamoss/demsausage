@@ -16,12 +16,13 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 	const userStatsGrandTotal = stats.map((item) => item.total).reduce((sum, item) => sum + item);
 	const userStatsSingleUserTotal = stats.map((item) => item.total).reduce((max, item) => (item > max ? item : max));
 	const avatarFabDiameter = 36;
+	const maxPctWidth = 88;
 
 	return (
 		<Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0.5, ml: 1 }}>
 			<Box
 				sx={{
-					width: `${(userStatsSingleUserTotal / userStatsGrandTotal) * 100}%`,
+					width: `${Math.min(maxPctWidth, (userStatsSingleUserTotal / userStatsGrandTotal) * 100)}%`,
 					height: 10,
 					mt: `${(avatarFabDiameter - 10) / 2}px`,
 					mb: `${(avatarFabDiameter - 10) / 2}px`,
@@ -46,11 +47,11 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 							width: avatarFabDiameter,
 							height: avatarFabDiameter,
 							// Take 3% off to (roughly) accommodate the width of 36px
-							left: `${(item.total / userStatsGrandTotal) * 100 - 2}%`,
+							left: `${Math.max(0, Math.min(maxPctWidth, (item.total / userStatsGrandTotal) * 100 - 2))}%`,
 						}}
 					>
 						<Badge badgeContent={item.total} max={999} color="primary">
-							<Avatar src={item.image_url} alt={item.initial} sx={{ width: 24, height: 24 }} />
+							<Avatar src={item.image_url} alt={item.initials} sx={{ width: 24, height: 24 }} />
 						</Badge>
 					</Fab>
 				))}

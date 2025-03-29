@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	AppBar,
+	Box,
 	Button,
 	Checkbox,
 	FormControl,
@@ -12,7 +13,6 @@ import {
 	ListItemText,
 	MenuItem,
 	OutlinedInput,
-	Paper,
 	Select,
 	Toolbar,
 } from '@mui/material';
@@ -64,10 +64,11 @@ function ElectionForm(props: Props) {
 			is_federal: election?.is_federal || false,
 			is_state: election?.is_state || false,
 			is_hidden: election?.is_hidden || false,
+			is_test: election?.is_test || false,
 		},
 	});
 
-	const { election_day, jurisdiction, geom, is_federal, is_state, is_hidden } = watch();
+	const { election_day, jurisdiction, geom, is_federal, is_state, is_hidden, is_test } = watch();
 
 	useEffect(() => {
 		if (jurisdiction !== undefined) {
@@ -107,7 +108,7 @@ function ElectionForm(props: Props) {
 	return (
 		<React.Fragment>
 			<form onSubmit={handleSubmit(onDoneWithForm)}>
-				<Paper elevation={0} sx={{ mt: 1 }}>
+				<Box sx={{ mt: 1 }}>
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 						<FormGroup>
 							<Controller
@@ -237,7 +238,24 @@ function ElectionForm(props: Props) {
 
 						{errors.is_hidden && <FormHelperText error>{errors.is_hidden.message}</FormHelperText>}
 					</FormControl>
-				</Paper>
+
+					<FormControl fullWidth={true} sx={{ mb: 0 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<FormControlLabel
+								control={
+									<Controller
+										name="is_test"
+										control={control}
+										render={({ field }) => <Checkbox {...field} checked={is_test === true} />}
+									/>
+								}
+								label="Test election"
+							/>
+						</FormGroup>
+
+						{errors.is_test && <FormHelperText error>{errors.is_test.message}</FormHelperText>}
+					</FormControl>
+				</Box>
 			</form>
 
 			<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
