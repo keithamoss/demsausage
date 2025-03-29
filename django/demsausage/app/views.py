@@ -1,6 +1,6 @@
 import json
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 from demsausage.app.enums import (
@@ -100,6 +100,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Func
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django.utils.timezone import make_aware
 
 logger = make_logger(__name__)
 
@@ -191,6 +192,25 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         elif request.method == "DELETE":
             cache.delete(cache_key)
             return Response()
+
+    @action(
+        detail=False,
+        methods=["get"],
+        permission_classes=(AnonymousOnlyGET,),
+        serializer_class=ElectionsSerializer,
+    )
+    def upcoming(self, request, format=None):
+        """
+        Retrieve a list of all elections coming up in the near future.
+        """
+        serializer = ElectionsSerializer(
+            Elections.objects.filter(is_hidden=True, is_test=False)
+            .filter(election_day__lte=make_aware(datetime.now()) + timedelta(weeks=12))
+            .order_by("-election_day"),
+            many=True,
+        )
+
+        return Response(serializer.data)
 
     @action(
         detail=True,

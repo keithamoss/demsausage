@@ -51,6 +51,9 @@ export const electionsApi = api.injectEndpoints({
 			// 	dispatch(setActiveElectionId(defaultElection?.id));
 			// },
 		}),
+		getUpcomingElections: builder.query<Election[], void>({
+			query: () => 'elections/upcoming/',
+		}),
 		getElectionStats: builder.query<ISausagelyticsFederalStats | ISausagelyticsStateStats, number>({
 			query: (electionId) => `elections/${electionId}/stats/`,
 		}),
@@ -91,5 +94,6 @@ export const electionsApi = api.injectEndpoints({
 
 export const {
 	useGetElectionsQuery,
+	useGetUpcomingElectionsQuery,
 	useGetElectionStatsQuery /*, useAddMapMutation, useUpdateMapMutation, usePatchMapMutation*/,
 } = electionsApi;

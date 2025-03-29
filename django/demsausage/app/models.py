@@ -83,6 +83,7 @@ class Elections(models.Model):
     geom = models.PolygonField(null=False)
     name = models.TextField(unique=True)
     short_name = models.TextField(unique=True)
+    is_test = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
     is_primary = models.BooleanField(default=False)
     is_federal = models.BooleanField(default=False)

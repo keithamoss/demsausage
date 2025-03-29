@@ -17,6 +17,7 @@ export interface ElectionModifiableProps {
 	is_federal: boolean;
 	is_state: boolean;
 	is_hidden: boolean;
+	is_test: boolean;
 }
 
 export type NewElection = ElectionModifiableProps;

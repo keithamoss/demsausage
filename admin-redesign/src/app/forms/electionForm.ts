@@ -24,5 +24,6 @@ export const electionFormValidationSchema: ObjectSchema<ElectionModifiableProps>
 		is_federal: yup.boolean().required(),
 		is_state: yup.boolean().required(),
 		is_hidden: yup.boolean().required(),
+		is_test: yup.boolean().required(),
 	})
 	.required();
