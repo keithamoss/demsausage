@@ -1,6 +1,3 @@
-from datetime import datetime
-
-import pytz
 from demsausage.app.enums import PollingPlaceStatus, StallStatus, StallSubmitterType
 from demsausage.app.models import (
     Elections,
@@ -14,7 +11,7 @@ from demsausage.app.models import (
 )
 from demsausage.app.sausage.elections import getGamifiedElectionStats
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
-from demsausage.util import get_or_none, get_url_safe_election_name
+from demsausage.util import daterange, get_or_none, get_url_safe_election_name
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
@@ -22,6 +19,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
+from django.db.models.functions import TruncDay
 
 
 class HistoricalRecordField(serializers.ListField):
@@ -143,6 +141,46 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
+        def _get_subs_by_type_and_day():
+            min_date = None
+            max_date = None
+            data = {}
+
+            for item in (
+                Stalls.objects.filter(election_id=obj.id)
+                .exclude(submitter_type="")
+                .annotate(day=TruncDay("reported_timestamp"))
+                .values("submitter_type", "day")
+                .annotate(count=Count("id"))
+            ):
+                if item["day"] not in data:
+                    data[item["day"]] = {"day": item["day"]}
+
+                    # Fill with empty fields for each status
+                    for tag in StallSubmitterType:
+                        data[item["day"]][tag] = None
+
+                data[item["day"]][item["submitter_type"]] = item["count"]
+
+                if min_date is None or item["day"] < min_date:
+                    min_date = item["day"]
+                if max_date is None or item["day"] > max_date:
+                    max_date = item["day"]
+
+            # Fill in any blank days so the series is continuous
+            if min_date is not None and max_date is not None:
+                for date in daterange(min_date, max_date):
+                    if date not in data:
+                        data[date] = {"day": date}
+
+                        # Fill with empty fields for each status
+                        for tag in StallSubmitterType:
+                            data[date][tag] = None
+
+            # Sort in descending order so the chart runs in the right order
+            sorted_data = {key: data[key] for key in sorted(data)}
+            return sorted_data.values()
+
         return {
             "with_data": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
@@ -157,8 +195,9 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                 polling_place__status=PollingPlaceStatus.ACTIVE,
             )
             .values("source")
-            .annotate(count=Count("source"))
+            .annotate(count=Count("id"))
             .order_by("-count"),
+            "subs_by_type_and_day": _get_subs_by_type_and_day(),
             "pending_subs": getGamifiedElectionStats(obj.id),
         }
 

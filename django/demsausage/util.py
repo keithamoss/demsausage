@@ -239,3 +239,8 @@ def get_stracktrace_string_for_current_exception():
         stack_trace.append("File \"%s\", line : %d, in \"%s\", message: %s" % (trace[0], trace[1], trace[2], trace[3]))
 
     return "\r\n".join(stack_trace)
+
+def daterange(start_date: datetime.date, end_date: datetime.date):
+    days = int((end_date - start_date).days)
+    for n in range(days):
+        yield start_date + datetime.timedelta(n)

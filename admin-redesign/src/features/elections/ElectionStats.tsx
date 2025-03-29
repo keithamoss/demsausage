@@ -23,10 +23,12 @@ import {
 import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
 import { useNotifications } from '@toolpad/core';
+import dayjs from 'dayjs';
 import { round, sortBy } from 'lodash-es';
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import type { Election } from '../../app/services/elections';
+import { StallSubmitterType, getStallSubmitterTypeName } from '../../app/services/stalls';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
@@ -78,7 +80,7 @@ function ElectionStats(props: Props) {
 
 	const notifications = useNotifications();
 
-	const dataset = elections
+	const datasetPollingPlaceWithData = elections
 		.filter((e) => {
 			if (e.id === election.id) {
 				return true;
@@ -117,6 +119,67 @@ function ElectionStats(props: Props) {
 			</AppBar>
 
 			<Paper elevation={0} sx={{ p: 2 }}>
+				{election.stats.subs_by_type_and_day.length > 0 && (
+					<Box
+						sx={{
+							mt: 1,
+							mb: 2,
+						}}
+					>
+						<BarChart
+							dataset={election.stats.subs_by_type_and_day}
+							series={Object.values(StallSubmitterType).map((i) => ({
+								dataKey: i,
+								stack: 'total',
+								label: getStallSubmitterTypeName(i),
+							}))}
+							onItemClick={(event, d) => {
+								const data = election.stats.subs_by_type_and_day[d.dataIndex];
+
+								notifications.show(
+									<React.Fragment>
+										<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
+
+										<TableContainer component={Paper}>
+											<Table size="small">
+												<TableBody>
+													{Object.entries(data).map(([key, value]) =>
+														key !== 'day' ? (
+															<StyledTableRow key={key}>
+																<StyledTableCell component="th" scope="row">
+																	{getStallSubmitterTypeName(key as StallSubmitterType)}
+																</StyledTableCell>
+																<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
+															</StyledTableRow>
+														) : undefined,
+													)}
+												</TableBody>
+											</Table>
+										</TableContainer>
+									</React.Fragment>,
+									{
+										severity: 'info',
+										autoHideDuration: 6000,
+									},
+								);
+							}}
+							margin={{ top: document.documentElement.clientWidth <= 600 ? 90 : 50 }}
+							grid={{ vertical: document.documentElement.clientWidth >= 600 }}
+							axisHighlight={{
+								x: 'line',
+							}}
+							xAxis={[
+								{
+									dataKey: 'day',
+									scaleType: 'band',
+									valueFormatter: (value, context) => dayjs(value).format('D MMM'),
+								},
+							]}
+							height={300}
+						/>
+					</Box>
+				)}
+
 				<Box
 					sx={{
 						mt: 1,
@@ -124,7 +187,7 @@ function ElectionStats(props: Props) {
 					}}
 				>
 					<BarChart
-						dataset={dataset}
+						dataset={datasetPollingPlaceWithData}
 						yAxis={[
 							{
 								scaleType: 'band',
@@ -145,13 +208,14 @@ function ElectionStats(props: Props) {
 								dataKey: 'data',
 								color: mapaThemePrimaryPurple,
 								valueFormatter: (value, { dataIndex }) => {
-									const data = dataset[dataIndex];
+									const data = datasetPollingPlaceWithData[dataIndex];
 									return `${value}% (${data.with_data} of ${data.total} polling places)`;
 								},
 							},
 						]}
 						onItemClick={(event, d) => {
-							const data = dataset[d.dataIndex];
+							const data = datasetPollingPlaceWithData[d.dataIndex];
+
 							notifications.show(
 								<React.Fragment>
 									<AlertTitle>{data.election}</AlertTitle>
@@ -189,7 +253,7 @@ function ElectionStats(props: Props) {
 								fill: 'white',
 							},
 						}}
-						height={Math.max(150, dataset.length * 40)}
+						height={Math.max(150, datasetPollingPlaceWithData.length * 40)}
 					/>
 				</Box>
 

@@ -28,6 +28,20 @@ export enum StallTipOffSource {
 }
 
 // Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
+export const getStallSubmitterTypeName = (enumName: StallSubmitterType): string => {
+	switch (enumName) {
+		case StallSubmitterType.Owner:
+			return 'Owner';
+		case StallSubmitterType.TipOff:
+			return 'Tip-off';
+		case StallSubmitterType.TipOffRunOut:
+			return 'Run Out Tip-off';
+		case StallSubmitterType.TipOffRedCrossOfShame:
+			return 'Red Cross of Shame Tip-off';
+	}
+};
+
+// Having a defined return type (string) ensures the switch raises a TS error if it's not exhaustive
 export const getStallSubmitterTypeTipOffName = (enumName: StallSubmitterType): string => {
 	switch (enumName) {
 		case StallSubmitterType.Owner:

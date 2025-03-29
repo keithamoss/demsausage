@@ -34,6 +34,10 @@ export interface Election extends ElectionModifiableProps {
 			source: string;
 			count: number;
 		}[];
+		subs_by_type_and_day: {
+			day: string; // Datetime
+			[key: string]: number | string; // Only string because of 'day'
+		}[];
 		pending_subs: ElectionPendingStallsGamifiedUserStats[];
 	};
 }
