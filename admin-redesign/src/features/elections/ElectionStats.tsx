@@ -73,7 +73,7 @@ interface Props {
 	onClose: () => void;
 }
 
-const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1);
+const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1) || 0;
 
 function ElectionStats(props: Props) {
 	const { election, elections, onClose } = props;
