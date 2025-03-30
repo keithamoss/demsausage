@@ -144,6 +144,17 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
+        def _get_by_source():
+            return (
+                PollingPlaceNoms.objects.filter(
+                    polling_place__election_id=obj.id,
+                    polling_place__status=PollingPlaceStatus.ACTIVE,
+                )
+                .values("source")
+                .annotate(count=Count("id"))
+                .order_by("-count")
+            )
+
         def _get_subs_by_type_and_day():
             min_date = None
             max_date = None
@@ -227,6 +238,16 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             sorted_data = {key: data[key] for key in sorted(data)}
             return sorted_data.values()
 
+        def _get_top_submitters():
+            # Not sure why it was a two-layer list
+            return (
+                Stalls.objects.filter(election_id=obj.id)
+                .values("email")
+                .annotate(count=Count("id"))
+                .order_by("-count")
+                .exclude(count__lte=1),
+            )[0]
+
         return {
             "with_data": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
@@ -236,15 +257,10 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "total": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             ).count(),
-            "by_source": PollingPlaceNoms.objects.filter(
-                polling_place__election_id=obj.id,
-                polling_place__status=PollingPlaceStatus.ACTIVE,
-            )
-            .values("source")
-            .annotate(count=Count("id"))
-            .order_by("-count"),
+            "by_source": _get_by_source(),
             "subs_by_type_and_day": _get_subs_by_type_and_day(),
             "triage_actions_by_day": _get_triage_actions_by_day(),
+            "top_submitters": _get_top_submitters(),
             "pending_subs": getGamifiedElectionStats(obj.id),
         }
 

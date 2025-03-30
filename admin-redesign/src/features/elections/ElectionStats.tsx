@@ -320,6 +320,36 @@ function ElectionStats(props: Props) {
 					/>
 				</Box>
 
+				{election.stats.top_submitters.length > 0 && (
+					<TableContainer
+						component={Paper}
+						sx={{
+							mt: 1,
+							mb: 3,
+						}}
+					>
+						<Table size="small">
+							<TableHead>
+								<TableRow>
+									<StyledTableCell>Email</StyledTableCell>
+									<StyledTableCell align="right">Count</StyledTableCell>
+								</TableRow>
+							</TableHead>
+
+							<TableBody>
+								{election.stats.top_submitters.map((row) => (
+									<StyledTableRow key={row.email}>
+										<StyledTableCell component="th" scope="row">
+											{row.email}
+										</StyledTableCell>
+										<StyledTableCell align="right">{row.count}</StyledTableCell>
+									</StyledTableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				)}
+
 				{election.stats.by_source.length > 0 && (
 					<TableContainer component={Paper}>
 						<Table size="small">
