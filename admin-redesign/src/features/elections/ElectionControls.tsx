@@ -49,6 +49,16 @@ export default function ElectionControls(props: Props) {
 	// ######################
 
 	// ######################
+	// Download Vollie Research Data
+	// ######################
+	const onClickDownloadVollieResearchData = () => {
+		window.location.href = `${getAPIBaseURL()}/0.1/polling_places/vollie_cos_task/?format=csv&election_id=${election.id}`;
+	};
+	// ######################
+	// Download Vollie Research Data (End)
+	// ######################
+
+	// ######################
 	// Map Data Cache Clearing
 	// ######################
 	const onClickRefreshMapData = () => {
@@ -107,6 +117,15 @@ export default function ElectionControls(props: Props) {
 									<Download />
 								</ListItemIcon>
 								<ListItemText primary="Download election data (XLS)" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding onClick={onClickDownloadVollieResearchData}>
+							<ListItemButton>
+								<ListItemIcon>
+									<Download />
+								</ListItemIcon>
+								<ListItemText primary="Download volunteer research data (XLS)" />
 							</ListItemButton>
 						</ListItem>
 

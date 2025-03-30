@@ -1,10 +1,13 @@
 import json
+import urllib.parse
 from copy import deepcopy
 from datetime import datetime, timedelta
 
 import pytz
 from demsausage.app.enums import (
+    PollingPlaceChanceOfSausage,
     PollingPlaceHistoryEventType,
+    PollingPlaceStatus,
     StallStatus,
     StallSubmitterType,
 )
@@ -80,7 +83,13 @@ from demsausage.rq.jobs import (
 )
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
-from demsausage.util import add_datetime_to_filename, get_or_none, make_logger
+from demsausage.util import (
+    add_datetime_to_filename,
+    get_env,
+    get_or_none,
+    get_url_safe_election_name,
+    make_logger,
+)
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
@@ -98,7 +107,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import Extent
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Func
+from django.db.models import F, Func
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.utils.timezone import make_aware
 
@@ -358,7 +367,11 @@ class PollingPlacesViewSet(
         )
 
         # Customise the filename for CSV downloads
-        if response.status_code == 200 and "text/csv" in response.accepted_media_type:
+        if (
+            response.status_code == 200
+            and "text/csv" in response.accepted_media_type
+            and "vollie_cos_task" not in request.get_full_path()
+        ):
             election = get_or_none(
                 Elections, id=request.query_params.get("election_id", None)
             )
@@ -414,6 +427,37 @@ class PollingPlacesViewSet(
             update_change_reason(self.get_object().noms, "Edited directly")
 
         return response
+
+    @action(detail=False, methods=["get"])
+    def vollie_cos_task(self, request, format=None):
+        election_id = request.query_params.get("election_id", None)
+
+        if election_id is None:
+            raise BadRequest("No election_id provided.")
+
+        election = Elections.objects.get(id=election_id)
+        data = []
+
+        for pollingPlace in PollingPlaces.objects.filter(
+            election_id=election_id, status=PollingPlaceStatus.ACTIVE, noms_id=None
+        ).order_by(F("chance_of_sausage").desc(nulls_last=True)):
+            data.append(
+                {
+                    "name": pollingPlace.name,
+                    "address": pollingPlace.address,
+                    "assigned_to": "",
+                    "status": "",
+                    "chance_of_sausage": (
+                        PollingPlaceChanceOfSausage(pollingPlace.chance_of_sausage).name
+                        if pollingPlace.chance_of_sausage is not None
+                        else "No Data"
+                    ),
+                    "edit_link": f"{get_env('SITE_BASE_URL')}/polling-places/{get_url_safe_election_name(election.name)}/{pollingPlace.id}/",
+                    "google_link": f"https://www.google.com/search?q=Facebook+{urllib.parse.quote_plus(pollingPlace.name)}+{pollingPlace.state}",
+                }
+            )
+
+        return Response(data)
 
     @action(detail=True, methods=["get"])
     def noms_history(self, request, pk=None, format=None):
