@@ -99,13 +99,13 @@ export default function MediaPage() {
 							},
 						}}
 					>
-						<ListItemButton href={'mailto:ausdemocracysausage@gmail.com'} dense>
+						<ListItemButton href={'mailto:media@democracysausage.org'} dense>
 							<ListItemIcon>
 								<IconButton edge="start" disableRipple>
 									<EmailIcon />
 								</IconButton>
 							</ListItemIcon>
-							<ListItemText primary="Media Contact" secondary="ausdemocracysausage@gmail.com" />
+							<ListItemText primary="Media Contact" secondary="media@democracysausage.org" />
 						</ListItemButton>
 					</ListItem>
 				</List>

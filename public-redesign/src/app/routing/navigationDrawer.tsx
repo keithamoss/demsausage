@@ -37,7 +37,7 @@ const navigationItemsTier1 = [
 ];
 
 const navigationItemsTier2 = [
-	{ text: 'Email', path: 'mailto:ausdemocracysausage@gmail.com', icon: <EmailIcon /> },
+	{ text: 'Email', path: 'mailto:info@democracysausage.org', icon: <EmailIcon /> },
 	{ text: 'Twitter', path: 'https://twitter.com/DemSausage', icon: <TwitterIcon /> },
 	{ text: 'Facebook', path: 'https://www.facebook.com/AusDemocracySausage', icon: <FacebookIcon /> },
 	{ text: 'Instagram', path: 'https://www.instagram.com/ausdemocracysausage/', icon: <InstagramIcon /> },

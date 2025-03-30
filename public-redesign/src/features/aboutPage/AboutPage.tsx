@@ -117,7 +117,7 @@ export default function AboutPage() {
 					<p>
 						We&apos;re enthusiastic about democracy sausage and making elections just a little bit more fun. You can
 						find us on Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{' '}
-						<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a>.
+						<a href="mailto:help@democracysausage.org">help@democracysausage.org</a>.
 					</p>
 				</Answer>
 
