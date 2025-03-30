@@ -63,14 +63,14 @@ export default function AddStallIntroMessage(props: Props) {
 				</Alert>
 
 				<List>
-					<ListItemButton component="a" href="mailto:ausdemocracysausage@gmail.com">
+					<ListItemButton component="a" href="mailto:help@democracysausage.org">
 						<ListItemAvatar>
 							<Avatar>
 								<EmailIcon />
 							</Avatar>
 						</ListItemAvatar>
 
-						<ListItemText primary="Having trouble submitting a stall?" secondary="ausdemocracysausage@gmail.com" />
+						<ListItemText primary="Having trouble submitting a stall?" secondary="help@democracysausage.org" />
 					</ListItemButton>
 				</List>
 			</Box>

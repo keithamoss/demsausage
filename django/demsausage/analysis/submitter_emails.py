@@ -207,7 +207,7 @@ with open("submitter_emails_20250323.json") as f:
             }
         )
 
-    with open("output_submitter_emails.csv", mode="w", newline="") as file:
+    with open("output_submitter_emails_20250323.csv", mode="w", newline="") as file:
         writer = csv.DictWriter(
             file,
             fieldnames=[
@@ -222,3 +222,6 @@ with open("submitter_emails_20250323.json") as f:
 
         for row in emails:
             writer.writerow(row)
+
+    with open("output_submitter_emails_20250323.json", mode="w") as file:
+        json.dump(emails, file)

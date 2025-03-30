@@ -37,7 +37,15 @@ export interface Election extends ElectionModifiableProps {
 		}[];
 		subs_by_type_and_day: {
 			day: string; // Datetime
-			[key: string]: number | string; // Only string because of 'day'
+			[key: string]: number | null | string; // Only string because of 'day'
+		}[];
+		triage_actions_by_day: {
+			day: string; // Datetime
+			[key: string]: number | null | string; // Only string because of 'day'
+		}[];
+		top_submitters: {
+			email: string;
+			count: 2;
 		}[];
 		pending_subs: ElectionPendingStallsGamifiedUserStats[];
 	};

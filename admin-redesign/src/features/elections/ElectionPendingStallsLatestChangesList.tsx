@@ -1,5 +1,7 @@
 import { Approval, Close, DoNotDisturb, QuestionMark } from '@mui/icons-material';
 import {
+	Alert,
+	AlertTitle,
 	AppBar,
 	IconButton,
 	Link,
@@ -14,7 +16,6 @@ import {
 import dayjs from 'dayjs';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ErrorElement from '../../ErrorElement';
 import { navigateToPollingPlaceSearchResultsFromElectionAndSearchTermDirectly } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
 import type { Election } from '../../app/services/elections';
 import {
@@ -38,7 +39,29 @@ function ElectionPendingStallsLatestChangesEntrypoint(props: EntrpointProps) {
 	const pendingStallsForElection = electionsWithPendingStalls?.find((i) => i.election_id === election.id);
 
 	if (pendingStallsForElection === undefined) {
-		return <ErrorElement />;
+		// return <ErrorElement />;
+
+		return (
+			<DialogWithTransition onClose={onClose}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
+					<Toolbar>
+						<IconButton edge="start" color="inherit" onClick={onClose}>
+							<Close />
+						</IconButton>
+
+						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+							Latest Changes
+						</Typography>
+					</Toolbar>
+				</AppBar>
+
+				<Alert severity="warning" sx={{ mt: 2 }}>
+					<AlertTitle>Oops!</AlertTitle>
+					We currently can't show the "Latest changes" view while there isn't at least one pending stall. We'll fix this
+					later.
+				</Alert>
+			</DialogWithTransition>
+		);
 	}
 
 	return (

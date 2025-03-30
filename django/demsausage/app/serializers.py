@@ -144,6 +144,17 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         )
 
     def get_stats(self, obj):
+        def _get_by_source():
+            return (
+                PollingPlaceNoms.objects.filter(
+                    polling_place__election_id=obj.id,
+                    polling_place__status=PollingPlaceStatus.ACTIVE,
+                )
+                .values("source")
+                .annotate(count=Count("id"))
+                .order_by("-count")
+            )
+
         def _get_subs_by_type_and_day():
             min_date = None
             max_date = None
@@ -184,6 +195,59 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             sorted_data = {key: data[key] for key in sorted(data)}
             return sorted_data.values()
 
+        def _get_triage_actions_by_day():
+            min_date = None
+            max_date = None
+            data = {}
+
+            for item in (
+                Stalls.history.filter(election_id=obj.id)
+                .exclude(triaged_on=None)
+                .exclude(status=StallStatus.PENDING)
+                .annotate(day=TruncDay("triaged_on"))
+                .values("status", "day")
+                .annotate(count=Count("id"))
+            ):
+                if item["day"] not in data:
+                    data[item["day"]] = {"day": item["day"]}
+
+                    # Fill with empty fields for each status
+                    for tag in StallStatus:
+                        if tag != StallStatus.PENDING:
+                            data[item["day"]][tag] = None
+
+                data[item["day"]][item["status"]] = item["count"]
+
+                if min_date is None or item["day"] < min_date:
+                    min_date = item["day"]
+                if max_date is None or item["day"] > max_date:
+                    max_date = item["day"]
+
+            # Fill in any blank days so the series is continuous
+            if min_date is not None and max_date is not None:
+                for date in daterange(min_date, max_date):
+                    if date not in data:
+                        data[date] = {"day": date}
+
+                        # Fill with empty fields for each status
+                        for tag in StallStatus:
+                            if tag != StallStatus.PENDING:
+                                data[date][tag] = None
+
+            # Sort in descending order so the chart runs in the right order
+            sorted_data = {key: data[key] for key in sorted(data)}
+            return sorted_data.values()
+
+        def _get_top_submitters():
+            # Not sure why it was a two-layer list
+            return (
+                Stalls.objects.filter(election_id=obj.id)
+                .values("email")
+                .annotate(count=Count("id"))
+                .order_by("-count")
+                .exclude(count__lte=1),
+            )[0]
+
         return {
             "with_data": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
@@ -193,14 +257,10 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "total": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             ).count(),
-            "by_source": PollingPlaceNoms.objects.filter(
-                polling_place__election_id=obj.id,
-                polling_place__status=PollingPlaceStatus.ACTIVE,
-            )
-            .values("source")
-            .annotate(count=Count("id"))
-            .order_by("-count"),
+            "by_source": _get_by_source(),
             "subs_by_type_and_day": _get_subs_by_type_and_day(),
+            "triage_actions_by_day": _get_triage_actions_by_day(),
+            "top_submitters": _get_top_submitters(),
             "pending_subs": getGamifiedElectionStats(obj.id),
         }
 
