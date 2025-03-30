@@ -28,7 +28,7 @@ import { round, sortBy } from 'lodash-es';
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import type { Election } from '../../app/services/elections';
-import { StallSubmitterType, getStallSubmitterTypeName } from '../../app/services/stalls';
+import { StallStatus, StallSubmitterType, getStallSubmitterTypeName } from '../../app/services/stalls';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
@@ -164,6 +164,69 @@ function ElectionStats(props: Props) {
 								);
 							}}
 							margin={{ top: document.documentElement.clientWidth <= 600 ? 90 : 50 }}
+							grid={{ vertical: document.documentElement.clientWidth >= 600 }}
+							axisHighlight={{
+								x: 'line',
+							}}
+							xAxis={[
+								{
+									dataKey: 'day',
+									scaleType: 'band',
+									valueFormatter: (value, context) => dayjs(value).format('D MMM'),
+								},
+							]}
+							height={300}
+						/>
+					</Box>
+				)}
+
+				{election.stats.triage_actions_by_day.length > 0 && (
+					<Box
+						sx={{
+							mt: 1,
+							mb: 2,
+						}}
+					>
+						<BarChart
+							dataset={election.stats.triage_actions_by_day}
+							series={Object.values(StallStatus)
+								.filter((i) => i !== StallStatus.Pending)
+								.map((i) => ({
+									dataKey: i,
+									stack: 'total',
+									label: i,
+								}))}
+							onItemClick={(event, d) => {
+								const data = election.stats.triage_actions_by_day[d.dataIndex];
+
+								notifications.show(
+									<React.Fragment>
+										<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
+
+										<TableContainer component={Paper}>
+											<Table size="small">
+												<TableBody>
+													{Object.entries(data).map(([key, value]) =>
+														key !== 'day' ? (
+															<StyledTableRow key={key}>
+																<StyledTableCell component="th" scope="row">
+																	{key}
+																</StyledTableCell>
+																<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
+															</StyledTableRow>
+														) : undefined,
+													)}
+												</TableBody>
+											</Table>
+										</TableContainer>
+									</React.Fragment>,
+									{
+										severity: 'info',
+										autoHideDuration: 6000,
+									},
+								);
+							}}
+							margin={{ top: 50 }}
 							grid={{ vertical: document.documentElement.clientWidth >= 600 }}
 							axisHighlight={{
 								x: 'line',
