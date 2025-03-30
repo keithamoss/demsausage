@@ -1047,8 +1047,14 @@ class StallsViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
         stall = self.get_object()
+
         if stall.status != StallStatus.PENDING:
-            raise BadRequest("Stall is not pending")
+            return Response(
+                {
+                    "error": f"Oops! This submission was already {stall.status.lower()} by {stall.triaged_by.first_name.split(' ')[0]}."
+                },
+                status=status.HTTP_418_IM_A_TEAPOT,
+            )
 
         # Update the PollingPlaceNoms with the data included from the noms form
         serializer = PollingPlaceNomsSerializer(
