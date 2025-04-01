@@ -13,7 +13,7 @@ from .views import (
     ElectionMapStaticImageCurrentDefaultElectionViewSet,
     ElectionMapStaticImageViewSet,
     ElectionsViewSet,
-                    PendingStallsViewSet, PollingPlaceFacilityTypeViewSet,
+    ImpossibilitiesViewSet,
     LogoutUserView,
     MailManagementViewSet,
     PendingStallsViewSet,
@@ -46,6 +46,7 @@ router.register(
     "PollingPlaceFacilityTypeViewSet",
 )
 router.register(r"mail", MailManagementViewSet, "MailManagementViewSet")
+router.register(r"impossibilities", ImpossibilitiesViewSet, "ImpossibilitiesViewSet")
 
 # Need to set base_name because Reasons
 # http://www.django-rest-framework.org/api-guide/routers/#usage (see note re `base_name`)

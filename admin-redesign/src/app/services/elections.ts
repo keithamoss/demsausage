@@ -164,6 +164,14 @@ export const electionsApi = api.injectEndpoints({
 				body: { election_id: electionId },
 			}),
 		}),
+		getImpossibilitiesReport: builder.query<
+			{ type: string; name: string; passed: boolean; message: string; ids: number[] }[],
+			void
+		>({
+			query: () => ({
+				url: 'impossibilities/report/',
+			}),
+		}),
 	}),
 });
 
@@ -175,4 +183,5 @@ export const {
 	useGetPollingPlaceLoaderJobInfoQuery,
 	useSetPrimaryElectionMutation,
 	useClearElectionMapDataCacheMutation,
+	useGetImpossibilitiesReportQuery,
 } = electionsApi;
