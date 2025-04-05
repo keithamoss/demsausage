@@ -234,7 +234,8 @@ function PollingPlaceChooser(props: Props) {
 
 			{isFetchingPollingPlacesBySearchTerm === false &&
 				isSuccessFetchingPollingPlacesBySearchTerm === true &&
-				pollingPlaceBySearchTermResult !== undefined && (
+				pollingPlaceBySearchTermResult !== undefined &&
+				isSearchingYet(urlSearchTerm) === true && (
 					<Stack spacing={1}>
 						{pollingPlaceBySearchTermResult.length === 0 && (
 							<List disablePadding>
