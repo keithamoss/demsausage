@@ -74,7 +74,7 @@ def getGamifiedElectionStats(electionId):
             .values("noms_id")
         )
         .values("history_user_id")
-        .annotate(total=Count("history_user_id"))
+        .annotate(total=Count("id", distinct=True))
         .order_by("total")
     )
 
