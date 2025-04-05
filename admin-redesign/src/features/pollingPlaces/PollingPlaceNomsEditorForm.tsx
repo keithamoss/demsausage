@@ -372,19 +372,6 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 				{allowAppBarControl !== false && (
 					<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
 						<Toolbar sx={{ justifyContent: 'flex-end' }}>
-							<Button
-								loading={isSaving}
-								loadingPosition="end"
-								disabled={isDirty === false}
-								size="small"
-								color="primary"
-								endIcon={<Save />}
-								onClick={onClickSubmit}
-							>
-								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
-								<span>Save</span>
-							</Button>
-
 							{pollingPlace.stall !== null && (
 								<Button
 									loading={isDeleting}
@@ -394,12 +381,25 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 									color="primary"
 									endIcon={<Delete />}
 									onClick={onClickDelete}
-									sx={{ ml: 1 }}
 								>
 									{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 									<span>Delete</span>
 								</Button>
 							)}
+
+							<Button
+								loading={isSaving}
+								loadingPosition="end"
+								disabled={isDirty === false}
+								size="small"
+								color="primary"
+								endIcon={<Save />}
+								onClick={onClickSubmit}
+								sx={{ ml: 1 }}
+							>
+								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+								<span>Save</span>
+							</Button>
 						</Toolbar>
 					</AppBar>
 				)}
