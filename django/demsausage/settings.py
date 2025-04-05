@@ -189,6 +189,8 @@ CACHES = {
     }
 }
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5Mb limit
+
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases

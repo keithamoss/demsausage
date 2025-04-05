@@ -353,7 +353,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     # field_data = {key: value.strip() for (key, value) in dict(polling_place).items() if key in regex["fields"]}
                     # match = re.search(regex["regex"].format(**field_data), polling_place[regex["field"]])
 
-                    match = re.search(regex["regex"], polling_place[regex["field"]])
+                    match = re.search(
+                        regex["regex"], polling_place[regex["field"]].strip()
+                    )
                     if match:
                         polling_place[regex["field"]] = match.groupdict()[
                             "main"
@@ -361,7 +363,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     else:
                         self.logger.error(
                             "No regex match for {} for {}".format(
-                                polling_place["name"], regex["regex"]
+                                polling_place[regex["field"]], regex["regex"], match
                             )
                         )
                 return polling_place
