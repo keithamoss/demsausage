@@ -14,7 +14,7 @@ import { getIntegerParamOrUndefined, getStringParamOrUndefined } from '../../app
 import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceByIdsLookupQuery } from '../../app/services/pollingPlaces';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
-import { selectElectionById, selectVisibleElections } from '../elections/electionsSlice';
+import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import PollingPlaceStallsList from './PollingPlaceStallsList';
 import { getPollingPlaceNavTabs, getPollingPlaceSummaryCardForHeading } from './pollingPlaceHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
@@ -61,7 +61,7 @@ function EntrypointLayer1() {
 	const urlPollingPlaceId = getIntegerParamOrUndefined(params, 'polling_place_id');
 
 	let electionId: number | undefined;
-	const elections = useAppSelector(selectVisibleElections);
+	const elections = useAppSelector(selectAllElections);
 
 	if (urlElectionName !== undefined && urlElectionName !== '') {
 		electionId = elections.find((e) => e.name_url_safe === urlElectionName)?.id;

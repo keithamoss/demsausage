@@ -193,10 +193,21 @@ function PendingStallsPollingPlace(props: Props) {
 				if (pollingPlace.pending_stalls.length === 1) {
 					navigateToPendingStallsRoot(navigate);
 				}
-			} catch (err) {
-				notifications.show(JSON.stringify(err), {
-					severity: 'error',
-				});
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			} catch (err: any) {
+				console.log(err);
+				if ('status' in err && err.status === 418) {
+					// 418 (I'm A Teapot) is the "This submission was already [approved/declined] by [name]" error code
+					navigateToPendingStallsRoot(navigate);
+
+					notifications.show(err.data.error, {
+						severity: 'warning',
+					});
+				} else {
+					notifications.show(JSON.stringify(err), {
+						severity: 'error',
+					});
+				}
 
 				setIsLoadingScreenShown(false);
 			}

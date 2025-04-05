@@ -1,4 +1,4 @@
-import { Storefront } from '@mui/icons-material';
+import { Report, Storefront } from '@mui/icons-material';
 import BallotIcon from '@mui/icons-material/Ballot';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
@@ -15,6 +15,7 @@ const navigationItemsTier1 = [
 	{ text: 'Pending Submissions', path: '/', icon: <Storefront /> },
 	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
 	{ text: 'Elections', path: '/elections/', icon: <BallotIcon /> },
+	{ text: 'Quality Assurance', path: '/impossibilities/', icon: <Report /> },
 ];
 
 interface UIMatchData {

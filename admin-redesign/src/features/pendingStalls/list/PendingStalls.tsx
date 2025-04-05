@@ -169,7 +169,7 @@ function PendingStalls(props: Props) {
 							<React.Fragment key={election.id}>
 								<Card variant="outlined" sx={{ mb: 1 }}>
 									<CardContent sx={{ p: 1 }}>
-										<ListItem sx={{ p: 0, pb: 1 }}>
+										<ListItem sx={{ p: 0 }}>
 											<ListItemAvatar>
 												{getJurisdictionCrestStandaloneReactAvatar(election.jurisdiction)}
 											</ListItemAvatar>

@@ -1,4 +1,4 @@
-import { QueryStats, Save, Schedule, Tune } from '@mui/icons-material';
+import { Close, QueryStats, Save, Schedule, Tune } from '@mui/icons-material';
 import { Button, Paper, styled } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -68,6 +68,8 @@ function ElectionEditor(props: Props) {
 		[updateElection],
 	);
 
+	const onClickClose = () => navigateToElections(navigate);
+
 	// ######################
 	// Dialog Management
 	// ######################
@@ -88,6 +90,10 @@ function ElectionEditor(props: Props) {
 
 	return (
 		<PageWrapper>
+			<Button startIcon={<Close />} onClick={onClickClose}>
+				Close
+			</Button>
+
 			<Button startIcon={<Tune />} onClick={onOpenControlsDialog}>
 				Controls
 			</Button>

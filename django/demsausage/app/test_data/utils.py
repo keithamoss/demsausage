@@ -21,7 +21,7 @@ from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces, St
 
 
 def get_election_id():
-    return 58
+    return 44
 
 
 def get_election():

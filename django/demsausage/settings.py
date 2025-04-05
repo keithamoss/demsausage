@@ -30,7 +30,7 @@ SECRET_KEY = get_env("SECRET_KEY")
 # Security
 SECURE_SSL_REDIRECT = True
 # https://stackoverflow.com/a/22284717
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
@@ -40,14 +40,14 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = list(get_env("ALLOWED_HOSTS_AND_WHITELIST").split(","))
 CSRF_TRUSTED_ORIGINS = get_env("ALLOWED_HOSTS_AND_WHITELIST").split(",")
-ALLOWED_HOSTS = get_env("ALLOWED_HOSTS_AND_WHITELIST").replace("https://", "").split(",")
+ALLOWED_HOSTS = (
+    get_env("ALLOWED_HOSTS_AND_WHITELIST").replace("https://", "").split(",")
+)
 
 SESSION_COOKIE_DOMAIN = get_env("SESSION_COOKIE_DOMAIN")
 CSRF_COOKIE_DOMAIN = get_env("CSRF_COOKIE_DOMAIN")
 
-CORS_ALLOW_HEADERS = default_headers + (
-    "Content-Disposition",
-)
+CORS_ALLOW_HEADERS = default_headers + ("Content-Disposition",)
 
 CONN_MAX_AGE = 10
 
@@ -83,9 +83,7 @@ if get_env("ENVIRONMENT") == "PRODUCTION" or get_env("ENVIRONMENT") == "STAGING"
 else:
     DEBUG = True
 
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static")
-    ]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
     for static_dir in STATICFILES_DIRS:
         pathlib.Path(static_dir).mkdir(exist_ok=True)
 
@@ -93,101 +91,103 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'social_django',
-    'demsausage.app',
-    'rest_framework',
-    'rest_framework_gis',
-    'corsheaders',
-    'simple_history',
-    'django_filters',
-    'drf_spectacular',
-    'django_rq'
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.gis",
+    "social_django",
+    "demsausage.app",
+    "rest_framework",
+    "rest_framework_gis",
+    "corsheaders",
+    "simple_history",
+    "django_filters",
+    "drf_spectacular",
+    "django_rq",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.azuread.AzureADOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
+    "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.azuread.AzureADOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
 )
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
+    "social_core.pipeline.social_auth.social_details",
     # 'social_core.pipeline.social_auth.social_uid',
-    'demsausage.app.auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
+    "demsausage.app.auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
     # 'social_core.pipeline.user.create_user',
-    'demsausage.app.auth.create_user',
+    "demsausage.app.auth.create_user",
     # 'ealgis.ealauth.pipeline.do_something',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-    'demsausage.app.auth.get_avatar',
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+    "demsausage.app.auth.get_avatar",
 )
 
-ROOT_URLCONF = 'demsausage.urls'
+ROOT_URLCONF = "demsausage.urls"
 
 LOGIN_REDIRECT_URL = get_env("SITE_BASE_URL")
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_env("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
-SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = get_env('SOCIAL_AUTH_AZUREAD_OAUTH2_KEY')
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = get_env('SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET')
+SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = get_env("SOCIAL_AUTH_AZUREAD_OAUTH2_KEY")
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = get_env("SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET")
 
-SOCIAL_AUTH_TWITTER_KEY = get_env('SOCIAL_AUTH_TWITTER_KEY')
-SOCIAL_AUTH_TWITTER_SECRET = get_env('SOCIAL_AUTH_TWITTER_SECRET')
+SOCIAL_AUTH_TWITTER_KEY = get_env("SOCIAL_AUTH_TWITTER_KEY")
+SOCIAL_AUTH_TWITTER_SECRET = get_env("SOCIAL_AUTH_TWITTER_SECRET")
 
-SOCIAL_AUTH_FACEBOOK_KEY = get_env('SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = get_env('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = get_env("SOCIAL_AUTH_FACEBOOK_KEY")
+SOCIAL_AUTH_FACEBOOK_SECRET = get_env("SOCIAL_AUTH_FACEBOOK_SECRET")
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
 ]
 
 CACHES = {
-    'default': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
-        'LOCATION': get_env('MEMCACHED_LOCATION'),
-        'TIMEOUT': None,
-        'KEY_PREFIX': 'demsausage',
+    "default": {
+        "BACKEND": "djpymemcache.backend.PyMemcacheCache",
+        "LOCATION": get_env("MEMCACHED_LOCATION"),
+        "TIMEOUT": None,
+        "KEY_PREFIX": "demsausage",
     }
 }
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5Mb limit
 
 
 # Database
@@ -195,18 +195,18 @@ CACHES = {
 
 # DATABASES = {}
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'OPTIONS': {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "OPTIONS": {
             # Assumes PostGIS was installed with defaults (i.e. its in the public schema)
             # https://stackoverflow.com/a/26289219/7368493
-            'options': '-c search_path={},public,topology'.format(get_env('DB_SCHEMA'))
+            "options": "-c search_path={},public,topology".format(get_env("DB_SCHEMA"))
         },
-        'NAME': get_env('DB_NAME'),
-        'USER': get_env('DB_USERNAME'),
-        'PASSWORD': get_env('DB_PASSWORD'),
-        'HOST': get_env('DB_HOST'),
-        'PORT': get_env('DB_PORT'),
+        "NAME": get_env("DB_NAME"),
+        "USER": get_env("DB_USERNAME"),
+        "PASSWORD": get_env("DB_PASSWORD"),
+        "HOST": get_env("DB_HOST"),
+        "PORT": get_env("DB_PORT"),
     },
 }
 
@@ -216,37 +216,33 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 # Django REST Framework
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-au'
+LANGUAGE_CODE = "en-au"
 
-TIME_ZONE = 'Australia/Perth'
+TIME_ZONE = "Australia/Perth"
 
 USE_I18N = True
 
@@ -256,41 +252,41 @@ USE_TZ = True
 
 # Model defaults
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/api/static/'
+STATIC_URL = "/api/static/"
 
 # Swagger
 
 SPECTACULAR_SETTINGS = {
-    'SERVE_PUBLIC': False,
-    'SWAGGER_UI_SETTINGS': {
-        'deepLinking': True,
+    "SERVE_PUBLIC": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
     },
-    'TITLE': 'Democracy Sausage API',
-    'DESCRIPTION': 'Sausage Transfer Protocol',
-    'CONTACT': {
-        'name': 'Keith Moss',
-        'email': 'keithamoss@gmail.com',
+    "TITLE": "Democracy Sausage API",
+    "DESCRIPTION": "Sausage Transfer Protocol",
+    "CONTACT": {
+        "name": "Keith Moss",
+        "email": "keithamoss@gmail.com",
     },
-    'VERSION': '0.1',
+    "VERSION": "0.1",
 }
 
 # RQ and Django-RQ
 RQ = {
     "DEFAULT_RESULT_TTL": 60 * 60 * 24,
-    'QUEUE_CLASS': 'demsausage.rq.custom_classes.CustomQueue',
-    'WORKER_CLASS': 'demsausage.rq.custom_classes.CustomWorker',
-    'JOB_CLASS': 'demsausage.rq.custom_classes.CustomJob',
+    "QUEUE_CLASS": "demsausage.rq.custom_classes.CustomQueue",
+    "WORKER_CLASS": "demsausage.rq.custom_classes.CustomWorker",
+    "JOB_CLASS": "demsausage.rq.custom_classes.CustomJob",
 }
 
 RQ_QUEUES = {
-    'cache_hydration': {
-        'URL': get_env("RQ_REDIS_URL"),
-        'DEFAULT_TIMEOUT': 500,
+    "cache_hydration": {
+        "URL": get_env("RQ_REDIS_URL"),
+        "DEFAULT_TIMEOUT": 500,
     }
 }
 
@@ -302,7 +298,7 @@ sentry_sdk.init(
     dsn=get_env("RAVEN_URL"),
     integrations=[DjangoIntegration()],
     send_default_pii=True,
-    environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper()
+    environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper(),
 )
 
 with sentry_sdk.configure_scope() as scope:

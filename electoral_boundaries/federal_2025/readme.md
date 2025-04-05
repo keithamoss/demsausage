@@ -2,7 +2,7 @@
 
 [Federal electoral boundary GIS data for free download](https://aec.gov.au/Electorates/gis/gis_datadownload.htm)
 
-Downloaded 10/05/2022.
+Downloaded 05/04/2025.
 
 # Loading data
 
@@ -22,10 +22,16 @@ cd /var/lib/postgresql/scripts
 
 Then, if we've changed models.py, apply any migrations.
 
+```
+docker compose exec -it django /bin/bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
 Then run the loader script.
 
 ```
-docker exec -it demsausage-django-1 python /electoral_boundaries/federal_2022/electoral_boundaries/load.py
+docker compose exec -it django python /electoral_boundaries/federal_2025/load.py
 ```
 
 Then, if all is good, replace the production table with the new development table:

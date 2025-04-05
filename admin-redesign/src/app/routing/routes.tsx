@@ -7,6 +7,7 @@ import ElectionCreator from '../../features/elections/ElectionCreator';
 import ElectionEditor from '../../features/elections/ElectionEditor';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
+import QualityAssuranceReport from '../../features/impossibilities/QualityAssuranceReport';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
 import PendingStallsPollingPlace from '../../features/pendingStalls/pollingplace/PendingStallsPollingPlace';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
@@ -113,6 +114,13 @@ export const router = sentryCreateBrowserRouter(
 							element: <ElectionEditor />,
 						},
 					],
+				},
+				{
+					path: '/impossibilities/',
+					element: <QualityAssuranceReport />,
+					loader: () => ({
+						name: 'Quality Assurance',
+					}),
 				},
 			],
 		},

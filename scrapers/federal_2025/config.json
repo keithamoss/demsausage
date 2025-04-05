@@ -1,0 +1,85 @@
+{
+    "filters": [
+        {
+            "column": "Status",
+            "type": "is_exactly",
+            "matches": [
+                "Current",
+                "Appointment"
+            ]
+        }
+    ],
+    "exclude_columns": [
+        "StateCo",
+        "DivId",
+        "DivCo",
+        "Status",
+        "AdvPremisesName",
+        "AdvAddress",
+        "AdvLocality",
+        "AdvBoothLocation",
+        "AdvGateAccess"
+    ],
+    "rename_columns": {
+        "StateAb": "state",
+        "DivName": "divisions",
+        "PPName": "name",
+        "PremisesName": "premises",
+        "EntrancesDesc": "entrance_desc",
+        "WheelchairAccess": "wheelchair_access",
+        "Lat": "lat",
+        "Long": "lon",
+        "PPId": "ec_id"
+    },
+    "fix_data_issues": [
+        {
+            "field": "wheelchair_access",
+            "value": "",
+            "overwrite": [
+                {
+                    "field": "wheelchair_access",
+                    "value": "Unknown"
+                }
+            ]
+        }
+    ],
+    "geocoding": {
+        "enabled": true,
+        "components": {
+            "country": "AU"
+        }
+    },
+    "extras": {
+        "fields": [
+            "CCD",
+            "OrdVoteEst",
+            "DecVoteEst",
+            "NoOrdIssuingOff",
+            "NoOfDecIssuingOff"
+        ]
+    },
+    "cleaning_regexes": [
+        {
+            "field": "name",
+            "regex": "^(?P<main>[A-z-'\\s]+)(\\([A-z-\\s]+\\))?$"
+        }
+    ],
+    "address_fields": [
+        "Address1",
+        "Address2",
+        "Address3",
+        "Locality",
+        "AddrStateAb",
+        "Postcode"
+    ],
+    "address_format": "{Address1}, {Address2}, {Address3}, {Locality}, {AddrStateAb} {Postcode}",
+    "bbox_validation": {
+        "ignore": [
+            "Lord Howe Island",
+            "Norfolk Island"
+        ]
+    },
+    "multiple_division_handling": {
+        "determine_home_division": "USE_ELECTORAL_BOUNDARIES"
+    }
+}

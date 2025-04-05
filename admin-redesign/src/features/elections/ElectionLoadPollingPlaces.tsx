@@ -142,7 +142,7 @@ export default function ElectionLoadPollingPlaces(props: Props) {
 			</AppBar>
 
 			<Paper elevation={0} sx={{ p: 2 }}>
-				<TextField label="JSON config" multiline fullWidth onChange={onJSONConfigChange} />
+				<TextField label="JSON config" multiline maxRows={18} fullWidth onChange={onJSONConfigChange} />
 
 				<FormGroup sx={{ mt: 2, mb: 2 }}>
 					<FormControlLabel control={<Checkbox defaultChecked onChange={onIsDryRunChange} />} label="Dry run?" />

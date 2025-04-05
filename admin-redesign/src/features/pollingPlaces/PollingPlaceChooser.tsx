@@ -32,7 +32,7 @@ import type { Election } from '../../app/services/elections';
 import { useGetPollingPlaceBySearchTermQuery } from '../../app/services/pollingPlaces';
 import { SelectElection } from '../../app/ui/selectElection';
 import { getDefaultElection } from '../elections/electionHelpers';
-import { selectElectionById, selectVisibleElections } from '../elections/electionsSlice';
+import { selectAllElections, selectElectionById } from '../elections/electionsSlice';
 import { isSearchingYet } from './pollingPlaceSearchHelpers';
 import type { IPollingPlace } from './pollingPlacesInterfaces';
 import SearchResultsPollingPlaceCard from './searchResultsPollingPlaceCard';
@@ -48,7 +48,7 @@ function EntrypointLayer1() {
 	const navigate = useNavigate();
 
 	// Fallback to our default election if the route hasn't specified an election
-	const elections = useAppSelector(selectVisibleElections);
+	const elections = useAppSelector(selectAllElections);
 	const defaultElection = getDefaultElection(elections);
 	let electionId = defaultElection?.id;
 
@@ -81,7 +81,7 @@ function EntrypointLayer2(props: PropsEntrypointLayer2) {
 
 	const location = useLocation();
 
-	const elections = useAppSelector((state) => selectVisibleElections(state));
+	const elections = useAppSelector((state) => selectAllElections(state));
 	const election = useAppSelector((state) => selectElectionById(state, electionId));
 
 	if (election === undefined) {
