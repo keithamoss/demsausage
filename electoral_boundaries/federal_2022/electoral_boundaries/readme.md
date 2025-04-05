@@ -2,7 +2,7 @@
 
 [Federal electoral boundary GIS data for free download](https://aec.gov.au/Electorates/gis/gis_datadownload.htm)
 
-Downloaded 10/05/2019.
+Downloaded 10/05/2022.
 
 # Loading data
 
