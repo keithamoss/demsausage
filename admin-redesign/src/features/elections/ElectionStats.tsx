@@ -374,7 +374,7 @@ function ElectionStats(props: Props) {
 					</TableContainer>
 				)}
 
-				{election.stats.pending_subs.length > 0 && (
+				{election.stats.noms_changes_by_user.length > 0 && (
 					<Card variant="outlined" sx={{ mt: 3 }}>
 						<CardHeader
 							sx={{
@@ -398,7 +398,7 @@ function ElectionStats(props: Props) {
 								Data on who has approved the most stalls and added the most data points.
 							</Typography>
 
-							<PendingStallsGamifiedUserStatsBar stats={election.stats.pending_subs} />
+							<PendingStallsGamifiedUserStatsBar stats={election.stats.noms_changes_by_user} />
 
 							<TableContainer component={Paper} sx={{ mt: 3 }}>
 								<Table size="small">
@@ -410,7 +410,7 @@ function ElectionStats(props: Props) {
 									</TableHead>
 
 									<TableBody>
-										{sortBy(election.stats.pending_subs, 'total')
+										{sortBy(election.stats.noms_changes_by_user, 'total')
 											.reverse()
 											.map((row) => (
 												<StyledTableRow key={row.id}>

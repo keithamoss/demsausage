@@ -22,3 +22,5 @@ interface ImportMetaEnv {
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }
+
+declare const gtag: (arg1: string, arg2: string | number, arg3?: object) => void;

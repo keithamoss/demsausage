@@ -38,6 +38,8 @@ export default function SearchFilterComponent(props: Props) {
 					electionId: election.id,
 				}),
 			);
+
+			gtag('event', !mapFilterSettings[value] === true ? 'SearchBarFilterItemOn' : 'SearchBarFilterItemOff');
 		},
 		[dispatch, election.id, mapFilterSettings],
 	);
@@ -53,6 +55,8 @@ export default function SearchFilterComponent(props: Props) {
 					electionId: election.id,
 				}),
 			);
+
+			gtag('event', checked === true ? 'SearchBarFilterItemOn' : 'SearchBarFilterItemOff');
 		},
 		[dispatch, election.id, mapFilterSettings],
 	);

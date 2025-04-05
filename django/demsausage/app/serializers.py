@@ -261,7 +261,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "subs_by_type_and_day": _get_subs_by_type_and_day(),
             "triage_actions_by_day": _get_triage_actions_by_day(),
             "top_submitters": _get_top_submitters(),
-            "pending_subs": getGamifiedElectionStats(obj.id),
+            "noms_changes_by_user": getGamifiedElectionStats(obj.id),
         }
 
 

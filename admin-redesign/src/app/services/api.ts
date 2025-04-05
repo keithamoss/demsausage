@@ -24,7 +24,7 @@ export const api = createApi({
 	 * Tag types must be defined in the original API definition
 	 * for any tags that would be provided by injected endpoints
 	 */
-	tagTypes: ['User', 'Election', 'PendingStalls'],
+	tagTypes: ['User', 'Election', 'PendingStalls', 'PollingPlaces'],
 });
 
 // Global API error handling

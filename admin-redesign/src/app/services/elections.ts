@@ -47,7 +47,7 @@ export interface Election extends ElectionModifiableProps {
 			email: string;
 			count: 2;
 		}[];
-		pending_subs: ElectionPendingStallsGamifiedUserStats[];
+		noms_changes_by_user: ElectionPendingStallsGamifiedUserStats[];
 	};
 }
 

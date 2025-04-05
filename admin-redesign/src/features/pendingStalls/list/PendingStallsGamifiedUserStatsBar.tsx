@@ -48,6 +48,7 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 							height: avatarFabDiameter,
 							// Take 3% off to (roughly) accommodate the width of 36px
 							left: `${Math.max(0, Math.min(maxPctWidth, (item.total / userStatsGrandTotal) * 100 - 2))}%`,
+							marginLeft: '-5px',
 						}}
 					>
 						<Badge badgeContent={item.total} max={999} color="primary">
