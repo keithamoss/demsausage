@@ -309,6 +309,8 @@ export default function SearchBar(props: Props) {
 	// ######################
 	const onClickFilterControl = useCallback(() => {
 		dispatch(setSearchBarFilterControlState(!searchBarFilterControlOpen));
+
+		gtag('event', !searchBarFilterControlOpen === true ? 'SearchBarFilterOpened' : 'SearchBarFilterClosed');
 	}, [dispatch, searchBarFilterControlOpen]);
 	// ######################
 	// Filter Control (End)

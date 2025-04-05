@@ -125,10 +125,11 @@ export default function PollingPlaceCard(props: Props) {
 	// ######################
 	// Send Tip-Off
 	// ######################
-	const onSendTipOff = useCallback(
-		() => navigateToAddStallSubmitterTypeFromPollingPlaceCard(params, navigate, pollingPlace),
-		[navigate, params, pollingPlace],
-	);
+	const onSendTipOff = useCallback(() => {
+		navigateToAddStallSubmitterTypeFromPollingPlaceCard(params, navigate, pollingPlace);
+
+		gtag('event', 'PollingPlaceSendTipOffUsed');
+	}, [navigate, params, pollingPlace]);
 	// ######################
 	// Send Tip-Off (End)
 	// ######################

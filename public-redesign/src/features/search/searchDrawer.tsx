@@ -79,14 +79,18 @@ function SearchDrawer(props: Props) {
 		[navigate, params],
 	);
 
-	const onGPSControlClicked = useCallback(
-		() => navigateToSearchDrawerAndInitiateGPSSearch(params, navigate),
-		[navigate, params],
-	);
+	const onGPSControlClicked = useCallback(() => {
+		navigateToSearchDrawerAndInitiateGPSSearch(params, navigate);
+
+		gtag('event', 'SearchBarGPSControlClicked');
+	}, [navigate, params]);
 
 	const onGPSLocationAcquired = useCallback(
-		(currentPosition: Coordinate) =>
-			navigateToSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(',')),
+		(currentPosition: Coordinate) => {
+			navigateToSearchListOfPollingPlacesFromGPSSearch(params, navigate, currentPosition.join(','));
+
+			gtag('event', 'SearchBarGPSLocationAcquired');
+		},
 		[navigate, params],
 	);
 
