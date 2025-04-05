@@ -20,6 +20,9 @@ export const pollingPlacesApi = api.injectEndpoints({
 				url: 'polling_places/nearby/',
 				params: { election_id: electionId, lonlat: `${lon},${lat}` },
 			}),
+			// This is a very inelegant approach to tag-based cache invalidation, but it'll do.
+			// We could make it far more nuanced and only validate specific things, but sod it.
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceByUniqueDetailsLookup: builder.query<
 			IPollingPlace,
@@ -30,39 +33,46 @@ export const pollingPlacesApi = api.injectEndpoints({
 				url: 'polling_places/lookup/',
 				params: { election_id: electionId, name, premises, state },
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceByIdLookup: builder.query<IPollingPlace, number>({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/`,
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
 			query: ({ electionId, pollingPlaceIds }) => ({
 				url: 'polling_places/search/',
 				params: { election_id: electionId, ids: pollingPlaceIds },
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceBySearchTerm: builder.query<IPollingPlace[], { electionId: number; searchTerm: string }>({
 			query: ({ electionId, searchTerm }) => ({
 				url: 'polling_places/search/',
 				params: { election_id: electionId, search_term: searchTerm },
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceByStallIdLookup: builder.query<IPollingPlace, number>({
 			query: (stallId) => ({
 				url: 'polling_places/stall_lookup/',
 				params: { stall_id: stallId },
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceNomsHistoryById: builder.query<IPollingPlaceNomsHistory[], number>({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/noms_history/`,
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceStallsById: builder.query<Stall[], number>({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/related_stalls/`,
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		getPollingPlaceHistoryById: builder.query<
 			{ id: number; type: PollingPlaceHistoryEventType; timestamp: string; message: string }[],
@@ -71,6 +81,7 @@ export const pollingPlacesApi = api.injectEndpoints({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/history/`,
 			}),
+			providesTags: ['PollingPlaces'],
 		}),
 		addOrEditPollingBoothNoms: builder.mutation<
 			void,
@@ -84,6 +95,7 @@ export const pollingPlacesApi = api.injectEndpoints({
 					stall: { ...stall, deleted: false },
 				},
 			}),
+			invalidatesTags: ['PollingPlaces'],
 		}),
 		updateInternalNotes: builder.mutation<void, { pollingPlaceId: number; internal_notes: string }>({
 			query: ({ pollingPlaceId, internal_notes }) => ({
@@ -94,12 +106,14 @@ export const pollingPlacesApi = api.injectEndpoints({
 					internal_notes,
 				},
 			}),
+			invalidatesTags: ['PollingPlaces'],
 		}),
 		deletePollingBoothNoms: builder.mutation<void, number>({
 			query: (pollingPlaceId) => ({
 				url: `polling_places/${pollingPlaceId}/delete_polling_place_noms/`,
 				method: 'DELETE',
 			}),
+			invalidatesTags: ['PollingPlaces'],
 		}),
 	}),
 });
