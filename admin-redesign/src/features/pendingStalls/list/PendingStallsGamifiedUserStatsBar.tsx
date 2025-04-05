@@ -19,7 +19,7 @@ export default function PendingStallsGamifiedUserStatsBar(props: Props) {
 	const maxPctWidth = 88;
 
 	return (
-		<Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0.5, ml: 1 }}>
+		<Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', mt: 0.5, ml: 1, pt: 1 }}>
 			<Box
 				sx={{
 					width: `${Math.min(maxPctWidth, (userStatsSingleUserTotal / userStatsGrandTotal) * 100)}%`,
