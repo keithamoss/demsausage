@@ -166,6 +166,7 @@ class PollingPlaces(models.Model):
     chance_of_sausage = models.IntegerField(
         choices=[(tag, tag.value) for tag in PollingPlaceChanceOfSausage], null=True
     )
+    chance_of_sausage_stats = JSONField(default=dict, blank=True)
     extras = JSONField(default=dict, blank=True)
     ec_id = models.IntegerField(null=True)
 

@@ -474,6 +474,11 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         return super(PollingPlacesSerializer, self).create(validated_data)
 
 
+class PollingPlacesCSVDownloadSerializer(PollingPlacesSerializer):
+    class Meta(PollingPlacesSerializer.Meta):
+        fields = PollingPlacesSerializer.Meta.fields + ("chance_of_sausage_stats",)
+
+
 class PollingPlacesManagementSerializer(PollingPlacesSerializer):
     class Meta:
         model = PollingPlaces
