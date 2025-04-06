@@ -83,6 +83,7 @@ from demsausage.app.serializers import (
     PendingStallsSerializer,
     PollingPlaceFacilityTypeSerializer,
     PollingPlaceNomsSerializer,
+    PollingPlacesCSVDownloadSerializer,
     PollingPlaceSearchResultsSerializer,
     PollingPlacesFlatJSONSerializer,
     PollingPlacesGeoJSONSerializer,
@@ -376,6 +377,9 @@ class PollingPlacesViewSet(
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (CSVRenderer,)
 
     def list(self, request, *args, **kwargs):
+        if request.query_params.get("format", None) == "csv":
+            self.serializer_class = PollingPlacesCSVDownloadSerializer
+
         self.filter_class = PollingPlacesBaseFilter
         return super(PollingPlacesViewSet, self).list(request, *args, **kwargs)
 
@@ -394,29 +398,6 @@ class PollingPlacesViewSet(
                 Elections, id=request.query_params.get("election_id", None)
             )
 
-            chance_of_sausage_calculations = calculate_chance_of_sausage_stats(
-                election,
-                PollingPlaces.objects.filter(id__in=[i["id"] for i in response.data]),
-            )
-
-            responseDataFinal = []
-
-            for polling_place in response.data:
-                if (
-                    polling_place["id"] not in chance_of_sausage_calculations
-                    or chance_of_sausage_calculations[polling_place["id"]] is None
-                ):
-                    raise BadRequest(
-                        f"Could not find the expected Chance of Sausage calculation result for {polling_place['id']}"
-                    )
-                else:
-                    responseDataFinal.append(
-                        {
-                            **polling_place,
-                            **chance_of_sausage_calculations[polling_place["id"]],
-                        }
-                    )
-
             if election is not None:
                 filename = add_datetime_to_filename("{}.csv".format(election.name))
 
@@ -426,8 +407,6 @@ class PollingPlacesViewSet(
                 response["Content-Disposition"] = "attachment; filename={}".format(
                     filename
                 )
-
-            response.data = responseDataFinal
         return response
 
     @transaction.atomic

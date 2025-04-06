@@ -11,7 +11,10 @@ import googlemaps
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import ElectoralBoundaries, PollingPlaces, Stalls
-from demsausage.app.sausage.chance_of_sausage import calculate_chance_of_sausage
+from demsausage.app.sausage.chance_of_sausage import (
+    calculate_chance_of_sausage,
+    calculate_chance_of_sausage_stats,
+)
 from demsausage.app.sausage.polling_places import find_by_distance
 from demsausage.app.serializers import (
     PollingPlaceLoaderEventsSerializer,
@@ -1296,7 +1299,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             election=self.election, status=PollingPlaceStatus.ACTIVE, noms__isnull=True
         )
 
-        chance_of_sausage_calculations = calculate_chance_of_sausage(
+        chance_of_sausage_calculations = calculate_chance_of_sausage_stats(
             self.election, polling_places
         )
 
@@ -1309,7 +1312,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 if chance_of_sausage_calculations[polling_place.id] is not None:
                     polling_place.chance_of_sausage = chance_of_sausage_calculations[
                         polling_place.id
-                    ]
+                    ]["chance_of_sausage"]
+                    polling_place.chance_of_sausage_stats = (
+                        chance_of_sausage_calculations[polling_place.id]
+                    )
                     polling_place.save()
 
                     update_count += 1
