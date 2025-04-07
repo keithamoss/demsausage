@@ -2,6 +2,15 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (
+    MetaPollingPlaceContactCategory,
+    MetaPollingPlaceContactType,
+    MetaPollingPlaceJurisdiction,
+    MetaPollingPlaceLinkType,
+    MetaPollingPlaceStatus,
+    MetaPollingPlaceTaskCategory,
+    MetaPollingPlaceTaskOutcome,
+    MetaPollingPlaceTaskStatus,
+    MetaPollingPlaceTaskType,
     PollingPlaceChanceOfSausage,
     PollingPlaceJurisdiction,
     PollingPlaceState,
@@ -105,6 +114,155 @@ class PollingPlaceFacilityType(models.Model):
     name = models.TextField()
 
 
+class MetaPollingPlaces(models.Model):
+    "The meta polling places that we quality control and maintain as our own 'authoritative' list that all PollingPlaces link back to."
+
+    # Meta fields
+    status = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceStatus],
+        default=MetaPollingPlaceStatus.DRAFT,
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True)
+
+    # Core fields
+    name = models.TextField(blank=False)
+    premises = models.TextField(blank=True)
+
+    # Address fields
+    address_1 = models.TextField(
+        blank=True
+    )  # @TODO Switch address_1 to blank=False once we've done the address matching and validation work
+    address_2 = models.TextField(blank=True)
+    address_3 = models.TextField(blank=True)
+    locality = models.TextField(blank=True)
+    jurisdiction = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceJurisdiction],
+        blank=True,
+        null=True,
+    )
+    postcode = models.TextField(blank=True, max_length=4)
+    overseas = models.BooleanField(null=False)
+
+    # Geospatial fields
+    geom_location = models.PointField(geography=True)
+    geom_boundary = models.PolygonField(geography=True, blank=True, null=True)
+
+    # Facility-related fields
+    facility_type = models.ForeignKey(
+        PollingPlaceFacilityType, on_delete=models.PROTECT, blank=True, null=True
+    )
+    wheelchair_access = models.TextField(
+        choices=[(tag, tag.value) for tag in PollingPlaceWheelchairAccess], blank=False
+    )
+    wheelchair_access_description = models.TextField(blank=True)
+
+    # Value-added fields
+    chance_of_sausage = JSONField(default=dict, blank=True)
+
+    history = HistoricalRecords()
+    tracker = FieldTracker()
+
+
+class MetaPollingPlacesTasks(models.Model):
+    "The tasks log for MetaPollingPlaces."
+
+    meta_polling_place = models.ForeignKey(MetaPollingPlaces, on_delete=models.PROTECT)
+
+    # Meta fields
+    status = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceTaskStatus],
+        default=MetaPollingPlaceTaskStatus.IN_PROGRESS,
+        blank=False,
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # Core fields
+    job_name = models.TextField(blank=False)
+    category = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceTaskCategory],
+        blank=False,
+    )
+    type = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceTaskType],
+        blank=False,
+    )
+
+    # Outcome fields
+    outcome = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceTaskOutcome],
+        blank=True,
+    )
+    actioned_on = models.DateTimeField(blank=True, null=True)
+    actioned_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, blank=True, null=True
+    )
+
+    history = HistoricalRecords()
+    tracker = FieldTracker()
+
+
+class MetaPollingPlacesRemarks(models.Model):
+    "The remarks log for MetaPollingPlaces."
+
+    meta_polling_place = models.ForeignKey(MetaPollingPlaces, on_delete=models.PROTECT)
+
+    # Meta fields
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True)
+
+    # Core fields
+    text = models.TextField(blank=False)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+
+    history = HistoricalRecords()
+    tracker = FieldTracker()
+
+
+class MetaPollingPlacesContacts(models.Model):
+    "The contacts register for MetaPollingPlaces."
+
+    meta_polling_place = models.ForeignKey(MetaPollingPlaces, on_delete=models.PROTECT)
+
+    # Meta fields
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True)
+
+    # Core fields
+    type = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceContactType],
+        blank=False,
+    )
+    contact_email = models.EmailField(blank=False)
+    category = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceContactCategory],
+        blank=False,
+    )
+
+    history = HistoricalRecords()
+    tracker = FieldTracker()
+
+
+class MetaPollingPlacesLinks(models.Model):
+    "The links register for MetaPollingPlaces."
+
+    meta_polling_place = models.ForeignKey(MetaPollingPlaces, on_delete=models.PROTECT)
+
+    # Meta fields
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True)
+
+    # Core fields
+    type = models.TextField(
+        choices=[(tag, tag.value) for tag in MetaPollingPlaceLinkType],
+        blank=False,
+    )
+    url = models.URLField(blank=False)
+
+    history = HistoricalRecords()
+    tracker = FieldTracker()
+
+
 class PollingPlaceNoms(models.Model):
     "Our crowdsauced information about the food, drink, et cetera that's available at a given polling place."
 
@@ -136,6 +294,9 @@ class PollingPlaces(models.Model):
     "Our information about each polling place sauced from the relevant Electoral Commission."
 
     old_id = models.IntegerField(null=True)
+    meta_polling_place = models.ForeignKey(
+        MetaPollingPlaces, on_delete=models.PROTECT, null=True
+    )
     election = models.ForeignKey(Elections, on_delete=models.PROTECT)
     noms = models.OneToOneField(
         PollingPlaceNoms,

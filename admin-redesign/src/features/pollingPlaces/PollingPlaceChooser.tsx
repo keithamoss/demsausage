@@ -16,6 +16,7 @@ import {
 	styled,
 } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
+import dayjs from 'dayjs';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -197,6 +198,15 @@ function PollingPlaceChooser(props: Props) {
 				elections={elections}
 				onChooseElection={onChooseElection}
 			/>
+
+			{dayjs(election.election_day).isBefore(dayjs()) === true && (
+				<Alert severity="warning" sx={{ mb: 2 }}>
+					<AlertTitle>
+						Is this the <s>droid</s> election you're looking for?
+					</AlertTitle>
+					This election has been and gone.
+				</Alert>
+			)}
 
 			<FormControl fullWidth sx={{ mb: 2 }}>
 				<InputLabel htmlFor="input-search-for-polling-place">Search for a polling place</InputLabel>
