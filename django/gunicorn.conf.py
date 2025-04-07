@@ -8,7 +8,6 @@ def max_workers():
     return 2 * cpu_count()
 
 
-bind = "0.0.0.0:" + environ.get("PORT", "8000")
 max_requests = 1000
 max_requests_jitter = 30
 worker_class = "gevent"
