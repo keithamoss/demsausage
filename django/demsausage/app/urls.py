@@ -1,3 +1,26 @@
+from demsausage.app.views.api_views import api_not_found
+from demsausage.app.views.election_views import (
+    ElectionMapStaticImageCurrentDefaultElectionViewSet,
+    ElectionMapStaticImageViewSet,
+    ElectionsViewSet,
+)
+from demsausage.app.views.impossibilities_views import ImpossibilitiesViewSet
+from demsausage.app.views.mail_management_views import MailManagementViewSet
+from demsausage.app.views.pollingplace_views import (
+    PollingPlaceFacilityTypeViewSet,
+    PollingPlacesGeoJSONViewSet,
+    PollingPlacesJSONViewSet,
+    PollingPlacesNearbyViewSet,
+    PollingPlacesSearchViewSet,
+    PollingPlacesViewSet,
+)
+from demsausage.app.views.stall_views import PendingStallsViewSet, StallsViewSet
+from demsausage.app.views.user_views import (
+    CurrentUserView,
+    LogoutUserView,
+    ProfileViewSet,
+    UserViewSet,
+)
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -7,27 +30,6 @@ from rest_framework import routers
 from rest_framework.permissions import AllowAny
 
 from django.urls import include, path, re_path
-
-from .views import (
-    CurrentUserView,
-    ElectionMapStaticImageCurrentDefaultElectionViewSet,
-    ElectionMapStaticImageViewSet,
-    ElectionsViewSet,
-    ImpossibilitiesViewSet,
-    LogoutUserView,
-    MailManagementViewSet,
-    PendingStallsViewSet,
-    PollingPlaceFacilityTypeViewSet,
-    PollingPlacesGeoJSONViewSet,
-    PollingPlacesJSONViewSet,
-    PollingPlacesNearbyViewSet,
-    PollingPlacesSearchViewSet,
-    PollingPlacesViewSet,
-    ProfileViewSet,
-    StallsViewSet,
-    UserViewSet,
-    api_not_found,
-)
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
