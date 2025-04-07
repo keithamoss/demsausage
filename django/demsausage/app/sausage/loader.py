@@ -8,9 +8,22 @@ from timeit import default_timer as timer
 
 import chardet
 import googlemaps
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import (
+    MetaPollingPlaceTaskCategory,
+    MetaPollingPlaceTaskStatus,
+    MetaPollingPlaceTaskType,
+    PollingPlaceState,
+    PollingPlaceStatus,
+    StallStatus,
+)
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.models import ElectoralBoundaries, PollingPlaces, Stalls
+from demsausage.app.models import (
+    ElectoralBoundaries,
+    MetaPollingPlaces,
+    MetaPollingPlacesTasks,
+    PollingPlaces,
+    Stalls,
+)
 from demsausage.app.sausage.chance_of_sausage import (
     calculate_chance_of_sausage,
     calculate_chance_of_sausage_stats,
@@ -1228,6 +1241,241 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     )
                 )
 
+    def migrate_mpps(self):
+        def _getDistanceThreshold(polling_place):
+            threshold = 0.1
+
+            # @TOOD Allow by ec_id where those exist, rather than just name
+            if self.overwrite_distance_thresholds is not None:
+                item = next(
+                    (
+                        i
+                        for i in self.overwrite_distance_thresholds
+                        if i["name"] == polling_place.name
+                    ),
+                    None,
+                )
+                if item is not None:
+                    threshold = item["threshold"]
+
+            return threshold
+
+        def _fetch_matching(polling_place):
+            if polling_place.ec_id is not None:
+                self.logger.info(
+                    f"Doing MPP migration by ec_id for {polling_place.name}"
+                )
+                results = PollingPlaces.objects.filter(
+                    election=self.election, status=PollingPlaceStatus.DRAFT
+                ).filter(ec_id=polling_place.ec_id)
+                count = results.count()
+                if count >= 2:
+                    self.logger.error(
+                        "Find by ec_id [{}]: Found {} existing polling places with that id.".format(
+                            polling_place.ec_id, count
+                        )
+                    )
+                return results
+            else:
+                self.logger.info(
+                    f"Doing MPP migration by distance for {polling_place.name}"
+                )
+                return self.safe_find_by_distance(
+                    "MPP Migration",
+                    polling_place.geom,
+                    distance_threshold_km=_getDistanceThreshold(polling_place),
+                    limit=None,
+                    qs=PollingPlaces.objects.filter(
+                        election=self.election, status=PollingPlaceStatus.DRAFT
+                    ),
+                )
+
+        # Migrate active polling places with attached MPPs (this should be all PPs)
+        queryset = PollingPlaces.objects.filter(
+            election=self.election, status=PollingPlaceStatus.ACTIVE
+        )
+
+        polling_places_to_update_active = []
+        polling_places_to_update_draft = []
+
+        for polling_place in queryset:
+            # start = timer()
+
+            matching_polling_places = _fetch_matching(polling_place)
+
+            if len(matching_polling_places) != 1:
+                self.logger.error(
+                    "MPP Migration: {} matching polling places found in new data: '{}' ({})".format(
+                        len(matching_polling_places),
+                        polling_place.name,
+                        polling_place.address,
+                    )
+                )
+
+            else:
+                # Repoint the meta polling place
+                if polling_place.meta_polling_place is not None:
+                    mpp_id = polling_place.meta_polling_place
+
+                    polling_place.meta_polling_place = None
+                    polling_places_to_update_active.append(polling_place)
+
+                    matching_polling_places[0].meta_polling_place = mpp_id
+                    polling_places_to_update_draft.append(matching_polling_places[0])
+                else:
+                    # Or if no MPP exists, insert a new draft singleton MPP
+                    mpp = MetaPollingPlaces(
+                        name=polling_place.name,
+                        premises=polling_place.premises,
+                        jurisdiction=(
+                            polling_place.state
+                            if polling_place.state != PollingPlaceState.Overseas
+                            else None
+                        ),
+                        overseas=polling_place.state == PollingPlaceState.Overseas,
+                        geom_location=polling_place.geom,
+                        wheelchair_access=polling_place.wheelchair_access,
+                    )
+
+                    try:
+                        mpp.full_clean()
+                    except Exception as e:
+                        self.logger.error(
+                            f"Error creating MPP: {polling_place.name} (#{polling_place.id})"
+                        )
+
+                    mpp.save(force_insert=True)
+
+                    # Link the new MPP to the polling place
+                    polling_place.meta_polling_place = mpp
+                    polling_places_to_update_draft.append(matching_polling_places[0])
+
+                    # Create the MPP task
+                    mpp_task = MetaPollingPlacesTasks(
+                        meta_polling_place=mpp,
+                        job_name=f"Polling Place Load {self.job.id}",
+                        category=MetaPollingPlaceTaskCategory.REVIEW,
+                        type=MetaPollingPlaceTaskType.REVIEW_DRAFT,
+                    )
+
+                    try:
+                        mpp_task.full_clean()
+                    except Exception as e:
+                        self.logger.error(
+                            f"Error creating MPP task: {polling_place.name} (#{polling_place.id})"
+                        )
+
+                    mpp_task.save(force_insert=True)
+
+            # end = timer()
+            # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
+
+        # Update polling place noms en masse
+        # Remove noms from the active polling places first to avoid the uniquness constraint on noms_id triggering in certain circumstances.
+        # This only came up in the NSW LG 2024 elections - before this there was a single bulk_update() call here.
+        # Not sure why it happened, but this is just doing what we wanted to do anyway (wipe each stall and then replace) - it's just doing it in a more obvious manner.
+        PollingPlaces.objects.bulk_update(
+            polling_places_to_update_active, ["meta_polling_place"]
+        )
+        PollingPlaces.objects.bulk_update(
+            polling_places_to_update_draft, ["meta_polling_place"]
+        )
+
+        self.logger.info(
+            "MPP Migration: Migrated {} active polling places".format(queryset.count())
+        )
+
+        # Handle draft polling places without an attached MPP
+        queryset = PollingPlaces.objects.filter(
+            election=self.election, status=PollingPlaceStatus.DRAFT
+        ).filter(meta_polling_place__isnull=True)
+
+        polling_places_to_update_draft = []
+
+        for polling_place in queryset:
+            # start = timer()
+
+            # Insert a new draft singleton MPP
+            mpp = MetaPollingPlaces(
+                name=polling_place.name,
+                premises=polling_place.premises,
+                jurisdiction=(
+                    polling_place.state
+                    if polling_place.state != PollingPlaceState.Overseas
+                    else None
+                ),
+                overseas=polling_place.state == PollingPlaceState.Overseas,
+                geom_location=polling_place.geom,
+                wheelchair_access=polling_place.wheelchair_access,
+            )
+
+            try:
+                mpp.full_clean()
+            except Exception as e:
+                self.logger.error(
+                    f"Error creating MPP: {polling_place.name} (#{polling_place.id})"
+                )
+
+            mpp.save(force_insert=True)
+
+            # Link the new MPP to the polling place
+            polling_place.meta_polling_place = mpp
+            polling_places_to_update_draft.append(polling_place)
+
+            # Create the MPP task
+            mpp_task = MetaPollingPlacesTasks(
+                meta_polling_place=mpp,
+                job_name=f"Polling Place Load {self.job.id}",
+                category=MetaPollingPlaceTaskCategory.REVIEW,
+                type=MetaPollingPlaceTaskType.REVIEW_DRAFT,
+            )
+
+            try:
+                mpp_task.full_clean()
+            except Exception as e:
+                self.logger.error(
+                    f"Error creating MPP task: {polling_place.name} (#{polling_place.id})"
+                )
+
+            mpp_task.save(force_insert=True)
+
+            # end = timer()
+            # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
+
+        # Update polling place noms en masse
+        # Remove noms from the active polling places first to avoid the uniquness constraint on noms_id triggering in certain circumstances.
+        # This only came up in the NSW LG 2024 elections - before this there was a single bulk_update() call here.
+        # Not sure why it happened, but this is just doing what we wanted to do anyway (wipe each stall and then replace) - it's just doing it in a more obvious manner.
+        PollingPlaces.objects.bulk_update(
+            polling_places_to_update_draft, ["meta_polling_place"]
+        )
+
+        self.logger.info(
+            "MPP Migration: Handled {} draft polling places".format(queryset.count())
+        )
+
+        count = (
+            PollingPlaces.objects.filter(
+                election=self.election, status=PollingPlaceStatus.ACTIVE
+            )
+            .filter(meta_polling_place__isnull=False)
+            .count()
+        )
+        if count != 0:
+            self.logger.error(
+                f"{count} active polling places have an MPP still attached"
+            )
+
+        count = (
+            PollingPlaces.objects.filter(
+                election=self.election, status=PollingPlaceStatus.DRAFT
+            )
+            .filter(meta_polling_place__isnull=True)
+            .count()
+        )
+        if count != 0:
+            self.logger.error(f"{count} draft polling places have no MPP")
+
     def migrate(self):
         # Migrate to new polling places
         old_archived_polling_places_queryset = PollingPlaces.objects.filter(
@@ -1345,6 +1593,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             with transaction.atomic():
                 self.invoke_and_bail_if_errors("write_draft_polling_places")
                 self.invoke_and_bail_if_errors("migrate_noms")
+                self.invoke_and_bail_if_errors("migrate_mpps")
                 self.invoke_and_bail_if_errors("migrate")
 
                 if self.is_dry_run() is True:

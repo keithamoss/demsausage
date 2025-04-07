@@ -26,6 +26,108 @@ class PollingPlaceState(str, EnumBase):
         return self.value
 
 
+class MetaPollingPlaceJurisdiction(str, EnumBase):
+    NSW = "NSW"
+    VIC = "VIC"
+    QLD = "QLD"
+    WA = "WA"
+    SA = "SA"
+    TAS = "TAS"
+    ACT = "ACT"
+    NT = "NT"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceStatus(str, EnumBase):
+    ACTIVE = "Active"
+    RETIRED = "Retired"
+    DRAFT = "Draft"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceTaskStatus(str, EnumBase):
+    IN_PROGRESS = "In Progress"
+    COMPLETED = "Completed"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceTaskCategory(str, EnumBase):
+    REVIEW = "Review"
+    QA = "QA"
+    ENRICHMENT = "Enrichment"
+    CROWDSOURCING = "Crowdsourcing"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceTaskType(str, EnumBase):
+    REVIEW_DRAFT = "Review Draft"
+    # REVIEW_ALL = "Review All Information"
+
+    # QA_ALL = "All"
+    # QA_SINGLETONS = "Singletons"
+    # QA_TOO_MANY_PPs = "Too Many Polling Places"
+    # QA_HAS_CLOSE_NEIGHBOURS = "Has Close Neighbours"
+    # QA_GEOMETRY_EXCEPTIONS = "Geometry Exceptions"
+    # QA_GEOCODING_EXCEPTIONS = "Geocoding Exceptions"
+    # QA_NAMES_MISMATCH = "Names Mismatch"
+    # QA_PREMISES_MISMATCH = "Premises Mismatch"
+    # ...and other QA tasks could exist, such as QAing the data we brought in in the initial MPP load e.g. all of those old facility types we had setup
+
+    # ENRICHMENT_STALL_INFORMATION = "Enrich from Stall Information"
+    # ENRICHMENT_ALL_MISSING_INFORMATION = "Enrich All Missing Information"
+    # ENRICHMENT_FACILITY_TYPE = "Enrich Facility Type"
+    # ENRICHMENT_WHEELCHAIR_ACCESS = "Enrich Wheelchair Access"
+    # ENRICHMENT_BOUNDARY = "Enrich Boundary Information"
+    # ENRICHMENT_ADDRESS = "Enrich Address Information"
+    # ENRICHMENT_EMAILS = "Enrich Emails"
+    # ENRICHMENT_LINKS = "Enrich Links"
+
+    CROWDSOURCE_FROM_FACEBOOK = "Crowdsource from Facebook"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceTaskOutcome(str, EnumBase):
+    APPROVED = "Approved"
+    REJECTED = "Rejected"
+    DEFERRED = "Deferred"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceContactType(str, EnumBase):
+    EMAIL = "Email"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceContactCategory(str, EnumBase):
+    PRIMARY = "Primary"
+    SECONDRY = "Secondary"
+
+    def __str__(self):
+        return self.value
+
+
+class MetaPollingPlaceLinkType(str, EnumBase):
+    OFFICIAL = "Official Website"
+    FACEBOOK = "Facebook"
+
+    def __str__(self):
+        return self.value
+
+
 class PollingPlaceStatus(str, EnumBase):
     ARCHIVED = "Archived"
     ACTIVE = "Active"

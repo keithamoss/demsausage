@@ -40,6 +40,7 @@ from demsausage.app.sausage.elections import (
     is_it_election_day,
 )
 from demsausage.app.sausage.impossibilities import (
+    inactive_polling_places_with_an_mpp,
     polling_place_noms_attached_to_an_archived_polling_place,
     polling_place_noms_invalid_boolean_non_true,
     polling_place_noms_invalid_empty_free_text,
@@ -48,6 +49,7 @@ from demsausage.app.sausage.impossibilities import (
     polling_place_noms_not_attached_to_a_polling_place,
     polling_place_noms_with_no_noms,
     polling_places_not_active_with_noms_still_attached,
+    polling_places_with_no_valid_mpp,
     stalls_attached_to_non_active_polling_place,
     stalls_noms_invalid_boolean_non_true,
     stalls_noms_invalid_empty_free_text,
@@ -1391,6 +1393,8 @@ class ImpossibilitiesViewSet(viewsets.ViewSet):
         ######################
         # Polling Place Impossibilities
         ######################
+        report.append(polling_places_with_no_valid_mpp())
+        report.append(inactive_polling_places_with_an_mpp())
         report.append(polling_places_not_active_with_noms_still_attached())
         ######################
         # Polling Place Impossibilities (End)

@@ -1,6 +1,6 @@
 import datetime
 
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.enums import MetaPollingPlaceStatus, PollingPlaceStatus, StallStatus
 from demsausage.app.models import PollingPlaceNoms, PollingPlaces, Stalls
 
 from django.db.models import Q
@@ -194,6 +194,51 @@ def stalls_noms_invalid_empty_free_text():
 ######################
 # Polling Place Impossibilities
 ######################
+def get_polling_places_with_no_valid_mpp():
+    return (
+        PollingPlaces.objects.filter(election__election_day__gte=min_election_date)
+        .filter(status=PollingPlaceStatus.ACTIVE)
+        .filter(
+            Q(meta_polling_place__isnull=True)
+            | Q(meta_polling_place__status=MetaPollingPlaceStatus.RETIRED)
+        )
+    )
+
+
+def polling_places_with_no_valid_mpp():
+    queryset = get_polling_places_with_no_valid_mpp()
+    count = queryset.count()
+
+    return {
+        "type": "polling_places_with_no_active_mpp",
+        "name": "Active polling places without a valid MPP attached",
+        "passed": count == 0,
+        "message": f"{count} active polling places without a valid MPP attached",
+        "ids": queryset.values_list("id", flat=True),
+    }
+
+
+def get_inactive_polling_places_with_an_mpp():
+    return (
+        PollingPlaces.objects.filter(election__election_day__gte=min_election_date)
+        .exclude(status=PollingPlaceStatus.ACTIVE)
+        .filter(meta_polling_place__isnull=False)
+    )
+
+
+def inactive_polling_places_with_an_mpp():
+    queryset = get_inactive_polling_places_with_an_mpp()
+    count = queryset.count()
+
+    return {
+        "type": "inactive_polling_places_with_an_mpp",
+        "name": "Inactive polling places with an MPP attached",
+        "passed": count == 0,
+        "message": f"{count} inactive polling places with MPP attached",
+        "ids": queryset.values_list("id", flat=True),
+    }
+
+
 def get_polling_places_not_active_with_noms_still_attached():
     return (
         PollingPlaces.objects.filter(election__election_day__gte=min_election_date)
