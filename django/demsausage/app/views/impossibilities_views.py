@@ -1,5 +1,6 @@
 from demsausage.app.sausage.impossibilities import (
     inactive_polling_places_with_an_mpp,
+    meta_polling_places_used_more_than_once_in_an_election,
     polling_place_noms_attached_to_an_archived_polling_place,
     polling_place_noms_invalid_boolean_non_true,
     polling_place_noms_invalid_empty_free_text,
@@ -50,6 +51,7 @@ class ImpossibilitiesViewSet(viewsets.ViewSet):
         ######################
         # Polling Place Impossibilities
         ######################
+        report.append(meta_polling_places_used_more_than_once_in_an_election())
         report.append(polling_places_with_no_valid_mpp())
         report.append(inactive_polling_places_with_an_mpp())
         report.append(polling_places_not_active_with_noms_still_attached())
