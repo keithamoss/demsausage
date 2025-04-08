@@ -73,6 +73,7 @@ class MetaPollingPlaceTaskType(str, EnumBase):
 
     # QA_ALL = "All"
     # QA_SINGLETONS = "Singletons"
+    # QA_USED_MORE_THAN_ONCE_IN_AN_ELECTION = "Used More Than Once in an Election"
     # QA_TOO_MANY_PPs = "Too Many Polling Places"
     # QA_HAS_CLOSE_NEIGHBOURS = "Has Close Neighbours"
     # QA_GEOMETRY_EXCEPTIONS = "Geometry Exceptions"
