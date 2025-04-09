@@ -19,8 +19,14 @@ export default function AddStallButton() {
 	}, [navigate]);
 
 	return (
-		<StyledFab color="primary" aria-label="The primary button to add a new stall to the map" onClick={onAddStall}>
-			<AddLocationIcon />
+		<StyledFab
+			color="primary"
+			variant="extended"
+			aria-label="The primary button to add a new stall to the map"
+			onClick={onAddStall}
+		>
+			<AddLocationIcon sx={{ mr: 1 }} />
+			Add
 		</StyledFab>
 	);
 }
