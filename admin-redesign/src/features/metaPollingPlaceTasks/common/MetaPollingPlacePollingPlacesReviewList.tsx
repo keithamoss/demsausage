@@ -12,7 +12,7 @@ import {
 	Typography,
 } from '@mui/material';
 import React from 'react';
-import type { IMetaPollingPlace } from '../metaPollingPlaceTasksInterfaces';
+import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
 
 interface Props {
 	metaPollingPlace: IMetaPollingPlace;

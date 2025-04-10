@@ -6,9 +6,14 @@ from demsausage.app.enums import (
     MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
 )
-from demsausage.app.models import MetaPollingPlacesTasks
+from demsausage.app.models import MetaPollingPlacesLinks, MetaPollingPlacesTasks
 from demsausage.app.sausage.polling_places import get_active_polling_place_queryset
-from demsausage.app.serializers import MetaPollingPlacesTasksSerializer
+from demsausage.app.serializers import (
+    MetaPollingPlacesLinksCreateSerializer,
+    MetaPollingPlacesLinksRetrieveSerializer,
+    MetaPollingPlacesLinksUpdateSerializer,
+    MetaPollingPlacesTasksSerializer,
+)
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -207,3 +212,22 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
     #     )
 
     #     return Response(serializer.data)
+
+
+class MetaPollingPlacesLinksViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows elections to be viewed and edited.
+    """
+
+    queryset = MetaPollingPlacesLinks.objects
+    serializer_class = MetaPollingPlacesLinksRetrieveSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action in ["create"]:
+            return MetaPollingPlacesLinksCreateSerializer
+        elif self.action in ["update", "partial_update"]:
+            return MetaPollingPlacesLinksUpdateSerializer
+        return super().get_serializer_class()
+
+    # @TOOD How do we turn off bits of ModelViewSet that we don't want?

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import { navigateToMetaPollingPlaceTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
 import { useGetMetaPollingPlaceTaskJobGroupsQuery } from '../../../app/services/metaPollingPlaceTasks';
-import { getMetaPollingPlaceTaskCategoryIcon } from '../metaPollingPlaceTasksHelpers';
+import { getMetaPollingPlaceTaskCategoryIcon } from '../helpers/metaPollingPlaceTasksHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
@@ -32,14 +32,6 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 	}
 
 	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceTaskJobByName(navigate, jobName);
-
-	// const onCopyToClipboard = (ids: number[]) => async () => {
-	//   try {
-	//     await navigator.clipboard.writeText(ids.join(', '));
-	//   } catch {
-	//     /* empty */
-	//   }
-	// };
 
 	return (
 		<PageWrapper>

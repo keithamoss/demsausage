@@ -2,7 +2,7 @@ import { createEntityAdapter } from '@reduxjs/toolkit';
 import type {
 	IMetaPollingPlaceTaskJob,
 	IMetaPollingPlaceTaskJobGroup,
-} from '../../features/metaPollingPlaceTasks/metaPollingPlaceTasksInterfaces';
+} from '../../features/metaPollingPlaceTasks/interfaces/metaPollingPlaceTasksInterfaces';
 import type { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
@@ -17,12 +17,12 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 			query: () => 'meta_polling_places/tasks/',
 			// This is a very inelegant approach to tag-based cache invalidation, but it'll do.
 			// We could make it far more nuanced and only validate specific things, but sod it.
-			// providesTags: ['MetaPollingPlaceTasks'],
+			providesTags: ['MetaPollingPlaceTasks'],
 		}),
 		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob, string>({
 			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),
 			// @TODO Check for caching bug?
-			// providesTags: ['MetaPollingPlaceTasks'],
+			providesTags: ['MetaPollingPlaceTasks'],
 		}),
 		// getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
 		//   query: ({ electionId, pollingPlaceIds }) => ({

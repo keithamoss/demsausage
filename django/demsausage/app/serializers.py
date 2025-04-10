@@ -3,6 +3,7 @@ from demsausage.app.models import (
     Elections,
     MailgunEvents,
     MetaPollingPlaces,
+    MetaPollingPlacesLinks,
     MetaPollingPlacesTasks,
     PollingPlaceFacilityType,
     PollingPlaceLoaderEvents,
@@ -967,8 +968,56 @@ class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
         fields = ("id", "timestamp", "payload")
 
 
+class MetaPollingPlacesLinksRetrieveSerializer(serializers.ModelSerializer):
+    # Allows us to use the pre-baked DRF ModelViewSet and for the frontend just to send the ID of the Meta Polling Place
+    meta_polling_place = serializers.PrimaryKeyRelatedField(
+        queryset=None, read_only=True
+    )
+
+    class Meta:
+        model = MetaPollingPlacesLinks
+
+        fields = read_only_fields = [
+            "id",
+            "created_on",
+            "modified_on",
+            "type",
+            "url",
+            "meta_polling_place",
+        ]
+
+
+class MetaPollingPlacesLinksCreateSerializer(MetaPollingPlacesLinksRetrieveSerializer):
+    meta_polling_place = serializers.PrimaryKeyRelatedField(
+        queryset=MetaPollingPlaces.objects.all()
+    )
+
+    class Meta:
+        model = MetaPollingPlacesLinksRetrieveSerializer.Meta.model
+
+        fields = MetaPollingPlacesLinksRetrieveSerializer.Meta.fields
+
+        # @TODO Apply this pattern elsewhere where we rely on ModelViewSet
+        read_only_fields = [
+            i for i in fields if i not in ["type", "url", "meta_polling_place"]
+        ]
+
+
+class MetaPollingPlacesLinksUpdateSerializer(MetaPollingPlacesLinksRetrieveSerializer):
+    class Meta:
+        model = MetaPollingPlacesLinksRetrieveSerializer.Meta.model
+
+        fields = MetaPollingPlacesLinksRetrieveSerializer.Meta.fields
+
+        # @TODO Apply this pattern elsewhere where we rely on ModelViewSet
+        read_only_fields = [i for i in fields if i not in ["type", "url"]]
+
+
 class MetaPollingPlacesSerializer(serializers.ModelSerializer):
     polling_places = serializers.SerializerMethodField()
+    links = MetaPollingPlacesLinksRetrieveSerializer(
+        many=True, read_only=True, source="metapollingplaceslinks_set"
+    )
 
     class Meta:
         model = MetaPollingPlaces
@@ -995,6 +1044,7 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             "wheelchair_access_description",
             "chance_of_sausage",
             "polling_places",
+            "links",
         ]
 
     def get_polling_places(self, obj):
