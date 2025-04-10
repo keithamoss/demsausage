@@ -8,6 +8,8 @@ import ElectionEditor from '../../features/elections/ElectionEditor';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import QualityAssuranceReport from '../../features/impossibilities/QualityAssuranceReport';
+import MetaPollingPlaceTaskCrowdsourceFromFacebook from '../../features/metaPollingPlaceTasks/actions/MetaPollingPlaceTaskCrowdsourceFromFacebook';
+import MetaPollingPlaceTasksJobGroupsBrowser from '../../features/metaPollingPlaceTasks/browser/MetaPollingPlaceTasksJobGroupsBrowser';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
 import PendingStallsPollingPlace from '../../features/pendingStalls/pollingplace/PendingStallsPollingPlace';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
@@ -120,6 +122,20 @@ export const router = sentryCreateBrowserRouter(
 					element: <QualityAssuranceReport />,
 					loader: () => ({
 						name: 'Quality Assurance',
+					}),
+				},
+				{
+					path: '/tasks/',
+					element: <MetaPollingPlaceTasksJobGroupsBrowser />,
+					loader: () => ({
+						name: 'Tasks',
+					}),
+				},
+				{
+					path: '/tasks/:job_name/',
+					element: <MetaPollingPlaceTaskCrowdsourceFromFacebook />,
+					loader: () => ({
+						name: 'Tasks',
 					}),
 				},
 			],

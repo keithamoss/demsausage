@@ -26,6 +26,11 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const mediaReleases = [
 	{
+		title: 'Federal Election 2025',
+		date: 'April 11th 2025',
+		filename: '2025 Federal Election Media Release - 11 April.pdf',
+	},
+	{
 		title: 'Federal Election 2022',
 		date: 'April 10th 2022',
 		filename: '2022 Federal Election Media Release - 10 April.pdf',

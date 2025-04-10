@@ -6,6 +6,7 @@ from demsausage.app.views.election_views import (
 )
 from demsausage.app.views.impossibilities_views import ImpossibilitiesViewSet
 from demsausage.app.views.mail_management_views import MailManagementViewSet
+from demsausage.app.views.meta_polling_place_views import MetaPollingPlacesTasksViewSet
 from demsausage.app.views.pollingplace_views import (
     PollingPlaceFacilityTypeViewSet,
     PollingPlacesGeoJSONViewSet,
@@ -49,6 +50,11 @@ router.register(
 )
 router.register(r"mail", MailManagementViewSet, "MailManagementViewSet")
 router.register(r"impossibilities", ImpossibilitiesViewSet, "ImpossibilitiesViewSet")
+router.register(
+    r"meta_polling_places/tasks",
+    MetaPollingPlacesTasksViewSet,
+    "MetaPollingPlacesTasksViewSet",
+)
 
 # Need to set base_name because Reasons
 # http://www.django-rest-framework.org/api-guide/routers/#usage (see note re `base_name`)

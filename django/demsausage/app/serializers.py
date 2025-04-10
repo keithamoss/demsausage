@@ -2,6 +2,8 @@ from demsausage.app.enums import PollingPlaceStatus, StallStatus, StallSubmitter
 from demsausage.app.models import (
     Elections,
     MailgunEvents,
+    MetaPollingPlaces,
+    MetaPollingPlacesTasks,
     PollingPlaceFacilityType,
     PollingPlaceLoaderEvents,
     PollingPlaceNoms,
@@ -472,6 +474,15 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
             validated_data["noms"] = self._update_or_create_stall(None, validated_data)
 
         return super(PollingPlacesSerializer, self).create(validated_data)
+
+
+class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
+    election_name = serializers.CharField(source="election.name", read_only=True)
+
+    class Meta(PollingPlacesSerializer.Meta):
+        fields = [
+            field for field in PollingPlacesSerializer.Meta.fields if field != "stall"
+        ] + ["election_name"]
 
 
 class PollingPlacesCSVDownloadSerializer(PollingPlacesSerializer):
@@ -954,3 +965,60 @@ class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceLoaderEvents
         fields = ("id", "timestamp", "payload")
+
+
+class MetaPollingPlacesSerializer(serializers.ModelSerializer):
+    polling_places = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MetaPollingPlaces
+        geo_field = "geom_location"
+
+        fields = [
+            "id",
+            "status",
+            "created_on",
+            "modified_on",
+            "name",
+            "premises",
+            "address_1",
+            "address_2",
+            "address_3",
+            "locality",
+            "postcode",
+            "jurisdiction",
+            "overseas",
+            "geom_location",
+            "geom_boundary",
+            "facility_type",
+            "wheelchair_access",
+            "wheelchair_access_description",
+            "chance_of_sausage",
+            "polling_places",
+        ]
+
+    def get_polling_places(self, obj):
+        polling_places = obj.pollingplaces_set.order_by("-election__election_day")
+        return PollingPlacesSerializerForMetaPollingPlaces(
+            polling_places, many=True, read_only=True
+        ).data
+
+
+class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
+    meta_polling_place = MetaPollingPlacesSerializer(required=True)
+
+    class Meta:
+        model = MetaPollingPlacesTasks
+
+        fields = (
+            "id",
+            "status",
+            "created_on",
+            "job_name",
+            "category",
+            "type",
+            "outcome",
+            "actioned_on",
+            "actioned_by",
+            "meta_polling_place",
+        )

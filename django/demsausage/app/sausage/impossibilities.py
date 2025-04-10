@@ -3,7 +3,7 @@ import datetime
 from demsausage.app.enums import MetaPollingPlaceStatus, PollingPlaceStatus, StallStatus
 from demsausage.app.models import PollingPlaceNoms, PollingPlaces, Stalls
 
-from django.db.models import Q
+from django.db.models import Count, Q
 
 # All elections from WA 2025 onwards
 min_election_date = datetime.datetime(2025, 1, 1)
@@ -194,6 +194,30 @@ def stalls_noms_invalid_empty_free_text():
 ######################
 # Polling Place Impossibilities
 ######################
+def get_meta_polling_places_used_more_than_once_in_an_election():
+    return (
+        PollingPlaces.objects.filter(election__election_day__gte=min_election_date)
+        .filter(status=PollingPlaceStatus.ACTIVE)
+        .values("election", "meta_polling_place")
+        .annotate(count=Count("id"))
+        .filter(count__gte=2)
+    )
+
+
+def meta_polling_places_used_more_than_once_in_an_election():
+    queryset = get_meta_polling_places_used_more_than_once_in_an_election()
+    print(queryset.values("election", "meta_polling_place", "count"))
+    count = queryset.count()
+
+    return {
+        "type": "meta_polling_places_used_twice_in_an_election",
+        "name": "Meta polling places used more than once in an election",
+        "passed": count == 0,
+        "message": f"{count} meta polling places used more than once in an election",
+        "ids": queryset.values_list("meta_polling_place", flat=True),
+    }
+
+
 def get_polling_places_with_no_valid_mpp():
     return (
         PollingPlaces.objects.filter(election__election_day__gte=min_election_date)
