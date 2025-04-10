@@ -409,15 +409,15 @@ class Migration(migrations.Migration):
                         choices=[
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[
-                                    "APPROVED"
+                                    "COMPLETED"
                                 ],
-                                "Approved",
+                                "Completed",
                             ),
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[
-                                    "REJECTED"
+                                    "CLOSED"
                                 ],
-                                "Rejected",
+                                "Closed",
                             ),
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[
@@ -667,15 +667,15 @@ class Migration(migrations.Migration):
                         choices=[
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[
-                                    "APPROVED"
+                                    "COMPLETED"
                                 ],
-                                "Approved",
+                                "Completed",
                             ),
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[
-                                    "REJECTED"
+                                    "CLOSED"
                                 ],
-                                "Rejected",
+                                "Closed",
                             ),
                             (
                                 demsausage.app.enums.MetaPollingPlaceTaskOutcome[

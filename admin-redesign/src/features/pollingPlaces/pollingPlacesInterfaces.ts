@@ -70,6 +70,7 @@ export interface IPollingPlace {
 	state: string;
 	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	stall: IPollingPlaceStall | null;
+	ec_id: number | null;
 	extras: {
 		[key: string]: string;
 	};

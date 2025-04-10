@@ -1,16 +1,16 @@
 import { AddCircle, QuestionMark, TipsAndUpdates, Troubleshoot, WorkspacePremium } from '@mui/icons-material';
 import type { ReactElement } from 'react';
-import { MetaPollingPlaceTaskCategory } from './metaPollingPlaceTasksInterfaces';
+import { IMetaPollingPlaceTaskCategory } from './metaPollingPlaceTasksInterfaces';
 
-export const getMetaPollingPlaceTaskCategoryIcon = (category: MetaPollingPlaceTaskCategory): ReactElement => {
+export const getMetaPollingPlaceTaskCategoryIcon = (category: IMetaPollingPlaceTaskCategory): ReactElement => {
 	switch (category) {
-		case MetaPollingPlaceTaskCategory.REVIEW:
+		case IMetaPollingPlaceTaskCategory.REVIEW:
 			return <Troubleshoot />;
-		case MetaPollingPlaceTaskCategory.QA:
+		case IMetaPollingPlaceTaskCategory.QA:
 			return <WorkspacePremium />;
-		case MetaPollingPlaceTaskCategory.ENRICHMENT:
+		case IMetaPollingPlaceTaskCategory.ENRICHMENT:
 			return <AddCircle />;
-		case MetaPollingPlaceTaskCategory.CROWDSOURCING:
+		case IMetaPollingPlaceTaskCategory.CROWDSOURCING:
 			return <TipsAndUpdates />;
 		default:
 			return <QuestionMark />;

@@ -71,6 +71,9 @@ class MetaPollingPlaceTaskType(str, EnumBase):
     REVIEW_DRAFT = "Review Draft"
     # REVIEW_ALL = "Review All Information"
 
+    # @TODO Notes:
+    # Some Polling Places, and as a result Meta Polling Places, have double spaces (and maybe other whitespace) in their names
+
     # QA_ALL = "All"
     # QA_SINGLETONS = "Singletons"
     # QA_USED_MORE_THAN_ONCE_IN_AN_ELECTION = "Used More Than Once in an Election"
@@ -98,9 +101,9 @@ class MetaPollingPlaceTaskType(str, EnumBase):
 
 
 class MetaPollingPlaceTaskOutcome(str, EnumBase):
-    APPROVED = "Approved"
-    REJECTED = "Rejected"
+    COMPLETED = "Completed"
     DEFERRED = "Deferred"
+    CLOSED = "Closed"
 
     def __str__(self):
         return self.value

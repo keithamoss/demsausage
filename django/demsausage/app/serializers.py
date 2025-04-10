@@ -476,6 +476,15 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
         return super(PollingPlacesSerializer, self).create(validated_data)
 
 
+class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
+    election_name = serializers.CharField(source="election.name", read_only=True)
+
+    class Meta(PollingPlacesSerializer.Meta):
+        fields = [
+            field for field in PollingPlacesSerializer.Meta.fields if field != "stall"
+        ] + ["election_name"]
+
+
 class PollingPlacesCSVDownloadSerializer(PollingPlacesSerializer):
     class Meta(PollingPlacesSerializer.Meta):
         fields = PollingPlacesSerializer.Meta.fields + ("chance_of_sausage_stats",)
@@ -959,6 +968,8 @@ class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
 
 
 class MetaPollingPlacesSerializer(serializers.ModelSerializer):
+    polling_places = serializers.SerializerMethodField()
+
     class Meta:
         model = MetaPollingPlaces
         geo_field = "geom_location"
@@ -974,8 +985,8 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             "address_2",
             "address_3",
             "locality",
-            "jurisdiction",
             "postcode",
+            "jurisdiction",
             "overseas",
             "geom_location",
             "geom_boundary",
@@ -983,7 +994,14 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             "wheelchair_access",
             "wheelchair_access_description",
             "chance_of_sausage",
+            "polling_places",
         ]
+
+    def get_polling_places(self, obj):
+        polling_places = obj.pollingplaces_set.order_by("-election__election_day")
+        return PollingPlacesSerializerForMetaPollingPlaces(
+            polling_places, many=True, read_only=True
+        ).data
 
 
 class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):

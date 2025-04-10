@@ -136,12 +136,12 @@ class MetaPollingPlaces(models.Model):
     address_2 = models.TextField(blank=True)
     address_3 = models.TextField(blank=True)
     locality = models.TextField(blank=True)
+    postcode = models.TextField(blank=True, max_length=4)
     jurisdiction = models.TextField(
         choices=[(tag, tag.value) for tag in MetaPollingPlaceJurisdiction],
         blank=True,
         null=True,
     )
-    postcode = models.TextField(blank=True, max_length=4)
     overseas = models.BooleanField(null=False)
 
     # Geospatial fields
@@ -214,6 +214,9 @@ class MetaPollingPlacesRemarks(models.Model):
     # Core fields
     text = models.TextField(blank=False)
     user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    meta_polling_place_task = models.ForeignKey(
+        MetaPollingPlacesTasks, on_delete=models.PROTECT, null=True, blank=True
+    )
 
     history = HistoricalRecords()
     tracker = FieldTracker()

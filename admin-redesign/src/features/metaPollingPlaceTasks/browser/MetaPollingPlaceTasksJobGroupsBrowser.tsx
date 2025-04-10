@@ -1,9 +1,11 @@
 import { FolderOpen } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, CardHeader, LinearProgress, Stack, styled } from '@mui/material';
 import dayjs from 'dayjs';
-import ErrorElement from '../../ErrorElement';
-import { useGetMetaPollingPlaceTaskJobGroupsQuery } from '../../app/services/metaPollingPlaceTasks';
-import { getMetaPollingPlaceTaskCategoryIcon } from './metaPollingPlaceTasksHelpers';
+import { useNavigate } from 'react-router-dom';
+import ErrorElement from '../../../ErrorElement';
+import { navigateToMetaPollingPlaceTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
+import { useGetMetaPollingPlaceTaskJobGroupsQuery } from '../../../app/services/metaPollingPlaceTasks';
+import { getMetaPollingPlaceTaskCategoryIcon } from '../metaPollingPlaceTasksHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
@@ -12,6 +14,8 @@ const PageWrapper = styled('div')(({ theme }) => ({
 }));
 
 function MetaPollingPlaceTasksJobGroupsBrowser() {
+	const navigate = useNavigate();
+
 	const {
 		data: metaPollingPlaceTasksJobGroups,
 		isLoading,
@@ -26,6 +30,8 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 	if (isError === true || isSuccess === false) {
 		return <ErrorElement />;
 	}
+
+	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceTaskJobByName(navigate, jobName);
 
 	// const onCopyToClipboard = (ids: number[]) => async () => {
 	//   try {
@@ -51,12 +57,12 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 							subheader={`${dayjs(item.max_created_on).format('D MMMM YYYY')} at ${dayjs(item.max_created_on).format('HH:mm')}`}
 						/>
 
-						<CardContent sx={{ pt: 1, pb: 1 }}>
+						<CardContent sx={{ pt: 0.5, pb: 0.5, fontSize: 14 }}>
 							<strong>{item.task_count.toLocaleString()}</strong> {item.type} tasks
 						</CardContent>
 
 						<CardActions disableSpacing>
-							<Button variant="outlined" startIcon={<FolderOpen />}>
+							<Button variant="outlined" startIcon={<FolderOpen />} onClick={onOpenTaskJobGroup(item.job_name)}>
 								Open
 							</Button>
 						</CardActions>

@@ -59,7 +59,37 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         # serializer_class=ElectionsSerializer,
     )
     @transaction.atomic
-    def add(self, request, pk=None, format=None):
+    def next(self, request, format=None):
+        job_name = request.query_params.get("job_name", None)
+
+        if job_name is None:
+            return HttpResponseBadRequest("job_name is required")
+
+        queryset = (
+            MetaPollingPlacesTasks.objects.filter(
+                job_name=job_name, status=MetaPollingPlaceTaskStatus.IN_PROGRESS
+            )
+            .order_by("created_on")
+            .first()
+        )
+
+        serializer = self.serializer_class(
+            queryset,
+            many=False,
+        )
+
+        return Response(serializer.data)
+
+    @action(
+        # detail=True,
+        # methods=["post"],
+        detail=False,
+        methods=["get"],
+        permission_classes=(IsAuthenticated,),
+        # serializer_class=ElectionsSerializer,
+    )
+    @transaction.atomic
+    def add(self, request, format=None):
         election_id = request.query_params.get("election_id", None)
         max_tasks = request.query_params.get("max_tasks", 5)
 
