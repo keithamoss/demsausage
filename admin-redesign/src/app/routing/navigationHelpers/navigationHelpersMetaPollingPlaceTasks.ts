@@ -7,9 +7,16 @@ export const navigateToMetaPollingPlaceTasksRoot = (navigate: NavigateFunction) 
 	navigate('/tasks/');
 };
 
-export const navigateToMetaPollingPlaceTaskJobByName = (navigate: NavigateFunction, jobName: string) => {
+export const navigateToMetaPollingPlaceNextTaskJobByName = (navigate: NavigateFunction, jobName: string) => {
 	// We handle going to all of these routes:
-	// /tasks/:job_name/
+	// /tasks/:job_name/next/
 
-	navigate(`/tasks/${jobName}/`);
+	navigate(`/tasks/${jobName}/next/`);
+};
+
+export const navigateToMetaPollingPlaceTaskJobTask = (navigate: NavigateFunction, jobName: string, taskId: number) => {
+	// We handle going to all of these routes:
+	// /tasks/:job_name/:task_id/
+
+	navigate(`/tasks/${jobName}/${taskId}/`);
 };

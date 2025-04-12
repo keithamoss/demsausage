@@ -3,7 +3,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, LinearProgress, Sta
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
-import { navigateToMetaPollingPlaceTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
+import { navigateToMetaPollingPlaceNextTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
 import { useGetMetaPollingPlaceTaskJobGroupsQuery } from '../../../app/services/metaPollingPlaceTasks';
 import { getMetaPollingPlaceTaskCategoryIcon } from '../helpers/metaPollingPlaceTasksHelpers';
 
@@ -31,7 +31,7 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 		return <ErrorElement />;
 	}
 
-	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceTaskJobByName(navigate, jobName);
+	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceNextTaskJobByName(navigate, jobName);
 
 	return (
 		<PageWrapper>

@@ -8,8 +8,9 @@ import ElectionEditor from '../../features/elections/ElectionEditor';
 import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import QualityAssuranceReport from '../../features/impossibilities/QualityAssuranceReport';
-import MetaPollingPlaceTaskCrowdsourceFromFacebook from '../../features/metaPollingPlaceTasks/actions/MetaPollingPlaceTaskCrowdsourceFromFacebook';
 import MetaPollingPlaceTasksJobGroupsBrowser from '../../features/metaPollingPlaceTasks/browser/MetaPollingPlaceTasksJobGroupsBrowser';
+import MetaPollingPlaceTaskCrowdsourceFromFacebook from '../../features/metaPollingPlaceTasks/tasks/MetaPollingPlaceTaskCrowdsourceFromFacebook';
+import MetaPollingPlaceTaskNextTask from '../../features/metaPollingPlaceTasks/tasks/MetaPollingPlaceTaskNextTask';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
 import PendingStallsPollingPlace from '../../features/pendingStalls/pollingplace/PendingStallsPollingPlace';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
@@ -132,7 +133,14 @@ export const router = sentryCreateBrowserRouter(
 					}),
 				},
 				{
-					path: '/tasks/:job_name/',
+					path: '/tasks/:job_name/next/',
+					element: <MetaPollingPlaceTaskNextTask />,
+					loader: () => ({
+						name: 'Tasks',
+					}),
+				},
+				{
+					path: '/tasks/:job_name/:task_id/',
 					element: <MetaPollingPlaceTaskCrowdsourceFromFacebook />,
 					loader: () => ({
 						name: 'Tasks',

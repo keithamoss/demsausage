@@ -1,17 +1,23 @@
 from datetime import datetime, timedelta
 
+import pytz
 from demsausage.app.enums import (
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
 )
-from demsausage.app.models import MetaPollingPlacesLinks, MetaPollingPlacesTasks
+from demsausage.app.models import (
+    MetaPollingPlacesLinks,
+    MetaPollingPlacesRemarks,
+    MetaPollingPlacesTasks,
+)
 from demsausage.app.sausage.polling_places import get_active_polling_place_queryset
 from demsausage.app.serializers import (
     MetaPollingPlacesLinksCreateSerializer,
     MetaPollingPlacesLinksRetrieveSerializer,
     MetaPollingPlacesLinksUpdateSerializer,
+    MetaPollingPlacesTasksCreateSerializer,
     MetaPollingPlacesTasksSerializer,
 )
 from rest_framework import viewsets
@@ -21,7 +27,7 @@ from rest_framework.response import Response
 
 from django.db import transaction
 from django.db.models import Count, F, Max, Q
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.utils import timezone
 
 
@@ -33,6 +39,112 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
     queryset = MetaPollingPlacesTasks.objects
     serializer_class = MetaPollingPlacesTasksSerializer
     permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action in ["create", "createCompletedTask"]:
+            return MetaPollingPlacesTasksCreateSerializer
+        # elif self.action in ["update", "partial_update"]:
+        #     return MetaPollingPlacesLinksUpdateSerializer
+        return super().get_serializer_class()
+
+    @action(
+        detail=True,
+        methods=["post"],
+    )
+    @transaction.atomic
+    def close(self, request, pk=None, format=None):
+        task = self.get_object()
+        remarks = request.data.get("remarks", None)
+
+        if remarks is not None and isinstance(remarks, str) and len(remarks) > 0:
+            mpp_remarks = MetaPollingPlacesRemarks(
+                meta_polling_place_task_id=task.id,
+                meta_polling_place_id=task.meta_polling_place.id,
+                text=remarks,
+                user_id=request.user.id,
+            )
+
+            try:
+                mpp_remarks.full_clean()
+            except Exception as e:
+                return HttpResponseBadRequest(f"Error creating remarks: {e}")
+
+            mpp_remarks.save()
+
+        task.status = MetaPollingPlaceTaskStatus.COMPLETED
+        task.outcome = MetaPollingPlaceTaskOutcome.CLOSED
+        task.actioned_on = datetime.now(pytz.utc)
+        task.actioned_by_id = request.user.id
+        task.save()
+
+        return Response()
+
+    @action(
+        detail=True,
+        methods=["post"],
+    )
+    @transaction.atomic
+    def defer(self, request, pk=None, format=None):
+        task = self.get_object()
+        remarks = request.data.get("remarks", None)
+
+        if remarks is not None and isinstance(remarks, str) and len(remarks) > 0:
+            mpp_remarks = MetaPollingPlacesRemarks(
+                meta_polling_place_task_id=task.id,
+                meta_polling_place_id=task.meta_polling_place.id,
+                text=remarks,
+                user_id=request.user.id,
+            )
+
+            try:
+                mpp_remarks.full_clean()
+            except Exception as e:
+                return HttpResponseBadRequest(f"Error creating remarks: {e}")
+
+            mpp_remarks.save()
+
+        task.status = MetaPollingPlaceTaskStatus.COMPLETED
+        task.outcome = MetaPollingPlaceTaskOutcome.DEFERRED
+        task.actioned_on = datetime.now(pytz.utc)
+        task.actioned_by_id = request.user.id
+        task.save()
+
+        return Response()
+
+    @action(
+        detail=True,
+        methods=["post"],
+    )
+    @transaction.atomic
+    def complete(self, request, pk=None, format=None):
+        task = self.get_object()
+
+        task.status = MetaPollingPlaceTaskStatus.COMPLETED
+        task.outcome = MetaPollingPlaceTaskOutcome.COMPLETED
+        task.actioned_on = datetime.now(pytz.utc)
+        task.actioned_by_id = request.user.id
+        task.save()
+
+        return Response()
+
+    @action(
+        detail=False,
+        methods=["post"],
+    )
+    @transaction.atomic
+    def createCompletedTask(self, request, *args, **kwargs):
+        data = request.data.copy()
+
+        data["status"] = MetaPollingPlaceTaskStatus.COMPLETED
+        data["outcome"] = MetaPollingPlaceTaskOutcome.COMPLETED
+        data["actioned_on"] = datetime.now(pytz.utc)
+        data["actioned_by"] = request.user.id
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response()
 
     @transaction.atomic
     def list(self, request):
@@ -70,7 +182,7 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         if job_name is None:
             return HttpResponseBadRequest("job_name is required")
 
-        queryset = (
+        task = (
             MetaPollingPlacesTasks.objects.filter(
                 job_name=job_name, status=MetaPollingPlaceTaskStatus.IN_PROGRESS
             )
@@ -78,12 +190,15 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             .first()
         )
 
-        serializer = self.serializer_class(
-            queryset,
-            many=False,
-        )
+        if task is not None:
+            serializer = self.serializer_class(
+                task,
+                many=False,
+            )
 
-        return Response(serializer.data)
+            return Response(serializer.data)
+        else:
+            return HttpResponseNotFound()
 
     @action(
         # detail=True,

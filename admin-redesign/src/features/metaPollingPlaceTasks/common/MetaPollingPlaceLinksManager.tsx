@@ -92,7 +92,6 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	const onDoneWithForm: SubmitHandler<IMetaPollingPlaceLinkModifiableProps> = useCallback(
 		(data) => {
 			if (isEmpty(data) === false) {
-				console.log(data);
 				addLink({ ...data, meta_polling_place_id: metaPollingPlace.id });
 
 				// if (stall === undefined && onDoneAdding !== undefined) {

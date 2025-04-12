@@ -10,6 +10,7 @@ import {
 	ListItemAvatar,
 	ListItemButton,
 	ListItemText,
+	type SxProps,
 	Typography,
 	useTheme,
 } from '@mui/material';
@@ -32,19 +33,29 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 interface Props {
 	election: Election;
-	onChooseElection: (e: Election) => void;
+	cardSxProps?: SxProps;
+	onChooseElection?: (e: Election) => void;
+	borderless?: boolean;
+	showProgressBar?: boolean;
 }
 
 export default function ElectionsManagerCard(props: Props) {
-	const { election, onChooseElection } = props;
+	const { election, cardSxProps, onChooseElection, borderless, showProgressBar } = props;
 
 	const theme = useTheme();
 
 	return (
-		<Card key={election.id} variant="outlined">
-			<CardContent sx={{ pl: 0, pb: `${theme.spacing(2)} !important` }}>
+		<Card variant="outlined" sx={{ border: borderless === true ? 0 : undefined }}>
+			<CardContent sx={{ pl: 0, pb: `${theme.spacing(2)} !important`, ...cardSxProps }}>
 				<List disablePadding>
-					<ListItem sx={{ pt: 0, pb: 0 }} onClick={() => onChooseElection(election)}>
+					<ListItem
+						sx={{ pt: 0, pb: 0 }}
+						onClick={() => {
+							if (onChooseElection !== undefined) {
+								onChooseElection(election);
+							}
+						}}
+					>
 						<ListItemAvatar sx={{ minWidth: 36, cursor: 'pointer' }}>
 							<Avatar
 								sx={{
@@ -75,7 +86,7 @@ export default function ElectionsManagerCard(props: Props) {
 					</ListItem>
 				</List>
 
-				{election.stats.total > 0 && (
+				{showProgressBar !== false && election.stats.total > 0 && (
 					<Box sx={{ pt: 1, pb: 0, pl: 2, width: '100%' }}>
 						<LinearProgressWithLabel value={(election.stats.with_data / election.stats.total) * 100} />
 					</Box>

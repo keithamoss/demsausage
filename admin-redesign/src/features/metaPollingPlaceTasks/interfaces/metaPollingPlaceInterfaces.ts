@@ -1,8 +1,16 @@
-import type { IPollingPlace, PollingPlaceWheelchairAccess } from '../../pollingPlaces/pollingPlacesInterfaces';
+import type {
+	IPollingPlace,
+	IPollingPlaceNoms,
+	PollingPlaceWheelchairAccess,
+} from '../../pollingPlaces/pollingPlacesInterfaces';
 import type { IMetaPollingPlaceLink } from './metaPollingPlaceLinksInterfaces';
 
 export interface IPollingPlaceAttachedToMetaPollingPlace extends Omit<IPollingPlace, 'stall'> {
 	election_name: string;
+	stall: {
+		id: number;
+		noms: IPollingPlaceNoms | null;
+	};
 }
 
 export interface IMetaPollingPlace {
@@ -27,6 +35,9 @@ export interface IMetaPollingPlace {
 	chance_of_sausage: object; // @TODO Implement interface
 	polling_places: IPollingPlaceAttachedToMetaPollingPlace[];
 	links: IMetaPollingPlaceLink[];
+	task_history: {
+		passed_review: boolean;
+	};
 }
 export enum IMetaPollingPlaceJurisdiction {
 	NSW = 'NSW',

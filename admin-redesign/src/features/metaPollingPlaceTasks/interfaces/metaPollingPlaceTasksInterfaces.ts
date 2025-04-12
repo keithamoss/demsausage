@@ -1,4 +1,4 @@
-import type { IMetaPollingPlace, IMetaPollingPlaceStatus } from './metaPollingPlaceInterfaces';
+import type { IMetaPollingPlace } from './metaPollingPlaceInterfaces';
 
 export enum IMetaPollingPlaceTaskCategory {
 	REVIEW = 'Review',
@@ -9,6 +9,8 @@ export enum IMetaPollingPlaceTaskCategory {
 
 export enum IMetaPollingPlaceTaskType {
 	REVIEW_DRAFT = 'Review Draft',
+	REVIEW_PP = 'Review Polling Places',
+	QA_PP_MISMATCH = 'Polling Place Mismatch',
 
 	CROWDSOURCE_FROM_FACEBOOK = 'Crowdsource from Facebook',
 }
@@ -33,16 +35,20 @@ export enum IMetaPollingPlaceTaskOutcome {
 	CLOSED = 'Closed',
 }
 
-export interface IMetaPollingPlaceTaskJob {
-	id: number;
-	status: IMetaPollingPlaceStatus;
-	created_on: string; // ISO 8601 date string
+export interface IMetaPollingPlaceTaskJobModifiableProps {
+	meta_polling_place: number; // Modifiable for task creation purposes only
 	job_name: string;
 	category: IMetaPollingPlaceTaskCategory;
 	type: IMetaPollingPlaceTaskType;
+	// To allow us to create tasks that start as 'Completd' (e.g. The 'Looks good!' action that creates a completed REVIEW_PP task)
+}
+
+export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobModifiableProps, 'meta_polling_place'> {
+	id: number;
+	status: IMetaPollingPlaceTaskStatus;
+	created_on: string; // ISO 8601 date string
 	outcome: IMetaPollingPlaceTaskOutcome;
 	actioned_on: string | null; // ISO 8601 date string
 	actioned_by: string | null;
-
 	meta_polling_place: IMetaPollingPlace;
 }
