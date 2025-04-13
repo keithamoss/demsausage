@@ -20,6 +20,16 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 			// We could make it far more nuanced and only validate specific things, but sod it.
 			providesTags: ['MetaPollingPlaceTasks'],
 		}),
+		createJob: builder.mutation<{ job_name: string; tasks_created: number }, { electionId: number; taskCount: number }>(
+			{
+				query: ({ electionId, taskCount }) => ({
+					url: 'meta_polling_places/tasks/create_job/',
+					method: 'POST',
+					body: { election_id: electionId, max_tasks: taskCount },
+				}),
+				invalidatesTags: ['MetaPollingPlaceTasks'],
+			},
+		),
 		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob, string>({
 			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),
 			// @TODO Check for caching bug?
@@ -113,6 +123,7 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 
 export const {
 	useGetMetaPollingPlaceTaskJobGroupsQuery,
+	useCreateJobMutation,
 	useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery,
 	useGetTaskQuery,
 	useAddTaskMutation,

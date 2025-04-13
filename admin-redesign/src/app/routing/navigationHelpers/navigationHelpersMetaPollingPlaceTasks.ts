@@ -6,6 +6,12 @@ export const navigateToMetaPollingPlaceTasksRoot = (navigate: NavigateFunction) 
 
 	navigate('/tasks/');
 };
+export const navigateToMetaPollingPlaceTasksManager = (navigate: NavigateFunction) => {
+	// We handle going to all of these routes:
+	// /tasks/manage/
+
+	navigate('/tasks/manage/');
+};
 
 export const navigateToMetaPollingPlaceNextTaskJobByName = (navigate: NavigateFunction, jobName: string) => {
 	// We handle going to all of these routes:

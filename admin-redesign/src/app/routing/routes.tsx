@@ -9,6 +9,7 @@ import ElectionsManager from '../../features/elections/ElectionsManager';
 import ElectionsManagerRoot from '../../features/elections/ElectionsManagerRoot';
 import QualityAssuranceReport from '../../features/impossibilities/QualityAssuranceReport';
 import MetaPollingPlaceTasksJobGroupsBrowser from '../../features/metaPollingPlaceTasks/browser/MetaPollingPlaceTasksJobGroupsBrowser';
+import MetaPollingPlaceTaskManager from '../../features/metaPollingPlaceTasks/manage/MetaPollingPlaceTaskManager';
 import MetaPollingPlaceTaskCrowdsourceFromFacebook from '../../features/metaPollingPlaceTasks/tasks/MetaPollingPlaceTaskCrowdsourceFromFacebook';
 import MetaPollingPlaceTaskNextTask from '../../features/metaPollingPlaceTasks/tasks/MetaPollingPlaceTaskNextTask';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
@@ -128,6 +129,13 @@ export const router = sentryCreateBrowserRouter(
 				{
 					path: '/tasks/',
 					element: <MetaPollingPlaceTasksJobGroupsBrowser />,
+					loader: () => ({
+						name: 'Tasks',
+					}),
+				},
+				{
+					path: '/tasks/manage/',
+					element: <MetaPollingPlaceTaskManager />,
 					loader: () => ({
 						name: 'Tasks',
 					}),

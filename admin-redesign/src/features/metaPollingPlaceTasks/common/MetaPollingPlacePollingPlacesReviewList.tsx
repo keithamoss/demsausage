@@ -46,11 +46,11 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	// ######################
 	// Looks Good
 	// ######################
-	const [ceateCompletedTask, { isLoading: isCreateCompletedTaskLoading, isSuccess: isCreateCompletedTaskSuccessful }] =
+	const [createCompletedTask, { isLoading: isCreateCompletedTaskLoading, isSuccess: isCreateCompletedTaskSuccessful }] =
 		useCreateCompletedTaskMutation();
 
 	const onClickLooksGood = () =>
-		ceateCompletedTask({
+		createCompletedTask({
 			meta_polling_place: metaPollingPlace.id,
 			job_name: 'From Facebook Research',
 			category: IMetaPollingPlaceTaskCategory.REVIEW,

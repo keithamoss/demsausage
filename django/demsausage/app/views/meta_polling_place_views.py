@@ -8,6 +8,7 @@ from demsausage.app.enums import (
     MetaPollingPlaceTaskType,
 )
 from demsausage.app.models import (
+    Elections,
     MetaPollingPlacesLinks,
     MetaPollingPlacesRemarks,
     MetaPollingPlacesTasks,
@@ -201,19 +202,20 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             return HttpResponseNotFound()
 
     @action(
-        # detail=True,
-        # methods=["post"],
         detail=False,
-        methods=["get"],
+        methods=["post"],
         permission_classes=(IsAuthenticated,),
         # serializer_class=ElectionsSerializer,
     )
     @transaction.atomic
-    def add(self, request, format=None):
-        election_id = request.query_params.get("election_id", None)
-        max_tasks = request.query_params.get("max_tasks", 5)
+    def create_job(self, request, format=None):
+        election_id = request.data.get("election_id", None)
+        max_tasks = request.data.get("max_tasks", 5)
 
-        if election_id is None:
+        if (
+            election_id is None
+            or Elections.objects.filter(id=election_id).exists() is False
+        ):
             return HttpResponseBadRequest("election_id is required")
 
         job_name = (
