@@ -1,8 +1,16 @@
-from demsausage.app.enums import PollingPlaceStatus, StallStatus, StallSubmitterType
+from demsausage.app.enums import (
+    MetaPollingPlaceTaskCategory,
+    MetaPollingPlaceTaskOutcome,
+    MetaPollingPlaceTaskStatus,
+    PollingPlaceStatus,
+    StallStatus,
+    StallSubmitterType,
+)
 from demsausage.app.models import (
     Elections,
     MailgunEvents,
     MetaPollingPlaces,
+    MetaPollingPlacesLinks,
     MetaPollingPlacesTasks,
     PollingPlaceFacilityType,
     PollingPlaceLoaderEvents,
@@ -478,11 +486,16 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
 
 class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
     election_name = serializers.CharField(source="election.name", read_only=True)
+    stall = serializers.SerializerMethodField()
 
     class Meta(PollingPlacesSerializer.Meta):
-        fields = [
-            field for field in PollingPlacesSerializer.Meta.fields if field != "stall"
-        ] + ["election_name"]
+        fields = [field for field in PollingPlacesSerializer.Meta.fields] + [
+            "election_name",
+            "stall",
+        ]
+
+    def get_stall(self, obj):
+        return None if obj.noms is None else {"id": obj.noms_id, "noms": obj.noms.noms}
 
 
 class PollingPlacesCSVDownloadSerializer(PollingPlacesSerializer):
@@ -967,8 +980,57 @@ class PollingPlaceLoaderEventsSerializer(serializers.ModelSerializer):
         fields = ("id", "timestamp", "payload")
 
 
+class MetaPollingPlacesLinksRetrieveSerializer(serializers.ModelSerializer):
+    # Allows us to use the pre-baked DRF ModelViewSet and for the frontend just to send the ID of the Meta Polling Place
+    meta_polling_place = serializers.PrimaryKeyRelatedField(
+        queryset=None, read_only=True
+    )
+
+    class Meta:
+        model = MetaPollingPlacesLinks
+
+        fields = read_only_fields = [
+            "id",
+            "created_on",
+            "modified_on",
+            "type",
+            "url",
+            "meta_polling_place",
+        ]
+
+
+class MetaPollingPlacesLinksCreateSerializer(MetaPollingPlacesLinksRetrieveSerializer):
+    meta_polling_place = serializers.PrimaryKeyRelatedField(
+        queryset=MetaPollingPlaces.objects.all()
+    )
+
+    class Meta:
+        model = MetaPollingPlacesLinksRetrieveSerializer.Meta.model
+
+        fields = MetaPollingPlacesLinksRetrieveSerializer.Meta.fields
+
+        # @TODO Apply this pattern elsewhere where we rely on ModelViewSet
+        read_only_fields = [
+            i for i in fields if i not in ["type", "url", "meta_polling_place"]
+        ]
+
+
+class MetaPollingPlacesLinksUpdateSerializer(MetaPollingPlacesLinksRetrieveSerializer):
+    class Meta:
+        model = MetaPollingPlacesLinksRetrieveSerializer.Meta.model
+
+        fields = MetaPollingPlacesLinksRetrieveSerializer.Meta.fields
+
+        # @TODO Apply this pattern elsewhere where we rely on ModelViewSet
+        read_only_fields = [i for i in fields if i not in ["type", "url"]]
+
+
 class MetaPollingPlacesSerializer(serializers.ModelSerializer):
     polling_places = serializers.SerializerMethodField()
+    links = MetaPollingPlacesLinksRetrieveSerializer(
+        many=True, read_only=True, source="metapollingplaceslinks_set"
+    )
+    task_history = serializers.SerializerMethodField()
 
     class Meta:
         model = MetaPollingPlaces
@@ -995,6 +1057,8 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             "wheelchair_access_description",
             "chance_of_sausage",
             "polling_places",
+            "links",
+            "task_history",
         ]
 
     def get_polling_places(self, obj):
@@ -1002,6 +1066,17 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
         return PollingPlacesSerializerForMetaPollingPlaces(
             polling_places, many=True, read_only=True
         ).data
+
+    def get_task_history(self, obj):
+        return {
+            "passed_review": MetaPollingPlacesTasks.objects.filter(
+                meta_polling_place=obj,
+                category=MetaPollingPlaceTaskCategory.REVIEW,
+                status=MetaPollingPlaceTaskStatus.COMPLETED,
+                outcome=MetaPollingPlaceTaskOutcome.COMPLETED,
+            ).count()
+            > 0
+        }
 
 
 class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
@@ -1022,3 +1097,10 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             "actioned_by",
             "meta_polling_place",
         )
+
+
+# Allows us to use the DRF ModelViewSet boilerplate CRUD endpoints to pass a meta_polling_place id while leaving MetaPollingPlacesTasksSerializer to return the full serialized MPP object.
+class MetaPollingPlacesTasksCreateSerializer(MetaPollingPlacesTasksSerializer):
+    meta_polling_place = serializers.PrimaryKeyRelatedField(
+        queryset=MetaPollingPlaces.objects.all(), required=True
+    )

@@ -8,17 +8,27 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
+	FormControl,
+	FormGroup,
+	FormHelperText,
+	InputLabel,
 	MenuItem,
+	OutlinedInput,
 	Select,
 	type SxProps,
 } from '@mui/material';
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import { isEmpty } from 'lodash-es';
+import React, { useCallback, useEffect } from 'react';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { metaPollingPlaceLinkFormValidationSchema } from '../../../app/forms/metaPollingPlaces/metaPollingPlaceLinksForm';
+import { useAddLinkMutation } from '../../../app/services/metaPollingPlaceLinks';
 import TextFieldWithPasteAdornment from '../../../app/ui/textFieldWithPasteAdornment';
-import type { IMetaPollingPlace, IMetaPollingPlaceLinkModifiableProps } from '../metaPollingPlaceTasksInterfaces';
+import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
+import type { IMetaPollingPlaceLinkModifiableProps } from '../interfaces/metaPollingPlaceLinksInterfaces';
+import { IMetaPollingPlaceLinkType } from '../interfaces/metaPollingPlaceLinksInterfaces';
+import MetaPollingPlaceLinksList from './MetaPollingPlaceLinksList';
 
 interface Props {
 	metaPollingPlace: IMetaPollingPlace;
@@ -28,16 +38,39 @@ interface Props {
 function MetaPollingPlaceLinksManager(props: Props) {
 	const { metaPollingPlace, cardSxProps } = props;
 
-	const [open, setOpen] = React.useState(false);
+	// ######################
+	// Dialog Management
+	// ######################
+	const [isAddLinkDialogOpen, setIsAddLinkDialogOpen] = React.useState(false);
 
-	const handleClickOpen = () => {
-		setOpen(true);
+	const onClickOpenAddLinkDialog = () => {
+		setIsAddLinkDialogOpen(true);
 	};
 
-	const handleClose = () => {
-		setOpen(false);
-	};
+	const onCloseAddLinkDialog = useCallback(() => {
+		setIsAddLinkDialogOpen(false);
+	}, []);
+	// ######################
+	// Dialog Management (End)
+	// ######################
 
+	// ######################
+	// Add Link
+	// ######################
+	const [addLink, { isLoading: isAddLinkLoading, isSuccess: isAddLinkSuccessful }] = useAddLinkMutation();
+
+	useEffect(() => {
+		if (isAddLinkSuccessful === true) {
+			onCloseAddLinkDialog();
+		}
+	}, [isAddLinkSuccessful, onCloseAddLinkDialog]);
+	// ######################
+	// Add Link (End)
+	// ######################
+
+	// ######################
+	// Form Management
+	// ######################
 	const {
 		watch,
 		setValue,
@@ -47,15 +80,42 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	} = useForm<IMetaPollingPlaceLinkModifiableProps>({
 		resolver: yupResolver(metaPollingPlaceLinkFormValidationSchema),
 		defaultValues: {
-			type: undefined,
+			type: IMetaPollingPlaceLinkType.FACEBOOK,
 			url: '',
 		},
 	});
 
+	// @TODO Add some sort of basic domain validation?
+
+	const { type } = watch();
+
+	const onDoneWithForm: SubmitHandler<IMetaPollingPlaceLinkModifiableProps> = useCallback(
+		(data) => {
+			if (isEmpty(data) === false) {
+				addLink({ ...data, meta_polling_place_id: metaPollingPlace.id });
+
+				// if (stall === undefined && onDoneAdding !== undefined) {
+				// 	onDoneAdding({ ...data });
+				// } else if (stall !== undefined && onDoneEditing !== undefined) {
+				// 	onDoneEditing({
+				// 		...stall,
+				// 		...data,
+				// 	});
+				// }
+			}
+		},
+		[addLink, metaPollingPlace.id],
+	);
+
+	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
+	// ######################
+	// Form Management (End)
+	// ######################
+
 	// ######################
 	// Paste To Field From Clipboard
 	// ######################
-	const onPasteNameFromClipboard = (pastedText: string) => setValue('url', pastedText, { shouldDirty: true });
+	const onPasteLinkFromClipboard = (pastedText: string) => setValue('url', pastedText, { shouldDirty: true });
 	// ######################
 	// Paste To Field From Clipboard (End)
 	// ######################
@@ -63,55 +123,81 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	return (
 		<React.Fragment>
 			<Card variant="outlined" sx={cardSxProps}>
-				<CardContent>Foobar</CardContent>
+				<CardContent>
+					<MetaPollingPlaceLinksList metaPollingPlace={metaPollingPlace} />
+				</CardContent>
 
-				<CardActions>
-					<Button variant="outlined" startIcon={<AddLink />} onClick={handleClickOpen}>
+				<CardActions sx={{ pl: 2, pb: 2, pr: 2 }}>
+					<Button variant="outlined" startIcon={<AddLink />} onClick={onClickOpenAddLinkDialog}>
 						Add Link
 					</Button>
 				</CardActions>
 			</Card>
 
-			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Subscribe</DialogTitle>
+			<Dialog open={isAddLinkDialogOpen} onClose={onCloseAddLinkDialog}>
+				<DialogTitle>Add Link</DialogTitle>
 
 				<DialogContent>
-					<DialogContentText>
-						To subscribe to this website, please enter your email address here. We will send updates occasionally.
-					</DialogContentText>
+					<form onSubmit={handleSubmit(onDoneWithForm)}>
+						<FormControl fullWidth sx={{ mt: 1, mb: 3 }}>
+							<FormGroup>
+								<InputLabel>Link Type</InputLabel>
 
-					<Select
-						labelId="demo-simple-select-label"
-						id="demo-simple-select"
-						// value={10}
-						value=""
-						label="Age"
-						// onChange={handleChange}
-					>
-						<MenuItem value={10}>Ten</MenuItem>
-						<MenuItem value={20}>Twenty</MenuItem>
-						<MenuItem value={30}>Thirty</MenuItem>
-					</Select>
+								{/* @TODO Add icons inside the MenuItems */}
+								<Controller
+									name="type"
+									control={control}
+									render={({ field }) => (
+										<Select {...field} input={<OutlinedInput label="Link Type" />} value={type || ''}>
+											{Object.entries(IMetaPollingPlaceLinkType).map(([, type]) => (
+												<MenuItem key={type} value={type} sx={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
+													{type}
+												</MenuItem>
+											))}
+										</Select>
+									)}
+								/>
 
-					<TextFieldWithPasteAdornment
-						autoFocus
-						required
-						margin="dense"
-						id="name"
-						name="email"
-						label="Email Address"
-						type="email"
-						fullWidth
-						variant="standard"
-						// label="Stall name"
-						helperText="e.g. Hillcrest Primary School Sausage Sizzle"
-						onPasteFromClipboard={onPasteNameFromClipboard}
-					/>
+								{errors.type && <FormHelperText error>{errors.type.message}</FormHelperText>}
+							</FormGroup>
+						</FormControl>
+
+						<FormControl fullWidth={true} component="fieldset" variant="outlined">
+							<FormGroup>
+								<Controller
+									name="url"
+									control={control}
+									render={({ field }) => (
+										<TextFieldWithPasteAdornment
+											{...field}
+											type="url"
+											label="URL"
+											onPasteFromClipboard={onPasteLinkFromClipboard}
+										/>
+									)}
+								/>
+							</FormGroup>
+
+							{errors.url !== undefined && <FormFieldValidationError error={errors.url} />}
+						</FormControl>
+					</form>
 				</DialogContent>
 
 				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button type="submit">Subscribe</Button>
+					<Button disabled={isAddLinkLoading === true} size="small" onClick={onCloseAddLinkDialog}>
+						Close
+					</Button>
+
+					<Button
+						loading={isAddLinkLoading}
+						loadingPosition="end"
+						disabled={isDirty === false}
+						size="small"
+						onClick={onClickSubmit}
+					>
+						{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+						<span>Add</span>
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</React.Fragment>

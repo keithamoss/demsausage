@@ -1,9 +1,7 @@
 import type { ObjectSchema } from 'yup';
 import * as yup from 'yup';
-import {
-	type IMetaPollingPlaceLinkModifiableProps,
-	IMetaPollingPlaceLinkType,
-} from '../../../features/metaPollingPlaceTasks/metaPollingPlaceTasksInterfaces';
+import type { IMetaPollingPlaceLinkModifiableProps } from '../../../features/metaPollingPlaceTasks/interfaces/metaPollingPlaceLinksInterfaces';
+import { IMetaPollingPlaceLinkType } from '../../../features/metaPollingPlaceTasks/interfaces/metaPollingPlaceLinksInterfaces';
 
 export const metaPollingPlaceLinkFormValidationSchema: ObjectSchema<IMetaPollingPlaceLinkModifiableProps> = yup
 	.object({

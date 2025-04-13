@@ -8,34 +8,34 @@ import {
 	ListItemAvatar,
 	ListItemButton,
 	ListItemText,
-	Typography,
 } from '@mui/material';
 import * as React from 'react';
-import { type Control, Controller } from 'react-hook-form';
-import { FormFieldValidationError, FormFieldValidationErrorMessageOnly } from '../../app/forms/formHelpers';
-import type { StallFoodOptions, StallFoodOptionsErrors } from '../../app/services/stalls';
-import TextFieldWithPasteAdornment from '../../app/ui/textFieldWithPasteAdornment';
-import { mapaThemePrimaryGrey } from '../../app/ui/theme';
-import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../icons/iconHelpers';
-import type { IPollingPlaceStallModifiableProps } from './pollingPlacesInterfaces';
+import { useMemo } from 'react';
+import type { FieldErrors } from 'react-hook-form';
+import { FormFieldValidationError, FormFieldValidationErrorMessageOnly } from '../../../app/forms/formHelpers';
+import type { StallFoodOptions } from '../../../app/services/stalls';
+import TextFieldWithPasteAdornment from '../../../app/ui/textFieldWithPasteAdornment';
+import { getAllFoodsAvailableOnStalls, standaloneIconSize, supportingIcons } from '../../icons/iconHelpers';
+import type { IPollingPlaceNoms } from '../../pollingPlaces/pollingPlacesInterfaces';
 
 interface Props {
 	foodOptions: StallFoodOptions;
 	onChange: (foodOptions: StallFoodOptions) => void;
-	allowPasteOnTextFields: boolean;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	control: Control<IPollingPlaceStallModifiableProps, any>;
-	errors: StallFoodOptionsErrors | undefined;
+	errors:
+		| FieldErrors<{
+				noms: IPollingPlaceNoms;
+		  }>
+		| undefined;
 }
 
-export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
-	const { foodOptions, onChange, allowPasteOnTextFields, control, errors } = props;
+export default function MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector(props: Props) {
+	const { foodOptions, onChange, errors } = props;
 
 	const isRedCrossOfShameChosen = foodOptions[supportingIcons.red_cross.value as keyof StallFoodOptions] === true;
 
 	// ######################
 	// !! Important !!
-	// If you're updating this component, be sure to reflect all changes in MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector
+	// If you're updating this component, be sure to reflect all changes in PollingPlaceNomsEditorFormNomsSelector
 	// ######################
 
 	// ######################
@@ -52,21 +52,46 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 		return onChange(rest);
 	};
 
-	const onPasteFreeTextNomsFromClipboard = (pastedText: string) => onChange({ ...foodOptions, free_text: pastedText });
+	const inputFieldRef = React.useRef<HTMLTextAreaElement | HTMLInputElement>(null);
+
+	const onPasteFreeTextNomsFromClipboard = (pastedText: string) => {
+		if (inputFieldRef.current !== null) {
+			inputFieldRef.current.value = pastedText;
+		}
+
+		onChange({ ...foodOptions, free_text: pastedText });
+	};
+
+	// This is ugly! We're using a Controlled TextField because otherwise isDirty in MetaPollingPlaceTaskCrowdsourceFromFacebook was always true because free_text was being set to underfined and after the first render when using a regular <Control> wrapped RHF TextField.
+	// No idea why, so here's the hacky workaround.
+	// Longer-term, maybe we ditch RHF for this component altogether.
+	const onChangeFreeTextFoodOption = useMemo(
+		() => (e: React.ChangeEvent<HTMLInputElement>) => {
+			if (e.target.value.length >= 1) {
+				return onChange({ ...foodOptions, free_text: e.target.value });
+			}
+
+			const { free_text, ...rest } = foodOptions;
+
+			// Ensures we remove 'free_text' from the list of noms when it's empty
+			return onChange(rest);
+		},
+		[foodOptions, onChange],
+	);
 	// ######################
 	// Food Options (End)
 	// ######################
 
 	return (
 		<React.Fragment>
-			<Typography
+			{/* <Typography
 				gutterBottom
 				variant="h6"
 				component="div"
 				sx={{ mt: 0, mb: 0, borderTop: `3px solid ${mapaThemePrimaryGrey}` }}
 			>
 				What&apos;s on offer?
-			</Typography>
+			</Typography> */}
 
 			<FormControl fullWidth={true} component="fieldset" variant="outlined">
 				<FormGroup>
@@ -185,35 +210,29 @@ export default function PollingPlaceNomsEditorFormNomsSelector(props: Props) {
 
 			{isRedCrossOfShameChosen === false && (
 				<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
-					<FormGroup>
-						<Controller
-							name="noms.free_text"
-							control={control}
-							render={({ field }) => (
-								<TextFieldWithPasteAdornment
-									{...field}
-									value={field.value || ''}
-									label="Anything else?"
-									helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
-									onPasteFromClipboard={onPasteFreeTextNomsFromClipboard}
-									pastingDisabled={allowPasteOnTextFields === false}
-									sx={{ mt: 1 }}
-								/>
-							)}
-						/>
-					</FormGroup>
+					<TextFieldWithPasteAdornment
+						inputRef={inputFieldRef}
+						value={foodOptions.free_text || ''}
+						onChange={onChangeFreeTextFoodOption}
+						label="Anything else?"
+						helperText="e.g. There's also yummy gluten free sausage rolls, cold drinks, and pony rides!"
+						onPasteFromClipboard={onPasteFreeTextNomsFromClipboard}
+						sx={{ mt: 1 }}
+					/>
 
-					{errors !== undefined && errors.free_text !== undefined && (
-						<FormFieldValidationError error={errors.free_text} />
+					{errors !== undefined && errors.noms !== undefined && errors.noms.free_text !== undefined && (
+						<FormFieldValidationError error={errors.noms.free_text} />
 					)}
 				</FormControl>
 			)}
 
-			{errors !== undefined && errors.message !== undefined && (
-				<FormFieldValidationErrorMessageOnly message={errors.message} sx={{ mb: 2 }} />
+			{errors !== undefined && errors.noms !== undefined && errors.noms.message !== undefined && (
+				<FormFieldValidationErrorMessageOnly message={errors.noms.message} sx={{ mb: 2 }} />
 			)}
 
-			{errors !== undefined && errors.root !== undefined && <FormFieldValidationError error={errors.root} />}
+			{errors !== undefined && errors.noms !== undefined && errors.noms.root !== undefined && (
+				<FormFieldValidationError error={errors.noms.root} />
+			)}
 		</React.Fragment>
 	);
 }

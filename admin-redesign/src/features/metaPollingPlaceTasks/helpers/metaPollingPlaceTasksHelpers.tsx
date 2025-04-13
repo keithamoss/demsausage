@@ -1,6 +1,6 @@
 import { AddCircle, QuestionMark, TipsAndUpdates, Troubleshoot, WorkspacePremium } from '@mui/icons-material';
 import type { ReactElement } from 'react';
-import { IMetaPollingPlaceTaskCategory } from './metaPollingPlaceTasksInterfaces';
+import { IMetaPollingPlaceTaskCategory } from '../interfaces/metaPollingPlaceTasksInterfaces';
 
 export const getMetaPollingPlaceTaskCategoryIcon = (category: IMetaPollingPlaceTaskCategory): ReactElement => {
 	switch (category) {

@@ -2,7 +2,8 @@ import { createEntityAdapter } from '@reduxjs/toolkit';
 import type {
 	IMetaPollingPlaceTaskJob,
 	IMetaPollingPlaceTaskJobGroup,
-} from '../../features/metaPollingPlaceTasks/metaPollingPlaceTasksInterfaces';
+	IMetaPollingPlaceTaskJobModifiableProps,
+} from '../../features/metaPollingPlaceTasks/interfaces/metaPollingPlaceTasksInterfaces';
 import type { IPollingPlace } from '../../features/pollingPlaces/pollingPlacesInterfaces';
 import { api } from './api';
 
@@ -17,12 +18,66 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 			query: () => 'meta_polling_places/tasks/',
 			// This is a very inelegant approach to tag-based cache invalidation, but it'll do.
 			// We could make it far more nuanced and only validate specific things, but sod it.
-			// providesTags: ['MetaPollingPlaceTasks'],
+			providesTags: ['MetaPollingPlaceTasks'],
 		}),
+		createJob: builder.mutation<{ job_name: string; tasks_created: number }, { electionId: number; taskCount: number }>(
+			{
+				query: ({ electionId, taskCount }) => ({
+					url: 'meta_polling_places/tasks/create_job/',
+					method: 'POST',
+					body: { election_id: electionId, max_tasks: taskCount },
+				}),
+				invalidatesTags: ['MetaPollingPlaceTasks'],
+			},
+		),
 		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob, string>({
 			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),
 			// @TODO Check for caching bug?
-			// providesTags: ['MetaPollingPlaceTasks'],
+			providesTags: ['MetaPollingPlaceTasks'],
+		}),
+		getTask: builder.query<IMetaPollingPlaceTaskJob, number>({
+			query: (id) => `meta_polling_places/tasks/${id}/`,
+			providesTags: ['MetaPollingPlaceTasks'],
+		}),
+		addTask: builder.mutation<void, Partial<IMetaPollingPlaceTaskJobModifiableProps>>({
+			query: (body) => ({
+				url: 'meta_polling_places/tasks/',
+				method: 'POST',
+				body,
+			}),
+			// @TODO This is very hacky, but it works for now. We need to invalidate anything that may have a representation of a link in it, which could be quite wide - so just invalidate all tasks.
+			invalidatesTags: ['MetaPollingPlaceTasks'],
+		}),
+		createCompletedTask: builder.mutation<void, Partial<IMetaPollingPlaceTaskJobModifiableProps>>({
+			query: (body) => ({
+				url: 'meta_polling_places/tasks/createCompletedTask/',
+				method: 'POST',
+				body,
+			}),
+			invalidatesTags: ['MetaPollingPlaceTasks'],
+		}),
+		closeTask: builder.mutation<void, { id: number; remarks: string }>({
+			query: ({ id, remarks }) => ({
+				url: `meta_polling_places/tasks/${id}/close/`,
+				method: 'POST',
+				body: { remarks },
+			}),
+			invalidatesTags: ['MetaPollingPlaceTasks'],
+		}),
+		deferTask: builder.mutation<void, { id: number; remarks: string }>({
+			query: ({ id, remarks }) => ({
+				url: `meta_polling_places/tasks/${id}/defer/`,
+				method: 'POST',
+				body: { remarks },
+			}),
+			invalidatesTags: ['MetaPollingPlaceTasks'],
+		}),
+		completeTask: builder.mutation<void, number>({
+			query: (id) => ({
+				url: `meta_polling_places/tasks/${id}/complete/`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['MetaPollingPlaceTasks'],
 		}),
 		// getPollingPlaceByIdsLookup: builder.query<IPollingPlace[], { electionId: number; pollingPlaceIds: number[] }>({
 		//   query: ({ electionId, pollingPlaceIds }) => ({
@@ -66,5 +121,14 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 	}),
 });
 
-export const { useGetMetaPollingPlaceTaskJobGroupsQuery, useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery } =
-	metaPollingPlaceTasksApi;
+export const {
+	useGetMetaPollingPlaceTaskJobGroupsQuery,
+	useCreateJobMutation,
+	useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery,
+	useGetTaskQuery,
+	useAddTaskMutation,
+	useCreateCompletedTaskMutation,
+	useCloseTaskMutation,
+	useDeferTaskMutation,
+	useCompleteTaskMutation,
+} = metaPollingPlaceTasksApi;

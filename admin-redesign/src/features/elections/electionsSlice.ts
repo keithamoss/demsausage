@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { electionsAdapter, electionsApi, initialElectionsState } from '../../app/services/elections';
 import type { RootState } from '../../app/store';
+import { isElectionLive } from './electionHelpers';
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
 // the query result object for a query with those parameters.
@@ -16,4 +17,8 @@ export const { selectAll: selectAllElections, selectById: selectElectionById } =
 
 export const selectVisibleElections = createSelector(selectAllElections, (elections) =>
 	elections.filter((e) => e.is_hidden === false),
+);
+
+export const selectActiveElections = createSelector(selectAllElections, (elections) =>
+	elections.filter((e) => isElectionLive(e) === true && e.is_hidden === false),
 );

@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
-import type { IMetaPollingPlace } from '../metaPollingPlaceTasksInterfaces';
+import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
 
 interface Props {
 	metaPollingPlace: IMetaPollingPlace;

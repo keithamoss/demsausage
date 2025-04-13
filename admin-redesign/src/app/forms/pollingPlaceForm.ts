@@ -4,7 +4,7 @@ import type { IPollingPlaceStallModifiableProps } from '../../features/pollingPl
 import type { StallFoodOptions } from '../services/stalls';
 import { booleanTrueOrUndefined, websiteURLOrEmptyString } from './yupValidation';
 
-export const pollingPlaceNomsFieldFormValidationSchema: ObjectSchema<StallFoodOptions> = yup
+export const basePollingPlaceNomsFieldFormValidationSchemaMayBeEmpty: ObjectSchema<StallFoodOptions> = yup
 	.object({
 		bbq: booleanTrueOrUndefined,
 		cake: booleanTrueOrUndefined,
@@ -18,7 +18,6 @@ export const pollingPlaceNomsFieldFormValidationSchema: ObjectSchema<StallFoodOp
 		nothing: booleanTrueOrUndefined,
 	})
 	.required()
-	.test('not-empty', 'One or more food options must be selected', (value) => Object.keys(value).length >= 1)
 	.test(
 		'red-cross-of-shame-is-solo',
 		"'Red Cross of Shame' cannot be mixed with other types of noms",
@@ -28,6 +27,13 @@ export const pollingPlaceNomsFieldFormValidationSchema: ObjectSchema<StallFoodOp
 		'run-out-is-not-solo',
 		"'Run Out' requires at least one other type of noms",
 		(value) => (value.run_out === true && Object.keys(value).length >= 2) || value.run_out === undefined,
+	);
+
+export const pollingPlaceNomsFieldFormValidationSchema: ObjectSchema<StallFoodOptions> =
+	basePollingPlaceNomsFieldFormValidationSchemaMayBeEmpty.test(
+		'not-empty',
+		'One or more food options must be selected',
+		(value) => Object.keys(value).length >= 1,
 	);
 
 export const pollingPlaceNomsFormValidationSchema: ObjectSchema<IPollingPlaceStallModifiableProps> = yup
@@ -42,5 +48,11 @@ export const pollingPlaceNomsFormValidationSchema: ObjectSchema<IPollingPlaceSta
 		source: yup.string().optional().ensure(),
 		internal_notes: yup.string().optional().ensure(),
 		favourited: yup.boolean().required(),
+	})
+	.required();
+
+export const metaPollingPlaceNomsFormValidationSchema: ObjectSchema<{ noms: StallFoodOptions }> = yup
+	.object({
+		noms: basePollingPlaceNomsFieldFormValidationSchemaMayBeEmpty,
 	})
 	.required();

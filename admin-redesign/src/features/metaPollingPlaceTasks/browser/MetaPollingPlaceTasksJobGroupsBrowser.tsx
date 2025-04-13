@@ -3,9 +3,12 @@ import { Button, Card, CardActions, CardContent, CardHeader, LinearProgress, Sta
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
-import { navigateToMetaPollingPlaceTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
+import {
+	navigateToMetaPollingPlaceNextTaskJobByName,
+	navigateToMetaPollingPlaceTasksManager,
+} from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
 import { useGetMetaPollingPlaceTaskJobGroupsQuery } from '../../../app/services/metaPollingPlaceTasks';
-import { getMetaPollingPlaceTaskCategoryIcon } from '../metaPollingPlaceTasksHelpers';
+import { getMetaPollingPlaceTaskCategoryIcon } from '../helpers/metaPollingPlaceTasksHelpers';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
@@ -31,15 +34,11 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 		return <ErrorElement />;
 	}
 
-	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceTaskJobByName(navigate, jobName);
+	const onOpenTaskJobGroup = (jobName: string) => () => navigateToMetaPollingPlaceNextTaskJobByName(navigate, jobName);
 
-	// const onCopyToClipboard = (ids: number[]) => async () => {
-	//   try {
-	//     await navigator.clipboard.writeText(ids.join(', '));
-	//   } catch {
-	//     /* empty */
-	//   }
-	// };
+	const onClickManage = () => {
+		navigateToMetaPollingPlaceTasksManager(navigate);
+	};
 
 	return (
 		<PageWrapper>
@@ -47,6 +46,10 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 				Our quality assurance report for recent elections to identify any "impossibilities" that might be creeping into
 				the system.
 			</Typography> */}
+
+			<Button variant="outlined" onClick={onClickManage}>
+				Manage
+			</Button>
 
 			<Stack direction="column" spacing={2} sx={{ mt: 2 }}>
 				{metaPollingPlaceTasksJobGroups.map((item) => (
