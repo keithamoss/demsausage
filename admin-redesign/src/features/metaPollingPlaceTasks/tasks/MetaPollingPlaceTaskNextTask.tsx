@@ -28,27 +28,25 @@ function MetaPollingPlaceTaskNextTask() {
 		isLoading,
 		isSuccess,
 		isError,
-		error,
 	} = useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery(urlJobName !== undefined ? urlJobName : skipToken);
 
 	useEffect(() => {
-		if (isSuccess === true && urlJobName !== undefined) {
+		if (isSuccess === true && metaPollingPlaceTaskJob !== null && urlJobName !== undefined) {
 			navigateToMetaPollingPlaceTaskJobTask(navigate, urlJobName, metaPollingPlaceTaskJob.id);
 		}
-	}, [isSuccess, navigate, urlJobName, metaPollingPlaceTaskJob?.id]);
+	}, [isSuccess, navigate, metaPollingPlaceTaskJob, urlJobName]);
 
 	if (isLoading === true) {
 		return <LinearProgress color="secondary" />;
 	}
 
-	if ((isError === true && 'data' in error && error.status !== 404) || urlJobName === undefined) {
+	if (isError === true || urlJobName === undefined) {
 		return <ErrorElement />;
 	}
 
 	return (
 		<PageWrapper>
-			{/* All errors that reach here are 404s */}
-			{error !== undefined && (
+			{metaPollingPlaceTaskJob === null && (
 				<Alert severity="success">
 					<AlertTitle>Task queue empty</AlertTitle>
 					<p>
