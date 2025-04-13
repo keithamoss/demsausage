@@ -9,6 +9,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	Toolbar,
+	Typography,
 } from '@mui/material';
 import { useNotifications } from '@toolpad/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -57,7 +58,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 		setIsLoadingScreenShown(false);
 	}, []);
 
-	const [closeTask, { isLoading: isCloseTaskLoading, isSuccess: isCloseTaskSuccessful }] = useCloseTaskMutation();
+	const [
+		closeTask,
+		{
+			isLoading: isCloseTaskLoading,
+			isSuccess: isCloseTaskSuccessful,
+			isError: isCloseTaskErrored,
+			error: closeTaskError,
+		},
+	] = useCloseTaskMutation();
 
 	const onConfirmCloseAddRemarksDialog = () => {
 		closeTask({ id: metaPollingPlaceTaskJob.id, remarks: closeAddRemarksInputFieldRef.current?.value || '' });
@@ -75,6 +84,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
 		}
 	}, [isCloseTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+
+	useEffect(() => {
+		if (isCloseTaskErrored === true) {
+			notifications.show(`Error closing task: ${JSON.stringify(closeTaskError)}`, {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
+		}
+	}, [isCloseTaskErrored, notifications.show, closeTaskError]);
 	// ######################
 	// Close Task (End)
 	// ######################
@@ -97,7 +115,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 		setIsLoadingScreenShown(false);
 	}, []);
 
-	const [deferTask, { isLoading: isDeferTaskLoading, isSuccess: isDeferTaskSuccessful }] = useDeferTaskMutation();
+	const [
+		deferTask,
+		{
+			isLoading: isDeferTaskLoading,
+			isSuccess: isDeferTaskSuccessful,
+			isError: isDeferTaskErrored,
+			error: deferTaskError,
+		},
+	] = useDeferTaskMutation();
 
 	const onConfirmDeferAddRemarksDialog = () => {
 		deferTask({ id: metaPollingPlaceTaskJob.id, remarks: deferAddRemarksInputFieldRef.current?.value || '' });
@@ -115,6 +141,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
 		}
 	}, [isDeferTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+
+	useEffect(() => {
+		if (isDeferTaskErrored === true) {
+			notifications.show(`Error deferring task: ${JSON.stringify(deferTaskError)}`, {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
+		}
+	}, [isDeferTaskErrored, notifications.show, deferTaskError]);
 	// ######################
 	// Defer Task (End)
 	// ######################
@@ -122,8 +157,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 	// ######################
 	// Complete Task
 	// ######################
-	const [completeTask, { isLoading: isCompleteTaskLoading, isSuccess: isCompleteTaskSuccessful }] =
-		useCompleteTaskMutation();
+	const [
+		completeTask,
+		{
+			isLoading: isCompleteTaskLoading,
+			isSuccess: isCompleteTaskSuccessful,
+			isError: isCompleteTaskErrored,
+			error: completeTaskError,
+		},
+	] = useCompleteTaskMutation();
 
 	const onComplete = () => {
 		setIsLoadingScreenShown(true);
@@ -145,6 +187,15 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
 		}
 	}, [isCompleteTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+
+	useEffect(() => {
+		if (isCompleteTaskErrored === true) {
+			notifications.show(`Error completing task: ${JSON.stringify(completeTaskError)}`, {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
+		}
+	}, [isCompleteTaskErrored, notifications.show, completeTaskError]);
 	// ######################
 	// Complete Task (End)
 	// ######################
@@ -204,6 +255,11 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				<DialogTitle>Close Task</DialogTitle>
 
 				<DialogContent>
+					<Typography variant="body2" sx={{ mb: 1 }}>
+						Tasks should only be closed when they're impossible to complete. e.g. When a polling place has no Facebook
+						presence and you're doing a Facebook Research task.
+					</Typography>
+
 					<TextFieldWithout1Password
 						inputRef={closeAddRemarksInputFieldRef}
 						variant="standard"
@@ -236,6 +292,10 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				<DialogTitle>Defer Task</DialogTitle>
 
 				<DialogContent>
+					<Typography variant="body2" sx={{ mb: 1 }}>
+						Tasks should be deferred when you can't complete them now, but may be able to in the near future.
+					</Typography>
+
 					<TextFieldWithout1Password
 						inputRef={deferAddRemarksInputFieldRef}
 						variant="standard"

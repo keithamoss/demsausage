@@ -220,7 +220,7 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 				onClickComplete={onCompleteTask}
 				isCloseAllowed={isDirty === false}
 				isDeferAllowed={isDirty === false}
-				isCompleteAllowed={true}
+				isCompleteAllowed={pollingPlaceForActiveElection?.stall !== null || isDirty === true}
 			/>
 		</PageWrapper>
 	);

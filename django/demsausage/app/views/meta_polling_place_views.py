@@ -7,6 +7,7 @@ from demsausage.app.enums import (
     MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
 )
+from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import (
     Elections,
     MetaPollingPlacesLinks,
@@ -57,6 +58,9 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         task = self.get_object()
         remarks = request.data.get("remarks", None)
 
+        if task.status != MetaPollingPlaceTaskStatus.IN_PROGRESS:
+            raise BadRequest("This task isn't in progress.")
+
         if remarks is not None and isinstance(remarks, str) and len(remarks) > 0:
             mpp_remarks = MetaPollingPlacesRemarks(
                 meta_polling_place_task_id=task.id,
@@ -89,6 +93,9 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         task = self.get_object()
         remarks = request.data.get("remarks", None)
 
+        if task.status != MetaPollingPlaceTaskStatus.IN_PROGRESS:
+            raise BadRequest("This task isn't in progress.")
+
         if remarks is not None and isinstance(remarks, str) and len(remarks) > 0:
             mpp_remarks = MetaPollingPlacesRemarks(
                 meta_polling_place_task_id=task.id,
@@ -119,6 +126,9 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def complete(self, request, pk=None, format=None):
         task = self.get_object()
+
+        if task.status != MetaPollingPlaceTaskStatus.IN_PROGRESS:
+            raise BadRequest("This task isn't in progress.")
 
         task.status = MetaPollingPlaceTaskStatus.COMPLETED
         task.outcome = MetaPollingPlaceTaskOutcome.COMPLETED
