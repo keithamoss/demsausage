@@ -30,7 +30,8 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 				invalidatesTags: ['MetaPollingPlaceTasks'],
 			},
 		),
-		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob, string>({
+		// Null response indicates no more tasks in the queue for this job
+		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob | null, string>({
 			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),
 			// @TODO Check for caching bug?
 			providesTags: ['MetaPollingPlaceTasks'],

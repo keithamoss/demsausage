@@ -1,4 +1,5 @@
 import type { IMetaPollingPlace } from './metaPollingPlaceInterfaces';
+import type { IMetaPollingPlaceRemark } from './metaPollingPlaceRemarksInterfaces';
 
 export enum IMetaPollingPlaceTaskCategory {
 	REVIEW = 'Review',
@@ -51,4 +52,5 @@ export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobM
 	actioned_on: string | null; // ISO 8601 date string
 	actioned_by: string | null;
 	meta_polling_place: IMetaPollingPlace;
+	remarks: IMetaPollingPlaceRemark[];
 }

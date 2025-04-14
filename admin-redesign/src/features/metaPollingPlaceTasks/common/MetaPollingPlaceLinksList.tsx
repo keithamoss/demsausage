@@ -1,14 +1,16 @@
-import { OpenInNew } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import { IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { getMetaPollingPlaceLinkTypeIcon } from '../helpers/metaPollingPlaceLinksHelpers';
 import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
+import type { IMetaPollingPlaceLink } from '../interfaces/metaPollingPlaceLinksInterfaces';
 
 interface Props {
 	metaPollingPlace: IMetaPollingPlace;
+	onClickManage: (link: IMetaPollingPlaceLink) => () => void;
 }
 
 function MetaPollingPlaceLinksList(props: Props) {
-	const { metaPollingPlace } = props;
+	const { metaPollingPlace, onClickManage } = props;
 
 	const onClickLink = (url: string) => () => window.open(url, '_blank');
 
@@ -18,8 +20,8 @@ function MetaPollingPlaceLinksList(props: Props) {
 				<ListItem
 					key={link.id}
 					secondaryAction={
-						<IconButton edge="end" onClick={onClickLink(link.url)}>
-							<OpenInNew />
+						<IconButton edge="end" onClick={onClickManage(link)}>
+							<Edit />
 						</IconButton>
 					}
 				>

@@ -21,11 +21,11 @@ import { selectActiveElections } from '../../elections/electionsSlice';
 import type { IPollingPlaceNoms } from '../../pollingPlaces/pollingPlacesInterfaces';
 import MetaPollingPlaceLinksManager from '../common/MetaPollingPlaceLinksManager';
 import MetaPollingPlacePollingPlacesReviewList from '../common/MetaPollingPlacePollingPlacesReviewList';
+import MetaPollingPlaceRemarks from '../common/MetaPollingPlaceRemarks';
 import MetaPollingPlaceSummaryCard from '../common/MetaPollingPlaceSummaryCard';
 import MetaPollingPlaceTaskActionBar from '../common/MetaPollingPlaceTaskActionBar';
 import MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector from '../controls/MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector';
 import type { IPollingPlaceAttachedToMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
-import { IMetaPollingPlaceLinkType } from '../interfaces/metaPollingPlaceLinksInterfaces';
 import {
 	type IMetaPollingPlaceTaskJob,
 	IMetaPollingPlaceTaskStatus,
@@ -172,20 +172,21 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 				cardSxProps={{ mt: 2 }}
 			/>
 
-			{metaPollingPlaceTaskJob.meta_polling_place.links.filter((l) => l.type === IMetaPollingPlaceLinkType.FACEBOOK)
-				.length === 0 && (
-				<Card variant="outlined" sx={{ mt: 2 }}>
-					<CardContent>
-						<Typography>Some instructions go here...</Typography>
-					</CardContent>
+			<MetaPollingPlaceRemarks metaPollingPlaceTaskJob={metaPollingPlaceTaskJob} cardSxProps={{ mt: 2 }} />
 
-					<CardActions sx={{ pl: 2, pb: 2, pr: 2 }}>
-						<Button variant="contained" startIcon={<Google />} onClick={onClickSearchForFacebookPage}>
-							Find Facebook page
-						</Button>
-					</CardActions>
-				</Card>
-			)}
+			<Card variant="outlined" sx={{ mt: 2 }}>
+				<CardContent>
+					<Typography>
+						Click the button below to start a Google search to find the Facebook page for this polling place.
+					</Typography>
+				</CardContent>
+
+				<CardActions sx={{ pl: 2, pb: 2, pr: 2 }}>
+					<Button variant="outlined" startIcon={<Google />} onClick={onClickSearchForFacebookPage}>
+						Find Facebook page
+					</Button>
+				</CardActions>
+			</Card>
 
 			<MetaPollingPlaceLinksManager
 				metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place}

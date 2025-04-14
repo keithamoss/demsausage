@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AddLink } from '@mui/icons-material';
+import { AddLink, Delete, Save } from '@mui/icons-material';
 import {
 	Button,
 	Card,
@@ -18,15 +18,23 @@ import {
 	Select,
 	type SxProps,
 } from '@mui/material';
+import { useDialogs, useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
 import React, { useCallback, useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../../app/forms/formHelpers';
 import { metaPollingPlaceLinkFormValidationSchema } from '../../../app/forms/metaPollingPlaces/metaPollingPlaceLinksForm';
-import { useAddLinkMutation } from '../../../app/services/metaPollingPlaceLinks';
+import {
+	useAddLinkMutation,
+	useDeleteLinkMutation,
+	useEditLinkMutation,
+} from '../../../app/services/metaPollingPlaceLinks';
 import TextFieldWithPasteAdornment from '../../../app/ui/textFieldWithPasteAdornment';
 import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
-import type { IMetaPollingPlaceLinkModifiableProps } from '../interfaces/metaPollingPlaceLinksInterfaces';
+import type {
+	IMetaPollingPlaceLink,
+	IMetaPollingPlaceLinkModifiableProps,
+} from '../interfaces/metaPollingPlaceLinksInterfaces';
 import { IMetaPollingPlaceLinkType } from '../interfaces/metaPollingPlaceLinksInterfaces';
 import MetaPollingPlaceLinksList from './MetaPollingPlaceLinksList';
 
@@ -37,6 +45,9 @@ interface Props {
 
 function MetaPollingPlaceLinksManager(props: Props) {
 	const { metaPollingPlace, cardSxProps } = props;
+
+	const notifications = useNotifications();
+	const dialogs = useDialogs();
 
 	// ######################
 	// Dialog Management
@@ -62,10 +73,92 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	useEffect(() => {
 		if (isAddLinkSuccessful === true) {
 			onCloseAddLinkDialog();
+
+			notifications.show('Link added', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
 		}
-	}, [isAddLinkSuccessful, onCloseAddLinkDialog]);
+	}, [isAddLinkSuccessful, onCloseAddLinkDialog, notifications.show]);
 	// ######################
 	// Add Link (End)
+	// ######################
+
+	// ######################
+	// Manage Link (End)
+	// ######################
+	const [linkToManage, setLinkToManage] = React.useState<IMetaPollingPlaceLink | undefined>(undefined);
+
+	useEffect(() => {
+		if (linkToManage !== undefined) {
+			setValue('type', linkToManage.type, { shouldDirty: true });
+			setValue('url', linkToManage.url, { shouldDirty: true });
+		} else {
+			reset();
+		}
+	}, [linkToManage]);
+
+	const onClickManage = useCallback((link: IMetaPollingPlaceLink) => () => setLinkToManage(link), []);
+
+	const onCloseManageLinkDialog = useCallback(() => {
+		setLinkToManage(undefined);
+	}, []);
+	// ######################
+	// Manage Link (End)
+	// ######################
+
+	// ######################
+	// Delete Link
+	// ######################
+	const [deleteLink, { isLoading: isDeleteLinkLoading, isSuccess: isDeleteLinkSuccessful }] = useDeleteLinkMutation();
+
+	const onClickDelete = useCallback(async () => {
+		if (linkToManage !== undefined) {
+			const confirmed = await dialogs.confirm('Confirm link delete', {
+				title: 'Are you sure?',
+				okText: 'Go Ahead',
+				cancelText: 'Cancel',
+			});
+
+			if (confirmed === false) {
+				return;
+			}
+
+			deleteLink(linkToManage?.id);
+		}
+	}, [linkToManage, dialogs.confirm, deleteLink]);
+
+	useEffect(() => {
+		if (isDeleteLinkSuccessful === true) {
+			setLinkToManage(undefined);
+
+			notifications.show('Link deleted', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
+		}
+	}, [isDeleteLinkSuccessful, notifications.show]);
+	// ######################
+	// Delete Link (End)
+	// ######################
+
+	// ######################
+	// Edit Link
+	// ######################
+	const [editLink, { isLoading: isEditLinkLoading, isSuccess: isEditLinkSuccessful }] = useEditLinkMutation();
+
+	useEffect(() => {
+		if (isEditLinkSuccessful === true) {
+			setLinkToManage(undefined);
+
+			notifications.show('Link edited', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
+		}
+	}, [isEditLinkSuccessful, notifications.show]);
+	// ######################
+	// Edit Link (End)
 	// ######################
 
 	// ######################
@@ -77,6 +170,7 @@ function MetaPollingPlaceLinksManager(props: Props) {
 		handleSubmit,
 		control,
 		formState: { errors, isDirty },
+		reset,
 	} = useForm<IMetaPollingPlaceLinkModifiableProps>({
 		resolver: yupResolver(metaPollingPlaceLinkFormValidationSchema),
 		defaultValues: {
@@ -92,19 +186,14 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	const onDoneWithForm: SubmitHandler<IMetaPollingPlaceLinkModifiableProps> = useCallback(
 		(data) => {
 			if (isEmpty(data) === false) {
-				addLink({ ...data, meta_polling_place_id: metaPollingPlace.id });
-
-				// if (stall === undefined && onDoneAdding !== undefined) {
-				// 	onDoneAdding({ ...data });
-				// } else if (stall !== undefined && onDoneEditing !== undefined) {
-				// 	onDoneEditing({
-				// 		...stall,
-				// 		...data,
-				// 	});
-				// }
+				if (linkToManage === undefined) {
+					addLink({ ...data, meta_polling_place_id: metaPollingPlace.id });
+				} else {
+					editLink({ link_id: linkToManage.id, ...data });
+				}
 			}
 		},
-		[addLink, metaPollingPlace.id],
+		[linkToManage, addLink, metaPollingPlace.id, editLink],
 	);
 
 	const onClickSubmit = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
@@ -124,7 +213,7 @@ function MetaPollingPlaceLinksManager(props: Props) {
 		<React.Fragment>
 			<Card variant="outlined" sx={cardSxProps}>
 				<CardContent>
-					<MetaPollingPlaceLinksList metaPollingPlace={metaPollingPlace} />
+					<MetaPollingPlaceLinksList metaPollingPlace={metaPollingPlace} onClickManage={onClickManage} />
 				</CardContent>
 
 				<CardActions sx={{ pl: 2, pb: 2, pr: 2 }}>
@@ -197,6 +286,85 @@ function MetaPollingPlaceLinksManager(props: Props) {
 					>
 						{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 						<span>Add</span>
+					</Button>
+				</DialogActions>
+			</Dialog>
+
+			<Dialog open={linkToManage !== undefined} onClose={onCloseManageLinkDialog}>
+				<DialogTitle>Manage Link</DialogTitle>
+
+				<DialogContent>
+					<form onSubmit={handleSubmit(onDoneWithForm)}>
+						<FormControl fullWidth sx={{ mt: 1, mb: 3 }}>
+							<FormGroup>
+								<InputLabel>Link Type</InputLabel>
+
+								{/* @TODO Add icons inside the MenuItems */}
+								<Controller
+									name="type"
+									control={control}
+									render={({ field }) => (
+										<Select {...field} input={<OutlinedInput label="Link Type" />} value={type || ''}>
+											{Object.entries(IMetaPollingPlaceLinkType).map(([, type]) => (
+												<MenuItem key={type} value={type} sx={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
+													{type}
+												</MenuItem>
+											))}
+										</Select>
+									)}
+								/>
+
+								{errors.type && <FormHelperText error>{errors.type.message}</FormHelperText>}
+							</FormGroup>
+						</FormControl>
+
+						<FormControl fullWidth={true} component="fieldset" variant="outlined">
+							<FormGroup>
+								<Controller
+									name="url"
+									control={control}
+									render={({ field }) => (
+										<TextFieldWithPasteAdornment
+											{...field}
+											type="url"
+											label="URL"
+											onPasteFromClipboard={onPasteLinkFromClipboard}
+										/>
+									)}
+								/>
+							</FormGroup>
+
+							{errors.url !== undefined && <FormFieldValidationError error={errors.url} />}
+						</FormControl>
+					</form>
+				</DialogContent>
+
+				<DialogActions>
+					<Button disabled={isDeleteLinkLoading || isEditLinkLoading} size="small" onClick={onCloseManageLinkDialog}>
+						Close
+					</Button>
+
+					<Button
+						loading={isDeleteLinkLoading}
+						loadingPosition="end"
+						endIcon={<Delete />}
+						size="small"
+						onClick={onClickDelete}
+					>
+						{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+						<span>Delete</span>
+					</Button>
+
+					<Button
+						loading={isEditLinkLoading}
+						loadingPosition="end"
+						disabled={isDirty === false}
+						endIcon={<Save />}
+						size="small"
+						onClick={onClickSubmit}
+					>
+						{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+						<span>Save</span>
 					</Button>
 				</DialogActions>
 			</Dialog>

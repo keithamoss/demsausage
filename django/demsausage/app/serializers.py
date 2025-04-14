@@ -11,6 +11,7 @@ from demsausage.app.models import (
     MailgunEvents,
     MetaPollingPlaces,
     MetaPollingPlacesLinks,
+    MetaPollingPlacesRemarks,
     MetaPollingPlacesTasks,
     PollingPlaceFacilityType,
     PollingPlaceLoaderEvents,
@@ -1079,8 +1080,31 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
         }
 
 
+class MetaPollingPlacesRemarksSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MetaPollingPlacesRemarks
+
+        fields = (
+            "id",
+            "created_on",
+            "modified_on",
+            "text",
+            "meta_polling_place",
+            "user",
+            "meta_polling_place_task",
+        )
+
+    def get_user(self, obj):
+        return obj.user.first_name.split(" ")[0] if obj.user is not None else "Unknown"
+
+
 class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
     meta_polling_place = MetaPollingPlacesSerializer(required=True)
+    remarks = MetaPollingPlacesRemarksSerializer(
+        many=True, read_only=True, source="metapollingplacesremarks_set"
+    )
 
     class Meta:
         model = MetaPollingPlacesTasks
@@ -1096,6 +1120,7 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             "actioned_on",
             "actioned_by",
             "meta_polling_place",
+            "remarks",
         )
 
 

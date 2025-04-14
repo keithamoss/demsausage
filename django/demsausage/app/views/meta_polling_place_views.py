@@ -209,7 +209,7 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data)
         else:
-            return HttpResponseNotFound()
+            return Response()
 
     @action(
         detail=False,

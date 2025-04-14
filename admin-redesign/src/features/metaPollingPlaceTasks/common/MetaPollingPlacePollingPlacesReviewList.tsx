@@ -43,6 +43,11 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 		setShowLinkedPollingPlaces(!showLinkedPollingPlaces);
 	};
 
+	useEffect(
+		() => setShowLinkedPollingPlaces(metaPollingPlace.task_history.passed_review === false),
+		[metaPollingPlace.task_history.passed_review],
+	);
+
 	// ######################
 	// Looks Good
 	// ######################
