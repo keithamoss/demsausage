@@ -269,6 +269,7 @@ export interface PollingPlaceWithPendingStall {
 	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	pending_stalls: PendingStall[];
 	previous_subs: PollingPlacePreviousSubsStats;
+	internal_notes: string;
 }
 
 // export interface UnofficialPollingPlaceWithPendingStall extends IStallLocationInfo {

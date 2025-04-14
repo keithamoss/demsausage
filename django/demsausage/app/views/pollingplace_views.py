@@ -424,11 +424,9 @@ class PollingPlacesViewSet(
         pollingPlace = self.get_object()
 
         # This probably should be using a serializer, but whatevs.
-        if "internal_notes" in request.data and pollingPlace.noms is not None:
-            pollingPlace.noms.internal_notes = request.data["internal_notes"]
-            pollingPlace.noms.save()
-
-            update_change_reason(self.get_object().noms, "Internal notes updated")
+        if "internal_notes" in request.data and pollingPlace is not None:
+            pollingPlace.internal_notes = request.data["internal_notes"]
+            pollingPlace.save()
 
         return Response()
 

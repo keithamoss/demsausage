@@ -284,7 +284,6 @@ class PollingPlaceNoms(models.Model):
     latest_report = models.DateTimeField(auto_now=True, null=True)
     source = models.TextField(blank=True)
     deleted = models.BooleanField(default=False)
-    internal_notes = models.TextField(blank=True)
 
     history = HistoricalRecords()
     tracker = FieldTracker()
@@ -333,6 +332,7 @@ class PollingPlaces(models.Model):
     chance_of_sausage_stats = JSONField(default=dict, blank=True)
     extras = JSONField(default=dict, blank=True)
     ec_id = models.IntegerField(null=True)
+    internal_notes = models.TextField(blank=True)
 
     tracker = FieldTracker(fields=["noms"])
     objects = PollingPlacesManager()
