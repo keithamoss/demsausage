@@ -35,7 +35,7 @@ export interface IMetaPollingPlace {
 	chance_of_sausage: object; // @TODO Implement interface
 	polling_places: IPollingPlaceAttachedToMetaPollingPlace[];
 	links: IMetaPollingPlaceLink[];
-	task_history: {
+	task_outcomes: {
 		passed_review: boolean;
 	};
 }

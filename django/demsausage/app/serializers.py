@@ -1020,7 +1020,7 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
     links = MetaPollingPlacesLinksRetrieveSerializer(
         many=True, read_only=True, source="metapollingplaceslinks_set"
     )
-    task_history = serializers.SerializerMethodField()
+    task_outcomes = serializers.SerializerMethodField()
 
     class Meta:
         model = MetaPollingPlaces
@@ -1048,7 +1048,7 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             "chance_of_sausage",
             "polling_places",
             "links",
-            "task_history",
+            "task_outcomes",
         ]
 
     def get_polling_places(self, obj):
@@ -1057,7 +1057,7 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
             polling_places, many=True, read_only=True
         ).data
 
-    def get_task_history(self, obj):
+    def get_task_outcomes(self, obj):
         return {
             "passed_review": MetaPollingPlacesTasks.objects.filter(
                 meta_polling_place=obj,
@@ -1091,6 +1091,7 @@ class MetaPollingPlacesRemarksSerializer(serializers.ModelSerializer):
 
 class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
     meta_polling_place = MetaPollingPlacesSerializer(required=True)
+    history = serializers.SerializerMethodField()
     remarks = MetaPollingPlacesRemarksSerializer(
         many=True, read_only=True, source="metapollingplacesremarks_set"
     )
@@ -1109,8 +1110,28 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             "actioned_on",
             "actioned_by",
             "meta_polling_place",
+            "history",
             "remarks",
         )
+
+    def get_history(self, obj):
+        return [
+            {
+                "history_id": i.history_id,
+                "history_type": i.history_type,
+                "history_user": (
+                    i.history_user.first_name.split(" ")[0]
+                    if i.history_user is not None
+                    else None
+                ),
+                "history_date": i.history_date,
+                "status": i.status,
+                "outcome": i.outcome,
+            }
+            for i in MetaPollingPlacesTasks.history.filter(id=obj.id).order_by(
+                "-history_date"
+            )
+        ]
 
 
 # Allows us to use the DRF ModelViewSet boilerplate CRUD endpoints to pass a meta_polling_place id while leaving MetaPollingPlacesTasksSerializer to return the full serialized MPP object.
