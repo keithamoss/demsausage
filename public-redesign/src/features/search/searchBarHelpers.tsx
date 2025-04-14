@@ -175,19 +175,18 @@ export const getBBoxFromGeoJSONPolygonCoordinates = (geometry: IGeoJSONPoylgon):
 };
 
 // Partial list taken from a chunk of https://api.mapbox.com/search/searchbox/v1/list/category
-export const getMapboxPOICategories = (): string =>
-	[
-		'school',
-		'education',
-		'place_of_worship',
-		'temple',
-		'church',
-		'outdoors',
-		'park',
-		'government',
-		'social_club',
-		'community_center',
-	].join('%2C');
+export const getMapboxPOICategories = (): string[] => [
+	'school',
+	'education',
+	'place_of_worship',
+	'temple',
+	'church',
+	'outdoors',
+	'park',
+	'government',
+	'social_club',
+	'community_center',
+];
 
 // https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
 export const getMapboxSearchParamsForElection = (election: Election) =>

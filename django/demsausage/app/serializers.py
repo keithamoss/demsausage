@@ -543,9 +543,6 @@ class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializ
         source="election.name", allow_null=False
     )
     previous_subs = serializers.SerializerMethodField()
-    internal_notes = serializers.CharField(
-        source="noms.internal_notes", required=False, allow_blank=True
-    )
 
     class Meta:
         model = PollingPlaces
@@ -567,14 +564,6 @@ class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializ
         representation = super().to_representation(obj)
 
         stall_representation = representation.pop("stall")
-
-        # Shift internal_notes off of its temporary home on the top-level representation (i.e. PollingPlace) and down on to the PollingPlaceNoms (where it is on the model).
-        # We do this this way because we DO NOT want any other serializers (e.g. those used for public-facing API endpoints) to expose internal_notes, hence it living on this special PendingStalls-related serializers.
-        # This is a bit icky, so it's is something we should look at when we rewrite the backend.
-        if stall_representation is not None:
-            stall_representation["internal_notes"] = representation["internal_notes"]
-            del representation["internal_notes"]
-
         representation["stall"] = stall_representation
 
         return representation

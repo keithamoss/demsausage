@@ -88,7 +88,7 @@ export default function PendingStallsInternalNotes(props: Props) {
 				<Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'start' }} elevation={0}>
 					<TextFieldWithout1Password
 						inputRef={inputFieldRef}
-						defaultValue={pollingPlace.stall?.internal_notes}
+						defaultValue={pollingPlace.internal_notes}
 						variant="standard"
 						multiline
 						sx={{ mt: 1, ml: 1, flex: 1 }}

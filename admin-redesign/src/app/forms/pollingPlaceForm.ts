@@ -46,7 +46,6 @@ export const pollingPlaceNomsFormValidationSchema: ObjectSchema<IPollingPlaceSta
 		website: websiteURLOrEmptyString,
 		extra_info: yup.string().optional().ensure(),
 		source: yup.string().optional().ensure(),
-		internal_notes: yup.string().optional().ensure(),
 		favourited: yup.boolean().required(),
 	})
 	.required();
