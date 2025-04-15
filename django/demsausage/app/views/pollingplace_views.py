@@ -33,6 +33,7 @@ from demsausage.app.sausage.polling_places import (
     find_by_stall,
     get_active_polling_place_queryset,
 )
+from demsausage.app.schemas import noms_schema
 from demsausage.app.serializers import (
     PollingPlaceFacilityTypeSerializer,
     PollingPlacesCSVDownloadSerializer,
@@ -99,6 +100,20 @@ class PollingPlacesViewSet(
             and "text/csv" in response.accepted_media_type
             and "vollie_cos_task" not in request.get_full_path()
         ):
+            responseDataFinal = []
+
+            # Fill nulls for all stall noms so the XLS export is consistent
+            # Note this ONLY works once we have at least one stall with noms
+            for pollingPlace in response.data:
+                if pollingPlace["stall"] is not None:
+                    for propName in noms_schema["properties"]:
+                        if propName not in pollingPlace["stall"]["noms"]:
+                            pollingPlace["stall"]["noms"][propName] = None
+
+                responseDataFinal.append(pollingPlace)
+
+            response.data = responseDataFinal
+
             election = get_or_none(
                 Elections, id=request.query_params.get("election_id", None)
             )

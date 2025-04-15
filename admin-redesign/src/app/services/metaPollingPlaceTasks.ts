@@ -20,16 +20,22 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 			// We could make it far more nuanced and only validate specific things, but sod it.
 			providesTags: ['MetaPollingPlaceTasks'],
 		}),
-		createJob: builder.mutation<{ job_name: string; tasks_created: number }, { electionId: number; taskCount: number }>(
-			{
-				query: ({ electionId, taskCount }) => ({
-					url: 'meta_polling_places/tasks/create_job/',
-					method: 'POST',
-					body: { election_id: electionId, max_tasks: taskCount },
-				}),
-				invalidatesTags: ['MetaPollingPlaceTasks'],
-			},
-		),
+		createJob: builder.mutation<
+			{ job_name: string; tasks_created: number },
+			{ electionId: number; taskCount: number; deferredTasksIncluded: boolean; jurisdiction: string }
+		>({
+			query: ({ electionId, taskCount, deferredTasksIncluded, jurisdiction }) => ({
+				url: 'meta_polling_places/tasks/create_job/',
+				method: 'POST',
+				body: {
+					election_id: electionId,
+					max_tasks: taskCount,
+					deferred_tasks_included: deferredTasksIncluded,
+					jurisdiction,
+				},
+			}),
+			invalidatesTags: ['MetaPollingPlaceTasks'],
+		}),
 		// Null response indicates no more tasks in the queue for this job
 		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob | null, string>({
 			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),

@@ -52,6 +52,18 @@ export interface IGeoJSON {
 	coordinates: [number, number];
 }
 
+export enum PollingPlaceState {
+	NSW = 'NSW',
+	VIC = 'VIC',
+	QLD = 'QLD',
+	WA = 'WA',
+	SA = 'SA',
+	TAS = 'TAS',
+	ACT = 'ACT',
+	NT = 'NT',
+	Overseas = 'Overseas',
+}
+
 export interface IPollingPlace {
 	id: number;
 	name: string;
@@ -65,7 +77,7 @@ export interface IPollingPlace {
 	premises: string;
 	address: string;
 	divisions: string[];
-	state: string;
+	state: PollingPlaceState;
 	chance_of_sausage: PollingPlaceChanceOfSausage | null;
 	stall: IPollingPlaceStall | null;
 	ec_id: number | null;

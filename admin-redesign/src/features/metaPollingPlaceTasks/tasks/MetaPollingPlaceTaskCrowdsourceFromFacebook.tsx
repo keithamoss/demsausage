@@ -24,6 +24,7 @@ import MetaPollingPlacePollingPlacesReviewList from '../common/MetaPollingPlaceP
 import MetaPollingPlaceRemarks from '../common/MetaPollingPlaceRemarks';
 import MetaPollingPlaceSummaryCard from '../common/MetaPollingPlaceSummaryCard';
 import MetaPollingPlaceTaskActionBar from '../common/MetaPollingPlaceTaskActionBar';
+import MetaPollingPlaceTaskHistory from '../common/MetaPollingPlaceTaskHistory';
 import MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector from '../controls/MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector';
 import type { IPollingPlaceAttachedToMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
 import {
@@ -173,6 +174,8 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 			/>
 
 			<MetaPollingPlaceRemarks metaPollingPlaceTaskJob={metaPollingPlaceTaskJob} cardSxProps={{ mt: 2 }} />
+
+			<MetaPollingPlaceTaskHistory metaPollingPlaceTaskJob={metaPollingPlaceTaskJob} cardSxProps={{ mt: 2 }} />
 
 			<Card variant="outlined" sx={{ mt: 2 }}>
 				<CardContent>

@@ -221,6 +221,8 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
     def create_job(self, request, format=None):
         election_id = request.data.get("election_id", None)
         max_tasks = request.data.get("max_tasks", 5)
+        deferred_tasks_included = request.data.get("deferred_tasks_included", False)
+        jurisdiction = request.data.get("jurisdiction", "")
 
         if (
             election_id is None
@@ -232,36 +234,53 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             f"Facebook Research - {datetime.today().strftime('%-d %B %Y %H:%M:%S')}"
         )
 
+        exclusionFilter = (
+            Q(outcome__isnull=True) | Q(outcome=MetaPollingPlaceTaskOutcome.DEFERRED)
+            if deferred_tasks_included is False
+            else Q(outcome__isnull=True)
+        )
+
         pollingPlaces = (
             get_active_polling_place_queryset()
             .filter(election_id=election_id)
             .filter(noms__isnull=True)
-            # Exclude any MPPs that already have an active task of this type
+            # Exclude any MPPs that already have an active task, or deferred (config dependent), of this type
             .exclude(
                 meta_polling_place__in=MetaPollingPlacesTasks.objects.filter(
-                    Q(outcome__isnull=True)
-                    | Q(outcome=MetaPollingPlaceTaskOutcome.DEFERRED)
+                    exclusionFilter
                 )
                 .filter(category=MetaPollingPlaceTaskCategory.CROWDSOURCING)
                 .filter(type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK)
                 .values_list("meta_polling_place", flat=True)
             )
             # Exclude any MPPs that were part of a task of this type with in the last 2 days
-            .exclude(
-                meta_polling_place__in=MetaPollingPlacesTasks.objects.filter(
-                    actioned_on__date__gte=timezone.now() - timedelta(days=2)
-                )
-                .filter(category=MetaPollingPlaceTaskCategory.CROWDSOURCING)
-                .filter(type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK)
-                .values_list("meta_polling_place", flat=True)
-            )
+            # .exclude(
+            #     meta_polling_place__in=MetaPollingPlacesTasks.objects.filter(
+            #         actioned_on__date__gte=timezone.now() - timedelta(days=2)
+            #     )
+            #     .filter(category=MetaPollingPlaceTaskCategory.CROWDSOURCING)
+            #     .filter(type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK)
+            #     .values_list("meta_polling_place", flat=True)
+            # )
             .order_by("geom")
             .order_by(F("chance_of_sausage").desc(nulls_last=True))
         )
 
+        # Allow constraining polling places to a specific jurisdiction
+        if jurisdiction != "":
+            pollingPlaces = pollingPlaces.filter(state=jurisdiction)
+
         metaPollingPlaceIds = []
 
         for pollingPlace in pollingPlaces[:max_tasks]:
+            print(
+                pollingPlace.id,
+                pollingPlace.premises,
+                pollingPlace.state,
+                pollingPlace.chance_of_sausage,
+            )
+            continue
+
             # Just a safeguard against an MPP being used twice in a given election
             # We'll have other things to protect against this, but they can still slip
             # through at the moment.

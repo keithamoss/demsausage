@@ -36,7 +36,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	const notifications = useNotifications();
 
 	const [showLinkedPollingPlaces, setShowLinkedPollingPlaces] = useState(
-		metaPollingPlace.task_history.passed_review === false,
+		metaPollingPlace.task_outcomes.passed_review === false,
 	);
 
 	const onClickShowLinkedPollingPlaces = () => {
@@ -44,8 +44,8 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	};
 
 	useEffect(
-		() => setShowLinkedPollingPlaces(metaPollingPlace.task_history.passed_review === false),
-		[metaPollingPlace.task_history.passed_review],
+		() => setShowLinkedPollingPlaces(metaPollingPlace.task_outcomes.passed_review === false),
+		[metaPollingPlace.task_outcomes.passed_review],
 	);
 
 	// ######################

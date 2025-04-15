@@ -44,6 +44,15 @@ export interface IMetaPollingPlaceTaskJobModifiableProps {
 	// To allow us to create tasks that start as 'Completd' (e.g. The 'Looks good!' action that creates a completed REVIEW_PP task)
 }
 
+export interface IMetaPollingPlaceTaskJobHistory {
+	history_id: number;
+	history_type: '+' | '~' | '-';
+	history_user: string | null;
+	history_date: string | null; // ISO 8601 date string
+	status: IMetaPollingPlaceTaskStatus;
+	outcome: IMetaPollingPlaceTaskOutcome;
+}
+
 export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobModifiableProps, 'meta_polling_place'> {
 	id: number;
 	status: IMetaPollingPlaceTaskStatus;
@@ -51,6 +60,7 @@ export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobM
 	outcome: IMetaPollingPlaceTaskOutcome;
 	actioned_on: string | null; // ISO 8601 date string
 	actioned_by: string | null;
+	history: IMetaPollingPlaceTaskJobHistory[];
 	meta_polling_place: IMetaPollingPlace;
 	remarks: IMetaPollingPlaceRemark[];
 }
