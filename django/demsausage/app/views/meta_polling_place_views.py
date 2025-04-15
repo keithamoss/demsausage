@@ -273,14 +273,6 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         metaPollingPlaceIds = []
 
         for pollingPlace in pollingPlaces[:max_tasks]:
-            print(
-                pollingPlace.id,
-                pollingPlace.premises,
-                pollingPlace.state,
-                pollingPlace.chance_of_sausage,
-            )
-            continue
-
             # Just a safeguard against an MPP being used twice in a given election
             # We'll have other things to protect against this, but they can still slip
             # through at the moment.
