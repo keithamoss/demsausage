@@ -29,7 +29,11 @@ import { mapaThemePrimaryGrey, mapaThemePrimaryPurple } from '../../../app/ui/th
 import StallSubmitterTypeOwner from '../../../assets/stalls/submit_mystall.svg?react';
 import StallSubmitterTypeTipOff from '../../../assets/stalls/submit_tipoff.svg?react';
 import { IconsFlexboxHorizontalSummaryRow, supportingIcons } from '../../icons/iconHelpers';
-import { doesStallHaveNomsToShowOnOffer, isStallATipOff } from '../../pollingPlaces/pollingPlaceStallsHelpers';
+import {
+	doesStallHaveNomsToShowOnOffer,
+	doesStallOnlyHaveFreeTextNoms,
+	isStallATipOff,
+} from '../../pollingPlaces/pollingPlaceStallsHelpers';
 import { getNomsIconsForPendingStall } from '../pendingStallsHelpers';
 import PendingStallsPollingPlaceStallFieldListItem from './PendingStallsPollingPlaceStallFieldListItem';
 import {
@@ -243,9 +247,10 @@ export default function PendingStallsPollingPlaceStallsList(props: Props) {
 							)}
 
 							{doesStallHaveNomsToShowOnOffer(stall) === false &&
+								doesStallOnlyHaveFreeTextNoms(stall) === false &&
 								stall.noms.nothing !== true &&
 								stall.noms.run_out !== true && (
-									<Alert severity="warning">
+									<Alert severity="warning" sx={{ mb: 1 }}>
 										<AlertTitle>Danger Will Robinson, danger!</AlertTitle>
 										It looks like this submission doesn't have any noms on offer. This should be impossible, so if you
 										do see this message, please let Keith know.

@@ -90,12 +90,19 @@ export const getStallSubmitterTypeElementIcon = (stall: Stall) => getStallSubmit
 
 export const getStallSubmitterTypeElementLabel = (stall: Stall) => getStallSubmitterTypeInfo(stall).label;
 
+export const doesStallOnlyHaveFreeTextNoms = (stall: Stall) =>
+	typeof stall.noms.free_text === 'string' && Object.keys(stall.noms).length === 1;
+
 export const doesStallHaveNomsToShowOnOffer = (stall: Stall) => {
 	if (stall.noms.nothing === true) {
 		return false;
 	}
 
 	if (stall.noms.run_out === true && Object.keys(stall.noms).length === 1) {
+		return false;
+	}
+
+	if (doesStallOnlyHaveFreeTextNoms(stall) === true) {
 		return false;
 	}
 
