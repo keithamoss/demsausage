@@ -1,9 +1,10 @@
-import { Alert, AlertTitle, Box, List, ListItem, ListItemText, styled } from '@mui/material';
+import { PublicOff, TravelExplore } from '@mui/icons-material';
+import { Alert, AlertTitle, Box, IconButton, List, ListItem, ListItemText, Switch, styled } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import type { Coordinate } from 'ol/coordinate';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { getStringParamOrEmptyString } from '../../../app/routing/routingHelpers';
@@ -17,8 +18,8 @@ import {
 	type EMapboxFeatureType,
 	type IMapboxSearchboxAPIV1ResponseFeature,
 	defaultMapboxSearchTypes,
+	getBBoxFromGeoJSONPolygonCoordinates,
 	getLonLatFromString,
-	getMapboxSearchParamsForElection,
 	isSearchingYet,
 	onViewOnMap,
 } from '../searchBarHelpers';
@@ -84,6 +85,19 @@ export default function SearchComponent(props: Props) {
 	const mapFilterSettings = useAppSelector((state) => selectMapFilterSettings(state, election.id));
 
 	// ######################
+	// Include Overseas Results Opt-in
+	// ######################
+	const [includeOverseasResults, setIncludeOverseasResults] = useState(false);
+
+	const onClickIncludeOverseasResults = useCallback(
+		() => setIncludeOverseasResults(!includeOverseasResults),
+		[includeOverseasResults],
+	);
+	// ######################
+	// Include Overseas Results Opt-in (End)
+	// ######################
+
+	// ######################
 	// Mapbox Search Query
 	// ######################
 	const {
@@ -96,7 +110,9 @@ export default function SearchComponent(props: Props) {
 			? {
 					searchTerm: urlSearchTerm,
 					types: mapboxSearchTypes,
-					...getMapboxSearchParamsForElection(election),
+					// Ref: https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
+					country: includeOverseasResults === false ? 'au' : undefined,
+					bbox: includeOverseasResults === false ? getBBoxFromGeoJSONPolygonCoordinates(election.geom) : undefined,
 				}
 			: skipToken,
 	);
@@ -154,6 +170,38 @@ export default function SearchComponent(props: Props) {
 				onGPSLocationAcquired={onGPSLocationAcquired}
 				onDiscardSearch={onDiscardSearch}
 			/>
+
+			{election.is_federal === true && (
+				<Alert
+					severity="info"
+					icon={false}
+					sx={{
+						'& .MuiAlert-message': {
+							display: 'flex',
+							alignItems: 'center',
+						},
+						mt: -0.5,
+					}}
+					action={
+						<IconButton size="small">
+							{includeOverseasResults === true ? (
+								<TravelExplore fontSize="inherit" color="info" />
+							) : (
+								<PublicOff fontSize="inherit" color="inherit" />
+							)}
+						</IconButton>
+					}
+				>
+					<Switch
+						checked={includeOverseasResults}
+						onClick={onClickIncludeOverseasResults}
+						size="small"
+						color="info"
+						sx={{ mr: 0.5 }}
+					/>
+					Include results from overseas?
+				</Alert>
+			)}
 
 			{/* Handles not found and all other types of error */}
 			{errorFetchingMapboxResults !== undefined && (

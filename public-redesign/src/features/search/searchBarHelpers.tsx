@@ -4,7 +4,7 @@ import { transformExtent } from 'ol/proj';
 import React from 'react';
 import type { NavigateFunction, Params } from 'react-router-dom';
 import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
-import type { Election, IGeoJSONPoylgon } from '../../app/services/elections';
+import type { IGeoJSONPoylgon } from '../../app/services/elections';
 import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
 import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';
 import { getStandardViewPadding } from '../map/mapHelpers';
@@ -187,15 +187,6 @@ export const getMapboxPOICategories = (): string[] => [
 	'social_club',
 	'community_center',
 ];
-
-// https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
-export const getMapboxSearchParamsForElection = (election: Election) =>
-	election.is_federal === false
-		? {
-				country: 'au',
-				bbox: getBBoxFromGeoJSONPolygonCoordinates(election.geom),
-			}
-		: {};
 
 // https://stackoverflow.com/a/57528471
 export const wrapIconWithTooltip = (icon: JSX.Element, title: string) => (
