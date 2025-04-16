@@ -193,5 +193,9 @@ export const getTextFieldStyledListItemText = (
 	fieldLabel: string,
 	stall: PendingStall,
 ) => (
-	<StyledListItemText primary={fieldLabel} secondary={getTextFieldDescriptiveTextWithVisualDiff(fieldName, stall)} />
+	<StyledListItemText
+		primary={fieldLabel}
+		secondary={getTextFieldDescriptiveTextWithVisualDiff(fieldName, stall)}
+		sx={fieldName === 'website' ? { '& .MuiListItemText-secondary': { wordWrap: 'break-word' } } : undefined}
+	/>
 );
