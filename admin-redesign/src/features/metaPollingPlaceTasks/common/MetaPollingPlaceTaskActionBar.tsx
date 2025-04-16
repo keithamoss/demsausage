@@ -22,6 +22,7 @@ import {
 } from '../../../app/services/metaPollingPlaceTasks';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import type { IMetaPollingPlaceTaskJob } from '../interfaces/metaPollingPlaceTasksInterfaces';
+import './MetaPollingPlaceTaskActionBar.css';
 
 interface Props {
 	metaPollingPlaceTaskJob: IMetaPollingPlaceTaskJob;

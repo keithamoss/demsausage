@@ -55,6 +55,7 @@ function MetaPollingPlaceLinksManager(props: Props) {
 	const [isAddLinkDialogOpen, setIsAddLinkDialogOpen] = React.useState(false);
 
 	const onClickOpenAddLinkDialog = () => {
+		reset();
 		setIsAddLinkDialogOpen(true);
 	};
 

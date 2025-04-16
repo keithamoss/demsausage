@@ -1,7 +1,7 @@
 import { CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { AppProvider } from '@toolpad/core';
+import { AppProvider, NotificationsProvider } from '@toolpad/core';
 import 'dayjs/locale/en-au';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -25,17 +25,25 @@ root.render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<AppProvider theme={theme}>
-				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-au">
-					<HelmetProvider>
-						<CssBaseline />
-						<RouterProvider
-							router={router}
-							future={{
-								v7_startTransition: true,
-							}}
-						/>
-					</HelmetProvider>
-				</LocalizationProvider>
+				<NotificationsProvider
+					slotProps={{
+						snackbar: {
+							anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+						},
+					}}
+				>
+					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-au">
+						<HelmetProvider>
+							<CssBaseline />
+							<RouterProvider
+								router={router}
+								future={{
+									v7_startTransition: true,
+								}}
+							/>
+						</HelmetProvider>
+					</LocalizationProvider>
+				</NotificationsProvider>
 			</AppProvider>
 		</Provider>
 	</React.StrictMode>,
