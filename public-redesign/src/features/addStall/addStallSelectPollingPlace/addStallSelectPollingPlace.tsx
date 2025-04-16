@@ -43,7 +43,6 @@ import type { Election } from '../../../app/services/elections';
 import { appBarHeight } from '../../../app/ui/theme';
 import { getBaseURL } from '../../../app/utils';
 import { selectActiveElections } from '../../elections/electionsSlice';
-import { getJurisdictionCrestStandaloneReact } from '../../icons/jurisdictionHelpers';
 import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../../pollingPlaces/pollingPlaceHelpers';
 import type { IPollingPlace } from '../../pollingPlaces/pollingPlacesInterfaces';
 import {
@@ -248,34 +247,6 @@ function AddStallSelectPollingPlace(props: Props) {
 					<Button onClick={onChoosePollingPlaceAndContinue}>Continue</Button>
 				</DialogActions>
 			</Dialog>
-
-			<Paper
-				square
-				elevation={0}
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					height: 50,
-					pl: 2,
-					bgcolor: 'grey.200',
-				}}
-			>
-				<Avatar
-					sx={{
-						width: 36,
-						height: 36,
-						marginRight: 2,
-						backgroundColor: 'transparent',
-						'& svg': {
-							width: 50,
-						},
-					}}
-				>
-					{getJurisdictionCrestStandaloneReact(election.jurisdiction)}
-				</Avatar>
-
-				<Typography variant="h6">{election.name}</Typography>
-			</Paper>
 
 			<Paper
 				square
