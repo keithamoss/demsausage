@@ -1,15 +1,17 @@
 import copy
 import csv
 
-POLLING_PLACE_FILENAME = "prdelms.gaz.statics.250405.09.00.02"
+POLLING_PLACE_FILENAME = "prdelms.gaz.statics.250416.09.00.02"
 OVERSEAS_POLLING_PLACE_FILENAME = (
     "../federal_overseas_polling_places/overseas_polling_places_2025"
 )
 MERGED_POLLING_PLACE_FILENAME = f"{POLLING_PLACE_FILENAME}_merged_overseas"
 
 # open both files
-with open(f"data/{POLLING_PLACE_FILENAME}.csv") as polling_places_australia, open(
-    f"data/{OVERSEAS_POLLING_PLACE_FILENAME}.csv"
+with open(
+    f"data/{POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
+) as polling_places_australia, open(
+    f"{OVERSEAS_POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
 ) as polling_places_overseas:
     csv_polling_places_australia = csv.DictReader(polling_places_australia)
     list_polling_places_australia = list(csv_polling_places_australia)
