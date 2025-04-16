@@ -22,7 +22,6 @@ import {
 } from '../../../app/services/metaPollingPlaceTasks';
 import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import type { IMetaPollingPlaceTaskJob } from '../interfaces/metaPollingPlaceTasksInterfaces';
-import './MetaPollingPlaceTaskActionBar.css';
 
 interface Props {
 	metaPollingPlaceTaskJob: IMetaPollingPlaceTaskJob;
@@ -203,7 +202,12 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 
 	return (
 		<React.Fragment>
-			<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
+			<AppBar
+				position="fixed"
+				color="transparent"
+				sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}
+				className="bottomAppBarPresent"
+			>
 				<Toolbar sx={{ justifyContent: 'flex-end' }}>
 					<Button
 						// loading={isDeleting}
