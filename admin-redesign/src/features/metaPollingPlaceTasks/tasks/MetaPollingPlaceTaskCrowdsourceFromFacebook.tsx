@@ -19,6 +19,7 @@ import type { StallFoodOptions } from '../../../app/services/stalls';
 import ElectionsManagerCard from '../../elections/ElectionsManagerCard';
 import { selectActiveElections } from '../../elections/electionsSlice';
 import type { IPollingPlaceNoms } from '../../pollingPlaces/pollingPlacesInterfaces';
+import MetaPollingPlaceHistorySummaryCard from '../common/MetaPollingPlaceHistorySummaryCard';
 import MetaPollingPlaceLinksManager from '../common/MetaPollingPlaceLinksManager';
 import MetaPollingPlacePollingPlacesReviewList from '../common/MetaPollingPlacePollingPlacesReviewList';
 import MetaPollingPlaceRemarks from '../common/MetaPollingPlaceRemarks';
@@ -167,6 +168,12 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 	return (
 		<PageWrapper>
 			<MetaPollingPlaceSummaryCard metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place} />
+
+			<MetaPollingPlaceHistorySummaryCard
+				metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place}
+				pollingPlaceForActiveElection={pollingPlaceForActiveElection}
+				cardSxProps={{ mt: 2 }}
+			/>
 
 			<MetaPollingPlacePollingPlacesReviewList
 				metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place}

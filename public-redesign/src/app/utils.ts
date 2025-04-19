@@ -120,4 +120,4 @@ export const mergeJSXElementsItemsWithOxfordComma = (items: JSX.Element[]) => {
 	return '';
 };
 
-export const pluralise = (word: string, count: number) => `${word}${count > 1 ? 's' : ''}`;
+export const pluralise = (word: string, count: number) => `${word}${count > 1 || count === 0 ? 's' : ''}`;

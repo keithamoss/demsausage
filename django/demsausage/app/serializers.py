@@ -493,6 +493,7 @@ class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
         fields = [field for field in PollingPlacesSerializer.Meta.fields] + [
             "election_name",
             "stall",
+            "chance_of_sausage_stats",
         ]
 
     def get_stall(self, obj):

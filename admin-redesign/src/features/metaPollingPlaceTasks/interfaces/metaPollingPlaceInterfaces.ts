@@ -11,6 +11,16 @@ export interface IPollingPlaceAttachedToMetaPollingPlace extends Omit<IPollingPl
 		id: number;
 		noms: IPollingPlaceNoms | null;
 	};
+	chance_of_sausage_stats: {
+		chance_of_sausage?: number;
+		first_positive_report?: string | null;
+		latest_positive_report?: string | null;
+		count_of_previous_reports?: number;
+		count_of_matching_polling_places?: number;
+		count_of_previous_reports_with_noms?: number;
+		count_of_previous_reports_with_rcos?: number;
+		count_of_previous_reports_with_run_out?: number;
+	};
 }
 
 export interface IMetaPollingPlace {
