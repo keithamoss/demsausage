@@ -1,6 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Radar } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmailIcon from '@mui/icons-material/Email';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 import SendIcon from '@mui/icons-material/Send';
 import {
 	Alert,
@@ -22,12 +24,15 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { FormFieldValidationError } from '../../app/forms/formHelpers';
 import { stallOwnerFormValidationSchema } from '../../app/forms/stallForm';
 import { useAppSelector } from '../../app/hooks/store';
+import type { Election } from '../../app/services/elections';
 import type { IStallLocationInfo, Stall, StallFoodOptions, StallOwnerModifiableProps } from '../../app/services/stalls';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { appBarHeight, mapaThemePrimaryGrey } from '../../app/ui/theme';
+import { getBaseURL } from '../../app/utils';
 import AddStallFormFoodOptionsSelector from '../addStall/addStallStallForm/addStallFormFoodOptionsSelector';
 import AddStallFormPrivacyNotice from '../addStall/addStallStallForm/addStallFormPrivacyNotice';
 import { selectActiveElections } from '../elections/electionsSlice';
+import { getPollingPlacePermalinkFromElectionAndPollingPlace } from '../pollingPlaces/pollingPlaceHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
 import { getHiddenStepperButton, getPollingPlaceFormHeading, mobileStepperMinHeight } from './stallFormHelpers';
 
@@ -41,6 +46,7 @@ const StyledInteractableBoxFullHeight = styled(Box)(({ theme }) => ({
 
 interface Props {
 	stall?: Stall;
+	election: Election;
 	pollingPlace?: IPollingPlace; // Only defined if election.polling_places_loaded === true
 	stallLocationInfo?: IStallLocationInfo; // Only defined if election.polling_places_loaded === false
 	isStallSaving: boolean;
@@ -50,7 +56,8 @@ interface Props {
 }
 
 export default function StallOwnerForm(props: Props) {
-	const { stall, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } = props;
+	const { stall, election, pollingPlace, stallLocationInfo, isStallSaving, onDoneAdding, onDoneEditing, onClickBack } =
+		props;
 
 	const activeElections = useAppSelector((state) => selectActiveElections(state));
 
@@ -137,6 +144,25 @@ export default function StallOwnerForm(props: Props) {
 				>
 					<Typography variant="h6">{getPollingPlaceFormHeading(stall, pollingPlace, stallLocationInfo)}</Typography>
 				</Paper>
+
+				{pollingPlace !== undefined && pollingPlace.stall !== null && pollingPlace.has_approved_subs === false && (
+					<Alert severity="info" variant="standard" icon={<Radar />} sx={{ ml: 2, mr: 2 }}>
+						We've already pre-filled this polling booth with some basic information we picked up from social media. If
+						there's more information you would like to provide, no stress - just go ahead and submit your details as
+						usual and we'll update it for you!
+						<Button
+							size="small"
+							variant="outlined"
+							color="inherit"
+							startIcon={<OpenInNew />}
+							href={`${getBaseURL()}${getPollingPlacePermalinkFromElectionAndPollingPlace(election, pollingPlace)}`}
+							target="_blank"
+							sx={{ mt: 2 }}
+						>
+							View Polling Place
+						</Button>
+					</Alert>
+				)}
 
 				<Paper
 					square

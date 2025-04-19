@@ -66,6 +66,7 @@ export interface IPollingPlace {
 	extras: {
 		[key: string]: string;
 	};
+	has_approved_subs: boolean;
 }
 
 export interface IPollingPlaceStubForStalls {
