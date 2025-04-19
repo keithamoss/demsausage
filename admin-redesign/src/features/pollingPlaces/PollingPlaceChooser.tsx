@@ -227,7 +227,7 @@ function PollingPlaceChooser(props: Props) {
 							</InputAdornment>
 						) : undefined
 					}
-					inputProps={{ spellCheck: false, autocomplete: 'off' }}
+					inputProps={{ spellCheck: false, autoComplete: 'off' }}
 					label="Search for a polling place"
 				/>
 

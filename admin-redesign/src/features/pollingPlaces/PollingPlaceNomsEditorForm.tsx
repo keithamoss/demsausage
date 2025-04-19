@@ -370,7 +370,12 @@ export default function PollingPlaceNomsEditorForm(props: Props) {
 					###################### */}
 
 				{allowAppBarControl !== false && (
-					<AppBar position="fixed" color="transparent" sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
+					<AppBar
+						position="fixed"
+						color="transparent"
+						sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}
+						className="bottomAppBarPresent"
+					>
 						<Toolbar sx={{ justifyContent: 'flex-end' }}>
 							{pollingPlace.stall !== null && (
 								<Button

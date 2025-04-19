@@ -6,7 +6,8 @@ import type { PollingPlaceWithPendingStall } from '../../../app/services/stalls'
 import { pluralise } from '../../../app/utils';
 import { getCountOfExistingStallsIcon } from '../pendingStallsHelpers';
 
-const StyledCardContent = styled(CardContent)(() => ({
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+	paddingTop: theme.spacing(1),
 	paddingBottom: 0,
 }));
 

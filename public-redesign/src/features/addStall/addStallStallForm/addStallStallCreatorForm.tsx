@@ -190,6 +190,7 @@ function AddStallStallCreatorForm(props: Props) {
 
 			{submitterType === StallSubmitterType.Owner && (
 				<StallOwnerForm
+					election={election}
 					pollingPlace={pollingPlace}
 					stallLocationInfo={stallLocationInfo}
 					isStallSaving={isAddingStallLoading}

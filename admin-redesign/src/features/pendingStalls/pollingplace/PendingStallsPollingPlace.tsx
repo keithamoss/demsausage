@@ -425,7 +425,7 @@ function PendingStallsPollingPlace(props: Props) {
 				</Card>
 
 				<Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
-					<BottomNavigation>
+					<BottomNavigation className="bottomAppBarPresent">
 						<BottomNavigationAction icon={<VerticalAlignTop />} onClick={scrollToTop} />
 
 						{pollingPlace.pending_stalls.slice(0, 4).map((stall, key) => {

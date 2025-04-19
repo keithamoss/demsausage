@@ -1,6 +1,5 @@
 import {
 	type EMapboxFeatureType,
-	type IMapboxGeocodingAPIV6Response,
 	type IMapboxSearchboxAPIV1Response,
 	getMapboxAPIKey,
 	getMapboxPOICategories,
@@ -9,11 +8,11 @@ import { api } from './api';
 
 export const mapboxGeocodingApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		fetchMapboxGeocodingResults: builder.query<IMapboxGeocodingAPIV6Response, { url: string }>({
-			query: ({ url }) => ({
-				url,
-			}),
-		}),
+		// fetchMapboxGeocodingResults: builder.query<IMapboxGeocodingAPIV6Response, { url: string }>({
+		// 	query: ({ url }) => ({
+		// 		url,
+		// 	}),
+		// }),
 		fetchMapboxSearchboxResults: builder.query<
 			IMapboxSearchboxAPIV1Response,
 			{ searchTerm: string; types: EMapboxFeatureType[]; country?: string; bbox?: [number, number, number, number] }
@@ -36,4 +35,4 @@ export const mapboxGeocodingApi = api.injectEndpoints({
 	}),
 });
 
-export const { useFetchMapboxGeocodingResultsQuery, useFetchMapboxSearchboxResultsQuery } = mapboxGeocodingApi;
+export const { useFetchMapboxSearchboxResultsQuery } = mapboxGeocodingApi;

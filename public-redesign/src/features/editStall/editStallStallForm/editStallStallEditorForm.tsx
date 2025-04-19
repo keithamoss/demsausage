@@ -120,7 +120,12 @@ function EditStallStallEditorForm(props: Props) {
 			)}
 
 			{stall.submitter_type === StallSubmitterType.Owner && (
-				<StallOwnerForm stall={stall} isStallSaving={isEditingStallLoading} onDoneEditing={onDoneEditing} />
+				<StallOwnerForm
+					stall={stall}
+					election={election}
+					isStallSaving={isEditingStallLoading}
+					onDoneEditing={onDoneEditing}
+				/>
 			)}
 
 			{stall.submitter_type === StallSubmitterType.TipOff && (

@@ -413,7 +413,11 @@ export default function SearchBar(props: Props) {
 				)}
 			</Paper>
 
-			{(isWaitingForGPSLocation === true || isFetching === true) && <LinearProgress color="secondary" />}
+			{isWaitingForGPSLocation === true || isFetching === true ? (
+				<LinearProgress color="secondary" />
+			) : (
+				<LinearProgress color="secondary" sx={{ backgroundColor: 'transparent' }} variant="determinate" value={0} />
+			)}
 
 			{enableFiltering === true && searchBarFilterControlOpen === true && <SearchFilterComponent election={election} />}
 

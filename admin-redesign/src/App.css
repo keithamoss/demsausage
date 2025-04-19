@@ -10,3 +10,8 @@ body {
 .sentry-error-embed-wrapper {
 	z-index: 10000 !important;
 }
+
+:has(.bottomAppBarPresent) .MuiSnackbar-anchorOriginBottomCenter {
+	/* AppBarHeight of 56px */
+	margin-bottom: 56px;
+}

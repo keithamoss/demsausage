@@ -397,6 +397,7 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
     chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
     facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
+    has_approved_subs = serializers.SerializerMethodField()
 
     class Meta:
         model = PollingPlaces
@@ -421,6 +422,7 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
             "facility_type",
             "ec_id",
             "extras",
+            "has_approved_subs",
         )
 
     def _update_facility_type(self, validated_data):
@@ -484,6 +486,15 @@ class PollingPlacesSerializer(serializers.ModelSerializer):
 
         return super(PollingPlacesSerializer, self).create(validated_data)
 
+    def get_has_approved_subs(self, obj):
+        return (
+            Stalls.history.filter(election_id=obj.election_id)
+            .filter(polling_place_id=obj.id)
+            .filter(status=StallStatus.APPROVED)
+            .count()
+            >= 1
+        )
+
 
 class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
     election_name = serializers.CharField(source="election.name", read_only=True)
@@ -493,6 +504,7 @@ class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
         fields = [field for field in PollingPlacesSerializer.Meta.fields] + [
             "election_name",
             "stall",
+            "chance_of_sausage_stats",
         ]
 
     def get_stall(self, obj):
