@@ -117,14 +117,15 @@ export default function AboutPage() {
 					<p>
 						We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can email us
 						at <a href="mailto:help@democracysausage.org">help@democracysausage.org</a> or else find us on social media:
-						<br />
-						Bluesky: demsausage.bsky.social
-						<br />
-						Instagram, Reddit, TikTok, Threads all at ausdemocracysausage
-						<br />
-						Facebook at AusDemocracySausage
-						<br />
-						Twitter at DemSausage
+						<p>
+							Bluesky: @democracysausage.org
+							<br />
+							Instagram, Reddit, TikTok, Threads all at ausdemocracysausage
+							<br />
+							Facebook at AusDemocracySausage
+							<br />
+							Twitter at DemSausage
+						</p>
 					</p>
 				</Answer>
 
@@ -136,7 +137,8 @@ export default function AboutPage() {
 					<a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
 						for more information
 					</a>
-					.
+					. Then you need to work out how you're going to run the stand - volunteers, payment systems / cash floats,
+					preorders of sausages, onions, bread and sauces.
 				</Answer>
 
 				<Question>Are you part of any political parties?</Question>
