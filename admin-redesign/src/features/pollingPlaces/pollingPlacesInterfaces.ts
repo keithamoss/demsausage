@@ -84,6 +84,7 @@ export interface IPollingPlace {
 	extras: {
 		[key: string]: string;
 	};
+	has_approved_subs: boolean; // @TOOD This is ONLY available if retrieved from /polling_places/lookup/ at the moment, it's also buggy (see notes in serializers.py)
 }
 
 export interface IPollingPlaceStubForStalls {
