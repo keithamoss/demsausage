@@ -56,19 +56,19 @@ export default function AboutPage() {
 				<Question>But how do you get all of the sausage sizzles?</Question>
 				<Answer>
 					<p>
-						We crowdsource (or is it crowdsauce?) data from Twitter, Facebook, and Instagram and from the stalls that
-						people submit to us on this here website.
+						We crowdsource (or is it crowdsauce?) data from social media, the web, and from the stalls that people
+						submit to us on this here website.
 					</p>
 					<p>
-						To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{' '}
-						<a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a
-						Direct Message. We&apos;ll be keeping an eye out.
+						To let us know about sausage and cake availability (or the absence thereof), the best method is to use the
+						"Add stall" functionality on our website - you can submit as either a stall owner or just a 'tip-off' as
+						appropriate. You can also contact us via our various social media channels listed below.
 					</p>
 					<p>
 						To make this work, we&apos;ve also used Australian Electoral Commission polling place data (likewise from
-						the various state electoral commissions).
+						the state and territory electoral commissions).
 					</p>
-					Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){' '}
+					Democracy Sausage incorporates data that is © Commonwealth of Australia (Australian Electoral Commission){' '}
 					{new Date().getFullYear()}.
 				</Answer>
 
@@ -109,23 +109,32 @@ export default function AboutPage() {
 
 				<Question>Who are you?</Question>
 				<Answer>
-					<p>We&apos;re six people, three babies, three cats, and some parrots.</p>
+					<p>We&apos;re six people, three children, three cats, and some birds.</p>
 					<p>
 						Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
 						crowdsaucing sausage sizzle locations.
 					</p>
 					<p>
 						We&apos;re enthusiastic about democracy sausage and making elections just a little bit more fun. You can
-						find us on Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{' '}
-						<a href="mailto:help@democracysausage.org">help@democracysausage.org</a>.
+						email us at <a href="mailto:help@democracysausage.org">help@democracysausage.org</a> or else find us on
+						social media:
+						<br />
+						Bluesky: demsausage.bsky.social
+						<br />
+						Instagram, Reddit, TikTok, Threads all at ausdemocracysausage
+						<br />
+						Facebook at AusDemocracySausage
+						<br />
+						Twitter at DemSausage
 					</p>
 				</Answer>
 
 				<Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
 				<Answer>
-					Well your school, first of all (but you knew that already). Beyond that, your local government may require you
-					to get a permit to run a temporary food stall - so give them a call to find out. There&apos;s also some pretty
-					basic food safety regulations you&apos;ll need to abide by - check out foodstandards.gov.au{' '}
+					Well your school or polling place host site, first of all (but you knew that already). Beyond that, your local
+					government may require you to get a permit to run a temporary food stall - so give them a call to find out.
+					There&apos;s also some pretty basic food safety regulations you&apos;ll need to abide by - check out
+					foodstandards.gov.au{' '}
 					<a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
 						for more information
 					</a>
@@ -139,7 +148,7 @@ export default function AboutPage() {
 				<Answer>
 					<p>
 						If you submit a stall to us, we won&apos;t share any personal information about you - such as your email
-						address, Twitter handle, et cetera.
+						address, social media handle, et cetera.
 					</p>
 					<p>
 						We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them
