@@ -41,6 +41,7 @@ from demsausage.app.serializers import (
     PollingPlacesFlatJSONSerializer,
     PollingPlacesGeoJSONSerializer,
     PollingPlacesSerializer,
+    PollingPlacesSerializerForLookup,
     StallsSerializer,
 )
 from demsausage.rq.jobs import task_regenerate_cached_election_data
@@ -361,7 +362,12 @@ class PollingPlacesViewSet(
         else:
             raise BadRequest("No election_id provided.")
 
-    @action(detail=False, methods=["get"], permission_classes=(AllowAny,))
+    @action(
+        detail=False,
+        methods=["get"],
+        permission_classes=(AllowAny,),
+        serializer_class=PollingPlacesSerializerForLookup,
+    )
     def lookup(self, request, format=None):
         """
         Lookup the details for an individual polling place by its name + premises + state or its ec_id field.
