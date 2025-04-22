@@ -50,8 +50,8 @@ export default function AboutPage() {
 				<Question>What is this?</Question>
 				<Answer>A map of sausage and cake availability on election day.</Answer>
 
-				<Question>I still don&apos;t understand</Question>
-				<Answer>It&apos;s practically part of the Australian Constitution. Or something.</Answer>
+				<Question>I still don't understand</Question>
+				<Answer>It's practically part of the Australian Constitution. Or something.</Answer>
 
 				<Question>But how do you get all of the sausage sizzles?</Question>
 				<Answer>
@@ -65,8 +65,8 @@ export default function AboutPage() {
 						appropriate. You can also contact us via our various social media channels listed below.
 					</p>
 					<p>
-						To make this work, we&apos;ve also used Australian Electoral Commission polling place data (likewise from
-						the state and territory electoral commissions).
+						To make this work, we've also used Australian Electoral Commission polling place data (likewise from the
+						state and territory electoral commissions).
 					</p>
 					Democracy Sausage incorporates data that is © Commonwealth of Australia (Australian Electoral Commission){' '}
 					{new Date().getFullYear()}.
@@ -93,15 +93,15 @@ export default function AboutPage() {
 				<Question>What does the halal symbol indicate?</Question>
 				<Answer>
 					<p>
-						Firstly, it&apos;s important to note that our site can&apos;t actually provide halal certification, and we
-						display the symbol based on information submitted to us by the folks running the stalls themselves.
+						Firstly, it's important to note that our site can't actually provide halal certification, and we display the
+						symbol based on information submitted to us by the folks running the stalls themselves.
 					</p>
 					<p>
 						The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is
-						just one of a variation of halal seals / stamps that are used in Australia - though we&apos;re happy to be
-						corrected on that). For the curious, the ABC&apos;s Bush Telegraph has more in their segment{' '}
+						just one of a variation of halal seals / stamps that are used in Australia - though we're happy to be
+						corrected on that). For the curious, the ABC's Bush Telegraph has more in their segment{' '}
 						<a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
-							What&apos;s the big fuss about Halal certification?
+							What's the big fuss about Halal certification?
 						</a>
 						.
 					</p>
@@ -109,15 +109,14 @@ export default function AboutPage() {
 
 				<Question>Who are you?</Question>
 				<Answer>
-					<p>We&apos;re six people, three children, three cats, and some birds.</p>
+					<p>We're six people, three children, three cats, and some birds.</p>
 					<p>
 						Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
 						crowdsaucing sausage sizzle locations.
 					</p>
 					<p>
-						We&apos;re enthusiastic about democracy sausage and making elections just a little bit more fun. You can
-						email us at <a href="mailto:help@democracysausage.org">help@democracysausage.org</a> or else find us on
-						social media:
+						We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can email us
+						at <a href="mailto:help@democracysausage.org">help@democracysausage.org</a> or else find us on social media:
 						<br />
 						Bluesky: demsausage.bsky.social
 						<br />
@@ -133,7 +132,7 @@ export default function AboutPage() {
 				<Answer>
 					Well your school or polling place host site, first of all (but you knew that already). Beyond that, your local
 					government may require you to get a permit to run a temporary food stall - so give them a call to find out.
-					There&apos;s also some pretty basic food safety regulations you&apos;ll need to abide by - check out
+					There's also some pretty basic food safety regulations you'll need to abide by - check out
 					foodstandards.gov.au{' '}
 					<a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
 						for more information
@@ -147,8 +146,8 @@ export default function AboutPage() {
 				<Question>Will you share my info with others?</Question>
 				<Answer>
 					<p>
-						If you submit a stall to us, we won&apos;t share any personal information about you - such as your email
-						address, social media handle, et cetera.
+						If you submit a stall to us, we won't share any personal information about you - such as your email address,
+						social media handle, et cetera.
 					</p>
 					<p>
 						We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them
