@@ -130,10 +130,9 @@ export default function AboutPage() {
 
 				<Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
 				<Answer>
-					Well your school or polling place host site, first of all (but you knew that already). Beyond that, your local
-					government may require you to get a permit to run a temporary food stall - so give them a call to find out.
-					There's also some pretty basic food safety regulations you'll need to abide by - check out
-					foodstandards.gov.au{' '}
+					Well your school or polling place host site, first of all. Beyond that, your local government may require you
+					to get a permit to run a temporary food stall - so give them a call to find out. There's also some pretty
+					basic food safety regulations you'll need to abide by - check out foodstandards.gov.au{' '}
 					<a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
 						for more information
 					</a>
