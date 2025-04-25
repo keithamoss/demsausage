@@ -11,6 +11,7 @@ export interface IPollingPlaceAttachedToMetaPollingPlace extends Omit<IPollingPl
 		id: number;
 		noms: IPollingPlaceNoms | null;
 	};
+	distance_from_meta_polling_place_metres: number;
 	chance_of_sausage_stats: {
 		chance_of_sausage?: number;
 		first_positive_report?: string | null;

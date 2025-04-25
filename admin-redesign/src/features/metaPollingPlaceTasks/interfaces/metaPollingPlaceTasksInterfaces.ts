@@ -62,5 +62,6 @@ export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobM
 	actioned_by: string | null;
 	history: IMetaPollingPlaceTaskJobHistory[];
 	meta_polling_place: IMetaPollingPlace;
+	nearby_meta_polling_places: IMetaPollingPlace[];
 	remarks: IMetaPollingPlaceRemark[];
 }
