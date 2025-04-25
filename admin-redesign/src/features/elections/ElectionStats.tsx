@@ -137,7 +137,7 @@ function ElectionStats(props: Props) {
 								<AutoGraph />
 							</Avatar>
 						}
-						title="Polling places with data "
+						title="Polling places with data"
 					/>
 
 					<CardContent sx={{ pt: 2, pb: '16px !important' }}>
@@ -207,6 +207,9 @@ function ElectionStats(props: Props) {
 								},
 							]}
 							sx={{
+								// Workaround to make touch scrolling on mobile to work
+								// Ref: https://github.com/mui/mui-x/issues/13885
+								'&&': { touchAction: 'auto' },
 								'& .MuiBarLabel-root': {
 									fill: 'white',
 								},
