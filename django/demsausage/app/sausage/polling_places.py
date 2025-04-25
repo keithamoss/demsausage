@@ -2,6 +2,7 @@ from demsausage.util import get_or_none
 
 from django.contrib.gis import measure
 from django.contrib.gis.db.models.functions import Distance
+from django.db.models import Q
 
 
 def get_active_polling_place_queryset():
@@ -11,8 +12,23 @@ def get_active_polling_place_queryset():
     return PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
 
 
-def find_by_distance(search_point, distance_threshold_km, limit, qs):
-    queryset_spatial = qs.filter(geom__dwithin=(search_point, measure.Distance(km=distance_threshold_km))).annotate(distance=Distance("geom", search_point)).order_by("distance")
+def find_by_distance(
+    search_point, distance_threshold_km, limit, qs, geom_field_name="geom"
+):
+    queryset_spatial = (
+        qs.filter(
+            Q(
+                **{
+                    f"{geom_field_name}__dwithin": (
+                        search_point,
+                        measure.Distance(km=distance_threshold_km),
+                    )
+                }
+            )
+        )
+        .annotate(distance=Distance(geom_field_name, search_point))
+        .order_by("distance")
+    )
 
     if limit is not None:
         return queryset_spatial[:limit]

@@ -9,6 +9,7 @@ from demsausage.app.views.mail_management_views import MailManagementViewSet
 from demsausage.app.views.meta_polling_place_views import (
     MetaPollingPlacesLinksViewSet,
     MetaPollingPlacesTasksViewSet,
+    MetaPollingPlacesViewSet,
 )
 from demsausage.app.views.pollingplace_views import (
     PollingPlaceFacilityTypeViewSet,
@@ -62,6 +63,11 @@ router.register(
     r"meta_polling_places/links",
     MetaPollingPlacesLinksViewSet,
     "MetaPollingPlacesLinksViewSet",
+)
+router.register(
+    r"meta_polling_places",
+    MetaPollingPlacesViewSet,
+    "MetaPollingPlacesViewSet",
 )
 
 # Need to set base_name because Reasons

@@ -1,4 +1,5 @@
 from demsausage.app.enums import (
+    MetaPollingPlaceStatus,
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
@@ -21,6 +22,7 @@ from demsausage.app.models import (
     Stalls,
 )
 from demsausage.app.sausage.elections import getGamifiedElectionStats
+from demsausage.app.sausage.polling_places import find_by_distance
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import daterange, get_or_none, get_url_safe_election_name
 from jsonschema import validate
@@ -1110,6 +1112,7 @@ class MetaPollingPlacesRemarksSerializer(serializers.ModelSerializer):
 
 class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
     meta_polling_place = MetaPollingPlacesSerializer(required=True)
+    nearby_meta_polling_places = serializers.SerializerMethodField()
     history = serializers.SerializerMethodField()
     remarks = MetaPollingPlacesRemarksSerializer(
         many=True, read_only=True, source="metapollingplacesremarks_set"
@@ -1129,9 +1132,25 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             "actioned_on",
             "actioned_by",
             "meta_polling_place",
+            "nearby_meta_polling_places",
             "history",
             "remarks",
         )
+
+    def get_nearby_meta_polling_places(self, obj):
+        meta_polling_places = find_by_distance(
+            obj.meta_polling_place.geom_location,
+            distance_threshold_km=0.4,
+            limit=None,
+            qs=MetaPollingPlaces.objects.exclude(id=obj.meta_polling_place.id).exclude(
+                status=MetaPollingPlaceStatus.RETIRED
+            ),
+            geom_field_name="geom_location",
+        )
+
+        return MetaPollingPlacesSerializer(
+            meta_polling_places, many=True, read_only=True
+        ).data
 
     def get_history(self, obj):
         return [
@@ -1158,3 +1177,14 @@ class MetaPollingPlacesTasksCreateSerializer(MetaPollingPlacesTasksSerializer):
     meta_polling_place = serializers.PrimaryKeyRelatedField(
         queryset=MetaPollingPlaces.objects.all(), required=True
     )
+
+
+class MetaPollingPlacesRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MetaPollingPlaces
+
+        fields = read_only_fields = [
+            "id",
+            "created_on",
+            "modified_on",
+        ]

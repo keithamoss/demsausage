@@ -25,7 +25,7 @@ import type { IMetaPollingPlaceTaskJob } from '../interfaces/metaPollingPlaceTas
 
 interface Props {
 	metaPollingPlaceTaskJob: IMetaPollingPlaceTaskJob;
-	onClickComplete: () => void;
+	onClickComplete?: () => void;
 	isCloseAllowed: boolean;
 	isDeferAllowed: boolean;
 	isCompleteAllowed: boolean;
@@ -170,7 +170,9 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 	const onComplete = () => {
 		setIsLoadingScreenShown(true);
 
-		onClickComplete();
+		if (onClickComplete !== undefined) {
+			onClickComplete();
+		}
 
 		completeTask(metaPollingPlaceTaskJob.id);
 	};

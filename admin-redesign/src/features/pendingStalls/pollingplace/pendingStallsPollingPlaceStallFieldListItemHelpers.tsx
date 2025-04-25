@@ -9,10 +9,10 @@ import {
 	Web,
 } from '@mui/icons-material';
 import { ListItemText, styled } from '@mui/material';
-import { diffWords } from 'diff';
 import type { PendingStall, StallFoodOptions } from '../../../app/services/stalls';
 import { mapaThemePrimaryGrey } from '../../../app/ui/theme';
 import { mergeJSXElementsItemsWithOxfordComma } from '../../../app/utils';
+import { DiffGreenSXProps, DiffRedSXProps, diffWordsAndFormat } from '../../../app/utils-diff';
 import { getAllFoodsAvailableOnStalls } from '../../icons/iconHelpers';
 import { getNomsDescriptiveTextWithoutFreeText } from '../../pollingPlaces/pollingPlaceHelpers';
 
@@ -29,19 +29,6 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
 		fontWeight: 700,
 	},
 }));
-
-const StyledListItemTextSecondaryDiffGreen = {
-	backgroundColor: '#ddfae1',
-	color: '#3b5338',
-	display: 'inline-block',
-};
-
-const StyledListItemTextSecondaryDiffRed = {
-	backgroundColor: '#fcdfde',
-	color: '#b29c96',
-	display: 'inline-block',
-	textDecoration: 'line-through',
-};
 
 export const getFieldIcon = (fieldName: FieldNames) => {
 	switch (fieldName) {
@@ -76,28 +63,6 @@ export const getFieldValue = (fieldName: FieldNames, stall: PendingStall) => {
 	return stall[fieldName] || '';
 };
 
-const diffWordsAndFormat = (oldValue: string | undefined, newValue: string | undefined) => {
-	const textDiff = diffWords(oldValue || '', newValue || '');
-
-	const elements: JSX.Element[] = [];
-
-	for (const part of textDiff) {
-		const style = part.added
-			? StyledListItemTextSecondaryDiffGreen
-			: part.removed
-				? StyledListItemTextSecondaryDiffRed
-				: undefined;
-
-		elements.push(
-			<span key={part.value} style={style}>
-				{part.value}
-			</span>,
-		);
-	}
-
-	return elements;
-};
-
 const getNomsDescriptiveTextWithoutFreeTextAndWithVisualDiff = (stall: PendingStall) => {
 	const fieldDiff = stall.diff?.find((item) => item.field === 'noms');
 
@@ -124,13 +89,7 @@ const getNomsDescriptiveTextWithoutFreeTextAndWithVisualDiff = (stall: PendingSt
 			elements.push(
 				<span
 					key={option.value}
-					style={
-						isNewNoms === true
-							? StyledListItemTextSecondaryDiffGreen
-							: isRemovedNoms === true
-								? StyledListItemTextSecondaryDiffRed
-								: undefined
-					}
+					style={isNewNoms === true ? DiffGreenSXProps : isRemovedNoms === true ? DiffRedSXProps : undefined}
 				>
 					{option.label.toLowerCase()}
 				</span>,

@@ -1,23 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Google } from '@mui/icons-material';
-import { Alert, Button, Card, CardActions, CardContent, LinearProgress, Typography, styled } from '@mui/material';
-import { skipToken } from '@reduxjs/toolkit/query';
+import { Alert, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { useNotifications } from '@toolpad/core';
 import { isEmpty } from 'lodash-es';
-import { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import ErrorElement from '../../../ErrorElement';
-import NotFound from '../../../NotFound';
 import { metaPollingPlaceNomsFormValidationSchema } from '../../../app/forms/pollingPlaceForm';
-import { useAppSelector } from '../../../app/hooks';
-import { getIntegerParamOrUndefined } from '../../../app/routing/routingHelpers';
 import type { Election } from '../../../app/services/elections';
-import { useGetTaskQuery } from '../../../app/services/metaPollingPlaceTasks';
 import { useAddOrEditPollingBoothNomsMutation } from '../../../app/services/pollingPlaces';
 import type { StallFoodOptions } from '../../../app/services/stalls';
 import ElectionsManagerCard from '../../elections/ElectionsManagerCard';
-import { selectActiveElections } from '../../elections/electionsSlice';
 import type { IPollingPlaceNoms } from '../../pollingPlaces/pollingPlacesInterfaces';
 import MetaPollingPlaceHistorySummaryCard from '../common/MetaPollingPlaceHistorySummaryCard';
 import MetaPollingPlaceLinksManager from '../common/MetaPollingPlaceLinksManager';
@@ -28,58 +20,7 @@ import MetaPollingPlaceTaskActionBar from '../common/MetaPollingPlaceTaskActionB
 import MetaPollingPlaceTaskHistory from '../common/MetaPollingPlaceTaskHistory';
 import MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector from '../controls/MetaPollingPlacePollingPlaceNomsEditorFormNomsSelector';
 import type { IPollingPlaceAttachedToMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
-import {
-	type IMetaPollingPlaceTaskJob,
-	IMetaPollingPlaceTaskStatus,
-} from '../interfaces/metaPollingPlaceTasksInterfaces';
-
-const PageWrapper = styled('div')(({ theme }) => ({
-	paddingTop: theme.spacing(2),
-	paddingLeft: theme.spacing(2),
-	paddingRight: theme.spacing(2),
-	// A bit of extra padding bottom here to allow for the presence of <AppBar> pinned at the bottom of the screen
-	paddingBottom: theme.spacing(10),
-}));
-
-function EntrypointLayer1() {
-	const urlTaskId = getIntegerParamOrUndefined(useParams(), 'task_id');
-
-	const activeElections = useAppSelector((state) => selectActiveElections(state));
-
-	const {
-		data: metaPollingPlaceTaskJob,
-		isLoading,
-		isSuccess,
-		isError,
-	} = useGetTaskQuery(urlTaskId !== undefined ? urlTaskId : skipToken);
-
-	if (isLoading === true) {
-		return <LinearProgress color="secondary" />;
-	}
-
-	if (isError === true || isSuccess === false) {
-		return <ErrorElement />;
-	}
-
-	if (metaPollingPlaceTaskJob.status !== IMetaPollingPlaceTaskStatus.IN_PROGRESS) {
-		return <NotFound />;
-	}
-
-	const pollingPlaceForActiveElection =
-		activeElections.length > 0
-			? metaPollingPlaceTaskJob.meta_polling_place.polling_places.find(
-					(p) => p.election_name === activeElections[0].name,
-				)
-			: undefined;
-
-	return (
-		<MetaPollingPlaceTaskCrowdsourceFromFacebook
-			metaPollingPlaceTaskJob={metaPollingPlaceTaskJob}
-			activeElection={activeElections.length > 0 ? activeElections[0] : undefined}
-			pollingPlaceForActiveElection={pollingPlaceForActiveElection}
-		/>
-	);
-}
+import type { IMetaPollingPlaceTaskJob } from '../interfaces/metaPollingPlaceTasksInterfaces';
 
 interface Props {
 	metaPollingPlaceTaskJob: IMetaPollingPlaceTaskJob;
@@ -87,7 +28,7 @@ interface Props {
 	pollingPlaceForActiveElection?: IPollingPlaceAttachedToMetaPollingPlace;
 }
 
-function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
+export default function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 	const { metaPollingPlaceTaskJob, activeElection, pollingPlaceForActiveElection } = props;
 
 	const notifications = useNotifications();
@@ -151,6 +92,13 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 	// Form Management (End)
 	// ######################
 
+	// ######################
+	// Task Completion
+	// ######################
+	const [isReviewListTaskCompleted, setIsReviewListTaskCompleted] = useState(false);
+
+	const onReviewListActionCompleted = () => setIsReviewListTaskCompleted(true);
+
 	const [
 		addOrEditPollingPlaceNoms,
 		{
@@ -162,11 +110,11 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 
 	const onCompleteTask = useCallback(() => handleSubmit(onDoneWithForm)(), [handleSubmit, onDoneWithForm]);
 	// ######################
-	// Form Management (End)
+	// Task Completion (End)
 	// ######################
 
 	return (
-		<PageWrapper>
+		<React.Fragment>
 			<MetaPollingPlaceSummaryCard metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place} />
 
 			<MetaPollingPlaceHistorySummaryCard
@@ -176,7 +124,9 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 			/>
 
 			<MetaPollingPlacePollingPlacesReviewList
-				metaPollingPlace={metaPollingPlaceTaskJob.meta_polling_place}
+				metaPollingPlaceTaskJob={metaPollingPlaceTaskJob}
+				jobName={metaPollingPlaceTaskJob.job_name}
+				onActionCompleted={onReviewListActionCompleted}
 				cardSxProps={{ mt: 2 }}
 			/>
 
@@ -231,10 +181,11 @@ function MetaPollingPlaceTaskCrowdsourceFromFacebook(props: Props) {
 				onClickComplete={onCompleteTask}
 				isCloseAllowed={isDirty === false}
 				isDeferAllowed={isDirty === false}
-				isCompleteAllowed={pollingPlaceForActiveElection?.stall !== null || isDirty === true}
+				isCompleteAllowed={
+					(pollingPlaceForActiveElection?.stall !== null || isDirty === true) &&
+					(isReviewListTaskCompleted === true || metaPollingPlaceTaskJob.meta_polling_place.task_outcomes.passed_review)
+				}
 			/>
-		</PageWrapper>
+		</React.Fragment>
 	);
 }
-
-export default EntrypointLayer1;

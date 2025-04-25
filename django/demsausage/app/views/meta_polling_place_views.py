@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (
@@ -6,19 +6,23 @@ from demsausage.app.enums import (
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
+    PollingPlaceState,
 )
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import (
     Elections,
+    MetaPollingPlaces,
     MetaPollingPlacesLinks,
     MetaPollingPlacesRemarks,
     MetaPollingPlacesTasks,
+    PollingPlaces,
 )
 from demsausage.app.sausage.polling_places import get_active_polling_place_queryset
 from demsausage.app.serializers import (
     MetaPollingPlacesLinksCreateSerializer,
     MetaPollingPlacesLinksRetrieveSerializer,
     MetaPollingPlacesLinksUpdateSerializer,
+    MetaPollingPlacesRetrieveSerializer,
     MetaPollingPlacesTasksCreateSerializer,
     MetaPollingPlacesTasksSerializer,
 )
@@ -29,8 +33,7 @@ from rest_framework.response import Response
 
 from django.db import transaction
 from django.db.models import Count, F, Max, Q
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
-from django.utils import timezone
+from django.http import HttpResponseBadRequest
 
 
 class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
@@ -277,12 +280,6 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             # We'll have other things to protect against this, but they can still slip
             # through at the moment.
             if pollingPlace.meta_polling_place.id not in metaPollingPlaceIds:
-                print(
-                    pollingPlace.meta_polling_place.id,
-                    pollingPlace.chance_of_sausage,
-                    pollingPlace.address,
-                )
-
                 mpp_task = MetaPollingPlacesTasks(
                     meta_polling_place_id=pollingPlace.meta_polling_place.id,
                     job_name=job_name,
@@ -368,4 +365,179 @@ class MetaPollingPlacesLinksViewSet(viewsets.ModelViewSet):
             return MetaPollingPlacesLinksUpdateSerializer
         return super().get_serializer_class()
 
-    # @TOOD How do we turn off bits of ModelViewSet that we don't want?
+    # @TODO How do we turn off bits of ModelViewSet that we don't want?
+
+
+class MetaPollingPlacesViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows MetaPollingPlaces to be viewed and edited.
+    """
+
+    queryset = MetaPollingPlaces.objects
+    serializer_class = MetaPollingPlacesRetrieveSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        # if self.action in ["create"]:
+        #     return MetaPollingPlacesLinksCreateSerializer
+        # elif self.action in ["update", "partial_update"]:
+        #     return MetaPollingPlacesLinksUpdateSerializer
+        return super().get_serializer_class()
+
+    @action(
+        detail=False,
+        methods=["post"],
+    )
+    @transaction.atomic
+    def rearrange_from_mpp_review(self, request):
+        ######################
+        # IMPORTANT!
+        # We're using `BadRequest` throughout rather than nicer `HttpResponseBadRequest`
+        # so that any errors or issues that arise cause all changes to be rolledback
+        # inside the transaction.
+        ######################
+        moves = request.data.get("moves", None)
+        splits = request.data.get("splits", None)
+
+        if moves is None or splits is None:
+            return HttpResponseBadRequest("Invalid input")
+
+        ######################
+        # Process Moves:
+        # These are Polling Places that are moving to existing Meta Polling Place(s)
+        ######################
+        metaPollingPlaceIdsLosingPollingPlaces = []
+        metaPollingPlaceIdsGainingPollingPlaces = []
+
+        if len(moves) > 0:
+            # Repoint each Polling Place to the requested Meta Polling Place
+            for item in moves:
+                if "pollingPlaceId" in item and "metaPollingPlaceId" in item:
+                    if (
+                        MetaPollingPlaces.objects.filter(
+                            id=item["metaPollingPlaceId"]
+                        ).first()
+                        is None
+                    ):
+                        raise BadRequest(
+                            "Processing moves: A Meta Polling Place doesn't exist"
+                        )
+
+                    pp = PollingPlaces.objects.filter(id=item["pollingPlaceId"]).first()
+
+                    if pp is None:
+                        raise BadRequest(
+                            "Processing moves: A Polling Place doesn't exist"
+                        )
+
+                    if (
+                        pp.meta_polling_place_id
+                        not in metaPollingPlaceIdsLosingPollingPlaces
+                    ):
+                        metaPollingPlaceIdsLosingPollingPlaces.append(
+                            pp.meta_polling_place_id
+                        )
+
+                    pp.meta_polling_place_id = item["metaPollingPlaceId"]
+                    pp.save()
+
+                    if (
+                        item["metaPollingPlaceId"]
+                        not in metaPollingPlaceIdsGainingPollingPlaces
+                    ):
+                        metaPollingPlaceIdsGainingPollingPlaces.append(
+                            item["metaPollingPlaceId"]
+                        )
+
+            # Ensure we haven't just created any orphan MPPs
+            for metaPollingPlaceId in metaPollingPlaceIdsLosingPollingPlaces:
+                if (
+                    PollingPlaces.objects.filter(
+                        meta_polling_place=metaPollingPlaceId
+                    ).count()
+                    == 0
+                ):
+                    raise BadRequest(
+                        "Unable to process polling place moves. This would create an orphan Meta Polling Place."
+                    )
+
+        ######################
+        # Process Splits:
+        # These are Polling Places that are moving to a brand new draft Meta Polling Place
+        ######################
+        metaPollingPlaceIdsLosingPollingPlaces = []
+        pollingPlaceIdsToSplit = []
+
+        for pollingPlaceId in splits:
+            if (
+                isinstance(pollingPlaceId, int) is True
+                and PollingPlaces.objects.filter(id=pollingPlaceId).first() is not None
+            ):
+                pollingPlaceIdsToSplit.append(pollingPlaceId)
+            else:
+                raise BadRequest(
+                    f"'{pollingPlaceId}' is not a number or is not a valid Polling Place"
+                )
+
+        if len(pollingPlaceIdsToSplit) > 0:
+            pollingPlacesToSplit = PollingPlaces.objects.filter(
+                id__in=pollingPlaceIdsToSplit
+            )
+
+            # Create a brand new draft Meta Polling Place
+            # Even though we've reviewed its Polling Places, it still needs to be a draft so
+            # we can populate its core info later.
+            firstPollingPlace = pollingPlacesToSplit.order_by(
+                "-election__election_day", "id"
+            ).first()
+
+            mpp = MetaPollingPlaces(
+                name=firstPollingPlace.name,
+                premises=firstPollingPlace.premises,
+                jurisdiction=(
+                    firstPollingPlace.state
+                    if firstPollingPlace.state != PollingPlaceState.Overseas
+                    else None
+                ),
+                overseas=firstPollingPlace.state == PollingPlaceState.Overseas,
+                geom_location=firstPollingPlace.geom,
+                wheelchair_access=firstPollingPlace.wheelchair_access,
+            )
+
+            try:
+                mpp.full_clean()
+                mpp.save(force_insert=True)
+            except Exception as e:
+                raise BadRequest(
+                    f"Error creating MPP: {firstPollingPlace.name} (#{firstPollingPlace.id})"
+                )
+
+            # Now move all of the Polling Places to our brand new Meta Polling Place
+            for pollingPlace in pollingPlacesToSplit:
+                if (
+                    pollingPlace.meta_polling_place_id
+                    not in metaPollingPlaceIdsLosingPollingPlaces
+                ):
+                    metaPollingPlaceIdsLosingPollingPlaces.append(
+                        pollingPlace.meta_polling_place_id
+                    )
+
+                pollingPlace.meta_polling_place_id = mpp.id
+
+                pollingPlace.save()
+
+            # Ensure we haven't just created any orphan Meta Polling Places
+            for metaPollingPlaceId in metaPollingPlaceIdsLosingPollingPlaces:
+                if (
+                    PollingPlaces.objects.filter(
+                        meta_polling_place=metaPollingPlaceId
+                    ).count()
+                    == 0
+                ):
+                    raise BadRequest(
+                        "Unable to process polling place splits. This would create an orphan Meta Polling Place."
+                    )
+
+        return Response()
+
+    # @TODO How do we turn off bits of ModelViewSet that we don't want?
