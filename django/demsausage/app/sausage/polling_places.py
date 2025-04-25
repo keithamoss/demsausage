@@ -9,7 +9,9 @@ def get_active_polling_place_queryset():
     from demsausage.app.enums import PollingPlaceStatus
     from demsausage.app.models import PollingPlaces
 
-    return PollingPlaces.objects.select_related("noms").filter(status=PollingPlaceStatus.ACTIVE)
+    return PollingPlaces.objects.select_related("noms").filter(
+        status=PollingPlaceStatus.ACTIVE
+    )
 
 
 def find_by_distance(
@@ -47,8 +49,11 @@ def find_by_lookup_terms(election_id, lookup_terms, queryset):
 
     # 2. Secondly, try to match on name, premises, and state
     if lookup_terms["name"] is not None and lookup_terms["state"] is not None:
-        qs = queryset.filter(name__iexact=lookup_terms["name"].replace("_", " "), state__iexact=lookup_terms["state"].replace("_", " "))
-        
+        qs = queryset.filter(
+            name__iexact=lookup_terms["name"].replace("_", " "),
+            state__iexact=lookup_terms["state"].replace("_", " "),
+        )
+
         # Occasionally some elections will have no premises names on polling places
         if lookup_terms["premises"] is not None:
             qs = qs.filter(premises__iexact=lookup_terms["premises"].replace("_", " "))
@@ -74,19 +79,25 @@ def getFoodDescription(stall):
     if stall is None or stall.noms is None:
         return ""
 
-    descriptions = [{"key": "bbq", "descriptor": "sausage sizzle"},
-                    {"key": "cake", "descriptor": "cake stall"},
-                    {"key": "coffee", "descriptor": "coffee"},
-                    {"key": "vego", "descriptor": "savoury vegetarian options"},
-                    {"key": "halal", "descriptor": "halal options"},
-                    {"key": "bacon_and_eggs", "descriptor": "bacon and egg rolls or sandwiches"}]
+    descriptions = [
+        {"key": "bbq", "descriptor": "sausage sizzle"},
+        {"key": "cake", "descriptor": "cake stall"},
+        {"key": "coffee", "descriptor": "coffee"},
+        {"key": "vego", "descriptor": "savoury vegetarian options"},
+        {"key": "halal", "descriptor": "halal options"},
+        {"key": "bacon_and_eggs", "descriptor": "bacon and egg rolls or sandwiches"},
+    ]
     noms = []
 
     for description in descriptions:
         if description["key"] in stall.noms and stall.noms[description["key"]] is True:
             noms.append(description["descriptor"])
 
-    if "free_text" in stall.noms and stall.noms["free_text"] is not None and len(stall.noms["free_text"]) > 0:
+    if (
+        "free_text" in stall.noms
+        and stall.noms["free_text"] is not None
+        and len(stall.noms["free_text"]) > 0
+    ):
         noms.append("and additional options: {}".format(stall.noms["free_text"]))
     return ", ".join(noms)
 
@@ -112,34 +123,53 @@ def data_quality(election):
 
     report = []
     for polling_place in queryset.filter(election_id=election.id)[:5]:
-        matching_polling_places = find_by_distance(polling_place.geom, 0.2, limit=None, qs=queryset.exclude(election_id=election.id)).order_by("election_id")
+        matching_polling_places = find_by_distance(
+            polling_place.geom,
+            0.2,
+            limit=None,
+            qs=queryset.exclude(election_id=election.id),
+        ).order_by("election_id")
 
-        premiseses = list(set(matching_polling_places.values_list("premises", flat=True)))
+        premiseses = list(
+            set(matching_polling_places.values_list("premises", flat=True))
+        )
         names = list(set(matching_polling_places.values_list("name", flat=True)))
 
         matching = []
         for pp in matching_polling_places:
-            matching.append({
-                "name": pp.name,
-                "address": pp.address,
-                "premises": pp.premises,
-                "election_id": pp.election_id,
-                "lon": pp.geom.x,
-                "lat": pp.geom.y,
-                "distance_m": float(pp.distance.m),
-            })
+            matching.append(
+                {
+                    "name": pp.name,
+                    "address": pp.address,
+                    "premises": pp.premises,
+                    "election_id": pp.election_id,
+                    "lon": pp.geom.x,
+                    "lat": pp.geom.y,
+                    "distance_m": float(pp.distance.m),
+                }
+            )
 
-        if (len(matching_polling_places) <= 2 and _does_string_partially_iexist(polling_place.premises, premiseses + names) is False) or _does_string_partially_iexist(polling_place.premises, premiseses + names) is False:
-            report.append({
-                "name": polling_place.name,
-                "address": polling_place.address,
-                "premises": polling_place.premises,
-                "lon": polling_place.geom.x,
-                "lat": polling_place.geom.y,
-                "count": len(matching_polling_places),
-                "matching": matching,
-                "matching_premiseses": premiseses,
-                "matching_names": names,
-            })
+        if (
+            len(matching_polling_places) <= 2
+            and _does_string_partially_iexist(
+                polling_place.premises, premiseses + names
+            )
+            is False
+        ) or _does_string_partially_iexist(
+            polling_place.premises, premiseses + names
+        ) is False:
+            report.append(
+                {
+                    "name": polling_place.name,
+                    "address": polling_place.address,
+                    "premises": polling_place.premises,
+                    "lon": polling_place.geom.x,
+                    "lat": polling_place.geom.y,
+                    "count": len(matching_polling_places),
+                    "matching": matching,
+                    "matching_premiseses": premiseses,
+                    "matching_names": names,
+                }
+            )
 
     return report
