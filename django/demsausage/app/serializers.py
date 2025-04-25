@@ -31,6 +31,7 @@ from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
+from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count, Q
 from django.db.models.functions import TruncDay
 
@@ -508,16 +509,27 @@ class PollingPlacesSerializerForLookup(PollingPlacesSerializer):
 class PollingPlacesSerializerForMetaPollingPlaces(PollingPlacesSerializer):
     election_name = serializers.CharField(source="election.name", read_only=True)
     stall = serializers.SerializerMethodField()
+    distance_from_meta_polling_place_metres = serializers.SerializerMethodField()
 
     class Meta(PollingPlacesSerializer.Meta):
         fields = [field for field in PollingPlacesSerializer.Meta.fields] + [
             "election_name",
             "stall",
+            "distance_from_meta_polling_place_metres",
             "chance_of_sausage_stats",
         ]
 
     def get_stall(self, obj):
         return None if obj.noms is None else {"id": obj.noms_id, "noms": obj.noms.noms}
+
+    def get_distance_from_meta_polling_place_metres(self, obj):
+        return (
+            PollingPlaces.objects.filter(id=obj.id)
+            .annotate(distance=Distance("geom", obj.meta_polling_place.geom_location))
+            .values("distance")
+            .first()["distance"]
+            .m
+        )
 
 
 class PollingPlacesCSVDownloadSerializer(PollingPlacesSerializer):

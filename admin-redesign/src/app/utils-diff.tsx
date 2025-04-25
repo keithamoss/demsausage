@@ -6,10 +6,14 @@ export const DiffGreenSXProps = {
 	display: 'inline-block',
 };
 
-export const DiffRedSXProps = {
+export const DiffRedSXPropsNoStrikethrough = {
 	backgroundColor: '#fcdfde',
 	color: '#b29c96',
 	display: 'inline-block',
+};
+
+export const DiffRedSXProps = {
+	...DiffRedSXPropsNoStrikethrough,
 	textDecoration: 'line-through',
 };
 

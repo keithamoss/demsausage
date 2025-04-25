@@ -1,6 +1,6 @@
 import { ListItem, ListItemText, Typography } from '@mui/material';
 import React from 'react';
-import { diffWordsAndFormat } from '../../../app/utils-diff';
+import { DiffRedSXPropsNoStrikethrough, diffWordsAndFormat } from '../../../app/utils-diff';
 import type {
 	IMetaPollingPlace,
 	IPollingPlaceAttachedToMetaPollingPlace,
@@ -32,6 +32,17 @@ function MetaPollingPlacePollingPlacesReviewListItem(props: Props) {
 						</Typography>
 						<Typography component={'span'} sx={{ display: 'block' }}>
 							{pollingPlace.name}
+						</Typography>
+						<Typography
+							component={'span'}
+							sx={{
+								display: 'block',
+								'& .distance':
+									pollingPlace.distance_from_meta_polling_place_metres > 0 ? DiffRedSXPropsNoStrikethrough : undefined,
+							}}
+						>
+							Distance from Meta Polling Place:{' '}
+							<span className="distance">{Math.round(pollingPlace.distance_from_meta_polling_place_metres)}m</span>
 						</Typography>
 						<Typography component={'span'} sx={{ display: 'block' }}>
 							{pollingPlace.election_name}
