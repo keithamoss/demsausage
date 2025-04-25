@@ -50,25 +50,25 @@ export default function AboutPage() {
 				<Question>What is this?</Question>
 				<Answer>A map of sausage and cake availability on election day.</Answer>
 
-				<Question>I still don&apos;t understand</Question>
-				<Answer>It&apos;s practically part of the Australian Constitution. Or something.</Answer>
+				<Question>I still don't understand</Question>
+				<Answer>It's practically part of the Australian Constitution. Or something.</Answer>
 
 				<Question>But how do you get all of the sausage sizzles?</Question>
 				<Answer>
 					<p>
-						We crowdsource (or is it crowdsauce?) data from Twitter, Facebook, and Instagram and from the stalls that
-						people submit to us on this here website.
+						We crowdsource (or is it crowdsauce?) data from social media, the web, and from the stalls that people
+						submit to us on this here website.
 					</p>
 					<p>
-						To let us know about sausage and cake availability (or the absence thereof), tweet using the hashtag{' '}
-						<a href="https://twitter.com/intent/tweet?hashtags=democracysausage">#democracysausage</a> or send us a
-						Direct Message. We&apos;ll be keeping an eye out.
+						To let us know about sausage and cake availability (or the absence thereof), the best method is to use the
+						"Add stall" functionality on our website - you can submit as either a stall owner or just a 'tip-off' as
+						appropriate. You can also contact us via our various social media channels listed below.
 					</p>
 					<p>
-						To make this work, we&apos;ve also used Australian Electoral Commission polling place data (likewise from
-						the various state electoral commissions).
+						To make this work, we've also used Australian Electoral Commission polling place data (likewise from the
+						state and territory electoral commissions).
 					</p>
-					Democracy Sausage incorporates data that is: © Commonwealth of Australia (Australian Electoral Commission){' '}
+					Democracy Sausage incorporates data that is © Commonwealth of Australia (Australian Electoral Commission){' '}
 					{new Date().getFullYear()}.
 				</Answer>
 
@@ -93,15 +93,15 @@ export default function AboutPage() {
 				<Question>What does the halal symbol indicate?</Question>
 				<Answer>
 					<p>
-						Firstly, it&apos;s important to note that our site can&apos;t actually provide halal certification, and we
-						display the symbol based on information submitted to us by the folks running the stalls themselves.
+						Firstly, it's important to note that our site can't actually provide halal certification, and we display the
+						symbol based on information submitted to us by the folks running the stalls themselves.
 					</p>
 					<p>
 						The halal symbol we use is widely understood by our users to indicate halal. (From what we understand, it is
-						just one of a variation of halal seals / stamps that are used in Australia - though we&apos;re happy to be
-						corrected on that). For the curious, the ABC&apos;s Bush Telegraph has more in their segment{' '}
+						just one of a variation of halal seals / stamps that are used in Australia - though we're happy to be
+						corrected on that). For the curious, the ABC's Bush Telegraph has more in their segment{' '}
 						<a href="https://www.abc.net.au/radionational/programs/archived/bushtelegraph/halal/5843904">
-							What&apos;s the big fuss about Halal certification?
+							What's the big fuss about Halal certification?
 						</a>
 						.
 					</p>
@@ -109,27 +109,36 @@ export default function AboutPage() {
 
 				<Question>Who are you?</Question>
 				<Answer>
-					<p>We&apos;re six people, three babies, three cats, and some parrots.</p>
+					<p>We're six people, three children, three cats, and some birds.</p>
 					<p>
 						Well, that and a whole bunch of dedicated and hard working volunteers on election days who help out with
 						crowdsaucing sausage sizzle locations.
 					</p>
 					<p>
-						We&apos;re enthusiastic about democracy sausage and making elections just a little bit more fun. You can
-						find us on Twitter at <a href="http://twitter.com/DemSausage">@DemSausage</a> or email us at{' '}
-						<a href="mailto:help@democracysausage.org">help@democracysausage.org</a>.
+						We're enthusiastic about democracy sausage and making elections just a little bit more fun. You can email us
+						at <a href="mailto:help@democracysausage.org">help@democracysausage.org</a> or else find us on social media:
+						<p>
+							Bluesky: @democracysausage.org
+							<br />
+							Instagram, Reddit, TikTok, Threads all at ausdemocracysausage
+							<br />
+							Facebook at AusDemocracySausage
+							<br />
+							Twitter at DemSausage
+						</p>
 					</p>
 				</Answer>
 
 				<Question>Who do we need permission from to run a sausage sizzle fundraiser at our school?</Question>
 				<Answer>
-					Well your school, first of all (but you knew that already). Beyond that, your local government may require you
-					to get a permit to run a temporary food stall - so give them a call to find out. There&apos;s also some pretty
-					basic food safety regulations you&apos;ll need to abide by - check out foodstandards.gov.au{' '}
+					Well your school or polling place host site, first of all. Beyond that, your local government may require you
+					to get a permit to run a temporary food stall - so give them a call to find out. There's also some pretty
+					basic food safety regulations you'll need to abide by - check out foodstandards.gov.au{' '}
 					<a href="http://www.foodstandards.gov.au/consumer/safety/faqsafety/pages/foodsafetyfactsheets/charitiesandcommunityorganisationsfactsheets/sausagesizzlesandbar1478.aspx">
 						for more information
 					</a>
-					.
+					. Then you need to work out how you're going to run the stand - volunteers, payment systems / cash floats,
+					preorders of sausages, onions, bread and sauces.
 				</Answer>
 
 				<Question>Are you part of any political parties?</Question>
@@ -138,8 +147,8 @@ export default function AboutPage() {
 				<Question>Will you share my info with others?</Question>
 				<Answer>
 					<p>
-						If you submit a stall to us, we won&apos;t share any personal information about you - such as your email
-						address, Twitter handle, et cetera.
+						If you submit a stall to us, we won't share any personal information about you - such as your email address,
+						social media handle, et cetera.
 					</p>
 					<p>
 						We do occasionally work with other websites to share data about sausage sizzles, but we only ever send them

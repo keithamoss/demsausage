@@ -337,6 +337,6 @@ export const supportingIcons = {
 		},
 		label: 'No reports',
 		value: 'grey_question',
-		description: "We don't have any reports for this polling place",
+		description: "We don't have any reports for this polling place at this election",
 	},
 };

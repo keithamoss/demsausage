@@ -72,6 +72,12 @@ export default function AddStallFormPrivacyNotice() {
 				publicly available.
 				<br />
 				<br />
+				We may use the email you provide to contact you to confirm details of your stall, or in the lead-up to future
+				elections. These emails are to inform you when our website is open for stall entries in case you're planning
+				another sausage sizzle. These emails always include an opt out option for future communication. As mentioned
+				above, we do not provide your email to third parties.
+				<br />
+				<br />
 				Got questions or concerns about any of this? Just get in touch with us at{' '}
 				<a href="mailto:ausdemocracysausage@gmail.com">ausdemocracysausage@gmail.com</a> - we&apos;re very happy to
 				discuss.

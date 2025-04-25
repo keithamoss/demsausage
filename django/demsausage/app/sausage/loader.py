@@ -395,10 +395,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 self.polling_places = processed_polling_places
 
         _filter()
-        _exclude_columns()
         _rename_columns()
         _add_columns()
         _create_extras()
+        _exclude_columns()
         # _skip_blank_coordinates()
         _run_regexes()
 
@@ -1262,9 +1262,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         def _fetch_matching(polling_place):
             if polling_place.ec_id is not None:
-                self.logger.info(
-                    f"Doing MPP migration by ec_id for {polling_place.name}"
-                )
+                # self.logger.info(
+                #     f"Doing MPP migration by ec_id for {polling_place.name}"
+                # )
                 results = PollingPlaces.objects.filter(
                     election=self.election, status=PollingPlaceStatus.DRAFT
                 ).filter(ec_id=polling_place.ec_id)

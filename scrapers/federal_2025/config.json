@@ -55,7 +55,8 @@
             "OrdVoteEst",
             "DecVoteEst",
             "NoOrdIssuingOff",
-            "NoOfDecIssuingOff"
+            "NoOfDecIssuingOff",
+            "AdvBoothLocation"
         ]
     },
     "cleaning_regexes": [

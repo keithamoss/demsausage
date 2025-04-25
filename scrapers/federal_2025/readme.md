@@ -26,6 +26,13 @@ Then run the load process with `config.json` as per normal.
 
 # Data Quality Issues
 
+## 25 April 2025 (loaded same day)
+
+Source: `prdelms.gaz.statics.250425.09.00.02`
+Source: Overseas polling places dataset built and included for the first time April 25th
+
+No issues identified.
+
 ## 16 April 2025 (loaded same day)
 
 Source: `prdelms.gaz.statics.250416.09.00.02`

@@ -85,7 +85,8 @@ export default function AddStallIntroMessage(props: Props) {
 
 					<StyledUnorderedList>
 						<li>
-							Please do not submit entries that are offensive, political, or do not relate to an election day stall
+							Please do not submit entries that are offensive, political, or do not relate to an election day stall at a
+							polling place
 						</li>
 						<li>
 							If you are running a stall, please also make sure that you have authorisation to run your fundraising
