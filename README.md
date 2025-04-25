@@ -226,3 +226,39 @@ The lazy "Eh, just dump everything and reload it rather than trying to upgrade i
 Performed on 30 October, 2022.
 
 Had to run through [these steps](https://www.crunchydata.com/blog/how-to-upgrade-postgresql-passwords-to-scram) to change the password authentication method being used.
+
+## Repointing the database
+When the EC2 we're currently running the database in reboots, it's public IP and public DNS name change.
+
+We then need to change it in a whole bunch of places.
+
+### Updating SSH
+
+1. Update `~/.ssh/known_hosts`
+
+### Updating Postico
+
+1. Update the `aws-db` connection
+
+### Updating secrets on the severs
+1. `sausage-db.env`: Update `DB_HOST` to point to the Public IPv4 DNS name
+2. `sausage-web.env`: Update `RQ_REDIS_URL` to point to the Public IPv4 address (PRODUCTION only)
+3. `rq-dashboard.env`: Update `RQ_DASHBOARD_REDIS_URL` to point to the Public IPv4 address (PRODUCTION only)
+
+### Updating local secrets files
+As above.
+
+1. `prod/sausage-web.env`: Update `RQ_REDIS_URL`
+2. `staging-real/rq-dashboard.env`: Update `RQ_DASHBOARD_REDIS_URL`
+3. `staging-real/sausage-db.env`: Update `DB_HOST`
+4. `staging-real/sausage-web.env`: Update `RQ_REDIS_URL`
+
+### Updating database management local secrets files
+
+1. `db-pg/scripts/secrets/sausage-prod-db.env`: Update `DB_HOST` to point to the Public IPv4 DNS name
+2. `db-pg/scripts/secrets/sausage-staging-db.env`: Update `DB_HOST` to point to the Public IPv4 DNS name
+
+### Updating GHA secrets
+As above.
+
+1. Update `SAUSAGE_WEB_PRODUCTION_ENV` with `prod/sausage-web.env`
