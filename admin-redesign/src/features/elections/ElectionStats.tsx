@@ -117,170 +117,12 @@ function ElectionStats(props: Props) {
 				</Toolbar>
 			</AppBar>
 
-			{/* ######################
-						Submission Type by Day
-				###################### */}
 			<Paper elevation={0} sx={{ p: 2 }}>
-				{election.stats.subs_by_type_and_day.length > 0 && (
-					<Card variant="outlined">
-						<CardHeader
-							sx={{
-								p: 1,
-								pb: 0,
-								'& .MuiCardHeader-title': {
-									fontSize: 18,
-									fontWeight: 700,
-								},
-							}}
-							avatar={
-								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
-								</Avatar>
-							}
-							title="Submission Type by Day"
-						/>
-
-						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
-							<BarChart
-								dataset={election.stats.subs_by_type_and_day}
-								series={Object.values(StallSubmitterType).map((i) => ({
-									dataKey: i,
-									stack: 'total',
-									label: getStallSubmitterTypeName(i),
-								}))}
-								onItemClick={(event, d) => {
-									const data = election.stats.subs_by_type_and_day[d.dataIndex];
-
-									notifications.show(
-										<React.Fragment>
-											<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
-
-											<TableContainer component={Paper}>
-												<Table size="small">
-													<TableBody>
-														{Object.entries(data).map(([key, value]) =>
-															key !== 'day' ? (
-																<StyledTableRow key={key}>
-																	<StyledTableCell component="th" scope="row">
-																		{getStallSubmitterTypeName(key as StallSubmitterType)}
-																	</StyledTableCell>
-																	<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
-																</StyledTableRow>
-															) : undefined,
-														)}
-													</TableBody>
-												</Table>
-											</TableContainer>
-										</React.Fragment>,
-										{
-											severity: 'success',
-											autoHideDuration: 6000,
-										},
-									);
-								}}
-								margin={{ top: document.documentElement.clientWidth <= 600 ? 90 : 50, bottom: 20 }}
-								grid={{ vertical: document.documentElement.clientWidth >= 600 }}
-								axisHighlight={{
-									x: 'line',
-								}}
-								xAxis={[
-									{
-										dataKey: 'day',
-										scaleType: 'band',
-										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
-									},
-								]}
-								height={300}
-							/>
-						</CardContent>
-					</Card>
-				)}
-
 				{/* ######################
-						Triage Actions by Day
-				###################### */}
-				{election.stats.triage_actions_by_day.length > 0 && (
-					<Card variant="outlined" sx={{ mt: 3 }}>
-						<CardHeader
-							sx={{
-								p: 1,
-								pb: 0,
-								'& .MuiCardHeader-title': {
-									fontSize: 18,
-									fontWeight: 700,
-								},
-							}}
-							avatar={
-								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
-								</Avatar>
-							}
-							title="Triage Actions by Day"
-						/>
-
-						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
-							<BarChart
-								dataset={election.stats.triage_actions_by_day}
-								series={Object.values(StallStatus)
-									.filter((i) => i !== StallStatus.Pending)
-									.map((i) => ({
-										dataKey: i,
-										stack: 'total',
-										label: i,
-									}))}
-								onItemClick={(event, d) => {
-									const data = election.stats.triage_actions_by_day[d.dataIndex];
-
-									notifications.show(
-										<React.Fragment>
-											<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
-
-											<TableContainer component={Paper}>
-												<Table size="small">
-													<TableBody>
-														{Object.entries(data).map(([key, value]) =>
-															key !== 'day' ? (
-																<StyledTableRow key={key}>
-																	<StyledTableCell component="th" scope="row">
-																		{key}
-																	</StyledTableCell>
-																	<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
-																</StyledTableRow>
-															) : undefined,
-														)}
-													</TableBody>
-												</Table>
-											</TableContainer>
-										</React.Fragment>,
-										{
-											severity: 'success',
-											autoHideDuration: 6000,
-										},
-									);
-								}}
-								margin={{ top: 50, bottom: 20 }}
-								grid={{ vertical: document.documentElement.clientWidth >= 600 }}
-								axisHighlight={{
-									x: 'line',
-								}}
-								xAxis={[
-									{
-										dataKey: 'day',
-										scaleType: 'band',
-										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
-									},
-								]}
-								height={300}
-							/>
-						</CardContent>
-					</Card>
-				)}
-
-				{/* ######################
-						% of Polling Places with data 
+						Polling places with data 
 						(Current and historical elections)
 				###################### */}
-				<Card variant="outlined" sx={{ mt: 3 }}>
+				<Card variant="outlined">
 					<CardHeader
 						sx={{
 							p: 1,
@@ -295,10 +137,14 @@ function ElectionStats(props: Props) {
 								<AutoGraph />
 							</Avatar>
 						}
-						title="% of polling places with data "
+						title="Polling places with data "
 					/>
 
 					<CardContent sx={{ pt: 2, pb: '16px !important' }}>
+						<Typography variant="body1" sx={{ mb: 2 }}>
+							Polling places with data of any sort - noms or Red Cross of Shame.
+						</Typography>
+
 						<BarChart
 							dataset={datasetPollingPlaceWithData}
 							yAxis={[
@@ -371,7 +217,222 @@ function ElectionStats(props: Props) {
 				</Card>
 
 				{/* ######################
-						Top Submitters
+						Polling places with data by source
+				###################### */}
+				{election.stats.by_source.length > 0 && (
+					<Card variant="outlined" sx={{ mt: 3 }}>
+						<CardHeader
+							sx={{
+								p: 1,
+								pb: 0,
+								'& .MuiCardHeader-title': {
+									fontSize: 18,
+									fontWeight: 700,
+								},
+							}}
+							avatar={
+								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
+									<AutoGraph />
+								</Avatar>
+							}
+							title="Polling places with data by source"
+						/>
+
+						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
+							<Typography variant="body1" sx={{ mb: 2 }}>
+								Polling places with data of any sort - noms or Red Cross of Shame.
+							</Typography>
+
+							<TableContainer
+								component={Paper}
+								sx={{
+									mt: 1,
+								}}
+							>
+								<Table size="small">
+									<TableHead>
+										<TableRow>
+											<StyledTableCell>Source</StyledTableCell>
+											<StyledTableCell align="right">Count</StyledTableCell>
+										</TableRow>
+									</TableHead>
+
+									<TableBody>
+										{election.stats.by_source.map((row) => (
+											<StyledTableRow key={row.source}>
+												<StyledTableCell component="th" scope="row">
+													{row.source}
+												</StyledTableCell>
+												<StyledTableCell align="right">{row.count}</StyledTableCell>
+											</StyledTableRow>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</CardContent>
+					</Card>
+				)}
+
+				{/* ######################
+						Submission type by day
+				###################### */}
+				{election.stats.subs_by_type_and_day.length > 0 && (
+					<Card variant="outlined" sx={{ mt: 3 }}>
+						<CardHeader
+							sx={{
+								p: 1,
+								pb: 0,
+								'& .MuiCardHeader-title': {
+									fontSize: 18,
+									fontWeight: 700,
+								},
+							}}
+							avatar={
+								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
+									<AutoGraph />
+								</Avatar>
+							}
+							title="Submission type by day"
+						/>
+
+						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
+							<BarChart
+								dataset={election.stats.subs_by_type_and_day}
+								series={Object.values(StallSubmitterType).map((i) => ({
+									dataKey: i,
+									stack: 'total',
+									label: getStallSubmitterTypeName(i),
+								}))}
+								onItemClick={(event, d) => {
+									const data = election.stats.subs_by_type_and_day[d.dataIndex];
+
+									notifications.show(
+										<React.Fragment>
+											<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
+
+											<TableContainer component={Paper}>
+												<Table size="small">
+													<TableBody>
+														{Object.entries(data).map(([key, value]) =>
+															key !== 'day' ? (
+																<StyledTableRow key={key}>
+																	<StyledTableCell component="th" scope="row">
+																		{getStallSubmitterTypeName(key as StallSubmitterType)}
+																	</StyledTableCell>
+																	<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
+																</StyledTableRow>
+															) : undefined,
+														)}
+													</TableBody>
+												</Table>
+											</TableContainer>
+										</React.Fragment>,
+										{
+											severity: 'success',
+											autoHideDuration: 6000,
+										},
+									);
+								}}
+								margin={{ top: document.documentElement.clientWidth <= 600 ? 90 : 50, bottom: 20 }}
+								grid={{ vertical: document.documentElement.clientWidth >= 600 }}
+								axisHighlight={{
+									x: 'line',
+								}}
+								xAxis={[
+									{
+										dataKey: 'day',
+										scaleType: 'band',
+										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
+									},
+								]}
+								height={300}
+							/>
+						</CardContent>
+					</Card>
+				)}
+
+				{/* ######################
+						Triage actions by day
+				###################### */}
+				{election.stats.triage_actions_by_day.length > 0 && (
+					<Card variant="outlined" sx={{ mt: 3 }}>
+						<CardHeader
+							sx={{
+								p: 1,
+								pb: 0,
+								'& .MuiCardHeader-title': {
+									fontSize: 18,
+									fontWeight: 700,
+								},
+							}}
+							avatar={
+								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
+									<AutoGraph />
+								</Avatar>
+							}
+							title="Triage actions by day"
+						/>
+
+						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
+							<BarChart
+								dataset={election.stats.triage_actions_by_day}
+								series={Object.values(StallStatus)
+									.filter((i) => i !== StallStatus.Pending)
+									.map((i) => ({
+										dataKey: i,
+										stack: 'total',
+										label: i,
+									}))}
+								onItemClick={(event, d) => {
+									const data = election.stats.triage_actions_by_day[d.dataIndex];
+
+									notifications.show(
+										<React.Fragment>
+											<AlertTitle>{dayjs(data.day).format('D MMMM YYYY')}</AlertTitle>
+
+											<TableContainer component={Paper}>
+												<Table size="small">
+													<TableBody>
+														{Object.entries(data).map(([key, value]) =>
+															key !== 'day' ? (
+																<StyledTableRow key={key}>
+																	<StyledTableCell component="th" scope="row">
+																		{key}
+																	</StyledTableCell>
+																	<StyledTableCell align="right">{value !== null ? value : 0}</StyledTableCell>
+																</StyledTableRow>
+															) : undefined,
+														)}
+													</TableBody>
+												</Table>
+											</TableContainer>
+										</React.Fragment>,
+										{
+											severity: 'success',
+											autoHideDuration: 6000,
+										},
+									);
+								}}
+								margin={{ top: 50, bottom: 20 }}
+								grid={{ vertical: document.documentElement.clientWidth >= 600 }}
+								axisHighlight={{
+									x: 'line',
+								}}
+								xAxis={[
+									{
+										dataKey: 'day',
+										scaleType: 'band',
+										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
+									},
+								]}
+								height={300}
+							/>
+						</CardContent>
+					</Card>
+				)}
+
+				{/* ######################
+						Top submitters
 				###################### */}
 				{election.stats.top_submitters.length > 0 && (
 					<Card variant="outlined" sx={{ mt: 3 }}>
@@ -389,7 +450,7 @@ function ElectionStats(props: Props) {
 									<AutoGraph />
 								</Avatar>
 							}
-							title="Top Submitters"
+							title="Top submitters"
 						/>
 
 						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
@@ -424,60 +485,7 @@ function ElectionStats(props: Props) {
 				)}
 
 				{/* ######################
-						Submissions by Source
-				###################### */}
-				{election.stats.by_source.length > 0 && (
-					<Card variant="outlined" sx={{ mt: 3 }}>
-						<CardHeader
-							sx={{
-								p: 1,
-								pb: 0,
-								'& .MuiCardHeader-title': {
-									fontSize: 18,
-									fontWeight: 700,
-								},
-							}}
-							avatar={
-								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
-								</Avatar>
-							}
-							title="Submissions by Source"
-						/>
-
-						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
-							<TableContainer
-								component={Paper}
-								sx={{
-									mt: 1,
-								}}
-							>
-								<Table size="small">
-									<TableHead>
-										<TableRow>
-											<StyledTableCell>Source</StyledTableCell>
-											<StyledTableCell align="right">Count</StyledTableCell>
-										</TableRow>
-									</TableHead>
-
-									<TableBody>
-										{election.stats.by_source.map((row) => (
-											<StyledTableRow key={row.source}>
-												<StyledTableCell component="th" scope="row">
-													{row.source}
-												</StyledTableCell>
-												<StyledTableCell align="right">{row.count}</StyledTableCell>
-											</StyledTableRow>
-										))}
-									</TableBody>
-								</Table>
-							</TableContainer>
-						</CardContent>
-					</Card>
-				)}
-
-				{/* ######################
-						Stats for Nerds
+						Stats for nerds
 				###################### */}
 				{election.stats.noms_changes_by_user.length > 0 && (
 					<Card variant="outlined" sx={{ mt: 3 }}>
@@ -495,7 +503,7 @@ function ElectionStats(props: Props) {
 									<AutoGraph />
 								</Avatar>
 							}
-							title="Stats for Nerds"
+							title="Stats for nerds"
 						/>
 
 						<CardContent sx={{ p: 2, pb: '16px !important' }}>
