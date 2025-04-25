@@ -1,4 +1,4 @@
-import { AutoGraph, Close } from '@mui/icons-material';
+import { BarChart as BarChartIcon, Close, DirectionsRun, StackedBarChart, TableChart } from '@mui/icons-material';
 import {
 	AlertTitle,
 	AppBar,
@@ -134,7 +134,7 @@ function ElectionStats(props: Props) {
 						}}
 						avatar={
 							<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-								<AutoGraph />
+								<BarChartIcon sx={{ transform: 'rotate(90deg)' }} />
 							</Avatar>
 						}
 						title="Polling places with data"
@@ -235,7 +235,7 @@ function ElectionStats(props: Props) {
 							}}
 							avatar={
 								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
+									<TableChart />
 								</Avatar>
 							}
 							title="Polling places with data by source"
@@ -292,7 +292,7 @@ function ElectionStats(props: Props) {
 							}}
 							avatar={
 								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
+									<StackedBarChart />
 								</Avatar>
 							}
 							title="Submission type by day"
@@ -348,6 +348,11 @@ function ElectionStats(props: Props) {
 										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
 									},
 								]}
+								sx={{
+									// Workaround to make touch scrolling on mobile to work
+									// Ref: https://github.com/mui/mui-x/issues/13885
+									'&&': { touchAction: 'auto' },
+								}}
 								height={300}
 							/>
 						</CardContent>
@@ -370,7 +375,7 @@ function ElectionStats(props: Props) {
 							}}
 							avatar={
 								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
+									<StackedBarChart />
 								</Avatar>
 							}
 							title="Triage actions by day"
@@ -428,6 +433,11 @@ function ElectionStats(props: Props) {
 										valueFormatter: (value, context) => dayjs(value).format('D MMM'),
 									},
 								]}
+								sx={{
+									// Workaround to make touch scrolling on mobile to work
+									// Ref: https://github.com/mui/mui-x/issues/13885
+									'&&': { touchAction: 'auto' },
+								}}
 								height={300}
 							/>
 						</CardContent>
@@ -450,7 +460,7 @@ function ElectionStats(props: Props) {
 							}}
 							avatar={
 								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
+									<TableChart />
 								</Avatar>
 							}
 							title="Top submitters"
@@ -503,7 +513,7 @@ function ElectionStats(props: Props) {
 							}}
 							avatar={
 								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
-									<AutoGraph />
+									<DirectionsRun />
 								</Avatar>
 							}
 							title="Stats for nerds"
