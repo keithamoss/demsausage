@@ -627,7 +627,7 @@ version = "0.16.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
 optional = false
 python-versions = ">=3.8"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
     {file = "h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"},
     {file = "h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1"},
@@ -1326,14 +1326,14 @@ dev = ["coverage (>=3.6)"]
 
 [[package]]
 name = "social-auth-core"
-version = "4.5.6"
+version = "4.6.0"
 description = "Python social authentication made simple."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "social_auth_core-4.5.6-py3-none-any.whl", hash = "sha256:43114bbc50f99789f7aadfd4943c2e15aee5e2f8c8612ad67fc4115b70b46ee1"},
-    {file = "social_auth_core-4.5.6.tar.gz", hash = "sha256:14753d4cf870b820918729ce8a2dfe51f332075528fb13bed908701a8486da80"},
+    {file = "social_auth_core-4.6.0-py3-none-any.whl", hash = "sha256:6d940c458c529d3689f2ceca2d944911a4b02d76e82d154688d1d3f75f12d168"},
+    {file = "social_auth_core-4.6.0.tar.gz", hash = "sha256:ecf9ae1e2e5bb52741cedcaede943fe89a8ada23f9aad018f350d4839a9d3a90"},
 ]
 
 [package.dependencies]
@@ -1349,9 +1349,10 @@ requests-oauthlib = ">=0.6.1"
 all = ["social-auth-core[azuread]", "social-auth-core[google-onetap]", "social-auth-core[saml]", "social-auth-core[shopify]"]
 allpy3 = ["social-auth-core[all]"]
 azuread = ["cryptography (>=2.1.1)"]
-dev = ["coverage (>=3.6)", "flake8 (>=5.0.4)", "httpretty (>=1.1.0,<1.2.0)", "pyright (>=1.1.391)", "pytest (>=4.5)", "pytest-cov (>=2.7.1)", "urllib3 (>=2.2.0,<2.3.0)"]
-google-onetap = ["google-auth (>=2.38.0,<2.39.0)"]
-saml = ["lxml (>=5.2.1,<5.3.0)", "python3-saml (>=1.5.0)"]
+dev = ["coverage (>=3.6)", "flake8 (>=5.0.4)", "google-auth-stubs (==0.3.0)", "mypy (==1.15.0)", "pyright (==1.1.400)", "pytest (>=4.5)", "pytest-cov (>=2.7.1)", "pytest-xdist (>=3.6.1)", "responses (==0.25.7)", "types-defusedxml (==0.7.0.20240218)", "types-oauthlib (==3.2.0.20250408)", "types-python-jose (==3.4.0.20250224)", "types-requests (==2.32.0.20250328)", "types-requests-oauthlib (==2.0.0.20250306)"]
+google-onetap = ["google-auth (>=2.39.0,<2.40.0)"]
+ping = ["python-jose (>=3.4.0,<4.0)"]
+saml = ["python3-saml (>=1.5.0)"]
 shopify = ["ShopifyAPI"]
 
 [[package]]
@@ -1617,4 +1618,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "3e9333983c5246855a89f8bc01c8ab48870b0325afdef7a3e9f79f5094d2bcaf"
+content-hash = "7caaf82e38b12a2178666bc9a685368229348bd61b96eebecbde92e463aa87e3"
