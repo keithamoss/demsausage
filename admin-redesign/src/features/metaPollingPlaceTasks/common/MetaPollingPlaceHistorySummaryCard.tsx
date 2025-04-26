@@ -50,7 +50,7 @@ function MetaPollingPlaceHistorySummaryCard(props: Props) {
 		<Card variant="outlined" sx={cardSxProps}>
 			<CardContent sx={{ pb: `${theme.spacing(2)} !important` }}>
 				{pollingPlaceForActiveElection !== undefined && pollingPlaceForActiveElection.stall !== null && (
-					<Alert severity="success" icon={<Radar />} sx={{ mb: 1 }}>
+					<Alert severity="warning" icon={<Radar />} sx={{ mb: 1 }}>
 						This polling place already has some stall data.
 					</Alert>
 				)}
