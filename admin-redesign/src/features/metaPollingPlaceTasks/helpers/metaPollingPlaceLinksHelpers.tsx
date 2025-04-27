@@ -1,4 +1,4 @@
-import { Facebook, Link, QuestionMark, Verified } from '@mui/icons-material';
+import { Facebook, Groups, Link, Newspaper, Verified } from '@mui/icons-material';
 import type { ReactElement } from 'react';
 import { IMetaPollingPlaceLinkType } from '../interfaces/metaPollingPlaceLinksInterfaces';
 
@@ -8,9 +8,11 @@ export const getMetaPollingPlaceLinkTypeIcon = (category: IMetaPollingPlaceLinkT
 			return <Verified />;
 		case IMetaPollingPlaceLinkType.FACEBOOK:
 			return <Facebook />;
+		case IMetaPollingPlaceLinkType.P_AND_C:
+			return <Groups />;
+		case IMetaPollingPlaceLinkType.NEWSLETTER:
+			return <Newspaper />;
 		case IMetaPollingPlaceLinkType.OTHER:
 			return <Link />;
-		default:
-			return <QuestionMark />;
 	}
 };

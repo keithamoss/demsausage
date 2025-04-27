@@ -129,6 +129,8 @@ class MetaPollingPlaceContactCategory(str, EnumBase):
 class MetaPollingPlaceLinkType(str, EnumBase):
     OFFICIAL = "Official Website"
     FACEBOOK = "Facebook"
+    P_AND_C = "P&C"
+    NEWSLETTER = "Newsletter"
     OTHER = "Other"
 
     def __str__(self):

@@ -12,5 +12,7 @@ export interface IMetaPollingPlaceLink extends IMetaPollingPlaceLinkModifiablePr
 export enum IMetaPollingPlaceLinkType {
 	OFFICIAL = 'Official Website',
 	FACEBOOK = 'Facebook',
+	P_AND_C = 'P&C',
+	NEWSLETTER = 'Newsletter',
 	OTHER = 'Other',
 }
