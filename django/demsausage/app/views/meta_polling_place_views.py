@@ -32,7 +32,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from django.db import transaction
-from django.db.models import Count, F, Max, Q
+from django.db.models import Case, Count, F, Max, Q, When
 from django.http import HttpResponseBadRequest
 
 
@@ -247,10 +247,10 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             get_active_polling_place_queryset()
             .filter(election_id=election_id)
             .filter(noms__isnull=True)
-            # Exclude any MPPs that already have an active task, or deferred (config dependent), of this type
+            # Exclude any MPPs that already have an active, or deferred (config dependent), task of this type
             .exclude(
                 meta_polling_place__in=MetaPollingPlacesTasks.objects.filter(
-                    exclusionFilter
+                    exclusionFilter,
                 )
                 .filter(category=MetaPollingPlaceTaskCategory.CROWDSOURCING)
                 .filter(type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK)
@@ -265,35 +265,57 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             #     .filter(type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK)
             #     .values_list("meta_polling_place", flat=True)
             # )
-            .order_by("geom")
-            .order_by(F("chance_of_sausage").desc(nulls_last=True))
+            .values("id")  # Group by 'id'
         )
 
-        # Allow constraining polling places to a specific jurisdiction
+        # Allow constraining polling places to a specific jurisdiction, and then order by location and Chance of Sausage
         if jurisdiction != "":
             pollingPlaces = pollingPlaces.filter(state=jurisdiction)
 
+        # Surface the oldest deferred tasks first and then order by Chance of Sausage and location so that polling places are grouped together geographically
+        if deferred_tasks_included is True:
+            pollingPlaces = pollingPlaces.annotate(
+                latest_actioned_on=Max(
+                    "meta_polling_place__metapollingplacestasks__actioned_on"
+                )
+            ).order_by(
+                "latest_actioned_on",
+                F("chance_of_sausage").desc(nulls_last=True),
+                "-chance_of_sausage_stats__count_of_previous_reports_with_noms",
+                "geom",
+            )
+        # Order by Chance of Sausage and location so that polling places are grouped together geographically
+        else:
+            pollingPlaces = pollingPlaces.order_by(
+                F("chance_of_sausage").desc(nulls_last=True),
+                "-chance_of_sausage_stats__count_of_previous_reports_with_noms",
+                "geom",
+            )
+
         metaPollingPlaceIds = []
 
-        for pollingPlace in pollingPlaces[:max_tasks]:
-            # Just a safeguard against an MPP being used twice in a given election
-            # We'll have other things to protect against this, but they can still slip
-            # through at the moment.
-            if pollingPlace.meta_polling_place.id not in metaPollingPlaceIds:
-                mpp_task = MetaPollingPlacesTasks(
-                    meta_polling_place_id=pollingPlace.meta_polling_place.id,
-                    job_name=job_name,
-                    category=MetaPollingPlaceTaskCategory.CROWDSOURCING,
-                    type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK,
-                )
+        for item in pollingPlaces[:max_tasks]:
+            pollingPlace = PollingPlaces.objects.filter(id=item["id"]).first()
 
-                try:
-                    mpp_task.full_clean()
-                except Exception as e:
-                    return HttpResponseBadRequest(f"Error creating task: {e}")
+            if pollingPlace is not None:
+                # Just a safeguard against an MPP being used twice in a given election
+                # We'll have other things to protect against this, but they can still slip
+                # through at the moment.
+                if pollingPlace.meta_polling_place.id not in metaPollingPlaceIds:
+                    mpp_task = MetaPollingPlacesTasks(
+                        meta_polling_place_id=pollingPlace.meta_polling_place.id,
+                        job_name=job_name,
+                        category=MetaPollingPlaceTaskCategory.CROWDSOURCING,
+                        type=MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK,
+                    )
 
-                mpp_task.save()
-                metaPollingPlaceIds.append(pollingPlace.meta_polling_place.id)
+                    try:
+                        mpp_task.full_clean()
+                    except Exception as e:
+                        return HttpResponseBadRequest(f"Error creating task: {e}")
+
+                    mpp_task.save()
+                    metaPollingPlaceIds.append(pollingPlace.meta_polling_place.id)
 
         return Response(
             {

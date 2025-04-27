@@ -257,6 +257,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 							{showLinkedPollingPlaces === true ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
 					}
+					onClick={onClickShowLinkedPollingPlaces}
 					title="Linked polling places"
 					// subheader="September 14, 2016"
 				/>

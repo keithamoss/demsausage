@@ -7,13 +7,14 @@ import { pluralise } from '../../../app/utils';
 import { getCountOfExistingStallsIcon } from '../pendingStallsHelpers';
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
-	paddingTop: theme.spacing(1),
+	paddingTop: theme.spacing(2),
 	paddingBottom: 0,
 }));
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
 	paddingTop: theme.spacing(0.5),
 	paddingLeft: theme.spacing(2),
+	paddingBottom: theme.spacing(2),
 }));
 
 interface Props {

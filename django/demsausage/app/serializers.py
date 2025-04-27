@@ -3,6 +3,7 @@ from demsausage.app.enums import (
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
+    PollingPlaceNomsChangeReason,
     PollingPlaceStatus,
     StallStatus,
     StallSubmitterType,
@@ -209,6 +210,84 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             sorted_data = {key: data[key] for key in sorted(data)}
             return sorted_data.values()
 
+        def _get_subs_by_category():
+            pollingPlacesWithNomsAndNoStall = (
+                PollingPlaces.objects.filter(
+                    election_id=obj.id,
+                    status=PollingPlaceStatus.ACTIVE,
+                )
+                .filter(noms__isnull=False, noms__deleted=False, stalls__isnull=True)
+                .count()
+            )
+
+            pollingPlaceNomsAddedDirectlyAndAlsoWithApprovedSubs = (
+                PollingPlaceNoms.history.filter(
+                    id__in=PollingPlaces.objects.filter(
+                        election_id=obj.id,
+                        status=PollingPlaceStatus.ACTIVE,
+                        noms__isnull=False,
+                        noms__deleted=False,
+                    ).values_list("noms_id", flat=True)
+                )
+                .values("id")
+                .annotate(
+                    has_added_directly=Count(
+                        "id",
+                        filter=Q(
+                            history_change_reason=PollingPlaceNomsChangeReason.ADDED_DIRECTLY
+                        ),
+                    ),
+                    has_approval=Count(
+                        "id",
+                        filter=Q(
+                            history_change_reason__in=[
+                                PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
+                                PollingPlaceNomsChangeReason.APPROVED_MANUAL,
+                            ]
+                        ),
+                    ),
+                )
+                .filter(has_added_directly__gt=0, has_approval__gt=0)
+                .count()
+            )
+
+            pollingPlacesNomsWithApprovedSubsAndNotDirectlySourced = (
+                PollingPlaceNoms.history.filter(
+                    id__in=PollingPlaces.objects.filter(
+                        election_id=obj.id,
+                        status=PollingPlaceStatus.ACTIVE,
+                        noms__isnull=False,
+                        noms__deleted=False,
+                    ).values_list("noms_id", flat=True)
+                )
+                .values("id")
+                .annotate(
+                    has_added_directly=Count(
+                        "id",
+                        filter=Q(
+                            history_change_reason=PollingPlaceNomsChangeReason.ADDED_DIRECTLY
+                        ),
+                    ),
+                    has_approval=Count(
+                        "id",
+                        filter=Q(
+                            history_change_reason__in=[
+                                PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
+                                PollingPlaceNomsChangeReason.APPROVED_MANUAL,
+                            ]
+                        ),
+                    ),
+                )
+                .filter(has_added_directly=0, has_approval__gt=0)
+                .count()
+            )
+
+            return {
+                "team_sausage": pollingPlacesWithNomsAndNoStall,
+                "team_sausage_and_crowdsauced": pollingPlaceNomsAddedDirectlyAndAlsoWithApprovedSubs,
+                "solely_crowdsauced": pollingPlacesNomsWithApprovedSubsAndNotDirectlySourced,
+            }
+
         def _get_triage_actions_by_day():
             min_date = None
             max_date = None
@@ -273,6 +352,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             ).count(),
             "by_source": _get_by_source(),
             "subs_by_type_and_day": _get_subs_by_type_and_day(),
+            "subs_by_category": _get_subs_by_category(),
             "triage_actions_by_day": _get_triage_actions_by_day(),
             "top_submitters": _get_top_submitters(),
             "noms_changes_by_user": getGamifiedElectionStats(obj.id),
@@ -495,11 +575,8 @@ class PollingPlacesSerializerForLookup(PollingPlacesSerializer):
         fields = PollingPlacesSerializer.Meta.fields + ("has_approved_subs",)
 
     def get_has_approved_subs(self, obj):
-        # @TODO This DOESN'T work once there's a polling place reload, because the polling place id will have changed in the live table, but not in the historical table.
-        # It doesn't cause a lot of harm now (it's a false negative that stops a nice-to-have warning message being shown), so revisit once we can tie stalls subs to their MPPs (stable ids)
         return (
-            Stalls.history.filter(election_id=obj.election_id)
-            .filter(polling_place_id=obj.id)
+            Stalls.history.filter(id__in=Stalls.objects.filter(polling_place_id=obj.id))
             .filter(status=StallStatus.APPROVED)
             .count()
             >= 1

@@ -2,7 +2,11 @@ from copy import deepcopy
 from datetime import datetime
 
 import pytz
-from demsausage.app.enums import StallStatus, StallSubmitterType
+from demsausage.app.enums import (
+    PollingPlaceNomsChangeReason,
+    StallStatus,
+    StallSubmitterType,
+)
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import Stalls
 from demsausage.app.permissions import StallEditingPermissions
@@ -173,6 +177,15 @@ class StallsViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def approve(self, request, pk=None, format=None):
+        def _get_change_reason(approvalType):
+            if request.data.get("approvalType", None) == "merged automatically":
+                return PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC
+
+            if request.data.get("approvalType", None) == "merged by hand":
+                return PollingPlaceNomsChangeReason.APPROVED_MANUAL
+
+            return PollingPlaceNomsChangeReason.UNKNOWN
+
         stall = self.get_object()
 
         if stall.status != StallStatus.PENDING:
@@ -194,8 +207,7 @@ class StallsViewSet(viewsets.ModelViewSet):
             noms = serializer.save()
 
             update_change_reason(
-                noms,
-                f"Approved and {request.data.get('approvalType', None)}",
+                noms, _get_change_reason(request.data.get("approvalType", None))
             )
 
             # If we've created the noms, we need to link it up to the polling place

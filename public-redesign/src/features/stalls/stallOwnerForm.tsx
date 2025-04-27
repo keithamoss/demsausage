@@ -147,9 +147,12 @@ export default function StallOwnerForm(props: Props) {
 
 				{pollingPlace !== undefined && pollingPlace.stall !== null && pollingPlace.has_approved_subs === false && (
 					<Alert severity="info" variant="standard" icon={<Radar />} sx={{ ml: 2, mr: 2 }}>
-						We've already pre-filled this polling booth with some basic information we picked up from social media. If
-						there's more information you would like to provide, no stress - just go ahead and submit your details as
-						usual and we'll update it for you!
+						<p style={{ margin: 0 }}>
+							We've already pre-filled this polling booth with some basic information we picked up from social media. If
+							there's more information you would like to provide, no stress - just go ahead and submit your details as
+							usual and we'll update it for you!
+						</p>
+
 						<Button
 							size="small"
 							variant="outlined"

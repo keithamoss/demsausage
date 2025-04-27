@@ -129,6 +129,8 @@ class MetaPollingPlaceContactCategory(str, EnumBase):
 class MetaPollingPlaceLinkType(str, EnumBase):
     OFFICIAL = "Official Website"
     FACEBOOK = "Facebook"
+    P_AND_C = "P&C"
+    NEWSLETTER = "Newsletter"
     OTHER = "Other"
 
     def __str__(self):
@@ -212,6 +214,19 @@ class StallStatus(str, EnumBase):
 class TaskStatus(str, EnumBase):
     SUCCESS = "Success"
     FAILED = "Failed"
+
+    def __str__(self):
+        return self.value
+
+
+class PollingPlaceNomsChangeReason(str, EnumBase):
+    ADDED_DIRECTLY = "Added directly"
+    EDITED_DIRECTLY = "Edited directly"
+    DELETD_DIRECTLY = "Deleted directly"
+    APPROVED_AUTOMATIC = "Approved and merged automatically"
+    APPROVED_MANUAL = "Approved and merged by hand"
+    # Should never occur!
+    UNKNOWN = "Unknown"
 
     def __str__(self):
         return self.value
