@@ -275,7 +275,9 @@ class PollingPlacesViewSet(
                     )
 
         # Stall change history
-        for item in Stalls.history.filter(polling_place_id=pollingPlace.id):
+        for item in Stalls.history.filter(
+            id__in=Stalls.objects.filter(polling_place_id=pollingPlace.id)
+        ):
             if item.status == StallStatus.PENDING and item.previous_status is None:
                 history.append(
                     {
