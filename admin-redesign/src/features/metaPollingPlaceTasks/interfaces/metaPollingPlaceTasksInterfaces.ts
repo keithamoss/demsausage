@@ -1,4 +1,4 @@
-import type { IMetaPollingPlace } from './metaPollingPlaceInterfaces';
+import type { IMetaPollingPlace, IMetaPollingPlaceNearbyToTask } from './metaPollingPlaceInterfaces';
 import type { IMetaPollingPlaceRemark } from './metaPollingPlaceRemarksInterfaces';
 
 export enum IMetaPollingPlaceTaskCategory {
@@ -62,6 +62,6 @@ export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobM
 	actioned_by: string | null;
 	history: IMetaPollingPlaceTaskJobHistory[];
 	meta_polling_place: IMetaPollingPlace;
-	nearby_meta_polling_places: IMetaPollingPlace[];
+	nearby_meta_polling_places: IMetaPollingPlaceNearbyToTask[];
 	remarks: IMetaPollingPlaceRemark[];
 }

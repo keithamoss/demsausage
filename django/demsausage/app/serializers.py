@@ -796,7 +796,7 @@ class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
         return representation
 
 
-class DistanceField(serializers.CharField):
+class DistanceFieldKilometres(serializers.CharField):
     """
     Make the result of the distance calculation friendlier for humans to read.
     """
@@ -805,8 +805,17 @@ class DistanceField(serializers.CharField):
         return round(float(value.km), 2)
 
 
+class DistanceFieldMetres(serializers.CharField):
+    """
+    Make the result of the distance calculation friendlier for humans to read.
+    """
+
+    def to_representation(self, value):
+        return round(float(value.m), 2)
+
+
 class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
-    distance_km = DistanceField(source="distance")
+    distance_km = DistanceFieldKilometres(source="distance")
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
 
     class Meta:
@@ -1179,6 +1188,17 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
         }
 
 
+class MetaPollingPlacesSerializerWithDistance(MetaPollingPlacesSerializer):
+    distance_from_task_mpp_metres = DistanceFieldMetres(source="distance")
+
+    class Meta:
+        model = MetaPollingPlacesSerializer.Meta.model
+
+        fields = MetaPollingPlacesSerializer.Meta.fields + [
+            "distance_from_task_mpp_metres"
+        ]
+
+
 class MetaPollingPlacesRemarksSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
@@ -1237,7 +1257,7 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             geom_field_name="geom_location",
         )
 
-        return MetaPollingPlacesSerializer(
+        return MetaPollingPlacesSerializerWithDistance(
             meta_polling_places, many=True, read_only=True
         ).data
 
