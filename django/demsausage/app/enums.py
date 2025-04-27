@@ -26,6 +26,19 @@ class PollingPlaceState(str, EnumBase):
         return self.value
 
 
+class PollingPlaceNomsChangeReason(str, EnumBase):
+    ADDED_DIRECTLY = "Added directly"
+    EDITED_DIRECTLY = "Edited directly"
+    DELETD_DIRECTLY = "Deleted directly"
+    APPROVED_AUTOMATIC = "Approved and merged automatically"
+    APPROVED_MANUAL = "Approved and merged by hand"
+    # Should never occur!
+    UNKNOWN = "Unknown"
+
+    def __str__(self):
+        return self.value
+
+
 class MetaPollingPlaceJurisdiction(str, EnumBase):
     NSW = "NSW"
     VIC = "VIC"

@@ -243,7 +243,8 @@ function ElectionStats(props: Props) {
 
 						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
 							<Typography variant="body1" sx={{ mb: 2 }}>
-								Polling places with data of any sort - noms or Red Cross of Shame.
+								Polling places with data of any sort - noms or Red Cross of Shame. Source is based on the source of the
+								first submission.
 							</Typography>
 
 							<TableContainer
@@ -267,6 +268,67 @@ function ElectionStats(props: Props) {
 													{row.source}
 												</StyledTableCell>
 												<StyledTableCell align="right">{row.count}</StyledTableCell>
+											</StyledTableRow>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</CardContent>
+					</Card>
+				)}
+
+				{/* ######################
+						Polling places with data by who contributed
+				###################### */}
+				{election.stats.by_source.length > 0 && (
+					<Card variant="outlined" sx={{ mt: 3 }}>
+						<CardHeader
+							sx={{
+								p: 1,
+								pb: 0,
+								'& .MuiCardHeader-title': {
+									fontSize: 18,
+									fontWeight: 700,
+								},
+							}}
+							avatar={
+								<Avatar sx={{ bgcolor: mapaThemePrimaryPurple }} variant="rounded">
+									<TableChart />
+								</Avatar>
+							}
+							title="Polling places with data by who contributed"
+						/>
+
+						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
+							<Typography variant="body1" sx={{ mb: 2 }}>
+								Polling places with data of any sort - noms or Red Cross of Shame.
+							</Typography>
+
+							<TableContainer
+								component={Paper}
+								sx={{
+									mt: 1,
+								}}
+							>
+								<Table size="small">
+									<TableHead>
+										<TableRow>
+											<StyledTableCell>Contributed by</StyledTableCell>
+											<StyledTableCell align="right">Count</StyledTableCell>
+										</TableRow>
+									</TableHead>
+
+									<TableBody>
+										{Object.entries(election.stats.subs_by_category).map(([key, value]) => (
+											<StyledTableRow key={key}>
+												<StyledTableCell
+													component="th"
+													scope="row"
+													sx={{ '::first-letter': { textTransform: 'capitalize' } }}
+												>
+													{key.replace(/_/g, ' ')}
+												</StyledTableCell>
+												<StyledTableCell align="right">{value}</StyledTableCell>
 											</StyledTableRow>
 										))}
 									</TableBody>

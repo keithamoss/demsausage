@@ -4,6 +4,7 @@ import urllib.parse
 from demsausage.app.enums import (
     PollingPlaceChanceOfSausage,
     PollingPlaceHistoryEventType,
+    PollingPlaceNomsChangeReason,
     PollingPlaceStatus,
     StallStatus,
 )
@@ -140,9 +141,13 @@ class PollingPlacesViewSet(
         )
 
         if pollingPlace.noms is None:
-            update_change_reason(self.get_object().noms, "Added directly")
+            update_change_reason(
+                self.get_object().noms, PollingPlaceNomsChangeReason.ADDED_DIRECTLY
+            )
         else:
-            update_change_reason(self.get_object().noms, "Edited directly")
+            update_change_reason(
+                self.get_object().noms, PollingPlaceNomsChangeReason.EDITED_DIRECTLY
+            )
 
         return response
 
@@ -255,8 +260,8 @@ class PollingPlacesViewSet(
                         }
                     )
                 elif item.history_change_reason in [
-                    "Approved and merged automatically",
-                    "Approved and merged by hand",
+                    PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
+                    PollingPlaceNomsChangeReason.APPROVED_MANUAL,
                 ]:
                     # These are handled by the stall history below
                     pass
@@ -329,7 +334,9 @@ class PollingPlacesViewSet(
 
         if pollingPlace.noms is not None:
             pollingPlace.noms.deleted = True
-            pollingPlace.noms._change_reason = "Deleted directly"
+            pollingPlace.noms._change_reason = (
+                PollingPlaceNomsChangeReason.DELETD_DIRECTLY
+            )
             pollingPlace.noms.save()
 
         return Response()

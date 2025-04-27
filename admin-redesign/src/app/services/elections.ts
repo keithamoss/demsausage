@@ -39,6 +39,11 @@ export interface Election extends ElectionModifiableProps {
 			day: string; // Datetime
 			[key: string]: number | null | string; // Only string because of 'day'
 		}[];
+		subs_by_category: {
+			team_sausage: number;
+			team_sausage_and_crowdsauced: number;
+			solely_crowdsauced: number;
+		};
 		triage_actions_by_day: {
 			day: string; // Datetime
 			[key: string]: number | null | string; // Only string because of 'day'
