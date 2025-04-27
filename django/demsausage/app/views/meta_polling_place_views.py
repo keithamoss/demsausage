@@ -281,11 +281,16 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
             ).order_by(
                 "latest_actioned_on",
                 F("chance_of_sausage").desc(nulls_last=True),
+                "-chance_of_sausage_stats__count_of_previous_reports_with_noms",
                 "geom",
             )
         # Order by Chance of Sausage and location so that polling places are grouped together geographically
         else:
-            pollingPlaces.order_by(F("chance_of_sausage").desc(nulls_last=True), "geom")
+            pollingPlaces = pollingPlaces.order_by(
+                F("chance_of_sausage").desc(nulls_last=True),
+                "-chance_of_sausage_stats__count_of_previous_reports_with_noms",
+                "geom",
+            )
 
         metaPollingPlaceIds = []
 
