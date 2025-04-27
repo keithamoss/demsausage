@@ -575,11 +575,8 @@ class PollingPlacesSerializerForLookup(PollingPlacesSerializer):
         fields = PollingPlacesSerializer.Meta.fields + ("has_approved_subs",)
 
     def get_has_approved_subs(self, obj):
-        # @TODO This DOESN'T work once there's a polling place reload, because the polling place id will have changed in the live table, but not in the historical table.
-        # It doesn't cause a lot of harm now (it's a false negative that stops a nice-to-have warning message being shown), so revisit once we can tie stalls subs to their MPPs (stable ids)
         return (
-            Stalls.history.filter(election_id=obj.election_id)
-            .filter(polling_place_id=obj.id)
+            Stalls.history.filter(id__in=Stalls.objects.filter(polling_place_id=obj.id))
             .filter(status=StallStatus.APPROVED)
             .count()
             >= 1
