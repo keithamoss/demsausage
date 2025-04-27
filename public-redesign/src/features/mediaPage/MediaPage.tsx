@@ -26,49 +26,54 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const mediaReleases = [
 	{
-		title: 'Federal Election 2025',
+		title: "Federal Election 2025: Community fundraisers ready for next week's Federal Election",
+		date: 'April 28th 2025',
+		filename: '2025-Federal_28-April.pdf',
+	},
+	{
+		title: "Federal Election 2025: It's on!",
 		date: 'April 11th 2025',
-		filename: '2025 Federal Election Media Release - 11 April.pdf',
+		filename: '2025-Federal_11-April.pdf',
 	},
 	{
 		title: 'Federal Election 2022',
 		date: 'April 10th 2022',
-		filename: '2022 Federal Election Media Release - 10 April.pdf',
+		filename: '2022-Federal_10-April.pdf',
 	},
 	{
 		title: 'WA Election 2021',
 		date: 'March 6th 2021',
-		filename: '2021 WA Election Media Release - 6 March.pdf',
+		filename: '2021-WA_6-March.pdf',
 	},
 	{
 		title: 'ACT & QLD Elections 2020',
 		date: 'October 11th 2020',
-		filename: '2020 ACT and QLD Election Media Release - 11 October.pdf',
+		filename: '2020-ACT-and-QLD_11-October.pdf',
 	},
 	{
 		title: 'NT Election 2020',
 		date: 'August 18th 2020',
-		filename: '2020 NT Election Media Release - 18 August.pdf',
+		filename: '2020-NT_18-August.pdf',
 	},
 	{
 		title: 'Federal Election 2019',
 		date: 'May 17th 2019',
-		filename: '2019 Federal Election Media Release - 17 May.pdf',
+		filename: '2019-Federal_17-May.pdf',
 	},
 	{
 		title: 'Federal Election 2019',
 		date: 'April 13th 2019',
-		filename: '2019 Federal Election Media Release - 13 April.pdf',
+		filename: '2019-Federal_13-April.pdf',
 	},
 	{
 		title: 'Federal Election 2016',
 		date: 'July 2nd 2016',
-		filename: '2016 Federal Election Media Release - 2 July.pdf',
+		filename: '2016-Federal_2-July.pdf',
 	},
 	{
 		title: 'Canning By-election 2015',
 		date: 'September 17th 2015',
-		filename: '2016 Canning By-election Media Release - 17 September.pdf',
+		filename: '2016-Canning-By-election_17-September.pdf',
 	},
 ];
 
