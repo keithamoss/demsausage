@@ -191,6 +191,7 @@ export default function SearchComponent(props: Props) {
 							)}
 						</IconButton>
 					}
+					onClick={onClickIncludeOverseasResults}
 				>
 					<Switch
 						checked={includeOverseasResults}
