@@ -1326,14 +1326,14 @@ dev = ["coverage (>=3.6)"]
 
 [[package]]
 name = "social-auth-core"
-version = "4.5.6"
+version = "4.6.1"
 description = "Python social authentication made simple."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "social_auth_core-4.5.6-py3-none-any.whl", hash = "sha256:43114bbc50f99789f7aadfd4943c2e15aee5e2f8c8612ad67fc4115b70b46ee1"},
-    {file = "social_auth_core-4.5.6.tar.gz", hash = "sha256:14753d4cf870b820918729ce8a2dfe51f332075528fb13bed908701a8486da80"},
+    {file = "social_auth_core-4.6.1-py3-none-any.whl", hash = "sha256:1019fe2f7fe30f9ff7d15c04a32c15324ecdbd59f62fbe829031dab74071a21a"},
+    {file = "social_auth_core-4.6.1.tar.gz", hash = "sha256:563510844ccc043a727b120fe57726860c93158d4304fafa2c1e122f2deb4fd3"},
 ]
 
 [package.dependencies]
@@ -1349,9 +1349,10 @@ requests-oauthlib = ">=0.6.1"
 all = ["social-auth-core[azuread]", "social-auth-core[google-onetap]", "social-auth-core[saml]", "social-auth-core[shopify]"]
 allpy3 = ["social-auth-core[all]"]
 azuread = ["cryptography (>=2.1.1)"]
-dev = ["coverage (>=3.6)", "flake8 (>=5.0.4)", "httpretty (>=1.1.0,<1.2.0)", "pyright (>=1.1.391)", "pytest (>=4.5)", "pytest-cov (>=2.7.1)", "urllib3 (>=2.2.0,<2.3.0)"]
-google-onetap = ["google-auth (>=2.38.0,<2.39.0)"]
-saml = ["lxml (>=5.2.1,<5.3.0)", "python3-saml (>=1.5.0)"]
+dev = ["coverage (>=3.6)", "flake8 (>=5.0.4)", "google-auth-stubs (==0.3.0)", "mypy (==1.15.0)", "pyright (==1.1.400)", "pytest (>=4.5)", "pytest-cov (>=2.7.1)", "pytest-xdist (>=3.6.1)", "responses (==0.25.7)", "types-defusedxml (==0.7.0.20240218)", "types-oauthlib (==3.2.0.20250408)", "types-python-jose (==3.4.0.20250224)", "types-requests (==2.32.0.20250328)", "types-requests-oauthlib (==2.0.0.20250306)"]
+google-onetap = ["google-auth (>=2.39.0,<2.40.0)"]
+ping = ["python-jose (>=3.4.0,<4.0)"]
+saml = ["python3-saml (>=1.5.0)"]
 shopify = ["ShopifyAPI"]
 
 [[package]]
@@ -1617,4 +1618,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "563851262231387f9400b8b25da3eb39e3ea4e28ba6938bd3aa2e7acb33698ed"
+content-hash = "2ca3f5b946213190d776c4849f17761d048a26a591b34f0b766375c002b49a97"
