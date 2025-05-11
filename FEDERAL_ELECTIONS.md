@@ -2,11 +2,31 @@
 
 1. Load new electoral boundaries data
 2. If available, load the expected election day polling places data
-3. Book at least two days of leave before, and one or two days of leave afterwards
+3. Book AT LEAST two days of leave before, and one or two days of leave afterwards
 
 # Tasks to do just before election day:
 
-1. Resize the server (Federal 2022 was 8vCPUs, 16GB RAM, 25GB SSD, 6TB Transfer and had no performance issues. Probably overspeccd for what it was, and way overspecced from what we use historically because of the unknowns around the new addition of the RQ queue, the social preview images, and the option to embed the site as an image or interactive map)
+## 1. Resize the backend server
+Federal 2022 was 8vCPUs, 16GB RAM, 25GB SSD, 6TB Transfer and had no performance issues. 
+
+Probably overspecd for what it was, and way overspecd from what we use historically because of the unknowns around the new addition of the RQ queue, the social preview images, and the option to embed the site as an image or interactive map.
+
+Federal 2025 was 4vCPU / 16GB and it did just fine.
+
+Resized back to: 1vCPU / 2GB
+
+## 2. Resize and reconfigure the database server
+Upsized to: 4vCPU / 16GB (t2.xlarge)
+Changed shared_buffers to 2048MB (to make use of our extra memory)
+
+Resized back to: 1vCPU / 2GB (t2.small)
+Changed shared_buffers back to 250MB
+
+## 3. Setup alerts for the database server
+e.g. CloudWatch alarms to spot issues like we had during Fed 2025 where slow queries would gradually start to be logged as the database crawled to an unresponsive halt.
+
+- CPU utilisation >= 30%
+- Incoming log events > 5 in a 1 minute period
 
 # When the election is called
 
@@ -26,3 +46,21 @@
 - [ ] Log a ticket to examine the RQ task results for anything interesting
 - [ ] Snapshot the server
 - [ ] Resize the server
+
+## Stashing stats and logs
+- Resize the database and backend server
+- Server and API usage stats.xlsx: Take screenshots of server usage from AWS, DO, CloudFlare, and Mapbox
+- Store logs in S3: Archive, reset, and clean-up log files from DO
+- 'CloudFlare' folder: Dump the four flavours of analytics reports we get from CloudFlare
+- 'Web server logs' folder: Analyse access.log (see 'log_analysis')
+- Analyse error.log and log GitHub issues (see 'log_analysis')
+- Analyse django.log, python_rq, supervisord, and friends and log GitHub issues
+- 'Google analytics' folder: Dump Google Analytics reports:
+-- Acquisition: Overview
+-- Engagement: Overview
+-- Engagement: Events (page size = 250)
+-- Engagement: Pages and screens (page size = 250)
+-- Retention
+-- Search Console: Queries (page size = 250)
+-- User attributes: Overview
+-- Tech: Overview
