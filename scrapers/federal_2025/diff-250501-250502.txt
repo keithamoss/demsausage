@@ -1,0 +1,15 @@
+
+--- Human-Readable Report ---
+PPId 4625 (Spensley St Primary School): Mismatch ->
+WheelchairAccess: 'Full' != 'None'
+
+PPId 7614 (St Hilda's Anglican School for Girls (Chidley Campus)): Mismatch ->
+AdvAddress: 'St Hilda's Anglican School for Girls' != 'McCabe St (Chidley Campus)'
+
+PPId 8164 (North Metropolitan TAFE (Perth Campus)): Mismatch ->
+AdvAddress: '25 Aberdeen St' != '25 Aberdeen St  (use entrance on Fra'
+
+PPId 83459 (618-620 Lower North East Rd): Mismatch ->
+Address1: '618-620 Lower North East Rd' != ''
+AdvAddress: '618-620 Lower North East Rd' != ''
+
