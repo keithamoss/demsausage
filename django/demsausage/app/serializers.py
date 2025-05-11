@@ -713,6 +713,47 @@ class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializ
         }
 
 
+# This ties to 'Project Cache'!
+# We used it to generate the test data file that had full details for an election in the GeoJSON file.
+# class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
+#     # noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
+#     chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
+#     # facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
+#     stall = PollingPlaceNomsSerializer(source="noms", required=False)
+
+#     class Meta:
+#         chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
+#         # facility_type = serializers.CharField(
+#         #     source="facility_type.name", allow_null=True
+#         # )
+#         stall = PollingPlaceNomsSerializer(source="noms", required=False)
+
+#     class Meta:
+#         model = PollingPlaces
+#         geo_field = "geom"
+
+#         fields = (
+#             "id",
+#             "name",
+#             "geom",
+#             # "facility_type",
+#             "booth_info",
+#             "wheelchair_access",
+#             "wheelchair_access_description",
+#             "entrance_desc",
+#             "opening_hours",
+#             "premises",
+#             "address",
+#             "divisions",
+#             "state",
+#             "chance_of_sausage",
+#             "stall",
+#             # "facility_type",
+#             "ec_id",
+#             "extras",
+#         )
+
+
 class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
     noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
 

@@ -472,6 +472,11 @@ class PollingPlacesGeoJSONViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
     filter_class = PollingPlacesBaseFilter
 
     def list(self, request, format=None):
+        # This ties to 'Project Cache'!
+        # We used it to bypass generate the full GeoJSON file for the election
+        # Comment out everything else below to re-enable.
+        # response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
+
         response = super(PollingPlacesGeoJSONViewSet, self).list(request, format)
 
         cache_key = get_polling_place_geojson_cache_key(
