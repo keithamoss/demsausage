@@ -41,7 +41,7 @@
     "web-vitals": "^5.0.0"
   },
   "devDependencies": {
-    "@sentry/types": "^9.17.0",
+    "@sentry/types": "^9.19.0",
     "@sentry/vite-plugin": "^3.4.0",
     "@testing-library/dom": "^10.4.0",
     "@types/history": "^5.0.0",
