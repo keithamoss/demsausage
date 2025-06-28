@@ -1511,12 +1511,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^24.0.3":
-  version: 24.0.3
-  resolution: "@types/node@npm:24.0.3"
+"@types/node@npm:^24.0.6":
+  version: 24.0.6
+  resolution: "@types/node@npm:24.0.6"
   dependencies:
     undici-types: "npm:~7.8.0"
-  checksum: 10c0/9c3c4e87600d1cf11e291c2fd4bfd806a615455463c30a0ef6dc9c801b3423344d9b82b8084e3ccabce485a7421ebb61a66e9676181bd7d9aea4759998a120d5
+  checksum: 10c0/17f976364358f85294912e04f0de147da6ba5ce3fe495b758df58458241f110475905cd0bb4ace373e9c44a0a7927202043bf0501cc1f7644306bde310c62650
   languageName: node
   linkType: hard
 
@@ -1766,7 +1766,7 @@ __metadata:
     "@types/lodash-es": "npm:^4.17.9"
     "@types/luxon": "npm:^3.6.2"
     "@types/material-ui": "npm:0.21.18"
-    "@types/node": "npm:^24.0.3"
+    "@types/node": "npm:^24.0.6"
     "@types/prop-types": "npm:^15.7.15"
     "@types/qs": "npm:^6.14.0"
     "@types/react": "npm:^19.1.8"
