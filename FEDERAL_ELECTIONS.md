@@ -4,7 +4,8 @@
 2. If available, load the expected election day polling places data
 3. Book AT LEAST two days of leave before, and one or two days of leave afterwards
 
-# Tasks to do just before election day:
+# Tasks to do IN THE WEEK before election day:
+Resize the database the WEEKEND before so we miss peak load.
 
 ## 1. Resize the backend server
 Federal 2022 was 8vCPUs, 16GB RAM, 25GB SSD, 6TB Transfer and had no performance issues. 
