@@ -67,7 +67,7 @@
     "prettier": "^3.6.2",
     "typescript": "^5.8.3",
     "vite": "^7.0.4",
-    "vite-plugin-checker": "^0.9.3",
+    "vite-plugin-checker": "^0.10.0",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "scripts": {
