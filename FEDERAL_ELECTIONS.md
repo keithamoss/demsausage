@@ -19,9 +19,11 @@ Resized back to: 1vCPU / 2GB
 ## 2. Resize and reconfigure the database server
 Upsized to: 4vCPU / 16GB (t2.xlarge)
 Changed shared_buffers to 2048MB (to make use of our extra memory)
+Changed maintenance_work_mem to 1GB (should be 10% of system memory with a max of 1GB)
 
 Resized back to: 1vCPU / 2GB (t2.small)
 Changed shared_buffers back to 250MB
+Changed maintenance_work_mem back to 128MB
 
 ## 3. Setup alerts for the database server
 e.g. CloudWatch alarms to spot issues like we had during Fed 2025 where slow queries would gradually start to be logged as the database crawled to an unresponsive halt.
