@@ -26,6 +26,11 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const mediaReleases = [
 	{
+		title: "Tasmanian Election 2025: Community fundraisers ready for this weekend's Tasmanian election",
+		date: 'July 14th 2025',
+		filename: '2025-Tasmania_14-July.pdf',
+	},
+	{
 		title: "Federal Election 2025: Community fundraisers ready for next week's Federal Election",
 		date: 'April 28th 2025',
 		filename: '2025-Federal_28-April.pdf',
