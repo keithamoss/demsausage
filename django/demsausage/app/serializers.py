@@ -713,6 +713,47 @@ class PendingStallsPollingPlacesInfoWithNomsSerializer(PollingPlacesInfoSerializ
         }
 
 
+# This ties to 'Project Cache'!
+# We used it to generate the test data file that had full details for an election in the GeoJSON file.
+# class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
+#     # noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
+#     chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
+#     # facility_type = serializers.CharField(source="facility_type.name", allow_null=True)
+#     stall = PollingPlaceNomsSerializer(source="noms", required=False)
+
+#     class Meta:
+#         chance_of_sausage = serializers.IntegerField(allow_null=True, read_only=True)
+#         # facility_type = serializers.CharField(
+#         #     source="facility_type.name", allow_null=True
+#         # )
+#         stall = PollingPlaceNomsSerializer(source="noms", required=False)
+
+#     class Meta:
+#         model = PollingPlaces
+#         geo_field = "geom"
+
+#         fields = (
+#             "id",
+#             "name",
+#             "geom",
+#             # "facility_type",
+#             "booth_info",
+#             "wheelchair_access",
+#             "wheelchair_access_description",
+#             "entrance_desc",
+#             "opening_hours",
+#             "premises",
+#             "address",
+#             "divisions",
+#             "state",
+#             "chance_of_sausage",
+#             "stall",
+#             # "facility_type",
+#             "ec_id",
+#             "extras",
+#         )
+
+
 class PollingPlacesGeoJSONSerializer(GeoFeatureModelSerializer):
     noms = NomsBooleanJSONField(source="noms.noms", allow_null=True)
 
@@ -796,7 +837,7 @@ class PollingPlacesFlatJSONSerializer(PollingPlacesSerializer):
         return representation
 
 
-class DistanceField(serializers.CharField):
+class DistanceFieldKilometres(serializers.CharField):
     """
     Make the result of the distance calculation friendlier for humans to read.
     """
@@ -805,8 +846,17 @@ class DistanceField(serializers.CharField):
         return round(float(value.km), 2)
 
 
+class DistanceFieldMetres(serializers.CharField):
+    """
+    Make the result of the distance calculation friendlier for humans to read.
+    """
+
+    def to_representation(self, value):
+        return round(float(value.m), 2)
+
+
 class PollingPlaceSearchResultsSerializer(PollingPlacesSerializer):
-    distance_km = DistanceField(source="distance")
+    distance_km = DistanceFieldKilometres(source="distance")
     stall = PollingPlaceNomsSerializer(source="noms", required=False)
 
     class Meta:
@@ -1179,6 +1229,17 @@ class MetaPollingPlacesSerializer(serializers.ModelSerializer):
         }
 
 
+class MetaPollingPlacesSerializerWithDistance(MetaPollingPlacesSerializer):
+    distance_from_task_mpp_metres = DistanceFieldMetres(source="distance")
+
+    class Meta:
+        model = MetaPollingPlacesSerializer.Meta.model
+
+        fields = MetaPollingPlacesSerializer.Meta.fields + [
+            "distance_from_task_mpp_metres"
+        ]
+
+
 class MetaPollingPlacesRemarksSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
@@ -1237,7 +1298,7 @@ class MetaPollingPlacesTasksSerializer(serializers.ModelSerializer):
             geom_field_name="geom_location",
         )
 
-        return MetaPollingPlacesSerializer(
+        return MetaPollingPlacesSerializerWithDistance(
             meta_polling_places, many=True, read_only=True
         ).data
 

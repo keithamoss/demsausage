@@ -50,6 +50,11 @@ export interface IMetaPollingPlace {
 		passed_review: boolean;
 	};
 }
+
+export interface IMetaPollingPlaceNearbyToTask extends IMetaPollingPlace {
+	distance_from_task_mpp_metres: number;
+}
+
 export enum IMetaPollingPlaceJurisdiction {
 	NSW = 'NSW',
 	VIC = 'VIC',

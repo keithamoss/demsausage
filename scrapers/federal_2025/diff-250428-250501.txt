@@ -1,0 +1,155 @@
+
+--- Human-Readable Report ---
+PPId 108928 (Broadwater Community Hall): Mismatch ->
+Address1: '17 Little Pit St' != '17 Little Pitt St'
+AdvAddress: '17 Little Pit St' != '17 Little Pitt St'
+
+PPId 109713 (Home Co Springfield ): Mismatch ->
+PremisesName: 'Home Co Springfield ' != 'Health Co Springfield '
+AdvPremisesName: 'Home Co Springfield ' != 'Health Co Springfield '
+
+PPId 109735 (Dohertys Creek P-9 College): Mismatch ->
+NoOrdIssuingOff: '0' != '1'
+
+PPId 1425 (Thornton Public School): Mismatch ->
+CCD: '1111820' != '1161839'
+
+PPId 2020 (Cammeraygal Senior School Campus): Mismatch ->
+AdvAddress: 'End of Rodborough Ave' != '149 West St Entrance via Rodborough '
+
+PPId 2078 (Grafton TAFE (Library)): Mismatch ->
+AdvAddress: 'Entrance via Pound St' != '7 Clarence St Entrance via Pound St'
+
+PPId 2490 (PCYC Broken Hill): Mismatch ->
+WheelchairAccess: 'None' != 'Assisted'
+
+PPId 3247 (St Justin's Primary School ): Mismatch ->
+AdvBoothLocation: 'Multi-purpose room' != 'Performing Arts Centre'
+
+PPId 3363 (University Park Primary School): Mismatch ->
+Lat: '-37.755' != '-37.755076'
+Long: '144.804' != '144.80304'
+
+PPId 3685 (Footscray Primary School): Mismatch ->
+Lat: '-37.79789132711557' != '-37.798373'
+Long: '144.89260584118628' != '144.8928'
+
+PPId 3699 (St Bernadette's Primary School): Mismatch ->
+Lat: '-37.77120005' != '-37.771002'
+Long: '144.83483141' != '144.834949'
+
+PPId 4191 (Greensborough Secondary College): Mismatch ->
+AdvAddress: '155 Nell St' != '61 Nepean St'
+
+PPId 46572 (Trinity College Senior): Mismatch ->
+PremisesName: 'Trinity College Senior' != 'Starplex Hewitson Theatre'
+Locality: 'EVANSTON SOUTH' != 'EVANSTON PARK'
+AdvPremisesName: 'Trinity College Senior' != 'Starplex Hewitson Theatre'
+AdvLocality: 'EVANSTON SOUTH' != 'EVANSTON PARK'
+AdvBoothLocation: 'Classroom' != 'Theatre'
+AdvGateAccess: 'Alexander Ave carpark' != 'Trinity Drive'
+EntrancesDesc: 'Through carpark to building entrance in the corner continue in to polling place' != 'Enter from Trinity Drive.'
+Lat: '-34.6345738924319' != '-34.631860138735426'
+Long: '138.733269460516' != '138.735426'
+
+PPId 5094 (Coburg Special Developmental School): Mismatch ->
+WheelchairAccess: 'None' != 'Full'
+
+PPId 5407 (Springwood Central State School): Mismatch ->
+Lat: '-27.61814098' != '-27.617157'
+Long: '153.12965439' != '153.129907'
+
+PPId 5940 (Clifton Beach Tennis Clubhouse): Mismatch ->
+Lat: '-16.76852' != '-16.76913565238785'
+Long: '145.67567' != '145.6760115752907'
+CCD: '3113923' != '3113910'
+
+PPId 6029 (Bar Jai Community Centre): Mismatch ->
+EntrancesDesc: 'Hall entry via Driveway' != 'Entrance to polling place in hall entry via driveway on Alexandra Rd'
+
+PPId 6406 (Craigslea State High School): Mismatch ->
+AdvBoothLocation: 'Multi-purpose room' != 'School Hall'
+EntrancesDesc: 'Pedestrian - path from Hamilton Rd with ramps down to level of hall; Accessible parking - driveway from Hamilton Rd to small parking area outside Admin with accessible parking bays and flat path to entrance of hall; Car - driveway from Maundrell Tce or upper carpark from Hamilton Rd' != 'Level concrete path from street and carpark'
+WheelchairAccess: 'Assisted' != 'Full'
+
+PPId 671 (Kioloa/Bawley Point Community Centre): Mismatch ->
+PremisesName: 'Kioloa/Bawley Point Community Centre' != 'Kioloa Bawley Point Community Centre'
+AdvPremisesName: 'Kioloa/Bawley Point Community Centre' != 'Kioloa Bawley Point Community Centre'
+
+PPId 701 (Horizons Lake Jindabyne): Mismatch ->
+PremisesName: 'Horizons Lake Jindabyne' != 'Jindabyne Memorial Hall'
+Address1: '10 Kosciuszko Rd' != '45 Kosciuszko Rd'
+Address2: ' ' != ''
+AdvPremisesName: 'Horizons Lake Jindabyne' != 'Jindabyne Memorial Hall'
+AdvAddress: '10 Kosciuszko Rd' != '45 Kosciuszko Rd'
+AdvBoothLocation: 'Multi-purpose room' != 'Hall'
+AdvGateAccess: 'Kosciuszko Cres' != 'Main door'
+EntrancesDesc: 'Driveway on Kosciuszko Cres; main entrance is on the left.' != 'Access through the main door on Thredbo Tce. Main hall and large door to foyer, hall is elevated above the carpark, but steps and ramp available'
+Lat: '-36.417' != '-36.4151245'
+Long: '148.618' != '148.6236223'
+WheelchairAccess: 'Full' != 'Assisted'
+
+PPId 7468 (Pioneer Village School): Mismatch ->
+WheelchairAccess: 'Assisted' != 'None'
+
+PPId 7869 (Nabawa Community Centre): Mismatch ->
+Address1: '320 Chapman Valley Rd' != '3320 Chapman Valley Rd'
+AdvAddress: '320 Chapman Valley Rd' != '3320 Chapman Valley Rd'
+Lat: '-28.4966' != '-28.49967569'
+Long: '114.81' != '114.79346286'
+
+PPId 82990 (Margaret Whitlam Recreation Centre, Community Room): Mismatch ->
+AdvAddress: 'Waverley Park Bondi Rd ' != 'Waverley Park, Bondi Rd '
+
+PPId 83459 (Athelstone Uniting Church): Mismatch ->
+PremisesName: 'Athelstone Uniting Church' != '618-620 Lower North East Rd'
+Address1: '33 Fox Ave' != '618-620 Lower North East Rd'
+Locality: 'ATHELSTONE' != 'CAMPBELLTOWN'
+Postcode: '5076' != '5074'
+AdvPremisesName: 'Athelstone Uniting Church' != '618-620 Lower North East Rd'
+AdvAddress: '33 Fox Ave' != '618-620 Lower North East Rd'
+AdvLocality: 'ATHELSTONE' != 'CAMPBELLTOWN'
+AdvBoothLocation: 'Church Hall' != 'Shopfront'
+AdvGateAccess: 'Kantilla Dr Carpark' != 'Shopfront'
+EntrancesDesc: 'Enter through Kantilla Dr carpark to hall entrance.' != 'Front doors facing carpark.'
+Lat: '-34.87114' != '-34.87823'
+Long: '138.70261' != '138.66429'
+CCD: '4101404' != '4101544'
+WheelchairAccess: 'Full' != 'Assisted'
+
+PPId 83482 (Springside West Secondary College): Mismatch ->
+AdvBoothLocation: 'Classroom' != 'Theatre'
+WheelchairAccess: 'Full' != 'Assisted'
+
+PPId 83744 (St Matt's Botany): Mismatch ->
+PremisesName: 'St Matt's Botany' != 'St Matts Botany'
+AdvPremisesName: 'St Matt's Botany' != 'St Matts Botany'
+
+PPId 83752 (Mackillop Senior College): Mismatch ->
+Address1: ' Lochinvar Place' != ' Ocean Dr Entrance via Lochinvar Pl'
+AdvAddress: 'MacKillop Senior College  via Lochin' != 'MacKillop Senior College   Ocean Dr '
+
+PPId 83796 (Keilor Village Scout Hall): Mismatch ->
+Lat: '-37.7235395483238' != '-37.723378'
+Long: '144.837876898121' != '144.83806'
+
+PPId 8476 (The Friends School): Mismatch ->
+Address1: '393 Argyle St' != 'The Friends School Argyle St Campus'
+Address2: '' != '395 Argyle St'
+AdvAddress: '393 Argyle St' != 'The Friends School Argyle St Campus '
+Lat: '-42.8669519091335' != '-42.8658712'
+Long: '147.315782686273' != '147.31445718'
+
+PPId 8484 (Hobart North Uniting Church): Mismatch ->
+AdvBoothLocation: 'Church Hall' != 'Multi-purpose room'
+AdvGateAccess: '' != 'Entry via Swan Street'
+EntrancesDesc: 'Polling place is located within church. Entry via Swan St.' != 'Polling place is in multi-purpose room inside of church. Entry via side driveway via Swan Street.'
+
+PPId 8907 (The Salvation Army Brimbank City Corps): Mismatch ->
+Lat: '-37.7078431541812' != '-37.708282'
+Long: '144.77813499015' != '144.77851'
+
+PPId 916 (Cudmirrah/Berrara Community Hall): Mismatch ->
+PremisesName: 'Cudmirrah/Berrara Community Hall' != 'Cudmirrah Berrara Community Hall'
+AdvPremisesName: 'Cudmirrah/Berrara Community Hall' != 'Cudmirrah Berrara Community Hall'
+

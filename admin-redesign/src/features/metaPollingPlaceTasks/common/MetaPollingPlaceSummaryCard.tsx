@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
-import type { IMetaPollingPlace } from '../interfaces/metaPollingPlaceInterfaces';
+import type { IMetaPollingPlace, IMetaPollingPlaceNearbyToTask } from '../interfaces/metaPollingPlaceInterfaces';
 
 interface Props {
-	metaPollingPlace: IMetaPollingPlace;
+	metaPollingPlace: IMetaPollingPlace | IMetaPollingPlaceNearbyToTask;
 }
 
 function MetaPollingPlaceSummaryCard(props: Props) {
@@ -29,6 +29,12 @@ function MetaPollingPlaceSummaryCard(props: Props) {
 						{/* {metaPollingPlace.address_1} */}
 						{metaPollingPlace.jurisdiction}
 					</Typography>
+
+					{'distance_from_task_mpp_metres' in metaPollingPlace && (
+						<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+							Distance from Task Meta Polling Place: {Math.round(metaPollingPlace.distance_from_task_mpp_metres)}m
+						</Typography>
+					)}
 				</Box>
 			</CardContent>
 		</Card>

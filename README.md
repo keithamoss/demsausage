@@ -234,7 +234,7 @@ We then need to change it in a whole bunch of places.
 
 ### Updating SSH
 
-1. Update `~/.ssh/known_hosts`
+1. Update `~/.ssh/known_hosts` to point to the Public IPv4 DNS name
 
 ### Updating Postico
 
@@ -262,3 +262,4 @@ As above.
 As above.
 
 1. Update `SAUSAGE_WEB_PRODUCTION_ENV` with `prod/sausage-web.env`
+2. Update `SAUSAGE_WEB_STAGING_ENV` with `staging-real/sausage-web.env`

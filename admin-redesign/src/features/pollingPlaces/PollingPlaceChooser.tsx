@@ -199,7 +199,7 @@ function PollingPlaceChooser(props: Props) {
 				onChooseElection={onChooseElection}
 			/>
 
-			{dayjs(election.election_day).isBefore(dayjs()) === true && (
+			{dayjs(dayjs()).isAfter(election.election_day, 'day') === true && (
 				<Alert severity="warning" sx={{ mb: 2 }}>
 					<AlertTitle>
 						Is this the <s>droid</s> election you're looking for?
