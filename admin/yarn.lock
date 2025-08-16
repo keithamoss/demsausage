@@ -1072,10 +1072,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/babel-plugin-component-annotate@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@sentry/babel-plugin-component-annotate@npm:4.0.2"
-  checksum: 10c0/8c446d83840e54350b2d433fa55e19e90cdd55e4cc49e31b36004c7725fc56a6cbeb05f22bb182b320ee3dc0c40c1451872c3f735b1a7876b982b05134a74ae5
+"@sentry/babel-plugin-component-annotate@npm:4.1.1":
+  version: 4.1.1
+  resolution: "@sentry/babel-plugin-component-annotate@npm:4.1.1"
+  checksum: 10c0/ee2ad4fad13362a35554f1ed7e1f5dfe4cbccdf35064bdd36bb658c0c785dffc3110ebecd11690cff3f4906a512bae3bc4bb9d488b4c71767ea7ed235efa1b5e
   languageName: node
   linkType: hard
 
@@ -1092,90 +1092,90 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@sentry/bundler-plugin-core@npm:4.0.2"
+"@sentry/bundler-plugin-core@npm:4.1.1":
+  version: 4.1.1
+  resolution: "@sentry/bundler-plugin-core@npm:4.1.1"
   dependencies:
     "@babel/core": "npm:^7.18.5"
-    "@sentry/babel-plugin-component-annotate": "npm:4.0.2"
-    "@sentry/cli": "npm:^2.49.0"
+    "@sentry/babel-plugin-component-annotate": "npm:4.1.1"
+    "@sentry/cli": "npm:^2.51.0"
     dotenv: "npm:^16.3.1"
     find-up: "npm:^5.0.0"
     glob: "npm:^9.3.2"
     magic-string: "npm:0.30.8"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/d3adbdda6906132d76b4b8a316da6622d9afc93814f4f2f2c67d1b16015451787d801b472cd7550c5d6db95b5756f06bae7a8f3484d24f2e776c5977e457f514
+  checksum: 10c0/3603b9347a7db4dd4a4596e79339239ad7a5c34d2a65037298aff9d140a08088c1116341cf534c31669f5938b32803ce435a9c0b3dc0c0b99bafecef706cc129
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-darwin@npm:2.50.0"
+"@sentry/cli-darwin@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-darwin@npm:2.52.0"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-linux-arm64@npm:2.50.0"
+"@sentry/cli-linux-arm64@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-linux-arm64@npm:2.52.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-linux-arm@npm:2.50.0"
+"@sentry/cli-linux-arm@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-linux-arm@npm:2.52.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-linux-i686@npm:2.50.0"
+"@sentry/cli-linux-i686@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-linux-i686@npm:2.52.0"
   conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-linux-x64@npm:2.50.0"
+"@sentry/cli-linux-x64@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-linux-x64@npm:2.52.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-win32-arm64@npm:2.50.0"
+"@sentry/cli-win32-arm64@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-win32-arm64@npm:2.52.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-win32-i686@npm:2.50.0"
+"@sentry/cli-win32-i686@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-win32-i686@npm:2.52.0"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.50.0":
-  version: 2.50.0
-  resolution: "@sentry/cli-win32-x64@npm:2.50.0"
+"@sentry/cli-win32-x64@npm:2.52.0":
+  version: 2.52.0
+  resolution: "@sentry/cli-win32-x64@npm:2.52.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:^2.49.0":
-  version: 2.50.0
-  resolution: "@sentry/cli@npm:2.50.0"
+"@sentry/cli@npm:^2.51.0":
+  version: 2.52.0
+  resolution: "@sentry/cli@npm:2.52.0"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.50.0"
-    "@sentry/cli-linux-arm": "npm:2.50.0"
-    "@sentry/cli-linux-arm64": "npm:2.50.0"
-    "@sentry/cli-linux-i686": "npm:2.50.0"
-    "@sentry/cli-linux-x64": "npm:2.50.0"
-    "@sentry/cli-win32-arm64": "npm:2.50.0"
-    "@sentry/cli-win32-i686": "npm:2.50.0"
-    "@sentry/cli-win32-x64": "npm:2.50.0"
+    "@sentry/cli-darwin": "npm:2.52.0"
+    "@sentry/cli-linux-arm": "npm:2.52.0"
+    "@sentry/cli-linux-arm64": "npm:2.52.0"
+    "@sentry/cli-linux-i686": "npm:2.52.0"
+    "@sentry/cli-linux-x64": "npm:2.52.0"
+    "@sentry/cli-win32-arm64": "npm:2.52.0"
+    "@sentry/cli-win32-i686": "npm:2.52.0"
+    "@sentry/cli-win32-x64": "npm:2.52.0"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -1200,7 +1200,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10c0/002370fef92d91c12ebe943dc256fa975d9f54e59c873464b020ac23e2fceabd43f5de9f20e5dc11c29b0394e298e29a648811a57875b933cf3214664b213382
+  checksum: 10c0/9d49e583ffba089b8920bd85e6fcd9dd1184932cbd53d3fead743fdb69b18d0e9ed1791b5bda92acb09d1e067679e9551cf05c6a74f2872518eac8cad8f9b2aa
   languageName: node
   linkType: hard
 
@@ -1227,13 +1227,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "@sentry/vite-plugin@npm:4.0.2"
+"@sentry/vite-plugin@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@sentry/vite-plugin@npm:4.1.1"
   dependencies:
-    "@sentry/bundler-plugin-core": "npm:4.0.2"
+    "@sentry/bundler-plugin-core": "npm:4.1.1"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/1d40addfe1023bf78a42f13c9f60f08f2c0c3c2bd601186473e591af57b8210aab468b0b315ad5e230ce7168ca929c4acc88d4268edfa3cc22ad3889a41afe82
+  checksum: 10c0/28ebb6be1c87284331b8b297c0c6e3dd87b9295795f5a7b6e49775770c809ac9b33b1b6ac3b204ffef926c12c46c873aeed8e4bfe45df2cf169743fe96c2f760
   languageName: node
   linkType: hard
 
@@ -1855,7 +1855,7 @@ __metadata:
   dependencies:
     "@sentry/browser": "npm:^10.3.0"
     "@sentry/types": "npm:^10.5.0"
-    "@sentry/vite-plugin": "npm:^4.0.2"
+    "@sentry/vite-plugin": "npm:^4.1.1"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.6.4"
     "@testing-library/react": "npm:^16.3.0"
