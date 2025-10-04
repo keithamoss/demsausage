@@ -1773,12 +1773,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.1.14":
-  version: 19.1.14
-  resolution: "@types/react@npm:19.1.14"
+"@types/react@npm:^19.2.0":
+  version: 19.2.0
+  resolution: "@types/react@npm:19.2.0"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10c0/0d1629e065413be79c949f011845836e7f515c8f97dbfef057719be2f312b404405d2d064cb28e03363c62c153c100e84268c09dd9aeda488858d45033b520f0
+  checksum: 10c0/a280e146df2abd3b06eaa2f5332dade9f7ebe916334a40699ee11139c5f22aeb49b5b78b6de8c55b53ef2fa94285e1bc2feaf4fbce6fe259a7de92dc1bf67b17
   languageName: node
   linkType: hard
 
@@ -1914,7 +1914,7 @@ __metadata:
     "@types/node": "npm:^24.6.2"
     "@types/prop-types": "npm:^15.7.15"
     "@types/qs": "npm:^6.14.0"
-    "@types/react": "npm:^19.1.14"
+    "@types/react": "npm:^19.2.0"
     "@types/react-dom": "npm:^19.2.0"
     "@types/react-is": "npm:^19"
     "@types/react-redux": "npm:7.1.34"
@@ -1938,7 +1938,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     prop-types: "npm:^15.8.1"
     qs: "npm:^6.14.0"
-    react: "npm:^19.1.1"
+    react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
     react-google-maps: "npm:^9.4.5"
     react-is: "npm:^19.1.1"
@@ -4260,10 +4260,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.1":
-  version: 19.1.1
-  resolution: "react@npm:19.1.1"
-  checksum: 10c0/8c9769a2dfd02e603af6445058325e6c8a24b47b185d0e461f66a6454765ddcaecb3f0a90184836c68bb509f3c38248359edbc42f0d07c23eb500a5c30c87b4e
+"react@npm:^19.2.0":
+  version: 19.2.0
+  resolution: "react@npm:19.2.0"
+  checksum: 10c0/1b6d64eacb9324725bfe1e7860cb7a6b8a34bc89a482920765ebff5c10578eb487e6b46b2f0df263bd27a25edbdae2c45e5ea5d81ae61404301c1a7192c38330
   languageName: node
   linkType: hard
 
