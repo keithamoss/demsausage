@@ -121,16 +121,10 @@ jobs:
     needs: [build-public-redesign, build-admin-redesign, build-django-static]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up QEMU (multi-arch emulation)
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Multi-arch setup & login
+        uses: ./.github/actions/setup-multiarch
         with:
+          login: 'true'
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -168,20 +162,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Multi-arch setup & login
+        uses: ./.github/actions/setup-multiarch
         with:
+          login: 'true'
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Containers - Build Django
-        run: docker build -t keithmoss/demsausage-django:staging-$GITHUB_SHA -t keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }} .
-        working-directory: django
-
-      - name: Containers - Push to Docker Hub
-        run: |
-          docker push keithmoss/demsausage-django --all-tags
+      
+      - name: Containers - Build and Push Django (multi-arch)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./django
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            keithmoss/demsausage-django:staging-${{ github.sha }}
+            keithmoss/demsausage-django:${{ env.LATEST_IMAGE_TAG }}
+          cache-from: type=gha,scope=demsausage-django-staging
+          cache-to: type=gha,mode=max,scope=demsausage-django-staging
 
   build-rq-dashboard:
     runs-on: ubuntu-latest
