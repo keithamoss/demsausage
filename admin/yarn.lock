@@ -1839,14 +1839,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:5.1.35":
-  version: 5.1.35
-  resolution: "@types/styled-components@npm:5.1.35"
+"@types/styled-components@npm:5.1.36":
+  version: 5.1.36
+  resolution: "@types/styled-components@npm:5.1.36"
   dependencies:
     "@types/hoist-non-react-statics": "npm:*"
     "@types/react": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/829d2d03c2e687f3079bbb6512b298ba8427c8371f9575c5ce1ec2abbbbe92d4455a731049b2b217168272ac6b507d8797fe754549801d94ec2fcdbce1a1aced
+    csstype: "npm:^3.2.2"
+  checksum: 10c0/bbbf65e22a852a5bc3e1839aa591372febe084e33b8d4f44712f790e0675df9f5a327c6c6a262bbf5fd08032afe2ac9b265de92c72efca0bfa5dea09d7127c28
   languageName: node
   linkType: hard
 
@@ -1952,7 +1952,7 @@ __metadata:
     "@types/react-router-redux": "npm:4.0.58"
     "@types/recompose": "npm:^0.30.10"
     "@types/redux-form": "npm:^8.3.5"
-    "@types/styled-components": "npm:5.1.35"
+    "@types/styled-components": "npm:5.1.36"
     "@vitejs/plugin-react": "npm:^5.1.1"
     "@vitejs/plugin-react-swc": "npm:^4.2.2"
     copy-to-clipboard: "npm:^3.3.3"
@@ -2449,6 +2449,13 @@ __metadata:
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
   checksum: 10c0/80c089d6f7e0c5b2bd83cf0539ab41474198579584fa10d86d0cafe0642202343cbc119e076a0b1aece191989477081415d66c9fefbf3c957fc2fc4b7009f248
+  languageName: node
+  linkType: hard
+
+"csstype@npm:^3.2.2":
+  version: 3.2.3
+  resolution: "csstype@npm:3.2.3"
+  checksum: 10c0/cd29c51e70fa822f1cecd8641a1445bed7063697469d35633b516e60fe8c1bde04b08f6c5b6022136bb669b64c63d4173af54864510fbb4ee23281801841a3ce
   languageName: node
   linkType: hard
 
