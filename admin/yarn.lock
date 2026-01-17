@@ -1982,7 +1982,7 @@ __metadata:
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.12.0"
     react-router-redux: "npm:^4.0.8"
-    react-string-replace: "npm:^1.1.1"
+    react-string-replace: "npm:^2.0.1"
     react-tiny-virtual-list: "npm:^2.2.0"
     recompose: "npm:^0.30.0"
     redux: "npm:^5.0.1"
@@ -4241,10 +4241,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-string-replace@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "react-string-replace@npm:1.1.1"
-  checksum: 10c0/5a4a4fd9c3758b4680da113adf411342116238b4dc68fa4c4e9b04c046cb757d4f00d6ba441301fa3afb44c847dacc17a2707865698ff1fc78a369182458e894
+"react-string-replace@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "react-string-replace@npm:2.0.1"
+  checksum: 10c0/a379305b0659d5ff6312dabbafe0012ddc1d6f27abe2eaf85517868609ef20bcc4a966223ee18664be6642a8cca0cfcf0ec55fc0c00a4842e492ab11a01d9920
   languageName: node
   linkType: hard
 
