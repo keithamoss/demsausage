@@ -1992,7 +1992,7 @@ __metadata:
     redux-responsive: "npm:^4.3.8"
     redux-thunk: "npm:^3.1.0"
     reselect: "npm:^5.1.1"
-    styled-components: "npm:6.3.3"
+    styled-components: "npm:6.3.8"
     typescript: "npm:^5.9.3"
     vite: "npm:^7.3.1"
     vite-plugin-checker: "npm:^0.12.0"
@@ -4796,9 +4796,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6.3.3":
-  version: 6.3.3
-  resolution: "styled-components@npm:6.3.3"
+"styled-components@npm:6.3.8":
+  version: 6.3.8
+  resolution: "styled-components@npm:6.3.8"
   dependencies:
     "@emotion/is-prop-valid": "npm:1.4.0"
     "@emotion/unitless": "npm:0.10.0"
@@ -4812,7 +4812,10 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
-  checksum: 10c0/046e952e9fea6d6b6cab63762ec68c06e2e7f70851f76857cdac8a7d721cebf0ceab40030fb2abae5827e387e78dd019ccf7d5fcfc6d32bd0d1c9676018f8fba
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/04cebfaee316e356919b85eac6b5a6319454f45c473cc2162173eedab062c9625ce726c96d78a255d4a2ece6f9316d45e5f3cf8976d278da64082cad3172a918
   languageName: node
   linkType: hard
 
