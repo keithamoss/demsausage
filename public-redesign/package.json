@@ -20,7 +20,7 @@
     "@mui/system": "^5.15.15",
     "@mui/x-date-pickers": "^7.5.1",
     "@reduxjs/toolkit": "^2.2.5",
-    "@sentry/browser": "^8.5.0",
+    "@sentry/browser": "^8.33.0",
     "@sentry/react": "^8.5.0",
     "autosuggest-highlight": "^3.3.4",
     "dayjs": "^1.11.11",
