@@ -6,4 +6,5 @@
         "editor.defaultFormatter": "biomejs.biome"
     },
     "biome.lspBin": "/Users/keithmoss/Projects/GitHub/demsausage/public-redesign/node_modules/@biomejs/biome/bin/biome",
+    "snyk.advanced.autoSelectOrganization": true,
 }
