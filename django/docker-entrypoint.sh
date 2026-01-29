@@ -79,6 +79,11 @@ if [ "$CMD" != "build" ]; then
 
   # Ensure we have a place to log to
   mkdir -p /app/logs/cron
+  mkdir -p /app/logs/gunicorn
+  mkdir -p /app/logs/django
+  mkdir -p /app/logs/rq_workers
+  mkdir -p /app/logs/supervisord
+  mkdir -p /app/logs/webdriver
 
   # Start crond service
   chmod 755 /app/demsausage/app/sausage/cron/cron.sh

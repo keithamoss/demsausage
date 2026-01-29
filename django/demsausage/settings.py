@@ -68,7 +68,7 @@ if get_env("ENVIRONMENT") == "PRODUCTION" or get_env("ENVIRONMENT") == "STAGING"
             "file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": "/app/logs/django.log",
+                "filename": "/app/logs/django/django.log",
                 "formatter": "verbose",
             },
         },
