@@ -5,10 +5,6 @@ inputs:
     description: 'Buildx driver (default docker-container)'
     required: false
     default: 'docker-container'
-  install:
-    description: 'Install buildx binary (true/false)'
-    required: false
-    default: 'false'
   login:
     description: 'Perform Docker registry login (true/false)'
     required: false
@@ -33,7 +29,6 @@ runs:
       uses: docker/setup-buildx-action@v3
       with:
         driver: ${{ inputs.driver }}
-        install: ${{ inputs.install }}
 
     - name: Docker registry login
       if: inputs.login == 'true'
