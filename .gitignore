@@ -1,7 +1,7 @@
 .DS_Store
 *.code-workspace
 /v3-test/*
-build/
+build/*.tgz
 secrets/
 keys/
 dev-certs/
@@ -18,5 +18,4 @@ demsausage-logs-federal-2022/
 db-a-logs-federal-election-2022/
 .dccache
 .iac-data/
-
 frontend/

@@ -70,27 +70,3 @@ nano wildcard.democracysausage.org.key
 **Note:** We can't use `staging.[foboar].democracysausage.org` because the Cloudflare Free plan doesn't cover more than one level of wildcards for Edge Certificates. It'd be at least USD$10/month to upgrade to a plan that allows it.
 
 **Note:** We created a new Origin Server certificate that claims to cover more than the original one when we thought we should use `staging.[foboar].democracysausage.org`, so in practice it really just covers the same domains as the cert in prod and exists to differentiate it from that prod cert.
-
-# GitHub Actions-powered CI/CD on Digital Ocean
-
-https://github.com/marketplace/actions/ssh-remote-commands
-
-```
-ssh-keygen -t rsa -b 4096 -C "staging@democracysausage"
-(On the remote host) nano ~/.ssh/authorized_keys and add the public key
-```
-
-Add the private key and other env vars to GitHub Actions
-
-```
-SSH_STAGING_HOST
-SSH_STAGING_USERNAME
-SSH_STAGING_KEY
-SSH_STAGING_KEY_PASSPHRASE
-```
-
-## Resources
-
-https://docs.servicestack.net/do-github-action-mix-deployment
-https://faun.pub/full-ci-cd-with-docker-github-actions-digitalocean-droplets-container-registry-db2938db8246
-https://thaoth.dev/Full-CI-CD-with-Docker-GitHub-Actions-DigitalOcean-Droplets-Container-Registry/

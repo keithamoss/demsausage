@@ -32,12 +32,7 @@ jobs:
           touch secrets/staging/sausage-admin-redesign-frontend.staging.env
 
       - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
-
-      # - name: Setup Debug Session
-      #   uses: csexton/debugger-action@master
+        run: mkdir ./build
 
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_staging.yml run public_redesign
@@ -46,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-public-redesign
-          path: ./nginx-prod/build/public-redesign.tgz
+          path: ./build/public-redesign.tgz
 
   build-admin-redesign:
     runs-on: ubuntu-latest
@@ -69,9 +64,7 @@ jobs:
           touch secrets/staging/sausage-public-redesign-frontend.staging.env
 
       - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
+        run: mkdir ./build
 
       - name: Admin Redesign Frontend - Build
         run: docker compose --file build_staging.yml run admin_redesign
@@ -80,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-admin-redesign
-          path: ./nginx-prod/build/admin-redesign.tgz
+          path: ./build/admin-redesign.tgz
 
   build-django-static:
     runs-on: ubuntu-latest
@@ -103,9 +96,7 @@ jobs:
           touch secrets/staging/sausage-admin-redesign-frontend.staging.env
 
       - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
+        run: mkdir ./build
 
       - name: Django - Build
         run: docker compose --file build_staging.yml run django
@@ -114,49 +105,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-django
-          path: ./nginx-prod/build/django.tgz
-
-  build-nginx:
-    runs-on: ubuntu-latest
-    needs: [build-public-redesign, build-admin-redesign, build-django-static]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Multi-arch setup & login
-        uses: ./.github/actions/setup-multiarch
-        with:
-          login: 'true'
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
-
-      - name: Download artifacts for container building
-        uses: actions/download-artifact@v4
-        with:
-          path: ./build/
-
-      - name: Move artifacts
-        run: |
-          cp -r ./public-legacy/staging/ ./nginx-prod/build/public-legacy/
-          cp -r ./admin-legacy/staging/ ./nginx-prod/build/admin-legacy/
-          mv ./build/build-public-redesign/public-redesign.tgz ./nginx-prod/build/public-redesign.tgz
-          mv ./build/build-admin-redesign/admin-redesign.tgz ./nginx-prod/build/admin-redesign.tgz
-          mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
-
-      - name: Containers - Build and Push Nginx (multi-arch)
-        uses: docker/build-push-action@v5
-        with:
-          context: ./nginx-prod
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            keithmoss/demsausage-nginx:staging-${{ github.sha }}
-            keithmoss/demsausage-nginx:${{ env.LATEST_IMAGE_TAG }}
-          cache-from: type=gha,scope=demsausage-nginx-staging
-          cache-to: type=gha,mode=max,scope=demsausage-nginx-staging
+          path: ./build/django.tgz
 
   build-django:
     runs-on: ubuntu-latest
@@ -203,18 +152,3 @@ jobs:
             keithmoss/demsausage-rq-dashboard:${{ env.LATEST_IMAGE_TAG }}
           cache-from: type=gha,scope=demsausage-rq-dashboard-staging
           cache-to: type=gha,mode=max,scope=demsausage-rq-dashboard-staging
-
-  deploy-app:
-    runs-on: ubuntu-latest
-    needs: [build-nginx, build-django, build-rq-dashboard]
-    steps:
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SSH_STAGING_HOST }}
-          username: ${{ secrets.SSH_STAGING_USERNAME }}
-          key: ${{ secrets.SSH_STAGING_KEY }}
-          passphrase: ${{ secrets.SSH_STAGING_KEY_PASSPHRASE }}
-          script: |
-            cd /apps/digitalocean-stack/
-            ./demsausage-staging-redeploy.sh
