@@ -102,6 +102,9 @@ fi
 
 # Build entrypoint (development)
 if [ "$CMD" = "build" ]; then
+  # Ensure logs directory exists for Django logging configuration
+  mkdir -p /app/logs/django
+  
   rm -rf /app/static
   mkdir -p /app/static
   
