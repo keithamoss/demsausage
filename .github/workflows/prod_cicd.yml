@@ -31,9 +31,6 @@ jobs:
           touch secrets/dev/sausage-web-db.dev.env
           touch secrets/prod/sausage-admin-redesign-frontend.production.env
 
-      - name: Build - Prep
-        run: mkdir ./build
-
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_production.yml run public_redesign
 
@@ -63,9 +60,6 @@ jobs:
           touch secrets/dev/sausage-web-db.dev.env
           touch secrets/prod/sausage-public-redesign-frontend.production.env
 
-      - name: Build - Prep
-        run: mkdir ./build
-
       - name: Admin Redesign Frontend - Build
         run: docker compose --file build_production.yml run admin_redesign
 
@@ -94,9 +88,6 @@ jobs:
           echo "${{secrets.SAUSAGE_WEB_DB_DEV_ENV }}" > secrets/dev/sausage-web-db.dev.env
           touch secrets/prod/sausage-public-redesign-frontend.production.env
           touch secrets/prod/sausage-admin-redesign-frontend.production.env
-
-      - name: Build - Prep
-        run: mkdir ./build
 
       - name: Django - Build
         run: docker compose --file build_production.yml run django
