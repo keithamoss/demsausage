@@ -37,7 +37,7 @@
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",
-    "styled-components": "6.3.8",
+    "styled-components": "6.3.9",
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
