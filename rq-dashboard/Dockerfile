@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 # Install rq-dashboard and pin rq for compatibility
-RUN pip install --no-cache-dir rq-dashboard rq==1.10.1
+RUN pip install --no-cache-dir rq-dashboard rq==1.16.2
 
 # Add local files (entrypoint script)
 ADD . /app
