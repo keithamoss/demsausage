@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10-slim-bookworm
 LABEL maintainer="<keithamoss@gmail.com>"
 
 ENV PYTHONUNBUFFERED=1 \
