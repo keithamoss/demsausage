@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.10-slim-bookworm
 LABEL maintainer="<keithamoss@gmail.com>"
 
 # Python
@@ -53,10 +53,8 @@ WORKDIR /app
 
 # Python deps management
 RUN apt-get install -y curl
-# Pin Poetry to 2.2.1 because Poetry 2.3.0+ dropped support for Python 3.9
-# This Dockerfile uses python:3.9-slim-bullseye, so we cannot use Poetry 2.3.0 or later
-# To upgrade Poetry beyond 2.2.x, first upgrade the base image to Python 3.10+
-RUN curl -sSL https://install.python-poetry.org | python - --version 2.2.1
+# Using latest Poetry since Python 3.10+ supports modern Poetry versions
+RUN curl -sSL https://install.python-poetry.org | python -
 # Even though Dependabot takes care of updating packages for us, we still need this for poetry to install without complaining about some packages "not being available at [version]". Whatever!
 RUN poetry update
 RUN poetry install --only main
