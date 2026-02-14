@@ -24,7 +24,29 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y supervisor gdal-bin 
 RUN apt-get install -y nano cron
-RUN apt-get install -y firefox-esr
+RUN apt-get install -y firefox-esr wget
+
+# Install geckodriver for the correct architecture
+# We manually install geckodriver instead of using webdriver-manager because it has a known bug
+# where it downloads x86-64 binaries on ARM64/aarch64 systems (e.g., Raspberry Pi), causing
+# "OSError: [Errno 8] Exec format error" when trying to run the binary.
+# See: https://github.com/SergeyPirogov/webdriver_manager/issues/616
+#      https://github.com/SergeyPirogov/webdriver_manager/issues/702
+# This manual installation detects the architecture and downloads the correct binary for both
+# amd64 (Intel/AMD) and arm64 (Raspberry Pi) platforms.
+RUN ARCH=$(dpkg --print-architecture) && \
+  if [ "$ARCH" = "amd64" ]; then \
+  GECKODRIVER_ARCH="linux64"; \
+  elif [ "$ARCH" = "arm64" ]; then \
+  GECKODRIVER_ARCH="linux-aarch64"; \
+  else \
+  echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi && \
+  GECKODRIVER_VERSION="v0.35.0" && \
+  wget -q "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-${GECKODRIVER_ARCH}.tar.gz" && \
+  tar -xzf "geckodriver-${GECKODRIVER_VERSION}-${GECKODRIVER_ARCH}.tar.gz" -C /usr/local/bin && \
+  chmod +x /usr/local/bin/geckodriver && \
+  rm "geckodriver-${GECKODRIVER_VERSION}-${GECKODRIVER_ARCH}.tar.gz"
 
 ADD . /app
 WORKDIR /app
@@ -39,7 +61,7 @@ RUN curl -sSL https://install.python-poetry.org | python - --version 2.2.1
 RUN poetry update
 RUN poetry install --only main
 
-RUN apt-get remove -y --purge curl && \
+RUN apt-get remove -y --purge curl wget && \
   apt-get autoremove -y && \
   rm -rf /var/lib/apt/lists/*
 
