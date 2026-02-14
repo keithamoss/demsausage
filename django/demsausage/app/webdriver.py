@@ -26,15 +26,15 @@ def get_map_screenshot(election):
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0; Demsausage-Webdriver-Screenshot-Service",
     )
 
-    if os.path.isfile("/app/logs/webdriver/geckodriver.log") is False:
-        Path("/app/logs/webdriver/").mkdir(parents=True, exist_ok=True)
-        with open("/app/logs/webdriver/geckodriver.log", "x") as f:
-            pass
+    # Ensure log directory exists (Selenium 4.x will create the log file)
+    Path("/app/logs/webdriver/").mkdir(parents=True, exist_ok=True)
 
     # Use system-installed geckodriver (installed in Dockerfile for correct architecture)
+    # Note: Selenium 4.x uses 'log_output' parameter instead of 'log_path'
     driver = webdriver.Firefox(
         service=Service(
-            "/usr/local/bin/geckodriver", log_path="/app/logs/webdriver/geckodriver.log"
+            "/usr/local/bin/geckodriver",
+            log_output="/app/logs/webdriver/geckodriver.log",
         ),
         options=firefox_options,
     )
