@@ -1040,6 +1040,161 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             else:
                 self.logger.error("Polling place invalid: {}".format(serialiser.errors))
 
+    def migrate_unofficial_pending_stalls(self):
+        """
+        Handles pending stalls that were submitted against unofficial (user-provided)
+        polling places (i.e. location_info is set and polling_place is None).
+
+        This happens when stalls are submitted before the first official CSV data is
+        loaded. On first load, we match each such stall's location_info geom against
+        the incoming DRAFT polling places within a 100m threshold and repoint them.
+
+        Only runs on the first polling place load (polling_places_loaded=False).
+        """
+        if self.election.polling_places_loaded is True:
+            return
+
+        queryset = Stalls.objects.filter(
+            election=self.election,
+            status=StallStatus.PENDING,
+            polling_place__isnull=True,
+            location_info__isnull=False,
+        )
+
+        count = queryset.count()
+        if count == 0:
+            self.logger.info(
+                "Unofficial Pending Stall Migration: No unofficial pending stalls to migrate"
+            )
+            return
+
+        self.logger.info(
+            "Unofficial Pending Stall Migration: Found {} unofficial pending stall(s) to migrate".format(
+                count
+            )
+        )
+
+        matched_count = 0
+        for stall in queryset:
+            coordinates = stall.location_info["geom"]["coordinates"]
+            stall_geom = Point(coordinates[0], coordinates[1], srid=4326)
+
+            matching_polling_places = self.safe_find_by_distance(
+                "Unofficial Pending Stall Migration",
+                stall_geom,
+                distance_threshold_km=0.2,
+                limit=None,
+                qs=PollingPlaces.objects.filter(
+                    election=self.election, status=PollingPlaceStatus.DRAFT
+                ),
+            )
+
+            num_matches = len(matching_polling_places)
+
+            if num_matches == 0:
+                self.logger.error(
+                    "Unofficial Pending Stall Migration: No matching polling place found within 100m for stall {} "
+                    "(User-submitted location: '{}' at '{}', {}). "
+                    "The user-submitted location may not correspond to an official polling place in this CSV. "
+                    "Action needed: adjust the distance threshold or update the database manually.".format(
+                        stall.id,
+                        stall.location_info["name"],
+                        stall.location_info["address"],
+                        stall.location_info["state"],
+                    )
+                )
+
+                # Expand to 1km to give the human something to work with, but don't auto-match.
+                nearby = list(
+                    find_by_distance(
+                        stall_geom,
+                        distance_threshold_km=1.0,
+                        limit=None,
+                        qs=PollingPlaces.objects.filter(
+                            election=self.election, status=PollingPlaceStatus.DRAFT
+                        ),
+                    )
+                )
+                if len(nearby) == 0:
+                    self.logger.error(
+                        "Unofficial Pending Stall Migration: No polling places found within 1km of stall {} either.".format(
+                            stall.id
+                        )
+                    )
+                else:
+                    for pp in nearby:
+                        self.logger.error(
+                            "Unofficial Pending Stall Migration: Nearby polling place for stall {} ({:.0f}m away, not auto-matched): "
+                            "'{}' ({}) at '{}'".format(
+                                stall.id,
+                                pp.distance.m,
+                                pp.name,
+                                pp.premises,
+                                pp.address,
+                            )
+                        )
+
+            elif num_matches > 1:
+                self.logger.error(
+                    "Unofficial Pending Stall Migration: {} polling places found within 100m for stall {} "
+                    "(User-submitted location: '{}' at '{}', {}). "
+                    "Cannot determine the correct match unambiguously.".format(
+                        num_matches,
+                        stall.id,
+                        stall.location_info["name"],
+                        stall.location_info["address"],
+                        stall.location_info["state"],
+                    )
+                )
+                for pp in matching_polling_places:
+                    self.logger.error(
+                        "Unofficial Pending Stall Migration: Candidate polling place for stall {} ({:.0f}m away): "
+                        "'{}' ({}) at '{}'".format(
+                            stall.id, pp.distance.m, pp.name, pp.premises, pp.address
+                        )
+                    )
+            else:
+                official = matching_polling_places[0]
+                self.logger.info(
+                    "Unofficial Pending Stall Migration: Stall {} matched successfully ({:.0f}m away). "
+                    "User-submitted location: '{}' at '{}', {} "
+                    "| Official polling place: '{}' ({}) at '{}'. "
+                    "Please verify this match is correct.".format(
+                        stall.id,
+                        official.distance.m,
+                        stall.location_info["name"],
+                        stall.location_info["address"],
+                        stall.location_info["state"],
+                        official.name,
+                        official.premises,
+                        official.address,
+                    )
+                )
+
+                stall.polling_place_id = official.id
+                stall.save()
+                matched_count += 1
+
+        # Validate that all unofficial pending stalls have been successfully repointed
+        unmatched = Stalls.objects.filter(
+            election=self.election,
+            status=StallStatus.PENDING,
+            polling_place__isnull=True,
+            location_info__isnull=False,
+        ).count()
+        if unmatched > 0:
+            self.logger.error(
+                "Unofficial Pending Stall Migration: {} unofficial pending stall(s) still have no polling place after migration — this shouldn't happen.".format(
+                    unmatched
+                )
+            )
+
+        self.logger.info(
+            "Unofficial Pending Stall Migration: Matched and repointed {} of {} unofficial pending stall(s)".format(
+                matched_count, count
+            )
+        )
+
     def migrate_noms(self):
         def _getDistanceThreshold(polling_place):
             threshold = 0.1
@@ -1592,6 +1747,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             with transaction.atomic():
                 self.invoke_and_bail_if_errors("write_draft_polling_places")
+                self.invoke_and_bail_if_errors("migrate_unofficial_pending_stalls")
                 self.invoke_and_bail_if_errors("migrate_noms")
                 self.invoke_and_bail_if_errors("migrate_mpps")
                 self.invoke_and_bail_if_errors("migrate")
