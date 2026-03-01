@@ -20,3 +20,5 @@ db-a-logs-federal-election-2022/
 .iac-data/
 
 frontend/
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md
