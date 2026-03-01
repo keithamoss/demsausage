@@ -36,6 +36,10 @@ def get_elections_cache_key():
     return "elections_list"
 
 
+def get_election_stats_cache_key(electionId):
+    return f"election_{electionId}_stats"
+
+
 def get_default_election():
     return Elections.objects.filter(is_primary=True).get()
 

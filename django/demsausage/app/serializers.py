@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
     MetaPollingPlaceTaskCategory,
@@ -22,7 +24,10 @@ from demsausage.app.models import (
     Profile,
     Stalls,
 )
-from demsausage.app.sausage.elections import getGamifiedElectionStats
+from demsausage.app.sausage.elections import (
+    get_election_stats_cache_key,
+    getGamifiedElectionStats,
+)
 from demsausage.app.sausage.polling_places import find_by_distance
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import daterange, get_or_none, get_url_safe_election_name
@@ -33,8 +38,10 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
+from django.core.cache import cache
 from django.db.models import Count, Q
 from django.db.models.functions import TruncDay
+from django.utils import timezone
 
 
 class HistoricalRecordField(serializers.ListField):
@@ -220,15 +227,18 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                 .count()
             )
 
-            pollingPlaceNomsAddedDirectlyAndAlsoWithApprovedSubs = (
-                PollingPlaceNoms.history.filter(
-                    id__in=PollingPlaces.objects.filter(
-                        election_id=obj.id,
-                        status=PollingPlaceStatus.ACTIVE,
-                        noms__isnull=False,
-                        noms__deleted=False,
-                    ).values_list("noms_id", flat=True)
-                )
+            # Build the shared subquery once and materialise the annotated history
+            # queryset into a list so we can derive both counts in Python without
+            # hitting the database twice.
+            active_noms_ids = PollingPlaces.objects.filter(
+                election_id=obj.id,
+                status=PollingPlaceStatus.ACTIVE,
+                noms__isnull=False,
+                noms__deleted=False,
+            ).values_list("noms_id", flat=True)
+
+            noms_history_annotated = list(
+                PollingPlaceNoms.history.filter(id__in=active_noms_ids)
                 .values("id")
                 .annotate(
                     has_added_directly=Count(
@@ -247,39 +257,18 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                         ),
                     ),
                 )
-                .filter(has_added_directly__gt=0, has_approval__gt=0)
-                .count()
             )
 
-            pollingPlacesNomsWithApprovedSubsAndNotDirectlySourced = (
-                PollingPlaceNoms.history.filter(
-                    id__in=PollingPlaces.objects.filter(
-                        election_id=obj.id,
-                        status=PollingPlaceStatus.ACTIVE,
-                        noms__isnull=False,
-                        noms__deleted=False,
-                    ).values_list("noms_id", flat=True)
-                )
-                .values("id")
-                .annotate(
-                    has_added_directly=Count(
-                        "id",
-                        filter=Q(
-                            history_change_reason=PollingPlaceNomsChangeReason.ADDED_DIRECTLY
-                        ),
-                    ),
-                    has_approval=Count(
-                        "id",
-                        filter=Q(
-                            history_change_reason__in=[
-                                PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
-                                PollingPlaceNomsChangeReason.APPROVED_MANUAL,
-                            ]
-                        ),
-                    ),
-                )
-                .filter(has_added_directly=0, has_approval__gt=0)
-                .count()
+            pollingPlaceNomsAddedDirectlyAndAlsoWithApprovedSubs = sum(
+                1
+                for item in noms_history_annotated
+                if item["has_added_directly"] > 0 and item["has_approval"] > 0
+            )
+
+            pollingPlacesNomsWithApprovedSubsAndNotDirectlySourced = sum(
+                1
+                for item in noms_history_annotated
+                if item["has_added_directly"] == 0 and item["has_approval"] > 0
             )
 
             return {
@@ -341,7 +330,14 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                 .exclude(count__lte=1),
             )[0]
 
-        return {
+        is_inactive = not obj.is_active()
+
+        if is_inactive:
+            cached = cache.get(get_election_stats_cache_key(obj.id))
+            if cached is not None:
+                return cached
+
+        result = {
             "with_data": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
@@ -350,13 +346,20 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "total": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             ).count(),
-            "by_source": _get_by_source(),
-            "subs_by_type_and_day": _get_subs_by_type_and_day(),
+            "by_source": list(_get_by_source()),
+            "subs_by_type_and_day": list(_get_subs_by_type_and_day()),
             "subs_by_category": _get_subs_by_category(),
-            "triage_actions_by_day": _get_triage_actions_by_day(),
-            "top_submitters": _get_top_submitters(),
+            "triage_actions_by_day": list(_get_triage_actions_by_day()),
+            "top_submitters": list(_get_top_submitters()),
             "noms_changes_by_user": getGamifiedElectionStats(obj.id),
         }
+
+        if is_inactive:
+            cache.set(
+                get_election_stats_cache_key(obj.id), result, timeout=60 * 60
+            )  # 1 hour
+
+        return result
 
 
 class NomsBooleanJSONField(serializers.JSONField):
