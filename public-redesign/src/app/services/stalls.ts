@@ -173,7 +173,10 @@ export const stallsApi = api.injectEndpoints({
 				body: stall,
 			}),
 		}),
-		updateStallWithCredentials: builder.mutation<void, Stall & { token: string; signature: string }>({
+		updateStallWithCredentials: builder.mutation<
+			void,
+			Omit<Stall, 'location_info'> & { token: string; signature: string }
+		>({
 			query: (stall) => ({
 				url: `stalls/${stall.id}/update_and_resubmit/`,
 				method: 'PATCH',
