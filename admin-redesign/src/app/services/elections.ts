@@ -170,7 +170,20 @@ export const electionsApi = api.injectEndpoints({
 			}),
 		}),
 		getImpossibilitiesReport: builder.query<
-			{ type: string; name: string; passed: boolean; message: string; ids: number[] }[],
+			// Most checks can group offending IDs by election. One check
+			// ('polling_place_noms_not_attached_to_a_polling_place') has no election
+			// FK to traverse (the noms record is detached), so it returns a flat 'ids'
+			// list instead. The UI discriminates on 'ids_by_election' in item.
+			(
+				| {
+						type: string;
+						name: string;
+						passed: boolean;
+						message: string;
+						ids_by_election: { election_id: number; election_name: string; ids: number[] }[];
+				  }
+				| { type: string; name: string; passed: boolean; message: string; ids: number[] }
+			)[],
 			void
 		>({
 			query: () => ({
