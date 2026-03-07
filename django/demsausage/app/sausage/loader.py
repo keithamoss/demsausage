@@ -8,39 +8,22 @@ from timeit import default_timer as timer
 
 import chardet
 import googlemaps
-from demsausage.app.enums import (
-    MetaPollingPlaceTaskCategory,
-    MetaPollingPlaceTaskStatus,
-    MetaPollingPlaceTaskType,
-    PollingPlaceState,
-    PollingPlaceStatus,
-    StallStatus,
-)
+from demsausage.app.enums import (MetaPollingPlaceTaskCategory,
+                                  MetaPollingPlaceTaskStatus,
+                                  MetaPollingPlaceTaskType, PollingPlaceState,
+                                  PollingPlaceStatus, StallStatus)
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.models import (
-    ElectoralBoundaries,
-    MetaPollingPlaces,
-    MetaPollingPlacesTasks,
-    PollingPlaces,
-    Stalls,
-)
+from demsausage.app.models import (ElectoralBoundaries, MetaPollingPlaces,
+                                   MetaPollingPlacesTasks, PollingPlaces,
+                                   Stalls)
 from demsausage.app.sausage.chance_of_sausage import (
-    calculate_chance_of_sausage,
-    calculate_chance_of_sausage_stats,
-)
+    calculate_chance_of_sausage, calculate_chance_of_sausage_stats)
 from demsausage.app.sausage.polling_places import find_by_distance
-from demsausage.app.serializers import (
-    PollingPlaceLoaderEventsSerializer,
-    PollingPlacesManagementSerializer,
-)
+from demsausage.app.serializers import (PollingPlaceLoaderEventsSerializer,
+                                        PollingPlacesManagementSerializer)
 from demsausage.rq.jobs import task_regenerate_cached_election_data
-from demsausage.util import (
-    convert_string_to_number,
-    get_env,
-    is_numeric,
-    make_logger,
-    merge_and_sum_dicts,
-)
+from demsausage.util import (convert_string_to_number, get_env, is_numeric,
+                             make_logger, merge_and_sum_dicts)
 from rq import get_current_job
 
 from django.contrib.gis.geos import Point
