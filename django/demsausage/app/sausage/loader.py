@@ -1458,7 +1458,25 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             matching_polling_places = _fetch_matching(polling_place)
 
-            if len(matching_polling_places) != 1:
+            if len(matching_polling_places) == 0:
+                if polling_place.meta_polling_place is not None:
+                    self.logger.warning(
+                        "MPP Migration: Polling place not found in new data (it may have been removed) - detaching MPP: '{}' ({})".format(
+                            polling_place.name,
+                            polling_place.address,
+                        )
+                    )
+                    polling_place.meta_polling_place = None
+                    polling_places_to_update_active.append(polling_place)
+                else:
+                    self.logger.warning(
+                        "MPP Migration: Polling place not found in new data (it may have been removed): '{}' ({})".format(
+                            polling_place.name,
+                            polling_place.address,
+                        )
+                    )
+
+            elif len(matching_polling_places) > 1:
                 self.logger.error(
                     "MPP Migration: {} matching polling places found in new data: '{}' ({})".format(
                         len(matching_polling_places),

@@ -269,7 +269,7 @@ def _generate_report_inner(
 
 
 # File paths
-file1_path = "data/20260301_160155 polling places.csv"
-file2_path = "data/test_modified.csv"
+file1_path = "data/20260301_171947 polling places.csv"
+file2_path = "data/20260307_150710 polling places.csv"
 
 generate_report(file1_path, file2_path, sort_column="id", premises_column="premises")

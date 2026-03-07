@@ -30,7 +30,10 @@ OUTPUT_DIR = Path(__file__).parent / "data"
 # (indicating ECSA has fixed their data and the patch should be removed).
 PATCHES: dict[str, dict[str, tuple[str, str]]] = {
     "Mount Barker Early Voting Centre": {
-        "type_code": ("PB", "EVC"),
+        "type_code": ("PP", "EVC"),
+    },
+    "Salisbury Early Voting Centre": {
+        "type_code": ("PP", "EVC"),
     },
 }
 
@@ -200,6 +203,16 @@ def process_place(place: dict) -> dict | None:
     Raises ValueError for unexpected field values.
     """
     location_name = place.get("location_name", "<unknown>")
+
+    # --- Detect misclassified early voting centres ---
+    if (
+        "early voting centre" in location_name.lower()
+        and place.get("type_code") != "EVC"
+    ):
+        raise ValueError(
+            f"Place {location_name!r} looks like an EVC but has type_code "
+            f"{place.get('type_code')!r}. Add a patch to PATCHES to fix this."
+        )
 
     # --- Filter ---
     if place.get("type_code") == "EVC":
