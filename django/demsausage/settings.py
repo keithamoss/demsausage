@@ -207,6 +207,9 @@ DATABASES = {
         "PASSWORD": get_env("DB_PASSWORD"),
         "HOST": get_env("DB_HOST"),
         "PORT": get_env("DB_PORT"),
+        "TEST": {
+            "NAME": "demsausage_test",
+        },
     },
 }
 

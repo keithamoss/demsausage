@@ -1,0 +1,40 @@
+{
+    "rename_columns": {
+        "Premise_Name": "premises",
+        "Polling_Place_Name": "name",
+        "Premise_State": "state",
+        "Premise_Latitude": "lat",
+        "Premise_Longitude": "lon",
+        "Division": "divisions",
+        "Disabled_Access": "wheelchair_access"
+    },
+    "address_fields": [
+        "Premise_Address_Line_1",
+        "Premise_Address_Line_2",
+        "Premise_Locality",
+        "Premise_Postcode"
+    ],
+    "extras": {
+        "fields": [
+            "Location_Within_Premise",
+            "Access_To_Location",
+            "VI_Vote_service"
+        ]
+    },
+    "address_format": "{Premise_Address_Line_1}, {Premise_Address_Line_2}, {Premise_Locality} {Premise_Postcode}",
+    "geocoding": {
+        "enabled": false
+    },
+    "fix_data_issues": [
+        {
+            "field": "wheelchair_access",
+            "value": "Assistance",
+            "overwrite": [
+                {
+                    "field": "wheelchair_access",
+                    "value": "Assisted"
+                }
+            ]
+        }
+    ]
+}
