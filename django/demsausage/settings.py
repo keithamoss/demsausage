@@ -304,9 +304,8 @@ sentry_sdk.init(
     environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper(),
 )
 
-with sentry_sdk.configure_scope() as scope:
-    scope.level = "warning"
-    scope.set_extra("site", get_env("RAVEN_SITE_NAME"))
+sentry_sdk.set_level("warning")
+sentry_sdk.set_extra("site", get_env("RAVEN_SITE_NAME"))
 
 
 # Project-specific settings
