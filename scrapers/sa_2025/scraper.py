@@ -22,20 +22,15 @@ import requests
 
 ECSA_MAP_URL = "https://www.ecsa.sa.gov.au/map"
 EXPECTED_AVAILABILITY = "Sat 21 March, 8am to 6pm"
+ALTERNATIVE_AVAILABILITY = "Sat 21 March,  9.30am - 11.30am"
+CLOSED_AVAILABILITY = "CLOSED FOR POLLING DAY"
 OUTPUT_DIR = Path(__file__).parent / "data"
 
 # Patches for known bad source data.
 # Each entry: location_name -> {field: (expected_source_value, corrected_value)}
 # If the source no longer has expected_source_value, an exception is raised
 # (indicating ECSA has fixed their data and the patch should be removed).
-PATCHES: dict[str, dict[str, tuple[str, str]]] = {
-    "Mount Barker Early Voting Centre": {
-        "type_code": ("PP", "EVC"),
-    },
-    "Salisbury Early Voting Centre": {
-        "type_code": ("PP", "EVC"),
-    },
-}
+PATCHES: dict[str, dict[str, tuple[str, str]]] = {}
 
 # All fields expected in each record from App.pollingPlaces.
 # If ECSA adds or removes fields, an error will be raised.
@@ -218,6 +213,10 @@ def process_place(place: dict) -> dict | None:
     if place.get("type_code") == "EVC":
         return None
 
+    if place.get("availability") == CLOSED_AVAILABILITY:
+        print(f"Skipping closed place: {location_name!r}", file=sys.stderr)
+        return None
+
     # --- Validate archived ---
     archived = place.get("archived")
     if archived != 0:
@@ -227,10 +226,10 @@ def process_place(place: dict) -> dict | None:
 
     # --- Validate availability ---
     availability = place.get("availability")
-    if availability != EXPECTED_AVAILABILITY:
+    if availability not in (EXPECTED_AVAILABILITY, ALTERNATIVE_AVAILABILITY):
         print(
             f"WARNING: Unexpected 'availability' value {availability!r} for place {location_name!r} "
-            f"(expected {EXPECTED_AVAILABILITY!r})",
+            f"(expected {EXPECTED_AVAILABILITY!r} or {ALTERNATIVE_AVAILABILITY!r})",
             file=sys.stderr,
         )
 
