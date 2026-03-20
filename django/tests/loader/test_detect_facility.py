@@ -156,10 +156,10 @@ def test_calculate_chance_of_sausage_updates_pp_when_historical_noms_exist(
     info_msgs = logs.get("info", [])
     # Just verify the stage completed without error (chance_of_sausage stats may or
     # may not yield numerical results depending on the stats function's algorithm,
-    # but the "Chance of Sausage calculations completed" line must appear)
+    # but the summary line must appear)
     assert any(
-        "Chance of Sausage calculations completed" in m for m in info_msgs
-    ), f"Expected 'Chance of Sausage calculations completed' in info; info={info_msgs}"
+        "Chance of sausage: considered" in m for m in info_msgs
+    ), f"Expected 'Chance of sausage: considered' in info; info={info_msgs}"
 
 
 # ---------------------------------------------------------------------------

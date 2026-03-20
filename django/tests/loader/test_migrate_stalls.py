@@ -90,8 +90,7 @@ def test_unofficial_pending_stall_no_match_logs_error(test_election):
 
     errors = logs.get("errors", [])
     assert any(
-        "Unofficial Pending Stall Migration" in m and "No matching polling place" in m
-        for m in errors
+        "stall_no_match" in m for m in errors
     ), f"Expected 'No matching polling place' error; errors={errors}"
 
 
@@ -121,8 +120,7 @@ def test_unofficial_pending_stall_multi_match_logs_error(test_election):
 
     errors = logs.get("errors", [])
     assert any(
-        "Unofficial Pending Stall Migration" in m and "Cannot determine" in m
-        for m in errors
+        "stall_multi_match" in m for m in errors
     ), f"Expected 'Cannot determine' multi-match error; errors={errors}"
 
 
@@ -229,7 +227,7 @@ def test_declined_stall_no_match_logs_error(test_election):
 
     errors = logs.get("errors", [])
     assert any(
-        "Declined/Pending Stall Migration" in m and "0 matching" in m for m in errors
+        "No match found in new data for declined" in m for m in errors
     ), f"Expected zero-match error for declined stall; errors={errors}"
 
 
@@ -272,6 +270,6 @@ def test_declined_stall_multi_match_logs_error(test_election):
 
     errors = logs.get("errors", [])
     assert any(
-        "Declined/Pending Stall Migration" in m and "matching polling places" in m
+        "spatial_proximity" in m or "matches found in new data for declined" in m
         for m in errors
     ), f"Expected multi-match Declined/Pending error; errors={errors}"

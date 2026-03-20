@@ -4,18 +4,27 @@ from demsausage.app.sausage.loader import LoadPollingPlaces
 from demsausage.rq.rq_utils import log_task_debug_info
 from demsausage.util import make_logger
 from django_rq import job
-
 from rq import Retry, get_current_job
 
 logger = make_logger(__name__)
 
 
-@job("cache_hydration", timeout=900, retry=Retry(max=1), meta={"_custom_job_name": "task_refresh_polling_place_data_{election_id}", "_ensure_task_is_unique": True})
-def task_refresh_polling_place_data(election_id, file, dry_run, config):
+@job(
+    "cache_hydration",
+    timeout=900,
+    retry=Retry(max=1),
+    meta={
+        "_custom_job_name": "task_refresh_polling_place_data_{election_id}",
+        "_ensure_task_is_unique": True,
+    },
+)
+def task_refresh_polling_place_data(
+    election_id, file, dry_run, config, user_email=None
+):
     log_task_debug_info(get_current_job())
 
     election = Elections.objects.get(id=election_id)
-    loader = LoadPollingPlaces(election, file, dry_run, config)
+    loader = LoadPollingPlaces(election, file, dry_run, config, user_email=user_email)
 
     try:
         loader.run()
@@ -26,9 +35,9 @@ def task_refresh_polling_place_data(election_id, file, dry_run, config):
     except Exception as e:
         raise e
 
-    logs = loader.collects_logs()
+    payload = loader.collect_structured_logs()
     job = get_current_job()
-    job.meta['_polling_place_loading_results'] = logs
+    job.meta["_polling_place_loading_results"] = {"payload": payload}
     job.save_meta()
 
-    return {"message": "Done", "logs": logs}
+    return {"message": "Done", "payload": payload}

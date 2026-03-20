@@ -56,8 +56,7 @@ def test_duplicate_ec_id_logs_error(test_election):
     ]
     logs = run_loader_dry(test_election, make_csv(rows))
     assert any(
-        "non-unique ec_id" in m or "non-unique" in m.lower()
-        for m in logs.get("errors", [])
+        "ec_id_duplicate" in m for m in logs.get("errors", [])
     ), f"Expected non-unique-ec_id error; errors={logs.get('errors')}"
 
 

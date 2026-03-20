@@ -12,8 +12,8 @@ Tests (7):
   1. Noms FK is repointed to the matching DRAFT PP (distance match)
   2. No DRAFT PP within threshold → error logged, loader bails
   3. Two DRAFT PPs within threshold → spatial_proximity + multi-match error
-  4. First load (polling_places_loaded=False) → merge-review warning logged
-  5. Reload (polling_places_loaded=True) → no merge-review warning
+  4. First load (polling_places_loaded=False) → noms_merge_review info entry logged
+  5. Reload (polling_places_loaded=True) → no merge-review entry in info or warnings
   6. overwrite_distance_thresholds allows a 165 m-distant PP to match
   7. Default 100 m threshold rejects a 165 m-distant PP
 """
@@ -108,8 +108,7 @@ def test_noms_no_match_logs_error(test_election):
     logs = run_loader_dry(test_election, make_csv([sydney_row]))
 
     assert any(
-        "0 matching polling places" in m or "matching polling places found" in m
-        for m in logs.get("errors", [])
+        "No match found" in m for m in logs.get("errors", [])
     ), f"Expected no-match error in migrate_noms; errors={logs.get('errors')}"
 
 
@@ -136,22 +135,24 @@ def test_noms_multi_match_logs_proximity_and_error(test_election):
 
     all_errors = logs.get("errors", [])
     assert any(
-        "spatially near each other" in m for m in all_errors
+        "spatial_proximity" in m for m in all_errors
     ), f"Expected spatial_proximity error; errors={all_errors}"
     assert any(
-        "matching polling places found" in m for m in all_errors
+        "matches found in new data" in m for m in all_errors
     ), f"Expected multi-match noms error; errors={all_errors}"
 
 
 # ---------------------------------------------------------------------------
-# 4. First load (polling_places_loaded=False) → merge-review warning
+# 4. First load (polling_places_loaded=False) → merge-review info entry
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.django_db
-def test_noms_merge_review_warning_on_first_load(test_election):
+def test_noms_merge_review_logged_on_first_load(test_election):
     """On a first load (polling_places_loaded=False) with an ACTIVE PP (user-
-    added) that matches a DRAFT PP, a 'Is this correct?' warning is logged."""
+    added) that matches a DRAFT PP, a noms_merge_review info entry is logged.
+    (Level is 'info', not 'warning' — Problem C fix: success should not be
+    logged as a warning; the action field carries the review guidance.)"""
     _make_active_pp_with_noms(test_election)
     # Leave polling_places_loaded=False (as created by test_election fixture)
     assert test_election.polling_places_loaded is False
@@ -159,9 +160,8 @@ def test_noms_merge_review_warning_on_first_load(test_election):
     logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
 
     assert any(
-        "Is this correct?" in m or "merged successfully" in m.lower()
-        for m in logs.get("warnings", [])
-    ), f"Expected merge-review warning on first load; warnings={logs.get('warnings')}"
+        "noms_merge_review" in m or "Please verify" in m for m in logs.get("info", [])
+    ), f"Expected merge-review info entry on first load; info={logs.get('info')}"
 
 
 # ---------------------------------------------------------------------------
@@ -179,10 +179,14 @@ def test_noms_merge_review_absent_on_reload(test_election):
 
     logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
 
+    # Must not appear in info or warnings on reload
+    all_messages = logs.get("info", []) + logs.get("warnings", [])
     assert not any(
-        "Is this correct?" in m or "merged successfully" in m.lower()
-        for m in logs.get("warnings", [])
-    ), f"Unexpected merge-review warning on reload; warnings={logs.get('warnings')}"
+        "Is this correct?" in m
+        or "merged successfully" in m.lower()
+        or "noms_merge_review" in m
+        for m in all_messages
+    ), f"Unexpected merge-review entry on reload; messages={all_messages}"
 
 
 # ---------------------------------------------------------------------------
@@ -233,6 +237,5 @@ def test_default_distance_threshold_misses_distant_pp(test_election):
     logs = run_loader_dry(test_election, make_csv([row]))
 
     assert any(
-        "0 matching polling places" in m or "matching polling places found" in m
-        for m in logs.get("errors", [])
+        "No match found" in m for m in logs.get("errors", [])
     ), f"Expected no-match error with default 100 m threshold; errors={logs.get('errors')}"

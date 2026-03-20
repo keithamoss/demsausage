@@ -103,7 +103,7 @@ def test_use_electoral_boundaries_no_match_logs_error(
     logs = run_loader_dry(test_election, make_csv(rows), config=USE_EB_CONFIG)
 
     assert any(
-        "no matching division" in m.lower() or "found no matching" in m.lower()
+        "find_home_division_error" in m and "no_match" in m
         for m in logs.get("errors", [])
     ), f"Expected no-matching-division error; errors={logs.get('errors')}"
 
@@ -132,7 +132,7 @@ def test_use_electoral_boundaries_multi_match_logs_error(
     logs = run_loader_dry(test_election, make_csv(rows), config=USE_EB_CONFIG)
 
     assert any(
-        "more than one" in m.lower() or "found more than one" in m.lower()
+        "find_home_division_error" in m and "multiple_matches" in m
         for m in logs.get("errors", [])
     ), f"Expected multi-match division error; errors={logs.get('errors')}"
 

@@ -91,10 +91,38 @@ def test_election(db):
 # ---------------------------------------------------------------------------
 
 
+def _flatten_payload(payload: dict) -> dict:
+    """Build flat {errors, warnings, info} string lists from a structured payload.
+
+    Mirrors the ``_text`` logic in ``collects_logs()`` so existing test
+    assertions (substring checks on type names and messages) continue to work.
+    """
+
+    def _text(entry: dict) -> str:
+        if entry.get("type") == "text":
+            return entry.get("message", "")
+        keys = {k: v for k, v in entry.items() if k != "level"}
+        return str(keys)
+
+    all_entries: list[dict] = []
+    for stage in payload.get("stages", []):
+        all_entries.extend(stage.get("errors", []))
+        all_entries.extend(stage.get("warnings", []))
+        all_entries.extend(stage.get("summaries", []))
+        all_entries.extend(stage.get("detail", []))
+
+    return {
+        "errors": [_text(e) for e in all_entries if e["level"] == "error"],
+        "warnings": [_text(e) for e in all_entries if e["level"] == "warning"],
+        "info": [_text(e) for e in all_entries if e["level"] in ("info", "summary")],
+    }
+
+
 def _run_dry(election, election_name):
     """
     Run the loader in dry_run mode against the named fixture election.
-    Returns the captured log dict produced by ``collects_logs()``.
+    Returns a flat {errors, warnings, info} log dict derived from the
+    structured payload.
 
     Safety overrides applied to every run:
     - ``geocoding.enabled`` forced to ``False`` (no API calls)
@@ -112,21 +140,14 @@ def _run_dry(election, election_name):
     config.pop("multiple_division_handling", None)
 
     with open(csv_path, "rb") as f:
+        loader = None
         try:
             loader = LoadPollingPlaces(election, f, dry_run=True, config=config)
             loader.run()
         except BadRequest as e:
-            logs = e.detail["logs"]
-            # Strip unstable entries from info logs so snapshots are stable:
-            # - [Timing] entries vary by machine/run speed
-            # - Deduping entries list divisions in non-deterministic order
-            UNSTABLE_PREFIXES = ("[Timing]", "Deduping:")
-            logs["info"] = [
-                entry
-                for entry in logs.get("info", [])
-                if not any(str(entry).startswith(p) for p in UNSTABLE_PREFIXES)
-            ]
-            return logs
+            if loader is not None:
+                return _flatten_payload(loader.collect_structured_logs())
+            return _flatten_payload(getattr(e, "_partial_payload", {}))
 
     pytest.fail("LoadPollingPlaces.run() did not raise BadRequest for a dry run")
 
@@ -409,19 +430,21 @@ def make_csv(rows: list[dict]) -> io.BytesIO:
 
 
 def run_loader_dry(election, csv_bytes: io.BytesIO, config=None) -> dict:
-    """Run the loader in dry-run mode and return the logs dict.
+    """Run the loader in dry-run mode and return a flat {errors, warnings, info} dict.
 
-    Always returns a dict (either error logs from a failed stage, or the
-    rollback logs from the successful dry-run ``BadRequest``).  If the loader
-    does NOT raise ``BadRequest`` (which should never happen for dry_run=True),
-    the test fails immediately.
+    Always returns a dict (either partial results from a failed stage, or the
+    rollback payload from a successful dry-run).  If the loader does NOT raise
+    ``BadRequest`` (which should never happen for dry_run=True), the test fails.
     """
+    loader = None
     try:
         loader = LoadPollingPlaces(election, csv_bytes, dry_run=True, config=config)
         loader.run()
         pytest.fail("Dry run did not raise BadRequest — this should not happen.")
     except BadRequest as exc:
-        return exc.detail.get("logs", {})
+        if loader is not None:
+            return _flatten_payload(loader.collect_structured_logs())
+        return _flatten_payload(getattr(exc, "_partial_payload", {}))
 
 
 def run_loader_full(election, csv_bytes: io.BytesIO, config=None):

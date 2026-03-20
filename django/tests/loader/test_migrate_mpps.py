@@ -91,6 +91,17 @@ def test_mpp_not_found_with_detached_mpp_logs_warning(test_election):
         "detach" in m.lower() for m in logs.get("warnings", [])
     ), f"Expected 'detaching MPP' warning; warnings={logs.get('warnings')}"
 
+    # mpp_id of the detached MPP must appear in the structured warning entry
+    assert any(
+        f"'mpp_id': {mpp.id}" in m for m in logs.get("warnings", [])
+    ), f"Expected mpp_id={mpp.id} in warning entry; warnings={logs.get('warnings')}"
+
+    # mpp_id must NOT appear in the no-MPP variant (detached_mpp=False entries)
+    assert not any(
+        "'detached_mpp': False" in m and f"'mpp_id': {mpp.id}" in m
+        for m in logs.get("warnings", [])
+    ), "mpp_id should not appear alongside detached_mpp=False"
+
 
 # ---------------------------------------------------------------------------
 # 2. mpp_not_found without attached MPP → warning, no detach message
@@ -116,12 +127,12 @@ def test_mpp_not_found_without_mpp_logs_warning(test_election):
     logs = run_loader_dry(test_election, make_csv([sydney_row]))
 
     assert any(
-        "been removed" in m.lower() for m in logs.get("warnings", [])
+        "mpp_not_found" in m for m in logs.get("warnings", [])
     ), f"Expected 'may have been removed' warning; warnings={logs.get('warnings')}"
-    # Must NOT mention detaching
+    # Must NOT be the detached-MPP variant (detached_mpp should be False)
     assert not any(
-        "detach" in m.lower() for m in logs.get("warnings", [])
-    ), f"Should not say 'detach' for PP without MPP; warnings={logs.get('warnings')}"
+        "detached_mpp': True" in m for m in logs.get("warnings", [])
+    ), f"Should not show detached_mpp=True for PP without MPP; warnings={logs.get('warnings')}"
 
 
 # ---------------------------------------------------------------------------
@@ -213,7 +224,7 @@ def test_mpp_ec_id_collision_logs_error(test_election):
     all_errors = logs.get("errors", [])
     # The collision is first detected as a non-unique ec_id in check_file_validity
     assert any(
-        "non-unique ec_id" in m for m in all_errors
+        "ec_id_duplicate" in m for m in all_errors
     ), f"Expected non-unique ec_id error; errors={all_errors}"
 
 

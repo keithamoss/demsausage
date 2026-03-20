@@ -132,8 +132,8 @@ def test_geocode_no_api_results_logs_warning(test_election, mocker):
     logs = run_loader_dry(test_election, make_csv(rows), config=GEOCODING_CONFIG)
 
     assert any(
-        "No good results found" in m for m in logs.get("warnings", [])
-    ), f"Expected 'No good results found' warning; warnings={logs.get('warnings')}"
+        "no_results" in m for m in logs.get("warnings", [])
+    ), f"Expected 'no_results' warning; warnings={logs.get('warnings')}"
 
 
 # ---------------------------------------------------------------------------
@@ -152,5 +152,5 @@ def test_geocode_not_accurate_enough_logs_warning(test_election, mocker):
     logs = run_loader_dry(test_election, make_csv(rows), config=GEOCODING_CONFIG)
 
     assert any(
-        "Not accurate enough" in m for m in logs.get("warnings", [])
-    ), f"Expected 'Not accurate enough' warning; warnings={logs.get('warnings')}"
+        "not_accurate_enough" in m for m in logs.get("warnings", [])
+    ), f"Expected 'not_accurate_enough' warning; warnings={logs.get('warnings')}"
