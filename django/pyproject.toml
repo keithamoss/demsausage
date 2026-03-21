@@ -32,7 +32,23 @@ pytz = "^2024.2"
 rq = "^1.16.2"
 django-rq = "^2.10.2"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
+pytest = "^8.0"
+pytest-django = "^4.8"
+pytest-mock = "^3.14"
+pytest-xdist = "^3.0"
+factory-boy = "^3.3"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "demsausage.settings"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
+addopts = "--no-migrations -n auto -m 'not slow'"
+markers = [
+    "slow: marks tests as slow (full-load integration tests; run with -m slow or --run-slow)",
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,33 +1,44 @@
-import { CallSplit, Close, GppGood, MoveDown } from '@mui/icons-material';
+import { CallSplit, Close, GppGood, MoveDown, Undo } from '@mui/icons-material';
 import {
 	AppBar,
+	Box,
 	Button,
+	Chip,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	IconButton,
-	Pagination,
 	Stack,
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import type {
 	IMetaPollingPlace,
+	IMetaPollingPlaceNearbyToTask,
 	IPollingPlaceAttachedToMetaPollingPlace,
 } from '../interfaces/metaPollingPlaceInterfaces';
+import { IMetaPollingPlaceStatus } from '../interfaces/metaPollingPlaceInterfaces';
 import MetaPollingPlacePollingPlacesReviewListItem from './MetaPollingPlacePollingPlacesReviewListItem';
 import MetaPollingPlaceSummaryCard from './MetaPollingPlaceSummaryCard';
 
 interface Props {
 	pollingPlace: IPollingPlaceAttachedToMetaPollingPlace;
 	metaPollingPlace: IMetaPollingPlace;
-	metaPollingPlaces: IMetaPollingPlace[];
+	metaPollingPlaces: Array<IMetaPollingPlace | IMetaPollingPlaceNearbyToTask>;
 	onKeep: (pollingPlaceId: number) => () => void;
 	onMove: (pollingPlaceId: number, metaPollingPlaceId: number) => () => void;
 	onSplit: (pollingPlaceId: number) => () => void;
 	pagePosition: number;
 	totalPages: number;
 	onClose: () => void;
+	canUndo?: boolean;
+	onUndo?: () => void;
+}
+
+interface ActionLogEntry {
+	key: number;
+	label: string;
 }
 
 function MetaPollingPlacePollingPlacesReviewDialog(props: Props) {
@@ -41,7 +52,49 @@ function MetaPollingPlacePollingPlacesReviewDialog(props: Props) {
 		pagePosition,
 		totalPages,
 		onClose,
+		canUndo,
+		onUndo,
 	} = props;
+
+	const [actionLog, setActionLog] = useState<ActionLogEntry[]>([]);
+
+	const logAndKeep = () => {
+		setActionLog((prev) => [
+			...prev,
+			{
+				key: pollingPlace.id,
+				label: `Keep: MPP #${metaPollingPlace.id} (${metaPollingPlace.premises})`,
+			},
+		]);
+		onKeep(pollingPlace.id)();
+	};
+
+	const logAndMove = (mpp: IMetaPollingPlace | IMetaPollingPlaceNearbyToTask) => () => {
+		setActionLog((prev) => [
+			...prev,
+			{
+				key: pollingPlace.id,
+				label: `Move → MPP #${mpp.id} (${mpp.premises})`,
+			},
+		]);
+		onMove(pollingPlace.id, mpp.id)();
+	};
+
+	const logAndSplit = () => {
+		setActionLog((prev) => [
+			...prev,
+			{
+				key: pollingPlace.id,
+				label: `Split from MPP #${metaPollingPlace.id} (${metaPollingPlace.premises})`,
+			},
+		]);
+		onSplit(pollingPlace.id)();
+	};
+
+	const handleUndo = () => {
+		setActionLog((prev) => prev.slice(0, -1));
+		onUndo?.();
+	};
 
 	return (
 		<Dialog open={true} fullWidth onClose={onClose}>
@@ -69,53 +122,69 @@ function MetaPollingPlacePollingPlacesReviewDialog(props: Props) {
 
 			<DialogActions>
 				<Stack flexGrow={1} spacing={1}>
-					<Button
-						disabled={false}
-						size="small"
-						onClick={onKeep(pollingPlace.id)}
-						variant="outlined"
-						startIcon={<GppGood />}
-					>
-						Keep in {metaPollingPlace.premises}
+					{canUndo === true && (
+						<Button size="small" onClick={handleUndo} variant="text" startIcon={<Undo />} color="warning">
+							Undo last
+						</Button>
+					)}
+
+					<Button disabled={false} size="small" onClick={logAndKeep} variant="outlined" startIcon={<GppGood />}>
+						Keep in MPP #{metaPollingPlace.id} ({metaPollingPlace.premises || '(no premises name)'})
 					</Button>
 
 					{metaPollingPlaces
 						.filter((mpp) => mpp.id !== metaPollingPlace.id)
-						.map((mpp) => (
-							<Button
-								key={mpp.id}
-								disabled={false}
-								size="small"
-								onClick={onMove(pollingPlace.id, mpp.id)}
-								variant="outlined"
-								startIcon={<MoveDown />}
-							>
-								Move to {mpp.premises}
-							</Button>
-						))}
+						.map((mpp) => {
+							const isDraft = mpp.status === IMetaPollingPlaceStatus.DRAFT;
+							return (
+								<Button
+									key={mpp.id}
+									disabled={false}
+									size="small"
+									onClick={logAndMove(mpp)}
+									variant="outlined"
+									color={isDraft ? 'warning' : 'primary'}
+									startIcon={<MoveDown />}
+									sx={{ justifyContent: 'flex-start', textAlign: 'left' }}
+								>
+									<Box>
+										<Typography variant="body2" fontWeight={500} component="span" sx={{ display: 'block' }}>
+											Move → {mpp.premises || '(no premises name)'}
+										</Typography>
+										<Typography
+											variant="caption"
+											color={isDraft ? 'warning.main' : 'text.secondary'}
+											component="span"
+											sx={{ display: 'block' }}
+										>
+											MPP #{mpp.id} · {mpp.jurisdiction}
+											{'distance_from_task_mpp_metres' in mpp
+												? ` · ${Math.round(mpp.distance_from_task_mpp_metres)}m`
+												: ''}
+											{' · '}
+											{mpp.polling_places.length} PP{mpp.polling_places.length !== 1 ? 's' : ''}
+											{isDraft ? ' · ⚠ Draft MPP' : ''}
+										</Typography>
+									</Box>
+								</Button>
+							);
+						})}
 
-					<Button
-						disabled={false}
-						size="small"
-						onClick={onSplit(pollingPlace.id)}
-						variant="outlined"
-						startIcon={<CallSplit />}
-					>
+					<Button disabled={false} size="small" onClick={logAndSplit} variant="outlined" startIcon={<CallSplit />}>
 						Split and create a new MPP
 					</Button>
 
-					<Pagination
-						count={totalPages}
-						page={pagePosition}
-						siblingCount={0}
-						disabled
-						sx={{
-							pt: 1,
-							'& .MuiPagination-ul': { justifyContent: 'center' },
-							'& .MuiPaginationItem-previousNext': { display: 'none' },
-							'& button': { color: 'black !important', opacity: '1 !important' },
-						}}
-					/>
+					{actionLog.length > 0 && (
+						<Stack direction="row" flexWrap="wrap" gap={0.5} sx={{ pt: 1 }}>
+							{actionLog.map((entry, i) => (
+								<Chip key={`${entry.key}-${i}`} label={entry.label} size="small" variant="outlined" />
+							))}
+						</Stack>
+					)}
+
+					<Typography variant="body2" color="text.secondary" align="center" sx={{ pt: 1 }}>
+						Polling place {pagePosition} of {totalPages}
+					</Typography>
 				</Stack>
 			</DialogActions>
 		</Dialog>

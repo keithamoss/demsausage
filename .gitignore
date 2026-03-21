@@ -18,4 +18,7 @@ demsausage-logs-federal-2022/
 db-a-logs-federal-election-2022/
 .dccache
 .iac-data/
+
 frontend/
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md

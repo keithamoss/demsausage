@@ -1,0 +1,35 @@
+{
+    "rename_columns": {},
+    "exclude_columns": [
+        "id"
+    ],
+    "add_columns": {
+        "ec_id": "",
+        "state": "SA"
+    },
+    "address_fields": [
+        "address_partial",
+        "suburb",
+        "postcode"
+    ],
+    "address_format": "{address_partial}, {suburb}, {postcode}",
+    "geocoding": {
+        "enabled": false
+    },
+    "fix_data_issues": [
+        {
+            "field": "premises",
+            "value": "Greenwith Community Centre",
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": "-34.770876"
+                },
+                {
+                    "field": "lng",
+                    "value": "138.719838"
+                }
+            ]
+        }
+    ]
+}

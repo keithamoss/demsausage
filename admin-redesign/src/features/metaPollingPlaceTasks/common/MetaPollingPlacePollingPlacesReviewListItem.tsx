@@ -9,10 +9,11 @@ import type {
 interface Props {
 	pollingPlace: IPollingPlaceAttachedToMetaPollingPlace;
 	metaPollingPlace: IMetaPollingPlace;
+	showState?: boolean;
 }
 
 function MetaPollingPlacePollingPlacesReviewListItem(props: Props) {
-	const { pollingPlace, metaPollingPlace } = props;
+	const { pollingPlace, metaPollingPlace, showState = false } = props;
 
 	return (
 		<ListItem>
@@ -28,7 +29,7 @@ function MetaPollingPlacePollingPlacesReviewListItem(props: Props) {
 				secondary={
 					<React.Fragment>
 						<Typography component={'span'} sx={{ display: 'block' }}>
-							{pollingPlace.address}
+							{pollingPlace.address}, {pollingPlace.state}
 						</Typography>
 						<Typography component={'span'} sx={{ display: 'block' }}>
 							{pollingPlace.name}

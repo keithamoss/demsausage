@@ -1,10 +1,8 @@
 import csv
 import json
-import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from io import StringIO
-from timeit import default_timer as timer
 
 import chardet
 import googlemaps
@@ -49,63 +47,226 @@ from django.db.models import Q
 
 logger = make_logger(__name__)
 
+# ---------------------------------------------------------------------------
+# Stage labels — human-readable names keyed by method name.
+# ---------------------------------------------------------------------------
+
+STAGE_LABELS = {
+    "_config": "Config Validation",
+    "convert_to_demsausage_schema": "Convert to Schema",
+    "check_file_validity": "File Validity",
+    "fix_polling_places": "Field Fixers",
+    "prepare_polling_places": "Prepare Polling Places",
+    "geocode_missing_locations": "Geocoding",
+    "check_polling_place_validity": "Polling Place Validity",
+    "dedupe_polling_places": "Deduplication",
+    "write_draft_polling_places": "Write Draft",
+    "migrate_unofficial_pending_stalls": "Unofficial Stall Migration",
+    "migrate_noms": "Noms Migration",
+    "migrate_mpps": "Meta Polling Place Migration",
+    "migrate": "Migration",
+    "detect_facility_type": "Facility Type Detection",
+    "calculate_chance_of_sausage": "Chance of Sausage",
+    "cleanup": "Cleanup",
+}
+
+
+class _LoggerCompat:
+    """
+    Backward-compatible logger shim used by RollbackPollingPlaces (out of
+    scope for the Phase 2 structured-log refactor).  Delegates to _log() on
+    the host loader so RollbackPollingPlaces method bodies need no changes.
+    """
+
+    def __init__(self, host):
+        self._host = host
+
+    def error(self, msg):
+        self._host._log("error", "text", message=str(msg))
+
+    def warning(self, msg):
+        self._host._log("warning", "text", message=str(msg))
+
+    def info(self, msg):
+        self._host._log("info", "text", message=str(msg))
+
 
 class PollingPlacesIngestBase:
     """
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
 
-    def make_logger(self):
-        logger = logging.getLogger(type(self).__name__)
-        logger.setLevel(logging.DEBUG)
-        fmt = logging.Formatter("[%(levelname)s] %(message)s")
+    # ------------------------------------------------------------------
+    # New structured log transport (Phase 2)
+    # ------------------------------------------------------------------
 
-        self.log_msgs = StringIO()
-        handler = logging.StreamHandler(self.log_msgs)
-        handler.setFormatter(fmt)
-        logger.addHandler(handler)
+    def _init_log_transport(self):
+        """Initialise log state.  Must be called at the top of each subclass __init__."""
+        self.log_entries: list[dict] = []
+        self.stages: list[dict] = []
+        # Backward-compat shim for RollbackPollingPlaces (uses self.logger.* directly)
+        self.logger = _LoggerCompat(self)
 
-        return logger
+    def _log(self, level: str, type: str, **kwargs):
+        """Append a structured log entry."""
+        self.log_entries.append({"level": level, "type": type, **kwargs})
 
-    def has_errors_messages(self):
-        return "[ERROR] " in self.log_msgs.getvalue()
+    def _has_errors(self) -> bool:
+        return any(e["level"] == "error" for e in self.log_entries)
 
-    def collects_logs(self):
-        log_msgs = self.log_msgs.getvalue().split("\n")
-        logs = {
-            "errors": [
-                msg.replace("[ERROR] ", "")
-                for msg in log_msgs
-                if msg.startswith("[ERROR] ")
-            ],
-            "warnings": [
-                msg.replace("[WARNING] ", "")
-                for msg in log_msgs
-                if msg.startswith("[WARNING] ")
-            ],
-            "info": [
-                msg.replace("[INFO] ", "")
-                for msg in log_msgs
-                if msg.startswith("[INFO] ")
-            ],
+    # ------------------------------------------------------------------
+    # Stage snapshotting helpers
+    # ------------------------------------------------------------------
+
+    def _current_stage_entries(self, entries_before: list[dict]) -> list[dict]:
+        """Return log entries that were added since *entries_before* was captured."""
+        return self.log_entries[len(entries_before) :]
+
+    @staticmethod
+    def _build_stage(
+        name: str,
+        label: str,
+        started_at: str,
+        finished_at: str,
+        stage_entries: list[dict],
+        outcome: str,
+    ) -> dict:
+        started = datetime.fromisoformat(started_at)
+        finished = datetime.fromisoformat(finished_at)
+        duration = round((finished - started).total_seconds(), 3)
+
+        errors = [e for e in stage_entries if e["level"] == "error"]
+        warnings = [e for e in stage_entries if e["level"] == "warning"]
+        summaries = [e for e in stage_entries if e["level"] == "summary"]
+        detail = [e for e in stage_entries if e["level"] == "info"]
+
+        return {
+            "name": name,
+            "label": label,
+            "started_at": started_at,
+            "finished_at": finished_at,
+            "duration_seconds": duration,
+            "outcome": outcome,
+            "total_entry_count": len(stage_entries),
+            "errors": errors,
+            "warnings": warnings,
+            "summaries": summaries,
+            "detail": detail,
         }
 
-        self.save_logs(logs)
+    # ------------------------------------------------------------------
+    # Backward-compat helpers (Phase 1 tests use these)
+    # ------------------------------------------------------------------
+
+    def has_errors_messages(self) -> bool:
+        return self._has_errors()
+
+    def collects_logs(self) -> dict:
+        """
+        Backward-compat shim: builds the old flat {errors, warnings, info} dict
+        from the new log_entries list.  Calls save_logs() with the new structured
+        payload so DB / disk always get the new format.
+
+        Used by:
+        - Phase 1 test assertions (conftest.run_loader_dry, test_detect_facility)
+        - RollbackPollingPlaces (sub-class, overrides run())
+        """
+
+        def _text(entry: dict) -> str:
+            if entry.get("type") == "text":
+                return entry.get("message", "")
+            # For structured types include the type so assertions can match on it
+            keys = {k: v for k, v in entry.items() if k != "level"}
+            return str(keys)
+
+        logs = {
+            "errors": [_text(e) for e in self.log_entries if e["level"] == "error"],
+            "warnings": [_text(e) for e in self.log_entries if e["level"] == "warning"],
+            "info": [
+                _text(e) for e in self.log_entries if e["level"] in ("info", "summary")
+            ],
+        }
+        self.save_logs(self.collect_structured_logs())
         return logs
 
-    def save_logs(self, logs):
+    # ------------------------------------------------------------------
+    # New structured payload
+    # ------------------------------------------------------------------
+
+    def collect_structured_logs(self) -> dict:
+        """
+        Build and return the fully structured loader payload (new Phase 2 format).
+        Saves to disk and DB via save_logs().
+        """
+        total_errors = sum(len(s["errors"]) for s in self.stages)
+        total_warnings = sum(len(s["warnings"]) for s in self.stages)
+        total_actions_required = sum(
+            1
+            for s in self.stages
+            for entries in (s["errors"], s["warnings"], s["summaries"], s["detail"])
+            for e in entries
+            if e.get("action") is not None
+        )
+
+        # Polling place stats — populated by the migrate stage summary entry
+        total_polling_places = None
+        delta_total = None
+        new_polling_places = None
+        deleted_polling_places = None
+        for stage in self.stages:
+            if stage["name"] == "migrate":
+                for entry in stage["summaries"]:
+                    if entry.get("type") == "migrate_stats":
+                        total_polling_places = entry.get("total_polling_places")
+                        delta_total = entry.get("delta_total")
+                        new_polling_places = entry.get("new_polling_places")
+                        deleted_polling_places = entry.get("deleted_polling_places")
+                break
+
+        run_at = (
+            self.stages[0]["started_at"]
+            if self.stages
+            else datetime.now(timezone.utc).isoformat()
+        )
+        run_by = getattr(self, "_run_by", None)
+
+        # Determine overall outcome
+        if any(s["outcome"] == "error" for s in self.stages):
+            overall_outcome = "error"
+        elif any(s["outcome"] == "warning" for s in self.stages):
+            overall_outcome = "warning"
+        else:
+            overall_outcome = "ok"
+
+        return {
+            "run_at": run_at,
+            "run_by": run_by,
+            "is_reload": getattr(self, "is_reload", None),
+            "is_dry_run": getattr(self, "dry_run", False),
+            "outcome": overall_outcome,
+            "total_errors": total_errors,
+            "total_warnings": total_warnings,
+            "total_actions_required": total_actions_required,
+            "total_polling_places": total_polling_places,
+            "delta_total": delta_total,
+            "new_polling_places": new_polling_places,
+            "deleted_polling_places": deleted_polling_places,
+            "stages": self.stages,
+        }
+
+    def save_logs(self, payload: dict):
         with open(
             "/app/logs/pollingplaceloader-{}.json".format(
-                datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
             ),
             "w",
         ) as f:
-            json.dump(logs, f)
+            json.dump(payload, f, default=str)
 
         serializer = PollingPlaceLoaderEventsSerializer(
             data={
-                "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-                "payload": logs,
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+                "payload": payload,
             }
         )
 
@@ -114,15 +275,24 @@ class PollingPlacesIngestBase:
         else:
             raise BadRequest("Error saving logs :(")
 
+    # ------------------------------------------------------------------
+    # Error checking / flow control
+    # ------------------------------------------------------------------
+
     def raise_exception_if_errors(self):
-        if self.has_errors_messages() is True:
+        if self._has_errors() is True:
             print("Bailing with errors")
-            raise BadRequest(
+            exc = BadRequest(
                 {
                     "message": "Oh dear, looks like we hit a snag (get it - snag?!)",
-                    "logs": self.collects_logs(),
                 }
             )
+            # Attach the partial structured payload directly on the exception
+            # so tests can access it via getattr(exc, "_partial_payload") even
+            # when the exception is raised from __init__ (before the loader
+            # variable is bound in the caller).
+            exc._partial_payload = self.collect_structured_logs()
+            raise exc
 
     def is_dry_run(self):
         return self.dry_run
@@ -135,38 +305,72 @@ class PollingPlacesIngestBase:
             > 0
         )
 
+    # ------------------------------------------------------------------
+    # Shared utilities
+    # ------------------------------------------------------------------
+
     def safe_find_by_distance(self, label, *args, **kwargs):
         results = find_by_distance(*args, **kwargs)
         count = results.count()
         if count >= 2:
-            self.logger.error(
-                "Find by distance [{}]: Found {} existing polling places spatially near each other. Polling places: {}".format(
-                    label,
-                    count,
-                    "; ".join(
-                        [
-                            "{}/{}/{}".format(pp.name, pp.premises, pp.address)
-                            for pp in results
-                        ]
-                    ),
-                )
+            self._log(
+                "error",
+                "spatial_proximity",
+                stage_name=label,
+                polling_places=[
+                    {"name": pp.name, "premises": pp.premises, "address": pp.address}
+                    for pp in results
+                ],
             )
-
         return results
 
     def invoke_and_bail_if_errors(self, method_name):
         print("Calling {}".format(method_name))
 
-        self.job.meta["_polling_place_loading_stages_log"].append(method_name)
-        self.job.save_meta()
+        job = getattr(self, "job", None)
+        if job is not None:
+            job.meta["_polling_place_loading_stages_log"].append(method_name)
+            job.save_meta()
 
-        start = timer()
-        getattr(self, method_name)()
-        end = timer()
+        entries_before = list(self.log_entries)
+        started_at = datetime.now(timezone.utc).isoformat()
 
-        self.logger.info(
-            "[Timing] {} took {}s".format(method_name, round(end - start, 2))
+        mid_stage_exc = None
+        try:
+            getattr(self, method_name)()
+        except BadRequest as e:
+            # Some stage methods call self.raise_exception_if_errors() themselves
+            # before returning.  Catch it here so we can still record the stage
+            # entry before re-raising.
+            mid_stage_exc = e
+
+        finished_at = datetime.now(timezone.utc).isoformat()
+        stage_entries = self._current_stage_entries(entries_before)
+
+        # Determine outcome
+        if any(e["level"] == "error" for e in stage_entries):
+            outcome = "error"
+        elif any(e["level"] == "warning" for e in stage_entries):
+            outcome = "warning"
+        else:
+            outcome = "ok"
+
+        self.stages.append(
+            self._build_stage(
+                name=method_name,
+                label=STAGE_LABELS.get(method_name, method_name),
+                started_at=started_at,
+                finished_at=finished_at,
+                stage_entries=stage_entries,
+                outcome=outcome,
+            )
         )
+
+        if mid_stage_exc is not None:
+            # Re-raise with updated partial payload now that the stage is recorded.
+            mid_stage_exc._partial_payload = self.collect_structured_logs()
+            raise mid_stage_exc
+
         self.raise_exception_if_errors()
 
 
@@ -175,7 +379,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
 
-    def __init__(self, election, file, dry_run, config):
+    def __init__(self, election, file, dry_run, config, user_email=None):
+        # Initialise new structured log transport first so _log() is available
+        # before check_config_is_valid runs.
+        self._init_log_transport()
+
         def _get_config_or_none(param_name, config):
             return (
                 config[param_name]
@@ -187,24 +395,32 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             if config is not None:
                 for field in config.keys():
                     if field not in allowed_fields:
-                        self.logger.error(
-                            "Config: Invalid field '{}' in config".format(field)
+                        self._log(
+                            "error",
+                            "text",
+                            message="Config: Invalid field '{}' in config".format(
+                                field
+                            ),
                         )
 
                 if "address_fields" in config and "address_format" not in config:
-                    self.logger.error(
-                        "Config: address_format required if address_fields provided"
+                    self._log(
+                        "error",
+                        "text",
+                        message="Config: address_format required if address_fields provided",
                     )
                 if "address_fields" not in config and "address_format" in config:
-                    self.logger.error(
-                        "Config: address_fields required if address_format provided"
+                    self._log(
+                        "error",
+                        "text",
+                        message="Config: address_fields required if address_format provided",
                     )
 
                 return True
 
         self.election = election
         self.dry_run = dry_run
-        self.logger = self.make_logger()
+        self.is_reload = False  # will be set accurately at the top of run()
 
         allowed_fields = [
             "filters",
@@ -222,9 +438,32 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             "bbox_validation",
             "multiple_division_handling",
         ]
+
+        config_started_at = datetime.now(timezone.utc).isoformat()
         self.has_config = (
             True if config is not None and check_config_is_valid(config) else False
         )
+        config_finished_at = datetime.now(timezone.utc).isoformat()
+
+        # Wrap any config-validation log entries in a synthetic _config stage.
+        config_entries = list(self.log_entries)
+        if config_entries:
+            config_outcome = (
+                "error" if any(e["level"] == "error" for e in config_entries) else "ok"
+            )
+        else:
+            config_outcome = "ok"
+        self.stages.append(
+            self._build_stage(
+                name="_config",
+                label=STAGE_LABELS["_config"],
+                started_at=config_started_at,
+                finished_at=config_finished_at,
+                stage_entries=config_entries,
+                outcome=config_outcome,
+            )
+        )
+
         self.raise_exception_if_errors()
         for field_name in allowed_fields:
             setattr(self, field_name, _get_config_or_none(field_name, config))
@@ -241,6 +480,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.job = get_current_job()
         self.job.meta["_polling_place_loading_stages_log"] = []
         self.job.save_meta()
+
+        # Capture who triggered this load (passed from the view via the job)
+        self._run_by = user_email
 
     def can_loading_begin(self):
         # if self.has_pending_stalls() is True:
@@ -262,12 +504,13 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     if _apply_filter(polling_place) is True:
                         filtered_polling_places.append(polling_place)
 
-                self.logger.info(
-                    "Filtered out {} polling places of {}. New total: {}.".format(
+                self._log(
+                    "summary",
+                    "text",
+                    message="{} of {} polling places filtered out".format(
                         len(self.polling_places) - len(filtered_polling_places),
                         len(self.polling_places),
-                        len(filtered_polling_places),
-                    )
+                    ),
                 )
                 self.polling_places = filtered_polling_places
 
@@ -286,7 +529,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         _remove_excluded_fields(polling_place)
                     )
 
-                self.logger.info("Removed {} columns".format(len(self.exclude_columns)))
+                self._log(
+                    "summary",
+                    "text",
+                    message="Removed {} columns".format(len(self.exclude_columns)),
+                )
                 self.polling_places = processed_polling_places
 
         def _rename_columns():
@@ -301,7 +548,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_rename_fields(polling_place))
 
-                self.logger.info("Renamed {} columns".format(len(self.rename_columns)))
+                self._log(
+                    "summary",
+                    "text",
+                    message="Renamed {} columns".format(len(self.rename_columns)),
+                )
                 self.polling_places = processed_polling_places
 
         def _add_columns():
@@ -315,7 +566,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_add_fields(polling_place))
 
-                self.logger.info("Added {} new columns".format(len(self.add_columns)))
+                self._log(
+                    "summary",
+                    "text",
+                    message="Added {} new columns".format(len(self.add_columns)),
+                )
                 self.polling_places = processed_polling_places
 
         def _create_extras():
@@ -338,10 +593,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_create(polling_place))
 
-                self.logger.info(
-                    "Created extras field from {} columns".format(
+                self._log(
+                    "summary",
+                    "text",
+                    message="Packed {} column(s) into the extras field".format(
                         len(self.extras["fields"])
-                    )
+                    ),
                 )
                 self.polling_places = processed_polling_places
 
@@ -377,10 +634,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             "main"
                         ].strip()
                     else:
-                        self.logger.error(
-                            "No regex match for {} for {}".format(
-                                polling_place[regex["field"]], regex["regex"], match
-                            )
+                        self._log(
+                            "error",
+                            "text",
+                            message="Cleaning regex '{}' did not match field value '{}'".format(
+                                regex["regex"], polling_place[regex["field"]]
+                            ),
                         )
                 return polling_place
 
@@ -389,8 +648,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 for polling_place in self.polling_places:
                     processed_polling_places.append(_apply_regexes(polling_place))
 
-                self.logger.info(
-                    "Ran {} cleaning regexes".format(len(self.cleaning_regexes))
+                self._log(
+                    "summary",
+                    "text",
+                    message="Ran {} cleaning regexes".format(
+                        len(self.cleaning_regexes)
+                    ),
                 )
                 self.polling_places = processed_polling_places
 
@@ -433,35 +696,59 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     required_model_field_names.index("address")
                 ]
 
-            # Check for allowable field names (optional extras)
-            for field in header:
-                if field not in allowable_field_names:
-                    self.logger.error("Unknown field in header: {}".format(field))
+            # Batch: check for allowable field names (unknown/excess fields)
+            unknown_fields = [
+                field for field in header if field not in allowable_field_names
+            ]
+            if unknown_fields:
+                self._log(
+                    "error",
+                    "text",
+                    message="Unknown fields in header: {}".format(
+                        ", ".join(unknown_fields)
+                    ),
+                )
 
-            # Check for mandatory field names
-            for field in required_model_field_names:
-                if field not in header:
-                    self.logger.error(
-                        "Required field missing in header: {}".format(field)
+            # Batch: check for mandatory field names
+            missing_fields = [
+                field for field in required_model_field_names if field not in header
+            ]
+            if missing_fields:
+                self._log(
+                    "error",
+                    "text",
+                    message="Required fields missing from header: {}".format(
+                        ", ".join(missing_fields)
+                    ),
+                )
+
+            # Batch: check for address fields (if necessary)
+            if self.address_fields is not None:
+                missing_addr = [
+                    field for field in self.address_fields if field not in header
+                ]
+                if missing_addr:
+                    self._log(
+                        "error",
+                        "text",
+                        message="Required address fields missing from header: {}".format(
+                            ", ".join(missing_addr)
+                        ),
                     )
 
-            # Check for address fields (if necessary)
-            if self.address_fields is not None:
-                for field in self.address_fields:
-                    if field not in header:
-                        self.logger.error(
-                            "Required address field missing in header: {}".format(field)
-                        )
-
-            # Check for division fields (if necessary)
+            # Batch: check for division fields (if necessary)
             if self.division_fields is not None:
-                for field in self.division_fields:
-                    if field not in header:
-                        self.logger.error(
-                            "Required division field missing in header: {}".format(
-                                field
-                            )
-                        )
+                missing_div = [
+                    field for field in self.division_fields if field not in header
+                ]
+                if missing_div:
+                    self._log(
+                        "error",
+                        "text",
+                        message="Required division fields missing from header: {}".format(
+                            ", ".join(missing_div)
+                        ),
+                    )
 
         def check_ec_id_is_unique():
             if "ec_id" in self.polling_places[0]:
@@ -473,22 +760,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         blank_ec_id_counter += 1
                     else:
                         if polling_place["ec_id"] in ec_id_tracker:
-                            self.logger.error(
-                                "[EC_ID Checker] Polling place {} ({}) has a non-unique ec_id of {}".format(
-                                    polling_place["name"],
-                                    polling_place["premises"],
-                                    polling_place["ec_id"],
-                                )
+                            self._log(
+                                "error",
+                                "ec_id_duplicate",
+                                name=polling_place["name"],
+                                premises=polling_place["premises"],
+                                ec_id=polling_place["ec_id"],
                             )
 
                         ec_id_tracker.append(polling_place["ec_id"])
 
                 # We only care about blanks if any polling place have an ec_id (not all Electoral Commissions deliver ec_ids)
                 if blank_ec_id_counter > 0 and len(ec_id_tracker) > 0:
-                    self.logger.warning(
-                        "[EC_ID Checker] {} polling places have blank ec_ids".format(
+                    self._log(
+                        "warning",
+                        "text",
+                        message="{} polling places have blank ec_id".format(
                             blank_ec_id_counter
-                        )
+                        ),
                     )
 
         # Ensure we have all of the required fields and no unknown/excess fields
@@ -532,10 +821,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     return polling_place
 
-                self.logger.error(
-                    "Address merging: No address or address fields found for polling place '{}'".format(
+                self._log(
+                    "error",
+                    "text",
+                    message="No address or address fields found for '{}'".format(
                         polling_place["name"]
-                    )
+                    ),
                 )
 
             def get_or_merge_divisions_fields(polling_place):
@@ -645,11 +936,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             geocode_result = _do_geocode(polling_place["address"])
 
                             if geocode_result is None:
-                                self.logger.warning(
-                                    "[Geocoding Skipping - No good results found] {} ({})".format(
-                                        polling_place["premises"],
-                                        polling_place["address"],
-                                    )
+                                self._log(
+                                    "warning",
+                                    "geocode_skip",
+                                    reason="no_results",
+                                    premises=polling_place["premises"],
+                                    address=polling_place["address"],
                                 )
 
                     return geocode_result
@@ -680,12 +972,13 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                         return polling_place
                     else:
-                        self.logger.warning(
-                            "[Geocoding Skipping - Not accurate enough] {} ({}) {}".format(
-                                polling_place["premises"],
-                                polling_place["address"],
-                                geocode_result,
-                            )
+                        self._log(
+                            "warning",
+                            "geocode_skip",
+                            reason="not_accurate_enough",
+                            premises=polling_place["premises"],
+                            address=polling_place["address"],
+                            geocode_result=geocode_result,
                         )
 
                 return None
@@ -709,22 +1002,30 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     else:
                         geocoding_skipped_counter += 1
-                        self.logger.warning(
-                            "[Geocoding Skipping - Not enabled] {} ({})".format(
-                                polling_place["premises"], polling_place["address"]
-                            )
-                        )
+                        # "not enabled" is folded into the combined geocoding summary — not a per-row warning
 
             self.polling_places = processed_polling_places
 
-            self.logger.info(
-                "Geocoded {} polling places successfully".format(
-                    geocoding_success_counter
+            # Merged geocoding summary (combines success + skip into one line)
+            geocoding_enabled = self.geocoding is not None and self.geocoding.get(
+                "enabled", False
+            )
+            if geocoding_enabled:
+                self._log(
+                    "summary",
+                    "text",
+                    message="Geocoding complete: {} geocoded, {} skipped".format(
+                        geocoding_success_counter, geocoding_skipped_counter
+                    ),
                 )
-            )
-            self.logger.info(
-                "Geocoding skipped {} polling places".format(geocoding_skipped_counter)
-            )
+            else:
+                self._log(
+                    "summary",
+                    "text",
+                    message="Geocoding complete: {} geocoded, {} skipped — geocoding not enabled".format(
+                        geocoding_success_counter, geocoding_skipped_counter
+                    ),
+                )
 
         _geocode_polling_places()
 
@@ -762,8 +1063,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         config, processed_polling_places
                     )
 
-                self.logger.info(
-                    "Ran {} field fixers".format(len(self.fix_data_issues))
+                self._log(
+                    "summary",
+                    "text",
+                    message="Ran {} field fixers".format(len(self.fix_data_issues)),
                 )
                 self.polling_places = processed_polling_places
 
@@ -785,10 +1088,17 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         for polling_place in self.polling_places:
             validation = is_polling_place_valid(polling_place)
             if validation is not True:
-                self.logger.error(
-                    "Polling place {} ({}) invalid: {}".format(
-                        polling_place["name"], polling_place["premises"], validation
-                    )
+                # Normalise DRF error dict to a list of {field, messages} objects
+                fields = [
+                    {"field": field, "messages": list(msgs)}
+                    for field, msgs in validation.items()
+                ]
+                self._log(
+                    "error",
+                    "validation_error",
+                    name=polling_place["name"],
+                    premises=polling_place["premises"],
+                    fields=fields,
                 )
 
             if polling_place["state"] != "Overseas":
@@ -797,16 +1107,20 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         self.bbox_validation is not None
                         and polling_place["name"] not in self.bbox_validation["ignore"]
                     ):
-                        self.logger.error(
-                            "Polling place {} ({}) falls outside the election's boundary".format(
+                        self._log(
+                            "error",
+                            "text",
+                            message="Polling place {} ({}) falls outside the election's boundary".format(
                                 polling_place["name"], polling_place["premises"]
-                            )
+                            ),
                         )
                     else:
-                        self.logger.warning(
-                            "Polling place {} ({}) falls outside the election's boundary".format(
+                        self._log(
+                            "warning",
+                            "text",
+                            message="Polling place {} ({}) falls outside the election's boundary (ignored)".format(
                                 polling_place["name"], polling_place["premises"]
-                            )
+                            ),
                         )
 
         self.raise_exception_if_errors()
@@ -827,22 +1141,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     ).filter(geom__contains=polling_places[0]["geom"])
 
                     if len(matching_boundaries) > 1:
-                        self.logger.error(
-                            "[Find Home Division] Found more than one matching division for {}: {}".format(
-                                polling_places[0]["name"],
-                                list(
-                                    matching_boundaries.values_list(
-                                        "division_name", flat=True
-                                    )
-                                ),
-                            )
+                        self._log(
+                            "error",
+                            "find_home_division_error",
+                            polling_place_name=polling_places[0]["name"],
+                            reason="multiple_matches",
+                            candidates=list(
+                                matching_boundaries.values_list(
+                                    "division_name", flat=True
+                                )
+                            ),
                         )
                         return None
                     elif len(matching_boundaries) == 0:
-                        self.logger.error(
-                            "[Find Home Division] Found no matching division for {}".format(
-                                polling_places[0]["name"]
-                            )
+                        self._log(
+                            "error",
+                            "find_home_division_error",
+                            polling_place_name=polling_places[0]["name"],
+                            reason="no_match",
                         )
                         return None
                     else:
@@ -867,10 +1183,13 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             )
                             return polling_place_divisions[idx]
                         except ValueError:
-                            self.logger.error(
-                                "[Find Home Division] Could not find electoral boundary division '{}' in polling places divisions list: {}".format(
-                                    eb_division_name, ", ".join(polling_place_divisions)
-                                )
+                            self._log(
+                                "error",
+                                "find_home_division_error",
+                                polling_place_name=polling_places[0]["name"],
+                                reason="not_in_list",
+                                eb_division=eb_division_name,
+                                candidates=list(polling_place_divisions),
                             )
                             return None
 
@@ -881,11 +1200,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             home_division = _find_home_division(polling_places)
 
             if home_division is None:
-                self.logger.error(
-                    "[Find Home Division] Got 'None' for home division lookup for {}".format(
-                        polling_places[0]["name"]
-                    )
-                )
+                # find_home_division_error was already logged by _find_home_division;
+                # do not emit an additional redundant entry.
                 return []
 
             # Flatten and dedupe
@@ -936,10 +1252,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 )
             )
             if len(unique_keys) > 1:
-                self.logger.error(
-                    "Deduping: Found multiple unique polling places sharing the same location: {}".format(
+                self._log(
+                    "error",
+                    "text",
+                    message="Found multiple unique polling places sharing the same location: {}".format(
                         ", ".join(unique_keys)
-                    )
+                    ),
                 )
 
             key = get_key(polling_places[0])
@@ -962,35 +1280,54 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     polling_places
                 )
 
-                self.logger.info(
-                    "Deduping: Merged divisions for {} polling places with the same location ({}). Divisions: {}. Polling Places: {}".format(
-                        len(indexes),
-                        key,
-                        divisions,
-                        "; ".join(
-                            [
-                                "{}/{}/{}".format(
-                                    pp["name"], pp["premises"], pp["address"]
-                                )
-                                for pp in polling_places
-                            ]
-                        ),
-                    )
+                pp_list = [
+                    {
+                        "name": pp["name"],
+                        "premises": pp["premises"],
+                        "address": pp["address"],
+                    }
+                    for pp in polling_places
+                ]
+                # Emit as both summary (visible without expanding Detail) and info (full Detail)
+                self._log(
+                    "summary",
+                    "dedup_merge",
+                    count=len(indexes),
+                    location=key,
+                    divisions=divisions,
+                    polling_places=pp_list,
+                )
+                self._log(
+                    "info",
+                    "dedup_merge",
+                    count=len(indexes),
+                    location=key,
+                    divisions=divisions,
+                    polling_places=pp_list,
                 )
             else:
-                self.logger.info(
-                    "Deduping: Discarded {} duplicate polling places with the same location ({}). No divisions were present. Polling Places: {}".format(
-                        len(indexes) - 1,
-                        key,
-                        "; ".join(
-                            [
-                                "{}/{}/{}".format(
-                                    pp["name"], pp["premises"], pp["address"]
-                                )
-                                for pp in polling_places
-                            ]
-                        ),
-                    )
+                pp_list = [
+                    {
+                        "name": pp["name"],
+                        "premises": pp["premises"],
+                        "address": pp["address"],
+                    }
+                    for pp in polling_places
+                ]
+                # Emit as both summary and info
+                self._log(
+                    "summary",
+                    "dedup_discard",
+                    count=len(indexes) - 1,
+                    location=key,
+                    polling_places=pp_list,
+                )
+                self._log(
+                    "info",
+                    "dedup_discard",
+                    count=len(indexes) - 1,
+                    location=key,
+                    polling_places=pp_list,
                 )
 
             # We can safely remove all bar the first polling place
@@ -1002,11 +1339,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             for idx, polling_place in enumerate(self.polling_places)
             if idx not in indexes_to_remove
         ]
-        self.logger.info(
-            "Deduping: Merged divisions for {} polling places with the same location".format(
-                len(indexes_to_remove)
-            )
-        )
+        # (trailing summary of total merges dropped — frontend computes from dedup_merge entries)
 
         # To be extra sure - group by name and bail out if there are dupes
         polling_places_group_by = {}
@@ -1024,10 +1357,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         for polling_places in [
             i for i in polling_places_group_by.values() if len(i) >= 2
         ]:
-            self.logger.error(
-                "Deduping: Found {} polling places sharing the same name ({})".format(
+            self._log(
+                "error",
+                "text",
+                message="Found {} polling places sharing the same name: '{}'".format(
                     len(polling_places), polling_places[0]["name"]
-                )
+                ),
             )
 
         self.raise_exception_if_errors()
@@ -1038,7 +1373,172 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             if serialiser.is_valid() is True:
                 serialiser.save()
             else:
-                self.logger.error("Polling place invalid: {}".format(serialiser.errors))
+                # pragma: no cover — check_polling_place_validity bails first in normal execution
+                fields = [
+                    {"field": field, "messages": list(msgs)}
+                    for field, msgs in serialiser.errors.items()
+                ]
+                self._log(
+                    "error",
+                    "validation_error",
+                    name=polling_place.get("name", "?"),
+                    premises=polling_place.get("premises", "?"),
+                    fields=fields,
+                )
+
+    def migrate_unofficial_pending_stalls(self):
+        """
+        Handles pending stalls that were submitted against unofficial (user-provided)
+        polling places (i.e. location_info is set and polling_place is None).
+
+        This happens when stalls are submitted before the first official CSV data is
+        loaded. On first load, we match each such stall's location_info geom against
+        the incoming DRAFT polling places within a 100m threshold and repoint them.
+
+        Only runs on the first polling place load (polling_places_loaded=False).
+        """
+        if self.election.polling_places_loaded is True:
+            return
+
+        queryset = Stalls.objects.filter(
+            election=self.election,
+            status=StallStatus.PENDING,
+            polling_place__isnull=True,
+            location_info__isnull=False,
+        )
+
+        count = queryset.count()
+        if count == 0:
+            self._log(
+                "summary",
+                "text",
+                message="No unofficial pending stalls to migrate",
+            )
+            return
+
+        self._log(
+            "summary",
+            "text",
+            message="Found {} unofficial pending stall(s) to migrate".format(count),
+        )
+
+        matched_count = 0
+        for stall in queryset:
+            coordinates = stall.location_info["geom"]["coordinates"]
+            stall_geom = Point(coordinates[0], coordinates[1], srid=4326)
+
+            matching_polling_places = self.safe_find_by_distance(
+                "migrate_unofficial_pending_stalls",
+                stall_geom,
+                distance_threshold_km=0.2,
+                limit=None,
+                qs=PollingPlaces.objects.filter(
+                    election=self.election, status=PollingPlaceStatus.DRAFT
+                ),
+            )
+
+            num_matches = len(matching_polling_places)
+
+            if num_matches == 0:
+                # Expand to 1km to give the human something to work with, but don't auto-match.
+                nearby = list(
+                    find_by_distance(
+                        stall_geom,
+                        distance_threshold_km=1.0,
+                        limit=None,
+                        qs=PollingPlaces.objects.filter(
+                            election=self.election, status=PollingPlaceStatus.DRAFT
+                        ),
+                    )
+                )
+                self._log(
+                    "error",
+                    "stall_no_match",
+                    stall_id=stall.id,
+                    location={
+                        "name": stall.location_info["name"],
+                        "address": stall.location_info["address"],
+                        "state": stall.location_info["state"],
+                    },
+                    nearby=[
+                        {
+                            "name": pp.name,
+                            "premises": pp.premises,
+                            "address": pp.address,
+                            "distance_m": round(pp.distance.m),
+                        }
+                        for pp in nearby
+                    ],
+                    action="Adjust the distance threshold or update the database manually.",
+                )
+
+            elif num_matches > 1:
+                self._log(
+                    "error",
+                    "stall_multi_match",
+                    stall_id=stall.id,
+                    location={
+                        "name": stall.location_info["name"],
+                        "address": stall.location_info["address"],
+                        "state": stall.location_info["state"],
+                    },
+                    candidates=[
+                        {
+                            "name": pp.name,
+                            "premises": pp.premises,
+                            "address": pp.address,
+                            "distance_m": round(pp.distance.m),
+                        }
+                        for pp in matching_polling_places
+                    ],
+                )
+            else:
+                official = matching_polling_places[0]
+                self._log(
+                    "info",
+                    "stall_matched",
+                    stall_id=stall.id,
+                    distance_m=round(official.distance.m),
+                    user_submitted={
+                        "name": stall.location_info["name"],
+                        "address": stall.location_info["address"],
+                        "state": stall.location_info["state"],
+                    },
+                    official={
+                        "name": official.name,
+                        "premises": official.premises,
+                        "address": official.address,
+                    },
+                    action="Please verify this match is correct.",
+                )
+
+                stall.polling_place_id = official.id
+                stall.save()
+                matched_count += 1
+
+        # Validate that all unofficial pending stalls have been successfully repointed
+        unmatched = Stalls.objects.filter(
+            election=self.election,
+            status=StallStatus.PENDING,
+            polling_place__isnull=True,
+            location_info__isnull=False,
+        ).count()
+        if unmatched > 0:
+            self._log(
+                "error",
+                "text",
+                message="{} unofficial pending stall(s) still have no polling place after migration — this shouldn't happen.".format(
+                    unmatched
+                ),
+            )
+
+        self._log(
+            "summary",
+            "text",
+            message="Matched and repointed {} of {} unofficial pending stall(s)".format(
+                matched_count, count
+            ),
+        )
 
     def migrate_noms(self):
         def _getDistanceThreshold(polling_place):
@@ -1061,26 +1561,32 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         def _fetch_matching(polling_place):
             if polling_place.ec_id is not None:
-                self.logger.info(
-                    f"Doing noms migration by ec_id for {polling_place.name}"
+                self._log(
+                    "info",
+                    "text",
+                    message="Matching by EC ID: {}".format(polling_place.name),
                 )
                 results = PollingPlaces.objects.filter(
                     election=self.election, status=PollingPlaceStatus.DRAFT
                 ).filter(ec_id=polling_place.ec_id)
                 count = results.count()
                 if count >= 2:
-                    self.logger.error(
-                        "Find by ec_id [{}]: Found {} existing polling places with that id.".format(
+                    self._log(
+                        "error",
+                        "text",
+                        message="Multiple polling places share EC ID '{}': {} found. Cannot migrate noms unambiguously.".format(
                             polling_place.ec_id, count
-                        )
+                        ),
                     )
                 return results
             else:
-                self.logger.info(
-                    f"Doing noms migration by distance for {polling_place.name}"
+                self._log(
+                    "info",
+                    "text",
+                    message="Matching by distance: {}".format(polling_place.name),
                 )
                 return self.safe_find_by_distance(
-                    "Noms Migration",
+                    "migrate_noms",
                     polling_place.geom,
                     distance_threshold_km=_getDistanceThreshold(polling_place),
                     limit=None,
@@ -1102,13 +1608,24 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             matching_polling_places = _fetch_matching(polling_place)
 
             if len(matching_polling_places) != 1:
-                self.logger.error(
-                    "Noms Migration: {} matching polling places found in new data: '{}' ({})".format(
-                        len(matching_polling_places),
-                        polling_place.name,
-                        polling_place.address,
+                if len(matching_polling_places) == 0:
+                    self._log(
+                        "error",
+                        "text",
+                        message="No match found in new data for '{}' ({})".format(
+                            polling_place.name, polling_place.address
+                        ),
                     )
-                )
+                else:
+                    self._log(
+                        "error",
+                        "text",
+                        message="{} matches found in new data for '{}' ({})".format(
+                            len(matching_polling_places),
+                            polling_place.name,
+                            polling_place.address,
+                        ),
+                    )
 
             else:
                 # Repoint polling place noms table
@@ -1125,25 +1642,32 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     election_id=self.election.id, polling_place=polling_place.id
                 ).update(polling_place=matching_polling_places[0].id)
                 if stalls_updated > 0:
-                    self.logger.info(
-                        "Noms Migration: {} stalls updated for polling place '{}' ({})".format(
+                    self._log(
+                        "info",
+                        "text",
+                        message="{} stalls updated for '{}' ({})".format(
                             stalls_updated,
                             matching_polling_places[0].name,
                             matching_polling_places[0].address,
-                        )
+                        ),
                     )
 
                 # If this is our first load of polling place info, log some INFO-level
                 # messages to compare the user-entered location info with the official
                 # location info. This is a poke for us to pick up any discrepancies.
                 if self.election.polling_places_loaded is False:
-                    self.logger.warning(
-                        "Noms Migration: User-added polling place '{}' ({}) has been merged successfully into the official polling place '{}' ({}). Is this correct?".format(
-                            polling_place.name,
-                            polling_place.address,
-                            matching_polling_places[0].name,
-                            matching_polling_places[0].address,
-                        )
+                    self._log(
+                        "info",
+                        "noms_merge_review",
+                        user_submitted={
+                            "name": polling_place.name,
+                            "address": polling_place.address,
+                        },
+                        official={
+                            "name": matching_polling_places[0].name,
+                            "address": matching_polling_places[0].address,
+                        },
+                        action="Please verify this merge is correct.",
                     )
 
             # end = timer()
@@ -1156,12 +1680,13 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         PollingPlaces.objects.bulk_update(polling_places_to_update_active, ["noms"])
         PollingPlaces.objects.bulk_update(polling_places_to_update_draft, ["noms"])
 
-        self.logger.info(
-            "Noms Migration: Migrated {} polling places".format(queryset.count())
+        self._log(
+            "summary",
+            "text",
+            message="Migrated {} polling places".format(queryset.count()),
         )
 
         # Migrate any leftover declined or pending stalls
-        start = timer()
         queryset = (
             Stalls.objects.filter(election=self.election)
             .filter(Q(status=StallStatus.DECLINED) | Q(status=StallStatus.PENDING))
@@ -1169,7 +1694,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         )
         for stall in queryset:
             matching_polling_places = self.safe_find_by_distance(
-                "Declined/Pending Stall Migration",
+                "migrate_noms",
                 stall.polling_place.geom,
                 distance_threshold_km=0.1,
                 limit=None,
@@ -1179,31 +1704,44 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             )
 
             if len(matching_polling_places) != 1:
-                self.logger.error(
-                    "Declined/Pending Stall Migration: {} matching polling places found in new data: '{}' ({})".format(
-                        len(matching_polling_places),
-                        stall.polling_place.name,
-                        stall.polling_place.address,
+                if len(matching_polling_places) == 0:
+                    self._log(
+                        "error",
+                        "text",
+                        message="No match found in new data for declined/pending stall '{}' ({})".format(
+                            stall.polling_place.name, stall.polling_place.address
+                        ),
                     )
-                )
+                else:
+                    self._log(
+                        "error",
+                        "text",
+                        message="{} matches found in new data for declined/pending stall '{}' ({})".format(
+                            len(matching_polling_places),
+                            stall.polling_place.name,
+                            stall.polling_place.address,
+                        ),
+                    )
 
             else:
                 # Repoint stall
                 stall.polling_place_id = matching_polling_places[0].id
                 stall.save()
 
-                self.logger.info(
-                    "Declined/Pending Stall Migration: Stall {} updated to point to polling place '{}' ({})".format(
+                self._log(
+                    "info",
+                    "text",
+                    message="Stall {} repointed to '{}' ({})".format(
                         stall.id,
                         matching_polling_places[0].name,
                         matching_polling_places[0].address,
-                    )
+                    ),
                 )
 
-        self.logger.info(
-            "Noms Migration: Migrated {} declined/pending stalls".format(
-                queryset.count()
-            )
+        self._log(
+            "summary",
+            "text",
+            message="Migrated {} declined/pending stalls".format(queryset.count()),
         )
 
         # Validate that we've actually migrated all stalls and polling places
@@ -1212,16 +1750,20 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         )
         count = queryset.count()
         if count > 0:
-            self.logger.error(
-                "Found {} old polling places with attached noms. This shouldn't happen.".format(
+            self._log(
+                "error",
+                "text",
+                message="Found {} old polling places with attached noms. This shouldn't happen.".format(
                     count
-                )
+                ),
             )
             for polling_place in queryset:
-                self.logger.error(
-                    "Polling place with noms still attached: {}".format(
-                        polling_place.id
-                    )
+                self._log(
+                    "error",
+                    "text",
+                    message="Still has noms: '{}' ({}) [id={}]".format(
+                        polling_place.name, polling_place.address, polling_place.id
+                    ),
                 )
 
         queryset = Stalls.objects.filter(
@@ -1229,16 +1771,20 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         )
         count = queryset.count()
         if count > 0:
-            self.logger.error(
-                "Found {} stalls with old polling places attached. This shouldn't happen.".format(
+            self._log(
+                "error",
+                "text",
+                message="Found {} stalls with old polling places attached. This shouldn't happen.".format(
                     count
-                )
+                ),
             )
             for stall in queryset:
-                self.logger.error(
-                    "Stall: {}; Polling Place: {}".format(
+                self._log(
+                    "error",
+                    "text",
+                    message="Unmigrated stall: stall_id={}, polling_place_id={}".format(
                         stall.id, stall.polling_place.id
-                    )
+                    ),
                 )
 
     def migrate_mpps(self):
@@ -1270,18 +1816,22 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 ).filter(ec_id=polling_place.ec_id)
                 count = results.count()
                 if count >= 2:
-                    self.logger.error(
-                        "Find by ec_id [{}]: Found {} existing polling places with that id.".format(
+                    self._log(
+                        "error",
+                        "text",
+                        message="Multiple polling places share EC ID '{}': {} found. Cannot migrate MPP unambiguously.".format(
                             polling_place.ec_id, count
-                        )
+                        ),
                     )
                 return results
             else:
-                self.logger.info(
-                    f"Doing MPP migration by distance for {polling_place.name}"
+                self._log(
+                    "info",
+                    "text",
+                    message="Matching by distance: {}".format(polling_place.name),
                 )
                 return self.safe_find_by_distance(
-                    "MPP Migration",
+                    "migrate_mpps",
                     polling_place.geom,
                     distance_threshold_km=_getDistanceThreshold(polling_place),
                     limit=None,
@@ -1303,13 +1853,38 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             matching_polling_places = _fetch_matching(polling_place)
 
-            if len(matching_polling_places) != 1:
-                self.logger.error(
-                    "MPP Migration: {} matching polling places found in new data: '{}' ({})".format(
+            if len(matching_polling_places) == 0:
+                if polling_place.meta_polling_place is not None:
+                    self._log(
+                        "warning",
+                        "mpp_not_found",
+                        name=polling_place.name,
+                        address=polling_place.address,
+                        mpp_id=polling_place.meta_polling_place.id,
+                        detached_mpp=True,
+                        action="MPP detached; polling place may have been removed.",
+                    )
+                    polling_place.meta_polling_place = None
+                    polling_places_to_update_active.append(polling_place)
+                else:
+                    self._log(
+                        "warning",
+                        "mpp_not_found",
+                        name=polling_place.name,
+                        address=polling_place.address,
+                        mpp_id=None,
+                        detached_mpp=False,
+                    )
+
+            elif len(matching_polling_places) > 1:
+                self._log(
+                    "error",
+                    "text",
+                    message="{} matches found in new data for '{}' ({})".format(
                         len(matching_polling_places),
                         polling_place.name,
                         polling_place.address,
-                    )
+                    ),
                 )
 
             else:
@@ -1339,12 +1914,16 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     try:
                         mpp.full_clean()
+                        mpp.save(force_insert=True)
                     except Exception as e:
-                        self.logger.error(
-                            f"Error creating MPP: {polling_place.name} (#{polling_place.id})"
+                        self._log(
+                            "error",
+                            "text",
+                            message="Error creating MPP: {} (#{}) — {}".format(
+                                polling_place.name, polling_place.id, str(e)
+                            ),
                         )
-
-                    mpp.save(force_insert=True)
+                        continue
 
                     # Link the new MPP to the polling place
                     polling_place.meta_polling_place = mpp
@@ -1360,12 +1939,15 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     try:
                         mpp_task.full_clean()
+                        mpp_task.save(force_insert=True)
                     except Exception as e:
-                        self.logger.error(
-                            f"Error creating MPP task: {polling_place.name} (#{polling_place.id})"
+                        self._log(
+                            "error",
+                            "text",
+                            message="Error creating MPP task: {} (#{}) — {}".format(
+                                polling_place.name, polling_place.id, str(e)
+                            ),
                         )
-
-                    mpp_task.save(force_insert=True)
 
             # end = timer()
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
@@ -1381,8 +1963,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             polling_places_to_update_draft, ["meta_polling_place"]
         )
 
-        self.logger.info(
-            "MPP Migration: Migrated {} active polling places".format(queryset.count())
+        self._log(
+            "summary",
+            "text",
+            message="Migrated {} active polling places".format(queryset.count()),
         )
 
         # Handle draft polling places without an attached MPP
@@ -1411,12 +1995,16 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             try:
                 mpp.full_clean()
+                mpp.save(force_insert=True)
             except Exception as e:
-                self.logger.error(
-                    f"Error creating MPP: {polling_place.name} (#{polling_place.id})"
+                self._log(
+                    "error",
+                    "text",
+                    message="Error creating MPP: {} (#{}) — {}".format(
+                        polling_place.name, polling_place.id, str(e)
+                    ),
                 )
-
-            mpp.save(force_insert=True)
+                continue
 
             # Link the new MPP to the polling place
             polling_place.meta_polling_place = mpp
@@ -1432,12 +2020,15 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             try:
                 mpp_task.full_clean()
+                mpp_task.save(force_insert=True)
             except Exception as e:
-                self.logger.error(
-                    f"Error creating MPP task: {polling_place.name} (#{polling_place.id})"
+                self._log(
+                    "error",
+                    "text",
+                    message="Error creating MPP task: {} (#{}) — {}".format(
+                        polling_place.name, polling_place.id, str(e)
+                    ),
                 )
-
-            mpp_task.save(force_insert=True)
 
             # end = timer()
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
@@ -1450,8 +2041,10 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             polling_places_to_update_draft, ["meta_polling_place"]
         )
 
-        self.logger.info(
-            "MPP Migration: Handled {} draft polling places".format(queryset.count())
+        self._log(
+            "summary",
+            "text",
+            message="Handled {} draft polling places".format(queryset.count()),
         )
 
         count = (
@@ -1462,8 +2055,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             .count()
         )
         if count != 0:
-            self.logger.error(
-                f"{count} active polling places have an MPP still attached"
+            self._log(
+                "error",
+                "text",
+                message="{} active polling places have an MPP still attached".format(
+                    count
+                ),
             )
 
         count = (
@@ -1474,7 +2071,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             .count()
         )
         if count != 0:
-            self.logger.error(f"{count} draft polling places have no MPP")
+            self._log(
+                "error",
+                "text",
+                message="{} draft polling places have no MPP".format(count),
+            )
 
     def migrate(self):
         # Migrate to new polling places
@@ -1488,12 +2089,18 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             election=self.election, status=PollingPlaceStatus.DRAFT
         )
 
-        self.logger.info(
-            "Loaded {} new polling places (previous set = {}, previous archived = {})".format(
-                new_polling_places_queryset.count(),
-                old_polling_places_queryset.count(),
-                old_archived_polling_places_queryset.count(),
-            )
+        new_count = new_polling_places_queryset.count()
+        old_count = old_polling_places_queryset.count()
+
+        self._log(
+            "summary",
+            "migrate_stats",
+            total_polling_places=new_count,
+            delta_total=new_count - old_count,
+            new_polling_places=max(0, new_count - old_count),
+            deleted_polling_places=max(0, old_count - new_count),
+            previous_set=old_count,
+            previous_archived=old_archived_polling_places_queryset.count(),
         )
 
         old_archived_polling_places_queryset.delete()
@@ -1537,8 +2144,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                 update_count += 1
 
-        self.logger.info(
-            "Facility types detected from historical data: {}".format(update_count)
+        self._log(
+            "summary",
+            "text",
+            message="Facility types detected from historical data: {}".format(
+                update_count
+            ),
         )
 
     def calculate_chance_of_sausage(self):
@@ -1553,8 +2164,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
         for polling_place in polling_places:
             if polling_place.id not in chance_of_sausage_calculations:
-                self.logger.error(
-                    f"Could not find the expected Chance of Sausage calculation result for {polling_place.id}"
+                self._log(
+                    "error",
+                    "text",
+                    message="Could not find the expected Chance of Sausage calculation result for {}".format(
+                        polling_place.id
+                    ),
                 )
             else:
                 if chance_of_sausage_calculations[polling_place.id] is not None:
@@ -1568,10 +2183,12 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     update_count += 1
 
-        self.logger.info(
-            "Chance of Sausage calculations completed: Considered = {}; Updated = {}".format(
+        self._log(
+            "summary",
+            "text",
+            message="Chance of sausage: considered {}, updated {}".format(
                 polling_places.count(), update_count
-            )
+            ),
         )
 
     def cleanup(self):
@@ -1579,19 +2196,37 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         task_regenerate_cached_election_data.delay(election_id=self.election.id)
 
     def run(self):
+        self.is_reload = PollingPlaces.objects.filter(
+            election=self.election, status=PollingPlaceStatus.ACTIVE
+        ).exists()
+
         if self.can_loading_begin() is False:
-            self.logger.error("Loading can't begin. There's probably pending stalls.")
+            self._log(
+                "error",
+                "text",
+                message="Loading can't begin. There's probably pending stalls.",
+            )
         else:
             self.invoke_and_bail_if_errors("convert_to_demsausage_schema")
             self.invoke_and_bail_if_errors("check_file_validity")
             self.invoke_and_bail_if_errors("fix_polling_places")
             self.invoke_and_bail_if_errors("prepare_polling_places")
             self.invoke_and_bail_if_errors("geocode_missing_locations")
+            # When geocoding is not configured or disabled, mark the stage as
+            # "skipped" for the UI accordion (the method still runs to filter
+            # out blank-coordinate polling places).
+            if self.geocoding is None or not self.geocoding.get("enabled", False):
+                if (
+                    self.stages
+                    and self.stages[-1]["name"] == "geocode_missing_locations"
+                ):
+                    self.stages[-1]["outcome"] = "skipped"
             self.invoke_and_bail_if_errors("check_polling_place_validity")
             self.invoke_and_bail_if_errors("dedupe_polling_places")
 
             with transaction.atomic():
                 self.invoke_and_bail_if_errors("write_draft_polling_places")
+                self.invoke_and_bail_if_errors("migrate_unofficial_pending_stalls")
                 self.invoke_and_bail_if_errors("migrate_noms")
                 self.invoke_and_bail_if_errors("migrate_mpps")
                 self.invoke_and_bail_if_errors("migrate")
@@ -1602,7 +2237,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         election_id=self.election.id
                     )
                     raise BadRequest(
-                        {"message": "Rollback", "logs": self.collects_logs()}
+                        {
+                            "message": "Rollback",
+                            "is_dry_run": True,
+                            "payload": self.collect_structured_logs(),
+                        }
                     )
 
             if self.is_dry_run() is False:
@@ -1613,6 +2252,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     self.invoke_and_bail_if_errors("cleanup")
 
             print("All done with loading")
+        self.save_logs(self.collect_structured_logs())
 
 
 class RollbackPollingPlaces(PollingPlacesIngestBase):
@@ -1621,6 +2261,7 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
     """
 
     def __init__(self, election, dry_run):
+        self._init_log_transport()
         self.election = election
         self.dry_run = dry_run
 
@@ -1663,13 +2304,24 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
             )
 
             if len(matching_polling_places) != 1:
-                self.logger.error(
-                    "Noms Rollback: {} matching polling places found in new data: '{}' ({})".format(
-                        len(matching_polling_places),
-                        polling_place.name,
-                        polling_place.address,
+                if len(matching_polling_places) == 0:
+                    self._log(
+                        "error",
+                        "text",
+                        message="No match found in archived data for '{}' ({})".format(
+                            polling_place.name, polling_place.address
+                        ),
                     )
-                )
+                else:
+                    self._log(
+                        "error",
+                        "text",
+                        message="{} matches found in archived data for '{}' ({})".format(
+                            len(matching_polling_places),
+                            polling_place.name,
+                            polling_place.address,
+                        ),
+                    )
 
             else:
                 # Repoint polling place noms table
@@ -1686,18 +2338,20 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
                     election_id=self.election.id, polling_place=polling_place.id
                 ).update(polling_place=matching_polling_places[0].id)
                 if stalls_updated > 0:
-                    self.logger.info(
-                        "Noms Rollback: {} stalls updated for polling place '{}' ({})".format(
+                    self._log(
+                        "info",
+                        "text",
+                        message="{} stalls updated for '{}' ({})".format(
                             stalls_updated,
                             matching_polling_places[0].name,
                             matching_polling_places[0].address,
-                        )
+                        ),
                     )
 
-        self.logger.info(
-            "Noms Rollback: Migrated {} polling places and stalls".format(
-                queryset.count()
-            )
+        self._log(
+            "summary",
+            "text",
+            message="Rolled back {} polling places and stalls".format(queryset.count()),
         )
 
         queryset = PollingPlaces.objects.filter(
@@ -1705,16 +2359,20 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
         )
         count = queryset.count()
         if count > 0:
-            self.logger.error(
-                "Found {} old polling places with attached noms. This shouldn't happen.".format(
+            self._log(
+                "error",
+                "text",
+                message="Found {} old polling places with attached noms. This shouldn't happen.".format(
                     count
-                )
+                ),
             )
             for polling_place in queryset:
-                self.logger.error(
-                    "Polling place with noms still attached: {}".format(
-                        polling_place.id
-                    )
+                self._log(
+                    "error",
+                    "text",
+                    message="Still has noms: '{}' ({}) [id={}]".format(
+                        polling_place.name, polling_place.address, polling_place.id
+                    ),
                 )
 
         queryset = Stalls.objects.filter(
@@ -1722,16 +2380,20 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
         )
         count = queryset.count()
         if count > 0:
-            self.logger.error(
-                "Found {} stalls with old polling places attached. This shouldn't happen.".format(
+            self._log(
+                "error",
+                "text",
+                message="Found {} stalls with old polling places attached. This shouldn't happen.".format(
                     count
-                )
+                ),
             )
             for stall in queryset:
-                self.logger.error(
-                    "Stall: {}; Polling Place: {}".format(
+                self._log(
+                    "error",
+                    "text",
+                    message="Unmigrated stall: stall_id={}, polling_place_id={}".format(
                         stall.id, stall.polling_place.id
-                    )
+                    ),
                 )
 
     def cleanup(self):
@@ -1743,11 +2405,13 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
             election=self.election, status=PollingPlaceStatus.ARCHIVED
         )
 
-        self.logger.info(
-            "Rolledback to {} archived polling places (previous active set = {})".format(
+        self._log(
+            "summary",
+            "text",
+            message="Rolled back to {} archived polling places (previous active set={})".format(
                 archived_polling_places_queryset.count(),
                 active_polling_places_queryset.count(),
-            )
+            ),
         )
 
         active_polling_places_queryset.delete()
@@ -1763,8 +2427,10 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
 
     def run(self):
         if self.can_loading_begin() is False:
-            self.logger.error(
-                "Rollback can't begin. There's probably pending stalls or draft polling places left over."
+            self._log(
+                "error",
+                "text",
+                message="Rollback can't begin. There's probably pending stalls or draft polling places left over.",
             )
         else:
             self.invoke_and_bail_if_errors("rollback_noms")

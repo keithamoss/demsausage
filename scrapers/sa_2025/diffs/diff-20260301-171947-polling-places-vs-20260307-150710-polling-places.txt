@@ -1,0 +1,141 @@
+
+=== Diff Report ===
+file1: data/20260301_171947 polling places.csv
+file2: data/20260307_150710 polling places.csv
+
+Summary: 24 change(s) found — 1 removed, 0 added, 23 modified
+
+Removed (only in file1):
+────────────────────────────────────────────────────────────
+PPId 110 — Guardian Childcare & Education
+  id: 110
+  name: Croydon Park
+  divisions: Croydon
+  suburb: Croydon Park
+  postcode: 5008
+  premises: Guardian Childcare & Education
+  address_partial: 346 Torrens Road
+  lat: -34.8807
+  lon: 138.559
+  wheelchair_access: Assisted
+
+Modified:
+────────────────────────────────────────────────────────────
+PPId 28 — Vermont Uniting Church
+  address_partial:
+    - 578 Cross Rd
+    + 576 Cross Rd
+
+PPId 38 — All Nations Baptist Church
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 64 — Loxton North School
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 78 — Waikerie High School
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 91 — Seaton Park Primary School
+  wheelchair_access:
+    - Assisted
+    + Full
+
+PPId 102 — Kidman Park Primary School
+  wheelchair_access:
+    - Assisted
+    + Full
+
+PPId 120 — Gateway Church West Croydon
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 144 — All Souls Anglican Church (Coles Hall)
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 146 — St Joseph's Parish School
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 158 — Marion Primary School
+  address_partial:
+    - 2-22 Malcolm Ave
+    + 2  Malcolm Ave
+
+PPId 175 — Hillbank Community Children's Centre
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 220 — Port Kenny & District Sports Centre
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 324 — Piccadilly Community Hall
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 386 — Seaton High School
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 389 — Bower Cottages
+  wheelchair_access:
+    - None
+    + Full
+
+PPId 412 — Coonawarra Soldiers Memorial Community Club
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 443 — Aldinga Payinthi College
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 516 — Moonta Town Hall
+  wheelchair_access:
+    - None
+    + Full
+
+PPId 535 — John XXIII Catholic Community Centre
+  wheelchair_access:
+    - Assisted
+    + Full
+
+PPId 559 — Owen Primary School
+  address_partial:
+    - 23 Second St
+    + 20 Second St
+
+PPId 563 — Roseworthy Primary School
+  premises:
+    - Roseworthy Primary School
+    + Roseworthy Soldiers Memorial Hall
+  address_partial:
+    - 3 Gartrell St
+    + 10 Elizabeth St
+
+PPId 589 — Semaphore Masonic Hall
+  wheelchair_access:
+    - None
+    + Assisted
+
+PPId 744 — Salisbury East High School
+  wheelchair_access:
+    - None
+    + Assisted
+

@@ -32,6 +32,7 @@ export const api = createApi({
 		'MetaPollingPlaces',
 		'MetaPollingPlaceTasks',
 		'MetaPollingPlaceLinks',
+		'PollingPlaceFacilityTypes',
 	],
 });
 

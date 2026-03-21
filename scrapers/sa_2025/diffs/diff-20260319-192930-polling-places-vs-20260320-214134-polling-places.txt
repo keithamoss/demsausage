@@ -1,0 +1,53 @@
+
+=== Diff Report ===
+file1: data/20260319_192930 polling places.csv
+file2: data/20260320_214134 polling places.csv
+
+Summary: 4 change(s) found — 3 removed, 0 added, 1 modified
+
+Removed (only in file1):
+────────────────────────────────────────────────────────────
+PPId 269 — Hincks Ave Primary School
+  id: 269
+  name: Whyalla Norrie North
+  divisions: Giles
+  suburb: Whyalla Norrie
+  postcode: 5608
+  premises: Hincks Ave Primary School
+  address_partial: 6 Schulz Ave
+  entrance_desc: Enter via Schulz Ave
+  lat: -33.0192
+  lon: 137.545
+  wheelchair_access: Assisted
+
+PPId 270 — Fisk St Primary School
+  id: 270
+  name: Whyalla Norrie North-West
+  divisions: Giles
+  suburb: Whyalla Norrie
+  postcode: 5608
+  premises: Fisk St Primary School
+  address_partial: Pattinson Cl
+  lat: -33.0167
+  lon: 137.533
+  wheelchair_access: Assisted
+
+PPId 273 — Willsden Primary School
+  id: 273
+  name: Willsden
+  divisions: Giles
+  suburb: Port Augusta
+  postcode: 5700
+  premises: Willsden Primary School
+  address_partial: 70-80 Elizabeth Tce
+  lat: -32.5064
+  lon: 137.779
+  wheelchair_access: Full
+
+Modified:
+────────────────────────────────────────────────────────────
+PPId 333 — Hackham East Primary School
+  address_partial:
+    - 72 Collins Pde
+    + 66 Collins Pde
+

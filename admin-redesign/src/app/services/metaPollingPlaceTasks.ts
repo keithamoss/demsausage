@@ -37,8 +37,14 @@ export const metaPollingPlaceTasksApi = api.injectEndpoints({
 			invalidatesTags: ['MetaPollingPlaceTasks'],
 		}),
 		// Null response indicates no more tasks in the queue for this job
-		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<IMetaPollingPlaceTaskJob | null, string>({
-			query: (job_name) => ({ url: 'meta_polling_places/tasks/next/', params: { job_name } }),
+		getNextTaskFromMetaPollingPlaceTaskJobGroup: builder.query<
+			IMetaPollingPlaceTaskJob | null,
+			{ job_name: string; lat?: number; lon?: number }
+		>({
+			query: ({ job_name, lat, lon }) => ({
+				url: 'meta_polling_places/tasks/next/',
+				params: { job_name, ...(lat !== undefined && lon !== undefined ? { lat, lon } : {}) },
+			}),
 			// @TODO Check for caching bug?
 			providesTags: ['MetaPollingPlaceTasks'],
 		}),

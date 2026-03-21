@@ -207,6 +207,9 @@ DATABASES = {
         "PASSWORD": get_env("DB_PASSWORD"),
         "HOST": get_env("DB_HOST"),
         "PORT": get_env("DB_PORT"),
+        "TEST": {
+            "NAME": "demsausage_test",
+        },
     },
 }
 
@@ -301,9 +304,8 @@ sentry_sdk.init(
     environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper(),
 )
 
-with sentry_sdk.configure_scope() as scope:
-    scope.level = "warning"
-    scope.set_extra("site", get_env("RAVEN_SITE_NAME"))
+sentry_sdk.set_level("warning")
+sentry_sdk.set_extra("site", get_env("RAVEN_SITE_NAME"))
 
 
 # Project-specific settings

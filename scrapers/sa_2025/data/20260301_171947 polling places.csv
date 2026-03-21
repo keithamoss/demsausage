@@ -1,0 +1,690 @@
+id,name,divisions,suburb,postcode,premises,address_partial,entrance_desc,lat,lon,wheelchair_access
+3,Adelaide,Adelaide,Adelaide,5000,Christian Brothers College (Senior Campus),214 Wakefield St,Enter via gym (Wakefield Street),-34.9279,138.609,Full
+4,Adelaide South,Adelaide,Adelaide,5000,Gilles St Primary School,91-93 Gilles St,,-34.9344,138.605,Assisted
+5,Adelaide West,Adelaide,Adelaide,5000,Adelaide High School,West Tce,,-34.9256,138.587,Full
+6,Nailsworth,Adelaide,Nailsworth,5083,Nailsworth Primary School,2 Balfour St,,-34.8828,138.603,Assisted
+7,North Adelaide,Adelaide,North Adelaide,5006,North Adelaide Primary School,62-80 Tynte St,,-34.9051,138.598,Assisted
+8,North Adelaide East,Adelaide,North Adelaide,5006,St Cyprian's Anglican Church,70 Melbourne St,,-34.9061,138.609,Assisted
+9,Prospect,Adelaide,Prospect,5082,Prospect Primary School,27 Gladstone Rd,Enter via Braund Road,-34.8852,138.59,Assisted
+10,Prospect North,Adelaide,Prospect,5082,Prospect North Primary School,30 Stuart Rd,,-34.8753,138.596,Assisted
+11,Prospect South,Adelaide,Prospect,5082,Blackfriars Priory School,22-24 Highbury St,Enter via Highbury Street,-34.8954,138.597,Full
+12,Walkerville,Adelaide,Walkerville,5081,Walkerville Primary School,159 Stephen Tce,,-34.8953,138.613,Assisted
+13,Walkerville North,Adelaide,Walkerville,5081,St Monica's Parish School,92 North East Rd,,-34.8876,138.616,Assisted
+15,Ascot Park,Badcoe,Ascot Park,5043,Active Elders Association,27a Charles St,,-34.9908,138.563,Full
+16,Black Forest,Badcoe,Black Forest,5035,Black Forest Primary School,679 South Rd,Enter via School Ave,-34.9607,138.573,Assisted
+17,Black Forest East,Badcoe,Black Forest,5035,Clarence Park Community Centre,72-74 East Ave,Enter via Canterbury Tce,-34.9608,138.581,Assisted
+18,Edwardstown,Badcoe,Edwardstown,5039,Southpoint Church of Christ,68 De Laine Ave,,-34.9744,138.565,Assisted
+19,Goodwood,Badcoe,Goodwood,5034,Goodwood Primary School,140 Goodwood Rd,,-34.9515,138.589,Assisted
+20,Keswick,Badcoe,Keswick,5035,Richmond Primary School,8 Surrey Rd,,-34.9434,138.572,Full
+21,Kurralta Park,Badcoe,Kurralta Park,5037,Seeds Uniting Church,1-3 Hare St,,-34.9475,138.571,Assisted
+22,Netley,Badcoe,Netley,5037,Netley Kindergarten,Comet Ave,,-34.9543,138.547,Assisted
+23,Park Holme South,Badcoe,Park Holme,5043,Ascot Park Primary School,1-37 Pildappa Ave,,-34.9905,138.556,Assisted
+24,Plympton,Badcoe,Plympton,5038,Plympton Primary School,19 Owen St,Enter via Keily and Owen Street gate,-34.9608,138.557,Assisted
+25,Plympton Park,Badcoe,Plympton Park,5038,Plympton Glenelg RSL Hall,464 Marion Rd,,-34.9703,138.555,Full
+26,Richmond,Badcoe,Richmond,5033,West Adelaide Football Club,57 Milner Road,,-34.93664472,138.5664787,Assisted
+27,South Plympton,Badcoe,South Plympton,5038,Forbes Primary School,80 Thomas St,,-34.9781,138.558,Assisted
+28,South Plympton North,Badcoe,South Plympton,5038,Vermont Uniting Church,578 Cross Rd,,-34.9675,138.56,Assisted
+30,Hallett Cove,Black,Hallett Cove,5158,Hallett Cove R-12 School,2-30 Gledsdale Rd,Enter via Gate 1,-35.0771,138.511,Assisted
+31,Hallett Cove East,Black,Hallett Cove,5158,Hallett Cove East Primary School,Quailo Ave,,-35.0709,138.517,Full
+32,Hallett Cove South,Black,Hallett Cove,5158,Hallett Cove South Primary School,Livonia St,Enter via Gretel Crs,-35.0833,138.504,Assisted
+33,Marino,Black,Marino,5049,Marino Community Hall,44 Newland Ave,,-35.0428,138.518,Assisted
+34,Seacliff,Black,Seacliff,5049,Seacliff Uniting Church,5-7 Wheatland St,,-35.0317,138.523,Assisted
+35,Seacliff South,Black,Seacliff,5049,Kauri Community and Sports Centre,Lipson Ave,,-35.0391,138.523,Assisted
+36,Seacombe Heights,Black,Seacombe Heights,5047,Seaview High School,78-124 Seacombe Rd,,-35.0298,138.546,Assisted
+37,Seaview Downs,Black,Seaview Downs,5049,Seaview Downs Primary School,26-44 Ross St,,-35.0407,138.536,Assisted
+38,Seaview Downs North,Black,Seaview Downs,5049,All Nations Baptist Church,168-170 Seacombe Rd,,-35.0296,138.54,None
+39,Sheidow Park,Black,Sheidow Park,5158,Sheidow Park Primary School,21-43 Adams Rd,,-35.0717,138.531,Full
+40,Sheidow Park South,Black,Sheidow Park,5158,Woodend Primary School,10-22 Edward Beck Dr,,-35.0791,138.536,Assisted
+42,Beaumont,Bragg,Beaumont,5066,Beaumont Scout Hall,42 Cooper Pl,,-34.9449,138.658,Assisted
+43,Burnside,Bragg,Burnside,5066,St David's Anglican Church,492 Glynburn Rd,,-34.9356,138.66,Assisted
+44,Dulwich,Bragg,Dulwich,5065,St Peter Claver Church Hall,1a Stuart Rd,,-34.9342,138.631,Assisted
+45,Glen Osmond,Bragg,Glen Osmond,5064,St Saviour's Anglican Church,2 Pridmore Rd,Enter Pridmore Rd,-34.9629,138.645,Full
+46,Glenunga,Bragg,Glenunga,5064,Glenunga International High School,99 L'Estrange St,,-34.9492,138.636,Assisted
+47,Kensington,Bragg,Kensington,5068,Marryatville Primary School,54 Dankel Ave,,-34.9249,138.649,Assisted
+48,Linden Park,Bragg,Linden Park,5065,Linden Park Primary School,14 Hay Rd,,-34.9475,138.647,Assisted
+49,Magill South,Bragg,Magill,5072,Norwood International High School,505 The Parade,,-34.919,138.672,Full
+50,Parkside,Bragg,Parkside,5063,Parkside Primary School,12 Robsart St,,-34.9446,138.62,Full
+51,Tusmore,Bragg,Tusmore,5065,Burnside City Uniting Church,384 Portrush Rd,Enter via Fisher St,-34.9375,138.643,Full
+52,Wattle Park,Bragg,Stonyfell,5066,St Peters Girls School,6 Stonyfell Rd,,-34.9303,138.669,Assisted
+55,Barmera,Chaffey,Barmera,5345,Barmera Primary School,1 Rumbold Dr,,-34.2525,140.477,Assisted
+56,Berri,Chaffey,Berri,5343,Berri Regional Secondary College,36 Kay Ave,,-34.27833658,140.6107486,Assisted
+57,Blanchetown,Chaffey,Blanchetown,5357,Blanchetown District Hall,3 Shaw St,,-34.352,139.615,Assisted
+58,Cadell,Chaffey,Cadell,5321,Cadell Institute,33-35 McGuire Tce,,-34.0395,139.764,Assisted
+59,Cambrai,Chaffey,Cambrai,5353,Cambrai Primary School,Main Rd,Enter via Croft Rd,-34.6526,139.282,Assisted
+60,Cobdogla,Chaffey,Cobdogla,5346,Cobdogla Primary School,2-12 Dolan St,,-34.2424,140.406,Full
+61,Glossop,Chaffey,Glossop,5344,Glossop Community School,Mitchell Tce,,-34.271,140.525,Assisted
+62,Karoonda,Chaffey,Karoonda,5307,Karoonda Institute,15 Peake St,,-35.09300915,139.8953395,Assisted
+63,Loxton,Chaffey,Loxton,5333,Loxton High School,1889 Bookpurnong Road,,-34.443053,140.585017,Assisted
+64,Loxton North,Chaffey,Loxton North,5333,Loxton North School,379 Balfour-Ogilvy Rd,,-34.4133,140.625,None
+65,Lyrup,Chaffey,Lyrup,5333,Lyrup Village Association,Cnr Rupert Ct & Wilson Pde,,-34.2555,140.646,None
+66,Monash,Chaffey,Monash,5342,Monash Memorial Hall,Cnr Randell Tce & Madison Ave,,-34.2378,140.558,Assisted
+67,Moorook,Chaffey,Moorook,5332,Moorook Community Hall,644 Kingston Rd,,-34.2889,140.367,Assisted
+68,Morgan,Chaffey,Morgan,5320,Morgan Sporting Complex,North East Tce,,-34.0292,139.669,None
+69,Nildottie,Chaffey,Nildottie,5238,St Stephens Lutheran Church Hall,4103 Hunter Rd,,-34.6801,139.652,Assisted
+70,Paringa,Chaffey,Paringa,5340,Paringa Friendship Centre,69 Hughes Ave,,-34.1818,140.791,Assisted
+71,Purnong,Chaffey,Purnong,5238,Purnong District Hall,3214 Purnong Rd,,-34.8541,139.624,Assisted
+72,Ramco,Chaffey,Ramco,5322,Ramco Institute,421 Ramco Rd,,-34.1706,139.937,Assisted
+73,Renmark,Chaffey,Renmark,5341,Renmark Paringa Community & Civic Centre,61 Eighteenth St,,-34.1743,140.743,Full
+74,Renmark North,Chaffey,Renmark North,5341,Renmark North Primary School,65 Warrego St,,-34.1261,140.712,Assisted
+75,Renmark West,Chaffey,Renmark West,5341,Renmark West Primary School,327 Tarcoola St,,-34.1662,140.71,Full
+76,Sedan,Chaffey,Sedan,5353,Sedan Hall,Stott Hwy,,-34.5731,139.298,Assisted
+77,Swan Reach,Chaffey,Swan Reach,5354,Swan Reach Town Hall,5 Nildottie Rd,,-34.5691,139.597,Assisted
+78,Waikerie,Chaffey,Waikerie,5330,Waikerie High School,24 Blake Rd,,-34.1847,139.975,None
+79,Walker Flat,Chaffey,Walker Flat,5238,Walker Flat & Districts Community Hall,4945 Angas Valley Rd,,-34.7614,139.568,Assisted
+81,Beverley,Cheltenham,Beverley,5009,St Michael's College - Primary,78 East Ave,Enter via Hubbard St or Main St,-34.8991,138.55,Assisted
+82,Cheltenham,Cheltenham,Cheltenham,5014,Cheltenham Community Centre,62 Stroud St North,,-34.8661,138.526,Assisted
+83,Findon,Cheltenham,Findon,5023,Western Link Uniting Church,93 Crittenden Rd,,-34.8987,138.537,Full
+84,Findon West,Cheltenham,Findon,5023,Findon High School,44 Drummond Ave,,-34.8987,138.527,Assisted
+85,Kilkenny,Cheltenham,Kilkenny,5009,Kilkenny Community Hall,27a Wilpena Tce,,-34.8839,138.551,Assisted
+86,Mansfield Park,Cheltenham,Mansfield Park,5012,St Patrick's School,33a Dudley St,,-34.8544,138.551,Full
+87,Ottoway,Cheltenham,Ottaway,5013,Junction Community Centre,2A May Tce,,-34.8513,138.527,Full
+88,Pennington,Cheltenham,Pennington,5013,Pennington School R-6,Butler Ave,,-34.8576,138.533,Assisted
+89,Queenstown,Cheltenham,Queenstown,5014,Alberton Primary School,14 Broad St,,-34.8633,138.512,Full
+90,Rosewater,Cheltenham,Rosewater,5013,Mt Carmel College,33 Newcastle St,Enter via Dundas St,-34.8563,138.522,Assisted
+91,Seaton Park,Cheltenham,Seaton,5023,Seaton Park Primary School,80 Balcombe Ave,,-34.8956,138.52,Assisted
+92,St Clair,Cheltenham,St Clair,5011,Woodville High School,11 Actil Ave,Enter via Leslie St W,-34.8722,138.541,Assisted
+93,Woodville Gardens,Cheltenham,Woodville Gardens,5012,Woodville Gardens School B-7,18-58 Ridley Gr,,-34.864,138.55,Assisted
+94,Woodville South,Cheltenham,Woodville South,5011,Woodville Primary School,Evans St,,-34.8818,138.533,Assisted
+95,Woodville West,Cheltenham,Woodville West,5011,White City Football Club,7 Minns Street,,-34.8877,138.521,Assisted
+97,Fulham,Colton,Fulham,5024,Fulham Community Centre,19 Fitch Rd,,-34.9306,138.514,Assisted
+98,Grange,Colton,Grange,5022,"Grange Primary School, Lawson Hall",39c Jetty St,,-34.9025,138.497,Assisted
+99,Henley Beach,Colton,Henley Beach,5022,Henley Fulham Uniting Church Temple Centre,214 Military Rd,,-34.9179,138.495,Assisted
+100,Henley Beach North,Colton,Henley Beach,5022,Fulham Gardens Primary School,70-72 Marlborough St,,-34.9131,138.504,Assisted
+101,Henley Beach South,Colton,Henley Beach South,5022,Henley Beach Primary School,38 Hazel Tce,Enter via Hazel Tce or Burford Rd,-34.93,138.5,Assisted
+102,Kidman Park,Colton,Kidman Park,5025,Kidman Park Primary School,13 Dean Ave,,-34.9119776,138.5242638,Assisted
+103,Lockleys,Colton,Lockleys,5032,Christ the King Church Hall,456 Henley Beach Rd,,-34.9259,138.527,Assisted
+104,Lockleys North,Colton,Lockleys,5032,Lockleys North Primary School,55 Malurus Ave,,-34.9198,138.538,Full
+105,Seaton West,Colton,Seaton,5023,Christian Family Centre,185 Frederick Rd,,-34.8981,138.506,Full
+106,West Beach,Colton,West Beach,5024,West Beach Primary School Activity Hall,3 Woodhead St,,-34.9375,138.51,Assisted
+108,Brompton,Croydon,Brompton,5007,19 on Green Community Centre,19 Green St,,-34.8979,138.576,Assisted
+109,Croydon,Croydon,Croydon,5008,St Barnabas Anglican Church,4a William St,,-34.8955,138.567,Full
+110,Croydon Park,Croydon,Croydon Park,5008,Guardian Childcare & Education,346 Torrens Road,,-34.8807,138.559,Assisted
+111,Croydon Park East,Croydon,Croydon Park,5008,Kilkenny Scout Hall,1 Pym Street,,-34.8826,138.567,Full
+112,Kilburn,Croydon,Kilburn,5084,St Brigid's Parish Hall,44 Le Hunte St,,-34.8623,138.588,Assisted
+113,Kilkenny,Croydon,Kilkenny,5009,Kilkenny Community Hall,27a Wilpena Tce,,-34.8839,138.551,Assisted
+114,Kilkenny North,Croydon,Kilkenny,5009,Challa Gardens Primary School,8 Humphries Tce,,-34.8779,138.554,Assisted
+115,Mansfield Park,Croydon,Mansfield Park,5012,St Patrick's School,33a Dudley St,,-34.8544,138.551,Full
+116,Prospect,Croydon,Prospect,5082,Prospect Primary School,27 Gladstone Rd,Enter via Braund Rd,-34.8852,138.59,Assisted
+117,Prospect North,Croydon,Prospect,5082,Prospect North Primary School,30 Stuart Rd,,-34.8753,138.596,Assisted
+118,Regency Park,Croydon,Regency Park,5010,Regency TAFE,137 Days Rd,,-34.8729,138.569,Full
+119,Renown Park,Croydon,Renown Park,5008,Brompton Primary School,11 Napier St,,-34.8938,138.581,Assisted
+120,West Croydon,Croydon,West Croydon,5008,Gateway Church West Croydon,38-40 Rosetta St,,-34.8893,138.559,None
+121,Woodville Gardens,Croydon,Woodville Gardens,5012,Woodville Gardens School B-7,18-58 Ridley Gr,,-34.864,138.55,Assisted
+123,Aberfoyle Park,Davenport,Aberfoyle Park,5159,Aberfoyle Park High School,36a Taylors Rd,,-35.0742,138.594,Assisted
+124,Aberfoyle Park Central,Davenport,Aberfoyle Park,5159,Aberfoyle Park Primary School Campus,2-8 Campus Dr,,-35.067,138.596,Full
+125,Aberfoyle Park North,Davenport,Aberfoyle Park,5159,Aberfoyle Park Baptist Church,70 Manning Rd,,-35.0593,138.599,Full
+126,Aberfoyle Park South,Davenport,Aberfoyle Park,5159,Aberfoyle Hub R-6 School,29 Jeanette Cres,,-35.0785,138.595,Assisted
+127,Flagstaff Hill,Davenport,Flagstaff Hill,5159,Flagstaff Hill Primary School,145 Black Rd,,-35.0493,138.588,Full
+128,Flagstaff Hill East,Davenport,Flagstaff Hill,5159,Craigburn Primary School,15 Murrays Hill Rd,,-35.0569,138.616,Full
+129,Happy Valley,Davenport,Happy Valley,5159,Happy Valley Primary School,18 Education Rd,,-35.0868,138.584,Assisted
+130,Happy Valley West,Davenport,Happy Valley,5159,Braeview School,1a Montana Dr,,-35.0803,138.554,Full
+131,Seacombe Heights,Davenport,Seacombe Heights,5047,Seaview High School,78-124 Seacombe Rd,,-35.0298,138.546,Assisted
+133,Dulwich,Dunstan,Dulwich,5065,St Peter Claver Church Hall,1a Stuart Rd,,-34.9342,138.631,Assisted
+134,Glynde,Dunstan,Glynde,5070,Zion Lutheran Church Glynde,15-17 Glynburn Rd,,-34.8914,138.656,Assisted
+135,Joslin,Dunstan,Joslin,5069,College Park Scout Hall,95 Fourth Ave,,-34.9016,138.628,Assisted
+136,Kensington,Dunstan,Kensington,5068,Marryatville Primary School,54 Dankel Ave,,-34.9249,138.649,Assisted
+137,Kensington Park,Dunstan,Kensington Park,5069,Kensington Park RSL,346 The Parade,,-34.9206,138.651,Assisted
+138,Kent Town,Dunstan,Kent Town,5067,Wesley Uniting Church,27 Grenfell St,Enter via Fullarton Rd,-34.9193,138.623,Assisted
+139,Marden,Dunstan,Marden,5070,Marden Senior College,1-37 Marden Rd,,-34.8916,138.635,Assisted
+140,Maylands,Dunstan,Maylands,5069,Field of Dreams Australia,17a Augusta St,Enter via Dover St,-34.9126,138.636,Assisted
+141,Norwood,Dunstan,Norwood,5067,Salvation Army,55 George St,,-34.9218,138.637,Assisted
+142,Norwood West,Dunstan,Norwood,5067,Norwood Primary School,37 Osmond Tce,,-34.9189,138.632,Assisted
+143,St Morris,Dunstan,St Morris,5068,Adelaide Korean Uniting Church Hall,40 Third Ave,,-34.9114,138.656,Assisted
+144,St Peters,Dunstan,St Peters,5069,All Souls Anglican Church (Coles Hall),34A Third Ave,,-34.9071,138.625,None
+145,St Peters East,Dunstan,St Peters,5069,East Adelaide School,57-59 Second Ave,,-34.9053,138.628,Full
+146,Tranmere South,Dunstan,Tranmere,5073,St Joseph's Parish School,1 Birkinshaw Ave,,-34.9132,138.666,None
+147,Trinity Gardens,Dunstan,Trinity Gardens,5068,Trinity Gardens School,160 Portrush Rd,,-34.9088,138.64,Assisted
+149,Ascot Park,Elder,Ascot Park,5043,Active Elders Association,27a Charles St,,-34.9908,138.563,Full
+150,Black Forest East,Elder,Black Forest,5035,Clarence Park Community Centre,72-74 East Ave,Enter via Canterbury Tce,-34.9608,138.581,Assisted
+151,Clapham,Elder,Clapham,5062,Clapham Primary School,48 Barretts Rd,,-34.9939,138.604,Assisted
+152,Clarence Gardens,Elder,Clarence Gardens,5039,St Francis of Assisi Church Community Centre,835 South Rd,Enter via Dinwoodie Ave,-34.9701,138.574,Full
+153,Clarence Park,Elder,Clarence Park,5034,Church of the Trinity,318 Goodwood Rd,,-34.9643,138.59,Full
+154,Colonel Light Gardens South,Elder,Colonel Light Gardens,5041,Colonel Light Gardens Primary School,Windsor Ave,,-34.9872,138.596,Assisted
+155,Daw Park,Elder,Daw Park,5041,Colonel Light Gardens Uniting Church,560 Goodwood Rd,,-34.9809,138.592,Full
+156,Edwardstown,Elder,Edwardstown,5039,Southpoint Church of Christ,68 De Laine Ave,,-34.9744,138.565,Assisted
+157,Hawthorn,Elder,Hawthorn,5062,Hawthorn Community Centre,5 Frimley Gr,,-34.9725,138.607,Assisted
+158,Marion,Elder,Marion,5043,Marion Primary School,2-22 Malcolm Ave,,-35.0042,138.556,Full
+159,Melrose Park,Elder,Melrose Park,5039,Edwardstown Primary School,125 Edward St,,-34.9785,138.579,Full
+160,Mitchell Park,Elder,Mitchell Park,5043,Hamilton Secondary College,815 Marion Rd,,-34.9979,138.558,Full
+161,Mitchell Park South,Elder,Mitchell Park,5043,Marion Church of Christ,15 Alawoona Ave,,-35.0071,138.559,Assisted
+162,Pasadena,Elder,Pasadena,5042,Springbank Secondary College,267 Daws Rd,Enter via Gate 1,-34.9921,138.592,Full
+163,St Marys,Elder,St Marys,5042,Edwardstown Baptist Church,54C Dorene St,,-34.9995,138.578,Full
+164,Westbourne Park,Elder,Westbourne Park,5041,Westbourne Park Primary School,2 Marlborough Rd,,-34.9694,138.592,Assisted
+166,Craigmore,Elizabeth,Blakeview,5114,Craigmore High School,2 Jamieson Rd,,-34.6905,138.7,Full
+167,Craigmore North,Elizabeth,Craigmore,5114,Playford Primary School,216 Adams Rd,,-34.6888,138.712,Assisted
+168,Elizabeth,Elizabeth,Elizabeth,5112,Playford International College,7 Crockerton Rd,,-34.724,138.668,Assisted
+169,Elizabeth Downs,Elizabeth,Elizabeth Downs,5113,Elizabeth Downs Primary School,Heard St,,-34.6995,138.694,Assisted
+170,Elizabeth East,Elizabeth,Elizabeth East,5112,Elizabeth East Primary School,15 Dolphin St,,-34.7251,138.678,Full
+171,Elizabeth Grove,Elizabeth,Elizabeth Grove,5112,Elizabeth Grove Primary,20 Haynes St,,-34.7327,138.67,Assisted
+172,Elizabeth North,Elizabeth,Elizabeth North,5113,Elizabeth North Primary School,141 Woodford Rd,,-34.7036,138.675,Full
+173,Elizabeth Park,Elizabeth,Elizabeth Park,5113,Elizabeth Park Primary School,15 Turner Rd,,-34.713,138.685,Assisted
+174,Elizabeth South,Elizabeth,Elizabeth South,5113,Elizabeth South Primary School,Chivell St,,-34.7313,138.662,Full
+175,Hillbank,Elizabeth,Hillbank,5112,Hillbank Community Children's Centre,10 Penarth Ct,,-34.7316,138.684,None
+176,Munno Para East,Elizabeth,Munno Para,5115,Munno Para Primary School,81 Maltarra Rd,,-34.6698,138.7,Assisted
+177,Smithfield,Elizabeth,Smithfield,5114,Smithfield Sports & Social Club,1 Anderson Walk,,-34.6835,138.691,Assisted
+179,Blair Athol,Enfield,Blair Athol,5084,St Paul Lutheran Church Hall,44 Audrey Ave,,-34.8616,138.599,Assisted
+180,Blair Athol North,Enfield,Blair Athol,5084,Blair Athol North B-6 School,5-13 Marmion Ave,,-34.853,138.599,Full
+181,Broadview,Enfield,Broadview,5083,Broadview Uniting Church,61 Galway Ave,,-34.8801,138.615,Full
+182,Broadview North,Enfield,Broadview,5083,Broadview Masonic Centre,565-567 Regency Rd,,-34.8733,138.612,Assisted
+183,Clearview,Enfield,Clearview,5085,Good Shepherd Catholic Church,7 St Albans Pl,,-34.8527,138.61,None
+184,Enfield,Enfield,Enfield,5085,Enfield Primary School,Clarice Ave,Enter via Harewood Ave,-34.8649,138.603,Full
+185,Greenacres,Enfield,Greenacres,5086,Hampstead Primary School,38-56 Muller Rd,Enter via Karoomba Ave,-34.8709,138.626,Assisted
+186,Lightsview,Enfield,Lightsview,5085,Wiltja Anangu Secondary College,111-125 Folland Ave,,-34.8589,138.626,Full
+187,Nailsworth,Enfield,Nailsworth,5083,Nailsworth Primary School,2 Balfour St,,-34.8828,138.603,Assisted
+188,Northfield,Enfield,Northfield,5085,Northfield Primary School,North Ave,,-34.8486,138.621,Assisted
+189,Oakden,Enfield,Oakden,5086,Salvation Army Oakden,166 Fosters Rd,,-34.8576,138.636,Assisted
+190,Pooraka,Enfield,Pooraka,5095,Pooraka Primary School,11 South Tce,,-34.8332,138.613,Full
+191,Prospect North,Enfield,Prospect,5082,Prospect North Primary School,30 Stuart Rd,,-34.8753,138.596,Assisted
+192,Walkley Heights,Enfield,Walkley Heights,5098,Walkley Heights Child Care Centre,1-5 Homestead Ave,,-34.8369,138.641,Full
+194,Currency Creek,Finniss,Currency Creek,5214,Currency Creek Community Hall,2836 Alexandrina Rd,,-35.4515,138.764,Assisted
+195,Goolwa,Finniss,Goolwa,5214,Goolwa Primary School,2 Gardiner St,,-35.4974,138.78,Assisted
+196,Goolwa Central,Finniss,Goolwa,5214,Goolwa Uniting Church,1 Collingwood St,,-35.5041,138.779,Full
+197,Middleton,Finniss,Middleton,5213,Middleton Pioneer Hall,1 Walker Pl,,-35.5082,138.706,Assisted
+198,Milang,Finniss,Milang,5256,Milang Institute,23 Coxe St,,-35.4072,138.969,Assisted
+199,Mount Compass,Finniss,Mount Compass,5210,Mount Compass Area School,School Rd,,-35.3506,138.621,Assisted
+200,Port Elliot,Finniss,Port Elliot,5212,Port Elliot Primary School,4 Cameron St,,-35.5238,138.677,Assisted
+201,Victor Harbor,Finniss,Victor Harbor,5211,Newland Memorial Uniting Church,20-28 Victoria St,,-35.556,138.621,Assisted
+202,Victor Harbor East,Finniss,Mccracken,5211,Victor Harbor Lutheran Church,21a Adelaide Rd,,-35.5333,138.638,Assisted
+203,Victor Harbor South,Finniss,Victor Harbor,5211,Salvation Army Church Victor Harbor,22 Bartel Blvd,,-35.5659,138.608,Assisted
+206,Arno Bay,Flinders,Arno Bay,5603,Arno Bay Memorial Hall,21-23 Tel El Kebir Tce,,-33.9111,136.568,Assisted
+207,Ceduna,Flinders,Ceduna,5690,Ceduna Memorial Hall,31 Poynton St,,-32.1255,133.674,Assisted
+208,Cleve,Flinders,Cleve,5640,Cleve Area School,Second St,,-33.7001,136.497,Assisted
+209,Coffin Bay,Flinders,Coffin Bay,5607,Coffin Bay Community Hall,153 The Esplanade,,-34.6218,135.466,Assisted
+210,Cowell,Flinders,Cowell,5602,Cowell Community Sporting Complex,Memorial Oval,,-33.6791013,136.9236142,Assisted
+211,Cummins,Flinders,Cummins,5631,Cummins Area School,13-15 McFarlane St,,-34.264,135.722,Assisted
+212,Darke Peak,Flinders,Darke Peak,5642,Darke Peak Sporting Complex,Carapee Hill Rd,,-33.4646,136.199,None
+213,Elliston,Flinders,Elliston,5670,Elliston Area School,52 Flinders Hwy,,-33.6445,134.891,Assisted
+214,Kimba,Flinders,Kimba,5641,Kimba Council Chambers,35-37 West Tce,,-33.1387,136.419,Assisted
+215,Kirton Point,Flinders,Port Lincoln,5606,Kirton Point Primary School,Matthew Pl,,-34.7318,135.869,Assisted
+216,Lock,Flinders,Lock,5633,Lock Institute,38 Railway Tce,,-33.5655,135.757,Assisted
+217,Minnipa,Flinders,Minnipa,5654,Minnipa Memorial Hall,24 Thomas St,,-32.854,135.155,None
+218,North Shields,Flinders,North Shields,5607,North Shields Soldiers Memorial Hall,25 Dorward St,,-34.6262,135.866,Assisted
+219,Poochera,Flinders,Poochera,5655,Poochera Memorial Hall,27 Main St,,-32.721,134.839,None
+220,Port Kenny,Flinders,Venus Bay,5607,Port Kenny & District Sports Centre,22706 Flinders Hwy,,-33.1799,134.713,None
+221,Port Lincoln,Flinders,Port Lincoln,5606,Nautilus Arts Centre,66 Tasman Tce,,-34.7199,135.858,Assisted
+222,Port Lincoln Central,Flinders,Port Lincoln,5606,Unity Hill Uniting Church,23 Flinders Hwy63 New W Rd,,-34.725,135.846,Assisted
+223,Port Lincoln South,Flinders,Port Lincoln,5606,Lincoln Gardens Primary School,31B Barley Rd,,-34.7414,135.847,Assisted
+224,Port Neill,Flinders,Port Neill,5604,Port Neill War Memorial Hall,41 Wallis St,,-34.1193,136.349,Assisted
+225,Smoky Bay,Flinders,Smoky Bay,5680,Smoky Bay Sports Club,South Tce,,-32.37741569,133.9366493,Assisted
+226,Streaky Bay,Flinders,Streaky Bay,5680,Streaky Bay RSL Hall,21 Bay Rd,,-32.7989,134.211,Assisted
+227,Tumby Bay,Flinders,Tumby Bay,5605,Tumby Bay Senior Citizens Clubrooms,11 Tumby Tce,,-34.3773,136.103,Assisted
+228,Ungarra,Flinders,Ungarra,5607,Ungarra Primary School,15 Schramm St,,-34.1807,136.047,Assisted
+229,Wangary,Flinders,Wangary,5607,Lake Wangary Primary School,2-8 Third St,,-34.5501,135.479,Assisted
+230,Wirrulla,Flinders,Wirrulla,5661,Wirrulla Memorial Hall,13 Chapman Tce,,-32.4052,134.534,None
+231,Wudinna,Flinders,Wudinna,5625,Wudinna Senior Citizens Club,20 Naylor Tce,,-33.0481,135.467,Assisted
+233,Ingle Farm,Florey,Ingle Farm,5098,Ingle Farm Primary School,2 Belalie Rd,,-34.8268,138.642,Assisted
+234,Ingle Farm North,Florey,Ingle Farm,5098,North Ingle Primary School,1-15 Rothwell Ave,,-34.819,138.645,Assisted
+235,Mawson Lakes,Florey,Mawson Lakes,5095,Endeavour College,85 Mawson Lakes Blvd,,-34.8114,138.619,Assisted
+236,Mawson Lakes North,Florey,Mawson Lakes,5095,Mawson Lakes School,12-28 Garden Tce,,-34.8088,138.612,Full
+237,Para Hills,Florey,Para Hills,5095,Para Hills Bowling Club,390 Bridge Rd,,-34.8078,138.648,Full
+238,Para Hills East,Florey,Para Hills,5095,East Para Primary School,12 Caroona Ave,,-34.8176,138.667,Assisted
+239,Para Hills West,Florey,Para Hills West,5096,Para Hills High School,90 Beafield Rd,,-34.8005,138.65,Full
+240,Para Vista,Florey,Para Vista,5093,Valley View Secondary School,240 Wright Rd,,-34.8349,138.657,Assisted
+241,Pooraka,Florey,Pooraka,5095,Pooraka Primary School,11 South Tce,,-34.8332,138.613,Full
+242,Pooraka North,Florey,Pooraka,5095,Pooraka Farm Community Centre,126 Henderson Ave,,-34.8237,138.623,Full
+243,Walkley Heights,Florey,Walkley Heights,5098,Walkley Heights Child Care Centre,1-5 Homestead Ave,,-34.8369,138.641,Full
+245,Brighton,Gibson,Brighton,5048,Brighton Primary School,1 Highet Ave,,-35.016,138.523,Full
+246,Glenelg South,Gibson,Glenelg South,5045,St Martin's Anglican Church,45 Hastings St,,-34.9896,138.517,Assisted
+247,Marion,Gibson,Marion,5043,Marion Primary School,2-22 Malcolm Ave,Enter via Oakleigh Rd,-35.0042,138.556,Full
+248,Marion South,Gibson,Marion,5043,Marion Uniting Church,9-11 Township Rd,,-35.011,138.555,Assisted
+249,North Brighton,Gibson,North Brighton,5048,Paringa Park Primary School,21 Bowker St,Enter via Bowker St,-35.0026,138.526,Assisted
+250,North Brighton West,Gibson,North Brighton,5048,Brighton Secondary School,305 Brighton Rd,Enter via King George Ave,-35.0042,138.521,Assisted
+251,Oaklands Park,Gibson,Oaklands Park,5046,St Elizabeth Of Hungary Anglican Church,12 Dwyer Rd,,-35.0107,138.542,Assisted
+252,Seacombe Heights,Gibson,Seacombe Heights,5047,Seaview High School,78-124 Seacombe Rd,,-35.0298,138.546,Assisted
+253,Seaview Downs North,Gibson,Seaview Downs,5049,All Nations Baptist Church,168-170 Seacombe Rd,,-35.0296,138.54,None
+254,Somerton Park,Gibson,Somerton Park,5044,Levande Somerton Park Community,91 Diagonal Rd,,-34.994,138.527,Assisted
+255,Sturt,Gibson,Sturt,5047,Marion Council Chambers,245 Sturt Rd,,-35.018,138.552,Full
+256,Warradale,Gibson,Warradale,5046,Corner Uniting Church,93 Oaklands Rd,,-34.9969,138.531,Assisted
+259,Hawker,Giles,Hawker,5434,Hawker Institute,58 Elder Tce,,-31.8882,138.422,Assisted
+260,Iron Knob,Giles,Iron Knob,5611,Iron Knob Rural Transaction Centre,Lot 783 Dickenson St,,-32.7318,137.15,Assisted
+261,Port Augusta,Giles,Port Augusta,5700,Commercial premises,68 Commercial Rd,,-32.4927,137.763,Assisted
+262,Port Augusta Central,Giles,Port Augusta,5700,TAFE SA (Port Augusta),9-39 Carlton Pde,,-32.4944,137.772,Assisted
+263,Port Augusta West,Giles,Port Augusta West,5700,Flinders View Primary School,27-43 McSporran Cres,Enter via Chinnery St,-32.4724,137.754,Assisted
+264,Quorn,Giles,Quorn,5433,Quorn Town Hall,20 Railway Tce,,-32.3456,138.042,Assisted
+265,Stirling North,Giles,Stirling North,5710,Stirling North Primary School,2-20 Beckman St,,-32.5131,137.837,Assisted
+266,Whyalla Central East,Giles,Whyalla,5600,Whyalla Town Primary School,3-9 Walls St,Enter via Darling Tce,-33.0361,137.585,Assisted
+267,Whyalla Central West,Giles,Whyalla,5600,Memorial Oval Primary School,60 Bradford St,Enter via Lockhart St,-33.034,137.568,Assisted
+268,Whyalla Norrie East,Giles,Whyalla Norrie,5608,Nicolson Ave Primary School,93 Nicolson Ave,Enter via Norrie Ave,-33.029,137.551,Full
+269,Whyalla Norrie North,Giles,Whyalla Norrie,5608,Hincks Ave Primary School,6 Schulz Ave,Enter via Schulz Ave,-33.0192,137.545,Assisted
+270,Whyalla Norrie North-West,Giles,Whyalla Norrie,5608,Fisk St Primary School,Pattinson Cl,,-33.0167,137.533,Assisted
+271,Whyalla Norrie South,Giles,Whyalla Norrie,5608,Long St Primary School,40 Eyre Ave,,-33.0391,137.532,Full
+272,Whyalla Stuart West,Giles,Whyalla Stuart,5608,Alex Ramsay Community Hub - Library and Children's Section,25 Ramsay St,,-33.0271,137.523,Assisted
+273,Willsden,Giles,Port Augusta,5700,Willsden Primary School,70-80 Elizabeth Tce,,-32.5064,137.779,Full
+275,Callington,Hammond,Callington,5254,Callington Memorial Hall,9-13 Callington Rd,,-35.1135,139.039,Assisted
+276,Harrogate,Hammond,Harrogate,5244,Harrogate Soldiers Memorial Hall,13 Mail Rd,,-34.9502,139.011,Assisted
+277,Jervois,Hammond,Jervois,5259,Jervois Hall,Henningson Rd,,-35.2656,139.436,Assisted
+278,Langhorne Creek,Hammond,Langhorne Creek,5255,Langhorne Creek Soldiers Memorial Hall,89 Bridge Rd,,-35.2959,139.036,Assisted
+279,Mannum,Hammond,Mannum,5238,Mannum Leisure Centre,51 Adelaide Rd,,-34.9141,139.303,Full
+280,Murray Bridge,Hammond,Murray Bridge,5254,Murray Bridge North School Gym,28-40 Railway Tce,,-35.1156,139.271,Assisted
+281,Murray Bridge East,Hammond,Murray Bridge East,5253,Murray Bridge Basketball Stadium,"Murray Bridge Showgrounds, 113 Old Princes Hwy",,-35.1144,139.303,Assisted
+282,Murray Bridge South,Hammond,Murray Bridge,5253,Murray Bridge High School,5 Lohmann St,Enter via Gate 2,-35.1362,139.286,Assisted
+283,Murray Bridge West,Hammond,Murray Bridge,5253,Bridge Evangelical Christian Church,10 Thomas St,,-35.1259,139.266,Assisted
+284,Mypolonga,Hammond,Mypolonga,5254,Mypolonga Institute Hall,6-8 Green St,,-35.0394,139.354,Assisted
+285,Palmer,Hammond,Palmer,5237,Collier Park Community Association Hall,"Oval Complex, Olive Grove Ave",,-34.8541,139.162,Assisted
+286,Ponde,Hammond,Ponde,5238,Ponde Hall,443 Dabinett Rd,,-34.9511,139.31,None
+287,Strathalbyn,Hammond,Strathalbyn,5255,Eastern Fleurieu R-12 School (Strathalbyn Campus),11 Callington Rd,,-35.2562,138.898,Full
+288,Wellington,Hammond,Wellington,5259,Wellington Hall,3444 Jervois Rd,,-35.3313,139.382,Assisted
+289,Woodchester,Hammond,Woodchester,5255,Richardson Hall,1372 Callington Rd,,-35.2039,138.968,Assisted
+290,Woods Point,Hammond,Woods Point,5253,Woods Point Community Hall,Jean St,,-35.2196,139.381,None
+293,Campbelltown,Hartley,Campbelltown,5074,Campbelltown Uniting Church,607 Lower North East Rd,,-34.8794,138.663,Full
+294,Dernancourt,Hartley,Dernancourt,5075,Dernancourt Primary School,29 Parsons Rd,,-34.8613,138.671,Assisted
+295,Felixstow,Hartley,Felixstow,5070,Felixstow Education Office,5-11 Briar Rd,,-34.8925,138.645,Assisted
+296,Glynde,Hartley,Glynde,5070,Zion Lutheran Church Glynde,15-17 Glynburn Rd,,-34.8914,138.656,Assisted
+297,Hectorville,Hartley,Hectorville,5073,East Torrens Primary School,12 Robson Rd,,-34.8904,138.667,Assisted
+298,Holden Hill,Hartley,Holden Hill,5088,Kildare College,96-98 Valiant Rd,Enter via Lyons Rd,-34.8566,138.671,Assisted
+299,Magill,Hartley,Magill,5072,Magill Primary School,11 Adelaide St,,-34.9131,138.678,Full
+300,Magill South,Hartley,Magill,5072,Norwood International High School,505 The Parade,,-34.919,138.672,Full
+301,Newton,Hartley,Newton,5074,St Francis of Assisi School,57 Newton Rd,Enter via Graves St,-34.8825,138.675,Assisted
+302,Paradise,Hartley,Paradise,5075,Charles Campbell College,3 Campbell Rd,Enter via Gate 3,-34.8754,138.673,Full
+303,Paradise East,Hartley,Paradise,5075,Paradise Primary School,100 George St,,-34.87,138.685,Full
+304,Rostrevor South,Hartley,Rostrevor,5073,Morialta Secondary College,Morialta Rd W,Enter via Moules Rd,-34.9007,138.678,Full
+305,Tranmere South,Hartley,Tranmere,5073,St Joseph's Parish School,1 Birkinshaw Ave,,-34.9132,138.666,None
+307,Aldgate,Heysen,Aldgate,5154,Aldgate Primary School,3 Fairview Rd,,-35.0191,138.75,Assisted
+308,Ashbourne,Heysen,Ashbourne,5157,Ashbourne War Memorial Hall,1293 Bull Creek Rd,,-35.2852,138.769,None
+309,Bradbury,Heysen,Bradbury,5153,Longwood Institute,706 Longwood Rd,,-35.0571,138.722,None
+310,Bridgewater,Heysen,Bridgewater,5155,Bridgewater Primary School,46 Morella Gr,,-35.0043,138.761,Full
+311,Cherry Gardens,Heysen,Cherry Gardens,5157,Cherry Gardens Memorial Hall,312 Cherry Gardens Rd,,-35.0635,138.654,Assisted
+312,Clarendon,Heysen,Clarendon,5157,Clarendon Primary School,249 Potter Rd,,-35.1102,138.632,Assisted
+313,Crafers,Heysen,Crafers,5152,Crafers Institute Hall,3 Sharrad St,,-34.9967,138.703,Assisted
+314,Echunga,Heysen,Echunga,5153,Echunga Primary School,802 Echunga Rd,,-35.0973,138.792,Full
+315,Hahndorf,Heysen,Hahndorf,5245,St Paul's Lutheran Church Hall,10 Mount Barker Rd,,-35.0338,138.814,Assisted
+316,Kangarilla,Heysen,Kangarilla,5157,Kangarilla Primary School,33-35 McLaren Flat Rd,,-35.1484,138.66,Assisted
+317,Lenswood,Heysen,Lenswood,5240,Lenswood Primary School Gym,1554 Lobethal Rd,,-34.9217,138.824,Full
+318,Macclesfield,Heysen,Macclesfield,5153,Macclesfield Primary School,1/5 Luck St,,-35.171,138.839,Assisted
+319,Meadows,Heysen,Meadows,5201,Meadows Primary School,77 Mawson Rd,,-35.1807,138.762,Assisted
+320,Montacute,Heysen,Montacute,5134,Montacute Institute,63 Institute Rd,,-34.8915,138.746,None
+321,Mylor,Heysen,Mylor,5153,Mylor Primary School,220 Strathalbyn Rd,,-35.0409,138.76,Full
+322,Norton Summit,Heysen,Norton Summit,5136,Norton Summit Primary School,15 Crescent Dr,,-34.9271,138.729,Assisted
+323,Oakbank,Heysen,Oakbank,5243,Oakbank Area School Hall,154 Onkaparinga Valley Rd,,-34.9888,138.836,Assisted
+324,Piccadilly,Heysen,Piccadilly,5151,Piccadilly Community Hall,171 Piccadilly Rd,,-34.9822,138.726,None
+325,Prospect Hill,Heysen,Prospect Hill,5201,Prospect Hill War Memorial Hall,397 Harvey Rd,,-35.2242,138.734,Assisted
+326,Stirling,Heysen,Stirling,5152,Stirling RSL Hall,5 Merrion Tce,,-35.0043,138.718,Assisted
+327,Stirling East,Heysen,Stirling,5152,Stirling East Primary School,51 Braeside Rd,,-35.0029,138.735,Assisted
+328,Summertown,Heysen,Summertown,5141,Summertown Uniting Church Hall,5a Bonython Rd,,-34.959,138.728,Full
+329,Upper Sturt,Heysen,Upper Sturt,5156,Upper Sturt Primary School,118 Upper Sturt Rd,Enter via Fernwood Way,-35.0189,138.685,Assisted
+330,Uraidla,Heysen,Uraidla,5142,Uraidla Primary School,17 Kidney St,,-34.9594,138.744,Full
+331,Yundi,Heysen,Yundi,5172,Yundi War Memorial Hall,482 Yundi Rd,,-35.3176,138.633,Assisted
+333,Hackham,Hurtle Vale,Hackham,5163,Hackham East Primary School,72 Collins Pde,,-35.1394,138.534,Assisted
+334,Hackham West,Hurtle Vale,Hackham West,5163,Hackham West Primary School,50 Glynville Dr,,-35.1434,138.517,Full
+335,Happy Valley,Hurtle Vale,Happy Valley,5159,Happy Valley Primary School,18 Education Rd,,-35.0868,138.584,Assisted
+336,Happy Valley West,Hurtle Vale,Happy Valley,5159,Braeview School,1a Montana Dr,,-35.0803,138.554,Full
+337,Huntfield Heights,Hurtle Vale,Huntfield Heights,5163,Huntfield Heights Primary School,78 Melsetter Rd,,-35.1532,138.517,Assisted
+338,Morphett Vale,Hurtle Vale,Morphett Vale,5162,Calvary Lutheran Church,5 Windsong Ct,,-35.13629835,138.5109413,Assisted
+339,Morphett Vale Central,Hurtle Vale,Morphett Vale,5162,Morphett Vale East Primary School Gym,1 Monarch St,,-35.1213,138.532,Assisted
+340,Morphett Vale East,Hurtle Vale,Morphett Vale,5162,Woodcroft College,143 - 173 Bains Rd,,-35.1143,138.544,Full
+341,Morphett Vale South,Hurtle Vale,Morphett Vale,5162,Coorara Primary School,Taylors Ave,,-35.1306,138.542,Full
+342,Reynella East,Hurtle Vale,Reynella East,5161,Reynella East College,63 Malbeck Dr,,-35.0909,138.555,Full
+343,Woodcroft,Hurtle Vale,Woodcroft,5162,Woodcroft Primary School Gym,1-23 Investigator Dr,,-35.106,138.556,Assisted
+345,Christie Downs,Kaurna,Christie Downs,5164,Christie Downs Primary School,33 Elizabeth Rd,,-35.1326,138.493,Assisted
+346,Christie Downs East,Kaurna,Christie Downs,5164,Elizabeth House Positive Ageing Centre,112 Elizabeth Rd,,-35.1344,138.503,Full
+347,Christies Beach,Kaurna,Christies Beach,5165,Christies Beach Primary School,46 Maturin Ave,,-35.1375,138.479,Full
+348,Maslin Beach,Kaurna,Maslin Beach,5170,Maslin Beach Community Hall,5 Parkway Dr,,-35.2245,138.479,Assisted
+349,McLaren Vale,Kaurna,Mclaren Vale,5171,McLaren Vale Primary School,239-253 Caffrey St,,-35.2119,138.531,Assisted
+350,Noarlunga Downs,Kaurna,Noarlunga Downs,5168,Noarlunga Downs P-7 School,Canterbury Cres,,-35.1504,138.496,Full
+351,Old Noarlunga,Kaurna,Old Noarlunga,5168,Old Noarlunga Institute,Patapinda Rd,,-35.1809,138.503,Full
+352,Port Noarlunga,Kaurna,Port Noarlunga,5167,Port Noarlunga Primary School,53 Anderson Ave,,-35.1448,138.473,Full
+353,Port Noarlunga South,Kaurna,Port Noarlunga South,5167,South Port Primary School,39 Jane St,,-35.1759,138.473,Full
+354,Seaford,Kaurna,Seaford,5169,Moana Primary School,52 Schooner Rd,,-35.1921,138.474,Full
+355,Seaford East,Kaurna,Seaford,5169,All Saints Catholic Primary School,621-631 Grand Blvd,,-35.1856,138.481,Full
+356,Seaford Rise,Kaurna,Seaford Rise,5169,Seaford Rise Primary School,184-202 Grand Blvd,,-35.2002,138.487,Full
+358,Brukunga,Kavel,Brukunga,5252,Brukunga Hall,12 Pyrites Rd,,-35.0024,138.942,Assisted
+359,Charleston,Kavel,Charleston,5244,Charleston Memorial Hall,1 Newman Rd,,-34.9161,138.902,Assisted
+360,Littlehampton,Kavel,Littlehampton,5250,Littlehampton Primary School Gym,16-30 Baker St,,-35.0495,138.867,Assisted
+361,Lobethal,Kavel,Lobethal,5241,Lobethal Centennial Hall,36 Main St,,-34.9051,138.875,Full
+362,Mount Barker,Kavel,Mount Barker,5251,Mount Barker High School,2 Wellington Rd,,-35.0754,138.857,Assisted
+363,Mount Barker Central,Kavel,Mt Barker,5251,St Marks Lutheran School,27 Hampden Rd,,-35.0725,138.861,Full
+364,Mount Barker South,Kavel,Mount Barker,5251,Mount Barker South Primary School,33-45 Princes Rd,,-35.0808,138.86,Assisted
+365,Nairne,Kavel,Nairne,5252,Nairne Primary School Gym,5 Saleyard Rd,,-35.0385,138.903,Assisted
+366,Woodside,Kavel,Woodside,5244,Woodside Primary School,23 Moffett St,Enter via William St,-34.9527,138.879,Assisted
+368,Craigmore South,King,Craigmore,5114,Craigmore South Primary School,1 Gooronga Dr,,-34.7088,138.706,Full
+369,Elizabeth East,King,Elizabeth East,5112,Elizabeth East Primary School,15 Dolphin St,,-34.7251,138.678,Full
+370,Elizabeth Vale,King,Elizabeth Vale,5112,Elizabeth Vale School,13-19 Rollison Rd,,-34.7463,138.669,Assisted
+371,Golden Grove,King,Golden Grove,5125,Golden Grove Uniting Church,75 One Tree Hill Rd,,-34.7747,138.731,Full
+372,Golden Grove Central,King,Golden Grove,5125,Golden Grove High School,1 Adey Pl,,-34.7938,138.696,Assisted
+373,Golden Grove East,King,Golden Grove,5125,Golden Grove Primary School,140 Bicentennial Dr,,-34.7867,138.709,Full
+374,Greenwith,King,Greenwith,5125,Greenwith Community Centre,The Golden Way,,-34.7681,138.709,Full
+375,Greenwith West,King,Greenwith,5125,Jesus Is Lord Church,1681 Golden Grove Rd,,-34.7679,138.709,Assisted
+376,Hillbank,King,Hillbank,5112,Hillbank Community Children's Centre,10 Penarth Ct,,-34.7316,138.684,None
+377,One Tree Hill,King,One Tree Hill,5114,One Tree Hill Institute,1009 Blacktop Rd,,-34.7186,138.766,Assisted
+378,Salisbury Heights,King,Salisbury Heights,5109,Salisbury Heights Primary School,9 Ward St,Enter via Target Hill Rd,-34.7589,138.677,Full
+379,Salisbury Park,King,Salisbury Park,5109,Salisbury Park Primary School,66 Goddard Dr,Enter via Wildwood Dr,-34.7603,138.67,Assisted
+380,Surrey Downs,King,Surrey Downs,5126,Surrey Downs Community Centre,6 Zanoni Cres,,-34.80089129,138.7112946,Assisted
+382,Albert Park,Lee,Albert Park,5014,Good News Lutheran Church,57-59 Botting St,,-34.877,138.522,Assisted
+383,Grange,Lee,Grange,5022,"Grange Primary School, Lawson Hall",39c Jetty St,,-34.9025,138.497,Assisted
+384,Royal Park,Lee,Royal Park,5014,United Church Royal Park,50-52 Tapleys Hill Rd,,-34.8705,138.512,Assisted
+385,Royal Park South,Lee,Royal Park,5014,Hendon Primary School,162 Cedar Ave,,-34.878,138.511,Assisted
+386,Seaton,Lee,Seaton,5023,Seaton High School,67-91 Glenburnie St,,-34.8853,138.506,None
+387,Seaton Park,Lee,Seaton,5023,Seaton Park Primary School,80 Balcombe Ave,,-34.8956,138.52,Assisted
+388,Seaton West,Lee,Seaton,5023,Christian Family Centre,185 Frederick Rd,,-34.8981,138.506,Full
+389,Semaphore Park,Lee,Semaphore Park,5019,Bower Cottages,200 Bower Rd,Enter via Kingfisher Dr carpark,-34.8521,138.494,None
+390,Semaphore Park South,Lee,Semaphore Park,5019,Westport Primary School,53 West St,,-34.8549,138.491,Full
+391,Semaphore South,Lee,Semaphore South,5019,Le Fevre High School,90 Hart St,,-34.8454,138.486,Assisted
+392,West Lakes Shore,Lee,West Lakes Shore,5020,West Lakes Shore School,Edwin St,,-34.8637,138.482,Assisted
+394,Angle Vale,Light,Angle Vale,5117,Angle Vale Primary School,Heaslip Rd,,-34.6435,138.647,Assisted
+395,Evanston,Light,Evanston,5116,Gawler & District College B-12,Barnet Rd,,-34.6198,138.738,Assisted
+396,Evanston Gardens,Light,Evanston Gardens,5116,Evanston Gardens Memorial Hall,65 Angle Vale Rd,,-34.6245,138.719,Assisted
+397,Evanston South,Light,Evanston South,5118,Starplex Hewitson Theatre,Alexander Ave,,-34.6329,138.734,Full
+398,Gawler,Light,Gawler East,5118,Immanuel Gawler,11 Lyndoch Rd,,-34.5965,138.753,Assisted
+399,Gawler East,Light,Gawler East,5118,Gawler East Primary School,Finch Rd,,-34.5979,138.762,Assisted
+400,Gawler South,Light,Gawler South,5118,Gawler Lutheran Church - Immanuel Worship Centre,2 Second St,,-34.6067,138.748,Assisted
+401,Gawler West,Light,Gawler,5118,Gawler Sport & Recreation Centre,7 Nixon Tce,,-34.5977894,138.7394553,Full
+402,Hewett,Light,Hewett,5118,Hewett Primary School,Kingfisher Dr,,-34.5776,138.751,Full
+403,Munno Para,Light,Munno Para,5115,Mark Oliphant College,99 Douglas Dr,,-34.6655,138.686,Full
+404,Munno Para East,Light,Munno Para,5115,Munno Para Primary School,81 Maltarra Rd,,-34.6698,138.7,Assisted
+405,Willaston,Light,Willaston,5118,Gawler Scout Hall,Gawler River Rd,,-34.5891,138.737,Assisted
+408,Beachport,MacKillop,Beachport,5280,Beachport Recreation Centre,Lot 15 Golf Course Rd,,-37.4756,140.011,Assisted
+409,Bordertown,MacKillop,Bordertown,5268,Bordertown High School Hall,30 South Tce,,-36.313,140.769,Assisted
+410,Coomandook,MacKillop,Coomandook,5261,Coomandook Uniting Church,3223 Dukes Hwy,,-35.4722,139.701,None
+411,Coonalpyn,MacKillop,Coonalpyn,5265,Coonalpyn Community Hall,53 Poyntz Tce,,-35.6981,139.859,Assisted
+412,Coonawarra,MacKillop,Coonawarra,5263,Coonawarra Soldiers Memorial Community Club,9-11 Memorial Dr,,-37.2913,140.833,None
+413,Frances,MacKillop,Frances,5262,Frances Primary School,23 Barrett Rd,,-36.7127,140.959,Assisted
+414,Furner,MacKillop,Furner,5280,Furner Community Hall,North Tce,,-37.4064,140.338,None
+415,Glencoe,MacKillop,Glencoe,5291,Glencoe Central Primary School,135 Kirip Rd,,-37.6702,140.595,None
+416,Kalangadoo,MacKillop,Kalangadoo,5278,Kalangadoo Primary School,48a Kangaroo Flat Rd,,-37.565,140.696,Assisted
+417,Keith,MacKillop,Keith,5267,Keith Area School,Tolmer Tce,,-36.0986,140.352,Assisted
+418,Kingston,MacKillop,Kingston Se,5275,Kingston Community School,46 East Tce,,-36.8365,139.857,Assisted
+419,Lameroo,MacKillop,Lameroo,5302,Lameroo Regional Community School Library,1 Bews Tce,,-35.3303,140.522,Assisted
+420,Lucindale,MacKillop,Lucindale,5272,Lucindale Area School,116 Gum Ave,,-36.9647,140.37,Assisted
+421,Meningie,MacKillop,Meningie,5264,Meningie Uniting Church,2 Princes Hwy,,-35.6842,139.34,Assisted
+422,Millicent,MacKillop,Millicent,5280,Millicent High School,2 Mount Burr Rd,,-37.5908,140.357,Assisted
+423,Millicent South,MacKillop,Millicent,5280,Newbery Park Primary School,Bridges St,,-37.6086,140.362,Assisted
+424,Mount Burr,MacKillop,Mount Burr,5279,Mount Burr Primary School,Thomas Dr,,-37.5412,140.459,None
+425,Mundulla,MacKillop,Mundulla,5270,Mundulla Primary School,22 Kennedy St,,-36.3579,140.693,Assisted
+426,Nangwarry,MacKillop,Nangwarry,5277,Nangwarry Primary School,Whitford Cres,,-37.5422,140.818,Assisted
+427,Naracoorte,MacKillop,Naracoorte,5271,Naracoorte Town Hall & Function Centre,95 Smith St,,-36.9557,140.742,Assisted
+428,Naracoorte South,MacKillop,Naracoorte,5271,Naracoorte South Primary School,71 Cedar Ave,,-36.9732,140.746,Assisted
+429,Padthaway,MacKillop,Padthaway,5271,Padthaway Primary School,67 Vogelsang Rd,,-36.593,140.497,Assisted
+430,Penola,MacKillop,Penola,5277,Penola Primary School,11 Riddoch St,Enter via Young St,-37.3803,140.834,Assisted
+431,Pinnaroo,MacKillop,Pinnaroo,5304,Pinnaroo Institute,21 Railway Tce,,-35.2603,140.908,Full
+432,Rendelsham,MacKillop,Rendelsham,5280,Rendelsham Community Hall,17-19 Nilsson St,,-37.5508,140.226,Assisted
+433,Robe,MacKillop,Robe,5276,Robe Primary School,1 Union St,,-37.1635,139.761,Assisted
+434,Southend,MacKillop,Southend,5280,Southend Community Centre,Corner Eliza St and Watson St,Enter via Watson St,-37.567775,140.133652,None
+435,Tailem Bend,MacKillop,Tailem Bend,5260,Tailem Bend Primary School Gym,1 Murray St,Enter via Library Lane,-35.2587,139.458,Assisted
+436,Tantanoola,MacKillop,Tantanoola,5280,Tantanoola Insitute Hall,24 Railway Tce W,,-37.6975,140.455,Assisted
+437,Tintinara,MacKillop,Tintinara,5266,Tintinara War Memorial Hall,49-51 Becker Tce,,-35.8849,140.058,Assisted
+438,Western Flat,MacKillop,Western Flat,5268,Western Flat Hall,2600 Naracoorte Rd,,-36.523,140.75,Assisted
+439,Willalooka,MacKillop,Willalooka,5267,Willalooka Hall,3436 Riddoch Hwy,,-36.3916,140.35,Assisted
+440,Wolseley,MacKillop,Wolseley,5269,Wolseley Community Club,Railway Tce N,,-36.3652,140.907,Assisted
+443,Aldinga,Mawson,Aldinga,5173,Aldinga Payinthi College,150 Quinliven Rd,,-35.2684,138.476,None
+444,Aldinga Beach,Mawson,Aldinga Beach,5173,Aldinga Community Centre,7 Stewart Ave,,-35.273,138.455,Full
+445,American River,Mawson,American River,5221,American River Community Hall,32 Ryberg Rd,,-35.7729,137.781,Assisted
+446,Cape Jervis,Mawson,Cape Jervis,5204,Cape Jervis Community Club,17 Ransford St,,-35.6044,138.108,Assisted
+447,Kingscote,Mawson,Kingscote,5223,Kangaroo Island Community Education (Kingscote Campus),5 Centenary Ave,,-35.6512,137.633,Assisted
+448,Maslin Beach,Mawson,Maslin Beach,5170,Maslin Beach Community Hall,5 Parkway Dr,,-35.2245,138.479,Assisted
+449,McLaren Flat,Mawson,Mclaren Flat,5171,McLaren Flat Soldiers Memorial Hall,41 Main Rd,,-35.2066,138.587,Assisted
+450,McLaren Vale,Mawson,Mclaren Vale,5171,McLaren Vale Primary School,239-253 Caffrey St,,-35.2119,138.531,Assisted
+451,Myponga,Mawson,Myponga,5202,Myponga Hall,40 Main South Rd,,-35.3917,138.463,Assisted
+452,Parawa,Mawson,Parawa,5203,Parawa Progress Association Hall,1541 Range Rd,,-35.5616,138.355,None
+453,Parndana,Mawson,Parndana,5220,Parndana Community Health Centre,12 Jubilee Ave,,-35.788,137.261,Assisted
+454,Penneshaw,Mawson,Penneshaw,5222,Penneshaw Town Hall,12 Middle Tce,,-35.7183,137.938,Assisted
+455,Second Valley,Mawson,Second Valley,5204,Second Valley Soldiers Memorial Hall,140 Finniss Vale Dr,,-35.5278,138.228,Assisted
+456,Sellicks Beach,Mawson,Sellicks Beach,5174,Sellicks Beach Community Hall,18 Riviera Rd,,-35.3247,138.455,Assisted
+457,Willunga,Mawson,Willunga,5172,Willunga Recreation Park (Show Hall),7 Main Rd,,-35.2709,138.554,None
+458,Yankalilla,Mawson,Yankalilla,5203,Yankalilla Area School,207 Main South Rd,,-35.4534,138.334,Assisted
+460,Athelstone,Morialta,Athelstone,5076,Athelstone School,8 Brookside Rd,,-34.8678,138.699,Assisted
+461,Athelstone South,Morialta,Athelstone,5076,Thorndon Park Primary School,71 Stradbroke Rd,,-34.8844,138.692,Full
+462,Highbury,Morialta,Highbury,5089,Turramurra Recreation Centre,1000-1030 Lower North East Rd,Enter via Valley Rd,-34.853,138.701,Full
+463,Highbury West,Morialta,Highbury,5089,Dernancourt Kindergarten,10 Vernons Dr,Enter via Silverlake Crs,-34.8573,138.693,Assisted
+464,Hope Valley East,Morialta,Hope Valley,5090,Highbury Primary School,1 Payne St,,-34.8481,138.71,Assisted
+465,Magill,Morialta,Magill,5072,Magill Primary School,11 Adelaide St,Enter via Magill Rd,-34.9131,138.678,Full
+466,Newton,Morialta,Newton,5074,St Francis of Assisi School,57 Newton Rd,Enter via Graves St,-34.8825,138.675,Assisted
+467,Rostrevor,Morialta,Rostrevor,5073,Stradbroke Primary School,73 Koonga Ave,,-34.8939,138.685,Full
+468,Rostrevor South,Morialta,Rostrevor,5073,Morialta Secondary College,Morialta Rd W,Enter via Moules Rd,-34.9007,138.678,Full
+469,St Agnes,Morialta,St Agnes,5097,St Agnes Primary School,250 Smart Rd,,-34.8314,138.718,Full
+471,Glenelg,Morphett,Glenelg,5045,St Mary's Catholic Hall,19 High St,,-34.9815,138.515,Full
+472,Glenelg East,Morphett,Glenelg East,5045,St Paul's Lutheran Church,48 -50 Brighton Rd,,-34.9808,138.52,Assisted
+473,Glenelg East Central,Morphett,Glenelg East,5045,Glenelg Primary School,cnr Diagonal Rd & Brighton Rd,,-34.9852,138.522,Assisted
+474,Glenelg North,Morphett,Glenelg North,5045,St Leonard's Primary School,5a Jervois St,,-34.9722,138.52,Assisted
+475,Glenelg South,Morphett,Glenelg South,5045,St Martin's Anglican Church,45 Hastings St,,-34.9896,138.517,Assisted
+476,Glengowrie,Morphett,Glengowrie,5044,Glengowrie Uniting Church,31-33 Butler Cres,,-34.9834,138.53,Assisted
+477,Morphettville,Morphett,Morphettville,5043,Marion Leisure & Fitness Centre,Oaklands Rd,,-34.9953,138.545,Assisted
+478,Novar Gardens,Morphett,Novar Gardens,5040,Immanuel Primary School,24 Morphett Rd,,-34.9727,138.537,Assisted
+479,Park Holme,Morphett,Park Holme,5043,Springpark Baptist Church,80 Hendrie St,,-34.9891,138.548,Assisted
+480,Park Holme South,Morphett,Park Holme,5043,Ascot Park Primary School,1-37 Pildappa Ave,,-34.9905,138.556,Assisted
+481,Somerton Park,Morphett,Somerton Park,5044,Levande Somerton Park Community,91 Diagonal Rd,,-34.994,138.527,Assisted
+483,Carpenter Rocks,Mount Gambier,Carpenter Rocks,5291,Carpenter Rocks Community Hall,26-44 Carpenter Rocks Rd,,-37.9136,140.399,Assisted
+484,Compton,Mount Gambier,Suttontown,5291,Compton Soldiers Memorial Hall,1 Compton Hall Rd,,-37.802,140.729,Assisted
+485,Glenburnie,Mount Gambier,Glenburnie,5291,Glenburnie Primary School,36 Kromelite Rd,,-37.8403,140.863,Assisted
+486,Kongorong,Mount Gambier,Kongorong,5291,Kongorong Soldiers Memorial Hall,2 Hay Tce,,-37.8991,140.561,Assisted
+487,Moorak,Mount Gambier,Moorak,5291,Moorak Public Hall,234 Moorak Hall Rd,,-37.8636,140.737,Assisted
+488,Mount Gambier,Mount Gambier,Mount Gambier,5290,Anglican Parish of Mt Gambier,26 Bay Rd,,-37.8313,140.779,Full
+489,Mount Gambier East,Mount Gambier,Mount Gambier,5290,Melaleuca Park Primary School,61 Boandik Tce,,-37.8402,140.794,Assisted
+490,Mount Gambier North,Mount Gambier,Mount Gambier,5290,Mount Gambier North Primary School Gym,9 Heath St,,-37.8169,140.776,Full
+491,Mount Gambier Park,Mount Gambier,Mount Gambier,5290,McDonald Park School,55-57 North Tce,,-37.8262,140.794,Assisted
+492,Mount Gambier West,Mount Gambier,Mount Gambier,5290,Mount Gambier High School,17 Brownes Rd,,-37.8254,140.766,Assisted
+493,Port MacDonnell,Mount Gambier,Port Macdonnell,5291,Port MacDonnell Senior Citizens Club,2 Elizabeth St,,-38.0514,140.7,Assisted
+494,Suttontown,Mount Gambier,Suttontown,5291,Suttontown Primary School,127 Pinehall Ave,,-37.7969,140.77,Assisted
+495,Tarpeena,Mount Gambier,Tarpeena,5277,Tarpeena Community Club,13 Edward St,,-37.62733431,140.7983575,None
+496,Yahl,Mount Gambier,Yahl,5291,Yahl Memorial Hall,29 Yahl Hall Rd,,-37.8789,140.827,Assisted
+499,Alford,Narungga,Alford,5555,Alford Community Hall,High St,,-33.8158,137.822,None
+500,Ardrossan,Narungga,Ardrossan,5571,Ardrossan Town Hall,9-13 First St,,-34.4226,137.917,Assisted
+501,Arthurton,Narungga,Arthurton,5572,Arthurton Town Hall,14 Main St,,-34.2595,137.757,Assisted
+502,Balaklava,Narungga,Balaklava,5461,Balaklava High School,14 Gwy Tce,,-34.1516,138.417,Assisted
+503,Blyth,Narungga,Blyth,5462,Blyth Primary School,August St,,-33.8445,138.491,Assisted
+504,Brinkworth,Narungga,Brinkworth,5464,Brinkworth Primary School,104 Main St,,-33.6883,138.404,Assisted
+505,Bute,Narungga,Bute,5560,Bute Soldiers Memorial Hall,14 High St,,-33.8652,138.007,Assisted
+506,Coobowie,Narungga,Coobowie,5583,Coobowie Community Hall,1 Gilbert St,,-35.0436,137.731,Assisted
+507,Corny Point,Narungga,Corny Point,5575,Corny Point Memorial Hall,2 Liddiard Rd,,-34.9264,137.083,Assisted
+508,Curramulka,Narungga,Curramulka,5580,Curramulka Primary School,1 Sixth St,,-34.6963,137.713,Assisted
+509,Edithburgh,Narungga,Edithburgh,5583,Edithburgh Institute,30 Blanche St,,-35.086,137.746,Assisted
+510,Hardwicke Bay,Narungga,Hardwicke Bay,5575,Hardwicke Bay Community Centre,5 Progress Rd,,-34.8924,137.46,Assisted
+511,Kadina,Narungga,Kadina,5573,Kadina Town Hall,51 Taylor Street,,-33.9617,137.715,Assisted
+512,Lochiel,Narungga,Lochiel,5510,Lochiel Hall,5-7 Frances St,,-33.9273,138.161,Assisted
+513,Maitland,Narungga,Maitland,5573,Maitland Central Yorke School,4-24 Junction Rd,,-34.3684,137.674,Assisted
+514,Marion Bay,Narungga,Marion Bay,5575,Marion Bay Community Hall,10-20 Slow St,,-35.238,136.981,Assisted
+515,Minlaton,Narungga,Minlaton,5575,Minlaton Town Hall,57 Main St,,-34.7727,137.595,Assisted
+516,Moonta,Narungga,Moonta,5558,Moonta Town Hall,71 George St,,-34.0672,137.59,None
+517,Paskeville,Narungga,Paskeville,5552,Paskeville Community Centre,70 Railway Tce S,,-34.039,137.902,Assisted
+518,Port Broughton,Narungga,Port Broughton,5522,Port Broughton Community Hall,34-36 McKay St,,-33.5999,137.931,Full
+519,Port Clinton,Narungga,Port Clinton,5570,Port Clinton Community Hall,32 Cumberland Rd,,-34.2244,138.019,Assisted
+520,Port Victoria,Narungga,Port Victoria,5573,Port Victoria Institute,16-18 Main St,,-34.4974,137.485,Assisted
+521,Port Vincent,Narungga,Port Vincent,5581,Port Vincent Senior Citizens Club,13 Main St,,-34.7786,137.86,Assisted
+522,Port Wakefield,Narungga,Port Wakefield,5550,Port Wakefield Soldiers Memorial Hall,41 Edward St,,-34.1851,138.146,Assisted
+523,Snowtown,Narungga,Snowtown,5520,Snowtown Soldiers Memorial Hall,22-24 Railway Tce E,,-33.7812,138.215,Assisted
+524,Stansbury,Narungga,Stansbury,5582,Stansbury Institute,6 Weaver St,,-34.9091,137.797,Assisted
+525,Wallaroo,Narungga,Wallaroo,5556,Wallaroo Primary School,12A Hughes St,,-33.9328,137.625,Full
+526,Wallaroo Mines,Narungga,Wallaroo Mines,5554,Wallaroo Mines Primary School,Lipson Ave,,-33.9663,137.699,Assisted
+527,Warooka,Narungga,Warooka,5577,Warooka Memorial Hall,1-3 Player St,,-34.9909,137.402,Assisted
+528,Yorketown,Narungga,Yorketown,5576,Yorketown Area School,Cnr Stansbury & School Rds,,-35.0172,137.615,Assisted
+530,Banksia Park,Newland,Banksia Park,5091,Banksia Park Primary R-7,1-5 Cottenham Rd,,-34.8083,138.727,Assisted
+531,Fairview Park,Newland,Fairview Park,5126,Fairview Park Primary School,Nepondi Ct,Enter via Pangari Dr,-34.7982,138.731,Assisted
+532,Highbury,Newland,Highbury,5089,Turramurra Recreation Centre,1000-1030 Lower North East Rd,Enter via Valley Road,-34.853,138.701,Full
+533,Hope Valley,Newland,Hope Valley,5090,Modbury South Primary School,8 Dampier Ave,,-34.8404,138.697,Full
+534,Hope Valley East,Newland,Hope Valley,5090,Highbury Primary School,1 Payne St,,-34.8481,138.71,Assisted
+535,Hope Valley West,Newland,Hope Valley,5090,John XXIII Catholic Community Centre,50 Reservoir Rd,,-34.8398,138.688,Assisted
+536,Modbury,Newland,Modbury,5092,Modbury West School,450-474 Wright Rd,,-34.8336,138.678,Full
+537,Modbury Heights,Newland,Modbury Heights,5092,The Heights School,21-51 Brunel Dr,,-34.8111,138.682,Assisted
+538,Modbury North,Newland,Modbury North,5092,Burragah Recreation centre,140 Kelly Rd,,-34.8252,138.674,Assisted
+539,Modbury North East,Newland,Modbury North,5092,Modbury School P-6,2-18 Golden Grove Rd,Enter via Gold Crt,-34.8261,138.693,Full
+540,Redwood Park,Newland,Redwood Park,5097,Redwood Park Primary,2 Lokan St,,-34.8147,138.702,Assisted
+541,Ridgehaven,Newland,Ridgehaven,5097,Ridgehaven Primary School,479 Milne Rd,,-34.8171,138.711,Assisted
+542,St Agnes,Newland,St Agnes,5097,St Agnes Primary School,250 Smart Rd,,-34.8314,138.718,Full
+543,St Agnes West,Newland,St Agnes,5097,Ardtornish Primary School,2 Saarinen Ave,,-34.8342,138.705,Assisted
+544,Tea Tree Gully,Newland,Tea Tree Gully,5091,Tea Tree Gully Primary School,11-13 Neale St,Enter via Memorial Dr,-34.8221,138.727,Assisted
+547,Angle Vale,Ngadjuri,Angle Vale,5117,Angle Vale Primary School,Heaslip Rd,,-34.6435,138.647,Assisted
+548,Auburn,Ngadjuri,Auburn,5451,Auburn Institute,28 Main North Rd,,-34.0253,138.685,Assisted
+549,Clare,Ngadjuri,Clare,5453,Clare Town Hall,229 Main North Rd,,-33.8338,138.613,Full
+550,Dublin,Ngadjuri,Dublin,5501,Dublin Institute,9 Sixth St,,-34.4538,138.352,Assisted
+551,Eudunda,Ngadjuri,Eudunda,5374,Eudunda RSL,2 Railway Pde,,-34.1726,139.085,Assisted
+552,Freeling,Ngadjuri,Freeling,5372,Freeling Institute,8 Clarke St,,-34.455,138.81,Assisted
+553,Hamley Bridge,Ngadjuri,Hamley Bridge,5401,Hamley Bridge Primary School,Florence St,,-34.3545,138.685,Assisted
+554,Hewett,Ngadjuri,Hewett,5118,Hewett Primary School,Kingfisher Dr,,-34.5776,138.751,Full
+555,Kapunda,Ngadjuri,Kapunda,5373,Kapunda Primary School,51 High St,Enter via Jeffs St,-34.3377,138.918,Assisted
+556,Mallala,Ngadjuri,Mallala,5502,Mallala Primary School,28 Aerodrome Rd,,-34.4344,138.51,Assisted
+557,Manoora,Ngadjuri,Manoora,5414,Manoora Primary School,3 Weymouth St,,-34.0066,138.814,Assisted
+558,Marrabel,Ngadjuri,Marrabel,5413,Marrabel District Hall Inc.,15 Main Rd,,-34.1449,138.878,Assisted
+559,Owen,Ngadjuri,Owen,5460,Owen Primary School,23 Second St,Enter via NW Tce,-34.2717,138.543,Assisted
+560,Point Pass,Ngadjuri,Point Pass,5374,Point Pass District Hall,15 Main St,,-34.0755,139.051,Assisted
+561,Riverton,Ngadjuri,Riverton,5412,Riverton Primary School,21 Swinden St,,-34.1573,138.745,Assisted
+562,Robertstown,Ngadjuri,Robertstown,5381,Robertstown Peace Hall,32 Commercial St,,-33.9897,139.083,Assisted
+563,Roseworthy,Ngadjuri,Roseworthy,5371,Roseworthy Primary School,3 Gartrell St,,-34.5334,138.748,Assisted
+564,Saddleworth,Ngadjuri,Saddleworth,5413,Saddleworth Primary School,7 Saddle Rd,,-34.0816,138.784,Assisted
+565,Tarlee,Ngadjuri,Tarlee,5411,Tarlee Primary School,38-42 Craig St,,-34.27,138.772,Assisted
+566,Two Wells,Ngadjuri,Two Wells,5501,Two Wells Primary School,17 Gawler Rd,,-34.5921,138.517,Assisted
+567,Wasleys,Ngadjuri,Wasleys,5400,Wasleys Community Hall,43 -45 Annie Tce,,-34.4704,138.684,Assisted
+568,Watervale,Ngadjuri,Watervale,5452,Watervale Primary School,27 Main North Rd,Enter via Commercial Rd,-33.9605,138.645,Assisted
+569,Willaston,Ngadjuri,Willaston,5118,Gawler Scout Hall,Gawler River Rd,,-34.5891,138.737,Assisted
+571,Mawson Lakes,Playford,Mawson Lakes,5095,Endeavour College,85 Mawson Lakes Blvd,,-34.8114,138.619,Assisted
+572,Mawson Lakes North,Playford,Mawson Lakes,5095,Mawson Lakes School,12-28 Garden Tce,,-34.8088,138.612,Full
+573,Parafield Gardens,Playford,Parafield Gardens,5107,Karrendi Primary School,15 Bradman Rd,,-34.7908,138.618,Assisted
+574,Parafield Gardens Central,Playford,Parafield Gardens,5107,Parafield Gardens Primary School,23 Shepherdson Rd,,-34.7859,138.616,Assisted
+575,Parafield Gardens North-West,Playford,Parafield Gardens,5107,The Pines School,42 Andrew Smith Dr,,-34.7726,138.607,Assisted
+576,Paralowie,Playford,Paralowie,5108,Paralowie R-12 School,168-186 Whites Rd,,-34.7535,138.622,Assisted
+577,Paralowie South,Playford,Paralowie,5108,Bethany Christian School,37 Countess St,,-34.762,138.606,Full
+578,Paralowie West,Playford,Paralowie,5108,Settlers Farm Campus R-6,23 Barassi St,,-34.7562,138.595,Assisted
+579,Salisbury Downs,Playford,Salisbury Downs,5108,Salisbury Downs Primary School,39 Paramount Rd,,-34.7717,138.624,Full
+581,Birkenhead,Port Adelaide,Birkenhead,5015,Le Fevre Peninsula Primary School,1 Shorney St,,-34.8404,138.495,Full
+582,Ethelton,Port Adelaide,Ethelton,5015,Portlife Church,1 Causeway Rd,,-34.8508,138.495,Full
+583,Largs Bay,Port Adelaide,Largs Bay,5016,Largs Bay School,215 Fletcher Rd,,-34.8235,138.494,Assisted
+584,Largs Bay Central,Port Adelaide,Largs Bay,5016,St Albans Anglican Church,29-31 Jetty Rd,,-34.826,138.489,Assisted
+585,North Haven,Port Adelaide,North Haven,5018,North Haven School,15 Tapping Cres,,-34.7902,138.498,Assisted
+586,Ottoway,Port Adelaide,Ottaway,5013,Junction Community Centre,2A May Tce,,-34.8513,138.527,Full
+587,Port Adelaide,Port Adelaide,Port Adelaide,5015,TAFE SA Port Adelaide Campus,1 Mundy St,,-34.8444,138.5,Full
+588,Rosewater,Port Adelaide,Rosewater,5013,Mt Carmel College,33 Newcastle St,Enter via Dundas St,-34.8563,138.522,Assisted
+589,Semaphore,Port Adelaide,Semaphore,5019,Semaphore Masonic Hall,66 Semaphore Rd,,-34.8394,138.485,None
+590,Semaphore South,Port Adelaide,Semaphore South,5019,Le Fevre High School,90 Hart St,,-34.8454,138.486,Assisted
+591,Taperoo,Port Adelaide,Taperoo,5017,Ocean View College,47 Gedville Rd,,-34.8042,138.495,Assisted
+592,Taperoo East,Port Adelaide,Taperoo,5017,Our Lady of the Visitation school,433 Victoria Rd,,-34.8057,138.5,Full
+594,Brahma Lodge,Ramsay,Brahma Lodge,5109,Brahma Lodge Primary School,20 Mortess St,,-34.7753,138.65,Assisted
+595,Burton,Ramsay,Burton,5110,Burton Primary School,49a Kensington Way,,-34.7416,138.597,Assisted
+596,Elizabeth Vale,Ramsay,Elizabeth Vale,5112,Elizabeth Vale School,13-19 Rollison Rd,,-34.7463,138.669,Assisted
+597,Lake Windemere,Ramsay,Salisbury North,5108,Lake Windemere B-6 School,17 Uraidla Ave,,-34.7396,138.62,Full
+598,Paralowie,Ramsay,Paralowie,5108,Paralowie R-12 School,168-186 Whites Rd,,-34.7535,138.622,Assisted
+599,Paralowie South,Ramsay,Paralowie,5108,Bethany Christian School,37 Countess St,,-34.762,138.606,Full
+600,Paralowie West,Ramsay,Paralowie,5108,Settlers Farm Campus R-6,23 Barassi St,,-34.7562,138.595,Assisted
+601,Salisbury,Ramsay,Salisbury,5108,Salisbury Primary School,10 Compuda St,,-34.7681,138.647,Assisted
+602,Salisbury Central,Ramsay,Salisbury,5108,TAFE SA Salisbury Campus,16 Wiltshire St,Enter via Mary St or Ann St,-34.7629,138.648,Full
+603,Salisbury Downs,Ramsay,Salisbury Downs,5108,Salisbury Downs Primary School,39 Paramount Rd,,-34.7717,138.624,Full
+604,Salisbury North,Ramsay,Salisbury North,5108,Salisbury North Primary School,38 Bagster Rd,,-34.7529,138.634,Full
+605,Salisbury Park,Ramsay,Salisbury Park,5109,Salisbury Park Primary School,66 Goddard Dr,Enter via Wildwood Dr,-34.7603,138.67,Assisted
+607,Christie Downs,Reynell,Christie Downs,5164,Christie Downs Primary School,33 Elizabeth Rd,,-35.1326,138.493,Assisted
+608,Christie Downs East,Reynell,Christie Downs,5164,Elizabeth House Positive Ageing Centre,112 Elizabeth Rd,,-35.1344,138.503,Full
+609,Christie Downs North,Reynell,Christie Downs,5164,Lonsdale Heights Primary School,25 Sunningdale Dr,,-35.1251,138.502,Assisted
+610,Morphett Vale,Reynell,Morphett Vale,5162,Calvary Lutheran Church,5 Windsong Ct,,-35.13629835,138.5109413,Assisted
+611,Morphett Vale Central,Reynell,Morphett Vale,5162,Morphett Vale East Primary School Gym,1 Monarch St,,-35.1213,138.532,Assisted
+612,Morphett Vale East,Reynell,Morphett Vale,5162,Woodcroft College,143 - 173 Bains Rd,,-35.1143,138.544,Full
+613,Morphett Vale North,Reynell,Morphett Vale,5162,Wakefield House Positive Ageing Centre,65 Acre Ave,,-35.1109,138.517,Full
+614,Old Reynella,Reynell,Old Reynella,5161,Reynella Primary School,55 Concord Dr,,-35.1003,138.537,Full
+615,O'Sullivan Beach,Reynell,O'Sullivan Beach,5166,O'Sullivan Beach Primary School,51 Galloway Rd,,-35.1254,138.479,Full
+616,Pimpala,Reynell,Morphett Vale,5162,Pimpala Primary School,24 Vanstone Ave,,-35.1134,138.529,Full
+617,Reynella,Reynell,Reynella,5161,Reynella South Primary School,119-135 Sherriffs Rd,,-35.1049,138.524,Full
+620,Angaston,Schubert,Angaston,5253,Angaston Town Hall,8 Sturt St,Enter via Washington St,-34.5023,139.046,Full
+621,Birdwood,Schubert,Birdwood,5234,Birdwood Primary School,44 Shannon St,,-34.8198,138.959,Assisted
+622,Cockatoo Valley,Schubert,Cockatoo Valley,5351,Sandy Creek Uniting Church,162 Williamstown Rd,,-34.6155,138.835,Assisted
+623,Cudlee Creek,Schubert,Cudlee Creek,5323,Cudlee Creek Soldiers Memorial Hall,4 Redden Dr,,-34.8402,138.816,None
+624,Eden Valley,Schubert,Eden Valley,5235,Eden Valley Lutheran Church Hall,1 Murray St,,-34.6402,139.097,Assisted
+625,Forreston,Schubert,Forreston,5233,Forreston Memorial Hall,231 Forreston Rd,,-34.798,138.899,Assisted
+626,Greenock,Schubert,Greenock,5360,Greenock Institute,1 Greenock Rd,,-34.4573,138.927,Assisted
+627,Gumeracha,Schubert,Gumeracha,5233,Gumeracha Primary School,1 Albert St,,-34.8253,138.881,Assisted
+628,Houghton,Schubert,Houghton,5131,Houghton Uniting Church Hall,6 Horn St,,-34.829,138.762,Assisted
+629,Kersbrook,Schubert,Kersbrook,5231,Kersbrook Primary School Resource Centre,Bowden St,,-34.7826,138.85,Assisted
+630,Keyneton,Schubert,Keyneton,5353,Keyneton Community Soldiers Memorial Hall,903 Keyneton Rd,,-34.5651,139.129,Assisted
+631,Lyndoch,Schubert,Lyndoch,5351,Lyndoch Primary School,19 Margaret St,,-34.6044,138.886,Assisted
+632,Moculta,Schubert,Moculta,5353,Moculta Soldiers Memorial Hall,2 Truro Rd,,-34.471,139.118,Assisted
+633,Mount Pleasant,Schubert,Mount Pleasant,5325,Mount Pleasant Soldiers Memorial Hall,61 Melrose St,,-34.7731,139.051,Full
+634,Mount Torrens,Schubert,Mount Torrens,5244,Mount Torrens Soldiers Memorial Hall,34 Townsend St,,-34.872,138.959,Assisted
+635,Nuriootpa,Schubert,Nuriootpa,5355,Nuriootpa High School,1 Penrice Rd,,-34.4685,138.999,Assisted
+636,One Tree Hill,Schubert,One Tree Hill,5114,One Tree Hill Institute,1009 Blacktop Rd,,-34.7186,138.766,Assisted
+637,Paracombe,Schubert,Paracombe,5132,Paracombe Hall,383 Paracombe Rd,,-34.8484,138.783,Assisted
+638,Springton,Schubert,Springton,5235,Springton Hall,4 Graetz Tce,,-34.7068,139.09,Assisted
+639,Stockwell,Schubert,Stockwell,5355,Stockwell Hall,4 Duck Ponds Rd,,-34.4349,139.054,Assisted
+640,Tanunda,Schubert,Tanunda,5352,Tanunda Primary School,25 Research Rd,,-34.5181,138.98,Full
+641,Truro,Schubert,Truro,5356,Truro Town Hall,36 Moorundie St,,-34.4087,139.127,Assisted
+642,Williamstown,Schubert,Williamstown,5351,Williamstown Primary School Gym,Queen St,,-34.6683,138.89,Assisted
+645,Andamooka,Stuart,Andamooka,5722,Andamooka Community Hall,Lot 281 School Rd,,-30.4488,137.167,Assisted
+646,Booborowie,Stuart,Booborowie,5417,Booborowie District Soldiers Memorial Institute,Cnr North Tce & Booborowie Rd,,-33.5596,138.758,None
+647,Booleroo Centre,Stuart,Booleroo Centre,5482,Booleroo Centre District Hall,33 Stephens St,,-32.8815,138.351,Assisted
+648,Burra,Stuart,Burra,5417,Burra Community School,Smelts Rd,,-33.6772,138.939,Assisted
+649,Crystal Brook,Stuart,Crystal Brook,5523,Crystal Brook Primary School,7 Mitchell St,,-33.3529,138.213,Assisted
+650,Farrell Flat,Stuart,Farrell Flat,5416,Farrell Flat Memorial Hall,1 Patterson Tce,,-33.8292,138.796,Assisted
+651,Georgetown,Stuart,Georgetown,5472,Georgetown Memorial Hall,3 Pitts St,,-33.3599,138.392,Assisted
+652,Gladstone,Stuart,Gladstone,5473,Gladstone Town Hall,14 Fifth St,,-33.2675,138.356,Assisted
+653,Hallett,Stuart,Hallett,5419,Hallett Institute Hall,Alfred St,,-33.411,138.893,None
+654,Jamestown,Stuart,Jamestown,5491,Jamestown Community School,1 Humphris Tce,,-33.2049,138.609,Full
+655,Laura,Stuart,Laura,5480,Laura Civic Centre,Cnr Hughes St & West Tce,,-33.1857,138.299,Assisted
+656,Leigh Creek,Stuart,Leigh Creek,5731,Leigh Creek Community Centre,Lot 303 Black Oak Dr,,-30.5924,138.401,Assisted
+657,Melrose,Stuart,Melrose,5483,Melrose Primary School,29 Stuart St,,-32.824,138.188,Assisted
+658,Napperby,Stuart,Napperby,5540,Napperby Primary School,Oaks Rd,,-33.1529,138.114,Assisted
+659,Orroroo,Stuart,Orroroo,5431,Orroroo Town Hall,17 Second St,,-32.7337,138.613,Assisted
+660,Peterborough,Stuart,Peterborough,5422,Peterborough Town Hall,108 Main St,,-32.9735,138.838,Assisted
+661,Port Germein,Stuart,Port Germein,5495,Port Germein & Districts Hall,9 Cottage Rd,,-33.0174,138.001,Assisted
+662,Port Pirie,Stuart,Port Pirie,5540,John Pirie Secondary School,Mary Elie St,,-33.1819,138.01,Assisted
+663,Port Pirie South,Stuart,Port Pirie,5540,Risdon Park Primary School,28 Kingston Rd,,-33.2033,138.008,Assisted
+664,Redhill,Stuart,Redhill,5521,Gulnare/Redhill Football/Netball Club,18 Ellis St West,,-33.53953997,138.2177723,Assisted
+665,Risdon Park,Stuart,Risdon Park,5540,Lighthouse Uniting Church,390 The Terrace,,-33.198,138.004,Assisted
+666,Risdon Park South,Stuart,Risdon Park South,5540,Risdon Park South Baptist Church,44 Hannan St,,-33.207,137.992,Assisted
+667,Solomontown,Stuart,Solomontown,5540,Solomontown Primary School,79 Three Chain Rd,Enter via Haslam Rd,-33.1897,138.019,Assisted
+668,Spalding,Stuart,Spalding,5454,Spalding District Hall,11 Main St,,-33.498,138.608,Assisted
+669,Terowie,Stuart,Terowie,5421,Terowie Institute,Main St,,-33.1494,138.92,Assisted
+670,Wilmington,Stuart,Wilmington,5485,Wilmington CWA Rooms,22 Horrocks Hwy,,-32.6517,138.1,Full
+671,Wirrabara,Stuart,Wirrabara,5481,Wirrabara Institute Hall,35 High St,,-33.0328,138.268,Assisted
+672,Woomera,Stuart,Woomera,5720,Woomera Youth Centre,Bool St,,-31.1987,136.827,Assisted
+674,Andrews Farm,Taylor,Andrews Farm,5114,St Columba College,42 President Ave,,-34.6722,138.666,Assisted
+675,Angle Vale,Taylor,Angle Vale,5117,Angle Vale Primary School,Heaslip Rd,,-34.6435,138.647,Assisted
+676,Davoren Park,Taylor,Davoren Park,5113,Swallowcliffe School P-6,18 Swallowcliffe Rd,,-34.6971,138.663,Assisted
+677,Munno Para,Taylor,Munno Para,5115,Mark Oliphant College,99 Douglas Dr,,-34.6655,138.686,Full
+678,Smithfield Plains,Taylor,Smithfield Plains,5114,John Hartley School B-6,199 Peachey Rd,,-34.6804,138.673,Assisted
+679,Virginia,Taylor,Virginia,5120,Virginia Community Centre,Old Port Wakefield Rd,,-34.6651,138.557,Assisted
+681,Gilles Plains,Torrens,Gilles Plains,5086,Wandana Primary School,2-12 Cowra Ave,Enter via Alton Ace,-34.8494,138.662,Full
+682,Greenacres,Torrens,Greenacres,5086,Hampstead Primary School,38-56 Muller Rd,Enter via Karoomba Ave,-34.8709,138.626,Assisted
+683,Hillcrest,Torrens,Hillcrest,5086,North East Community House,17-31 Queensborough Ave,,-34.8656,138.639,Assisted
+684,Holden Hill,Torrens,Holden Hill,5088,Kildare College,96-98 Valiant Rd,Enter via Lyons Rd,-34.8566,138.671,Assisted
+685,Klemzig,Torrens,Klemzig,5087,Klemzig Primary School,2 Hay St,,-34.8767,138.637,Full
+686,Modbury,Torrens,Modbury,5092,Modbury West School,450-474 Wright Rd,,-34.8336,138.678,Full
+687,Oakden,Torrens,Oakden,5086,Salvation Army Oakden,166 Fosters Rd,,-34.8576,138.636,Assisted
+688,Para Vista,Torrens,Para Vista,5093,Valley View Secondary School,240 Wright Rd,,-34.8349,138.657,Assisted
+689,Vale Park,Torrens,Vale Park,5081,Vale Park Primary School,40-56 Ascot Ave,,-34.8854,138.626,Assisted
+690,Windsor Gardens,Torrens,Windsor Gardens,5087,Avenues College,20-28 McKay Ave,Enter via Danby Ave,-34.8621,138.658,Assisted
+692,Clarence Park,Unley,Clarence Park,5034,Church of the Trinity,318 Goodwood Rd,,-34.9643,138.59,Full
+693,Fullarton,Unley,Fullarton,5063,Fullarton Park Community Centre,411 Fullarton Rd,,-34.9578,138.625,Full
+694,Glenunga,Unley,Glenunga,5064,Glenunga International High School,99 L'Estrange St,Enter via Conyngham St,-34.9492,138.636,Assisted
+695,Goodwood,Unley,Goodwood,5034,Goodwood Primary School,140 Goodwood Rd,,-34.9515,138.589,Assisted
+696,Hawthorn,Unley,Hawthorn,5062,Hawthorn Community Centre,5 Frimley Gr,,-34.9725,138.607,Assisted
+697,Kingswood,Unley,Kingswood,5062,Mitcham Girls High School,Kyre Ave,,-34.9694,138.61,Full
+698,Millswood,Unley,Millswood,5034,Tabor College,181 Goodwood Rd,,-34.956,138.591,Assisted
+699,Mitcham,Unley,Mitcham,5062,Mitcham Village Institute,103c Princes Rd,,-34.9769,138.62,Assisted
+700,Myrtle Bank,Unley,Myrtle Bank,5064,Fullarton Scout Hall,1A Culross Ave,,-34.958,138.629,Assisted
+701,Netherby,Unley,Netherby,5062,Urrbrae Agricultural High School,505 Fullarton Rd,,-34.9662,138.626,Full
+702,Parkside,Unley,Parkside,5063,Parkside Primary School,12 Robsart St,,-34.9446,138.62,Full
+703,Unley,Unley,Unley,5061,Unley Town Hall,181 Unley Rd,,-34.9508,138.608,Assisted
+704,Unley Park,Unley,Unley Park,5061,Unley Park Baptist Church,1A Northgate St,,-34.9603,138.607,Assisted
+705,Unley South,Unley,Malvern,5061,Unley Primary School,222 Wattle St,,-34.9544,138.609,Assisted
+706,Wayville,Unley,Wayville,5034,Christ Church Wayville,26 King William Rd,,-34.946,138.599,Assisted
+708,Belair,Waite,Belair,5052,Belair Primary School,45-83 Main Rd,,-35.0039,138.623,Assisted
+709,Bellevue Heights,Waite,Bellevue Heights,5050,Bellevue Heights Primary School,7-19 Vaucluse Cres,,-35.0292,138.589,Assisted
+710,Blackwood,Waite,Blackwood,5051,Blackwood Hills Baptist Church,72 Coromandel Pde,,-35.0294,138.62,Assisted
+711,Blackwood Central,Waite,Blackwood,5051,Blackwood Church of Christ Hall,367 Shepherds Hill Rd,Enter via Waite St,-35.0209,138.615,Assisted
+712,Clapham,Waite,Clapham,5062,Clapham Primary School,48 Barretts Rd,,-34.9939,138.604,Assisted
+713,Colonel Light Gardens South,Waite,Colonel Light Gardens,5041,Colonel Light Gardens Primary School,Windsor Ave,,-34.9872,138.596,Assisted
+714,Coromandel Valley,Waite,Coromandel Valley,5051,Coromandel Valley Primary School,339 Main Rd,,-35.0332,138.625,Assisted
+715,Eden Hills,Waite,Eden Hills,5050,Blackwood Primary School,4 Seymour St,,-35.0252,138.607,Assisted
+716,Flagstaff Hill East,Waite,Flagstaff Hill,5159,Craigburn Primary School,15 Murrays Hill Rd,,-35.0569,138.616,Full
+717,Hawthorn,Waite,Hawthorn,5062,Hawthorn Community Centre,5 Frimley Gr,,-34.9725,138.607,Assisted
+718,Hawthorndene,Waite,Hawthorndene,5051,Hawthorndene Primary School,Suffolk Rd,,-35.0203,138.636,Assisted
+719,Kingswood,Waite,Kingswood,5062,Mitcham Girls High School,Kyre Ave,,-34.9694,138.61,Full
+720,Mitcham,Waite,Mitcham,5062,Mitcham Village Institute,103c Princes Rd,,-34.9769,138.62,Assisted
+722,Allenby Gardens,West Torrens,Allenby Gardens,5009,Allenby Gardens Primary School,33 Barham St,,-34.9017,138.555,Full
+723,Brooklyn Park,West Torrens,Brooklyn Park,5032,Uniting College for Leadership and Theology,312 Sir Donald Bradman Dr,,-34.9307,138.548,Full
+724,Brooklyn Park North,West Torrens,Brooklyn Park,5032,Brooklyn Park Church of Christ,3 Allen Ave,,-34.9255,138.549,Full
+725,Brooklyn Park West,West Torrens,Brooklyn Park,5032,Brooklyn Park Primary School,29 Elston St,,-34.9302,138.535,Full
+726,Cowandilla,West Torrens,Cowandilla,5033,Cowandilla Primary School,21 Jenkins St,,-34.9342,138.559,Assisted
+727,Flinders Park,West Torrens,Flinders Park,5025,Flinders Park Primary School,70 Holbrooks Rd,,-34.9114,138.548,Assisted
+728,Lockleys North,West Torrens,Lockleys,5032,Lockleys North Primary School,55 Malurus Ave,,-34.9198,138.538,Full
+729,Mile End,West Torrens,Mile End,5031,St George College,73-75 Rose St,,-34.9226,138.571,Assisted
+730,Richmond,West Torrens,Richmond,5033,West Adelaide Football Club,57 Milner Road,,-34.93664472,138.5664787,Assisted
+731,Torrensville,West Torrens,Torrensville,5031,Torrensville Primary School,35 Hayward Ave,,-34.9195,138.557,Full
+732,Torrensville East,West Torrens,Torrensville,5031,Thebarton Senior College,40 Ashley St,,-34.9179,138.563,Assisted
+733,West Hindmarsh,West Torrens,West Hindmarsh,5007,St Joseph's School,56 Albemarle St,,-34.9038,138.563,Full
+736,Golden Grove Central,Wright,Golden Grove,5125,Golden Grove High School,1 Adey Pl,,-34.7938,138.696,Assisted
+737,Gulfview Heights,Wright,Gulfview Heights,5096,Gulfview Heights Primary School,39 Kiekebusch Rd,,-34.7924,138.668,Assisted
+738,Modbury Heights,Wright,Modbury Heights,5092,The Heights School,21-51 Brunel Dr,,-34.8111,138.682,Assisted
+739,Modbury North,Wright,Modbury North,5092,Burragah Recreation centre,140 Kelly Rd,,-34.8252,138.674,Assisted
+740,Para Hills East,Wright,Para Hills,5096,East Para Primary School,12 Caroona Ave,,-34.8176,138.667,Assisted
+741,Redwood Park,Wright,Redwood Park,5097,Redwood Park Primary,2 Lokan St,,-34.8147,138.702,Assisted
+742,Ridgehaven,Wright,Ridgehaven,5097,Ridgehaven Primary School,479 Milne Rd,,-34.8171,138.711,Assisted
+743,Salisbury East,Wright,Salisbury East,5109,Madison Park School,19-23 Lincoln Ave,,-34.7847,138.663,Full
+744,Salisbury East North,Wright,Salisbury East,5109,Salisbury East High School,50 Smith Rd,Enter via Gloucester Ave,-34.7759,138.667,None
+745,Salisbury East South,Wright,Salisbury East,5109,Keller Road Primary School,23-33 Melville Rd,,-34.7918,138.657,Assisted
+746,Surrey Downs,Wright,Surrey Downs,5126,Surrey Downs Community Centre,6 Zanoni Cres,,-34.80089129,138.7112946,Assisted
+747,Wynn Vale,Wright,Wynn Vale,5127,Golden Grove Lutheran Church,21 Richardson Dr,,-34.8009,138.688,Full
+748,Wynn Vale West,Wright,Wynn Vale,5127,Keithcot Farm Children's Centre,5 Keithcot Farm Dr,,-34.8001,138.677,Full
