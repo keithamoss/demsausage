@@ -2,6 +2,7 @@ from datetime import datetime
 
 import pytz
 from demsausage.app.enums import (
+    MetaPollingPlaceStatus,
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
@@ -25,12 +26,15 @@ from demsausage.app.serializers import (
     MetaPollingPlacesRetrieveSerializer,
     MetaPollingPlacesTasksCreateSerializer,
     MetaPollingPlacesTasksSerializer,
+    MetaPollingPlacesUpdateSerializer,
 )
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
 from django.db import transaction
 from django.db.models import Case, Count, F, Max, Q, When
 from django.http import HttpResponseBadRequest
@@ -139,6 +143,15 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         task.actioned_by_id = request.user.id
         task.save()
 
+        # Promote draft MPPs to Active on REVIEW_DRAFT completion.
+        # This is wrapped in the same @transaction.atomic block so a failure
+        # on the MPP save will roll back the task save too.
+        if task.type == MetaPollingPlaceTaskType.REVIEW_DRAFT:
+            mpp = task.meta_polling_place
+            if mpp.status == MetaPollingPlaceStatus.DRAFT:
+                mpp.status = MetaPollingPlaceStatus.ACTIVE
+                mpp.save()
+
         return Response()
 
     @action(
@@ -196,23 +209,45 @@ class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
         if job_name is None:
             return HttpResponseBadRequest("job_name is required")
 
-        task = (
-            MetaPollingPlacesTasks.objects.filter(
-                job_name=job_name, status=MetaPollingPlaceTaskStatus.IN_PROGRESS
-            )
-            .order_by("created_on")
-            .first()
+        # Optional proximity hint: when the caller passes lat/lon (the coordinates
+        # of the MPP they just finished), order by distance from that point so
+        # nearby tasks surface first, rather than randomly.
+        lat_param = request.query_params.get("lat", None)
+        lon_param = request.query_params.get("lon", None)
+
+        qs = MetaPollingPlacesTasks.objects.filter(
+            job_name=job_name, status=MetaPollingPlaceTaskStatus.IN_PROGRESS
         )
 
+        if lat_param is not None and lon_param is not None:
+            try:
+                ref_point = Point(float(lon_param), float(lat_param), srid=4326)
+                qs = qs.annotate(
+                    _distance=Distance("meta_polling_place__geom_location", ref_point)
+                ).order_by("_distance")
+            except (ValueError, TypeError):
+                qs = qs.order_by("?")
+        else:
+            qs = qs.order_by("?")
+
+        task = qs.first()
+
         if task is not None:
+            tasks_remaining = MetaPollingPlacesTasks.objects.filter(
+                job_name=job_name, status=MetaPollingPlaceTaskStatus.IN_PROGRESS
+            ).count()
+
             serializer = self.serializer_class(
                 task,
                 many=False,
             )
 
-            return Response(serializer.data)
+            data = dict(serializer.data)
+            data["tasks_remaining"] = tasks_remaining
+
+            return Response(data)
         else:
-            return Response()
+            return Response({})
 
     @action(
         detail=False,
@@ -400,10 +435,8 @@ class MetaPollingPlacesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
-        # if self.action in ["create"]:
-        #     return MetaPollingPlacesLinksCreateSerializer
-        # elif self.action in ["update", "partial_update"]:
-        #     return MetaPollingPlacesLinksUpdateSerializer
+        if self.action == "partial_update":
+            return MetaPollingPlacesUpdateSerializer
         return super().get_serializer_class()
 
     @action(
@@ -521,6 +554,9 @@ class MetaPollingPlacesViewSet(viewsets.ModelViewSet):
                     if firstPollingPlace.state != PollingPlaceState.Overseas
                     else None
                 ),
+                # `overseas` is derived from the originating polling place at creation time and
+                # is intentionally non-editable via the REVIEW_DRAFT task — it reflects whether
+                # the source polling place was in an overseas jurisdiction.
                 overseas=firstPollingPlace.state == PollingPlaceState.Overseas,
                 geom_location=firstPollingPlace.geom,
                 wheelchair_access=firstPollingPlace.wheelchair_access,
@@ -559,6 +595,39 @@ class MetaPollingPlacesViewSet(viewsets.ModelViewSet):
                     raise BadRequest(
                         "Unable to process polling place splits. This would create an orphan Meta Polling Place."
                     )
+
+            # Auto-create a REVIEW_DRAFT task for the new MPP so it lands in the
+            # reviewer's queue.  Multiple splits in the same review session share
+            # a job name (supplied by the frontend); if none is provided we
+            # generate a unique fallback so every split still gets a task.
+            if "split_job_name" in request.data:
+                split_job_name = request.data.get("split_job_name")
+
+                if (
+                    isinstance(split_job_name, str) is False
+                    or len(split_job_name.strip()) == 0
+                ):
+                    raise BadRequest(
+                        "split_job_name must be a non-empty string when provided"
+                    )
+            else:
+                split_job_name = (
+                    f"MPP Split - {datetime.today().strftime('%-d %B %Y %H:%M:%S')}"
+                )
+
+            mpp_task = MetaPollingPlacesTasks(
+                meta_polling_place=mpp,
+                job_name=split_job_name,
+                category=MetaPollingPlaceTaskCategory.REVIEW,
+                type=MetaPollingPlaceTaskType.REVIEW_DRAFT,
+            )
+
+            try:
+                mpp_task.full_clean()
+            except Exception as e:
+                raise BadRequest(f"Error creating MPP task for split: {e}")
+
+            mpp_task.save(force_insert=True)
 
         return Response()
 

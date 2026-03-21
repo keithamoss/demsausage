@@ -35,6 +35,7 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.fields import GeometryField
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
@@ -402,7 +403,7 @@ class PollingPlaceFacilityTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollingPlaceFacilityType
 
-        fields = ("name",)
+        fields = ("id", "name")
 
 
 class PollingPlaceNomsSerializer(serializers.ModelSerializer):
@@ -1341,3 +1342,38 @@ class MetaPollingPlacesRetrieveSerializer(serializers.ModelSerializer):
             "created_on",
             "modified_on",
         ]
+
+
+class MetaPollingPlacesUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for PATCH updates of core MPP fields only.
+
+    Intentionally limited to the writable fields relevant for the REVIEW_DRAFT
+    task. Fields like `status` and `overseas` are excluded so they cannot be
+    changed via this endpoint.
+    """
+
+    facility_type = serializers.PrimaryKeyRelatedField(
+        queryset=PollingPlaceFacilityType.objects.all(), allow_null=True, required=False
+    )
+    geom_location = GeometryField(required=False)
+
+    class Meta:
+        model = MetaPollingPlaces
+        fields = [
+            "name",
+            "premises",
+            "facility_type",
+            "wheelchair_access",
+            "wheelchair_access_description",
+            "geom_location",
+        ]
+
+    def validate_geom_location(self, value):
+        """Reject geometry types other than Point."""
+        from django.contrib.gis.geos import Point
+
+        if value is not None and not isinstance(value, Point):
+            raise serializers.ValidationError(
+                "geom_location must be a GeoJSON Point."
+            )
+        return value

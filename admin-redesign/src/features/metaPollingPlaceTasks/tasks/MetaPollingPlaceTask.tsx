@@ -16,6 +16,7 @@ import {
 } from '../interfaces/metaPollingPlaceTasksInterfaces';
 import MetaPollingPlaceTaskCrowdsourceFromFacebook from './MetaPollingPlaceTaskCrowdsourceFromFacebook';
 import MetaPollingPlaceTaskQAPollingPlaceMismatch from './MetaPollingPlaceTaskQAPollingPlaceMismatch';
+import MetaPollingPlaceTaskReviewDraft from './MetaPollingPlaceTaskReviewDraft';
 
 const PageWrapper = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
@@ -76,7 +77,7 @@ const MetaPollingPlaceTaskNotImplementedYet = (props: Props) => <div>Task not im
 const getTaskComponent = (type: IMetaPollingPlaceTaskType, props: Props): JSX.Element => {
 	switch (type) {
 		case IMetaPollingPlaceTaskType.REVIEW_DRAFT:
-			return <MetaPollingPlaceTaskNotImplementedYet {...props} />;
+			return <MetaPollingPlaceTaskReviewDraft {...props} />;
 		case IMetaPollingPlaceTaskType.REVIEW_PP:
 			return <MetaPollingPlaceTaskNotImplementedYet {...props} />;
 		case IMetaPollingPlaceTaskType.QA_PP_MISMATCH:

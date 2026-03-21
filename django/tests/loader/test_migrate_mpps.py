@@ -6,21 +6,22 @@ migrate_mpps has two sub-loops:
      matching DRAFT PP.
   B) For every DRAFT PP without an MPP → create a new draft singleton MPP.
 
-Tests (6 + 2 xfail):
+Tests (8):
   1. mpp_not_found with MPP detached  (action field presence & detach behaviour)
   2. mpp_not_found without MPP (warning but no action — PP simply missing)
   3. Active PP successfully migrated — MPP FK repointed to the new DRAFT PP
   4. New DRAFT PP without an existing MPP gets a fresh singleton MPP created
   5. ec_id collision in MPP migration → 'Find by ec_id' multi-match error logged
   6. overwrite_distance_thresholds respected during distance-based MPP migration
-  xfail A: mpp.save() runs after full_clean() raises ValidationError (Bug #2a)
-  xfail B: mpp_task.save() runs after full_clean() raises ValidationError (Bug #2b)
+    7. MPP full_clean() failure does not persist invalid MPP (Bug #2a fixed)
+    8. MPP task full_clean() failure does not persist invalid task (Bug #2b fixed)
 """
 
 from unittest.mock import patch
 
 import pytest
 from demsausage.app.enums import MetaPollingPlaceStatus, PollingPlaceStatus
+from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import (
     MetaPollingPlaces,
     MetaPollingPlacesTasks,
@@ -256,32 +257,21 @@ def test_mpp_overwrite_distance_threshold_allows_distant_match(test_election):
 
 
 # ---------------------------------------------------------------------------
-# xfail A — Bug #2a: mpp.save() runs unconditionally after full_clean() raises
+# 7. Bug #2a fixed — mpp.save() must not run if full_clean() raises
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Bug #2a: In migrate_mpps() first loop, mpp.save(force_insert=True) is "
-        "called unconditionally after try: mpp.full_clean() / except: log_error. "
-        "If full_clean() raises ValidationError, an invalid MPP object is persisted."
-    ),
-)
 @pytest.mark.django_db
 def test_new_mpp_full_clean_failure_does_not_save(test_election):
-    """When MetaPollingPlaces.full_clean() raises ValidationError the MPP must
-    NOT be saved to the DB.  Currently mpp.save() is called unconditionally,
-    so an invalid MPP is persisted — this test documents that bug."""
+    """When MetaPollingPlaces.full_clean() raises, no invalid MPP is persisted."""
     mpp_count_before = MetaPollingPlaces.objects.count()
 
     with patch.object(MetaPollingPlaces, "full_clean", side_effect=Exception("boom")):
-        # This will trigger new MPP creation (no pre-existing ACTIVE PPs)
-        run_loader_full(test_election, make_csv([MINIMAL_ROW]))
+        # This triggers new MPP creation (no pre-existing ACTIVE PPs).
+        # The loader logs an error and then raises BadRequest at stage boundary.
+        with pytest.raises(BadRequest):
+            run_loader_full(test_election, make_csv([MINIMAL_ROW]))
 
-    # If the bug is present, an MPP is created despite full_clean() raising
-    # The assertion below will PASS (expected failure) when the bug is present
-    # and FAIL (unexpected pass) once the bug is fixed
     assert MetaPollingPlaces.objects.count() == mpp_count_before, (
         "mpp.save() should NOT have been called after full_clean() raised, "
         "but an MPP was persisted to the DB."
@@ -289,28 +279,20 @@ def test_new_mpp_full_clean_failure_does_not_save(test_election):
 
 
 # ---------------------------------------------------------------------------
-# xfail B — Bug #2b: mpp_task.save() runs after mpp_task.full_clean() raises
+# 8. Bug #2b fixed — mpp_task.save() must not run if full_clean() raises
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Bug #2b: In migrate_mpps() first loop, mpp_task.save(force_insert=True) "
-        "is called unconditionally after try: mpp_task.full_clean() / except: log. "
-        "If full_clean() raises, an invalid task is persisted."
-    ),
-)
 @pytest.mark.django_db
 def test_mpp_task_full_clean_failure_does_not_save(test_election):
-    """When MetaPollingPlacesTasks.full_clean() raises ValidationError the task
-    must NOT be saved.  The unconditional save() currently persists it."""
+    """When MetaPollingPlacesTasks.full_clean() raises, no invalid task persists."""
     task_count_before = MetaPollingPlacesTasks.objects.count()
 
     with patch.object(
         MetaPollingPlacesTasks, "full_clean", side_effect=Exception("boom")
     ):
-        run_loader_full(test_election, make_csv([MINIMAL_ROW]))
+        with pytest.raises(BadRequest):
+            run_loader_full(test_election, make_csv([MINIMAL_ROW]))
 
     assert MetaPollingPlacesTasks.objects.count() == task_count_before, (
         "mpp_task.save() should NOT have been called after full_clean() raised, "

@@ -1914,6 +1914,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     try:
                         mpp.full_clean()
+                        mpp.save(force_insert=True)
                     except Exception as e:
                         self._log(
                             "error",
@@ -1922,8 +1923,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                                 polling_place.name, polling_place.id, str(e)
                             ),
                         )
-
-                    mpp.save(force_insert=True)
+                        continue
 
                     # Link the new MPP to the polling place
                     polling_place.meta_polling_place = mpp
@@ -1939,6 +1939,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
                     try:
                         mpp_task.full_clean()
+                        mpp_task.save(force_insert=True)
                     except Exception as e:
                         self._log(
                             "error",
@@ -1947,8 +1948,6 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                                 polling_place.name, polling_place.id, str(e)
                             ),
                         )
-
-                    mpp_task.save(force_insert=True)
 
             # end = timer()
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
@@ -1996,6 +1995,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             try:
                 mpp.full_clean()
+                mpp.save(force_insert=True)
             except Exception as e:
                 self._log(
                     "error",
@@ -2004,8 +2004,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         polling_place.name, polling_place.id, str(e)
                     ),
                 )
-
-            mpp.save(force_insert=True)
+                continue
 
             # Link the new MPP to the polling place
             polling_place.meta_polling_place = mpp
@@ -2021,6 +2020,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
 
             try:
                 mpp_task.full_clean()
+                mpp_task.save(force_insert=True)
             except Exception as e:
                 self._log(
                     "error",
@@ -2029,8 +2029,6 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         polling_place.name, polling_place.id, str(e)
                     ),
                 )
-
-            mpp_task.save(force_insert=True)
 
             # end = timer()
             # self.logger.info("[Timing - Migrate Noms] {} took {}s".format(polling_place.premises, round(end - start, 2)))
