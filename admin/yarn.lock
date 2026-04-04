@@ -800,6 +800,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/core@npm:10.47.0":
+  version: 10.47.0
+  resolution: "@sentry/core@npm:10.47.0"
+  checksum: 10c0/985dd751d26c3bbfd14ba491489ee0d38d7a4570b70538d36580d408c3171116a86883d18a7ddd6741455737fb72016786ff666dcea1ab95572257fc1e7f242b
+  languageName: node
+  linkType: hard
+
 "@sentry/rollup-plugin@npm:5.1.1":
   version: 5.1.1
   resolution: "@sentry/rollup-plugin@npm:5.1.1"
@@ -812,12 +819,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:^10.46.0":
-  version: 10.46.0
-  resolution: "@sentry/types@npm:10.46.0"
+"@sentry/types@npm:^10.47.0":
+  version: 10.47.0
+  resolution: "@sentry/types@npm:10.47.0"
   dependencies:
-    "@sentry/core": "npm:10.46.0"
-  checksum: 10c0/74ab28573edfc8dafdeaa9bde21d5dbb5193a0e58a99c217037b81f4b44c0d2d643c8d114267aa735fcc422ee7d9ba8f5f995a4975bbde5905ad83632a3e3ee5
+    "@sentry/core": "npm:10.47.0"
+  checksum: 10c0/51392e3fd13d8385fb2011ba26b9334f72d0c0a9929078a1f6645965ab7281fd710201d38e1389da834bb60592488437d711b6dfc418eeee21b6a1d22dc36c1e
   languageName: node
   linkType: hard
 
@@ -1123,6 +1130,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash-es@npm:^4.17.9":
+  version: 4.17.12
+  resolution: "@types/lodash-es@npm:4.17.12"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 10c0/5d12d2cede07f07ab067541371ed1b838a33edb3c35cb81b73284e93c6fd0c4bbeaefee984e69294bffb53f62d7272c5d679fdba8e595ff71e11d00f2601dde0
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.17.24
+  resolution: "@types/lodash@npm:4.17.24"
+  checksum: 10c0/b72f60d4daacdad1fa643edb3faba204c02a01eb1ac00a83ff73496a6d236fc55e459c06106e8ced42277dba932d087d8fc090f8de4ef590d3f91e6d6f7ce85a
+  languageName: node
+  linkType: hard
+
 "@types/luxon@npm:^3.7.1":
   version: 3.7.1
   resolution: "@types/luxon@npm:3.7.1"
@@ -1395,7 +1418,7 @@ __metadata:
   resolution: "admin@workspace:."
   dependencies:
     "@sentry/browser": "npm:^10.46.0"
-    "@sentry/types": "npm:^10.46.0"
+    "@sentry/types": "npm:^10.47.0"
     "@sentry/vite-plugin": "npm:^5.1.1"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
@@ -1404,6 +1427,7 @@ __metadata:
     "@types/history": "npm:^5.0.0"
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3"
+    "@types/lodash-es": "npm:^4.17.9"
     "@types/luxon": "npm:^3.7.1"
     "@types/material-ui": "npm:0.21.18"
     "@types/node": "npm:^25.5.0"
@@ -1425,6 +1449,7 @@ __metadata:
     deep-object-diff: "npm:^1.1.9"
     dot-prop-immutable: "npm:^2.1.1"
     js-cookie: "npm:^3.0.5"
+    lodash-es: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     material-ui: "npm:^0.20.2"
     material-ui-responsive-drawer: "npm:^1.19.4"
@@ -2798,7 +2823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.2.1":
+"lodash-es@npm:^4.18.1, lodash-es@npm:^4.2.1":
   version: 4.18.1
   resolution: "lodash-es@npm:4.18.1"
   checksum: 10c0/35d4dcf87ef07f8d090f409447575800108057e360b445f590d0d25d09e3d1e33a163d2fc100d4d072b0f901d5e2fc533cd7c4bfd8eeb38a06abec693823c8b8
