@@ -24,7 +24,7 @@
     "react-dom": "^19.2.6",
     "react-google-maps": "^9.4.5",
     "react-is": "^19.2.6",
-    "react-redux": "^9.2.0",
+    "react-redux": "^9.3.0",
     "react-router": "^7.15.0",
     "react-router-redux": "^4.0.8",
     "react-string-replace": "^2.0.1",
