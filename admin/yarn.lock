@@ -1426,7 +1426,7 @@ __metadata:
     core-js: "npm:^3.49.0"
     deep-object-diff: "npm:^1.1.9"
     dot-prop-immutable: "npm:^2.1.1"
-    js-cookie: "npm:^3.0.6"
+    js-cookie: "npm:^3.0.7"
     lodash-es: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     material-ui: "npm:^0.20.2"
@@ -2617,10 +2617,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.6":
-  version: 3.0.6
-  resolution: "js-cookie@npm:3.0.6"
-  checksum: 10c0/826156f1259a05d321319716a3918672d6aba3c93d5908809a7c69c541b4b9ed00793761cbad76f61254c0e475abf29d3d09917ad4b4a0cdb213636de824a652
+"js-cookie@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "js-cookie@npm:3.0.7"
+  checksum: 10c0/c921c43014e98bb94a1765663a1a10d693048d61444e374c1ecf459eba92320381f9c406e724df9aa44e819c4b606e6a7240f2abe2d5c54ad1e73a3002b191c2
   languageName: node
   linkType: hard
 
