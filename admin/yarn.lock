@@ -1463,7 +1463,7 @@ __metadata:
     react: "npm:^19.2.6"
     react-dom: "npm:^19.2.7"
     react-google-maps: "npm:^9.4.5"
-    react-is: "npm:^19.2.6"
+    react-is: "npm:^19.2.7"
     react-redux: "npm:^9.3.0"
     react-router: "npm:^7.16.0"
     react-router-redux: "npm:^4.0.8"
@@ -3625,10 +3625,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.2.6":
-  version: 19.2.6
-  resolution: "react-is@npm:19.2.6"
-  checksum: 10c0/263177f370fc156b279d22570dd6e922a0ad641a4a426a4cb70284b8003b00ef532d59f2beca1d22a1ca0b37f85f9077d7733ca5d344ebecd2942e9bc2a2a3c0
+"react-is@npm:^19.2.7":
+  version: 19.2.7
+  resolution: "react-is@npm:19.2.7"
+  checksum: 10c0/419fe54d5bd7fdf5414a5bb7bd9a1e0e36f9fae28ffb4cb73290fbe342bde15d8584a90d1db62547f6aa03018dce517b178a041abb522136cd4b4b51b4e94c83
   languageName: node
   linkType: hard
 
