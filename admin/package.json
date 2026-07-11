@@ -64,7 +64,7 @@
     "@types/styled-components": "5.1.36",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitejs/plugin-react-swc": "^4.3.1",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
     "vite-plugin-checker": "^0.14.4",
