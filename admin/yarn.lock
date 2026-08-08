@@ -1462,15 +1462,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "@vitejs/plugin-react-swc@npm:4.3.2"
+"@vitejs/plugin-react-swc@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "@vitejs/plugin-react-swc@npm:4.3.3"
   dependencies:
     "@rolldown/pluginutils": "npm:^1.0.1"
     "@swc/core": "npm:^1.15.46"
   peerDependencies:
     vite: ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: 10c0/b848aa423e37ced3033910d178a2b01273db039d32965902b5195a103346c9dc110124beaad4e10e5e96140805aa656e5931161abf55831a0c3f808a644a0caf
+  checksum: 10c0/4600857f2900d9912e5fee1c99a6babd9cfcc53156cd2dd7fb299c88e2fe7231a92e193c5f76c0e836eb170ab46040d68edf69b822257e1668f089570c0928c9
   languageName: node
   linkType: hard
 
@@ -1539,7 +1539,7 @@ __metadata:
     "@types/redux-form": "npm:^8.3.5"
     "@types/styled-components": "npm:5.1.36"
     "@vitejs/plugin-react": "npm:^6.0.4"
-    "@vitejs/plugin-react-swc": "npm:^4.3.2"
+    "@vitejs/plugin-react-swc": "npm:^4.3.3"
     copy-to-clipboard: "npm:^4.0.2"
     core-js: "npm:^3.49.0"
     deep-object-diff: "npm:^1.1.9"
