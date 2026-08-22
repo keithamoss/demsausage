@@ -1570,7 +1570,7 @@ __metadata:
     vite: "npm:^8.2.1"
     vite-plugin-checker: "npm:^0.14.5"
     vite-tsconfig-paths: "npm:^6.1.1"
-    web-vitals: "npm:^6.1.0"
+    web-vitals: "npm:^6.1.1"
   languageName: unknown
   linkType: soft
 
@@ -4777,10 +4777,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "web-vitals@npm:6.1.0"
-  checksum: 10c0/ab1bf6a91cd618ca64c4aaf4644066221dea1fad0733ad2ec20461ca37e3d7e8e02cda014710c728ea938271d9a5eec65c23675eae5926e5df4ea16fb1edda92
+"web-vitals@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "web-vitals@npm:6.1.1"
+  checksum: 10c0/46a65d39d7c73bc06f90b7a6b6ab20a72f1635294ed81a6e0d3bfa32557012005f7abf319bdd128e5bde5185b3e2c9121f7c62d51aebf97d730a56042296bace
   languageName: node
   linkType: hard
 
