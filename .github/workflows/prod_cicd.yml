@@ -31,9 +31,9 @@ jobs:
           touch secrets/dev/sausage-web-db.dev.env
           touch secrets/prod/sausage-admin-redesign-frontend.production.env
 
-      - name: Build - Prep
-        run: |
-          mkdir ./nginx-prod/build
+      # - name: Build - Prep
+      #   run: |
+      #     mkdir ./nginx-prod/build
 
       - name: Public Redesign Frontend - Build
         run: docker compose --file build_production.yml run public_redesign
@@ -64,9 +64,9 @@ jobs:
           touch secrets/dev/sausage-web-db.dev.env
           touch secrets/prod/sausage-public-redesign-frontend.production.env
 
-      - name: Build - Prep
-        run: |
-          mkdir ./nginx-prod/build
+      # - name: Build - Prep
+      #   run: |
+      #     mkdir ./nginx-prod/build
 
       - name: Admin Redesign Frontend - Build
         run: docker compose --file build_production.yml run admin_redesign
@@ -97,9 +97,9 @@ jobs:
           touch secrets/prod/sausage-public-redesign-frontend.production.env
           touch secrets/prod/sausage-admin-redesign-frontend.production.env
 
-      - name: Build - Prep
-        run: |
-          mkdir ./nginx-prod/build
+      # - name: Build - Prep
+      #   run: |
+      #     mkdir ./nginx-prod/build
 
       - name: Django - Build
         run: docker compose --file build_production.yml run django
@@ -122,9 +122,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build - Prep
-        run: |
-          mkdir ./nginx-prod/build
+      # - name: Build - Prep
+      #   run: |
+      #     mkdir ./nginx-prod/build
 
       - name: Download artifacts for container building
         uses: actions/download-artifact@v4
