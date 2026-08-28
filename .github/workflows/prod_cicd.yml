@@ -122,9 +122,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build - Prep
-      #   run: |
-      #     mkdir ./nginx-prod/build
+      - name: Build - Prep
+        run: |
+          mkdir ./nginx-prod/build
 
       - name: Download artifacts for container building
         uses: actions/download-artifact@v4
