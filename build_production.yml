@@ -5,7 +5,7 @@ services:
     command: build
     volumes:
       - ./django/:/app:delegated
-      - ./nginx-prod/build/:/build:delegated
+      - ./build/:/build:delegated
       - ./logs/django:/app/logs:delegated
     environment:
       - BUILD=YES
@@ -18,7 +18,7 @@ services:
     command: build
     volumes:
       - ./public-redesign:/app:delegated
-      - ./nginx-prod/build/:/build:delegated
+      - ./build/:/build:delegated
     env_file:
       - secrets/prod/sausage-public-redesign-frontend.production.env
   admin_redesign:
@@ -27,6 +27,6 @@ services:
     command: build
     volumes:
       - ./admin-redesign:/app:delegated
-      - ./nginx-prod/build/:/build:delegated
+      - ./build/:/build:delegated
     env_file:
       - secrets/prod/sausage-admin-redesign-frontend.production.env

@@ -61,7 +61,7 @@ function MetaPollingPlaceTasksJobGroupsBrowser() {
 						/>
 
 						<CardContent sx={{ pt: 0.5, pb: 0.5, fontSize: 14 }}>
-							<strong>{item.task_count.toLocaleString()}</strong> {item.type} tasks
+							<strong>{item.task_count.toLocaleString()}</strong> remaining
 						</CardContent>
 
 						<CardActions disableSpacing>

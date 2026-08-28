@@ -40,7 +40,7 @@ export interface IMetaPollingPlace {
 	overseas: boolean;
 	geom_location: IGeoJSONPoint;
 	geom_boundary: IGeoJSONPolygon | null;
-	facility_type: string | null;
+	facility_type: number | null;
 	wheelchair_access: PollingPlaceWheelchairAccess;
 	wheelchair_access_description: string; // May be blank
 	chance_of_sausage: object; // @TODO Implement interface

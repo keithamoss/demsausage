@@ -1,0 +1,289 @@
+{
+    "filters": [
+        {
+            "column": "Status",
+            "type": "is_exactly",
+            "matches": [
+                "Current",
+                "Appointment"
+            ]
+        }
+    ],
+    "exclude_columns": [
+        "StateCo",
+        "DivId",
+        "DivCo",
+        "Status",
+        "AdvPremisesName",
+        "AdvAddress",
+        "AdvLocality",
+        "AdvBoothLocation",
+        "AdvGateAccess"
+    ],
+    "rename_columns": {
+        "StateAb": "state",
+        "DivName": "divisions",
+        "PPName": "name",
+        "PremisesName": "premises",
+        "EntrancesDesc": "entrance_desc",
+        "WheelchairAccess": "wheelchair_access",
+        "Lat": "lat",
+        "Long": "lon",
+        "PPId": "ec_id"
+    },
+    "fix_data_issues": [
+        {
+            "field": "ec_id",
+            "value": 2325,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.921647
+                },
+                {
+                    "field": "lon",
+                    "value": 151.239767
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 2887,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.88694957623772
+                },
+                {
+                    "field": "lon",
+                    "value": 151.2124001071115
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 46435,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -34.68968738737803
+                },
+                {
+                    "field": "lon",
+                    "value": 138.7141293913578
+                },
+                {
+                    "field": "entrance_desc",
+                    "value": "Use rear pedestrian gate off of Somerset Grove - next to the gym"
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1475,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.755306457346464
+                },
+                {
+                    "field": "lon",
+                    "value": 150.6097771238578
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 11978,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.806824753560676
+                },
+                {
+                    "field": "lon",
+                    "value": 150.95353600487007
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 81621,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.806824753560676
+                },
+                {
+                    "field": "lon",
+                    "value": 150.95353600487007
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1051,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.769365588737415
+                },
+                {
+                    "field": "lon",
+                    "value": 150.93716583271913
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1042,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.77701786927137
+                },
+                {
+                    "field": "lon",
+                    "value": 150.9247200383731
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1030,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.74747662545731
+                },
+                {
+                    "field": "lon",
+                    "value": 150.89069333206263
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 402,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.7673706076731
+                },
+                {
+                    "field": "lon",
+                    "value": 150.82192702960785
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 83589,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.77153067607477
+                },
+                {
+                    "field": "lon",
+                    "value": 150.83803072773907
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 1476,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -33.7465560892024
+                },
+                {
+                    "field": "lon",
+                    "value": 150.62407404685226
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 6208,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -26.5699088791283
+                },
+                {
+                    "field": "lon",
+                    "value": 148.78947214890607
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 7212,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -35.021817532730324
+                },
+                {
+                    "field": "lon",
+                    "value": 138.71269299191056
+                }
+            ]
+        },
+        {
+            "field": "ec_id",
+            "value": 6936,
+            "overwrite": [
+                {
+                    "field": "lat",
+                    "value": -30.592711384297914
+                },
+                {
+                    "field": "lon",
+                    "value": 138.40114226600966
+                }
+            ]
+        }
+    ],
+    "geocoding": {
+        "enabled": true,
+        "components": {
+            "country": "AU"
+        }
+    },
+    "extras": {
+        "fields": [
+            "CCD",
+            "OrdVoteEst",
+            "DecVoteEst",
+            "NoOrdIssuingOff",
+            "NoOfDecIssuingOff"
+        ]
+    },
+    "cleaning_regexes": [
+        {
+            "field": "name",
+            "regex": "^(?P<main>[A-z-'\\s]+)(\\([A-z-\\s]+\\))?$"
+        }
+    ],
+    "address_fields": [
+        "Address1",
+        "Address2",
+        "Address3",
+        "Locality",
+        "AddrStateAb",
+        "Postcode"
+    ],
+    "address_format": "{Address1}, {Address2}, {Address3}, {Locality}, {AddrStateAb} {Postcode}",
+    "bbox_validation": {
+        "ignore": [
+            "Lord Howe Island",
+            "Norfolk Island"
+        ]
+    },
+    "multiple_division_handling": {
+        "determine_home_division": "USE_ELECTORAL_BOUNDARIES"
+    }
+}

@@ -64,4 +64,6 @@ export interface IMetaPollingPlaceTaskJob extends Omit<IMetaPollingPlaceTaskJobM
 	meta_polling_place: IMetaPollingPlace;
 	nearby_meta_polling_places: IMetaPollingPlaceNearbyToTask[];
 	remarks: IMetaPollingPlaceRemark[];
+	// Returned by the `next` endpoint only — present when navigating through a job queue
+	tasks_remaining?: number;
 }

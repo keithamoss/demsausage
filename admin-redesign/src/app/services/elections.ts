@@ -1,4 +1,5 @@
 import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
+import type { ILoaderJobResponse } from '../../features/elections/loaderTypes';
 import type { eJurisdiction } from '../../features/icons/jurisdictionHelpers';
 import { api } from './api';
 import type { ElectionPendingStallsGamifiedUserStats } from './stalls';
@@ -139,14 +140,7 @@ export const electionsApi = api.injectEndpoints({
 			{
 				status: 'queued' | 'started' | 'finished' | 'failed' | 'stopped' | 'canceled' | 'cancelled';
 				stages_log: string[] | null;
-				response: {
-					message: string;
-					logs: {
-						errors: string[];
-						warnings: string[];
-						info: string[];
-					};
-				} | null;
+				response: ILoaderJobResponse | null;
 			},
 			{ electionId: number; jobId: string }
 		>({

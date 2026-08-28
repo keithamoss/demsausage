@@ -1,5 +1,9 @@
 SHELL=/bin/bash
 BASH_ENV=/app/demsausage/app/sausage/cron/demsausage.cron.env
-0 12 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
+
+# Daily cron job at midnight (00:00 UTC)
+# - Sends monthly reminder heartbeat email
+# - Checks for pending stalls and sends reminder emails if any exist
 0 0 * * * /app/demsausage/app/sausage/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
+
 # Do not remove this new line, cron needs it

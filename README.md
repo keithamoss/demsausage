@@ -232,9 +232,14 @@ When the EC2 we're currently running the database in reboots, it's public IP and
 
 We then need to change it in a whole bunch of places.
 
-### Updating SSH
+### Updating SSH (Partial replacement: New model using 'demsausage-prod.db.services.keithmoss.me')
 
-1. Update `~/.ssh/known_hosts` to point to the Public IPv4 DNS name
+1. Update CloudFlare's DNS record for `demsausage-prod.db.services.keithmoss.me` to point to the Public IPv4 address
+2. Update `~/.ssh/do_aliases` to point to the Public IPv4 DNS name
+
+### Updating SSH (Full replacement: Old model)
+
+1. Update `~/.ssh/do_aliases` to point to the Public IPv4 DNS name
 
 ### Updating Postico
 

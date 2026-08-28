@@ -1,0 +1,37 @@
+
+--- Human-Readable Report ---
+PPId Bracknell (Bracknell War Memorial Hall): Mismatch ->
+Premise_Address_Line_1: 'Cnr Louisa and Amelia Sts' != 'Cnr Louisa and Amelia St'
+
+PPId Currie (Currie Town Hall): Mismatch ->
+Premise_Address_Line_1: 'Cnr Meech and George Sts' != 'Cnr Meech and George St'
+
+PPId Glenorchy (Glenorchy Primary School): Mismatch ->
+Access_To_Location: 'Access via Hull Street' != 'Access via Hull St'
+
+PPId Magra (Magra CWA Building): Mismatch ->
+Access_To_Location: 'Cnr of Back River and Saddle Roads' != 'Cnr of Back River and Saddle Rd'
+
+PPId Mount Stuart (Mt Stuart Primary School): Mismatch ->
+Premise_Name: 'Mt Stuart Primary School' != 'Mount Stuart Primary School'
+
+PPId Mountain River (Grove Fire Station): Mismatch ->
+Premise_Address_Line_1: '41 Crabtree Red' != '41 Crabtree Rd'
+Premise_Latitude: '-42.97612805' != '-42.976128'
+
+PPId Port Sorell (Port Sorell Memorial Hall): Mismatch ->
+Premise_Address_Line_1: 'Cnr Darling and Meredith Sts' != 'Cnr Darling and Meredith St'
+
+PPId Prospect (St Patricks College): Mismatch ->
+Premise_Name: 'St Patricks College' != 'St Patrick's College'
+
+PPId Seven Mile Beach (Club Wyndham Seven Mile Beach): Mismatch ->
+Premise_Name: 'Club Wyndham Seven Mile Beach' != 'Club Wyndham'
+
+PPId West Hobart (St Peter's Hall): Mismatch ->
+Premise_Address_Line_1: 'Cnr Brisbane and Harrington Sts' != 'Cnr Brisbane and Harrington St'
+Location_Within_Premise: 'St Marys College' != 'St Mary's College'
+
+PPId Youngtown (Youngtown Primary School): Mismatch ->
+Premise_Address_Line_1: 'Cnr Victoria & Napier Sts' != 'Cnr Victoria & Napier St'
+

@@ -1,8 +1,8 @@
 import {
 	Check,
-	CheckCircle,
 	Close,
 	Error as ErrorIcon,
+	HourglassEmpty,
 	InfoOutlined,
 	InsertDriveFile,
 	Numbers,
@@ -19,7 +19,6 @@ import {
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	ListSubheader,
 	Paper,
 	TextField,
 	Toolbar,
@@ -33,6 +32,7 @@ import {
 	useLoadPollingPlaceFileMutation,
 } from '../../app/services/elections';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import LoaderReport, { STAGE_LABELS } from './ElectionLoaderReport';
 
 interface Props {
 	election: Election;
@@ -169,111 +169,78 @@ export default function ElectionLoadPollingPlaces(props: Props) {
 				)}
 
 				{jobId !== undefined && (
-					<List>
-						<ListItem>
-							<ListItemIcon>
-								<Numbers />
-							</ListItemIcon>
-
-							<ListItemText primary={`Job ID: ${jobId}`} />
-						</ListItem>
-
-						{isGetJobInfoError === true && (
+					<React.Fragment>
+						<List>
 							<ListItem>
 								<ListItemIcon>
-									<ErrorIcon color="error" />
+									<Numbers />
 								</ListItemIcon>
 
-								<ListItemText primary="There was a problem fetching information about the loader job." />
+								<ListItemText primary={`Job ID: ${jobId}`} />
 							</ListItem>
-						)}
 
-						{isGetJobInfoSuccessful === true && jobInfo !== undefined && (
-							<React.Fragment>
+							{isGetJobInfoError === true && (
 								<ListItem>
 									<ListItemIcon>
-										<InfoOutlined />
+										<ErrorIcon color="error" />
 									</ListItemIcon>
 
-									<ListItemText primary={`Job status: ${jobInfo.status}`} sx={{ textTransform: 'capitalize' }} />
+									<ListItemText primary="There was a problem fetching information about the loader job." />
 								</ListItem>
+							)}
 
-								{jobInfo.stages_log !== null &&
-									jobInfo.stages_log.length > 0 &&
-									jobInfo.stages_log.map((stageName: string) => (
-										<ListItem key={stageName}>
+							{isGetJobInfoSuccessful === true && jobInfo !== undefined && (
+								<React.Fragment>
+									{/* Job status chip */}
+									<ListItem>
+										<ListItemIcon>
+											{['finished', 'failed', 'stopped', 'canceled', 'cancelled'].includes(jobInfo.status) ? (
+												<InfoOutlined />
+											) : (
+												<HourglassEmpty />
+											)}
+										</ListItemIcon>
+
+										<ListItemText primary={`Job status: ${jobInfo.status}`} sx={{ textTransform: 'capitalize' }} />
+									</ListItem>
+
+									{/* Live stage ticker — shown while the job is running */}
+									{jobInfo.response === null &&
+										jobInfo.stages_log !== null &&
+										jobInfo.stages_log.length > 0 &&
+										jobInfo.stages_log.map((stageName: string) => (
+											<ListItem key={stageName}>
+												<ListItemIcon>
+													<Check color="success" />
+												</ListItemIcon>
+
+												<ListItemText
+													primary={STAGE_LABELS[stageName] ?? stageName.replaceAll('_', ' ')}
+													sx={{ textTransform: 'capitalize' }}
+												/>
+											</ListItem>
+										))}
+
+									{/* Failed job (unhandled exception in the worker) */}
+									{jobInfo.status === 'failed' && (
+										<ListItem>
 											<ListItemIcon>
-												<Check />
+												<ErrorIcon color="error" />
 											</ListItemIcon>
 
-											<ListItemText primary={stageName.replaceAll('_', ' ')} sx={{ textTransform: 'capitalize' }} />
+											<ListItemText primary="The loader job failed with an internal error. Check the worker logs for details." />
 										</ListItem>
-									))}
+									)}
+								</React.Fragment>
+							)}
+						</List>
 
-								{jobInfo.response !== null && jobInfo.response.logs.errors.length > 0 && (
-									<ListItem>
-										<ListItemIcon>
-											<ErrorIcon color="error" />
-										</ListItemIcon>
-
-										<ListItemText primary="There was a problem loading the polling places. Please review the logs below for further information." />
-									</ListItem>
-								)}
-
-								{jobInfo.response !== null && jobInfo.response.logs.errors.length === 0 && (
-									<ListItem>
-										<ListItemIcon>
-											<CheckCircle color="success" />
-										</ListItemIcon>
-
-										<ListItemText primary="Polling places have been loaded successfully." />
-									</ListItem>
-								)}
-
-								{jobInfo.response !== null && jobInfo.response.logs.errors.length > 0 && (
-									<React.Fragment>
-										<ListSubheader sx={{ fontSize: 18, lineHeight: '28px', mt: 2, fontWeight: 500, color: 'black' }}>
-											Errors
-										</ListSubheader>
-
-										{jobInfo.response.logs.errors.map((message: string, index: number) => (
-											<ListItem key={`${index}.${message}`}>
-												<ListItemText primary={message} sx={{ pl: 2 }} />
-											</ListItem>
-										))}
-									</React.Fragment>
-								)}
-
-								{jobInfo.response !== null && jobInfo.response.logs.warnings.length > 0 && (
-									<React.Fragment>
-										<ListSubheader sx={{ fontSize: 18, lineHeight: '28px', mt: 2, fontWeight: 500, color: 'black' }}>
-											Warnings
-										</ListSubheader>
-
-										{jobInfo.response.logs.warnings.map((message: string, index: number) => (
-											<ListItem key={`${index}.${message}`}>
-												<ListItemText primary={message} sx={{ pl: 2 }} />
-											</ListItem>
-										))}
-									</React.Fragment>
-								)}
-
-								{jobInfo.response !== null && jobInfo.response.logs.info.length > 0 && (
-									<React.Fragment>
-										<ListSubheader sx={{ fontSize: 18, lineHeight: '28px', mt: 2, fontWeight: 500, color: 'black' }}>
-											Info
-										</ListSubheader>
-
-										{jobInfo.response.logs.info.map((message: string, index: number) => (
-											<ListItem key={`${index}.${message}`}>
-												<ListItemText primary={message} sx={{ pl: 2 }} />
-											</ListItem>
-										))}
-									</React.Fragment>
-								)}
-							</React.Fragment>
-						)}
-					</List>
+						{/* Structured report — rendered once the job finishes with a payload */}
+						{isGetJobInfoSuccessful === true &&
+							jobInfo !== undefined &&
+							jobInfo.response !== null &&
+							jobInfo.response.payload !== null && <LoaderReport payload={jobInfo.response.payload} />}
+					</React.Fragment>
 				)}
 			</Paper>
 		</DialogWithTransition>

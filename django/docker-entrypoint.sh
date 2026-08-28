@@ -79,6 +79,11 @@ if [ "$CMD" != "build" ]; then
 
   # Ensure we have a place to log to
   mkdir -p /app/logs/cron
+  mkdir -p /app/logs/gunicorn
+  mkdir -p /app/logs/django
+  mkdir -p /app/logs/rq_workers
+  mkdir -p /app/logs/supervisord
+  mkdir -p /app/logs/webdriver
 
   # Start crond service
   chmod 755 /app/demsausage/app/sausage/cron/cron.sh
@@ -89,6 +94,14 @@ fi
 if [ "$CMD" = "supervisord" ]; then
   waitfordb
 
+  # Ensure we have a place to log to
+  mkdir -p /app/logs/cron
+  mkdir -p /app/logs/gunicorn
+  mkdir -p /app/logs/django
+  mkdir -p /app/logs/rq_workers
+  mkdir -p /app/logs/supervisord
+  mkdir -p /app/logs/webdriver
+
   django-admin migrate
 
   /usr/bin/supervisord -c /app/supervisord.conf
@@ -97,6 +110,9 @@ fi
 
 # Build entrypoint (development)
 if [ "$CMD" = "build" ]; then
+  # Ensure logs directory exists for Django logging configuration
+  mkdir -p /app/logs/django
+  
   rm -rf /app/static
   mkdir -p /app/static
   

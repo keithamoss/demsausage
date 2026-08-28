@@ -1,0 +1,6 @@
+
+=== Diff Report ===
+file1: data/20260314_132855 polling places.csv
+file2: data/20260319_192930 polling places.csv
+
+No differences found.

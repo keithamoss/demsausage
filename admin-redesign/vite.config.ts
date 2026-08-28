@@ -11,6 +11,42 @@ export default defineConfig(({ command, mode }) => {
 	// Load env file based on `mode` in the current working directory.
 	// Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
 	const env = loadEnv(mode, process.cwd(), '');
+	const isTest = mode === 'test' || process.env.VITEST === 'true';
+	const shouldEnableSentry = command === 'build' && !isTest;
+
+	const plugins = [
+		react(),
+		svgr({
+			svgrOptions: {
+				ref: true,
+			},
+		}),
+		viteTsconfigPaths(),
+		checker({
+			typescript: true,
+		}),
+	];
+
+	if (shouldEnableSentry) {
+		plugins.push(
+			sentryVitePlugin({
+				org: env.VITE_SENTRY_ORGANISATION_NAME,
+				project: env.VITE_SENTRY_PROJECT_NAME,
+
+				// Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+				// and need `project:releases` and `org:read` scopes
+				authToken: env.VITE_SENTRY_AUTH_TOKEN,
+
+				sourcemaps: {
+					// Specify the directory containing build artifacts
+					assets: './**',
+					// Don't upload the source maps of dependencies
+					ignore: ['./node_modules/**'],
+				},
+				telemetry: false,
+			}),
+		);
+	}
 
 	return {
 		server: {
@@ -30,34 +66,7 @@ export default defineConfig(({ command, mode }) => {
 				},
 			},
 		},
-		plugins: [
-			react(),
-			svgr({
-				svgrOptions: {
-					ref: true,
-				},
-			}),
-			viteTsconfigPaths(),
-			checker({
-				typescript: true,
-			}),
-			// Put the Sentry vite plugin after all other plugins
-			sentryVitePlugin({
-				org: env.VITE_SENTRY_ORGANISATION_NAME,
-				project: env.VITE_SENTRY_PROJECT_NAME,
-
-				// Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-				// and need `project:releases` and `org:read` scopes
-				authToken: env.VITE_SENTRY_AUTH_TOKEN,
-
-				sourcemaps: {
-					// Specify the directory containing build artifacts
-					assets: './**',
-					// Don't upload the source maps of dependencies
-					ignore: ['./node_modules/**'],
-				},
-			}),
-		],
+		plugins,
 		// Resolve the randomly occuring error with "styled_default is not a function" from Popper.js
 		// https://github.com/mui/material-ui/issues/36515
 		// Solution found in:
@@ -74,6 +83,11 @@ export default defineConfig(({ command, mode }) => {
 				// '@emotion/react',
 				// '@emotion/styled',
 			],
+		},
+		test: {
+			environment: 'jsdom',
+			globals: true,
+			setupFiles: ['./src/test/setup.ts'],
 		},
 	};
 });

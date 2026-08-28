@@ -1,12 +1,28 @@
-import { Check, ExpandLess, ExpandMore, GppGood, PlayArrow, RestartAlt, Troubleshoot } from '@mui/icons-material';
 import {
+	CallMerge,
+	Check,
+	ExpandLess,
+	ExpandMore,
+	GppGood,
+	PlayArrow,
+	RestartAlt,
+	Troubleshoot,
+} from '@mui/icons-material';
+import {
+	Alert,
 	Avatar,
+	Box,
 	Button,
 	Card,
 	CardActions,
 	CardContent,
 	CardHeader,
 	Collapse,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Divider,
 	IconButton,
 	List,
 	Stack,
@@ -36,10 +52,21 @@ interface Props {
 	jobName: string;
 	onActionCompleted: () => void;
 	cardSxProps: SxProps;
+	/**
+	 * Stable job name for REVIEW_DRAFT tasks created by splits in this review
+	 * session.  When provided, all splits share this job name in the task
+	 * browser.  If omitted, the backend generates a unique fallback per split.
+	 */
+	splitJobName?: string;
+	/**
+	 * When provided, a "Complete now?" prompt appears after "Looks good!" succeeds.
+	 * Should be wired to the parent's completion handler.
+	 */
+	onClickCompleteNow?: () => void;
 }
 
 function MetaPollingPlacePollingPlacesReviewList(props: Props) {
-	const { metaPollingPlaceTaskJob, jobName, onActionCompleted, cardSxProps } = props;
+	const { metaPollingPlaceTaskJob, jobName, onActionCompleted, cardSxProps, splitJobName, onClickCompleteNow } = props;
 
 	const notifications = useNotifications();
 
@@ -67,6 +94,34 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 		[metaPollingPlaceTaskJob.meta_polling_place, metaPollingPlaceTaskJob.nearby_meta_polling_places],
 	);
 
+	const sortedNearbyMPPs = useMemo(
+		() =>
+			[...metaPollingPlaceTaskJob.nearby_meta_polling_places].sort(
+				(a, b) => a.distance_from_task_mpp_metres - b.distance_from_task_mpp_metres || a.id - b.id,
+			),
+		[metaPollingPlaceTaskJob.nearby_meta_polling_places],
+	);
+
+	const duplicateNames = useMemo(() => {
+		const counts = new Map<string, number>();
+		for (const mpp of [
+			metaPollingPlaceTaskJob.meta_polling_place,
+			...metaPollingPlaceTaskJob.nearby_meta_polling_places,
+		]) {
+			const key = mpp.premises.trim().toLowerCase();
+			counts.set(key, (counts.get(key) ?? 0) + 1);
+		}
+		return new Set([...counts.entries()].filter(([, n]) => n > 1).map(([k]) => k));
+	}, [metaPollingPlaceTaskJob.meta_polling_place, metaPollingPlaceTaskJob.nearby_meta_polling_places]);
+
+	const HIGH_AMBIGUITY_DISTANCE_METRES = 250;
+	const hasHighAmbiguity = useMemo(() => {
+		const withinThreshold = metaPollingPlaceTaskJob.nearby_meta_polling_places.filter(
+			(mpp) => mpp.distance_from_task_mpp_metres <= HIGH_AMBIGUITY_DISTANCE_METRES,
+		);
+		return withinThreshold.some((mpp) => duplicateNames.has(mpp.premises.trim().toLowerCase()));
+	}, [metaPollingPlaceTaskJob.nearby_meta_polling_places, duplicateNames]);
+
 	const [pollingPlacesToReview, setPollingPlacesToReview] = React.useState<
 		{ pollingPlace: IPollingPlaceAttachedToMetaPollingPlace; metaPollingPlace: IMetaPollingPlace }[] | undefined
 	>(undefined);
@@ -76,6 +131,45 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	const [movesAndSplits, setMovesAndSplits] = React.useState<
 		{ moves: { pollingPlaceId: number; metaPollingPlaceId: number }[]; splits: number[] } | undefined
 	>(undefined);
+
+	// ######################
+	// Undo Stack
+	// ######################
+	const [undoStack, setUndoStack] = React.useState<
+		{
+			item: { pollingPlace: IPollingPlaceAttachedToMetaPollingPlace; metaPollingPlace: IMetaPollingPlace };
+			action: 'keep' | 'move' | 'split';
+			moveTargetId?: number;
+		}[]
+	>([]);
+
+	const onUndoInDialog = useCallback(() => {
+		if (undoStack.length === 0 || !Array.isArray(pollingPlacesToReview)) return;
+
+		const last = undoStack[undoStack.length - 1];
+
+		setPollingPlacesToReview([last.item, ...pollingPlacesToReview]);
+
+		if (movesAndSplits !== undefined) {
+			if (last.action === 'move' && last.moveTargetId !== undefined) {
+				setMovesAndSplits({
+					...movesAndSplits,
+					moves: movesAndSplits.moves.filter((m) => m.pollingPlaceId !== last.item.pollingPlace.id),
+				});
+			} else if (last.action === 'split') {
+				setMovesAndSplits({
+					...movesAndSplits,
+					splits: movesAndSplits.splits.filter((id) => id !== last.item.pollingPlace.id),
+				});
+			}
+		}
+
+		setUndoStack((prev) => prev.slice(0, -1));
+		setIsReviewDialogOpen(true);
+	}, [undoStack, pollingPlacesToReview, movesAndSplits]);
+	// ######################
+	// Undo Stack (End)
+	// ######################
 
 	const onCloseReviewDialog = useCallback(() => setIsReviewDialogOpen(false), []);
 
@@ -91,15 +185,19 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	// ######################
 	// Review Choices
 	// ######################
-	const removeFirstPollingPlaceFromReviewList = useCallback(() => {
-		if (Array.isArray(pollingPlacesToReview)) {
-			const [, ...rest] = pollingPlacesToReview;
-			setPollingPlacesToReview(rest);
-		}
-	}, [pollingPlacesToReview]);
+	const removeFirstPollingPlaceFromReviewList = useCallback(
+		(action: 'keep' | 'move' | 'split', moveTargetId?: number) => {
+			if (Array.isArray(pollingPlacesToReview) && pollingPlacesToReview.length > 0) {
+				const [first, ...rest] = pollingPlacesToReview;
+				setUndoStack((prev) => [...prev, { item: first, action, moveTargetId }]);
+				setPollingPlacesToReview(rest);
+			}
+		},
+		[pollingPlacesToReview],
+	);
 
 	const onKeepPollingPlace = (pollingPlaceId: number) => () => {
-		removeFirstPollingPlaceFromReviewList();
+		removeFirstPollingPlaceFromReviewList('keep');
 	};
 
 	const onMovePollingPlace = (pollingPlaceId: number, metaPollingPlaceId: number) => () => {
@@ -117,7 +215,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 			setMovesAndSplits(localMovesAndSplits);
 		}
 
-		removeFirstPollingPlaceFromReviewList();
+		removeFirstPollingPlaceFromReviewList('move', metaPollingPlaceId);
 	};
 
 	const onSplitPollingPlace = (pollingPlaceId: number) => () => {
@@ -129,7 +227,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 			setMovesAndSplits(localMovesAndSplits);
 		}
 
-		removeFirstPollingPlaceFromReviewList();
+		removeFirstPollingPlaceFromReviewList('split');
 	};
 	// ######################
 	// Review Choices (End)
@@ -140,6 +238,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	// ######################
 	const onClickBeginReview = () => {
 		setIsReviewDialogOpen(true);
+		setUndoStack([]);
 
 		setMovesAndSplits({
 			moves: [],
@@ -181,7 +280,7 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	const onClickConfirmReview = async () => {
 		if (Array.isArray(pollingPlacesToReview) && pollingPlacesToReview.length === 0 && movesAndSplits !== undefined) {
 			try {
-				await rearrangePollingPlaces(movesAndSplits).unwrap();
+				await rearrangePollingPlaces({ ...movesAndSplits, splitJobName }).unwrap();
 
 				notifications.show('Polling places rearranged successfully', {
 					severity: 'success',
@@ -217,6 +316,10 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 
 	const onClickLooksGood = useCallback(async () => {
 		try {
+			// Submit an empty rearrangement first so any splits generated by this
+			// session (splitJobName) are sent to the backend.  For "Looks good!"
+			// there are no moves or splits, but the call is still required to keep
+			// the flow consistent.
 			// Only confirm the primary MPP is good because we need to do the review from the PERSPECTIVE of each individual MPP to ensure that there aren't any other MPPs near them that need polling places moved into them.
 			await createCompletedTask({
 				meta_polling_place: metaPollingPlaceTaskJob.meta_polling_place.id,
@@ -243,6 +346,48 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 	// Looks Good! (End)
 	// ######################
 
+	// ######################
+	// Merge All
+	// ######################
+	const [isMergeAllConfirmOpen, setIsMergeAllConfirmOpen] = React.useState(false);
+
+	const onClickMergeAll = async () => {
+		setIsMergeAllConfirmOpen(false);
+
+		const moves = sortedNearbyMPPs.flatMap((mpp) =>
+			mpp.polling_places.map((pp) => ({
+				pollingPlaceId: pp.id,
+				metaPollingPlaceId: metaPollingPlaceTaskJob.meta_polling_place.id,
+			})),
+		);
+
+		try {
+			await rearrangePollingPlaces({ moves, splits: [], splitJobName }).unwrap();
+
+			notifications.show('Polling places merged successfully', {
+				severity: 'success',
+				autoHideDuration: 3000,
+			});
+
+			await createCompletedTask({
+				meta_polling_place: metaPollingPlaceTaskJob.meta_polling_place.id,
+				job_name: `From ${jobName}`,
+				category: IMetaPollingPlaceTaskCategory.REVIEW,
+				type: IMetaPollingPlaceTaskType.REVIEW_PP,
+			}).unwrap();
+
+			onActionCompleted();
+		} catch (err) {
+			notifications.show(`Merge failed: ${JSON.stringify(err)}`, {
+				severity: 'error',
+				autoHideDuration: 6000,
+			});
+		}
+	};
+	// ######################
+	// Merge All (End)
+	// ######################
+
 	return (
 		<React.Fragment>
 			<Card variant="outlined" sx={cardSxProps}>
@@ -259,8 +404,22 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 					}
 					onClick={onClickShowLinkedPollingPlaces}
 					title="Linked polling places"
-					// subheader="September 14, 2016"
+					subheader={
+						isLooksGoodSuccessful
+							? 'Reviewed ✓'
+							: pollingPlacesToReview === undefined
+								? 'Review not started'
+								: pollingPlacesToReview.length === 0
+									? 'All decisions made — confirm or restart'
+									: `In progress (${countOfPollingPlacesToReview - pollingPlacesToReview.length} of ${countOfPollingPlacesToReview} reviewed)`
+					}
 				/>
+
+				{hasHighAmbiguity === true && (
+					<Alert severity="warning" sx={{ borderRadius: 0, borderLeft: 0, borderRight: 0 }}>
+						One or more nearby MPPs share the same name as this MPP — check carefully before moving or splitting.
+					</Alert>
+				)}
 
 				<Collapse in={showLinkedPollingPlaces} timeout="auto" unmountOnExit>
 					<CardContent sx={{ pt: 0 }}>
@@ -273,23 +432,30 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 								/>
 							))}
 
-							{metaPollingPlaceTaskJob.nearby_meta_polling_places.length > 0 && (
+							{sortedNearbyMPPs.length > 0 && (
 								<React.Fragment>
-									<Typography sx={{ mt: 1, mb: 1 }} variant="h6" component="div">
+									<Divider sx={{ mt: 2, mb: 2 }} />
+									<Typography sx={{ mb: 1 }} variant="h6" component="div">
 										Other nearby meta polling places
 									</Typography>
 
-									{metaPollingPlaceTaskJob.nearby_meta_polling_places.map((mpp) => (
+									{sortedNearbyMPPs.map((mpp) => (
 										<React.Fragment key={mpp.id}>
-											<MetaPollingPlaceSummaryCard metaPollingPlace={mpp} />
+											<MetaPollingPlaceSummaryCard
+												metaPollingPlace={mpp}
+												showDuplicateNameWarning={duplicateNames.has(mpp.premises.trim().toLowerCase())}
+											/>
 
-											{mpp.polling_places.map((pp) => (
-												<MetaPollingPlacePollingPlacesReviewListItem
-													key={pp.id}
-													pollingPlace={pp}
-													metaPollingPlace={mpp}
-												/>
-											))}
+											<Box sx={{ pl: 2 }}>
+												{mpp.polling_places.map((pp) => (
+													<MetaPollingPlacePollingPlacesReviewListItem
+														key={pp.id}
+														pollingPlace={pp}
+														metaPollingPlace={mpp}
+														showState={true}
+													/>
+												))}
+											</Box>
 										</React.Fragment>
 									))}
 								</React.Fragment>
@@ -305,7 +471,19 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 									<span>Begin Review</span>
 								</Button>
 							)}
-
+							{pollingPlacesToReview === undefined &&
+								isLooksGoodSuccessful === false &&
+								sortedNearbyMPPs.length > 0 && (
+									<Button
+										onClick={() => setIsMergeAllConfirmOpen(true)}
+										variant="outlined"
+										startIcon={<CallMerge />}
+										color="warning"
+									>
+										{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+										<span>Merge all into this MPP</span>
+									</Button>
+								)}
 							{Array.isArray(pollingPlacesToReview) &&
 								pollingPlacesToReview.length > 0 &&
 								isLooksGoodSuccessful === false && (
@@ -314,7 +492,6 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 										<span>Resume Review</span>
 									</Button>
 								)}
-
 							{Array.isArray(pollingPlacesToReview) &&
 								pollingPlacesToReview.length < countOfPollingPlacesToReview &&
 								isLooksGoodSuccessful === false && (
@@ -328,7 +505,6 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 										<span>Restart Review</span>
 									</Button>
 								)}
-
 							{Array.isArray(pollingPlacesToReview) &&
 								pollingPlacesToReview.length === 0 &&
 								isLooksGoodSuccessful === false && (
@@ -344,7 +520,6 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 										<span>Confirm Review</span>
 									</Button>
 								)}
-
 							<Button
 								loading={isLooksGoodLoading === true}
 								loadingPosition="end"
@@ -356,6 +531,18 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
 								<span>Looks good!</span>
 							</Button>
+							{isLooksGoodSuccessful === true && onClickCompleteNow !== undefined && (
+								<Alert
+									severity="success"
+									action={
+										<Button size="small" color="success" onClick={onClickCompleteNow}>
+											Complete now
+										</Button>
+									}
+								>
+									Marked as reviewed.
+								</Alert>
+							)}{' '}
 						</Stack>
 					</CardActions>
 				</Collapse>
@@ -372,8 +559,29 @@ function MetaPollingPlacePollingPlacesReviewList(props: Props) {
 					pagePosition={countOfPollingPlacesToReview - pollingPlacesToReview.length + 1}
 					totalPages={countOfPollingPlacesToReview}
 					onClose={onCloseReviewDialog}
+					canUndo={undoStack.length > 0}
+					onUndo={onUndoInDialog}
 				/>
 			)}
+
+			<Dialog open={isMergeAllConfirmOpen} onClose={() => setIsMergeAllConfirmOpen(false)}>
+				<DialogTitle>Merge all polling places?</DialogTitle>
+				<DialogContent>
+					<Typography variant="body2">
+						This will move all polling places from the {sortedNearbyMPPs.length} nearby MPP
+						{sortedNearbyMPPs.length !== 1 ? 's' : ''} into this MPP. Their linked polling places will be reassigned
+						here.
+					</Typography>
+				</DialogContent>
+				<DialogActions>
+					<Button size="small" onClick={() => setIsMergeAllConfirmOpen(false)}>
+						Cancel
+					</Button>
+					<Button size="small" onClick={onClickMergeAll} color="warning">
+						<span>Merge all</span>
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</React.Fragment>
 	);
 }

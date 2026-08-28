@@ -1,4 +1,4 @@
-import { AssignmentLate, AssignmentReturn, AssignmentTurnedIn } from '@mui/icons-material';
+import { ArrowBack, AssignmentLate, AssignmentReturn, AssignmentTurnedIn } from '@mui/icons-material';
 import {
 	AppBar,
 	Backdrop,
@@ -14,7 +14,10 @@ import {
 import { useNotifications } from '@toolpad/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { navigateToMetaPollingPlaceNextTaskJobByName } from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
+import {
+	navigateToMetaPollingPlaceNextTaskJobByName,
+	navigateToMetaPollingPlaceTasksRoot,
+} from '../../../app/routing/navigationHelpers/navigationHelpersMetaPollingPlaceTasks';
 import {
 	useCloseTaskMutation,
 	useCompleteTaskMutation,
@@ -29,16 +32,41 @@ interface Props {
 	isCloseAllowed: boolean;
 	isDeferAllowed: boolean;
 	isCompleteAllowed: boolean;
+	/**
+	 * When true, clicking "Complete" calls `onClickComplete` (e.g. to open a
+	 * confirmation dialog) but does NOT internally call `completeTask`.  The
+	 * caller is responsible for calling the complete mutation and navigating.
+	 * Default: false (built-in complete behaviour).
+	 */
+	completeIsHandledExternally?: boolean;
+	/** Optional extra buttons rendered before Close in the action toolbar. */
+	additionalActions?: React.ReactNode;
 }
 
 function MetaPollingPlaceTaskActionBar(props: Props) {
-	const { metaPollingPlaceTaskJob, onClickComplete, isCloseAllowed, isDeferAllowed, isCompleteAllowed } = props;
+	const {
+		metaPollingPlaceTaskJob,
+		onClickComplete,
+		isCloseAllowed,
+		isDeferAllowed,
+		isCompleteAllowed,
+		completeIsHandledExternally = false,
+		additionalActions,
+	} = props;
 
 	const navigate = useNavigate();
 
 	const notifications = useNotifications();
 
 	const [isLoadingScreenShown, setIsLoadingScreenShown] = useState(false);
+
+	// Extract the task MPP's coordinates so the next task endpoint can return a
+	// geographically nearby task rather than a random one.
+	const [mppLon, mppLat] = metaPollingPlaceTaskJob.meta_polling_place.geom_location.coordinates;
+
+	const onBackToTaskList = useCallback(() => {
+		navigateToMetaPollingPlaceTasksRoot(navigate);
+	}, [navigate]);
 
 	// ######################
 	// Close Task
@@ -81,9 +109,12 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				autoHideDuration: 3000,
 			});
 
-			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
+			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name, {
+				lat: mppLat,
+				lon: mppLon,
+			});
 		}
-	}, [isCloseTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+	}, [isCloseTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name, mppLat, mppLon]);
 
 	useEffect(() => {
 		if (isCloseTaskErrored === true) {
@@ -138,9 +169,12 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				autoHideDuration: 3000,
 			});
 
-			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
+			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name, {
+				lat: mppLat,
+				lon: mppLon,
+			});
 		}
-	}, [isDeferTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+	}, [isDeferTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name, mppLat, mppLon]);
 
 	useEffect(() => {
 		if (isDeferTaskErrored === true) {
@@ -174,6 +208,13 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 			onClickComplete();
 		}
 
+		// When complete logic is handled externally (e.g. REVIEW_DRAFT confirmation
+		// dialog), don't fire the internal completeTask mutation here.  The caller
+		// is responsible for completing the task and navigating away.
+		if (completeIsHandledExternally) {
+			return;
+		}
+
 		completeTask(metaPollingPlaceTaskJob.id);
 	};
 
@@ -186,18 +227,45 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				autoHideDuration: 3000,
 			});
 
-			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name);
+			navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name, {
+				lat: mppLat,
+				lon: mppLon,
+			});
 		}
-	}, [isCompleteTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name]);
+	}, [isCompleteTaskSuccessful, notifications.show, navigate, metaPollingPlaceTaskJob.job_name, mppLat, mppLon]);
 
 	useEffect(() => {
 		if (isCompleteTaskErrored === true) {
-			notifications.show(`Error completing task: ${JSON.stringify(completeTaskError)}`, {
-				severity: 'error',
-				autoHideDuration: 6000,
-			});
+			setIsLoadingScreenShown(false);
+
+			// FR-14: Detect 'task already completed in another session' and give the
+			// reviewer an actionable message rather than a generic one.
+			const errorBody = JSON.stringify(completeTaskError);
+			if (errorBody.includes("isn't in progress")) {
+				notifications.show('This task was already completed in another session. Move to the next task.', {
+					severity: 'warning',
+					autoHideDuration: 8000,
+				});
+				navigateToMetaPollingPlaceNextTaskJobByName(navigate, metaPollingPlaceTaskJob.job_name, {
+					lat: mppLat,
+					lon: mppLon,
+				});
+			} else {
+				notifications.show(`Error completing task: ${JSON.stringify(completeTaskError)}`, {
+					severity: 'error',
+					autoHideDuration: 6000,
+				});
+			}
 		}
-	}, [isCompleteTaskErrored, notifications.show, completeTaskError]);
+	}, [
+		isCompleteTaskErrored,
+		notifications.show,
+		completeTaskError,
+		navigate,
+		metaPollingPlaceTaskJob.job_name,
+		mppLat,
+		mppLon,
+	]);
 	// ######################
 	// Complete Task (End)
 	// ######################
@@ -211,6 +279,17 @@ function MetaPollingPlaceTaskActionBar(props: Props) {
 				className="bottomAppBarPresent"
 			>
 				<Toolbar sx={{ justifyContent: 'flex-end' }}>
+					<Button
+						size="small"
+						color="secondary"
+						variant="outlined"
+						sx={{ mr: 1 }}
+						endIcon={<ArrowBack />}
+						onClick={onBackToTaskList}
+					>
+						<span>Task list</span>
+					</Button>
+					{additionalActions}
 					<Button
 						// loading={isDeleting}
 						loadingPosition="end"

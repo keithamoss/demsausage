@@ -206,7 +206,7 @@ def merge_and_sum_dicts(dict_list):
 
 
 def get_url_safe_election_name(name):
-    return urllib.parse.quote(re.sub("\s", "_", name).lower())
+    return urllib.parse.quote(re.sub(r"\s", "_", name).lower())
 
 
 def threaded(func):

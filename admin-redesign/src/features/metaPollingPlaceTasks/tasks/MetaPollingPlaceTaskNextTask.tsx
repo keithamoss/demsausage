@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, Button, LinearProgress, styled } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ErrorElement from '../../../ErrorElement';
 import {
 	navigateToMetaPollingPlaceTaskJobTask,
@@ -23,20 +23,35 @@ function MetaPollingPlaceTaskNextTask() {
 
 	const urlJobName = getStringParamOrUndefined(useParams(), 'job_name');
 
+	const [searchParams] = useSearchParams();
+	const latParam = searchParams.get('lat');
+	const lonParam = searchParams.get('lon');
+	const lat = latParam !== null ? Number(latParam) : undefined;
+	const lon = lonParam !== null ? Number(lonParam) : undefined;
+
+	const queryArg =
+		urlJobName !== undefined
+			? { job_name: urlJobName, ...(lat !== undefined && lon !== undefined ? { lat, lon } : {}) }
+			: skipToken;
+
 	const {
 		data: metaPollingPlaceTaskJob,
 		isLoading,
+		isFetching,
 		isSuccess,
 		isError,
-	} = useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery(urlJobName !== undefined ? urlJobName : skipToken);
+	} = useGetNextTaskFromMetaPollingPlaceTaskJobGroupQuery(queryArg, {
+		// Always fetch a fresh "next" task instead of immediately reusing cache.
+		refetchOnMountOrArgChange: true,
+	});
 
 	useEffect(() => {
-		if (isSuccess === true && metaPollingPlaceTaskJob !== null && urlJobName !== undefined) {
-			navigateToMetaPollingPlaceTaskJobTask(navigate, urlJobName, metaPollingPlaceTaskJob.id);
+		if (isSuccess === true && isFetching === false && metaPollingPlaceTaskJob !== null && urlJobName !== undefined) {
+			navigateToMetaPollingPlaceTaskJobTask(navigate, urlJobName, metaPollingPlaceTaskJob.id, true);
 		}
-	}, [isSuccess, navigate, metaPollingPlaceTaskJob, urlJobName]);
+	}, [isSuccess, isFetching, navigate, metaPollingPlaceTaskJob, urlJobName]);
 
-	if (isLoading === true) {
+	if (isLoading === true || isFetching === true) {
 		return <LinearProgress color="secondary" />;
 	}
 

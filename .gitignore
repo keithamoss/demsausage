@@ -1,7 +1,7 @@
 .DS_Store
 *.code-workspace
 /v3-test/*
-build/
+build/*.tgz
 secrets/
 keys/
 dev-certs/

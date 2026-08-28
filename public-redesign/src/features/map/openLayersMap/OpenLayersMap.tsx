@@ -22,7 +22,7 @@ import VectorSource from 'ol/source/Vector';
 import type { StyleFunction } from 'ol/style/Style';
 import * as React from 'react';
 import type { Election } from '../../../app/services/elections';
-import { getAPIBaseURL } from '../../../app/utils';
+import { getAPIBaseURL, getCartoAPIKey } from '../../../app/utils';
 import type { OLMapView } from '../../app/appSlice';
 import type { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
 import type { IMapPollingPlaceFeature, IMapPollingPlaceGeoJSONFeatureCollection } from '../mapHelpers';
@@ -442,9 +442,9 @@ class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
 			new TileLayer({
 				source: new OSM({
 					// https://carto.com/location-data-services/basemaps/
-					url: 'https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+					url: `https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${getCartoAPIKey()}`,
 					attributions: [
-						'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+						'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 					],
 				}),
 			}),

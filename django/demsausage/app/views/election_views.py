@@ -138,6 +138,7 @@ class ElectionsViewSet(viewsets.ModelViewSet):
             file=request.data["file"],
             dry_run=dry_run,
             config=config,
+            user_email=request.user.email,
         )
         return Response({"job_id": job.id if job is not None else None})
 
@@ -151,9 +152,10 @@ class ElectionsViewSet(viewsets.ModelViewSet):
 
             response = None
             if jobStatus == "finished":
+                results = job.meta.get("_polling_place_loading_results", None) or {}
                 response = {
                     "message": "Done",
-                    "logs": job.meta.get("_polling_place_loading_results", None),
+                    "payload": results.get("payload", None),
                 }
 
             return Response(

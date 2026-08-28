@@ -1,0 +1,24 @@
+
+=== Diff Report ===
+file1: data/20260307_150710 polling places.csv
+file2: data/20260314_132855 polling places.csv
+
+Summary: 3 change(s) found — 0 removed, 0 added, 3 modified
+
+Modified:
+────────────────────────────────────────────────────────────
+PPId 95 — White City Football Club
+  address_partial:
+    - 7 Minns Street
+    + 55 Minns Street
+
+PPId 146 — St Joseph's Parish School
+  address_partial:
+    - 1 Birkinshaw Ave
+    + 513 Magill Road
+
+PPId 305 — St Joseph's Parish School
+  address_partial:
+    - 1 Birkinshaw Ave
+    + 513 Magill Road
+

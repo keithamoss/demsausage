@@ -15,6 +15,7 @@ interface ImportMetaEnv {
 	readonly VITE_SENTRY_PROJECT_NAME: string;
 	readonly VITE_SENTRY_SITE_NAME: string;
 	readonly VITE_SENTRY_AUTH_TOKEN: string;
+	readonly VITE_CARTO_API_KEY: string;
 	readonly VITE_MAPBOX_API_KEY_DEV: string;
 	readonly VITE_MAPBOX_API_KEY_PROD: string;
 }

@@ -13,16 +13,27 @@ export const navigateToMetaPollingPlaceTasksManager = (navigate: NavigateFunctio
 	navigate('/tasks/manage/');
 };
 
-export const navigateToMetaPollingPlaceNextTaskJobByName = (navigate: NavigateFunction, jobName: string) => {
+export const navigateToMetaPollingPlaceNextTaskJobByName = (
+	navigate: NavigateFunction,
+	jobName: string,
+	coords?: { lat: number; lon: number },
+) => {
 	// We handle going to all of these routes:
 	// /tasks/:job_name/next/
+	// /tasks/:job_name/next/?lat=XX&lon=YY  (proximity-ordered)
 
-	navigate(`/tasks/${jobName}/next/`);
+	const search = coords !== undefined ? `?lat=${coords.lat}&lon=${coords.lon}` : '';
+	navigate(`/tasks/${jobName}/next/${search}`);
 };
 
-export const navigateToMetaPollingPlaceTaskJobTask = (navigate: NavigateFunction, jobName: string, taskId: number) => {
+export const navigateToMetaPollingPlaceTaskJobTask = (
+	navigate: NavigateFunction,
+	jobName: string,
+	taskId: number,
+	replace = false,
+) => {
 	// We handle going to all of these routes:
 	// /tasks/:job_name/:task_id/
 
-	navigate(`/tasks/${jobName}/${taskId}/`);
+	navigate(`/tasks/${jobName}/${taskId}/`, { replace });
 };

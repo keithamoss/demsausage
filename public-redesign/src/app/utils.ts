@@ -27,6 +27,10 @@ export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
 }
 
+export function getCartoAPIKey(): string {
+	return import.meta.env.VITE_CARTO_API_KEY;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-next-line
 export const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
