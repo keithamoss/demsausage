@@ -33,7 +33,6 @@ jobs:
 
       - name: Build - Prep
         run: |
-          mkdir ./build
           mkdir ./nginx-prod/build
 
       - name: Public Redesign Frontend - Build
@@ -67,7 +66,6 @@ jobs:
 
       - name: Build - Prep
         run: |
-          mkdir ./build
           mkdir ./nginx-prod/build
 
       - name: Admin Redesign Frontend - Build
@@ -101,7 +99,6 @@ jobs:
 
       - name: Build - Prep
         run: |
-          mkdir ./build
           mkdir ./nginx-prod/build
 
       - name: Django - Build
@@ -127,7 +124,6 @@ jobs:
 
       - name: Build - Prep
         run: |
-          mkdir ./build
           mkdir ./nginx-prod/build
 
       - name: Download artifacts for container building
