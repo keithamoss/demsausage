@@ -131,6 +131,9 @@ jobs:
         with:
           path: ./build/
 
+      - name: Start SSH debug session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Move artifacts
         run: |
           cp -r ./public-legacy/prod/ ./nginx-prod/build/public-legacy/
