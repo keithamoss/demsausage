@@ -131,15 +131,13 @@ jobs:
         with:
           path: ./build/
 
-      - name: Start SSH debug session
-        uses: owenthereal/action-upterm@v1
-        with:
-          wait-timeout-minutes: 15
+      # - name: Start SSH debug session
+      #   uses: owenthereal/action-upterm@v1
+      #   with:
+      #     wait-timeout-minutes: 15
 
       - name: Move artifacts
         run: |
-          cp -r ./public-legacy/prod/ ./nginx-prod/build/public-legacy/
-          cp -r ./admin-legacy/prod/ ./nginx-prod/build/admin-legacy/
           mv ./build/build-public-redesign/public-redesign.tgz ./nginx-prod/build/public-redesign.tgz
           mv ./build/build-admin-redesign/admin-redesign.tgz ./nginx-prod/build/admin-redesign.tgz
           mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
