@@ -1104,10 +1104,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^3.7.4":
-  version: 3.7.4
-  resolution: "@types/luxon@npm:3.7.4"
-  checksum: 10c0/f3cf9c0eccb81e8f0a3cf840927f2dac82fca31edc0888a99965ecd6ba4ba995ccdff34d6dd8e13aed9f57765defee5b3e41739f81a5c939ace6764156dff79a
+"@types/luxon@npm:^3.7.5":
+  version: 3.7.5
+  resolution: "@types/luxon@npm:3.7.5"
+  checksum: 10c0/7b851e94cd0d47784682dd3bc412960519d2c888bcca1408b6c8484742805637ed1a94797ce4e44fc925c8b20b52803035880d0122e3658c17f98838b387c46b
   languageName: node
   linkType: hard
 
@@ -1519,7 +1519,7 @@ __metadata:
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3"
     "@types/lodash-es": "npm:^4.17.9"
-    "@types/luxon": "npm:^3.7.4"
+    "@types/luxon": "npm:^3.7.5"
     "@types/material-ui": "npm:0.21.18"
     "@types/node": "npm:^26.3.0"
     "@types/prop-types": "npm:^15.7.15"
