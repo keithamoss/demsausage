@@ -23,7 +23,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-google-maps": "^9.4.5",
-    "react-is": "^19.2.8",
+    "react-is": "^19.3.0",
     "react-redux": "^9.3.0",
     "react-router": "^8.4.0",
     "react-router-redux": "^4.0.8",
