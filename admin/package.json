@@ -9,7 +9,7 @@
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
     "copy-to-clipboard": "^4.0.2",
-    "core-js": "^3.50.0",
+    "core-js": "^3.51.0",
     "deep-object-diff": "^1.1.9",
     "dot-prop-immutable": "^2.1.1",
     "js-cookie": "^3.0.8",
