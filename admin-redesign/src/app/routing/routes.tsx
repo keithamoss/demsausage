@@ -14,6 +14,7 @@ import MetaPollingPlaceTask from '../../features/metaPollingPlaceTasks/tasks/Met
 import MetaPollingPlaceTaskNextTask from '../../features/metaPollingPlaceTasks/tasks/MetaPollingPlaceTaskNextTask';
 import PendingStalls from '../../features/pendingStalls/list/PendingStalls';
 import PendingStallsPollingPlace from '../../features/pendingStalls/pollingplace/PendingStallsPollingPlace';
+import PendingUnofficialStalls from '../../features/pendingStalls/unofficial/PendingUnofficialStalls';
 import PollingPlaceChooser from '../../features/pollingPlaces/PollingPlaceChooser';
 import PollingPlaceEditor from '../../features/pollingPlaces/PollingPlaceEditor';
 import PollingPlaceNomsEditor from '../../features/pollingPlaces/PollingPlaceNomsEditor';
@@ -41,6 +42,13 @@ export const router = sentryCreateBrowserRouter(
 					element: <PendingStallsPollingPlace />,
 					loader: () => ({
 						name: 'Pending Submissions',
+					}),
+				},
+				{
+					path: '/pending_unofficial/',
+					element: <PendingUnofficialStalls />,
+					loader: () => ({
+						name: 'Pending Unofficial',
 					}),
 				},
 				{

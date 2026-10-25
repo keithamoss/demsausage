@@ -56,6 +56,7 @@ export interface ILoaderLogEntryGeocodeSkip extends ILogEntryBase {
 export interface ILoaderLogEntryStallNoMatch extends ILogEntryBase {
 	type: 'stall_no_match';
 	stall_id: number;
+	stall_name?: string;
 	location: IStallLocation;
 	nearby: IPollingPlaceRef[];
 }
@@ -63,6 +64,7 @@ export interface ILoaderLogEntryStallNoMatch extends ILogEntryBase {
 export interface ILoaderLogEntryStallMultiMatch extends ILogEntryBase {
 	type: 'stall_multi_match';
 	stall_id: number;
+	stall_name?: string;
 	location: IStallLocation;
 	candidates: IPollingPlaceRef[];
 }
@@ -70,6 +72,7 @@ export interface ILoaderLogEntryStallMultiMatch extends ILogEntryBase {
 export interface ILoaderLogEntryStallMatched extends ILogEntryBase {
 	type: 'stall_matched';
 	stall_id: number;
+	stall_name?: string;
 	distance_m: number;
 	user_submitted: IStallLocation;
 	official: { name: string; premises: string; address: string };
@@ -115,7 +118,7 @@ export interface ILoaderLogEntryFindHomeDivisionError extends ILogEntryBase {
 export interface ILoaderLogEntryNomsMergeReview extends ILogEntryBase {
 	type: 'noms_merge_review';
 	user_submitted: { name: string; address: string };
-	official: { name: string; address: string };
+	official: { name: string; premises?: string; address: string };
 }
 
 export interface ILoaderLogEntryMppNotFound extends ILogEntryBase {

@@ -19,6 +19,11 @@ from demsausage.app.views.pollingplace_views import (
     PollingPlacesSearchViewSet,
     PollingPlacesViewSet,
 )
+from demsausage.app.views.stall_unofficial_views import (
+    ApproveUnofficialStallView,
+    MatchUnofficialStallView,
+    PendingUnofficialStallsViewSet,
+)
 from demsausage.app.views.stall_views import PendingStallsViewSet, StallsViewSet
 from demsausage.app.views.user_views import (
     CurrentUserView,
@@ -101,6 +106,21 @@ urlpatterns = [
         r"^api/0.1/stalls/pending/$",
         PendingStallsViewSet.as_view(),
         name="api-stalls-pending",
+    ),
+    re_path(
+        r"^api/0.1/stalls/pending_unofficial/$",
+        PendingUnofficialStallsViewSet.as_view(),
+        name="api-stalls-pending-unofficial",
+    ),
+    re_path(
+        r"^api/0.1/stalls/(?P<pk>\d+)/approve_and_add/$",
+        ApproveUnofficialStallView.as_view(),
+        name="api-stalls-approve-and-add",
+    ),
+    re_path(
+        r"^api/0.1/stalls/(?P<pk>\d+)/match_to_polling_place/$",
+        MatchUnofficialStallView.as_view(),
+        name="api-stalls-match-to-polling-place",
     ),
     re_path(r"^api/0.1/", include(router.urls)),
     re_path(

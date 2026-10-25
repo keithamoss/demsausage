@@ -1455,6 +1455,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     "error",
                     "stall_no_match",
                     stall_id=stall.id,
+                    stall_name=stall.name,
                     location={
                         "name": stall.location_info["name"],
                         "address": stall.location_info["address"],
@@ -1477,6 +1478,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     "error",
                     "stall_multi_match",
                     stall_id=stall.id,
+                    stall_name=stall.name,
                     location={
                         "name": stall.location_info["name"],
                         "address": stall.location_info["address"],
@@ -1498,6 +1500,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                     "info",
                     "stall_matched",
                     stall_id=stall.id,
+                    stall_name=stall.name,
                     distance_m=round(official.distance.m),
                     user_submitted={
                         "name": stall.location_info["name"],
@@ -1601,6 +1604,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         )
         polling_places_to_update_active = []
         polling_places_to_update_draft = []
+        # Draft polling place id -> the old polling place whose noms it's receiving
+        noms_migrated_to = {}
 
         for polling_place in queryset:
             # start = timer()
@@ -1627,7 +1632,25 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         ),
                     )
 
+            elif matching_polling_places[0].id in noms_migrated_to:
+                # e.g. Two approved unofficial polling places that are duplicates of the same official polling place
+                other = noms_migrated_to[matching_polling_places[0].id]
+                self._log(
+                    "error",
+                    "text",
+                    message="'{}' ({}) and '{}' ({}) both match '{}' ({}) in the new data. Only one set of noms can be migrated, so merge them by hand first.".format(
+                        polling_place.name,
+                        polling_place.address,
+                        other.name,
+                        other.address,
+                        matching_polling_places[0].name,
+                        matching_polling_places[0].address,
+                    ),
+                )
+
             else:
+                noms_migrated_to[matching_polling_places[0].id] = polling_place
+
                 # Repoint polling place noms table
                 noms_id = polling_place.noms
 
@@ -1665,6 +1688,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         },
                         official={
                             "name": matching_polling_places[0].name,
+                            "premises": matching_polling_places[0].premises,
                             "address": matching_polling_places[0].address,
                         },
                         action="Please verify this merge is correct.",
@@ -2196,9 +2220,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         task_regenerate_cached_election_data.delay(election_id=self.election.id)
 
     def run(self):
-        self.is_reload = PollingPlaces.objects.filter(
-            election=self.election, status=PollingPlaceStatus.ACTIVE
-        ).exists()
+        # Unofficial polling places are ACTIVE before the first official load, so don't infer this from ACTIVE rows
+        self.is_reload = self.election.polling_places_loaded is True
 
         if self.can_loading_begin() is False:
             self._log(
@@ -2423,7 +2446,7 @@ class RollbackPollingPlaces(PollingPlacesIngestBase):
         # Update election if necessary
         if self.all_polling_places_are_unofficial() is True:
             self.election.polling_places_loaded = False
-            self.election.polling_places_loaded.save()
+            self.election.save()
 
     def run(self):
         if self.can_loading_begin() is False:

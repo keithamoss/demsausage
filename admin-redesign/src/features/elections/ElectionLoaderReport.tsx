@@ -179,7 +179,7 @@ function ComparisonCard({
 	userLabel: string;
 	user: { name: string; address: string };
 	officialLabel: string;
-	official: { name: string; address: string };
+	official: { name: string; premises?: string; address: string };
 }) {
 	return (
 		<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ mt: 0.5 }}>
@@ -217,6 +217,7 @@ function ComparisonCard({
 				<Typography variant="body2">
 					<strong>{official.name}</strong>
 				</Typography>
+				{official.premises && <Typography variant="body2">{official.premises}</Typography>}
 				<Typography variant="body2">{official.address}</Typography>
 			</Box>
 		</Stack>
@@ -292,12 +293,16 @@ function GeocodeSkipEntry({ entry }: { entry: ILoaderLogEntryGeocodeSkip }) {
 	);
 }
 
+// Tip-offs (and reports from older loads) have no stall name
+const getStallLabel = (entry: { stall_id: number; stall_name?: string }) =>
+	entry.stall_name ? `Stall #${entry.stall_id} (${entry.stall_name})` : `Stall #${entry.stall_id}`;
+
 function StallNoMatchEntry({ entry }: { entry: ILoaderLogEntryStallNoMatch }) {
 	return (
 		<Box>
 			<Typography variant="body2">
-				<strong>Stall #{entry.stall_id}:</strong> {entry.location.name}, {entry.location.address} (
-				{entry.location.state})
+				<strong>{getStallLabel(entry)}:</strong> {entry.location.name}, {entry.location.address} ({entry.location.state}
+				)
 			</Typography>
 			<PollingPlaceRefList places={entry.nearby} label="nearby polling places" />
 			{entry.action && <ActionCallout action={entry.action} />}
@@ -309,8 +314,8 @@ function StallMultiMatchEntry({ entry }: { entry: ILoaderLogEntryStallMultiMatch
 	return (
 		<Box>
 			<Typography variant="body2">
-				<strong>Stall #{entry.stall_id}:</strong> {entry.location.name}, {entry.location.address} (
-				{entry.location.state})
+				<strong>{getStallLabel(entry)}:</strong> {entry.location.name}, {entry.location.address} ({entry.location.state}
+				)
 			</Typography>
 			<PollingPlaceRefList places={entry.candidates} label="candidate polling places" />
 			{entry.action && <ActionCallout action={entry.action} />}
@@ -322,7 +327,7 @@ function StallMatchedEntry({ entry }: { entry: ILoaderLogEntryStallMatched }) {
 	return (
 		<Box>
 			<Typography variant="body2">
-				Stall #{entry.stall_id} matched at {Math.round(entry.distance_m)}m
+				{getStallLabel(entry)} matched at {Math.round(entry.distance_m)}m
 			</Typography>
 			<ComparisonCard
 				userLabel="User submitted"

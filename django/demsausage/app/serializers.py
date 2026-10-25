@@ -254,6 +254,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                             history_change_reason__in=[
                                 PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
                                 PollingPlaceNomsChangeReason.APPROVED_MANUAL,
+                                PollingPlaceNomsChangeReason.APPROVED_UNOFFICIAL,
                             ]
                         ),
                     ),
@@ -1373,7 +1374,5 @@ class MetaPollingPlacesUpdateSerializer(serializers.ModelSerializer):
         from django.contrib.gis.geos import Point
 
         if value is not None and not isinstance(value, Point):
-            raise serializers.ValidationError(
-                "geom_location must be a GeoJSON Point."
-            )
+            raise serializers.ValidationError("geom_location must be a GeoJSON Point.")
         return value
