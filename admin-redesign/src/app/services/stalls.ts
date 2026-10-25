@@ -255,6 +255,7 @@ export interface ElectionPendingStalls {
 	latest_changes: ElectionPendingStallsLatestChanges[];
 	stats: ElectionPendingStallsGamifiedUserStats[];
 	booths: PollingPlaceWithPendingStall[];
+	unofficial_pending_count: number;
 }
 
 export interface PollingPlaceWithPendingStall {
@@ -280,6 +281,38 @@ export interface PollingPlaceWithPendingStall {
 // 	pending_stalls: PendingStall[];
 // 	previous_subs: PollingPlacePreviousSubsStats;
 // }
+
+export interface PendingUnofficialStallNearbyPollingPlace {
+	id: number;
+	name: string;
+	premises: string;
+	address: string;
+	distance_m: number;
+}
+
+export interface PendingUnofficialStallNearbyPendingStall {
+	id: number;
+	name: string;
+	distance_m: number;
+}
+
+export interface PendingUnofficialStall
+	extends Omit<Stall, 'location_info' | 'polling_place' | 'tipoff_source' | 'tipoff_source_other'> {
+	location_info: IStallLocationInfo;
+	polling_place: null;
+	tipoff_source: StallTipOffSource | '';
+	tipoff_source_other: string;
+	election_name: string;
+	election_jurisdiction: string;
+	election_polling_places_loaded: boolean;
+	state_matches_election: boolean;
+	polling_place_state: string | null;
+	triaged_on: string | null; // ISO date
+	triaged_by_name: string | null;
+	diff: PendingStallDiffTextOrNumberField[] | PendingStallDiffNomsField[] | null;
+	nearby_polling_places: PendingUnofficialStallNearbyPollingPlace[];
+	nearby_pending_stalls: PendingUnofficialStallNearbyPendingStall[];
+}
 
 // type StallsResponse = Stall[];
 
@@ -334,13 +367,34 @@ export const stallsApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['PendingStalls'],
 		}),
-		// approveUnofficialStall: builder.mutation<void, number>({
-		// 	query: (stallId) => ({
-		// 		url: `stalls/${stallId}/approve_and_add/`,
-		// 		method: 'POST',
-		// 	}),
-		// 	invalidatesTags: ['PendingStalls'],
-		// }),
+		getPendingUnofficialStalls: builder.query<PendingUnofficialStall[], void>({
+			query: () => ({
+				url: 'stalls/pending_unofficial/',
+			}),
+			providesTags: ['PendingUnofficialStalls'],
+		}),
+		approveUnofficialStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/approve_and_add/`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['PendingUnofficialStalls', 'PendingStalls'],
+		}),
+		declineUnofficialStall: builder.mutation<void, number>({
+			query: (stallId) => ({
+				url: `stalls/${stallId}/decline/`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['PendingUnofficialStalls', 'PendingStalls'],
+		}),
+		matchUnofficialStall: builder.mutation<void, { stallId: number; pollingPlaceId: number }>({
+			query: ({ stallId, pollingPlaceId }) => ({
+				url: `stalls/${stallId}/match_to_polling_place/`,
+				method: 'POST',
+				body: { polling_place_id: pollingPlaceId },
+			}),
+			invalidatesTags: ['PendingUnofficialStalls', 'PendingStalls'],
+		}),
 		declineStall: builder.mutation<void, number>({
 			query: (stallId) => ({
 				url: `stalls/${stallId}/decline/`,
@@ -357,6 +411,9 @@ export const {
 	useAddStallMutation,
 	useUpdateStallWithCredentialsMutation,
 	useApproveStallMutation,
-	// useApproveUnofficialStallMutation,
 	useDeclineStallMutation,
+	useGetPendingUnofficialStallsQuery,
+	useApproveUnofficialStallMutation,
+	useDeclineUnofficialStallMutation,
+	useMatchUnofficialStallMutation,
 } = stallsApi;

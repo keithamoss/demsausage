@@ -225,6 +225,7 @@ class PollingPlaceNomsChangeReason(str, EnumBase):
     DELETD_DIRECTLY = "Deleted directly"
     APPROVED_AUTOMATIC = "Approved and merged automatically"
     APPROVED_MANUAL = "Approved and merged by hand"
+    APPROVED_UNOFFICIAL = "Approved and added as an unofficial polling place"
     # Should never occur!
     UNKNOWN = "Unknown"
 

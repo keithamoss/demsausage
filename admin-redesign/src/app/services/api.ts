@@ -28,6 +28,7 @@ export const api = createApi({
 		'User',
 		'Election',
 		'PendingStalls',
+		'PendingUnofficialStalls',
 		'PollingPlaces',
 		'MetaPollingPlaces',
 		'MetaPollingPlaceTasks',

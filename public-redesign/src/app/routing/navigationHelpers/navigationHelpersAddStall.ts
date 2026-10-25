@@ -167,6 +167,10 @@ export const navigateToAddStallSubmitterTypeFromPollingPlaceCard = (
 	}
 };
 
+// Encoded so values containing '/' (e.g. "43/55 Market St") stay in one path segment
+const getLocationPath = (electionName: string, name: string, address: string, state: string, lonlat: string) =>
+	`/add-stall/${electionName}/location/${encodeURIComponent(name)}/${encodeURIComponent(address)}/${encodeURIComponent(state)}/${lonlat}/`;
+
 export const navigateToAddStallSubmitterTypeFromMapboxFeature = (
 	params: Params<string>,
 	navigate: NavigateFunction,
@@ -186,7 +190,7 @@ export const navigateToAddStallSubmitterTypeFromMapboxFeature = (
 		feature.properties.context.region?.region_code || feature.properties.context.locality?.name || 'Unknown';
 	const lonlat = feature.geometry.coordinates.join(',');
 
-	navigate(`/add-stall/${urlElectionName}/location/${name}/${address}/${state}/${lonlat}/`, {
+	navigate(getLocationPath(urlElectionName, name, address, state, lonlat), {
 		state: { cameFromInternalNavigation: true },
 	});
 };
@@ -227,7 +231,7 @@ export const navigateToAddStallSubmitterTypeFromURLParams = (params: Params<stri
 		urlLocationLonLat !== undefined
 	) {
 		navigate(
-			`/add-stall/${urlElectionName}/location/${urlLocationName}/${urlLocationAddress}/${urlLocationState}/${urlLocationLonLat}/`,
+			getLocationPath(urlElectionName, urlLocationName, urlLocationAddress, urlLocationState, urlLocationLonLat),
 			{ state: { cameFromInternalNavigation: true } },
 		);
 	}
@@ -271,7 +275,7 @@ export const navigateToAddStallForm = (
 		urlLocationLonLat !== undefined
 	) {
 		navigate(
-			`/add-stall/${urlElectionName}/location/${urlLocationName}/${urlLocationAddress}/${urlLocationState}/${urlLocationLonLat}/submitter/${submitterType}/`,
+			`${getLocationPath(urlElectionName, urlLocationName, urlLocationAddress, urlLocationState, urlLocationLonLat)}submitter/${submitterType}/`,
 			{
 				state: { cameFromInternalNavigation: true },
 			},

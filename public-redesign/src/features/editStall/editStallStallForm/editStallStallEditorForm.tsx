@@ -107,10 +107,15 @@ function EditStallStallEditorForm(props: Props) {
 		(stall: Stall) => {
 			// Exclude location_info — stalls created before polling places were loaded may have a
 			// non-null location_info, which the backend rejects on edit for polling_places_loaded elections.
-			const { location_info: _location_info, ...stallData } = stall;
-			editStall({ ...stallData, token, signature });
+			// Elections without polling places loaded still require it to be sent.
+			if (election.polling_places_loaded === true) {
+				const { location_info: _location_info, ...stallData } = stall;
+				editStall({ ...stallData, token, signature });
+			} else {
+				editStall({ ...stall, token, signature });
+			}
 		},
-		[editStall, signature, token],
+		[editStall, election.polling_places_loaded, signature, token],
 	);
 
 	return (

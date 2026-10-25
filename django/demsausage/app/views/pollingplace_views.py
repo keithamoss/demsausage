@@ -262,6 +262,7 @@ class PollingPlacesViewSet(
                 elif item.history_change_reason in [
                     PollingPlaceNomsChangeReason.APPROVED_AUTOMATIC,
                     PollingPlaceNomsChangeReason.APPROVED_MANUAL,
+                    PollingPlaceNomsChangeReason.APPROVED_UNOFFICIAL,
                 ]:
                     # These are handled by the stall history below
                     pass

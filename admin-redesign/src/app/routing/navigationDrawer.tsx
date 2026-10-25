@@ -1,4 +1,4 @@
-import { Report, Storefront, Task } from '@mui/icons-material';
+import { AddLocationAlt, Report, Storefront, Task } from '@mui/icons-material';
 import BallotIcon from '@mui/icons-material/Ballot';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
@@ -13,6 +13,7 @@ import { mapaThemePrimaryPurple } from '../ui/theme';
 // The page names here must match what's in routes.tsx if we want the link to show as active
 const navigationItemsTier1 = [
 	{ text: 'Pending Submissions', path: '/', icon: <Storefront /> },
+	{ text: 'Pending Unofficial', path: '/pending_unofficial/', icon: <AddLocationAlt /> },
 	{ text: 'Polling Places', path: '/polling-places/', icon: <MapsHomeWorkIcon /> },
 	{ text: 'Elections', path: '/elections/', icon: <BallotIcon /> },
 	{ text: 'Tasks', path: '/tasks/', icon: <Task /> },

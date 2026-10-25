@@ -20,6 +20,9 @@ from demsausage.app.sausage.mailgun import (
     send_stall_edited_email,
     send_stall_submitted_email,
 )
+from demsausage.app.views.stall_unofficial_views import (
+    get_pending_unofficial_stalls_queryset,
+)
 from demsausage.app.serializers import (
     PendingStallsSerializer,
     PollingPlaceNomsSerializer,
@@ -37,6 +40,7 @@ from rest_framework.response import Response
 from simple_history.utils import update_change_reason
 
 from django.db import transaction
+from django.db.models import Count
 
 
 class StallsViewSet(viewsets.ModelViewSet):
@@ -236,85 +240,21 @@ class StallsViewSet(viewsets.ModelViewSet):
         else:
             raise BadRequest(serializer.errors)
 
-    # @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
-    # @transaction.atomic
-    # def approve_and_add(self, request, pk=None, format=None):
-    #     stall = self.get_object()
-    #     if stall.status != StallStatus.PENDING:
-    #         raise BadRequest("Stall is not pending")
-
-    #     if stall.election.polling_places_loaded is True:
-    #         raise BadRequest("Election polling places already loaded")
-
-    #     # @TODO Handle updating PollingPlaceNomsSerializer as per approve()
-
-    #     # Create polling place based on user-submitted location info
-    #     pollingPlaceSerializer = PollingPlacesManagementSerializer(
-    #         data={
-    #             "geom": stall.location_info["geom"],
-    #             "name": stall.location_info["name"],
-    #             "address": stall.location_info["address"],
-    #             "state": stall.location_info["state"],
-    #             "facility_type": None,
-    #             "election": stall.election.id,
-    #             "status": PollingPlaceStatus.ACTIVE,
-    #             "wheelchair_access": PollingPlaceWheelchairAccess.UNKNOWN,
-    #         }
-    #     )
-
-    #     if pollingPlaceSerializer.is_valid() is True:
-    #         pollingPlaceSerializer.save()
-    #     else:
-    #         raise BadRequest(pollingPlaceSerializer.errors)
-
-    #     # Now that we have a polling place, add noms
-    #     pollingPlaceWithNomsSerializer = PollingPlacesManagementSerializer(
-    #         pollingPlaceSerializer.instance,
-    #         data={
-    #             "stall": {
-    #                 "noms": stall.noms,
-    #                 "name": stall.name,
-    #                 "description": stall.description,
-    #                 "opening_hours": stall.opening_hours,
-    #                 "website": stall.website,
-    #             },
-    #         },
-    #         partial=True,
-    #     )
-
-    #     if pollingPlaceWithNomsSerializer.is_valid() is True:
-    #         pollingPlaceWithNomsSerializer.save()
-    #     else:
-    #         raise BadRequest(pollingPlaceWithNomsSerializer.errors)
-
-    #     # Approve stall and link it to the new unofficial polling place we just added
-    #     serializer = StallsManagementSerializer(
-    #         stall,
-    #         data={
-    #             "status": StallStatus.APPROVED,
-    #             "triaged_on": datetime.now(pytz.utc),
-    #             "triaged_by": request.user.id,
-    #             "polling_place": pollingPlaceSerializer.instance.id,
-    #         },
-    #         partial=True,
-    #     )
-    #     if serializer.is_valid() is True:
-    #         serializer.save()
-
-    #         send_stall_approved_email(Stalls.objects.get(id=stall.id))
-    #         return Response({})
-    #     else:
-    #         raise BadRequest(serializer.errors)
-
     @action(detail=True, methods=["post"], permission_classes=(IsAuthenticated,))
     @transaction.atomic
     def decline(self, request, pk=None, format=None):
-        stall = self.get_object()
+        # Lock the row so concurrent triage requests are serialised
+        stall = Stalls.objects.select_for_update().get(pk=self.get_object().pk)
         if stall.status != StallStatus.PENDING:
-            raise BadRequest("Stall is not pending")
+            return Response(
+                {
+                    "error": f"Oops! This submission was already {stall.status.lower()} by {stall.triaged_by.first_name.split(' ')[0]}."
+                },
+                status=status.HTTP_418_IM_A_TEAPOT,
+            )
 
         serializer = StallsManagementSerializer(
-            self.get_object(),
+            stall,
             data={
                 "status": StallStatus.DECLINED,
                 "triaged_on": datetime.now(pytz.utc),
@@ -346,6 +286,8 @@ class PendingStallsViewSet(generics.ListAPIView):
             for stall in (
                 Stalls.history.filter(election_id=electionId)
                 .filter(status__in=[StallStatus.APPROVED, StallStatus.DECLINED])
+                # Declined unofficial submissions never get a polling place
+                .filter(polling_place__isnull=False)
                 .order_by("-triaged_on")[:24]
             ):
                 data.append(
@@ -432,6 +374,12 @@ class PendingStallsViewSet(generics.ListAPIView):
             #     )
 
         response = []
+        unofficialCounts = dict(
+            get_pending_unofficial_stalls_queryset()
+            .values("election_id")
+            .annotate(count=Count("id"))
+            .values_list("election_id", "count")
+        )
         for electionId in data:
             response.append(
                 {
@@ -439,6 +387,7 @@ class PendingStallsViewSet(generics.ListAPIView):
                     "latest_changes": _get_latest_changes(electionId),
                     "stats": getGamifiedElectionStats(electionId),
                     "booths": data[electionId].values(),
+                    "unofficial_pending_count": unofficialCounts.get(electionId, 0),
                 }
             )
 

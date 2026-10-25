@@ -1,4 +1,4 @@
-import { QueryStats, Schedule } from '@mui/icons-material';
+import { AddLocationAlt, QueryStats, Schedule } from '@mui/icons-material';
 import {
 	Button,
 	Card,
@@ -10,6 +10,7 @@ import {
 	ListItemAvatar,
 	ListItemText,
 	Stack,
+	Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useState } from 'react';
@@ -67,7 +68,7 @@ function Entrypoint() {
 
 const areThereAnyPendingStalls = (electionsWithPendingStalls: ElectionPendingStalls[]) => {
 	for (const data of electionsWithPendingStalls) {
-		if (data.booths.length > 0) {
+		if (data.booths.length > 0 || data.unofficial_pending_count > 0) {
 			return true;
 		}
 	}
@@ -87,6 +88,8 @@ function PendingStalls(props: Props) {
 
 	const pendingStalls = areThereAnyPendingStalls(electionsWithPendingStalls);
 	const pageTitle = `${pendingStalls === true ? '🚨 ' : ''}Pending Submissions | Democracy Sausage`;
+
+	const onClickUnofficial = useCallback(() => navigate('/pending_unofficial/'), [navigate]);
 
 	const onClickPollingPlace = useCallback(
 		(pollingPlace: PollingPlaceWithPendingStall) => () =>
@@ -210,6 +213,29 @@ function PendingStalls(props: Props) {
 								</Card>
 
 								<Stack spacing={1} sx={{ mb: 3 }}>
+									{data.unofficial_pending_count > 0 && (
+										<Card variant="outlined" sx={{ borderColor: 'warning.main' }}>
+											<CardContent sx={{ pb: 0 }}>
+												<Typography sx={{ fontSize: 16, fontWeight: 500 }}>Unofficial submissions</Typography>
+												<Typography color="text.secondary" sx={{ fontSize: 15 }}>
+													{data.unofficial_pending_count} waiting for review at locations that aren&apos;t official
+													polling places yet
+												</Typography>
+											</CardContent>
+											<CardActions sx={{ pl: 2, pb: 2 }}>
+												<Button
+													size="small"
+													variant="outlined"
+													color="warning"
+													startIcon={<AddLocationAlt />}
+													onClick={onClickUnofficial}
+												>
+													Review
+												</Button>
+											</CardActions>
+										</Card>
+									)}
+
 									{data.booths.map((pollingPlace) => (
 										<PendingStallsBoothCard
 											key={pollingPlace.id}

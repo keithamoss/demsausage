@@ -8,7 +8,7 @@ DRAFT polling places.
 Tests are set up by directly creating ACTIVE PollingPlaces (and PollingPlaceNoms)
 in the DB, bypassing the full first-load pipeline.
 
-Tests (7):
+Tests (9):
   1. Noms FK is repointed to the matching DRAFT PP (distance match)
   2. No DRAFT PP within threshold → error logged, loader bails
   3. Two DRAFT PPs within threshold → spatial_proximity + multi-match error
@@ -16,6 +16,8 @@ Tests (7):
   5. Reload (polling_places_loaded=True) → no merge-review entry in info or warnings
   6. overwrite_distance_thresholds allows a 165 m-distant PP to match
   7. Default 100 m threshold rejects a 165 m-distant PP
+  8. Two ACTIVE PPs with noms matching the same DRAFT PP → error, neither noms lost
+  9. Same as 8, but for official polling places on a reload
 """
 
 import pytest
@@ -239,3 +241,82 @@ def test_default_distance_threshold_misses_distant_pp(test_election):
     assert any(
         "No match found" in m for m in logs.get("errors", [])
     ), f"Expected no-match error with default 100 m threshold; errors={logs.get('errors')}"
+
+
+# ---------------------------------------------------------------------------
+# 8. Two ACTIVE PPs with noms matching the same DRAFT PP → error
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_two_active_pps_matching_same_draft_pp_logs_error(test_election):
+    """Two approved unofficial polling places that duplicate the same official
+    polling place both match one DRAFT PP. Only one set of noms can be migrated,
+    so an error is logged (loader bails) rather than one noms record being
+    silently dropped."""
+    _, noms_a = _make_active_pp_with_noms(test_election)
+
+    # Second user-added PP ~55 m north — within 100 m of the single DRAFT PP
+    noms_b = PollingPlaceNoms.objects.create(noms={"cake": True})
+    PollingPlaces.objects.create(
+        election=test_election,
+        name="Test Hall Duplicate",
+        address="3 Test St, Testville VIC 1234",
+        state="VIC",
+        wheelchair_access="Unknown",
+        geom=Point(MELB_LON, MELB_LAT + 0.0005, srid=4326),
+        status=PollingPlaceStatus.ACTIVE,
+        noms=noms_b,
+    )
+
+    logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
+
+    all_errors = logs.get("errors", [])
+    assert any(
+        "both match" in m and "Test Hall Duplicate" in m for m in all_errors
+    ), f"Expected duplicate-target noms error; errors={all_errors}"
+
+    # Dry run rolls back, so both noms must still be attached to their original PPs
+    assert PollingPlaces.objects.filter(noms=noms_a).exists()
+    assert PollingPlaces.objects.filter(noms=noms_b).exists()
+
+
+# ---------------------------------------------------------------------------
+# 9. Reload: two official ACTIVE PPs with noms matching the same DRAFT PP → error
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_reload_two_official_pps_matching_same_draft_pp_logs_error(test_election):
+    """On a reload, two previously-loaded official polling places (e.g. two
+    halls the electoral commission has since consolidated) that both have noms
+    and both match one DRAFT PP log an error rather than silently dropping one
+    noms record."""
+    _, noms_a = _make_active_pp_with_noms(test_election)
+
+    # Second official PP ~55 m north — within 100 m of the single DRAFT PP
+    noms_b = PollingPlaceNoms.objects.create(noms={"cake": True})
+    PollingPlaces.objects.create(
+        election=test_election,
+        name="Test Annex",
+        premises="Test Primary School Annex",
+        address="3 Test St, Testville VIC 1234",
+        state="VIC",
+        wheelchair_access="Full",
+        geom=Point(MELB_LON, MELB_LAT + 0.0005, srid=4326),
+        status=PollingPlaceStatus.ACTIVE,
+        noms=noms_b,
+    )
+    test_election.polling_places_loaded = True
+    test_election.save()
+
+    logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
+
+    all_errors = logs.get("errors", [])
+    assert any(
+        "both match" in m and "Test Annex" in m for m in all_errors
+    ), f"Expected duplicate-target noms error on reload; errors={all_errors}"
+
+    # Dry run rolls back, so both noms must still be attached to their original PPs
+    assert PollingPlaces.objects.filter(noms=noms_a).exists()
+    assert PollingPlaces.objects.filter(noms=noms_b).exists()
