@@ -7,4 +7,13 @@
     },
     "biome.lspBin": "/Users/keithmoss/Projects/GitHub/demsausage/public-redesign/node_modules/@biomejs/biome/bin/biome",
     "snyk.advanced.autoSelectOrganization": true,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    // Dependencies live only in Docker, so disable inherited strict checking and missing-import warnings locally.
+    // The proper fix is to use VS Code Dev Containers so Pylance can access the container's Python and dependencies,
+    // then remove these analysis overrides to restore dependency-aware checking.
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none"
+    },
 }
