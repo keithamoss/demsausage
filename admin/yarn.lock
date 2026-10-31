@@ -507,11 +507,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugins@npm:11.8.0":
-  version: 11.8.0
-  resolution: "@sentry/bundler-plugins@npm:11.8.0"
+"@sentry/bundler-plugins@npm:11.9.0":
+  version: 11.9.0
+  resolution: "@sentry/bundler-plugins@npm:11.9.0"
   dependencies:
-    "@sentry/core": "npm:11.8.0"
+    "@sentry/core": "npm:11.9.0"
     dotenv: "npm:^17.4.2"
     glob: "npm:^13.0.6"
     magic-string: "npm:~0.30.8 || ^1.0.0"
@@ -519,17 +519,14 @@ __metadata:
     sentry: "npm:^0.45.0"
     supports-color: "npm:^8.1.1"
   peerDependencies:
-    "@babel/core": ^7.18.5
     rollup: ">=3.2.0"
     webpack: ">=5.1.0"
   peerDependenciesMeta:
-    "@babel/core":
-      optional: true
     rollup:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/61fc745c78dac2eda9678624af146496b7890ece75f80861642a18891e7d13aaaa2840a3bfb9180254d8f9fecc63927b0b61d220371f876cc0a6ba0de68cd770
+  checksum: 10c0/e0dfcf55ae761e86c4e66bf0eaf8995aafcf717d34d6beeec4d09daeea581cf1db732621ffeda1a52b41f76acba5112dd0d45f433033a60d48ccfa0e045886fb
   languageName: node
   linkType: hard
 
@@ -553,15 +550,6 @@ __metadata:
   dependencies:
     "@sentry/conventions": "npm:^0.16.0"
   checksum: 10c0/f287fd4a6ff278b5b3d7120ddd09766629ffaa7351905c2fe7ae90f612975a4a7863f26dcb36d010dad9905d66243ceaf3863dd56e649cac4c9f3bd00489c067
-  languageName: node
-  linkType: hard
-
-"@sentry/core@npm:11.8.0":
-  version: 11.8.0
-  resolution: "@sentry/core@npm:11.8.0"
-  dependencies:
-    "@sentry/conventions": "npm:^0.27.0"
-  checksum: 10c0/420d3009b5e42e157471c1dfb6e0eecc7d09cd1bf5f9c2b6a96f066eb9e5d69099cb2424fd0ef16e8a73cd84c0ef93a72997fc92b74089c0130b1d952905ddf8
   languageName: node
   linkType: hard
 
@@ -612,12 +600,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^11.8.0":
-  version: 11.8.0
-  resolution: "@sentry/vite-plugin@npm:11.8.0"
+"@sentry/vite-plugin@npm:^11.9.0":
+  version: 11.9.0
+  resolution: "@sentry/vite-plugin@npm:11.9.0"
   dependencies:
-    "@sentry/bundler-plugins": "npm:11.8.0"
-  checksum: 10c0/76a81e51a7373ff3be578697ea14ed02188f2044ae0a750353c9cc4d5982d77ffbef6df2649ac8ed0562df5679059ba3c86f84c7d03b638bb7b299d56222523d
+    "@sentry/bundler-plugins": "npm:11.9.0"
+  checksum: 10c0/b3c6d48ad826aa75bdb2c506bc68b7cb31f5899144235a576da04aba8ea722a8bfa85d45650730bd24688a56066c858642ab6139d8e58a73b67b4cb211d372eb
   languageName: node
   linkType: hard
 
@@ -1362,7 +1350,7 @@ __metadata:
   dependencies:
     "@sentry/browser": "npm:^11.9.0"
     "@sentry/types": "npm:^10.75.2"
-    "@sentry/vite-plugin": "npm:^11.8.0"
+    "@sentry/vite-plugin": "npm:^11.9.0"
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^7.0.1"
     "@testing-library/react": "npm:^16.3.3"
