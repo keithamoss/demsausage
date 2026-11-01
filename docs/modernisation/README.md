@@ -15,6 +15,7 @@ The plan was split from one document, so section numbers (1 to 15) are kept and 
 | [07-security-agents.md](07-security-agents.md) | 14-14.5 | Security-agent research, trials, results, recall ideas, business-logic invariants |
 | [08-static-public-site.md](08-static-public-site.md) | 15 | Static S3/CDN public site design, local Compose stack, loaded data, benchmarks |
 | [09-serverless-public-write-path.md](09-serverless-public-write-path.md) | n/a | Serverless replacement for stall submission, token reads, notifications and og:image |
+| [10-dev-environment-and-synthetic-data.md](10-dev-environment-and-synthetic-data.md) | n/a | Plan for a one-command agent-friendly dev stack with deterministic synthetic data |
 | [experiments/](experiments/) | n/a | Throwaway scripts behind the matcher and detector evidence |
 
 ## Notes
