@@ -2,7 +2,7 @@
 
 Status: analysis and planning. The only code-adjacent change so far is the set of read-only security agents in `.github/agents/`. Stale docs (`FOO.md`, `LOADER_REDESIGN_PLAN.md`, `MPP_SUBTASK_REDESIGN_SPEC.md`) are intentionally left in place.
 
-The plan was split from one document, so section numbers (1 to 14.5) are kept and cross-references like "section 13" still apply across files.
+The plan was split from one document, so section numbers (1 to 15) are kept and cross-references like "section 13" still apply across files.
 
 | File | Sections | Contents |
 |---|---|---|
@@ -13,6 +13,8 @@ The plan was split from one document, so section numbers (1 to 14.5) are kept an
 | [05-frontend-api-delivery.md](05-frontend-api-delivery.md) | 12 | Frontend, API and delivery analysis |
 | [06-security-review.md](06-security-review.md) | 13 | Security review of Django and the redesigned apps, with verification |
 | [07-security-agents.md](07-security-agents.md) | 14-14.5 | Security-agent research, trials, results, recall ideas, business-logic invariants |
+| [08-static-public-site.md](08-static-public-site.md) | 15 | Static S3/CDN public site design, local Compose stack, loaded data, benchmarks |
+| [09-serverless-public-write-path.md](09-serverless-public-write-path.md) | n/a | Serverless replacement for stall submission, token reads, notifications and og:image |
 | [experiments/](experiments/) | n/a | Throwaway scripts behind the matcher and detector evidence |
 
 ## Notes

@@ -42,6 +42,8 @@ Source: three read-only code-analysis passes. Claims marked (unverified) were no
 10. Retire `public` and `admin` after confirming DNS and access logs; audit legacy-only endpoints from logs first.
 11. Add MSW/Vitest service tests and Playwright smoke tests for the public map and the admin approval flow.
 
+See [08-static-public-site.md](08-static-public-site.md) for the static S3/CDN design and benchmarks.
+
 ## Where we got to
 - The analysis came from three exploration agents and is mostly unverified by direct inspection (the `/mail/` endpoint was checked and is guarded).
 - Main themes: duplicated API types across the two redesigns, no generated client, an unannotated OpenAPI schema, no CI test gates, `poetry update` at build time, no backups found.
