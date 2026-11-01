@@ -97,3 +97,30 @@ Documented in `AGENTS.md` and used by `.github/workflows/copilot-setup-steps.yml
 - Whether to use the real boundaries when present and synthetic otherwise.
 - Decide on factory_boy vs plain functions.
 - Restricted-network builds (blocked hosts): keep the pip-based Dockerfile path as a documented option.
+
+## 7. Appendix: sandbox workarounds to fold into workstream A
+
+These two local files were used to build the stack in a restricted sandbox. They were not committed, because `docker-compose.override.yml` loads automatically and would change everyone's `docker compose up`. Move their content into an opt-in `docker-compose.dev.yml` and a Dockerfile build target.
+
+`docker-compose.override.yml`:
+
+```yaml
+# bitnami/redis:6.2-debian-10 no longer exists on Docker Hub.
+services:
+  django:
+    build:
+      context: django/
+      dockerfile: Dockerfile.sandbox
+  python_rq_worker:
+    build:
+      context: django/
+      dockerfile: Dockerfile.sandbox
+  redis:
+    image: redis:6.2
+    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_PASSWORD\""]
+    volumes: !override []
+```
+
+`django/Dockerfile.sandbox` is a copy of `django/Dockerfile` with one change: poetry is installed with `RUN pip install poetry` instead of the `install.python-poetry.org` script (which is blocked in restricted networks). Make this a build argument or a separate stage in the real Dockerfile rather than a copy.
+
+Other local-only steps: `docker compose` v2 plugin installed manually, `fs.inotify.max_user_watches=524288`, the `demsausage` schema created by hand, and migration 0052 temporarily no-oped (see workstream A).
