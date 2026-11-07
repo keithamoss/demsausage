@@ -1,0 +1,6 @@
+Campbells Creek Primary School (Bendigo West): no election day hours on the VEC map (closed or provisional?)
+Fitzroy High School (Brunswick): wheelchair rating is LNWA in the spreadsheet but 'Wheelchair Access With Assistance(AWA)' (id 1) on the VEC map
+Anglican Parish Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+Strathbogie Memorial Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+St Kevin's College (Malvern): wheelchair rating is LNWA in the spreadsheet but 'Independent Wheelchair Access(IWA)' (id 2) on the VEC map
+Harrietville Community Hall (Ovens Valley): no election day hours on the VEC map (closed or provisional?)

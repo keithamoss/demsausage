@@ -1,0 +1,23 @@
+{
+  "add_columns": {
+    "ec_id": ""
+  },
+  "extras": {
+    "fields": [
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ]
+  },
+  "geocoding": {
+    "enabled": false
+  },
+  "overwrite_distance_thresholds": [
+    {
+      "name": "Brunswick North",
+      "threshold": 0.170
+    }
+  ]
+}
