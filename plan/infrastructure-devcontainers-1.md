@@ -1,0 +1,165 @@
+---
+goal: Move local development tooling into a Compose-backed VS Code Dev Container
+version: 1.3
+date_created: 2026-10-25
+last_updated: 2026-10-25
+owner: Democracy Sausage maintainers
+status: Planned
+tags: [infrastructure, development, devcontainers]
+---
+
+# Introduction
+
+![Status: Planned](https://img.shields.io/badge/status-Planned-blue)
+
+Attach VS Code directly to the existing Django service, subject to the focused feasibility gate below. Preserve the working Compose stack, local database, public/admin HTTPS URLs, and host-based development as a rollback path. Do not create a separate editor Python environment. This document is a proposal; no runtime configuration has been changed.
+
+Confirmed decisions (2026-10-25): use one shared workspace and automatically start the application stack on workspace open and shut it down on normal workspace/window closure. Closing the workspace must preserve all persistent data and dependency volumes. Updated direction: investigate direct Django attachment to eliminate duplicated Python environments, and provisionally retain Docker socket access following the local Mapa pattern. Host-terminal maintenance remains available, not mandatory for every Docker command.
+
+The immediate acceptance criterion comes from `.vscode/settings.json`: Python analysis is disabled because dependencies exist only in Docker. The Dev Container must give Pylance a real Python interpreter with project dependencies, without starting a second Django server or cron scheduler.
+
+### Direct-Attachment Feasibility Gate
+
+The local sibling Mapa checkout, rather than the fetched published `staging` files, supplies the reference implementation: attach to `django`, preserve its command with `overrideCommand: false`, add tooling through Features, mount the full repo, install dev dependencies into the existing system Python, and use `stopCompose`.
+
+Read-only probe on 2026-10-25: the running Django container uses `/usr/local/bin/python` (Python 3.10.20), with `sys.prefix == sys.base_prefix == /usr/local`. Imports resolve to global site-packages. Django 4.2.29, DRF 3.16.1, pytest 9.0.2, and pytest-django 4.12.0 are installed; GEOS successfully constructs a point. The shell runs as UID/GID 0, and source/system-package directories are writable as root. Poetry is available; Node, pnpm, Git, Docker CLI, and debugpy are absent. These are observed installed versions, not new dependency pins or proof that a clean image contains the same development packages.
+
+Focused execution check on 2026-10-25: `docker compose exec -T django python -m pytest tests/loader/test_write_fields.py -n0 --tb=short -q` passed all 12 tests in 11.03 seconds, with one existing Django `USE_L10N` deprecation warning. Container labels identify project `demsausage`, service `django`, and host project directory `/Users/keithmoss/Projects/GitHub/demsausage`. The source bind maps that directory's `django/` to `/app`; scraper, data, and electoral-boundary mounts remain separate. No packages were installed and no services were restarted during these checks.
+
+Preliminary result: sharing the runtime Python is viable at the interpreter/import level. End-to-end attachment is not yet verified. Before accepting the design, prove Pylance and pytest use that interpreter, a serial test breakpoint maps to the edited source, Node/Biome work, Docker CLI reaches the intended daemon/project, and Compose bind paths resolve to host paths. Resolve non-root editor access without changing the root service startup needed by cron. If this gate fails, record the exact blocker and obtain approval before returning to a separate Python environment.
+
+## 1. Requirements & Constraints
+
+- **REQ-001**: Support backend and both active frontends (`django/`, `admin-redesign/`, `public-redesign/`) in one VS Code window rooted at `/workspaces/demsausage`.
+- **REQ-002**: Use the root `docker-compose.yml` plus an explicitly selected `.devcontainer/compose.yml` overlay targeting the existing `django` service. Do not add a dedicated `workspace` service or use an automatically loaded root override.
+- **REQ-003**: Match the existing runtime toolchain initially: Python 3.10, Node 22, and pnpm 9.12.2. Install Python main and development dependencies for analysis and tests. Do not combine this migration with runtime upgrades.
+- **REQ-004**: Restore dependency-aware Python analysis and use project-local TypeScript/Biome installations without a host-specific absolute path. Establish the intended Python checking mode before removing the existing overrides; do not silently impose strict checking.
+- **REQ-005**: Preserve `https://public.test.democracysausage.org` and `https://admin.test.democracysausage.org`, nginx routing, browser authentication, and Vite hot reload.
+- **REQ-006**: Reopening or rebuilding the workspace must not reset database/cache storage, import production data, or start a second set of application services. Workspace bootstrap must not apply migrations or start cron; existing Django service startup behavior, including its migrations and cron, remains unchanged when Compose starts that service.
+- **REQ-007**: Preserve the current fast/full Django and admin Vitest workflows. Keep runtime parity checks in the running Django service; support local test discovery and serial debugging in the workspace interpreter.
+- **REQ-008**: Opening the Dev Container automatically starts the workspace and all existing application services. Normal workspace/window closure stops the associated Compose stack, including services previously started from a host terminal in the same project, without deleting persistent storage. Host `docker compose up` remains available as an independent fallback when the Dev Container is closed.
+- **REQ-009**: Pylance, VS Code tests, terminal Python, and the Django server must use `/usr/local/bin/python` in the same `django` container. Do not create `django/.venv`, a separate Python dependency volume, or a second editor Python installation. Verify module paths and interpreter identity after attachment, not just matching version numbers.
+- **SEC-001**: Never copy secrets, database dumps, private keys, or local data directories into images. Add an explicit root `.dockerignore` before building any image with the repository as its context.
+- **SEC-002**: Retain Docker socket access provisionally through `ghcr.io/devcontainers/features/docker-outside-of-docker:1`, using the existing host daemon rather than Docker-in-Docker. Treat socket access as host-daemon control, not a read-only capability or security sandbox. Confirm the intended daemon/project and host-path mapping before running mutating Docker commands from the container. Inherit only the existing development service environment; host-terminal maintenance remains supported.
+- **SEC-003**: Keep mkcert CA private keys on the host. Reuse existing leaf certificate mounts for nginx; add a public CA trust certificate to a container only when a verified workflow needs it. Never disable TLS verification globally.
+- **CON-001**: Host prerequisites remain Docker with Compose v2, VS Code with Dev Containers, hosts-file entries, locally trusted certificates, and provisioned development env files. Dev Containers cannot provision host browser trust or host DNS from inside the workspace.
+- **CON-002**: Keep `db-pg/data`, Redis storage, existing service bind mounts, and published ports unchanged in the initial migration. Do not change the PostgreSQL/PostGIS version or storage format.
+- **CON-003**: Existing frontends use Alpine/musl; the proposed Python workspace uses Debian/glibc. Never share their `node_modules` volumes. Keep host macOS dependencies isolated too.
+- **CON-004**: Do not modify production/staging build workflows, retired frontends, application behavior, or database restore scripts as part of this migration.
+- **PAT-001**: Put tooling-only behavior in `.devcontainer/`. Preserve Django's application entrypoint and command with `overrideCommand: false`; do not launch another application process from lifecycle hooks. Prefer a non-root `remoteUser` for editor processes while leaving the service startup user unchanged; validate source/log access and install system Python dev dependencies through an explicit privileged setup step. Any root-editor fallback requires an explicit recorded decision. Socket access still grants daemon control regardless of editor UID.
+
+## 2. Implementation Steps
+
+### Implementation Phase 1
+
+- **GOAL-001**: Start with TASK-000 to resolve the remaining direct-attachment implementation checks, then confirm a reproducible dependency baseline and safe ownership of the existing Compose project. This phase blocks the broader rollout, not the minimal prototype needed to execute TASK-000.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-000 | First implementation step: create only the minimal `.devcontainer/devcontainer.json` and `.devcontainer/compose.yml` prototype needed to verify the four outstanding checks. (1) Validate editor-user source/log permissions while preserving Django's root-dependent cron startup. (2) Demonstrate repeatable locked main/dev dependency installation into `/usr/local/bin/python`, without a second virtualenv or silent main-package upgrades. (3) Verify Docker socket access reaches the existing `demsausage` project and Compose bind sources resolve to host paths. (4) After a coordinated reopen, verify Pylance import resolution, pytest discovery, and a serial test breakpoint against the same interpreter and source used by Django; also smoke-test Node/Biome. Record pass/fail evidence for each check in the Direct-Attachment Feasibility Gate, retaining the existing import/test probes as preliminary evidence only. Coordinate any live Django rebuild or editor transition with the user. Stop and report a specific blocker rather than adding a separate Python environment. | No | |
+| TASK-001 | Inspect `django/poetry.lock`, both active frontend lockfiles, installed Poetry/Corepack versions, and tracked dependency changes. Record exact Poetry/Corepack pins in this document before creating the tooling image. If a Python lockfile is absent, generate and review one as a separately identified prerequisite; do not use an unreviewed update as workspace bootstrap. | No | |
+| TASK-002 | Inspect the running Compose project's labels and resolved config locally without printing env values. Record its project name and absolute bind paths, including the existing database mount. Select one project name for host Compose and Dev Containers; explicitly document how the current `demsausage` project is reused and that workspace closure will stop services already started from the host in this project. Do not start a second project. | No | |
+| TASK-003 | Inventory only the env-file names referenced by `docker-compose.yml` and `nginx/nginx/docker.https.dev.conf` certificate paths. Check corresponding templates and files exist without reading secret values. Document required dev-file provisioning, including Redis, RQ dashboard, both redesign frontends, and nginx's wildcard certificate requirement. | No | |
+| TASK-004 | Reference TASK-000's direct-attachment results rather than repeating its probes. Record baseline fast Django test results, admin Vitest results, public/admin browser login and hot reload, and an existing screenshot-generation smoke case. Record pre-existing failures separately. Confirm runtime/host CPU architectures match the Docker-outside-of-Docker Feature requirements. Do not switch the active editor session or rebuild the live Django service without coordinating that transition with the user. | No | |
+
+Completion: dependency pins, project identity, bootstrap inputs, baseline results, and direct-attachment gate results are recorded. Interpreter-level checks are preliminary; a minimal attachment prototype may be created during this phase before the complete configuration in Phase 2. Any unavailable image, missing lockfile, absent development template, or permissions/path blocker has a named resolution before rollout proceeds.
+
+### Implementation Phase 2
+
+- **GOAL-002**: Extend the existing Django service for direct editor attachment without changing application startup behavior. Depends on Phase 1; tasks run in listed order.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-005 | Audit the inherited `django/` build context and ignore rules before extending the service image. Exclude local secrets, dumps, logs, and generated artifacts from any new context. Avoid introducing a root build context; if one becomes necessary, add a root `.dockerignore` before using it. Do not assume `.gitignore` protects Docker builds. | No | |
+| TASK-006 | Extend the Django image through pinned Dev Container Features for Git, common utilities/non-root editor user, Node 22 with pnpm 9.12.2, and Docker-outside-of-Docker. Reuse Python 3.10 and its GDAL/Firefox/geckodriver from the application image. Commit `.devcontainer/devcontainer-lock.json`; explicitly pin installed tool versions rather than using `latest`. Do not add a second Python image or change production builds. | No | |
+| TASK-007 | Add `.devcontainer/compose.yml` targeting `django`, retaining `/app` and existing data/scraper mounts while adding the full repository at `/workspaces/demsausage`. Preserve its working directory, entrypoint, command, ports, env files, and dependencies. In editor settings use `/app` as the canonical backend import root initially; verify mapping between `/app` and the full-repo source path. Provide the host-path alias/mapping required by TASK-009 without replacing existing bind mounts. | No | |
+| TASK-008 | Add separate named volumes for the editor-side pnpm store and each frontend's `node_modules`. Keep them separate from Alpine runtime dependencies. Do not add a Python dependency volume or virtualenv. Explicitly initialize mount ownership for the editor user and validate UID/GID behavior on macOS and Linux. | No | |
+| TASK-009 | Add `.devcontainer/devcontainer.json` referencing `../docker-compose.yml` then `compose.yml`, selecting service `django`, using `/workspaces/demsausage`, setting `overrideCommand: false`, and setting `shutdownAction` to `stopCompose`. Set `runServices` to `db`, `redis`, `memcached`, `memcached_gui`, `django`, `python_rq_worker`, `rq_dashboard`, `frontend_public_redesign`, `frontend_admin_redesign`, and `nginx`. Configure and verify the Phase 1 project identity. Expose `${localWorkspaceFolder}` as `LOCAL_WORKSPACE_FOLDER` and make the host repo path accessible at the same absolute path inside the container for Compose commands; document the exact tested `--project-directory` and project-name invocation. Do not assume `/workspaces/demsausage` is a valid daemon-side bind source. Do not forward already-published ports or replace custom HTTPS domains. | No | |
+| TASK-010 | Add `.devcontainer/post-create.sh` to install reviewed, locked Python main/dev dependencies into the existing `/usr/local` interpreter with `POETRY_VIRTUALENVS_CREATE=false` and run `pnpm install --frozen-lockfile` separately in both frontends. Prefer installing dev dependencies in the development image before app startup; if a privileged post-create install is needed for the prototype, record that live dependency changes require a Django reload/restart before claiming server/editor parity. Do not silently change existing main package versions. Fail visibly and do not invoke migrations, restores, app entrypoints, or extra application servers. Document dependency refresh after lockfile changes. | No | |
+
+Completion: VS Code opens the full repository attached to Django, using its runtime Python and a validated editor user. Dependencies install without lockfile changes, Docker CLI reaches the intended host daemon, Compose host-path mapping is correct, and the full stack starts automatically. Normal closure stops the associated stack; reopening restores availability. Rebuilds and shutdowns preserve stored data and frontend dependency volumes.
+
+### Implementation Phase 3
+
+- **GOAL-003**: Make editor analysis and test/debug workflows useful inside the workspace. Depends on Phase 2; editor and documentation tasks may run independently after the interpreter path is verified.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-011 | Configure Python, Pylance, Biome, and ESLint only if the repository actually uses it via `customizations.vscode.extensions` in `.devcontainer/devcontainer.json`. Select `/usr/local/bin/python`, pytest rooted at `django`, and the verified canonical backend source path for Pylance. Confirm the server, test adapter, and terminal resolve the same installed modules. Configure TypeScript/Biome against Linux workspace dependencies, verifying both frontend roots. | No | |
+| TASK-012 | Update `.vscode/settings.json` to remove the macOS-only Biome executable path and obsolete missing-import suppressions once Phase 2 interpreter/import checks pass. Put container-specific executable paths in Dev Container customizations. Explicitly set the agreed Python checking mode there; preserve unrelated user settings and avoid requiring host dependencies for the fallback workflow. | No | |
+| TASK-013 | Add a focused pytest debug configuration in `.vscode/launch.json` using the workspace interpreter, `cwd` of `${workspaceFolder}/django`, and `-n0` for serial debugging. Verify a breakpoint in an existing isolated test. Do not add an application debug server unless separately approved. | No | |
+| TASK-014 | Document workspace-local `cd django && python -m pytest tests/ --tb=short -q` and serial debug commands, plus `cd admin-redesign && pnpm test`. Preserve host `docker compose exec django` as an equivalent route to the same Python environment, not a second test environment. Document the tested in-container Docker/Compose invocation, its project and host-path constraints, and that recreating/stopping `django` disconnects the editor. Do not assume the base image's `--only main` build includes pytest on a fresh machine. | No | |
+
+Completion: Django/REST framework imports resolve in Pylance; analysis, formatting, test discovery, a serial breakpoint, and admin tests work using the shared runtime interpreter. Host-exec and editor tests do not run concurrently against the same test database.
+
+### Implementation Phase 4
+
+- **GOAL-004**: Validate onboarding and publish the supported workflow. Depends on Phase 3; validation precedes declaring the migration complete.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-015 | Update `README.md` with host prerequisites, actual `secrets/dev/` inputs, public/admin domains, certificate filenames, and automatic stack startup/shutdown with Dev Containers. Update `DEV_WORKFLOWS.md` with dependency refresh/rebuild, terminal boundaries, tests, logs, host-based fallback startup, and the effect of workspace closure on services already started from the host. Document that forced VS Code termination or a host crash may require manual Compose cleanup; shutdown is guaranteed only for verified normal closure paths. Keep production data access optional rather than a normal onboarding prerequisite. | No | |
+| TASK-016 | Update `.github/instructions/testing.instructions.md` with explicit execution contexts: inside the workspace use its Python/pytest directly; from the host use `docker compose exec django` as before. Keep parallelism/slow-test rules intact and explain the no-concurrent-test-databases constraint. | No | |
+| TASK-017 | Extend `db-pg/scripts/README.md` to label database replacement as an explicit host-terminal maintenance workflow. Retain the existing restore commands and their manual nature; do not run them during verification. Document that workspace rebuilding never imports production data. | No | |
+| TASK-018 | Execute all checks in Section 6 on the existing macOS installation and an isolated fresh setup with disposable database storage. Record results and remaining platform limitations in this document. Mark the plan Completed only when required checks pass; otherwise retain Planned or In progress with explicit blockers. | No | |
+
+Completion: documented setup is reproducible, existing state survives workspace lifecycle operations, editor/test behavior meets the checks below, and returning to host-based Compose does not require data conversion.
+
+## 3. Alternatives
+
+- **ALT-001**: A separate idle tooling container. Previously proposed, now fallback only: it duplicates the Python environment and does not directly solve the user's runtime/Pylance parity problem. Reconsider only if the direct-attachment gate identifies an unresolvable blocker and the user approves the tradeoff.
+- **ALT-002**: Separate Python, public, and admin Dev Containers. Better per-runtime isolation, but requires multiple editor windows and more configuration. Defer unless the single workspace proves too costly.
+- **ALT-003**: Run all application processes inside the editor container. Reject because it discards existing service separation and complicates process supervision. The selected approach coordinates separate services through the Dev Containers lifecycle instead.
+- **ALT-004**: Host-terminal-only Docker operations without socket access. Still a supported fallback, but no longer the preferred default following the user's updated direction. Avoid Docker-in-Docker: it creates a second daemon rather than managing this stack.
+- **ALT-005**: Change all services to Debian and share frontend dependencies. Defer because it changes runtime images and native dependency behavior, expanding the migration beyond editor tooling.
+
+## 4. Dependencies
+
+- **DEP-001**: Working local Docker engine and Compose v2, VS Code, and the Dev Containers extension. Set and document the exact minimum Compose version after validating the chosen configuration; do not retain the README's obsolete Compose v1 requirement.
+- **DEP-002**: Access to the existing service images and architectures, development env files, TLS leaf certificates, and a usable local PostGIS database. Production credentials and production database access are not prerequisites for editor setup.
+- **DEP-003**: Reviewed dependency locks and pinned Poetry/Corepack versions established in Phase 1. Existing `django/Dockerfile` runs `poetry update` and installs only main dependencies. Direct attachment removes a second Python environment but does not make this build reproducible; do not run further updates in editor setup. Record clean-build reproducibility as a prerequisite before claiming locked server/editor dependency parity.
+
+## 5. Files
+
+- **FILE-001**: Add `.devcontainer/devcontainer.json`, `.devcontainer/compose.yml`, `.devcontainer/devcontainer-lock.json`, and `.devcontainer/post-create.sh` to extend the existing Django service. No separate tooling Dockerfile or Python environment is planned.
+- **FILE-002**: Add `.vscode/launch.json` for serial pytest debugging; update `.vscode/settings.json` only for verified portability/analysis changes. Update build ignore rules only for the actual selected context.
+- **FILE-003**: Update `README.md`, `DEV_WORKFLOWS.md`, `db-pg/scripts/README.md`, and `.github/instructions/testing.instructions.md` with explicit host/workspace workflows.
+- **FILE-004**: Update this plan with Phase 1 pins/project identity, validation results, and status. Any new or updated dependency lockfile must be explicitly reviewed and recorded rather than silently created by bootstrap.
+
+## 6. Testing
+
+- **TEST-001**: Validate Dev Container metadata with the Dev Containers CLI and merge the two Compose files using `docker compose -f docker-compose.yml -f .devcontainer/compose.yml config --quiet`. Inspect resolved mounts/project identity locally without emitting environment secrets. Require unchanged base-service ports and persistent mounts.
+- **TEST-002**: Reopen and rebuild the attached Django workspace twice. Require the validated editor UID, Python 3.10 at `/usr/local/bin/python`, Node 22, pnpm 9.12.2, writable frontend dependency volumes, no unexpected tracked lockfile changes, and no extra Django/cron processes from lifecycle hooks. Verify no second Python environment exists and the original application entrypoint still runs normally.
+- **TEST-003**: From `django/` in the workspace, import `django`, `rest_framework`, `psycopg2`, and `django.contrib.gis.geos`; run `python manage.py check`. Require successful native-library loading and service-name connectivity to the configured dev database, Redis, and Memcached without exposing credentials.
+- **TEST-004**: In VS Code, verify Go to Definition for an installed Django symbol, no unresolved installed-package imports, pytest discovery, one serial pytest breakpoint, and Biome formatting in both active frontends. Record baseline application type diagnostics rather than expanding into unrelated fixes.
+- **TEST-005**: Run the fast Django suite inside the attached editor and compare interpreter/module paths with a host `docker compose exec django` probe. These must reach the same container environment; do not duplicate the whole suite for nominal environment parity. Run the full suite before migration completion and compare failures with Phase 1. Run `pnpm test` in `admin-redesign` and `pnpm exec tsc --noEmit` in both active frontends. Do not trigger deployment-oriented build scripts.
+- **TEST-006**: In the host browser, verify public/admin HTTPS, representative API reads, login/session persistence, and hot reload after one source edit per active frontend. Verify a representative existing RQ job and Django screenshot-generation workflow, including nginx hostname resolution. Do not treat localhost port forwarding as equivalent to the custom-domain tests.
+- **TEST-007**: Compare a non-sensitive local database sentinel before workspace rebuild and after reopening. Require the same host database mount/project and preserved dependency volumes. Test normal Close Folder/workspace closure and Close Window separately: require all associated Compose services to stop, then reopen and require automatic startup and the unchanged sentinel. Repeat with the base stack initially started from a host terminal to confirm project reuse and shutdown ownership. With the Dev Container closed, verify host `docker compose up -d` restores the base stack without data conversion. Never use `down -v`, prune volumes, or execute replacement scripts.
+- **TEST-008**: In an isolated fresh setup with disposable storage, follow only the documented prerequisites and Dev Container steps. Verify mounts do not mask image-installed dependencies, bootstrap is repeatable, and missing env/cert inputs fail clearly. Test native Apple Silicon and Linux when available; record any untested platform explicitly.
+- **TEST-009**: Inside the attached editor run read-only Docker version/Compose status queries first, requiring the same daemon, project labels, service IDs, and host bind paths seen from the host. Validate Compose config using the documented host-path alias and compare non-secret mount definitions; do not recreate services merely to prove CLI access. Test a disposable bind-mounted container only after path verification and explicit approval; never point a probe at database storage.
+
+## 7. Risks & Assumptions
+
+- **RISK-001**: An unintended Compose project name can create a second stack, collide on ports, or reuse the same database bind directory concurrently. Project identity verification is a precondition to startup, not a cleanup task.
+- **RISK-002**: Root-owned mounted volumes and macOS/Linux differences can prevent dependency installation. Validate non-root ownership on fresh volumes and rebuilds without recursively changing ownership of the repository or database data.
+- **RISK-003**: The base image performs `poetry update`, and the observed container already has dev dependencies not guaranteed by `--only main`. Direct attachment shares installed packages but cannot prevent clean-build drift or already-imported modules remaining stale after a live install. Verify a fresh build and coordinated reload before claiming reproducibility; never fix this by creating another Python environment.
+- **RISK-004**: Native Node packages differ between macOS, Debian, and Alpine. Separate workspace volumes are mandatory; an Alpine runtime repair script is not evidence that Debian dependencies work.
+- **RISK-005**: Whole-repo mounts include local ignored material and potentially large data/log trees. Do not bake that material into images; configure editor watcher/search exclusions for these directories if measured performance requires it. A Dev Container is not a sandbox against repository-readable secrets.
+- **RISK-006**: The existing nginx configuration references a wildcard certificate beyond the two leaf certificates documented in `README.md`. Fresh onboarding must account for every configured certificate without introducing new hostname behavior.
+- **RISK-007**: `stopCompose` affects the associated project, including services started from a host terminal. Do not use simultaneous Dev Container windows against this project: closing one can interrupt the other. Forced VS Code termination or host crashes may bypass normal shutdown; document host-terminal recovery and verify normal closure paths explicitly.
+- **RISK-008**: Docker socket access permits daemon-level changes, including destructive operations outside this repository. A non-root editor does not remove that authority. Host/client architecture mismatch and container-only bind paths can also break Docker-outside-of-Docker; validate native architecture and host path mapping before enabling general Compose management.
+- **ASSUMPTION-001**: Initial scope is local Docker-backed development, not Codespaces or remote Docker hosts. Custom HTTPS names and host trust remain supported host-managed prerequisites.
+- **ASSUMPTION-002**: Confirmed by the user: one editor window covers backend and both redesign frontends, and the application stack starts/stops automatically with that workspace.
+- **ASSUMPTION-003**: Updated user preference: provisionally keep Docker socket access and test direct attachment to eliminate duplicate Python environments. Validate socket/path behavior before rollout and document the security tradeoff. Host-terminal access remains the recovery path if editor-side operations disconnect the attached service.
+
+## 8. Related Specifications / Further Reading
+
+- [Repository setup](../README.md)
+- [Development workflow](../DEV_WORKFLOWS.md)
+- [Compose service definitions](../docker-compose.yml)
+- [Current editor settings](../.vscode/settings.json)
+- [Django test execution rules](../.github/instructions/testing.instructions.md)
+- [Dev Containers with Docker Compose](https://code.visualstudio.com/docs/devcontainers/create-dev-container#_use-docker-compose)
+- [Dev Container configuration reference](https://containers.dev/implementors/json_reference/)
+- [Dev Container lifecycle scripts](https://containers.dev/implementors/json_reference/#lifecycle-scripts)
+- [Docker-outside-of-Docker Feature and host bind paths](https://github.com/devcontainers/features/tree/main/src/docker-outside-of-docker)
