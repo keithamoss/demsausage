@@ -5,20 +5,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0006_pollingplaceloaderevents'),
+        ("app", "0006_pollingplaceloaderevents"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pollingplaces',
-            name='ec_id',
+            model_name="pollingplaces",
+            name="ec_id",
             field=models.IntegerField(null=True),
         ),
         migrations.AddField(
-            model_name='pollingplaces',
-            name='extras',
-            field=django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict),
+            model_name="pollingplaces",
+            name="extras",
+            field=django.contrib.postgres.fields.jsonb.JSONField(
+                blank=True, default=dict
+            ),
         ),
     ]

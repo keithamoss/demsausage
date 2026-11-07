@@ -11,10 +11,8 @@ import time
 import traceback
 import unicodedata
 import urllib.parse
-from urllib.parse import quote
 
 import pytz
-
 from django.conf import settings
 
 
@@ -227,7 +225,7 @@ def is_jsonable(obj):
     try:
         json.dumps(obj)
         return True
-    except:
+    except (TypeError, ValueError, OverflowError, RecursionError):
         return False
 
 
@@ -235,7 +233,7 @@ def is_iterable(obj):
     # https://stackoverflow.com/a/1952655
 
     try:
-        iterator = iter(obj)
+        iter(obj)
     except TypeError:
         # not iterable
         return False

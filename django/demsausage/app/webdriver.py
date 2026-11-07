@@ -1,13 +1,13 @@
-import os
 from pathlib import Path
 from time import sleep
 
-from demsausage.util import get_env, get_url_safe_election_name
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service
+
+from demsausage.util import get_env, get_url_safe_election_name
 
 
 def get_map_screenshot(election):
@@ -47,7 +47,7 @@ def get_map_screenshot(election):
         # driver.set_window_size(1920, 1080)
         driver.set_window_size(1200, 630)
         driver.get(
-            f'{get_env("PUBLIC_SITE_URL")}/{get_url_safe_election_name(election.name)}?embed=1'
+            f"{get_env('PUBLIC_SITE_URL')}/{get_url_safe_election_name(election.name)}?embed=1"
         )
 
         # Give the map and basemap tiles time to load

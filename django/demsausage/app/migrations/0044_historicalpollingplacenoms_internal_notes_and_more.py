@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0043_elections_is_state'),
+        ("app", "0043_elections_is_state"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalpollingplacenoms',
-            name='internal_notes',
+            model_name="historicalpollingplacenoms",
+            name="internal_notes",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='pollingplacenoms',
-            name='internal_notes',
+            model_name="pollingplacenoms",
+            name="internal_notes",
             field=models.TextField(blank=True),
         ),
     ]

@@ -12,7 +12,6 @@ The tests use a lightweight stub subclass that initialises only the transport
 layer, avoiding the full DB/job machinery in LoadPollingPlaces.__init__.
 """
 
-import pytest
 from demsausage.app.sausage.loader import STAGE_LABELS, PollingPlacesIngestBase
 
 # ---------------------------------------------------------------------------
@@ -279,12 +278,10 @@ class TestStageLabels:
 
     def test_labels_are_non_empty_strings(self):
         for name, label in STAGE_LABELS.items():
-            assert (
-                isinstance(label, str) and label.strip()
-            ), f"STAGE_LABELS[{name!r}] is not a non-empty string"
+            assert isinstance(label, str) and label.strip(), (
+                f"STAGE_LABELS[{name!r}] is not a non-empty string"
+            )
 
     def test_no_unexpected_stages(self):
-        # Warn if extra stages are present (not a hard failure; new stages are fine)
-        extra = set(STAGE_LABELS.keys()) - EXPECTED_STAGE_NAMES
-        # Just verify the dict is a superset of what we expect
+        # New stages are allowed as long as all expected stages remain.
         assert EXPECTED_STAGE_NAMES.issubset(set(STAGE_LABELS.keys()))

@@ -1,7 +1,7 @@
 import json
 import os.path
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pandas as pd
 import requests
@@ -12,7 +12,7 @@ def get_disabled_access_string(DisabledAccessType):
         return "Full"
     elif DisabledAccessType == 0:
         return "None"
-    raise Exception(f"Unknown 'DisabledAccessType' of {DisabledAccessType} found.")
+    raise ValueError(f"Unknown 'DisabledAccessType' of {DisabledAccessType} found.")
 
 
 def transform_polling_place(polling_place):
@@ -101,19 +101,19 @@ else:
             "districtOrdinaryPollingPlaces"
         ]:
             if polling_place["INDICATOR_DA"] not in [0, 1]:
-                raise Exception(
-                    f"Unknown 'INDICATOR_DA' found: {polling_place["INDICATOR_DA"]}"
+                raise ValueError(
+                    f"Unknown 'INDICATOR_DA' found: {polling_place['INDICATOR_DA']}"
                 )
 
             # if polling_place["VENUE_NAME"] != polling_place["ASSIGNED_NAME"]:
             #     raise Exception(f"{polling_place['VENUE_NAME']} != {polling_place['ASSIGNED_NAME']}")
 
             if polling_place["IS_REAL"] not in [1]:
-                raise Exception(f"Unknown 'IS_REAL' found: {polling_place["IS_REAL"]}")
+                raise ValueError(f"Unknown 'IS_REAL' found: {polling_place['IS_REAL']}")
 
             # Handle some polling places in the initial releases still being TBC
             if polling_place["LATITUDE"] == None or polling_place["LONGITUDE"] == None:
-                print(f"Skipping '{polling_place["VENUE_NAME"]}' due to blank lat/lon")
+                print(f"Skipping '{polling_place['VENUE_NAME']}' due to blank lat/lon")
                 continue
 
             # Handle early polling places with duplicate addresses and lat/lons separately
@@ -142,7 +142,7 @@ else:
 # Handle duplicate 'Central' entries for a few districts
 polling_places_dupe_pairs = {}
 for polling_place in polling_places_dupes:
-    latlon = f"{polling_place["lat"]},{polling_place["lon"]}"
+    latlon = f"{polling_place['lat']},{polling_place['lon']}"
     if latlon not in polling_places_dupe_pairs:
         polling_places_dupe_pairs[latlon] = []
 
@@ -150,24 +150,24 @@ for polling_place in polling_places_dupes:
 
 for dupe_polling_places in polling_places_dupe_pairs.values():
     if len(dupe_polling_places) > 1:
-        latlon = f"{dupe_polling_places[0]["lat"]},{dupe_polling_places[0]["lon"]}"
+        latlon = f"{dupe_polling_places[0]['lat']},{dupe_polling_places[0]['lon']}"
 
         if latlon not in expected_dupes_pairs:
-            raise Exception(
-                f"Unexpected set of duplicate polling places found: {", ".join([pp["name"] for pp in dupe_polling_places])} ({latlon})"
+            raise ValueError(
+                f"Unexpected set of duplicate polling places found: {', '.join([pp['name'] for pp in dupe_polling_places])} ({latlon})"
             )
 
         for polling_place in dupe_polling_places:
             if polling_place["name"] not in expected_dupes_pairs[latlon]["names"]:
-                raise Exception(
-                    f"Unexpected polling place found in a predefined duplicate pair: {polling_place["name"]} found for {latlon}"
+                raise ValueError(
+                    f"Unexpected polling place found in a predefined duplicate pair: {polling_place['name']} found for {latlon}"
                 )
 
         for name in expected_dupes_pairs[latlon]["names"]:
             if name not in [
                 polling_place["name"] for polling_place in dupe_polling_places
             ]:
-                raise Exception(
+                raise ValueError(
                     f"Expected polling place not found in a predefined duplicate pair: {name} found for {latlon}"
                 )
 
@@ -181,9 +181,10 @@ for dupe_polling_places in polling_places_dupe_pairs.values():
 
 if len(expected_dupes_pairs.values()) != 0:
     print(expected_dupes_pairs)
-    raise Exception(
+    raise ValueError(
         "There are expected duplicate pairs remaining when there shouldn't be"
     )
 
 df = pd.DataFrame.from_dict(polling_places, orient="index")
-df.to_csv(f"data/wa_2025 ({datetime.today().strftime("%Y%m%d")}).csv", index=False)
+local_date = datetime.now(UTC).astimezone().strftime("%Y%m%d")
+df.to_csv(f"data/wa_2025 ({local_date}).csv", index=False)

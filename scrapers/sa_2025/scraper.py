@@ -137,7 +137,8 @@ def extract_polling_places(html: str) -> list[dict]:
         raise ValueError(f"Could not parse App.pollingPlaces JSON: {exc}") from exc
 
     if not isinstance(data, list):
-        raise ValueError(
+        # Malformed source data is consistently reported as ValueError.
+        raise ValueError(  # noqa: TRY004
             f"Expected App.pollingPlaces to be a list, got {type(data).__name__}"
         )
 
@@ -315,6 +316,6 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         main()
-    except Exception as exc:
+    except (OSError, ValueError, TypeError, KeyError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)

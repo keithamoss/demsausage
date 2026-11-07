@@ -64,7 +64,7 @@ def main() -> None:
     fake_row["name"] = "Test Fake Polling Place"
     fake_row["suburb"] = "Fakeville"
     modified.append(fake_row)
-    print(f"  Change 3 (insert): new row id=99999 appended at end")
+    print("  Change 3 (insert): new row id=99999 appended at end")
 
     with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=fieldnames)
@@ -72,7 +72,7 @@ def main() -> None:
         writer.writerows(modified)
 
     print(f"\nTest file written to: {OUTPUT_PATH}")
-    print(f"\nRun diff with:\n" f'  python diff.py "{source}" "{OUTPUT_PATH}"')
+    print(f'\nRun diff with:\n  python diff.py "{source}" "{OUTPUT_PATH}"')
 
 
 if __name__ == "__main__":

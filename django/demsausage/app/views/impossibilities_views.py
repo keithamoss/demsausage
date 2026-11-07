@@ -1,3 +1,8 @@
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from demsausage.app.sausage.impossibilities import (
     inactive_polling_places_with_an_mpp,
     meta_polling_places_used_more_than_once_in_an_election,
@@ -19,10 +24,6 @@ from demsausage.app.sausage.impossibilities import (
     stalls_with_active_polling_places_with_no_noms,
     stalls_with_no_noms,
 )
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 
 class ImpossibilitiesViewSet(viewsets.ViewSet):

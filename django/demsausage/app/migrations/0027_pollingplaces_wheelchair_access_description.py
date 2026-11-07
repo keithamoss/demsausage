@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0026_alter_elections_is_federal'),
+        ("app", "0026_alter_elections_is_federal"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pollingplaces',
-            name='wheelchair_access_description',
+            model_name="pollingplaces",
+            name="wheelchair_access_description",
             field=models.TextField(blank=True),
         ),
     ]

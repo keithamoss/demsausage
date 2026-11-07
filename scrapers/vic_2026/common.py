@@ -2,7 +2,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal, TypeGuard, TypedDict, overload
+from typing import Literal, TypedDict, TypeGuard, overload
 
 import openpyxl
 
@@ -261,10 +261,11 @@ def _require_list(value: object, context: str) -> list[object]:
     return value
 
 
+# Invalid external data is consistently reported as ValueError by these parsers.
 def _require_str(record: dict[str, object], key: str, context: str) -> str:
     value = record.get(key)
     if not isinstance(value, str):
-        raise ValueError(f"Expected text for {context}.{key}")
+        raise ValueError(f"Expected text for {context}.{key}")  # noqa: TRY004
     return value
 
 
@@ -280,14 +281,14 @@ def _require_optional_str(
 def _require_int(record: dict[str, object], key: str, context: str) -> int:
     value = record.get(key)
     if not isinstance(value, int) or isinstance(value, bool):
-        raise ValueError(f"Expected an integer for {context}.{key}")
+        raise ValueError(f"Expected an integer for {context}.{key}")  # noqa: TRY004
     return value
 
 
 def _require_float(record: dict[str, object], key: str, context: str) -> float:
     value = record.get(key)
     if not isinstance(value, (int, float)) or isinstance(value, bool):
-        raise ValueError(f"Expected a number for {context}.{key}")
+        raise ValueError(f"Expected a number for {context}.{key}")  # noqa: TRY004
     return float(value)
 
 
@@ -428,7 +429,7 @@ def _require_str_list(value: object, context: str) -> list[str]:
 
 def _require_number(value: object, context: str) -> float:
     if not isinstance(value, (int, float)) or isinstance(value, bool):
-        raise ValueError(f"Expected a number for {context}")
+        raise ValueError(f"Expected a number for {context}")  # noqa: TRY004
     return float(value)
 
 
@@ -458,7 +459,7 @@ def parse_scrape_cache(value: object) -> ScrapeCache:
         )
     complete = raw.get("complete")
     if not isinstance(complete, bool):
-        raise ValueError("Expected a boolean scrape cache complete field")
+        raise ValueError("Expected a boolean scrape cache complete field")  # noqa: TRY004
     finished_at = _require_optional_str(raw, "finished_at", "scrape cache")
 
     spreadsheet_raw = _require_dict(raw.get("spreadsheet"), "scrape cache.spreadsheet")
@@ -520,14 +521,14 @@ def parse_scrape_cache(value: object) -> ScrapeCache:
     }
 
 
-def norm(value: str | int | float | None) -> str:
+def norm(value: str | float | None) -> str:
     return " ".join(str(value or "").split()).lower()
 
 
 def venue_key(
-    name: str | int | float | None,
-    address_line_1: str | int | float | None,
-    suburb: str | int | float | None,
+    name: str | float | None,
+    address_line_1: str | float | None,
+    suburb: str | float | None,
 ) -> VenueKey:
     return (norm(name), norm(address_line_1), norm(suburb))
 
@@ -585,7 +586,7 @@ class Venue:
 
 def clean_cell(value: object) -> SheetCell:
     if isinstance(value, bool):
-        raise ValueError(f"Unexpected boolean spreadsheet cell {value!r}")
+        raise ValueError(f"Unexpected boolean spreadsheet cell {value!r}")  # noqa: TRY004
     if value is None or isinstance(value, (str, int, float)):
         return value.strip() if isinstance(value, str) else value
     raise ValueError(
@@ -610,7 +611,7 @@ def _read_sheet_rows(
             if cell is None:
                 continue
             if not isinstance(cell, str):
-                raise ValueError(f"Non-text header in sheet {sheet!r}: {cell!r}")
+                raise ValueError(f"Non-text header in sheet {sheet!r}: {cell!r}")  # noqa: TRY004
             header_cells.append(cell)
         header = tuple(header_cells)
         if header != expected_headers:
@@ -648,7 +649,7 @@ def _optional_text(row: dict[str, SheetCell], field_name: str) -> str | None:
     if value is None:
         return None
     if not isinstance(value, str):
-        raise ValueError(
+        raise ValueError(  # noqa: TRY004
             f"Expected text in spreadsheet column {field_name!r}, got {value!r}"
         )
     return value

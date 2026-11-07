@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0024_alter_historicalstalls_options_and_more'),
+        ("app", "0024_alter_historicalstalls_options_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='elections',
-            name='is_federal',
+            model_name="elections",
+            name="is_federal",
             field=models.BooleanField(null=True),
         ),
     ]

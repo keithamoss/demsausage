@@ -14,9 +14,9 @@ import sys
 from pathlib import Path
 
 from common import (
-    ApiVenue,
     CACHE_DIR,
     DATA_DIR,
+    ApiVenue,
     PollingPlaceOutputRow,
     ScrapeCache,
     Venue,
@@ -118,7 +118,7 @@ def validate_api_fields(voting_centres: dict[str, ApiVenue]) -> None:
         )
 
 
-def parse_estimate(value: str | int | float | None) -> int | None:
+def parse_estimate(value: str | float | None) -> int | None:
     return None if value is None else int(value)
 
 

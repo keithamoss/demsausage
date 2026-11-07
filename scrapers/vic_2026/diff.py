@@ -281,9 +281,10 @@ def build_report(old_path: Path, new_path: Path) -> list[str]:
         (k for k in old.keys() & new.keys() if old[k] != new[k]),
         key=lambda k: new[k]["name"],
     )
-    old_cache_path, new_cache_path = cache_path_for_output(
-        old_path
-    ), cache_path_for_output(new_path)
+    old_cache_path, new_cache_path = (
+        cache_path_for_output(old_path),
+        cache_path_for_output(new_path),
+    )
     old_cache = load_cache(old_cache_path) if old_cache_path.exists() else None
     new_cache = load_cache(new_cache_path) if new_cache_path.exists() else None
     old_sheet = old_cache["spreadsheet"] if old_cache else None

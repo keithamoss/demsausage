@@ -4,25 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0014_auto_20190422_0113'),
+        ("app", "0014_auto_20190422_0113"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalstalls',
-            name='opening_hours',
+            model_name="historicalstalls",
+            name="opening_hours",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='pollingplacenoms',
-            name='opening_hours',
+            model_name="pollingplacenoms",
+            name="opening_hours",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='stalls',
-            name='opening_hours',
+            model_name="stalls",
+            name="opening_hours",
             field=models.TextField(blank=True),
         ),
     ]

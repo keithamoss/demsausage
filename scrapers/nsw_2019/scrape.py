@@ -1,41 +1,56 @@
 import os
+
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-import json
-from urllib.parse import parse_qs
-import pytz
-import time
 import csv
+import json
+import time
 from copy import deepcopy
+from urllib.parse import parse_qs
 
 import requests
-from haralyzer import HarParser, HarPage
 from bs4 import BeautifulSoup
-
-from demsausage.app.models import PollingPlaces
-from demsausage.app.serializers import PollingPlacesManagementSerializer
-from django.contrib.gis.geos import Point
 from demsausage.app.enums import PollingPlaceStatus
+from demsausage.app.serializers import PollingPlacesManagementSerializer
 from demsausage.util import add_datetime_to_filename
+from django.contrib.gis.geos import Point
+from haralyzer import HarParser
 
 
-class scraper():
+class scraper:
     def __init__(self):
         self.base_dir = "/scrapers/nsw/"
         self.index_url = "http://map.elections.nsw.gov.au/Event.aspx?ID=SG1901&mode=PP"
         self.har_path = os.path.join(self.base_dir, "map.elections.nsw.gov.au.har")
-        self.placemark_api = "http://map.elections.nsw.gov.au/PlacemarkApi.ashx?mode=PP&ID={ID}"
+        self.placemark_api = (
+            "http://map.elections.nsw.gov.au/PlacemarkApi.ashx?mode=PP&ID={ID}"
+        )
         self.cookie_jar = self.__get_cookies()
 
     def __get_cookies(self):
         # REPLACE THESE
         jar = requests.cookies.RequestsCookieJar()
-        jar.set("incap_ses_435_143128", "aQA7P1yyVhQAG2CVim8JBt/wiFwAAAAAvtCoHVHzLQIcH1+RE80iCg==", domain=".elections.nsw.gov.au", path="/")
-        jar.set("incap_ses_973_143128", "WqLGBrT7jEwylS766sqADQnyiFwAAAAAaccU8ZPJWLPcYnjlfvBPdQ==", domain=".elections.nsw.gov.au", path="/")
-        jar.set("visid_incap_143128", "s53vfKc9QJGfqKixn0kM2N/wiFwAAAAAQUIPAAAAAABe0XujrkikzGaVjW3p/WhC", domain=".elections.nsw.gov.au", path="/")
+        jar.set(
+            "incap_ses_435_143128",
+            "aQA7P1yyVhQAG2CVim8JBt/wiFwAAAAAvtCoHVHzLQIcH1+RE80iCg==",
+            domain=".elections.nsw.gov.au",
+            path="/",
+        )
+        jar.set(
+            "incap_ses_973_143128",
+            "WqLGBrT7jEwylS766sqADQnyiFwAAAAAaccU8ZPJWLPcYnjlfvBPdQ==",
+            domain=".elections.nsw.gov.au",
+            path="/",
+        )
+        jar.set(
+            "visid_incap_143128",
+            "s53vfKc9QJGfqKixn0kM2N/wiFwAAAAAQUIPAAAAAABe0XujrkikzGaVjW3p/WhC",
+            domain=".elections.nsw.gov.au",
+            path="/",
+        )
         return jar
 
     def __get_page_content_from_har(self):
@@ -45,12 +60,12 @@ class scraper():
         for page in har_parser.pages[:1]:
             for file in page.html_files:
                 return file["response"]["content"]["text"]
-        raise Exception("Unable to access HAR file.")
+        raise RuntimeError("Unable to access HAR file.")
 
     def __get_ids_from_index(self):
         ids = []
         res = BeautifulSoup(self.__get_page_content_from_har(), "html5lib")
-        for a in res.select("a[href^=Map\.aspx]"):
+        for a in res.select(r"a[href^=Map\.aspx]"):
             ids.append(parse_qs(a["href"])["ID"][0])
         return ids
 
@@ -62,7 +77,7 @@ class scraper():
 
         if r.status_code == 200 and json is not None:
             return json
-        raise Exception("Error getting JSON from Placemark API")
+        raise RuntimeError("Error getting JSON from Placemark API")
 
     def scrape_polling_places_json(self):
         polling_places = []
@@ -72,11 +87,13 @@ class scraper():
             # Be nice
             time.sleep(3)
 
-        json_filepath = os.path.join(self.base_dir, add_datetime_to_filename("nsw_polling_places.json"))
+        json_filepath = os.path.join(
+            self.base_dir, add_datetime_to_filename("nsw_polling_places.json")
+        )
         with open(json_filepath, "w") as f:
             f.write(json.dumps(polling_places))
 
-        print("Wrote {} polling places to {}".format(len(polling_places), json_filepath))
+        print(f"Wrote {len(polling_places)} polling places to {json_filepath}")
         return json_filepath
 
     def __json_to_model(self, polling_place):
@@ -84,15 +101,23 @@ class scraper():
             if polling_place["Access"] is True:
                 return "Wheelchair accessible"
             if polling_place["AssistedAccess"] is True:
-                return "Wheelchair accessible with assistance: {}".format("; ".join(polling_place["FeatureValues"]))
+                return "Wheelchair accessible with assistance: {}".format(
+                    "; ".join(polling_place["FeatureValues"])
+                )
             return ""
 
         def __get_address(polling_place):
-            return "{address}, {locality} {postcode}".format(address=polling_place["Address"], locality=polling_place["Locality"], postcode=polling_place["Postcode"])
+            return "{address}, {locality} {postcode}".format(
+                address=polling_place["Address"],
+                locality=polling_place["Locality"],
+                postcode=polling_place["Postcode"],
+            )
 
         return {
             "election": 1,
-            "geom": Point(float(polling_place["Lon"]), float(polling_place["Lat"]), srid=4326),
+            "geom": Point(
+                float(polling_place["Lon"]), float(polling_place["Lat"]), srid=4326
+            ),
             "name": polling_place["Name"],
             "facility_type": None,
             "premises": polling_place["Premises"],
@@ -108,31 +133,52 @@ class scraper():
         # A few checks to validate the JSON to handle fields that look like they'll be used in the future / closer to election day.
 
         if polling_place["UppnLabel"] != "USVN":
-            raise Exception("PP {}: UppnLabel is not USVN".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: UppnLabel is not USVN".format(polling_place["Name"])
+            )
 
         if polling_place["Type"] != 1:
-            raise Exception("PP {}: Type is not 1".format(polling_place["Name"]))
+            raise ValueError("PP {}: Type is not 1".format(polling_place["Name"]))
 
         if polling_place["Access"] is True and polling_place["AssistedAccess"] is True:
-            raise Exception("PP {}: Both Access and AssistedAccess are true".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: Both Access and AssistedAccess are true".format(
+                    polling_place["Name"]
+                )
+            )
 
-        if polling_place["AssistedAccess"] is True and len(polling_place["FeatureValues"]) == 0:
-            raise Exception("PP {}: Requires assisted access, but no details provided".format(polling_place["Name"]))
+        if (
+            polling_place["AssistedAccess"] is True
+            and len(polling_place["FeatureValues"]) == 0
+        ):
+            raise ValueError(
+                "PP {}: Requires assisted access, but no details provided".format(
+                    polling_place["Name"]
+                )
+            )
 
         if polling_place["NextAvailable"] is not None:
-            raise Exception("PP {}: NextAvailable is not null".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: NextAvailable is not null".format(polling_place["Name"])
+            )
 
         if polling_place["Ppp"] != 0:
-            raise Exception("PP {}: Ppp is not 0".format(polling_place["Name"]))
+            raise ValueError("PP {}: Ppp is not 0".format(polling_place["Name"]))
 
         if polling_place["RoTelephone"] is not None:
-            raise Exception("PP {}: RoTelephone is not null".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: RoTelephone is not null".format(polling_place["Name"])
+            )
 
         if polling_place["IsVenueTypePPP"] is not False:
-            raise Exception("PP {}: IsVenueTypePPP is not false".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: IsVenueTypePPP is not false".format(polling_place["Name"])
+            )
 
         if polling_place["IsVenueTypeMW"] is not False:
-            raise Exception("PP {}: IsVenueTypeMW is not false".format(polling_place["Name"]))
+            raise ValueError(
+                "PP {}: IsVenueTypeMW is not false".format(polling_place["Name"])
+            )
 
         return True
 
@@ -161,12 +207,16 @@ class scraper():
                 self.__validate_json(polling_place)
 
             for polling_place in polling_places:
-                serialiser = PollingPlacesManagementSerializer(data=self.__json_to_model(polling_place))
+                serialiser = PollingPlacesManagementSerializer(
+                    data=self.__json_to_model(polling_place)
+                )
                 if serialiser.is_valid() is True:
-                    polling_place_models.append(__model_to_json(serialiser.validated_data))
+                    polling_place_models.append(
+                        __model_to_json(serialiser.validated_data)
+                    )
                 else:
                     print(polling_place)
-                    raise Exception(serialiser.errors)
+                    raise ValueError(serialiser.errors)
 
         return polling_place_models
 
@@ -176,7 +226,9 @@ class scraper():
 
         polling_place_models = self.convert_to_demsausage_schema(json_filepath)
 
-        csv_filepath = os.path.join(self.base_dir, add_datetime_to_filename("nsw_polling_places.csv"))
+        csv_filepath = os.path.join(
+            self.base_dir, add_datetime_to_filename("nsw_polling_places.csv")
+        )
         with open(csv_filepath, "w") as f:
             writer = csv.writer(f)
 
@@ -185,7 +237,7 @@ class scraper():
             for polling_place in polling_place_models:
                 writer.writerow(list(polling_place.values()))
 
-        print("Wrote {} polling_places to {}".format(len(polling_place_models), csv_filepath))
+        print(f"Wrote {len(polling_place_models)} polling_places to {csv_filepath}")
         return csv_filepath
 
 

@@ -1,7 +1,9 @@
 import os
 from datetime import datetime
 
+import django
 import pytz
+
 from demsausage.app.test_data.utils import (
     cleanup,
     create_owner_submission_stall,
@@ -26,15 +28,14 @@ from demsausage.app.test_data.utils import (
     get_next_polling_place,
 )
 
-import django
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-from demsausage.app.enums import StallStatus, StallTipOffSource
-from demsausage.app.models import PollingPlaceNoms, Stalls
+# These imports require Django's app registry to be initialized.
+from django.contrib.auth.models import User  # noqa: E402
 
-from django.contrib.auth.models import User
+from demsausage.app.enums import StallStatus, StallTipOffSource  # noqa: E402
+from demsausage.app.models import PollingPlaceNoms, Stalls  # noqa: E402
 
 # Monkey patching so it looks like changes by real users
 PollingPlaceNoms._history_user = property(lambda self: User.objects.get(id=1))

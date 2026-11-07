@@ -15,6 +15,7 @@ import json
 import os
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from demsausage.app.sausage.loader import LoadPollingPlaces

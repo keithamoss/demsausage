@@ -4,23 +4,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0059_alter_historicalmetapollingplacestasks_type_and_more'),
+        ("app", "0059_alter_historicalmetapollingplacestasks_type_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='historicalpollingplacenoms',
-            name='internal_notes',
+            model_name="historicalpollingplacenoms",
+            name="internal_notes",
         ),
         migrations.RemoveField(
-            model_name='pollingplacenoms',
-            name='internal_notes',
+            model_name="pollingplacenoms",
+            name="internal_notes",
         ),
         migrations.AddField(
-            model_name='pollingplaces',
-            name='internal_notes',
+            model_name="pollingplaces",
+            name="internal_notes",
             field=models.TextField(blank=True),
         ),
     ]

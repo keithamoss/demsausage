@@ -4,7 +4,6 @@ from django.db import connection, migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("app", "0048_remove_elections_analytics_stats_saved"),
     ]

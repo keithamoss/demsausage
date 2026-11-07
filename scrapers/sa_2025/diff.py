@@ -112,7 +112,7 @@ def check_duplicates(file_path, header, data, id_column, skip_indices):
             f"{YELLOW}{BOLD}Warning: duplicate '{id_column}' values in {file_path} — these rows will be skipped:{RESET}"
         )
         for dupe_id, count in sorted(
-            dupes.items(), key=lambda x: (int(x[0]) if x[0].isdigit() else x[0])
+            dupes.items(), key=lambda x: int(x[0]) if x[0].isdigit() else x[0]
         ):
             print(f"  {YELLOW}{id_column} {dupe_id} appears {count} times{RESET}")
         print()
@@ -193,7 +193,7 @@ def _generate_report_inner(
 
     all_ids = sorted(
         (map1.keys() | map2.keys()) - excluded_ids,
-        key=lambda x: (int(x) if x.isdigit() else x),
+        key=lambda x: int(x) if x.isdigit() else x,
     )
 
     only_in_file1 = []

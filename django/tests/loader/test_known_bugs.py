@@ -14,11 +14,11 @@ failure) while the bug is present, and would FAIL (unexpected pass) once fixed.
 """
 
 import pytest
+from django.contrib.gis.geos import Point
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces, Stalls
 from demsausage.app.sausage.loader import RollbackPollingPlaces
-
-from django.contrib.gis.geos import Point
 
 MELB_LON = 144.9631
 MELB_LAT = -37.8136
@@ -86,6 +86,6 @@ def test_rollback_cleanup_polling_places_loaded_reset_raises(test_election):
 
     # If we reach here the bug is fixed; ensure polling_places_loaded was reset
     test_election.refresh_from_db()
-    assert (
-        test_election.polling_places_loaded is False
-    ), "After rollback, polling_places_loaded should be False"
+    assert test_election.polling_places_loaded is False, (
+        "After rollback, polling_places_loaded should be False"
+    )

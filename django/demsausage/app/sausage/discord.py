@@ -1,8 +1,11 @@
 import json
 
 import requests
+
 from demsausage.app.admin import is_production
-from demsausage.util import get_env
+from demsausage.util import get_env, make_logger
+
+logger = make_logger(__name__)
 
 
 def send_discord_webhook_message(content):
@@ -25,6 +28,5 @@ def send_discord_webhook_message(content):
                     }
                 ),
             )
-        except:
-            # Fail silently because we don't want to surface this sort of non-critical error to the user
-            pass
+        except requests.RequestException as exc:
+            logger.warning("Failed to send Discord webhook (%s)", type(exc).__name__)

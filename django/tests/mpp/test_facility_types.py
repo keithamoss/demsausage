@@ -5,8 +5,9 @@ Covers the API contract used by REVIEW_DRAFT UI select options.
 """
 
 import pytest
-from demsausage.app.models import PollingPlaceFacilityType
 from rest_framework.test import APIClient
+
+from demsausage.app.models import PollingPlaceFacilityType
 
 URL = "/api/0.1/polling_places_facility_types/"
 

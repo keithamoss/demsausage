@@ -1,8 +1,8 @@
-from demsausage.util import get_or_none
-
 from django.contrib.gis import measure
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Q
+
+from demsausage.util import get_or_none
 
 
 def get_active_polling_place_queryset():
@@ -105,7 +105,7 @@ def getFoodDescription(stall):
 def is_noms_item_true(polling_place, item):
     if polling_place.noms is not None and polling_place.noms.noms is not None:
         if item in polling_place.noms.noms:
-            if type(polling_place.noms.noms[item]) == bool:
+            if type(polling_place.noms.noms[item]) is bool:
                 if polling_place.noms.noms[item] is True:
                     return True
     return False

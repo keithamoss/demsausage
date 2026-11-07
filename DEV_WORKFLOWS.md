@@ -16,15 +16,14 @@ The recommended editor workflow is the VS Code Dev Container in this repository.
 
 The base Django image contains runtime dependencies only; pytest and the other development dependencies are installed from the `dev` group during workspace creation. Workspace creation also installs pre-commit as a separate tool, so the repository's Git hooks run when you commit from inside the container.
 
-Ruff is used for Python linting, import sorting, and formatting. Its configuration is in `django/pyproject.toml`; VS Code formats the whole Python file and applies Ruff lint fixes and import sorting when you save it explicitly. The existing Python code has Ruff findings and formatting differences, so saving an existing file can produce unrelated formatting/import changes; review them before committing. Ruff is not a commit gate yet. To run it manually:
+Ruff is used for Python linting, import sorting, and formatting. The Django configuration is in `django/pyproject.toml`; standalone scripts use Ruff's defaults. VS Code formats the whole Python file and applies Ruff lint fixes and import sorting when you save it explicitly. Ruff is not a commit gate yet. To check the entire repository, run from its root:
 
 ```bash
-cd django
 ruff check .
 ruff format --check .
 ```
 
-`ruff check --fix .` applies safe lint fixes, while `ruff format .` applies formatting. Review the resulting changes before keeping them; do not format the entire existing codebase as part of routine setup.
+`ruff check --fix .` applies safe lint fixes, while `ruff format .` applies formatting, including Python examples in Markdown. Review the resulting changes before keeping them.
 
 When updating Python dependencies, change `django/pyproject.toml`, regenerate and review `django/uv.lock` with uv, then rebuild/reopen the Dev Container so the development group is installed. Do not use Poetry or create a project virtual environment. For frontend dependency changes, commit the relevant pnpm lockfile and rebuild/reopen the container.
 

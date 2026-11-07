@@ -1,6 +1,20 @@
 import json
 import urllib.parse
 
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models import Extent
+from django.core.cache import cache
+from django.db import transaction
+from django.db.models import F, Func
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from rest_framework import generics, mixins, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
+from rest_framework_csv.renderers import CSVRenderer
+from simple_history.utils import update_change_reason
+
 from demsausage.app.enums import (
     PollingPlaceChanceOfSausage,
     PollingPlaceHistoryEventType,
@@ -52,20 +66,6 @@ from demsausage.util import (
     get_or_none,
     get_url_safe_election_name,
 )
-from rest_framework import generics, mixins, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
-from rest_framework_csv.renderers import CSVRenderer
-from simple_history.utils import update_change_reason
-
-from django.contrib.auth.models import User
-from django.contrib.gis.db.models import Extent
-from django.core.cache import cache
-from django.db import transaction
-from django.db.models import F, Func
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
 
 
 class PollingPlacesViewSet(

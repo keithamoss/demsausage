@@ -25,7 +25,7 @@ with open("output_submitter_emails_20250323.json") as fo:
                 )
 
                 if lookup is None:
-                    print(f"{item["email"]} not found in the categorisation list")
+                    print(f"{item['email']} not found in the categorisation list")
                     continue
 
                 if lookup["category"] in ["", "Private Email", "Government - Other"]:

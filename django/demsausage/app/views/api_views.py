@@ -1,6 +1,6 @@
-from demsausage.util import make_logger
-
 from django.http import HttpResponseNotFound
+
+from demsausage.util import make_logger
 
 logger = make_logger(__name__)
 

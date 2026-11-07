@@ -1,18 +1,17 @@
-from demsausage.util import get_env, make_logger
-
 from django.apps import AppConfig
+
+from demsausage.util import get_env, make_logger
 
 logger = make_logger(__name__)
 
 
 class MyAppConfig(AppConfig):
-    name = 'demsausage.app'
+    name = "demsausage.app"
 
     def ready(self):
         import demsausage.app.signals  # noqa
         from demsausage.app.admin import is_production
-        from demsausage.app.sausage.elections import \
-            cache_rehydration_on_init_tasks
+        from demsausage.app.sausage.elections import cache_rehydration_on_init_tasks
 
         # Otherwise this would run every time Django reloads due to code changes in development
         if is_production() is True and get_env("BUILD") != "YES":

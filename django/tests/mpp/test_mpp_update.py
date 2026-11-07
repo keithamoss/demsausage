@@ -5,13 +5,9 @@ Tests that MetaPollingPlacesViewSet.partial_update accepts the correct writable
 fields and silently discards read-only fields (overseas, status).
 """
 
-import json
-
 import pytest
-from demsausage.app.enums import MetaPollingPlaceStatus
-from demsausage.app.models import MetaPollingPlaces
 
-from django.contrib.gis.geos import GEOSGeometry
+from demsausage.app.enums import MetaPollingPlaceStatus
 
 
 def _url(pk):
@@ -57,7 +53,9 @@ def test_patch_all_writable_fields(api_client, draft_mpp, facility_type):
 @pytest.mark.django_db
 def test_patch_name_only(api_client, draft_mpp):
     original_premises = draft_mpp.premises
-    resp = api_client.patch(_url(draft_mpp.id), {"name": "Partial Update Hall"}, format="json")
+    resp = api_client.patch(
+        _url(draft_mpp.id), {"name": "Partial Update Hall"}, format="json"
+    )
     assert resp.status_code == 200
 
     draft_mpp.refresh_from_db()
@@ -92,7 +90,9 @@ def test_patch_geom_location_valid(api_client, draft_mpp):
 @pytest.mark.django_db
 def test_patch_facility_type_valid_id(api_client, draft_mpp, facility_type):
     assert draft_mpp.facility_type_id is None
-    resp = api_client.patch(_url(draft_mpp.id), {"facility_type": facility_type.id}, format="json")
+    resp = api_client.patch(
+        _url(draft_mpp.id), {"facility_type": facility_type.id}, format="json"
+    )
     assert resp.status_code == 200
 
     draft_mpp.refresh_from_db()
@@ -153,7 +153,9 @@ def test_patch_geom_location_invalid_shape(api_client, draft_mpp):
         {
             "geom_location": {
                 "type": "Polygon",
-                "coordinates": [[[144.9, -37.8], [145.0, -37.8], [145.0, -37.9], [144.9, -37.8]]],
+                "coordinates": [
+                    [[144.9, -37.8], [145.0, -37.8], [145.0, -37.9], [144.9, -37.8]]
+                ],
             }
         },
         format="json",
@@ -235,4 +237,6 @@ def test_patch_status_ignored(api_client, draft_mpp):
     assert resp.status_code == 200
 
     draft_mpp.refresh_from_db()
-    assert draft_mpp.status == MetaPollingPlaceStatus.DRAFT  # unchanged — not in serializer
+    assert (
+        draft_mpp.status == MetaPollingPlaceStatus.DRAFT
+    )  # unchanged — not in serializer

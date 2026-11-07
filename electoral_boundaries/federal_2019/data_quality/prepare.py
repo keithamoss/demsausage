@@ -1,20 +1,23 @@
-import os
-import django
 import json
+import os
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-from django.db import transaction
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
 
-from demsausage.app.models import PollingPlaces
 from demsausage.app.sausage.polling_places import get_active_polling_place_queryset
 
 queryset = get_active_polling_place_queryset().filter(election_id=27)
 
-with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed2019_updated_locations_linked.json")) as f:
+with open(
+    os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "data",
+        "fed2019_updated_locations_linked.json",
+    )
+) as f:
     fixed_booths = json.load(f)
     for_fix_data_issues = []
 
@@ -28,7 +31,14 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed
             print()
             for_fix_data_issues.append(fixed_booth)
 
-    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "fed2019_updated_locations_linked_only_with_distance_shift_huge_shifts.json"), "w") as nf:
+    with open(
+        os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            "data",
+            "fed2019_updated_locations_linked_only_with_distance_shift_huge_shifts.json",
+        ),
+        "w",
+    ) as nf:
         nf.write(json.dumps(for_fix_data_issues))
 
 

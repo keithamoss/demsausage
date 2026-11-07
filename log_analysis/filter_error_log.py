@@ -25,13 +25,14 @@ filtered_logs = []
 with open(LOG_FILE, "r") as file:
     for line in file:
         match = re.search(r"^(\d{4}/\d{2}/\d{2})", line)  # Extract date
-        if match and date_in_range(match.group(1)):  # Apply strict filtering
-            if (
-                "an upstream response is buffered to a temporary file" not in line
-                and "a client request body is buffered to a temporary file" not in line
-                and "SSL_do_handshake() failed" not in line
-            ):
-                filtered_logs.append(line)
+        if (
+            match
+            and date_in_range(match.group(1))
+            and "an upstream response is buffered to a temporary file" not in line
+            and "a client request body is buffered to a temporary file" not in line
+            and "SSL_do_handshake() failed" not in line
+        ):
+            filtered_logs.append(line)
 
 # Convert to DataFrame and save filtered logs
 df = pd.DataFrame(filtered_logs, columns=["log_entry"])

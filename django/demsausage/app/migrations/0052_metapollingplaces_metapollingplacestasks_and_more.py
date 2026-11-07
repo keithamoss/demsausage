@@ -2,8 +2,13 @@
 
 from collections import Counter
 
-import demsausage.app.enums
+import django.contrib.gis.db.models.fields
+import django.db.models.deletion
 import simple_history.models
+from django.conf import settings
+from django.db import migrations, models
+
+import demsausage.app.enums
 from demsausage.app.enums import (
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskType,
@@ -16,11 +21,6 @@ from demsausage.app.models import (
     PollingPlaces,
 )
 from demsausage.app.sausage.polling_places import find_by_distance
-
-import django.contrib.gis.db.models.fields
-import django.db.models.deletion
-from django.conf import settings
-from django.db import migrations, models
 
 
 def create_mpp(
@@ -56,7 +56,7 @@ def create_mpp(
     try:
         mpp_task.full_clean()
     except Exception as e:
-        print(f"Error creating MPP Task")
+        print("Error creating MPP Task")
         raise e
     mpp_task.save(force_insert=True)
 
@@ -64,7 +64,6 @@ def create_mpp(
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("app", "0051_pollingplaces_chance_of_sausage_stats"),

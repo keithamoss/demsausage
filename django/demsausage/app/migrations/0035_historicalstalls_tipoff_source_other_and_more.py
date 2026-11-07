@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0034_historicalstalls_tipoff_source_stalls_tipoff_source'),
+        ("app", "0034_historicalstalls_tipoff_source_stalls_tipoff_source"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalstalls',
-            name='tipoff_source_other',
+            model_name="historicalstalls",
+            name="tipoff_source_other",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='stalls',
-            name='tipoff_source_other',
+            model_name="stalls",
+            name="tipoff_source_other",
             field=models.TextField(blank=True),
         ),
     ]

@@ -4,7 +4,6 @@ from django.db import connection, migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("app", "0042_historicalstalls_owner_edit_timestamp_and_more"),
     ]

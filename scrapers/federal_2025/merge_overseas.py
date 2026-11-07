@@ -8,11 +8,14 @@ OVERSEAS_POLLING_PLACE_FILENAME = (
 MERGED_POLLING_PLACE_FILENAME = f"{POLLING_PLACE_FILENAME}_merged_overseas"
 
 # open both files
-with open(
-    f"data/{POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
-) as polling_places_australia, open(
-    f"{OVERSEAS_POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
-) as polling_places_overseas:
+with (
+    open(
+        f"data/{POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
+    ) as polling_places_australia,
+    open(
+        f"{OVERSEAS_POLLING_PLACE_FILENAME}.csv", encoding="utf-8"
+    ) as polling_places_overseas,
+):
     csv_polling_places_australia = csv.DictReader(polling_places_australia)
     list_polling_places_australia = list(csv_polling_places_australia)
     print(len(list_polling_places_australia))
@@ -29,7 +32,7 @@ with open(
     check_file_similarity = copy.deepcopy(csv_polling_places_overseas.fieldnames)
     check_file_similarity.remove("booth_info")
     if csv_polling_places_australia.fieldnames != check_file_similarity:
-        raise Exception(
+        raise ValueError(
             "The two polling place files should be identical except for the booth_info field"
         )
 

@@ -1,14 +1,15 @@
 from datetime import datetime
 
-from demsausage.app.models import Stalls
-from demsausage.app.sausage.mailgun import make_confirmation_hash, verify_webhook
-from demsausage.app.serializers import MailgunEventsSerializer
-from demsausage.util import get_or_none
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
+from demsausage.app.models import Stalls
+from demsausage.app.sausage.mailgun import make_confirmation_hash, verify_webhook
+from demsausage.app.serializers import MailgunEventsSerializer
+from demsausage.util import get_or_none
 
 
 class MailManagementViewSet(viewsets.ViewSet):

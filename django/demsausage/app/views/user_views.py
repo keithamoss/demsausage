@@ -1,12 +1,12 @@
-from demsausage.app.serializers import UserSerializer
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.contrib.auth import logout
-from django.contrib.auth.models import User
+from demsausage.app.serializers import UserSerializer
 
 
 class CurrentUserView(APIView):

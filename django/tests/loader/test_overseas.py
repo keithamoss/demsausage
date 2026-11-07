@@ -26,6 +26,7 @@ Tests (4):
 """
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import MetaPollingPlaces, PollingPlaces
 from tests.conftest import OVERSEAS_ROW, make_csv, run_loader_dry, run_loader_full
@@ -109,9 +110,9 @@ def test_overseas_pp_booth_info_is_persisted(test_election):
     pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        pp.booth_info == OVERSEAS_ROW["booth_info"]
-    ), f"Expected booth_info={OVERSEAS_ROW['booth_info']!r}, got {pp.booth_info!r}"
+    assert pp.booth_info == OVERSEAS_ROW["booth_info"], (
+        f"Expected booth_info={OVERSEAS_ROW['booth_info']!r}, got {pp.booth_info!r}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -137,14 +138,14 @@ def test_overseas_pp_mpp_has_overseas_true_and_no_jurisdiction(test_election):
     pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        pp.meta_polling_place_id is not None
-    ), "Overseas PP should have an MPP created after the first full load"
+    assert pp.meta_polling_place_id is not None, (
+        "Overseas PP should have an MPP created after the first full load"
+    )
 
     mpp = MetaPollingPlaces.objects.get(pk=pp.meta_polling_place_id)
-    assert (
-        mpp.overseas is True
-    ), f"MPP for an overseas PP must have overseas=True; got {mpp.overseas!r}"
-    assert (
-        mpp.jurisdiction is None
-    ), f"MPP for an overseas PP must have jurisdiction=None; got {mpp.jurisdiction!r}"
+    assert mpp.overseas is True, (
+        f"MPP for an overseas PP must have overseas=True; got {mpp.overseas!r}"
+    )
+    assert mpp.jurisdiction is None, (
+        f"MPP for an overseas PP must have jurisdiction=None; got {mpp.jurisdiction!r}"
+    )

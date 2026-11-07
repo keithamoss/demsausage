@@ -1,6 +1,16 @@
 from datetime import datetime
 
 import pytz
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
+from django.db import transaction
+from django.db.models import Count, F, Max, Q
+from django.http import HttpResponseBadRequest
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
     MetaPollingPlaceTaskCategory,
@@ -28,16 +38,6 @@ from demsausage.app.serializers import (
     MetaPollingPlacesTasksSerializer,
     MetaPollingPlacesUpdateSerializer,
 )
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
-from django.db import transaction
-from django.db.models import Case, Count, F, Max, Q, When
-from django.http import HttpResponseBadRequest
 
 
 class MetaPollingPlacesTasksViewSet(viewsets.ModelViewSet):
@@ -565,7 +565,7 @@ class MetaPollingPlacesViewSet(viewsets.ModelViewSet):
             try:
                 mpp.full_clean()
                 mpp.save(force_insert=True)
-            except Exception as e:
+            except Exception:
                 raise BadRequest(
                     f"Error creating MPP: {firstPollingPlace.name} (#{firstPollingPlace.id})"
                 )

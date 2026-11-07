@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0049_elections_analytics_stats_saved'),
+        ("app", "0049_elections_analytics_stats_saved"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='elections',
-            name='is_test',
+            model_name="elections",
+            name="is_test",
             field=models.BooleanField(default=False),
         ),
     ]

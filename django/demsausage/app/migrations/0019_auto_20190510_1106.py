@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0018_electoralboundaries'),
+        ("app", "0018_electoralboundaries"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='electoralboundaries',
-            name='loaded',
+            model_name="electoralboundaries",
+            name="loaded",
             field=models.DateField(auto_now_add=True),
         ),
     ]

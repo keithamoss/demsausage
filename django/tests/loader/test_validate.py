@@ -14,6 +14,7 @@ Tests (7 + 1 xfail):
 """
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
@@ -36,9 +37,9 @@ def test_required_field_missing_in_header(test_election):
     # Build a row that is missing wheelchair_access (blank=False in the model)
     row = {k: v for k, v in MINIMAL_ROW.items() if k != "wheelchair_access"}
     logs = run_loader_dry(test_election, make_csv([row]))
-    assert any(
-        "wheelchair_access" in m for m in logs.get("errors", [])
-    ), f"Expected missing-field error for wheelchair_access; errors={logs.get('errors')}"
+    assert any("wheelchair_access" in m for m in logs.get("errors", [])), (
+        f"Expected missing-field error for wheelchair_access; errors={logs.get('errors')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -55,9 +56,9 @@ def test_duplicate_ec_id_logs_error(test_election):
         {**MINIMAL_ROW, "name": "Test Hall 2", "address": NEARBY_ADDR, "ec_id": "123"},
     ]
     logs = run_loader_dry(test_election, make_csv(rows))
-    assert any(
-        "ec_id_duplicate" in m for m in logs.get("errors", [])
-    ), f"Expected non-unique-ec_id error; errors={logs.get('errors')}"
+    assert any("ec_id_duplicate" in m for m in logs.get("errors", [])), (
+        f"Expected non-unique-ec_id error; errors={logs.get('errors')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -79,9 +80,9 @@ def test_blank_ec_id_with_some_filled_logs_warning(test_election):
         },  # blank
     ]
     logs = run_loader_dry(test_election, make_csv(rows))
-    assert any(
-        "blank ec_id" in m.lower() for m in logs.get("warnings", [])
-    ), f"Expected blank-ec_id warning; warnings={logs.get('warnings')}"
+    assert any("blank ec_id" in m.lower() for m in logs.get("warnings", [])), (
+        f"Expected blank-ec_id warning; warnings={logs.get('warnings')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -108,9 +109,9 @@ def test_dedup_merge_combines_divisions(test_election):
     pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        "Hotham" in pp.divisions and "Richmond" in pp.divisions
-    ), f"Merged PP should contain both original divisions; divisions={pp.divisions}"
+    assert "Hotham" in pp.divisions and "Richmond" in pp.divisions, (
+        f"Merged PP should contain both original divisions; divisions={pp.divisions}"
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from demsausage.app.enums import PollingPlaceChanceOfSausage, PollingPlaceStatus
-from demsausage.app.models import Elections, PollingPlaces
+from demsausage.app.models import PollingPlaces
 from demsausage.app.sausage.polling_places import find_by_distance, is_noms_item_true
 
 

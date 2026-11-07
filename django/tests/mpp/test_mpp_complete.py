@@ -11,13 +11,14 @@ Tests that:
 from unittest.mock import patch
 
 import pytest
+from rest_framework.test import APIClient
+
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
     MetaPollingPlaceTaskOutcome,
     MetaPollingPlaceTaskStatus,
 )
 from demsausage.app.models import MetaPollingPlaces, MetaPollingPlacesTasks
-from rest_framework.test import APIClient
 
 
 def _complete_url(pk):
@@ -38,7 +39,9 @@ def _close_url(pk):
 
 
 @pytest.mark.django_db
-def test_complete_review_draft_promotes_draft_mpp(api_client, review_draft_task, draft_mpp):
+def test_complete_review_draft_promotes_draft_mpp(
+    api_client, review_draft_task, draft_mpp
+):
     resp = api_client.post(_complete_url(review_draft_task.id))
     assert resp.status_code == 200
 
@@ -57,9 +60,13 @@ def test_complete_review_draft_promotes_draft_mpp(api_client, review_draft_task,
 
 @pytest.mark.django_db
 def test_complete_review_draft_active_mpp_unchanged(api_client, db):
-    from demsausage.app.enums import MetaPollingPlaceTaskCategory, MetaPollingPlaceTaskType, PollingPlaceWheelchairAccess
-
     from django.contrib.gis.geos import Point
+
+    from demsausage.app.enums import (
+        MetaPollingPlaceTaskCategory,
+        MetaPollingPlaceTaskType,
+        PollingPlaceWheelchairAccess,
+    )
 
     # Create an ACTIVE MPP and a REVIEW_DRAFT task for it
     mpp = MetaPollingPlaces.objects.create(
@@ -91,9 +98,14 @@ def test_complete_review_draft_active_mpp_unchanged(api_client, db):
 
 
 @pytest.mark.django_db
-def test_complete_review_pp_does_not_promote_mpp(api_client, review_pp_task, active_mpp, draft_mpp):
+def test_complete_review_pp_does_not_promote_mpp(
+    api_client, review_pp_task, active_mpp, draft_mpp
+):
     # Create a REVIEW_PP task pointing to draft_mpp
-    from demsausage.app.enums import MetaPollingPlaceTaskCategory, MetaPollingPlaceTaskType
+    from demsausage.app.enums import (
+        MetaPollingPlaceTaskCategory,
+        MetaPollingPlaceTaskType,
+    )
 
     task = MetaPollingPlacesTasks.objects.create(
         meta_polling_place=draft_mpp,
@@ -115,7 +127,9 @@ def test_complete_review_pp_does_not_promote_mpp(api_client, review_pp_task, act
 
 
 @pytest.mark.django_db
-def test_complete_crowdsource_task_no_mpp_change(api_client, crowdsource_task, active_mpp):
+def test_complete_crowdsource_task_no_mpp_change(
+    api_client, crowdsource_task, active_mpp
+):
     original_status = active_mpp.status
 
     resp = api_client.post(_complete_url(crowdsource_task.id))
@@ -131,7 +145,9 @@ def test_complete_crowdsource_task_no_mpp_change(api_client, crowdsource_task, a
 
 
 @pytest.mark.django_db
-def test_defer_review_draft_does_not_promote_mpp(api_client, review_draft_task, draft_mpp):
+def test_defer_review_draft_does_not_promote_mpp(
+    api_client, review_draft_task, draft_mpp
+):
     resp = api_client.post(_defer_url(review_draft_task.id))
     assert resp.status_code == 200
 
@@ -149,7 +165,9 @@ def test_defer_review_draft_does_not_promote_mpp(api_client, review_draft_task, 
 
 
 @pytest.mark.django_db
-def test_close_review_draft_does_not_promote_mpp(api_client, review_draft_task, draft_mpp):
+def test_close_review_draft_does_not_promote_mpp(
+    api_client, review_draft_task, draft_mpp
+):
     resp = api_client.post(_close_url(review_draft_task.id))
     assert resp.status_code == 200
 
@@ -200,7 +218,9 @@ def test_complete_review_draft_sets_passed_review(api_client, review_draft_task)
     assert resp.status_code == 200
 
     # GET the task and verify passed_review in the nested MPP's task_outcomes
-    get_resp = api_client.get(f"/api/0.1/meta_polling_places/tasks/{review_draft_task.id}/")
+    get_resp = api_client.get(
+        f"/api/0.1/meta_polling_places/tasks/{review_draft_task.id}/"
+    )
     assert get_resp.status_code == 200
     data = get_resp.json()
     assert data["meta_polling_place"]["task_outcomes"]["passed_review"] is True

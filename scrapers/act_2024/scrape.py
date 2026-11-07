@@ -11,13 +11,8 @@ kml_soup = BeautifulSoup(r.content, "lxml-xml")
 
 polling_places = {}
 for placemark in kml_soup.find_all("Placemark"):
-    d = {
-        "state": "ACT",
-        "ec_id": "",
-        "wheelchair_access": "Unknown"
-    }
+    d = {"state": "ACT", "ec_id": "", "wheelchair_access": "Unknown"}
 
-    
     lng, lat, junk = placemark.find("Point").find("coordinates").text.strip().split(",")
     d["lat"] = lat
     d["lon"] = lng
@@ -35,6 +30,6 @@ for placemark in kml_soup.find_all("Placemark"):
 
     polling_places[len(polling_places.keys())] = d
 
-df = pd.DataFrame.from_dict(polling_places, orient='index')
+df = pd.DataFrame.from_dict(polling_places, orient="index")
 
 df.to_csv("data/act_2024.csv", index=False)

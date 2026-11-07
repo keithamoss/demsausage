@@ -59,7 +59,6 @@ def process_logs(log_path, output_file):
 
         # Loop over each file to process
         for filename in files:
-
             # Check if the file is gzipped or not, and open it accordingly
             if filename.endswith(".gz"):
                 open_fn = gzip.open
@@ -69,7 +68,6 @@ def process_logs(log_path, output_file):
             # Open the file and loop over each line
             with open_fn(filename, "rt", encoding="utf-8") as file:
                 for line in file:
-
                     # Match the line against the regular expression pattern
                     match = line_format.match(line.strip())
 
@@ -86,8 +84,9 @@ def process_logs(log_path, output_file):
                         ) = match.groups()
                         dt = datetime.strptime(date_str, "%d/%b/%Y:%H:%M:%S %z")
                         try:
-                            method, url = request.split()[0], " ".join(
-                                request.split()[1:]
+                            method, url = (
+                                request.split()[0],
+                                " ".join(request.split()[1:]),
                             )
                         except IndexError:
                             method, url = request, ""

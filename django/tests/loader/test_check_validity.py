@@ -9,6 +9,7 @@ Tests (4):
 """
 
 import pytest
+
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry
 
 # Coordinates for a point well outside the test_election's Australia-wide bbox.
@@ -97,4 +98,6 @@ def test_serializer_validation_failure_logs_error(test_election):
     # Verify the error references the polling place so it's identifiable
     assert any(
         "Test Hall" in m or "invalid" in m.lower() for m in logs.get("errors", [])
-    ), f"Error message should identify the offending polling place; errors={logs.get('errors')}"
+    ), (
+        f"Error message should identify the offending polling place; errors={logs.get('errors')}"
+    )

@@ -1,6 +1,13 @@
 from datetime import datetime
 
 import pytz
+from django.contrib.auth.models import User
+from django.contrib.gis.db import models
+from django.contrib.postgres.indexes import GinIndex
+from django.db.models import JSONField
+from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
+
 from demsausage.app.enums import (
     MetaPollingPlaceContactCategory,
     MetaPollingPlaceContactType,
@@ -26,13 +33,6 @@ from demsausage.app.managers import PollingPlacesManager
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.app.validators import JSONSchemaValidator
 from demsausage.util import make_logger
-from model_utils import FieldTracker
-from simple_history.models import HistoricalRecords
-
-from django.contrib.auth.models import User
-from django.contrib.gis.db import models
-from django.contrib.postgres.indexes import GinIndex
-from django.db.models import JSONField
 
 logger = make_logger(__name__)
 

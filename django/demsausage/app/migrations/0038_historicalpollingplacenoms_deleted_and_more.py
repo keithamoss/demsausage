@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0037_historicalpollingplacenoms'),
+        ("app", "0037_historicalpollingplacenoms"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalpollingplacenoms',
-            name='deleted',
+            model_name="historicalpollingplacenoms",
+            name="deleted",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='pollingplacenoms',
-            name='deleted',
+            model_name="pollingplacenoms",
+            name="deleted",
             field=models.BooleanField(default=False),
         ),
     ]

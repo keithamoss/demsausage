@@ -4,21 +4,23 @@ from django.db import migrations, models
 
 
 def set_field_values(apps, schema_editor):
-    for election in apps.get_model("app", "Elections").objects.filter(id__in=[1, 9, 27, 37, 53]):
+    for election in apps.get_model("app", "Elections").objects.filter(
+        id__in=[1, 9, 27, 37, 53]
+    ):
         election.is_federal = True
         election.save()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
-        ('app', '0025_elections_is_federal'),
+        ("app", "0025_elections_is_federal"),
     ]
 
     operations = [
         migrations.RunPython(set_field_values),
         migrations.AlterField(
-            model_name='elections',
-            name='is_federal',
+            model_name="elections",
+            name="is_federal",
             field=models.BooleanField(default=False),
         ),
     ]

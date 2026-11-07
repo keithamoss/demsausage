@@ -4,20 +4,25 @@ from datetime import datetime
 from time import sleep
 
 import django
+import pytz
 from django.contrib.gis.geos import Point
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-import pytz
-from demsausage.app.enums import (
+# These imports require Django's app registry to be initialized.
+from demsausage.app.enums import (  # noqa: E402
     PollingPlaceStatus,
     PollingPlaceWheelchairAccess,
     StallStatus,
     StallSubmitterType,
-    StallTipOffSource,
 )
-from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces, Stalls
+from demsausage.app.models import (  # noqa: E402
+    Elections,
+    PollingPlaceNoms,
+    PollingPlaces,
+    Stalls,
+)
 
 
 def get_election_id():
