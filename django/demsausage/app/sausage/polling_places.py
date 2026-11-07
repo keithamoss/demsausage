@@ -70,7 +70,9 @@ def find_by_stall(stall_id, queryset):
     if stall_id.isdigit() is True:
         stall = get_or_none(Stalls, id=stall_id)
         if stall is not None:
-            return queryset.filter(id=stall.polling_place_id).first()
+            return queryset.filter(
+                id=stall.polling_place_id  # pyright: ignore[reportAttributeAccessIssue]
+            ).first()
 
     return None
 
@@ -103,12 +105,12 @@ def getFoodDescription(stall):
 
 
 def is_noms_item_true(polling_place, item):
-    if polling_place.noms is not None and polling_place.noms.noms is not None:
-        if item in polling_place.noms.noms:
-            if type(polling_place.noms.noms[item]) is bool:
-                if polling_place.noms.noms[item] is True:
-                    return True
-    return False
+    return (
+        polling_place.noms is not None
+        and polling_place.noms.noms is not None
+        and item in polling_place.noms.noms
+        and polling_place.noms.noms[item] is True
+    )
 
 
 def data_quality(election):
@@ -142,10 +144,10 @@ def data_quality(election):
                     "name": pp.name,
                     "address": pp.address,
                     "premises": pp.premises,
-                    "election_id": pp.election_id,
+                    "election_id": pp.election_id,  # pyright: ignore[reportAttributeAccessIssue]
                     "lon": pp.geom.x,
                     "lat": pp.geom.y,
-                    "distance_m": float(pp.distance.m),
+                    "distance_m": float(pp.distance.m),  # pyright: ignore[reportAttributeAccessIssue]
                 }
             )
 
