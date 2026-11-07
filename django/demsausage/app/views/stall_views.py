@@ -8,7 +8,7 @@ from demsausage.app.enums import (
     StallSubmitterType,
 )
 from demsausage.app.exceptions import BadRequest
-from demsausage.app.models import Stalls
+from demsausage.app.models import PollingPlaces, Stalls
 from demsausage.app.permissions import StallEditingPermissions
 from demsausage.app.sausage.elections import (
     get_active_elections,
@@ -281,15 +281,48 @@ class PendingStallsViewSet(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         def _get_latest_changes(electionId):
+            """Build the recent approvals and declines shown in the admin.
+
+            We look at the latest 24 saved snapshots with a polling-place ID.
+            A submission can appear more than once if it was reviewed again.
+
+            Reloading election data can delete old polling places while keeping
+            submission history. If the original place has gone, we show the
+            submission's current place instead; it may not be the same place
+            that was reviewed. If neither exists, we skip that entry without
+            replacing it with an older one.
+            """
             data = []
 
-            for stall in (
+            history = list(
                 Stalls.history.filter(election_id=electionId)
                 .filter(status__in=[StallStatus.APPROVED, StallStatus.DECLINED])
                 # Declined unofficial submissions never get a polling place
                 .filter(polling_place__isnull=False)
+                .select_related("triaged_by")
                 .order_by("-triaged_on")[:24]
-            ):
+            )
+            polling_places = PollingPlaces.objects.in_bulk(
+                [stall.polling_place_id for stall in history]
+            )
+            current_polling_places = {
+                stall.id: stall.polling_place
+                for stall in Stalls.objects.filter(
+                    id__in=[
+                        stall.id
+                        for stall in history
+                        if stall.polling_place_id not in polling_places
+                    ]
+                ).select_related("polling_place")
+            }
+
+            for stall in history:
+                polling_place = polling_places.get(
+                    stall.polling_place_id
+                ) or current_polling_places.get(stall.id)
+                if polling_place is None:
+                    continue
+
                 data.append(
                     {
                         "history_id": stall.history_id,
@@ -297,8 +330,8 @@ class PendingStallsViewSet(generics.ListAPIView):
                         "triaged_by": stall.triaged_by.first_name.split(" ")[0],
                         "status": stall.status,
                         "stall_id": stall.id,
-                        "polling_place_name": stall.polling_place.name,
-                        "polling_place_id": stall.polling_place.id,
+                        "polling_place_name": polling_place.name,
+                        "polling_place_id": polling_place.id,
                     }
                 )
 
