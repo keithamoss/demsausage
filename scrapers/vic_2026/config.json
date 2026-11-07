@@ -1,0 +1,75 @@
+{
+  "add_columns": {
+    "ec_id": ""
+  },
+  "extras": {
+    "fields": [
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ]
+  },
+  "geocoding": {
+    "enabled": false
+  },
+  "overwrite_distance_thresholds": [
+    {
+      "name": "11 Fernhill Road",
+      "threshold": 0.130
+    },
+    {
+      "name": "149 Appin Street",
+      "threshold": 0.135
+    },
+    {
+      "name": "105 Orchard Road",
+      "threshold": 0.160
+    },
+    {
+      "name": "358 Cheltenham Road",
+      "threshold": 0.175
+    },
+    {
+      "name": "44 Murphy Street",
+      "threshold": 0.195
+    },
+    {
+      "name": "Black Rock Primary School",
+      "threshold": 0.130
+    },
+    {
+      "name": "Banyule Primary School",
+      "threshold": 0.145
+    },
+    {
+      "name": "Sherbourne Primary School",
+      "threshold": 0.140
+    },
+    {
+      "name": "Vermont Secondary College",
+      "threshold": 0.150
+    },
+    {
+      "name": "Whittlesea Secondary College",
+      "threshold": 0.165
+    },
+    {
+      "name": "Buninyong Primary School",
+      "threshold": 0.170
+    },
+    {
+      "name": "Sacred Heart College",
+      "threshold": 0.215
+    },
+    {
+      "name": "Fairfield Primary School",
+      "threshold": 0.165
+    },
+    {
+      "name": "Glen Katherine Primary School",
+      "threshold": 0.420
+    }
+  ]
+}

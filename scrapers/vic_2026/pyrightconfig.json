@@ -1,0 +1,15 @@
+{
+  "include": [
+    "common.py",
+    "scrape.py",
+    "transform.py",
+    "diff.py",
+    "run.py"
+  ],
+  "pythonVersion": "3.10",
+  "pythonPlatform": "Darwin",
+  "venvPath": ".",
+  "venv": "venv",
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": "none"
+}
