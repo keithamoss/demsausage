@@ -6,20 +6,8 @@ ENV PYTHONUNBUFFERED=1 \
   # Prevents Python from creating .pyc files
   PYTHONDONTWRITEBYTECODE=1 \
   \
-  # Poetry
-  # https://python-poetry.org/docs/configuration/#using-environment-variables
-  # Make poetry install to this location
-  POETRY_HOME="/opt/poetry" \
-  # Prevent poetry from creating a virtual environment
-  POETRY_VIRTUALENVS_CREATE=false \
-  # Do not ask any interactive question
-  POETRY_NO_INTERACTION=1 \
-  \
   # Django
   DJANGO_SETTINGS_MODULE="demsausage.settings"
-
-# prepend poetry to path
-ENV PATH="$POETRY_HOME/bin:$PATH"
 
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y supervisor gdal-bin 
@@ -48,18 +36,25 @@ RUN ARCH=$(dpkg --print-architecture) && \
   chmod +x /usr/local/bin/geckodriver && \
   rm "geckodriver-${GECKODRIVER_VERSION}-${GECKODRIVER_ARCH}.tar.gz"
 
-ADD . /app
 WORKDIR /app
 
-# Python deps management
-RUN apt-get install -y curl
-# Using latest Poetry since Python 3.10+ supports modern Poetry versions
-RUN curl -sSL https://install.python-poetry.org | python -
-# Even though Dependabot takes care of updating packages for us, we still need this for poetry to install without complaining about some packages "not being available at [version]". Whatever!
-RUN poetry update
-RUN poetry install --only main
+# Keep the dependency manager pinned and use the committed lock for the runtime set.
+COPY --from=ghcr.io/astral-sh/uv:0.8.15 /uv /uvx /bin/
+COPY pyproject.toml uv.lock ./
+RUN uv lock --check && \
+  uv export --locked --no-dev --no-emit-project --format requirements.txt \
+    --output-file /tmp/requirements.txt && \
+  uv pip install --python /usr/local/bin/python --require-hashes \
+    --no-deps -r /tmp/requirements.txt && \
+  rm /tmp/requirements.txt
 
-RUN apt-get remove -y --purge curl wget && \
+COPY . /app
+# Keep the project importable by django-admin and editable through the /app source mount.
+RUN uv pip install --python /usr/local/bin/python --no-deps --editable /app
+# This generated cron export contains the runtime environment and must not enter the image.
+RUN test ! -e /app/demsausage/app/sausage/cron/demsausage.cron.env
+
+RUN apt-get remove -y --purge wget && \
   apt-get autoremove -y && \
   rm -rf /var/lib/apt/lists/*
 

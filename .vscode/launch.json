@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django: debug current pytest file (serial)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-n0", "${file}"],
+      "cwd": "${workspaceFolder}/django",
+      "justMyCode": false
+    }
+  ]
+}

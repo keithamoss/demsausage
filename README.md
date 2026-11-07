@@ -4,8 +4,8 @@
 
 Requirements:
 
-- Docker 18.09.0+
-- Docker Compose 1.23.2+
+- Docker Engine/Desktop with Docker Compose v2
+- Visual Studio Code and the Dev Containers extension (for the recommended workflow)
 
 ### First Time
 
@@ -18,6 +18,7 @@ Add the following to your [hosts file](<https://en.wikipedia.org/wiki/Hosts_(fil
 ```
 127.0.0.1 public.test.democracysausage.org
 127.0.0.1 admin.test.democracysausage.org
+127.0.0.1 rq.test.democracysausage.org
 ```
 
 #### Generate self-signed SSL certs
@@ -31,19 +32,24 @@ mkcert -install
 
 ```
 mkdir keys && cd $_
-mkcert public.test.democracysausage.org
-mkcert admin.test.democracysausage.org
+mkcert -cert-file public.test.democracysausage.org.pem -key-file public.test.democracysausage.org-key.pem public.test.democracysausage.org
+mkcert -cert-file admin.test.democracysausage.org.pem -key-file admin.test.democracysausage.org-key.pem admin.test.democracysausage.org
+mkcert -cert-file wildcard.democracysausage.org.pem -key-file wildcard.democracysausage.org-key.pem '*.democracysausage.org' '*.test.democracysausage.org'
 ```
 
 #### .env files
 
-Use the template .env files in `secrets-tmpl` to create corresponding files under `secrets/` for:
+Create the local-only files referenced by `docker-compose.yml` under `secrets/dev/`:
 
-1. `sausage-web.dev.env`
-2. `sausage-web-db.dev.env`
-3. `sausage-db.dev.env`
-4. `sausage-public-frontend.dev.env`
-5. `sausage-admin-frontend.dev.env`
+1. `sausage-db.dev.env`
+2. `redis.env`
+3. `sausage-web.dev.env`
+4. `sausage-web-db.dev.env`
+5. `sausage-rq-dashboard.dev.env`
+6. `sausage-public-redesign-frontend.dev.env`
+7. `sausage-admin-redesign-frontend.dev.env`
+
+Use the applicable files in `secrets-tmpl` where they match; some template names predate the current Compose service names. Obtain missing development values from a maintainer. Never commit local secrets.
 
 #### Load data
 
@@ -56,6 +62,7 @@ Follow the instructions in `data/federal_2019/electoral_boundaries/README.md` to
 ##### Load production database dump
 
 Alternatively, if you have access to the production database you can use the scripts in this repo to initialise your environment with its current state.
+This is optional maintenance and is not part of Dev Container setup or rebuilding.
 
 ```
 docker compose up db
@@ -72,12 +79,21 @@ cd /var/lib/postgresql/scripts
 
 ### Run both sites
 
-`docker compose up`
+#### VS Code Dev Container
+
+Complete the local hosts-file, certificate, and environment-file setup above, then open this repository in VS Code and run **Dev Containers: Reopen in Container**. The container uses the existing Compose project and starts the application services. Its existing Django entrypoint still runs its normal startup tasks, including migrations and cron setup.
+
+The container uses the committed `django/uv.lock` for Python dependencies and installs development dependencies when the workspace is created. Frontend dependencies are installed from the frozen pnpm lockfiles. Closing the workspace normally stops the Compose project without deleting persistent storage; this can also stop services previously started from a host terminal in the same project.
+
+#### Host terminal fallback
+
+Run `docker compose up` from the repository root.
+
 Then navigate to the URLs given below
 
 ### Public site
 
-Navigate to https://test.democracysausage.org
+Navigate to https://public.test.democracysausage.org
 
 ### Admin site
 
