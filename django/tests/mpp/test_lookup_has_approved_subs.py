@@ -5,6 +5,8 @@ Regression tests for PollingPlacesSerializerForLookup.get_has_approved_subs.
 """
 
 import pytest
+from django.contrib.gis.geos import Point
+
 from demsausage.app.enums import (
     PollingPlaceStatus,
     PollingPlaceWheelchairAccess,
@@ -14,14 +16,14 @@ from demsausage.app.models import PollingPlaceNoms, PollingPlaces, Stalls
 from demsausage.app.serializers import PollingPlacesSerializerForLookup
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_full
 
-from django.contrib.gis.geos import Point
-
 MELB_LON = 144.9631
 MELB_LAT = -37.8136
 
 
 @pytest.mark.django_db
-def test_has_approved_subs_true_after_loader_reload_replaces_polling_place(test_election):
+def test_has_approved_subs_true_after_loader_reload_replaces_polling_place(
+    test_election,
+):
     noms = PollingPlaceNoms.objects.create(noms={"bbq": True})
     old_pp = PollingPlaces.objects.create(
         election=test_election,

@@ -4,7 +4,6 @@ from django.db import connection, migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("app", "0044_historicalpollingplacenoms_internal_notes_and_more"),
     ]

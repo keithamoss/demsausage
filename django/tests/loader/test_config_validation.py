@@ -16,6 +16,7 @@ Tests (6):
 """
 
 import pytest
+
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry
 
 # ---------------------------------------------------------------------------
@@ -42,9 +43,9 @@ def test_bad_config_address_fields_without_format(test_election):
         csv_bytes,
         config={"address_fields": ["street", "suburb"]},
     )
-    assert any(
-        "address_format required" in m for m in logs.get("errors", [])
-    ), f"Expected address_format-required error, got: {logs.get('errors')}"
+    assert any("address_format required" in m for m in logs.get("errors", [])), (
+        f"Expected address_format-required error, got: {logs.get('errors')}"
+    )
 
 
 @pytest.mark.django_db
@@ -56,9 +57,9 @@ def test_bad_config_address_format_without_fields(test_election):
         csv_bytes,
         config={"address_format": "{street}, {suburb}"},
     )
-    assert any(
-        "address_fields required" in m for m in logs.get("errors", [])
-    ), f"Expected address_fields-required error, got: {logs.get('errors')}"
+    assert any("address_fields required" in m for m in logs.get("errors", [])), (
+        f"Expected address_fields-required error, got: {logs.get('errors')}"
+    )
 
 
 # ---------------------------------------------------------------------------

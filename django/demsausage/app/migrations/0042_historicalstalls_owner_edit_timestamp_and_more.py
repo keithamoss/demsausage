@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0041_alter_stalls_triaged_by'),
+        ("app", "0041_alter_stalls_triaged_by"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalstalls',
-            name='owner_edit_timestamp',
+            model_name="historicalstalls",
+            name="owner_edit_timestamp",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='stalls',
-            name='owner_edit_timestamp',
+            model_name="stalls",
+            name="owner_edit_timestamp",
             field=models.DateTimeField(null=True),
         ),
     ]

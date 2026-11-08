@@ -11,18 +11,21 @@ Tests that:
 from unittest.mock import patch
 
 import pytest
+from django.contrib.gis.geos import Point
+from rest_framework.test import APIClient
+
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
-    MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
     PollingPlaceState,
     PollingPlaceStatus,
     PollingPlaceWheelchairAccess,
 )
-from demsausage.app.models import MetaPollingPlaces, MetaPollingPlacesTasks, PollingPlaces
-from rest_framework.test import APIClient
-
-from django.contrib.gis.geos import Point
+from demsausage.app.models import (
+    MetaPollingPlaces,
+    MetaPollingPlacesTasks,
+    PollingPlaces,
+)
 
 REARRANGE_URL = "/api/0.1/meta_polling_places/rearrange_from_mpp_review/"
 
@@ -79,35 +82,59 @@ def test_split_with_job_name_creates_review_draft_task(
 def test_two_splits_share_job_name(api_client, draft_mpp, test_election):
     # Create two MPPs, each with TWO PPs, so splitting one PP off doesn't orphan the source.
     mpp2 = MetaPollingPlaces.objects.create(
-        name="MPP 2", premises="", geom_location=Point(MELB_LON + 0.01, MELB_LAT, srid=4326),
-        wheelchair_access=PollingPlaceWheelchairAccess.FULL, overseas=False, jurisdiction="VIC",
+        name="MPP 2",
+        premises="",
+        geom_location=Point(MELB_LON + 0.01, MELB_LAT, srid=4326),
+        wheelchair_access=PollingPlaceWheelchairAccess.FULL,
+        overseas=False,
+        jurisdiction="VIC",
         status=MetaPollingPlaceStatus.DRAFT,
     )
     # draft_mpp gets two PPs so splitting one doesn't orphan it
     pp_a = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=draft_mpp,
-        name="PP A", premises="", address="1 A St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=draft_mpp,
+        name="PP A",
+        premises="",
+        address="1 A St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=draft_mpp,
-        name="PP A2", premises="", address="1A A St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=draft_mpp,
+        name="PP A2",
+        premises="",
+        address="1A A St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON + 0.0001, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON + 0.0001, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     # mpp2 gets two PPs so splitting one doesn't orphan it
     pp_b = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=mpp2,
-        name="PP B", premises="", address="2 B St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=mpp2,
+        name="PP B",
+        premises="",
+        address="2 B St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON + 0.01, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON + 0.01, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=mpp2,
-        name="PP B2", premises="", address="2A B St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=mpp2,
+        name="PP B2",
+        premises="",
+        address="2A B St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON + 0.0101, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON + 0.0101, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
 
     shared_job_name = "Shared Job 2025"
@@ -218,7 +245,10 @@ def test_move_pp_to_existing_mpp(
         REARRANGE_URL,
         {
             "moves": [
-                {"pollingPlaceId": second_polling_place.id, "metaPollingPlaceId": active_mpp.id}
+                {
+                    "pollingPlaceId": second_polling_place.id,
+                    "metaPollingPlaceId": active_mpp.id,
+                }
             ],
             "splits": [],
         },
@@ -243,22 +273,37 @@ def test_move_pp_to_existing_mpp(
 def test_mixed_move_and_split(api_client, draft_mpp, active_mpp, test_election):
     # draft_mpp has three PPs: split one, move one, leave one
     pp_keep = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=draft_mpp,
-        name="PP Keep", premises="", address="1 Keep St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=draft_mpp,
+        name="PP Keep",
+        premises="",
+        address="1 Keep St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     pp_move = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=draft_mpp,
-        name="PP Move", premises="", address="2 Move St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=draft_mpp,
+        name="PP Move",
+        premises="",
+        address="2 Move St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON + 0.001, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON + 0.001, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     pp_split = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=draft_mpp,
-        name="PP Split", premises="", address="3 Split St VIC", state=PollingPlaceState.VIC,
+        election=test_election,
+        meta_polling_place=draft_mpp,
+        name="PP Split",
+        premises="",
+        address="3 Split St VIC",
+        state=PollingPlaceState.VIC,
         wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(MELB_LON + 0.002, MELB_LAT, srid=4326), status=PollingPlaceStatus.DRAFT,
+        geom=Point(MELB_LON + 0.002, MELB_LAT, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
 
     initial_mpp_count = MetaPollingPlaces.objects.count()
@@ -267,7 +312,9 @@ def test_mixed_move_and_split(api_client, draft_mpp, active_mpp, test_election):
     resp = api_client.post(
         REARRANGE_URL,
         {
-            "moves": [{"pollingPlaceId": pp_move.id, "metaPollingPlaceId": active_mpp.id}],
+            "moves": [
+                {"pollingPlaceId": pp_move.id, "metaPollingPlaceId": active_mpp.id}
+            ],
             "splits": [pp_split.id],
             "split_job_name": "Mixed Job",
         },
@@ -277,6 +324,9 @@ def test_mixed_move_and_split(api_client, draft_mpp, active_mpp, test_election):
 
     assert MetaPollingPlaces.objects.count() == initial_mpp_count + 1
     assert MetaPollingPlacesTasks.objects.count() == initial_task_count + 1
+
+    pp_keep.refresh_from_db()
+    assert pp_keep.meta_polling_place_id == draft_mpp.id
 
     pp_move.refresh_from_db()
     assert pp_move.meta_polling_place_id == active_mpp.id
@@ -324,7 +374,12 @@ def test_move_orphans_source_mpp_returns_400(
     resp = api_client.post(
         REARRANGE_URL,
         {
-            "moves": [{"pollingPlaceId": polling_place.id, "metaPollingPlaceId": active_mpp.id}],
+            "moves": [
+                {
+                    "pollingPlaceId": polling_place.id,
+                    "metaPollingPlaceId": active_mpp.id,
+                }
+            ],
             "splits": [],
         },
         format="json",
@@ -355,7 +410,9 @@ def test_split_nonexistent_polling_place_id_returns_400(
 
 
 @pytest.mark.django_db
-def test_move_nonexistent_polling_place_id_returns_400(api_client, draft_mpp, active_mpp):
+def test_move_nonexistent_polling_place_id_returns_400(
+    api_client, draft_mpp, active_mpp
+):
     resp = api_client.post(
         REARRANGE_URL,
         {
@@ -430,16 +487,26 @@ def test_split_overseas_pp_sets_overseas_and_null_jurisdiction(
     )
     # Create two PPs on the overseas MPP (so splitting one doesn't orphan it)
     PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=overseas_mpp,
-        name="London Embassy PP 2", premises="", address="Strand, London",
-        state=PollingPlaceState.Overseas, wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(-0.1175, 51.5126, srid=4326), status=PollingPlaceStatus.DRAFT,
+        election=test_election,
+        meta_polling_place=overseas_mpp,
+        name="London Embassy PP 2",
+        premises="",
+        address="Strand, London",
+        state=PollingPlaceState.Overseas,
+        wheelchair_access=PollingPlaceWheelchairAccess.FULL,
+        geom=Point(-0.1175, 51.5126, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
     overseas_pp = PollingPlaces.objects.create(
-        election=test_election, meta_polling_place=overseas_mpp,
-        name="London Embassy PP", premises="", address="Strand, London",
-        state=PollingPlaceState.Overseas, wheelchair_access=PollingPlaceWheelchairAccess.FULL,
-        geom=Point(-0.1175, 51.5126, srid=4326), status=PollingPlaceStatus.DRAFT,
+        election=test_election,
+        meta_polling_place=overseas_mpp,
+        name="London Embassy PP",
+        premises="",
+        address="Strand, London",
+        state=PollingPlaceState.Overseas,
+        wheelchair_access=PollingPlaceWheelchairAccess.FULL,
+        geom=Point(-0.1175, 51.5126, srid=4326),
+        status=PollingPlaceStatus.DRAFT,
     )
 
     resp = api_client.post(
@@ -468,7 +535,9 @@ def test_split_task_full_clean_failure_rolls_back_everything(
     initial_task_count = MetaPollingPlacesTasks.objects.count()
     original_mpp_id = second_polling_place.meta_polling_place_id
 
-    with patch.object(MetaPollingPlacesTasks, "full_clean", side_effect=Exception("boom")):
+    with patch.object(
+        MetaPollingPlacesTasks, "full_clean", side_effect=Exception("boom")
+    ):
         resp = api_client.post(
             REARRANGE_URL,
             {

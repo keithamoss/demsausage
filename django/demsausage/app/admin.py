@@ -1,8 +1,8 @@
-from demsausage.util import get_env
-
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import connection
+
+from demsausage.util import get_env
 
 from .models import Profile
 
@@ -16,7 +16,9 @@ def get_super_admins():
 
 def get_admins():
     if "auth_user" in connection.introspection.table_names():
-        return User.objects.filter(is_staff=True, is_superuser=True, is_active=True).all()
+        return User.objects.filter(
+            is_staff=True, is_superuser=True, is_active=True
+        ).all()
     else:
         return []
 

@@ -1,10 +1,11 @@
+from django_rq import job
+from rq import Retry, get_current_job
+
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import Elections
 from demsausage.app.sausage.loader import LoadPollingPlaces
 from demsausage.rq.rq_utils import log_task_debug_info
 from demsausage.util import make_logger
-from django_rq import job
-from rq import Retry, get_current_job
 
 logger = make_logger(__name__)
 
@@ -28,7 +29,7 @@ def task_refresh_polling_place_data(
 
     try:
         loader.run()
-    except BadRequest as e:
+    except BadRequest:
         # BadRequest comes from rolling back when we're doing dry run
         logger.info("Got a BadRequest, probably because we're doing a dry run")
         pass

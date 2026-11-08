@@ -21,4 +21,5 @@ The plan was split from one document, so section numbers (1 to 15) are kept and 
 ## Notes
 - Findings come from reading code. Unless a section says a reproduction was run, nothing was exploited against a live system.
 - The `experiments/` scripts are exploratory. They assume a scratch directory at `/tmp` and downloaded data that is not in the repo, so they are evidence of method, not runnable tools.
+- If reproducing the historical-data experiments, copy the current experiment scripts together into `/tmp`; `historical.py` is imported without running its main routine.
 - Draft invariants in section 14.5 are inferred from code and need maintainer confirmation.

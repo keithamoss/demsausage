@@ -4,9 +4,26 @@ applyTo: "django/**"
 
 # Running the Django Test Suite
 
-The compose stack (`docker compose up`) is assumed to be already running. Always use `exec` into the running `django` container — never `docker compose run` — to avoid the entrypoint startup delay.
+The Compose stack must already be running. Do not start a second stack or run host and workspace tests concurrently against the same test database.
 
-## Commands
+## VS Code Dev Container
+
+When attached to the Dev Container, run tests in its shared `/usr/local/bin/python` environment:
+
+```bash
+cd django
+python -m pytest tests/ --tb=short -q
+```
+
+The Dev Container attaches VS Code to the existing `django` service. Its normal Compose startup still runs the service entrypoint; workspace bootstrap installs the locked development dependencies but does not start another Django process or apply migrations.
+
+For breakpoints, use the **Django: debug current pytest file (serial)** configuration in `.vscode/launch.json`. It runs the current file with `-n0` from `django/`.
+
+## Host terminal
+
+Use `exec` into the already-running `django` container — never `docker compose run` — to avoid the entrypoint startup delay.
+
+### Commands
 
 Fast suite — parallel, skips slow tests (default for development):
 ```bash
@@ -55,6 +72,8 @@ The fast suite (no slow tests) completes in under 10 seconds.
 
 ## Rules
 
-- Always use `docker compose exec django` (not `docker compose run --rm django`) so the command runs inside the already-running container with no entrypoint overhead.
+- From the host, always use `docker compose exec django` (not `docker compose run --rm django`) so tests run in the already-running container with no entrypoint overhead.
+- From the Dev Container, run `python -m pytest` in `django/`; do not launch another Compose stack.
 - Always run foreground (no background terminals) with a generous timeout (≥ 120 000 ms for the fast suite, ≥ 420 000 ms for the full suite). This prevents truncated output.
-- If the stack is not running, start it first: `docker compose up -d`
+- If the stack is not running, start it from the host with `docker compose up -d` or reopen the Dev Container.
+- Normal Dev Container closure uses Compose shutdown and may stop services previously started from the host in the same project.

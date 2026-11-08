@@ -1,0 +1,17 @@
+[project]
+name = "demsausage-vic-2026-scraper"
+version = "0.1.0"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "openpyxl==3.1.5",
+    "requests==2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "pyright==1.1.414",
+    "types-requests==2.33.0.20261030",
+]
+
+[tool.uv]
+package = false

@@ -77,6 +77,7 @@ Two core helpers:
 def _log(self, level: str, type: str, **kwargs):
     self.log_entries.append({"level": level, "type": type, **kwargs})
 
+
 def _has_errors(self):
     return any(e["level"] == "error" for e in self.log_entries)
 ```
@@ -108,6 +109,7 @@ STAGE_LABELS = {
     "cleanup": "Cleanup",
 }
 
+
 def invoke_and_bail_if_errors(self, method_name):
     print("Calling {}".format(method_name))
 
@@ -120,21 +122,23 @@ def invoke_and_bail_if_errors(self, method_name):
     finished_at = datetime.now(timezone.utc)
 
     stage_entries = self.log_entries[before:]
-    has_errors   = any(e["level"] == "error"   for e in stage_entries)
+    has_errors = any(e["level"] == "error" for e in stage_entries)
     has_warnings = any(e["level"] == "warning" for e in stage_entries)
-    self.stages.append({
-        "name": method_name,
-        "label": STAGE_LABELS.get(method_name, method_name),
-        "started_at": started_at.isoformat(),
-        "finished_at": finished_at.isoformat(),
-        "duration_seconds": round((finished_at - started_at).total_seconds(), 2),
-        "outcome": "error" if has_errors else ("warning" if has_warnings else "ok"),
-        "total_entry_count": len(stage_entries),
-        "errors":   [e for e in stage_entries if e["level"] == "error"],
-        "warnings": [e for e in stage_entries if e["level"] == "warning"],
-        "summaries":[e for e in stage_entries if e["level"] == "summary"],
-        "detail":   [e for e in stage_entries if e["level"] == "info"],
-    })
+    self.stages.append(
+        {
+            "name": method_name,
+            "label": STAGE_LABELS.get(method_name, method_name),
+            "started_at": started_at.isoformat(),
+            "finished_at": finished_at.isoformat(),
+            "duration_seconds": round((finished_at - started_at).total_seconds(), 2),
+            "outcome": "error" if has_errors else ("warning" if has_warnings else "ok"),
+            "total_entry_count": len(stage_entries),
+            "errors": [e for e in stage_entries if e["level"] == "error"],
+            "warnings": [e for e in stage_entries if e["level"] == "warning"],
+            "summaries": [e for e in stage_entries if e["level"] == "summary"],
+            "detail": [e for e in stage_entries if e["level"] == "info"],
+        }
+    )
 
     self.raise_exception_if_errors()
 ```
@@ -144,16 +148,21 @@ The `"skipped"` outcome is used for stages the loader explicitly decides not to 
 ```python
 if not self.config.get("geocoding", {}).get("enabled", False):
     now = datetime.now(timezone.utc).isoformat()
-    self.stages.append({
-        "name": "geocode_missing_locations",
-        "label": STAGE_LABELS["geocode_missing_locations"],
-        "outcome": "skipped",
-        "started_at": now,
-        "finished_at": now,
-        "duration_seconds": 0,
-        "total_entry_count": 0,
-        "errors": [], "warnings": [], "summaries": [], "detail": [],
-    })
+    self.stages.append(
+        {
+            "name": "geocode_missing_locations",
+            "label": STAGE_LABELS["geocode_missing_locations"],
+            "outcome": "skipped",
+            "started_at": now,
+            "finished_at": now,
+            "duration_seconds": 0,
+            "total_entry_count": 0,
+            "errors": [],
+            "warnings": [],
+            "summaries": [],
+            "detail": [],
+        }
+    )
     return
 # otherwise: call geocode_missing_locations() then invoke_and_bail_if_errors()
 ```
@@ -252,19 +261,23 @@ When `N=0` this reads awkwardly. These should be two separate messages: one for 
 ```python
 # At the end of __init__, before returning:
 config_entries = self.log_entries  # everything so far is config validation
-self.stages.append({
-    "name": "_config",
-    "label": "Config Validation",
-    "started_at": self._init_started_at.isoformat(),
-    "finished_at": datetime.now(timezone.utc).isoformat(),
-    "duration_seconds": 0.0,
-    "outcome": "error" if any(e["level"] == "error" for e in config_entries) else "ok",
-    "total_entry_count": len(config_entries),
-    "errors":    [e for e in config_entries if e["level"] == "error"],
-    "warnings":  [e for e in config_entries if e["level"] == "warning"],
-    "summaries": [e for e in config_entries if e["level"] == "summary"],
-    "detail":    [e for e in config_entries if e["level"] == "info"],
-})
+self.stages.append(
+    {
+        "name": "_config",
+        "label": "Config Validation",
+        "started_at": self._init_started_at.isoformat(),
+        "finished_at": datetime.now(timezone.utc).isoformat(),
+        "duration_seconds": 0.0,
+        "outcome": "error"
+        if any(e["level"] == "error" for e in config_entries)
+        else "ok",
+        "total_entry_count": len(config_entries),
+        "errors": [e for e in config_entries if e["level"] == "error"],
+        "warnings": [e for e in config_entries if e["level"] == "warning"],
+        "summaries": [e for e in config_entries if e["level"] == "summary"],
+        "detail": [e for e in config_entries if e["level"] == "info"],
+    }
+)
 ```
 
 Add `"_config": "Config Validation"` to `STAGE_LABELS`. Config errors are relatively rare and small in number, so this stage will usually be empty and the accordion header collapses it cleanly.
@@ -482,7 +495,11 @@ Every call to `self.logger.*` is replaced with `self._log(level, type, ...)`. Th
 ```python
 self._log("summary", "text", message="Noms Migration: Migrated 42 polling places")
 self._log("info", "text", message="Doing noms migration by ec_id for Acme Hall")
-self._log("error", "text", message="Config: address_format required if address_fields provided")
+self._log(
+    "error",
+    "text",
+    message="Config: address_format required if address_fields provided",
+)
 ```
 
 ```json
@@ -494,13 +511,15 @@ self._log("error", "text", message="Config: address_format required if address_f
 Replaces: `"Polling place {} ({}) invalid: {}".format(name, premises, serialiser.errors)`
 
 ```python
-self._log("error", "validation_error",
+self._log(
+    "error",
+    "validation_error",
     name=polling_place["name"],
     premises=polling_place["premises"],
     fields=[
         {"field": field, "messages": messages}
         for field, messages in serialiser.errors.items()
-    ]
+    ],
 )
 ```
 
@@ -522,11 +541,13 @@ self._log("error", "validation_error",
 Replaces three separate warning strings with different inline reasons.
 
 ```python
-self._log("warning", "geocode_skip",
+self._log(
+    "warning",
+    "geocode_skip",
     reason="not_accurate_enough",  # or "no_results" | "not_enabled"
     premises=polling_place["premises"],
     address=polling_place["address"],
-    geocode_result=geocode_result  # raw Google Maps result kept as-is
+    geocode_result=geocode_result,  # raw Google Maps result kept as-is
 )
 ```
 
@@ -546,7 +567,9 @@ self._log("warning", "geocode_skip",
 Replaces 2–N separate error lines (the "no match" line + "no places within 1km" or N "nearby" lines).
 
 ```python
-self._log("error", "stall_no_match",
+self._log(
+    "error",
+    "stall_no_match",
     stall_id=stall.id,
     user_location={
         "name": stall.location_info["name"],
@@ -554,10 +577,15 @@ self._log("error", "stall_no_match",
         "state": stall.location_info["state"],
     },
     nearby=[
-        {"name": pp.name, "premises": pp.premises, "address": pp.address, "distance_m": round(pp.distance.m)}
+        {
+            "name": pp.name,
+            "premises": pp.premises,
+            "address": pp.address,
+            "distance_m": round(pp.distance.m),
+        }
         for pp in nearby
     ],
-    action="Adjust the distance threshold or update the database manually."
+    action="Adjust the distance threshold or update the database manually.",
 )
 ```
 
@@ -579,13 +607,20 @@ self._log("error", "stall_no_match",
 Replaces N+1 separate error lines (the "N polling places found" line + N "Candidate" lines).
 
 ```python
-self._log("error", "stall_multi_match",
+self._log(
+    "error",
+    "stall_multi_match",
     stall_id=stall.id,
     user_location={...},
     candidates=[
-        {"name": pp.name, "premises": pp.premises, "address": pp.address, "distance_m": round(pp.distance.m)}
+        {
+            "name": pp.name,
+            "premises": pp.premises,
+            "address": pp.address,
+            "distance_m": round(pp.distance.m),
+        }
         for pp in matching_polling_places
-    ]
+    ],
 )
 ```
 
@@ -607,7 +642,9 @@ self._log("error", "stall_multi_match",
 Replaces the long pipe-delimited info string with a true two-sided object.
 
 ```python
-self._log("info", "stall_matched",
+self._log(
+    "info",
+    "stall_matched",
     stall_id=stall.id,
     distance_m=round(official.distance.m),
     user_submitted={
@@ -620,7 +657,7 @@ self._log("info", "stall_matched",
         "premises": official.premises,
         "address": official.address,
     },
-    action="Please verify this match is correct."
+    action="Please verify this match is correct.",
 )
 ```
 
@@ -641,12 +678,14 @@ self._log("info", "stall_matched",
 Replaces the semicolon-joined string of polling place names.
 
 ```python
-self._log("error", "spatial_proximity",
+self._log(
+    "error",
+    "spatial_proximity",
     stage_name=label,  # machine-readable method name, e.g. "migrate_noms"
     polling_places=[
         {"name": pp.name, "premises": pp.premises, "address": pp.address}
         for pp in results
-    ]
+    ],
 )
 ```
 
@@ -656,24 +695,28 @@ Replaces the long semicolon-joined info string. Emitted with both `summary` and 
 
 ```python
 # Summary version — visible without expanding Detail
-self._log("summary", "dedup_merge",
+self._log(
+    "summary",
+    "dedup_merge",
     count=len(indexes),
     location=key,
     divisions=divisions,
     polling_places=[
         {"name": pp["name"], "premises": pp["premises"], "address": pp["address"]}
         for pp in polling_places
-    ]
+    ],
 )
 # Detail version — also captured in full detail log
-self._log("info", "dedup_merge",
+self._log(
+    "info",
+    "dedup_merge",
     count=len(indexes),
     location=key,
     divisions=divisions,
     polling_places=[
         {"name": pp["name"], "premises": pp["premises"], "address": pp["address"]}
         for pp in polling_places
-    ]
+    ],
 )
 ```
 
@@ -683,43 +726,51 @@ Emitted with both `summary` and `info` levels, same pattern as `dedup_merge`.
 
 ```python
 # Summary version
-self._log("summary", "dedup_discard",
+self._log(
+    "summary",
+    "dedup_discard",
     count=len(indexes) - 1,
     location=key,
     polling_places=[
         {"name": pp["name"], "premises": pp["premises"], "address": pp["address"]}
         for pp in polling_places
-    ]
+    ],
 )
 # Detail version
-self._log("info", "dedup_discard",
+self._log(
+    "info",
+    "dedup_discard",
     count=len(indexes) - 1,
     location=key,
     polling_places=[
         {"name": pp["name"], "premises": pp["premises"], "address": pp["address"]}
         for pp in polling_places
-    ]
+    ],
 )
 ```
 
 ### EC ID duplicate (check_file_validity)
 
 ```python
-self._log("error", "ec_id_duplicate",
+self._log(
+    "error",
+    "ec_id_duplicate",
     name=polling_place["name"],
     premises=polling_place["premises"],
-    ec_id=polling_place["ec_id"]
+    ec_id=polling_place["ec_id"],
 )
 ```
 
 ### Find home division error (dedupe_polling_places)
 
 ```python
-self._log("error", "find_home_division_error",
+self._log(
+    "error",
+    "find_home_division_error",
     polling_place_name=polling_places[0]["name"],
     reason="multiple_matches",  # or "no_match" | "not_in_list"
     eb_division=eb_division_name,  # only for "not_in_list"
-    candidates=list(matching_boundaries.values_list("division_name", flat=True))
+    candidates=list(matching_boundaries.values_list("division_name", flat=True)),
 )
 ```
 
@@ -728,7 +779,9 @@ self._log("error", "find_home_division_error",
 Replaces the `warning`-level pipe-style string `"User-added polling place ... has been merged successfully ..."`.
 
 ```python
-self._log("info", "noms_merge_review",
+self._log(
+    "info",
+    "noms_merge_review",
     user_submitted={
         "name": polling_place.name,
         "address": polling_place.address,
@@ -737,7 +790,7 @@ self._log("info", "noms_merge_review",
         "name": matching_polling_places[0].name,
         "address": matching_polling_places[0].address,
     },
-    action="Please verify this merge is correct."
+    action="Please verify this merge is correct.",
 )
 ```
 
@@ -756,15 +809,18 @@ self._log("info", "noms_merge_review",
 Replaces the two near-identical warning variants (with/without MPP detachment).
 
 ```python
-self._log("warning", "mpp_not_found",
+self._log(
+    "warning",
+    "mpp_not_found",
     name=polling_place.name,
     address=polling_place.address,
     detached_mpp=polling_place.meta_polling_place is not None,
     action=(
         "This polling place previously had a meta polling place assigned — "
         "please verify the removal is correct."
-        if polling_place.meta_polling_place is not None else None
-    )
+        if polling_place.meta_polling_place is not None
+        else None
+    ),
 )
 ```
 
@@ -1169,6 +1225,7 @@ from demsausage.app.enums import PollingPlaceJurisdiction
 from datetime import datetime
 import pytz
 
+
 @pytest.fixture
 def mock_job():
     job = MagicMock()
@@ -1183,29 +1240,34 @@ def mock_job():
     job.save_meta = MagicMock()
     return job
 
+
 @pytest.fixture(autouse=True)
 def patch_rq(mock_job):
     # Patch in loader.py's import namespace, not in the rq package itself
     with patch("demsausage.app.sausage.loader.get_current_job", return_value=mock_job):
         yield
 
+
 @pytest.fixture(autouse=True)
 def patch_task_regenerate():
     with patch("demsausage.app.sausage.loader.task_regenerate_cached_election_data"):
         yield
+
 
 @pytest.fixture(autouse=True)
 def patch_save_logs():
     with patch("demsausage.app.sausage.loader.PollingPlacesIngestBase.save_logs"):
         yield
 
+
 @pytest.fixture
 def test_election(db):
     # Polygon covering all of Australia — contains all real polling place coordinates
     # used across the fixture elections (SA, VIC, QLD etc.)
-    geom = Polygon((
-        (112.0, -44.0), (155.0, -44.0), (155.0, -9.0), (112.0, -9.0), (112.0, -44.0)
-    ), srid=4326)
+    geom = Polygon(
+        ((112.0, -44.0), (155.0, -44.0), (155.0, -9.0), (112.0, -9.0), (112.0, -44.0)),
+        srid=4326,
+    )
     return Elections.objects.create(
         name="Test Election",
         short_name="test_election",
@@ -1311,7 +1373,9 @@ def _load_full(election, csv_path, config_path):
     if "geocoding" in config:
         config["geocoding"]["enabled"] = False
     with open(csv_path, "rb") as f:
-        loader = LoadPollingPlaces(election=election, file=f, dry_run=False, config=config)
+        loader = LoadPollingPlaces(
+            election=election, file=f, dry_run=False, config=config
+        )
         loader.run()
     return loader
 
@@ -1325,7 +1389,9 @@ def test_sa_2025_dry_run_writes_nothing(test_election):
         config["geocoding"]["enabled"] = False
 
     with open("tests/fixtures/elections/sa_2025/polling_places.csv", "rb") as f:
-        loader = LoadPollingPlaces(election=test_election, file=f, dry_run=True, config=config)
+        loader = LoadPollingPlaces(
+            election=test_election, file=f, dry_run=True, config=config
+        )
         try:
             loader.run()
         except BadRequest:
@@ -1379,9 +1445,12 @@ def test_detect_facility_type_runs(test_election):
         "tests/fixtures/elections/sa_2025/config.json",
     )
     # Confirm the load completed (detect_facility_type was reached)
-    assert PollingPlaces.objects.filter(
-        election=test_election, status=PollingPlaceStatus.ACTIVE
-    ).count() > 0
+    assert (
+        PollingPlaces.objects.filter(
+            election=test_election, status=PollingPlaceStatus.ACTIVE
+        ).count()
+        > 0
+    )
 
 
 @pytest.mark.django_db(transaction=True)
@@ -1395,7 +1464,12 @@ def test_calculate_chance_of_sausage_runs(test_election):
     )
     # No assertion on count — chance_of_sausage requires historical stall data to be non-trivial.
     # Just confirming the stage ran without raising.
-    assert PollingPlaces.objects.filter(election=test_election, status=PollingPlaceStatus.ACTIVE).count() > 0
+    assert (
+        PollingPlaces.objects.filter(
+            election=test_election, status=PollingPlaceStatus.ACTIVE
+        ).count()
+        > 0
+    )
 
 
 @pytest.mark.django_db(transaction=True)
@@ -1414,7 +1488,9 @@ def test_pending_stalls_blocks_load(test_election):
     config["geocoding"]["enabled"] = False
 
     with open("tests/fixtures/elections/sa_2025/polling_places.csv", "rb") as f:
-        loader = LoadPollingPlaces(election=test_election, file=f, dry_run=True, config=config)
+        loader = LoadPollingPlaces(
+            election=test_election, file=f, dry_run=True, config=config
+        )
         loader.run()
 
     # No polling places should have been written (the abort fired immediately)
@@ -1450,19 +1526,24 @@ def test_bad_config_produces_config_stage(test_election, tmp_path):
     csv_path.write_bytes(csv_content)
 
     with open(csv_path, "rb") as f:
-        loader = LoadPollingPlaces(election=test_election, file=f, dry_run=True, config=bad_config)
+        loader = LoadPollingPlaces(
+            election=test_election, file=f, dry_run=True, config=bad_config
+        )
         try:
             loader.run()
             raise AssertionError("Expected BadRequest but loader returned normally")
         except BadRequest as e:
             # Pre-refactor: error raised with "Oh dear" message (not "Rollback")
-            assert e.detail.get("message") != "Rollback", "Load should have aborted at config, not dry_run rollback"
+            assert e.detail.get("message") != "Rollback", (
+                "Load should have aborted at config, not dry_run rollback"
+            )
             logs = e.detail.get("logs", {})
 
     # Config errors must surface in the error list
     assert len(logs.get("errors", [])) > 0
     # No polling places should have been written
     from demsausage.app.models import PollingPlaces
+
     assert PollingPlaces.objects.filter(election=test_election).count() == 0
 ```
 
@@ -1491,6 +1572,7 @@ A shared `make_csv(headers, rows)` helper in `conftest.py` returns `io.BytesIO` 
 
 ```python
 import io, csv
+
 
 def make_csv(headers: list[str], rows: list[list]) -> io.BytesIO:
     buf = io.StringIO()
@@ -1594,9 +1676,10 @@ def electoral_boundaries(db):
     (138.6, -34.9) used in the synthetic CSVs for USE_ELECTORAL_BOUNDARIES tests."""
     from demsausage.app.models import ElectoralBoundaries
     from django.contrib.gis.geos import GEOSGeometry
+
     geom = GEOSGeometry(
         '{"type":"MultiPolygon","coordinates":[[[[138.5,-35.0],[139.0,-35.0],[139.0,-34.8],[138.5,-34.8],[138.5,-35.0]]]]]}',
-        srid=4326
+        srid=4326,
     )
     return ElectoralBoundaries.objects.create(
         name="Test Division",

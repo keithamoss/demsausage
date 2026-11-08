@@ -1,4 +1,9 @@
-from demsausage.app.admin import is_development
+from django.contrib.auth.models import User
+from django.db.models.signals import post_delete, post_save, pre_save
+from django.dispatch import receiver
+from simple_history.models import HistoricalRecords
+from simple_history.signals import pre_create_historical_record
+
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.models import (
     Elections,
@@ -10,12 +15,6 @@ from demsausage.app.models import (
 from demsausage.app.sausage.discord import send_discord_webhook_message
 from demsausage.app.sausage.elections import clear_elections_cache
 from demsausage.rq.jobs import task_regenerate_cached_election_data
-from simple_history.models import HistoricalRecords
-from simple_history.signals import pre_create_historical_record
-
-from django.contrib.auth.models import User
-from django.db.models.signals import post_delete, post_save, pre_save
-from django.dispatch import receiver
 
 
 @receiver(post_save, sender=PollingPlaceNoms)

@@ -10,6 +10,7 @@ Tests (3):
 """
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_full
@@ -119,6 +120,6 @@ def test_no_draft_rows_remain_after_full_pipeline(test_election):
     draft = PollingPlaces.objects.filter(
         election=test_election, status=PollingPlaceStatus.DRAFT
     ).count()
-    assert (
-        draft == 0
-    ), f"Expected 0 DRAFT polling places after full pipeline; got {draft}"
+    assert draft == 0, (
+        f"Expected 0 DRAFT polling places after full pipeline; got {draft}"
+    )

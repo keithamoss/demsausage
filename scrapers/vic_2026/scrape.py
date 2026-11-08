@@ -27,12 +27,11 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
 import requests
-
 from common import (
     CACHE_DIR,
     CACHE_VERSION,
-    ApiVenue,
     ELECTION_DAY_TYPE_ID,
+    ApiVenue,
     ElectionSummary,
     ScrapeCache,
     Venue,
@@ -146,7 +145,9 @@ def find_spreadsheet_url(client: PoliteClient) -> str:
     urls = {
         urljoin(RESOURCES_PAGE_URL, html.unescape(href))
         for href, text in re.findall(
-            r'<a[^>]+href="([^"]+\.xlsx[^"]*)"[^>]*>(.*?)</a>', page, flags=re.S | re.I
+            r'<a[^>]+href="([^"]+\.xlsx[^"]*)"[^>]*>(.*?)</a>',
+            page,
+            flags=re.DOTALL | re.IGNORECASE,
         )
         if "venues spreadsheet" in norm(re.sub(r"<[^>]+>", "", text))
     }

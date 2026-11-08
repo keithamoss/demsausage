@@ -2,6 +2,14 @@ from copy import deepcopy
 from datetime import datetime
 
 import pytz
+from django.db import transaction
+from django.db.models import Count
+from rest_framework import generics, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from simple_history.utils import update_change_reason
+
 from demsausage.app.enums import (
     PollingPlaceNomsChangeReason,
     StallStatus,
@@ -20,9 +28,6 @@ from demsausage.app.sausage.mailgun import (
     send_stall_edited_email,
     send_stall_submitted_email,
 )
-from demsausage.app.views.stall_unofficial_views import (
-    get_pending_unofficial_stalls_queryset,
-)
 from demsausage.app.serializers import (
     PendingStallsSerializer,
     PollingPlaceNomsSerializer,
@@ -33,14 +38,9 @@ from demsausage.app.serializers import (
     StallsTipOffManagementSerializer,
     StallsTipOffUserEditSerializer,
 )
-from rest_framework import generics, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from simple_history.utils import update_change_reason
-
-from django.db import transaction
-from django.db.models import Count
+from demsausage.app.views.stall_unofficial_views import (
+    get_pending_unofficial_stalls_queryset,
+)
 
 
 class StallsViewSet(viewsets.ModelViewSet):
@@ -116,9 +116,8 @@ class StallsViewSet(viewsets.ModelViewSet):
                     raise BadRequest(serializer.errors)
             else:
                 raise BadRequest(
-                    "Could not locate a valid serializer for the submitter_type '{submitter_type}'".format(
-                        request.data["submitter_type"]
-                    )
+                    "Could not locate a valid serializer for the submitter_type "
+                    f"'{request.data['submitter_type']}'"
                 )
         raise BadRequest("No election supplied")
 

@@ -1,12 +1,15 @@
 import copy
 import csv
 
-# POLLING_PLACE_FILENAME = 'prdelms.gaz.statics.220521.09.00.01_cleaned'
-OVERSEAS_POLLING_PLACE_FILENAME = 'overseas_polling_places_2022'
-MERGED_POLLING_PLACE_FILENAME = f'{POLLING_PLACE_FILENAME}_merged_overseas'
+POLLING_PLACE_FILENAME = "prdelms.gaz.statics.220521.09.00.01_cleaned"
+OVERSEAS_POLLING_PLACE_FILENAME = "overseas_polling_places_2022"
+MERGED_POLLING_PLACE_FILENAME = f"{POLLING_PLACE_FILENAME}_merged_overseas"
 
 # open both files
-with open(f'data/{POLLING_PLACE_FILENAME}.csv') as polling_places_australia, open(f'data/{OVERSEAS_POLLING_PLACE_FILENAME}.csv') as polling_places_overseas:
+with (
+    open(f"data/{POLLING_PLACE_FILENAME}.csv") as polling_places_australia,
+    open(f"data/{OVERSEAS_POLLING_PLACE_FILENAME}.csv") as polling_places_overseas,
+):
     csv_polling_places_australia = csv.DictReader(polling_places_australia)
     list_polling_places_australia = list(csv_polling_places_australia)
     print(len(list_polling_places_australia))
@@ -21,9 +24,11 @@ with open(f'data/{POLLING_PLACE_FILENAME}.csv') as polling_places_australia, ope
     print(csv_polling_places_overseas.fieldnames)
 
     check_file_similarity = copy.deepcopy(csv_polling_places_overseas.fieldnames)
-    check_file_similarity.remove('booth_info')
+    check_file_similarity.remove("booth_info")
     if csv_polling_places_australia.fieldnames != check_file_similarity:
-        raise Exception('The two polling place files should be identical except for the booth_info field')
+        raise ValueError(
+            "The two polling place files should be identical except for the booth_info field"
+        )
 
     # Hacky, use for debugging data file formatting issues (headers being different)
     # print("####")
@@ -37,7 +42,9 @@ with open(f'data/{POLLING_PLACE_FILENAME}.csv') as polling_places_australia, ope
     #     print(h)
     #     print("")
 
-    with open(f'data/{MERGED_POLLING_PLACE_FILENAME}.csv', 'w') as output_file:
-        dict_writer = csv.DictWriter(output_file, fieldnames=csv_polling_places_overseas.fieldnames)
+    with open(f"data/{MERGED_POLLING_PLACE_FILENAME}.csv", "w") as output_file:
+        dict_writer = csv.DictWriter(
+            output_file, fieldnames=csv_polling_places_overseas.fieldnames
+        )
         dict_writer.writeheader()
         dict_writer.writerows(polling_places_all)

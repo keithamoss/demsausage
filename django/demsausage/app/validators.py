@@ -1,6 +1,6 @@
-from jsonschema import validate
-from django.core.validators import BaseValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import BaseValidator
+from jsonschema import validate
 
 
 class JSONSchemaValidator(BaseValidator):
@@ -8,4 +8,7 @@ class JSONSchemaValidator(BaseValidator):
         try:
             validate(a, b)
         except Exception:
-            raise ValidationError("%(value)s is not schema", params={"value": a}, )
+            raise ValidationError(
+                "%(value)s is not schema",
+                params={"value": a},
+            )

@@ -33,6 +33,7 @@ Tests (11):
 """
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from tests.conftest import (

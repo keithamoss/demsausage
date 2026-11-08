@@ -4,38 +4,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0003_remove_pollingplacenoms_chance_of_sausage'),
+        ("app", "0003_remove_pollingplacenoms_chance_of_sausage"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='historicalstalls',
-            name='mail_confirm_key',
+            model_name="historicalstalls",
+            name="mail_confirm_key",
         ),
         migrations.RemoveField(
-            model_name='stalls',
-            name='mail_confirm_key',
+            model_name="stalls",
+            name="mail_confirm_key",
         ),
         migrations.AddField(
-            model_name='historicalstalls',
-            name='approved_on',
+            model_name="historicalstalls",
+            name="approved_on",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='stalls',
-            name='approved_on',
+            model_name="stalls",
+            name="approved_on",
             field=models.DateTimeField(null=True),
         ),
         migrations.AlterField(
-            model_name='historicalstalls',
-            name='mail_confirmed',
+            model_name="historicalstalls",
+            name="mail_confirmed",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='stalls',
-            name='mail_confirmed',
+            model_name="stalls",
+            name="mail_confirmed",
             field=models.BooleanField(default=True),
         ),
     ]

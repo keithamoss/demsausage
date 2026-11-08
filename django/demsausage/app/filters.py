@@ -1,9 +1,9 @@
+from django.db.models import Q
+from django_filters import rest_framework as filters
+
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import PollingPlaces
 from demsausage.util import is_one_of_these_things_in_this_other_thing
-from django_filters import rest_framework as filters
-
-from django.db.models import Q
 
 
 class ValueInFilter(filters.BaseInFilter):
@@ -28,7 +28,11 @@ class NamePremisesOrAddressFilter(filters.BaseCSVFilter, filters.CharFilter):
             raise BadRequest("Please supply at least one value to filter by")
         elif value is not None:
             for search_term in value:
-                qs = qs.filter(Q(name__icontains=search_term) | Q(premises__icontains=search_term) | Q(address__icontains=search_term))
+                qs = qs.filter(
+                    Q(name__icontains=search_term)
+                    | Q(premises__icontains=search_term)
+                    | Q(address__icontains=search_term)
+                )
         return qs
 
 
@@ -41,9 +45,9 @@ class LonLatFilter(filters.Filter):
 
     def filter(self, qs, value):
         if value not in (None, ""):
-            from demsausage.app.sausage.polling_places import find_by_distance
-
             from django.contrib.gis.geos import Point
+
+            from demsausage.app.sausage.polling_places import find_by_distance
 
             try:
                 lon, lat = [float(v) for v in value[0:1000].split(",")]
@@ -51,9 +55,13 @@ class LonLatFilter(filters.Filter):
             except Exception as e:
                 raise BadRequest(e)
 
-            polling_places_filter = find_by_distance(search_point, distance_threshold_km=50, limit=15, qs=qs)
+            polling_places_filter = find_by_distance(
+                search_point, distance_threshold_km=50, limit=15, qs=qs
+            )
             if polling_places_filter.count() == 0:
-                polling_places_filter = find_by_distance(search_point, distance_threshold_km=1000, limit=15, qs=qs)
+                polling_places_filter = find_by_distance(
+                    search_point, distance_threshold_km=1000, limit=15, qs=qs
+                )
             return polling_places_filter
         return qs
 
@@ -63,7 +71,7 @@ class PollingPlacesBaseFilter(filters.FilterSet):
 
     class Meta:
         model = PollingPlaces
-        fields = ("election_id", )
+        fields = ("election_id",)
 
 
 class PollingPlacesSearchFilter(PollingPlacesBaseFilter):
@@ -73,14 +81,23 @@ class PollingPlacesSearchFilter(PollingPlacesBaseFilter):
 
     class Meta:
         model = PollingPlaces
-        fields = ("ids", "search_term", "polling_place_names", )
+        fields = (
+            "ids",
+            "search_term",
+            "polling_place_names",
+        )
 
     def is_valid(self):
         searchParams = list(self.get_fields().keys())
         queryParams = list(self.request.query_params.keys())
 
-        if is_one_of_these_things_in_this_other_thing(searchParams, queryParams) is False:
-            raise BadRequest("Please supply a filter criteria: {}".format(", ".join(searchParams)))
+        if (
+            is_one_of_these_things_in_this_other_thing(searchParams, queryParams)
+            is False
+        ):
+            raise BadRequest(
+                "Please supply a filter criteria: {}".format(", ".join(searchParams))
+            )
         return super(PollingPlacesSearchFilter, self).is_valid()
 
 
@@ -89,4 +106,7 @@ class PollingPlacesNearbyFilter(PollingPlacesBaseFilter):
 
     class Meta:
         model = PollingPlaces
-        fields = ("election_id", "lonlat", )
+        fields = (
+            "election_id",
+            "lonlat",
+        )

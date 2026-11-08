@@ -1,0 +1,42 @@
+# Generated runtime environment and local credentials
+**/*.env
+**/*.env.*
+demsausage/app/sausage/cron/demsausage.cron.env
+secrets/
+**/secrets/
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+
+# Local data, database exports, and generated artifacts
+data/
+**/data/
+**/*.sql
+**/*.sql.*
+**/*.dump
+**/*.backup
+**/*.sqlite3
+**/*.db
+**/*.log
+**/*.tar
+**/*.tgz
+**/*.zip
+logs/
+**/logs/
+static/
+
+# Python caches and local environments
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+**/.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Repository/editor metadata
+.git/
+.DS_Store

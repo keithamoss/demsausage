@@ -24,6 +24,8 @@ from unittest.mock import patch
 
 import pytest
 import pytz
+from django.contrib.gis.geos import Point, Polygon
+
 from demsausage.app.enums import PollingPlaceJurisdiction, PollingPlaceStatus
 from demsausage.app.models import (
     Elections,
@@ -33,8 +35,6 @@ from demsausage.app.models import (
 )
 from demsausage.app.sausage.loader import LoadPollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_full
-
-from django.contrib.gis.geos import Point, Polygon
 
 MELB_LON = 144.9631
 MELB_LAT = -37.8136
@@ -119,9 +119,9 @@ def test_detect_facility_type_stays_none_without_historical_pp(test_election):
     pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        pp.facility_type_id is None
-    ), f"Expected facility_type=None when no historical data; got {pp.facility_type_id}"
+    assert pp.facility_type_id is None, (
+        f"Expected facility_type=None when no historical data; got {pp.facility_type_id}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -157,9 +157,9 @@ def test_calculate_chance_of_sausage_updates_pp_when_historical_noms_exist(
     # Just verify the stage completed without error (chance_of_sausage stats may or
     # may not yield numerical results depending on the stats function's algorithm,
     # but the summary line must appear)
-    assert any(
-        "Chance of sausage: considered" in m for m in info_msgs
-    ), f"Expected 'Chance of sausage: considered' in info; info={info_msgs}"
+    assert any("Chance of sausage: considered" in m for m in info_msgs), (
+        f"Expected 'Chance of sausage: considered' in info; info={info_msgs}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +193,6 @@ def test_calculate_chance_of_sausage_missing_pp_id_logs_error(test_election):
         logs = loader.collects_logs()
 
     errors = logs.get("errors", [])
-    assert any(
-        "Could not find the expected Chance of Sausage" in m for m in errors
-    ), f"Expected missing-PP error in errors; errors={errors}"
+    assert any("Could not find the expected Chance of Sausage" in m for m in errors), (
+        f"Expected missing-PP error in errors; errors={errors}"
+    )

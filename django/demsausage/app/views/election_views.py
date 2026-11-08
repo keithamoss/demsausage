@@ -1,6 +1,18 @@
 import json
 from datetime import datetime, timedelta
 
+from django.core.cache import cache
+from django.db import transaction
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django.utils.timezone import make_aware
+from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rq.job import Job
+
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import Elections
 from demsausage.app.permissions import AnonymousOnlyGET
@@ -26,18 +38,9 @@ from demsausage.rq.jobs import (
 )
 from demsausage.rq.jobs_loader import task_refresh_polling_place_data
 from demsausage.rq.rq_utils import get_redis_connection
-from rest_framework import mixins, viewsets
-from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rq.job import Job
+from demsausage.util import make_logger
 
-from django.core.cache import cache
-from django.db import transaction
-from django.http import HttpResponseBadRequest, HttpResponseNotFound
-from django.utils.timezone import make_aware
+logger = make_logger(__name__)
 
 
 class ElectionsViewSet(viewsets.ModelViewSet):
@@ -210,6 +213,15 @@ class ElectionsViewSet(viewsets.ModelViewSet):
         return Response({"report": report})
 
 
+def _default_map_image_response():
+    try:
+        with open("/app/demsausage/static_maps/federal_2019_australia.png", "rb") as f:
+            return Response(f.read())
+    except OSError:
+        logger.exception("Could not read the default election map image")
+        return HttpResponseBadRequest()
+
+
 class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
     permission_classes = (AllowAny,)
     queryset = Elections.objects
@@ -225,14 +237,7 @@ class ElectionMapStaticImageCurrentDefaultElectionViewSet(APIView):
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
 
             # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
-            try:
-                with open(
-                    "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
-                ) as f:
-                    default_map_png = f.read()
-                    return Response(default_map_png)
-            except:
-                return HttpResponseBadRequest()
+            return _default_map_image_response()
 
     # We were seeing a fair number of HEAD requests for the default map image.
     # (Presumably from the crawlers building the social previews? Or someother bot doing things there?)
@@ -262,14 +267,7 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
         task_generate_election_map_screenshot.delay(election_id=pk)
 
         # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
-        try:
-            with open(
-                "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
-            ) as f:
-                default_map_png = f.read()
-                return Response(default_map_png)
-        except:
-            return HttpResponseBadRequest()
+        return _default_map_image_response()
 
     # Hacky hacky...make this all work better
     def list(self, request, format=None):
@@ -281,11 +279,4 @@ class ElectionMapStaticImageViewSet(mixins.ListModelMixin, viewsets.GenericViewS
             task_generate_election_map_screenshot.delay(election_id=primaryElection.id)
 
             # ...and return the pre-generated static image of the 2019 Federal Election (it's better than nothing!)
-            try:
-                with open(
-                    "/app/demsausage/static_maps/federal_2019_australia.png", "rb"
-                ) as f:
-                    default_map_png = f.read()
-                    return Response(default_map_png)
-            except:
-                return HttpResponseBadRequest()
+            return _default_map_image_response()

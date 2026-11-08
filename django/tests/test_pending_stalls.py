@@ -1,14 +1,14 @@
 from unittest.mock import patch
 
 import pytest
-from demsausage.app.enums import PollingPlaceStatus, StallStatus
-from demsausage.app.models import PollingPlaces, Stalls
-from demsausage.app.views.stall_views import PendingStallsViewSet
-from rest_framework.test import APIRequestFactory, force_authenticate
-
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.utils import timezone
+from rest_framework.test import APIRequestFactory, force_authenticate
+
+from demsausage.app.enums import PollingPlaceStatus, StallStatus
+from demsausage.app.models import PollingPlaces, Stalls
+from demsausage.app.views.stall_views import PendingStallsViewSet
 
 
 @pytest.mark.django_db

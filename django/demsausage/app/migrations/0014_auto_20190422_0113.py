@@ -5,15 +5,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0013_remove_elections_default_zoom_level'),
+        ("app", "0013_remove_elections_default_zoom_level"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='elections',
-            name='geom',
+            model_name="elections",
+            name="geom",
             field=django.contrib.gis.db.models.fields.PolygonField(srid=4326),
         ),
     ]

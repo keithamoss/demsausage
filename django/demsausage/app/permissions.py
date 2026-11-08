@@ -1,6 +1,7 @@
-from demsausage.app.sausage.mailgun import make_confirmation_hash
 from django.contrib.auth.models import AnonymousUser, User
 from rest_framework import permissions
+
+from demsausage.app.sausage.mailgun import make_confirmation_hash
 
 
 class AnonymousOnlyList(permissions.BasePermission):
@@ -9,7 +10,11 @@ class AnonymousOnlyList(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        if view.action == "list" or view.action == "polling_places" or view.action == "polling_places_nearby":
+        if (
+            view.action == "list"
+            or view.action == "polling_places"
+            or view.action == "polling_places_nearby"
+        ):
             return True
         return isinstance(request.user, User)
 

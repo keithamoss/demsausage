@@ -6,9 +6,13 @@ from io import StringIO
 
 import chardet
 import googlemaps
+from django.contrib.gis.geos import Point
+from django.db import transaction
+from django.db.models import Q
+from rq import get_current_job
+
 from demsausage.app.enums import (
     MetaPollingPlaceTaskCategory,
-    MetaPollingPlaceTaskStatus,
     MetaPollingPlaceTaskType,
     PollingPlaceState,
     PollingPlaceStatus,
@@ -23,7 +27,6 @@ from demsausage.app.models import (
     Stalls,
 )
 from demsausage.app.sausage.chance_of_sausage import (
-    calculate_chance_of_sausage,
     calculate_chance_of_sausage_stats,
 )
 from demsausage.app.sausage.polling_places import find_by_distance
@@ -39,11 +42,6 @@ from demsausage.util import (
     make_logger,
     merge_and_sum_dicts,
 )
-from rq import get_current_job
-
-from django.contrib.gis.geos import Point
-from django.db import transaction
-from django.db.models import Q
 
 logger = make_logger(__name__)
 
@@ -984,7 +982,6 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 return None
 
             processed_polling_places = []
-            skipped_polling_places = []
             geocoding_success_counter = 0
             geocoding_skipped_counter = 0
 

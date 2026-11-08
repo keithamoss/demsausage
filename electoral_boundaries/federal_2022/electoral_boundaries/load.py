@@ -8,13 +8,12 @@ django.setup()
 
 from demsausage.app.models import ElectoralBoundaries
 from django.contrib.gis.gdal import DataSource
-from django.contrib.gis.geos import (GEOSGeometry, MultiPolygon, Polygon,
-                                     WKTWriter)
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon, WKTWriter
 from django.db import transaction
 
 
 def _force_2d(geom):
-    """ https://groups.google.com/d/msg/django-users/7c1NZ76UwRU/xEAir0dUCQAJ """
+    """https://groups.google.com/d/msg/django-users/7c1NZ76UwRU/xEAir0dUCQAJ"""
 
     wkt_w = WKTWriter()
     wkt_w.outdim = 2
@@ -30,7 +29,9 @@ def _force_2d(geom):
 loader_id = "federal_election_2022"
 election_id = 37
 
-boundaries_shp = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "2021_ELB_region.shp")
+boundaries_shp = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "data", "2021_ELB_region.shp"
+)
 ds = DataSource(boundaries_shp)
 lyr = ds[0]
 
@@ -48,7 +49,7 @@ with transaction.atomic():
             state="",
             extras={
                 "num_ccds": feat.get("Numccds"),
-                "total_pop": feat.get("Total_Popu")
-            }
+                "total_pop": feat.get("Total_Popu"),
+            },
         )
         record.save()

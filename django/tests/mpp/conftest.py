@@ -6,19 +6,10 @@ it creates an Elections row with an Australia-wide bounding polygon.
 """
 
 import pytest
+from django.contrib.auth.models import User
+from django.contrib.gis.geos import Point
+from rest_framework.test import APIClient
 
-
-# ---------------------------------------------------------------------------
-# Disable SECURE_SSL_REDIRECT for all tests in this suite.
-# The production settings.py has SECURE_SSL_REDIRECT=True, which causes the
-# Django test client to receive a 301 redirect on every request.  Disabling
-# it here keeps the tests clean without touching global settings.
-# ---------------------------------------------------------------------------
-
-
-@pytest.fixture(autouse=True)
-def disable_ssl_redirect(settings):
-    settings.SECURE_SSL_REDIRECT = False
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
     MetaPollingPlaceTaskCategory,
@@ -34,10 +25,19 @@ from demsausage.app.models import (
     PollingPlaceFacilityType,
     PollingPlaces,
 )
-from rest_framework.test import APIClient
 
-from django.contrib.auth.models import User
-from django.contrib.gis.geos import Point
+# ---------------------------------------------------------------------------
+# Disable SECURE_SSL_REDIRECT for all tests in this suite.
+# The production settings.py has SECURE_SSL_REDIRECT=True, which causes the
+# Django test client to receive a 301 redirect on every request.  Disabling
+# it here keeps the tests clean without touching global settings.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def disable_ssl_redirect(settings):
+    settings.SECURE_SSL_REDIRECT = False
+
 
 # Melbourne CBD coordinates used throughout
 MELB_LON = 144.9631

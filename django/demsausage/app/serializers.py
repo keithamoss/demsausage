@@ -1,4 +1,13 @@
-from datetime import timedelta
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models.functions import Distance
+from django.core.cache import cache
+from django.db.models import Count, Q
+from django.db.models.functions import TruncDay
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
+from rest_framework import serializers
+from rest_framework_gis.fields import GeometryField
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from demsausage.app.enums import (
     MetaPollingPlaceStatus,
@@ -31,18 +40,6 @@ from demsausage.app.sausage.elections import (
 from demsausage.app.sausage.polling_places import find_by_distance
 from demsausage.app.schemas import noms_schema, stall_location_info_schema
 from demsausage.util import daterange, get_or_none, get_url_safe_election_name
-from jsonschema import validate
-from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-from rest_framework import serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from rest_framework_gis.fields import GeometryField
-
-from django.contrib.auth.models import User
-from django.contrib.gis.db.models.functions import Distance
-from django.core.cache import cache
-from django.db.models import Count, Q
-from django.db.models.functions import TruncDay
-from django.utils import timezone
 
 
 class HistoricalRecordField(serializers.ListField):

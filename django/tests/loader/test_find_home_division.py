@@ -19,11 +19,11 @@ that the dedup path that calls _find_home_division is exercised.
 """
 
 import pytest
+from django.contrib.gis.geos import MultiPolygon, Polygon
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import ElectoralBoundaries, PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
-
-from django.contrib.gis.geos import MultiPolygon, Polygon
 
 # Melbourne CBD — within the electoral_boundaries fixture polygon
 MELB_LAT = "-37.8136"
@@ -79,9 +79,9 @@ def test_use_electoral_boundaries_happy_path(test_election, electoral_boundaries
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
     assert pp.divisions, "Expected a non-empty divisions list"
-    assert (
-        pp.divisions[0] == "Hotham"
-    ), f"Expected 'Hotham' as home division (first element) but got: {pp.divisions}"
+    assert pp.divisions[0] == "Hotham", (
+        f"Expected 'Hotham' as home division (first element) but got: {pp.divisions}"
+    )
 
 
 # ---------------------------------------------------------------------------

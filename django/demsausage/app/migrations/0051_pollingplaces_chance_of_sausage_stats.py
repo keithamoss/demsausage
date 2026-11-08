@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0050_elections_is_test'),
+        ("app", "0050_elections_is_test"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pollingplaces',
-            name='chance_of_sausage_stats',
+            model_name="pollingplaces",
+            name="chance_of_sausage_stats",
             field=models.JSONField(blank=True, default=dict),
         ),
     ]

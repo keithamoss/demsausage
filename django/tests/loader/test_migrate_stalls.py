@@ -20,11 +20,11 @@ Tests:
 """
 
 import pytest
+from django.contrib.gis.geos import Point
+
 from demsausage.app.enums import PollingPlaceStatus, StallStatus
 from demsausage.app.models import PollingPlaces, Stalls
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
-
-from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 MELB_LON = 144.9631
 MELB_LAT = -37.8136
@@ -89,9 +89,9 @@ def test_unofficial_pending_stall_no_match_logs_error(test_election):
     logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
 
     errors = logs.get("errors", [])
-    assert any(
-        "stall_no_match" in m for m in errors
-    ), f"Expected 'No matching polling place' error; errors={errors}"
+    assert any("stall_no_match" in m for m in errors), (
+        f"Expected 'No matching polling place' error; errors={errors}"
+    )
 
 
 @pytest.mark.django_db
@@ -119,9 +119,9 @@ def test_unofficial_pending_stall_multi_match_logs_error(test_election):
     logs = run_loader_dry(test_election, make_csv(rows))
 
     errors = logs.get("errors", [])
-    assert any(
-        "stall_multi_match" in m for m in errors
-    ), f"Expected 'Cannot determine' multi-match error; errors={errors}"
+    assert any("stall_multi_match" in m for m in errors), (
+        f"Expected 'Cannot determine' multi-match error; errors={errors}"
+    )
 
 
 @pytest.mark.django_db
@@ -137,9 +137,9 @@ def test_unofficial_pending_stall_skipped_on_reload(test_election):
     run_loader_full(test_election, make_csv([MINIMAL_ROW]))
 
     stall.refresh_from_db()
-    assert (
-        stall.polling_place_id is None
-    ), "Stall should NOT be repointed when polling_places_loaded=True"
+    assert stall.polling_place_id is None, (
+        "Stall should NOT be repointed when polling_places_loaded=True"
+    )
 
 
 @pytest.mark.django_db
@@ -152,9 +152,9 @@ def test_unofficial_pending_stall_successful_match_repoints_fk(test_election):
     run_loader_full(test_election, make_csv([MINIMAL_ROW]))
 
     stall = Stalls.objects.get(election=test_election, status=StallStatus.PENDING)
-    assert (
-        stall.polling_place_id is not None
-    ), "Stall FK should be repointed after successful match"
+    assert stall.polling_place_id is not None, (
+        "Stall FK should be repointed after successful match"
+    )
 
 
 # ============================================================================
@@ -189,9 +189,9 @@ def test_declined_stall_repointed_to_new_draft_pp(test_election):
     new_active = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        stall.polling_place_id == new_active.id
-    ), f"Stall should point to new ACTIVE PP {new_active.id}; got {stall.polling_place_id}"
+    assert stall.polling_place_id == new_active.id, (
+        f"Stall should point to new ACTIVE PP {new_active.id}; got {stall.polling_place_id}"
+    )
 
 
 @pytest.mark.django_db
@@ -226,9 +226,9 @@ def test_declined_stall_no_match_logs_error(test_election):
     logs = run_loader_dry(test_election, make_csv([sydney_row]))
 
     errors = logs.get("errors", [])
-    assert any(
-        "No match found in new data for declined" in m for m in errors
-    ), f"Expected zero-match error for declined stall; errors={errors}"
+    assert any("No match found in new data for declined" in m for m in errors), (
+        f"Expected zero-match error for declined stall; errors={errors}"
+    )
 
 
 @pytest.mark.django_db

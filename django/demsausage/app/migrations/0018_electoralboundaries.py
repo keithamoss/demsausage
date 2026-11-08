@@ -6,26 +6,46 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0017_auto_20190426_0328'),
+        ("app", "0017_auto_20190426_0328"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ElectoralBoundaries',
+            name="ElectoralBoundaries",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('loader_id', models.TextField()),
-                ('geom', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
-                ('election_ids', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=list)),
-                ('division_name', models.TextField(unique=True)),
-                ('state', models.CharField(max_length=8)),
-                ('extras', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict)),
-                ('loaded', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("loader_id", models.TextField()),
+                (
+                    "geom",
+                    django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326),
+                ),
+                (
+                    "election_ids",
+                    django.contrib.postgres.fields.jsonb.JSONField(
+                        blank=True, default=list
+                    ),
+                ),
+                ("division_name", models.TextField(unique=True)),
+                ("state", models.CharField(max_length=8)),
+                (
+                    "extras",
+                    django.contrib.postgres.fields.jsonb.JSONField(
+                        blank=True, default=dict
+                    ),
+                ),
+                ("loaded", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'unique_together': {('division_name', 'loader_id')},
+                "unique_together": {("division_name", "loader_id")},
             },
         ),
     ]

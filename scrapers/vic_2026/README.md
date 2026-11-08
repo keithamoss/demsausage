@@ -9,20 +9,24 @@ Requests are sent at most one every 2 seconds with an identifying User-Agent. Th
 
 ## Running
 
+From the Dev Container, in this directory:
+
 ```
-python3 -m venv venv
-venv/bin/pip install -r requirements.txt
-venv/bin/python run.py            # scrape -> transform -> diff against the previous output
-venv/bin/python run.py --fresh    # don't resume an unfinished scrape
+uv sync --locked
+uv run python run.py            # scrape -> transform -> diff against the previous output
+uv run python run.py --fresh    # don't resume an unfinished scrape
 ```
+
+`uv sync` creates this scraper's Linux `.venv` from `pyproject.toml` and `uv.lock`.
+Run `uv sync` again after changing dependencies.
 
 Or run the steps on their own:
 
 | Script | Network? | What it does |
 |---|---|---|
-| `scrape.py` | Yes | Downloads the spreadsheet and queries the map. Writes `data/cache/<stamp> scrape.json` and `<stamp> venues.xlsx`, saving after every request. An unfinished scrape less than 24 hours old is resumed. |
-| `transform.py [cache]` | No | Reads a scrape cache and writes `data/<stamp> polling places.csv` plus `data/<stamp> warnings.txt`. |
-| `diff.py [old new]` | No | Compares two outputs by VEC venue ID, including new and resolved warnings. Saves the report to `diffs/`. |
+| `uv run python scrape.py` | Yes | Downloads the spreadsheet and queries the map. Writes `data/cache/<stamp> scrape.json` and `<stamp> venues.xlsx`, saving after every request. An unfinished scrape less than 24 hours old is resumed. |
+| `uv run python transform.py [cache]` | No | Reads a scrape cache and writes `data/<stamp> polling places.csv` plus `data/<stamp> warnings.txt`. |
+| `uv run python diff.py [old new]` | No | Compares two outputs by VEC venue ID, including new and resolved warnings. Saves the report to `diffs/`. |
 
 Load the CSV via the admin elections page using `config.json` (dry run first).
 

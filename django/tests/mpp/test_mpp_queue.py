@@ -10,6 +10,9 @@ Tests that:
 """
 
 import pytest
+from django.contrib.gis.geos import Point
+from rest_framework.test import APIClient
+
 from demsausage.app.enums import (
     MetaPollingPlaceTaskCategory,
     MetaPollingPlaceTaskStatus,
@@ -17,9 +20,6 @@ from demsausage.app.enums import (
     PollingPlaceWheelchairAccess,
 )
 from demsausage.app.models import MetaPollingPlaces, MetaPollingPlacesTasks
-from rest_framework.test import APIClient
-
-from django.contrib.gis.geos import Point
 
 LIST_URL = "/api/0.1/meta_polling_places/tasks/"
 NEXT_URL = "/api/0.1/meta_polling_places/tasks/next/"
@@ -73,8 +73,8 @@ def test_list_two_job_groups_correct_task_counts(api_client):
     mpp3 = _make_mpp(2)
 
     _make_task(mpp1, "Job Alpha")
-    _make_task(mpp2, "Job Alpha")   # 2 tasks in Job Alpha
-    _make_task(mpp3, "Job Beta")    # 1 task in Job Beta
+    _make_task(mpp2, "Job Alpha")  # 2 tasks in Job Alpha
+    _make_task(mpp3, "Job Beta")  # 1 task in Job Beta
 
     resp = api_client.get(LIST_URL)
     assert resp.status_code == 200

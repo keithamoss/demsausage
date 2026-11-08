@@ -18,6 +18,7 @@ Tests are ordered to match the 12 items from the plan:
 """
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
@@ -374,6 +375,6 @@ def test_add_columns_adds_values_to_all_rows(test_election):
     )
     assert pps.count() == 2
     for pp in pps:
-        assert (
-            pp.booth_info == "added-by-test"
-        ), f"Expected booth_info='added-by-test' on {pp.name}, got {pp.booth_info!r}"
+        assert pp.booth_info == "added-by-test", (
+            f"Expected booth_info='added-by-test' on {pp.name}, got {pp.booth_info!r}"
+        )

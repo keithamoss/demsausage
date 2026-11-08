@@ -14,6 +14,7 @@ imports in loader.py are patched to avoid real network calls.
 from unittest.mock import MagicMock
 
 import pytest
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
@@ -85,9 +86,9 @@ def test_geocode_enabled_geocodes_blank_coord_pp(test_election, mocker):
     count = PollingPlaces.objects.filter(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     ).count()
-    assert (
-        count == 2
-    ), f"Expected 2 ACTIVE PPs (1 pre-geocoded + 1 geocoded), got {count}"
+    assert count == 2, (
+        f"Expected 2 ACTIVE PPs (1 pre-geocoded + 1 geocoded), got {count}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -106,9 +107,9 @@ def test_geocode_disabled_drops_blank_coord_pp(test_election):
     count = PollingPlaces.objects.filter(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     ).count()
-    assert (
-        count == 1
-    ), f"Expected 1 ACTIVE PP (blank-coord PP should have been dropped), got {count}"
+    assert count == 1, (
+        f"Expected 1 ACTIVE PP (blank-coord PP should have been dropped), got {count}"
+    )
 
     # The remaining PP should be the one with valid coordinates
     pp = PollingPlaces.objects.get(
@@ -131,9 +132,9 @@ def test_geocode_no_api_results_logs_warning(test_election, mocker):
     rows = [MINIMAL_ROW, BLANK_COORDS_ROW]
     logs = run_loader_dry(test_election, make_csv(rows), config=GEOCODING_CONFIG)
 
-    assert any(
-        "no_results" in m for m in logs.get("warnings", [])
-    ), f"Expected 'no_results' warning; warnings={logs.get('warnings')}"
+    assert any("no_results" in m for m in logs.get("warnings", [])), (
+        f"Expected 'no_results' warning; warnings={logs.get('warnings')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -151,6 +152,6 @@ def test_geocode_not_accurate_enough_logs_warning(test_election, mocker):
     rows = [MINIMAL_ROW, BLANK_COORDS_ROW]
     logs = run_loader_dry(test_election, make_csv(rows), config=GEOCODING_CONFIG)
 
-    assert any(
-        "not_accurate_enough" in m for m in logs.get("warnings", [])
-    ), f"Expected 'not_accurate_enough' warning; warnings={logs.get('warnings')}"
+    assert any("not_accurate_enough" in m for m in logs.get("warnings", [])), (
+        f"Expected 'not_accurate_enough' warning; warnings={logs.get('warnings')}"
+    )

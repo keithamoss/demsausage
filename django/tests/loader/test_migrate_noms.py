@@ -21,11 +21,11 @@ Tests (9):
 """
 
 import pytest
+from django.contrib.gis.geos import Point
+
 from demsausage.app.enums import PollingPlaceStatus
 from demsausage.app.models import PollingPlaceNoms, PollingPlaces
 from tests.conftest import MINIMAL_ROW, make_csv, run_loader_dry, run_loader_full
-
-from django.contrib.gis.geos import Point
 
 # Base coordinates (Melbourne CBD)
 MELB_LON = 144.9631
@@ -81,9 +81,9 @@ def test_noms_migrate_by_distance_repoints_fk(test_election):
     new_pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        new_pp.noms_id == noms.id
-    ), f"Expected noms id={noms.id} on new ACTIVE PP; got {new_pp.noms_id}"
+    assert new_pp.noms_id == noms.id, (
+        f"Expected noms id={noms.id} on new ACTIVE PP; got {new_pp.noms_id}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -109,9 +109,9 @@ def test_noms_no_match_logs_error(test_election):
     }
     logs = run_loader_dry(test_election, make_csv([sydney_row]))
 
-    assert any(
-        "No match found" in m for m in logs.get("errors", [])
-    ), f"Expected no-match error in migrate_noms; errors={logs.get('errors')}"
+    assert any("No match found" in m for m in logs.get("errors", [])), (
+        f"Expected no-match error in migrate_noms; errors={logs.get('errors')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -136,12 +136,12 @@ def test_noms_multi_match_logs_proximity_and_error(test_election):
     logs = run_loader_dry(test_election, make_csv(rows))
 
     all_errors = logs.get("errors", [])
-    assert any(
-        "spatial_proximity" in m for m in all_errors
-    ), f"Expected spatial_proximity error; errors={all_errors}"
-    assert any(
-        "matches found in new data" in m for m in all_errors
-    ), f"Expected multi-match noms error; errors={all_errors}"
+    assert any("spatial_proximity" in m for m in all_errors), (
+        f"Expected spatial_proximity error; errors={all_errors}"
+    )
+    assert any("matches found in new data" in m for m in all_errors), (
+        f"Expected multi-match noms error; errors={all_errors}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -216,9 +216,9 @@ def test_overwrite_distance_threshold_allows_distant_match(test_election):
     new_pp = PollingPlaces.objects.get(
         election=test_election, status=PollingPlaceStatus.ACTIVE
     )
-    assert (
-        new_pp.noms_id == noms.id
-    ), f"Expected noms to be migrated to distant PP; got noms_id={new_pp.noms_id}"
+    assert new_pp.noms_id == noms.id, (
+        f"Expected noms to be migrated to distant PP; got noms_id={new_pp.noms_id}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -238,9 +238,9 @@ def test_default_distance_threshold_misses_distant_pp(test_election):
     row = {**MINIMAL_ROW, **EAST_165M}
     logs = run_loader_dry(test_election, make_csv([row]))
 
-    assert any(
-        "No match found" in m for m in logs.get("errors", [])
-    ), f"Expected no-match error with default 100 m threshold; errors={logs.get('errors')}"
+    assert any("No match found" in m for m in logs.get("errors", [])), (
+        f"Expected no-match error with default 100 m threshold; errors={logs.get('errors')}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -272,9 +272,9 @@ def test_two_active_pps_matching_same_draft_pp_logs_error(test_election):
     logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
 
     all_errors = logs.get("errors", [])
-    assert any(
-        "both match" in m and "Test Hall Duplicate" in m for m in all_errors
-    ), f"Expected duplicate-target noms error; errors={all_errors}"
+    assert any("both match" in m and "Test Hall Duplicate" in m for m in all_errors), (
+        f"Expected duplicate-target noms error; errors={all_errors}"
+    )
 
     # Dry run rolls back, so both noms must still be attached to their original PPs
     assert PollingPlaces.objects.filter(noms=noms_a).exists()
@@ -313,9 +313,9 @@ def test_reload_two_official_pps_matching_same_draft_pp_logs_error(test_election
     logs = run_loader_dry(test_election, make_csv([MINIMAL_ROW]))
 
     all_errors = logs.get("errors", [])
-    assert any(
-        "both match" in m and "Test Annex" in m for m in all_errors
-    ), f"Expected duplicate-target noms error on reload; errors={all_errors}"
+    assert any("both match" in m and "Test Annex" in m for m in all_errors), (
+        f"Expected duplicate-target noms error on reload; errors={all_errors}"
+    )
 
     # Dry run rolls back, so both noms must still be attached to their original PPs
     assert PollingPlaces.objects.filter(noms=noms_a).exists()

@@ -10,6 +10,84 @@ We run a modified version of the GitLab branching workflow.
 4. When we're ready to deploy to staging, we use a PR to merge `main` into `staging` (triggering CI/CD)
 5. When we're ready to deploy to production, we use a PR to merge `staging` into `production (triggering CI, with manual deployment)
 
+## Local development environment
+
+The recommended editor workflow is the VS Code Dev Container in this repository. It attaches VS Code to the existing `django` Compose service and starts the configured application stack. Python dependencies come from `django/uv.lock`; both frontend packages are installed with frozen pnpm lockfiles. Do not start a second Compose project while attached.
+
+The base Django image contains runtime dependencies only; pytest and the other development dependencies are installed from the `dev` group during workspace creation. Workspace creation also installs pre-commit as a separate tool, so the repository's Git hooks run when you commit from inside the container.
+
+Ruff is used for Python linting, import sorting, and formatting. The Django configuration is in `django/pyproject.toml`; standalone scripts use Ruff's defaults. VS Code formats the whole Python file and applies Ruff lint fixes and import sorting when you save it explicitly. Ruff is not a commit gate yet. To check the entire repository, run from its root:
+
+```bash
+ruff check .
+ruff format --check .
+```
+
+`ruff check --fix .` applies safe lint fixes, while `ruff format .` applies formatting, including Python examples in Markdown. Review the resulting changes before keeping them.
+
+When updating Python dependencies, change `django/pyproject.toml`, regenerate and review `django/uv.lock` with uv, then rebuild/reopen the Dev Container so the development group is installed. Do not use Poetry or create a project virtual environment. For frontend dependency changes, commit the relevant pnpm lockfile and rebuild/reopen the container.
+
+After changing `.devcontainer/devcontainer.json` (for example its extensions or VS Code settings), use **Dev Containers: Rebuild Container**. Reopening or reattaching to an existing container keeps the configuration recorded when that container was created.
+
+Run Django tests inside the attached workspace with `cd django && python -m pytest tests/ --tb=short -q`. Use the **Django: debug current pytest file (serial)** launch configuration for breakpoints. From a host terminal, the existing equivalent is `docker compose exec django bash -c "cd /app && pytest tests/ --tb=short -q"`. Do not run these workflows concurrently against the same test database. Run admin frontend tests with `cd admin-redesign && pnpm test`.
+
+The existing host-terminal fallback remains `docker compose up`. Normal Dev Container closure stops the shared Compose project, including services started from the host in that same project; it does not remove persistent storage. A forced editor/host termination may require manual Compose cleanup.
+
+Docker-outside-of-Docker uses the host daemon. Read-only Compose queries from the attached container can use the host-path alias:
+
+```bash
+docker compose \
+  -f "$LOCAL_WORKSPACE_FOLDER/docker-compose.yml" \
+  -f "$LOCAL_WORKSPACE_FOLDER/.devcontainer/compose.yml" \
+  ps
+```
+
+The Compose files declare project `demsausage`; the path alias is required so bind sources resolve on the host. Do not use plain Compose commands to rebuild or recreate `django` while attached: they bypass the Dev Container Feature layer and disconnect the editor. Use **Dev Containers: Rebuild Container** instead. When working from the host with the Dev Container closed, `docker compose up` remains the base-stack fallback.
+
+To inspect logs while attached, use the same host-path alias, for example `docker compose -f "$LOCAL_WORKSPACE_FOLDER/docker-compose.yml" -f "$LOCAL_WORKSPACE_FOLDER/.devcontainer/compose.yml" logs -f django`. From the host, `docker compose logs -f django` is unchanged.
+
+### Local admin browser session without Google login
+
+For local browser testing, create an eight-hour session for the existing active
+user ID 1 from the attached Dev Container:
+
+```bash
+cd django
+python create_local_admin_session.py
+```
+
+From the host, use the already-running container:
+
+```bash
+docker compose exec django python /app/create_local_admin_session.py
+```
+
+The script refuses non-local database/site settings, does not change the user,
+and outputs a JSON cookie containing a sensitive session token. Do not commit,
+save, or share that output. It is for the local admin site only, not production
+or staging.
+
+An assistant can install the returned cookie into VS Code's integrated browser
+using `runPlaywrightCode` on a shared page:
+
+```javascript
+const cookie = /* JSON returned by the script */;
+const cdp = await page.context().newCDPSession(page);
+try {
+    const result = await cdp.send('Network.setCookie', cookie);
+    if (!result.success) throw new Error('Session cookie was not installed');
+} finally {
+    await cdp.detach();
+}
+await page.goto('https://admin.test.democracysausage.org/');
+```
+
+Use `Network.setCookie`: this browser currently does not implement the
+`Storage.setCookies` method used by Playwright's `context.addCookies()`. Read
+the page afterward to verify that Pending Submissions loads rather than Login.
+Log out when finished to invalidate the session; otherwise it expires after
+eight hours.
+
 ## Other resources
 
 https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy

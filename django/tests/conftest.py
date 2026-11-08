@@ -7,12 +7,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 import pytz
+from django.contrib.gis.geos import Polygon
+
 from demsausage.app.enums import PollingPlaceJurisdiction
 from demsausage.app.exceptions import BadRequest
 from demsausage.app.models import Elections
 from demsausage.app.sausage.loader import LoadPollingPlaces
-
-from django.contrib.gis.geos import Polygon
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "elections")
 
@@ -470,9 +470,9 @@ def electoral_boundaries(test_election, db):
     Division name ``"Hotham"`` is used in find_home_division tests so that CSV
     rows that carry ``divisions=["Hotham"]`` resolve correctly.
     """
-    from demsausage.app.models import ElectoralBoundaries
-
     from django.contrib.gis.geos import MultiPolygon
+
+    from demsausage.app.models import ElectoralBoundaries
 
     # Bounding box: lon 144.5–145.5°E, lat 38.5–37.5°S — surrounds Melbourne
     geom = MultiPolygon(Polygon.from_bbox((144.5, -38.5, 145.5, -37.5)))

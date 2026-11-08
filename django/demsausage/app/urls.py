@@ -1,3 +1,11 @@
+from django.urls import include, re_path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from rest_framework import routers
+
 from demsausage.app.views.api_views import api_not_found
 from demsausage.app.views.election_views import (
     ElectionMapStaticImageCurrentDefaultElectionViewSet,
@@ -31,15 +39,6 @@ from demsausage.app.views.user_views import (
     ProfileViewSet,
     UserViewSet,
 )
-from drf_spectacular.views import (
-    SpectacularAPIView,
-    SpectacularRedocView,
-    SpectacularSwaggerView,
-)
-from rest_framework import routers
-from rest_framework.permissions import AllowAny
-
-from django.urls import include, path, re_path
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)

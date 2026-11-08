@@ -1,18 +1,18 @@
 import os
+
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demsausage.settings")
 django.setup()
 
-from django.db import transaction
-from django.contrib.gis.gdal import DataSource
-from django.contrib.gis.geos import Polygon, MultiPolygon, GEOSGeometry, WKTWriter
-
 from demsausage.app.models import ElectoralBoundaries
+from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon, WKTWriter
+from django.db import transaction
 
 
 def _force_2d(geom):
-    """ https://groups.google.com/d/msg/django-users/7c1NZ76UwRU/xEAir0dUCQAJ """
+    """https://groups.google.com/d/msg/django-users/7c1NZ76UwRU/xEAir0dUCQAJ"""
 
     wkt_w = WKTWriter()
     wkt_w.outdim = 2
@@ -27,7 +27,9 @@ def _force_2d(geom):
 
 loader_id = "federal_election_2019"
 
-boundaries_shp = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data", "COM_ELB_region.shp")
+boundaries_shp = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "data", "COM_ELB_region.shp"
+)
 ds = DataSource(boundaries_shp)
 lyr = ds[0]
 
@@ -41,6 +43,6 @@ with transaction.atomic():
             election_ids=[27],
             division_name=feat.get("Elect_div"),
             state=feat.get("State"),
-            extras={"num_ccds": feat.get("Numccds")}
+            extras={"num_ccds": feat.get("Numccds")},
         )
         record.save()

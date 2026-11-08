@@ -1,0 +1,17 @@
+name: demsausage
+
+services:
+  django:
+    volumes:
+      - .:/workspaces/demsausage:delegated
+      - devcontainer_pnpm_store:/workspaces/demsausage/.pnpm-store
+      - public_redesign_node_modules:/workspaces/demsausage/public-redesign/node_modules
+      - admin_redesign_node_modules:/workspaces/demsausage/admin-redesign/node_modules
+  nginx:
+    depends_on:
+      - rq_dashboard
+
+volumes:
+  devcontainer_pnpm_store:
+  public_redesign_node_modules:
+  admin_redesign_node_modules:

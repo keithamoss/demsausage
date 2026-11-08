@@ -11,7 +11,12 @@ kml_soup = BeautifulSoup(r.content, "lxml-xml")
 
 polling_places = {}
 for placemark in kml_soup.find_all("Placemark"):
-    polling_place_type = placemark.find("ExtendedData").find("Data", attrs={"name": "Type"}).find("value").text
+    polling_place_type = (
+        placemark.find("ExtendedData")
+        .find("Data", attrs={"name": "Type"})
+        .find("value")
+        .text
+    )
     if polling_place_type == "Early Voting Centre":
         continue
 
@@ -40,7 +45,7 @@ for placemark in kml_soup.find_all("Placemark"):
 
     polling_places[len(polling_places.keys())] = d
 
-df = pd.DataFrame.from_dict(polling_places, orient='index')
+df = pd.DataFrame.from_dict(polling_places, orient="index")
 del df["type"]
 
 df.to_csv("data/act_2020.csv", index=False)

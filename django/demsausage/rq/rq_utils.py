@@ -1,15 +1,19 @@
-from demsausage.app.enums import TaskStatus
-from demsausage.util import (get_env,
-                             get_stracktrace_string_for_current_exception,
-                             is_iterable, is_jsonable, make_logger)
 from django.utils.timezone import make_aware
 from pytz import timezone
 from redis import Redis
-
 from rq import Queue
 from rq.command import send_stop_job_command
 from rq.job import Job
 from rq.registry import StartedJobRegistry
+
+from demsausage.app.enums import TaskStatus
+from demsausage.util import (
+    get_env,
+    get_stracktrace_string_for_current_exception,
+    is_iterable,
+    is_jsonable,
+    make_logger,
+)
 
 logger = make_logger(__name__)
 
@@ -37,11 +41,13 @@ def get_started_tasks(queue_name=None):
             registry = StartedJobRegistry(name=queue.name, connection=redis)
             for job_id in registry.get_job_ids():
                 job = Job.fetch(job_id, connection=redis)
-                tasks.append({
-                    "id": job.id,
-                    "name": get_job_name_from_meta_or_none(job),
-                    "queue": job.origin,
-                })
+                tasks.append(
+                    {
+                        "id": job.id,
+                        "name": get_job_name_from_meta_or_none(job),
+                        "queue": job.origin,
+                    }
+                )
     return tasks
 
 
@@ -53,15 +59,22 @@ def get_queued_tasks(queue_name=None):
         if queue_name is None or queue.name == queue_name:
             for job_id in queue.job_ids:
                 job = Job.fetch(job_id, connection=redis)
-                tasks.append({
-                    "id": job.id,
-                    "name": get_job_name_from_meta_or_none(job),
-                    "queue": job.origin,
-                })
+                tasks.append(
+                    {
+                        "id": job.id,
+                        "name": get_job_name_from_meta_or_none(job),
+                        "queue": job.origin,
+                    }
+                )
     return tasks
 
 
-def is_job_started(custom_job_name, queue_name=None, except_for_job_id=None, return_duplicate_jobs=False):
+def is_job_started(
+    custom_job_name,
+    queue_name=None,
+    except_for_job_id=None,
+    return_duplicate_jobs=False,
+):
     duplicate_jobs = []
     redis = get_redis_connection()
     for queue in Queue.all(connection=redis):
@@ -73,7 +86,11 @@ def is_job_started(custom_job_name, queue_name=None, except_for_job_id=None, ret
 
                 job = Job.fetch(job_id, connection=redis)
 
-                if job.meta is not None and "_custom_job_name" in job.meta and job.meta["_custom_job_name"] == custom_job_name:
+                if (
+                    job.meta is not None
+                    and "_custom_job_name" in job.meta
+                    and job.meta["_custom_job_name"] == custom_job_name
+                ):
                     duplicate_jobs.append(job)
 
     return duplicate_jobs if return_duplicate_jobs is True else len(duplicate_jobs) > 0
@@ -109,7 +126,12 @@ def is_job_started(custom_job_name, queue_name=None, except_for_job_id=None, ret
 #     return duplicate_jobs if return_duplicate_jobs is True else len(duplicate_jobs) > 0
 
 
-def is_job_queued(custom_job_name, queue_name=None, except_for_job_id=None, return_duplicate_jobs=False):
+def is_job_queued(
+    custom_job_name,
+    queue_name=None,
+    except_for_job_id=None,
+    return_duplicate_jobs=False,
+):
     duplicate_jobs = []
     redis = get_redis_connection()
     for queue in Queue.all(connection=redis):
@@ -120,7 +142,11 @@ def is_job_queued(custom_job_name, queue_name=None, except_for_job_id=None, retu
 
                 job = Job.fetch(job_id, connection=redis)
 
-                if job.meta is not None and "_custom_job_name" in job.meta and job.meta["_custom_job_name"] == custom_job_name:
+                if (
+                    job.meta is not None
+                    and "_custom_job_name" in job.meta
+                    and job.meta["_custom_job_name"] == custom_job_name
+                ):
                     duplicate_jobs.append(job)
 
     return duplicate_jobs if return_duplicate_jobs is True else len(duplicate_jobs) > 0
@@ -137,7 +163,17 @@ def is_job_started_or_queued(custom_job_name, queue_name=None, except_for_job_id
 
 def get_duplicate_jobs(job, queue_name=None):
     custom_job_name = get_job_name_from_meta_or_none(job)
-    return is_job_started(custom_job_name, queue_name=queue_name, except_for_job_id=job.id, return_duplicate_jobs=True) + is_job_queued(custom_job_name, queue_name=queue_name, except_for_job_id=job.id, return_duplicate_jobs=True)
+    return is_job_started(
+        custom_job_name,
+        queue_name=queue_name,
+        except_for_job_id=job.id,
+        return_duplicate_jobs=True,
+    ) + is_job_queued(
+        custom_job_name,
+        queue_name=queue_name,
+        except_for_job_id=job.id,
+        return_duplicate_jobs=True,
+    )
 
     # if custom_job_name == "task_open_tweet_stream":
     #     return is_job_started_debugging(custom_job_name, queue_name=queue_name, except_for_job_id=job.id, return_duplicate_jobs=True) + is_job_queued(custom_job_name, queue_name=queue_name, except_for_job_id=job.id, return_duplicate_jobs=True)
@@ -181,7 +217,9 @@ def cancel_jobs(jobs):
     redis = get_redis_connection()
 
     for job in jobs:
-        logger.info(f"Cancelling job '{job.id}' (_custom_job_name={get_job_name_from_meta_or_none(job)}) (status={job.get_status()}) on queue '{job.origin}'")
+        logger.info(
+            f"Cancelling job '{job.id}' (_custom_job_name={get_job_name_from_meta_or_none(job)}) (status={job.get_status()}) on queue '{job.origin}'"
+        )
 
         # This will raise an exception if job is invalid or not currently executing
         send_stop_job_command(redis, job.id)
@@ -203,35 +241,69 @@ def report_job_result(status, job, connection, result, *args, **kwargs):
     def _format_complex_parameter(result):
         if is_jsonable(result):
             return result
-        elif is_iterable(result) and __name__ in result and "Exception" in result.__name__:
+        elif (
+            is_iterable(result)
+            and __name__ in result
+            and "Exception" in result.__name__
+        ):
             # Without is_iterable() checking this would fail on types like 'type'
             return get_stracktrace_string_for_current_exception()
         return f"{result}"
 
     from demsausage.app.models import TaskResults
-    task = TaskResults(job_id=job.id, job_name=get_job_name_from_meta_or_none(job), job_func_name=job.func_name, queue=job.origin, worker="", status=status, result=_format_complex_parameter(result), meta=job.meta, job_args=_format_complex_parameter(job.args), job_kwargs=_format_complex_parameter(job.kwargs), date_enqueued=make_aware(job.enqueued_at, timezone=timezone("UTC")), date_done=make_aware(job.ended_at, timezone=timezone("UTC")))
+
+    task = TaskResults(
+        job_id=job.id,
+        job_name=get_job_name_from_meta_or_none(job),
+        job_func_name=job.func_name,
+        queue=job.origin,
+        worker="",
+        status=status,
+        result=_format_complex_parameter(result),
+        meta=job.meta,
+        job_args=_format_complex_parameter(job.args),
+        job_kwargs=_format_complex_parameter(job.kwargs),
+        date_enqueued=make_aware(job.enqueued_at, timezone=timezone("UTC")),
+        date_done=make_aware(job.ended_at, timezone=timezone("UTC")),
+    )
     task.save()
 
 
 def does_job_want_to_be_unique(job_meta):
-    return job_meta is not None and "_ensure_task_is_unique" in job_meta and job_meta["_ensure_task_is_unique"] is True
+    return (
+        job_meta is not None
+        and "_ensure_task_is_unique" in job_meta
+        and job_meta["_ensure_task_is_unique"] is True
+    )
 
 
 def does_job_want_to_be_unique_scheduled_job(job_meta):
-    return job_meta is not None and "_ensure_task_is_unique_in_scheduled_jobs" in job_meta and job_meta["_ensure_task_is_unique_in_scheduled_jobs"] is True
+    return (
+        job_meta is not None
+        and "_ensure_task_is_unique_in_scheduled_jobs" in job_meta
+        and job_meta["_ensure_task_is_unique_in_scheduled_jobs"] is True
+    )
 
 
 def log_task_debug_info(job):
     import inspect
+
     calling_func_name = inspect.stack()[1].function
 
-    already_exists_elsewhere = is_job_started_or_queued(job.meta["_custom_job_name"], except_for_job_id=job.id)
-    logger.info(f"starting {calling_func_name} as {job.id} (already_exists_elsewhere={already_exists_elsewhere})")
+    already_exists_elsewhere = is_job_started_or_queued(
+        job.meta["_custom_job_name"], except_for_job_id=job.id
+    )
+    logger.info(
+        f"starting {calling_func_name} as {job.id} (already_exists_elsewhere={already_exists_elsewhere})"
+    )
 
 
 def start_job_if_not_queued(task_name, queue_name, *args, **kwargs):
     if is_job_queued(task_name, queue_name) is False:
         import demsausage.rq.jobs as jobs
+
         getattr(jobs, task_name).delay(*args, **kwargs)
     else:
-        logger.info(f"start_job_if_not_queued {task_name} is already queued, so not adding another")
+        logger.info(
+            f"start_job_if_not_queued {task_name} is already queued, so not adding another"
+        )

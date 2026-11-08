@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0012_auto_20190421_1339'),
+        ("app", "0012_auto_20190421_1339"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='elections',
-            name='default_zoom_level',
+            model_name="elections",
+            name="default_zoom_level",
         ),
     ]

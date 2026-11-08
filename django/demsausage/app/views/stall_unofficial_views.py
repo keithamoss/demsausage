@@ -2,6 +2,15 @@ from datetime import datetime
 from math import asin, cos, radians, sin, sqrt
 
 import pytz
+from django.contrib.gis.geos import Point
+from django.db import transaction
+from django.db.models.expressions import RawSQL
+from django.utils import timezone
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from simple_history.utils import update_change_reason
+
 from demsausage.app.enums import (
     PollingPlaceJurisdiction,
     PollingPlaceNomsChangeReason,
@@ -20,15 +29,6 @@ from demsausage.app.serializers import (
     StallsManagementSerializer,
     StallsSerializer,
 )
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from simple_history.utils import update_change_reason
-
-from django.contrib.gis.geos import Point
-from django.db import transaction
-from django.db.models.expressions import RawSQL
-from django.utils import timezone
 
 
 def _get_location_info_point(stall):

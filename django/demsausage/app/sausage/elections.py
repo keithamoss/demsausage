@@ -1,13 +1,13 @@
 from datetime import timedelta
 
-from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces
-from demsausage.rq.jobs import task_regenerate_cached_election_data
-from demsausage.util import make_logger
-
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db.models import Count
 from django.utils import timezone
+
+from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces
+from demsausage.rq.jobs import task_regenerate_cached_election_data
+from demsausage.util import make_logger
 
 logger = make_logger(__name__)
 

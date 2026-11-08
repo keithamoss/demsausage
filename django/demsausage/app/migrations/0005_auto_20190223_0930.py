@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app', '0004_auto_20190223_0843'),
+        ("app", "0004_auto_20190223_0843"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='historicalstalls',
-            name='ip_address',
-            field=models.GenericIPAddressField(null=True, verbose_name='IP address'),
+            model_name="historicalstalls",
+            name="ip_address",
+            field=models.GenericIPAddressField(null=True, verbose_name="IP address"),
         ),
     ]

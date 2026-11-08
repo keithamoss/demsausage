@@ -1,3 +1,7 @@
+from rq.job import Callback, Job
+from rq.queue import Queue
+from rq.worker import Worker
+
 from demsausage.rq.rq_utils import (
     does_job_want_to_be_unique,
     does_job_want_to_be_unique_scheduled_job,
@@ -8,9 +12,6 @@ from demsausage.rq.rq_utils import (
     report_job_success,
 )
 from demsausage.util import make_logger
-from rq.job import Callback, Job
-from rq.queue import Queue
-from rq.worker import Worker
 
 logger = make_logger(__name__)
 
@@ -28,7 +29,7 @@ class CustomQueue(Queue):
             custom_job_name = kwargs["meta"]["_custom_job_name"].format(
                 **kwargs["kwargs"]
             )
-        elif type(args) == tuple and callable(args[0]) is True:
+        elif type(args) is tuple and callable(args[0]) is True:
             custom_job_name = args[0].__name__
         else:
             raise Exception("No _custom_job_name could be determined from meta or args")

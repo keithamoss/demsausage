@@ -1,9 +1,9 @@
 import datetime
 
+from django.db.models import Count, Q
+
 from demsausage.app.enums import MetaPollingPlaceStatus, PollingPlaceStatus, StallStatus
 from demsausage.app.models import PollingPlaceNoms, PollingPlaces, Stalls
-
-from django.db.models import Count, Q
 
 # All elections from WA 2025 onwards
 min_election_date = datetime.datetime(2025, 1, 1)

@@ -26,6 +26,11 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const mediaReleases = [
 	{
+		title: "It's on: Be part of Victorian Democracy Sausage Day on 28 November",
+		date: 'November 9th 2026',
+		filename: '2026-Victoria_9-November.pdf',
+	},
+	{
 		title: "Tasmanian Election 2025: Community fundraisers ready for this weekend's Tasmanian election",
 		date: 'July 14th 2025',
 		filename: '2025-Tasmania_14-July.pdf',
