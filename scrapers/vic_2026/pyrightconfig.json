@@ -7,9 +7,9 @@
     "run.py"
   ],
   "pythonVersion": "3.10",
-  "pythonPlatform": "Darwin",
+  "pythonPlatform": "Linux",
   "venvPath": ".",
-  "venv": "venv",
+  "venv": ".venv",
   "typeCheckingMode": "strict",
   "reportMissingTypeStubs": "none"
 }
