@@ -46,6 +46,48 @@ The Compose files declare project `demsausage`; the path alias is required so bi
 
 To inspect logs while attached, use the same host-path alias, for example `docker compose -f "$LOCAL_WORKSPACE_FOLDER/docker-compose.yml" -f "$LOCAL_WORKSPACE_FOLDER/.devcontainer/compose.yml" logs -f django`. From the host, `docker compose logs -f django` is unchanged.
 
+### Local admin browser session without Google login
+
+For local browser testing, create an eight-hour session for the existing active
+user ID 1 from the attached Dev Container:
+
+```bash
+cd django
+python create_local_admin_session.py
+```
+
+From the host, use the already-running container:
+
+```bash
+docker compose exec django python /app/create_local_admin_session.py
+```
+
+The script refuses non-local database/site settings, does not change the user,
+and outputs a JSON cookie containing a sensitive session token. Do not commit,
+save, or share that output. It is for the local admin site only, not production
+or staging.
+
+An assistant can install the returned cookie into VS Code's integrated browser
+using `runPlaywrightCode` on a shared page:
+
+```javascript
+const cookie = /* JSON returned by the script */;
+const cdp = await page.context().newCDPSession(page);
+try {
+    const result = await cdp.send('Network.setCookie', cookie);
+    if (!result.success) throw new Error('Session cookie was not installed');
+} finally {
+    await cdp.detach();
+}
+await page.goto('https://admin.test.democracysausage.org/');
+```
+
+Use `Network.setCookie`: this browser currently does not implement the
+`Storage.setCookies` method used by Playwright's `context.addCookies()`. Read
+the page afterward to verify that Pending Submissions loads rather than Login.
+Log out when finished to invalidate the session; otherwise it expires after
+eight hours.
+
 ## Other resources
 
 https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy
