@@ -39,6 +39,8 @@ Load the CSV via the admin elections page using `config.json` (dry run first).
 - a stale entry in `VENUE_KEY_ALIASES`
 - changed spreadsheet headers or map fields
 
+The explicit API-only venue allowlist in `transform.py` is the exception to the map-only error. It currently includes Ringwood Heights Primary School, which has no matching spreadsheet row. Its venue label, wheelchair classification, and coordinates come from the API; vote estimates and spreadsheet-only accessibility/entrance descriptions are blank.
+
 **Warnings** are written to `warnings.txt` but don't stop the run; the spreadsheet value is used. They cover:
 
 - venues with no election day hours on the map, or hours other than 8am-6pm

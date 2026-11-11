@@ -26,6 +26,8 @@ from common import (
     load_evc_keys,
     load_vc_venues,
     match_venues,
+    norm,
+    parse_api_address_line_3,
     warnings_path_for_stamp,
 )
 
@@ -69,6 +71,7 @@ JOINT_SUFFIX_RE = re.compile(r"\s*\((?P<marker>H?JVC)\)$")
 
 OPENING_HOURS = "8am to 6pm"
 EXPECTED_ELECTION_DAY_HOURS = ("08:00", "18:00")
+API_ONLY_VENUE_IDS = frozenset({"78927c1c-78c8-45bd-7f68-08df3bca53bf"})
 
 TYPOGRAPHIC_TO_ASCII = str.maketrans(
     {
@@ -227,6 +230,64 @@ def transform_venue(
     }
 
 
+def transform_api_only_venue(
+    api_record: ApiVenue, evc_keys: set[tuple[str, str, str]]
+) -> PollingPlaceOutputRow:
+    accessibility_id = api_record["accessibilityId"]
+    if accessibility_id not in API_ACCESSIBILITY_IDS:
+        raise ValueError(
+            f"Unknown API accessibility id {accessibility_id} for {api_record['venueName']!r}"
+        )
+    accessibility = API_ACCESSIBILITY_IDS[accessibility_id]
+    if accessibility not in WHEELCHAIR_ACCESS_MAP:
+        raise ValueError(
+            f"Unknown API accessibility {accessibility!r} for {api_record['venueName']!r}"
+        )
+
+    address_parts = [api_record["addressLine1"]]
+    entrance_desc = ""
+    entrance = ENTRANCE_RE.match(api_record["addressLine2"])
+    if entrance:
+        text = entrance["text"]
+        entrance_desc = text[0].upper() + text[1:]
+    elif api_record["addressLine2"]:
+        address_parts.append(api_record["addressLine2"])
+    address_parts.append(api_record["addressLine3"])
+
+    suburb, _ = parse_api_address_line_3(api_record)
+    if suburb is None:
+        raise ValueError(
+            f"Could not parse API address for {api_record['venueName']!r}"
+        )
+    evc_key = (
+        norm(api_record["venueName"]),
+        norm(api_record["addressLine1"]),
+        norm(suburb),
+    )
+    accessibility_details = "; ".join(
+        detail["description"] for detail in api_record["accessibilityDetails"]
+    )
+
+    return {
+        "name": api_record["name"],
+        "premises": api_record["venueName"],
+        "address": ", ".join(address_parts),
+        "lat": api_record["latitude"],
+        "lon": api_record["longitude"],
+        "state": "VIC",
+        "divisions": api_record["hostElectorateName"],
+        "wheelchair_access": WHEELCHAIR_ACCESS_MAP[accessibility],
+        "wheelchair_access_description": accessibility_details,
+        "entrance_desc": entrance_desc,
+        "opening_hours": OPENING_HOURS,
+        "vec_venue_id": api_record["venueId"],
+        "host_district": api_record["hostElectorateName"],
+        "is_early_voting_centre": int(evc_key in evc_keys),
+        "est_ordinary_votes": None,
+        "est_absent_votes": None,
+    }
+
+
 def build_rows(
     cache: ScrapeCache,
 ) -> tuple[list[PollingPlaceOutputRow], list[str], list[str]]:
@@ -243,9 +304,13 @@ def build_rows(
         for key in result.stale_aliases
     ]
     errors += [f"NOT FOUND IN API: {v.describe()}" for v in result.unmatched_venues]
+    unknown_api_records = {r["venueId"]: r for r in result.unknown_api_records}
+    for venue_id in sorted(API_ONLY_VENUE_IDS - cache["voting_centres"].keys()):
+        errors.append(f"APPROVED API-ONLY VENUE NOT FOUND IN API: {venue_id}")
     errors += [
-        f"NOT IN SPREADSHEET: {describe_api_record(r)}"
-        for r in result.unknown_api_records
+        f"NOT IN SPREADSHEET: {describe_api_record(record)}"
+        for venue_id, record in unknown_api_records.items()
+        if venue_id not in API_ONLY_VENUE_IDS
     ]
     warnings: list[str] = []
     rows: list[PollingPlaceOutputRow] = []
@@ -259,6 +324,23 @@ def build_rows(
             continue
         rows.append(transform_venue(venue, records[0], key in evc_keys))
         warnings += venue_warnings(venue, records[0], election_date)
+
+    for venue_id in API_ONLY_VENUE_IDS.intersection(unknown_api_records):
+        record = unknown_api_records[venue_id]
+        rows.append(transform_api_only_venue(record, evc_keys))
+        api_hours = [
+            (o["operatingFrom"][11:16], o["operatingTo"][11:16])
+            for o in record["operationDetails"]
+            if o["operatingFrom"][:10] == election_date
+        ]
+        if not api_hours:
+            warnings.append(
+                f"{record['name']}: no election day hours on the VEC map (closed or provisional?)"
+            )
+        elif api_hours != [EXPECTED_ELECTION_DAY_HOURS]:
+            warnings.append(
+                f"{record['name']}: unexpected election day hours on the VEC map: {api_hours}"
+            )
 
     names_by_coords: dict[tuple[float, float], list[str]] = {}
     for row in rows:
