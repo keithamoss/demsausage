@@ -198,6 +198,16 @@ class ElectionDayOnlyTests(unittest.TestCase):
 
 
 class WarningDiffTests(unittest.TestCase):
+    def test_summary_distinguishes_unchanged_count_from_changed_venues(self):
+        old = {"old": {"name": "Old", "premises": "Old"}}
+        new = {"new": {"name": "New", "premises": "New"}}
+        summary = diff.summary_text(
+            old, new, ["new"], ["old"], [], None, Path("old.csv"), Path("new.csv")
+        )
+        self.assertIn("the total count is unchanged", summary)
+        self.assertIn("added: New", summary)
+        self.assertIn("removed: Old", summary)
+
     def test_summary_classifies_changes_by_venue_and_issue(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory)

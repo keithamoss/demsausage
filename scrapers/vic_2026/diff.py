@@ -250,11 +250,11 @@ def summary_text(
         )
     else:
         comparison = (
-            f"unchanged from {previous_load_date}"
+            f"the total count is unchanged from {previous_load_date}"
             if previous_load_date
-            else "unchanged"
+            else "the total count is unchanged"
         )
-    change += f", {comparison}"
+    change += f"{';' if delta == 0 else ','} {comparison}"
     changes: list[str] = []
     if added:
         changes.append(
