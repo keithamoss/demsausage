@@ -197,5 +197,93 @@ class ElectionDayOnlyTests(unittest.TestCase):
             self.assertEqual(diff.load(old_path), diff.load(new_path))
 
 
+class WarningDiffTests(unittest.TestCase):
+    def test_summary_classifies_changes_by_venue_and_issue(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            old_path = path / "old polling places.csv"
+            new_path = path / "new polling places.csv"
+            fields = ["vec_venue_id", "name", "premises", "host_district"]
+            for csv_path, rows in (
+                (
+                    old_path,
+                    [
+                        ["1", "Old Name", "Old Hall", "District"],
+                        ["2", "Resolved", "Resolved Hall", "District"],
+                    ],
+                ),
+                (
+                    new_path,
+                    [
+                        ["1", "New Name", "New Hall", "District"],
+                        ["3", "New", "New Hall 2", "District"],
+                    ],
+                ),
+            ):
+                with csv_path.open("w", newline="", encoding="utf-8") as file:
+                    writer = csv.writer(file)
+                    writer.writerow(fields)
+                    writer.writerows(rows)
+            (path / "old warnings.txt").write_text(
+                "Old Hall (District): wheelchair rating is LNWA in the spreadsheet but 'AWA' on the VEC map\n"
+                "Resolved Hall (District): no election day hours on the VEC map\n",
+                encoding="utf-8",
+            )
+            (path / "new warnings.txt").write_text(
+                "New Hall (District): wheelchair rating is IWA in the spreadsheet but 'AWA' on the VEC map\n"
+                "New Hall 2 (District): no election day hours on the VEC map\n",
+                encoding="utf-8",
+            )
+
+            def warnings_path(stamp: str) -> Path:
+                return path / f"{stamp} warnings.txt"
+
+            with patch.object(
+                diff, "warnings_path_for_stamp", side_effect=warnings_path
+            ):
+                summary = "\n".join(diff.warning_summary_lines(old_path, new_path))
+                details = "\n".join(diff.warning_lines(old_path, new_path))
+            self.assertIn("**New:** Election-day hours: New Hall 2 (New)", summary)
+            self.assertIn(
+                "**Changed:** Wheelchair rating mismatch: New Hall (New Name)", summary
+            )
+            self.assertIn(
+                "**Resolved:** Election-day hours: Resolved Hall (Resolved)", summary
+            )
+            self.assertIn("2 total; 1 new; 1 changed; 1 resolved.", details)
+            self.assertIn("**Changed:** Old Hall (Old Name)", details)
+
+    def test_missing_warning_file_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            with patch.object(
+                diff, "warnings_path_for_stamp", return_value=path / "missing"
+            ):
+                summary = diff.warning_summary_lines(path / "old.csv", path / "new.csv")
+            self.assertIn("unavailable", summary[0])
+
+    def test_identity_does_not_guess_ambiguous_or_unknown_warnings(self):
+        rows = {
+            "1": {
+                "vec_venue_id": "1",
+                "name": "First",
+                "premises": "Hall",
+                "host_district": "District",
+            },
+            "2": {
+                "vec_venue_id": "2",
+                "name": "Second",
+                "premises": "Hall",
+                "host_district": "District",
+            },
+        }
+        self.assertIsNone(
+            diff.warning_identity(
+                "Hall (District): wheelchair rating is AWA in the spreadsheet", rows
+            )
+        )
+        self.assertIsNone(diff.warning_identity("First: unrecognised issue", rows))
+
+
 if __name__ == "__main__":
     unittest.main()

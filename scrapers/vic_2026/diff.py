@@ -8,7 +8,9 @@ Usage: python diff.py [old.csv new.csv]   (defaults to the two most recent outpu
 import argparse
 import csv
 import math
+import re
 import sys
+from collections import defaultdict
 from collections.abc import Mapping
 from datetime import datetime
 from email.utils import parsedate_to_datetime
@@ -66,27 +68,123 @@ def load_warnings(csv_path: Path) -> set[str] | None:
     return set(path.read_text(encoding="utf-8").splitlines()) if path.exists() else None
 
 
-def warning_lines(old_path: Path, new_path: Path) -> list[str]:
+def warning_issue(warning: str) -> str | None:
+    _, separator, detail = warning.partition(": ")
+    if not separator:
+        return None
+    if detail.startswith("wheelchair rating is "):
+        return "Wheelchair rating mismatch"
+    if detail.startswith(("no election day hours", "unexpected election day hours")):
+        return "Election-day hours"
+    match = re.match(r"non-ASCII left in ([^:]+): ", detail)
+    if match:
+        return f"Non-ASCII in {match[1]}"
+    return None
+
+
+def warning_identity(
+    warning: str, rows: Mapping[str, CsvRow]
+) -> tuple[str, str] | None:
+    issue = warning_issue(warning)
+    label, separator, _ = warning.partition(": ")
+    if issue is None or not separator:
+        return None
+    premises, marker, district = label.rpartition(" (")
+    if marker and district.endswith(")"):
+        matches = [
+            row
+            for row in rows.values()
+            if row.get("premises") == premises
+            and row.get("host_district") == district[:-1]
+        ]
+    else:
+        matches = [row for row in rows.values() if row.get("name") == label]
+    return (matches[0][KEY], issue) if len(matches) == 1 else None
+
+
+def compare_warnings(
+    old_path: Path, new_path: Path
+) -> tuple[set[str], set[str], set[str], list[tuple[str, str]]] | None:
     old, new = load_warnings(old_path), load_warnings(new_path)
     if old is None or new is None:
+        return None
+
+    added, resolved = new - old, old - new
+    old_by_identity: dict[tuple[str, str], list[str]] = defaultdict(list)
+    new_by_identity: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for warnings, rows, index in (
+        (resolved, load(old_path), old_by_identity),
+        (added, load(new_path), new_by_identity),
+    ):
+        for warning in warnings:
+            identity = warning_identity(warning, rows)
+            if identity is not None:
+                index[identity].append(warning)
+
+    changed: list[tuple[str, str]] = []
+    for identity in sorted(old_by_identity.keys() & new_by_identity.keys()):
+        previous, current = old_by_identity[identity], new_by_identity[identity]
+        if len(previous) == len(current) == 1:
+            changed.append((previous[0], current[0]))
+            resolved.remove(previous[0])
+            added.remove(current[0])
+    return new & old, added, resolved, changed
+
+
+def warning_summary_lines(old_path: Path, new_path: Path) -> list[str]:
+    comparison = compare_warnings(old_path, new_path)
+    if comparison is None:
+        return [
+            "Warning changes unavailable: warnings were not recorded for both outputs.",
+            "",
+        ]
+    _, added, resolved, changed = comparison
+    lines: list[str] = []
+    for label, warnings, path in (
+        ("New", added, new_path),
+        ("Changed", [current for _, current in changed], new_path),
+        ("Resolved", resolved, old_path),
+    ):
+        grouped: dict[str, list[str]] = defaultdict(list)
+        for warning in warnings:
+            issue = warning_issue(warning) or "Other warning"
+            formatted = format_warning(warning, path)
+            venue, separator, _ = formatted.partition(": ")
+            grouped[issue].append(venue if separator else formatted)
+        details = "; ".join(
+            f"{issue}: {', '.join(sorted(venues))}"
+            for issue, venues in sorted(grouped.items())
+        )
+        lines.append(f"- **{label}:** {details or 'None'}")
+    return lines + [""]
+
+
+def warning_lines(old_path: Path, new_path: Path) -> list[str]:
+    comparison = compare_warnings(old_path, new_path)
+    if comparison is None:
         return [
             "Warnings were not recorded for both outputs, so they cannot be compared.",
             "",
         ]
-    added, resolved = sorted(new - old), sorted(old - new)
-    lines = [f"{len(new)} total; {len(added)} new; {len(resolved)} resolved."]
+    unchanged, added, resolved, changed = comparison
+    lines = [
+        (
+            f"{len(unchanged) + len(added) + len(changed)} total; "
+            f"{len(added)} new; {len(changed)} changed; {len(resolved)} resolved."
+        )
+    ]
 
     def warning_group(warning: str) -> str:
         value = warning.lower()
-        if "no election day hours" in value:
-            return "No election-day hours"
+        if "election day hours" in value:
+            return "Election-day hours"
         if "wheelchair rating" in value:
             return "Wheelchair rating mismatch"
         return "Other warnings"
 
     grouped: dict[str, list[tuple[str, str]]] = {}
     for label, warnings, csv_path in (
-        ("Still present", new & old, new_path),
+        ("Still present", unchanged, new_path),
         ("New", added, new_path),
         ("Resolved", resolved, old_path),
     ):
@@ -94,6 +192,13 @@ def warning_lines(old_path: Path, new_path: Path) -> list[str]:
             grouped.setdefault(warning_group(warning), []).append(
                 (label, format_warning(warning, csv_path))
             )
+    for previous, current in changed:
+        grouped.setdefault(warning_group(current), []).append(
+            (
+                "Changed",
+                f"{format_warning(previous, old_path)} -> {format_warning(current, new_path)}",
+            )
+        )
 
     for group in sorted(grouped):
         lines += ["", f"### {group}"]
@@ -190,12 +295,6 @@ def summary_text(
             f"{len(modified)} existing polling places changed, including {details}."
         )
 
-    old_warnings, new_warnings = load_warnings(old_path), load_warnings(new_path)
-    if old_warnings is not None and new_warnings is not None:
-        sentences.append(
-            f"Warnings: {len(new_warnings)} remain, {len(new_warnings - old_warnings)} new, "
-            f"{len(old_warnings - new_warnings)} resolved."
-        )
     return "\n\n".join(sentences)
 
 
@@ -306,6 +405,7 @@ def build_report(old_path: Path, new_path: Path) -> list[str]:
             "The spreadsheet is unchanged; any differences come from the VEC map.",
             "",
         ]
+    lines += ["### Warning changes", ""] + warning_summary_lines(old_path, new_path)
     lines += ["## Warnings", ""] + warning_lines(old_path, new_path)
     lines += [
         "## Changes",

@@ -46,7 +46,7 @@ Confirmed map-only venues can be explicitly added by VEC venue ID to `API_ONLY_V
 - venues with no election day hours on the map, or hours other than 8am-6pm
 - wheelchair ratings that differ between the spreadsheet and the map
 
-The diff groups warnings by issue and shows which are still present, new, or resolved since the previous output.
+The diff summarises new, changed and resolved warnings, then lists warnings by issue. A warning is changed when its details differ for the same VEC venue ID and recognised issue; ambiguous or unrecognised warnings are reported as new and resolved instead.
 
 ## When a venue doesn't match
 
