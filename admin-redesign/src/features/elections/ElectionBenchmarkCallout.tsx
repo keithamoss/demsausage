@@ -33,7 +33,7 @@ export default function ElectionBenchmarkCallout(props: Props) {
 
 	return (
 		<Box
-			role="status"
+			component="output"
 			data-testid="benchmark-callout"
 			sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, mb: 2, borderRadius: 2, color, bgcolor }}
 		>
@@ -41,7 +41,8 @@ export default function ElectionBenchmarkCallout(props: Props) {
 
 			<div>
 				<Typography variant="h6" component="p" sx={{ lineHeight: 1.2, fontWeight: 700 }}>
-					{status === 'level' ? 'Level with' : `${Math.abs(delta).toFixed(1)} pts ${wording[status]}`} {benchmark.election_name}
+					{status === 'level' ? 'Level with' : `${Math.abs(delta).toFixed(1)} pts ${wording[status]}`}{' '}
+					{benchmark.election_name}
 				</Typography>
 
 				<Typography variant="body2" sx={{ color: 'text.primary' }}>

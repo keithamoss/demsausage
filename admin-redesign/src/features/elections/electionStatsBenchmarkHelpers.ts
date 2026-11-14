@@ -20,4 +20,5 @@ export const calcBenchmarkDelta = (currentPct: number, benchmarkPct: number) => 
 
 export const isBenchmarkOk = (
 	benchmark: ElectionStatsBenchmark | null | undefined,
-): benchmark is Extract<ElectionStatsBenchmark, { error: null }> => benchmark !== null && benchmark !== undefined && benchmark.error === null;
+): benchmark is Extract<ElectionStatsBenchmark, { error: null }> =>
+	benchmark !== null && benchmark !== undefined && benchmark.error === null;
