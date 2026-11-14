@@ -23,6 +23,18 @@ export interface ElectionModifiableProps {
 
 export type NewElection = ElectionModifiableProps;
 
+export type ElectionStatsBenchmark =
+	| {
+			error: null;
+			election_id: number;
+			election_name: string;
+			days_out: number;
+			pct: number;
+			with_data: number;
+			total: number;
+	  }
+	| { error: string };
+
 export interface Election extends ElectionModifiableProps {
 	id: number;
 	is_primary: boolean;
@@ -32,6 +44,8 @@ export interface Election extends ElectionModifiableProps {
 	stats: {
 		with_data: number;
 		total: number;
+		// Only present for active elections
+		benchmark?: ElectionStatsBenchmark | null;
 		by_source: {
 			source: string;
 			count: number;

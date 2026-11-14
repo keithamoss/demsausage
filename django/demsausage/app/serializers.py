@@ -33,6 +33,7 @@ from demsausage.app.models import (
     Profile,
     Stalls,
 )
+from demsausage.app.sausage.election_benchmark import get_election_benchmark
 from demsausage.app.sausage.elections import (
     get_election_stats_cache_key,
     getGamifiedElectionStats,
@@ -357,6 +358,8 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             cache.set(
                 get_election_stats_cache_key(obj.id), result, timeout=60 * 60
             )  # 1 hour
+        else:
+            result["benchmark"] = get_election_benchmark(obj)
 
         return result
 

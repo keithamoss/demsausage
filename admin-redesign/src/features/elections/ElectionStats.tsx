@@ -31,6 +31,7 @@ import { StallStatus, StallSubmitterType, getStallSubmitterTypeName } from '../.
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
+import ElectionBenchmarkCallout from './ElectionBenchmarkCallout';
 import { selectAllElections } from './electionsSlice';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -144,6 +145,13 @@ function ElectionStats(props: Props) {
 						<Typography variant="body1" sx={{ mb: 2 }}>
 							Polling places with data of any sort - noms or Red Cross of Shame.
 						</Typography>
+
+						{election.stats.benchmark !== undefined && election.stats.benchmark !== null && (
+							<ElectionBenchmarkCallout
+								currentPct={calcPercentageOfPollingPlaceWithData(election)}
+								benchmark={election.stats.benchmark}
+							/>
+						)}
 
 						<BarChart
 							dataset={datasetPollingPlaceWithData}
