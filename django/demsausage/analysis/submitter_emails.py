@@ -1,5 +1,12 @@
+"""Categorize approved submissions, normalizing emails before lookup and counting.
+
+Input rows require email and status. Run from the directory containing the
+dated JSON export; output rows retain one entry per approved submission.
+"""
+
 import csv
 import json
+from collections import Counter
 from email.headerregistry import Address
 
 
@@ -60,7 +67,8 @@ def get_private_email_category(email):
 
 
 def get_email_category(email):
-    domain = Address(addr_spec=stall["email"]).domain
+    email = email.strip().lower()
+    domain = Address(addr_spec=email).domain
 
     if is_private_email(domain) is True:
         return get_private_email_category(email)
@@ -177,37 +185,32 @@ def get_email_category(email):
     return ""
 
 
-emails = []
-emails_by_email = {}
-emails_by_domain = {}
+def categorize_submissions(data):
+    addresses = [
+        stall["email"].strip().lower()
+        for stall in data
+        if stall["status"] == "Approved"
+    ]
+    domains = [Address(addr_spec=email).domain for email in addresses]
+    emails_by_email = Counter(addresses)
+    emails_by_domain = Counter(domains)
+    return [
+        {
+            "email": email,
+            "domain": domain,
+            "category": get_email_category(email),
+            "count_of_email": emails_by_email[email],
+            "count_of_domain": emails_by_domain[domain],
+        }
+        for email, domain in zip(addresses, domains)
+    ]
 
-with open("submitter_emails_20250323.json") as f:
-    data = json.load(f)
 
-    for stall in data:
-        if stall["email"] not in emails_by_email:
-            emails_by_email[stall["email"]] = 0
-        emails_by_email[stall["email"]] += 1
+def main():
+    with open("submitter_emails_20261114.json") as file:
+        emails = categorize_submissions(json.load(file))
 
-        domain = Address(addr_spec=stall["email"]).domain
-        if domain not in emails_by_domain:
-            emails_by_domain[domain] = 0
-        emails_by_domain[domain] += 1
-
-    for stall in data:
-        emails.append(
-            {
-                "email": stall["email"],
-                "domain": Address(addr_spec=stall["email"]).domain,
-                "category": get_email_category(stall["email"]),
-                "count_of_email": emails_by_email[stall["email"]],
-                "count_of_domain": emails_by_domain[
-                    Address(addr_spec=stall["email"]).domain
-                ],
-            }
-        )
-
-    with open("output_submitter_emails_20250323.csv", mode="w", newline="") as file:
+    with open("output_submitter_emails_20261114.csv", mode="w", newline="") as file:
         writer = csv.DictWriter(
             file,
             fieldnames=[
@@ -220,8 +223,11 @@ with open("submitter_emails_20250323.json") as f:
         )
         writer.writeheader()
 
-        for row in emails:
-            writer.writerow(row)
+        writer.writerows(emails)
 
-    with open("output_submitter_emails_20250323.json", mode="w") as file:
+    with open("output_submitter_emails_20261114.json", mode="w") as file:
         json.dump(emails, file)
+
+
+if __name__ == "__main__":
+    main()
