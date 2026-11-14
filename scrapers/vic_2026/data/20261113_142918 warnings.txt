@@ -1,0 +1,6 @@
+Campbells Creek Primary School (Bendigo West): no election day hours on the VEC map (closed or provisional?)
+Anglican Parish Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+Strathbogie Memorial Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+Kaniva Senior Citizens Hall (Lowan): wheelchair rating is LNWA in the spreadsheet but 'Wheelchair Access With Assistance(AWA)' (id 1) on the VEC map
+Harrietville Community Hall (Ovens Valley): no election day hours on the VEC map (closed or provisional?)
+Heywood Community Hall (South-West Coast): wheelchair rating is LNWA in the spreadsheet but 'Independent Wheelchair Access(IWA)' (id 2) on the VEC map
