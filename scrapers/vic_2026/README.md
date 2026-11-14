@@ -39,7 +39,7 @@ Load the CSV via the admin elections page using `config.json` (dry run first).
 - a stale entry in `VENUE_KEY_ALIASES`
 - changed spreadsheet headers or map fields
 
-The explicit API-only venue allowlist in `transform.py` is the exception to the map-only error. It currently includes Ringwood Heights Primary School, which has no matching spreadsheet row. Its venue label, wheelchair classification, and coordinates come from the API; vote estimates and spreadsheet-only accessibility/entrance descriptions are blank.
+Confirmed map-only venues can be explicitly added by VEC venue ID to `API_ONLY_VENUE_IDS` in `common.py`. The allowlist is currently empty. For an approved map-only venue, the label and wheelchair classification come from the API; vote estimates and spreadsheet-only accessibility/entrance descriptions are unavailable. Remove its ID once it appears in the spreadsheet.
 
 **Warnings** are written to `warnings.txt` but don't stop the run; the spreadsheet value is used. They cover:
 
@@ -62,7 +62,6 @@ Venues are matched on name + address line 1 + suburb. If the scrape or transform
 - The loader packs these columns into `extras`:
   - `vec_venue_id`
   - `host_district`
-  - `is_early_voting_centre` (1/0)
   - `est_ordinary_votes`
   - `est_absent_votes`
   

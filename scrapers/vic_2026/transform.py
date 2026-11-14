@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from common import (
+    API_ONLY_VENUE_IDS,
     CACHE_DIR,
     DATA_DIR,
     ApiVenue,
@@ -23,10 +24,8 @@ from common import (
     describe_api_record,
     latest_complete_cache_path,
     load_cache,
-    load_evc_keys,
     load_vc_venues,
     match_venues,
-    norm,
     parse_api_address_line_3,
     warnings_path_for_stamp,
 )
@@ -71,7 +70,6 @@ JOINT_SUFFIX_RE = re.compile(r"\s*\((?P<marker>H?JVC)\)$")
 
 OPENING_HOURS = "8am to 6pm"
 EXPECTED_ELECTION_DAY_HOURS = ("08:00", "18:00")
-API_ONLY_VENUE_IDS = frozenset({"78927c1c-78c8-45bd-7f68-08df3bca53bf"})
 
 TYPOGRAPHIC_TO_ASCII = str.maketrans(
     {
@@ -103,7 +101,6 @@ CSV_FIELDS = [
     "opening_hours",
     "vec_venue_id",
     "host_district",
-    "is_early_voting_centre",
     "est_ordinary_votes",
     "est_absent_votes",
 ]
@@ -177,9 +174,7 @@ def location_name(venue: Venue, host_district: str) -> str:
     return JOINT_SUFFIX_RE.sub("", host_row["Voting Location Name"])
 
 
-def transform_venue(
-    venue: Venue, api_record: ApiVenue, is_evc: bool
-) -> PollingPlaceOutputRow:
+def transform_venue(venue: Venue, api_record: ApiVenue) -> PollingPlaceOutputRow:
     if venue.accessibility not in WHEELCHAIR_ACCESS_MAP:
         raise ValueError(
             f"Unknown Accessibility {venue.accessibility!r} for {venue.name!r}"
@@ -224,15 +219,12 @@ def transform_venue(
         "opening_hours": OPENING_HOURS,
         "vec_venue_id": api_record["venueId"],
         "host_district": host_district,
-        "is_early_voting_centre": int(is_evc),
         "est_ordinary_votes": sum_estimates([ordinary for ordinary, _ in votes]),
         "est_absent_votes": sum_estimates([absent for _, absent in votes]),
     }
 
 
-def transform_api_only_venue(
-    api_record: ApiVenue, evc_keys: set[tuple[str, str, str]]
-) -> PollingPlaceOutputRow:
+def transform_api_only_venue(api_record: ApiVenue) -> PollingPlaceOutputRow:
     accessibility_id = api_record["accessibilityId"]
     if accessibility_id not in API_ACCESSIBILITY_IDS:
         raise ValueError(
@@ -256,14 +248,7 @@ def transform_api_only_venue(
 
     suburb, _ = parse_api_address_line_3(api_record)
     if suburb is None:
-        raise ValueError(
-            f"Could not parse API address for {api_record['venueName']!r}"
-        )
-    evc_key = (
-        norm(api_record["venueName"]),
-        norm(api_record["addressLine1"]),
-        norm(suburb),
-    )
+        raise ValueError(f"Could not parse API address for {api_record['venueName']!r}")
     accessibility_details = "; ".join(
         detail["description"] for detail in api_record["accessibilityDetails"]
     )
@@ -282,7 +267,6 @@ def transform_api_only_venue(
         "opening_hours": OPENING_HOURS,
         "vec_venue_id": api_record["venueId"],
         "host_district": api_record["hostElectorateName"],
-        "is_early_voting_centre": int(evc_key in evc_keys),
         "est_ordinary_votes": None,
         "est_absent_votes": None,
     }
@@ -294,7 +278,6 @@ def build_rows(
     """Returns (rows, errors, warnings). Rows must not be written if there are errors."""
     spreadsheet_path = CACHE_DIR / cache["spreadsheet"]["filename"]
     venues = load_vc_venues(spreadsheet_path)
-    evc_keys = load_evc_keys(spreadsheet_path)
     validate_api_fields(cache["voting_centres"])
     election_date = cache["election"]["electionDate"][:10]
 
@@ -322,12 +305,12 @@ def build_rows(
                 f"MULTIPLE API LOCATIONS: {venue.describe()} -> {[r['venueId'] for r in records]}"
             )
             continue
-        rows.append(transform_venue(venue, records[0], key in evc_keys))
+        rows.append(transform_venue(venue, records[0]))
         warnings += venue_warnings(venue, records[0], election_date)
 
     for venue_id in API_ONLY_VENUE_IDS.intersection(unknown_api_records):
         record = unknown_api_records[venue_id]
-        rows.append(transform_api_only_venue(record, evc_keys))
+        rows.append(transform_api_only_venue(record))
         api_hours = [
             (o["operatingFrom"][11:16], o["operatingTo"][11:16])
             for o in record["operationDetails"]
@@ -409,9 +392,7 @@ def main(cache_path: Path | None = None) -> int:
     warnings_path_for_stamp(cache["stamp"]).write_text(
         "".join(f"{w}\n" for w in warnings), encoding="utf-8"
     )
-    print(
-        f"Wrote {len(rows)} polling places ({sum(r['is_early_voting_centre'] for r in rows)} also EVCs) to {output_path}"
-    )
+    print(f"Wrote {len(rows)} polling places to {output_path}")
     return 0
 
 

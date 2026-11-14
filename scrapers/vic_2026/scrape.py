@@ -28,6 +28,7 @@ from urllib.parse import urljoin, urlparse
 
 import requests
 from common import (
+    API_ONLY_VENUE_IDS,
     CACHE_DIR,
     CACHE_VERSION,
     ELECTION_DAY_TYPE_ID,
@@ -362,6 +363,9 @@ def main(fresh: bool = False) -> int:
         write_json_atomic(cache_path, cache)
 
     result = match_venues(venues, cache["voting_centres"])
+    unapproved_api_records = [
+        r for r in result.unknown_api_records if r["venueId"] not in API_ONLY_VENUE_IDS
+    ]
     cache["unmatched_spreadsheet_venues"] = [
         v.describe() for v in result.unmatched_venues
     ]
@@ -378,12 +382,17 @@ def main(fresh: bool = False) -> int:
     )
     for line in cache["unmatched_spreadsheet_venues"]:
         print(f"  NOT FOUND IN API: {line}")
-    for line in cache["api_venues_not_in_spreadsheet"]:
-        print(f"  NOT IN SPREADSHEET: {line}")
+    for record in result.unknown_api_records:
+        label = (
+            "APPROVED API-ONLY"
+            if record["venueId"] in API_ONLY_VENUE_IDS
+            else "NOT IN SPREADSHEET"
+        )
+        print(f"  {label}: {describe_api_record(record)}")
     return (
         1
         if cache["unmatched_spreadsheet_venues"]
-        or cache["api_venues_not_in_spreadsheet"]
+        or unapproved_api_records
         else 0
     )
 

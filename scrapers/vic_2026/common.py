@@ -2,7 +2,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal, TypedDict, TypeGuard, overload
+from typing import Literal, TypedDict, TypeGuard
 
 import openpyxl
 
@@ -13,6 +13,7 @@ DIFFS_DIR = Path(__file__).parent / "diffs"
 CACHE_VERSION = 1
 
 ELECTION_DAY_TYPE_ID = 1
+API_ONLY_VENUE_IDS: frozenset[str] = frozenset()
 
 VCS_SHEET: Literal["VCs"] = "VCs"
 VCS_HEADERS = (
@@ -31,41 +32,13 @@ VCS_HEADERS = (
     "Additional Wheel Chair Access Description",
 )
 
-EVCS_SHEET: Literal["EVCs"] = "EVCs"
-EVCS_HEADERS = (
-    "District",
-    "Voting Location Name",
-    "Venue Name",
-    "Accessibility",
-    "Address Line 1",
-    "Address Line 2",
-    "Suburb",
-    "Post Code",
-    "Est. Early Votes",
-    "Designated Entrance Details",
-    "Secondary Designated Entrance Details (if applicable)",
-    "Additional Wheel Chair Access Description",
-)
-
 DEFINITIONS_SHEET = "Definitions"
 INFORMATION_DATE_PREFIX = "Information correct as at"
 
 API_ADDRESS_LINE_3_RE = re.compile(r"^(?P<suburb>.+?)\s+VIC\s+(?P<postcode>\d{4})$")
 
-# API venue key -> spreadsheet venue key, for venues the two sources name differently (checked 2026-11-04)
-VENUE_KEY_ALIASES = {
-    (
-        "the hellenic orthodox community of geelong community hall",
-        "3 taliska avenue",
-        "hamlyn heights",
-    ): (
-        "the hellenic orthodox community of geelong parish hall",
-        "3 taliska avenue",
-        "hamlyn heights",
-    ),
-}
-
 VenueKey = tuple[str, str, str]
+VENUE_KEY_ALIASES: dict[VenueKey, VenueKey] = {}
 SheetCell = str | int | float | None
 
 VCSheetRow = TypedDict(
@@ -84,15 +57,6 @@ VCSheetRow = TypedDict(
         "Designated Entrance Details": str | None,
         "Secondary Designated Entrance Details (if applicable)": str | None,
         "Additional Wheel Chair Access Description": str | None,
-    },
-)
-
-EVCSheetRow = TypedDict(
-    "EVCSheetRow",
-    {
-        "Venue Name": str,
-        "Address Line 1": str,
-        "Suburb": str,
     },
 )
 
@@ -213,7 +177,6 @@ PollingPlaceOutputRow = TypedDict(
         "opening_hours": str,
         "vec_venue_id": str,
         "host_district": str,
-        "is_early_voting_centre": int,
         "est_ordinary_votes": int | None,
         "est_absent_votes": int | None,
     },
@@ -234,7 +197,6 @@ PollingPlaceCsvRow = TypedDict(
         "opening_hours": str,
         "vec_venue_id": str,
         "host_district": str,
-        "is_early_voting_centre": str,
         "est_ordinary_votes": str,
         "est_absent_votes": str,
     },
@@ -669,21 +631,9 @@ def _postcode_cell(row: dict[str, SheetCell]) -> str | int | float:
     raise ValueError(f"Expected a postcode, got {value!r}")
 
 
-@overload
 def read_sheet(
     path: Path, sheet: Literal["VCs"], expected_headers: tuple[str, ...]
-) -> list[VCSheetRow]: ...
-
-
-@overload
-def read_sheet(
-    path: Path, sheet: Literal["EVCs"], expected_headers: tuple[str, ...]
-) -> list[EVCSheetRow]: ...
-
-
-def read_sheet(
-    path: Path, sheet: str, expected_headers: tuple[str, ...]
-) -> list[VCSheetRow] | list[EVCSheetRow]:
+) -> list[VCSheetRow]:
     rows = _read_sheet_rows(path, sheet, expected_headers)
     if sheet == VCS_SHEET:
         parsed_rows: list[VCSheetRow] = []
@@ -712,17 +662,6 @@ def read_sheet(
                 }
             )
         return parsed_rows
-    if sheet == EVCS_SHEET:
-        parsed_evc_rows: list[EVCSheetRow] = []
-        for row in rows:
-            parsed_evc_rows.append(
-                {
-                    "Venue Name": _required_text(row, "Venue Name"),
-                    "Address Line 1": _required_text(row, "Address Line 1"),
-                    "Suburb": _required_text(row, "Suburb"),
-                }
-            )
-        return parsed_evc_rows
     raise ValueError(f"Unsupported spreadsheet sheet {sheet!r}")
 
 
@@ -773,17 +712,6 @@ def load_vc_venues(path: Path) -> dict[VenueKey, Venue]:
         raise ValueError("Inconsistent joint venue rows:\n  " + "\n  ".join(errors))
 
     return venues
-
-
-def load_evc_keys(path: Path) -> set[VenueKey]:
-    return {
-        venue_key(
-            re.sub(r"\s*\(EVC\)$", "", row["Venue Name"]),
-            row["Address Line 1"],
-            row["Suburb"],
-        )
-        for row in read_sheet(path, EVCS_SHEET, EVCS_HEADERS)
-    }
 
 
 def parse_api_address_line_3(record: ApiVenue) -> tuple[str, str] | tuple[None, None]:

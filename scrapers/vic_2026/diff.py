@@ -26,6 +26,7 @@ from common import (
 )
 
 KEY = "vec_venue_id"
+RETIRED_FIELDS = {"is_early_voting_centre"}
 CsvRow = dict[str, str]
 
 
@@ -43,7 +44,9 @@ def load(path: Path) -> dict[str, CsvRow]:
             row: CsvRow = {
                 key: value
                 for key, value in raw_row.items()
-                if key is not None and isinstance(value, str)
+                if key is not None
+                and key not in RETIRED_FIELDS
+                and isinstance(value, str)
             }
             identifier = row.get(KEY)
             if not identifier or identifier != identifier.strip():
