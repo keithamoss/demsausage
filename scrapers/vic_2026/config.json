@@ -23,6 +23,20 @@
           "value": "1 Doone Street, Aberfeldie VIC 3040"
         }
       ]
+    },
+    {
+      "field": "premises",
+      "value": "Loch Sport Community House",
+      "overwrite": [
+        {
+          "field": "wheelchair_access",
+          "value": "Full"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "value": ""
+        }
+      ]
     }
   ],
   "overwrite_distance_thresholds": [
