@@ -333,6 +333,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
         is_inactive = not obj.is_active()
 
         if is_inactive:
+            # Assumes deployment restarts Memcached, clearing stale stats payloads.
             cached = cache.get(get_election_stats_cache_key(obj.id))
             if cached is not None:
                 return cached
@@ -341,7 +342,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "with_data": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             )
-            .filter(noms__isnull=False)
+            .filter(noms__deleted=False)
             .count(),
             "total": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
@@ -352,14 +353,13 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "triage_actions_by_day": list(_get_triage_actions_by_day()),
             "top_submitters": list(_get_top_submitters()),
             "noms_changes_by_user": getGamifiedElectionStats(obj.id),
+            "benchmark": None if is_inactive else get_election_benchmark(obj),
         }
 
         if is_inactive:
             cache.set(
                 get_election_stats_cache_key(obj.id), result, timeout=60 * 60
             )  # 1 hour
-        else:
-            result["benchmark"] = get_election_benchmark(obj)
 
         return result
 
