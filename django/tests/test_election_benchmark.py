@@ -359,6 +359,9 @@ def test_deleted_and_archived_noms_do_not_affect_selection_or_current_coverage(
         deleted=True, first_report=None
     )
     add_polling_places(current, 3, [20, 20, 20])
+    PollingPlaceNoms.objects.filter(polling_place__election=current).update(
+        source="test-source"
+    )
     deleted = PollingPlaces.objects.filter(election=current).first()
     PollingPlaceNoms.objects.filter(pk=deleted.noms_id).update(deleted=True)
     archived = (
@@ -371,6 +374,7 @@ def test_deleted_and_archived_noms_do_not_affect_selection_or_current_coverage(
     result = ElectionsStatsSerializer(current).data["stats"]
     assert result["with_data"] == 1
     assert result["total"] == 2
+    assert result["by_source"] == [{"source": "test-source", "count": 1}]
     assert result["benchmark"]["election_id"] == best.id
 
 

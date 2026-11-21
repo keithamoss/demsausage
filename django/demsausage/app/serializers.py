@@ -173,6 +173,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                 PollingPlaceNoms.objects.filter(
                     polling_place__election_id=obj.id,
                     polling_place__status=PollingPlaceStatus.ACTIVE,
+                    deleted=False,
                 )
                 .values("source")
                 .annotate(count=Count("id"))
