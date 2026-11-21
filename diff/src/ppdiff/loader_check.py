@@ -94,6 +94,8 @@ def fix_audit(old: Dataset, new: Dataset, config: dict[str, Any]) -> list[dict[s
                 ],
             }
         )
+        old_rows = rules.apply_fixes(old_rows, [fix])
+        new_rows = rules.apply_fixes(new_rows, [fix])
     return audit
 
 
