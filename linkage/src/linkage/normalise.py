@@ -125,8 +125,7 @@ def equivalent(kind: str, a: str | None, b: str | None) -> bool:
     if a == b:
         return True
     try:  # numbers written differently: "1.50" and "1.5"
-        if float(a) == float(b):
-            return True
+        return float(a) == float(b)
     except ValueError:
         pass
     normaliser = NORMALISERS.get(kind, norm)
