@@ -63,6 +63,8 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
 .dir.improved { background: var(--add-soft); color: var(--add); }
 .dir.worse { background: var(--del-soft); color: var(--del); }
+.dir.cosm { background: var(--info-soft); color: var(--muted); }
+.change.cosmetic { opacity: .65; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -85,6 +87,7 @@ button.small { font-size: 13px; padding: 3px 10px; }
 .cardhead h3 { margin: 0 0 4px; }
 label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
 .card.reviewed { opacity: .55; }
+.card.kbd { outline: 2px solid var(--accent); outline-offset: 2px; }
 .card.reviewed:hover { opacity: 1; }
 .hide-toggle { margin: 0 4px; }
 .allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
@@ -320,7 +323,7 @@ function goTo(tabId, elementId) {
 }
 const CATEGORY_LABEL = { accessibility: "Accessibility", entrance: "Entrance", hours: "Opening hours", address: "Address", name: "Name", divisions: "Divisions", votes: "Vote estimates", location: "Location", other: "Other" };
 function entryCategories(e) {
-  const cats = new Set(e.changes.map((c) => c.category || "other"));
+  const cats = new Set(e.changes.filter((c) => !c.cosmetic).map((c) => c.category || "other"));
   if (e.location) cats.add("location");
   return [...cats];
 }
@@ -329,7 +332,15 @@ function directionBadge(c) {
 }
 // ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
 const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
-let REVIEWED = (() => { try { return JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) { return {}; } })();
+// Ticks saved in the repo (reviewed.json, embedded at build) plus any made in this browser since.
+let REVIEWED = (() => { let local = {}; try { local = JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) {} return { ...(DATA.reviewed || {}), ...local }; })();
+const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
+function downloadReview() {
+  const blob = new Blob([JSON.stringify({ old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `reviewed ${first.old.label || "old"} to ${first.new.label || "new"}.json`.replace(/[,:]/g, "") });
+  document.body.append(a); a.click(); a.remove();
+}
+function unsavedTicks() { return Object.keys(REVIEWED).filter((k) => !SAVED_REVIEWED.has(k)).length + [...SAVED_REVIEWED].filter((k) => !REVIEWED[k]).length; }
 let hideReviewed = false;
 function setReviewed(key, on) {
   if (on) REVIEWED[key] = new Date().toISOString(); else delete REVIEWED[key];
@@ -346,6 +357,8 @@ function cardHead(title, key) {
 }
 function reviewAttrs(key) { return { "data-review": key, class: "card" + (REVIEWED[key] ? " reviewed" : "") }; }
 function updateReviewCounts() {
+  const btn = document.getElementById("download-review");
+  if (btn) { const n = unsavedTicks(); btn.textContent = n ? `Download review (${n} not saved to repo)` : "Download review"; }
   document.querySelectorAll("#view details.section").forEach((sec) => {
     const keys = new Set([...sec.querySelectorAll(":scope > .card[data-review], :scope > div > .card[data-review]")].map((c) => c.dataset.review));
     const done = [...keys].filter((k) => REVIEWED[k]).length;
@@ -367,8 +380,8 @@ function pairCard(e, d) {
       disagreeBadge(e.old_index, e.new_index),
       fix ? h("button", { class: "badge fixbadge", onclick: () => goTo(d.matcher, `${d.matcher}-${fixKey(fix)}`) }, fix.no_fix_needed ? "no fix needed ›" : "suggested fix ›") : null),
     e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
-    e.changes.map((c) => h("div", { class: "change" },
-      h("div", { class: "field" }, c.field, " ", directionBadge(c)),
+    e.changes.map((c) => h("div", { class: "change" + (c.cosmetic ? " cosmetic" : "") },
+      h("div", { class: "field" }, c.field, " ", directionBadge(c), c.cosmetic ? h("span", { class: "dir cosm", title: "The linkage module treats both values as the same" }, "cosmetic") : null),
       h("div", {}, textDiff(c.old, c.new)))),
     locationRow(e.location),
     e.link.band === "review" ? explainLine(e.link.explain) : null);
@@ -587,7 +600,8 @@ function summaryText(d) {
   if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
   if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
   for (const p of d.replacements) lines.push(`Likely replacement: ${p.old_name} → ${p.new_name} (${fmtM(p.distance_m)})`);
-  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.filter((c) => !c.cosmetic).map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  if ((d.cosmetic || []).length) lines.push(`Cosmetic only (not counted): ${d.cosmetic.length} places.`);
   const warns = d.changed.concat(d.possible_matches).flatMap((e) => e.warnings.map((w) => `${e.name}: ${w}`));
   if (warns.length) lines.push("Warnings:", ...warns.map((w) => `- ${w}`));
   return lines.join("\n");
@@ -611,7 +625,7 @@ function renderDiff(d) {
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
     h("div", { class: "tiles" },
-      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"]]
+      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
@@ -619,6 +633,7 @@ function renderDiff(d) {
     h("div", { class: "toolbar" },
       h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
       h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
+      h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
     cats.length ? h("div", { class: "chips" },
       h("button", { class: "chip", "aria-pressed": "true", onclick: () => setChip(null) }, "All changes"),
@@ -636,8 +651,10 @@ function renderDiff(d) {
     section("Changed", d.changed, card, true),
     section("Added", d.added, (e) => recordCard(e, d, "added"), true),
     section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
+    section("Cosmetic changes only (not counted as changes)", d.cosmetic || [], card, false,
+      h("p", { class: "note" }, "Values that the linkage module treats as the same: case, punctuation, spacing, address abbreviations (St/Street), number formatting, and how times are written.")),
     section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
-    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}. Keys: j / k next / previous card, x tick reviewed.`));
   return wrap;
 }
 
@@ -715,6 +732,29 @@ document.getElementById("download").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
   const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_label || DIS.old_file} to ${DIS.new_label || DIS.new_file}.json`.replace(/[,:]/g, "") });
   document.body.append(a); a.click(); a.remove();
+});
+
+
+// ---------- keyboard: j/k next/previous card, x tick reviewed ----------
+let kbdCard = null;
+function visibleCards() {
+  return [...document.querySelectorAll("#view .card[data-review]")].filter((c) => c.offsetParent !== null && !c.closest("details:not([open])"));
+}
+function focusCard(card) {
+  if (kbdCard) kbdCard.classList.remove("kbd");
+  kbdCard = card;
+  if (card) { card.classList.add("kbd"); card.scrollIntoView({ block: "center", behavior: "smooth" }); }
+}
+document.addEventListener("keydown", (ev) => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+  const cards = visibleCards();
+  if (!cards.length) return;
+  const i = cards.indexOf(kbdCard);
+  if (ev.key === "j") focusCard(cards[Math.min(i + 1, cards.length - 1)]);
+  else if (ev.key === "k") focusCard(cards[Math.max(i - 1, 0)]);
+  else if (ev.key === "x" && kbdCard) setReviewed(kbdCard.dataset.review, !REVIEWED[kbdCard.dataset.review]);
+  else return;
+  ev.preventDefault();
 });
 
 render();

@@ -16,9 +16,17 @@ uv run ppdiff index ../scrapers/<election>/diffs                                
 uv run ppdiff latest "../scrapers/<election>/data/*.csv" --out-dir ../scrapers/<election>/diffs    # newest two only (scrapers call this)
 ```
 
-**Run automatically by scrapers.** `scrapers/nsw_coffs_harbour_2026/scraper.py` calls `ppdiff latest` after writing each CSV, so every scrape leaves a report in its `diffs/` folder (open `diffs/index.html`). `--no-diff` skips it, and a failed diff never fails the scrape. Other scrapers can do the same: copy `diff_against_previous()` from that scraper. Scraper outputs need a timestamp in the file name so same-day scrapes don't overwrite each other.
+**Run automatically by scrapers.** `scrapers/nsw_coffs_harbour_2026/scraper.py` and `scrapers/vic_2026/run.py` (into `diffs-linkage/`) call `ppdiff latest` after writing each CSV, so every scrape leaves a report in its `diffs/` folder (open `diffs/index.html`). `--no-diff` skips it, and a failed diff never fails the scrape. Other scrapers can do the same: copy `diff_against_previous()` from that scraper. Scraper outputs need a timestamp in the file name so same-day scrapes don't overwrite each other.
 
-Options: `--matcher rapidfuzz|splink|both` (default `both`), `--ignore COLUMN` (repeatable), and `--election LABEL`, which defaults to the out-dir's parent folder. `series` skips pairs that already have a report unless you pass `--force`.
+Options: `--matcher rapidfuzz|splink|both`, `--ignore COLUMN` (repeatable), `--large-move-m`, `--replacement-radius-m`, and `--election LABEL`, which defaults to the out-dir's parent folder.
+
+**Per-election settings:** put a `diff.json` beside the election's `config.json`, so automatic runs pick it up with no flags:
+
+```json
+{"ignore": ["est_ordinary_votes", "est_absent_votes"], "large_move_m": 1000, "replacement_radius_m": 500, "matcher": "both"}
+```
+
+Every key is optional. Command-line `--ignore` adds to the file's list, and the other options override it. Unknown keys are an error, to catch typos. The settings used are recorded in each diff. `series` skips pairs that already have a report unless you pass `--force`.
 
 VIC 2026 writes to `scrapers/vic_2026/diffs-linkage/`, alongside the existing `diffs/` from its own `diff.py`.
 
@@ -37,7 +45,9 @@ Each pair of files gets a folder `<old>__<new>/` containing:
 | `disagreements.json` | Each place the matchers handled differently, with both decisions and their reasoning |
 | `report.html` | A self-contained report: a tab per matcher's diff, plus a Disagreements tab for verdicts |
 
-The diffs folder also gets an `index.html`, rebuilt after every run. It lists every pair, with each matcher's counts and how many disagreements there are. It also has a **history by place**: every place that changed at least once, followed from file to file through each matcher's links (e.g. "Kaniva: added 7 Nov, wheelchair access improved 16 Nov"). A place's history continues while consecutive pairs share a file.
+The diffs folder also gets an `index.html`, rebuilt after every run. It shows:
+- a **matcher comparison**: how many places the matchers disagreed on, in how many pairs, and a tally of the verdicts recorded in `linkage/verdicts/verdicts.jsonl` (who was right, by reason) for this election and for all elections.
+- every pair, with each matcher's counts, its disagreements and how many verdicts are recorded. Runs of consecutive pairs with no changes fold into one line. It also has a **history by place**: every place that changed at least once, followed from file to file through each matcher's links (e.g. "Kaniva: added 7 Nov, wheelchair access improved 16 Nov"). A place's history continues while consecutive pairs share a file.
 
 A diff contains:
 - **summary:** counts of unchanged, changed, added, removed, possible matches and warnings.
@@ -48,7 +58,8 @@ A diff contains:
 - **columns:** columns added, removed or ignored.
 - **replacements:** a removed place and an added place within 500 m are paired as a likely replacement (a venue swap the matcher rightly didn't link). The removed and added entries point at each other.
 - **suggested_fixes:** draft `fix_data_issues` entries for the election's `config.json`, using the loader's column names after `rename_columns`. Each one puts back the previous value, for a move of 1 km or more or a field gone blank, selecting the place by name (with a warning if the name isn't unique). For big moves it guesses which side is wrong by how isolated each position is from the other polling places. If the old position was the outlier, it says "no fix needed" instead of offering a fix.
-- **nothing_changed:** true when the two files have the same places with the same values.
+- **cosmetic:** linked places whose only differences are ones the linkage module treats as the same value (`linkage.normalise.equivalent`): case, punctuation, spacing, address abbreviations, noise words in names, number formatting, and how opening hours are written ("8am to 6pm" = "08:00 AM - 06:00 PM"). Each change carries `cosmetic: true/false`. Only linkage decides this; the diff does no matching of its own. Cosmetic-only places aren't counted as changed.
+- **nothing_changed:** true when the two files have the same places, with no differences beyond cosmetic ones.
 - **quality:** checks on the new file. Different places at identical coordinates, coordinates with 3 or fewer decimal places, missing coordinates, and fields that had a value and are now blank.
 - **categories:** each change gets a category (accessibility, entrance, hours, address, name, divisions, votes, other). Wheelchair access changes are marked `improved` or `worse`.
 - **context_points:** every place's coordinates in the new file, used as the map's background.
@@ -64,7 +75,9 @@ A diff contains:
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.
 - **Sections:** warnings, suggested config fixes, possible matches, likely replacements, changed, added, removed, data quality. Changed places come biggest first: warnings, then accessibility getting worse, then the largest moves, then the most fields changed. Possible matches come least confident first.
 - **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
-- **Reviewed ticks** on every card, remembered in the browser for that pair of files and shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them.
+- **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. The button shows how many ticks aren't saved yet.
+- **Keyboard:** `j` / `k` move to the next / previous card, and `x` ticks the current one as reviewed.
+- **Cosmetic changes** are listed in their own folded section, and tagged "cosmetic" where they appear alongside real changes.
 - **"No changes"** shown at the top when nothing changed.
 - **Copy summary:** plain text for Slack or a commit message.
 

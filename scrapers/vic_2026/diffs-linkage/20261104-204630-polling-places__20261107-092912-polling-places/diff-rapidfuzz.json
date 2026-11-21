@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T09:55:02+00:00",
+  "created_at": "2026-11-21T10:11:54+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -29,7 +29,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Wed 4 Nov 2026, 8:46 pm"
   },
@@ -46,7 +47,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Sat 7 Nov 2026, 9:29 am"
   },
@@ -97,6 +99,7 @@
     "added": 1,
     "removed": 0,
     "possible_matches": 0,
+    "cosmetic": 0,
     "likely_replacements": 0,
     "warnings": 0,
     "quality_issues": 1
@@ -113,6 +116,7 @@
           "field": "entrance_desc",
           "old": "Access via Westbourne Street",
           "new": "Access via Albion Street",
+          "cosmetic": false,
           "category": "entrance"
         }
       ],
@@ -250,6 +254,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Assisted",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         },
@@ -257,6 +262,7 @@
           "field": "wheelchair_access_description",
           "old": "",
           "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Door width is between 750 - 850mm.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -319,6 +325,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Assisted",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         },
@@ -326,6 +333,7 @@
           "field": "wheelchair_access_description",
           "old": "",
           "new": "Accessible parking may be restrictive.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -388,12 +396,14 @@
           "field": "address",
           "old": "33 Service Street, Tatura VIC 3616",
           "new": "Corner Service Street and Albert Street, Tatura VIC 3616",
+          "cosmetic": false,
           "category": "address"
         },
         {
           "field": "entrance_desc",
           "old": "",
           "new": "Access via Service Street",
+          "cosmetic": false,
           "category": "entrance"
         }
       ],
@@ -456,6 +466,7 @@
           "field": "address",
           "old": "109-141 Bulmans Road, Melton VIC 3337",
           "new": "109-141 Bulmans Road, Melton West VIC 3337",
+          "cosmetic": false,
           "category": "address"
         }
       ],
@@ -518,6 +529,7 @@
           "field": "wheelchair_access_description",
           "old": "",
           "new": "The main entrance",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -580,6 +592,7 @@
           "field": "wheelchair_access_description",
           "old": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
           "new": "Accessible parking is not available. Doors within the building have less than 750mm clear width. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -642,6 +655,7 @@
           "field": "est_ordinary_votes",
           "old": "2000",
           "new": "1550",
+          "cosmetic": false,
           "category": "votes"
         }
       ],
@@ -696,6 +710,7 @@
     }
   ],
   "possible_matches": [],
+  "cosmetic": [],
   "added": [
     {
       "new_index": 814,
@@ -740,6 +755,11 @@
     }
   ],
   "suggested_fixes": [],
+  "settings": {
+    "ignore": [],
+    "large_move_m": 1000.0,
+    "replacement_radius_m": 500.0
+  },
   "context_points": [
     [
       -37.84136,

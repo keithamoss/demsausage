@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from ppdiff.core import location_change, values_equal, warnings_for
+from ppdiff.core import changed_text, location_change, warnings_for
 from ppdiff.run import run_pair, series
 
 from linkage.records import ColumnMap, Dataset, records_from_rows
@@ -31,11 +31,10 @@ def _write(path: Path, rows):
     return path
 
 
-def test_values_equal_ignores_whitespace_and_number_formatting():
-    assert values_equal(" Full ", "Full")
-    assert values_equal("-30.3344050", "-30.334405")
-    assert not values_equal("Full", "Assisted")
-    assert not values_equal("", "0")
+def test_changed_text_only_ignores_surrounding_whitespace():
+    assert not changed_text(" Full ", "Full")
+    assert changed_text("1.50", "1.5")  # a change, but a cosmetic one (decided by linkage)
+    assert changed_text("Full", "Assisted")
 
 
 def test_location_change_ignores_float_noise_and_flags_single_axis_typos():
@@ -77,12 +76,12 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     assert sorted(p.name for p in target.iterdir()) == ["diff-rapidfuzz.json", "disagreements.json", "link.json", "report.html"]
     d = json.loads((target / "diff-rapidfuzz.json").read_text())
     assert d["summary"] == {
-        "unchanged": 1, "changed": 2, "added": 1, "removed": 1, "possible_matches": 0,
+        "unchanged": 1, "changed": 2, "added": 1, "removed": 1, "possible_matches": 0, "cosmetic": 0,
         "likely_replacements": 0, "warnings": 1, "quality_issues": 0,
     }
     beta = next(e for e in d["changed"] if e["name"] == "Beta School")
     assert beta["changes"] == [
-        {"field": "wheelchair_access", "old": "Assisted", "new": "Full", "category": "accessibility", "direction": "improved"}
+        {"field": "wheelchair_access", "old": "Assisted", "new": "Full", "cosmetic": False, "category": "accessibility", "direction": "improved"}
     ]
     gamma = next(e for e in d["changed"] if e["name"] == "Gamma Church")
     assert gamma["changes"] == [] and gamma["location"]["likely_typo"] == "latitude"
@@ -249,3 +248,82 @@ def test_nothing_changed_flag_and_latest_command(tmp_path, capsys):
     capsys.readouterr()
     main(["latest", str(tmp_path / "data" / "*.csv"), "--out-dir", str(out), "--matcher", "rapidfuzz"])
     assert "already done" in capsys.readouterr().out
+
+
+def test_cosmetic_changes_are_decided_by_linkage(tmp_path):
+    (tmp_path / "data").mkdir()
+    a = [_row("Alpha Hall", -33.0, 151.0, address="12 Smith Street, Town"), _row("Beta Hall", -33.1, 151.1, access="None")]
+    b = [_row("Alpha Hall", -33.0, 151.0, address="12 Smith St, Town"), _row("Beta Hall", -33.1, 151.1, access="Full")]
+    old, new = _write(tmp_path / "data" / "20260101 a.csv", a), _write(tmp_path / "data" / "20260102 b.csv", b)
+    d = json.loads((run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    assert [e["name"] for e in d["cosmetic"]] == ["Alpha Hall"] and d["cosmetic"][0]["changes"][0]["cosmetic"] is True
+    assert [e["name"] for e in d["changed"]] == ["Beta Hall"]
+    assert d["summary"]["changed"] == 1 and d["summary"]["cosmetic"] == 1
+
+
+def test_diff_json_settings_and_cli_overrides(pair):
+    root, old, new = pair
+    (root / "diff.json").write_text(json.dumps({"ignore": ["wheelchair_access"], "large_move_m": 200000, "matcher": "rapidfuzz"}))
+    target = run_pair(old, new, root / "diffs")
+    assert [p.name for p in target.glob("diff-*.json")] == ["diff-rapidfuzz.json"]  # matcher from diff.json
+    d = json.loads((target / "diff-rapidfuzz.json").read_text())
+    assert d["settings"] == {"ignore": ["wheelchair_access"], "large_move_m": 200000, "replacement_radius_m": 500.0}
+    assert all(c["field"] != "wheelchair_access" for e in d["changed"] for c in e["changes"])
+    gamma = next(e for e in d["changed"] if e["name"] == "Gamma Church")
+    assert gamma["warnings"] == []  # 111 km is under the 200 km threshold set in diff.json
+    target = run_pair(old, new, root / "diffs", ignore={"address"}, large_move_m=1000)
+    d = json.loads((target / "diff-rapidfuzz.json").read_text())
+    assert d["settings"]["ignore"] == ["address", "wheelchair_access"] and d["settings"]["large_move_m"] == 1000
+
+
+def test_diff_json_rejects_unknown_settings(pair):
+    root, old, new = pair
+    (root / "diff.json").write_text(json.dumps({"ignroe": ["x"]}))
+    with pytest.raises(ValueError, match="unknown settings"):
+        run_pair(old, new, root / "diffs")
+
+
+def test_reviewed_import_saves_ticks_into_the_pair_folder(pair, tmp_path):
+    from ppdiff.cli import main
+
+    root, old, new = pair
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    link = json.loads((target / "link.json").read_text())
+    download = tmp_path / "reviewed download.json"
+    download.write_text(json.dumps({
+        "old_sha256": link["left"]["sha256"], "new_sha256": link["right"]["sha256"],
+        "reviewed": {"pair-1": "2026-11-21T10:00:00Z", "added-3": "2026-11-21T10:01:00Z"},
+    }))
+    assert main(["reviewed", "import", str(download), "--diffs-dir", str(root / "diffs")]) == 0
+    saved = json.loads((target / "reviewed.json").read_text())
+    assert sorted(saved["reviewed"]) == ["added-3", "pair-1"]
+    html = (target / "report.html").read_text()
+    assert '"reviewed": {"added-3"' in html.replace("\\u0022", '"') or '"added-3"' in html
+    # Unticking in the browser (a download without pair-1) removes it from the repo too.
+    download.write_text(json.dumps({**json.loads(download.read_text()), "reviewed": {"added-3": "x"}}))
+    main(["reviewed", "import", str(download), "--diffs-dir", str(root / "diffs")])
+    assert list(json.loads((target / "reviewed.json").read_text())["reviewed"]) == ["added-3"]
+
+
+def test_index_flags_quiet_pairs_and_tallies_this_elections_verdicts(tmp_path, monkeypatch):
+    from linkage import verdicts as verdict_store
+    from ppdiff.index import write_index
+
+    election = tmp_path / "test_2026"
+    (election / "data").mkdir(parents=True)
+    rows = _town("Coffs", -30.29, 153.11)
+    for name in ("20260101 a.csv", "20260102 b.csv", "20260103 c.csv"):
+        _write(election / "data" / name, rows)
+    for a, b in series(str(election / "data" / "*.csv")):
+        run_pair(a, b, election / "diffs", matcher="rapidfuzz")
+    store = tmp_path / "verdicts.jsonl"
+    store.write_text(
+        json.dumps({"old_sha256": "x", "new_sha256": "y", "election": "test_2026", "left": {"index": 0}, "decisions": {}, "verdict": "splink", "reason": "venue change"}) + "\n"
+        + json.dumps({"old_sha256": "p", "new_sha256": "q", "election": "other", "left": {"index": 0}, "decisions": {}, "verdict": "rapidfuzz", "reason": "rename"}) + "\n"
+    )
+    monkeypatch.setattr(verdict_store, "DEFAULT_PATH", store)
+    html = write_index(election / "diffs").read_text()
+    data = json.loads(html.split('id="data">')[1].split("</script>")[0])
+    assert [p["nothing_changed"] for p in data["pairs"]] == [True, True]
+    assert data["tally_here"]["by_verdict"] == {"splink": 1}
+    assert data["tally_all"]["total"] == 2

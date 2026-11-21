@@ -9,10 +9,11 @@ from __future__ import annotations
 
 import math
 import re
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 
-from linkage.normalise import distance_m
+from linkage.normalise import distance_m, equivalent
 from linkage.records import Dataset
 from linkage.result import Link, LinkResult
 
@@ -37,20 +38,17 @@ def _to_float(value: str | None) -> float | None:
     return number if math.isfinite(number) else None
 
 
-def values_equal(a: str | None, b: str | None) -> bool:
-    """Equal after trimming whitespace, or numerically equal ("1.50" == "1.5")."""
-    a, b = (a or "").strip(), (b or "").strip()
-    if a == b:
-        return True
-    fa, fb = _to_float(a), _to_float(b)
-    return fa is not None and fb is not None and fa == fb
+def changed_text(a: str | None, b: str | None) -> bool:
+    """Whether the text differs at all (ignoring surrounding whitespace). Whether a
+    difference matters is linkage's call: see linkage.normalise.equivalent."""
+    return (a or "").strip() != (b or "").strip()
 
 
 def header(d: Dataset) -> list[str]:
     return list(d.records[0].raw) if d.records else []
 
 
-def location_change(old: Dataset, new: Dataset, i: int, j: int) -> dict[str, Any] | None:
+def location_change(old: Dataset, new: Dataset, i: int, j: int, large_move_m: float = LARGE_MOVE_M) -> dict[str, Any] | None:
     a, b = old.records[i], new.records[j]
     if not (a.has_coords and b.has_coords):
         if a.has_coords == b.has_coords:
@@ -65,7 +63,7 @@ def location_change(old: Dataset, new: Dataset, i: int, j: int) -> dict[str, Any
     if moved < MIN_MOVE_M:
         return None
     change: dict[str, Any] = {"old": [a.lat, a.lon], "new": [b.lat, b.lon], "moved_m": round(moved, 1)}
-    if moved >= LARGE_MOVE_M:
+    if moved >= large_move_m:
         lat_same = abs(a.lat - b.lat) < SINGLE_AXIS_TOLERANCE_DEG  # type: ignore[operator]
         lon_same = abs(a.lon - b.lon) < SINGLE_AXIS_TOLERANCE_DEG  # type: ignore[operator]
         if lat_same != lon_same:
@@ -73,11 +71,11 @@ def location_change(old: Dataset, new: Dataset, i: int, j: int) -> dict[str, Any
     return change
 
 
-def warnings_for(location: dict[str, Any] | None) -> list[str]:
+def warnings_for(location: dict[str, Any] | None, large_move_m: float = LARGE_MOVE_M) -> list[str]:
     if not location or location.get("moved_m") is None:
         return [location["note"]] if location and location.get("note") else []
     moved = location["moved_m"]
-    if moved < LARGE_MOVE_M:
+    if moved < large_move_m:
         return []
     km = f"{moved / 1000:.1f} km"
     if "likely_typo" in location:
@@ -85,16 +83,23 @@ def warnings_for(location: dict[str, Any] | None) -> list[str]:
     return [f"Moved {km}"]
 
 
-def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str]) -> dict[str, Any]:
+def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str], large_move_m: float = LARGE_MOVE_M) -> dict[str, Any]:
     a, b = old.records[link.left], new.records[link.right]
     coord_columns = {c for c in (old.columns.lat, old.columns.lon, new.columns.lat, new.columns.lon) if c}
     shared = [c for c in header(old) if c in b.raw and c not in ignore and c not in coord_columns]
     changes = [
-        {"field": c, "old": a.raw.get(c, ""), "new": b.raw.get(c, "")}
+        {
+            "field": c,
+            "old": a.raw.get(c, ""),
+            "new": b.raw.get(c, ""),
+            # Cosmetic: the linkage module treats both values as the same (case, punctuation,
+            # spacing, abbreviations, number formatting, how times are written).
+            "cosmetic": equivalent(new.columns.kind_of(c), a.raw.get(c), b.raw.get(c)),
+        }
         for c in shared
-        if not values_equal(a.raw.get(c), b.raw.get(c))
+        if changed_text(a.raw.get(c), b.raw.get(c))
     ]
-    location = location_change(old, new, link.left, link.right)
+    location = location_change(old, new, link.left, link.right, large_move_m)
     return {
         "old_index": link.left,
         "new_index": link.right,
@@ -102,7 +107,7 @@ def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str]) -> d
         "old_name": a.label(),
         "changes": changes,
         "location": location,
-        "warnings": warnings_for(location),
+        "warnings": warnings_for(location, large_move_m),
         "link": {"band": link.band, "score": link.score, "via": link.via, "explain": link.explain},
         "old": a.raw,
         "new": b.raw,
@@ -125,6 +130,18 @@ ACCESS_RANK = {"none": 0, "no": 0, "n": 0, "assisted": 1, "partial": 1, "a": 1, 
 
 #: A removed place and an added place this close together are probably one venue replacing another.
 REPLACEMENT_RADIUS_M = 500.0
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Per-election diff settings, usually from diff.json beside the election's config.json."""
+
+    ignore: frozenset[str] = frozenset()
+    large_move_m: float = LARGE_MOVE_M
+    replacement_radius_m: float = REPLACEMENT_RADIUS_M
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"ignore": sorted(self.ignore), "large_move_m": self.large_move_m, "replacement_radius_m": self.replacement_radius_m}
 
 #: Places listed per quality check (the count is always complete).
 QUALITY_LIST_LIMIT = 50
@@ -152,7 +169,7 @@ def annotate_changes(changes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return changes
 
 
-def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: list[int]) -> list[dict[str, Any]]:
+def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: list[int], radius_m: float = REPLACEMENT_RADIUS_M) -> list[dict[str, Any]]:
     """Pair removed and added places that sit close together, nearest first, each used once."""
     candidates = []
     for i in removed:
@@ -160,7 +177,7 @@ def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: lis
         for j in added:
             b = new.records[j]
             dist = distance_m(a.lat, a.lon, b.lat, b.lon)
-            if dist is not None and dist <= REPLACEMENT_RADIUS_M:
+            if dist is not None and dist <= radius_m:
                 candidates.append((dist, i, j))
     used_old, used_new, pairs = set(), set(), []
     for dist, i, j in sorted(candidates):
@@ -242,7 +259,12 @@ def _schema(column: str | None, rename: dict[str, str]) -> str | None:
 
 
 def suggested_fixes(
-    old: Dataset, new: Dataset, changed: list[dict[str, Any]], quality: list[dict[str, Any]], rename: dict[str, str]
+    old: Dataset,
+    new: Dataset,
+    changed: list[dict[str, Any]],
+    quality: list[dict[str, Any]],
+    rename: dict[str, str],
+    large_move_m: float = LARGE_MOVE_M,
 ) -> list[dict[str, Any]]:
     """Draft fix_data_issues entries for the loader's config.json, for problems a human confirms.
 
@@ -272,7 +294,7 @@ def suggested_fixes(
     fixes = []
     for e in changed:
         loc = e.get("location")
-        if not loc or loc.get("moved_m") is None or loc["moved_m"] < LARGE_MOVE_M or not (lat_col and lon_col):
+        if not loc or loc.get("moved_m") is None or loc["moved_m"] < large_move_m or not (lat_col and lon_col):
             continue
         typo = loc.get("likely_typo")
         moved = f"Moved {loc['moved_m'] / 1000:.1f} km" + (f", {typo} only (likely typo)" if typo else "")
@@ -281,7 +303,7 @@ def suggested_fixes(
         new_pos = (loc["new"][0], loc["new"][1])
         iso_new = nearest_other_m(*new_pos, exclude=new_pos)
         iso_old = nearest_other_m(loc["old"][0], loc["old"][1], exclude=new_pos)
-        if iso_new is not None and iso_old is not None and iso_old > 3 * iso_new and iso_old - iso_new > LARGE_MOVE_M:
+        if iso_new is not None and iso_old is not None and iso_old > 3 * iso_new and iso_old - iso_new > large_move_m:
             fixes.append(
                 {
                     "new_index": e["new_index"],
@@ -298,7 +320,7 @@ def suggested_fixes(
                 }
             )
             continue
-        new_isolated = iso_new is not None and iso_old is not None and iso_new > 3 * iso_old and iso_new - iso_old > LARGE_MOVE_M
+        new_isolated = iso_new is not None and iso_old is not None and iso_new > 3 * iso_old and iso_new - iso_old > large_move_m
         sel, note = selector(e["new_index"])
         fixes.append(
             {
@@ -348,7 +370,7 @@ def severity(e: dict[str, Any]) -> tuple:
     worse = any(c.get("direction") == "worse" for c in e["changes"])
     loc = e.get("location") or {}
     moved = loc.get("moved_m") or 0
-    return (not e["warnings"], not worse, -moved, -len(e["changes"]), e["name"])
+    return (not e["warnings"], not worse, -moved, -sum(not c.get("cosmetic") for c in e["changes"]), e["name"])
 
 
 def context_points(new: Dataset) -> list[list[float]]:
@@ -361,23 +383,27 @@ def build_diff(
     new: Dataset,
     result: LinkResult,
     link_output: dict[str, Any],
-    ignore: set[str] | None = None,
+    settings: Settings | None = None,
     rename: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    ignore = ignore or set()
+    settings = settings or Settings()
+    ignore = set(settings.ignore)
     rename = rename or {}
-    changed, possible, unchanged = [], [], 0
+    changed, possible, cosmetic, unchanged = [], [], [], 0
     for link in result.links:
-        entry = describe_pair(old, new, link, ignore)
+        entry = describe_pair(old, new, link, ignore, settings.large_move_m)
         annotate_changes(entry["changes"])
+        real = [c for c in entry["changes"] if not c["cosmetic"]]
         if link.band == "review":
             possible.append(entry)
-        elif entry["changes"] or entry["location"]:
+        elif real or entry["location"]:
             changed.append(entry)
+        elif entry["changes"]:
+            cosmetic.append(entry)
         else:
             unchanged += 1
     old_cols, new_cols = header(old), header(new)
-    replacements = find_replacements(old, new, result.unmatched_left, result.unmatched_right)
+    replacements = find_replacements(old, new, result.unmatched_left, result.unmatched_right, settings.replacement_radius_m)
     replaced_by = {p["old_index"]: p["new_index"] for p in replacements}
     replaces = {p["new_index"]: p["old_index"] for p in replacements}
 
@@ -408,19 +434,24 @@ def build_diff(
             "added": len(added),
             "removed": len(removed),
             "possible_matches": len(possible),
+            "cosmetic": len(cosmetic),
             "likely_replacements": len(replacements),
             "warnings": sum(len(e["warnings"]) for e in changed + possible),
             "quality_issues": sum(q["count"] for q in quality),
         },
+        # Cosmetic-only differences don't count as changes.
         "nothing_changed": not (changed or possible or added or removed),
         # Biggest first: warnings, accessibility getting worse, largest moves, most fields changed.
         "changed": sorted(changed, key=severity),
         # Least confident first.
         "possible_matches": sorted(possible, key=lambda e: (e["link"]["score"], e["name"])),
+        # Only cosmetic differences (see linkage.normalise.equivalent).
+        "cosmetic": sorted(cosmetic, key=lambda e: e["name"]),
         "added": sorted(added, key=lambda e: e["name"]),
         "removed": sorted(removed, key=lambda e: e["name"]),
         "replacements": replacements,
         "quality": quality,
-        "suggested_fixes": suggested_fixes(old, new, changed + possible, quality, rename),
+        "suggested_fixes": suggested_fixes(old, new, changed + possible, quality, rename, settings.large_move_m),
+        "settings": settings.to_dict(),
         "context_points": context_points(new),
     }

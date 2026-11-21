@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T09:52:24+00:00",
+  "created_at": "2026-11-21T10:11:57+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -17,7 +17,7 @@
     "exact_pass": true
   },
   "old": {
-    "path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
+    "path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
     "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f",
     "records": 23,
     "columns": {
@@ -31,12 +31,13 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": null,
-      "id": null
+      "id": null,
+      "hours": "opening_hours"
     },
     "label": "Sat 21 Nov 2026"
   },
   "new": {
-    "path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv",
+    "path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv",
     "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f",
     "records": 23,
     "columns": {
@@ -50,7 +51,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": null,
-      "id": null
+      "id": null,
+      "hours": "opening_hours"
     },
     "label": "Sat 21 Nov 2026, 9:52 am"
   },
@@ -93,6 +95,7 @@
     "added": 0,
     "removed": 0,
     "possible_matches": 0,
+    "cosmetic": 0,
     "likely_replacements": 0,
     "warnings": 0,
     "quality_issues": 0
@@ -100,11 +103,17 @@
   "nothing_changed": true,
   "changed": [],
   "possible_matches": [],
+  "cosmetic": [],
   "added": [],
   "removed": [],
   "replacements": [],
   "quality": [],
   "suggested_fixes": [],
+  "settings": {
+    "ignore": [],
+    "large_move_m": 1000.0,
+    "replacement_radius_m": 500.0
+  },
   "context_points": [
     [
       -30.33441,

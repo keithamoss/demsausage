@@ -76,6 +76,59 @@ def norm_address(text: str | None) -> str:
     return " ".join(ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split())
 
 
+_TIME = re.compile(r"(?<![\d:.])(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?(?![\d:])", re.IGNORECASE)
+
+
+def norm_hours(text: str | None) -> str:
+    """Opening hours as 24-hour times: "8am to 6pm" and "08:00 AM - 06:00 PM" both become
+    "08:00-18:00". Text without recognisable times falls back to norm()."""
+    raw = (text or "").strip()
+    times = []
+    for hour, minute, meridiem in _TIME.findall(raw):
+        h, m = int(hour), int(minute or 0)
+        mer = meridiem.lower().replace(".", "")
+        if mer == "pm" and h < 12:
+            h += 12
+        elif mer == "am" and h == 12:
+            h = 0
+        if not mer and not minute:
+            return norm(raw)  # a bare number ("8") is too ambiguous to treat as a time
+        if h > 23 or m > 59:
+            return norm(raw)
+        times.append(f"{h:02d}:{m:02d}")
+    return "-".join(times) if times else norm(raw)
+
+
+#: How each kind of field is normalised when deciding whether two values mean the same thing.
+NORMALISERS = {
+    "name": norm_name,
+    "premises": norm,
+    "address": norm_address,
+    "hours": norm_hours,
+    "text": norm,
+}
+
+
+def equivalent(kind: str, a: str | None, b: str | None) -> bool:
+    """True when two values differ only in ways matching ignores (case, punctuation,
+    spacing, address abbreviations, noise words in names, how times are written).
+
+    This is the linkage module's definition of "the same value"; other tools (such as
+    the diff) should use it rather than their own comparisons.
+    """
+    a, b = (a or "").strip(), (b or "").strip()
+    if a == b:
+        return True
+    try:  # numbers written differently: "1.50" and "1.5"
+        if float(a) == float(b):
+            return True
+    except ValueError:
+        pass
+    normaliser = NORMALISERS.get(kind, norm)
+    na, nb = normaliser(a), normaliser(b)
+    return bool(na) and na == nb
+
+
 def distance_m(
     lat1: float | None, lon1: float | None, lat2: float | None, lon2: float | None
 ) -> float | None:

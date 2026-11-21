@@ -28,7 +28,10 @@ def write_report(folder: Path) -> Path:
     order = {"rapidfuzz": 0, "splink": 1}
     diffs.sort(key=lambda d: (order.get(d["matcher"], 9), d["matcher"]))
     disagreements_path = folder / "disagreements.json"
+    reviewed_path = folder / "reviewed.json"
     data = {
+        # Ticks saved to the repo with `ppdiff reviewed import`; the browser adds its own on top.
+        "reviewed": json.loads(reviewed_path.read_text()).get("reviewed", {}) if reviewed_path.exists() else {},
         "diffs": diffs,
         "disagreements": json.loads(disagreements_path.read_text()) if disagreements_path.exists() else None,
         "verdicts": VERDICTS,

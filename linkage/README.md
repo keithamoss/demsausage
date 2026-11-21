@@ -31,6 +31,17 @@ uv run linkage verdicts tally                                # who was right whe
 
 Python 3.10+ (Django runs 3.10). The rapidfuzz matcher only needs `rapidfuzz`, `scipy` and `numpy`.
 
+## "Same value" for other tools
+
+`linkage.normalise.equivalent(kind, a, b)` is the module's definition of two values meaning the same thing. The diff uses it to mark cosmetic changes. It applies the same normalisers as matching:
+- names: noise words dropped;
+- addresses: abbreviations expanded;
+- everything: case, punctuation and spacing;
+- numbers: formatting ("1.50" = "1.5");
+- opening hours: `norm_hours` ("8am to 6pm" = "08:00 AM - 06:00 PM").
+
+`ColumnMap.kind_of(column)` says which kind a column is.
+
 ## Downstream: diffs and verdicts
 
 [`../diff/`](../diff/) turns linkage results into one diff per matcher, with an HTML report. Its Disagreements tab records which matcher was right. Those verdicts are imported into [`verdicts/verdicts.jsonl`](verdicts/) with `uv run linkage verdicts import FILE` and summarised with `uv run linkage verdicts tally`.

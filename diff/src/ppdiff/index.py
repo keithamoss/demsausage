@@ -12,6 +12,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from linkage import verdicts as verdict_store
+
 from .names import friendly_label
 from .report import _embed, _html_escape
 
@@ -24,7 +26,7 @@ def pair_folders(out_dir: Path) -> list[Path]:
 
 
 def _describe(entry: dict[str, Any]) -> str:
-    parts = [c["field"] + (f" ({c['direction']})" if c.get("direction") else "") for c in entry["changes"]]
+    parts = [c["field"] + (f" ({c['direction']})" if c.get("direction") else "") for c in entry["changes"] if not c.get("cosmetic")]
     loc = entry.get("location")
     if loc and loc.get("moved_m") is not None:
         km = loc["moved_m"] / 1000
@@ -103,7 +105,9 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
             d = json.loads(diff_path.read_text())
             summaries[d["matcher"]] = d["summary"]
         dis_path = folder / "disagreements.json"
-        disagreements = len(json.loads(dis_path.read_text())["items"]) if dis_path.exists() else None
+        dis = json.loads(dis_path.read_text()) if dis_path.exists() else None
+        disagreements = len(dis["items"]) if dis else None
+        nothing = all(json.loads(p.read_text()).get("nothing_changed") for p in folder.glob("diff-*.json"))
         rows.append(
             {
                 "folder": folder.name,
@@ -114,6 +118,11 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
                 "records": [link_output["left"]["records"], link_output["right"]["records"]],
                 "summaries": summaries,
                 "disagreements": disagreements,
+                "agree": dis.get("agree") if dis else None,
+                "left_records": dis.get("left_records") if dis else None,
+                "old_sha256": link_output["left"]["sha256"],
+                "new_sha256": link_output["right"]["sha256"],
+                "nothing_changed": nothing and not disagreements,
             }
         )
     return rows
@@ -123,8 +132,17 @@ def write_index(out_dir: Path) -> Path:
     folders = pair_folders(out_dir)
     rows = pair_rows(folders)
     matchers = sorted({m for r in rows for m in r["summaries"]}, key=lambda m: ({"rapidfuzz": 0, "splink": 1}.get(m, 9), m))
+    election = out_dir.resolve().parent.name
+    all_verdicts = verdict_store.load()
+    pair_keys = {(r["old_sha256"], r["new_sha256"]) for r in rows}
+    here = [v for v in all_verdicts if (v["old_sha256"], v["new_sha256"]) in pair_keys or v.get("election") == election]
+    for r in rows:
+        r["verdicts"] = sum(1 for v in all_verdicts if (v["old_sha256"], v["new_sha256"]) == (r["old_sha256"], r["new_sha256"]))
     data = {
-        "title": out_dir.resolve().parent.name,
+        "title": election,
+        "verdict_labels": verdict_store.VERDICTS,
+        "tally_here": verdict_store.tally(here),
+        "tally_all": verdict_store.tally(all_verdicts),
         "pairs": rows,
         "matchers": matchers,
         "history": {m: history(folders, m) for m in matchers},

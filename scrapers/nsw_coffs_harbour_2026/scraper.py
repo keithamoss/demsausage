@@ -168,6 +168,8 @@ def diff_against_previous() -> None:
             os.path.join(OUTPUT_DIR, "*.csv"), "--out-dir", DIFFS_DIR,
         ],
         check=False,
+        # Let uv use the diff project's own environment, not this scraper's.
+        env={k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"},
     )
     if result.returncode != 0:
         print("The diff failed (the scrape itself is fine). See the output above.")

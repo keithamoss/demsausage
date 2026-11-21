@@ -12,7 +12,7 @@ from linkage.records import Dataset, Record
 from linkage.result import LinkResult
 from linkage.run import file_sha256, link_files
 
-from .core import build_diff
+from .core import Settings, build_diff
 from .index import write_index
 from .names import friendly_label
 from .report import write_report
@@ -85,22 +85,63 @@ def loader_renames(out_dir: Path) -> dict[str, str]:
         return {}
 
 
+DIFF_SETTINGS_FILE = "diff.json"
+
+
+def election_settings(out_dir: Path) -> dict[str, Any]:
+    """diff.json beside the election's config.json (the diffs folder's parent), if any.
+
+        {"ignore": ["est_ordinary_votes"], "large_move_m": 1000, "replacement_radius_m": 500, "matcher": "both"}
+    """
+    path = out_dir.resolve().parent / DIFF_SETTINGS_FILE
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text())
+    unknown = set(data) - {"ignore", "large_move_m", "replacement_radius_m", "matcher"}
+    if unknown:
+        raise ValueError(f"{path}: unknown settings {sorted(unknown)}")
+    return data
+
+
+def resolve_settings(
+    out_dir: Path,
+    ignore: set[str] | None = None,
+    large_move_m: float | None = None,
+    replacement_radius_m: float | None = None,
+    matcher: str | None = None,
+) -> tuple[Settings, str]:
+    """diff.json, then command-line options on top (extra ignores add to the file's)."""
+    file = election_settings(out_dir)
+    defaults = Settings()
+    settings = Settings(
+        ignore=frozenset(file.get("ignore", [])) | frozenset(ignore or ()),
+        large_move_m=large_move_m if large_move_m is not None else file.get("large_move_m", defaults.large_move_m),
+        replacement_radius_m=(
+            replacement_radius_m if replacement_radius_m is not None else file.get("replacement_radius_m", defaults.replacement_radius_m)
+        ),
+    )
+    return settings, matcher or file.get("matcher", "both")
+
+
 def run_pair(
     old: Path,
     new: Path,
     out_dir: Path,
-    matcher: str = "both",
+    matcher: str | None = None,
     ignore: set[str] | None = None,
     election: str | None = None,
     splink_model: str | None = None,
+    large_move_m: float | None = None,
+    replacement_radius_m: float | None = None,
 ) -> Path:
     election = election or out_dir.resolve().parent.name
+    settings, matcher = resolve_settings(out_dir, ignore, large_move_m, replacement_radius_m, matcher)
     left, right, link_output = link_files(old, new, matcher=matcher, splink_model=splink_model)
     target = pair_dir(out_dir, old, new)
     target.mkdir(parents=True, exist_ok=True)
     (target / "link.json").write_text(json.dumps(link_output, separators=(",", ":")))
     for r in link_output["results"]:
-        diff = build_diff(left, right, LinkResult.from_dict(r), link_output, ignore, loader_renames(out_dir))
+        diff = build_diff(left, right, LinkResult.from_dict(r), link_output, settings, loader_renames(out_dir))
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)

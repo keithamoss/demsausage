@@ -158,3 +158,23 @@ def test_leading_place_name_is_dropped_from_address():
     ])
     assert d.records[0].n_address == "corner wellington and gordon streets"
     assert d.records[1].n_address == "town hall road springfield"
+
+
+def test_norm_hours_and_equivalent():
+    from linkage.normalise import equivalent, norm_hours
+
+    assert norm_hours("8am to 6pm") == norm_hours("08:00 AM - 06:00 PM") == "08:00-18:00"
+    assert norm_hours("8:30am–5.30pm") == "08:30-17:30"
+    assert norm_hours("8 to 6") == "8 to 6"  # bare numbers aren't treated as times
+    assert equivalent("hours", "8am to 6pm", "08:00 AM - 06:00 PM")
+    assert not equivalent("hours", "8am to 6pm", "8am to 5pm")
+    assert equivalent("address", "Cnr Smith St, Mt Barker", "Corner Smith Street, Mount Barker")
+    assert not equivalent("address", "12 Smith St", "14 Smith St")
+    assert equivalent("text", "1.50", "1.5") and equivalent("text", "FULL", "Full")
+    assert not equivalent("text", "None", "Assisted")
+
+
+def test_column_kinds():
+    cm = ColumnMap.detect(["name", "premises", "address", "suburb", "opening_hours", "wheelchair_access"])
+    assert [cm.kind_of(c) for c in ("name", "premises", "suburb", "opening_hours", "wheelchair_access")] == [
+        "name", "premises", "address", "hours", "text"]

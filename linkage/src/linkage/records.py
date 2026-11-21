@@ -42,6 +42,7 @@ _LAT_COLUMNS = ("lat", "Lat", "latitude", "Latitude", "Premise_Latitude", "Premi
 _LON_COLUMNS = ("lon", "Long", "lng", "longitude", "Longitude", "Premise_Longitude", "Premise Longitude")
 _DIVISION_COLUMNS = ("divisions", "DivName", "Division", "division", "district")
 _ID_COLUMNS = ("ec_id", "PPId", "vec_venue_id", "id")
+_HOURS_COLUMNS = ("opening_hours", "OpeningHours", "hours", "election_day_hours")
 
 
 @dataclass(frozen=True)
@@ -55,6 +56,20 @@ class ColumnMap:
     lon: str | None = None
     divisions: str | None = None
     id: str | None = None
+    #: Not used for matching; lets other tools compare hours with norm_hours.
+    hours: str | None = None
+
+    def kind_of(self, column: str) -> str:
+        """What kind of value a column holds, for normalise.equivalent()."""
+        if column == self.name:
+            return "name"
+        if column == self.premises:
+            return "premises"
+        if column in self.address:
+            return "address"
+        if column == self.hours:
+            return "hours"
+        return "text"
 
     @classmethod
     def detect(cls, header: Sequence[str], id_column: str | None = None) -> ColumnMap:
@@ -76,6 +91,7 @@ class ColumnMap:
             lon=first(_LON_COLUMNS),
             divisions=first(_DIVISION_COLUMNS),
             id=id_column if id_column is not None else first(_ID_COLUMNS),
+            hours=first(_HOURS_COLUMNS),
         )
 
 

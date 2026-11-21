@@ -58,20 +58,23 @@ def validate(v: dict[str, Any]) -> list[str]:
     return problems
 
 
-def load(path: Path = DEFAULT_PATH) -> list[dict[str, Any]]:
+def load(path: Path | None = None) -> list[dict[str, Any]]:
+    path = path or DEFAULT_PATH
     if not path.exists():
         return []
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
 
-def save(verdicts: Iterable[dict[str, Any]], path: Path = DEFAULT_PATH) -> None:
+def save(verdicts: Iterable[dict[str, Any]], path: Path | None = None) -> None:
+    path = path or DEFAULT_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     rows = sorted(verdicts, key=lambda v: (v.get("recorded_at", ""), key(v)))
     path.write_text("".join(json.dumps(v, sort_keys=True) + "\n" for v in rows))
 
 
-def import_file(source: Path, path: Path = DEFAULT_PATH) -> dict[str, int]:
+def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
     """Merge a downloaded verdicts file into the record. Returns counts."""
+    path = path or DEFAULT_PATH
     incoming = json.loads(source.read_text())
     if isinstance(incoming, dict):
         incoming = incoming.get("verdicts", [])

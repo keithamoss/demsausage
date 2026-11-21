@@ -63,6 +63,8 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
 .dir.improved { background: var(--add-soft); color: var(--add); }
 .dir.worse { background: var(--del-soft); color: var(--del); }
+.dir.cosm { background: var(--info-soft); color: var(--muted); }
+.change.cosmetic { opacity: .65; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -85,6 +87,7 @@ button.small { font-size: 13px; padding: 3px 10px; }
 .cardhead h3 { margin: 0 0 4px; }
 label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
 .card.reviewed { opacity: .55; }
+.card.kbd { outline: 2px solid var(--accent); outline-offset: 2px; }
 .card.reviewed:hover { opacity: 1; }
 .hide-toggle { margin: 0 4px; }
 .allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
@@ -146,7 +149,7 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
   <button class="primary" id="download">Download verdicts</button>
   <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
 </div></div>
-<script type="application/json" id="data">{"diffs": [{"schema_version": 3, "created_at": "2026-11-21T09:52:24+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null}, "label": "Sat 21 Nov 2026"}, "new": {"path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]]}, {"schema_version": 3, "created_at": "2026-11-21T09:52:24+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null}, "label": "Sat 21 Nov 2026"}, "new": {"path": "/home/user/demsausage/scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]]}], "disagreements": {"election": "nsw_coffs_harbour_2026", "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "matchers": ["rapidfuzz", "splink"], "agree": 23, "left_records": 23, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
+<script type="application/json" id="data">{"reviewed": {}, "diffs": [{"schema_version": 3, "created_at": "2026-11-21T10:11:57+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]]}, {"schema_version": 3, "created_at": "2026-11-21T10:11:57+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]]}], "disagreements": {"election": "nsw_coffs_harbour_2026", "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "matchers": ["rapidfuzz", "splink"], "agree": 23, "left_records": 23, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
 <script>
 "use strict";
 const DATA = JSON.parse(document.getElementById("data").textContent);
@@ -320,7 +323,7 @@ function goTo(tabId, elementId) {
 }
 const CATEGORY_LABEL = { accessibility: "Accessibility", entrance: "Entrance", hours: "Opening hours", address: "Address", name: "Name", divisions: "Divisions", votes: "Vote estimates", location: "Location", other: "Other" };
 function entryCategories(e) {
-  const cats = new Set(e.changes.map((c) => c.category || "other"));
+  const cats = new Set(e.changes.filter((c) => !c.cosmetic).map((c) => c.category || "other"));
   if (e.location) cats.add("location");
   return [...cats];
 }
@@ -329,7 +332,15 @@ function directionBadge(c) {
 }
 // ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
 const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
-let REVIEWED = (() => { try { return JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) { return {}; } })();
+// Ticks saved in the repo (reviewed.json, embedded at build) plus any made in this browser since.
+let REVIEWED = (() => { let local = {}; try { local = JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) {} return { ...(DATA.reviewed || {}), ...local }; })();
+const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
+function downloadReview() {
+  const blob = new Blob([JSON.stringify({ old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `reviewed ${first.old.label || "old"} to ${first.new.label || "new"}.json`.replace(/[,:]/g, "") });
+  document.body.append(a); a.click(); a.remove();
+}
+function unsavedTicks() { return Object.keys(REVIEWED).filter((k) => !SAVED_REVIEWED.has(k)).length + [...SAVED_REVIEWED].filter((k) => !REVIEWED[k]).length; }
 let hideReviewed = false;
 function setReviewed(key, on) {
   if (on) REVIEWED[key] = new Date().toISOString(); else delete REVIEWED[key];
@@ -346,6 +357,8 @@ function cardHead(title, key) {
 }
 function reviewAttrs(key) { return { "data-review": key, class: "card" + (REVIEWED[key] ? " reviewed" : "") }; }
 function updateReviewCounts() {
+  const btn = document.getElementById("download-review");
+  if (btn) { const n = unsavedTicks(); btn.textContent = n ? `Download review (${n} not saved to repo)` : "Download review"; }
   document.querySelectorAll("#view details.section").forEach((sec) => {
     const keys = new Set([...sec.querySelectorAll(":scope > .card[data-review], :scope > div > .card[data-review]")].map((c) => c.dataset.review));
     const done = [...keys].filter((k) => REVIEWED[k]).length;
@@ -367,8 +380,8 @@ function pairCard(e, d) {
       disagreeBadge(e.old_index, e.new_index),
       fix ? h("button", { class: "badge fixbadge", onclick: () => goTo(d.matcher, `${d.matcher}-${fixKey(fix)}`) }, fix.no_fix_needed ? "no fix needed ›" : "suggested fix ›") : null),
     e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
-    e.changes.map((c) => h("div", { class: "change" },
-      h("div", { class: "field" }, c.field, " ", directionBadge(c)),
+    e.changes.map((c) => h("div", { class: "change" + (c.cosmetic ? " cosmetic" : "") },
+      h("div", { class: "field" }, c.field, " ", directionBadge(c), c.cosmetic ? h("span", { class: "dir cosm", title: "The linkage module treats both values as the same" }, "cosmetic") : null),
       h("div", {}, textDiff(c.old, c.new)))),
     locationRow(e.location),
     e.link.band === "review" ? explainLine(e.link.explain) : null);
@@ -587,7 +600,8 @@ function summaryText(d) {
   if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
   if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
   for (const p of d.replacements) lines.push(`Likely replacement: ${p.old_name} → ${p.new_name} (${fmtM(p.distance_m)})`);
-  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.filter((c) => !c.cosmetic).map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  if ((d.cosmetic || []).length) lines.push(`Cosmetic only (not counted): ${d.cosmetic.length} places.`);
   const warns = d.changed.concat(d.possible_matches).flatMap((e) => e.warnings.map((w) => `${e.name}: ${w}`));
   if (warns.length) lines.push("Warnings:", ...warns.map((w) => `- ${w}`));
   return lines.join("\n");
@@ -611,7 +625,7 @@ function renderDiff(d) {
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
     h("div", { class: "tiles" },
-      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"]]
+      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
@@ -619,6 +633,7 @@ function renderDiff(d) {
     h("div", { class: "toolbar" },
       h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
       h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
+      h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
     cats.length ? h("div", { class: "chips" },
       h("button", { class: "chip", "aria-pressed": "true", onclick: () => setChip(null) }, "All changes"),
@@ -636,8 +651,10 @@ function renderDiff(d) {
     section("Changed", d.changed, card, true),
     section("Added", d.added, (e) => recordCard(e, d, "added"), true),
     section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
+    section("Cosmetic changes only (not counted as changes)", d.cosmetic || [], card, false,
+      h("p", { class: "note" }, "Values that the linkage module treats as the same: case, punctuation, spacing, address abbreviations (St/Street), number formatting, and how times are written.")),
     section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
-    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}. Keys: j / k next / previous card, x tick reviewed.`));
   return wrap;
 }
 
@@ -715,6 +732,29 @@ document.getElementById("download").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
   const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_label || DIS.old_file} to ${DIS.new_label || DIS.new_file}.json`.replace(/[,:]/g, "") });
   document.body.append(a); a.click(); a.remove();
+});
+
+
+// ---------- keyboard: j/k next/previous card, x tick reviewed ----------
+let kbdCard = null;
+function visibleCards() {
+  return [...document.querySelectorAll("#view .card[data-review]")].filter((c) => c.offsetParent !== null && !c.closest("details:not([open])"));
+}
+function focusCard(card) {
+  if (kbdCard) kbdCard.classList.remove("kbd");
+  kbdCard = card;
+  if (card) { card.classList.add("kbd"); card.scrollIntoView({ block: "center", behavior: "smooth" }); }
+}
+document.addEventListener("keydown", (ev) => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+  const cards = visibleCards();
+  if (!cards.length) return;
+  const i = cards.indexOf(kbdCard);
+  if (ev.key === "j") focusCard(cards[Math.min(i + 1, cards.length - 1)]);
+  else if (ev.key === "k") focusCard(cards[Math.max(i - 1, 0)]);
+  else if (ev.key === "x" && kbdCard) setReviewed(kbdCard.dataset.review, !REVIEWED[kbdCard.dataset.review]);
+  else return;
+  ev.preventDefault();
 });
 
 render();

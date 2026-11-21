@@ -33,6 +33,11 @@ a { color: var(--accent); }
 .counts th { color: var(--muted); font-weight: 400; }
 .counts tbody th { text-align: left; }
 .counts td { font-weight: 600; font-variant-numeric: tabular-nums; }
+.counts tr.total th, .counts tr.total td { border-top: 1px solid var(--border); }
+.tally { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin: 8px 0; }
+.tally h3 { margin: 0 0 6px; font-size: 14px; }
+.pair.quiet summary { cursor: pointer; font-weight: 600; }
+.pair.quiet .pair { margin-top: 8px; }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
 .tab { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 13px; font: inherit; cursor: pointer; }
 .tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
@@ -59,6 +64,8 @@ input[type=search] { font: inherit; color: var(--text); background: var(--surfac
 <main>
   <h1 id="title"></h1>
   <p class="note">Each pair of consecutive files has a report with one diff per matcher and a tab for recording verdicts where they disagree.</p>
+  <h2>Matcher comparison</h2>
+  <div id="comparison"></div>
   <h2>Pairs</h2>
   <div class="pairs" id="pairs"></div>
   <h2>History by place</h2>
@@ -85,16 +92,55 @@ function h(tag, attrs, ...children) {
 }
 document.getElementById("title").textContent = document.title;
 
+// ---- matcher comparison: disagreements per pair + verdict tallies (from linkage/verdicts) ----
+function tallyBlock(title, t) {
+  if (!t.total) return h("p", { class: "note" }, `${title}: no verdicts recorded yet.`);
+  const order = ["rapidfuzz", "splink", "neither", "both"];
+  return h("div", { class: "tally" },
+    h("h3", {}, `${title}: ${t.total} verdict${t.total === 1 ? "" : "s"}`),
+    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", {}, "Reason"), order.map((k) => h("th", { scope: "col" }, DATA.verdict_labels[k])))),
+      h("tbody", {},
+        Object.entries(t.by_reason).map(([reason, c]) => h("tr", {}, h("th", { scope: "row" }, reason), order.map((k) => h("td", {}, c[k] || 0)))),
+        h("tr", { class: "total" }, h("th", { scope: "row" }, "All"), order.map((k) => h("td", {}, t.by_verdict[k] || 0)))))));
+}
+{
+  const withDis = DATA.pairs.filter((p) => p.disagreements);
+  const places = withDis.reduce((n, p) => n + p.disagreements, 0);
+  document.getElementById("comparison").replaceChildren(
+    h("p", { class: "note" }, DATA.pairs.some((p) => p.disagreements !== null)
+      ? (places ? `The two matchers disagreed on ${places} place${places === 1 ? "" : "s"} across ${withDis.length} of ${DATA.pairs.length} pairs. Record verdicts in each report's Disagreements tab, then import them (uv run linkage verdicts import FILE).`
+                : `The two matchers agreed on every place in all ${DATA.pairs.length} pairs.`)
+      : "Only one matcher was run, so there's nothing to compare."),
+    tallyBlock("This election", DATA.tally_here),
+    tallyBlock("All elections", DATA.tally_all));
+}
+
 const COLS = [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible"], ["likely_replacements", "Replaced"], ["warnings", "Warnings"]];
-document.getElementById("pairs").replaceChildren(...DATA.pairs.map((p) =>
-  h("div", { class: "pair" },
+function pairCard(p) {
+  return h("div", { class: "pair" },
     h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old_label} → ${p.new_label}`)),
     h("div", { class: "note" }, `${p.old} → ${p.new} · ${p.records[0]} → ${p.records[1]} places`,
-      p.disagreements === null ? "" : ` · ${p.disagreements ? p.disagreements + " disagreements to review" : "matchers agree"}`),
+      p.disagreements === null ? "" : p.disagreements ? ` · ${p.disagreements} disagreement${p.disagreements === 1 ? "" : "s"}, ${p.verdicts} verdict${p.verdicts === 1 ? "" : "s"} recorded` : " · matchers agree"),
     h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
       h("thead", {}, h("tr", {}, h("th", {}), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),
       h("tbody", {}, Object.entries(p.summaries).map(([m, s]) =>
-        h("tr", {}, h("th", { scope: "row" }, label(m)), COLS.map(([k]) => h("td", {}, s[k] ?? 0))))))))));
+        h("tr", {}, h("th", { scope: "row" }, label(m)), COLS.map(([k]) => h("td", {}, s[k] ?? 0))))))));
+}
+// Runs of consecutive pairs with no changes fold into one line.
+const groups = [];
+for (const p of DATA.pairs) {
+  const last = groups[groups.length - 1];
+  if (p.nothing_changed && last && last.quiet) last.pairs.push(p);
+  else groups.push({ quiet: p.nothing_changed, pairs: [p] });
+}
+document.getElementById("pairs").replaceChildren(...groups.map((g) => {
+  if (!g.quiet) return g.pairs.map(pairCard);
+  const a = g.pairs[0], b = g.pairs[g.pairs.length - 1];
+  return h("details", { class: "pair quiet" },
+    h("summary", {}, `${g.pairs.length} scrape${g.pairs.length === 1 ? "" : "s"} with no changes`, h("span", { class: "note" }, ` · ${a.old_label} → ${b.new_label}`)),
+    g.pairs.map(pairCard));
+}).flat());
 
 let matcher = DATA.matchers[0];
 function renderHistory() {

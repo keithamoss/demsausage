@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T09:55:04+00:00",
+  "created_at": "2026-11-21T10:11:56+00:00",
   "matcher": "splink",
   "matcher_params": {
     "auto_threshold": 0.95,
@@ -45,7 +45,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Wed 11 Nov 2026, 12:49 pm"
   },
@@ -62,7 +63,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Fri 13 Nov 2026, 2:29 pm"
   },
@@ -114,6 +116,7 @@
     "added": 0,
     "removed": 0,
     "possible_matches": 0,
+    "cosmetic": 0,
     "likely_replacements": 0,
     "warnings": 0,
     "quality_issues": 2
@@ -130,6 +133,7 @@
           "field": "wheelchair_access",
           "old": "Assisted",
           "new": "None",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "worse"
         },
@@ -137,6 +141,7 @@
           "field": "wheelchair_access_description",
           "old": "Ramp access to the building entrance may restrict independent wheelchair access.",
           "new": "Ramp access to the building entrance may restrict wheelchair access.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -198,6 +203,7 @@
           "field": "wheelchair_access",
           "old": "Full",
           "new": "None",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "worse"
         },
@@ -205,6 +211,7 @@
           "field": "wheelchair_access_description",
           "old": "",
           "new": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -394,18 +401,21 @@
           "field": "name",
           "old": "Ringwood Heights Primary School",
           "new": "Ringwood Heights",
+          "cosmetic": false,
           "category": "name"
         },
         {
           "field": "est_ordinary_votes",
           "old": "",
           "new": "600",
+          "cosmetic": false,
           "category": "votes"
         },
         {
           "field": "est_absent_votes",
           "old": "",
           "new": "58",
+          "cosmetic": false,
           "category": "votes"
         }
       ],
@@ -470,6 +480,7 @@
           "field": "entrance_desc",
           "old": "Access via Gate 13",
           "new": "Access via gates 18 and 19",
+          "cosmetic": false,
           "category": "entrance"
         }
       ],
@@ -531,6 +542,7 @@
           "field": "premises",
           "old": "The Hellenic Orthodox Community of Geelong Parish Hall",
           "new": "The Hellenic Orthodox Community of Geelong Community Hall",
+          "cosmetic": false,
           "category": "name"
         }
       ],
@@ -592,6 +604,7 @@
           "field": "wheelchair_access_description",
           "old": "The main entrance",
           "new": "",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -653,6 +666,7 @@
           "field": "est_absent_votes",
           "old": "243",
           "new": "40",
+          "cosmetic": false,
           "category": "votes"
         }
       ],
@@ -714,6 +728,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Full",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         }
@@ -776,6 +791,7 @@
           "field": "wheelchair_access_description",
           "old": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
           "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -829,6 +845,7 @@
     }
   ],
   "possible_matches": [],
+  "cosmetic": [],
   "added": [],
   "removed": [],
   "replacements": [],
@@ -880,6 +897,11 @@
       }
     }
   ],
+  "settings": {
+    "ignore": [],
+    "large_move_m": 1000.0,
+    "replacement_radius_m": 500.0
+  },
   "context_points": [
     [
       -37.84136,

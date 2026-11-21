@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T09:55:03+00:00",
+  "created_at": "2026-11-21T10:11:55+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -29,7 +29,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Sat 7 Nov 2026, 9:29 am"
   },
@@ -46,7 +47,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Wed 11 Nov 2026, 12:49 pm"
   },
@@ -97,6 +99,7 @@
     "added": 1,
     "removed": 0,
     "possible_matches": 0,
+    "cosmetic": 0,
     "likely_replacements": 0,
     "warnings": 0,
     "quality_issues": 1
@@ -235,6 +238,7 @@
     }
   ],
   "possible_matches": [],
+  "cosmetic": [],
   "added": [
     {
       "new_index": 1579,
@@ -279,6 +283,11 @@
     }
   ],
   "suggested_fixes": [],
+  "settings": {
+    "ignore": [],
+    "large_move_m": 1000.0,
+    "replacement_radius_m": 500.0
+  },
   "context_points": [
     [
       -37.84136,

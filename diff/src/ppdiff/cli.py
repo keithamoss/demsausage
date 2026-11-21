@@ -6,6 +6,9 @@
     ppdiff index scrapers/<election>/diffs                    # rebuild index.html only
     ppdiff latest "scrapers/<election>/data/*.csv" --out-dir scrapers/<election>/diffs   # newest two only (scrapers call this)
 
+Settings come from diff.json beside the election's config.json (ignore, large_move_m,
+replacement_radius_m, matcher); command-line options add to or override them.
+
 Each pair gets a folder holding link.json (both linkage results), diff-<matcher>.json
 for each matcher, disagreements.json and report.html. Verdicts on disagreements are
 recorded in report.html and imported with `linkage verdicts import`.
@@ -26,8 +29,10 @@ from .run import check_inputs_unchanged, pair_dir, run_pair, series
 
 def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--out-dir", required=True, help="Usually the scraper's diffs folder")
-    p.add_argument("--matcher", choices=MATCHER_CHOICES, default="both")
-    p.add_argument("--ignore", action="append", default=[], help="Column to leave out of the diff (repeatable)")
+    p.add_argument("--matcher", choices=MATCHER_CHOICES, help="Default: diff.json's, else both")
+    p.add_argument("--ignore", action="append", default=[], help="Column to leave out of the diff (repeatable; adds to diff.json's)")
+    p.add_argument("--large-move-m", type=float, help="Warn about moves at least this far (default: diff.json's, else 1000)")
+    p.add_argument("--replacement-radius-m", type=float, help="Pair removed + added places this close (default: diff.json's, else 500)")
     p.add_argument("--election", help="Label stored with verdicts (default: the out-dir's parent folder name)")
     p.add_argument("--splink-model", help="Splink model JSON (default: the bundled model)")
 
@@ -41,6 +46,8 @@ def _run(args: argparse.Namespace, old: Path, new: Path) -> None:
         ignore=set(args.ignore),
         election=args.election,
         splink_model=args.splink_model,
+        large_move_m=args.large_move_m,
+        replacement_radius_m=args.replacement_radius_m,
     )
     print(f"{old.name} -> {new.name}: {target / 'report.html'}")
 
@@ -73,6 +80,16 @@ def cmd_latest(args: argparse.Namespace) -> int:
         print(f"{old.name} -> {new.name}: already done")
         return 0
     _run(args, old, new)
+    return 0
+
+
+def cmd_reviewed_import(args: argparse.Namespace) -> int:
+    from .reviewed import import_reviewed
+
+    folder, counts = import_reviewed(Path(args.file), Path(args.diffs_dir))
+    write_report(folder)
+    write_index(folder.parent)
+    print(f"{folder.name}: {counts['ticked']} ticked ({counts['added']} new, {counts['removed']} unticked); report rebuilt")
     return 0
 
 
@@ -114,6 +131,13 @@ def main(argv: list[str] | None = None) -> int:
     p_report = sub.add_parser("report", help="Rebuild report.html from a pair folder's JSON")
     p_report.add_argument("folder")
     p_report.set_defaults(func=cmd_report)
+
+    p_rev = sub.add_parser("reviewed", help="Save review ticks downloaded from a report into the repo")
+    rsub = p_rev.add_subparsers(dest="reviewed_command", required=True)
+    p_rimp = rsub.add_parser("import", help="Merge a 'Download review' file into its pair folder's reviewed.json")
+    p_rimp.add_argument("file")
+    p_rimp.add_argument("--diffs-dir", required=True, help="The diffs folder holding the report")
+    p_rimp.set_defaults(func=cmd_reviewed_import)
 
     p_index = sub.add_parser("index", help="Rebuild a diffs folder's index.html (pairs + per-place history)")
     p_index.add_argument("folder")

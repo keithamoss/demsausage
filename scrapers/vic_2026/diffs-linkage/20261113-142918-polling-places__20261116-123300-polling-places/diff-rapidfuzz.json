@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T09:55:05+00:00",
+  "created_at": "2026-11-21T10:11:57+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -29,7 +29,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Fri 13 Nov 2026, 2:29 pm"
   },
@@ -46,7 +47,8 @@
       "lat": "lat",
       "lon": "lon",
       "divisions": "divisions",
-      "id": "vec_venue_id"
+      "id": "vec_venue_id",
+      "hours": "opening_hours"
     },
     "label": "Mon 16 Nov 2026, 12:33 pm"
   },
@@ -95,6 +97,7 @@
     "added": 0,
     "removed": 0,
     "possible_matches": 0,
+    "cosmetic": 0,
     "likely_replacements": 0,
     "warnings": 0,
     "quality_issues": 1
@@ -111,6 +114,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Assisted",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         },
@@ -118,6 +122,7 @@
           "field": "wheelchair_access_description",
           "old": "",
           "new": "Accessible parking may be restrictive. Building has lips and/or steps (50mm or less). Door width is between 750 - 850mm.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -178,6 +183,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Assisted",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         },
@@ -185,6 +191,7 @@
           "field": "wheelchair_access_description",
           "old": "Accessible parking is not available. Circulation space within the building may restrict wheelchair access.",
           "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive. Door width is between 750 - 850mm.",
+          "cosmetic": false,
           "category": "accessibility"
         }
       ],
@@ -245,6 +252,7 @@
           "field": "entrance_desc",
           "old": "",
           "new": "Access via The Butler Memorial Gate",
+          "cosmetic": false,
           "category": "entrance"
         }
       ],
@@ -305,6 +313,7 @@
           "field": "wheelchair_access",
           "old": "None",
           "new": "Full",
+          "cosmetic": false,
           "category": "accessibility",
           "direction": "improved"
         }
@@ -358,6 +367,7 @@
     }
   ],
   "possible_matches": [],
+  "cosmetic": [],
   "added": [],
   "removed": [],
   "replacements": [],
@@ -376,6 +386,11 @@
     }
   ],
   "suggested_fixes": [],
+  "settings": {
+    "ignore": [],
+    "large_move_m": 1000.0,
+    "replacement_radius_m": 500.0
+  },
   "context_points": [
     [
       -37.84136,
