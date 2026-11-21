@@ -53,6 +53,10 @@ details.section > summary { cursor: pointer; font-weight: 600; font-size: 16px; 
 .old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .empty { font-style: italic; opacity: .8; }
+.inline-diff { overflow-wrap: anywhere; }
+.inline-diff .old, .inline-diff .new { padding: 0 1px; border-radius: 3px; }
+ins { text-decoration: none; }
+.inline-diff del + ins { margin-left: 3px; }
 .kv { display: grid; grid-template-columns: minmax(110px, 180px) 1fr; gap: 2px 12px; font-size: 14px; }
 .kv dt { color: var(--muted); overflow-wrap: anywhere; }
 .kv dd { margin: 0; overflow-wrap: anywhere; }
@@ -191,6 +195,70 @@ function locationRow(loc) {
       olat !== null && nlat !== null ? " · " : null,
       nlat !== null ? h("a", { href: osm(nlat, nlon), target: "_blank", rel: "noopener" }, "new") : null));
 }
+// ---------- word-level text diff ----------
+// Words, punctuation and whitespace are separate tokens, so "Melton VIC" -> "Melton West VIC"
+// highlights just "West", and an added sentence shows as one green run.
+const tokenise = (s) => String(s).match(/\s+|\w+|[^\s\w]/gu) || [];
+function diffTokens(a, b) {
+  const n = a.length, m = b.length;
+  // Longest common subsequence table, filled from the end.
+  const L = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--)
+    for (let j = m - 1; j >= 0; j--)
+      L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const ops = [];
+  const push = (op, t) => { const last = ops[ops.length - 1]; if (last && last.op === op) last.text += t; else ops.push({ op, text: t }); };
+  let i = 0, j = 0;
+  while (i < n && j < m) {
+    if (a[i] === b[j]) { push("same", a[i]); i++; j++; }
+    else if (L[i + 1][j] >= L[i][j + 1]) push("del", a[i++]);
+    else push("ins", b[j++]);
+  }
+  while (i < n) push("del", a[i++]);
+  while (j < m) push("ins", b[j++]);
+  return { ops, common: L[0][0] };
+}
+// Whitespace between two changes reads better as part of the change: "a b c" -> "a x y c"
+// shows "b" -> "x y" rather than "b" " " "x" " " "y".
+function absorbGaps(ops) {
+  const out = [];
+  for (let k = 0; k < ops.length; k++) {
+    const o = ops[k], prev = out[out.length - 1], next = ops[k + 1];
+    if (o.op === "same" && !o.text.trim() && prev && prev.op !== "same" && next && next.op !== "same") {
+      out.push({ op: "del", text: o.text }, { op: "ins", text: o.text });
+      continue;
+    }
+    out.push(o);
+  }
+  // Group each run of changes as all deletions then all insertions.
+  const grouped = [];
+  for (let k = 0; k < out.length;) {
+    if (out[k].op === "same") { grouped.push(out[k++]); continue; }
+    let del = "", ins = "";
+    while (k < out.length && out[k].op !== "same") { if (out[k].op === "del") del += out[k].text; else ins += out[k].text; k++; }
+    if (del) grouped.push({ op: "del", text: del });
+    if (ins) grouped.push({ op: "ins", text: ins });
+  }
+  return grouped;
+}
+function wholeChange(oldV, newV) {
+  return [h("span", { class: "old" }, val(oldV)), " → ", h("span", { class: "new" }, val(newV))];
+}
+function textDiff(oldV, newV) {
+  oldV = oldV ?? ""; newV = newV ?? "";
+  if (!oldV || !newV) return wholeChange(oldV, newV);
+  const a = tokenise(oldV), b = tokenise(newV);
+  if (a.length * b.length > 400000) return wholeChange(oldV, newV);  // very long text: keep it cheap
+  const { ops, common } = diffTokens(a, b);
+  // Only go word-level when most of the text is shared; otherwise it's a rewrite and
+  // interleaved fragments are harder to read than the two whole values.
+  const words = (t) => t.filter((x) => x.trim()).length;
+  const sharedWords = ops.filter((o) => o.op === "same").reduce((s, o) => s + words(tokenise(o.text)), 0);
+  if (!common || sharedWords < 0.5 * Math.max(words(a), words(b))) return wholeChange(oldV, newV);
+  return h("span", { class: "inline-diff" }, absorbGaps(ops).map((o) =>
+    o.op === "same" ? o.text : h(o.op === "del" ? "del" : "ins", { class: o.op === "del" ? "old" : "new" }, o.text)));
+}
+
 function pairCard(e) {
   return h("div", { class: "card", "data-search": `${e.name} ${e.old_name}`.toLowerCase() },
     h("h3", {}, e.name),
@@ -199,7 +267,7 @@ function pairCard(e) {
     e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
     e.changes.map((c) => h("div", { class: "change" },
       h("div", { class: "field" }, c.field),
-      h("div", {}, h("span", { class: "old" }, val(c.old)), " → ", h("span", { class: "new" }, val(c.new))))),
+      h("div", {}, textDiff(c.old, c.new)))),
     locationRow(e.location),
     e.link.band === "review" ? explainLine(e.link.explain) : null);
 }
