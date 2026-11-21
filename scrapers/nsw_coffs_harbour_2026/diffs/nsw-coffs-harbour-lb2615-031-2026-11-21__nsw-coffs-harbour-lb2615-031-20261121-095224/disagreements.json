@@ -1,0 +1,16 @@
+{
+  "election": "nsw_coffs_harbour_2026",
+  "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
+  "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv",
+  "old_label": "Sat 21 Nov 2026",
+  "new_label": "Sat 21 Nov 2026, 9:52 am",
+  "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f",
+  "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f",
+  "matchers": [
+    "rapidfuzz",
+    "splink"
+  ],
+  "agree": 23,
+  "left_records": 23,
+  "items": []
+}

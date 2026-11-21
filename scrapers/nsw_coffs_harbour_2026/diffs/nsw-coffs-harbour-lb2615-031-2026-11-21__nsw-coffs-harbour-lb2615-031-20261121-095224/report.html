@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sat 21 Nov 2026 → Sat 21 Nov 2026, 9:52 am</title>
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- OpenLayers (as public-redesign uses) and ol-mapbox-style (draws the OpenFreeMap Liberty basemap),
+     from a CDN to keep reports small. Version-pinned, with Subresource Integrity hashes computed from
+     the npm packages; deferred so the report renders before ~1 MB of map code arrives. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css" integrity="sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script defer src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js" integrity="sha384-rwbCGPbgxLkcQaFvIra1Vz3KBT1yBeF2/1VgLs/gCCNCJ61GHJGimHpkufVKcqap" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js" integrity="sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
+  --accent: #5b3fa8; --accent-soft: #efeaf9;
+  --add: #1f7a3d; --add-soft: #e6f4ea; --del: #b3261e; --del-soft: #fbe9e7;
+  --warn: #8a5a00; --warn-soft: #fff3d6; --info-soft: #eef2f7;
+  --radius: 10px; --shadow: 0 1px 2px rgba(0,0,0,.05);
+  /* Native controls (scrollbars, checkboxes, inputs) follow the theme; checkboxes use the accent. */
+  color-scheme: light dark;
+  accent-color: var(--accent);
+}
+/* Keep jumped-to and focused content clear of the sticky tab bar (WCAG 2.4.11). --tabs-h is measured. */
+html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
+    --accent: #b49cf0; --accent-soft: #2c2540;
+    --add: #7fd39a; --add-soft: #173322; --del: #f2a39c; --del-soft: #3a1c1a;
+    --warn: #f0c46a; --warn-soft: #3a2e12; --info-soft: #232a33;
+    --shadow: none;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { padding: 20px 16px 8px; max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 0 0 4px; overflow-wrap: anywhere; }
+.sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+main { max-width: 1100px; margin: 0 auto; padding: 0 16px 120px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; position: sticky; top: 0; background: var(--bg); padding: 8px 0; z-index: 2; }
+.tab { position: relative; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 7px 14px; font: inherit; cursor: pointer; }
+/* Selected: fill plus an underline, so it isn't shown by colour alone (WCAG 1.4.1). */
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.tab[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 14px -7px; border-block-end: 3px solid var(--accent); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); }
+.tile b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+.tile span { color: var(--muted); font-size: 13px; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+input[type=search], select, textarea { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; }
+input[type=search] { flex: 1; min-width: 180px; }
+.section { margin: 14px 0; }
+.section > h2 { margin: 0; font-size: 16px; }
+.section-toggle { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: start; font: inherit; font-weight: 600; color: var(--text); background: none; border: 0; padding: 6px 0; cursor: pointer; }
+.section-toggle::before { content: "▸"; display: inline-block; }
+.section-toggle[aria-expanded="true"]::before { rotate: 90deg; }
+@media (prefers-reduced-motion: no-preference) { .section-toggle::before { transition: rotate .15s; } }
+/* Cards far down a long report skip rendering until scrolled near (Baseline 2025). */
+.section-body > .card:nth-child(n+5) { content-visibility: auto; contain-intrinsic-size: auto 180px; }
+.count { color: var(--muted); font-weight: 400; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
+.card h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.was { color: var(--muted); font-size: 13px; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.badge { font-size: 12px; border-radius: 999px; padding: 2px 8px; background: var(--info-soft); color: var(--muted); }
+.badge.review { background: var(--warn-soft); color: var(--warn); }
+.warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 6px 10px; margin: 6px 0; font-size: 14px; }
+.change { display: grid; grid-template-columns: minmax(110px, 180px) 1fr; gap: 4px 12px; padding: 6px 0; border-top: 1px solid var(--border); }
+.change:first-of-type { border-top: 0; }
+.field { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+.new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+.empty { font-style: italic; opacity: .8; }
+.badge.disagree { border: 0; cursor: pointer; background: var(--accent-soft); color: var(--accent); font: inherit; font-size: 12px; }
+button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
+.dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+.dir.improved { background: var(--add-soft); color: var(--add); }
+.dir.worse { background: var(--del-soft); color: var(--del); }
+.dir.cosm { background: var(--info-soft); color: var(--muted); }
+.change.cosmetic { opacity: .65; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .card.flash { transition: outline-color 1s; } }
+.card.quality summary { cursor: pointer; }
+.card.quality ul { margin: 8px 0 0; padding-left: 18px; }
+.mapbox { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 8px 12px; font-size: 13px; border-top: 1px solid var(--border); }
+.legend .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.key.moved { background: var(--accent); } .key.typo { background: var(--warn); } .key.added { background: var(--add); } .key.removed { background: var(--del); } .key.replacement { background: none; border: 2px dotted var(--muted); width: 8px; height: 8px; }
+.olmap { width: 100%; height: min(60vh, 460px); background: var(--info-soft); }
+.placemap-wrap { margin-top: 10px; }
+.placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
+.placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.card-actions { margin-top: 8px; }
+.small-link { font-size: 13px; }
+button.small { font-size: 13px; padding: 3px 10px; }
+.ol-attribution { font-size: 11px; }
+.cardhead { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
+.cardhead h3 { margin: 0 0 4px; }
+label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+.card.reviewed { opacity: .55; }
+.card.kbd { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card.reviewed:hover { opacity: 1; }
+.hide-toggle { margin: 0 4px; }
+.allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
+pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; overflow-x: auto; margin: 6px 0; }
+.badge.fixbadge { background: var(--warn-soft); color: var(--warn); }
+.fix-intro { margin-bottom: 4px; }
+.inline-diff { overflow-wrap: anywhere; }
+.inline-diff .old, .inline-diff .new { padding: 0 1px; border-radius: 3px; }
+ins { text-decoration: none; }
+.inline-diff del + ins { margin-left: 3px; }
+.kv { display: grid; grid-template-columns: minmax(110px, 180px) 1fr; gap: 2px 12px; font-size: 14px; }
+.kv dt { color: var(--muted); overflow-wrap: anywhere; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+.explain { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.explain code { font-size: 12px; }
+a { color: var(--accent); }
+.note { color: var(--muted); font-size: 14px; }
+.decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.decision { border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+.decision h4 { margin: 0 0 6px; font-size: 14px; }
+.nolink { color: var(--muted); font-style: italic; }
+.verdict { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.verdict label { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
+.verdict input { position: absolute; opacity: 0; pointer-events: none; }
+.verdict input:checked + span { font-weight: 600; }
+.verdict label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+.verdict-extra { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 8px; }
+.card.done { border-left: 4px solid var(--accent); }
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 16px; display: none; }
+.bar.show { display: block; }
+.bar-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button.primary { font: inherit; background: var(--accent); color: var(--surface); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+button.primary:disabled { opacity: .5; cursor: default; }
+button.ghost { font: inherit; background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+@media (max-width: 640px) {
+  .decisions, .verdict-extra { grid-template-columns: 1fr; }
+  .change, .kv { grid-template-columns: 1fr; }
+  .field, .kv dt { margin-top: 4px; }
+  .bar .note { display: none; }
+  .bar { padding: 6px 12px; font-size: 14px; }
+  .bar button.primary { padding: 6px 12px; font-size: 14px; }
+  .tiles { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tile { padding: 6px 8px; }
+  .tile b { font-size: 17px; }
+  .tile span { font-size: 11px; line-height: 1.2; display: block; }
+  h1 { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <div class="sub" id="subtitle"></div>
+</header>
+<main>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Report views"></div>
+  <div id="view" role="tabpanel" tabindex="-1"></div>
+</main>
+<div class="bar" id="bar"><div class="bar-inner">
+  <span id="bar-status"></span>
+  <button class="primary" id="download">Download verdicts</button>
+  <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
+</div></div>
+<div id="live" class="sr-only" role="status"></div>
+<script type="application/json" id="data">{"reviewed": {}, "diffs": [{"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}, {"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}], "disagreements": {"election": "nsw_coffs_harbour_2026", "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "matchers": ["rapidfuzz", "splink"], "agree": 23, "left_records": 23, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
+<script>
+"use strict";
+const DATA = JSON.parse(document.getElementById("data").textContent);
+const DIS = DATA.disagreements;
+const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
+const label = (m) => MATCHER_LABEL[m] || m;
+const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+// OpenLayers loads with `defer`, so it's ready by DOMContentLoaded.
+const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true })));
+function announce(message) {  // the page's live region, for screen readers
+  const live = document.getElementById("live");
+  live.textContent = "";
+  requestAnimationFrame(() => { live.textContent = message; });
+}
+
+// Tiny DOM helper: h("div", {class: "x"}, child, "text", ...). Text is never parsed as HTML.
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of children.flat(Infinity)) {
+    if (c === null || c === undefined || c === false) continue;
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  }
+  return el;
+}
+const val = (v) => (v === "" || v === null || v === undefined) ? h("span", { class: "empty" }, "(blank)") : String(v);
+// Opens the position in Google Maps (no key needed for a link).
+const gmaps = (lat, lon) => `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+const fmtM = (m) => m === null || m === undefined ? "?" : m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`;
+
+// ---------- header ----------
+const first = DATA.diffs[0];
+document.getElementById("title").textContent = document.title;
+if (first) {
+  const created = new Date(first.created_at).toLocaleString();
+  document.getElementById("subtitle").textContent =
+    `${first.old.path.split("/").pop()} (${first.old.records} places) → ${first.new.path.split("/").pop()} (${first.new.records} places) · ${DIS ? DIS.election + " · " : ""}diffed ${created}`;
+}
+
+// ---------- storage (per pair of files) ----------
+const STORE_KEY = DIS ? `ppdiff-verdicts:${DIS.old_sha256}:${DIS.new_sha256}` : null;
+function loadVerdicts() {
+  if (!STORE_KEY) return {};
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; }
+}
+let VERDICTS = loadVerdicts();
+function saveVerdicts() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(VERDICTS)); } catch (e) { /* private mode: keep in memory */ }
+  updateBar();
+}
+
+// ---------- tabs ----------
+const TABS = DATA.diffs.map((d) => ({ id: d.matcher, title: `${label(d.matcher)} diff`, render: () => renderDiff(d) }));
+if (DIS && DIS.matchers.length > 1) TABS.push({ id: "disagreements", title: null, render: renderDisagreements });
+let current = TABS[0] && TABS[0].id;
+try { const saved = localStorage.getItem("ppdiff-tab"); if (TABS.some((t) => t.id === saved)) current = saved; } catch (e) {}
+
+function tabTitle(t) {
+  if (t.id !== "disagreements") return t.title;
+  if (!DIS.items.length) return "Disagreements (none)";
+  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).length;
+  return `Disagreements (${done}/${DIS.items.length} reviewed)`;
+}
+function selectTab(id, focus) {
+  current = id;
+  try { localStorage.setItem("ppdiff-tab", current); } catch (e) {}
+  render();
+  if (focus) document.getElementById(`tab-${id}`).focus();
+}
+function renderTabs() {
+  const list = document.getElementById("tabs");
+  list.replaceChildren(...TABS.map((t) =>
+    h("button", { type: "button", class: "tab", role: "tab", id: `tab-${t.id}`, "aria-selected": String(t.id === current),
+      tabindex: t.id === current ? "0" : "-1", onclick: () => selectTab(t.id) }, tabTitle(t))));
+}
+// Arrow keys move between tabs (selection follows focus); Home/End jump to the ends.
+document.getElementById("tabs").addEventListener("keydown", (ev) => {
+  const i = TABS.findIndex((t) => t.id === current);
+  const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[ev.key];
+  if (next === undefined) return;
+  ev.preventDefault();
+  selectTab(TABS[(next + TABS.length) % TABS.length].id, true);
+});
+// Keep scroll-padding-top equal to the sticky tab bar's real height (it wraps on phones).
+new ResizeObserver(([entry]) => document.documentElement.style.setProperty("--tabs-h", `${Math.ceil(entry.target.getBoundingClientRect().height)}px`))
+  .observe(document.getElementById("tabs"));
+function render() {
+  activeChip = null; searchText = "";
+  renderTabs();
+  const tab = TABS.find((t) => t.id === current);
+  const view = document.getElementById("view");
+  view.setAttribute("aria-labelledby", `tab-${current}`);
+  view.replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
+  updateReviewCounts(); applyFilters();
+  updateBar();
+}
+
+// ---------- a matcher's diff ----------
+function explainLine(explain) {
+  const parts = Object.entries(explain || {}).map(([k, v]) => `${k} ${v}`);
+  return parts.length ? h("div", { class: "explain" }, "Why: ", h("code", {}, parts.join(" · "))) : null;
+}
+function locationRow(loc) {
+  if (!loc) return null;
+  const [olat, olon] = loc.old, [nlat, nlon] = loc.new;
+  return h("div", { class: "change" },
+    h("div", { class: "field" }, "location"),
+    h("div", {},
+      loc.moved_m === null ? loc.note : `Moved ${fmtM(loc.moved_m)} `,
+      olat !== null ? h("a", { href: gmaps(olat, olon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, "old") : null,
+      olat !== null && nlat !== null ? " · " : null,
+      nlat !== null ? h("a", { href: gmaps(nlat, nlon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, "new") : null,
+      " ",
+      placeMapButton([{ lat: olat, lon: olon, label: "old", kind: "old" }, { lat: nlat, lon: nlon, label: "new", kind: "new" }])));
+}
+// ---------- word-level text diff ----------
+// Words, punctuation and whitespace are separate tokens, so "Melton VIC" -> "Melton West VIC"
+// highlights just "West", and an added sentence shows as one green run.
+const tokenise = (s) => String(s).match(/\s+|\w+|[^\s\w]/gu) || [];
+function diffTokens(a, b) {
+  const n = a.length, m = b.length;
+  // Longest common subsequence table, filled from the end.
+  const L = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--)
+    for (let j = m - 1; j >= 0; j--)
+      L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const ops = [];
+  const push = (op, t) => { const last = ops[ops.length - 1]; if (last && last.op === op) last.text += t; else ops.push({ op, text: t }); };
+  let i = 0, j = 0;
+  while (i < n && j < m) {
+    if (a[i] === b[j]) { push("same", a[i]); i++; j++; }
+    else if (L[i + 1][j] >= L[i][j + 1]) push("del", a[i++]);
+    else push("ins", b[j++]);
+  }
+  while (i < n) push("del", a[i++]);
+  while (j < m) push("ins", b[j++]);
+  return { ops, common: L[0][0] };
+}
+// Whitespace between two changes reads better as part of the change: "a b c" -> "a x y c"
+// shows "b" -> "x y" rather than "b" " " "x" " " "y".
+function absorbGaps(ops) {
+  const out = [];
+  for (let k = 0; k < ops.length; k++) {
+    const o = ops[k], prev = out[out.length - 1], next = ops[k + 1];
+    if (o.op === "same" && !o.text.trim() && prev && prev.op !== "same" && next && next.op !== "same") {
+      out.push({ op: "del", text: o.text }, { op: "ins", text: o.text });
+      continue;
+    }
+    out.push(o);
+  }
+  // Group each run of changes as all deletions then all insertions.
+  const grouped = [];
+  for (let k = 0; k < out.length;) {
+    if (out[k].op === "same") { grouped.push(out[k++]); continue; }
+    let del = "", ins = "";
+    while (k < out.length && out[k].op !== "same") { if (out[k].op === "del") del += out[k].text; else ins += out[k].text; k++; }
+    if (del) grouped.push({ op: "del", text: del });
+    if (ins) grouped.push({ op: "ins", text: ins });
+  }
+  return grouped;
+}
+function wholeChange(oldV, newV) {
+  return [h("span", { class: "old" }, val(oldV)), " → ", h("span", { class: "new" }, val(newV))];
+}
+function textDiff(oldV, newV) {
+  oldV = oldV ?? ""; newV = newV ?? "";
+  if (!oldV || !newV) return wholeChange(oldV, newV);
+  const a = tokenise(oldV), b = tokenise(newV);
+  if (a.length * b.length > 400000) return wholeChange(oldV, newV);  // very long text: keep it cheap
+  const { ops, common } = diffTokens(a, b);
+  // Only go word-level when most of the text is shared; otherwise it's a rewrite and
+  // interleaved fragments are harder to read than the two whole values.
+  const words = (t) => t.filter((x) => x.trim()).length;
+  const sharedWords = ops.filter((o) => o.op === "same").reduce((s, o) => s + words(tokenise(o.text)), 0);
+  if (!common || sharedWords < 0.5 * Math.max(words(a), words(b))) return wholeChange(oldV, newV);
+  return h("span", { class: "inline-diff" }, absorbGaps(ops).map((o) =>
+    o.op === "same" ? o.text : h(o.op === "del" ? "del" : "ins", { class: o.op === "del" ? "old" : "new" }, o.text)));
+}
+
+// Places the two matchers handled differently (for badges in each diff).
+const DIS_LEFT = new Set(DIS ? DIS.items.map((it) => it.left.index) : []);
+const DIS_RIGHT = new Set(DIS ? DIS.items.flatMap((it) => Object.values(it.decisions).filter(Boolean).map((d) => d.right.index)) : []);
+function disagreeBadge(oldIndex, newIndex) {
+  const hit = (oldIndex !== undefined && oldIndex !== null && DIS_LEFT.has(oldIndex)) || (newIndex !== undefined && newIndex !== null && DIS_RIGHT.has(newIndex));
+  if (!hit || !TABS.some((t) => t.id === "disagreements")) return null;
+  const target = oldIndex !== undefined && oldIndex !== null && DIS_LEFT.has(oldIndex) ? oldIndex
+    : DIS.items.find((it) => Object.values(it.decisions).some((d) => d && d.right.index === newIndex)).left.index;
+  return h("button", { class: "badge disagree", title: "The other matcher handled this place differently", onclick: () => goTo("disagreements", `dis-${target}`) }, "matchers disagree ›");
+}
+function openSectionOf(el) {
+  const body = el.closest(".section-body[hidden]");
+  if (body) body.closest(".section").querySelector(".section-toggle").click();
+}
+function goTo(tabId, elementId) {
+  if (current !== tabId) { current = tabId; render(); }
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  openSectionOf(el);
+  if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+  el.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+  el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600);
+}
+const CATEGORY_LABEL = { accessibility: "Accessibility", entrance: "Entrance", hours: "Opening hours", address: "Address", name: "Name", divisions: "Divisions", votes: "Vote estimates", location: "Location", other: "Other" };
+function entryCategories(e) {
+  const cats = new Set(e.changes.filter((c) => !c.cosmetic).map((c) => c.category || "other"));
+  if (e.location) cats.add("location");
+  return [...cats];
+}
+function directionBadge(c) {
+  return c.direction ? h("span", { class: "dir " + c.direction }, c.direction === "improved" ? "▲ improved" : "▼ worse") : null;
+}
+// ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
+const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
+// Ticks saved in the repo (reviewed.json, embedded at build) plus any made in this browser since.
+let REVIEWED = (() => { let local = {}; try { local = JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) {} return { ...(DATA.reviewed || {}), ...local }; })();
+const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
+function downloadReview() {
+  const blob = new Blob([JSON.stringify({ old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `reviewed ${first.old.label || "old"} to ${first.new.label || "new"}.json`.replace(/[,:]/g, "") });
+  document.body.append(a); a.click(); a.remove();
+}
+function unsavedTicks() { return Object.keys(REVIEWED).filter((k) => !SAVED_REVIEWED.has(k)).length + [...SAVED_REVIEWED].filter((k) => !REVIEWED[k]).length; }
+let hideReviewed = false;
+function setReviewed(key, on) {
+  if (on) REVIEWED[key] = new Date().toISOString(); else delete REVIEWED[key];
+  try { localStorage.setItem(REVIEW_STORE, JSON.stringify(REVIEWED)); } catch (e) {}
+  document.querySelectorAll(`[data-review="${CSS.escape(key)}"]`).forEach((card) => {
+    card.classList.toggle("reviewed", on);
+    const box = card.querySelector(":scope > .cardhead input"); if (box) box.checked = on;
+  });
+  updateReviewCounts(); applyFilters();
+}
+function cardHead(title, key) {
+  return h("div", { class: "cardhead" }, h("h3", {}, title),
+    h("label", { class: "review" }, h("input", { type: "checkbox", checked: Boolean(REVIEWED[key]), onchange: (ev) => setReviewed(key, ev.target.checked) }), "Reviewed"));
+}
+function reviewAttrs(key) { return { "data-review": key, class: "card" + (REVIEWED[key] ? " reviewed" : "") }; }
+function updateReviewCounts() {
+  const btn = document.getElementById("download-review");
+  if (btn) { const n = unsavedTicks(); btn.textContent = n ? `Download review (${n} not saved to repo)` : "Download review"; }
+  document.querySelectorAll("#view section.section").forEach((sec) => {
+    const keys = new Set([...sec.querySelectorAll(":scope > .section-body > .card[data-review], :scope > .section-body > div > .card[data-review]")].map((c) => c.dataset.review));
+    const done = [...keys].filter((k) => REVIEWED[k]).length;
+    const el = sec.querySelector(":scope > h2 .revcount");
+    if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
+  });
+}
+const fixKey = (f) => `fix-${f.kind}-${f.new_index}`;
+function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
+
+function pairCard(e, d) {
+  const key = `pair-${e.new_index}`, fix = fixFor(d, e.new_index);
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
+    cardHead(e.name, key),
+    e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
+    h("div", { class: "badges" },
+      h("span", { class: "badge" + (e.link.band === "review" ? " review" : "") }, e.link.band === "review" ? "possible match" : "linked"),
+      h("span", { class: "badge" }, e.link.via === "exact" ? "exact key" : `score ${e.link.score}`),
+      disagreeBadge(e.old_index, e.new_index),
+      fix ? h("button", { class: "badge fixbadge", onclick: () => goTo(d.matcher, `${d.matcher}-${fixKey(fix)}`) }, fix.no_fix_needed ? "no fix needed ›" : "suggested fix ›") : null),
+    e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
+    e.changes.map((c) => h("div", { class: "change" + (c.cosmetic ? " cosmetic" : "") },
+      h("div", { class: "field" }, c.field, " ", directionBadge(c), c.cosmetic ? h("span", { class: "dir cosm", title: "The linkage module treats both values as the same" }, "cosmetic") : null),
+      h("div", {}, textDiff(c.old, c.new)))),
+    locationRow(e.location),
+    e.link.band === "review" ? explainLine(e.link.explain) : null);
+}
+function recordCard(e, d, which) {
+  const idx = which === "added" ? e.new_index : e.old_index;
+  const pair = which === "added" ? e.replaces : e.replaced_by;
+  const repl = pair === null || pair === undefined ? null
+    : d.replacements.find((p) => (which === "added" ? p.new_index === idx : p.old_index === idx));
+  const key = `${which}-${idx}`;
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${which}-${idx}`, "data-search": e.name.toLowerCase(), "data-cats": "" },
+    cardHead(e.name, key),
+    h("div", { class: "badges" },
+      repl ? h("button", { class: "badge review", onclick: () => goTo(d.matcher, `${d.matcher}-repl-${repl.old_index}`) },
+        `${which === "added" ? "likely replaces" : "likely replaced by"} ${which === "added" ? repl.old_name : repl.new_name} (${fmtM(repl.distance_m)}) ›`) : null,
+      disagreeBadge(which === "removed" ? idx : null, which === "added" ? idx : null)),
+    h("dl", { class: "kv" }, Object.entries(e.record).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])),
+    h("div", { class: "card-actions" }, placeMapButton([{ lat: e.lat, lon: e.lon, label: which, kind: which === "added" ? "new" : "old" }])));
+}
+function replacementCard(p, d) {
+  const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
+  const brief = (r) => h("div", {}, h("b", {}, r.name), h("div", { class: "was" }, r.record.address || Object.values(r.record).slice(2, 4).join(", ")),
+    r.lat !== null ? h("a", { href: gmaps(r.lat, r.lon), target: "_blank", rel: "noopener" }, "Google Maps") : null);
+  const key = `repl-${p.old_index}-${p.new_index}`;
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-repl-${p.old_index}`, "data-search": `${p.old_name} ${p.new_name}`.toLowerCase(), "data-cats": "" },
+    cardHead(`${p.old_name} → ${p.new_name}`, key),
+    h("div", { class: "badges" }, h("span", { class: "badge review" }, `${fmtM(p.distance_m)} apart`), disagreeBadge(p.old_index, p.new_index)),
+    h("div", { class: "decisions" },
+      h("div", { class: "decision" }, h("h4", {}, "Removed"), brief(gone)),
+      h("div", { class: "decision" }, h("h4", {}, "Added nearby"), brief(came))),
+    h("div", { class: "card-actions" }, placeMapButton([{ lat: gone.lat, lon: gone.lon, label: "removed", kind: "old" }, { lat: came.lat, lon: came.lon, label: "added", kind: "new" }])),
+    h("p", { class: "note" }, "Not linked by the matcher, but close together: often a venue swap. Check the two cards above if it should have been a link."));
+}
+function qualityCard(q, d) {
+  return h("details", { class: "card quality", "data-search": q.places.map((p) => p.name).join(" ").toLowerCase(), "data-cats": "" },
+    h("summary", {}, h("b", {}, q.title), " ", h("span", { class: "count" }, `(${q.count})`)),
+    h("ul", {}, q.places.map((p) => h("li", {}, p.name, p.detail ? h("span", { class: "was" }, ` · ${p.detail}`) : null))),
+    q.count > q.places.length ? h("p", { class: "note" }, `Showing ${q.places.length} of ${q.count}.`) : null);
+}
+// A section is a heading wrapping a toggle button (screen-reader users can move by heading;
+// headings inside <summary> get dropped), with content hidden until found so find-in-page
+// still opens it.
+let sectionCount = 0;
+function section(title, items, makeCard, open, extra) {
+  open = Boolean(open && items.length > 0);
+  const id = `section-${++sectionCount}`;
+  const body = h("div", { class: "section-body", id, hidden: open ? null : "until-found" },
+    items.length ? [extra || null, ...items.map(makeCard)] : h("p", { class: "note" }, "None."));
+  const toggle = h("button", { type: "button", class: "section-toggle", "aria-expanded": String(open), "aria-controls": id },
+    h("span", {}, title, " ", h("span", { class: "count" }, `(${items.length}`, h("span", { class: "revcount" }), ")")));
+  const setOpen = (on) => {
+    toggle.setAttribute("aria-expanded", String(on));
+    if (on) body.removeAttribute("hidden"); else body.setAttribute("hidden", "until-found");
+  };
+  toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  body.addEventListener("beforematch", () => setOpen(true));  // find-in-page found something inside
+  return h("section", { class: "section" }, h("h2", {}, toggle), body);
+}
+const fixJSON = (fixes) => JSON.stringify(fixes, null, 4);
+function fixCard(f, d) {
+  const key = fixKey(f);
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${key}`, "data-search": f.name.toLowerCase(), "data-cats": "" },
+    cardHead(f.name, key),
+    h("div", { class: "badges" },
+      f.no_fix_needed ? h("span", { class: "badge" }, "no fix needed") : f.likely ? h("span", { class: "badge review" }, "likely needed") : h("span", { class: "badge" }, "only if the change is wrong"),
+      h("button", { class: "badge", onclick: () => goTo(d.matcher, `${d.matcher}-pair-${f.new_index}`) }, "show the change ›")),
+    h("p", {}, f.reason),
+    f.note ? h("div", { class: "warn" }, "⚠ ", f.note) : null,
+    f.fix ? [h("pre", { class: "fixjson" }, fixJSON(f.fix)),
+             h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(f.fix), ev.currentTarget) }, "Copy fix")] : null);
+}
+
+// ---------- map (inline SVG, works offline) ----------
+function mapFeatures(d) {
+  const f = [];
+  for (const e of d.changed.concat(d.possible_matches)) {
+    if (e.location && e.location.moved_m !== null && e.location.old[0] !== null)
+      f.push({ kind: e.location.likely_typo ? "typo" : "moved", from: e.location.old, to: e.location.new, name: e.name, target: `${d.matcher}-pair-${e.new_index}` });
+  }
+  for (const p of d.replacements) {
+    const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
+    if (gone && came && gone.lat !== null && came.lat !== null)
+      f.push({ kind: "replacement", from: [gone.lat, gone.lon], to: [came.lat, came.lon], name: `${p.old_name} → ${p.new_name}`, target: `${d.matcher}-repl-${p.old_index}`, lineOnly: true });
+  }
+  for (const a of d.added) if (a.lat !== null) f.push({ kind: "added", to: [a.lat, a.lon], name: a.name, target: `${d.matcher}-added-${a.new_index}` });
+  for (const r of d.removed) if (r.lat !== null) f.push({ kind: "removed", to: [r.lat, r.lon], name: r.name, target: `${d.matcher}-removed-${r.old_index}` });
+  return f;
+}
+// ---------- maps: OpenLayers (loaded in <head>) on the OpenFreeMap Liberty basemap ----------
+const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+// ---- basemap: OpenFreeMap Liberty (free, no key, OpenStreetMap data). It names schools, halls
+// and churches and shows buildings and house numbers when zoomed in, which is what checking a
+// polling place needs. https://openfreemap.org
+const LIBERTY = "https://tiles.openfreemap.org/styles/liberty";
+function basemapLayer(ol) {
+  const group = new ol.layer.Group();
+  window.olms.apply(group, LIBERTY).then(() => {
+    group.getLayers().forEach((layer) => {
+      const src = layer.getSource && layer.getSource();
+      if (src && src.setAttributions) src.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+    });
+  });
+  return group;
+}
+function olStyles(ol) {
+  const S = ol.style, c = (n) => cssVar(n);
+  const dot = (fill, r, stroke) => new S.Style({ image: new S.Circle({ radius: r, fill: new S.Fill({ color: fill }), stroke: new S.Stroke({ color: stroke || c("--surface"), width: 2 }) }) });
+  const ring = (color, r) => new S.Style({ image: new S.Circle({ radius: r, fill: new S.Fill({ color: c("--surface") }), stroke: new S.Stroke({ color, width: 2.5 }) }) });
+  const line = (color, dash, width) => new S.Style({ stroke: new S.Stroke({ color, width: width || 2.5, lineDash: dash }) });
+  return {
+    context: new S.Style({ image: new S.Circle({ radius: 2.5, fill: new S.Fill({ color: "rgba(29,29,27,.28)" }) }) }),
+    moved: { line: line(c("--accent"), [6, 4]), from: ring(c("--accent"), 5), to: dot(c("--accent"), 7) },
+    typo: { line: line(c("--warn"), [6, 4]), from: ring(c("--warn"), 5), to: dot(c("--warn"), 7) },
+    added: dot(c("--add"), 7),
+    removed: dot(c("--del"), 7),
+    replacement: line(c("--muted"), [2, 4], 2),
+    label: (text, color) => new S.Style({ text: new S.Text({ text, offsetY: -16, font: "600 12px system-ui, sans-serif", fill: new S.Fill({ color }), stroke: new S.Stroke({ color: c("--surface"), width: 3 }) }) }),
+  };
+}
+const toXY = (ol, lat, lon) => ol.proj.fromLonLat([lon, lat]);
+
+function renderMap(d) {
+  const feats = mapFeatures(d);
+  if (!feats.length) return null;
+  const el = h("div", { class: "olmap" });
+  const count = (kind) => feats.filter((f) => f.kind === kind).length;
+  const moved = count("moved") + count("typo");
+  // The map is visual only; screen-reader users get the same facts as text and in the sections below.
+  const summary = h("p", { class: "sr-only" },
+    `Map of changes: ${moved} moved (${count("typo")} likely coordinate typos), ${count("added")} added, ${count("removed")} removed, ${count("replacement")} likely replacements. The same places are listed in the sections below.`);
+  const box = h("div", { class: "mapbox" }, summary, el,
+    h("div", { class: "legend" },
+      [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
+        h("span", {}, h("i", { class: "key " + k }), t)),
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")));
+  olReady.then(() => requestAnimationFrame(() => {  // after OpenLayers loads and the element is in the page
+    const ol = window.ol;
+    const st = olStyles(ol);
+    const context = new ol.source.Vector({ features: d.context_points.map(([lat, lon]) => new ol.Feature(new ol.geom.Point(toXY(ol, lat, lon)))) });
+    const fg = new ol.source.Vector();
+    for (const f of feats) {
+      const add = (geom, style) => { const feat = new ol.Feature(geom); feat.setStyle(style); feat.set("target", f.target); feat.set("name", f.name); fg.addFeature(feat); };
+      if (f.kind === "replacement") { add(new ol.geom.LineString([toXY(ol, ...f.from), toXY(ol, ...f.to)]), st.replacement); continue; }
+      if (f.from) {
+        const s = st[f.kind];
+        add(new ol.geom.LineString([toXY(ol, ...f.from), toXY(ol, ...f.to)]), s.line);
+        add(new ol.geom.Point(toXY(ol, ...f.from)), s.from);
+        add(new ol.geom.Point(toXY(ol, ...f.to)), s.to);
+      } else add(new ol.geom.Point(toXY(ol, ...f.to)), st[f.kind]);
+    }
+    const map = (new ol.Map({
+      target: el,
+      layers: [basemapLayer(ol), new ol.layer.Vector({ source: context, style: st.context }), new ol.layer.Vector({ source: fg })],
+      view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }),
+    }));
+    map.getView().fit(fg.getExtent(), { padding: [40, 40, 40, 40], maxZoom: 16 });
+    map.on("pointermove", (ev) => { el.style.cursor = map.hasFeatureAtPixel(ev.pixel, { layerFilter: (l) => l.getSource() === fg }) ? "pointer" : ""; });
+    map.on("click", (ev) => {
+      const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
+      if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
+    });
+  }));
+  return box;
+}
+
+// A small map inside one card, for checking positions against the basemap.
+// points: [{lat, lon, label, kind}] where kind is "old", "new" or "place".
+function placeMapButton(points) {
+  points = points.filter((p) => p.lat !== null && p.lat !== undefined);
+  if (!points.length) return null;
+  let holder = null;
+  const button = h("button", { type: "button", class: "ghost small", "aria-expanded": "false", onclick: () => {
+    button.setAttribute("aria-expanded", String(!holder));
+    if (holder) { holder.remove(); holder = null; button.textContent = "Check on map"; return; }
+    holder = h("div", { class: "placemap-wrap" });
+    button.closest(".card").append(holder);
+    button.textContent = "Hide map";
+    buildPlaceMap(holder, points);
+  } }, "Check on map");
+  return button;
+}
+function buildPlaceMap(holder, points) {
+  const el = h("div", { class: "placemap" });
+  const controls = h("div", { class: "placemap-ctl" });
+  holder.append(el, controls);
+  olReady.then(() => requestAnimationFrame(() => {
+    const ol = window.ol;
+    const st = olStyles(ol);
+    const src = new ol.source.Vector();
+    const colour = { old: cssVar("--del"), new: cssVar("--add"), place: cssVar("--accent") };
+    if (points.length === 2) {
+      const line = new ol.Feature(new ol.geom.LineString(points.map((p) => toXY(ol, p.lat, p.lon))));
+      line.setStyle(st.moved.line); src.addFeature(line);
+    }
+    for (const p of points) {
+      const f = new ol.Feature(new ol.geom.Point(toXY(ol, p.lat, p.lon)));
+      f.setStyle([p.kind === "old" ? new ol.style.Style({ image: new ol.style.Circle({ radius: 7, fill: new ol.style.Fill({ color: cssVar("--surface") }), stroke: new ol.style.Stroke({ color: colour.old, width: 3 }) }) })
+                                    : new ol.style.Style({ image: new ol.style.Circle({ radius: 7, fill: new ol.style.Fill({ color: colour[p.kind] }), stroke: new ol.style.Stroke({ color: cssVar("--surface"), width: 2 }) }) }),
+                  st.label(p.label, colour[p.kind])]);
+      src.addFeature(f);
+    }
+    const map = (new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) }));
+    const duration = reduceMotion() ? 0 : 300;
+    const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration });
+    fitAll();
+    controls.replaceChildren(...[
+      points.length > 1 ? h("button", { class: "ghost small", onclick: fitAll }, "Both") : null,
+      ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration }) }, `Zoom to ${p.label}`)),
+      ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
+    ].filter(Boolean));
+  }));
+}
+
+// ---------- filters, copy summary ----------
+let activeChip = null;
+function setChip(cat) {
+  activeChip = cat;
+  document.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String((c.dataset.cat || null) === cat)));
+  applyFilters();
+}
+let searchText = "";
+function applyFilters() {
+  const root = document.getElementById("view");
+  root.querySelectorAll(".card").forEach((c) => {
+    const okText = !searchText || (c.dataset.search || "").includes(searchText);
+    const okCat = !activeChip || (c.dataset.cats || "").split(" ").includes(activeChip);
+    const okReview = !(hideReviewed && c.classList.contains("reviewed"));
+    c.style.display = okText && okCat && okReview ? "" : "none";
+  });
+}
+function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
+function summaryText(d) {
+  const s = d.summary, lines = [];
+  lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
+  if (d.loader && d.loader.config_found) {
+    const look = d.loader.fix_audit.filter(fixNeedsLook), probs = d.loader.problems.length + d.loader.regex_errors.length;
+    if (probs) lines.push(`Load problems: ${probs}`);
+    if (look.length) lines.push(`Config fixes to look at: ${look.map((f) => `#${f.number} (${f.status.replace("_", " ")})`).join(", ")}`);
+  }
+  if (d.nothing_changed) { lines.push(`No changes: all ${d.new.records} places are the same.`); return lines.join("\n"); }
+  lines.push(`${d.new.records} places: ${s.changed} changed, ${s.added} added, ${s.removed} removed, ${s.possible_matches} possible matches, ${s.likely_replacements} likely replacements.`);
+  if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
+  if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
+  for (const p of d.replacements) lines.push(`Likely replacement: ${p.old_name} → ${p.new_name} (${fmtM(p.distance_m)})`);
+  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.filter((c) => !c.cosmetic).map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  if ((d.cosmetic || []).length) lines.push(`Cosmetic only (not counted): ${d.cosmetic.length} places.`);
+  const warns = d.changed.concat(d.possible_matches).flatMap((e) => e.warnings.map((w) => `${e.name}: ${w}`));
+  if (warns.length) lines.push("Warnings:", ...warns.map((w) => `- ${w}`));
+  return lines.join("\n");
+}
+async function copyText(text, button) {
+  let ok = true;
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    try { const t = h("textarea", {}, text); document.body.append(t); t.select(); ok = document.execCommand("copy"); t.remove(); }
+    catch (e2) { ok = false; }
+  }
+  const message = ok ? "Copied" : "Copy failed";
+  if (!button.dataset.label) button.dataset.label = button.textContent;
+  clearTimeout(button._copyTimer);
+  button.textContent = message;  // seen
+  announce(message);             // heard
+  button._copyTimer = setTimeout(() => { button.textContent = button.dataset.label; }, 1600);
+}
+
+
+// ---------- loader checks (the loader's own rules, via loader_rules) ----------
+const FIX_STATUS = {
+  missing_field: ["Overwrites a field that doesn't exist after renaming, so the loader skips it", "warn"],
+  stopped_matching: ["Stopped matching in this scrape: the selector no longer finds the place", "warn"],
+  no_match: ["Doesn't match any place (orphan): can probably be removed", "warn"],
+  already_fixed: ["Source already has the fixed value: the entry can probably be removed", "warn"],
+  multiple: ["Matches more than one place: it will change all of them", "warn"],
+  applies: ["Still applies", "ok"],
+};
+const fixNeedsLook = (f) => f.status !== "applies";
+function configFixCard(f) {
+  const key = `cfgfix-${f.number}`;
+  const [text, tone] = FIX_STATUS[f.status] || [f.status, "warn"];
+  return h("div", { ...reviewAttrs(key), "data-search": f.matches.join(" ").toLowerCase() },
+    cardHead(`fix_data_issues entry ${f.number}: ${f.fix.field} = ${JSON.stringify(f.fix.value)}`, key),
+    h("div", { class: tone === "warn" ? "warn" : "allclear" }, text,
+      f.translates_value ? ` (translates a value: ${f.matches.length} places)` : f.matches.length ? ` (${f.matches.length} place${f.matches.length === 1 ? "" : "s"})` : ""),
+    f.missing_fields.length ? h("p", {}, `Missing after renaming: ${f.missing_fields.join(", ")}. Check the spelling against the loader's column names (e.g. lon, not lng).`) : null,
+    !f.translates_value && f.matches.length ? h("p", { class: "note" }, `Matches: ${f.matches.slice(0, 6).join("; ")}${f.matches.length > 6 ? "…" : ""}`) : null,
+    !f.translates_value && f.source_values.length ? h("p", { class: "note" }, `This scrape has: ${f.source_values.slice(0, 3).map((v) => JSON.stringify(v)).join("; ")}`) : null,
+    h("pre", { class: "fixjson" }, JSON.stringify(f.fix, null, 4)));
+}
+function loadProblemCard(p) {
+  const key = `load-${p.new_index}`;
+  return h("div", { ...reviewAttrs(key), "data-search": p.name.toLowerCase() },
+    cardHead(p.name, key), h("ul", {}, p.problems.map((x) => h("li", {}, x))));
+}
+function renderLoaderChecks(d) {
+  const L = d.loader;
+  if (!L) return null;
+  if (!L.config_found) return section("Loader checks", [], () => null, false,
+    h("p", { class: "note" }, "No config.json beside this diffs folder, so the loader checks didn't run."));
+  const look = L.fix_audit.filter(fixNeedsLook), fine = L.fix_audit.filter((f) => !fixNeedsLook(f));
+  const intro = h("p", { class: "note" },
+    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters} places after its filters. `,
+    "Load problems are what the loader would reject, as far as can be checked without the database: required fields, allowed values, coordinates and cleaning regexes.");
+  return [
+    section("Loader: config fixes to look at", look, configFixCard, true, intro),
+    section("Loader: config fixes that still apply", fine, configFixCard, false),
+    section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
+      L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+  ];
+}
+
+function renderDiff(d) {
+  const s = d.summary;
+  const warned = d.changed.concat(d.possible_matches).filter((e) => e.warnings.length);
+  const counts = {};
+  for (const e of d.changed.concat(d.possible_matches)) for (const c of entryCategories(e)) counts[c] = (counts[c] || 0) + 1;
+  const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
+  activeChip = null; searchText = "";
+  const card = (e) => pairCard(e, d);
+  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length : 0;
+  s.config_fixes = d.loader && d.loader.config_found ? d.loader.fix_audit.filter(fixNeedsLook).length : 0;
+  // Likely-needed fixes first, then "only if wrong", then the "no fix needed" notes.
+  const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
+  const copyable = fixes.filter((f) => f.fix);
+  const wrap = h("div", {},
+    h("div", { class: "tiles" },
+      [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
+        .filter(([k]) => (s[k] ?? 0) > 0 || ["changed", "added", "removed"].includes(k))
+        .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
+    d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
+      `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
+    renderMap(d),
+    h("div", { class: "toolbar" },
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
+      h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
+      h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
+    cats.length ? h("div", { class: "chips" },
+      h("button", { class: "chip", "aria-pressed": "true", onclick: () => setChip(null) }, "All changes"),
+      cats.map((c) => h("button", { class: "chip", "data-cat": c, "aria-pressed": "false", onclick: () => setChip(activeChip === c ? null : c) }, `${CATEGORY_LABEL[c]} ${counts[c]}`))) : null,
+    d.columns.added.length || d.columns.removed.length
+      ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
+      : null,
+    renderLoaderChecks(d),
+    section("Warnings", warned, card, true),
+    section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
+      h("div", { class: "fix-intro" },
+        h("p", { class: "note" }, "Drafts for the fix_data_issues list in this election's config.json. Check the map before using one: each keeps the previous value, which is only right if the new file is wrong."),
+        copyable.length ? h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(copyable.map((f) => f.fix)), ev.currentTarget) }, `Copy all ${copyable.length} as a list`) : null)),
+    section("Possible matches (review band)", d.possible_matches, card, true),
+    section("Likely replacements (removed + added nearby)", d.replacements, (p) => replacementCard(p, d), true),
+    section("Changed", d.changed, card, true),
+    section("Added", d.added, (e) => recordCard(e, d, "added"), true),
+    section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
+    section("Cosmetic changes only (not counted as changes)", d.cosmetic || [], card, false,
+      h("p", { class: "note" }, "Values that the linkage module treats as the same: case, punctuation, spacing, address abbreviations (St/Street), number formatting, and how times are written.")),
+    section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}. Keys: j / k next / previous card, x tick reviewed.`));
+  return wrap;
+}
+
+// ---------- disagreements + verdicts ----------
+function placeLines(r) {
+  return h("dl", { class: "kv" },
+    r.premises ? [h("dt", {}, "premises"), h("dd", {}, r.premises)] : null,
+    h("dt", {}, "address"), h("dd", {}, val(r.address)),
+    h("dt", {}, "location"), h("dd", {}, r.lat !== null ? h("a", { href: gmaps(r.lat, r.lon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, `${r.lat}, ${r.lon}`) : val("")),
+    r.divisions && r.divisions.length ? [h("dt", {}, "divisions"), h("dd", {}, r.divisions.join(", "))] : null);
+}
+function decisionBox(matcher, dec) {
+  return h("div", { class: "decision" },
+    h("h4", {}, label(matcher)),
+    dec === null
+      ? h("div", { class: "nolink" }, "No link: treats this place as removed")
+      : [h("div", {}, h("b", {}, dec.right.name)), placeLines(dec.right),
+         h("div", { class: "badges" }, h("span", { class: "badge" + (dec.band === "review" ? " review" : "") }, dec.band), h("span", { class: "badge" }, dec.via === "exact" ? "exact key" : `score ${dec.score}`)),
+         explainLine(dec.explain)]);
+}
+function verdictCard(item) {
+  const idx = item.left.index;
+  const v = VERDICTS[idx] || {};
+  const name = `verdict-${idx}`;
+  const card = h("div", { class: "card" + (v.verdict ? " done" : ""), id: `dis-${idx}`, "data-search": item.left.name.toLowerCase() });
+  const set = (patch) => {
+    VERDICTS[idx] = Object.assign({}, VERDICTS[idx], patch, { updated_at: new Date().toISOString() });
+    card.classList.toggle("done", Boolean(VERDICTS[idx].verdict));
+    saveVerdicts(); renderTabs();
+  };
+  const options = DIS.matchers.map((m) => [m, `${label(m)} was right`]).concat([["neither", "Both wrong"], ["both", "Both defensible"]]);
+  card.append(
+    h("h3", {}, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
+    h("div", { class: "decisions" }, DIS.matchers.map((m) => decisionBox(m, item.decisions[m]))),
+    h("div", { class: "verdict", role: "radiogroup" }, options.map(([key, text]) =>
+      h("label", {}, h("input", { type: "radio", name, value: key, checked: v.verdict === key, onchange: () => set({ verdict: key }) }), h("span", {}, text)))),
+    h("div", { class: "verdict-extra" },
+      h("select", { onchange: (ev) => set({ reason: ev.target.value }) },
+        h("option", { value: "" }, "Reason…"),
+        DATA.reasons.map((r) => h("option", { value: r, selected: v.reason === r }, r))),
+      h("textarea", { rows: 1, placeholder: "Note (optional)", oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
+  return card;
+}
+function renderDisagreements() {
+  const wrap = h("div", {},
+    h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
+    h("div", { class: "toolbar" },
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
+    DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
+  return wrap;
+}
+function updateBar() {
+  const bar = document.getElementById("bar");
+  if (!DIS || current !== "disagreements") { bar.classList.remove("show"); return; }
+  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict);
+  document.getElementById("bar-status").textContent = `${done.length} of ${DIS.items.length} reviewed`;
+  document.getElementById("download").disabled = done.length === 0;
+  bar.classList.add("show");
+}
+document.getElementById("download").addEventListener("click", () => {
+  const records = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).map((it) => {
+    const v = VERDICTS[it.left.index];
+    const decisions = {};
+    for (const m of DIS.matchers) {
+      const d = it.decisions[m];
+      decisions[m] = d ? { right: d.right, score: d.score, band: d.band, via: d.via } : null;
+    }
+    return {
+      schema_version: DATA.verdict_schema_version, recorded_at: v.updated_at, election: DIS.election,
+      old_file: DIS.old_file, new_file: DIS.new_file, old_sha256: DIS.old_sha256, new_sha256: DIS.new_sha256,
+      left: it.left, decisions, verdict: v.verdict, reason: v.reason || "", note: v.note || "",
+    };
+  });
+  const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_label || DIS.old_file} to ${DIS.new_label || DIS.new_file}.json`.replace(/[,:]/g, "") });
+  document.body.append(a); a.click(); a.remove();
+});
+
+
+// ---------- keyboard: j/k next/previous card, x tick reviewed ----------
+let kbdCard = null;
+function visibleCards() {
+  return [...document.querySelectorAll("#view .card[data-review]")].filter((c) => c.offsetParent !== null && !c.closest(".section-body[hidden]"));
+}
+function focusCard(card) {
+  if (kbdCard) kbdCard.classList.remove("kbd");
+  kbdCard = card;
+  if (card) { card.classList.add("kbd"); card.scrollIntoView({ block: "center", behavior: reduceMotion() ? "auto" : "smooth" }); }
+}
+document.addEventListener("keydown", (ev) => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+  const cards = visibleCards();
+  if (!cards.length) return;
+  const i = cards.indexOf(kbdCard);
+  if (ev.key === "j") focusCard(cards[Math.min(i + 1, cards.length - 1)]);
+  else if (ev.key === "k") focusCard(cards[Math.max(i - 1, 0)]);
+  else if (ev.key === "x" && kbdCard) setReviewed(kbdCard.dataset.review, !REVIEWED[kbdCard.dataset.review]);
+  else return;
+  ev.preventDefault();
+});
+
+render();
+</script>
+</body>
+</html>
