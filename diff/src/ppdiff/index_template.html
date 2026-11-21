@@ -102,8 +102,8 @@ function tallyBlock(title, t) {
   const order = ["rapidfuzz", "splink", "neither", "both"];
   return h("div", { class: "tally" },
     h("h3", {}, `${title}: ${t.total} verdict${t.total === 1 ? "" : "s"}`),
-    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
-      h("thead", {}, h("tr", {}, h("th", {}, "Reason"), order.map((k) => h("th", { scope: "col" }, DATA.verdict_labels[k])))),
+    h("div", { class: "counts-wrap", tabindex: "0", role: "region", "aria-label": `${title}: verdicts by reason` }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", { scope: "col" }, "Reason"), order.map((k) => h("th", { scope: "col" }, DATA.verdict_labels[k])))),
       h("tbody", {},
         Object.entries(t.by_reason).map(([reason, c]) => h("tr", {}, h("th", { scope: "row" }, reason), order.map((k) => h("td", {}, c[k] || 0)))),
         h("tr", { class: "total" }, h("th", { scope: "row" }, "All"), order.map((k) => h("td", {}, t.by_verdict[k] || 0)))))));
@@ -126,8 +126,9 @@ function pairCard(p) {
     h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old_label} → ${p.new_label}`)),
     h("div", { class: "note" }, `${p.old} → ${p.new} · ${p.records[0]} → ${p.records[1]} places`,
       p.disagreements === null ? "" : p.disagreements ? ` · ${p.disagreements} disagreement${p.disagreements === 1 ? "" : "s"}, ${p.verdicts} verdict${p.verdicts === 1 ? "" : "s"} recorded` : " · matchers agree"),
-    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
-      h("thead", {}, h("tr", {}, h("th", {}), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),
+    // Focusable, so the table can be scrolled sideways by keyboard on a narrow screen.
+    h("div", { class: "counts-wrap", tabindex: "0", role: "region", "aria-label": `${p.old_label} → ${p.new_label}: counts by matcher` }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", { scope: "col" }, "Matcher"), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),
       h("tbody", {}, Object.entries(p.summaries).map(([m, s]) =>
         h("tr", {}, h("th", { scope: "row" }, label(m)), COLS.map(([k]) => h("td", {}, s[k] ?? 0))))))));
 }

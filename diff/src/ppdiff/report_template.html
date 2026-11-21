@@ -8,8 +8,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- OpenLayers (as public-redesign uses) and ol-mapbox-style (draws the OpenFreeMap Liberty basemap),
      from a CDN to keep reports small. Version-pinned, with Subresource Integrity hashes computed from
-     the npm packages; deferred so the report renders before ~1 MB of map code arrives. -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css" integrity="sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" crossorigin="anonymous" referrerpolicy="no-referrer">
+     the npm packages; deferred so the report renders before ~1 MB of map code arrives. ol.css is added
+     by the script below (OL_CSS), because a stylesheet <link> here would hold up the first paint. -->
 <script defer src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js" integrity="sha384-rwbCGPbgxLkcQaFvIra1Vz3KBT1yBeF2/1VgLs/gCCNCJ61GHJGimHpkufVKcqap" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js" integrity="sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
@@ -24,7 +24,7 @@
   accent-color: var(--accent);
 }
 /* Keep jumped-to and focused content clear of the sticky tab bar (WCAG 2.4.11). --tabs-h is measured. */
-html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); }
+html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); scroll-padding-bottom: calc(var(--bar-h, 0px) + 12px); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @media (prefers-color-scheme: dark) {
@@ -64,7 +64,7 @@ input[type=search] { flex: 1; min-width: 180px; }
 .section-body > .card:nth-child(n+5) { content-visibility: auto; contain-intrinsic-size: auto 180px; }
 .count { color: var(--muted); font-weight: 400; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
-.card h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.card h3, .card > h2 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
 .was { color: var(--muted); font-size: 13px; }
 .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
 .badge { font-size: 12px; border-radius: 999px; padding: 2px 8px; background: var(--info-soft); color: var(--muted); }
@@ -75,14 +75,15 @@ input[type=search] { flex: 1; min-width: 180px; }
 .field { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 .old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
-.empty { font-style: italic; opacity: .8; }
+.empty { font-style: italic; }
 .badge.disagree { border: 0; cursor: pointer; background: var(--accent-soft); color: var(--accent); font: inherit; font-size: 12px; }
 button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
 .dir.improved { background: var(--add-soft); color: var(--add); }
 .dir.worse { background: var(--del-soft); color: var(--del); }
 .dir.cosm { background: var(--info-soft); color: var(--muted); }
-.change.cosmetic { opacity: .65; }
+/* Cosmetic values are greyed with colour, not opacity, so the text keeps its contrast (WCAG 1.4.3). */
+.change.cosmetic .old, .change.cosmetic .new { background: var(--info-soft); color: var(--muted); }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -105,12 +106,11 @@ button.small { font-size: 13px; padding: 3px 10px; }
 .cardhead { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
 .cardhead h3 { margin: 0 0 4px; }
 label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
-.card.reviewed { opacity: .55; }
+.card.reviewed { background: var(--bg); border-style: dashed; box-shadow: none; }
 .card.kbd { outline: 2px solid var(--accent); outline-offset: 2px; }
-.card.reviewed:hover { opacity: 1; }
 .hide-toggle { margin: 0 4px; }
 .allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
-pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; overflow-x: auto; margin: 6px 0; }
+pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0; }
 .badge.fixbadge { background: var(--warn-soft); color: var(--warn); }
 .fix-intro { margin-bottom: 4px; }
 .inline-diff { overflow-wrap: anywhere; }
@@ -126,7 +126,8 @@ a { color: var(--accent); }
 .note { color: var(--muted); font-size: 14px; }
 .decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
 .decision { border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
-.decision h4 { margin: 0 0 6px; font-size: 14px; }
+.decision h4, .decision h3 { margin: 0 0 6px; font-size: 14px; }
+.map-unavailable { padding: 16px 12px; margin: 0; }
 .nolink { color: var(--muted); font-style: italic; }
 .verdict { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .verdict label { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
@@ -164,12 +165,12 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
 <main>
   <div class="tabs" id="tabs" role="tablist" aria-label="Report views"></div>
   <div id="view" role="tabpanel" tabindex="-1"></div>
+  <div class="bar" id="bar"><div class="bar-inner">
+    <span id="bar-status"></span>
+    <button class="primary" id="download">Download verdicts</button>
+    <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
+  </div></div>
 </main>
-<div class="bar" id="bar"><div class="bar-inner">
-  <span id="bar-status"></span>
-  <button class="primary" id="download">Download verdicts</button>
-  <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
-</div></div>
 <div id="live" class="sr-only" role="status"></div>
 <script type="application/json" id="data">{{DATA}}</script>
 <script>
@@ -179,12 +180,23 @@ const DIS = DATA.disagreements;
 const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
 const label = (m) => MATCHER_LABEL[m] || m;
 const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-// OpenLayers loads with `defer`, so it's ready by DOMContentLoaded.
-const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true })));
-function announce(message) {  // the page's live region, for screen readers
+// OpenLayers loads with `defer`, so it has run (or failed to load) by DOMContentLoaded.
+const olReady = new Promise((resolve, reject) => {
+  const settle = () => (window.ol && window.olms ? resolve(window.ol) : reject(new Error("OpenLayers didn't load")));
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", settle, { once: true }); else settle();
+});
+olReady.catch(() => {});  // each map says so itself (mapUnavailable)
+// The page's live region, for screen readers. A repeated message gets a no-break space so VoiceOver
+// reads it again, and the region is emptied afterwards so a stale message isn't left in browse mode.
+let lastAnnounced = "", announceTimer;
+function announce(message) {
   const live = document.getElementById("live");
+  if (message === lastAnnounced) message += "\u00A0";
+  lastAnnounced = message;
   live.textContent = "";
+  clearTimeout(announceTimer);
   requestAnimationFrame(() => { live.textContent = message; });
+  announceTimer = setTimeout(() => { live.textContent = ""; }, 2000);
 }
 
 // Tiny DOM helper: h("div", {class: "x"}, child, "text", ...). Text is never parsed as HTML.
@@ -202,6 +214,9 @@ function h(tag, attrs, ...children) {
   }
   return el;
 }
+// ol.css from script, not a <link> in <head>: script-added stylesheets don't block rendering.
+const OL_CSS = { href: "https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css", integrity: "sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" };
+document.head.append(h("link", { rel: "stylesheet", ...OL_CSS, crossorigin: "anonymous", referrerpolicy: "no-referrer" }));
 const val = (v) => (v === "" || v === null || v === undefined) ? h("span", { class: "empty" }, "(blank)") : String(v);
 // Opens the position in Google Maps (no key needed for a link).
 const gmaps = (lat, lon) => `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
@@ -542,8 +557,13 @@ function basemapLayer(ol) {
       const src = layer.getSource && layer.getSource();
       if (src && src.setAttributions) src.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
     });
-  });
+  }).catch(() => {});  // no basemap (offline): the markers still show
   return group;
+}
+// Shown in place of a map when OpenLayers couldn't be loaded (offline, or the CDN is blocked).
+function mapUnavailable(el) {
+  el.replaceChildren(h("p", { class: "note map-unavailable" }, "Map unavailable: the map library couldn't be loaded (offline?). The places are listed below, with links to Google Maps."));
+  el.style.height = "auto";
 }
 function olStyles(ol) {
   const S = ol.style, c = (n) => cssVar(n);
@@ -602,7 +622,7 @@ function renderMap(d) {
       const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
       if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
     });
-  }));
+  }), () => mapUnavailable(el));
   return box;
 }
 
@@ -651,7 +671,10 @@ function buildPlaceMap(holder, points) {
       ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration }) }, `Zoom to ${p.label}`)),
       ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
     ].filter(Boolean));
-  }));
+  }), () => {
+    mapUnavailable(el);
+    controls.replaceChildren(...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)));
+  });
 }
 
 // ---------- filters, copy summary ----------
@@ -811,7 +834,7 @@ function placeLines(r) {
 }
 function decisionBox(matcher, dec) {
   return h("div", { class: "decision" },
-    h("h4", {}, label(matcher)),
+    h("h3", {}, label(matcher)),
     dec === null
       ? h("div", { class: "nolink" }, "No link: treats this place as removed")
       : [h("div", {}, h("b", {}, dec.right.name)), placeLines(dec.right),
@@ -829,16 +852,17 @@ function verdictCard(item) {
     saveVerdicts(); renderTabs();
   };
   const options = DIS.matchers.map((m) => [m, `${label(m)} was right`]).concat([["neither", "Both wrong"], ["both", "Both defensible"]]);
+  const headingId = `dis-${idx}-name`;
   card.append(
-    h("h3", {}, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
+    h("h2", { id: headingId }, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
     h("div", { class: "decisions" }, DIS.matchers.map((m) => decisionBox(m, item.decisions[m]))),
-    h("div", { class: "verdict", role: "radiogroup" }, options.map(([key, text]) =>
+    h("div", { class: "verdict", role: "radiogroup", "aria-label": `Who was right about ${item.left.name}` }, options.map(([key, text]) =>
       h("label", {}, h("input", { type: "radio", name, value: key, checked: v.verdict === key, onchange: () => set({ verdict: key }) }), h("span", {}, text)))),
     h("div", { class: "verdict-extra" },
-      h("select", { onchange: (ev) => set({ reason: ev.target.value }) },
+      h("select", { "aria-label": "Reason", "aria-describedby": headingId, onchange: (ev) => set({ reason: ev.target.value }) },
         h("option", { value: "" }, "Reason…"),
         DATA.reasons.map((r) => h("option", { value: r, selected: v.reason === r }, r))),
-      h("textarea", { rows: 1, placeholder: "Note (optional)", oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
+      h("textarea", { rows: 1, placeholder: "Note (optional)", "aria-label": "Note (optional)", "aria-describedby": headingId, oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
   return card;
 }
 function renderDisagreements() {
@@ -850,6 +874,9 @@ function renderDisagreements() {
     DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
   return wrap;
 }
+// Keep scroll-padding-bottom equal to the fixed bar's height, so focused controls aren't hidden under it (WCAG 2.4.11).
+new ResizeObserver(([entry]) => document.documentElement.style.setProperty("--bar-h", `${Math.ceil(entry.target.getBoundingClientRect().height)}px`))
+  .observe(document.getElementById("bar"));
 function updateBar() {
   const bar = document.getElementById("bar");
   if (!DIS || current !== "disagreements") { bar.classList.remove("show"); return; }
