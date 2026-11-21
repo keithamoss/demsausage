@@ -2,13 +2,15 @@
   "add_columns": {
     "ec_id": ""
   },
+  "rename_columns": {
+    "address": "street_address"
+  },
   "address_fields": [
-    "address",
+    "street_address",
     "suburb",
-    "state",
     "postcode"
   ],
-  "address_format": "{address}, {suburb}, {state}, {postcode}",
+  "address_format": "{street_address}, {suburb}, NSW, {postcode}",
   "geocoding": {
     "enabled": false
   }
