@@ -1,0 +1,34 @@
+[project]
+name = "demsausage-linkage"
+version = "0.1.0"
+description = "Record linkage for polling places: decides which places in one dataset are the same as places in another."
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "numpy",
+    "rapidfuzz",
+    "scipy",
+]
+
+[project.optional-dependencies]
+splink = [
+    "splink>=5,<6",
+]
+
+[project.scripts]
+linkage = "linkage.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/linkage"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
