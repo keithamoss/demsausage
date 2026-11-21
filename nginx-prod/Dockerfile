@@ -1,4 +1,4 @@
-FROM nginx:1.23.3-alpine
+FROM nginx:1.26.3-alpine
 LABEL maintainer="<keithamoss@gmail.com>"
 
 # Copy our local nginx config in
