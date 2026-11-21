@@ -90,7 +90,10 @@ def _to_row(record: dict) -> dict:
     address, entrance_desc = _split_address_note(record["Address"])
     return {
         "name": record["Name"],
-        "premises": record["Premises"],
+        # NSWEC's Premises is always identical to Name. Following nsw_kiama_2026, we
+        # leave premises blank: the redesigned frontends fall back to name
+        # (premises || name), and name is required by the model and permalinks.
+        "premises": "",
         "address": address,
         "suburb": record["Locality"],
         "state": "NSW",
