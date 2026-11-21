@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vic_2026 diffs</title>
+<meta name="color-scheme" content="light dark">
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
+  --accent: #5b3fa8; --accent-soft: #efeaf9; --add: #1f7a3d; --add-soft: #e6f4ea;
+  --del: #b3261e; --del-soft: #fbe9e7; --warn: #8a5a00; --warn-soft: #fff3d6; --radius: 10px;
+  color-scheme: light dark;
+  accent-color: var(--accent);
+}
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
+    --accent: #b49cf0; --accent-soft: #2c2540; --add: #7fd39a; --add-soft: #173322;
+    --del: #f2a39c; --del-soft: #3a1c1a; --warn: #f0c46a; --warn-soft: #3a2e12;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 26px 0 8px; }
+.note { color: var(--muted); font-size: 14px; }
+a { color: var(--accent); }
+.pairs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.pair { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+.pair h3 { margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
+.counts-wrap { overflow-x: auto; }
+.counts { border-collapse: collapse; font-size: 13px; width: 100%; }
+.counts th, .counts td { padding: 2px 6px; text-align: right; white-space: nowrap; }
+.counts th { color: var(--muted); font-weight: 400; }
+.counts tbody th { text-align: left; }
+.counts td { font-weight: 600; font-variant-numeric: tabular-nums; }
+.counts tr.total th, .counts tr.total td { border-top: 1px solid var(--border); }
+.tally { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin: 8px 0; }
+.tally h3 { margin: 0 0 6px; font-size: 14px; }
+.pair.quiet summary { cursor: pointer; font-weight: 600; }
+.pair.quiet .pair { margin-top: 8px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.tab { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 13px; font: inherit; cursor: pointer; }
+.tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+input[type=search] { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%; margin: 6px 0 10px; }
+.place { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin: 6px 0; }
+.place h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.events { list-style: none; margin: 0; padding: 0; }
+.events li { display: grid; grid-template-columns: minmax(120px, 210px) 1fr; gap: 10px; padding: 3px 0; border-top: 1px solid var(--border); font-size: 14px; }
+.events li:first-child { border-top: 0; }
+.when { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.kind { font-size: 12px; border-radius: 999px; padding: 1px 7px; margin-right: 6px; }
+.kind.added { background: var(--add-soft); color: var(--add); }
+.kind.removed { background: var(--del-soft); color: var(--del); }
+.kind.changed { background: var(--accent-soft); color: var(--accent); }
+.kind.possible { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 640px) {
+  .counts { font-size: 11.5px; }
+  .counts th, .counts td { padding: 2px 3px; }
+  .events li { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title"></h1>
+  <p class="note">Each pair of consecutive files has a report with one diff per matcher and a tab for recording verdicts where they disagree.</p>
+  <h2>Matcher comparison</h2>
+  <div id="comparison"></div>
+  <h2>Pairs</h2>
+  <div class="pairs" id="pairs"></div>
+  <h2>History by place</h2>
+  <p class="note">Every place that changed at least once, followed from file to file through the chosen matcher's links. Places with the most events come first.</p>
+  <div class="tabs" id="matchers"></div>
+  <input type="search" id="search" aria-label="Filter places by name" placeholder="Filter by name…">
+  <div id="history"></div>
+</main>
+<script type="application/json" id="data">{"title": "vic_2026", "verdict_labels": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "tally_here": {"total": 0, "by_verdict": {}, "by_reason": {}, "elections": []}, "tally_all": {"total": 0, "by_verdict": {}, "by_reason": {}, "elections": []}, "pairs": [{"folder": "20261104-204630-polling-places__20261107-092912-polling-places", "old": "20261104_204630 polling places.csv", "new": "20261107_092912 polling places.csv", "old_label": "Wed 4 Nov 2026, 8:46 pm", "new_label": "Sat 7 Nov 2026, 9:29 am", "records": [1650, 1651], "summaries": {"rapidfuzz": {"unchanged": 1641, "changed": 9, "added": 1, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}, "splink": {"unchanged": 1641, "changed": 9, "added": 1, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}}, "disagreements": 0, "agree": 1650, "left_records": 1650, "old_sha256": "29a778717ff1706a9ac600b0841e01851a29ba30c394b8dd3840fc0e18cfad46", "new_sha256": "b1ff21b3bd4d5a574b64b2069ba068ea4c3517d6b5ebd13f1aa0bef01928c792", "nothing_changed": false, "verdicts": 0}, {"folder": "20261107-092912-polling-places__20261111-124944-polling-places", "old": "20261107_092912 polling places.csv", "new": "20261111_124944 polling places.csv", "old_label": "Sat 7 Nov 2026, 9:29 am", "new_label": "Wed 11 Nov 2026, 12:49 pm", "records": [1651, 1652], "summaries": {"rapidfuzz": {"unchanged": 1649, "changed": 2, "added": 1, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}, "splink": {"unchanged": 1649, "changed": 2, "added": 1, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}}, "disagreements": 0, "agree": 1651, "left_records": 1651, "old_sha256": "b1ff21b3bd4d5a574b64b2069ba068ea4c3517d6b5ebd13f1aa0bef01928c792", "new_sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62", "nothing_changed": false, "verdicts": 0}, {"folder": "20261111-124944-polling-places__20261113-142918-polling-places", "old": "20261111_124944 polling places.csv", "new": "20261113_142918 polling places.csv", "old_label": "Wed 11 Nov 2026, 12:49 pm", "new_label": "Fri 13 Nov 2026, 2:29 pm", "records": [1652, 1652], "summaries": {"rapidfuzz": {"unchanged": 1641, "changed": 11, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 2}, "splink": {"unchanged": 1641, "changed": 11, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 2}}, "disagreements": 0, "agree": 1652, "left_records": 1652, "old_sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62", "new_sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96", "nothing_changed": false, "verdicts": 0}, {"folder": "20261113-142918-polling-places__20261116-123300-polling-places", "old": "20261113_142918 polling places.csv", "new": "20261116_123300 polling places.csv", "old_label": "Fri 13 Nov 2026, 2:29 pm", "new_label": "Mon 16 Nov 2026, 12:33 pm", "records": [1652, 1652], "summaries": {"rapidfuzz": {"unchanged": 1648, "changed": 4, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}, "splink": {"unchanged": 1648, "changed": 4, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 1}}, "disagreements": 0, "agree": 1652, "left_records": 1652, "old_sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96", "new_sha256": "8777bdb1e0171b0243429b51b0748794e9496ace395067d89d5b1b632770191e", "nothing_changed": false, "verdicts": 0}], "matchers": ["rapidfuzz", "splink"], "history": {"rapidfuzz": [{"name": "Heywood (Heywood Community Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access_description"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access_description"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved)"}]}, {"name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "changed", "text": "moved 56 m"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "entrance_desc"}]}, {"name": "Fawkner Park (Christ Church Grammar School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (worse), wheelchair_access_description"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "entrance_desc"}]}, {"name": "Kaniva (Kaniva Senior Citizens Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "added", "text": "added"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Ringwood Heights (Ringwood Heights Primary School)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "added", "text": "added"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "name, est_ordinary_votes, est_absent_votes"}]}, {"name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "changed", "text": "moved 11 m"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access_description"}]}, {"name": "Brunswick North (Brunswick North Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "entrance_desc, moved 142 m"}]}, {"name": "Bulmans (St Francis Catholic College Melton)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "address"}]}, {"name": "Curtain (Fitzroy High School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Greenvale South (Greenvale Recreation Centre)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "moved 5 m"}]}, {"name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Community Hall)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "premises"}]}, {"name": "Kensington (Kensington Primary School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "moved 13 m"}]}, {"name": "Kooyong (St Kevin's College)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Little River (Little River Primary School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "est_absent_votes"}]}, {"name": "Magpie (Magpie Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access_description"}]}, {"name": "Mickleham South (North Victorian Buddhist Association)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (worse), wheelchair_access_description"}]}, {"name": "Murrabit (Murrabit Group School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (improved)"}]}, {"name": "Nhill (Nhill Uniting Church Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "est_ordinary_votes"}]}, {"name": "Officer Central (Kurrun Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "moved 66 m"}]}, {"name": "Tatura (Tatura Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "address, entrance_desc"}]}, {"name": "Walwa (Walwa Servicemen's Memorial Hall)", "events": [{"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}], "splink": [{"name": "Heywood (Heywood Community Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access_description"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access_description"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved)"}]}, {"name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "changed", "text": "moved 56 m"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "entrance_desc"}]}, {"name": "Fawkner Park (Christ Church Grammar School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (worse), wheelchair_access_description"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "entrance_desc"}]}, {"name": "Kaniva (Kaniva Senior Citizens Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "added", "text": "added"}, {"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Ringwood Heights (Ringwood Heights Primary School)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "added", "text": "added"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "name, est_ordinary_votes, est_absent_votes"}]}, {"name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "events": [{"when": "Wed 11 Nov 2026, 12:49 pm", "pair": "20261107-092912-polling-places__20261111-124944-polling-places", "kind": "changed", "text": "moved 11 m"}, {"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access_description"}]}, {"name": "Brunswick North (Brunswick North Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "entrance_desc, moved 142 m"}]}, {"name": "Bulmans (St Francis Catholic College Melton)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "address"}]}, {"name": "Curtain (Fitzroy High School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Greenvale South (Greenvale Recreation Centre)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "moved 5 m"}]}, {"name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Community Hall)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "premises"}]}, {"name": "Kensington (Kensington Primary School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "moved 13 m"}]}, {"name": "Kooyong (St Kevin's College)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}, {"name": "Little River (Little River Primary School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "est_absent_votes"}]}, {"name": "Magpie (Magpie Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "wheelchair_access_description"}]}, {"name": "Mickleham South (North Victorian Buddhist Association)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (worse), wheelchair_access_description"}]}, {"name": "Murrabit (Murrabit Group School)", "events": [{"when": "Fri 13 Nov 2026, 2:29 pm", "pair": "20261111-124944-polling-places__20261113-142918-polling-places", "kind": "changed", "text": "wheelchair_access (improved)"}]}, {"name": "Nhill (Nhill Uniting Church Hall)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "est_ordinary_votes"}]}, {"name": "Officer Central (Kurrun Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "moved 66 m"}]}, {"name": "Tatura (Tatura Primary School)", "events": [{"when": "Sat 7 Nov 2026, 9:29 am", "pair": "20261104-204630-polling-places__20261107-092912-polling-places", "kind": "changed", "text": "address, entrance_desc"}]}, {"name": "Walwa (Walwa Servicemen's Memorial Hall)", "events": [{"when": "Mon 16 Nov 2026, 12:33 pm", "pair": "20261113-142918-polling-places__20261116-123300-polling-places", "kind": "changed", "text": "wheelchair_access (improved), wheelchair_access_description"}]}]}}</script>
+<script>
+"use strict";
+const DATA = JSON.parse(document.getElementById("data").textContent);
+const label = (m) => ({ rapidfuzz: "rapidfuzz", splink: "Splink" }[m] || m);
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else el.setAttribute(k, v);
+  }
+  for (const c of children.flat(Infinity)) if (c !== null && c !== undefined && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+document.getElementById("title").textContent = document.title;
+
+// ---- matcher comparison: disagreements per pair + verdict tallies (from linkage/verdicts) ----
+function tallyBlock(title, t) {
+  if (!t.total) return h("p", { class: "note" }, `${title}: no verdicts recorded yet.`);
+  const order = ["rapidfuzz", "splink", "neither", "both"];
+  return h("div", { class: "tally" },
+    h("h3", {}, `${title}: ${t.total} verdict${t.total === 1 ? "" : "s"}`),
+    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", {}, "Reason"), order.map((k) => h("th", { scope: "col" }, DATA.verdict_labels[k])))),
+      h("tbody", {},
+        Object.entries(t.by_reason).map(([reason, c]) => h("tr", {}, h("th", { scope: "row" }, reason), order.map((k) => h("td", {}, c[k] || 0)))),
+        h("tr", { class: "total" }, h("th", { scope: "row" }, "All"), order.map((k) => h("td", {}, t.by_verdict[k] || 0)))))));
+}
+{
+  const withDis = DATA.pairs.filter((p) => p.disagreements);
+  const places = withDis.reduce((n, p) => n + p.disagreements, 0);
+  document.getElementById("comparison").replaceChildren(
+    h("p", { class: "note" }, DATA.pairs.some((p) => p.disagreements !== null)
+      ? (places ? `The two matchers disagreed on ${places} place${places === 1 ? "" : "s"} across ${withDis.length} of ${DATA.pairs.length} pairs. Record verdicts in each report's Disagreements tab, then import them (uv run linkage verdicts import FILE).`
+                : `The two matchers agreed on every place in all ${DATA.pairs.length} pairs.`)
+      : "Only one matcher was run, so there's nothing to compare."),
+    tallyBlock("This election", DATA.tally_here),
+    tallyBlock("All elections", DATA.tally_all));
+}
+
+const COLS = [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible"], ["likely_replacements", "Replaced"], ["warnings", "Warnings"]];
+function pairCard(p) {
+  return h("div", { class: "pair" },
+    h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old_label} → ${p.new_label}`)),
+    h("div", { class: "note" }, `${p.old} → ${p.new} · ${p.records[0]} → ${p.records[1]} places`,
+      p.disagreements === null ? "" : p.disagreements ? ` · ${p.disagreements} disagreement${p.disagreements === 1 ? "" : "s"}, ${p.verdicts} verdict${p.verdicts === 1 ? "" : "s"} recorded` : " · matchers agree"),
+    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", {}), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),
+      h("tbody", {}, Object.entries(p.summaries).map(([m, s]) =>
+        h("tr", {}, h("th", { scope: "row" }, label(m)), COLS.map(([k]) => h("td", {}, s[k] ?? 0))))))));
+}
+// Runs of consecutive pairs with no changes fold into one line.
+const groups = [];
+for (const p of DATA.pairs) {
+  const last = groups[groups.length - 1];
+  if (p.nothing_changed && last && last.quiet) last.pairs.push(p);
+  else groups.push({ quiet: p.nothing_changed, pairs: [p] });
+}
+document.getElementById("pairs").replaceChildren(...groups.map((g) => {
+  if (!g.quiet) return g.pairs.map(pairCard);
+  const a = g.pairs[0], b = g.pairs[g.pairs.length - 1];
+  return h("details", { class: "pair quiet" },
+    h("summary", {}, `${g.pairs.length} scrape${g.pairs.length === 1 ? "" : "s"} with no changes`, h("span", { class: "note" }, ` · ${a.old_label} → ${b.new_label}`)),
+    g.pairs.map(pairCard));
+}).flat());
+
+let matcher = DATA.matchers[0];
+function renderHistory() {
+  document.getElementById("matchers").replaceChildren(...DATA.matchers.map((m) =>
+    h("button", { type: "button", class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  const places = (DATA.history[matcher] || []).filter((p) => !q || (p.name || "").toLowerCase().includes(q));
+  document.getElementById("history").replaceChildren(
+    places.length ? h("div", {}, places.map((p) => h("div", { class: "place" },
+      h("h3", {}, p.name || "(unnamed)"),
+      h("ul", { class: "events" }, p.events.map((e) => h("li", {},
+        h("a", { class: "when", href: `${encodeURIComponent(e.pair)}/report.html` }, e.when),
+        h("span", {}, h("span", { class: "kind " + e.kind }, e.kind), e.text))))))) : h("p", { class: "note" }, "No places changed."));
+}
+document.getElementById("search").addEventListener("input", renderHistory);
+renderHistory();
+</script>
+</body>
+</html>

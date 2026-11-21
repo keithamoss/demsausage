@@ -1,0 +1,52 @@
+name: Linkage and diff tests
+
+# Tests for the record linkage (linkage/) and scraper diff (diff/) packages.
+# The diff imports the loader's rules from django/ without Django, so changes
+# there run these tests too. The Django suite itself runs in the CI/CD workflows.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "linkage/**"
+      - "diff/**"
+      - "django/demsausage/app/sausage/loader_rules.py"
+      - "django/demsausage/app/enums.py"
+      - "django/demsausage/numbers.py"
+      - ".github/workflows/linkage_diff_tests.yml"
+  pull_request:
+    paths:
+      - "linkage/**"
+      - "diff/**"
+      - "django/demsausage/app/sausage/loader_rules.py"
+      - "django/demsausage/app/enums.py"
+      - "django/demsausage/numbers.py"
+      - ".github/workflows/linkage_diff_tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [linkage, diff]
+    defaults:
+      run:
+        working-directory: ${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "${{ matrix.package }}/uv.lock"
+
+      - name: Install
+        run: uv sync --locked --all-extras
+
+      - name: Test
+        run: uv run pytest -q
