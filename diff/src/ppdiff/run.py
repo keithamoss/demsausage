@@ -74,6 +74,17 @@ def disagreements(old: Dataset, new: Dataset, link_output: dict[str, Any], elect
     }
 
 
+def loader_renames(out_dir: Path) -> dict[str, str]:
+    """rename_columns from the election's config.json (beside the diffs folder), if any."""
+    config = out_dir.resolve().parent / "config.json"
+    if not config.exists():
+        return {}
+    try:
+        return json.loads(config.read_text()).get("rename_columns") or {}
+    except json.JSONDecodeError:
+        return {}
+
+
 def run_pair(
     old: Path,
     new: Path,
@@ -89,7 +100,7 @@ def run_pair(
     target.mkdir(parents=True, exist_ok=True)
     (target / "link.json").write_text(json.dumps(link_output, separators=(",", ":")))
     for r in link_output["results"]:
-        diff = build_diff(left, right, LinkResult.from_dict(r), link_output, ignore)
+        diff = build_diff(left, right, LinkResult.from_dict(r), link_output, ignore, loader_renames(out_dir))
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)

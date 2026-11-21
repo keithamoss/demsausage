@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "created_at": "2026-11-21T09:47:33+00:00",
+  "schema_version": 3,
+  "created_at": "2026-11-21T09:55:04+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -102,68 +102,8 @@
     "warnings": 0,
     "quality_issues": 2
   },
+  "nothing_changed": false,
   "changed": [
-    {
-      "old_index": 696,
-      "new_index": 696,
-      "name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
-      "old_name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
-      "changes": [
-        {
-          "field": "entrance_desc",
-          "old": "Access via Gate 13",
-          "new": "Access via gates 18 and 19",
-          "category": "entrance"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Fairy Hills",
-        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
-        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
-        "lat": "-37.7722762494479",
-        "lon": "145.04426721790173",
-        "state": "VIC",
-        "divisions": "Ivanhoe",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
-        "entrance_desc": "Access via Gate 13",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
-        "host_district": "Ivanhoe",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1094",
-        "est_absent_votes": "113"
-      },
-      "new": {
-        "name": "Fairy Hills",
-        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
-        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
-        "lat": "-37.7722762494479",
-        "lon": "145.04426721790173",
-        "state": "VIC",
-        "divisions": "Ivanhoe",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
-        "entrance_desc": "Access via gates 18 and 19",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
-        "host_district": "Ivanhoe",
-        "est_ordinary_votes": "1094",
-        "est_absent_votes": "113"
-      }
-    },
     {
       "old_index": 1288,
       "new_index": 1288,
@@ -233,6 +173,138 @@
       }
     },
     {
+      "old_index": 719,
+      "new_index": 719,
+      "name": "Mickleham South (North Victorian Buddhist Association)",
+      "old_name": "Mickleham South (North Victorian Buddhist Association)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "Full",
+          "new": "None",
+          "category": "accessibility",
+          "direction": "worse"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+          "category": "accessibility"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Mickleham South",
+        "premises": "North Victorian Buddhist Association",
+        "address": "1690 Mickleham Road, Mickleham VIC 3064",
+        "lat": "-37.577074672386125",
+        "lon": "144.87587341755918",
+        "state": "VIC",
+        "divisions": "Kalkallo",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde",
+        "host_district": "Kalkallo",
+        "is_early_voting_centre": "1",
+        "est_ordinary_votes": "773",
+        "est_absent_votes": "126"
+      },
+      "new": {
+        "name": "Mickleham South",
+        "premises": "North Victorian Buddhist Association",
+        "address": "1690 Mickleham Road, Mickleham VIC 3064",
+        "lat": "-37.577074672386125",
+        "lon": "144.87587341755918",
+        "state": "VIC",
+        "divisions": "Kalkallo",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde",
+        "host_district": "Kalkallo",
+        "est_ordinary_votes": "773",
+        "est_absent_votes": "126"
+      }
+    },
+    {
+      "old_index": 877,
+      "new_index": 877,
+      "name": "Kensington (Kensington Primary School)",
+      "old_name": "Kensington (Kensington Primary School)",
+      "changes": [],
+      "location": {
+        "old": [
+          -37.792839018551895,
+          144.92760458469215
+        ],
+        "new": [
+          -37.7929579527909,
+          144.92760458501957
+        ],
+        "moved_m": 13.2
+      },
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 13.2,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Kensington",
+        "premises": "Kensington Primary School",
+        "address": "62-74 McCracken Street, Kensington VIC 3031",
+        "lat": "-37.792839018551895",
+        "lon": "144.92760458469215",
+        "state": "VIC",
+        "divisions": "Melbourne, Essendon",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5",
+        "host_district": "Melbourne",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1837",
+        "est_absent_votes": "189"
+      },
+      "new": {
+        "name": "Kensington",
+        "premises": "Kensington Primary School",
+        "address": "62-74 McCracken Street, Kensington VIC 3031",
+        "lat": "-37.7929579527909",
+        "lon": "144.92760458501957",
+        "state": "VIC",
+        "divisions": "Melbourne, Essendon",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5",
+        "host_district": "Melbourne",
+        "est_ordinary_votes": "1837",
+        "est_absent_votes": "189"
+      }
+    },
+    {
       "old_index": 657,
       "new_index": 657,
       "name": "Greenvale South (Greenvale Recreation Centre)",
@@ -294,6 +366,143 @@
         "host_district": "Greenvale",
         "est_ordinary_votes": "901",
         "est_absent_votes": "187"
+      }
+    },
+    {
+      "old_index": 1579,
+      "new_index": 1579,
+      "name": "Ringwood Heights (Ringwood Heights Primary School)",
+      "old_name": "Ringwood Heights Primary School (Ringwood Heights Primary School)",
+      "changes": [
+        {
+          "field": "name",
+          "old": "Ringwood Heights Primary School",
+          "new": "Ringwood Heights",
+          "category": "name"
+        },
+        {
+          "field": "est_ordinary_votes",
+          "old": "",
+          "new": "600",
+          "category": "votes"
+        },
+        {
+          "field": "est_absent_votes",
+          "old": "",
+          "new": "58",
+          "category": "votes"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 0.9097,
+        "via": "matcher",
+        "explain": {
+          "name": 0.681,
+          "premises": 1.0,
+          "address": 1.0,
+          "geo": 1.0,
+          "divisions": 1.0,
+          "distance_m": 0.0
+        }
+      },
+      "old": {
+        "name": "Ringwood Heights Primary School",
+        "premises": "Ringwood Heights Primary School",
+        "address": "60 Summit Crescent, Ringwood North VIC 3134",
+        "lat": "-37.80380958458955",
+        "lon": "145.2174396816827",
+        "state": "VIC",
+        "divisions": "Warrandyte",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf",
+        "host_district": "Warrandyte",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "",
+        "est_absent_votes": ""
+      },
+      "new": {
+        "name": "Ringwood Heights",
+        "premises": "Ringwood Heights Primary School",
+        "address": "60 Summit Crescent, Ringwood North VIC 3134",
+        "lat": "-37.80380958458955",
+        "lon": "145.2174396816827",
+        "state": "VIC",
+        "divisions": "Warrandyte",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf",
+        "host_district": "Warrandyte",
+        "est_ordinary_votes": "600",
+        "est_absent_votes": "58"
+      }
+    },
+    {
+      "old_index": 696,
+      "new_index": 696,
+      "name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
+      "old_name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
+      "changes": [
+        {
+          "field": "entrance_desc",
+          "old": "Access via Gate 13",
+          "new": "Access via gates 18 and 19",
+          "category": "entrance"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Fairy Hills",
+        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
+        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
+        "lat": "-37.7722762494479",
+        "lon": "145.04426721790173",
+        "state": "VIC",
+        "divisions": "Ivanhoe",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via Gate 13",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
+        "host_district": "Ivanhoe",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1094",
+        "est_absent_votes": "113"
+      },
+      "new": {
+        "name": "Fairy Hills",
+        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
+        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
+        "lat": "-37.7722762494479",
+        "lon": "145.04426721790173",
+        "state": "VIC",
+        "divisions": "Ivanhoe",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via gates 18 and 19",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
+        "host_district": "Ivanhoe",
+        "est_ordinary_votes": "1094",
+        "est_absent_votes": "113"
       }
     },
     {
@@ -419,70 +628,6 @@
       }
     },
     {
-      "old_index": 877,
-      "new_index": 877,
-      "name": "Kensington (Kensington Primary School)",
-      "old_name": "Kensington (Kensington Primary School)",
-      "changes": [],
-      "location": {
-        "old": [
-          -37.792839018551895,
-          144.92760458469215
-        ],
-        "new": [
-          -37.7929579527909,
-          144.92760458501957
-        ],
-        "moved_m": 13.2
-      },
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 13.2,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Kensington",
-        "premises": "Kensington Primary School",
-        "address": "62-74 McCracken Street, Kensington VIC 3031",
-        "lat": "-37.792839018551895",
-        "lon": "144.92760458469215",
-        "state": "VIC",
-        "divisions": "Melbourne, Essendon",
-        "wheelchair_access": "Assisted",
-        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5",
-        "host_district": "Melbourne",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1837",
-        "est_absent_votes": "189"
-      },
-      "new": {
-        "name": "Kensington",
-        "premises": "Kensington Primary School",
-        "address": "62-74 McCracken Street, Kensington VIC 3031",
-        "lat": "-37.7929579527909",
-        "lon": "144.92760458501957",
-        "state": "VIC",
-        "divisions": "Melbourne, Essendon",
-        "wheelchair_access": "Assisted",
-        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5",
-        "host_district": "Melbourne",
-        "est_ordinary_votes": "1837",
-        "est_absent_votes": "189"
-      }
-    },
-    {
       "old_index": 1605,
       "new_index": 1605,
       "name": "Little River (Little River Primary School)",
@@ -541,74 +686,6 @@
         "host_district": "Werribee",
         "est_ordinary_votes": "516",
         "est_absent_votes": "40"
-      }
-    },
-    {
-      "old_index": 719,
-      "new_index": 719,
-      "name": "Mickleham South (North Victorian Buddhist Association)",
-      "old_name": "Mickleham South (North Victorian Buddhist Association)",
-      "changes": [
-        {
-          "field": "wheelchair_access",
-          "old": "Full",
-          "new": "None",
-          "category": "accessibility",
-          "direction": "worse"
-        },
-        {
-          "field": "wheelchair_access_description",
-          "old": "",
-          "new": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
-          "category": "accessibility"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Mickleham South",
-        "premises": "North Victorian Buddhist Association",
-        "address": "1690 Mickleham Road, Mickleham VIC 3064",
-        "lat": "-37.577074672386125",
-        "lon": "144.87587341755918",
-        "state": "VIC",
-        "divisions": "Kalkallo",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde",
-        "host_district": "Kalkallo",
-        "is_early_voting_centre": "1",
-        "est_ordinary_votes": "773",
-        "est_absent_votes": "126"
-      },
-      "new": {
-        "name": "Mickleham South",
-        "premises": "North Victorian Buddhist Association",
-        "address": "1690 Mickleham Road, Mickleham VIC 3064",
-        "lat": "-37.577074672386125",
-        "lon": "144.87587341755918",
-        "state": "VIC",
-        "divisions": "Kalkallo",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde",
-        "host_district": "Kalkallo",
-        "est_ordinary_votes": "773",
-        "est_absent_votes": "126"
       }
     },
     {
@@ -671,82 +748,6 @@
         "host_district": "Murray Plains",
         "est_ordinary_votes": "191",
         "est_absent_votes": "32"
-      }
-    },
-    {
-      "old_index": 1579,
-      "new_index": 1579,
-      "name": "Ringwood Heights (Ringwood Heights Primary School)",
-      "old_name": "Ringwood Heights Primary School (Ringwood Heights Primary School)",
-      "changes": [
-        {
-          "field": "name",
-          "old": "Ringwood Heights Primary School",
-          "new": "Ringwood Heights",
-          "category": "name"
-        },
-        {
-          "field": "est_ordinary_votes",
-          "old": "",
-          "new": "600",
-          "category": "votes"
-        },
-        {
-          "field": "est_absent_votes",
-          "old": "",
-          "new": "58",
-          "category": "votes"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 0.9097,
-        "via": "matcher",
-        "explain": {
-          "name": 0.681,
-          "premises": 1.0,
-          "address": 1.0,
-          "geo": 1.0,
-          "divisions": 1.0,
-          "distance_m": 0.0
-        }
-      },
-      "old": {
-        "name": "Ringwood Heights Primary School",
-        "premises": "Ringwood Heights Primary School",
-        "address": "60 Summit Crescent, Ringwood North VIC 3134",
-        "lat": "-37.80380958458955",
-        "lon": "145.2174396816827",
-        "state": "VIC",
-        "divisions": "Warrandyte",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf",
-        "host_district": "Warrandyte",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "",
-        "est_absent_votes": ""
-      },
-      "new": {
-        "name": "Ringwood Heights",
-        "premises": "Ringwood Heights Primary School",
-        "address": "60 Summit Crescent, Ringwood North VIC 3134",
-        "lat": "-37.80380958458955",
-        "lon": "145.2174396816827",
-        "state": "VIC",
-        "divisions": "Warrandyte",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf",
-        "host_district": "Warrandyte",
-        "est_ordinary_votes": "600",
-        "est_absent_votes": "58"
       }
     },
     {
@@ -836,9 +837,31 @@
         {
           "new_index": 1468,
           "name": "Heywood (Heywood Community Hall)",
-          "detail": "was: The main entrance"
+          "detail": "was: The main entrance",
+          "old_value": "The main entrance"
         }
       ]
+    }
+  ],
+  "suggested_fixes": [
+    {
+      "new_index": 1468,
+      "name": "Heywood (Heywood Community Hall)",
+      "kind": "blank",
+      "likely": false,
+      "no_fix_needed": false,
+      "reason": "wheelchair_access_description is now blank. If that's a mistake, this keeps the previous value.",
+      "note": null,
+      "fix": {
+        "field": "name",
+        "value": "Heywood",
+        "overwrite": [
+          {
+            "field": "wheelchair_access_description",
+            "value": "The main entrance"
+          }
+        ]
+      }
     }
   ],
   "context_points": [

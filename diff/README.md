@@ -13,7 +13,10 @@ uv run ppdiff run OLD.csv NEW.csv --out-dir ../scrapers/<election>/diffs
 uv run ppdiff series "../scrapers/<election>/data/*.csv" --out-dir ../scrapers/<election>/diffs   # every consecutive pair
 uv run ppdiff report ../scrapers/<election>/diffs/<pair folder>                                    # rebuild report.html only
 uv run ppdiff index ../scrapers/<election>/diffs                                                   # rebuild index.html only
+uv run ppdiff latest "../scrapers/<election>/data/*.csv" --out-dir ../scrapers/<election>/diffs    # newest two only (scrapers call this)
 ```
+
+**Run automatically by scrapers.** `scrapers/nsw_coffs_harbour_2026/scraper.py` calls `ppdiff latest` after writing each CSV, so every scrape leaves a report in its `diffs/` folder (open `diffs/index.html`). `--no-diff` skips it, and a failed diff never fails the scrape. Other scrapers can do the same: copy `diff_against_previous()` from that scraper. Scraper outputs need a timestamp in the file name so same-day scrapes don't overwrite each other.
 
 Options: `--matcher rapidfuzz|splink|both` (default `both`), `--ignore COLUMN` (repeatable), and `--election LABEL`, which defaults to the out-dir's parent folder. `series` skips pairs that already have a report unless you pass `--force`.
 
@@ -44,6 +47,8 @@ A diff contains:
 - **added and removed:** full rows.
 - **columns:** columns added, removed or ignored.
 - **replacements:** a removed place and an added place within 500 m are paired as a likely replacement (a venue swap the matcher rightly didn't link). The removed and added entries point at each other.
+- **suggested_fixes:** draft `fix_data_issues` entries for the election's `config.json`, using the loader's column names after `rename_columns`. Each one puts back the previous value, for a move of 1 km or more or a field gone blank, selecting the place by name (with a warning if the name isn't unique). For big moves it guesses which side is wrong by how isolated each position is from the other polling places. If the old position was the outlier, it says "no fix needed" instead of offering a fix.
+- **nothing_changed:** true when the two files have the same places with the same values.
 - **quality:** checks on the new file. Different places at identical coordinates, coordinates with 3 or fewer decimal places, missing coordinates, and fields that had a value and are now blank.
 - **categories:** each change gets a category (accessibility, entrance, hours, address, name, divisions, votes, other). Wheelchair access changes are marked `improved` or `worse`.
 - **context_points:** every place's coordinates in the new file, used as the map's background.
@@ -57,7 +62,10 @@ A diff contains:
 - **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
 - **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.
-- **Sections:** warnings, possible matches, likely replacements, changed, added, removed, data quality.
+- **Sections:** warnings, suggested config fixes, possible matches, likely replacements, changed, added, removed, data quality. Changed places come biggest first: warnings, then accessibility getting worse, then the largest moves, then the most fields changed. Possible matches come least confident first.
+- **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
+- **Reviewed ticks** on every card, remembered in the browser for that pair of files and shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them.
+- **"No changes"** shown at the top when nothing changed.
 - **Copy summary:** plain text for Slack or a commit message.
 
 ## Recording verdicts

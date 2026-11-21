@@ -81,6 +81,16 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .small-link { font-size: 13px; }
 button.small { font-size: 13px; padding: 3px 10px; }
 .ol-attribution { font-size: 11px; }
+.cardhead { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
+.cardhead h3 { margin: 0 0 4px; }
+label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+.card.reviewed { opacity: .55; }
+.card.reviewed:hover { opacity: 1; }
+.hide-toggle { margin: 0 4px; }
+.allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
+pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; overflow-x: auto; margin: 6px 0; }
+.badge.fixbadge { background: var(--warn-soft); color: var(--warn); }
+.fix-intro { margin-bottom: 4px; }
 .inline-diff { overflow-wrap: anywhere; }
 .inline-diff .old, .inline-diff .new { padding: 0 1px; border-radius: 3px; }
 ins { text-decoration: none; }
@@ -207,6 +217,7 @@ function render() {
   renderTabs();
   const tab = TABS.find((t) => t.id === current);
   document.getElementById("view").replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
+  updateReviewCounts(); applyFilters();
   updateBar();
 }
 
@@ -316,14 +327,45 @@ function entryCategories(e) {
 function directionBadge(c) {
   return c.direction ? h("span", { class: "dir " + c.direction }, c.direction === "improved" ? "▲ improved" : "▼ worse") : null;
 }
+// ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
+const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
+let REVIEWED = (() => { try { return JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) { return {}; } })();
+let hideReviewed = false;
+function setReviewed(key, on) {
+  if (on) REVIEWED[key] = new Date().toISOString(); else delete REVIEWED[key];
+  try { localStorage.setItem(REVIEW_STORE, JSON.stringify(REVIEWED)); } catch (e) {}
+  document.querySelectorAll(`[data-review="${CSS.escape(key)}"]`).forEach((card) => {
+    card.classList.toggle("reviewed", on);
+    const box = card.querySelector(":scope > .cardhead input"); if (box) box.checked = on;
+  });
+  updateReviewCounts(); applyFilters();
+}
+function cardHead(title, key) {
+  return h("div", { class: "cardhead" }, h("h3", {}, title),
+    h("label", { class: "review" }, h("input", { type: "checkbox", checked: Boolean(REVIEWED[key]), onchange: (ev) => setReviewed(key, ev.target.checked) }), "Reviewed"));
+}
+function reviewAttrs(key) { return { "data-review": key, class: "card" + (REVIEWED[key] ? " reviewed" : "") }; }
+function updateReviewCounts() {
+  document.querySelectorAll("#view details.section").forEach((sec) => {
+    const keys = new Set([...sec.querySelectorAll(":scope > .card[data-review], :scope > div > .card[data-review]")].map((c) => c.dataset.review));
+    const done = [...keys].filter((k) => REVIEWED[k]).length;
+    const el = sec.querySelector(":scope > summary .revcount");
+    if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
+  });
+}
+const fixKey = (f) => `fix-${f.kind}-${f.new_index}`;
+function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
+
 function pairCard(e, d) {
-  return h("div", { class: "card", id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
-    h("h3", {}, e.name),
+  const key = `pair-${e.new_index}`, fix = fixFor(d, e.new_index);
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
+    cardHead(e.name, key),
     e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
     h("div", { class: "badges" },
       h("span", { class: "badge" + (e.link.band === "review" ? " review" : "") }, e.link.band === "review" ? "possible match" : "linked"),
       h("span", { class: "badge" }, e.link.via === "exact" ? "exact key" : `score ${e.link.score}`),
-      disagreeBadge(e.old_index, e.new_index)),
+      disagreeBadge(e.old_index, e.new_index),
+      fix ? h("button", { class: "badge fixbadge", onclick: () => goTo(d.matcher, `${d.matcher}-${fixKey(fix)}`) }, fix.no_fix_needed ? "no fix needed ›" : "suggested fix ›") : null),
     e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
     e.changes.map((c) => h("div", { class: "change" },
       h("div", { class: "field" }, c.field, " ", directionBadge(c)),
@@ -336,8 +378,9 @@ function recordCard(e, d, which) {
   const pair = which === "added" ? e.replaces : e.replaced_by;
   const repl = pair === null || pair === undefined ? null
     : d.replacements.find((p) => (which === "added" ? p.new_index === idx : p.old_index === idx));
-  return h("div", { class: "card", id: `${d.matcher}-${which}-${idx}`, "data-search": e.name.toLowerCase(), "data-cats": "" },
-    h("h3", {}, e.name),
+  const key = `${which}-${idx}`;
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${which}-${idx}`, "data-search": e.name.toLowerCase(), "data-cats": "" },
+    cardHead(e.name, key),
     h("div", { class: "badges" },
       repl ? h("button", { class: "badge review", onclick: () => goTo(d.matcher, `${d.matcher}-repl-${repl.old_index}`) },
         `${which === "added" ? "likely replaces" : "likely replaced by"} ${which === "added" ? repl.old_name : repl.new_name} (${fmtM(repl.distance_m)}) ›`) : null,
@@ -349,8 +392,9 @@ function replacementCard(p, d) {
   const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
   const brief = (r) => h("div", {}, h("b", {}, r.name), h("div", { class: "was" }, r.record.address || Object.values(r.record).slice(2, 4).join(", ")),
     r.lat !== null ? h("a", { href: gmaps(r.lat, r.lon), target: "_blank", rel: "noopener" }, "Google Maps") : null);
-  return h("div", { class: "card", id: `${d.matcher}-repl-${p.old_index}`, "data-search": `${p.old_name} ${p.new_name}`.toLowerCase(), "data-cats": "" },
-    h("h3", {}, `${p.old_name} → ${p.new_name}`),
+  const key = `repl-${p.old_index}-${p.new_index}`;
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-repl-${p.old_index}`, "data-search": `${p.old_name} ${p.new_name}`.toLowerCase(), "data-cats": "" },
+    cardHead(`${p.old_name} → ${p.new_name}`, key),
     h("div", { class: "badges" }, h("span", { class: "badge review" }, `${fmtM(p.distance_m)} apart`), disagreeBadge(p.old_index, p.new_index)),
     h("div", { class: "decisions" },
       h("div", { class: "decision" }, h("h4", {}, "Removed"), brief(gone)),
@@ -364,10 +408,23 @@ function qualityCard(q, d) {
     h("ul", {}, q.places.map((p) => h("li", {}, p.name, p.detail ? h("span", { class: "was" }, ` · ${p.detail}`) : null))),
     q.count > q.places.length ? h("p", { class: "note" }, `Showing ${q.places.length} of ${q.count}.`) : null);
 }
-function section(title, items, makeCard, open, extraClass) {
-  return h("details", { class: "section" + (extraClass ? " " + extraClass : ""), open: open && items.length > 0 },
-    h("summary", {}, title, " ", h("span", { class: "count" }, `(${items.length})`)),
-    items.length ? items.map(makeCard) : h("p", { class: "note" }, "None."));
+function section(title, items, makeCard, open, extra) {
+  return h("details", { class: "section", open: open && items.length > 0 },
+    h("summary", {}, title, " ", h("span", { class: "count" }, `(${items.length}`, h("span", { class: "revcount" }), ")")),
+    items.length ? [extra || null, ...items.map(makeCard)] : h("p", { class: "note" }, "None."));
+}
+const fixJSON = (fixes) => JSON.stringify(fixes, null, 4);
+function fixCard(f, d) {
+  const key = fixKey(f);
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${key}`, "data-search": f.name.toLowerCase(), "data-cats": "" },
+    cardHead(f.name, key),
+    h("div", { class: "badges" },
+      f.no_fix_needed ? h("span", { class: "badge" }, "no fix needed") : f.likely ? h("span", { class: "badge review" }, "likely needed") : h("span", { class: "badge" }, "only if the change is wrong"),
+      h("button", { class: "badge", onclick: () => goTo(d.matcher, `${d.matcher}-pair-${f.new_index}`) }, "show the change ›")),
+    h("p", {}, f.reason),
+    f.note ? h("div", { class: "warn" }, "⚠ ", f.note) : null,
+    f.fix ? [h("pre", { class: "fixjson" }, fixJSON(f.fix)),
+             h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(f.fix), ev.currentTarget) }, "Copy fix")] : null);
 }
 
 // ---------- map (inline SVG, works offline) ----------
@@ -517,13 +574,15 @@ function applyFilters() {
   root.querySelectorAll(".card").forEach((c) => {
     const okText = !searchText || (c.dataset.search || "").includes(searchText);
     const okCat = !activeChip || (c.dataset.cats || "").split(" ").includes(activeChip);
-    c.style.display = okText && okCat ? "" : "none";
+    const okReview = !(hideReviewed && c.classList.contains("reviewed"));
+    c.style.display = okText && okCat && okReview ? "" : "none";
   });
 }
 function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
 function summaryText(d) {
   const s = d.summary, lines = [];
   lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
+  if (d.nothing_changed) { lines.push(`No changes: all ${d.new.records} places are the same.`); return lines.join("\n"); }
   lines.push(`${d.new.records} places: ${s.changed} changed, ${s.added} added, ${s.removed} removed, ${s.possible_matches} possible matches, ${s.likely_replacements} likely replacements.`);
   if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
   if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
@@ -547,13 +606,19 @@ function renderDiff(d) {
   const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
   activeChip = null; searchText = "";
   const card = (e) => pairCard(e, d);
+  // Likely-needed fixes first, then "only if wrong", then the "no fix needed" notes.
+  const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
+  const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
     h("div", { class: "tiles" },
       [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"]]
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
+    d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
+      `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
     renderMap(d),
     h("div", { class: "toolbar" },
       h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
     cats.length ? h("div", { class: "chips" },
       h("button", { class: "chip", "aria-pressed": "true", onclick: () => setChip(null) }, "All changes"),
@@ -562,6 +627,10 @@ function renderDiff(d) {
       ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
       : null,
     section("Warnings", warned, card, true),
+    section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
+      h("div", { class: "fix-intro" },
+        h("p", { class: "note" }, "Drafts for the fix_data_issues list in this election's config.json. Check the map before using one: each keeps the previous value, which is only right if the new file is wrong."),
+        copyable.length ? h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(copyable.map((f) => f.fix)), ev.currentTarget) }, `Copy all ${copyable.length} as a list`) : null)),
     section("Possible matches (review band)", d.possible_matches, card, true),
     section("Likely replacements (removed + added nearby)", d.replacements, (p) => replacementCard(p, d), true),
     section("Changed", d.changed, card, true),

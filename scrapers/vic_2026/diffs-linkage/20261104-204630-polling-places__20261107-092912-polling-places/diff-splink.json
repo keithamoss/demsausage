@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "created_at": "2026-11-21T09:47:32+00:00",
+  "schema_version": 3,
+  "created_at": "2026-11-21T09:55:02+00:00",
   "matcher": "splink",
   "matcher_params": {
     "auto_threshold": 0.95,
@@ -117,6 +117,7 @@
     "warnings": 0,
     "quality_issues": 1
   },
+  "nothing_changed": false,
   "changed": [
     {
       "old_index": 234,
@@ -191,65 +192,68 @@
       }
     },
     {
-      "old_index": 886,
-      "new_index": 887,
-      "name": "Bulmans (St Francis Catholic College Melton)",
-      "old_name": "Bulmans (St Francis Catholic College Melton)",
-      "changes": [
-        {
-          "field": "address",
-          "old": "109-141 Bulmans Road, Melton VIC 3337",
-          "new": "109-141 Bulmans Road, Melton West VIC 3337",
-          "category": "address"
-        }
-      ],
-      "location": null,
+      "old_index": 1215,
+      "new_index": 1216,
+      "name": "Officer Central (Kurrun Primary School)",
+      "old_name": "Officer Central (Kurrun Primary School)",
+      "changes": [],
+      "location": {
+        "old": [
+          -38.069601,
+          145.405358
+        ],
+        "new": [
+          -38.07015048990286,
+          145.4050790509173
+        ],
+        "moved_m": 65.8
+      },
       "warnings": [],
       "link": {
         "band": "auto",
         "score": 1.0,
         "via": "exact",
         "explain": {
-          "distance_m": 0.0,
-          "same_address": false,
+          "distance_m": 65.8,
+          "same_address": true,
           "same_premises": true
         }
       },
       "old": {
-        "name": "Bulmans",
-        "premises": "St Francis Catholic College Melton",
-        "address": "109-141 Bulmans Road, Melton VIC 3337",
-        "lat": "-37.67797221646729",
-        "lon": "144.55077361507733",
+        "name": "Officer Central",
+        "premises": "Kurrun Primary School",
+        "address": "22 Allsburg Avenue, Officer VIC 3809",
+        "lat": "-38.069601",
+        "lon": "145.405358",
         "state": "VIC",
-        "divisions": "Melton",
+        "divisions": "Pakenham",
         "wheelchair_access": "Full",
         "wheelchair_access_description": "",
-        "entrance_desc": "Access vis Gate 1",
+        "entrance_desc": "",
         "opening_hours": "8am to 6pm",
-        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
-        "host_district": "Melton",
+        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
+        "host_district": "Pakenham",
         "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1479",
-        "est_absent_votes": "141"
+        "est_ordinary_votes": "1044",
+        "est_absent_votes": "192"
       },
       "new": {
-        "name": "Bulmans",
-        "premises": "St Francis Catholic College Melton",
-        "address": "109-141 Bulmans Road, Melton West VIC 3337",
-        "lat": "-37.67797221646729",
-        "lon": "144.55077361507733",
+        "name": "Officer Central",
+        "premises": "Kurrun Primary School",
+        "address": "22 Allsburg Avenue, Officer VIC 3809",
+        "lat": "-38.07015048990286",
+        "lon": "145.4050790509173",
         "state": "VIC",
-        "divisions": "Melton",
+        "divisions": "Pakenham",
         "wheelchair_access": "Full",
         "wheelchair_access_description": "",
-        "entrance_desc": "Access vis Gate 1",
+        "entrance_desc": "",
         "opening_hours": "8am to 6pm",
-        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
-        "host_district": "Melton",
+        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
+        "host_district": "Pakenham",
         "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1479",
-        "est_absent_votes": "141"
+        "est_ordinary_votes": "1044",
+        "est_absent_votes": "192"
       }
     },
     {
@@ -322,68 +326,6 @@
       }
     },
     {
-      "old_index": 1467,
-      "new_index": 1468,
-      "name": "Heywood (Heywood Community Hall)",
-      "old_name": "Heywood (Heywood Community Hall)",
-      "changes": [
-        {
-          "field": "wheelchair_access_description",
-          "old": "",
-          "new": "The main entrance",
-          "category": "accessibility"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Heywood",
-        "premises": "Heywood Community Hall",
-        "address": "20 Edgar Street, Heywood VIC 3304",
-        "lat": "-38.13419045778523",
-        "lon": "141.62986480631758",
-        "state": "VIC",
-        "divisions": "South-West Coast",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
-        "host_district": "South-West Coast",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "770",
-        "est_absent_votes": "37"
-      },
-      "new": {
-        "name": "Heywood",
-        "premises": "Heywood Community Hall",
-        "address": "20 Edgar Street, Heywood VIC 3304",
-        "lat": "-38.13419045778523",
-        "lon": "141.62986480631758",
-        "state": "VIC",
-        "divisions": "South-West Coast",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "The main entrance",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
-        "host_district": "South-West Coast",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "770",
-        "est_absent_votes": "37"
-      }
-    },
-    {
       "old_index": 867,
       "new_index": 868,
       "name": "Kooyong (St Kevin's College)",
@@ -450,6 +392,198 @@
         "is_early_voting_centre": "0",
         "est_ordinary_votes": "540",
         "est_absent_votes": "281"
+      }
+    },
+    {
+      "old_index": 1444,
+      "new_index": 1445,
+      "name": "Tatura (Tatura Primary School)",
+      "old_name": "Tatura (Tatura Primary School)",
+      "changes": [
+        {
+          "field": "address",
+          "old": "33 Service Street, Tatura VIC 3616",
+          "new": "Corner Service Street and Albert Street, Tatura VIC 3616",
+          "category": "address"
+        },
+        {
+          "field": "entrance_desc",
+          "old": "",
+          "new": "Access via Service Street",
+          "category": "entrance"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": false,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Tatura",
+        "premises": "Tatura Primary School",
+        "address": "33 Service Street, Tatura VIC 3616",
+        "lat": "-36.443723827141184",
+        "lon": "145.2292116498774",
+        "state": "VIC",
+        "divisions": "Shepparton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
+        "host_district": "Shepparton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1386",
+        "est_absent_votes": "169"
+      },
+      "new": {
+        "name": "Tatura",
+        "premises": "Tatura Primary School",
+        "address": "Corner Service Street and Albert Street, Tatura VIC 3616",
+        "lat": "-36.443723827141184",
+        "lon": "145.2292116498774",
+        "state": "VIC",
+        "divisions": "Shepparton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access via Service Street",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
+        "host_district": "Shepparton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1386",
+        "est_absent_votes": "169"
+      }
+    },
+    {
+      "old_index": 886,
+      "new_index": 887,
+      "name": "Bulmans (St Francis Catholic College Melton)",
+      "old_name": "Bulmans (St Francis Catholic College Melton)",
+      "changes": [
+        {
+          "field": "address",
+          "old": "109-141 Bulmans Road, Melton VIC 3337",
+          "new": "109-141 Bulmans Road, Melton West VIC 3337",
+          "category": "address"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": false,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Bulmans",
+        "premises": "St Francis Catholic College Melton",
+        "address": "109-141 Bulmans Road, Melton VIC 3337",
+        "lat": "-37.67797221646729",
+        "lon": "144.55077361507733",
+        "state": "VIC",
+        "divisions": "Melton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access vis Gate 1",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
+        "host_district": "Melton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1479",
+        "est_absent_votes": "141"
+      },
+      "new": {
+        "name": "Bulmans",
+        "premises": "St Francis Catholic College Melton",
+        "address": "109-141 Bulmans Road, Melton West VIC 3337",
+        "lat": "-37.67797221646729",
+        "lon": "144.55077361507733",
+        "state": "VIC",
+        "divisions": "Melton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access vis Gate 1",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
+        "host_district": "Melton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1479",
+        "est_absent_votes": "141"
+      }
+    },
+    {
+      "old_index": 1467,
+      "new_index": 1468,
+      "name": "Heywood (Heywood Community Hall)",
+      "old_name": "Heywood (Heywood Community Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "The main entrance",
+          "category": "accessibility"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      },
+      "new": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "The main entrance",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
       }
     },
     {
@@ -575,139 +709,6 @@
         "est_ordinary_votes": "1550",
         "est_absent_votes": "40"
       }
-    },
-    {
-      "old_index": 1215,
-      "new_index": 1216,
-      "name": "Officer Central (Kurrun Primary School)",
-      "old_name": "Officer Central (Kurrun Primary School)",
-      "changes": [],
-      "location": {
-        "old": [
-          -38.069601,
-          145.405358
-        ],
-        "new": [
-          -38.07015048990286,
-          145.4050790509173
-        ],
-        "moved_m": 65.8
-      },
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 65.8,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Officer Central",
-        "premises": "Kurrun Primary School",
-        "address": "22 Allsburg Avenue, Officer VIC 3809",
-        "lat": "-38.069601",
-        "lon": "145.405358",
-        "state": "VIC",
-        "divisions": "Pakenham",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
-        "host_district": "Pakenham",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1044",
-        "est_absent_votes": "192"
-      },
-      "new": {
-        "name": "Officer Central",
-        "premises": "Kurrun Primary School",
-        "address": "22 Allsburg Avenue, Officer VIC 3809",
-        "lat": "-38.07015048990286",
-        "lon": "145.4050790509173",
-        "state": "VIC",
-        "divisions": "Pakenham",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
-        "host_district": "Pakenham",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1044",
-        "est_absent_votes": "192"
-      }
-    },
-    {
-      "old_index": 1444,
-      "new_index": 1445,
-      "name": "Tatura (Tatura Primary School)",
-      "old_name": "Tatura (Tatura Primary School)",
-      "changes": [
-        {
-          "field": "address",
-          "old": "33 Service Street, Tatura VIC 3616",
-          "new": "Corner Service Street and Albert Street, Tatura VIC 3616",
-          "category": "address"
-        },
-        {
-          "field": "entrance_desc",
-          "old": "",
-          "new": "Access via Service Street",
-          "category": "entrance"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": false,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Tatura",
-        "premises": "Tatura Primary School",
-        "address": "33 Service Street, Tatura VIC 3616",
-        "lat": "-36.443723827141184",
-        "lon": "145.2292116498774",
-        "state": "VIC",
-        "divisions": "Shepparton",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
-        "host_district": "Shepparton",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1386",
-        "est_absent_votes": "169"
-      },
-      "new": {
-        "name": "Tatura",
-        "premises": "Tatura Primary School",
-        "address": "Corner Service Street and Albert Street, Tatura VIC 3616",
-        "lat": "-36.443723827141184",
-        "lon": "145.2292116498774",
-        "state": "VIC",
-        "divisions": "Shepparton",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "Access via Service Street",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
-        "host_district": "Shepparton",
-        "is_early_voting_centre": "0",
-        "est_ordinary_votes": "1386",
-        "est_absent_votes": "169"
-      }
     }
   ],
   "possible_matches": [],
@@ -754,6 +755,7 @@
       ]
     }
   ],
+  "suggested_fixes": [],
   "context_points": [
     [
       -37.84136,

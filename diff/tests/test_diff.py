@@ -176,3 +176,76 @@ def test_index_follows_a_place_across_the_series(pair):
     assert places["Gamma Church"] == ["changed:moved 111.2 km", "changed:moved 111.2 km"]
     assert places["Epsilon Centre"] == ["added:added"]
     assert places["Delta Library"] == ["removed:removed"]
+
+
+def _town(prefix, lat, lon, n=4):
+    """A small cluster of places around a town centre."""
+    return [_row(f"{prefix} Hall {i}", lat + 0.002 * i, lon + 0.002 * i, address=f"{i} {prefix} St") for i in range(n)]
+
+
+def _typo_files(root):
+    good = _town("Northam", -31.656, 116.671) + _town("York", -31.888, 116.770)
+    typo = [dict(r) for r in good]
+    typo[0]["lat"] = "-32.656000"  # latitude off by one degree, far from every other place
+    return good, typo
+
+
+def test_suggested_fix_when_new_file_has_the_typo(tmp_path):
+    good, typo = _typo_files(tmp_path)
+    (tmp_path / "data").mkdir()
+    old = _write(tmp_path / "data" / "20260101 a.csv", good)
+    new = _write(tmp_path / "data" / "20260102 b.csv", typo)
+    d = json.loads((run_pair(old, new, tmp_path / "e" / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
+    assert fix["likely"] and not fix["no_fix_needed"]
+    assert fix["fix"] == {
+        "field": "name", "value": "Northam Hall 0",
+        "overwrite": [{"field": "lat", "value": -31.656}, {"field": "lon", "value": 116.671}],
+    }
+    assert d["changed"][0]["name"] == "Northam Hall 0"  # biggest change first
+
+
+def test_no_fix_needed_when_new_file_corrects_the_typo(tmp_path):
+    good, typo = _typo_files(tmp_path)
+    (tmp_path / "data").mkdir()
+    old = _write(tmp_path / "data" / "20260101 a.csv", typo)
+    new = _write(tmp_path / "data" / "20260102 b.csv", good)
+    d = json.loads((run_pair(old, new, tmp_path / "e" / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
+    assert fix["no_fix_needed"] and fix["fix"] is None
+
+
+def test_fix_fields_use_the_loaders_renamed_columns(tmp_path):
+    good, typo = _typo_files(tmp_path)
+    renamed = lambda rows: [{"PPName": r["name"], "premises": r["premises"], "address": r["address"], "Lat": r["lat"], "Long": r["lon"]} for r in rows]
+    election = tmp_path / "fed"
+    (election / "data").mkdir(parents=True)
+    (election / "config.json").write_text(json.dumps({"rename_columns": {"PPName": "name", "Lat": "lat", "Long": "lon"}}))
+    def write(path, rows):
+        with open(path, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=["PPName", "premises", "address", "Lat", "Long"]); w.writeheader(); w.writerows(rows)
+        return path
+    old = write(election / "data" / "20260101 a.csv", renamed(good))
+    new = write(election / "data" / "20260102 b.csv", renamed(typo))
+    d = json.loads((run_pair(old, new, election / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
+    assert fix["fix"]["field"] == "name" and [o["field"] for o in fix["fix"]["overwrite"]] == ["lat", "lon"]
+
+
+def test_nothing_changed_flag_and_latest_command(tmp_path, capsys):
+    from ppdiff.cli import main
+
+    (tmp_path / "data").mkdir()
+    rows = _town("Coffs", -30.29, 153.11)
+    _write(tmp_path / "data" / "20260101 a.csv", rows)
+    _write(tmp_path / "data" / "20260102 b.csv", rows)
+    _write(tmp_path / "data" / "20260103 c.csv", rows)
+    out = tmp_path / "diffs"
+    assert main(["latest", str(tmp_path / "data" / "*.csv"), "--out-dir", str(out), "--matcher", "rapidfuzz"]) == 0
+    folders = [p.name for p in out.iterdir() if p.is_dir()]
+    assert folders == ["20260102-b__20260103-c"]  # only the newest pair
+    d = json.loads((out / folders[0] / "diff-rapidfuzz.json").read_text())
+    assert d["nothing_changed"] is True
+    capsys.readouterr()
+    main(["latest", str(tmp_path / "data" / "*.csv"), "--out-dir", str(out), "--matcher", "rapidfuzz"])
+    assert "already done" in capsys.readouterr().out

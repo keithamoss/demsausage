@@ -18,7 +18,7 @@ from linkage.result import Link, LinkResult
 
 from .names import friendly_label
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 #: Coordinate changes smaller than this are float noise ("-30.3344050" vs "-30.334405").
 MIN_MOVE_M = 1.0
@@ -228,10 +228,127 @@ def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[
         a, b = old.records[link.left].raw, new.records[link.right].raw
         for column, value in a.items():
             if column in b and (value or "").strip() and not (b[column] or "").strip():
-                blanked.setdefault(column, []).append({"new_index": link.right, "name": new.records[link.right].label(), "detail": f"was: {value}"})
+                blanked.setdefault(column, []).append(
+                    {"new_index": link.right, "name": new.records[link.right].label(), "detail": f"was: {value}", "old_value": value}
+                )
     for column, places in sorted(blanked.items()):
         add(f"newly_blank:{column}", f"{column} is now blank", places)
     return checks
+
+
+def _schema(column: str | None, rename: dict[str, str]) -> str | None:
+    """The column's name after the loader's rename_columns (fix_data_issues runs after renaming)."""
+    return None if column is None else rename.get(column, column)
+
+
+def suggested_fixes(
+    old: Dataset, new: Dataset, changed: list[dict[str, Any]], quality: list[dict[str, Any]], rename: dict[str, str]
+) -> list[dict[str, Any]]:
+    """Draft fix_data_issues entries for the loader's config.json, for problems a human confirms.
+
+    Each fix selects the place by name in the new file and puts back the previous
+    value. They are suggestions: only copy one in after checking the map.
+    """
+    name_col, lat_col, lon_col = new.columns.name, new.columns.lat, new.columns.lon
+    name_counts: dict[str, int] = {}
+    for r in new.records:
+        value = r.raw.get(name_col, "")
+        name_counts[value] = name_counts.get(value, 0) + 1
+
+    def selector(new_index: int) -> tuple[dict[str, str], str | None]:
+        value = new.records[new_index].raw.get(name_col, "")
+        note = None
+        if name_counts.get(value, 0) > 1:
+            note = f"{name_counts[value]} places are named {value!r}: this fix would change all of them."
+        return {"field": _schema(name_col, rename), "value": value}, note
+
+    others = [(r.lat, r.lon) for r in new.records if r.has_coords]
+
+    def nearest_other_m(lat: float, lon: float, exclude: tuple[float, float]) -> float | None:
+        dists = [distance_m(lat, lon, a, b) for a, b in others if (a, b) != exclude]
+        dists = [d for d in dists if d is not None]
+        return min(dists) if dists else None
+
+    fixes = []
+    for e in changed:
+        loc = e.get("location")
+        if not loc or loc.get("moved_m") is None or loc["moved_m"] < LARGE_MOVE_M or not (lat_col and lon_col):
+            continue
+        typo = loc.get("likely_typo")
+        moved = f"Moved {loc['moved_m'] / 1000:.1f} km" + (f", {typo} only (likely typo)" if typo else "")
+        # A wrong position usually lands far from every other polling place. Compare how
+        # isolated each position is to guess which one is the mistake.
+        new_pos = (loc["new"][0], loc["new"][1])
+        iso_new = nearest_other_m(*new_pos, exclude=new_pos)
+        iso_old = nearest_other_m(loc["old"][0], loc["old"][1], exclude=new_pos)
+        if iso_new is not None and iso_old is not None and iso_old > 3 * iso_new and iso_old - iso_new > LARGE_MOVE_M:
+            fixes.append(
+                {
+                    "new_index": e["new_index"],
+                    "name": e["name"],
+                    "kind": "coordinates",
+                    "likely": False,
+                    "no_fix_needed": True,
+                    "reason": (
+                        f"{moved}. The new position looks right: the old one was {iso_old / 1000:.1f} km from any "
+                        f"other polling place, the new one {iso_new / 1000:.1f} km. No fix needed."
+                    ),
+                    "note": None,
+                    "fix": None,
+                }
+            )
+            continue
+        new_isolated = iso_new is not None and iso_old is not None and iso_new > 3 * iso_old and iso_new - iso_old > LARGE_MOVE_M
+        sel, note = selector(e["new_index"])
+        fixes.append(
+            {
+                "new_index": e["new_index"],
+                "name": e["name"],
+                "kind": "coordinates",
+                "likely": bool(typo) or new_isolated,
+                "no_fix_needed": False,
+                "reason": (
+                    f"{moved}."
+                    + (f" The new position is {iso_new / 1000:.1f} km from any other polling place, the old one {iso_old / 1000:.1f} km." if new_isolated else "")
+                    + " If the new position is wrong, this keeps the previous one."
+                ),
+                "note": note,
+                "fix": {
+                    **sel,
+                    "overwrite": [
+                        {"field": _schema(lat_col, rename), "value": loc["old"][0]},
+                        {"field": _schema(lon_col, rename), "value": loc["old"][1]},
+                    ],
+                },
+            }
+        )
+    for q in quality:
+        if not q["check"].startswith("newly_blank:"):
+            continue
+        column = q["check"].split(":", 1)[1]
+        for place in q["places"]:
+            sel, note = selector(place["new_index"])
+            fixes.append(
+                {
+                    "new_index": place["new_index"],
+                    "name": place["name"],
+                    "kind": "blank",
+                    "likely": False,
+                    "no_fix_needed": False,
+                    "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",
+                    "note": note,
+                    "fix": {**sel, "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}]},
+                }
+            )
+    return fixes
+
+
+def severity(e: dict[str, Any]) -> tuple:
+    """Sort key putting the changes most worth a look first."""
+    worse = any(c.get("direction") == "worse" for c in e["changes"])
+    loc = e.get("location") or {}
+    moved = loc.get("moved_m") or 0
+    return (not e["warnings"], not worse, -moved, -len(e["changes"]), e["name"])
 
 
 def context_points(new: Dataset) -> list[list[float]]:
@@ -245,8 +362,10 @@ def build_diff(
     result: LinkResult,
     link_output: dict[str, Any],
     ignore: set[str] | None = None,
+    rename: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     ignore = ignore or set()
+    rename = rename or {}
     changed, possible, unchanged = [], [], 0
     for link in result.links:
         entry = describe_pair(old, new, link, ignore)
@@ -293,11 +412,15 @@ def build_diff(
             "warnings": sum(len(e["warnings"]) for e in changed + possible),
             "quality_issues": sum(q["count"] for q in quality),
         },
-        "changed": sorted(changed, key=lambda e: e["name"]),
-        "possible_matches": sorted(possible, key=lambda e: e["name"]),
+        "nothing_changed": not (changed or possible or added or removed),
+        # Biggest first: warnings, accessibility getting worse, largest moves, most fields changed.
+        "changed": sorted(changed, key=severity),
+        # Least confident first.
+        "possible_matches": sorted(possible, key=lambda e: (e["link"]["score"], e["name"])),
         "added": sorted(added, key=lambda e: e["name"]),
         "removed": sorted(removed, key=lambda e: e["name"]),
         "replacements": replacements,
         "quality": quality,
+        "suggested_fixes": suggested_fixes(old, new, changed + possible, quality, rename),
         "context_points": context_points(new),
     }

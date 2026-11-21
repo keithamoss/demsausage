@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "created_at": "2026-11-21T09:47:34+00:00",
+  "schema_version": 3,
+  "created_at": "2026-11-21T09:55:05+00:00",
   "matcher": "rapidfuzz",
   "matcher_params": {
     "auto_threshold": 0.75,
@@ -99,128 +99,8 @@
     "warnings": 0,
     "quality_issues": 1
   },
+  "nothing_changed": false,
   "changed": [
-    {
-      "old_index": 1288,
-      "new_index": 1288,
-      "name": "Fawkner Park (Christ Church Grammar School)",
-      "old_name": "Fawkner Park (Christ Church Grammar School)",
-      "changes": [
-        {
-          "field": "entrance_desc",
-          "old": "",
-          "new": "Access via The Butler Memorial Gate",
-          "category": "entrance"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Fawkner Park",
-        "premises": "Christ Church Grammar School",
-        "address": "677 Punt Road, South Yarra VIC 3141",
-        "lat": "-37.83883147676405",
-        "lon": "144.9860434409811",
-        "state": "VIC",
-        "divisions": "Prahran",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
-        "host_district": "Prahran",
-        "est_ordinary_votes": "1370",
-        "est_absent_votes": "336"
-      },
-      "new": {
-        "name": "Fawkner Park",
-        "premises": "Christ Church Grammar School",
-        "address": "677 Punt Road, South Yarra VIC 3141",
-        "lat": "-37.83883147676405",
-        "lon": "144.9860434409811",
-        "state": "VIC",
-        "divisions": "Prahran",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
-        "entrance_desc": "Access via The Butler Memorial Gate",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
-        "host_district": "Prahran",
-        "est_ordinary_votes": "1370",
-        "est_absent_votes": "336"
-      }
-    },
-    {
-      "old_index": 1468,
-      "new_index": 1468,
-      "name": "Heywood (Heywood Community Hall)",
-      "old_name": "Heywood (Heywood Community Hall)",
-      "changes": [
-        {
-          "field": "wheelchair_access",
-          "old": "None",
-          "new": "Full",
-          "category": "accessibility",
-          "direction": "improved"
-        }
-      ],
-      "location": null,
-      "warnings": [],
-      "link": {
-        "band": "auto",
-        "score": 1.0,
-        "via": "exact",
-        "explain": {
-          "distance_m": 0.0,
-          "same_address": true,
-          "same_premises": true
-        }
-      },
-      "old": {
-        "name": "Heywood",
-        "premises": "Heywood Community Hall",
-        "address": "20 Edgar Street, Heywood VIC 3304",
-        "lat": "-38.13419045778523",
-        "lon": "141.62986480631758",
-        "state": "VIC",
-        "divisions": "South-West Coast",
-        "wheelchair_access": "None",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
-        "host_district": "South-West Coast",
-        "est_ordinary_votes": "770",
-        "est_absent_votes": "37"
-      },
-      "new": {
-        "name": "Heywood",
-        "premises": "Heywood Community Hall",
-        "address": "20 Edgar Street, Heywood VIC 3304",
-        "lat": "-38.13419045778523",
-        "lon": "141.62986480631758",
-        "state": "VIC",
-        "divisions": "South-West Coast",
-        "wheelchair_access": "Full",
-        "wheelchair_access_description": "",
-        "entrance_desc": "",
-        "opening_hours": "8am to 6pm",
-        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
-        "host_district": "South-West Coast",
-        "est_ordinary_votes": "770",
-        "est_absent_votes": "37"
-      }
-    },
     {
       "old_index": 814,
       "new_index": 814,
@@ -354,6 +234,127 @@
         "est_ordinary_votes": "197",
         "est_absent_votes": "46"
       }
+    },
+    {
+      "old_index": 1288,
+      "new_index": 1288,
+      "name": "Fawkner Park (Christ Church Grammar School)",
+      "old_name": "Fawkner Park (Christ Church Grammar School)",
+      "changes": [
+        {
+          "field": "entrance_desc",
+          "old": "",
+          "new": "Access via The Butler Memorial Gate",
+          "category": "entrance"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Fawkner Park",
+        "premises": "Christ Church Grammar School",
+        "address": "677 Punt Road, South Yarra VIC 3141",
+        "lat": "-37.83883147676405",
+        "lon": "144.9860434409811",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
+        "host_district": "Prahran",
+        "est_ordinary_votes": "1370",
+        "est_absent_votes": "336"
+      },
+      "new": {
+        "name": "Fawkner Park",
+        "premises": "Christ Church Grammar School",
+        "address": "677 Punt Road, South Yarra VIC 3141",
+        "lat": "-37.83883147676405",
+        "lon": "144.9860434409811",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via The Butler Memorial Gate",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
+        "host_district": "Prahran",
+        "est_ordinary_votes": "1370",
+        "est_absent_votes": "336"
+      }
+    },
+    {
+      "old_index": 1468,
+      "new_index": 1468,
+      "name": "Heywood (Heywood Community Hall)",
+      "old_name": "Heywood (Heywood Community Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Full",
+          "category": "accessibility",
+          "direction": "improved"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      },
+      "new": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      }
     }
   ],
   "possible_matches": [],
@@ -374,6 +375,7 @@
       ]
     }
   ],
+  "suggested_fixes": [],
   "context_points": [
     [
       -37.84136,

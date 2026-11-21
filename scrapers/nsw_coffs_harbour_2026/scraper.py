@@ -10,6 +10,12 @@ nsw_kiama_2026/data, so the existing config.json can be used to load it.
 Usage:
     python scraper.py                 # uses EVENT_ID below
     python scraper.py LB2615-031      # override the event/area ID
+    python scraper.py --no-diff       # skip the diff against the previous scrape
+
+After writing the CSV, the scraper diffs it against the previous one with the
+repo's diff tool (diff/, via uv) into diffs/: open diffs/index.html. If uv isn't
+available the diff is skipped with a message; run it later with:
+    cd ../../diff && uv run ppdiff latest "../scrapers/nsw_coffs_harbour_2026/data/*.csv" --out-dir ../scrapers/nsw_coffs_harbour_2026/diffs
 
 IDs are "<event>-<area>". For local government events the area is the council
 (Coffs Harbour = 031); for state events it's the electoral district (Coffs
@@ -22,10 +28,13 @@ records, addresses that look like they contain notes) are printed, and the CSV
 is still written.
 """
 
+import argparse
 import csv
 import datetime
 import os
 import re
+import shutil
+import subprocess
 import sys
 
 import requests
@@ -33,7 +42,10 @@ import requests
 EVENT_ID = "LB2615-031"
 DISTRICT_NAME = "Coffs Harbour"
 API_URL = "https://map.elections.nsw.gov.au/PlacemarkApi.ashx?mode=PP&ID={event_id}"
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(HERE, "data")
+DIFFS_DIR = os.path.join(HERE, "diffs")
+DIFF_PROJECT = os.path.join(HERE, "..", "..", "diff")
 
 FIELDS = [
     "name",
@@ -101,7 +113,7 @@ SUSPICIOUS_ADDRESS_PATTERN = re.compile(
 
 
 
-def scrape(event_id: str) -> None:
+def scrape(event_id: str) -> str:
     url = API_URL.format(event_id=event_id)
     print(f"Fetching {url}")
     response = requests.get(url, timeout=60)
@@ -131,7 +143,8 @@ def scrape(event_id: str) -> None:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output_file = os.path.join(
         OUTPUT_DIR,
-        f"nsw_coffs_harbour_{event_id}_{datetime.date.today().isoformat()}.csv",
+        # Timestamped so several scrapes on one day don't overwrite each other.
+        f"nsw_coffs_harbour_{event_id}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
     )
     with open(output_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS, lineterminator="\n")
@@ -140,6 +153,26 @@ def scrape(event_id: str) -> None:
 
     _print_list("Warnings", warnings)
     print(f"Wrote {len(rows)} polling places to {output_file}")
+    return output_file
+
+
+def diff_against_previous() -> None:
+    """Diff the newest two CSVs in data/ with the repo's diff tool, if it can run."""
+    if shutil.which("uv") is None:
+        print("\nSkipping the diff: uv isn't installed. See the module docstring to run it later.")
+        return
+    print("\nDiffing against the previous scrape...")
+    result = subprocess.run(
+        [
+            "uv", "run", "--project", DIFF_PROJECT, "ppdiff", "latest",
+            os.path.join(OUTPUT_DIR, "*.csv"), "--out-dir", DIFFS_DIR,
+        ],
+        check=False,
+    )
+    if result.returncode != 0:
+        print("The diff failed (the scrape itself is fine). See the output above.")
+    else:
+        print(f"Open {os.path.join(DIFFS_DIR, 'index.html')} in a browser.")
 
 
 def _check_api_fields(records: list[dict], errors: list[str], warnings: list[str]):
@@ -256,4 +289,10 @@ def _get_wheelchair_access(record: dict) -> tuple[str, str]:
 
 
 if __name__ == "__main__":
-    scrape(sys.argv[1] if len(sys.argv) > 1 else EVENT_ID)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("event_id", nargs="?", default=EVENT_ID)
+    parser.add_argument("--no-diff", action="store_true", help="Don't diff against the previous scrape")
+    args = parser.parse_args()
+    scrape(args.event_id)
+    if not args.no_diff:
+        diff_against_previous()

@@ -4,6 +4,7 @@
     ppdiff series "scrapers/<election>/data/*.csv" --out-dir scrapers/<election>/diffs
     ppdiff report scrapers/<election>/diffs/<pair folder>      # rebuild report.html only
     ppdiff index scrapers/<election>/diffs                    # rebuild index.html only
+    ppdiff latest "scrapers/<election>/data/*.csv" --out-dir scrapers/<election>/diffs   # newest two only (scrapers call this)
 
 Each pair gets a folder holding link.json (both linkage results), diff-<matcher>.json
 for each matcher, disagreements.json and report.html. Verdicts on disagreements are
@@ -62,6 +63,19 @@ def cmd_series(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_latest(args: argparse.Namespace) -> int:
+    pairs = series(args.pattern)
+    if not pairs:
+        print(f"Nothing to diff yet: need at least two files matching {args.pattern!r}")
+        return 0
+    old, new = pairs[-1]
+    if not args.force and (pair_dir(Path(args.out_dir), old, new) / "report.html").exists():
+        print(f"{old.name} -> {new.name}: already done")
+        return 0
+    _run(args, old, new)
+    return 0
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     target = Path(args.folder)
     check_inputs_unchanged(target)
@@ -90,6 +104,12 @@ def main(argv: list[str] | None = None) -> int:
     _common(p_series)
     p_series.add_argument("--force", action="store_true", help="Redo pairs that already have a report")
     p_series.set_defaults(func=cmd_series)
+
+    p_latest = sub.add_parser("latest", help="Diff only the newest two files matching a glob (for scrapers to call)")
+    p_latest.add_argument("pattern")
+    _common(p_latest)
+    p_latest.add_argument("--force", action="store_true", help="Redo even if a report exists")
+    p_latest.set_defaults(func=cmd_latest)
 
     p_report = sub.add_parser("report", help="Rebuild report.html from a pair folder's JSON")
     p_report.add_argument("folder")
