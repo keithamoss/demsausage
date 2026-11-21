@@ -7,7 +7,7 @@
 <!-- OpenLayers, as used by the public site (public-redesign); loaded from a CDN to keep reports small -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css">
 <script src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"></script>
-<!-- ol-mapbox-style draws the keyless fallback basemap (OpenFreeMap vector tiles) -->
+<!-- ol-mapbox-style draws the OpenFreeMap Liberty basemap (vector tiles) -->
 <script src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"></script>
 <style>
 :root {
@@ -78,12 +78,7 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
 .placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
 .card-actions { margin-top: 8px; }
-.basemap-switch { margin-left: auto; display: inline-flex; gap: 4px; }
-.basemap-switch .chip { font-size: 12px; padding: 2px 9px; }
 .small-link { font-size: 13px; }
-.keybar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
-.keybar input { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; min-width: 0; flex: 1 1 160px; }
-button.primary.small { font-size: 13px; padding: 4px 12px; }
 button.small { font-size: 13px; padding: 3px 10px; }
 .ol-attribution { font-size: 11px; }
 .inline-diff { overflow-wrap: anywhere; }
@@ -391,94 +386,21 @@ function mapFeatures(d) {
   for (const r of d.removed) if (r.lat !== null) f.push({ kind: "removed", to: [r.lat, r.lon], name: r.name, target: `${d.matcher}-removed-${r.old_index}` });
   return f;
 }
-// ---------- maps: OpenLayers (loaded in <head>) on the public site's CARTO basemap ----------
+// ---------- maps: OpenLayers (loaded in <head>) on the OpenFreeMap Liberty basemap ----------
 const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-const darkMode = () => window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-// The CARTO basemap needs the public site's API key (VITE_CARTO_API_KEY). It is never written
-// into reports: you paste it once and it stays in this browser's localStorage. A link can also
-// carry it as #carto-key=... (saved, then removed from the address bar).
-const CARTO_KEY_STORE = "ppdiff-carto-key";
-function cartoKey() {
-  const m = location.hash.match(/carto-key=([^&]+)/);
-  if (m) {
-    try { localStorage.setItem(CARTO_KEY_STORE, decodeURIComponent(m[1])); } catch (e) {}
-    history.replaceState(null, "", location.pathname + location.search);
-    return decodeURIComponent(m[1]);
-  }
-  try { return localStorage.getItem(CARTO_KEY_STORE) || ""; } catch (e) { return ""; }
-}
-const CARTO_KEY = cartoKey();
-window.addEventListener("hashchange", () => { if (/carto-key=/.test(location.hash)) { cartoKey(); location.reload(); } });
-function cartoKeyForm() {
-  const input = h("input", { type: "password", placeholder: "CARTO API key", autocomplete: "off", spellcheck: "false" });
-  const save = () => { const v = input.value.trim(); if (!v) return; try { localStorage.setItem(CARTO_KEY_STORE, v); } catch (e) {} location.reload(); };
-  input.addEventListener("keydown", (ev) => { if (ev.key === "Enter") save(); });
-  return h("div", { class: "keybar" },
-    h("span", {}, CARTO_KEY ? "CARTO basemap (the public site's) available, using the key saved in this browser."
-      : "Optional: add the public site's CARTO API key (VITE_CARTO_API_KEY) to offer its basemap too. Stored only in this browser."),
-    CARTO_KEY ? h("button", { class: "ghost small", onclick: () => { try { localStorage.removeItem(CARTO_KEY_STORE); } catch (e) {} location.reload(); } }, "Forget key")
-              : [input, h("button", { class: "primary small", onclick: save }, "Save")]);
-}
-// ---- basemaps ----
-// "map": OpenFreeMap Liberty (free, no key): names of schools, halls and churches, buildings,
-//        house numbers when zoomed in. Positron/CARTO light look cleaner but drop venue names.
-// "satellite": Esri World Imagery with Liberty's labels on top (like Google's hybrid view).
-// "carto": the public site's CARTO basemap, offered once its key is saved in this browser.
-const BASEMAP_STORE = "ppdiff-basemap";
-const BASEMAPS = { map: "Map", satellite: "Satellite", ...(CARTO_KEY ? { carto: "CARTO" } : {}) };
-let basemapChoice = (() => { try { const v = localStorage.getItem(BASEMAP_STORE); return BASEMAPS[v] ? v : "map"; } catch (e) { return "map"; } })();
+// ---- basemap: OpenFreeMap Liberty (free, no key, OpenStreetMap data). It names schools, halls
+// and churches and shows buildings and house numbers when zoomed in, which is what checking a
+// polling place needs. https://openfreemap.org
 const LIBERTY = "https://tiles.openfreemap.org/styles/liberty";
-const OFM_ATTRIBUTION = '<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-let libertyLabelsStyle = null;  // Liberty with only its label layers, for the satellite view
-function libertyLabels() {
-  if (!libertyLabelsStyle) libertyLabelsStyle = fetch(LIBERTY).then((r) => r.json()).then((style) => ({ ...style, layers: style.layers.filter((l) => l.type === "symbol") }));
-  return libertyLabelsStyle;
-}
-function olmsGroup(ol, style) {
+function basemapLayer(ol) {
   const group = new ol.layer.Group();
-  Promise.resolve(style).then((st) => window.olms.apply(group, st)).then(() => {
-    group.getLayers().forEach((layer) => { const src = layer.getSource && layer.getSource(); if (src && src.setAttributions) src.setAttributions(OFM_ATTRIBUTION); });
+  window.olms.apply(group, LIBERTY).then(() => {
+    group.getLayers().forEach((layer) => {
+      const src = layer.getSource && layer.getSource();
+      if (src && src.setAttributions) src.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+    });
   });
   return group;
-}
-function basemapLayer(ol, kind) {
-  kind = kind || basemapChoice;
-  if (kind === "carto" && CARTO_KEY) {
-    const retina = window.devicePixelRatio > 1;
-    return new ol.layer.Tile({
-      source: new ol.source.XYZ({
-        url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png?key=${encodeURIComponent(CARTO_KEY)}`,
-        tilePixelRatio: retina ? 2 : 1,
-        maxZoom: 20,
-        attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-      }),
-    });
-  }
-  if (kind === "satellite") {
-    const imagery = new ol.layer.Tile({
-      source: new ol.source.XYZ({
-        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        maxZoom: 19,
-        attributions: "Imagery: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
-      }),
-    });
-    return new ol.layer.Group({ layers: [imagery, olmsGroup(ol, libertyLabels())] });
-  }
-  return olmsGroup(ol, LIBERTY);
-}
-// Every map on the page, so switching basemap updates them all.
-const ALL_MAPS = [];
-function registerMap(map) { ALL_MAPS.push(map); return map; }
-function setBasemap(kind) {
-  basemapChoice = kind;
-  try { localStorage.setItem(BASEMAP_STORE, kind); } catch (e) {}
-  for (const map of ALL_MAPS) map.getLayers().setAt(0, basemapLayer(window.ol, kind));
-  document.querySelectorAll(".basemap-switch button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
-}
-function basemapSwitch() {
-  return h("span", { class: "basemap-switch", role: "group", "aria-label": "Basemap" },
-    Object.entries(BASEMAPS).map(([kind, text]) =>
-      h("button", { class: "chip", "data-kind": kind, "aria-pressed": String(kind === basemapChoice), onclick: () => setBasemap(kind) }, text)));
 }
 function olStyles(ol) {
   const S = ol.style, c = (n) => cssVar(n);
@@ -486,7 +408,7 @@ function olStyles(ol) {
   const ring = (color, r) => new S.Style({ image: new S.Circle({ radius: r, fill: new S.Fill({ color: c("--surface") }), stroke: new S.Stroke({ color, width: 2.5 }) }) });
   const line = (color, dash, width) => new S.Style({ stroke: new S.Stroke({ color, width: width || 2.5, lineDash: dash }) });
   return {
-    context: new S.Style({ image: new S.Circle({ radius: 2.5, fill: new S.Fill({ color: darkMode() ? "rgba(236,235,231,.35)" : "rgba(29,29,27,.28)" }) }) }),
+    context: new S.Style({ image: new S.Circle({ radius: 2.5, fill: new S.Fill({ color: "rgba(29,29,27,.28)" }) }) }),
     moved: { line: line(c("--accent"), [6, 4]), from: ring(c("--accent"), 5), to: dot(c("--accent"), 7) },
     typo: { line: line(c("--warn"), [6, 4]), from: ring(c("--warn"), 5), to: dot(c("--warn"), 7) },
     added: dot(c("--add"), 7),
@@ -505,8 +427,7 @@ function renderMap(d) {
     h("div", { class: "legend" },
       [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
         h("span", {}, h("i", { class: "key " + k }), t)),
-      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it."),
-      basemapSwitch()));
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")));
   requestAnimationFrame(() => {  // after the element is in the page, so the map can size itself
     const ol = window.ol;
     const st = olStyles(ol);
@@ -522,7 +443,7 @@ function renderMap(d) {
         add(new ol.geom.Point(toXY(ol, ...f.to)), s.to);
       } else add(new ol.geom.Point(toXY(ol, ...f.to)), st[f.kind]);
     }
-    const map = registerMap(new ol.Map({
+    const map = (new ol.Map({
       target: el,
       layers: [basemapLayer(ol), new ol.layer.Vector({ source: context, style: st.context }), new ol.layer.Vector({ source: fg })],
       view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }),
@@ -572,14 +493,13 @@ function buildPlaceMap(holder, points) {
                   st.label(p.label, colour[p.kind])]);
       src.addFeature(f);
     }
-    const map = registerMap(new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) }));
+    const map = (new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) }));
     const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration: 300 });
     fitAll();
     controls.replaceChildren(...[
       points.length > 1 ? h("button", { class: "ghost small", onclick: fitAll }, "Both") : null,
       ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration: 300 }) }, `Zoom to ${p.label}`)),
       ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
-      basemapSwitch(),
     ].filter(Boolean));
   });
 }
@@ -648,8 +568,7 @@ function renderDiff(d) {
     section("Added", d.added, (e) => recordCard(e, d, "added"), true),
     section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
     section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
-    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`),
-    cartoKeyForm());
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
   return wrap;
 }
 
