@@ -29,9 +29,13 @@ def write_report(folder: Path) -> Path:
     diffs.sort(key=lambda d: (order.get(d["matcher"], 9), d["matcher"]))
     disagreements_path = folder / "disagreements.json"
     reviewed_path = folder / "reviewed.json"
+    reviewed = json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}
+    saved_hashes = (reviewed.get("old_sha256"), reviewed.get("new_sha256"))
+    if not diffs or saved_hashes != (diffs[0]["old"]["sha256"], diffs[0]["new"]["sha256"]):
+        reviewed = {}
     data = {
         # Ticks saved to the repo with `ppdiff reviewed import`; the browser adds its own on top.
-        "reviewed": json.loads(reviewed_path.read_text()).get("reviewed", {}) if reviewed_path.exists() else {},
+        "reviewed": reviewed.get("reviewed", {}),
         "diffs": diffs,
         "disagreements": json.loads(disagreements_path.read_text()) if disagreements_path.exists() else None,
         "verdicts": VERDICTS,
