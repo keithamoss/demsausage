@@ -78,8 +78,6 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
 .placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
 .card-actions { margin-top: 8px; }
-.map-problem { background: var(--warn-soft); color: var(--warn); font-size: 13px; padding: 8px 12px; border-radius: 8px; margin: 0 0 6px; }
-.mapbox .map-problem { border-radius: 0; margin: 0; }
 .basemap-switch { margin-left: auto; display: inline-flex; gap: 4px; }
 .basemap-switch .chip { font-size: 12px; padding: 2px 9px; }
 .small-link { font-size: 13px; }
@@ -436,46 +434,18 @@ function libertyLabels() {
   if (!libertyLabelsStyle) libertyLabelsStyle = fetch(LIBERTY).then((r) => r.json()).then((style) => ({ ...style, layers: style.layers.filter((l) => l.type === "symbol") }));
   return libertyLabelsStyle;
 }
-// ---- basemap problems: say so on the map instead of showing blank space ----
-const BASEMAP_PROBLEMS = new Map();  // host -> detail
-let tilesLoaded = 0;
-function basemapProblem(host, detail) {
-  if (BASEMAP_PROBLEMS.has(host)) return;
-  BASEMAP_PROBLEMS.set(host, detail);
-  document.querySelectorAll(".map-problem").forEach(renderProblem);
-}
-function renderProblem(el) {
-  if (!BASEMAP_PROBLEMS.size) { el.hidden = true; return; }
-  el.hidden = false;
-  el.replaceChildren(
-    h("b", {}, "The basemap didn't load. "),
-    `Blocked or failing: ${[...BASEMAP_PROBLEMS].map(([host, d]) => `${host} (${d})`).join("; ")}. `,
-    "If you're viewing this inside an app preview, it may block map tiles: open the report.html file in a normal browser instead. The Google Maps links still work.");
-}
-function problemBox() { const el = h("div", { class: "map-problem", hidden: true, role: "status" }); renderProblem(el); return el; }
-function watchSource(src, host) {
-  if (!src || !src.on) return;
-  src.on("tileloadend", () => { tilesLoaded++; });
-  src.on("tileloaderror", () => basemapProblem(host, "tile requests failing"));
-}
-// If a map has been up for a while and not one basemap tile has arrived, say so.
-function watchdog() { setTimeout(() => { if (!tilesLoaded) basemapProblem("basemap", "no tiles arrived after 10 seconds"); }, 10000); }
 function olmsGroup(ol, style) {
   const group = new ol.layer.Group();
   Promise.resolve(style).then((st) => window.olms.apply(group, st)).then(() => {
-    group.getLayers().forEach((layer) => {
-      const src = layer.getSource && layer.getSource();
-      if (src && src.setAttributions) src.setAttributions(OFM_ATTRIBUTION);
-      watchSource(src, "tiles.openfreemap.org");
-    });
-  }).catch((err) => basemapProblem("tiles.openfreemap.org", `style didn't load: ${err && err.message ? err.message : err}`));
+    group.getLayers().forEach((layer) => { const src = layer.getSource && layer.getSource(); if (src && src.setAttributions) src.setAttributions(OFM_ATTRIBUTION); });
+  });
   return group;
 }
 function basemapLayer(ol, kind) {
   kind = kind || basemapChoice;
   if (kind === "carto" && CARTO_KEY) {
     const retina = window.devicePixelRatio > 1;
-    const layer = new ol.layer.Tile({
+    return new ol.layer.Tile({
       source: new ol.source.XYZ({
         url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png?key=${encodeURIComponent(CARTO_KEY)}`,
         tilePixelRatio: retina ? 2 : 1,
@@ -483,8 +453,6 @@ function basemapLayer(ol, kind) {
         attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
       }),
     });
-    watchSource(layer.getSource(), "basemaps.cartocdn.com");
-    return layer;
   }
   if (kind === "satellite") {
     const imagery = new ol.layer.Tile({
@@ -494,20 +462,13 @@ function basemapLayer(ol, kind) {
         attributions: "Imagery: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
       }),
     });
-    watchSource(imagery.getSource(), "server.arcgisonline.com");
     return new ol.layer.Group({ layers: [imagery, olmsGroup(ol, libertyLabels())] });
   }
   return olmsGroup(ol, LIBERTY);
 }
 // Every map on the page, so switching basemap updates them all.
 const ALL_MAPS = [];
-function registerMap(map) {
-  ALL_MAPS.push(map);
-  const target = map.getTargetElement();
-  if (target && target.parentElement) target.parentElement.insertBefore(problemBox(), target);
-  watchdog();
-  return map;
-}
+function registerMap(map) { ALL_MAPS.push(map); return map; }
 function setBasemap(kind) {
   basemapChoice = kind;
   try { localStorage.setItem(BASEMAP_STORE, kind); } catch (e) {}
