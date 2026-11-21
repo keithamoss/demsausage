@@ -218,7 +218,7 @@ def row_problems(row: Row) -> list[str]:
         )
     for field, low, high in (("lat", -90, 90), ("lon", -180, 180)):
         value = row.get(field)
-        if value in (None, ""):
+        if value is None or (isinstance(value, str) and not value.strip()):
             continue  # blank coordinates are geocoded by the loader when geocoding is on
         if not is_numeric(value) or not low <= float(value) <= high:
             problems.append(f"{field} {value!r} isn't a valid coordinate")
