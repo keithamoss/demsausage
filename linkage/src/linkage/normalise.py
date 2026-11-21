@@ -83,6 +83,11 @@ def norm_hours(text: str | None) -> str:
     """Opening hours as 24-hour times: "8am to 6pm" and "08:00 AM - 06:00 PM" both become
     "08:00-18:00". Text without recognisable times falls back to norm()."""
     raw = (text or "").strip()
+    # Only discard separators when the entire value is a supported time range.
+    if not re.fullmatch(
+        rf"{_TIME.pattern}\s*(?:to|[-–—])\s*{_TIME.pattern}", raw, re.IGNORECASE
+    ):
+        return norm(raw)
     times = []
     for hour, minute, meridiem in _TIME.findall(raw):
         h, m = int(hour), int(minute or 0)
