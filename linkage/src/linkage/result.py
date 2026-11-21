@@ -1,0 +1,80 @@
+"""The output of linking two datasets, shared by every matcher."""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+from typing import Any, Literal
+
+Band = Literal["auto", "review"]
+Via = Literal["exact", "matcher"]
+
+
+@dataclass(frozen=True)
+class ScoredPair:
+    """A candidate pair scored by a matcher. Higher is more likely the same place.
+
+    `score` is what thresholds and bands use. `rank`, if set, is what one-to-one
+    assignment maximises instead: Splink's probabilities saturate at 1.0, so two
+    competing pairs can tie on score while their match weights differ a lot.
+    """
+
+    score: float
+    left: int
+    right: int
+    explain: dict[str, Any] = field(default_factory=dict)
+    rank: float | None = None
+
+    @property
+    def assignment_value(self) -> float:
+        return self.score if self.rank is None else self.rank
+
+
+@dataclass(frozen=True)
+class Link:
+    """A decision that left record `left` and right record `right` are the same place.
+
+    `band` is "auto" (confident) or "review" (plausible, needs a human look).
+    `via` is "exact" (shared exact-key pass) or "matcher" (the named matcher).
+    """
+
+    left: int
+    right: int
+    score: float
+    band: Band
+    via: Via
+    explain: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class LinkResult:
+    matcher: str
+    links: list[Link]
+    unmatched_left: list[int]
+    unmatched_right: list[int]
+    params: dict[str, Any] = field(default_factory=dict)
+
+    def by_left(self) -> dict[int, Link]:
+        return {link.left: link for link in self.links}
+
+    def by_right(self) -> dict[int, Link]:
+        return {link.right: link for link in self.links}
+
+    def counts(self) -> dict[str, int]:
+        return {
+            "links": len(self.links),
+            "exact": sum(1 for x in self.links if x.via == "exact"),
+            "auto": sum(1 for x in self.links if x.band == "auto"),
+            "review": sum(1 for x in self.links if x.band == "review"),
+            "unmatched_left": len(self.unmatched_left),
+            "unmatched_right": len(self.unmatched_right),
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "matcher": self.matcher,
+            "params": self.params,
+            "counts": self.counts(),
+            "links": [asdict(link) for link in self.links],
+            "unmatched_left": self.unmatched_left,
+            "unmatched_right": self.unmatched_right,
+        }

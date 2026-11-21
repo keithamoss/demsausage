@@ -1,0 +1,1766 @@
+[
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.0,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 685,
+      "auto": 685,
+      "review": 0,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "vic_2026",
+      "federal_2022_2025"
+    ],
+    "seconds": 6.05,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 685,
+      "auto": 685,
+      "review": 0,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 0.0,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 685,
+      "auto": 685,
+      "review": 0,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.05,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 0,
+      "auto": 685,
+      "review": 0,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "vic_2026",
+      "federal_2022_2025"
+    ],
+    "seconds": 6.37,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 0,
+      "auto": 685,
+      "review": 0,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "sa_2025",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 2.52,
+    "records": [
+      689,
+      685
+    ],
+    "counts": {
+      "links": 685,
+      "exact": 0,
+      "auto": 684,
+      "review": 1,
+      "unmatched_left": 4,
+      "unmatched_right": 0
+    },
+    "truth_pairs": 685,
+    "changed_pairs": 8,
+    "links": 685,
+    "correct": 685,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 1,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": [
+        {
+          "left": "Roseworthy (Roseworthy Primary School)",
+          "right": "Roseworthy (Roseworthy Soldiers Memorial Hall)",
+          "score": 0.8933
+        }
+      ]
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.01,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 1646,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "sa_2025",
+      "federal_2022_2025"
+    ],
+    "seconds": 5.9,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 1646,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": true,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 4.53,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 1646,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.09,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 0,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "sa_2025",
+      "federal_2022_2025"
+    ],
+    "seconds": 6.08,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 0,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "vic_2026",
+    "kind": "within election",
+    "note": "",
+    "exact_pass": false,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 4.55,
+    "records": [
+      1650,
+      1652
+    ],
+    "counts": {
+      "links": 1650,
+      "exact": 0,
+      "auto": 1650,
+      "review": 0,
+      "unmatched_left": 0,
+      "unmatched_right": 2
+    },
+    "truth_pairs": 1650,
+    "changed_pairs": 8,
+    "links": 1650,
+    "correct": 1650,
+    "wrong": 0,
+    "missed": 0,
+    "changed_correct": 8,
+    "wrong_auto": 0,
+    "wrong_review": 0,
+    "correct_review": 0,
+    "false_links": 0,
+    "examples": {
+      "wrong": [],
+      "missed": [],
+      "review": []
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": true,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.09,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6691,
+      "exact": 5949,
+      "auto": 6261,
+      "review": 430,
+      "unmatched_left": 356,
+      "unmatched_right": 275
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6617,
+    "correct": 6543,
+    "wrong": 74,
+    "missed": 114,
+    "changed_correct": 3081,
+    "wrong_auto": 60,
+    "wrong_review": 14,
+    "correct_review": 402,
+    "false_links": 49,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Bennelong) (Ngarala Public School)",
+          "should_be": "Eastwood West (Parramatta) (Ngarala Public School)",
+          "score": 0.7977,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 0.7172,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Ermington West (Bennelong) (Ermington West Public School)",
+          "right": "Denistone West (Ermington Public School)",
+          "should_be": "Ermington West (Ermington West Public School)",
+          "score": 0.7914,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Carlingford Heights (Murray Farm Public School)",
+          "right": "Carlingford Heights (Mitchell) (Murray Farm Public School)",
+          "should_be": "Carlingford Heights (Parramatta) (Murray Farm Public School)",
+          "score": 0.7172,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Bass Hill (Bass Hill Public School)",
+          "right": "Bass Hill (Blaxland) (Bass Hill Public School)",
+          "should_be": "Bass Hill (Watson) (Bass Hill Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Denistone West (8 Lakeside Rd)",
+          "right": "Denistone West (Ermington Public School)"
+        },
+        {
+          "left": "Ryde (The Living Way Church)",
+          "right": "Marsfield South (Macquarie Church of Christ)"
+        },
+        {
+          "left": "West Pennant Hills North (Berowra) (West Pennant Hills Community Centre)",
+          "right": "West Pennant Hills North (West Pennant Hills Community Centre)"
+        },
+        {
+          "left": "Bankstown (Blaxland) (Bankstown Public School)",
+          "right": "Bankstown (Bankstown Public School)"
+        },
+        {
+          "left": "Bankstown Central (Blaxland) (Bankstown Senior Citizens Centre)",
+          "right": "Bankstown Central (Bankstown Senior Citizens Centre)"
+        },
+        {
+          "left": "Asquith (Bradfield) (Asquith Public School)",
+          "right": "Asquith (Asquith Public School)"
+        },
+        {
+          "left": "Hornsby Central (Bradfield) (Hornsby Girls High School)",
+          "right": "Hornsby Central (Hornsby Girls High School)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Carlton West (Park Road Anglican Church)",
+          "right": "Carlton West (Park Road Anglican Church)",
+          "score": 0.7172
+        },
+        {
+          "left": "Central Sydney (Banks) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Banks) (TAFE NSW (Ultimo Campus))",
+          "score": 0.683
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)",
+          "score": 0.6808
+        },
+        {
+          "left": "Brighton North (St Mark's Anglican Church Hall)",
+          "right": "Brighton North (St Mark's Anglican Church Hall)",
+          "score": 0.7172
+        },
+        {
+          "left": "Central Sydney (Barton) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Barton) (TAFE NSW (Ultimo Campus))",
+          "score": 0.683
+        },
+        {
+          "left": "Marrickville South (Ferncourt Public School)",
+          "right": "Marrickville South (Ferncourt Public School)",
+          "score": 0.7172
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)",
+          "score": 0.6808
+        },
+        {
+          "left": "Tempe (Tempe High School)",
+          "right": "Tempe (Tempe High School)",
+          "score": 0.7172
+        },
+        {
+          "left": "Carlingford East (Roselea Public School)",
+          "right": "Carlingford East (Roselea Public School)",
+          "score": 0.7098
+        },
+        {
+          "left": "Epping (Epping Church of Christ)",
+          "right": "Epping (Berowra) (Epping Church of Christ)",
+          "score": 0.7172
+        }
+      ]
+    },
+    "precision": 0.98882,
+    "recall": 0.97207
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": true,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "sa_2025",
+      "vic_2026"
+    ],
+    "seconds": 4.96,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6481,
+      "exact": 5949,
+      "auto": 6443,
+      "review": 38,
+      "unmatched_left": 566,
+      "unmatched_right": 485
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6415,
+    "correct": 6347,
+    "wrong": 68,
+    "missed": 316,
+    "changed_correct": 2885,
+    "wrong_auto": 66,
+    "wrong_review": 2,
+    "correct_review": 36,
+    "false_links": 48,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Ryde Heights (Meadowbank Public School)",
+          "right": "Meadowbank (Meadowbank Public School)",
+          "should_be": "Ryde Heights (Smalls Road Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Carlingford Heights (Murray Farm Public School)",
+          "right": "Carlingford Heights (Mitchell) (Murray Farm Public School)",
+          "should_be": "Carlingford Heights (Parramatta) (Murray Farm Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Bass Hill (Bass Hill Public School)",
+          "right": "Bass Hill (Blaxland) (Bass Hill Public School)",
+          "should_be": "Bass Hill (Watson) (Bass Hill Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Bass Hill West (Bass High School)",
+          "right": "Bass Hill West (Blaxland) (Bass High School)",
+          "should_be": "Bass Hill West (Watson) (Bass High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Central Sydney (Banks) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Banks) (TAFE NSW (Ultimo Campus))"
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Central Sydney (Barton) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Barton) (TAFE NSW (Ultimo Campus))"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Denistone West (8 Lakeside Rd)",
+          "right": "Denistone West (Ermington Public School)"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Parramatta) (Ngarala Public School)"
+        },
+        {
+          "left": "Ermington West (Bennelong) (Ermington West Public School)",
+          "right": "Ermington West (Ermington West Public School)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Epping East (Epping Public School)",
+          "right": "Epping East (Epping Public School)",
+          "score": 0.714
+        },
+        {
+          "left": "Hornsby East (Salvation Army Hornsby)",
+          "right": "Hornsby East (Hornsby Salvation Army)",
+          "score": 0.7375
+        },
+        {
+          "left": "Tweed Mills (Fatima Hall)",
+          "right": "Lithgow Tweed Mills (Lithgow Fatima Hall)",
+          "score": 0.7484
+        },
+        {
+          "left": "Gundaroo (Gundaroo Public School)",
+          "right": "Gundaroo (Gundaroo Public School)",
+          "score": 0.8332
+        },
+        {
+          "left": "Tumut East (Tumut High School)",
+          "right": "Tumut East (Tumut High School)",
+          "score": 0.9328
+        },
+        {
+          "left": "Yass (Berinba Public School)",
+          "right": "Yass (Berinba Public School)",
+          "score": 0.9328
+        },
+        {
+          "left": "Tuross Head (Kyla Park Hall)",
+          "right": "Tuross Head (Kyla Park Hall)",
+          "score": 0.9328
+        },
+        {
+          "left": "Balmain (Sydney Secondary College (Balmain Campus))",
+          "right": "Rozelle North (Sydney Secondary College (Balmain Campus))",
+          "score": 0.7367
+        },
+        {
+          "left": "Exeter (Exeter Public School)",
+          "right": "Exeter (Exeter Public School)",
+          "score": 0.714
+        },
+        {
+          "left": "Goulburn South (George Simes Memorial Scout Centre)",
+          "right": "Goulburn South (George Simes Memorial Scout Centre)",
+          "score": 0.9328
+        }
+      ]
+    },
+    "precision": 0.9894,
+    "recall": 0.94295
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": true,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 6.83,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6689,
+      "exact": 5949,
+      "auto": 6651,
+      "review": 38,
+      "unmatched_left": 358,
+      "unmatched_right": 277
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6612,
+    "correct": 6536,
+    "wrong": 76,
+    "missed": 119,
+    "changed_correct": 3074,
+    "wrong_auto": 75,
+    "wrong_review": 1,
+    "correct_review": 33,
+    "false_links": 52,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Bennelong) (Ngarala Public School)",
+          "should_be": "Eastwood West (Parramatta) (Ngarala Public School)",
+          "score": 0.9285,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        },
+        {
+          "left": "Ryde Heights (Meadowbank Public School)",
+          "right": "Meadowbank (Meadowbank Public School)",
+          "should_be": "Ryde Heights (Smalls Road Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Carlingford Heights (Murray Farm Public School)",
+          "right": "Carlingford Heights (Mitchell) (Murray Farm Public School)",
+          "should_be": "Carlingford Heights (Parramatta) (Murray Farm Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Bass Hill (Bass Hill Public School)",
+          "right": "Bass Hill (Blaxland) (Bass Hill Public School)",
+          "should_be": "Bass Hill (Watson) (Bass Hill Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "exact"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Ermington West (Bennelong) (Ermington West Public School)",
+          "right": "Ermington West (Ermington West Public School)"
+        },
+        {
+          "left": "Meadowbank (Boronia Grove Community Centre)",
+          "right": "Meadowbank (Meadowbank Public School)"
+        },
+        {
+          "left": "Ryde (The Living Way Church)",
+          "right": "Marsfield South (Macquarie Church of Christ)"
+        },
+        {
+          "left": "Sydney (Bennelong) (York Events)",
+          "right": "Wynyard (Bennelong) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "West Pennant Hills North (Berowra) (West Pennant Hills Community Centre)",
+          "right": "West Pennant Hills North (West Pennant Hills Community Centre)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Killara (St Albans Anglican Church)",
+          "right": "Killara (Killara Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Seven Hills Central (The Hills Sports School High)",
+          "right": "Seven Hills Central (The Meadows Public School)",
+          "score": 0.8542
+        },
+        {
+          "left": "Vineyard East (Greenway) (Natasha's Arts Theatre)",
+          "right": "Vineyard East (Greenway) (Vineyard Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Goulburn Heights (Mulwaree High School)",
+          "right": "Goulburn Heights (Goulburn High School)",
+          "score": 0.5143
+        },
+        {
+          "left": "Vineyard East (Macquarie) (Natasha's Arts Theatre)",
+          "right": "Vineyard East (Macquarie) (Vineyard Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Box Hill (Box Hill Community Centre)",
+          "right": "Box Hill (Rouse Hill Salvation Army Corps)",
+          "score": 0.7009
+        },
+        {
+          "left": "Georgetown (Callaghan College (Waratah Campus))",
+          "right": "Georgetown (Newcastle Middle School)",
+          "score": 0.8666
+        },
+        {
+          "left": "Chatswood (North Sydney) (The Meridian)",
+          "right": "Chatswood (Bennelong) (St Paul's Anglican Church)",
+          "score": 0.7455
+        },
+        {
+          "left": "North Sydney (Crows Nest Uniting Church)",
+          "right": "North Sydney (North Sydney Public School)",
+          "score": 0.8542
+        },
+        {
+          "left": "Parkes West (Assemblies of God Hall)",
+          "right": "Parkes West (Parkes PCYC)",
+          "score": 0.8542
+        }
+      ]
+    },
+    "precision": 0.98851,
+    "recall": 0.97103
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": false,
+    "matcher": "rapidfuzz",
+    "splink_trained_on": null,
+    "seconds": 0.47,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6718,
+      "exact": 0,
+      "auto": 6244,
+      "review": 474,
+      "unmatched_left": 329,
+      "unmatched_right": 248
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6633,
+    "correct": 6527,
+    "wrong": 106,
+    "missed": 98,
+    "changed_correct": 3074,
+    "wrong_auto": 71,
+    "wrong_review": 35,
+    "correct_review": 411,
+    "false_links": 58,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 0.9535,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Hurstville South (Hurstville South Public School)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Hurstville South (Hurstville South Public School)",
+          "score": 0.729,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 0.9985,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Bennelong) (Ngarala Public School)",
+          "should_be": "Eastwood West (Parramatta) (Ngarala Public School)",
+          "score": 0.7977,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 0.7172,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Ermington West (Bennelong) (Ermington West Public School)",
+          "right": "Denistone West (Ermington Public School)",
+          "should_be": "Ermington West (Ermington West Public School)",
+          "score": 0.7914,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 0.9454,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "North Ryde Central (North Ryde Public School)",
+          "right": "Marsfield South (Macquarie Church of Christ)",
+          "should_be": "North Ryde Central (North Ryde Public School)",
+          "score": 0.6598,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Ryde (The Living Way Church)",
+          "right": "West Ryde Central (Sovereign Grace Bible Church)",
+          "should_be": "Marsfield South (Macquarie Church of Christ)",
+          "score": 0.6913,
+          "band": "review",
+          "via": "matcher"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Denistone West (8 Lakeside Rd)",
+          "right": "Denistone West (Ermington Public School)"
+        },
+        {
+          "left": "Bankstown (Blaxland) (Bankstown Public School)",
+          "right": "Bankstown (Bankstown Public School)"
+        },
+        {
+          "left": "Bankstown Central (Blaxland) (Bankstown Senior Citizens Centre)",
+          "right": "Bankstown Central (Bankstown Senior Citizens Centre)"
+        },
+        {
+          "left": "Asquith (Bradfield) (Asquith Public School)",
+          "right": "Asquith (Asquith Public School)"
+        },
+        {
+          "left": "Waitara (The Light of Christ Centre Hall)",
+          "right": "Waitara (Waitara Public School)"
+        },
+        {
+          "left": "Waitara North (PCYC Waitara)",
+          "right": "Waitara North (PCYC Hornsby-Ku-ring-gai)"
+        },
+        {
+          "left": "Arndell Park North (Walters Road Public School)",
+          "right": "Arndell Park North (Evans High School)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 0.713
+        },
+        {
+          "left": "Carlton West (Park Road Anglican Church)",
+          "right": "Carlton West (Park Road Anglican Church)",
+          "score": 0.7172
+        },
+        {
+          "left": "Central Sydney (Banks) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Banks) (TAFE NSW (Ultimo Campus))",
+          "score": 0.683
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)",
+          "score": 0.6808
+        },
+        {
+          "left": "Brighton North (St Mark's Anglican Church Hall)",
+          "right": "Brighton North (St Mark's Anglican Church Hall)",
+          "score": 0.7172
+        },
+        {
+          "left": "Central Sydney (Barton) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Barton) (TAFE NSW (Ultimo Campus))",
+          "score": 0.683
+        },
+        {
+          "left": "Marrickville South (Ferncourt Public School)",
+          "right": "Marrickville South (Ferncourt Public School)",
+          "score": 0.7172
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)",
+          "score": 0.6808
+        },
+        {
+          "left": "Tempe (Tempe High School)",
+          "right": "Tempe (Tempe High School)",
+          "score": 0.7172
+        },
+        {
+          "left": "Carlingford East (Roselea Public School)",
+          "right": "Carlingford East (Roselea Public School)",
+          "score": 0.7098
+        }
+      ]
+    },
+    "precision": 0.98402,
+    "recall": 0.96969
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": false,
+    "matcher": "splink",
+    "splink_trained_on": [
+      "sa_2025",
+      "vic_2026"
+    ],
+    "seconds": 5.1,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6130,
+      "exact": 0,
+      "auto": 6017,
+      "review": 113,
+      "unmatched_left": 917,
+      "unmatched_right": 836
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6068,
+    "correct": 5989,
+    "wrong": 79,
+    "missed": 663,
+    "changed_correct": 2527,
+    "wrong_auto": 77,
+    "wrong_review": 2,
+    "correct_review": 110,
+    "false_links": 45,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Ryde Heights (Meadowbank Public School)",
+          "right": "Meadowbank (Meadowbank Public School)",
+          "should_be": "Ryde Heights (Smalls Road Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "West Ryde Central (Smalls Road Public School)",
+          "right": "Ryde Heights (Smalls Road Public School)",
+          "should_be": "West Ryde Central (Sovereign Grace Bible Church)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Carlingford Heights (Murray Farm Public School)",
+          "right": "Carlingford Heights (Mitchell) (Murray Farm Public School)",
+          "should_be": "Carlingford Heights (Parramatta) (Murray Farm Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Bass Hill (Bass Hill Public School)",
+          "right": "Bass Hill (Blaxland) (Bass Hill Public School)",
+          "should_be": "Bass Hill (Watson) (Bass Hill Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Central Sydney (Banks) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Banks) (TAFE NSW (Ultimo Campus))"
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Central Sydney (Barton) (TAFE NSW Ultimo Campus)",
+          "right": "Ultimo (Barton) (TAFE NSW (Ultimo Campus))"
+        },
+        {
+          "left": "Earlwood Central (Our Lady of Lourdes Church Hall)",
+          "right": "Earlwood Central (Earlwood Senior Citizens Centre)"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Denistone West (8 Lakeside Rd)",
+          "right": "Denistone West (Ermington Public School)"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Parramatta) (Ngarala Public School)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Epping East (Epping Public School)",
+          "right": "Epping East (Epping Public School)",
+          "score": 0.714
+        },
+        {
+          "left": "Macquarie Park (Morling College)",
+          "right": "Macquarie Park (Dunmore Lang College)",
+          "score": 0.9482
+        },
+        {
+          "left": "Auburn East (St Joseph the Worker Hall)",
+          "right": "Auburn East (St Joseph the Worker Catholic Church)",
+          "score": 0.9227
+        },
+        {
+          "left": "Gordon (St John's Anglican Church Hall)",
+          "right": "Gordon (Gordon Library Meeting Room)",
+          "score": 0.8591
+        },
+        {
+          "left": "Hornsby East (Salvation Army Hornsby)",
+          "right": "Hornsby East (Hornsby Salvation Army)",
+          "score": 0.7375
+        },
+        {
+          "left": "Ilford (Ilford Public School)",
+          "right": "Ilford (Ilford Public Hall)",
+          "score": 0.5945
+        },
+        {
+          "left": "Rylstone (Rylstone Memorial Hall)",
+          "right": "Rylstone (Rylstone Public School)",
+          "score": 0.8888
+        },
+        {
+          "left": "Tweed Mills (Fatima Hall)",
+          "right": "Lithgow Tweed Mills (Lithgow Fatima Hall)",
+          "score": 0.7484
+        },
+        {
+          "left": "Bellbrook (Bellbrook Public School)",
+          "right": "Bellbrook (Bellbrook School of Arts Hall)",
+          "score": 0.9227
+        },
+        {
+          "left": "Raleigh (Raleigh Public School)",
+          "right": "Raleigh (Raleigh School of Arts Hall)",
+          "score": 0.9227
+        }
+      ]
+    },
+    "precision": 0.98698,
+    "recall": 0.88976
+  },
+  {
+    "case": "federal_2022_2025",
+    "kind": "cross election",
+    "note": "PPId is a booth ID, not a venue ID: ~25% change premises or move >100 m between elections, so 'wrong' here partly reflects a noisy answer key.",
+    "exact_pass": false,
+    "matcher": "splink-em",
+    "splink_trained_on": "unsupervised EM on this pair",
+    "seconds": 6.72,
+    "records": [
+      7047,
+      6966
+    ],
+    "counts": {
+      "links": 6683,
+      "exact": 0,
+      "auto": 6646,
+      "review": 37,
+      "unmatched_left": 364,
+      "unmatched_right": 283
+    },
+    "truth_pairs": 6731,
+    "changed_pairs": 3227,
+    "links": 6610,
+    "correct": 6519,
+    "wrong": 91,
+    "missed": 121,
+    "changed_correct": 3058,
+    "wrong_auto": 90,
+    "wrong_review": 1,
+    "correct_review": 33,
+    "false_links": 48,
+    "examples": {
+      "wrong": [
+        {
+          "left": "Allawah (PJ Ferry Reserve Community Hall)",
+          "right": "Allawah (Banks) (PJ Ferry Reserve Community Hall)",
+          "should_be": "Allawah (Barton) (PJ Ferry Reserve Community Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Allawah South (St Raphael's Church Hall)",
+          "right": "Allawah South (Banks) (St Raphael's Church Hall)",
+          "should_be": "Allawah South (Barton) (St Raphael's Church Hall)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Blakehurst North (Blakehurst High School)",
+          "right": "Blakehurst North (Banks) (Blakehurst High School)",
+          "should_be": "Blakehurst North (Barton) (Blakehurst High School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Kyeemagh (Kyeemagh Public School)",
+          "right": "Kyeemagh (Barton) (Kyeemagh Public School)",
+          "should_be": "Kyeemagh (Kingsford Smith) (Kyeemagh Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Eastwood West (Corrective Services Academy)",
+          "right": "Eastwood West (Bennelong) (Ngarala Public School)",
+          "should_be": "Eastwood West (Parramatta) (Ngarala Public School)",
+          "score": 0.9285,
+          "band": "review",
+          "via": "matcher"
+        },
+        {
+          "left": "Epping West (Epping West Public School)",
+          "right": "Epping West (Berowra) (Epping West Public School)",
+          "should_be": "Epping West (Parramatta) (Epping West Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Melrose Park (Melrose Park Public School)",
+          "right": "Melrose Park (Bennelong) (Melrose Park Public School)",
+          "should_be": "Melrose Park (Parramatta) (Melrose Park Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Ryde Heights (Meadowbank Public School)",
+          "right": "Meadowbank (Meadowbank Public School)",
+          "should_be": "Ryde Heights (Smalls Road Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "West Ryde Central (Smalls Road Public School)",
+          "right": "Ryde Heights (Smalls Road Public School)",
+          "should_be": "West Ryde Central (Sovereign Grace Bible Church)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        },
+        {
+          "left": "Carlingford Heights (Murray Farm Public School)",
+          "right": "Carlingford Heights (Mitchell) (Murray Farm Public School)",
+          "should_be": "Carlingford Heights (Parramatta) (Murray Farm Public School)",
+          "score": 1.0,
+          "band": "auto",
+          "via": "matcher"
+        }
+      ],
+      "missed": [
+        {
+          "left": "Carlton South (Banks) (Carlton South Public School)",
+          "right": "Carlton South (Carlton South Public School)"
+        },
+        {
+          "left": "Sydney (Banks) (York Events)",
+          "right": "Wynyard (Banks) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Marrickville Park (Barton) (Marrickville Uniting Church)",
+          "right": "Marrickville Park (Marrickville Uniting Church)"
+        },
+        {
+          "left": "Marrickville West (Barton) (Marrickville West Public School)",
+          "right": "Marrickville West (Marrickville West Primary School)"
+        },
+        {
+          "left": "Sydney (Barton) (York Events)",
+          "right": "Wynyard (Barton) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "Ermington West (Bennelong) (Ermington West Public School)",
+          "right": "Ermington West (Ermington West Public School)"
+        },
+        {
+          "left": "Meadowbank (Boronia Grove Community Centre)",
+          "right": "Meadowbank (Meadowbank Public School)"
+        },
+        {
+          "left": "Ryde (The Living Way Church)",
+          "right": "Marsfield South (Macquarie Church of Christ)"
+        },
+        {
+          "left": "Sydney (Bennelong) (York Events)",
+          "right": "Wynyard (Bennelong) (St Stephen's Uniting Church)"
+        },
+        {
+          "left": "West Pennant Hills North (Berowra) (West Pennant Hills Community Centre)",
+          "right": "West Pennant Hills North (West Pennant Hills Community Centre)"
+        }
+      ],
+      "review": [
+        {
+          "left": "Killara (St Albans Anglican Church)",
+          "right": "Killara (Killara Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Seven Hills Central (The Hills Sports School High)",
+          "right": "Seven Hills Central (The Meadows Public School)",
+          "score": 0.8542
+        },
+        {
+          "left": "Vineyard East (Greenway) (Natasha's Arts Theatre)",
+          "right": "Vineyard East (Greenway) (Vineyard Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Goulburn Heights (Mulwaree High School)",
+          "right": "Goulburn Heights (Goulburn High School)",
+          "score": 0.5143
+        },
+        {
+          "left": "Vineyard East (Macquarie) (Natasha's Arts Theatre)",
+          "right": "Vineyard East (Macquarie) (Vineyard Public School)",
+          "score": 0.9069
+        },
+        {
+          "left": "Box Hill (Box Hill Community Centre)",
+          "right": "Box Hill (Rouse Hill Salvation Army Corps)",
+          "score": 0.7009
+        },
+        {
+          "left": "Georgetown (Callaghan College (Waratah Campus))",
+          "right": "Georgetown (Newcastle Middle School)",
+          "score": 0.8666
+        },
+        {
+          "left": "Chatswood (North Sydney) (The Meridian)",
+          "right": "Chatswood (Bennelong) (St Paul's Anglican Church)",
+          "score": 0.7455
+        },
+        {
+          "left": "North Sydney (Crows Nest Uniting Church)",
+          "right": "North Sydney (North Sydney Public School)",
+          "score": 0.8542
+        },
+        {
+          "left": "Parkes West (Assemblies of God Hall)",
+          "right": "Parkes West (Parkes PCYC)",
+          "score": 0.8542
+        }
+      ]
+    },
+    "precision": 0.98623,
+    "recall": 0.9685
+  }
+]

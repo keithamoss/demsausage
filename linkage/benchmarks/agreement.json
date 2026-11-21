@@ -1,0 +1,312 @@
+[
+  {
+    "name": "wa_2025",
+    "old": "scrapers/wa_2025/data/wa_2025 (20250206).csv",
+    "new": "scrapers/wa_2025/data/wa_2025 (20250306).csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 708,
+        "exact": 708,
+        "auto": 708,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 14
+      },
+      "splink": {
+        "links": 708,
+        "exact": 708,
+        "auto": 708,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 14
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 708,
+    "agree": 708,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "wa_2021",
+    "old": "scrapers/wa_2021/data/wa_2021 (20210207).csv",
+    "new": "scrapers/wa_2021/data/wa_2021 (20210312).csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 722,
+        "exact": 718,
+        "auto": 721,
+        "review": 1,
+        "unmatched_left": 0,
+        "unmatched_right": 0
+      },
+      "splink": {
+        "links": 720,
+        "exact": 718,
+        "auto": 720,
+        "review": 0,
+        "unmatched_left": 2,
+        "unmatched_right": 2
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 722,
+    "agree": 720,
+    "disagree": 2,
+    "disagreements": [
+      {
+        "left": 104,
+        "left_label": "South West Health Campus",
+        "rapidfuzz": {
+          "right": 100,
+          "right_label": "ECU South West Campus",
+          "score": 0.7742,
+          "band": "auto",
+          "via": "matcher"
+        },
+        "splink": null
+      },
+      {
+        "left": 166,
+        "left_label": "Northam Town Hall",
+        "rapidfuzz": {
+          "right": 166,
+          "right_label": "Northam Town Hall",
+          "score": 0.6608,
+          "band": "review",
+          "via": "matcher"
+        },
+        "splink": null
+      }
+    ]
+  },
+  {
+    "name": "qld_2024",
+    "old": "scrapers/qld_2024/data/qld_2024-2024-10-03.csv",
+    "new": "scrapers/qld_2024/data/qld_2024-2024-10-24.csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 1261,
+        "exact": 1259,
+        "auto": 1261,
+        "review": 0,
+        "unmatched_left": 1,
+        "unmatched_right": 1
+      },
+      "splink": {
+        "links": 1261,
+        "exact": 1259,
+        "auto": 1260,
+        "review": 1,
+        "unmatched_left": 1,
+        "unmatched_right": 1
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 1262,
+    "agree": 1262,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "qld_2020",
+    "old": "scrapers/qld_2020/data/qld_2020 (20201011).csv",
+    "new": "scrapers/qld_2020/data/qld_2020 (20201029).csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 1180,
+        "exact": 1179,
+        "auto": 1180,
+        "review": 0,
+        "unmatched_left": 3,
+        "unmatched_right": 0
+      },
+      "splink": {
+        "links": 1180,
+        "exact": 1179,
+        "auto": 1180,
+        "review": 0,
+        "unmatched_left": 3,
+        "unmatched_right": 0
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 1183,
+    "agree": 1183,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "tas_2025",
+    "old": "scrapers/tas_2025/data/20250710 Polling places.csv",
+    "new": "scrapers/tas_2025/data/20250715 Polling places.csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 256,
+        "exact": 256,
+        "auto": 256,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 0
+      },
+      "splink": {
+        "links": 256,
+        "exact": 256,
+        "auto": 256,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 0
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 256,
+    "agree": 256,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "tas_2021",
+    "old": "scrapers/tas_2021/data/tas_20210425.csv",
+    "new": "scrapers/tas_2021/data/tas_20210430.csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 261,
+        "exact": 259,
+        "auto": 261,
+        "review": 0,
+        "unmatched_left": 2,
+        "unmatched_right": 1
+      },
+      "splink": {
+        "links": 261,
+        "exact": 259,
+        "auto": 261,
+        "review": 0,
+        "unmatched_left": 2,
+        "unmatched_right": 1
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 263,
+    "agree": 263,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "act_2024",
+    "old": "scrapers/act_2024/data/act_2024_10_14.csv",
+    "new": "scrapers/act_2024/data/act_2024_10_17.csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 44,
+        "exact": 40,
+        "auto": 44,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 11
+      },
+      "splink": {
+        "links": 44,
+        "exact": 40,
+        "auto": 44,
+        "review": 0,
+        "unmatched_left": 0,
+        "unmatched_right": 11
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 44,
+    "agree": 44,
+    "disagree": 0,
+    "disagreements": []
+  },
+  {
+    "name": "coffs_harbour_2023_state_to_2026_council",
+    "old": "linkage/benchmarks/data/nsw_coffs_harbour_state_2023_SG2301-020.csv",
+    "new": "scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
+    "counts": {
+      "rapidfuzz": {
+        "links": 21,
+        "exact": 18,
+        "auto": 19,
+        "review": 2,
+        "unmatched_left": 2,
+        "unmatched_right": 2
+      },
+      "splink": {
+        "links": 18,
+        "exact": 18,
+        "auto": 18,
+        "review": 0,
+        "unmatched_left": 5,
+        "unmatched_right": 5
+      }
+    },
+    "matchers": [
+      "rapidfuzz",
+      "splink"
+    ],
+    "left_records": 23,
+    "agree": 20,
+    "disagree": 3,
+    "disagreements": [
+      {
+        "left": 6,
+        "left_label": "Corindi Public School",
+        "rapidfuzz": {
+          "right": 8,
+          "right_label": "Corindi Beach Community Hall",
+          "score": 0.6504,
+          "band": "review",
+          "via": "matcher"
+        },
+        "splink": null
+      },
+      {
+        "left": 7,
+        "left_label": "Dance Centre, Coffs Harbour Showground",
+        "rapidfuzz": {
+          "right": 5,
+          "right_label": "Coffs Harbour Showground - Exhibition Halls",
+          "score": 0.7622,
+          "band": "auto",
+          "via": "matcher"
+        },
+        "splink": null
+      },
+      {
+        "left": 22,
+        "left_label": "Woolgoolga Public School",
+        "rapidfuzz": {
+          "right": 22,
+          "right_label": "Woolgoolga Uniting Church",
+          "score": 0.735,
+          "band": "review",
+          "via": "matcher"
+        },
+        "splink": null
+      }
+    ]
+  }
+]
