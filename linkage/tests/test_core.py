@@ -142,3 +142,19 @@ def test_compare_lists_disagreements():
     assert c["agree"] == 2 and c["disagree"] == 1
     assert c["disagreements"][0]["left"] == 0
     assert c["disagreements"][0]["strict"] is None
+
+
+def test_norm_address_expands_abbreviations():
+    from linkage.normalise import norm_address
+
+    assert norm_address("Cnr Wellington & Gordon Sts") == "corner wellington and gordon sts"
+    assert norm_address("12 Smith St, Mt Barker") == "12 smith street mount barker"
+
+
+def test_leading_place_name_is_dropped_from_address():
+    d = dataset([
+        place(1, "Northam Town Hall", address="Northam Town Hall, Cnr Wellington & Gordon Streets"),
+        place(2, "Town Hall", address="Town Hall Road, Springfield"),  # no comma after: kept
+    ])
+    assert d.records[0].n_address == "corner wellington and gordon streets"
+    assert d.records[1].n_address == "town hall road springfield"

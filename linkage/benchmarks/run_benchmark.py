@@ -41,6 +41,11 @@ class Case:
     new: Path
     id_column: str
     note: str = ""
+    #: Splink is never trained on a case from the same group as the test case.
+    group: str = ""
+
+    def __post_init__(self) -> None:
+        self.group = self.group or self.name
 
     def load(self) -> tuple[Dataset, Dataset]:
         row_filter = _not_abolished if "federal" in self.name else None
@@ -50,6 +55,7 @@ class Case:
         )
 
 
+#: One case per election: used for training (and as the first-to-last test case).
 CASES = [
     Case(
         "sa_2025",
@@ -77,22 +83,40 @@ CASES = [
 ]
 
 
+def snapshot_cases(group: str, pattern: str, id_column: str) -> list[Case]:
+    """Every consecutive pair of snapshots in a series (what a re-scrape diff sees)."""
+    files = sorted(SCRAPERS.glob(pattern))
+    return [
+        Case(f"{group} {a.name[:15]} -> {b.name[:15]}", "within election (consecutive)", a, b, id_column, group=group)
+        for a, b in zip(files, files[1:])
+    ]
+
+
+TEST_CASES = (
+    CASES
+    + snapshot_cases("vic_2026", "vic_2026/data/*polling places.csv", "vec_venue_id")
+    + snapshot_cases("sa_2025", "sa_2025/data/*polling places.csv", "id")
+)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(Path(__file__).parent / "results.json"))
     parser.add_argument("--only", help="Run only this case")
     args = parser.parse_args()
 
-    loaded = {c.name: c.load() for c in CASES}
+    loaded = {c.name: c.load() for c in TEST_CASES}
+    models: dict[str, tuple[dict, float]] = {}
     rows = []
-    for case in CASES:
-        if args.only and case.name != args.only:
+    for case in TEST_CASES:
+        if args.only and not case.name.startswith(args.only):
             continue
         left, right = loaded[case.name]
-        train_pairs = [(c.name, *loaded[c.name]) for c in CASES if c.name != case.name]
-        t = time.time()
-        model = train_from_labels(train_pairs)
-        train_s = time.time() - t
+        train_pairs = [(c.name, *loaded[c.name]) for c in CASES if c.group != case.group]
+        if case.group not in models:
+            t = time.time()
+            models[case.group] = (train_from_labels(train_pairs), time.time() - t)
+        model, train_s = models[case.group]
         matchers = [RapidfuzzMatcher(), SplinkMatcher(model=model)]
         # Unsupervised EM needs enough records to estimate from; skip it on small files.
         if min(len(left.records), len(right.records)) >= EM_MIN_RECORDS:
@@ -123,7 +147,7 @@ def main() -> int:
                 }
                 rows.append(row)
                 print(
-                    f"{case.name:18} exact={'on ' if use_exact else 'off'} {matcher.name:9} "
+                    f"{case.name:42} exact={'on ' if use_exact else 'off'} {matcher.name:9} "
                     f"truth {ev.truth_pairs:5} changed {ev.changed_pairs:4} | correct {ev.correct:5} "
                     f"wrong {ev.wrong:3} (auto {ev.wrong_auto}, review {ev.wrong_review}) "
                     f"missed {ev.missed:4} | changed ok {ev.changed_correct}/{ev.changed_pairs} "

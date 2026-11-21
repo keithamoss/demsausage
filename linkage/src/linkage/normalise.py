@@ -45,6 +45,37 @@ def norm_name(text: str | None) -> str:
     return " ".join(word for word in norm(text).split() if word not in NOISE_WORDS)
 
 
+#: Common Australian address abbreviations, expanded so "Cnr Smith St" == "Corner Smith Street".
+ADDRESS_ABBREVIATIONS = {
+    "cnr": "corner",
+    "crn": "corner",
+    "st": "street",
+    "rd": "road",
+    "ave": "avenue",
+    "av": "avenue",
+    "hwy": "highway",
+    "dr": "drive",
+    "pde": "parade",
+    "cres": "crescent",
+    "cr": "crescent",
+    "ct": "court",
+    "pl": "place",
+    "tce": "terrace",
+    "blvd": "boulevard",
+    "esp": "esplanade",
+    "gr": "grove",
+    "ln": "lane",
+    "mt": "mount",
+    "nth": "north",
+    "sth": "south",
+}
+
+
+def norm_address(text: str | None) -> str:
+    """norm() plus expanding common street abbreviations."""
+    return " ".join(ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split())
+
+
 def distance_m(
     lat1: float | None, lon1: float | None, lat2: float | None, lon2: float | None
 ) -> float | None:

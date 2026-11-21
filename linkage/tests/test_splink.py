@@ -81,3 +81,15 @@ def test_bundled_model_loads_and_links():
     result = link(dataset(base), dataset(_drifted(base, 12)), SplinkMatcher())
     assert result.params["training"]["labelled_pairs"] > 0
     assert all(x.left == x.right for x in result.links)
+
+
+def test_single_axis_coordinate_typo_does_not_veto_a_match(model):
+    # Same place, but the old file's latitude is off by exactly one degree (~111 km).
+    others = _synthetic(40, 21)
+    good = place("x", "Northam Town Hall", "", "Cnr Wellington & Gordon Streets, Northam", -31.656332, 116.671239)
+    typo = dict(good, lat="-32.656332")
+    left, right = dataset([typo] + others), dataset([good] + [dict(r) for r in others])
+    pairs = SplinkMatcher(model=model, review_threshold=0.0).score(left, right, [0], [0])
+    assert pairs and pairs[0].explain["mw_geo"] > -3
+    geo = next(c for c in model["comparisons"] if c["output_column_name"] == "lat_lon")
+    assert any("typo" in (lv.get("label_for_charts") or "") for lv in geo["comparison_levels"])

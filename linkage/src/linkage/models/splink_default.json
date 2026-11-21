@@ -5,7 +5,7 @@
   "retain_intermediate_calculation_columns": true,
   "additional_columns_to_retain": [],
   "sql_dialect": "duckdb",
-  "linker_uid": "pcc5ib7u",
+  "linker_uid": "15lbxja7",
   "em_convergence": 0.0001,
   "max_iterations": 25,
   "match_weight_column_prefix": "mw_",
@@ -151,8 +151,8 @@
         {
           "sql_condition": "\"address_l\" = \"address_r\"",
           "label_for_charts": "Exact match on address",
-          "m_probability": 0.802425578831312,
-          "u_probability": 0.00010508219131396286,
+          "m_probability": 0.8131201764057332,
+          "u_probability": 0.00010555553451807982,
           "fix_m_probability": false,
           "fix_u_probability": false,
           "tf_adjustment_column": "address",
@@ -161,24 +161,24 @@
         {
           "sql_condition": "jaro_winkler_similarity(\"address_l\", \"address_r\") >= 0.92",
           "label_for_charts": "Jaro-Winkler distance of address >= 0.92",
-          "m_probability": 0.03914002205071665,
-          "u_probability": 2.6507219430549193e-05,
+          "m_probability": 0.03528114663726571,
+          "u_probability": 3.029396506348479e-05,
           "fix_m_probability": false,
           "fix_u_probability": false
         },
         {
           "sql_condition": "jaro_winkler_similarity(\"address_l\", \"address_r\") >= 0.8",
           "label_for_charts": "Jaro-Winkler distance of address >= 0.8",
-          "m_probability": 0.04564498346196252,
-          "u_probability": 0.000198330802525002,
+          "m_probability": 0.04663726571113561,
+          "u_probability": 0.00039713494825412095,
           "fix_m_probability": false,
           "fix_u_probability": false
         },
         {
           "sql_condition": "ELSE",
           "label_for_charts": "All other comparisons",
-          "m_probability": 0.11278941565600882,
-          "u_probability": 0.9996700797867305,
+          "m_probability": 0.10496141124586549,
+          "u_probability": 0.9994670155521643,
           "fix_m_probability": false,
           "fix_u_probability": false
         }
@@ -189,8 +189,8 @@
       "output_column_name": "lat_lon",
       "comparison_levels": [
         {
-          "sql_condition": "(\"lat_l\" IS NULL OR \"lat_r\" IS NULL) OR (\"lon_l\" IS NULL OR \"lon_r\" IS NULL)",
-          "label_for_charts": "(lat is NULL) OR (lon is NULL)",
+          "sql_condition": "lat_l IS NULL OR lat_r IS NULL OR lon_l IS NULL OR lon_r IS NULL",
+          "label_for_charts": "Coordinates missing",
           "fix_m_probability": false,
           "fix_u_probability": false,
           "is_null_level": true
@@ -198,7 +198,7 @@
         {
           "sql_condition": "\n        cast(\n            acos(\n                \n        case\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) > 1 then 1\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) < -1 then -1\n            else (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    )\n        end\n    \n            ) * 6371\n            as float\n        )\n     <= 0.05",
           "label_for_charts": "Distance less than 0.05km",
-          "m_probability": 0.8041896729015806,
+          "m_probability": 0.8041010276554494,
           "u_probability": 0.00011557495699095863,
           "fix_m_probability": false,
           "fix_u_probability": false
@@ -206,7 +206,7 @@
         {
           "sql_condition": "\n        cast(\n            acos(\n                \n        case\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) > 1 then 1\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) < -1 then -1\n            else (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    )\n        end\n    \n            ) * 6371\n            as float\n        )\n     <= 0.2",
           "label_for_charts": "Distance less than 0.2km",
-          "m_probability": 0.10826901316530749,
+          "m_probability": 0.10825707875027604,
           "u_probability": 3.931443209118675e-05,
           "fix_m_probability": false,
           "fix_u_probability": false
@@ -214,7 +214,7 @@
         {
           "sql_condition": "\n        cast(\n            acos(\n                \n        case\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) > 1 then 1\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) < -1 then -1\n            else (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    )\n        end\n    \n            ) * 6371\n            as float\n        )\n     <= 1",
           "label_for_charts": "Distance less than 1km",
-          "m_probability": 0.06339580205747111,
+          "m_probability": 0.06338881398405208,
           "u_probability": 0.00011415395342139766,
           "fix_m_probability": false,
           "fix_u_probability": false
@@ -222,21 +222,29 @@
         {
           "sql_condition": "\n        cast(\n            acos(\n                \n        case\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) > 1 then 1\n            when (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    ) < -1 then -1\n            else (\n        sin( radians(\"lat_l\") ) * sin( radians(\"lat_r\") ) +\n        cos( radians(\"lat_l\") ) * cos( radians(\"lat_r\") )\n            * cos( radians(\"lon_r\" - \"lon_l\") )\n    )\n        end\n    \n            ) * 6371\n            as float\n        )\n     <= 5",
           "label_for_charts": "Distance less than 5km",
-          "m_probability": 0.022381466597728782,
+          "m_probability": 0.022378999504849846,
           "u_probability": 0.002696117439313674,
+          "fix_m_probability": false,
+          "fix_u_probability": false
+        },
+        {
+          "sql_condition": "abs(lat_l - lat_r) < 0.0005 OR abs(lon_l - lon_r) < 0.0005",
+          "label_for_charts": "One coordinate agrees, the other is far off (likely typo)",
+          "m_probability": 0.00022047071366799258,
+          "u_probability": 0.00031546279244253463,
           "fix_m_probability": false,
           "fix_u_probability": false
         },
         {
           "sql_condition": "ELSE",
           "label_for_charts": "All other comparisons",
-          "m_probability": 0.0017640452779120745,
-          "u_probability": 0.9970348392181828,
+          "m_probability": 0.0016536093917046298,
+          "u_probability": 0.9967193764257403,
           "fix_m_probability": false,
           "fix_u_probability": false
         }
       ],
-      "comparison_description": "DistanceInKMAtThresholds"
+      "comparison_description": "CustomComparison"
     },
     {
       "output_column_name": "divisions",
@@ -297,6 +305,7 @@
       ]
     ],
     "labelled_pairs": 9066,
-    "m_pseudo_count": 1.0
+    "m_pseudo_count": 1.0,
+    "single_axis_level": true
   }
 }

@@ -37,19 +37,19 @@
     "counts": {
       "rapidfuzz": {
         "links": 722,
-        "exact": 718,
-        "auto": 721,
-        "review": 1,
+        "exact": 719,
+        "auto": 722,
+        "review": 0,
         "unmatched_left": 0,
         "unmatched_right": 0
       },
       "splink": {
-        "links": 720,
-        "exact": 718,
-        "auto": 720,
+        "links": 721,
+        "exact": 719,
+        "auto": 721,
         "review": 0,
-        "unmatched_left": 2,
-        "unmatched_right": 2
+        "unmatched_left": 1,
+        "unmatched_right": 1
       }
     },
     "matchers": [
@@ -57,8 +57,8 @@
       "splink"
     ],
     "left_records": 722,
-    "agree": 720,
-    "disagree": 2,
+    "agree": 721,
+    "disagree": 1,
     "disagreements": [
       {
         "left": 104,
@@ -68,18 +68,6 @@
           "right_label": "ECU South West Campus",
           "score": 0.7742,
           "band": "auto",
-          "via": "matcher"
-        },
-        "splink": null
-      },
-      {
-        "left": 166,
-        "left_label": "Northam Town Hall",
-        "rapidfuzz": {
-          "right": 166,
-          "right_label": "Northam Town Hall",
-          "score": 0.6608,
-          "band": "review",
           "via": "matcher"
         },
         "splink": null

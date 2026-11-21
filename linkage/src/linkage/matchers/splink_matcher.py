@@ -74,7 +74,45 @@ def splink_row(record: Record, uid: str, label: str | None = None, group: str = 
     }
 
 
-def settings(all_pairs: bool = False):
+#: One coordinate agreeing to within this many degrees (~50 m) while the other is far
+#: off is the signature of a single-coordinate typo (e.g. -32.656 for -31.656).
+SINGLE_AXIS_TOLERANCE_DEG = 0.0005
+
+
+def geo_comparison(single_axis_level: bool = True):
+    """Distance bands, plus (optionally) a level for "one axis agrees, the other doesn't".
+
+    Without that level a typo in one coordinate lands in "more than 5 km apart",
+    which in a model trained on clean data is near-conclusive evidence against a
+    match. As its own level, Splink learns how much that pattern should count:
+    it is rare for true matches but also rare for random pairs, so it ends up
+    close to neutral and the other fields decide.
+    """
+    cl, _, _, _, _ = _splink()
+    import splink.comparison_level_library as cll
+
+    levels = [
+        cll.CustomLevel(
+            "lat_l IS NULL OR lat_r IS NULL OR lon_l IS NULL OR lon_r IS NULL",
+            label_for_charts="Coordinates missing",
+        ).configure(is_null_level=True),
+        *(cll.DistanceInKMLevel("lat", "lon", km) for km in (0.05, 0.2, 1, 5)),
+    ]
+    if single_axis_level:
+        t = SINGLE_AXIS_TOLERANCE_DEG
+        levels.append(
+            cll.CustomLevel(
+                f"abs(lat_l - lat_r) < {t} OR abs(lon_l - lon_r) < {t}",
+                label_for_charts="One coordinate agrees, the other is far off (likely typo)",
+            )
+        )
+    levels.append(cll.ElseLevel())
+    return cl.CustomComparison(
+        levels, output_column_name="lat_lon", comparison_description="Distance between places"
+    )
+
+
+def settings(all_pairs: bool = False, single_axis_level: bool = True):
     """Comparisons and blocking. Shared by training and prediction."""
     cl, _, _, SettingsCreator, block_on = _splink()
     blocking = [
@@ -97,7 +135,7 @@ def settings(all_pairs: bool = False):
             cl.JaroWinklerAtThresholds("address", [0.92, 0.8]).configure(
                 term_frequency_adjustments=True
             ),
-            cl.DistanceInKMAtThresholds("lat", "lon", [0.05, 0.2, 1, 5]),
+            geo_comparison(single_axis_level),
             cl.ArrayIntersectAtSizes("divisions", [2, 1]),
         ],
         blocking_rules_to_generate_predictions=blocking,
@@ -159,10 +197,11 @@ def train_from_labels(
     pairs: Sequence[tuple[str, Dataset, Dataset]],
     out_path: str | Path | None = None,
     pseudo_count: float = 1.0,
+    single_axis_level: bool = True,
 ) -> dict:
     """Train m and u probabilities from labelled pairs; return (and optionally save) the model."""
     left_rows, right_rows = labelled_rows(pairs)
-    linker = _linker(left_rows, right_rows, settings())
+    linker = _linker(left_rows, right_rows, settings(single_axis_level=single_axis_level))
     linker.training.estimate_u_using_random_sampling(max_pairs=2e6, seed=1)
     linker.training.estimate_m_from_label_column("truth")
     model = linker.misc.save_model_to_json()
@@ -173,6 +212,7 @@ def train_from_labels(
         "files": [[left.path, right.path] for _, left, right in pairs],
         "labelled_pairs": n_labelled,
         "m_pseudo_count": pseudo_count,
+        "single_axis_level": single_axis_level,
     }
     if out_path is not None:
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
@@ -190,6 +230,8 @@ class SplinkMatcher:
     #: unsupervised is set.
     model: dict | str | Path | None = None
     unsupervised: bool = False
+    #: Only used when training by EM; a loaded model carries its own comparisons.
+    single_axis_level: bool = True
     #: Score every pair when left x right is at most this; otherwise use blocking.
     all_pairs_limit: int = 250_000
     _model_dict: dict | None = field(default=None, init=False, repr=False)
@@ -226,7 +268,7 @@ class SplinkMatcher:
     def _prediction_settings(self, n_left: int, n_right: int) -> Any:
         all_pairs = n_left * n_right <= self.all_pairs_limit
         if self.unsupervised:
-            return settings(all_pairs)
+            return settings(all_pairs, self.single_axis_level)
         model = json.loads(json.dumps(self._load_model()))
         model.pop("training", None)
         model["blocking_rules_to_generate_predictions"] = (
@@ -269,7 +311,9 @@ class SplinkMatcher:
                 except Exception:  # noqa: BLE001 - EM can fail to converge on tiny inputs
                     pass
 
-        predictions = linker.inference.predict(threshold_match_probability=0.01).as_record_list()
+        predictions = linker.inference.predict(
+            threshold_match_probability=min(0.01, self.review_threshold)
+        ).as_record_list()
         pairs = []
         for row in predictions:
             a, b = row["unique_id_l"], row["unique_id_r"]

@@ -14,7 +14,7 @@ from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .normalise import norm, norm_name
+from .normalise import norm, norm_address, norm_name
 
 # Candidate source columns for each field, in order of preference.
 _NAME_COLUMNS = ("name", "PPName", "Polling_Place_Name", "Polling Place Name", "polling_place_name")
@@ -101,7 +101,9 @@ class Record:
     def __post_init__(self) -> None:
         object.__setattr__(self, "n_name", norm_name(_strip_own_division(self.name, self.divisions)))
         object.__setattr__(self, "n_premises", norm(self.premises))
-        object.__setattr__(self, "n_address", norm(self.address))
+        object.__setattr__(
+            self, "n_address", norm_address(_strip_leading_place_name(self.address, self.name, self.premises))
+        )
 
     @property
     def has_coords(self) -> bool:
@@ -125,6 +127,18 @@ def _strip_own_division(name: str, divisions: frozenset[str]) -> str:
     if match and norm(match.group(1)) in divisions:
         return name[: match.start()]
     return name
+
+
+def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
+    """Drop a first comma-separated part that just repeats the place's name or premises.
+
+    Some files write "Northam Town Hall, Cnr Wellington & Gordon Streets" where
+    others write "Corner Wellington & Gordon Streets".
+    """
+    first, sep, rest = address.partition(",")
+    if sep and rest.strip() and norm(first) in {norm(name), norm(premises)} - {""}:
+        return rest.strip()
+    return address
 
 
 def _to_float(value: str | None) -> float | None:
