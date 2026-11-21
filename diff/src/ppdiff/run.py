@@ -147,6 +147,10 @@ def run_pair(
         diff = build_diff(left, right, LinkResult.from_dict(r), link_output, settings, loader_renames(out_dir))
         diff["loader"] = checks
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
+    active_diffs = {f"diff-{r['matcher']}.json" for r in link_output["results"]}
+    for path in target.glob("diff-*.json"):
+        if path.name not in active_diffs:
+            path.unlink()
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)
     write_index(out_dir)
