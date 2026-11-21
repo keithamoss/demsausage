@@ -227,6 +227,32 @@ def test_stats_hide_past_benchmark_when_a_newer_election_is_active(_gamified):
 
 
 @pytest.mark.django_db
+@patch("demsausage.app.serializers.getGamifiedElectionStats", return_value=[])
+def test_election_day_activity_uses_perth_date_for_benchmark_and_cache(
+    _gamified, local_cache
+):
+    now = datetime(2026, 11, 15, 0, tzinfo=datetime_timezone.utc)
+    past = make_election(
+        "Federal 2022", datetime(2022, 5, 20, 16, tzinfo=datetime_timezone.utc)
+    )
+    current = make_election(
+        "Federal 2025", datetime(2026, 11, 14, 16, tzinfo=datetime_timezone.utc)
+    )
+    make_election(
+        "Federal 2028", datetime(2028, 11, 14, 16, tzinfo=datetime_timezone.utc)
+    )
+    add_polling_places(past, 2, GOOD_HISTORY)
+    add_polling_places(current, 1, [])
+
+    with patch("django.utils.timezone.now", return_value=now):
+        stats = ElectionsStatsSerializer(current).data["stats"]
+
+    assert stats["benchmark"]["election_id"] == past.id
+    assert stats["benchmark"]["is_active"] is True
+    assert local_cache.get(f"election_{current.id}_stats") is None
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "area,legacy_name,recent_name",
     [

@@ -55,6 +55,21 @@ def election_calendar_day(election):
     return election.election_day.astimezone(BENCHMARK_TIMEZONE).date()
 
 
+def is_election_active(election, today=None):
+    """Check whether an election is today or still to come in Perth.
+
+    Args:
+        election: The election whose activity should be checked.
+        today: Today's date in Perth, or None to calculate it now.
+
+    Returns:
+        True if the election's Perth calendar day is today or later.
+    """
+    if today is None:
+        today = timezone.now().astimezone(BENCHMARK_TIMEZONE).date()
+    return election_calendar_day(election) >= today
+
+
 def _pct(numerator, denominator):
     """Turn a count and total into a percentage rounded to one decimal place.
 
@@ -356,7 +371,7 @@ def get_election_benchmark(election):
         return None
 
     today = timezone.now().astimezone(BENCHMARK_TIMEZONE).date()
-    is_active = election.is_active()
+    is_active = is_election_active(election, today=today)
     if not is_active and not _show_past_benchmark(election):
         return None
 
