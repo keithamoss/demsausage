@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
+  --accent: #5b3fa8; --accent-soft: #efeaf9; --add: #1f7a3d; --add-soft: #e6f4ea;
+  --del: #b3261e; --del-soft: #fbe9e7; --warn: #8a5a00; --warn-soft: #fff3d6; --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
+    --accent: #b49cf0; --accent-soft: #2c2540; --add: #7fd39a; --add-soft: #173322;
+    --del: #f2a39c; --del-soft: #3a1c1a; --warn: #f0c46a; --warn-soft: #3a2e12;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 26px 0 8px; }
+.note { color: var(--muted); font-size: 14px; }
+a { color: var(--accent); }
+.pairs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.pair { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+.pair h3 { margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
+.counts-wrap { overflow-x: auto; }
+.counts { border-collapse: collapse; font-size: 13px; width: 100%; }
+.counts th, .counts td { padding: 2px 6px; text-align: right; white-space: nowrap; }
+.counts th { color: var(--muted); font-weight: 400; }
+.counts tbody th { text-align: left; }
+.counts td { font-weight: 600; font-variant-numeric: tabular-nums; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.tab { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 13px; font: inherit; cursor: pointer; }
+.tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+input[type=search] { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%; margin: 6px 0 10px; }
+.place { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin: 6px 0; }
+.place h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.events { list-style: none; margin: 0; padding: 0; }
+.events li { display: grid; grid-template-columns: minmax(120px, 210px) 1fr; gap: 10px; padding: 3px 0; border-top: 1px solid var(--border); font-size: 14px; }
+.events li:first-child { border-top: 0; }
+.when { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.kind { font-size: 12px; border-radius: 999px; padding: 1px 7px; margin-right: 6px; }
+.kind.added { background: var(--add-soft); color: var(--add); }
+.kind.removed { background: var(--del-soft); color: var(--del); }
+.kind.changed { background: var(--accent-soft); color: var(--accent); }
+.kind.possible { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 640px) {
+  .counts { font-size: 11.5px; }
+  .counts th, .counts td { padding: 2px 3px; }
+  .events li { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title"></h1>
+  <p class="note">Each pair of consecutive files has a report with one diff per matcher and a tab for recording verdicts where they disagree.</p>
+  <h2>Pairs</h2>
+  <div class="pairs" id="pairs"></div>
+  <h2>History by place</h2>
+  <p class="note">Every place that changed at least once, followed from file to file through the chosen matcher's links. Places with the most events come first.</p>
+  <div class="tabs" id="matchers"></div>
+  <input type="search" id="search" placeholder="Filter by name…">
+  <div id="history"></div>
+</main>
+<script type="application/json" id="data">{{DATA}}</script>
+<script>
+"use strict";
+const DATA = JSON.parse(document.getElementById("data").textContent);
+const label = (m) => ({ rapidfuzz: "rapidfuzz", splink: "Splink" }[m] || m);
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else el.setAttribute(k, v);
+  }
+  for (const c of children.flat(Infinity)) if (c !== null && c !== undefined && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+document.getElementById("title").textContent = document.title;
+
+const COLS = [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible"], ["likely_replacements", "Replaced"], ["warnings", "Warnings"]];
+document.getElementById("pairs").replaceChildren(...DATA.pairs.map((p) =>
+  h("div", { class: "pair" },
+    h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old} → ${p.new}`)),
+    h("div", { class: "note" }, `${p.records[0]} → ${p.records[1]} places`,
+      p.disagreements === null ? "" : ` · ${p.disagreements ? p.disagreements + " disagreements to review" : "matchers agree"}`),
+    h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
+      h("thead", {}, h("tr", {}, h("th", {}), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),
+      h("tbody", {}, Object.entries(p.summaries).map(([m, s]) =>
+        h("tr", {}, h("th", { scope: "row" }, label(m)), COLS.map(([k]) => h("td", {}, s[k] ?? 0))))))))));
+
+let matcher = DATA.matchers[0];
+function renderHistory() {
+  document.getElementById("matchers").replaceChildren(...DATA.matchers.map((m) =>
+    h("button", { class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  const places = (DATA.history[matcher] || []).filter((p) => !q || (p.name || "").toLowerCase().includes(q));
+  document.getElementById("history").replaceChildren(
+    places.length ? h("div", {}, places.map((p) => h("div", { class: "place" },
+      h("h3", {}, p.name || "(unnamed)"),
+      h("ul", { class: "events" }, p.events.map((e) => h("li", {},
+        h("a", { class: "when", href: `${encodeURIComponent(e.pair)}/report.html` }, e.when),
+        h("span", {}, h("span", { class: "kind " + e.kind }, e.kind), e.text))))))) : h("p", { class: "note" }, "No places changed."));
+}
+document.getElementById("search").addEventListener("input", renderHistory);
+renderHistory();
+</script>
+</body>
+</html>

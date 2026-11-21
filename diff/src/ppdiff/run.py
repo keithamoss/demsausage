@@ -13,6 +13,7 @@ from linkage.result import LinkResult
 from linkage.run import file_sha256, link_files
 
 from .core import build_diff
+from .index import write_index
 from .report import write_report
 
 
@@ -89,6 +90,7 @@ def run_pair(
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)
+    write_index(out_dir)
     return target
 
 

@@ -3,6 +3,7 @@
     ppdiff run OLD.csv NEW.csv --out-dir scrapers/<election>/diffs
     ppdiff series "scrapers/<election>/data/*.csv" --out-dir scrapers/<election>/diffs
     ppdiff report scrapers/<election>/diffs/<pair folder>      # rebuild report.html only
+    ppdiff index scrapers/<election>/diffs                    # rebuild index.html only
 
 Each pair gets a folder holding link.json (both linkage results), diff-<matcher>.json
 for each matcher, disagreements.json and report.html. Verdicts on disagreements are
@@ -17,6 +18,7 @@ from pathlib import Path
 
 from linkage.run import MATCHER_CHOICES
 
+from .index import write_index
 from .report import write_report
 from .run import check_inputs_unchanged, pair_dir, run_pair, series
 
@@ -64,6 +66,12 @@ def cmd_report(args: argparse.Namespace) -> int:
     target = Path(args.folder)
     check_inputs_unchanged(target)
     print(write_report(target))
+    write_index(target.parent)
+    return 0
+
+
+def cmd_index(args: argparse.Namespace) -> int:
+    print(write_index(Path(args.folder)))
     return 0
 
 
@@ -86,6 +94,10 @@ def main(argv: list[str] | None = None) -> int:
     p_report = sub.add_parser("report", help="Rebuild report.html from a pair folder's JSON")
     p_report.add_argument("folder")
     p_report.set_defaults(func=cmd_report)
+
+    p_index = sub.add_parser("index", help="Rebuild a diffs folder's index.html (pairs + per-place history)")
+    p_index.add_argument("folder")
+    p_index.set_defaults(func=cmd_index)
 
     args = parser.parse_args(argv)
     return args.func(args)

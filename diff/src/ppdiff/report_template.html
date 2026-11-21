@@ -53,6 +53,37 @@ details.section > summary { cursor: pointer; font-weight: 600; font-size: 16px; 
 .old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .empty { font-style: italic; opacity: .8; }
+.badge.disagree { border: 0; cursor: pointer; background: var(--accent-soft); color: var(--accent); font: inherit; font-size: 12px; }
+button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
+.dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+.dir.improved { background: var(--add-soft); color: var(--add); }
+.dir.worse { background: var(--del-soft); color: var(--del); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; transition: outline-color 1s; }
+.card.quality summary { cursor: pointer; }
+.card.quality ul { margin: 8px 0 0; padding-left: 18px; }
+.mapbox { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+svg.map { display: block; width: 100%; height: min(60vh, 460px); touch-action: none; cursor: grab; background: var(--info-soft); }
+svg.map .bg circle { fill: var(--muted); opacity: .45; }
+svg.map .feat { cursor: pointer; }
+svg.map .feat circle { stroke: var(--surface); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+svg.map .feat line { stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+svg.map .moved circle, svg.map .moved line { fill: var(--accent); stroke: var(--accent); }
+svg.map .moved circle.from, svg.map .typo circle.from { fill: var(--surface); }
+svg.map .typo circle, svg.map .typo line { fill: var(--warn); stroke: var(--warn); }
+svg.map .typo line, svg.map .moved line { stroke-dasharray: 6 4; }
+svg.map .added circle { fill: var(--add); }
+svg.map .replacement line { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
+svg.map .removed circle { fill: var(--del); }
+svg.map .feat:focus { outline: none; }
+svg.map .feat:focus circle, svg.map .feat:hover circle { stroke: var(--text); }
+.mapctl { margin-left: auto; display: flex; gap: 4px; }
+.mapctl button { background: var(--surface); min-width: 34px; padding: 3px 9px; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 8px 12px; font-size: 13px; border-top: 1px solid var(--border); }
+.legend .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.key.moved { background: var(--accent); } .key.typo { background: var(--warn); } .key.added { background: var(--add); } .key.removed { background: var(--del); } .key.replacement { background: none; border: 2px dotted var(--muted); width: 8px; height: 8px; }
 .inline-diff { overflow-wrap: anywhere; }
 .inline-diff .old, .inline-diff .new { padding: 0 1px; border-radius: 3px; }
 ins { text-decoration: none; }
@@ -86,6 +117,11 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
   .change, .kv { grid-template-columns: 1fr; }
   .field, .kv dt { margin-top: 4px; }
   .bar .note { display: none; }
+  .tiles { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tile { padding: 6px 8px; }
+  .tile b { font-size: 17px; }
+  .tile span { font-size: 11px; line-height: 1.2; display: block; }
+  h1 { font-size: 17px; }
 }
 </style>
 </head>
@@ -120,7 +156,7 @@ function h(tag, attrs, ...children) {
     else if (k === "class") el.className = v;
     else el.setAttribute(k, v === true ? "" : v);
   }
-  for (const c of children.flat()) {
+  for (const c of children.flat(Infinity)) {
     if (c === null || c === undefined || c === false) continue;
     el.append(c instanceof Node ? c : document.createTextNode(String(c)));
   }
@@ -159,6 +195,7 @@ try { const saved = localStorage.getItem("ppdiff-tab"); if (TABS.some((t) => t.i
 
 function tabTitle(t) {
   if (t.id !== "disagreements") return t.title;
+  if (!DIS.items.length) return "Disagreements (none)";
   const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).length;
   return `Disagreements (${done}/${DIS.items.length} reviewed)`;
 }
@@ -168,6 +205,7 @@ function renderTabs() {
     h("button", { class: "tab", role: "tab", "aria-selected": String(t.id === current), onclick: () => { current = t.id; try { localStorage.setItem("ppdiff-tab", current); } catch (e) {} render(); } }, tabTitle(t))));
 }
 function render() {
+  activeChip = null; searchText = "";
   renderTabs();
   const tab = TABS.find((t) => t.id === current);
   document.getElementById("view").replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
@@ -175,11 +213,6 @@ function render() {
 }
 
 // ---------- a matcher's diff ----------
-function linkBadges(link) {
-  return h("div", { class: "badges" },
-    h("span", { class: "badge" + (link.band === "review" ? " review" : "") }, link.band === "review" ? "possible match" : "linked"),
-    h("span", { class: "badge" }, link.via === "exact" ? "exact key" : `score ${link.score}`));
-}
 function explainLine(explain) {
   const parts = Object.entries(explain || {}).map(([k, v]) => `${k} ${v}`);
   return parts.length ? h("div", { class: "explain" }, "Why: ", h("code", {}, parts.join(" · "))) : null;
@@ -259,52 +292,226 @@ function textDiff(oldV, newV) {
     o.op === "same" ? o.text : h(o.op === "del" ? "del" : "ins", { class: o.op === "del" ? "old" : "new" }, o.text)));
 }
 
-function pairCard(e) {
-  return h("div", { class: "card", "data-search": `${e.name} ${e.old_name}`.toLowerCase() },
+// Places the two matchers handled differently (for badges in each diff).
+const DIS_LEFT = new Set(DIS ? DIS.items.map((it) => it.left.index) : []);
+const DIS_RIGHT = new Set(DIS ? DIS.items.flatMap((it) => Object.values(it.decisions).filter(Boolean).map((d) => d.right.index)) : []);
+function disagreeBadge(oldIndex, newIndex) {
+  const hit = (oldIndex !== undefined && oldIndex !== null && DIS_LEFT.has(oldIndex)) || (newIndex !== undefined && newIndex !== null && DIS_RIGHT.has(newIndex));
+  if (!hit || !TABS.some((t) => t.id === "disagreements")) return null;
+  const target = oldIndex !== undefined && oldIndex !== null && DIS_LEFT.has(oldIndex) ? oldIndex
+    : DIS.items.find((it) => Object.values(it.decisions).some((d) => d && d.right.index === newIndex)).left.index;
+  return h("button", { class: "badge disagree", title: "The other matcher handled this place differently", onclick: () => goTo("disagreements", `dis-${target}`) }, "matchers disagree ›");
+}
+function goTo(tabId, elementId) {
+  current = tabId; render();
+  const el = document.getElementById(elementId);
+  if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+}
+const CATEGORY_LABEL = { accessibility: "Accessibility", entrance: "Entrance", hours: "Opening hours", address: "Address", name: "Name", divisions: "Divisions", votes: "Vote estimates", location: "Location", other: "Other" };
+function entryCategories(e) {
+  const cats = new Set(e.changes.map((c) => c.category || "other"));
+  if (e.location) cats.add("location");
+  return [...cats];
+}
+function directionBadge(c) {
+  return c.direction ? h("span", { class: "dir " + c.direction }, c.direction === "improved" ? "▲ improved" : "▼ worse") : null;
+}
+function pairCard(e, d) {
+  return h("div", { class: "card", id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
     h("h3", {}, e.name),
     e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
-    linkBadges(e.link),
+    h("div", { class: "badges" },
+      h("span", { class: "badge" + (e.link.band === "review" ? " review" : "") }, e.link.band === "review" ? "possible match" : "linked"),
+      h("span", { class: "badge" }, e.link.via === "exact" ? "exact key" : `score ${e.link.score}`),
+      disagreeBadge(e.old_index, e.new_index)),
     e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
     e.changes.map((c) => h("div", { class: "change" },
-      h("div", { class: "field" }, c.field),
+      h("div", { class: "field" }, c.field, " ", directionBadge(c)),
       h("div", {}, textDiff(c.old, c.new)))),
     locationRow(e.location),
     e.link.band === "review" ? explainLine(e.link.explain) : null);
 }
-function recordCard(e, which) {
-  const r = e.record;
-  return h("div", { class: "card", "data-search": e.name.toLowerCase() },
+function recordCard(e, d, which) {
+  const idx = which === "added" ? e.new_index : e.old_index;
+  const pair = which === "added" ? e.replaces : e.replaced_by;
+  const repl = pair === null || pair === undefined ? null
+    : d.replacements.find((p) => (which === "added" ? p.new_index === idx : p.old_index === idx));
+  return h("div", { class: "card", id: `${d.matcher}-${which}-${idx}`, "data-search": e.name.toLowerCase(), "data-cats": "" },
     h("h3", {}, e.name),
-    h("dl", { class: "kv" }, Object.entries(r).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])));
+    h("div", { class: "badges" },
+      repl ? h("button", { class: "badge review", onclick: () => goTo(d.matcher, `${d.matcher}-repl-${repl.old_index}`) },
+        `${which === "added" ? "likely replaces" : "likely replaced by"} ${which === "added" ? repl.old_name : repl.new_name} (${fmtM(repl.distance_m)}) ›`) : null,
+      disagreeBadge(which === "removed" ? idx : null, which === "added" ? idx : null)),
+    h("dl", { class: "kv" }, Object.entries(e.record).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])));
 }
-function section(title, items, makeCard, open) {
-  return h("details", { class: "section", open: open && items.length > 0 },
+function replacementCard(p, d) {
+  const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
+  const brief = (r) => h("div", {}, h("b", {}, r.name), h("div", { class: "was" }, r.record.address || Object.values(r.record).slice(2, 4).join(", ")),
+    r.lat !== null ? h("a", { href: osm(r.lat, r.lon), target: "_blank", rel: "noopener" }, "map") : null);
+  return h("div", { class: "card", id: `${d.matcher}-repl-${p.old_index}`, "data-search": `${p.old_name} ${p.new_name}`.toLowerCase(), "data-cats": "" },
+    h("h3", {}, `${p.old_name} → ${p.new_name}`),
+    h("div", { class: "badges" }, h("span", { class: "badge review" }, `${fmtM(p.distance_m)} apart`), disagreeBadge(p.old_index, p.new_index)),
+    h("div", { class: "decisions" },
+      h("div", { class: "decision" }, h("h4", {}, "Removed"), brief(gone)),
+      h("div", { class: "decision" }, h("h4", {}, "Added nearby"), brief(came))),
+    h("p", { class: "note" }, "Not linked by the matcher, but close together: often a venue swap. Check the two cards above if it should have been a link."));
+}
+function qualityCard(q, d) {
+  return h("details", { class: "card quality", "data-search": q.places.map((p) => p.name).join(" ").toLowerCase(), "data-cats": "" },
+    h("summary", {}, h("b", {}, q.title), " ", h("span", { class: "count" }, `(${q.count})`)),
+    h("ul", {}, q.places.map((p) => h("li", {}, p.name, p.detail ? h("span", { class: "was" }, ` · ${p.detail}`) : null))),
+    q.count > q.places.length ? h("p", { class: "note" }, `Showing ${q.places.length} of ${q.count}.`) : null);
+}
+function section(title, items, makeCard, open, extraClass) {
+  return h("details", { class: "section" + (extraClass ? " " + extraClass : ""), open: open && items.length > 0 },
     h("summary", {}, title, " ", h("span", { class: "count" }, `(${items.length})`)),
     items.length ? items.map(makeCard) : h("p", { class: "note" }, "None."));
 }
+
+// ---------- map (inline SVG, works offline) ----------
+function mapFeatures(d) {
+  const f = [];
+  for (const e of d.changed.concat(d.possible_matches)) {
+    if (e.location && e.location.moved_m !== null && e.location.old[0] !== null)
+      f.push({ kind: e.location.likely_typo ? "typo" : "moved", from: e.location.old, to: e.location.new, name: e.name, target: `${d.matcher}-pair-${e.new_index}` });
+  }
+  for (const p of d.replacements) {
+    const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
+    if (gone && came && gone.lat !== null && came.lat !== null)
+      f.push({ kind: "replacement", from: [gone.lat, gone.lon], to: [came.lat, came.lon], name: `${p.old_name} → ${p.new_name}`, target: `${d.matcher}-repl-${p.old_index}`, lineOnly: true });
+  }
+  for (const a of d.added) if (a.lat !== null) f.push({ kind: "added", to: [a.lat, a.lon], name: a.name, target: `${d.matcher}-added-${a.new_index}` });
+  for (const r of d.removed) if (r.lat !== null) f.push({ kind: "removed", to: [r.lat, r.lon], name: r.name, target: `${d.matcher}-removed-${r.old_index}` });
+  return f;
+}
+function renderMap(d) {
+  const feats = mapFeatures(d);
+  if (!feats.length) return null;
+  const pts = feats.flatMap((f) => (f.from ? [f.from, f.to] : [f.to]));
+  const lats = pts.map((p) => p[0]), lons = pts.map((p) => p[1]);
+  const latC = (Math.min(...lats) + Math.max(...lats)) / 2, kx = Math.cos(latC * Math.PI / 180);
+  const X = (lon) => lon * kx, Y = (lat) => -lat;
+  let x0 = Math.min(...lons.map(X)), x1 = Math.max(...lons.map(X)), y0 = Math.min(...lats.map(Y)), y1 = Math.max(...lats.map(Y));
+  const pad = Math.max(x1 - x0, y1 - y0, 0.02) * 0.12;
+  x0 -= pad; x1 += pad; y0 -= pad; y1 += pad;
+  const home = [x0, y0, Math.max(x1 - x0, 0.02), Math.max(y1 - y0, 0.02)];
+  let vb = home.slice();
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, attrs) => { const el = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
+  const svg = s("svg", { class: "map", role: "img", "aria-label": "Map of changed places" });
+  const bg = s("g", { class: "bg" }), fg = s("g", {});
+  for (const [lat, lon] of d.context_points) bg.append(s("circle", { cx: X(lon), cy: Y(lat), "data-r": 2 }));
+  for (const f of feats) {
+    const g = s("g", { class: "feat " + f.kind, tabindex: 0 });
+    const title = s("title", {}); title.textContent = `${f.name} (${f.kind === "typo" ? "moved, likely coordinate typo" : f.kind})`; g.append(title);
+    if (f.from) g.append(s("line", { x1: X(f.from[1]), y1: Y(f.from[0]), x2: X(f.to[1]), y2: Y(f.to[0]) }));
+    if (f.from && !f.lineOnly) g.append(s("circle", { class: "from", cx: X(f.from[1]), cy: Y(f.from[0]), "data-r": 3 }));
+    if (!f.lineOnly) g.append(s("circle", { cx: X(f.to[1]), cy: Y(f.to[0]), "data-r": 5.5 }));
+    const go = () => { setChip(null); goTo(d.matcher, f.target); };
+    g.addEventListener("click", go); g.addEventListener("keydown", (ev) => { if (ev.key === "Enter") go(); });
+    fg.append(g);
+  }
+  svg.append(bg, fg);
+  const apply = () => {
+    svg.setAttribute("viewBox", vb.join(" "));
+    // The viewBox is letterboxed into the element, so one screen pixel is the larger of the two ratios.
+    const px = Math.max(vb[2] / (svg.clientWidth || 600), vb[3] / (svg.clientHeight || 400));
+    svg.querySelectorAll("circle").forEach((c) => c.setAttribute("r", c.dataset.r * px));
+  };
+  const zoom = (factor, cx, cy) => {
+    const w = vb[2] * factor, hgt = vb[3] * factor;
+    cx = cx ?? vb[0] + vb[2] / 2; cy = cy ?? vb[1] + vb[3] / 2;
+    vb = [cx - (cx - vb[0]) * factor, cy - (cy - vb[1]) * factor, w, hgt]; apply();
+  };
+  const toMap = (ev) => { const r = svg.getBoundingClientRect(); return [vb[0] + (ev.clientX - r.left) / r.width * vb[2], vb[1] + (ev.clientY - r.top) / r.height * vb[3]]; };
+  svg.addEventListener("wheel", (ev) => { ev.preventDefault(); const [mx, my] = toMap(ev); zoom(ev.deltaY > 0 ? 1.25 : 0.8, mx, my); }, { passive: false });
+  let drag = null;
+  svg.addEventListener("pointerdown", (ev) => { if (ev.target.closest(".feat")) return; drag = { x: ev.clientX, y: ev.clientY, vb: vb.slice() }; svg.setPointerCapture(ev.pointerId); });
+  svg.addEventListener("pointermove", (ev) => {
+    if (!drag) return; const r = svg.getBoundingClientRect();
+    vb = [drag.vb[0] - (ev.clientX - drag.x) / r.width * drag.vb[2], drag.vb[1] - (ev.clientY - drag.y) / r.height * drag.vb[3], drag.vb[2], drag.vb[3]]; apply();
+  });
+  svg.addEventListener("pointerup", () => { drag = null; });
+  const box = h("div", { class: "mapbox" }, svg,
+    h("div", { class: "legend" },
+      [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
+        h("span", {}, h("i", { class: "key " + k }), t)),
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it."),
+      h("span", { class: "mapctl" },
+        h("button", { class: "ghost", "aria-label": "Zoom in", onclick: () => zoom(0.6) }, "+"),
+        h("button", { class: "ghost", "aria-label": "Zoom out", onclick: () => zoom(1 / 0.6) }, "−"),
+        h("button", { class: "ghost", onclick: () => { vb = home.slice(); apply(); } }, "Reset"))));
+  requestAnimationFrame(apply);
+  new ResizeObserver(apply).observe(svg);
+  return box;
+}
+
+// ---------- filters, copy summary ----------
+let activeChip = null;
+function setChip(cat) {
+  activeChip = cat;
+  document.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String((c.dataset.cat || null) === cat)));
+  applyFilters();
+}
+let searchText = "";
+function applyFilters() {
+  const root = document.getElementById("view");
+  root.querySelectorAll(".card").forEach((c) => {
+    const okText = !searchText || (c.dataset.search || "").includes(searchText);
+    const okCat = !activeChip || (c.dataset.cats || "").split(" ").includes(activeChip);
+    c.style.display = okText && okCat ? "" : "none";
+  });
+}
+function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
+function summaryText(d) {
+  const s = d.summary, lines = [];
+  lines.push(`${d.old.path.split("/").pop()} → ${d.new.path.split("/").pop()} (${label(d.matcher)})`);
+  lines.push(`${d.new.records} places: ${s.changed} changed, ${s.added} added, ${s.removed} removed, ${s.possible_matches} possible matches, ${s.likely_replacements} likely replacements.`);
+  if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
+  if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
+  for (const p of d.replacements) lines.push(`Likely replacement: ${p.old_name} → ${p.new_name} (${fmtM(p.distance_m)})`);
+  if (d.changed.length) lines.push("Changed:", ...d.changed.map((e) => `- ${e.name}: ${[...e.changes.map((c) => c.field), ...(e.location ? [`moved ${fmtM(e.location.moved_m)}`] : [])].join(", ")}`));
+  const warns = d.changed.concat(d.possible_matches).flatMap((e) => e.warnings.map((w) => `${e.name}: ${w}`));
+  if (warns.length) lines.push("Warnings:", ...warns.map((w) => `- ${w}`));
+  return lines.join("\n");
+}
+async function copyText(text, button) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const t = h("textarea", {}, text); document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); }
+  const was = button.textContent; button.textContent = "Copied"; setTimeout(() => { button.textContent = was; }, 1400);
+}
+
 function renderDiff(d) {
   const s = d.summary;
   const warned = d.changed.concat(d.possible_matches).filter((e) => e.warnings.length);
+  const counts = {};
+  for (const e of d.changed.concat(d.possible_matches)) for (const c of entryCategories(e)) counts[c] = (counts[c] || 0) + 1;
+  const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
+  activeChip = null; searchText = "";
+  const card = (e) => pairCard(e, d);
   const wrap = h("div", {},
     h("div", { class: "tiles" },
-      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["warnings", "Warnings"], ["unchanged", "Unchanged"]]
-        .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k]), h("span", {}, t)))),
+      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"]]
+        .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
+    renderMap(d),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) })),
+      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
+    cats.length ? h("div", { class: "chips" },
+      h("button", { class: "chip", "aria-pressed": "true", onclick: () => setChip(null) }, "All changes"),
+      cats.map((c) => h("button", { class: "chip", "data-cat": c, "aria-pressed": "false", onclick: () => setChip(activeChip === c ? null : c) }, `${CATEGORY_LABEL[c]} ${counts[c]}`))) : null,
     d.columns.added.length || d.columns.removed.length
       ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
       : null,
-    section("Warnings", warned, pairCard, true),
-    section("Possible matches (review band)", d.possible_matches, pairCard, true),
-    section("Changed", d.changed, pairCard, true),
-    section("Added", d.added, (e) => recordCard(e, "added"), true),
-    section("Removed", d.removed, (e) => recordCard(e, "removed"), true),
+    section("Warnings", warned, card, true),
+    section("Possible matches (review band)", d.possible_matches, card, true),
+    section("Likely replacements (removed + added nearby)", d.replacements, (p) => replacementCard(p, d), true),
+    section("Changed", d.changed, card, true),
+    section("Added", d.added, (e) => recordCard(e, d, "added"), true),
+    section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
+    section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
     h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
   return wrap;
-}
-function filter(root, q) {
-  q = q.trim().toLowerCase();
-  root.querySelectorAll(".card").forEach((c) => { c.style.display = !q || (c.dataset.search || "").includes(q) ? "" : "none"; });
 }
 
 // ---------- disagreements + verdicts ----------
@@ -328,7 +535,7 @@ function verdictCard(item) {
   const idx = item.left.index;
   const v = VERDICTS[idx] || {};
   const name = `verdict-${idx}`;
-  const card = h("div", { class: "card" + (v.verdict ? " done" : ""), "data-search": item.left.name.toLowerCase() });
+  const card = h("div", { class: "card" + (v.verdict ? " done" : ""), id: `dis-${idx}`, "data-search": item.left.name.toLowerCase() });
   const set = (patch) => {
     VERDICTS[idx] = Object.assign({}, VERDICTS[idx], patch, { updated_at: new Date().toISOString() });
     card.classList.toggle("done", Boolean(VERDICTS[idx].verdict));

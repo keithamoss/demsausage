@@ -20,7 +20,7 @@ def _ds(rows):
 
 
 def _row(name, lat, lon, address="1 Main St, Town", access="Full", premises=""):
-    return {"name": name, "premises": premises, "address": address, "lat": str(lat), "lon": str(lon), "wheelchair_access": access}
+    return {"name": name, "premises": premises, "address": address, "lat": f"{lat:.6f}", "lon": f"{lon:.6f}", "wheelchair_access": access}
 
 
 def _write(path: Path, rows):
@@ -76,9 +76,14 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
     assert sorted(p.name for p in target.iterdir()) == ["diff-rapidfuzz.json", "disagreements.json", "link.json", "report.html"]
     d = json.loads((target / "diff-rapidfuzz.json").read_text())
-    assert d["summary"] == {"unchanged": 1, "changed": 2, "added": 1, "removed": 1, "possible_matches": 0, "warnings": 1}
+    assert d["summary"] == {
+        "unchanged": 1, "changed": 2, "added": 1, "removed": 1, "possible_matches": 0,
+        "likely_replacements": 0, "warnings": 1, "quality_issues": 0,
+    }
     beta = next(e for e in d["changed"] if e["name"] == "Beta School")
-    assert beta["changes"] == [{"field": "wheelchair_access", "old": "Assisted", "new": "Full"}]
+    assert beta["changes"] == [
+        {"field": "wheelchair_access", "old": "Assisted", "new": "Full", "category": "accessibility", "direction": "improved"}
+    ]
     gamma = next(e for e in d["changed"] if e["name"] == "Gamma Church")
     assert gamma["changes"] == [] and gamma["location"]["likely_typo"] == "latitude"
     assert [e["name"] for e in d["added"]] == ["Epsilon Centre"]
@@ -102,3 +107,66 @@ def test_series_pairs_consecutive_files(pair):
     root, old, new = pair
     later = _write(root / "data" / "20260115 places.csv", [_row("Alpha Hall", -33.0, 151.0)])
     assert series(str(root / "data" / "*.csv")) == [(old, new), (new, later)]
+
+
+def test_field_categories_and_access_direction():
+    from ppdiff.core import access_direction, field_category
+
+    assert field_category("wheelchair_access") == "accessibility"
+    assert field_category("entrance_desc") == "entrance"
+    assert field_category("opening_hours") == "hours"
+    assert field_category("suburb") == "address"
+    assert field_category("est_ordinary_votes") == "votes"
+    assert field_category("mystery") == "other"
+    assert access_direction("wheelchair_access", "None", "Assisted") == "improved"
+    assert access_direction("wheelchair_access", "Full", "Assisted") == "worse"
+    assert access_direction("wheelchair_access_description", "None", "Full") is None
+    assert access_direction("wheelchair_access", "Full", "Full") is None
+
+
+def test_replacements_quality_and_categories_in_diff(pair, tmp_path):
+    root, old, new = pair
+    # Delta (removed) and a new venue 200 m away should pair up; Epsilon is far from anything.
+    rows = [
+        _row("Alpha Hall", -33.00, 151.00),
+        _row("Beta School", -33.10, 151.10, access="Full"),
+        _row("Gamma Church", -33.20, 151.20, address=""),  # address newly blank
+        _row("Delta Replacement Hall", -33.3018, 151.30, address="2 Other St"),
+        _row("Zeta Hall", -33.00, 151.00, address="99 Far Rd"),  # same coordinates as Alpha, different place
+        _row("Eta Hut", -33.5, 151.5),
+    ]
+    rows[-1]["lat"], rows[-1]["lon"] = "-33.5", "151.5"  # low precision
+    newer = _write(root / "data" / "20260108b places.csv", rows)
+    target = run_pair(old, newer, root / "diffs2", matcher="rapidfuzz")
+    d = json.loads((target / "diff-rapidfuzz.json").read_text())
+    assert [(p["old_name"], p["new_name"]) for p in d["replacements"]] == [("Delta Library", "Delta Replacement Hall")]
+    removed = next(r for r in d["removed"] if r["name"] == "Delta Library")
+    assert removed["replaced_by"] is not None
+    checks = {q["check"]: q for q in d["quality"]}
+    assert {p["name"] for p in checks["same_coordinates"]["places"]} == {"Alpha Hall", "Zeta Hall"}
+    assert [p["name"] for p in checks["low_precision"]["places"]] == ["Eta Hut"]
+    assert [p["name"] for p in checks["newly_blank:address"]["places"]] == ["Gamma Church"]
+    beta = next(e for e in d["changed"] if e["name"] == "Beta School")
+    assert beta["changes"][0]["category"] == "accessibility" and beta["changes"][0]["direction"] == "improved"
+    assert len(d["context_points"]) == 6
+
+
+def test_index_follows_a_place_across_the_series(pair):
+    from ppdiff.index import history
+
+    root, old, new = pair
+    later = _write(root / "data" / "20260115 places.csv", [
+        _row("Alpha Hall", -33.00, 151.00),
+        _row("Beta School", -33.10, 151.10, access="None"),
+        _row("Gamma Church", -33.20, 151.20),
+        _row("Epsilon Centre", -33.40, 151.40, address="9 New Rd, Elsewhere"),
+    ])
+    out = root / "diffs"
+    run_pair(old, new, out, matcher="rapidfuzz")
+    run_pair(new, later, out, matcher="rapidfuzz")
+    assert (out / "index.html").exists()
+    places = {p["name"]: [e["kind"] + ":" + e["text"] for e in p["events"]] for p in history(sorted(p.parent for p in out.glob("*/link.json")), "rapidfuzz")}
+    assert places["Beta School"] == ["changed:wheelchair_access (improved)", "changed:wheelchair_access (worse)"]
+    assert places["Gamma Church"] == ["changed:moved 111.2 km", "changed:moved 111.2 km"]
+    assert places["Epsilon Centre"] == ["added:added"]
+    assert places["Delta Library"] == ["removed:removed"]

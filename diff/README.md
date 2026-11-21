@@ -12,6 +12,7 @@ uv sync
 uv run ppdiff run OLD.csv NEW.csv --out-dir ../scrapers/<election>/diffs
 uv run ppdiff series "../scrapers/<election>/data/*.csv" --out-dir ../scrapers/<election>/diffs   # every consecutive pair
 uv run ppdiff report ../scrapers/<election>/diffs/<pair folder>                                    # rebuild report.html only
+uv run ppdiff index ../scrapers/<election>/diffs                                                   # rebuild index.html only
 ```
 
 Options: `--matcher rapidfuzz|splink|both` (default `both`), `--ignore COLUMN` (repeatable), and `--election LABEL`, which defaults to the out-dir's parent folder. `series` skips pairs that already have a report unless you pass `--force`.
@@ -29,6 +30,8 @@ Each pair of files gets a folder `<old>__<new>/` containing:
 | `disagreements.json` | Each place the matchers handled differently, with both decisions and their reasoning |
 | `report.html` | A self-contained report: a tab per matcher's diff, plus a Disagreements tab for verdicts |
 
+The diffs folder also gets an `index.html`, rebuilt after every run. It lists every pair, with each matcher's counts and how many disagreements there are. It also has a **history by place**: every place that changed at least once, followed from file to file through each matcher's links (e.g. "Kaniva: added 7 Nov, wheelchair access improved 16 Nov"). A place's history continues while consecutive pairs share a file.
+
 A diff contains:
 - **summary:** counts of unchanged, changed, added, removed, possible matches and warnings.
 - **changed:** linked places where any column differs. Every shared column is compared, not just the ones used for matching. Each change gives the field and its old and new values. Whitespace-only and number-formatting changes ("-30.3344050" vs "-30.334405") are ignored.
@@ -36,7 +39,20 @@ A diff contains:
 - **possible_matches:** review-band links. They're kept apart from "changed", so a doubtful link is never silently reported as an edit.
 - **added and removed:** full rows.
 - **columns:** columns added, removed or ignored.
+- **replacements:** a removed place and an added place within 500 m are paired as a likely replacement (a venue swap the matcher rightly didn't link). The removed and added entries point at each other.
+- **quality:** checks on the new file. Different places at identical coordinates, coordinates with 3 or fewer decimal places, missing coordinates, and fields that had a value and are now blank.
+- **categories:** each change gets a category (accessibility, entrance, hours, address, name, divisions, votes, other). Wheelchair access changes are marked `improved` or `worse`.
+- **context_points:** every place's coordinates in the new file, used as the map's background.
 - **provenance:** the matcher and its settings, plus both input files with their hashes.
+
+## The report
+
+- **Summary tiles and a map.** The map is drawn inline, so it works offline. It shows moves as old → new arrows (amber when it's a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. You can pan and zoom, and tapping a marker jumps to its card.
+- **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
+- **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
+- **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.
+- **Sections:** warnings, possible matches, likely replacements, changed, added, removed, data quality.
+- **Copy summary:** plain text for Slack or a commit message.
 
 ## Recording verdicts
 

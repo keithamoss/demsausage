@@ -8,6 +8,7 @@ ones used for matching, so wheelchair access, opening hours and so on show up.
 from __future__ import annotations
 
 import math
+import re
 from datetime import datetime, timezone
 from typing import Any
 
@@ -15,7 +16,7 @@ from linkage.normalise import distance_m
 from linkage.records import Dataset
 from linkage.result import Link, LinkResult
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 #: Coordinate changes smaller than this are float noise ("-30.3344050" vs "-30.334405").
 MIN_MOVE_M = 1.0
@@ -106,6 +107,136 @@ def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str]) -> d
     }
 
 
+#: Field-name patterns for grouping changes in the report, checked in order.
+FIELD_CATEGORIES = [
+    ("accessibility", re.compile(r"wheelchair|disab|^access|_access|vi_vote|vision", re.I)),
+    ("entrance", re.compile(r"entrance|within_premise|within premise|booth_location|gate", re.I)),
+    ("hours", re.compile(r"hour|open", re.I)),
+    ("address", re.compile(r"address|suburb|locality|postcode|city|street", re.I)),
+    ("name", re.compile(r"^name$|premises|ppname|polling.?place.?name", re.I)),
+    ("divisions", re.compile(r"division|district|divname|ward", re.I)),
+    ("votes", re.compile(r"vote|issuing", re.I)),
+]
+
+#: Wheelchair access levels, worst to best, for "improved" / "worse".
+ACCESS_RANK = {"none": 0, "no": 0, "n": 0, "assisted": 1, "partial": 1, "a": 1, "full": 2, "yes": 2, "f": 2}
+
+#: A removed place and an added place this close together are probably one venue replacing another.
+REPLACEMENT_RADIUS_M = 500.0
+
+#: Places listed per quality check (the count is always complete).
+QUALITY_LIST_LIMIT = 50
+
+
+def field_category(field: str) -> str:
+    return next((name for name, pattern in FIELD_CATEGORIES if pattern.search(field)), "other")
+
+
+def access_direction(field: str, old: str, new: str) -> str | None:
+    if not re.search(r"wheelchair|disab", field, re.I) or "desc" in field.lower():
+        return None
+    a, b = ACCESS_RANK.get(old.strip().lower()), ACCESS_RANK.get(new.strip().lower())
+    if a is None or b is None or a == b:
+        return None
+    return "improved" if b > a else "worse"
+
+
+def annotate_changes(changes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    for c in changes:
+        c["category"] = field_category(c["field"])
+        direction = access_direction(c["field"], c["old"], c["new"])
+        if direction:
+            c["direction"] = direction
+    return changes
+
+
+def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: list[int]) -> list[dict[str, Any]]:
+    """Pair removed and added places that sit close together, nearest first, each used once."""
+    candidates = []
+    for i in removed:
+        a = old.records[i]
+        for j in added:
+            b = new.records[j]
+            dist = distance_m(a.lat, a.lon, b.lat, b.lon)
+            if dist is not None and dist <= REPLACEMENT_RADIUS_M:
+                candidates.append((dist, i, j))
+    used_old, used_new, pairs = set(), set(), []
+    for dist, i, j in sorted(candidates):
+        if i in used_old or j in used_new:
+            continue
+        used_old.add(i)
+        used_new.add(j)
+        pairs.append(
+            {
+                "old_index": i,
+                "new_index": j,
+                "old_name": old.records[i].label(),
+                "new_name": new.records[j].label(),
+                "distance_m": round(dist, 1),
+            }
+        )
+    return sorted(pairs, key=lambda p: p["new_name"])
+
+
+def _decimals(text: str) -> int:
+    text = (text or "").strip()
+    return len(text.split(".", 1)[1]) if "." in text else 0
+
+
+def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[str, Any]]:
+    """Problems worth a look in the new file, whichever matcher you trust."""
+    checks: list[dict[str, Any]] = []
+
+    def add(check: str, title: str, places: list[dict[str, Any]]) -> None:
+        if places:
+            checks.append({"check": check, "title": title, "count": len(places), "places": places[:QUALITY_LIST_LIMIT]})
+
+    # Same coordinates, different place: a commission copying one venue's coordinates to another.
+    groups: dict[tuple[float, float], list] = {}
+    for r in new.records:
+        if r.has_coords:
+            groups.setdefault((round(r.lat, 5), round(r.lon, 5)), []).append(r)  # type: ignore[arg-type]
+    same = []
+    for recs in groups.values():
+        identities = {r.n_premises or r.n_name for r in recs}
+        if len(identities) > 1:
+            names = ", ".join(sorted({r.label() for r in recs}))
+            same += [{"new_index": r.index, "name": r.label(), "detail": f"shares coordinates with: {names}"} for r in recs]
+    add("same_coordinates", "Different places at identical coordinates", same)
+
+    lat_col, lon_col = new.columns.lat, new.columns.lon
+    if lat_col and lon_col:
+        coarse = [
+            {"new_index": r.index, "name": r.label(), "detail": f"{r.raw.get(lat_col)}, {r.raw.get(lon_col)}"}
+            for r in new.records
+            if r.has_coords and min(_decimals(r.raw.get(lat_col, "")), _decimals(r.raw.get(lon_col, ""))) <= 3
+        ]
+        add("low_precision", "Coordinates with 3 or fewer decimal places (~100 m or worse)", coarse)
+    add(
+        "missing_coordinates",
+        "No coordinates",
+        [{"new_index": r.index, "name": r.label(), "detail": ""} for r in new.records if not r.has_coords],
+    )
+
+    # Fields that had a value and are now blank, on confidently linked places.
+    blanked: dict[str, list[dict[str, Any]]] = {}
+    for link in result.links:
+        if link.band != "auto":
+            continue
+        a, b = old.records[link.left].raw, new.records[link.right].raw
+        for column, value in a.items():
+            if column in b and (value or "").strip() and not (b[column] or "").strip():
+                blanked.setdefault(column, []).append({"new_index": link.right, "name": new.records[link.right].label(), "detail": f"was: {value}"})
+    for column, places in sorted(blanked.items()):
+        add(f"newly_blank:{column}", f"{column} is now blank", places)
+    return checks
+
+
+def context_points(new: Dataset) -> list[list[float]]:
+    """Every place's coordinates in the new file, rounded (~1 m), as map background."""
+    return [[round(r.lat, 5), round(r.lon, 5)] for r in new.records if r.has_coords]  # type: ignore[arg-type]
+
+
 def build_diff(
     old: Dataset,
     new: Dataset,
@@ -117,6 +248,7 @@ def build_diff(
     changed, possible, unchanged = [], [], 0
     for link in result.links:
         entry = describe_pair(old, new, link, ignore)
+        annotate_changes(entry["changes"])
         if link.band == "review":
             possible.append(entry)
         elif entry["changes"] or entry["location"]:
@@ -124,8 +256,17 @@ def build_diff(
         else:
             unchanged += 1
     old_cols, new_cols = header(old), header(new)
-    added = [{"new_index": j, "name": new.records[j].label(), "record": new.records[j].raw} for j in result.unmatched_right]
-    removed = [{"old_index": i, "name": old.records[i].label(), "record": old.records[i].raw} for i in result.unmatched_left]
+    replacements = find_replacements(old, new, result.unmatched_left, result.unmatched_right)
+    replaced_by = {p["old_index"]: p["new_index"] for p in replacements}
+    replaces = {p["new_index"]: p["old_index"] for p in replacements}
+
+    def place(d: Dataset, i: int) -> dict[str, Any]:
+        r = d.records[i]
+        return {"name": r.label(), "lat": r.lat, "lon": r.lon, "record": r.raw}
+
+    added = [{"new_index": j, **place(new, j), "replaces": replaces.get(j)} for j in result.unmatched_right]
+    removed = [{"old_index": i, **place(old, i), "replaced_by": replaced_by.get(i)} for i in result.unmatched_left]
+    quality = quality_checks(old, new, result)
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -146,10 +287,15 @@ def build_diff(
             "added": len(added),
             "removed": len(removed),
             "possible_matches": len(possible),
+            "likely_replacements": len(replacements),
             "warnings": sum(len(e["warnings"]) for e in changed + possible),
+            "quality_issues": sum(q["count"] for q in quality),
         },
         "changed": sorted(changed, key=lambda e: e["name"]),
         "possible_matches": sorted(possible, key=lambda e: e["name"]),
         "added": sorted(added, key=lambda e: e["name"]),
         "removed": sorted(removed, key=lambda e: e["name"]),
+        "replacements": replacements,
+        "quality": quality,
+        "context_points": context_points(new),
     }
