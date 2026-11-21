@@ -392,7 +392,11 @@ function directionBadge(c) {
 // ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
 const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
 // Ticks saved in the repo (reviewed.json, embedded at build) plus any made in this browser since.
-let REVIEWED = (() => { let local = {}; try { local = JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) {} return { ...(DATA.reviewed || {}), ...local }; })();
+let REVIEWED = (() => {
+  let local = {};
+  try { local = JSON.parse(localStorage.getItem(REVIEW_STORE) || "{}"); } catch (e) {}
+  return Object.fromEntries(Object.entries({ ...(DATA.reviewed || {}), ...local }).filter(([, value]) => value));
+})();
 const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
 function downloadReview() {
   const blob = new Blob([JSON.stringify({ old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
@@ -403,7 +407,8 @@ function unsavedTicks() { return Object.keys(REVIEWED).filter((k) => !SAVED_REVI
 let hideReviewed = false;
 function setReviewed(key, on) {
   if (on) REVIEWED[key] = new Date().toISOString(); else delete REVIEWED[key];
-  try { localStorage.setItem(REVIEW_STORE, JSON.stringify(REVIEWED)); } catch (e) {}
+  const removed = Object.fromEntries([...SAVED_REVIEWED].filter((k) => !REVIEWED[k]).map((k) => [k, null]));
+  try { localStorage.setItem(REVIEW_STORE, JSON.stringify({ ...removed, ...REVIEWED })); } catch (e) {}
   document.querySelectorAll(`[data-review="${CSS.escape(key)}"]`).forEach((card) => {
     card.classList.toggle("reviewed", on);
     const box = card.querySelector(":scope > .cardhead input"); if (box) box.checked = on;
