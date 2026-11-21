@@ -19,6 +19,7 @@ Harbour = 020). Event codes are listed at https://map.elections.nsw.gov.au/.
 import csv
 import datetime
 import os
+import re
 import sys
 
 import requests
@@ -40,7 +41,12 @@ FIELDS = [
     "wheelchair_access",
     "wheelchair_access_description",
     "opening_hours",
+    "entrance_desc",
 ]
+
+# NSWEC sometimes put access notes in the address field, e.g. Kororo Public School:
+# "James Small Drive NOTE: No access to Korora School Road (closed), ..."
+ADDRESS_NOTE_PATTERN = re.compile(r"\s+NOTE:\s*", re.IGNORECASE)
 
 
 def scrape(event_id: str) -> None:
@@ -81,10 +87,11 @@ def _to_row(record: dict) -> dict:
         print(f"  warning: {record['Name']} is in district {record['LgaName']!r}")
 
     wheelchair_access, wheelchair_access_description = _get_wheelchair_access(record)
+    address, entrance_desc = _split_address_note(record["Address"])
     return {
         "name": record["Name"],
         "premises": record["Premises"],
-        "address": record["Address"],
+        "address": address,
         "suburb": record["Locality"],
         "state": "NSW",
         "postcode": record["Postcode"],
@@ -93,7 +100,16 @@ def _to_row(record: dict) -> dict:
         "wheelchair_access": wheelchair_access,
         "wheelchair_access_description": wheelchair_access_description,
         "opening_hours": record.get("OpeningHours") or "",
+        "entrance_desc": entrance_desc,
     }
+
+
+def _split_address_note(address: str) -> tuple[str, str]:
+    """Move any 'NOTE: ...' text out of the address and into entrance_desc."""
+    parts = ADDRESS_NOTE_PATTERN.split(address, maxsplit=1)
+    if len(parts) == 1:
+        return address.strip(), ""
+    return parts[0].strip().rstrip(","), parts[1].strip()
 
 
 def _get_wheelchair_access(record: dict) -> tuple[str, str]:
