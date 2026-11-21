@@ -425,7 +425,7 @@ function updateReviewCounts() {
     if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
   });
 }
-const fixKey = (f) => `fix-${f.kind}-${f.new_index}`;
+const fixKey = (f) => `fix-${f.kind}-${f.new_index}${f.kind === "blank" ? "-" + encodeURIComponent(f.fix.overwrite[0].field) : ""}`;
 function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
 
 function pairCard(e, d) {
