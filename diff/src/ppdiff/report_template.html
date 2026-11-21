@@ -131,6 +131,7 @@ a { color: var(--accent); }
 .verdict { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .verdict label { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
 .verdict input { position: absolute; opacity: 0; pointer-events: none; }
+.verdict label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
 .verdict input:checked + span { font-weight: 600; }
 .verdict label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
 .verdict-extra { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 8px; }
