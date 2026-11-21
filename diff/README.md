@@ -51,9 +51,9 @@ A diff contains:
 
 ## The report
 
-- **Summary tiles and an overview map.** It uses OpenLayers 8.1.0 and the CARTO "light_all" basemap, the same library and basemap as the public site; dark mode uses CARTO's "dark_all". It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
+- **Summary tiles and an overview map.** It uses OpenLayers 10.11.0 (from jsDelivr) and the CARTO "light_all" basemap, the same basemap as the public site; dark mode uses CARTO's "dark_all". It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
 - **"Check on map" on every moved, added, removed and replacement card.** It opens a map inside the card with the old and new positions over the basemap. "Zoom to old" / "Zoom to new" go to street level, for checking each position against the basemap.
-- **Offline fallback.** OpenLayers and the tiles load from jsDelivr and CARTO. Offline, the overview falls back to a plain dots-only map, and the place maps say they need a connection; the OpenStreetMap links still work. The public site's CARTO API key is not put in reports; the tiles are requested without one.
+- **Basemap key.** CARTO tiles need the public site's CARTO API key (`VITE_CARTO_API_KEY`). It is never written into reports. The first report you open asks for it and keeps it in that browser's localStorage, and every report then uses it. You can also open a report with `#carto-key=KEY` on the end of its address. "Forget key" at the bottom of a diff tab removes it. Reports need an internet connection for the maps.
 - **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
 - **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.

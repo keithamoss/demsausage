@@ -92,6 +92,8 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     assert (d["old"]["label"], d["new"]["label"]) == ("Thu 1 Jan 2026", "Thu 8 Jan 2026")
     html = (target / "report.html").read_text()
     assert "<title>Thu 1 Jan 2026 → Thu 8 Jan 2026</title>" in html
+    assert 'src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"' in html
+    assert "?key=" not in html.split("${CARTO_KEY")[0].split("cartocdn")[-1]  # no key baked into the tile URL
     assert "Gamma Church" in html and "{{DATA}}" not in html and "</script" not in html.split('id="data">')[1].split("</script>")[0]
 
 

@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
+<!-- OpenLayers, as used by the public site (public-redesign); loaded from a CDN to keep reports small -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css">
+<script src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"></script>
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
@@ -65,22 +68,6 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .card.quality summary { cursor: pointer; }
 .card.quality ul { margin: 8px 0 0; padding-left: 18px; }
 .mapbox { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
-svg.map { display: block; width: 100%; height: min(60vh, 460px); touch-action: none; cursor: grab; background: var(--info-soft); }
-svg.map .bg circle { fill: var(--muted); opacity: .45; }
-svg.map .feat { cursor: pointer; }
-svg.map .feat circle { stroke: var(--surface); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-svg.map .feat line { stroke-width: 2.5; vector-effect: non-scaling-stroke; }
-svg.map .moved circle, svg.map .moved line { fill: var(--accent); stroke: var(--accent); }
-svg.map .moved circle.from, svg.map .typo circle.from { fill: var(--surface); }
-svg.map .typo circle, svg.map .typo line { fill: var(--warn); stroke: var(--warn); }
-svg.map .typo line, svg.map .moved line { stroke-dasharray: 6 4; }
-svg.map .added circle { fill: var(--add); }
-svg.map .replacement line { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
-svg.map .removed circle { fill: var(--del); }
-svg.map .feat:focus { outline: none; }
-svg.map .feat:focus circle, svg.map .feat:hover circle { stroke: var(--text); }
-.mapctl { margin-left: auto; display: flex; gap: 4px; }
-.mapctl button { background: var(--surface); min-width: 34px; padding: 3px 9px; }
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 8px 12px; font-size: 13px; border-top: 1px solid var(--border); }
 .legend .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
 .key.moved { background: var(--accent); } .key.typo { background: var(--warn); } .key.added { background: var(--add); } .key.removed { background: var(--del); } .key.replacement { background: none; border: 2px dotted var(--muted); width: 8px; height: 8px; }
@@ -89,6 +76,9 @@ svg.map .feat:focus circle, svg.map .feat:hover circle { stroke: var(--text); }
 .placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
 .placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
 .card-actions { margin-top: 8px; }
+.keybar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+.keybar input { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; min-width: 0; flex: 1 1 160px; }
+button.primary.small { font-size: 13px; padding: 4px 12px; }
 button.small { font-size: 13px; padding: 3px 10px; }
 .ol-attribution { font-size: 11px; }
 .inline-diff { overflow-wrap: anywhere; }
@@ -395,94 +385,40 @@ function mapFeatures(d) {
   for (const r of d.removed) if (r.lat !== null) f.push({ kind: "removed", to: [r.lat, r.lon], name: r.name, target: `${d.matcher}-removed-${r.old_index}` });
   return f;
 }
-function renderSvgMap(d) {
-  const feats = mapFeatures(d);
-  if (!feats.length) return null;
-  const pts = feats.flatMap((f) => (f.from ? [f.from, f.to] : [f.to]));
-  const lats = pts.map((p) => p[0]), lons = pts.map((p) => p[1]);
-  const latC = (Math.min(...lats) + Math.max(...lats)) / 2, kx = Math.cos(latC * Math.PI / 180);
-  const X = (lon) => lon * kx, Y = (lat) => -lat;
-  let x0 = Math.min(...lons.map(X)), x1 = Math.max(...lons.map(X)), y0 = Math.min(...lats.map(Y)), y1 = Math.max(...lats.map(Y));
-  const pad = Math.max(x1 - x0, y1 - y0, 0.02) * 0.12;
-  x0 -= pad; x1 += pad; y0 -= pad; y1 += pad;
-  const home = [x0, y0, Math.max(x1 - x0, 0.02), Math.max(y1 - y0, 0.02)];
-  let vb = home.slice();
-  const NS = "http://www.w3.org/2000/svg";
-  const s = (tag, attrs) => { const el = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
-  const svg = s("svg", { class: "map", role: "img", "aria-label": "Map of changed places" });
-  const bg = s("g", { class: "bg" }), fg = s("g", {});
-  for (const [lat, lon] of d.context_points) bg.append(s("circle", { cx: X(lon), cy: Y(lat), "data-r": 2 }));
-  for (const f of feats) {
-    const g = s("g", { class: "feat " + f.kind, tabindex: 0 });
-    const title = s("title", {}); title.textContent = `${f.name} (${f.kind === "typo" ? "moved, likely coordinate typo" : f.kind})`; g.append(title);
-    if (f.from) g.append(s("line", { x1: X(f.from[1]), y1: Y(f.from[0]), x2: X(f.to[1]), y2: Y(f.to[0]) }));
-    if (f.from && !f.lineOnly) g.append(s("circle", { class: "from", cx: X(f.from[1]), cy: Y(f.from[0]), "data-r": 3 }));
-    if (!f.lineOnly) g.append(s("circle", { cx: X(f.to[1]), cy: Y(f.to[0]), "data-r": 5.5 }));
-    const go = () => { setChip(null); goTo(d.matcher, f.target); };
-    g.addEventListener("click", go); g.addEventListener("keydown", (ev) => { if (ev.key === "Enter") go(); });
-    fg.append(g);
-  }
-  svg.append(bg, fg);
-  const apply = () => {
-    svg.setAttribute("viewBox", vb.join(" "));
-    // The viewBox is letterboxed into the element, so one screen pixel is the larger of the two ratios.
-    const px = Math.max(vb[2] / (svg.clientWidth || 600), vb[3] / (svg.clientHeight || 400));
-    svg.querySelectorAll("circle").forEach((c) => c.setAttribute("r", c.dataset.r * px));
-  };
-  const zoom = (factor, cx, cy) => {
-    const w = vb[2] * factor, hgt = vb[3] * factor;
-    cx = cx ?? vb[0] + vb[2] / 2; cy = cy ?? vb[1] + vb[3] / 2;
-    vb = [cx - (cx - vb[0]) * factor, cy - (cy - vb[1]) * factor, w, hgt]; apply();
-  };
-  const toMap = (ev) => { const r = svg.getBoundingClientRect(); return [vb[0] + (ev.clientX - r.left) / r.width * vb[2], vb[1] + (ev.clientY - r.top) / r.height * vb[3]]; };
-  svg.addEventListener("wheel", (ev) => { ev.preventDefault(); const [mx, my] = toMap(ev); zoom(ev.deltaY > 0 ? 1.25 : 0.8, mx, my); }, { passive: false });
-  let drag = null;
-  svg.addEventListener("pointerdown", (ev) => { if (ev.target.closest(".feat")) return; drag = { x: ev.clientX, y: ev.clientY, vb: vb.slice() }; svg.setPointerCapture(ev.pointerId); });
-  svg.addEventListener("pointermove", (ev) => {
-    if (!drag) return; const r = svg.getBoundingClientRect();
-    vb = [drag.vb[0] - (ev.clientX - drag.x) / r.width * drag.vb[2], drag.vb[1] - (ev.clientY - drag.y) / r.height * drag.vb[3], drag.vb[2], drag.vb[3]]; apply();
-  });
-  svg.addEventListener("pointerup", () => { drag = null; });
-  const box = h("div", { class: "mapbox" }, svg,
-    h("div", { class: "legend" },
-      [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
-        h("span", {}, h("i", { class: "key " + k }), t)),
-      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it."),
-      h("span", { class: "mapctl" },
-        h("button", { class: "ghost", "aria-label": "Zoom in", onclick: () => zoom(0.6) }, "+"),
-        h("button", { class: "ghost", "aria-label": "Zoom out", onclick: () => zoom(1 / 0.6) }, "−"),
-        h("button", { class: "ghost", onclick: () => { vb = home.slice(); apply(); } }, "Reset"))));
-  requestAnimationFrame(apply);
-  new ResizeObserver(apply).observe(svg);
-  return box;
-}
-
-
-// ---------- OpenLayers (same library and basemap as the public site) ----------
-// Loaded on demand from a CDN; without it (offline) the overview falls back to the SVG map.
-const OL_VERSION = "8.1.0";
-let olPromise = null;
-function loadOL() {
-  if (window.ol) return Promise.resolve(window.ol);
-  if (olPromise) return olPromise;
-  olPromise = new Promise((resolve, reject) => {
-    const css = h("link", { rel: "stylesheet", href: `https://cdn.jsdelivr.net/npm/ol@${OL_VERSION}/ol.css` });
-    const js = h("script", { src: `https://cdn.jsdelivr.net/npm/ol@${OL_VERSION}/dist/ol.js` });
-    js.onload = () => (window.ol ? resolve(window.ol) : reject(new Error("OpenLayers did not load")));
-    js.onerror = () => reject(new Error("OpenLayers could not be loaded"));
-    setTimeout(() => reject(new Error("OpenLayers timed out")), 15000);
-    document.head.append(css, js);
-  });
-  return olPromise;
-}
+// ---------- maps: OpenLayers (loaded in <head>) on the public site's CARTO basemap ----------
 const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const darkMode = () => window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+// The CARTO basemap needs the public site's API key (VITE_CARTO_API_KEY). It is never written
+// into reports: you paste it once and it stays in this browser's localStorage. A link can also
+// carry it as #carto-key=... (saved, then removed from the address bar).
+const CARTO_KEY_STORE = "ppdiff-carto-key";
+function cartoKey() {
+  const m = location.hash.match(/carto-key=([^&]+)/);
+  if (m) {
+    try { localStorage.setItem(CARTO_KEY_STORE, decodeURIComponent(m[1])); } catch (e) {}
+    history.replaceState(null, "", location.pathname + location.search);
+    return decodeURIComponent(m[1]);
+  }
+  try { return localStorage.getItem(CARTO_KEY_STORE) || ""; } catch (e) { return ""; }
+}
+const CARTO_KEY = cartoKey();
+window.addEventListener("hashchange", () => { if (/carto-key=/.test(location.hash)) { cartoKey(); location.reload(); } });
+function cartoKeyForm() {
+  const input = h("input", { type: "password", placeholder: "CARTO API key", autocomplete: "off", spellcheck: "false" });
+  const save = () => { const v = input.value.trim(); if (!v) return; try { localStorage.setItem(CARTO_KEY_STORE, v); } catch (e) {} location.reload(); };
+  input.addEventListener("keydown", (ev) => { if (ev.key === "Enter") save(); });
+  return h("div", { class: "keybar" },
+    h("span", {}, CARTO_KEY ? "Basemap key saved in this browser." : "The basemap needs the public site's CARTO API key (VITE_CARTO_API_KEY). It's stored only in this browser."),
+    CARTO_KEY ? h("button", { class: "ghost small", onclick: () => { try { localStorage.removeItem(CARTO_KEY_STORE); } catch (e) {} location.reload(); } }, "Forget key")
+              : [input, h("button", { class: "primary small", onclick: save }, "Save")]);
+}
 function basemapLayer(ol) {
   // CARTO basemap, as on democracysausage.org (light_all), or its dark twin in dark mode.
   const retina = window.devicePixelRatio > 1;
+  const key = CARTO_KEY ? `?key=${encodeURIComponent(CARTO_KEY)}` : "";
   return new ol.layer.Tile({
     source: new ol.source.XYZ({
-      url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png`,
+      url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png${key}`,
       tilePixelRatio: retina ? 2 : 1,
       maxZoom: 20,
       attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -514,8 +450,10 @@ function renderMap(d) {
     h("div", { class: "legend" },
       [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
         h("span", {}, h("i", { class: "key " + k }), t)),
-      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")));
-  loadOL().then((ol) => {
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")),
+    CARTO_KEY ? null : cartoKeyForm());
+  requestAnimationFrame(() => {  // after the element is in the page, so the map can size itself
+    const ol = window.ol;
     const st = olStyles(ol);
     const context = new ol.source.Vector({ features: d.context_points.map(([lat, lon]) => new ol.Feature(new ol.geom.Point(toXY(ol, lat, lon)))) });
     const fg = new ol.source.Vector();
@@ -540,7 +478,7 @@ function renderMap(d) {
       const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
       if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
     });
-  }).catch(() => box.replaceWith(renderSvgMap(d) || h("span")));
+  });
   return box;
 }
 
@@ -563,7 +501,8 @@ function buildPlaceMap(holder, points) {
   const el = h("div", { class: "placemap" });
   const controls = h("div", { class: "placemap-ctl" });
   holder.append(el, controls);
-  loadOL().then((ol) => {
+  requestAnimationFrame(() => {
+    const ol = window.ol;
     const st = olStyles(ol);
     const src = new ol.source.Vector();
     const colour = { old: cssVar("--del"), new: cssVar("--add"), place: cssVar("--accent") };
@@ -586,7 +525,7 @@ function buildPlaceMap(holder, points) {
       ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration: 300 }) }, `Zoom to ${p.label}`)),
       h("span", { class: "was" }, points.map((p) => `${p.label}: ${p.lat}, ${p.lon}`).join(" · ")),
     ].filter(Boolean));
-  }).catch(() => { el.replaceWith(h("p", { class: "note" }, "The map needs an internet connection (it loads OpenLayers and the CARTO basemap). The old/new links above open OpenStreetMap instead.")); });
+  });
 }
 
 // ---------- filters, copy summary ----------
@@ -653,7 +592,8 @@ function renderDiff(d) {
     section("Added", d.added, (e) => recordCard(e, d, "added"), true),
     section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
     section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
-    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`),
+    CARTO_KEY ? cartoKeyForm() : null);
   return wrap;
 }
 
