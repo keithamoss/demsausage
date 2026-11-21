@@ -106,7 +106,7 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
             summaries[d["matcher"]] = d["summary"]
         dis_path = folder / "disagreements.json"
         dis = json.loads(dis_path.read_text()) if dis_path.exists() else None
-        disagreements = len(dis["items"]) if dis else None
+        disagreements = len(dis["items"]) if dis and len(dis["matchers"]) > 1 else None
         nothing = all(json.loads(p.read_text()).get("nothing_changed") for p in folder.glob("diff-*.json"))
         rows.append(
             {
