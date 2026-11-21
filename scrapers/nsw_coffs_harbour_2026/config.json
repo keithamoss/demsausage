@@ -1,0 +1,15 @@
+{
+  "add_columns": {
+    "ec_id": ""
+  },
+  "address_fields": [
+    "address",
+    "suburb",
+    "state",
+    "postcode"
+  ],
+  "address_format": "{address}, {suburb}, {state}, {postcode}",
+  "geocoding": {
+    "enabled": false
+  }
+}
