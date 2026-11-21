@@ -84,6 +84,9 @@ const CONFIGS = [
   { name: "iPhone 13, dark", device: IPHONE, phone: true, colorScheme: "dark", reducedMotion: "no-preference" },
 ];
 
+// PPDIFF_CONFIGS="desktop,iPhone 13" runs only those configurations (names as above).
+const ONLY = process.env.PPDIFF_CONFIGS ? process.env.PPDIFF_CONFIGS.split(",").map((x) => x.trim()) : null;
+
 // Records how the page scrolls and animates maps, so reduced motion can be checked.
 function instrument() {
   window.__scrolls = [];
@@ -119,7 +122,7 @@ const mapsLoaded = (page) => page.evaluate(() => Boolean(window.ol && window.olm
 
 // ---------- the 13 features, per configuration ----------
 for (const cfg of CONFIGS) {
-  test(cfg.name, async (t) => {
+  test(cfg.name, { skip: Boolean(ONLY && !ONLY.includes(cfg.name)) }, async (t) => {
     const { context, page, errors } = await open(cfg);
     const online = await mapsLoaded(page);
     if (!online) t.diagnostic("OpenLayers didn't load (offline?): map checks are skipped");
@@ -194,9 +197,10 @@ for (const cfg of CONFIGS) {
       await reload();
       const live = page.locator("#live");
       assert.equal(await live.getAttribute("role"), "status");
-      const copy = page.getByRole("button", { name: "Copy summary" });
+      // A handle, not a locator: the button's name changes to "Copied".
+      const copy = await page.getByRole("button", { name: "Copy summary" }).elementHandle();
       await copy.click();
-      await assert.doesNotReject(live.filter({ hasText: /^Copied/ }).waitFor({ timeout: 2000 }));
+      await page.waitForFunction(() => /^Copied/.test(document.getElementById("live").textContent), null, { timeout: 2000 });
       assert.match(await copy.textContent(), /^Copied/);
       assert.match(await page.evaluate(() => navigator.clipboard.readText()), /places: \d+ changed/);
       // A second copy must differ from the first, or VoiceOver won't read it again.
@@ -211,7 +215,7 @@ for (const cfg of CONFIGS) {
         document.execCommand = () => false;
       });
       await copy.click();
-      await assert.doesNotReject(live.filter({ hasText: /^Copy failed/ }).waitFor({ timeout: 2000 }));
+      await page.waitForFunction(() => /^Copy failed/.test(document.getElementById("live").textContent), null, { timeout: 2000 });
     });
 
     await t.test("5. search inputs are labelled", async () => {
@@ -242,7 +246,9 @@ for (const cfg of CONFIGS) {
       assert.ok(scrolls.every((b) => b === (reduce ? "auto" : "smooth")), `scroll behaviours: ${scrolls}`);
       if (!online) return;
       await page.evaluate(() => (window.__mapDurations.length = 0));
-      const card = page.locator(".card", { has: page.getByRole("button", { name: "Check on map" }) }).first();
+      // By id, not by the button: its name changes to "Hide map".
+      const id = await page.locator(".card", { has: page.getByRole("button", { name: "Check on map" }) }).first().getAttribute("id");
+      const card = page.locator(`[id="${id}"]`);
       await card.getByRole("button", { name: "Check on map" }).click();
       await card.locator(".placemap canvas").first().waitFor();
       await card.getByRole("button", { name: /^Zoom to / }).first().click();
@@ -273,6 +279,12 @@ for (const cfg of CONFIGS) {
       await folded.click();
       assert.equal(await body.getAttribute("hidden"), "until-found");
       assert.equal(await page.getByRole("heading", { level: 2, name: /^Changed/ }).count(), 1, "screen readers can move by section heading");
+      const dupes = await page.evaluate(() => {
+        const seen = {};
+        for (const el of document.querySelectorAll("[id]")) seen[el.id] = (seen[el.id] || 0) + 1;
+        return Object.keys(seen).filter((id) => seen[id] > 1);
+      });
+      assert.deepEqual(dupes, [], "ids are unique");
     });
 
     await t.test("8. content-visibility: auto from the fifth card in each section", async () => {
@@ -325,7 +337,8 @@ for (const cfg of CONFIGS) {
     });
 
     await t.test("10. CDN tags have SRI, crossorigin and referrerpolicy", async () => {
-      const tags = await page.evaluate(() => [...document.querySelectorAll("script[src], link[rel=stylesheet]")].map((e) => ({
+      // The report's own tags. (ol-mapbox-style also adds unpinned @fontsource stylesheets for map labels.)
+      const tags = await page.evaluate(() => [...document.querySelectorAll("script[src], link[rel=stylesheet]")].filter((e) => !/@fontsource\//.test(e.src || e.href)).map((e) => ({
         url: e.src || e.href, integrity: e.integrity, crossorigin: e.getAttribute("crossorigin"), referrerpolicy: e.getAttribute("referrerpolicy") })));
       assert.equal(tags.length, 3);
       for (const tag of tags) {
@@ -370,7 +383,8 @@ for (const cfg of CONFIGS) {
       const s = await page.evaluate(() => DATA.diffs[0].summary);
       assert.match(text, new RegExp(`${s.added} added, ${s.removed} removed, ${s.likely_replacements} likely replacements`));
       assert.match(text, /^Map of changes: \d+ moved \(\d+ likely coordinate typos?\)/);
-      assert.ok(await page.getByText(/^Map of changes:/).isVisible() === false, "visually hidden");
+      const box = await summary.boundingBox();
+      assert.ok(box.width <= 1 && box.height <= 1, "visually hidden");
       const inTree = await page.locator(".mapbox").ariaSnapshot();
       assert.match(inTree, /Map of changes/, "exposed to assistive technology");
     });
@@ -415,6 +429,7 @@ test("scroll-to-text fragment opens a folded section (beforematch)", async (t) =
         hidden: document.getElementById(id).getAttribute("hidden"),
         expanded: document.querySelector(`[aria-controls="${id}"]`).getAttribute("aria-expanded"),
         inView: heading.top >= document.getElementById("tabs").getBoundingClientRect().bottom && heading.bottom <= innerHeight,
+        top: Math.round(heading.top), bottom: Math.round(heading.bottom), innerHeight, bar: Math.round(document.getElementById("tabs").getBoundingClientRect().bottom),
         scrollY,
       };
     }, target);

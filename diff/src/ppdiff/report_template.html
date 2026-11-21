@@ -57,11 +57,16 @@ input[type=search] { flex: 1; min-width: 180px; }
 .section { margin: 14px 0; }
 .section > h2 { margin: 0; font-size: 16px; }
 .section-toggle { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: start; font: inherit; font-weight: 600; color: var(--text); background: none; border: 0; padding: 6px 0; cursor: pointer; }
-.section-toggle::before { content: "▸"; display: inline-block; }
+/* The arrow is decoration: empty alt text keeps it out of the button's accessible name. */
+.section-toggle::before { content: "▸" / ""; display: inline-block; }
 .section-toggle[aria-expanded="true"]::before { rotate: 90deg; }
 @media (prefers-reduced-motion: no-preference) { .section-toggle::before { transition: rotate .15s; } }
 /* Cards far down a long report skip rendering until scrolled near (Baseline 2025). */
 .section-body > .card:nth-child(n+5) { content-visibility: auto; contain-intrinsic-size: auto 180px; }
+/* Once find-in-page (or a #:~:text= link) opens a folded section, every card is laid out at its real
+   height before the browser scrolls to the match. Otherwise cards above it change from the 180px
+   estimate to their real height after the scroll, and push the match off-screen. */
+.found-in-page .section-body > .card { content-visibility: visible; }
 .count { color: var(--muted); font-weight: 400; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
 .card h3, .card > h2 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
@@ -440,12 +445,15 @@ function updateReviewCounts() {
     if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
   });
 }
-const fixKey = (f) => `fix-${f.kind}-${f.new_index}`;
+// One place can have several fixes of a kind (two fields gone blank), so the key names the fields too.
+const fixKey = (f) => `fix-${f.kind}-${f.new_index}${f.fix ? "-" + f.fix.overwrite.map((o) => o.field).join("-") : ""}`.replace(/[^\w-]/g, "_");
 function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
 
-function pairCard(e, d) {
+// A place with warnings is shown in Warnings as well as in Changed (or Possible matches); the copy
+// in Warnings gets its own id ("where"), so ids stay unique and jumps go to the place's own section.
+function pairCard(e, d, where) {
   const key = `pair-${e.new_index}`, fix = fixFor(d, e.new_index);
-  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${where || "pair"}-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
     cardHead(e.name, key),
     e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
     h("div", { class: "badges" },
@@ -511,7 +519,7 @@ function section(title, items, makeCard, open, extra) {
     if (on) body.removeAttribute("hidden"); else body.setAttribute("hidden", "until-found");
   };
   toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
-  body.addEventListener("beforematch", () => setOpen(true));  // find-in-page found something inside
+  body.addEventListener("beforematch", () => { document.documentElement.classList.add("found-in-page"); setOpen(true); });  // find-in-page found something inside
   return h("section", { class: "section" }, h("h2", {}, toggle), body);
 }
 const fixJSON = (fixes) => JSON.stringify(fixes, null, 4);
@@ -807,7 +815,7 @@ function renderDiff(d) {
       ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
       : null,
     renderLoaderChecks(d),
-    section("Warnings", warned, card, true),
+    section("Warnings", warned, (e) => pairCard(e, d, "warning"), true),
     section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
       h("div", { class: "fix-intro" },
         h("p", { class: "note" }, "Drafts for the fix_data_issues list in this election's config.json. Check the map before using one: each keeps the previous value, which is only right if the new file is wrong."),

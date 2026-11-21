@@ -98,7 +98,10 @@ If the election has a `config.json` beside its diffs folder, each diff also chec
   - Animation is turned off when the system asks for reduced motion.
   - "Copy" results are announced to screen readers, and each map has a text summary.
   - Long sections only render the cards on screen.
-  - OpenLayers loads deferred from jsDelivr, with Subresource Integrity hashes. When you upgrade it, update the `integrity` attributes in `report_template.html`.
+  - OpenLayers loads deferred from jsDelivr, with Subresource Integrity hashes, and its stylesheet is added from script so it doesn't hold up the first paint. When you upgrade it, update the `integrity` attributes in `report_template.html` (the two `<script>` tags and `OL_CSS`).
+  - Without a connection, each map says "Map unavailable" instead of failing, and the Google Maps links still work.
+  - Text keeps its contrast in both themes: cosmetic and reviewed items are marked with colour and a dashed border, not faded with opacity.
+  - Tested in Chromium at desktop and phone sizes, with reduced motion and dark mode, plus axe-core: see [`tests/browser/`](tests/browser/README.md).
 - **Cosmetic changes** are listed in their own folded section, and tagged "cosmetic" where they appear alongside real changes.
 - **"No changes"** shown at the top when nothing changed.
 - **Copy summary:** plain text for Slack or a commit message.

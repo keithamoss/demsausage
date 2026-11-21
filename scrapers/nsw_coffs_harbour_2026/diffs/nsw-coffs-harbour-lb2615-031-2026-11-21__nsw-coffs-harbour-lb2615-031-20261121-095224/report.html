@@ -8,8 +8,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- OpenLayers (as public-redesign uses) and ol-mapbox-style (draws the OpenFreeMap Liberty basemap),
      from a CDN to keep reports small. Version-pinned, with Subresource Integrity hashes computed from
-     the npm packages; deferred so the report renders before ~1 MB of map code arrives. -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css" integrity="sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" crossorigin="anonymous" referrerpolicy="no-referrer">
+     the npm packages; deferred so the report renders before ~1 MB of map code arrives. ol.css is added
+     by the script below (OL_CSS), because a stylesheet <link> here would hold up the first paint. -->
 <script defer src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js" integrity="sha384-rwbCGPbgxLkcQaFvIra1Vz3KBT1yBeF2/1VgLs/gCCNCJ61GHJGimHpkufVKcqap" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js" integrity="sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
@@ -24,7 +24,7 @@
   accent-color: var(--accent);
 }
 /* Keep jumped-to and focused content clear of the sticky tab bar (WCAG 2.4.11). --tabs-h is measured. */
-html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); }
+html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); scroll-padding-bottom: calc(var(--bar-h, 0px) + 12px); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @media (prefers-color-scheme: dark) {
@@ -57,14 +57,19 @@ input[type=search] { flex: 1; min-width: 180px; }
 .section { margin: 14px 0; }
 .section > h2 { margin: 0; font-size: 16px; }
 .section-toggle { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: start; font: inherit; font-weight: 600; color: var(--text); background: none; border: 0; padding: 6px 0; cursor: pointer; }
-.section-toggle::before { content: "▸"; display: inline-block; }
+/* The arrow is decoration: empty alt text keeps it out of the button's accessible name. */
+.section-toggle::before { content: "▸" / ""; display: inline-block; }
 .section-toggle[aria-expanded="true"]::before { rotate: 90deg; }
 @media (prefers-reduced-motion: no-preference) { .section-toggle::before { transition: rotate .15s; } }
 /* Cards far down a long report skip rendering until scrolled near (Baseline 2025). */
 .section-body > .card:nth-child(n+5) { content-visibility: auto; contain-intrinsic-size: auto 180px; }
+/* Once find-in-page (or a #:~:text= link) opens a folded section, every card is laid out at its real
+   height before the browser scrolls to the match. Otherwise cards above it change from the 180px
+   estimate to their real height after the scroll, and push the match off-screen. */
+.found-in-page .section-body > .card { content-visibility: visible; }
 .count { color: var(--muted); font-weight: 400; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
-.card h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.card h3, .card > h2 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
 .was { color: var(--muted); font-size: 13px; }
 .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
 .badge { font-size: 12px; border-radius: 999px; padding: 2px 8px; background: var(--info-soft); color: var(--muted); }
@@ -75,14 +80,15 @@ input[type=search] { flex: 1; min-width: 180px; }
 .field { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 .old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
 .new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
-.empty { font-style: italic; opacity: .8; }
+.empty { font-style: italic; }
 .badge.disagree { border: 0; cursor: pointer; background: var(--accent-soft); color: var(--accent); font: inherit; font-size: 12px; }
 button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .dir { font-size: 12px; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
 .dir.improved { background: var(--add-soft); color: var(--add); }
 .dir.worse { background: var(--del-soft); color: var(--del); }
 .dir.cosm { background: var(--info-soft); color: var(--muted); }
-.change.cosmetic { opacity: .65; }
+/* Cosmetic values are greyed with colour, not opacity, so the text keeps its contrast (WCAG 1.4.3). */
+.change.cosmetic .old, .change.cosmetic .new { background: var(--info-soft); color: var(--muted); }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -105,12 +111,11 @@ button.small { font-size: 13px; padding: 3px 10px; }
 .cardhead { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
 .cardhead h3 { margin: 0 0 4px; }
 label.review { font-size: 13px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
-.card.reviewed { opacity: .55; }
+.card.reviewed { background: var(--bg); border-style: dashed; box-shadow: none; }
 .card.kbd { outline: 2px solid var(--accent); outline-offset: 2px; }
-.card.reviewed:hover { opacity: 1; }
 .hide-toggle { margin: 0 4px; }
 .allclear { background: var(--add-soft); color: var(--add); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
-pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; overflow-x: auto; margin: 6px 0; }
+pre.fixjson { background: var(--info-soft); border-radius: 8px; padding: 8px 10px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0; }
 .badge.fixbadge { background: var(--warn-soft); color: var(--warn); }
 .fix-intro { margin-bottom: 4px; }
 .inline-diff { overflow-wrap: anywhere; }
@@ -126,7 +131,8 @@ a { color: var(--accent); }
 .note { color: var(--muted); font-size: 14px; }
 .decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
 .decision { border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
-.decision h4 { margin: 0 0 6px; font-size: 14px; }
+.decision h4, .decision h3 { margin: 0 0 6px; font-size: 14px; }
+.map-unavailable { padding: 16px 12px; margin: 0; }
 .nolink { color: var(--muted); font-style: italic; }
 .verdict { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .verdict label { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
@@ -164,12 +170,12 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
 <main>
   <div class="tabs" id="tabs" role="tablist" aria-label="Report views"></div>
   <div id="view" role="tabpanel" tabindex="-1"></div>
+  <div class="bar" id="bar"><div class="bar-inner">
+    <span id="bar-status"></span>
+    <button class="primary" id="download">Download verdicts</button>
+    <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
+  </div></div>
 </main>
-<div class="bar" id="bar"><div class="bar-inner">
-  <span id="bar-status"></span>
-  <button class="primary" id="download">Download verdicts</button>
-  <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
-</div></div>
 <div id="live" class="sr-only" role="status"></div>
 <script type="application/json" id="data">{"reviewed": {}, "diffs": [{"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}, {"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}], "disagreements": {"election": "nsw_coffs_harbour_2026", "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "matchers": ["rapidfuzz", "splink"], "agree": 23, "left_records": 23, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
 <script>
@@ -179,12 +185,23 @@ const DIS = DATA.disagreements;
 const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
 const label = (m) => MATCHER_LABEL[m] || m;
 const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-// OpenLayers loads with `defer`, so it's ready by DOMContentLoaded.
-const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true })));
-function announce(message) {  // the page's live region, for screen readers
+// OpenLayers loads with `defer`, so it has run (or failed to load) by DOMContentLoaded.
+const olReady = new Promise((resolve, reject) => {
+  const settle = () => (window.ol && window.olms ? resolve(window.ol) : reject(new Error("OpenLayers didn't load")));
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", settle, { once: true }); else settle();
+});
+olReady.catch(() => {});  // each map says so itself (mapUnavailable)
+// The page's live region, for screen readers. A repeated message gets a no-break space so VoiceOver
+// reads it again, and the region is emptied afterwards so a stale message isn't left in browse mode.
+let lastAnnounced = "", announceTimer;
+function announce(message) {
   const live = document.getElementById("live");
+  if (message === lastAnnounced) message += "\u00A0";
+  lastAnnounced = message;
   live.textContent = "";
+  clearTimeout(announceTimer);
   requestAnimationFrame(() => { live.textContent = message; });
+  announceTimer = setTimeout(() => { live.textContent = ""; }, 2000);
 }
 
 // Tiny DOM helper: h("div", {class: "x"}, child, "text", ...). Text is never parsed as HTML.
@@ -202,6 +219,9 @@ function h(tag, attrs, ...children) {
   }
   return el;
 }
+// ol.css from script, not a <link> in <head>: script-added stylesheets don't block rendering.
+const OL_CSS = { href: "https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css", integrity: "sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" };
+document.head.append(h("link", { rel: "stylesheet", ...OL_CSS, crossorigin: "anonymous", referrerpolicy: "no-referrer" }));
 const val = (v) => (v === "" || v === null || v === undefined) ? h("span", { class: "empty" }, "(blank)") : String(v);
 // Opens the position in Google Maps (no key needed for a link).
 const gmaps = (lat, lon) => `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
@@ -425,12 +445,15 @@ function updateReviewCounts() {
     if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
   });
 }
-const fixKey = (f) => `fix-${f.kind}-${f.new_index}`;
+// One place can have several fixes of a kind (two fields gone blank), so the key names the fields too.
+const fixKey = (f) => `fix-${f.kind}-${f.new_index}${f.fix ? "-" + f.fix.overwrite.map((o) => o.field).join("-") : ""}`.replace(/[^\w-]/g, "_");
 function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
 
-function pairCard(e, d) {
+// A place with warnings is shown in Warnings as well as in Changed (or Possible matches); the copy
+// in Warnings gets its own id ("where"), so ids stay unique and jumps go to the place's own section.
+function pairCard(e, d, where) {
   const key = `pair-${e.new_index}`, fix = fixFor(d, e.new_index);
-  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
+  return h("div", { ...reviewAttrs(key), id: `${d.matcher}-${where || "pair"}-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
     cardHead(e.name, key),
     e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
     h("div", { class: "badges" },
@@ -496,7 +519,7 @@ function section(title, items, makeCard, open, extra) {
     if (on) body.removeAttribute("hidden"); else body.setAttribute("hidden", "until-found");
   };
   toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
-  body.addEventListener("beforematch", () => setOpen(true));  // find-in-page found something inside
+  body.addEventListener("beforematch", () => { document.documentElement.classList.add("found-in-page"); setOpen(true); });  // find-in-page found something inside
   return h("section", { class: "section" }, h("h2", {}, toggle), body);
 }
 const fixJSON = (fixes) => JSON.stringify(fixes, null, 4);
@@ -542,8 +565,13 @@ function basemapLayer(ol) {
       const src = layer.getSource && layer.getSource();
       if (src && src.setAttributions) src.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
     });
-  });
+  }).catch(() => {});  // no basemap (offline): the markers still show
   return group;
+}
+// Shown in place of a map when OpenLayers couldn't be loaded (offline, or the CDN is blocked).
+function mapUnavailable(el) {
+  el.replaceChildren(h("p", { class: "note map-unavailable" }, "Map unavailable: the map library couldn't be loaded (offline?). The places are listed below, with links to Google Maps."));
+  el.style.height = "auto";
 }
 function olStyles(ol) {
   const S = ol.style, c = (n) => cssVar(n);
@@ -602,7 +630,7 @@ function renderMap(d) {
       const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
       if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
     });
-  }));
+  }), () => mapUnavailable(el));
   return box;
 }
 
@@ -651,7 +679,10 @@ function buildPlaceMap(holder, points) {
       ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration }) }, `Zoom to ${p.label}`)),
       ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
     ].filter(Boolean));
-  }));
+  }), () => {
+    mapUnavailable(el);
+    controls.replaceChildren(...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)));
+  });
 }
 
 // ---------- filters, copy summary ----------
@@ -784,7 +815,7 @@ function renderDiff(d) {
       ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
       : null,
     renderLoaderChecks(d),
-    section("Warnings", warned, card, true),
+    section("Warnings", warned, (e) => pairCard(e, d, "warning"), true),
     section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
       h("div", { class: "fix-intro" },
         h("p", { class: "note" }, "Drafts for the fix_data_issues list in this election's config.json. Check the map before using one: each keeps the previous value, which is only right if the new file is wrong."),
@@ -811,7 +842,7 @@ function placeLines(r) {
 }
 function decisionBox(matcher, dec) {
   return h("div", { class: "decision" },
-    h("h4", {}, label(matcher)),
+    h("h3", {}, label(matcher)),
     dec === null
       ? h("div", { class: "nolink" }, "No link: treats this place as removed")
       : [h("div", {}, h("b", {}, dec.right.name)), placeLines(dec.right),
@@ -829,16 +860,17 @@ function verdictCard(item) {
     saveVerdicts(); renderTabs();
   };
   const options = DIS.matchers.map((m) => [m, `${label(m)} was right`]).concat([["neither", "Both wrong"], ["both", "Both defensible"]]);
+  const headingId = `dis-${idx}-name`;
   card.append(
-    h("h3", {}, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
+    h("h2", { id: headingId }, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
     h("div", { class: "decisions" }, DIS.matchers.map((m) => decisionBox(m, item.decisions[m]))),
-    h("div", { class: "verdict", role: "radiogroup" }, options.map(([key, text]) =>
+    h("div", { class: "verdict", role: "radiogroup", "aria-label": `Who was right about ${item.left.name}` }, options.map(([key, text]) =>
       h("label", {}, h("input", { type: "radio", name, value: key, checked: v.verdict === key, onchange: () => set({ verdict: key }) }), h("span", {}, text)))),
     h("div", { class: "verdict-extra" },
-      h("select", { onchange: (ev) => set({ reason: ev.target.value }) },
+      h("select", { "aria-label": "Reason", "aria-describedby": headingId, onchange: (ev) => set({ reason: ev.target.value }) },
         h("option", { value: "" }, "Reason…"),
         DATA.reasons.map((r) => h("option", { value: r, selected: v.reason === r }, r))),
-      h("textarea", { rows: 1, placeholder: "Note (optional)", oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
+      h("textarea", { rows: 1, placeholder: "Note (optional)", "aria-label": "Note (optional)", "aria-describedby": headingId, oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
   return card;
 }
 function renderDisagreements() {
@@ -850,6 +882,9 @@ function renderDisagreements() {
     DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
   return wrap;
 }
+// Keep scroll-padding-bottom equal to the fixed bar's height, so focused controls aren't hidden under it (WCAG 2.4.11).
+new ResizeObserver(([entry]) => document.documentElement.style.setProperty("--bar-h", `${Math.ceil(entry.target.getBoundingClientRect().height)}px`))
+  .observe(document.getElementById("bar"));
 function updateBar() {
   const bar = document.getElementById("bar");
   if (!DIS || current !== "disagreements") { bar.classList.remove("show"); return; }
