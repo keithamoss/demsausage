@@ -1,0 +1,706 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-21T09:03:37+00:00",
+  "matcher": "rapidfuzz",
+  "matcher_params": {
+    "auto_threshold": 0.75,
+    "review_threshold": 0.65,
+    "weights": {
+      "name": 0.28,
+      "premises": 0.11,
+      "address": 0.14,
+      "geo": 0.18,
+      "divisions": 0.28
+    },
+    "geo_full_m": 50.0,
+    "geo_zero_m": 5000.0,
+    "exact_pass": true
+  },
+  "old": {
+    "path": "../scrapers/vic_2026/data/20261104_204630 polling places.csv",
+    "sha256": "29a778717ff1706a9ac600b0841e01851a29ba30c394b8dd3840fc0e18cfad46",
+    "records": 1650,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "new": {
+    "path": "../scrapers/vic_2026/data/20261107_092912 polling places.csv",
+    "sha256": "b1ff21b3bd4d5a574b64b2069ba068ea4c3517d6b5ebd13f1aa0bef01928c792",
+    "records": 1651,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "columns": {
+    "old": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "new": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "added": [],
+    "removed": [],
+    "ignored": []
+  },
+  "summary": {
+    "unchanged": 1641,
+    "changed": 9,
+    "added": 1,
+    "removed": 0,
+    "possible_matches": 0,
+    "warnings": 0
+  },
+  "changed": [
+    {
+      "old_index": 234,
+      "new_index": 234,
+      "name": "Brunswick North (Brunswick North Primary School)",
+      "old_name": "Brunswick North (Brunswick North Primary School)",
+      "changes": [
+        {
+          "field": "entrance_desc",
+          "old": "Access via Westbourne Street",
+          "new": "Access via Albion Street"
+        }
+      ],
+      "location": {
+        "old": [
+          -37.76019338736554,
+          144.95194462516596
+        ],
+        "new": [
+          -37.75939337078503,
+          144.95068666979282
+        ],
+        "moved_m": 141.9
+      },
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 141.9,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Brunswick North",
+        "premises": "Brunswick North Primary School",
+        "address": "144 Pearson Street, Brunswick West VIC 3055",
+        "lat": "-37.76019338736554",
+        "lon": "144.95194462516596",
+        "state": "VIC",
+        "divisions": "Brunswick",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access.",
+        "entrance_desc": "Access via Westbourne Street",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "654419bb-1875-4458-2c59-08de7439bbb5",
+        "host_district": "Brunswick",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1346",
+        "est_absent_votes": "416"
+      },
+      "new": {
+        "name": "Brunswick North",
+        "premises": "Brunswick North Primary School",
+        "address": "144 Pearson Street, Brunswick West VIC 3055",
+        "lat": "-37.75939337078503",
+        "lon": "144.95068666979282",
+        "state": "VIC",
+        "divisions": "Brunswick",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access.",
+        "entrance_desc": "Access via Albion Street",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "654419bb-1875-4458-2c59-08de7439bbb5",
+        "host_district": "Brunswick",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1346",
+        "est_absent_votes": "416"
+      }
+    },
+    {
+      "old_index": 886,
+      "new_index": 887,
+      "name": "Bulmans (St Francis Catholic College Melton)",
+      "old_name": "Bulmans (St Francis Catholic College Melton)",
+      "changes": [
+        {
+          "field": "address",
+          "old": "109-141 Bulmans Road, Melton VIC 3337",
+          "new": "109-141 Bulmans Road, Melton West VIC 3337"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": false,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Bulmans",
+        "premises": "St Francis Catholic College Melton",
+        "address": "109-141 Bulmans Road, Melton VIC 3337",
+        "lat": "-37.67797221646729",
+        "lon": "144.55077361507733",
+        "state": "VIC",
+        "divisions": "Melton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access vis Gate 1",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
+        "host_district": "Melton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1479",
+        "est_absent_votes": "141"
+      },
+      "new": {
+        "name": "Bulmans",
+        "premises": "St Francis Catholic College Melton",
+        "address": "109-141 Bulmans Road, Melton West VIC 3337",
+        "lat": "-37.67797221646729",
+        "lon": "144.55077361507733",
+        "state": "VIC",
+        "divisions": "Melton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access vis Gate 1",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "1a19f787-ac05-493a-6012-08de7f225849",
+        "host_district": "Melton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1479",
+        "est_absent_votes": "141"
+      }
+    },
+    {
+      "old_index": 240,
+      "new_index": 240,
+      "name": "Curtain (Fitzroy High School)",
+      "old_name": "Curtain (Fitzroy High School)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Assisted"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Door width is between 750 - 850mm."
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Curtain",
+        "premises": "Fitzroy High School",
+        "address": "24-30 Falconer Street, Fitzroy North VIC 3068",
+        "lat": "-37.784756644727004",
+        "lon": "144.98778093286833",
+        "state": "VIC",
+        "divisions": "Brunswick",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "81d3eb73-c677-4ab8-e004-08df2fc920a2",
+        "host_district": "Brunswick",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "896",
+        "est_absent_votes": "305"
+      },
+      "new": {
+        "name": "Curtain",
+        "premises": "Fitzroy High School",
+        "address": "24-30 Falconer Street, Fitzroy North VIC 3068",
+        "lat": "-37.784756644727004",
+        "lon": "144.98778093286833",
+        "state": "VIC",
+        "divisions": "Brunswick",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Door width is between 750 - 850mm.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "81d3eb73-c677-4ab8-e004-08df2fc920a2",
+        "host_district": "Brunswick",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "896",
+        "est_absent_votes": "305"
+      }
+    },
+    {
+      "old_index": 1467,
+      "new_index": 1468,
+      "name": "Heywood (Heywood Community Hall)",
+      "old_name": "Heywood (Heywood Community Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "The main entrance"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      },
+      "new": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "The main entrance",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      }
+    },
+    {
+      "old_index": 867,
+      "new_index": 868,
+      "name": "Kooyong (St Kevin's College)",
+      "old_name": "Kooyong (St Kevin's College)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Assisted"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "Accessible parking may be restrictive."
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Kooyong",
+        "premises": "St Kevin's College",
+        "address": "73 Lansell Road, Toorak VIC 3142",
+        "lat": "-37.83367890033221",
+        "lon": "145.02020880610903",
+        "state": "VIC",
+        "divisions": "Malvern",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "6e4b7762-670b-4289-2e50-08de7439bbb5",
+        "host_district": "Malvern",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "540",
+        "est_absent_votes": "281"
+      },
+      "new": {
+        "name": "Kooyong",
+        "premises": "St Kevin's College",
+        "address": "73 Lansell Road, Toorak VIC 3142",
+        "lat": "-37.83367890033221",
+        "lon": "145.02020880610903",
+        "state": "VIC",
+        "divisions": "Malvern",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Accessible parking may be restrictive.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "6e4b7762-670b-4289-2e50-08de7439bbb5",
+        "host_district": "Malvern",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "540",
+        "est_absent_votes": "281"
+      }
+    },
+    {
+      "old_index": 451,
+      "new_index": 451,
+      "name": "Magpie (Magpie Primary School)",
+      "old_name": "Magpie (Magpie Primary School)",
+      "changes": [
+        {
+          "field": "wheelchair_access_description",
+          "old": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+          "new": "Accessible parking is not available. Doors within the building have less than 750mm clear width. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users."
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Magpie",
+        "premises": "Magpie Primary School",
+        "address": "61 Docwra Street, Magpie VIC 3352",
+        "lat": "-37.61637476220001",
+        "lon": "143.84345606760942",
+        "state": "VIC",
+        "divisions": "Eureka",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "239c75ba-fff3-4960-610a-08de7f225849",
+        "host_district": "Eureka",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "244",
+        "est_absent_votes": "144"
+      },
+      "new": {
+        "name": "Magpie",
+        "premises": "Magpie Primary School",
+        "address": "61 Docwra Street, Magpie VIC 3352",
+        "lat": "-37.61637476220001",
+        "lon": "143.84345606760942",
+        "state": "VIC",
+        "divisions": "Eureka",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Accessible parking is not available. Doors within the building have less than 750mm clear width. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "239c75ba-fff3-4960-610a-08de7f225849",
+        "host_district": "Eureka",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "244",
+        "est_absent_votes": "144"
+      }
+    },
+    {
+      "old_index": 823,
+      "new_index": 824,
+      "name": "Nhill (Nhill Uniting Church Hall)",
+      "old_name": "Nhill (Nhill Uniting Church Hall)",
+      "changes": [
+        {
+          "field": "est_ordinary_votes",
+          "old": "2000",
+          "new": "1550"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Nhill",
+        "premises": "Nhill Uniting Church Hall",
+        "address": "57 Victoria Street, Nhill VIC 3418",
+        "lat": "-36.3351606084614",
+        "lon": "141.64847195337296",
+        "state": "VIC",
+        "divisions": "Lowan",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "53f22544-b7b3-42de-6170-08de7f225849",
+        "host_district": "Lowan",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "2000",
+        "est_absent_votes": "40"
+      },
+      "new": {
+        "name": "Nhill",
+        "premises": "Nhill Uniting Church Hall",
+        "address": "57 Victoria Street, Nhill VIC 3418",
+        "lat": "-36.3351606084614",
+        "lon": "141.64847195337296",
+        "state": "VIC",
+        "divisions": "Lowan",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "53f22544-b7b3-42de-6170-08de7f225849",
+        "host_district": "Lowan",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1550",
+        "est_absent_votes": "40"
+      }
+    },
+    {
+      "old_index": 1215,
+      "new_index": 1216,
+      "name": "Officer Central (Kurrun Primary School)",
+      "old_name": "Officer Central (Kurrun Primary School)",
+      "changes": [],
+      "location": {
+        "old": [
+          -38.069601,
+          145.405358
+        ],
+        "new": [
+          -38.07015048990286,
+          145.4050790509173
+        ],
+        "moved_m": 65.8
+      },
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 65.8,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Officer Central",
+        "premises": "Kurrun Primary School",
+        "address": "22 Allsburg Avenue, Officer VIC 3809",
+        "lat": "-38.069601",
+        "lon": "145.405358",
+        "state": "VIC",
+        "divisions": "Pakenham",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
+        "host_district": "Pakenham",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1044",
+        "est_absent_votes": "192"
+      },
+      "new": {
+        "name": "Officer Central",
+        "premises": "Kurrun Primary School",
+        "address": "22 Allsburg Avenue, Officer VIC 3809",
+        "lat": "-38.07015048990286",
+        "lon": "145.4050790509173",
+        "state": "VIC",
+        "divisions": "Pakenham",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "2b101b1b-4615-41ad-60d6-08de7f225849",
+        "host_district": "Pakenham",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1044",
+        "est_absent_votes": "192"
+      }
+    },
+    {
+      "old_index": 1444,
+      "new_index": 1445,
+      "name": "Tatura (Tatura Primary School)",
+      "old_name": "Tatura (Tatura Primary School)",
+      "changes": [
+        {
+          "field": "address",
+          "old": "33 Service Street, Tatura VIC 3616",
+          "new": "Corner Service Street and Albert Street, Tatura VIC 3616"
+        },
+        {
+          "field": "entrance_desc",
+          "old": "",
+          "new": "Access via Service Street"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": false,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Tatura",
+        "premises": "Tatura Primary School",
+        "address": "33 Service Street, Tatura VIC 3616",
+        "lat": "-36.443723827141184",
+        "lon": "145.2292116498774",
+        "state": "VIC",
+        "divisions": "Shepparton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
+        "host_district": "Shepparton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1386",
+        "est_absent_votes": "169"
+      },
+      "new": {
+        "name": "Tatura",
+        "premises": "Tatura Primary School",
+        "address": "Corner Service Street and Albert Street, Tatura VIC 3616",
+        "lat": "-36.443723827141184",
+        "lon": "145.2292116498774",
+        "state": "VIC",
+        "divisions": "Shepparton",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "Access via Service Street",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "bb6df144-bbf6-4913-621b-08de7f225849",
+        "host_district": "Shepparton",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1386",
+        "est_absent_votes": "169"
+      }
+    }
+  ],
+  "possible_matches": [],
+  "added": [
+    {
+      "new_index": 814,
+      "name": "Kaniva (Kaniva Senior Citizens Hall)",
+      "record": {
+        "name": "Kaniva",
+        "premises": "Kaniva Senior Citizens Hall",
+        "address": "32 Progress Street, Kaniva VIC 3419",
+        "lat": "-36.37776474646634",
+        "lon": "141.24197740394766",
+        "state": "VIC",
+        "divisions": "Lowan",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "76979f7a-74b0-42cc-8e26-08df3ba0f319",
+        "host_district": "Lowan",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "600",
+        "est_absent_votes": "41"
+      }
+    }
+  ],
+  "removed": []
+}

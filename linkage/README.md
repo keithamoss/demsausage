@@ -26,9 +26,14 @@ uv run linkage evaluate OLD.csv NEW.csv --id-column id       # score against a t
 uv run python benchmarks/run_benchmark.py                    # labelled real data -> benchmarks/results.json
 uv run python benchmarks/run_agreement.py                    # unlabelled real data -> benchmarks/agreement.json
 uv run python benchmarks/train_default_model.py              # retrain the bundled Splink model
+uv run linkage verdicts tally                                # who was right where they disagreed
 ```
 
 Python 3.10+ (Django runs 3.10). The rapidfuzz matcher only needs `rapidfuzz`, `scipy` and `numpy`.
+
+## Downstream: diffs and verdicts
+
+[`../diff/`](../diff/) turns linkage results into one diff per matcher, with an HTML report. Its Disagreements tab records which matcher was right. Those verdicts are imported into [`verdicts/verdicts.jsonl`](verdicts/) with `uv run linkage verdicts import FILE` and summarised with `uv run linkage verdicts tally`.
 
 ## Results so far (2026-11-21)
 

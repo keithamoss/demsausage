@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-21T09:03:38+00:00",
+  "matcher": "splink",
+  "matcher_params": {
+    "auto_threshold": 0.95,
+    "review_threshold": 0.5,
+    "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json",
+    "training": {
+      "groups": [
+        "sa_2025",
+        "vic_2026",
+        "federal_2022_2025"
+      ],
+      "files": [
+        [
+          "scrapers/sa_2025/data/20260301_171947 polling places.csv",
+          "scrapers/sa_2025/data/20260320_214134 polling places.csv"
+        ],
+        [
+          "scrapers/vic_2026/data/20261104_204630 polling places.csv",
+          "scrapers/vic_2026/data/20261116_123300 polling places.csv"
+        ],
+        [
+          "django/tests/fixtures/elections/federal_2022/polling_places.csv",
+          "django/tests/fixtures/elections/federal_2025/polling_places.csv"
+        ]
+      ],
+      "labelled_pairs": 9066,
+      "m_pseudo_count": 1.0,
+      "single_axis_level": true
+    },
+    "exact_pass": true
+  },
+  "old": {
+    "path": "../scrapers/vic_2026/data/20261107_092912 polling places.csv",
+    "sha256": "b1ff21b3bd4d5a574b64b2069ba068ea4c3517d6b5ebd13f1aa0bef01928c792",
+    "records": 1651,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "new": {
+    "path": "../scrapers/vic_2026/data/20261111_124944 polling places.csv",
+    "sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62",
+    "records": 1652,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "columns": {
+    "old": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "new": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "is_early_voting_centre",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "added": [],
+    "removed": [],
+    "ignored": []
+  },
+  "summary": {
+    "unchanged": 1649,
+    "changed": 2,
+    "added": 1,
+    "removed": 0,
+    "possible_matches": 0,
+    "warnings": 0
+  },
+  "changed": [
+    {
+      "old_index": 696,
+      "new_index": 696,
+      "name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
+      "old_name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)",
+      "changes": [],
+      "location": {
+        "old": [
+          -37.77277742082889,
+          145.04418810164043
+        ],
+        "new": [
+          -37.7722762494479,
+          145.04426721790173
+        ],
+        "moved_m": 56.2
+      },
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 56.2,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Fairy Hills",
+        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
+        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
+        "lat": "-37.77277742082889",
+        "lon": "145.04418810164043",
+        "state": "VIC",
+        "divisions": "Ivanhoe",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via Gate 13",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
+        "host_district": "Ivanhoe",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1094",
+        "est_absent_votes": "113"
+      },
+      "new": {
+        "name": "Fairy Hills",
+        "premises": "Ivanhoe Grammar School - Ivanhoe Campus",
+        "address": "41 The Ridgeway, Ivanhoe VIC 3079",
+        "lat": "-37.7722762494479",
+        "lon": "145.04426721790173",
+        "state": "VIC",
+        "divisions": "Ivanhoe",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via Gate 13",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5",
+        "host_district": "Ivanhoe",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1094",
+        "est_absent_votes": "113"
+      }
+    },
+    {
+      "old_index": 1296,
+      "new_index": 1296,
+      "name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)",
+      "old_name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)",
+      "changes": [],
+      "location": {
+        "old": [
+          -37.83554823287706,
+          144.98876553512292
+        ],
+        "new": [
+          -37.83546037306623,
+          144.98882845218697
+        ],
+        "moved_m": 11.2
+      },
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 11.2,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "South Yarra",
+        "premises": "Melbourne Girls Grammar - Morris Hall Campus",
+        "address": "100 Caroline Street, South Yarra VIC 3141",
+        "lat": "-37.83554823287706",
+        "lon": "144.98876553512292",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1",
+        "host_district": "Prahran",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1007",
+        "est_absent_votes": "359"
+      },
+      "new": {
+        "name": "South Yarra",
+        "premises": "Melbourne Girls Grammar - Morris Hall Campus",
+        "address": "100 Caroline Street, South Yarra VIC 3141",
+        "lat": "-37.83546037306623",
+        "lon": "144.98882845218697",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1",
+        "host_district": "Prahran",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "1007",
+        "est_absent_votes": "359"
+      }
+    }
+  ],
+  "possible_matches": [],
+  "added": [
+    {
+      "new_index": 1579,
+      "name": "Ringwood Heights Primary School (Ringwood Heights Primary School)",
+      "record": {
+        "name": "Ringwood Heights Primary School",
+        "premises": "Ringwood Heights Primary School",
+        "address": "60 Summit Crescent, Ringwood North VIC 3134",
+        "lat": "-37.80380958458955",
+        "lon": "145.2174396816827",
+        "state": "VIC",
+        "divisions": "Warrandyte",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf",
+        "host_district": "Warrandyte",
+        "is_early_voting_centre": "0",
+        "est_ordinary_votes": "",
+        "est_absent_votes": ""
+      }
+    }
+  ],
+  "removed": []
+}

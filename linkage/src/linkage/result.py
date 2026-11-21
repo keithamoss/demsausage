@@ -69,6 +69,17 @@ class LinkResult:
             "unmatched_right": len(self.unmatched_right),
         }
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> LinkResult:
+        """Inverse of to_dict(), for tools that read saved linkage output."""
+        return cls(
+            matcher=data["matcher"],
+            links=[Link(**link) for link in data["links"]],
+            unmatched_left=list(data["unmatched_left"]),
+            unmatched_right=list(data["unmatched_right"]),
+            params=data.get("params", {}),
+        )
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "matcher": self.matcher,

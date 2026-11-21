@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>20261111_124944 polling places → 20261113_142918 polling places</title>
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
+  --accent: #5b3fa8; --accent-soft: #efeaf9;
+  --add: #1f7a3d; --add-soft: #e6f4ea; --del: #b3261e; --del-soft: #fbe9e7;
+  --warn: #8a5a00; --warn-soft: #fff3d6; --info-soft: #eef2f7;
+  --radius: 10px; --shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
+    --accent: #b49cf0; --accent-soft: #2c2540;
+    --add: #7fd39a; --add-soft: #173322; --del: #f2a39c; --del-soft: #3a1c1a;
+    --warn: #f0c46a; --warn-soft: #3a2e12; --info-soft: #232a33;
+    --shadow: none;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { padding: 20px 16px 8px; max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 0 0 4px; overflow-wrap: anywhere; }
+.sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+main { max-width: 1100px; margin: 0 auto; padding: 0 16px 120px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; position: sticky; top: 0; background: var(--bg); padding: 8px 0; z-index: 2; }
+.tab { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 7px 14px; font: inherit; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); }
+.tile b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+.tile span { color: var(--muted); font-size: 13px; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+input[type=search], select, textarea { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; }
+input[type=search] { flex: 1; min-width: 180px; }
+details.section { margin: 14px 0; }
+details.section > summary { cursor: pointer; font-weight: 600; font-size: 16px; padding: 6px 0; }
+.count { color: var(--muted); font-weight: 400; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
+.card h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.was { color: var(--muted); font-size: 13px; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.badge { font-size: 12px; border-radius: 999px; padding: 2px 8px; background: var(--info-soft); color: var(--muted); }
+.badge.review { background: var(--warn-soft); color: var(--warn); }
+.warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 6px 10px; margin: 6px 0; font-size: 14px; }
+.change { display: grid; grid-template-columns: minmax(110px, 180px) 1fr; gap: 4px 12px; padding: 6px 0; border-top: 1px solid var(--border); }
+.change:first-of-type { border-top: 0; }
+.field { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.old { background: var(--del-soft); color: var(--del); text-decoration: line-through; border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+.new { background: var(--add-soft); color: var(--add); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+.empty { font-style: italic; opacity: .8; }
+.kv { display: grid; grid-template-columns: minmax(110px, 180px) 1fr; gap: 2px 12px; font-size: 14px; }
+.kv dt { color: var(--muted); overflow-wrap: anywhere; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+.explain { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.explain code { font-size: 12px; }
+a { color: var(--accent); }
+.note { color: var(--muted); font-size: 14px; }
+.decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.decision { border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+.decision h4 { margin: 0 0 6px; font-size: 14px; }
+.nolink { color: var(--muted); font-style: italic; }
+.verdict { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.verdict label { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 14px; }
+.verdict input { position: absolute; opacity: 0; pointer-events: none; }
+.verdict input:checked + span { font-weight: 600; }
+.verdict label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+.verdict-extra { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 8px; }
+.card.done { border-left: 4px solid var(--accent); }
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 16px; display: none; }
+.bar.show { display: block; }
+.bar-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button.primary { font: inherit; background: var(--accent); color: var(--surface); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+button.primary:disabled { opacity: .5; cursor: default; }
+button.ghost { font: inherit; background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+@media (max-width: 640px) {
+  .decisions, .verdict-extra { grid-template-columns: 1fr; }
+  .change, .kv { grid-template-columns: 1fr; }
+  .field, .kv dt { margin-top: 4px; }
+  .bar .note { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <div class="sub" id="subtitle"></div>
+</header>
+<main>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <section id="view"></section>
+</main>
+<div class="bar" id="bar"><div class="bar-inner">
+  <span id="bar-status"></span>
+  <button class="primary" id="download">Download verdicts</button>
+  <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
+</div></div>
+<script type="application/json" id="data">{"diffs": [{"schema_version": 1, "created_at": "2026-11-21T09:03:39+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "../scrapers/vic_2026/data/20261111_124944 polling places.csv", "sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62", "records": 1652, "columns": {"name": "name", "premises": "premises", "address": ["address"], "lat": "lat", "lon": "lon", "divisions": "divisions", "id": "vec_venue_id"}}, "new": {"path": "../scrapers/vic_2026/data/20261113_142918 polling places.csv", "sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96", "records": 1652, "columns": {"name": "name", "premises": "premises", "address": ["address"], "lat": "lat", "lon": "lon", "divisions": "divisions", "id": "vec_venue_id"}}, "columns": {"old": ["name", "premises", "address", "lat", "lon", "state", "divisions", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "vec_venue_id", "host_district", "is_early_voting_centre", "est_ordinary_votes", "est_absent_votes"], "new": ["name", "premises", "address", "lat", "lon", "state", "divisions", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "vec_venue_id", "host_district", "est_ordinary_votes", "est_absent_votes"], "added": [], "removed": ["is_early_voting_centre"], "ignored": []}, "summary": {"unchanged": 1641, "changed": 11, "added": 0, "removed": 0, "possible_matches": 0, "warnings": 0}, "changed": [{"old_index": 696, "new_index": 696, "name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "old_name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "changes": [{"field": "entrance_desc", "old": "Access via Gate 13", "new": "Access via gates 18 and 19"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Fairy Hills", "premises": "Ivanhoe Grammar School - Ivanhoe Campus", "address": "41 The Ridgeway, Ivanhoe VIC 3079", "lat": "-37.7722762494479", "lon": "145.04426721790173", "state": "VIC", "divisions": "Ivanhoe", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "Access via Gate 13", "opening_hours": "8am to 6pm", "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5", "host_district": "Ivanhoe", "is_early_voting_centre": "0", "est_ordinary_votes": "1094", "est_absent_votes": "113"}, "new": {"name": "Fairy Hills", "premises": "Ivanhoe Grammar School - Ivanhoe Campus", "address": "41 The Ridgeway, Ivanhoe VIC 3079", "lat": "-37.7722762494479", "lon": "145.04426721790173", "state": "VIC", "divisions": "Ivanhoe", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "Access via gates 18 and 19", "opening_hours": "8am to 6pm", "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5", "host_district": "Ivanhoe", "est_ordinary_votes": "1094", "est_absent_votes": "113"}}, {"old_index": 1288, "new_index": 1288, "name": "Fawkner Park (Christ Church Grammar School)", "old_name": "Fawkner Park (Christ Church Grammar School)", "changes": [{"field": "wheelchair_access", "old": "Assisted", "new": "None"}, {"field": "wheelchair_access_description", "old": "Ramp access to the building entrance may restrict independent wheelchair access.", "new": "Ramp access to the building entrance may restrict wheelchair access."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Fawkner Park", "premises": "Christ Church Grammar School", "address": "677 Punt Road, South Yarra VIC 3141", "lat": "-37.83883147676405", "lon": "144.9860434409811", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Ramp access to the building entrance may restrict independent wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1", "host_district": "Prahran", "is_early_voting_centre": "0", "est_ordinary_votes": "1370", "est_absent_votes": "336"}, "new": {"name": "Fawkner Park", "premises": "Christ Church Grammar School", "address": "677 Punt Road, South Yarra VIC 3141", "lat": "-37.83883147676405", "lon": "144.9860434409811", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1", "host_district": "Prahran", "est_ordinary_votes": "1370", "est_absent_votes": "336"}}, {"old_index": 657, "new_index": 657, "name": "Greenvale South (Greenvale Recreation Centre)", "old_name": "Greenvale South (Greenvale Recreation Centre)", "changes": [], "location": {"old": [-37.65033587460932, 144.89255072951212], "new": [-37.650380710279784, 144.8925453654215], "moved_m": 5.0}, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 5.0, "same_address": true, "same_premises": true}}, "old": {"name": "Greenvale South", "premises": "Greenvale Recreation Centre", "address": "27 Barrymore Road, Greenvale VIC 3059", "lat": "-37.65033587460932", "lon": "144.89255072951212", "state": "VIC", "divisions": "Greenvale", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "5d9125d2-ec33-4f30-2c79-08de7439bbb5", "host_district": "Greenvale", "is_early_voting_centre": "0", "est_ordinary_votes": "901", "est_absent_votes": "187"}, "new": {"name": "Greenvale South", "premises": "Greenvale Recreation Centre", "address": "27 Barrymore Road, Greenvale VIC 3059", "lat": "-37.650380710279784", "lon": "144.8925453654215", "state": "VIC", "divisions": "Greenvale", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "5d9125d2-ec33-4f30-2c79-08de7439bbb5", "host_district": "Greenvale", "est_ordinary_votes": "901", "est_absent_votes": "187"}}, {"old_index": 762, "new_index": 762, "name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Community Hall)", "old_name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Parish Hall)", "changes": [{"field": "premises", "old": "The Hellenic Orthodox Community of Geelong Parish Hall", "new": "The Hellenic Orthodox Community of Geelong Community Hall"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": false}}, "old": {"name": "Hamlyn Banks", "premises": "The Hellenic Orthodox Community of Geelong Parish Hall", "address": "3 Taliska Avenue, Hamlyn Heights VIC 3215", "lat": "-38.11672953495224", "lon": "144.33025293974188", "state": "VIC", "divisions": "Lara", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "c23ad5e8-ad2c-462e-3d00-08ded0ec9227", "host_district": "Lara", "is_early_voting_centre": "1", "est_ordinary_votes": "883", "est_absent_votes": "189"}, "new": {"name": "Hamlyn Banks", "premises": "The Hellenic Orthodox Community of Geelong Community Hall", "address": "3 Taliska Avenue, Hamlyn Heights VIC 3215", "lat": "-38.11672953495224", "lon": "144.33025293974188", "state": "VIC", "divisions": "Lara", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "c23ad5e8-ad2c-462e-3d00-08ded0ec9227", "host_district": "Lara", "est_ordinary_votes": "883", "est_absent_votes": "189"}}, {"old_index": 1468, "new_index": 1468, "name": "Heywood (Heywood Community Hall)", "old_name": "Heywood (Heywood Community Hall)", "changes": [{"field": "wheelchair_access_description", "old": "The main entrance", "new": ""}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Heywood", "premises": "Heywood Community Hall", "address": "20 Edgar Street, Heywood VIC 3304", "lat": "-38.13419045778523", "lon": "141.62986480631758", "state": "VIC", "divisions": "South-West Coast", "wheelchair_access": "None", "wheelchair_access_description": "The main entrance", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1", "host_district": "South-West Coast", "is_early_voting_centre": "0", "est_ordinary_votes": "770", "est_absent_votes": "37"}, "new": {"name": "Heywood", "premises": "Heywood Community Hall", "address": "20 Edgar Street, Heywood VIC 3304", "lat": "-38.13419045778523", "lon": "141.62986480631758", "state": "VIC", "divisions": "South-West Coast", "wheelchair_access": "None", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1", "host_district": "South-West Coast", "est_ordinary_votes": "770", "est_absent_votes": "37"}}, {"old_index": 877, "new_index": 877, "name": "Kensington (Kensington Primary School)", "old_name": "Kensington (Kensington Primary School)", "changes": [], "location": {"old": [-37.792839018551895, 144.92760458469215], "new": [-37.7929579527909, 144.92760458501957], "moved_m": 13.2}, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 13.2, "same_address": true, "same_premises": true}}, "old": {"name": "Kensington", "premises": "Kensington Primary School", "address": "62-74 McCracken Street, Kensington VIC 3031", "lat": "-37.792839018551895", "lon": "144.92760458469215", "state": "VIC", "divisions": "Melbourne, Essendon", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5", "host_district": "Melbourne", "is_early_voting_centre": "0", "est_ordinary_votes": "1837", "est_absent_votes": "189"}, "new": {"name": "Kensington", "premises": "Kensington Primary School", "address": "62-74 McCracken Street, Kensington VIC 3031", "lat": "-37.7929579527909", "lon": "144.92760458501957", "state": "VIC", "divisions": "Melbourne, Essendon", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5", "host_district": "Melbourne", "est_ordinary_votes": "1837", "est_absent_votes": "189"}}, {"old_index": 1605, "new_index": 1605, "name": "Little River (Little River Primary School)", "old_name": "Little River (Little River Primary School)", "changes": [{"field": "est_absent_votes", "old": "243", "new": "40"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Little River", "premises": "Little River Primary School", "address": "Rothwell Street, Little River VIC 3211", "lat": "-37.9647027268545", "lon": "144.5010641576753", "state": "VIC", "divisions": "Werribee, Lara", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access to the building is via an alternative entrance. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "49d4babe-1b9b-424b-6c8d-08df2e4500f1", "host_district": "Werribee", "is_early_voting_centre": "0", "est_ordinary_votes": "516", "est_absent_votes": "243"}, "new": {"name": "Little River", "premises": "Little River Primary School", "address": "Rothwell Street, Little River VIC 3211", "lat": "-37.9647027268545", "lon": "144.5010641576753", "state": "VIC", "divisions": "Werribee, Lara", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access to the building is via an alternative entrance. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "49d4babe-1b9b-424b-6c8d-08df2e4500f1", "host_district": "Werribee", "est_ordinary_votes": "516", "est_absent_votes": "40"}}, {"old_index": 719, "new_index": 719, "name": "Mickleham South (North Victorian Buddhist Association)", "old_name": "Mickleham South (North Victorian Buddhist Association)", "changes": [{"field": "wheelchair_access", "old": "Full", "new": "None"}, {"field": "wheelchair_access_description", "old": "", "new": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Mickleham South", "premises": "North Victorian Buddhist Association", "address": "1690 Mickleham Road, Mickleham VIC 3064", "lat": "-37.577074672386125", "lon": "144.87587341755918", "state": "VIC", "divisions": "Kalkallo", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde", "host_district": "Kalkallo", "is_early_voting_centre": "1", "est_ordinary_votes": "773", "est_absent_votes": "126"}, "new": {"name": "Mickleham South", "premises": "North Victorian Buddhist Association", "address": "1690 Mickleham Road, Mickleham VIC 3064", "lat": "-37.577074672386125", "lon": "144.87587341755918", "state": "VIC", "divisions": "Kalkallo", "wheelchair_access": "None", "wheelchair_access_description": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde", "host_district": "Kalkallo", "est_ordinary_votes": "773", "est_absent_votes": "126"}}, {"old_index": 1046, "new_index": 1046, "name": "Murrabit (Murrabit Group School)", "old_name": "Murrabit (Murrabit Group School)", "changes": [{"field": "wheelchair_access", "old": "None", "new": "Full"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Murrabit", "premises": "Murrabit Group School", "address": "61 Browning Avenue, Murrabit VIC 3579", "lat": "-35.52806080329914", "lon": "143.95032357707197", "state": "VIC", "divisions": "Murray Plains", "wheelchair_access": "None", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "db4cbd8e-f165-4042-6c8e-08df2e4500f1", "host_district": "Murray Plains", "is_early_voting_centre": "0", "est_ordinary_votes": "191", "est_absent_votes": "32"}, "new": {"name": "Murrabit", "premises": "Murrabit Group School", "address": "61 Browning Avenue, Murrabit VIC 3579", "lat": "-35.52806080329914", "lon": "143.95032357707197", "state": "VIC", "divisions": "Murray Plains", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "db4cbd8e-f165-4042-6c8e-08df2e4500f1", "host_district": "Murray Plains", "est_ordinary_votes": "191", "est_absent_votes": "32"}}, {"old_index": 1579, "new_index": 1579, "name": "Ringwood Heights (Ringwood Heights Primary School)", "old_name": "Ringwood Heights Primary School (Ringwood Heights Primary School)", "changes": [{"field": "name", "old": "Ringwood Heights Primary School", "new": "Ringwood Heights"}, {"field": "est_ordinary_votes", "old": "", "new": "600"}, {"field": "est_absent_votes", "old": "", "new": "58"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 0.9097, "via": "matcher", "explain": {"name": 0.681, "premises": 1.0, "address": 1.0, "geo": 1.0, "divisions": 1.0, "distance_m": 0.0}}, "old": {"name": "Ringwood Heights Primary School", "premises": "Ringwood Heights Primary School", "address": "60 Summit Crescent, Ringwood North VIC 3134", "lat": "-37.80380958458955", "lon": "145.2174396816827", "state": "VIC", "divisions": "Warrandyte", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf", "host_district": "Warrandyte", "is_early_voting_centre": "0", "est_ordinary_votes": "", "est_absent_votes": ""}, "new": {"name": "Ringwood Heights", "premises": "Ringwood Heights Primary School", "address": "60 Summit Crescent, Ringwood North VIC 3134", "lat": "-37.80380958458955", "lon": "145.2174396816827", "state": "VIC", "divisions": "Warrandyte", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf", "host_district": "Warrandyte", "est_ordinary_votes": "600", "est_absent_votes": "58"}}, {"old_index": 1296, "new_index": 1296, "name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "old_name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "changes": [{"field": "wheelchair_access_description", "old": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "South Yarra", "premises": "Melbourne Girls Grammar - Morris Hall Campus", "address": "100 Caroline Street, South Yarra VIC 3141", "lat": "-37.83546037306623", "lon": "144.98882845218697", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1", "host_district": "Prahran", "is_early_voting_centre": "0", "est_ordinary_votes": "1007", "est_absent_votes": "359"}, "new": {"name": "South Yarra", "premises": "Melbourne Girls Grammar - Morris Hall Campus", "address": "100 Caroline Street, South Yarra VIC 3141", "lat": "-37.83546037306623", "lon": "144.98882845218697", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1", "host_district": "Prahran", "est_ordinary_votes": "1007", "est_absent_votes": "359"}}], "possible_matches": [], "added": [], "removed": []}, {"schema_version": 1, "created_at": "2026-11-21T09:03:39+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "../scrapers/vic_2026/data/20261111_124944 polling places.csv", "sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62", "records": 1652, "columns": {"name": "name", "premises": "premises", "address": ["address"], "lat": "lat", "lon": "lon", "divisions": "divisions", "id": "vec_venue_id"}}, "new": {"path": "../scrapers/vic_2026/data/20261113_142918 polling places.csv", "sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96", "records": 1652, "columns": {"name": "name", "premises": "premises", "address": ["address"], "lat": "lat", "lon": "lon", "divisions": "divisions", "id": "vec_venue_id"}}, "columns": {"old": ["name", "premises", "address", "lat", "lon", "state", "divisions", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "vec_venue_id", "host_district", "is_early_voting_centre", "est_ordinary_votes", "est_absent_votes"], "new": ["name", "premises", "address", "lat", "lon", "state", "divisions", "wheelchair_access", "wheelchair_access_description", "entrance_desc", "opening_hours", "vec_venue_id", "host_district", "est_ordinary_votes", "est_absent_votes"], "added": [], "removed": ["is_early_voting_centre"], "ignored": []}, "summary": {"unchanged": 1641, "changed": 11, "added": 0, "removed": 0, "possible_matches": 0, "warnings": 0}, "changed": [{"old_index": 696, "new_index": 696, "name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "old_name": "Fairy Hills (Ivanhoe Grammar School - Ivanhoe Campus)", "changes": [{"field": "entrance_desc", "old": "Access via Gate 13", "new": "Access via gates 18 and 19"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Fairy Hills", "premises": "Ivanhoe Grammar School - Ivanhoe Campus", "address": "41 The Ridgeway, Ivanhoe VIC 3079", "lat": "-37.7722762494479", "lon": "145.04426721790173", "state": "VIC", "divisions": "Ivanhoe", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "Access via Gate 13", "opening_hours": "8am to 6pm", "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5", "host_district": "Ivanhoe", "is_early_voting_centre": "0", "est_ordinary_votes": "1094", "est_absent_votes": "113"}, "new": {"name": "Fairy Hills", "premises": "Ivanhoe Grammar School - Ivanhoe Campus", "address": "41 The Ridgeway, Ivanhoe VIC 3079", "lat": "-37.7722762494479", "lon": "145.04426721790173", "state": "VIC", "divisions": "Ivanhoe", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "Access via gates 18 and 19", "opening_hours": "8am to 6pm", "vec_venue_id": "d895927b-fa0c-4b2d-2d03-08de7439bbb5", "host_district": "Ivanhoe", "est_ordinary_votes": "1094", "est_absent_votes": "113"}}, {"old_index": 1288, "new_index": 1288, "name": "Fawkner Park (Christ Church Grammar School)", "old_name": "Fawkner Park (Christ Church Grammar School)", "changes": [{"field": "wheelchair_access", "old": "Assisted", "new": "None"}, {"field": "wheelchair_access_description", "old": "Ramp access to the building entrance may restrict independent wheelchair access.", "new": "Ramp access to the building entrance may restrict wheelchair access."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Fawkner Park", "premises": "Christ Church Grammar School", "address": "677 Punt Road, South Yarra VIC 3141", "lat": "-37.83883147676405", "lon": "144.9860434409811", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Ramp access to the building entrance may restrict independent wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1", "host_district": "Prahran", "is_early_voting_centre": "0", "est_ordinary_votes": "1370", "est_absent_votes": "336"}, "new": {"name": "Fawkner Park", "premises": "Christ Church Grammar School", "address": "677 Punt Road, South Yarra VIC 3141", "lat": "-37.83883147676405", "lon": "144.9860434409811", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "None", "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1", "host_district": "Prahran", "est_ordinary_votes": "1370", "est_absent_votes": "336"}}, {"old_index": 657, "new_index": 657, "name": "Greenvale South (Greenvale Recreation Centre)", "old_name": "Greenvale South (Greenvale Recreation Centre)", "changes": [], "location": {"old": [-37.65033587460932, 144.89255072951212], "new": [-37.650380710279784, 144.8925453654215], "moved_m": 5.0}, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 5.0, "same_address": true, "same_premises": true}}, "old": {"name": "Greenvale South", "premises": "Greenvale Recreation Centre", "address": "27 Barrymore Road, Greenvale VIC 3059", "lat": "-37.65033587460932", "lon": "144.89255072951212", "state": "VIC", "divisions": "Greenvale", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "5d9125d2-ec33-4f30-2c79-08de7439bbb5", "host_district": "Greenvale", "is_early_voting_centre": "0", "est_ordinary_votes": "901", "est_absent_votes": "187"}, "new": {"name": "Greenvale South", "premises": "Greenvale Recreation Centre", "address": "27 Barrymore Road, Greenvale VIC 3059", "lat": "-37.650380710279784", "lon": "144.8925453654215", "state": "VIC", "divisions": "Greenvale", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "5d9125d2-ec33-4f30-2c79-08de7439bbb5", "host_district": "Greenvale", "est_ordinary_votes": "901", "est_absent_votes": "187"}}, {"old_index": 762, "new_index": 762, "name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Community Hall)", "old_name": "Hamlyn Banks (The Hellenic Orthodox Community of Geelong Parish Hall)", "changes": [{"field": "premises", "old": "The Hellenic Orthodox Community of Geelong Parish Hall", "new": "The Hellenic Orthodox Community of Geelong Community Hall"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": false}}, "old": {"name": "Hamlyn Banks", "premises": "The Hellenic Orthodox Community of Geelong Parish Hall", "address": "3 Taliska Avenue, Hamlyn Heights VIC 3215", "lat": "-38.11672953495224", "lon": "144.33025293974188", "state": "VIC", "divisions": "Lara", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "c23ad5e8-ad2c-462e-3d00-08ded0ec9227", "host_district": "Lara", "is_early_voting_centre": "1", "est_ordinary_votes": "883", "est_absent_votes": "189"}, "new": {"name": "Hamlyn Banks", "premises": "The Hellenic Orthodox Community of Geelong Community Hall", "address": "3 Taliska Avenue, Hamlyn Heights VIC 3215", "lat": "-38.11672953495224", "lon": "144.33025293974188", "state": "VIC", "divisions": "Lara", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "c23ad5e8-ad2c-462e-3d00-08ded0ec9227", "host_district": "Lara", "est_ordinary_votes": "883", "est_absent_votes": "189"}}, {"old_index": 1468, "new_index": 1468, "name": "Heywood (Heywood Community Hall)", "old_name": "Heywood (Heywood Community Hall)", "changes": [{"field": "wheelchair_access_description", "old": "The main entrance", "new": ""}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Heywood", "premises": "Heywood Community Hall", "address": "20 Edgar Street, Heywood VIC 3304", "lat": "-38.13419045778523", "lon": "141.62986480631758", "state": "VIC", "divisions": "South-West Coast", "wheelchair_access": "None", "wheelchair_access_description": "The main entrance", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1", "host_district": "South-West Coast", "is_early_voting_centre": "0", "est_ordinary_votes": "770", "est_absent_votes": "37"}, "new": {"name": "Heywood", "premises": "Heywood Community Hall", "address": "20 Edgar Street, Heywood VIC 3304", "lat": "-38.13419045778523", "lon": "141.62986480631758", "state": "VIC", "divisions": "South-West Coast", "wheelchair_access": "None", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1", "host_district": "South-West Coast", "est_ordinary_votes": "770", "est_absent_votes": "37"}}, {"old_index": 877, "new_index": 877, "name": "Kensington (Kensington Primary School)", "old_name": "Kensington (Kensington Primary School)", "changes": [], "location": {"old": [-37.792839018551895, 144.92760458469215], "new": [-37.7929579527909, 144.92760458501957], "moved_m": 13.2}, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 13.2, "same_address": true, "same_premises": true}}, "old": {"name": "Kensington", "premises": "Kensington Primary School", "address": "62-74 McCracken Street, Kensington VIC 3031", "lat": "-37.792839018551895", "lon": "144.92760458469215", "state": "VIC", "divisions": "Melbourne, Essendon", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5", "host_district": "Melbourne", "is_early_voting_centre": "0", "est_ordinary_votes": "1837", "est_absent_votes": "189"}, "new": {"name": "Kensington", "premises": "Kensington Primary School", "address": "62-74 McCracken Street, Kensington VIC 3031", "lat": "-37.7929579527909", "lon": "144.92760458501957", "state": "VIC", "divisions": "Melbourne, Essendon", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "e71af3dc-f686-48c0-2c7f-08de7439bbb5", "host_district": "Melbourne", "est_ordinary_votes": "1837", "est_absent_votes": "189"}}, {"old_index": 1605, "new_index": 1605, "name": "Little River (Little River Primary School)", "old_name": "Little River (Little River Primary School)", "changes": [{"field": "est_absent_votes", "old": "243", "new": "40"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Little River", "premises": "Little River Primary School", "address": "Rothwell Street, Little River VIC 3211", "lat": "-37.9647027268545", "lon": "144.5010641576753", "state": "VIC", "divisions": "Werribee, Lara", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access to the building is via an alternative entrance. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "49d4babe-1b9b-424b-6c8d-08df2e4500f1", "host_district": "Werribee", "is_early_voting_centre": "0", "est_ordinary_votes": "516", "est_absent_votes": "243"}, "new": {"name": "Little River", "premises": "Little River Primary School", "address": "Rothwell Street, Little River VIC 3211", "lat": "-37.9647027268545", "lon": "144.5010641576753", "state": "VIC", "divisions": "Werribee, Lara", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access to the building is via an alternative entrance. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "49d4babe-1b9b-424b-6c8d-08df2e4500f1", "host_district": "Werribee", "est_ordinary_votes": "516", "est_absent_votes": "40"}}, {"old_index": 719, "new_index": 719, "name": "Mickleham South (North Victorian Buddhist Association)", "old_name": "Mickleham South (North Victorian Buddhist Association)", "changes": [{"field": "wheelchair_access", "old": "Full", "new": "None"}, {"field": "wheelchair_access_description", "old": "", "new": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Mickleham South", "premises": "North Victorian Buddhist Association", "address": "1690 Mickleham Road, Mickleham VIC 3064", "lat": "-37.577074672386125", "lon": "144.87587341755918", "state": "VIC", "divisions": "Kalkallo", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde", "host_district": "Kalkallo", "is_early_voting_centre": "1", "est_ordinary_votes": "773", "est_absent_votes": "126"}, "new": {"name": "Mickleham South", "premises": "North Victorian Buddhist Association", "address": "1690 Mickleham Road, Mickleham VIC 3064", "lat": "-37.577074672386125", "lon": "144.87587341755918", "state": "VIC", "divisions": "Kalkallo", "wheelchair_access": "None", "wheelchair_access_description": "Accessible parking is not available. The main entrance to the building has a step/s restricting wheelchair access. The path from the carpark, or street, to the building entrance is inaccessible for wheelchair users.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "4d930b58-8378-40f7-7892-08ded643dfde", "host_district": "Kalkallo", "est_ordinary_votes": "773", "est_absent_votes": "126"}}, {"old_index": 1046, "new_index": 1046, "name": "Murrabit (Murrabit Group School)", "old_name": "Murrabit (Murrabit Group School)", "changes": [{"field": "wheelchair_access", "old": "None", "new": "Full"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "Murrabit", "premises": "Murrabit Group School", "address": "61 Browning Avenue, Murrabit VIC 3579", "lat": "-35.52806080329914", "lon": "143.95032357707197", "state": "VIC", "divisions": "Murray Plains", "wheelchair_access": "None", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "db4cbd8e-f165-4042-6c8e-08df2e4500f1", "host_district": "Murray Plains", "is_early_voting_centre": "0", "est_ordinary_votes": "191", "est_absent_votes": "32"}, "new": {"name": "Murrabit", "premises": "Murrabit Group School", "address": "61 Browning Avenue, Murrabit VIC 3579", "lat": "-35.52806080329914", "lon": "143.95032357707197", "state": "VIC", "divisions": "Murray Plains", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "db4cbd8e-f165-4042-6c8e-08df2e4500f1", "host_district": "Murray Plains", "est_ordinary_votes": "191", "est_absent_votes": "32"}}, {"old_index": 1579, "new_index": 1579, "name": "Ringwood Heights (Ringwood Heights Primary School)", "old_name": "Ringwood Heights Primary School (Ringwood Heights Primary School)", "changes": [{"field": "name", "old": "Ringwood Heights Primary School", "new": "Ringwood Heights"}, {"field": "est_ordinary_votes", "old": "", "new": "600"}, {"field": "est_absent_votes", "old": "", "new": "58"}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "matcher", "explain": {"match_weight": 34.96, "mw_name": 4.42, "mw_premises": 10.48, "mw_address": 10.39, "mw_geo": 12.76, "mw_divisions": 7.59}}, "old": {"name": "Ringwood Heights Primary School", "premises": "Ringwood Heights Primary School", "address": "60 Summit Crescent, Ringwood North VIC 3134", "lat": "-37.80380958458955", "lon": "145.2174396816827", "state": "VIC", "divisions": "Warrandyte", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf", "host_district": "Warrandyte", "is_early_voting_centre": "0", "est_ordinary_votes": "", "est_absent_votes": ""}, "new": {"name": "Ringwood Heights", "premises": "Ringwood Heights Primary School", "address": "60 Summit Crescent, Ringwood North VIC 3134", "lat": "-37.80380958458955", "lon": "145.2174396816827", "state": "VIC", "divisions": "Warrandyte", "wheelchair_access": "Full", "wheelchair_access_description": "", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "78927c1c-78c8-45bd-7f68-08df3bca53bf", "host_district": "Warrandyte", "est_ordinary_votes": "600", "est_absent_votes": "58"}}, {"old_index": 1296, "new_index": 1296, "name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "old_name": "South Yarra (Melbourne Girls Grammar - Morris Hall Campus)", "changes": [{"field": "wheelchair_access_description", "old": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access."}], "location": null, "warnings": [], "link": {"band": "auto", "score": 1.0, "via": "exact", "explain": {"distance_m": 0.0, "same_address": true, "same_premises": true}}, "old": {"name": "South Yarra", "premises": "Melbourne Girls Grammar - Morris Hall Campus", "address": "100 Caroline Street, South Yarra VIC 3141", "lat": "-37.83546037306623", "lon": "144.98882845218697", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1", "host_district": "Prahran", "is_early_voting_centre": "0", "est_ordinary_votes": "1007", "est_absent_votes": "359"}, "new": {"name": "South Yarra", "premises": "Melbourne Girls Grammar - Morris Hall Campus", "address": "100 Caroline Street, South Yarra VIC 3141", "lat": "-37.83546037306623", "lon": "144.98882845218697", "state": "VIC", "divisions": "Prahran", "wheelchair_access": "Assisted", "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access.", "entrance_desc": "", "opening_hours": "8am to 6pm", "vec_venue_id": "644cb095-b300-4888-6c93-08df2e4500f1", "host_district": "Prahran", "est_ordinary_votes": "1007", "est_absent_votes": "359"}}], "possible_matches": [], "added": [], "removed": []}], "disagreements": {"election": "vic_2026", "old_file": "20261111_124944 polling places.csv", "new_file": "20261113_142918 polling places.csv", "old_sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62", "new_sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96", "matchers": ["rapidfuzz", "splink"], "agree": 1652, "left_records": 1652, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
+<script>
+"use strict";
+const DATA = JSON.parse(document.getElementById("data").textContent);
+const DIS = DATA.disagreements;
+const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
+const label = (m) => MATCHER_LABEL[m] || m;
+
+// Tiny DOM helper: h("div", {class: "x"}, child, "text", ...). Text is never parsed as HTML.
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of children.flat()) {
+    if (c === null || c === undefined || c === false) continue;
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  }
+  return el;
+}
+const val = (v) => (v === "" || v === null || v === undefined) ? h("span", { class: "empty" }, "(blank)") : String(v);
+const osm = (lat, lon) => `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
+const fmtM = (m) => m === null || m === undefined ? "?" : m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`;
+
+// ---------- header ----------
+const first = DATA.diffs[0];
+document.getElementById("title").textContent = document.title;
+if (first) {
+  const created = new Date(first.created_at).toLocaleString();
+  document.getElementById("subtitle").textContent =
+    `${first.old.path} (${first.old.records} places) → ${first.new.path} (${first.new.records} places) · ${DIS ? DIS.election + " · " : ""}${created}`;
+}
+
+// ---------- storage (per pair of files) ----------
+const STORE_KEY = DIS ? `ppdiff-verdicts:${DIS.old_sha256}:${DIS.new_sha256}` : null;
+function loadVerdicts() {
+  if (!STORE_KEY) return {};
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; }
+}
+let VERDICTS = loadVerdicts();
+function saveVerdicts() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(VERDICTS)); } catch (e) { /* private mode: keep in memory */ }
+  updateBar();
+}
+
+// ---------- tabs ----------
+const TABS = DATA.diffs.map((d) => ({ id: d.matcher, title: `${label(d.matcher)} diff`, render: () => renderDiff(d) }));
+if (DIS && DIS.matchers.length > 1) TABS.push({ id: "disagreements", title: null, render: renderDisagreements });
+let current = TABS[0] && TABS[0].id;
+try { const saved = localStorage.getItem("ppdiff-tab"); if (TABS.some((t) => t.id === saved)) current = saved; } catch (e) {}
+
+function tabTitle(t) {
+  if (t.id !== "disagreements") return t.title;
+  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).length;
+  return `Disagreements (${done}/${DIS.items.length} reviewed)`;
+}
+function renderTabs() {
+  const nav = document.getElementById("tabs");
+  nav.replaceChildren(...TABS.map((t) =>
+    h("button", { class: "tab", role: "tab", "aria-selected": String(t.id === current), onclick: () => { current = t.id; try { localStorage.setItem("ppdiff-tab", current); } catch (e) {} render(); } }, tabTitle(t))));
+}
+function render() {
+  renderTabs();
+  const tab = TABS.find((t) => t.id === current);
+  document.getElementById("view").replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
+  updateBar();
+}
+
+// ---------- a matcher's diff ----------
+function linkBadges(link) {
+  return h("div", { class: "badges" },
+    h("span", { class: "badge" + (link.band === "review" ? " review" : "") }, link.band === "review" ? "possible match" : "linked"),
+    h("span", { class: "badge" }, link.via === "exact" ? "exact key" : `score ${link.score}`));
+}
+function explainLine(explain) {
+  const parts = Object.entries(explain || {}).map(([k, v]) => `${k} ${v}`);
+  return parts.length ? h("div", { class: "explain" }, "Why: ", h("code", {}, parts.join(" · "))) : null;
+}
+function locationRow(loc) {
+  if (!loc) return null;
+  const [olat, olon] = loc.old, [nlat, nlon] = loc.new;
+  return h("div", { class: "change" },
+    h("div", { class: "field" }, "location"),
+    h("div", {},
+      loc.moved_m === null ? loc.note : `Moved ${fmtM(loc.moved_m)} `,
+      olat !== null ? h("a", { href: osm(olat, olon), target: "_blank", rel: "noopener" }, "old") : null,
+      olat !== null && nlat !== null ? " · " : null,
+      nlat !== null ? h("a", { href: osm(nlat, nlon), target: "_blank", rel: "noopener" }, "new") : null));
+}
+function pairCard(e) {
+  return h("div", { class: "card", "data-search": `${e.name} ${e.old_name}`.toLowerCase() },
+    h("h3", {}, e.name),
+    e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
+    linkBadges(e.link),
+    e.warnings.map((w) => h("div", { class: "warn" }, "⚠ ", w)),
+    e.changes.map((c) => h("div", { class: "change" },
+      h("div", { class: "field" }, c.field),
+      h("div", {}, h("span", { class: "old" }, val(c.old)), " → ", h("span", { class: "new" }, val(c.new))))),
+    locationRow(e.location),
+    e.link.band === "review" ? explainLine(e.link.explain) : null);
+}
+function recordCard(e, which) {
+  const r = e.record;
+  return h("div", { class: "card", "data-search": e.name.toLowerCase() },
+    h("h3", {}, e.name),
+    h("dl", { class: "kv" }, Object.entries(r).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])));
+}
+function section(title, items, makeCard, open) {
+  return h("details", { class: "section", open: open && items.length > 0 },
+    h("summary", {}, title, " ", h("span", { class: "count" }, `(${items.length})`)),
+    items.length ? items.map(makeCard) : h("p", { class: "note" }, "None."));
+}
+function renderDiff(d) {
+  const s = d.summary;
+  const warned = d.changed.concat(d.possible_matches).filter((e) => e.warnings.length);
+  const wrap = h("div", {},
+    h("div", { class: "tiles" },
+      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["warnings", "Warnings"], ["unchanged", "Unchanged"]]
+        .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k]), h("span", {}, t)))),
+    h("div", { class: "toolbar" },
+      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) })),
+    d.columns.added.length || d.columns.removed.length
+      ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
+      : null,
+    section("Warnings", warned, pairCard, true),
+    section("Possible matches (review band)", d.possible_matches, pairCard, true),
+    section("Changed", d.changed, pairCard, true),
+    section("Added", d.added, (e) => recordCard(e, "added"), true),
+    section("Removed", d.removed, (e) => recordCard(e, "removed"), true),
+    h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`));
+  return wrap;
+}
+function filter(root, q) {
+  q = q.trim().toLowerCase();
+  root.querySelectorAll(".card").forEach((c) => { c.style.display = !q || (c.dataset.search || "").includes(q) ? "" : "none"; });
+}
+
+// ---------- disagreements + verdicts ----------
+function placeLines(r) {
+  return h("dl", { class: "kv" },
+    r.premises ? [h("dt", {}, "premises"), h("dd", {}, r.premises)] : null,
+    h("dt", {}, "address"), h("dd", {}, val(r.address)),
+    h("dt", {}, "location"), h("dd", {}, r.lat !== null ? h("a", { href: osm(r.lat, r.lon), target: "_blank", rel: "noopener" }, `${r.lat}, ${r.lon}`) : val("")),
+    r.divisions && r.divisions.length ? [h("dt", {}, "divisions"), h("dd", {}, r.divisions.join(", "))] : null);
+}
+function decisionBox(matcher, dec) {
+  return h("div", { class: "decision" },
+    h("h4", {}, label(matcher)),
+    dec === null
+      ? h("div", { class: "nolink" }, "No link: treats this place as removed")
+      : [h("div", {}, h("b", {}, dec.right.name)), placeLines(dec.right),
+         h("div", { class: "badges" }, h("span", { class: "badge" + (dec.band === "review" ? " review" : "") }, dec.band), h("span", { class: "badge" }, dec.via === "exact" ? "exact key" : `score ${dec.score}`)),
+         explainLine(dec.explain)]);
+}
+function verdictCard(item) {
+  const idx = item.left.index;
+  const v = VERDICTS[idx] || {};
+  const name = `verdict-${idx}`;
+  const card = h("div", { class: "card" + (v.verdict ? " done" : ""), "data-search": item.left.name.toLowerCase() });
+  const set = (patch) => {
+    VERDICTS[idx] = Object.assign({}, VERDICTS[idx], patch, { updated_at: new Date().toISOString() });
+    card.classList.toggle("done", Boolean(VERDICTS[idx].verdict));
+    saveVerdicts(); renderTabs();
+  };
+  const options = DIS.matchers.map((m) => [m, `${label(m)} was right`]).concat([["neither", "Both wrong"], ["both", "Both defensible"]]);
+  card.append(
+    h("h3", {}, item.left.name), h("div", { class: "was" }, "in the old file"), placeLines(item.left),
+    h("div", { class: "decisions" }, DIS.matchers.map((m) => decisionBox(m, item.decisions[m]))),
+    h("div", { class: "verdict", role: "radiogroup" }, options.map(([key, text]) =>
+      h("label", {}, h("input", { type: "radio", name, value: key, checked: v.verdict === key, onchange: () => set({ verdict: key }) }), h("span", {}, text)))),
+    h("div", { class: "verdict-extra" },
+      h("select", { onchange: (ev) => set({ reason: ev.target.value }) },
+        h("option", { value: "" }, "Reason…"),
+        DATA.reasons.map((r) => h("option", { value: r, selected: v.reason === r }, r))),
+      h("textarea", { rows: 1, placeholder: "Note (optional)", oninput: (ev) => set({ note: ev.target.value }) }, v.note || "")));
+  return card;
+}
+function renderDisagreements() {
+  const wrap = h("div", {},
+    h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
+    h("div", { class: "toolbar" },
+      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
+    DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
+  return wrap;
+}
+function updateBar() {
+  const bar = document.getElementById("bar");
+  if (!DIS || current !== "disagreements") { bar.classList.remove("show"); return; }
+  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict);
+  document.getElementById("bar-status").textContent = `${done.length} of ${DIS.items.length} reviewed`;
+  document.getElementById("download").disabled = done.length === 0;
+  bar.classList.add("show");
+}
+document.getElementById("download").addEventListener("click", () => {
+  const records = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).map((it) => {
+    const v = VERDICTS[it.left.index];
+    const decisions = {};
+    for (const m of DIS.matchers) {
+      const d = it.decisions[m];
+      decisions[m] = d ? { right: d.right, score: d.score, band: d.band, via: d.via } : null;
+    }
+    return {
+      schema_version: DATA.verdict_schema_version, recorded_at: v.updated_at, election: DIS.election,
+      old_file: DIS.old_file, new_file: DIS.new_file, old_sha256: DIS.old_sha256, new_sha256: DIS.new_sha256,
+      left: it.left, decisions, verdict: v.verdict, reason: v.reason || "", note: v.note || "",
+    };
+  });
+  const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_file} to ${DIS.new_file}.json` });
+  document.body.append(a); a.click(); a.remove();
+});
+
+render();
+</script>
+</body>
+</html>

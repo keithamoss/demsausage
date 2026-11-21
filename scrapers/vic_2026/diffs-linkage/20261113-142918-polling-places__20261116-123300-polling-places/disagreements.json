@@ -1,0 +1,14 @@
+{
+  "election": "vic_2026",
+  "old_file": "20261113_142918 polling places.csv",
+  "new_file": "20261116_123300 polling places.csv",
+  "old_sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96",
+  "new_sha256": "8777bdb1e0171b0243429b51b0748794e9496ace395067d89d5b1b632770191e",
+  "matchers": [
+    "rapidfuzz",
+    "splink"
+  ],
+  "agree": 1652,
+  "left_records": 1652,
+  "items": []
+}

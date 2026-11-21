@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-21T09:03:40+00:00",
+  "matcher": "rapidfuzz",
+  "matcher_params": {
+    "auto_threshold": 0.75,
+    "review_threshold": 0.65,
+    "weights": {
+      "name": 0.28,
+      "premises": 0.11,
+      "address": 0.14,
+      "geo": 0.18,
+      "divisions": 0.28
+    },
+    "geo_full_m": 50.0,
+    "geo_zero_m": 5000.0,
+    "exact_pass": true
+  },
+  "old": {
+    "path": "../scrapers/vic_2026/data/20261113_142918 polling places.csv",
+    "sha256": "2bcf70855a57c4e5aac866556b02a3ea93996aad93d05203d91af9060a960f96",
+    "records": 1652,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "new": {
+    "path": "../scrapers/vic_2026/data/20261116_123300 polling places.csv",
+    "sha256": "8777bdb1e0171b0243429b51b0748794e9496ace395067d89d5b1b632770191e",
+    "records": 1652,
+    "columns": {
+      "name": "name",
+      "premises": "premises",
+      "address": [
+        "address"
+      ],
+      "lat": "lat",
+      "lon": "lon",
+      "divisions": "divisions",
+      "id": "vec_venue_id"
+    }
+  },
+  "columns": {
+    "old": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "new": [
+      "name",
+      "premises",
+      "address",
+      "lat",
+      "lon",
+      "state",
+      "divisions",
+      "wheelchair_access",
+      "wheelchair_access_description",
+      "entrance_desc",
+      "opening_hours",
+      "vec_venue_id",
+      "host_district",
+      "est_ordinary_votes",
+      "est_absent_votes"
+    ],
+    "added": [],
+    "removed": [],
+    "ignored": []
+  },
+  "summary": {
+    "unchanged": 1648,
+    "changed": 4,
+    "added": 0,
+    "removed": 0,
+    "possible_matches": 0,
+    "warnings": 0
+  },
+  "changed": [
+    {
+      "old_index": 1288,
+      "new_index": 1288,
+      "name": "Fawkner Park (Christ Church Grammar School)",
+      "old_name": "Fawkner Park (Christ Church Grammar School)",
+      "changes": [
+        {
+          "field": "entrance_desc",
+          "old": "",
+          "new": "Access via The Butler Memorial Gate"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Fawkner Park",
+        "premises": "Christ Church Grammar School",
+        "address": "677 Punt Road, South Yarra VIC 3141",
+        "lat": "-37.83883147676405",
+        "lon": "144.9860434409811",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
+        "host_district": "Prahran",
+        "est_ordinary_votes": "1370",
+        "est_absent_votes": "336"
+      },
+      "new": {
+        "name": "Fawkner Park",
+        "premises": "Christ Church Grammar School",
+        "address": "677 Punt Road, South Yarra VIC 3141",
+        "lat": "-37.83883147676405",
+        "lon": "144.9860434409811",
+        "state": "VIC",
+        "divisions": "Prahran",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access.",
+        "entrance_desc": "Access via The Butler Memorial Gate",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "4cc22d01-5d22-4acc-6c91-08df2e4500f1",
+        "host_district": "Prahran",
+        "est_ordinary_votes": "1370",
+        "est_absent_votes": "336"
+      }
+    },
+    {
+      "old_index": 1468,
+      "new_index": 1468,
+      "name": "Heywood (Heywood Community Hall)",
+      "old_name": "Heywood (Heywood Community Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Full"
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      },
+      "new": {
+        "name": "Heywood",
+        "premises": "Heywood Community Hall",
+        "address": "20 Edgar Street, Heywood VIC 3304",
+        "lat": "-38.13419045778523",
+        "lon": "141.62986480631758",
+        "state": "VIC",
+        "divisions": "South-West Coast",
+        "wheelchair_access": "Full",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "0e36fc6b-a690-4194-6c8b-08df2e4500f1",
+        "host_district": "South-West Coast",
+        "est_ordinary_votes": "770",
+        "est_absent_votes": "37"
+      }
+    },
+    {
+      "old_index": 814,
+      "new_index": 814,
+      "name": "Kaniva (Kaniva Senior Citizens Hall)",
+      "old_name": "Kaniva (Kaniva Senior Citizens Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Assisted"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "old": "",
+          "new": "Accessible parking may be restrictive. Building has lips and/or steps (50mm or less). Door width is between 750 - 850mm."
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Kaniva",
+        "premises": "Kaniva Senior Citizens Hall",
+        "address": "32 Progress Street, Kaniva VIC 3419",
+        "lat": "-36.37776474646634",
+        "lon": "141.24197740394766",
+        "state": "VIC",
+        "divisions": "Lowan",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "76979f7a-74b0-42cc-8e26-08df3ba0f319",
+        "host_district": "Lowan",
+        "est_ordinary_votes": "600",
+        "est_absent_votes": "41"
+      },
+      "new": {
+        "name": "Kaniva",
+        "premises": "Kaniva Senior Citizens Hall",
+        "address": "32 Progress Street, Kaniva VIC 3419",
+        "lat": "-36.37776474646634",
+        "lon": "141.24197740394766",
+        "state": "VIC",
+        "divisions": "Lowan",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Accessible parking may be restrictive. Building has lips and/or steps (50mm or less). Door width is between 750 - 850mm.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "76979f7a-74b0-42cc-8e26-08df3ba0f319",
+        "host_district": "Lowan",
+        "est_ordinary_votes": "600",
+        "est_absent_votes": "41"
+      }
+    },
+    {
+      "old_index": 105,
+      "new_index": 105,
+      "name": "Walwa (Walwa Servicemen's Memorial Hall)",
+      "old_name": "Walwa (Walwa Servicemen's Memorial Hall)",
+      "changes": [
+        {
+          "field": "wheelchair_access",
+          "old": "None",
+          "new": "Assisted"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "old": "Accessible parking is not available. Circulation space within the building may restrict wheelchair access.",
+          "new": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive. Door width is between 750 - 850mm."
+        }
+      ],
+      "location": null,
+      "warnings": [],
+      "link": {
+        "band": "auto",
+        "score": 1.0,
+        "via": "exact",
+        "explain": {
+          "distance_m": 0.0,
+          "same_address": true,
+          "same_premises": true
+        }
+      },
+      "old": {
+        "name": "Walwa",
+        "premises": "Walwa Servicemen's Memorial Hall",
+        "address": "56 Main Street, Walwa VIC 3709",
+        "lat": "-35.96399890246906",
+        "lon": "147.73702078364136",
+        "state": "VIC",
+        "divisions": "Benambra",
+        "wheelchair_access": "None",
+        "wheelchair_access_description": "Accessible parking is not available. Circulation space within the building may restrict wheelchair access.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "9fa195a8-0762-443e-6c8f-08df2e4500f1",
+        "host_district": "Benambra",
+        "est_ordinary_votes": "197",
+        "est_absent_votes": "46"
+      },
+      "new": {
+        "name": "Walwa",
+        "premises": "Walwa Servicemen's Memorial Hall",
+        "address": "56 Main Street, Walwa VIC 3709",
+        "lat": "-35.96399890246906",
+        "lon": "147.73702078364136",
+        "state": "VIC",
+        "divisions": "Benambra",
+        "wheelchair_access": "Assisted",
+        "wheelchair_access_description": "Access from the carpark or street to the building entrance may restrict independent wheelchair access. Accessible parking may be restrictive. Door width is between 750 - 850mm.",
+        "entrance_desc": "",
+        "opening_hours": "8am to 6pm",
+        "vec_venue_id": "9fa195a8-0762-443e-6c8f-08df2e4500f1",
+        "host_district": "Benambra",
+        "est_ordinary_votes": "197",
+        "est_absent_votes": "46"
+      }
+    }
+  ],
+  "possible_matches": [],
+  "added": [],
+  "removed": []
+}
