@@ -43,19 +43,19 @@ def assign(pairs: Iterable[ScoredPair], min_score: float) -> list[ScoredPair]:
         rights = sorted({p.right for p in component})
         li = {v: k for k, v in enumerate(lefts)}
         ri = {v: k for k, v in enumerate(rights)}
-        matrix = np.zeros((len(lefts), len(rights)))
+        # Each left record can choose a real partner or an unmatched dummy.
+        matrix = np.full((len(lefts), len(rights) + len(lefts)), -np.inf)
+        matrix[:, len(rights):] = 0.0
         best: dict[tuple[int, int], ScoredPair] = {}
         for p in component:
             key = (li[p.left], ri[p.right])
             # A matcher may emit the same pair twice (several blocking rules); keep the best.
             if key not in best or p.assignment_value > best[key].assignment_value:
                 best[key] = p
-        # Shift values so every real pair is positive and preferred over "no pair" (0).
-        floor = min(p.assignment_value for p in best.values())
         for key, p in best.items():
-            matrix[key] = p.assignment_value - floor + 1.0
+            matrix[key] = p.assignment_value
         rows, cols = linear_sum_assignment(-matrix)
         for r, c in zip(rows, cols):
-            if matrix[r, c] > 0:
+            if c < len(rights):
                 chosen.append(best[(r, c)])
     return chosen
