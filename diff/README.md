@@ -51,9 +51,14 @@ A diff contains:
 
 ## The report
 
-- **Summary tiles and an overview map.** It uses OpenLayers 10.11.0 (from jsDelivr) and the CARTO "light_all" basemap, the same basemap as the public site; dark mode uses CARTO's "dark_all". It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
-- **"Check on map" on every moved, added, removed and replacement card.** It opens a map inside the card with the old and new positions over the basemap. "Zoom to old" / "Zoom to new" go to street level, for checking each position against the basemap.
-- **Basemap.** With the public site's CARTO API key (`VITE_CARTO_API_KEY`), the maps use the site's CARTO basemap. Without it, they use [OpenFreeMap](https://openfreemap.org): free, no key, OpenStreetMap data. That's the Positron style (the same lineage as CARTO's light basemap), or Dark in dark mode, drawn with `ol-mapbox-style` 13.9.0. The key is never written into reports. Paste it into the box under a report's map and it's kept in that browser's localStorage for every report, or open a report with `#carto-key=KEY` on the end of its address. "Forget key" removes it. OpenStreetMap's own tile servers aren't used, because they refuse pages opened from a local file (no Referer). Reports need an internet connection for the maps.
+- **Summary tiles and an overview map** (OpenLayers 10.11.0). It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
+- **"Check on map" on every moved, added, removed and replacement card.** It opens a map inside the card with the old and new positions. "Zoom to old" / "Zoom to new" go to street level, and "old/new in Google Maps" opens each position in Google Maps.
+- **Basemaps**, switchable on every map; your choice is remembered:
+  - **Map** (default): [OpenFreeMap](https://openfreemap.org) Liberty. Free, no key, OpenStreetMap data, with names of schools, halls and churches, building outlines and house numbers when zoomed in, which is what you need to check a polling place. (Positron and CARTO's light basemap, the public site's, look cleaner but drop venue names.)
+  - **Satellite**: Esri World Imagery with Liberty's labels on top, like Google's hybrid view.
+  - **CARTO**: the public site's basemap, offered once you paste its API key (`VITE_CARTO_API_KEY`) into the box at the bottom of a diff tab. The key stays in that browser's localStorage and is never written into reports. You can also open a report with `#carto-key=KEY` on the end of its address.
+
+  OpenStreetMap's own tile servers aren't used, because they refuse pages opened from a local file (no Referer). Google's map tiles need a key and can't be used directly, hence the links. Reports need an internet connection for the maps.
 - **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
 - **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.

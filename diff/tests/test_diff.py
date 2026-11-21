@@ -94,7 +94,8 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     assert "<title>Thu 1 Jan 2026 → Thu 8 Jan 2026</title>" in html
     assert 'src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"' in html
     assert 'src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"' in html
-    assert "tiles.openfreemap.org/styles/" in html
+    assert "tiles.openfreemap.org/styles/liberty" in html
+    assert "World_Imagery" in html and "google.com/maps/search" in html
     # The CARTO key is only ever filled in from the browser, never baked into the report.
     import re
     assert re.findall(r"\?key=(.{2})", html) == ["${"]

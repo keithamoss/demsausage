@@ -78,6 +78,9 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
 .placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
 .card-actions { margin-top: 8px; }
+.basemap-switch { margin-left: auto; display: inline-flex; gap: 4px; }
+.basemap-switch .chip { font-size: 12px; padding: 2px 9px; }
+.small-link { font-size: 13px; }
 .keybar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
 .keybar input { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; min-width: 0; flex: 1 1 160px; }
 button.primary.small { font-size: 13px; padding: 4px 12px; }
@@ -162,7 +165,8 @@ function h(tag, attrs, ...children) {
   return el;
 }
 const val = (v) => (v === "" || v === null || v === undefined) ? h("span", { class: "empty" }, "(blank)") : String(v);
-const osm = (lat, lon) => `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
+// Opens the position in Google Maps (no key needed for a link).
+const gmaps = (lat, lon) => `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
 const fmtM = (m) => m === null || m === undefined ? "?" : m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`;
 
 // ---------- header ----------
@@ -223,9 +227,9 @@ function locationRow(loc) {
     h("div", { class: "field" }, "location"),
     h("div", {},
       loc.moved_m === null ? loc.note : `Moved ${fmtM(loc.moved_m)} `,
-      olat !== null ? h("a", { href: osm(olat, olon), target: "_blank", rel: "noopener" }, "old") : null,
+      olat !== null ? h("a", { href: gmaps(olat, olon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, "old") : null,
       olat !== null && nlat !== null ? " · " : null,
-      nlat !== null ? h("a", { href: osm(nlat, nlon), target: "_blank", rel: "noopener" }, "new") : null,
+      nlat !== null ? h("a", { href: gmaps(nlat, nlon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, "new") : null,
       " ",
       placeMapButton([{ lat: olat, lon: olon, label: "old", kind: "old" }, { lat: nlat, lon: nlon, label: "new", kind: "new" }])));
 }
@@ -349,7 +353,7 @@ function recordCard(e, d, which) {
 function replacementCard(p, d) {
   const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
   const brief = (r) => h("div", {}, h("b", {}, r.name), h("div", { class: "was" }, r.record.address || Object.values(r.record).slice(2, 4).join(", ")),
-    r.lat !== null ? h("a", { href: osm(r.lat, r.lon), target: "_blank", rel: "noopener" }, "map") : null);
+    r.lat !== null ? h("a", { href: gmaps(r.lat, r.lon), target: "_blank", rel: "noopener" }, "Google Maps") : null);
   return h("div", { class: "card", id: `${d.matcher}-repl-${p.old_index}`, "data-search": `${p.old_name} ${p.new_name}`.toLowerCase(), "data-cats": "" },
     h("h3", {}, `${p.old_name} → ${p.new_name}`),
     h("div", { class: "badges" }, h("span", { class: "badge review" }, `${fmtM(p.distance_m)} apart`), disagreeBadge(p.old_index, p.new_index)),
@@ -410,14 +414,36 @@ function cartoKeyForm() {
   const save = () => { const v = input.value.trim(); if (!v) return; try { localStorage.setItem(CARTO_KEY_STORE, v); } catch (e) {} location.reload(); };
   input.addEventListener("keydown", (ev) => { if (ev.key === "Enter") save(); });
   return h("div", { class: "keybar" },
-    h("span", {}, CARTO_KEY ? "Basemap: CARTO (the public site's), using the key saved in this browser."
-      : "Basemap: OpenFreeMap. To use the public site's CARTO basemap, add its API key (VITE_CARTO_API_KEY); it's stored only in this browser."),
+    h("span", {}, CARTO_KEY ? "CARTO basemap (the public site's) available, using the key saved in this browser."
+      : "Optional: add the public site's CARTO API key (VITE_CARTO_API_KEY) to offer its basemap too. Stored only in this browser."),
     CARTO_KEY ? h("button", { class: "ghost small", onclick: () => { try { localStorage.removeItem(CARTO_KEY_STORE); } catch (e) {} location.reload(); } }, "Forget key")
               : [input, h("button", { class: "primary small", onclick: save }, "Save")]);
 }
-function basemapLayer(ol) {
-  // With the CARTO key: the public site's basemap (CARTO light_all, or dark_all in dark mode).
-  if (CARTO_KEY) {
+// ---- basemaps ----
+// "map": OpenFreeMap Liberty (free, no key): names of schools, halls and churches, buildings,
+//        house numbers when zoomed in. Positron/CARTO light look cleaner but drop venue names.
+// "satellite": Esri World Imagery with Liberty's labels on top (like Google's hybrid view).
+// "carto": the public site's CARTO basemap, offered once its key is saved in this browser.
+const BASEMAP_STORE = "ppdiff-basemap";
+const BASEMAPS = { map: "Map", satellite: "Satellite", ...(CARTO_KEY ? { carto: "CARTO" } : {}) };
+let basemapChoice = (() => { try { const v = localStorage.getItem(BASEMAP_STORE); return BASEMAPS[v] ? v : "map"; } catch (e) { return "map"; } })();
+const LIBERTY = "https://tiles.openfreemap.org/styles/liberty";
+const OFM_ATTRIBUTION = '<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+let libertyLabelsStyle = null;  // Liberty with only its label layers, for the satellite view
+function libertyLabels() {
+  if (!libertyLabelsStyle) libertyLabelsStyle = fetch(LIBERTY).then((r) => r.json()).then((style) => ({ ...style, layers: style.layers.filter((l) => l.type === "symbol") }));
+  return libertyLabelsStyle;
+}
+function olmsGroup(ol, style) {
+  const group = new ol.layer.Group();
+  Promise.resolve(style).then((st) => window.olms.apply(group, st)).then(() => {
+    group.getLayers().forEach((layer) => { const src = layer.getSource && layer.getSource(); if (src && src.setAttributions) src.setAttributions(OFM_ATTRIBUTION); });
+  });
+  return group;
+}
+function basemapLayer(ol, kind) {
+  kind = kind || basemapChoice;
+  if (kind === "carto" && CARTO_KEY) {
     const retina = window.devicePixelRatio > 1;
     return new ol.layer.Tile({
       source: new ol.source.XYZ({
@@ -428,15 +454,31 @@ function basemapLayer(ol) {
       }),
     });
   }
-  // Without it: OpenFreeMap (free, no key), Positron style (CARTO's light style lineage) or Dark.
-  const group = new ol.layer.Group();
-  window.olms.apply(group, `https://tiles.openfreemap.org/styles/${darkMode() ? "dark" : "positron"}`).then(() => {
-    group.getLayers().forEach((layer) => {
-      const source = layer.getSource && layer.getSource();
-      if (source && source.setAttributions) source.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+  if (kind === "satellite") {
+    const imagery = new ol.layer.Tile({
+      source: new ol.source.XYZ({
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        maxZoom: 19,
+        attributions: "Imagery: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+      }),
     });
-  });
-  return group;
+    return new ol.layer.Group({ layers: [imagery, olmsGroup(ol, libertyLabels())] });
+  }
+  return olmsGroup(ol, LIBERTY);
+}
+// Every map on the page, so switching basemap updates them all.
+const ALL_MAPS = [];
+function registerMap(map) { ALL_MAPS.push(map); return map; }
+function setBasemap(kind) {
+  basemapChoice = kind;
+  try { localStorage.setItem(BASEMAP_STORE, kind); } catch (e) {}
+  for (const map of ALL_MAPS) map.getLayers().setAt(0, basemapLayer(window.ol, kind));
+  document.querySelectorAll(".basemap-switch button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
+}
+function basemapSwitch() {
+  return h("span", { class: "basemap-switch", role: "group", "aria-label": "Basemap" },
+    Object.entries(BASEMAPS).map(([kind, text]) =>
+      h("button", { class: "chip", "data-kind": kind, "aria-pressed": String(kind === basemapChoice), onclick: () => setBasemap(kind) }, text)));
 }
 function olStyles(ol) {
   const S = ol.style, c = (n) => cssVar(n);
@@ -463,8 +505,8 @@ function renderMap(d) {
     h("div", { class: "legend" },
       [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
         h("span", {}, h("i", { class: "key " + k }), t)),
-      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")),
-    CARTO_KEY ? null : cartoKeyForm());
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it."),
+      basemapSwitch()));
   requestAnimationFrame(() => {  // after the element is in the page, so the map can size itself
     const ol = window.ol;
     const st = olStyles(ol);
@@ -480,11 +522,11 @@ function renderMap(d) {
         add(new ol.geom.Point(toXY(ol, ...f.to)), s.to);
       } else add(new ol.geom.Point(toXY(ol, ...f.to)), st[f.kind]);
     }
-    const map = new ol.Map({
+    const map = registerMap(new ol.Map({
       target: el,
       layers: [basemapLayer(ol), new ol.layer.Vector({ source: context, style: st.context }), new ol.layer.Vector({ source: fg })],
       view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }),
-    });
+    }));
     map.getView().fit(fg.getExtent(), { padding: [40, 40, 40, 40], maxZoom: 16 });
     map.on("pointermove", (ev) => { el.style.cursor = map.hasFeatureAtPixel(ev.pixel, { layerFilter: (l) => l.getSource() === fg }) ? "pointer" : ""; });
     map.on("click", (ev) => {
@@ -530,13 +572,14 @@ function buildPlaceMap(holder, points) {
                   st.label(p.label, colour[p.kind])]);
       src.addFeature(f);
     }
-    const map = new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) });
+    const map = registerMap(new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) }));
     const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration: 300 });
     fitAll();
     controls.replaceChildren(...[
       points.length > 1 ? h("button", { class: "ghost small", onclick: fitAll }, "Both") : null,
       ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration: 300 }) }, `Zoom to ${p.label}`)),
-      h("span", { class: "was" }, points.map((p) => `${p.label}: ${p.lat}, ${p.lon}`).join(" · ")),
+      ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
+      basemapSwitch(),
     ].filter(Boolean));
   });
 }
@@ -606,7 +649,7 @@ function renderDiff(d) {
     section("Removed", d.removed, (e) => recordCard(e, d, "removed"), true),
     section("Data quality", d.quality, (q) => qualityCard(q, d), d.quality.length > 0),
     h("p", { class: "note" }, `Matcher: ${label(d.matcher)}. Ignored columns: ${d.columns.ignored.join(", ") || "none"}.`),
-    CARTO_KEY ? cartoKeyForm() : null);
+    cartoKeyForm());
   return wrap;
 }
 
@@ -615,7 +658,7 @@ function placeLines(r) {
   return h("dl", { class: "kv" },
     r.premises ? [h("dt", {}, "premises"), h("dd", {}, r.premises)] : null,
     h("dt", {}, "address"), h("dd", {}, val(r.address)),
-    h("dt", {}, "location"), h("dd", {}, r.lat !== null ? h("a", { href: osm(r.lat, r.lon), target: "_blank", rel: "noopener" }, `${r.lat}, ${r.lon}`) : val("")),
+    h("dt", {}, "location"), h("dd", {}, r.lat !== null ? h("a", { href: gmaps(r.lat, r.lon), target: "_blank", rel: "noopener", title: "Open in Google Maps" }, `${r.lat}, ${r.lon}`) : val("")),
     r.divisions && r.divisions.length ? [h("dt", {}, "divisions"), h("dd", {}, r.divisions.join(", "))] : null);
 }
 function decisionBox(matcher, dec) {
