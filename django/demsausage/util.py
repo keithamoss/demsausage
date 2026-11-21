@@ -15,6 +15,9 @@ import urllib.parse
 import pytz
 from django.conf import settings
 
+# Number helpers live in a Django-free module so the loader's rules can be used outside Django.
+from demsausage.numbers import convert_string_to_number, is_float, is_int, is_numeric  # noqa: F401
+
 
 def make_logger(name, handler=logging.StreamHandler(), formatter=None):
     logger = logging.getLogger(name)
@@ -128,43 +131,6 @@ def clean_filename(filename, whitelist=None, replace=" "):
         )
 
     return cleaned_filename[:char_limit]
-
-
-def is_float(string):
-    """
-    Here be dragons.
-    https://stackoverflow.com/a/20929983
-    """
-    try:
-        float(string)
-        return True
-    except ValueError:
-        return False
-
-
-def is_int(string):
-    """
-    Here be dragons.
-    https://stackoverflow.com/a/20929983
-    """
-    try:
-        int(string)
-        return True
-    except ValueError:
-        return False
-
-
-def is_numeric(subject):
-    return is_float(subject) is True or is_int(subject) is True
-
-
-def convert_string_to_number(subject):
-    if is_int(subject) is True:
-        return int(subject)
-    elif is_float(subject) is True:
-        return float(subject)
-    else:
-        raise Exception("Failed try to convert '{}' to a number".format(subject))
 
 
 def merge_and_sum_dicts(dict_list):
