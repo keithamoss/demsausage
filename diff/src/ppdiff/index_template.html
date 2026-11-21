@@ -4,12 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
+<meta name="color-scheme" content="light dark">
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
   --accent: #5b3fa8; --accent-soft: #efeaf9; --add: #1f7a3d; --add-soft: #e6f4ea;
   --del: #b3261e; --del-soft: #fbe9e7; --warn: #8a5a00; --warn-soft: #fff3d6; --radius: 10px;
+  color-scheme: light dark;
+  accent-color: var(--accent);
 }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
@@ -71,7 +75,7 @@ input[type=search] { font: inherit; color: var(--text); background: var(--surfac
   <h2>History by place</h2>
   <p class="note">Every place that changed at least once, followed from file to file through the chosen matcher's links. Places with the most events come first.</p>
   <div class="tabs" id="matchers"></div>
-  <input type="search" id="search" placeholder="Filter by name…">
+  <input type="search" id="search" aria-label="Filter places by name" placeholder="Filter by name…">
   <div id="history"></div>
 </main>
 <script type="application/json" id="data">{{DATA}}</script>
@@ -145,7 +149,7 @@ document.getElementById("pairs").replaceChildren(...groups.map((g) => {
 let matcher = DATA.matchers[0];
 function renderHistory() {
   document.getElementById("matchers").replaceChildren(...DATA.matchers.map((m) =>
-    h("button", { class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
+    h("button", { type: "button", class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
   const q = document.getElementById("search").value.trim().toLowerCase();
   const places = (DATA.history[matcher] || []).filter((p) => !q || (p.name || "").toLowerCase().includes(q));
   document.getElementById("history").replaceChildren(

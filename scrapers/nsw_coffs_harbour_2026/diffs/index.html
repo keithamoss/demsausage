@@ -4,12 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nsw_coffs_harbour_2026 diffs</title>
+<meta name="color-scheme" content="light dark">
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
   --accent: #5b3fa8; --accent-soft: #efeaf9; --add: #1f7a3d; --add-soft: #e6f4ea;
   --del: #b3261e; --del-soft: #fbe9e7; --warn: #8a5a00; --warn-soft: #fff3d6; --radius: 10px;
+  color-scheme: light dark;
+  accent-color: var(--accent);
 }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
@@ -71,7 +75,7 @@ input[type=search] { font: inherit; color: var(--text); background: var(--surfac
   <h2>History by place</h2>
   <p class="note">Every place that changed at least once, followed from file to file through the chosen matcher's links. Places with the most events come first.</p>
   <div class="tabs" id="matchers"></div>
-  <input type="search" id="search" placeholder="Filter by name…">
+  <input type="search" id="search" aria-label="Filter places by name" placeholder="Filter by name…">
   <div id="history"></div>
 </main>
 <script type="application/json" id="data">{"title": "nsw_coffs_harbour_2026", "verdict_labels": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "tally_here": {"total": 0, "by_verdict": {}, "by_reason": {}, "elections": []}, "tally_all": {"total": 0, "by_verdict": {}, "by_reason": {}, "elections": []}, "pairs": [{"folder": "nsw-coffs-harbour-lb2615-031-2026-11-21__nsw-coffs-harbour-lb2615-031-20261121-095224", "old": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "records": [23, 23], "summaries": {"rapidfuzz": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "splink": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}}, "disagreements": 0, "agree": 23, "left_records": 23, "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "nothing_changed": true, "verdicts": 0}], "matchers": ["rapidfuzz", "splink"], "history": {"rapidfuzz": [], "splink": []}}</script>
@@ -145,7 +149,7 @@ document.getElementById("pairs").replaceChildren(...groups.map((g) => {
 let matcher = DATA.matchers[0];
 function renderHistory() {
   document.getElementById("matchers").replaceChildren(...DATA.matchers.map((m) =>
-    h("button", { class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
+    h("button", { type: "button", class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
   const q = document.getElementById("search").value.trim().toLowerCase();
   const places = (DATA.history[matcher] || []).filter((p) => !q || (p.name || "").toLowerCase().includes(q));
   document.getElementById("history").replaceChildren(

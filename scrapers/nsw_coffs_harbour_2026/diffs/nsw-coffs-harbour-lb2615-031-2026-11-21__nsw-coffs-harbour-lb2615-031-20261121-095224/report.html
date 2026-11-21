@@ -4,11 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sat 21 Nov 2026 → Sat 21 Nov 2026, 9:52 am</title>
-<!-- OpenLayers, as used by the public site (public-redesign); loaded from a CDN to keep reports small -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css">
-<script src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"></script>
-<!-- ol-mapbox-style draws the OpenFreeMap Liberty basemap (vector tiles) -->
-<script src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"></script>
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- OpenLayers (as public-redesign uses) and ol-mapbox-style (draws the OpenFreeMap Liberty basemap),
+     from a CDN to keep reports small. Version-pinned, with Subresource Integrity hashes computed from
+     the npm packages; deferred so the report renders before ~1 MB of map code arrives. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css" integrity="sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script defer src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js" integrity="sha384-rwbCGPbgxLkcQaFvIra1Vz3KBT1yBeF2/1VgLs/gCCNCJ61GHJGimHpkufVKcqap" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js" integrity="sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
@@ -16,7 +19,14 @@
   --add: #1f7a3d; --add-soft: #e6f4ea; --del: #b3261e; --del-soft: #fbe9e7;
   --warn: #8a5a00; --warn-soft: #fff3d6; --info-soft: #eef2f7;
   --radius: 10px; --shadow: 0 1px 2px rgba(0,0,0,.05);
+  /* Native controls (scrollbars, checkboxes, inputs) follow the theme; checkboxes use the accent. */
+  color-scheme: light dark;
+  accent-color: var(--accent);
 }
+/* Keep jumped-to and focused content clear of the sticky tab bar (WCAG 2.4.11). --tabs-h is measured. */
+html { scroll-padding-top: calc(var(--tabs-h, 56px) + 12px); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #161615; --surface: #1f1f1d; --text: #ecebe7; --muted: #a3a29c; --border: #34332f;
@@ -33,8 +43,10 @@ h1 { font-size: 20px; margin: 0 0 4px; overflow-wrap: anywhere; }
 .sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 main { max-width: 1100px; margin: 0 auto; padding: 0 16px 120px; }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; position: sticky; top: 0; background: var(--bg); padding: 8px 0; z-index: 2; }
-.tab { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 7px 14px; font: inherit; cursor: pointer; }
+.tab { position: relative; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 7px 14px; font: inherit; cursor: pointer; }
+/* Selected: fill plus an underline, so it isn't shown by colour alone (WCAG 1.4.1). */
 .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.tab[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 14px -7px; border-block-end: 3px solid var(--accent); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
 .tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); }
 .tile b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
@@ -42,8 +54,14 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px 120px; }
 .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
 input[type=search], select, textarea { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; }
 input[type=search] { flex: 1; min-width: 180px; }
-details.section { margin: 14px 0; }
-details.section > summary { cursor: pointer; font-weight: 600; font-size: 16px; padding: 6px 0; }
+.section { margin: 14px 0; }
+.section > h2 { margin: 0; font-size: 16px; }
+.section-toggle { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: start; font: inherit; font-weight: 600; color: var(--text); background: none; border: 0; padding: 6px 0; cursor: pointer; }
+.section-toggle::before { content: "▸"; display: inline-block; }
+.section-toggle[aria-expanded="true"]::before { rotate: 90deg; }
+@media (prefers-reduced-motion: no-preference) { .section-toggle::before { transition: rotate .15s; } }
+/* Cards far down a long report skip rendering until scrolled near (Baseline 2025). */
+.section-body > .card:nth-child(n+5) { content-visibility: auto; contain-intrinsic-size: auto 180px; }
 .count { color: var(--muted); font-weight: 400; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; box-shadow: var(--shadow); }
 .card h3 { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
@@ -68,7 +86,8 @@ button.badge { font: inherit; font-size: 12px; border: 0; cursor: pointer; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .chip { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
-.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; transition: outline-color 1s; }
+.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .card.flash { transition: outline-color 1s; } }
 .card.quality summary { cursor: pointer; }
 .card.quality ul { margin: 8px 0 0; padding-left: 18px; }
 .mapbox { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
@@ -127,6 +146,8 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
   .change, .kv { grid-template-columns: 1fr; }
   .field, .kv dt { margin-top: 4px; }
   .bar .note { display: none; }
+  .bar { padding: 6px 12px; font-size: 14px; }
+  .bar button.primary { padding: 6px 12px; font-size: 14px; }
   .tiles { grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .tile { padding: 6px 8px; }
   .tile b { font-size: 17px; }
@@ -141,14 +162,15 @@ button.ghost { font: inherit; background: none; color: var(--muted); border: 1px
   <div class="sub" id="subtitle"></div>
 </header>
 <main>
-  <nav class="tabs" id="tabs" role="tablist"></nav>
-  <section id="view"></section>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Report views"></div>
+  <div id="view" role="tabpanel" tabindex="-1"></div>
 </main>
 <div class="bar" id="bar"><div class="bar-inner">
   <span id="bar-status"></span>
   <button class="primary" id="download">Download verdicts</button>
   <span class="note">Then, from <code>linkage/</code>: <code>uv run linkage verdicts import FILE</code></span>
 </div></div>
+<div id="live" class="sr-only" role="status"></div>
 <script type="application/json" id="data">{"reviewed": {}, "diffs": [{"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "rapidfuzz", "matcher_params": {"auto_threshold": 0.75, "review_threshold": 0.65, "weights": {"name": 0.28, "premises": 0.11, "address": 0.14, "geo": 0.18, "divisions": 0.28}, "geo_full_m": 50.0, "geo_zero_m": 5000.0, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}, {"schema_version": 3, "created_at": "2026-11-21T10:32:20+00:00", "matcher": "splink", "matcher_params": {"auto_threshold": 0.95, "review_threshold": 0.5, "model": "/home/user/demsausage/linkage/src/linkage/models/splink_default.json", "training": {"groups": ["sa_2025", "vic_2026", "federal_2022_2025"], "files": [["scrapers/sa_2025/data/20260301_171947 polling places.csv", "scrapers/sa_2025/data/20260320_214134 polling places.csv"], ["scrapers/vic_2026/data/20261104_204630 polling places.csv", "scrapers/vic_2026/data/20261116_123300 polling places.csv"], ["django/tests/fixtures/elections/federal_2022/polling_places.csv", "django/tests/fixtures/elections/federal_2025/polling_places.csv"]], "labelled_pairs": 9066, "m_pseudo_count": 1.0, "single_axis_level": true}, "exact_pass": true}, "old": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026"}, "new": {"path": "../scrapers/nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "records": 23, "columns": {"name": "name", "premises": "premises", "address": ["address", "suburb", "postcode"], "lat": "lat", "lon": "lon", "divisions": null, "id": null, "hours": "opening_hours"}, "label": "Sat 21 Nov 2026, 9:52 am"}, "columns": {"old": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "new": ["name", "premises", "address", "suburb", "state", "postcode", "lat", "lon", "wheelchair_access", "wheelchair_access_description", "opening_hours", "entrance_desc"], "added": [], "removed": [], "ignored": []}, "summary": {"unchanged": 23, "changed": 0, "added": 0, "removed": 0, "possible_matches": 0, "cosmetic": 0, "likely_replacements": 0, "warnings": 0, "quality_issues": 0}, "nothing_changed": true, "changed": [], "possible_matches": [], "cosmetic": [], "added": [], "removed": [], "replacements": [], "quality": [], "suggested_fixes": [], "settings": {"ignore": [], "large_move_m": 1000.0, "replacement_radius_m": 500.0}, "context_points": [[-30.33441, 153.07687], [-30.38033, 153.03324], [-30.29884, 153.11828], [-30.30497, 153.13611], [-30.30221, 153.12103], [-30.29197, 153.12132], [-30.28069, 153.1094], [-30.22121, 153.01146], [-30.02326, 153.20011], [-30.24498, 152.88665], [-30.25293, 153.04735], [-30.25407, 153.13138], [-30.07823, 153.18964], [-30.13209, 153.01427], [-30.2923, 153.10365], [-29.9864, 153.22609], [-30.15329, 153.18536], [-30.36376, 153.09789], [-30.36125, 153.08079], [-30.35106, 153.08504], [-30.28919, 153.01358], [-30.10083, 153.19018], [-30.11184, 153.1993]], "loader": {"config_found": true, "fix_audit": [], "problems": [], "regex_errors": [], "rows_after_filters": 23}}], "disagreements": {"election": "nsw_coffs_harbour_2026", "old_file": "nsw_coffs_harbour_LB2615-031_2026-11-21.csv", "new_file": "nsw_coffs_harbour_LB2615-031_20261121_095224.csv", "old_label": "Sat 21 Nov 2026", "new_label": "Sat 21 Nov 2026, 9:52 am", "old_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "new_sha256": "3a91858050f9b7addaab6647c0448639e8c220b7cee82c3ecec2bbeb806c473f", "matchers": ["rapidfuzz", "splink"], "agree": 23, "left_records": 23, "items": []}, "verdicts": {"rapidfuzz": "rapidfuzz was right", "splink": "Splink was right", "neither": "Both were wrong", "both": "Both are defensible"}, "reasons": ["coordinate typo", "venue change", "rename", "address change", "same venue, different booth", "data error", "other"], "verdict_schema_version": 1}</script>
 <script>
 "use strict";
@@ -156,6 +178,14 @@ const DATA = JSON.parse(document.getElementById("data").textContent);
 const DIS = DATA.disagreements;
 const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
 const label = (m) => MATCHER_LABEL[m] || m;
+const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+// OpenLayers loads with `defer`, so it's ready by DOMContentLoaded.
+const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true })));
+function announce(message) {  // the page's live region, for screen readers
+  const live = document.getElementById("live");
+  live.textContent = "";
+  requestAnimationFrame(() => { live.textContent = message; });
+}
 
 // Tiny DOM helper: h("div", {class: "x"}, child, "text", ...). Text is never parsed as HTML.
 function h(tag, attrs, ...children) {
@@ -210,16 +240,36 @@ function tabTitle(t) {
   const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).length;
   return `Disagreements (${done}/${DIS.items.length} reviewed)`;
 }
-function renderTabs() {
-  const nav = document.getElementById("tabs");
-  nav.replaceChildren(...TABS.map((t) =>
-    h("button", { class: "tab", role: "tab", "aria-selected": String(t.id === current), onclick: () => { current = t.id; try { localStorage.setItem("ppdiff-tab", current); } catch (e) {} render(); } }, tabTitle(t))));
+function selectTab(id, focus) {
+  current = id;
+  try { localStorage.setItem("ppdiff-tab", current); } catch (e) {}
+  render();
+  if (focus) document.getElementById(`tab-${id}`).focus();
 }
+function renderTabs() {
+  const list = document.getElementById("tabs");
+  list.replaceChildren(...TABS.map((t) =>
+    h("button", { type: "button", class: "tab", role: "tab", id: `tab-${t.id}`, "aria-selected": String(t.id === current),
+      tabindex: t.id === current ? "0" : "-1", onclick: () => selectTab(t.id) }, tabTitle(t))));
+}
+// Arrow keys move between tabs (selection follows focus); Home/End jump to the ends.
+document.getElementById("tabs").addEventListener("keydown", (ev) => {
+  const i = TABS.findIndex((t) => t.id === current);
+  const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[ev.key];
+  if (next === undefined) return;
+  ev.preventDefault();
+  selectTab(TABS[(next + TABS.length) % TABS.length].id, true);
+});
+// Keep scroll-padding-top equal to the sticky tab bar's real height (it wraps on phones).
+new ResizeObserver(([entry]) => document.documentElement.style.setProperty("--tabs-h", `${Math.ceil(entry.target.getBoundingClientRect().height)}px`))
+  .observe(document.getElementById("tabs"));
 function render() {
   activeChip = null; searchText = "";
   renderTabs();
   const tab = TABS.find((t) => t.id === current);
-  document.getElementById("view").replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
+  const view = document.getElementById("view");
+  view.setAttribute("aria-labelledby", `tab-${current}`);
+  view.replaceChildren(tab ? tab.render() : h("p", {}, "No diffs in this folder."));
   updateReviewCounts(); applyFilters();
   updateBar();
 }
@@ -316,10 +366,19 @@ function disagreeBadge(oldIndex, newIndex) {
     : DIS.items.find((it) => Object.values(it.decisions).some((d) => d && d.right.index === newIndex)).left.index;
   return h("button", { class: "badge disagree", title: "The other matcher handled this place differently", onclick: () => goTo("disagreements", `dis-${target}`) }, "matchers disagree ›");
 }
+function openSectionOf(el) {
+  const body = el.closest(".section-body[hidden]");
+  if (body) body.closest(".section").querySelector(".section-toggle").click();
+}
 function goTo(tabId, elementId) {
-  current = tabId; render();
+  if (current !== tabId) { current = tabId; render(); }
   const el = document.getElementById(elementId);
-  if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+  if (!el) return;
+  openSectionOf(el);
+  if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+  el.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+  el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600);
 }
 const CATEGORY_LABEL = { accessibility: "Accessibility", entrance: "Entrance", hours: "Opening hours", address: "Address", name: "Name", divisions: "Divisions", votes: "Vote estimates", location: "Location", other: "Other" };
 function entryCategories(e) {
@@ -359,10 +418,10 @@ function reviewAttrs(key) { return { "data-review": key, class: "card" + (REVIEW
 function updateReviewCounts() {
   const btn = document.getElementById("download-review");
   if (btn) { const n = unsavedTicks(); btn.textContent = n ? `Download review (${n} not saved to repo)` : "Download review"; }
-  document.querySelectorAll("#view details.section").forEach((sec) => {
-    const keys = new Set([...sec.querySelectorAll(":scope > .card[data-review], :scope > div > .card[data-review]")].map((c) => c.dataset.review));
+  document.querySelectorAll("#view section.section").forEach((sec) => {
+    const keys = new Set([...sec.querySelectorAll(":scope > .section-body > .card[data-review], :scope > .section-body > div > .card[data-review]")].map((c) => c.dataset.review));
     const done = [...keys].filter((k) => REVIEWED[k]).length;
-    const el = sec.querySelector(":scope > summary .revcount");
+    const el = sec.querySelector(":scope > h2 .revcount");
     if (el) el.textContent = keys.size && done ? ` · ${done} reviewed` : "";
   });
 }
@@ -421,10 +480,24 @@ function qualityCard(q, d) {
     h("ul", {}, q.places.map((p) => h("li", {}, p.name, p.detail ? h("span", { class: "was" }, ` · ${p.detail}`) : null))),
     q.count > q.places.length ? h("p", { class: "note" }, `Showing ${q.places.length} of ${q.count}.`) : null);
 }
+// A section is a heading wrapping a toggle button (screen-reader users can move by heading;
+// headings inside <summary> get dropped), with content hidden until found so find-in-page
+// still opens it.
+let sectionCount = 0;
 function section(title, items, makeCard, open, extra) {
-  return h("details", { class: "section", open: open && items.length > 0 },
-    h("summary", {}, title, " ", h("span", { class: "count" }, `(${items.length}`, h("span", { class: "revcount" }), ")")),
+  open = Boolean(open && items.length > 0);
+  const id = `section-${++sectionCount}`;
+  const body = h("div", { class: "section-body", id, hidden: open ? null : "until-found" },
     items.length ? [extra || null, ...items.map(makeCard)] : h("p", { class: "note" }, "None."));
+  const toggle = h("button", { type: "button", class: "section-toggle", "aria-expanded": String(open), "aria-controls": id },
+    h("span", {}, title, " ", h("span", { class: "count" }, `(${items.length}`, h("span", { class: "revcount" }), ")")));
+  const setOpen = (on) => {
+    toggle.setAttribute("aria-expanded", String(on));
+    if (on) body.removeAttribute("hidden"); else body.setAttribute("hidden", "until-found");
+  };
+  toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  body.addEventListener("beforematch", () => setOpen(true));  // find-in-page found something inside
+  return h("section", { class: "section" }, h("h2", {}, toggle), body);
 }
 const fixJSON = (fixes) => JSON.stringify(fixes, null, 4);
 function fixCard(f, d) {
@@ -493,12 +566,17 @@ function renderMap(d) {
   const feats = mapFeatures(d);
   if (!feats.length) return null;
   const el = h("div", { class: "olmap" });
-  const box = h("div", { class: "mapbox" }, el,
+  const count = (kind) => feats.filter((f) => f.kind === kind).length;
+  const moved = count("moved") + count("typo");
+  // The map is visual only; screen-reader users get the same facts as text and in the sections below.
+  const summary = h("p", { class: "sr-only" },
+    `Map of changes: ${moved} moved (${count("typo")} likely coordinate typos), ${count("added")} added, ${count("removed")} removed, ${count("replacement")} likely replacements. The same places are listed in the sections below.`);
+  const box = h("div", { class: "mapbox" }, summary, el,
     h("div", { class: "legend" },
       [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
         h("span", {}, h("i", { class: "key " + k }), t)),
       h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")));
-  requestAnimationFrame(() => {  // after the element is in the page, so the map can size itself
+  olReady.then(() => requestAnimationFrame(() => {  // after OpenLayers loads and the element is in the page
     const ol = window.ol;
     const st = olStyles(ol);
     const context = new ol.source.Vector({ features: d.context_points.map(([lat, lon]) => new ol.Feature(new ol.geom.Point(toXY(ol, lat, lon)))) });
@@ -524,7 +602,7 @@ function renderMap(d) {
       const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
       if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
     });
-  });
+  }));
   return box;
 }
 
@@ -534,7 +612,8 @@ function placeMapButton(points) {
   points = points.filter((p) => p.lat !== null && p.lat !== undefined);
   if (!points.length) return null;
   let holder = null;
-  const button = h("button", { class: "ghost small", onclick: () => {
+  const button = h("button", { type: "button", class: "ghost small", "aria-expanded": "false", onclick: () => {
+    button.setAttribute("aria-expanded", String(!holder));
     if (holder) { holder.remove(); holder = null; button.textContent = "Check on map"; return; }
     holder = h("div", { class: "placemap-wrap" });
     button.closest(".card").append(holder);
@@ -547,7 +626,7 @@ function buildPlaceMap(holder, points) {
   const el = h("div", { class: "placemap" });
   const controls = h("div", { class: "placemap-ctl" });
   holder.append(el, controls);
-  requestAnimationFrame(() => {
+  olReady.then(() => requestAnimationFrame(() => {
     const ol = window.ol;
     const st = olStyles(ol);
     const src = new ol.source.Vector();
@@ -564,14 +643,15 @@ function buildPlaceMap(holder, points) {
       src.addFeature(f);
     }
     const map = (new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) }));
-    const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration: 300 });
+    const duration = reduceMotion() ? 0 : 300;
+    const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration });
     fitAll();
     controls.replaceChildren(...[
       points.length > 1 ? h("button", { class: "ghost small", onclick: fitAll }, "Both") : null,
-      ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration: 300 }) }, `Zoom to ${p.label}`)),
+      ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration }) }, `Zoom to ${p.label}`)),
       ...points.map((p) => h("a", { href: gmaps(p.lat, p.lon), target: "_blank", rel: "noopener", class: "small-link" }, `${p.label} in Google Maps`)),
     ].filter(Boolean));
-  });
+  }));
 }
 
 // ---------- filters, copy summary ----------
@@ -612,9 +692,18 @@ function summaryText(d) {
   return lines.join("\n");
 }
 async function copyText(text, button) {
+  let ok = true;
   try { await navigator.clipboard.writeText(text); }
-  catch (e) { const t = h("textarea", {}, text); document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); }
-  const was = button.textContent; button.textContent = "Copied"; setTimeout(() => { button.textContent = was; }, 1400);
+  catch (e) {
+    try { const t = h("textarea", {}, text); document.body.append(t); t.select(); ok = document.execCommand("copy"); t.remove(); }
+    catch (e2) { ok = false; }
+  }
+  const message = ok ? "Copied" : "Copy failed";
+  if (!button.dataset.label) button.dataset.label = button.textContent;
+  clearTimeout(button._copyTimer);
+  button.textContent = message;  // seen
+  announce(message);             // heard
+  button._copyTimer = setTimeout(() => { button.textContent = button.dataset.label; }, 1600);
 }
 
 
@@ -678,12 +767,13 @@ function renderDiff(d) {
   const wrap = h("div", {},
     h("div", { class: "tiles" },
       [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
+        .filter(([k]) => (s[k] ?? 0) > 0 || ["changed", "added", "removed"].includes(k))
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
     renderMap(d),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
       h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
       h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
@@ -755,7 +845,7 @@ function renderDisagreements() {
   const wrap = h("div", {},
     h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
       h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
     DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
   return wrap;
@@ -791,12 +881,12 @@ document.getElementById("download").addEventListener("click", () => {
 // ---------- keyboard: j/k next/previous card, x tick reviewed ----------
 let kbdCard = null;
 function visibleCards() {
-  return [...document.querySelectorAll("#view .card[data-review]")].filter((c) => c.offsetParent !== null && !c.closest("details:not([open])"));
+  return [...document.querySelectorAll("#view .card[data-review]")].filter((c) => c.offsetParent !== null && !c.closest(".section-body[hidden]"));
 }
 function focusCard(card) {
   if (kbdCard) kbdCard.classList.remove("kbd");
   kbdCard = card;
-  if (card) { card.classList.add("kbd"); card.scrollIntoView({ block: "center", behavior: "smooth" }); }
+  if (card) { card.classList.add("kbd"); card.scrollIntoView({ block: "center", behavior: reduceMotion() ? "auto" : "smooth" }); }
 }
 document.addEventListener("keydown", (ev) => {
   if (ev.metaKey || ev.ctrlKey || ev.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;

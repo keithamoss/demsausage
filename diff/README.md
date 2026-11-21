@@ -90,6 +90,15 @@ If the election has a `config.json` beside its diffs folder, each diff also chec
 - **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
 - **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. The button shows how many ticks aren't saved yet.
 - **Keyboard:** `j` / `k` move to the next / previous card, and `x` ticks the current one as reviewed.
+- **Accessibility and browser behaviour:**
+  - The views are proper tabs: use the arrow keys, Home and End to move between them.
+  - Section headers are buttons that fold their section. A folded section still opens when find-in-page (Ctrl/Cmd+F) matches text inside it.
+  - Jumps to a card land below the sticky tab bar and move keyboard focus to the card.
+  - The report follows the system's light or dark setting for form controls and scrollbars.
+  - Animation is turned off when the system asks for reduced motion.
+  - "Copy" results are announced to screen readers, and each map has a text summary.
+  - Long sections only render the cards on screen.
+  - OpenLayers loads deferred from jsDelivr, with Subresource Integrity hashes. When you upgrade it, update the `integrity` attributes in `report_template.html`.
 - **Cosmetic changes** are listed in their own folded section, and tagged "cosmetic" where they appear alongside real changes.
 - **"No changes"** shown at the top when nothing changed.
 - **Copy summary:** plain text for Slack or a commit message.
