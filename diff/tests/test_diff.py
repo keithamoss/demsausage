@@ -98,6 +98,17 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     assert "Gamma Church" in html and "{{DATA}}" not in html and "</script" not in html.split('id="data">')[1].split("</script>")[0]
 
 
+@pytest.mark.parametrize("ignored_coordinate", ["lat", "lon"])
+def test_ignored_coordinate_suppresses_location_changes_and_fixes(pair, ignored_coordinate):
+    root, old, new = pair
+    target = run_pair(old, new, root / f"diffs-ignore-{ignored_coordinate}", matcher="rapidfuzz", ignore={ignored_coordinate})
+    d = json.loads((target / "diff-rapidfuzz.json").read_text())
+
+    assert all(e["name"] != "Gamma Church" for e in d["changed"])
+    assert d["summary"]["warnings"] == 0
+    assert not [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
+
+
 def test_run_pair_with_both_matchers_records_disagreements(pair):
     root, old, new = pair
     target = run_pair(old, new, root / "diffs", matcher="both", election="test_2026")

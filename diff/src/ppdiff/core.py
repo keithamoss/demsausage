@@ -99,7 +99,7 @@ def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str], larg
         for c in shared
         if changed_text(a.raw.get(c), b.raw.get(c))
     ]
-    location = location_change(old, new, link.left, link.right, large_move_m)
+    location = None if coord_columns & ignore else location_change(old, new, link.left, link.right, large_move_m)
     return {
         "old_index": link.left,
         "new_index": link.right,
