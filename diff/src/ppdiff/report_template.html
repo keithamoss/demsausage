@@ -7,6 +7,8 @@
 <!-- OpenLayers, as used by the public site (public-redesign); loaded from a CDN to keep reports small -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css">
 <script src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"></script>
+<!-- ol-mapbox-style draws the keyless fallback basemap (OpenFreeMap vector tiles) -->
+<script src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"></script>
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
@@ -408,22 +410,33 @@ function cartoKeyForm() {
   const save = () => { const v = input.value.trim(); if (!v) return; try { localStorage.setItem(CARTO_KEY_STORE, v); } catch (e) {} location.reload(); };
   input.addEventListener("keydown", (ev) => { if (ev.key === "Enter") save(); });
   return h("div", { class: "keybar" },
-    h("span", {}, CARTO_KEY ? "Basemap key saved in this browser." : "The basemap needs the public site's CARTO API key (VITE_CARTO_API_KEY). It's stored only in this browser."),
+    h("span", {}, CARTO_KEY ? "Basemap: CARTO (the public site's), using the key saved in this browser."
+      : "Basemap: OpenFreeMap. To use the public site's CARTO basemap, add its API key (VITE_CARTO_API_KEY); it's stored only in this browser."),
     CARTO_KEY ? h("button", { class: "ghost small", onclick: () => { try { localStorage.removeItem(CARTO_KEY_STORE); } catch (e) {} location.reload(); } }, "Forget key")
               : [input, h("button", { class: "primary small", onclick: save }, "Save")]);
 }
 function basemapLayer(ol) {
-  // CARTO basemap, as on democracysausage.org (light_all), or its dark twin in dark mode.
-  const retina = window.devicePixelRatio > 1;
-  const key = CARTO_KEY ? `?key=${encodeURIComponent(CARTO_KEY)}` : "";
-  return new ol.layer.Tile({
-    source: new ol.source.XYZ({
-      url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png${key}`,
-      tilePixelRatio: retina ? 2 : 1,
-      maxZoom: 20,
-      attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-    }),
+  // With the CARTO key: the public site's basemap (CARTO light_all, or dark_all in dark mode).
+  if (CARTO_KEY) {
+    const retina = window.devicePixelRatio > 1;
+    return new ol.layer.Tile({
+      source: new ol.source.XYZ({
+        url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png?key=${encodeURIComponent(CARTO_KEY)}`,
+        tilePixelRatio: retina ? 2 : 1,
+        maxZoom: 20,
+        attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+      }),
+    });
+  }
+  // Without it: OpenFreeMap (free, no key), Positron style (CARTO's light style lineage) or Dark.
+  const group = new ol.layer.Group();
+  window.olms.apply(group, `https://tiles.openfreemap.org/styles/${darkMode() ? "dark" : "positron"}`).then(() => {
+    group.getLayers().forEach((layer) => {
+      const source = layer.getSource && layer.getSource();
+      if (source && source.setAttributions) source.setAttributions('<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+    });
   });
+  return group;
 }
 function olStyles(ol) {
   const S = ol.style, c = (n) => cssVar(n);
