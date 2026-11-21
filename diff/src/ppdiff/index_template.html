@@ -88,8 +88,8 @@ document.getElementById("title").textContent = document.title;
 const COLS = [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible"], ["likely_replacements", "Replaced"], ["warnings", "Warnings"]];
 document.getElementById("pairs").replaceChildren(...DATA.pairs.map((p) =>
   h("div", { class: "pair" },
-    h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old} → ${p.new}`)),
-    h("div", { class: "note" }, `${p.records[0]} → ${p.records[1]} places`,
+    h("h3", {}, h("a", { href: `${encodeURIComponent(p.folder)}/report.html` }, `${p.old_label} → ${p.new_label}`)),
+    h("div", { class: "note" }, `${p.old} → ${p.new} · ${p.records[0]} → ${p.records[1]} places`,
       p.disagreements === null ? "" : ` · ${p.disagreements ? p.disagreements + " disagreements to review" : "matchers agree"}`),
     h("div", { class: "counts-wrap" }, h("table", { class: "counts" },
       h("thead", {}, h("tr", {}, h("th", {}), COLS.map(([, t]) => h("th", { scope: "col" }, t)))),

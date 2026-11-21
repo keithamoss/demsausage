@@ -16,6 +16,8 @@ from linkage.normalise import distance_m
 from linkage.records import Dataset
 from linkage.result import Link, LinkResult
 
+from .names import friendly_label
+
 SCHEMA_VERSION = 2
 
 #: Coordinate changes smaller than this are float noise ("-30.3344050" vs "-30.334405").
@@ -272,8 +274,8 @@ def build_diff(
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "matcher": result.matcher,
         "matcher_params": result.params,
-        "old": link_output["left"],
-        "new": link_output["right"],
+        "old": {**link_output["left"], "label": friendly_label(link_output["left"]["path"])},
+        "new": {**link_output["right"], "label": friendly_label(link_output["right"]["path"])},
         "columns": {
             "old": old_cols,
             "new": new_cols,

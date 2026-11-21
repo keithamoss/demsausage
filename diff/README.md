@@ -19,6 +19,10 @@ Options: `--matcher rapidfuzz|splink|both` (default `both`), `--ignore COLUMN` (
 
 VIC 2026 writes to `scrapers/vic_2026/diffs-linkage/`, alongside the existing `diffs/` from its own `diff.py`.
 
+## File names
+
+Reports and the index show files by when they were scraped, e.g. "Wed 4 Nov 2026, 8:46 pm" for `20261104_204630 polling places.csv`. `ppdiff/names.py` recognises the date styles our scrapers use (`20261104_204630`, `2026-11-21`, `(20210207)`, `18-08-2026`, `2024_10_14`). Files without one fall back to a tidied file name. To support another style, add a pattern to `ADAPTERS` there.
+
 ## What you get
 
 Each pair of files gets a folder `<old>__<new>/` containing:
@@ -47,7 +51,9 @@ A diff contains:
 
 ## The report
 
-- **Summary tiles and a map.** The map is drawn inline, so it works offline. It shows moves as old → new arrows (amber when it's a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. You can pan and zoom, and tapping a marker jumps to its card.
+- **Summary tiles and an overview map.** It uses OpenLayers 8.1.0 and the CARTO "light_all" basemap, the same library and basemap as the public site; dark mode uses CARTO's "dark_all". It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
+- **"Check on map" on every moved, added, removed and replacement card.** It opens a map inside the card with the old and new positions over the basemap. "Zoom to old" / "Zoom to new" go to street level, for checking each position against the basemap.
+- **Offline fallback.** OpenLayers and the tiles load from jsDelivr and CARTO. Offline, the overview falls back to a plain dots-only map, and the place maps say they need a connection; the OpenStreetMap links still work. The public site's CARTO API key is not put in reports; the tiles are requested without one.
 - **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
 - **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.

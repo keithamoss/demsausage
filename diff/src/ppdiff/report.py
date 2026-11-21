@@ -12,6 +12,8 @@ from pathlib import Path
 
 from linkage.verdicts import REASONS, SCHEMA_VERSION, VERDICTS
 
+from .names import friendly_label
+
 TEMPLATE = Path(__file__).with_name("report_template.html")
 
 
@@ -35,7 +37,7 @@ def write_report(folder: Path) -> Path:
     }
     title = "Polling place diff"
     if diffs:
-        title = f"{Path(diffs[0]['old']['path']).stem} → {Path(diffs[0]['new']['path']).stem}"
+        title = f"{friendly_label(diffs[0]['old']['path'])} → {friendly_label(diffs[0]['new']['path'])}"
     html = TEMPLATE.read_text().replace("{{TITLE}}", _html_escape(title)).replace("{{DATA}}", _embed(data))
     out = folder / "report.html"
     out.write_text(html)

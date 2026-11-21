@@ -89,7 +89,9 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     assert [e["name"] for e in d["added"]] == ["Epsilon Centre"]
     assert [e["name"] for e in d["removed"]] == ["Delta Library"]
     assert d["old"]["sha256"] and d["matcher"] == "rapidfuzz"
+    assert (d["old"]["label"], d["new"]["label"]) == ("Thu 1 Jan 2026", "Thu 8 Jan 2026")
     html = (target / "report.html").read_text()
+    assert "<title>Thu 1 Jan 2026 → Thu 8 Jan 2026</title>" in html
     assert "Gamma Church" in html and "{{DATA}}" not in html and "</script" not in html.split('id="data">')[1].split("</script>")[0]
 
 

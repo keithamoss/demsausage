@@ -14,6 +14,7 @@ from linkage.run import file_sha256, link_files
 
 from .core import build_diff
 from .index import write_index
+from .names import friendly_label
 from .report import write_report
 
 
@@ -62,6 +63,8 @@ def disagreements(old: Dataset, new: Dataset, link_output: dict[str, Any], elect
         "election": election,
         "old_file": Path(link_output["left"]["path"]).name,
         "new_file": Path(link_output["right"]["path"]).name,
+        "old_label": friendly_label(link_output["left"]["path"]),
+        "new_label": friendly_label(link_output["right"]["path"]),
         "old_sha256": link_output["left"]["sha256"],
         "new_sha256": link_output["right"]["sha256"],
         "matchers": list(results),

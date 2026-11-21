@@ -2,6 +2,8 @@
   "election": "vic_2026",
   "old_file": "20261107_092912 polling places.csv",
   "new_file": "20261111_124944 polling places.csv",
+  "old_label": "Sat 7 Nov 2026, 9:29 am",
+  "new_label": "Wed 11 Nov 2026, 12:49 pm",
   "old_sha256": "b1ff21b3bd4d5a574b64b2069ba068ea4c3517d6b5ebd13f1aa0bef01928c792",
   "new_sha256": "e4a7e7933e3209474e9d731791824bdf254c9728643a45bedc0d2fe9ce8ceb62",
   "matchers": [

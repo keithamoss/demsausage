@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .names import friendly_label
 from .report import _embed, _html_escape
 
 TEMPLATE = Path(__file__).with_name("index_template.html")
@@ -56,7 +57,7 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
         diff = json.loads(diff_path.read_text())
         if link_output["left"]["sha256"] != previous_new_sha:
             ids = {}  # the chain broke: start fresh from this pair's old file
-        when = Path(link_output["right"]["path"]).stem
+        when = friendly_label(link_output["right"]["path"])
         pair = folder.name
 
         def pid(old_index: int) -> int:
@@ -108,6 +109,8 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
                 "folder": folder.name,
                 "old": Path(link_output["left"]["path"]).name,
                 "new": Path(link_output["right"]["path"]).name,
+                "old_label": friendly_label(link_output["left"]["path"]),
+                "new_label": friendly_label(link_output["right"]["path"]),
                 "records": [link_output["left"]["records"], link_output["right"]["records"]],
                 "summaries": summaries,
                 "disagreements": disagreements,

@@ -84,6 +84,13 @@ svg.map .feat:focus circle, svg.map .feat:hover circle { stroke: var(--text); }
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 8px 12px; font-size: 13px; border-top: 1px solid var(--border); }
 .legend .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
 .key.moved { background: var(--accent); } .key.typo { background: var(--warn); } .key.added { background: var(--add); } .key.removed { background: var(--del); } .key.replacement { background: none; border: 2px dotted var(--muted); width: 8px; height: 8px; }
+.olmap { width: 100%; height: min(60vh, 460px); background: var(--info-soft); }
+.placemap-wrap { margin-top: 10px; }
+.placemap { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: var(--info-soft); border: 1px solid var(--border); }
+.placemap-ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.card-actions { margin-top: 8px; }
+button.small { font-size: 13px; padding: 3px 10px; }
+.ol-attribution { font-size: 11px; }
 .inline-diff { overflow-wrap: anywhere; }
 .inline-diff .old, .inline-diff .new { padding: 0 1px; border-radius: 3px; }
 ins { text-decoration: none; }
@@ -172,7 +179,7 @@ document.getElementById("title").textContent = document.title;
 if (first) {
   const created = new Date(first.created_at).toLocaleString();
   document.getElementById("subtitle").textContent =
-    `${first.old.path} (${first.old.records} places) → ${first.new.path} (${first.new.records} places) · ${DIS ? DIS.election + " · " : ""}${created}`;
+    `${first.old.path.split("/").pop()} (${first.old.records} places) → ${first.new.path.split("/").pop()} (${first.new.records} places) · ${DIS ? DIS.election + " · " : ""}diffed ${created}`;
 }
 
 // ---------- storage (per pair of files) ----------
@@ -226,7 +233,9 @@ function locationRow(loc) {
       loc.moved_m === null ? loc.note : `Moved ${fmtM(loc.moved_m)} `,
       olat !== null ? h("a", { href: osm(olat, olon), target: "_blank", rel: "noopener" }, "old") : null,
       olat !== null && nlat !== null ? " · " : null,
-      nlat !== null ? h("a", { href: osm(nlat, nlon), target: "_blank", rel: "noopener" }, "new") : null));
+      nlat !== null ? h("a", { href: osm(nlat, nlon), target: "_blank", rel: "noopener" }, "new") : null,
+      " ",
+      placeMapButton([{ lat: olat, lon: olon, label: "old", kind: "old" }, { lat: nlat, lon: nlon, label: "new", kind: "new" }])));
 }
 // ---------- word-level text diff ----------
 // Words, punctuation and whitespace are separate tokens, so "Melton VIC" -> "Melton West VIC"
@@ -342,7 +351,8 @@ function recordCard(e, d, which) {
       repl ? h("button", { class: "badge review", onclick: () => goTo(d.matcher, `${d.matcher}-repl-${repl.old_index}`) },
         `${which === "added" ? "likely replaces" : "likely replaced by"} ${which === "added" ? repl.old_name : repl.new_name} (${fmtM(repl.distance_m)}) ›`) : null,
       disagreeBadge(which === "removed" ? idx : null, which === "added" ? idx : null)),
-    h("dl", { class: "kv" }, Object.entries(e.record).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])));
+    h("dl", { class: "kv" }, Object.entries(e.record).filter(([, v]) => v !== "").flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])),
+    h("div", { class: "card-actions" }, placeMapButton([{ lat: e.lat, lon: e.lon, label: which, kind: which === "added" ? "new" : "old" }])));
 }
 function replacementCard(p, d) {
   const gone = d.removed.find((r) => r.old_index === p.old_index), came = d.added.find((a) => a.new_index === p.new_index);
@@ -354,6 +364,7 @@ function replacementCard(p, d) {
     h("div", { class: "decisions" },
       h("div", { class: "decision" }, h("h4", {}, "Removed"), brief(gone)),
       h("div", { class: "decision" }, h("h4", {}, "Added nearby"), brief(came))),
+    h("div", { class: "card-actions" }, placeMapButton([{ lat: gone.lat, lon: gone.lon, label: "removed", kind: "old" }, { lat: came.lat, lon: came.lon, label: "added", kind: "new" }])),
     h("p", { class: "note" }, "Not linked by the matcher, but close together: often a venue swap. Check the two cards above if it should have been a link."));
 }
 function qualityCard(q, d) {
@@ -384,7 +395,7 @@ function mapFeatures(d) {
   for (const r of d.removed) if (r.lat !== null) f.push({ kind: "removed", to: [r.lat, r.lon], name: r.name, target: `${d.matcher}-removed-${r.old_index}` });
   return f;
 }
-function renderMap(d) {
+function renderSvgMap(d) {
   const feats = mapFeatures(d);
   if (!feats.length) return null;
   const pts = feats.flatMap((f) => (f.from ? [f.from, f.to] : [f.to]));
@@ -446,6 +457,138 @@ function renderMap(d) {
   return box;
 }
 
+
+// ---------- OpenLayers (same library and basemap as the public site) ----------
+// Loaded on demand from a CDN; without it (offline) the overview falls back to the SVG map.
+const OL_VERSION = "8.1.0";
+let olPromise = null;
+function loadOL() {
+  if (window.ol) return Promise.resolve(window.ol);
+  if (olPromise) return olPromise;
+  olPromise = new Promise((resolve, reject) => {
+    const css = h("link", { rel: "stylesheet", href: `https://cdn.jsdelivr.net/npm/ol@${OL_VERSION}/ol.css` });
+    const js = h("script", { src: `https://cdn.jsdelivr.net/npm/ol@${OL_VERSION}/dist/ol.js` });
+    js.onload = () => (window.ol ? resolve(window.ol) : reject(new Error("OpenLayers did not load")));
+    js.onerror = () => reject(new Error("OpenLayers could not be loaded"));
+    setTimeout(() => reject(new Error("OpenLayers timed out")), 15000);
+    document.head.append(css, js);
+  });
+  return olPromise;
+}
+const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const darkMode = () => window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+function basemapLayer(ol) {
+  // CARTO basemap, as on democracysausage.org (light_all), or its dark twin in dark mode.
+  const retina = window.devicePixelRatio > 1;
+  return new ol.layer.Tile({
+    source: new ol.source.XYZ({
+      url: `https://{a-d}.basemaps.cartocdn.com/${darkMode() ? "dark_all" : "light_all"}/{z}/{x}/{y}${retina ? "@2x" : ""}.png`,
+      tilePixelRatio: retina ? 2 : 1,
+      maxZoom: 20,
+      attributions: '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    }),
+  });
+}
+function olStyles(ol) {
+  const S = ol.style, c = (n) => cssVar(n);
+  const dot = (fill, r, stroke) => new S.Style({ image: new S.Circle({ radius: r, fill: new S.Fill({ color: fill }), stroke: new S.Stroke({ color: stroke || c("--surface"), width: 2 }) }) });
+  const ring = (color, r) => new S.Style({ image: new S.Circle({ radius: r, fill: new S.Fill({ color: c("--surface") }), stroke: new S.Stroke({ color, width: 2.5 }) }) });
+  const line = (color, dash, width) => new S.Style({ stroke: new S.Stroke({ color, width: width || 2.5, lineDash: dash }) });
+  return {
+    context: new S.Style({ image: new S.Circle({ radius: 2.5, fill: new S.Fill({ color: darkMode() ? "rgba(236,235,231,.35)" : "rgba(29,29,27,.28)" }) }) }),
+    moved: { line: line(c("--accent"), [6, 4]), from: ring(c("--accent"), 5), to: dot(c("--accent"), 7) },
+    typo: { line: line(c("--warn"), [6, 4]), from: ring(c("--warn"), 5), to: dot(c("--warn"), 7) },
+    added: dot(c("--add"), 7),
+    removed: dot(c("--del"), 7),
+    replacement: line(c("--muted"), [2, 4], 2),
+    label: (text, color) => new S.Style({ text: new S.Text({ text, offsetY: -16, font: "600 12px system-ui, sans-serif", fill: new S.Fill({ color }), stroke: new S.Stroke({ color: c("--surface"), width: 3 }) }) }),
+  };
+}
+const toXY = (ol, lat, lon) => ol.proj.fromLonLat([lon, lat]);
+
+function renderMap(d) {
+  const feats = mapFeatures(d);
+  if (!feats.length) return null;
+  const el = h("div", { class: "olmap" });
+  const box = h("div", { class: "mapbox" }, el,
+    h("div", { class: "legend" },
+      [["moved", "moved (old → new)"], ["typo", "likely coordinate typo"], ["added", "added"], ["removed", "removed"], ["replacement", "likely replacement"]].map(([k, t]) =>
+        h("span", {}, h("i", { class: "key " + k }), t)),
+      h("span", { class: "was" }, "Grey: unchanged places. Tap a marker to jump to it.")));
+  loadOL().then((ol) => {
+    const st = olStyles(ol);
+    const context = new ol.source.Vector({ features: d.context_points.map(([lat, lon]) => new ol.Feature(new ol.geom.Point(toXY(ol, lat, lon)))) });
+    const fg = new ol.source.Vector();
+    for (const f of feats) {
+      const add = (geom, style) => { const feat = new ol.Feature(geom); feat.setStyle(style); feat.set("target", f.target); feat.set("name", f.name); fg.addFeature(feat); };
+      if (f.kind === "replacement") { add(new ol.geom.LineString([toXY(ol, ...f.from), toXY(ol, ...f.to)]), st.replacement); continue; }
+      if (f.from) {
+        const s = st[f.kind];
+        add(new ol.geom.LineString([toXY(ol, ...f.from), toXY(ol, ...f.to)]), s.line);
+        add(new ol.geom.Point(toXY(ol, ...f.from)), s.from);
+        add(new ol.geom.Point(toXY(ol, ...f.to)), s.to);
+      } else add(new ol.geom.Point(toXY(ol, ...f.to)), st[f.kind]);
+    }
+    const map = new ol.Map({
+      target: el,
+      layers: [basemapLayer(ol), new ol.layer.Vector({ source: context, style: st.context }), new ol.layer.Vector({ source: fg })],
+      view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }),
+    });
+    map.getView().fit(fg.getExtent(), { padding: [40, 40, 40, 40], maxZoom: 16 });
+    map.on("pointermove", (ev) => { el.style.cursor = map.hasFeatureAtPixel(ev.pixel, { layerFilter: (l) => l.getSource() === fg }) ? "pointer" : ""; });
+    map.on("click", (ev) => {
+      const hit = map.forEachFeatureAtPixel(ev.pixel, (f) => f, { layerFilter: (l) => l.getSource() === fg });
+      if (hit) { setChip(null); goTo(d.matcher, hit.get("target")); }
+    });
+  }).catch(() => box.replaceWith(renderSvgMap(d) || h("span")));
+  return box;
+}
+
+// A small map inside one card, for checking positions against the basemap.
+// points: [{lat, lon, label, kind}] where kind is "old", "new" or "place".
+function placeMapButton(points) {
+  points = points.filter((p) => p.lat !== null && p.lat !== undefined);
+  if (!points.length) return null;
+  let holder = null;
+  const button = h("button", { class: "ghost small", onclick: () => {
+    if (holder) { holder.remove(); holder = null; button.textContent = "Check on map"; return; }
+    holder = h("div", { class: "placemap-wrap" });
+    button.closest(".card").append(holder);
+    button.textContent = "Hide map";
+    buildPlaceMap(holder, points);
+  } }, "Check on map");
+  return button;
+}
+function buildPlaceMap(holder, points) {
+  const el = h("div", { class: "placemap" });
+  const controls = h("div", { class: "placemap-ctl" });
+  holder.append(el, controls);
+  loadOL().then((ol) => {
+    const st = olStyles(ol);
+    const src = new ol.source.Vector();
+    const colour = { old: cssVar("--del"), new: cssVar("--add"), place: cssVar("--accent") };
+    if (points.length === 2) {
+      const line = new ol.Feature(new ol.geom.LineString(points.map((p) => toXY(ol, p.lat, p.lon))));
+      line.setStyle(st.moved.line); src.addFeature(line);
+    }
+    for (const p of points) {
+      const f = new ol.Feature(new ol.geom.Point(toXY(ol, p.lat, p.lon)));
+      f.setStyle([p.kind === "old" ? new ol.style.Style({ image: new ol.style.Circle({ radius: 7, fill: new ol.style.Fill({ color: cssVar("--surface") }), stroke: new ol.style.Stroke({ color: colour.old, width: 3 }) }) })
+                                    : new ol.style.Style({ image: new ol.style.Circle({ radius: 7, fill: new ol.style.Fill({ color: colour[p.kind] }), stroke: new ol.style.Stroke({ color: cssVar("--surface"), width: 2 }) }) }),
+                  st.label(p.label, colour[p.kind])]);
+      src.addFeature(f);
+    }
+    const map = new ol.Map({ target: el, layers: [basemapLayer(ol), new ol.layer.Vector({ source: src })], view: new ol.View({ center: [0, 0], zoom: 2, maxZoom: 20 }) });
+    const fitAll = () => map.getView().fit(src.getExtent(), { padding: [50, 50, 50, 50], maxZoom: 18, duration: 300 });
+    fitAll();
+    controls.replaceChildren(...[
+      points.length > 1 ? h("button", { class: "ghost small", onclick: fitAll }, "Both") : null,
+      ...points.map((p) => h("button", { class: "ghost small", onclick: () => map.getView().animate({ center: toXY(ol, p.lat, p.lon), zoom: 19, duration: 300 }) }, `Zoom to ${p.label}`)),
+      h("span", { class: "was" }, points.map((p) => `${p.label}: ${p.lat}, ${p.lon}`).join(" · ")),
+    ].filter(Boolean));
+  }).catch(() => { el.replaceWith(h("p", { class: "note" }, "The map needs an internet connection (it loads OpenLayers and the CARTO basemap). The old/new links above open OpenStreetMap instead.")); });
+}
+
 // ---------- filters, copy summary ----------
 let activeChip = null;
 function setChip(cat) {
@@ -465,7 +608,7 @@ function applyFilters() {
 function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
 function summaryText(d) {
   const s = d.summary, lines = [];
-  lines.push(`${d.old.path.split("/").pop()} → ${d.new.path.split("/").pop()} (${label(d.matcher)})`);
+  lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
   lines.push(`${d.new.records} places: ${s.changed} changed, ${s.added} added, ${s.removed} removed, ${s.possible_matches} possible matches, ${s.likely_replacements} likely replacements.`);
   if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
   if (d.removed.length) lines.push(`Removed: ${d.removed.map((r) => r.name).join("; ")}`);
@@ -586,7 +729,7 @@ document.getElementById("download").addEventListener("click", () => {
     };
   });
   const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
-  const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_file} to ${DIS.new_file}.json` });
+  const a = h("a", { href: URL.createObjectURL(blob), download: `verdicts ${DIS.election} ${DIS.old_label || DIS.old_file} to ${DIS.new_label || DIS.new_file}.json`.replace(/[,:]/g, "") });
   document.body.append(a); a.click(); a.remove();
 });
 
