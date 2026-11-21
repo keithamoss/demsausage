@@ -14,6 +14,7 @@ from linkage.run import file_sha256, link_files
 
 from .core import Settings, build_diff
 from .index import write_index
+from .loader_check import loader_checks
 from .names import friendly_label
 from .report import write_report
 
@@ -140,8 +141,11 @@ def run_pair(
     target = pair_dir(out_dir, old, new)
     target.mkdir(parents=True, exist_ok=True)
     (target / "link.json").write_text(json.dumps(link_output, separators=(",", ":")))
+    # Checks against the loader (its own rules via loader_rules); the same for every matcher.
+    checks = loader_checks(left, right, out_dir)
     for r in link_output["results"]:
         diff = build_diff(left, right, LinkResult.from_dict(r), link_output, settings, loader_renames(out_dir))
+        diff["loader"] = checks
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)

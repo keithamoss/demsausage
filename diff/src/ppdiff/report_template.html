@@ -595,6 +595,11 @@ function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); 
 function summaryText(d) {
   const s = d.summary, lines = [];
   lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
+  if (d.loader && d.loader.config_found) {
+    const look = d.loader.fix_audit.filter(fixNeedsLook), probs = d.loader.problems.length + d.loader.regex_errors.length;
+    if (probs) lines.push(`Load problems: ${probs}`);
+    if (look.length) lines.push(`Config fixes to look at: ${look.map((f) => `#${f.number} (${f.status.replace("_", " ")})`).join(", ")}`);
+  }
   if (d.nothing_changed) { lines.push(`No changes: all ${d.new.records} places are the same.`); return lines.join("\n"); }
   lines.push(`${d.new.records} places: ${s.changed} changed, ${s.added} added, ${s.removed} removed, ${s.possible_matches} possible matches, ${s.likely_replacements} likely replacements.`);
   if (d.added.length) lines.push(`Added: ${d.added.map((a) => a.name).join("; ")}`);
@@ -612,6 +617,51 @@ async function copyText(text, button) {
   const was = button.textContent; button.textContent = "Copied"; setTimeout(() => { button.textContent = was; }, 1400);
 }
 
+
+// ---------- loader checks (the loader's own rules, via loader_rules) ----------
+const FIX_STATUS = {
+  missing_field: ["Overwrites a field that doesn't exist after renaming, so the loader skips it", "warn"],
+  stopped_matching: ["Stopped matching in this scrape: the selector no longer finds the place", "warn"],
+  no_match: ["Doesn't match any place (orphan): can probably be removed", "warn"],
+  already_fixed: ["Source already has the fixed value: the entry can probably be removed", "warn"],
+  multiple: ["Matches more than one place: it will change all of them", "warn"],
+  applies: ["Still applies", "ok"],
+};
+const fixNeedsLook = (f) => f.status !== "applies";
+function configFixCard(f) {
+  const key = `cfgfix-${f.number}`;
+  const [text, tone] = FIX_STATUS[f.status] || [f.status, "warn"];
+  return h("div", { ...reviewAttrs(key), "data-search": f.matches.join(" ").toLowerCase() },
+    cardHead(`fix_data_issues entry ${f.number}: ${f.fix.field} = ${JSON.stringify(f.fix.value)}`, key),
+    h("div", { class: tone === "warn" ? "warn" : "allclear" }, text,
+      f.translates_value ? ` (translates a value: ${f.matches.length} places)` : f.matches.length ? ` (${f.matches.length} place${f.matches.length === 1 ? "" : "s"})` : ""),
+    f.missing_fields.length ? h("p", {}, `Missing after renaming: ${f.missing_fields.join(", ")}. Check the spelling against the loader's column names (e.g. lon, not lng).`) : null,
+    !f.translates_value && f.matches.length ? h("p", { class: "note" }, `Matches: ${f.matches.slice(0, 6).join("; ")}${f.matches.length > 6 ? "…" : ""}`) : null,
+    !f.translates_value && f.source_values.length ? h("p", { class: "note" }, `This scrape has: ${f.source_values.slice(0, 3).map((v) => JSON.stringify(v)).join("; ")}`) : null,
+    h("pre", { class: "fixjson" }, JSON.stringify(f.fix, null, 4)));
+}
+function loadProblemCard(p) {
+  const key = `load-${p.new_index}`;
+  return h("div", { ...reviewAttrs(key), "data-search": p.name.toLowerCase() },
+    cardHead(p.name, key), h("ul", {}, p.problems.map((x) => h("li", {}, x))));
+}
+function renderLoaderChecks(d) {
+  const L = d.loader;
+  if (!L) return null;
+  if (!L.config_found) return section("Loader checks", [], () => null, false,
+    h("p", { class: "note" }, "No config.json beside this diffs folder, so the loader checks didn't run."));
+  const look = L.fix_audit.filter(fixNeedsLook), fine = L.fix_audit.filter((f) => !fixNeedsLook(f));
+  const intro = h("p", { class: "note" },
+    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters} places after its filters. `,
+    "Load problems are what the loader would reject, as far as can be checked without the database: required fields, allowed values, coordinates and cleaning regexes.");
+  return [
+    section("Loader: config fixes to look at", look, configFixCard, true, intro),
+    section("Loader: config fixes that still apply", fine, configFixCard, false),
+    section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
+      L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+  ];
+}
+
 function renderDiff(d) {
   const s = d.summary;
   const warned = d.changed.concat(d.possible_matches).filter((e) => e.warnings.length);
@@ -620,12 +670,14 @@ function renderDiff(d) {
   const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
   activeChip = null; searchText = "";
   const card = (e) => pairCard(e, d);
+  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length : 0;
+  s.config_fixes = d.loader && d.loader.config_found ? d.loader.fix_audit.filter(fixNeedsLook).length : 0;
   // Likely-needed fixes first, then "only if wrong", then the "no fix needed" notes.
   const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
     h("div", { class: "tiles" },
-      [["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
+      [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
@@ -641,6 +693,7 @@ function renderDiff(d) {
     d.columns.added.length || d.columns.removed.length
       ? h("div", { class: "warn" }, `Columns added: ${d.columns.added.join(", ") || "none"} · removed: ${d.columns.removed.join(", ") || "none"}`)
       : null,
+    renderLoaderChecks(d),
     section("Warnings", warned, card, true),
     section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
       h("div", { class: "fix-intro" },

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "created_at": "2026-11-21T10:11:57+00:00",
+  "created_at": "2026-11-21T10:32:20+00:00",
   "matcher": "splink",
   "matcher_params": {
     "auto_threshold": 0.95,
@@ -7016,5 +7016,68 @@
       -37.63962,
       145.1334
     ]
-  ]
+  ],
+  "loader": {
+    "config_found": true,
+    "fix_audit": [
+      {
+        "number": 1,
+        "fix": {
+          "field": "premises",
+          "value": "Aberfeldie Primary School",
+          "overwrite": [
+            {
+              "field": "address",
+              "value": "1 Doone Street, Aberfeldie VIC 3040"
+            }
+          ]
+        },
+        "status": "applies",
+        "translates_value": false,
+        "matches": [
+          "Aberfeldie (Aberfeldie Primary School)"
+        ],
+        "matched_in_old": 1,
+        "missing_fields": [],
+        "source_values": [
+          {
+            "address": "1 Doone Street, Essendon VIC 3040"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "fix": {
+          "field": "premises",
+          "value": "Loch Sport Community House",
+          "overwrite": [
+            {
+              "field": "wheelchair_access",
+              "value": "Full"
+            },
+            {
+              "field": "wheelchair_access_description",
+              "value": ""
+            }
+          ]
+        },
+        "status": "applies",
+        "translates_value": false,
+        "matches": [
+          "Loch Sport (Loch Sport Community House)"
+        ],
+        "matched_in_old": 1,
+        "missing_fields": [],
+        "source_values": [
+          {
+            "wheelchair_access": "None",
+            "wheelchair_access_description": "Ramp access to the building entrance may restrict wheelchair access."
+          }
+        ]
+      }
+    ],
+    "problems": [],
+    "regex_errors": [],
+    "rows_after_filters": 1652
+  }
 }

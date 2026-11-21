@@ -327,3 +327,51 @@ def test_index_flags_quiet_pairs_and_tallies_this_elections_verdicts(tmp_path, m
     assert [p["nothing_changed"] for p in data["pairs"]] == [True, True]
     assert data["tally_here"]["by_verdict"] == {"splink": 1}
     assert data["tally_all"]["total"] == 2
+
+
+def test_loader_checks_audit_fixes_and_find_load_problems(tmp_path):
+    election = tmp_path / "test_2026"
+    (election / "data").mkdir(parents=True)
+    hdr = ["PPName", "premises", "address", "lat", "lon", "access"]
+
+    def write(path, rows):
+        with open(path, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=hdr); w.writeheader(); w.writerows(rows)
+        return path
+
+    def row(name, lat, lon, access="Full", address="1 Main St"):
+        return {"PPName": name, "premises": "", "address": address, "lat": f"{lat:.6f}", "lon": f"{lon:.6f}", "access": access}
+
+    old_rows = [row("Alpha", -33.0, 151.0), row("Beta", -33.1, 151.1), row("Gone", -33.2, 151.2), row("Twin", -33.3, 151.3), row("Twin", -33.4, 151.4)]
+    new_rows = [row("Alpha", -33.0, 151.0), row("Beta", -33.5, 151.1), row("Twin", -33.3, 151.3), row("Twin", -33.4, 151.4),
+                row("Delta", -33.6, 151.6, access="Wheelchair Access", address=" ")]
+    (election / "config.json").write_text(json.dumps({
+        "rename_columns": {"PPName": "name", "access": "wheelchair_access"},
+        "add_columns": {"state": "NSW", "ec_id": ""},
+        "fix_data_issues": [
+            {"field": "name", "value": "Alpha", "overwrite": [{"field": "lat", "value": -33.9}, {"field": "lng", "value": 151.9}]},
+            {"field": "name", "value": "Gone", "overwrite": [{"field": "lat", "value": -33.9}]},
+            {"field": "name", "value": "Beta", "overwrite": [{"field": "lat", "value": "-33.500000"}]},
+            {"field": "name", "value": "Twin", "overwrite": [{"field": "lat", "value": -34.0}]},
+            {"field": "name", "value": "Delta", "overwrite": [{"field": "lat", "value": -34.1}]},
+            {"field": "wheelchair_access", "value": "Wheelchair Access", "overwrite": [{"field": "wheelchair_access", "value": "Full"}]},
+        ],
+    }))
+    old = write(election / "data" / "20260101 a.csv", old_rows)
+    new = write(election / "data" / "20260102 b.csv", new_rows)
+    d = json.loads((run_pair(old, new, election / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    loader = d["loader"]
+    assert [f["status"] for f in loader["fix_audit"]] == [
+        "missing_field", "stopped_matching", "already_fixed", "multiple", "applies", "applies",
+    ]
+    assert loader["fix_audit"][0]["missing_fields"] == ["lng"]
+    assert loader["fix_audit"][5]["translates_value"] is True
+    # Delta's wheelchair value is translated by the last fix, so only its blank address is a problem.
+    assert loader["problems"] == [{"new_index": 4, "name": "Delta", "problems": ["address is blank"]}]
+    assert loader["rows_after_filters"] == 5
+
+
+def test_loader_checks_skip_without_config(pair):
+    root, old, new = pair
+    d = json.loads((run_pair(old, new, root / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+    assert d["loader"] == {"config_found": False}

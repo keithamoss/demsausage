@@ -65,6 +65,18 @@ A diff contains:
 - **context_points:** every place's coordinates in the new file, used as the map's background.
 - **provenance:** the matcher and its settings, plus both input files with their hashes.
 
+## Loader checks
+
+If the election has a `config.json` beside its diffs folder, each diff also checks the new file against the polling place loader. It uses the loader's own rules, not a copy: `django/demsausage/app/sausage/loader_rules.py` holds the steps the loader runs (filters, renaming, added columns, extras, dropped columns, cleaning regexes, `fix_data_issues`, address and division merging) and its value rules, with no Django dependency. `loader.py` calls the same functions. Both checks are the same for every matcher.
+
+- **Config fix audit:** each existing `fix_data_issues` entry is checked against the new scrape:
+  - *still applies*;
+  - *source already has the fixed value* (the entry can probably go);
+  - *doesn't match any place* or *stopped matching in this scrape*;
+  - *matches more than one place* (fine when the entry translates a value, e.g. every "Assistance" → "Assisted");
+  - *overwrites a field that doesn't exist after renaming*, so the loader silently skips it (e.g. `lng` instead of `lon`).
+- **Load problems:** rows the loader would reject after applying the config and fixes, as far as can be checked without a database. That covers required fields, allowed wheelchair and state values, blank names or addresses, invalid coordinates, and cleaning regexes that don't match. The loader's serializer and its boundary check can still catch more.
+
 ## The report
 
 - **Summary tiles and an overview map** (OpenLayers 10.11.0). It shows moves as old → new lines (amber for a likely coordinate typo), added and removed places, and dotted lines joining likely replacements, over grey dots for unchanged places. Tapping a marker jumps to its card.
@@ -73,6 +85,7 @@ A diff contains:
 - **Filter chips** by kind of change (Accessibility, Address, Location…), plus a name filter.
 - **Changed text is highlighted word by word.** Short values and near-total rewrites show old → new whole.
 - **"Matchers disagree" badges** on any place the other matcher handled differently, linking to the Disagreements tab.
+- **Loader sections first:** config fixes to look at, config fixes that still apply (folded), and problems that would stop the load, with tiles counting them.
 - **Sections:** warnings, suggested config fixes, possible matches, likely replacements, changed, added, removed, data quality. Changed places come biggest first: warnings, then accessibility getting worse, then the largest moves, then the most fields changed. Possible matches come least confident first.
 - **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
 - **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. The button shows how many ticks aren't saved yet.
