@@ -485,10 +485,11 @@ function qualityCard(q, d) {
 // still opens it.
 let sectionCount = 0;
 function section(title, items, makeCard, open, extra) {
-  open = Boolean(open && items.length > 0);
+  open = Boolean(open && (items.length > 0 || extra));
   const id = `section-${++sectionCount}`;
   const body = h("div", { class: "section-body", id, hidden: open ? null : "until-found" },
-    items.length ? [extra || null, ...items.map(makeCard)] : h("p", { class: "note" }, "None."));
+    extra || null,
+    items.length ? items.map(makeCard) : h("p", { class: "note" }, "No entries."));
   const toggle = h("button", { type: "button", class: "section-toggle", "aria-expanded": String(open), "aria-controls": id },
     h("span", {}, title, " ", h("span", { class: "count" }, `(${items.length}`, h("span", { class: "revcount" }), ")")));
   const setOpen = (on) => {
