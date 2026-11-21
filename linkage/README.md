@@ -2,7 +2,7 @@
 
 Decides which polling places in one file are the same places as in another. That's the first step for anything that compares datasets: diffing scrapes, the loader, meta polling places. This module only does linkage. The downstream tools use its output.
 
-It has two matchers behind one interface so they can run side by side on real data and be judged on the results. The background is in [`docs/modernisation/02-data-model-and-matcher.md`](../docs/modernisation/02-data-model-and-matcher.md), section 4 and "How fair was the Splink comparison?".
+It has two matchers behind one interface so they can run side by side on real data and be judged on the results. Learnings, pitfalls and next steps for the Splink side are in [`SPLINK_NOTES.md`](SPLINK_NOTES.md). The background is in [`docs/modernisation/02-data-model-and-matcher.md`](../docs/modernisation/02-data-model-and-matcher.md), section 4 and "How fair was the Splink comparison?".
 
 ## How a link is made
 
