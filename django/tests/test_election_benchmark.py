@@ -11,7 +11,6 @@ from django.utils import timezone
 from demsausage.app.enums import PollingPlaceJurisdiction, PollingPlaceStatus
 from demsausage.app.models import Elections, PollingPlaceNoms, PollingPlaces
 from demsausage.app.sausage import election_benchmark
-from demsausage.app.sausage.elections import get_election_stats_cache_key
 from demsausage.app.serializers import ElectionsStatsSerializer
 
 
@@ -522,21 +521,25 @@ def test_missing_current_report_date_makes_comparison_unavailable(caplog):
 
 @pytest.mark.django_db
 @patch("demsausage.app.serializers.getGamifiedElectionStats", return_value=[])
-def test_latest_past_chart_disappears_when_a_new_comparable_election_is_added(
-    _gamified,
-):
+def test_past_chart_updates_after_cached_stats_expire(_gamified):
     earlier = make_election("Earlier", days_from_now(-2000))
     latest = make_election("Latest", days_from_now(-1000))
     add_polling_places(earlier, 1, [20])
     add_polling_places(latest, 1, [20])
 
-    result = ElectionsStatsSerializer(latest).data["stats"]["benchmark"]
-    assert result["election_id"] == earlier.id
-    assert result["is_active"] is False
-    assert point_at(result, 0)["current"] == 100.0
+    with patch(
+        "django.core.cache.backends.locmem.time.time", return_value=2_000_000_000
+    ) as clock:
+        result = ElectionsStatsSerializer(latest).data["stats"]["benchmark"]
+        assert result["election_id"] == earlier.id
+        assert result["is_active"] is False
+        assert point_at(result, 0)["current"] == 100.0
 
-    make_election("New election", days_from_now(10))
-    assert ElectionsStatsSerializer(latest).data["stats"]["benchmark"] is None
+        make_election("New election", days_from_now(10))
+        clock.return_value += 3599
+        assert ElectionsStatsSerializer(latest).data["stats"]["benchmark"] == result
+        clock.return_value += 1
+        assert ElectionsStatsSerializer(latest).data["stats"]["benchmark"] is None
 
 
 @pytest.mark.django_db
@@ -580,24 +583,5 @@ def test_stats_always_include_benchmark(
     assert stats["benchmark"] == {"error": True}
     if not election_is_active:
         assert ElectionsStatsSerializer(current).data["stats"] == stats
-        assert _benchmark.call_count == 2
+        _benchmark.assert_called_once()
         _gamified.assert_called_once()
-
-
-@pytest.mark.django_db
-@patch(
-    "demsausage.app.serializers.get_election_benchmark",
-    return_value={"error": True},
-)
-def test_cached_stats_replace_a_stale_benchmark(_benchmark, local_cache, monkeypatch):
-    monkeypatch.setattr(Elections, "is_active", lambda self: False)
-    election = make_election("Past election", days_from_now(-1000))
-    local_cache.set(
-        get_election_stats_cache_key(election.id),
-        {"total": 42, "benchmark": None},
-    )
-
-    stats = ElectionsStatsSerializer(election).data["stats"]
-
-    assert stats == {"total": 42, "benchmark": {"error": True}}
-    _benchmark.assert_called_once()

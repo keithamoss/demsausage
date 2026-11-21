@@ -353,7 +353,7 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "triage_actions_by_day": list(_get_triage_actions_by_day()),
             "top_submitters": list(_get_top_submitters()),
             "noms_changes_by_user": getGamifiedElectionStats(obj.id),
-            "benchmark": None if is_inactive else get_election_benchmark(obj),
+            "benchmark": get_election_benchmark(obj),
         }
 
         if is_inactive:
