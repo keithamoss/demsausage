@@ -440,7 +440,7 @@ def build_diff(
             "quality_issues": sum(q["count"] for q in quality),
         },
         # Cosmetic-only differences don't count as changes.
-        "nothing_changed": not (changed or possible or added or removed),
+        "nothing_changed": not (changed or possible or added or removed or ((set(old_cols) ^ set(new_cols)) - ignore)),
         # Biggest first: warnings, accessibility getting worse, largest moves, most fields changed.
         "changed": sorted(changed, key=severity),
         # Least confident first.
