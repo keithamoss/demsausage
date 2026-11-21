@@ -70,6 +70,16 @@ def splink_row(record: Record, uid: str, label: str | None = None, group: str = 
             if record.has_coords
             else None
         ),
+        "g3": (
+            f"{_grid(record.lat, 0.005)}|{_grid(record.lon)}"
+            if record.has_coords
+            else None
+        ),
+        "g4": (
+            f"{_grid(record.lat)}|{_grid(record.lon, 0.005)}"
+            if record.has_coords
+            else None
+        ),
         "truth": label,
     }
 
@@ -121,6 +131,8 @@ def settings(all_pairs: bool = False, single_axis_level: bool = True):
         block_on("grp", "address"),
         block_on("grp", "g1"),
         block_on("grp", "g2"),
+        block_on("grp", "g3"),
+        block_on("grp", "g4"),
     ]
     if all_pairs:
         blocking = ["l.grp = r.grp"]
@@ -156,6 +168,12 @@ def _linker(left_rows: list[dict], right_rows: list[dict], model: Any):
         model,
         log_level=logging.ERROR,
     )
+
+
+def _match_prior(n_left: int, n_right: int) -> float:
+    if n_left <= 0 or n_right <= 0:
+        return 0.5
+    return min(min(n_left, n_right) / (n_left * n_right), 0.5)
 
 
 def labelled_rows(pairs: Sequence[tuple[str, Dataset, Dataset]]) -> tuple[list[dict], list[dict]]:
@@ -278,7 +296,7 @@ class SplinkMatcher:
         )
         model["retain_intermediate_calculation_columns"] = True
         # Within one comparison, at most min(n) of the n_left * n_right pairs are matches.
-        model["probability_two_random_records_match"] = min(n_left, n_right) / (n_left * n_right)
+        model["probability_two_random_records_match"] = _match_prior(n_left, n_right)
         return model
 
     def score(
@@ -300,9 +318,8 @@ class SplinkMatcher:
 
         if self.unsupervised:
             _, _, _, _, block_on = _splink()
-            n = min(len(left_rows), len(right_rows))
-            linker._settings_obj._probability_two_random_records_match = n / (
-                len(left_rows) * len(right_rows)
+            linker._settings_obj._probability_two_random_records_match = _match_prior(
+                len(left_rows), len(right_rows)
             )
             linker.training.estimate_u_using_random_sampling(max_pairs=2e6, seed=1)
             for rule in (block_on("name"), block_on("g1")):

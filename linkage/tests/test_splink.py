@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import random
 
 import pytest
@@ -7,7 +8,12 @@ from helpers import dataset, place
 
 pytest.importorskip("splink")
 
-from linkage.matchers.splink_matcher import DEFAULT_MODEL_PATH, SplinkMatcher, train_from_labels  # noqa: E402
+from linkage.matchers.splink_matcher import (
+    DEFAULT_MODEL_PATH,
+    SplinkMatcher,
+    splink_row,
+    train_from_labels,
+)  # noqa: E402
 from linkage.pipeline import link  # noqa: E402
 
 STREETS = ["Main", "High", "Church", "Station", "Park", "King", "Queen", "George", "Victoria", "Albert"]
@@ -93,3 +99,47 @@ def test_single_axis_coordinate_typo_does_not_veto_a_match(model):
     assert pairs and pairs[0].explain["mw_geo"] > -3
     geo = next(c for c in model["comparisons"] if c["output_column_name"] == "lat_lon")
     assert any("typo" in (lv.get("label_for_charts") or "") for lv in geo["comparison_levels"])
+
+
+@pytest.mark.parametrize(
+    ("left_coords", "right_coords", "matching_grid"),
+    [
+        ((-33.0049, 151.0001), (-33.0051, 150.9999), "g3"),
+        ((-33.0001, 151.0049), (-32.9999, 151.0051), "g4"),
+    ],
+)
+def test_splink_blocks_across_both_coordinate_grid_axes(
+    model, left_coords, right_coords, matching_grid
+):
+    left = dataset([place("left", "Old Hall", "Old Hall", "1 Old Road", *left_coords)])
+    right = dataset([place("right", "New School", "New School", "2 New Road", *right_coords)])
+    left_row = splink_row(left.records[0], "L:0")
+    right_row = splink_row(right.records[0], "R:0")
+    assert left_row["g1"] != right_row["g1"]
+    assert left_row["g2"] != right_row["g2"]
+    assert left_row[matching_grid] == right_row[matching_grid]
+
+    pairs = SplinkMatcher(
+        model=model, review_threshold=0.0, all_pairs_limit=0
+    ).score(left, right, [0], [0])
+    assert [(pair.left, pair.right) for pair in pairs] == [(0, 0)]
+
+
+@pytest.mark.parametrize("unsupervised", [False, True])
+@pytest.mark.parametrize("matching", [False, True], ids=["unrelated", "matching"])
+def test_singleton_inputs_have_finite_match_weights(model, unsupervised, matching):
+    left_record = place("left", "Northside Primary School", "Northside School", "1 Main Road")
+    right_record = (
+        dict(left_record, id="right")
+        if matching
+        else place("right", "Westbury Community Hall", "Westbury Hall", "99 Other Road")
+    )
+    left = dataset([left_record])
+    right_dataset = dataset([right_record])
+    matcher = SplinkMatcher(model=model, unsupervised=unsupervised, review_threshold=0.0)
+
+    pairs = matcher.score(left, right_dataset, [0], [0])
+
+    assert pairs
+    assert all(math.isfinite(pair.rank) for pair in pairs)
+    assert all(0 <= pair.score <= 1 for pair in pairs)
