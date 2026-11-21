@@ -60,7 +60,8 @@ class Evaluation:
 
     @property
     def precision(self) -> float:
-        return self.correct / self.links if self.links else 1.0
+        judged_links = self.links + self.false_links
+        return self.correct / judged_links if judged_links else 1.0
 
     @property
     def recall(self) -> float:
