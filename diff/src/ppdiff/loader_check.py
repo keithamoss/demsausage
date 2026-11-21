@@ -48,6 +48,12 @@ def as_loaded(d: Dataset, config: dict[str, Any], fixes: bool) -> tuple[list[dic
     return rows, regex_errors
 
 
+def pre_fix_rows_by_index(d: Dataset, config: dict[str, Any]) -> dict[int, dict]:
+    """Rows as the loader sees them before fix_data_issues, keyed by source row index."""
+    rows, _ = as_loaded(d, config, fixes=False)
+    return {row[_ROW]: row for row in rows}
+
+
 def _label(d: Dataset, row: dict) -> str:
     return d.records[row[_ROW]].label()
 

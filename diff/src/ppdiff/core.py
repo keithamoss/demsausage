@@ -265,6 +265,7 @@ def suggested_fixes(
     quality: list[dict[str, Any]],
     rename: dict[str, str],
     large_move_m: float = LARGE_MOVE_M,
+    selector_rows: dict[int, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Draft fix_data_issues entries for the loader's config.json, for problems a human confirms.
 
@@ -272,17 +273,28 @@ def suggested_fixes(
     value. They are suggestions: only copy one in after checking the map.
     """
     name_col, lat_col, lon_col = new.columns.name, new.columns.lat, new.columns.lon
-    name_counts: dict[str, int] = {}
-    for r in new.records:
-        value = r.raw.get(name_col, "")
-        name_counts[value] = name_counts.get(value, 0) + 1
+    selector_field = _schema(name_col, rename)
+    rows_by_index = selector_rows if selector_rows is not None else {
+        r.index: {selector_field: r.raw.get(name_col, "")} for r in new.records
+    }
 
-    def selector(new_index: int) -> tuple[dict[str, str], str | None]:
-        value = new.records[new_index].raw.get(name_col, "")
+    def selector(new_index: int) -> tuple[dict[str, str] | None, str | None]:
+        source_index = new.records[new_index].index
+        row = rows_by_index.get(source_index)
+        if selector_field is None or row is None or selector_field not in row:
+            return None, "No pre-fix loader row has this selector field; a safe fix cannot be drafted."
+        value = str(row[selector_field])
+        matching_indices = [
+            index
+            for index, candidate in rows_by_index.items()
+            if selector_field in candidate and str(candidate[selector_field]) == value
+        ]
+        if source_index not in matching_indices:
+            return None, "The loader selector does not match this place; a safe fix cannot be drafted."
         note = None
-        if name_counts.get(value, 0) > 1:
-            note = f"{name_counts[value]} places are named {value!r}: this fix would change all of them."
-        return {"field": _schema(name_col, rename), "value": value}, note
+        if len(matching_indices) > 1:
+            note = f"{len(matching_indices)} places are named {value!r}: this fix would change all of them."
+        return {"field": selector_field, "value": value}, note
 
     others = [(r.lat, r.lon) for r in new.records if r.has_coords]
 
@@ -341,7 +353,7 @@ def suggested_fixes(
                         {"field": _schema(lat_col, rename), "value": loc["old"][0]},
                         {"field": _schema(lon_col, rename), "value": loc["old"][1]},
                     ],
-                },
+                } if sel else None,
             }
         )
     for q in quality:
@@ -359,7 +371,7 @@ def suggested_fixes(
                     "no_fix_needed": False,
                     "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",
                     "note": note,
-                    "fix": {**sel, "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}]},
+                    "fix": {**sel, "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}]} if sel else None,
                 }
             )
     return fixes
@@ -385,6 +397,7 @@ def build_diff(
     link_output: dict[str, Any],
     settings: Settings | None = None,
     rename: dict[str, str] | None = None,
+    selector_rows: dict[int, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     settings = settings or Settings()
     ignore = set(settings.ignore)
@@ -451,7 +464,9 @@ def build_diff(
         "removed": sorted(removed, key=lambda e: e["name"]),
         "replacements": replacements,
         "quality": quality,
-        "suggested_fixes": suggested_fixes(old, new, changed + possible, quality, rename, settings.large_move_m),
+        "suggested_fixes": suggested_fixes(
+            old, new, changed + possible, quality, rename, settings.large_move_m, selector_rows
+        ),
         "settings": settings.to_dict(),
         "context_points": context_points(new),
     }

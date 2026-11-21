@@ -231,6 +231,25 @@ def test_fix_fields_use_the_loaders_renamed_columns(tmp_path):
     assert fix["fix"]["field"] == "name" and [o["field"] for o in fix["fix"]["overwrite"]] == ["lat", "lon"]
 
 
+def test_suggested_fix_selector_uses_loader_cleaned_name(tmp_path):
+    good, typo = _typo_files(tmp_path)
+    typo[0]["name"] += " Polling Place"
+    election = tmp_path / "fed"
+    (election / "data").mkdir(parents=True)
+    (election / "config.json").write_text(json.dumps({
+        "cleaning_regexes": [{"field": "name", "regex": "^(?P<main>.+) Polling Place$"}],
+    }))
+    old = _write(election / "data" / "20260101 a.csv", good)
+    new = _write(election / "data" / "20260102 b.csv", typo)
+
+    d = json.loads((run_pair(old, new, election / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
+
+    (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
+    assert fix["fix"]["field"] == "name"
+    assert fix["fix"]["value"] == "Northam Hall 0"
+    assert fix["fix"]["value"] != typo[0]["name"]
+
+
 def test_nothing_changed_flag_and_latest_command(tmp_path, capsys):
     from ppdiff.cli import main
 
