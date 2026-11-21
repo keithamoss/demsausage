@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Scraper for the NSW Coffs Harbour State By-Election (2026).
+Scraper for the City of Coffs Harbour Council By-Election (12 Dec 2026),
+part of NSWEC's "December 2026 Local Government By-Elections" event (LB2615).
 
 Pulls polling places from the NSWEC map's PlacemarkApi (the same API the
 nsw_by_2024 scraper uses) and writes a CSV in the same shape as
@@ -8,12 +9,11 @@ nsw_kiama_2026/data, so the existing config.json can be used to load it.
 
 Usage:
     python scraper.py                 # uses EVENT_ID below
-    python scraper.py SB2601-020      # override the event/district ID
+    python scraper.py LB2615-031      # override the event/area ID
 
-Event IDs are "<event>-<district>". Coffs Harbour is district 020 (stable
-across events, e.g. SG2301-020 for the 2023 general election). The event
-code for the by-election (e.g. SB2601) is listed at
-https://map.elections.nsw.gov.au/ once NSWEC publish it.
+IDs are "<event>-<area>". For local government events the area is the council
+(Coffs Harbour = 031); for state events it's the electoral district (Coffs
+Harbour = 020). Event codes are listed at https://map.elections.nsw.gov.au/.
 """
 
 import csv
@@ -23,7 +23,7 @@ import sys
 
 import requests
 
-EVENT_ID = "SB2601-020"
+EVENT_ID = "LB2615-031"
 DISTRICT_NAME = "Coffs Harbour"
 API_URL = "https://map.elections.nsw.gov.au/PlacemarkApi.ashx?mode=PP&ID={event_id}"
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
