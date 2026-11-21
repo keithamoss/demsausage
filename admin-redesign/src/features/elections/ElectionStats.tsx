@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import type {} from '@mui/x-charts/themeAugmentation';
-import { useNotifications } from '@toolpad/core';
+import { NotificationsProvider, useNotifications } from '@toolpad/core';
 import dayjs from 'dayjs';
 import { round, sortBy } from 'lodash-es';
 import React from 'react';
@@ -31,6 +31,7 @@ import { StallStatus, StallSubmitterType, getStallSubmitterTypeName } from '../.
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
 import PendingStallsGamifiedUserStatsBar from '../pendingStalls/list/PendingStallsGamifiedUserStatsBar';
+import ElectionTrackingCard from './ElectionTrackingCard';
 import { selectAllElections } from './electionsSlice';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -74,6 +75,31 @@ interface Props {
 
 const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1) || 0;
 
+function StatsContentWithTrackingNotice({ children }: { children: React.ReactNode }) {
+	return (
+		<NotificationsProvider
+			slotProps={{
+				snackbar: {
+					anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+					style: { position: 'relative', inset: 'auto', transform: 'none' },
+					sx: {
+						flexShrink: 0,
+						alignSelf: 'center',
+						maxWidth: '100%',
+						maxHeight: '40vh',
+						overflowY: 'auto',
+						p: 1,
+					},
+				},
+			}}
+		>
+			<Paper elevation={0} sx={{ p: 2, flex: '1 1 auto', minHeight: 0, overflowY: 'auto' }}>
+				{children}
+			</Paper>
+		</NotificationsProvider>
+	);
+}
+
 function ElectionStats(props: Props) {
 	const { election, elections, onClose } = props;
 
@@ -111,13 +137,13 @@ function ElectionStats(props: Props) {
 						<Close />
 					</IconButton>
 
-					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="h1">
 						Election Stats
 					</Typography>
 				</Toolbar>
 			</AppBar>
 
-			<Paper elevation={0} sx={{ p: 2 }}>
+			<StatsContentWithTrackingNotice>
 				{/* ######################
 						Polling places with data 
 						(Current and historical elections)
@@ -138,12 +164,19 @@ function ElectionStats(props: Props) {
 							</Avatar>
 						}
 						title="Polling places with data"
+						slotProps={{ title: { component: 'h2' } }}
 					/>
 
-					<CardContent sx={{ pt: 2, pb: '16px !important' }}>
-						<Typography variant="body1" sx={{ mb: 2 }}>
-							Polling places with data of any sort - noms or Red Cross of Shame.
-						</Typography>
+					<CardContent
+						sx={{
+							pt: 2,
+							pb: '16px !important',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2,
+						}}
+					>
+						<Typography variant="body1">Polling places with data of any sort - noms or Red Cross of Shame.</Typography>
 
 						<BarChart
 							dataset={datasetPollingPlaceWithData}
@@ -218,6 +251,10 @@ function ElectionStats(props: Props) {
 						/>
 					</CardContent>
 				</Card>
+
+				{election.stats.benchmark !== null && (
+					<ElectionTrackingCard benchmark={election.stats.benchmark} electionName={election.name} />
+				)}
 
 				{/* ######################
 						Polling places with data by source
@@ -614,7 +651,7 @@ function ElectionStats(props: Props) {
 						</CardContent>
 					</Card>
 				)}
-			</Paper>
+			</StatsContentWithTrackingNotice>
 		</DialogWithTransition>
 	);
 }
