@@ -92,7 +92,7 @@ describe('ElectionTrackingCard', () => {
 		expect(screen.getByRole('heading', { name: "How we're tracking" })).toBeInTheDocument();
 		expect(screen.getByText('Days before election day').closest('svg')).toBe(screen.getByTestId('tracking-chart'));
 		expect(screen.queryByRole('table')).not.toBeInTheDocument();
-		const todayNote = screen.getByText(/Today's figure only includes reports received so far/);
+		const todayNote = screen.getByText(/Today's figure includes all reports received so far/);
 		const historyNote = screen.getByText(/Past figures use information still held today/);
 		expect(todayNote.tagName).toBe('P');
 		expect(historyNote.tagName).toBe('P');
