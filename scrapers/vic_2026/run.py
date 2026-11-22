@@ -2,11 +2,19 @@
 """
 Scrape, transform, then diff against the previous output. Stops at the first step that fails.
 
-Usage: python run.py [--fresh]
+The diff here (diff.py) compares by VEC venue ID. After it, the repo's generic polling place
+diff (diff/, linkage-based, one diff per matcher) also runs into diffs-linkage/; a failure
+there doesn't fail the run.
+
+Usage: python run.py [--fresh] [--no-linkage-diff]
 """
 
 import argparse
+import os
+import shutil
+import subprocess
 import sys
+from pathlib import Path
 
 import diff
 import scrape
@@ -14,7 +22,45 @@ import transform
 from common import output_paths
 
 
-def main(fresh: bool) -> int:
+HERE = Path(__file__).resolve().parent
+
+
+def linkage_diff() -> None:
+    """Run the repository's generic diff on the newest two polling-place files.
+
+    The scraper succeeds even if the optional diff is unavailable or fails.
+
+    Returns:
+        ``None``.
+    """
+    if shutil.which("uv") is None:
+        print("\nSkipping the linkage diff: uv isn't installed.")
+        return
+    print("\nLinkage diff (diffs-linkage/):")
+    result = subprocess.run(
+        [
+            "uv", "run", "--project", str(HERE.parent.parent / "diff"), "ppdiff", "latest",
+            str(HERE / "data" / "*polling places.csv"), "--out-dir", str(HERE / "diffs-linkage"),
+        ],
+        check=False,
+        # Let uv use the diff project's own environment, not this scraper's.
+        env={k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"},
+    )
+    if result.returncode != 0:
+        print("The linkage diff failed (the run itself is fine). See the output above.")
+
+
+def main(fresh: bool, run_linkage_diff: bool = True) -> int:
+    """Scrape, transform, and compare the latest output with the previous one.
+
+    Args:
+        fresh: Start a new scrape instead of resuming an incomplete one.
+        run_linkage_diff: Whether to also run the generic linkage-based diff.
+
+    Returns:
+        A non-zero status if scraping or transforming fails; otherwise the
+        scraper-specific diff's status.
+    """
     if scrape.main(fresh=fresh) != 0:
         return 1
     print()
@@ -24,7 +70,10 @@ def main(fresh: bool) -> int:
         print("\nFirst output; nothing to diff against yet.")
         return 0
     print()
-    return diff.main()
+    status = diff.main()
+    if run_linkage_diff:
+        linkage_diff()
+    return status
 
 
 if __name__ == "__main__":
@@ -36,4 +85,10 @@ if __name__ == "__main__":
         action="store_true",
         help="start a new scrape instead of resuming an incomplete one",
     )
-    sys.exit(main(parser.parse_args().fresh))
+    parser.add_argument(
+        "--no-linkage-diff",
+        action="store_true",
+        help="skip the generic linkage-based diff into diffs-linkage/",
+    )
+    args = parser.parse_args()
+    sys.exit(main(args.fresh, not args.no_linkage_diff))

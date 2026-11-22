@@ -9,6 +9,7 @@ can be mapped explicitly.
 from __future__ import annotations
 
 import csv
+import math
 import re
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
@@ -158,12 +159,20 @@ def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
 
 
 def _to_float(value: str | None) -> float | None:
+    """Read one coordinate, treating invalid values and zero as missing.
+
+    Args:
+        value: The coordinate text from the source file.
+
+    Returns:
+        A finite, non-zero number, or ``None`` if the coordinate is missing or invalid.
+    """
     try:
         number = float(value)  # type: ignore[arg-type]
     except (TypeError, ValueError):
         return None
-    # 0,0 is a "no coordinates" placeholder in some commission files.
-    return None if number == 0 else number
+    # A zero on either axis is treated as a missing coordinate.
+    return None if number == 0 or not math.isfinite(number) else number
 
 
 def _split_divisions(value: str | None) -> frozenset[str]:
@@ -173,6 +182,15 @@ def _split_divisions(value: str | None) -> frozenset[str]:
 def records_from_rows(
     rows: Sequence[dict[str, str]], columns: ColumnMap
 ) -> list[Record]:
+    """Turn source rows into records used by the matchers.
+
+    Args:
+        rows: Source rows in their original order.
+        columns: The source columns that hold each record field.
+
+    Returns:
+        Records indexed by row position; incomplete coordinate pairs are missing.
+    """
     records = []
     for index, row in enumerate(rows):
 
@@ -180,14 +198,17 @@ def records_from_rows(
             return (row.get(column) or "").strip() if column else ""
 
         source_id = get(columns.id) or None
+        lat, lon = _to_float(get(columns.lat)), _to_float(get(columns.lon))
+        if lat is None or lon is None:
+            lat, lon = None, None
         records.append(
             Record(
                 index=index,
                 name=get(columns.name),
                 premises=get(columns.premises),
                 address=", ".join(get(c) for c in columns.address if get(c)),
-                lat=_to_float(get(columns.lat)),
-                lon=_to_float(get(columns.lon)),
+                lat=lat,
+                lon=lon,
                 divisions=_split_divisions(get(columns.divisions)),
                 source_id=source_id,
                 raw=dict(row),
@@ -198,11 +219,19 @@ def records_from_rows(
 
 @dataclass
 class Dataset:
-    """A loaded file: its records, the column map used and where it came from."""
+    """A loaded file and the information used to interpret it.
+
+    Attributes:
+        path: The source file's path.
+        columns: The mapping from source columns to record fields.
+        records: The polling places read from the file.
+        header: Source column names in order, or ``None`` for an in-memory dataset.
+    """
 
     path: str
     columns: ColumnMap
     records: list[Record]
+    header: list[str] | None = None
 
     def fields_present(self) -> set[str]:
         """Fields with a value in at least one record."""
@@ -229,8 +258,8 @@ def load_csv(
 ) -> Dataset:
     """Load a CSV. Rows failing `row_filter` are dropped before indexing."""
     with open(path, newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        header = reader.fieldnames or []
+        reader = csv.DictReader(f, restval="")
+        header = list(reader.fieldnames or [])
         rows = [row for row in reader if row_filter is None or row_filter(row)]
     columns = columns or ColumnMap.detect(header, id_column=id_column)
-    return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns))
+    return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns), header=header)
