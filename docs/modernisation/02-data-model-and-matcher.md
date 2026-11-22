@@ -13,7 +13,7 @@
 - Migration: stop cloning rows per load (Draft, Active, Archived), and keep the API shape compatible.
 
 ## 4. Matching decision (final)
-Use a hand-built matcher: rapidfuzz scoring plus `scipy.optimize.linear_sum_assignment`. Splink was evaluated and is not adopted.
+Use a hand-built matcher: rapidfuzz scoring plus `scipy.optimize.linear_sum_assignment`. Splink was evaluated and is not adopted. (Revisited 2026-11-21: that evaluation was inconclusive, so both are now being built and compared on real scrapes; see "How fair was the Splink comparison?" in section 6.)
 
 1. **Normalise:** Unicode-fold, lowercase, `&` to "and", strip punctuation. Drop the noise words (polling, place, centre, election, day, early, voting, and, the, district, pre, poll). Sort the divisions.
 2. **Exact-key pass first:** `n2(name)` plus sorted divisions, then the matcher on the leftovers.
@@ -40,6 +40,15 @@ Use a hand-built matcher: rapidfuzz scoring plus `scipy.optimize.linear_sum_assi
 - Cross-election venue-link quality was deprioritised and is weaker.
 - Splink's untested strengths: calibrated probabilities and explainability charts. It needs explicit DuckDB memory limits, labelled matches to train, and per-jurisdiction training.
 - No production DB access, so real review-queue load is estimated, not measured (roughly 3-13% cross-election per jurisdiction).
+
+### How fair was the Splink comparison? (added 2026-11-21)
+The "not adopted" decision is weaker than it reads. Splink did get labelled training data, but the test could not separate the two methods:
+- Training: unsupervised EM in `shoot.py`; supervised from half-labelled data in `fair.py`, `fair2.py` (synthetic drift) and `fair_real.py` (real federal 2025, labelled by `PPId`); trained on one real dataset and applied to another in `fair3.py`. "DuckDB tuning" was only `SET memory_limit='2GB'`, which affects memory, not accuracy.
+- The real-data samples were tiny (16 federal changes, 8 SA; `fair_real.py` scores half of them), so a tie means little.
+- Only the hand matcher was tuned (`tune.py`). Splink's comparison thresholds were set once, and its term-frequency adjustments (rare names count for more) were not used.
+- Both methods were tuned or trained on the same synthetic drift, so that does not explain Splink's lead there.
+
+The hand matcher was chosen for practical reasons (no training, small dependencies, easy to explain), not proven accuracy. Decision since: build both behind one linkage module, run them side by side on real scrapes, and evaluate on those results. See `linkage/`.
 
 ## 7. Next steps
 1. Port the matcher into a module with unit tests, including the 16 real federal booth cases. Follow `.github/instructions/testing.instructions.md` for any `django/**` changes.
