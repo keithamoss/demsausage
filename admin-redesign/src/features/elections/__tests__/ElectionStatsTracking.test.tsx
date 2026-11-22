@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { NotificationsProvider } from '@toolpad/core';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -6,7 +6,7 @@ import type { Election } from '../../../app/services/elections';
 import { eJurisdiction } from '../../icons/jurisdictionHelpers';
 import ElectionStats from '../ElectionStats';
 
-vi.mock('../../../app/hooks', () => ({ useAppSelector: () => [] }));
+vi.mock('../../../app/hooks', () => ({ useAppSelector: () => [referenceElection] }));
 
 const chartRef = vi.hoisted(() => ({
 	current: null as SVGSVGElement | null,
@@ -78,6 +78,7 @@ const election: Election = {
 		noms_changes_by_user: [],
 	},
 };
+const referenceElection: Election = { ...election, id: 2, election_day: '2022-11-25T16:00:00Z' };
 
 describe('Election stats tracking notice', () => {
 	it('reserves a separate footer for notices and lets the chart selection change', async () => {
@@ -99,13 +100,19 @@ describe('Election stats tracking notice', () => {
 		});
 		fireEvent.click(svg, { clientX: 100, clientY: 50 });
 		const notice = (await screen.findByText('Election day')).closest('.MuiSnackbar-root');
-		expect(notice).toBeInTheDocument();
+		if (!(notice instanceof HTMLElement)) throw new Error('Tracking notice was not rendered');
+		expect(within(notice).getByText('21 Nov 2026')).toBeInTheDocument();
+		expect(within(notice).getByText('26 Nov 2022')).toBeInTheDocument();
+		expect(within(notice).getByText('80%')).toBeInTheDocument();
+		expect(within(notice).getByText('16 of 20')).toBeInTheDocument();
 		expect(content?.parentElement).toBe(notice?.parentElement);
 		expect(content).toHaveStyle({ overflowY: 'auto', minHeight: '0' });
 		expect(notice).toHaveStyle({ position: 'relative', inset: 'auto', transform: 'none', flexShrink: '0' });
 
 		fireEvent.click(svg, { clientX: 0, clientY: 50 });
 		expect(await screen.findByText('1 day before election day')).toBeInTheDocument();
+		expect(screen.getByText('20 Nov 2026')).toBeInTheDocument();
+		expect(screen.getByText('25 Nov 2022')).toBeInTheDocument();
 		expect(chart?.querySelectorAll('[data-chart-selection] circle')).toHaveLength(2);
 	});
 });

@@ -8,6 +8,7 @@ import {
 	CardHeader,
 	IconButton,
 	Paper,
+	Snackbar,
 	Table,
 	TableBody,
 	TableCell,
@@ -75,21 +76,37 @@ interface Props {
 
 const calcPercentageOfPollingPlaceWithData = (e: Election) => round((e.stats.with_data / e.stats.total) * 100, 1) || 0;
 
+const TrackingSnackbar = styled(Snackbar)(({ theme }) => ({
+	flexShrink: 0,
+	alignSelf: 'center',
+	width: 'min(440px, 100%)',
+	maxWidth: '100%',
+	maxHeight: '40vh',
+	overflowY: 'auto',
+	padding: theme.spacing(1),
+	'& .MuiAlert-root': {
+		position: 'relative',
+		display: 'block',
+		backgroundColor: theme.palette.background.paper,
+		color: theme.palette.text.primary,
+		border: `1px solid ${theme.palette.divider}`,
+		borderRadius: theme.shape.borderRadius * 2,
+		boxShadow: theme.shadows[3],
+		padding: theme.spacing(2),
+	},
+	'& .MuiAlert-icon': { display: 'none' },
+	'& .MuiAlert-message': { width: '100%', overflow: 'visible', padding: 0 },
+	'& .MuiAlert-action': { position: 'absolute', top: 12, right: 12, margin: 0, padding: 0 },
+}));
+
 function StatsContentWithTrackingNotice({ children }: { children: React.ReactNode }) {
 	return (
 		<NotificationsProvider
+			slots={{ snackbar: TrackingSnackbar }}
 			slotProps={{
 				snackbar: {
 					anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
 					style: { position: 'relative', inset: 'auto', transform: 'none' },
-					sx: {
-						flexShrink: 0,
-						alignSelf: 'center',
-						maxWidth: '100%',
-						maxHeight: '40vh',
-						overflowY: 'auto',
-						p: 1,
-					},
 				},
 			}}
 		>
@@ -104,6 +121,9 @@ function ElectionStats(props: Props) {
 	const { election, elections, onClose } = props;
 
 	const notifications = useNotifications();
+	const benchmark = election.stats.benchmark;
+	const referenceElection =
+		benchmark && !benchmark.error ? elections.find((e) => e.id === benchmark.election_id) : undefined;
 
 	const datasetPollingPlaceWithData = elections
 		.filter((e) => {
@@ -253,7 +273,11 @@ function ElectionStats(props: Props) {
 				</Card>
 
 				{election.stats.benchmark !== null && (
-					<ElectionTrackingCard benchmark={election.stats.benchmark} electionName={election.name} />
+					<ElectionTrackingCard
+						benchmark={election.stats.benchmark}
+						election={election}
+						referenceElection={referenceElection}
+					/>
 				)}
 
 				{/* ######################

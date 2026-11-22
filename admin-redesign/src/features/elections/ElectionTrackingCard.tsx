@@ -1,5 +1,5 @@
 import StackedLineChart from '@mui/icons-material/StackedLineChart';
-import { AlertTitle, Avatar, Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import {
 	ChartsAxisHighlight,
 	ChartsGrid,
@@ -16,11 +16,14 @@ import {
 } from '@mui/x-charts';
 import { useNotifications } from '@toolpad/core';
 import { useEffect, useRef, useState } from 'react';
-import type { ElectionStatsBenchmark } from '../../app/services/elections';
+import type { Election, ElectionStatsBenchmark } from '../../app/services/elections';
 import { mapaThemePrimaryPurple } from '../../app/ui/theme';
+import TrackingNotice from './TrackingNotice';
 
 type Tracking = Extract<ElectionStatsBenchmark, { error: false }>;
 type TrackingPoint = Tracking['points'][number];
+type ElectionDetails = Pick<Election, 'name' | 'short_name' | 'election_day'>;
+type ReferenceElectionDetails = Pick<Election, 'short_name' | 'election_day'>;
 
 const referenceColor = '#526372';
 const aheadColor = '#d8c6f4';
@@ -37,20 +40,6 @@ const todayColor = '#555';
  */
 function formatDay(daysOut: number) {
 	return daysOut === 0 ? 'Election day' : `${daysOut} ${daysOut === 1 ? 'day' : 'days'} before election day`;
-}
-
-/**
- * Describes how many polling places have data, or says when the figures are unavailable.
- * @param percentage - The percentage with data, or null when it is not available.
- * @param count - The number with data, or null when it is not available.
- * @param total - The total number of active polling places.
- * @returns The percentage and counts, or "Not yet available".
- * @example
- * formatCoverage(50, 5, 10); // "50% (5 of 10)"
- * formatCoverage(null, null, 10); // "Not yet available"
- */
-function formatCoverage(percentage: number | null, count: number | null, total: number) {
-	return percentage === null ? 'Not yet available' : `${percentage}% (${count} of ${total})`;
 }
 
 /**
@@ -89,18 +78,22 @@ function ChartClickHandler({
 				console.error('Cannot select a chart day: chart coordinates are unavailable.');
 				return;
 			}
+
+			// Convert the screen position into chart coordinates before checking its bounds.
 			const location = svg.createSVGPoint();
 			location.x = event.clientX;
 			location.y = event.clientY;
 			const position = location.matrixTransform(transform.inverse());
 			if (!isPointInside(position)) return;
 
+			// Snap to the closest available day, rather than requiring a precise click.
 			const daysOut = -xScale.invert(position.x);
 			const closest = points.reduce((best, point) =>
 				Math.abs(point.days_out - daysOut) < Math.abs(best.days_out - daysOut) ? point : best,
 			);
 			onSelect(closest);
 		};
+
 		svg.addEventListener('click', handleClick);
 		return () => svg.removeEventListener('click', handleClick);
 	}, [svgRef, xScale, isPointInside, points, onSelect]);
@@ -162,8 +155,11 @@ type SegmentPoint = { svgX: number; currentPercentage: number; referencePercenta
 function findCrossing(start: SegmentPoint, end: SegmentPoint): SegmentPoint {
 	const startGap = start.currentPercentage - start.referencePercentage;
 	const endGap = end.currentPercentage - end.referencePercentage;
+
+	// Interpolate between the days in proportion to the size of their gaps.
 	const fraction = Math.abs(startGap) / (Math.abs(startGap) + Math.abs(endGap));
 	const percentage = start.currentPercentage + (end.currentPercentage - start.currentPercentage) * fraction;
+
 	return {
 		svgX: start.svgX + (end.svgX - start.svgX) * fraction,
 		currentPercentage: percentage,
@@ -185,9 +181,11 @@ function DifferenceArea({ points }: { points: Tracking['points'] }) {
 		<g>
 			{points.slice(1).flatMap((point, index) => {
 				const previous = points[index];
+
 				// Without current-election data for both days, there is no gap to shade.
 				if (previous.current === null || point.current === null) return [];
 
+				// Turn each day into a chart position and a pair of percentages.
 				const start = {
 					svgX: xScale(-previous.days_out),
 					currentPercentage: previous.current,
@@ -198,8 +196,11 @@ function DifferenceArea({ points }: { points: Tracking['points'] }) {
 					currentPercentage: point.current,
 					referencePercentage: point.reference,
 				};
+
+				// The sign of the gap tells us which election is ahead.
 				const startGap = start.currentPercentage - start.referencePercentage;
 				const endGap = end.currentPercentage - end.referencePercentage;
+
 				/**
 				 * Draws one piece of the shaded gap between the lines.
 				 * @param from - Where the piece starts on the chart and the percentages there.
@@ -214,6 +215,7 @@ function DifferenceArea({ points }: { points: Tracking['points'] }) {
 						fill={ahead ? aheadColor : behindColor}
 					/>
 				);
+
 				if (startGap * endGap < 0) {
 					// Split the shading at the crossing so each side gets the right colour.
 					const crossing = findCrossing(start, end);
@@ -243,6 +245,8 @@ function TrackingChart({
 	onSelect: (point: TrackingPoint) => void;
 }) {
 	const showTodayMarker = benchmark.is_active && benchmark.today_days_out > 0;
+
+	// Store the day, not its array position, so it remains selected if the timeline changes.
 	const [selectedDaysOut, setSelectedDaysOut] = useState<number | null>(null);
 	const selected = benchmark.points.find((point) => point.days_out === selectedDaysOut);
 
@@ -251,6 +255,8 @@ function TrackingChart({
 			<Typography variant="body2">
 				Percentage of active polling places with data, by days before election day.
 			</Typography>
+
+			{/* Different line styles distinguish the elections without relying on colour alone. */}
 			<Box
 				component="ul"
 				// biome-ignore lint/a11y/useSemanticElements: Safari needs a role for flex lists without markers.
@@ -267,6 +273,8 @@ function TrackingChart({
 					</Box>
 				))}
 			</Box>
+
+			{/* The shading key and Today marker explain the chart's additional cues. */}
 			<Box
 				component="ul"
 				// biome-ignore lint/a11y/useSemanticElements: Safari needs a role for flex lists without markers.
@@ -291,6 +299,7 @@ function TrackingChart({
 					</Box>
 				)}
 			</Box>
+
 			<Box sx={{ width: 'calc(100% + 24px)', ml: '-12px', aspectRatio: '1.4', maxHeight: 400, mt: 2 }}>
 				<ResponsiveChartContainer
 					series={[
@@ -339,6 +348,7 @@ function TrackingChart({
 					}}
 				>
 					<ChartsGrid horizontal />
+					{/* Keep the shading behind the lines and selection markers. */}
 					<DifferenceArea points={benchmark.points} />
 					<LinePlot skipAnimation />
 					<ChartsAxisHighlight x="line" />
@@ -363,12 +373,14 @@ function TrackingChart({
 					<ChartsTooltip trigger="axis" />
 				</ResponsiveChartContainer>
 			</Box>
+
 			{benchmark.is_active && (
 				<Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
 					Today's figure includes all reports received so far. The previous election's figure includes reports from the
 					whole corresponding day.
 				</Typography>
 			)}
+
 			<Typography variant="body2" color="text.secondary" sx={{ mt: benchmark.is_active ? 1 : 2 }}>
 				Past figures use information still held today. They don't reflect deleted reports or changes to polling places.
 			</Typography>
@@ -378,17 +390,20 @@ function TrackingChart({
 
 /**
  * Shows the comparison card, or explains when the comparison is unavailable.
- * @param props - The comparison and the current election's name.
+ * @param props - The comparison and election details.
  * @param props.benchmark - The comparison figures, or a result saying they are unavailable.
- * @param props.electionName - Name of the current election.
+ * @param props.election - The current election's name, short name and date.
+ * @param props.referenceElection - The previous election's short name and date, if available.
  * @returns The tracking card.
  */
 export default function ElectionTrackingCard({
 	benchmark,
-	electionName,
+	election,
+	referenceElection,
 }: {
 	benchmark: Exclude<ElectionStatsBenchmark, null>;
-	electionName: string;
+	election: ElectionDetails;
+	referenceElection?: ReferenceElectionDetails;
 }) {
 	const notifications = useNotifications();
 	const previousNotification = useRef<string>();
@@ -401,16 +416,16 @@ export default function ElectionTrackingCard({
 	 */
 	const showPoint = (point: TrackingPoint, tracking: Tracking) => {
 		if (previousNotification.current) notifications.close(previousNotification.current);
+
 		previousNotification.current = notifications.show(
-			<>
-				<AlertTitle>{formatDay(point.days_out)}</AlertTitle>
-				<div>
-					{electionName}: {formatCoverage(point.current, point.current_count, tracking.current_total)}
-				</div>
-				<div>
-					{tracking.election_name}: {formatCoverage(point.reference, point.reference_count, tracking.total)}
-				</div>
-			</>,
+			<TrackingNotice
+				point={point}
+				tracking={tracking}
+				election={election}
+				referenceElection={referenceElection}
+				dayLabel={formatDay(point.days_out)}
+				referenceColor={referenceColor}
+			/>,
 			{ severity: 'success', autoHideDuration: 8000 },
 		);
 	};
@@ -436,7 +451,7 @@ export default function ElectionTrackingCard({
 				) : (
 					<TrackingChart
 						benchmark={benchmark}
-						electionName={electionName}
+						electionName={election.name}
 						onSelect={(point) => showPoint(point, benchmark)}
 					/>
 				)}
