@@ -155,6 +155,28 @@ def test_row_problems():
     assert loader_rules.row_problems({**good, "lat": "", "lon": "  "}) == []
 
 
+@pytest.mark.parametrize("field", ["lat", "lon"])
+def test_row_problems_rejects_null_coordinate(field):
+    """Report a null coordinate rather than treating it as a geocodable blank.
+
+    Args:
+        field: Coordinate field to set to None.
+    """
+    row = {
+        "name": "A",
+        "address": "1 St",
+        "state": "NSW",
+        "wheelchair_access": "Full",
+        "lat": "-33.1",
+        "lon": "151.2",
+        field: None,
+    }
+
+    assert loader_rules.row_problems(row) == [f"{field} None isn't a valid coordinate"]
+    del row[field]
+    assert loader_rules.row_problems(row) == [f"missing field {field!r}"]
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     [

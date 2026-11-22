@@ -445,8 +445,10 @@ def row_problems(row: Row) -> list[str]:
             f"state {row['state']!r} isn't one of {', '.join(STATE_VALUES)}"
         )
     for field, low, high in (("lat", -90, 90), ("lon", -180, 180)):
-        value = row.get(field)
-        if value is None or (isinstance(value, str) and not value.strip()):
+        if field not in row:
+            continue
+        value = row[field]
+        if isinstance(value, str) and not value.strip():
             continue  # blank coordinates are geocoded by the loader when geocoding is on
         if not _coordinate_is_valid(value, low, high):
             problems.append(f"{field} {value!r} isn't a valid coordinate")

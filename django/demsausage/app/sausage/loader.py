@@ -1030,15 +1030,17 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             )
                             return None
 
-            # We'll just use the first one - it'll probably be wrong but whatever
-            return polling_places[0]["divisions"][0]
+            # Use the first available division when boundaries are not configured.
+            return next(
+                (division for pp in polling_places for division in pp["divisions"]),
+                None,
+            )
 
         def _merge_divisions(polling_places):
             home_division = _find_home_division(polling_places)
 
             if home_division is None:
-                # find_home_division_error was already logged by _find_home_division;
-                # do not emit an additional redundant entry.
+                # Either no divisions were supplied, or boundary matching logged an error.
                 return []
 
             # Flatten and dedupe
