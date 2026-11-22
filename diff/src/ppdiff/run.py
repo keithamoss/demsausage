@@ -187,6 +187,7 @@ def run_pair(
     splink_model: str | None = None,
     large_move_m: float | None = None,
     replacement_radius_m: float | None = None,
+    rebuild_index: bool = True,
 ) -> Path:
     """Link and compare two source files, then write their report.
 
@@ -200,6 +201,7 @@ def run_pair(
         splink_model: Optional path to a Splink model file.
         large_move_m: Distance at which a location change is warned about.
         replacement_radius_m: Maximum distance for pairing a removed and added place.
+        rebuild_index: Whether to rebuild the series index after this pair.
 
     Returns:
         The folder containing this pair's linkage, diff, and HTML reports.
@@ -237,7 +239,8 @@ def run_pair(
             path.unlink()
     (target / "disagreements.json").write_text(json.dumps(disagreements(left, right, link_output, election), indent=2))
     write_report(target)
-    write_index(out_dir)
+    if rebuild_index:
+        write_index(out_dir)
     return target
 
 

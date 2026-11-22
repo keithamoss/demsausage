@@ -20,6 +20,25 @@ from .names import friendly_label
 TEMPLATE = Path(__file__).with_name("report_template.html")
 
 
+def selector_conflict(fixes: list[dict]) -> bool:
+    """Check whether one proposed fix could change another fix's selector.
+
+    Args:
+        fixes: Copyable loader fixes in the proposed list.
+
+    Returns:
+        ``True`` if applying them together needs a closer review of their order.
+    """
+    return any(
+        overwrite["field"] == other["field"]
+        and (fix["field"] != other["field"] or str(overwrite["value"]) != str(fix["value"]))
+        for i, fix in enumerate(fixes)
+        for j, other in enumerate(fixes)
+        if i != j
+        for overwrite in fix["overwrite"]
+    )
+
+
 def write_report(folder: Path) -> Path:
     """Rebuild the HTML report from a pair folder's JSON files.
 
@@ -34,6 +53,8 @@ def write_report(folder: Path) -> Path:
     order = {"rapidfuzz": 0, "splink": 1}
     diffs.sort(key=lambda d: (order.get(d["matcher"], 9), d["matcher"]))
     for diff in diffs:
+        copyable = [item["fix"] for item in diff.get("suggested_fixes", []) if item.get("fix")]
+        diff["copy_all_conflict"] = selector_conflict(copyable)
         loader = diff.get("loader") or {}
         counts: dict[str, int] = {}
         for fix in loader.get("fix_audit", []):
@@ -49,8 +70,13 @@ def write_report(folder: Path) -> Path:
         reviewed.get("pair_folder") is not None and reviewed["pair_folder"] != folder.name
     ):
         reviewed = {}
+    resolved_folder = folder.resolve()
     data = {
-        "pair": {"election": folder.parent.parent.name, "collection": folder.parent.name, "folder": folder.name},
+        "pair": {
+            "election": resolved_folder.parent.parent.name,
+            "collection": resolved_folder.parent.name,
+            "folder": resolved_folder.name,
+        },
         # Ticks saved to the repo with `ppdiff reviewed import`; the browser adds its own on top.
         "reviewed": reviewed.get("reviewed", {}),
         "diffs": diffs,

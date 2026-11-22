@@ -58,13 +58,14 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--splink-model", help="Splink model JSON (default: the bundled model)")
 
 
-def _run(args: argparse.Namespace, old: Path, new: Path) -> None:
+def _run(args: argparse.Namespace, old: Path, new: Path, rebuild_index: bool = True) -> None:
     """Run one pair and print the path to its report.
 
     Args:
         args: Parsed command-line options.
         old: The earlier input file.
         new: The later input file.
+        rebuild_index: Whether to rebuild the series index after this pair.
 
     Returns:
         ``None``.
@@ -79,6 +80,7 @@ def _run(args: argparse.Namespace, old: Path, new: Path) -> None:
         splink_model=args.splink_model,
         large_move_m=args.large_move_m,
         replacement_radius_m=args.replacement_radius_m,
+        rebuild_index=rebuild_index,
     )
     print(f"{old.name} -> {new.name}: {target / 'report.html'}")
 
@@ -109,11 +111,17 @@ def cmd_series(args: argparse.Namespace) -> int:
     if not pairs:
         print(f"Need at least two files matching {args.pattern!r}", file=sys.stderr)
         return 1
-    for old, new in pairs:
-        if not args.force and (pair_dir(Path(args.out_dir), old, new) / "report.html").exists():
-            print(f"{old.name} -> {new.name}: already done (use --force to redo)")
-            continue
-        _run(args, old, new)
+    completed = False
+    try:
+        for old, new in pairs:
+            if not args.force and (pair_dir(Path(args.out_dir), old, new) / "report.html").exists():
+                print(f"{old.name} -> {new.name}: already done (use --force to redo)")
+                continue
+            _run(args, old, new, rebuild_index=False)
+            completed = True
+    finally:
+        if completed:
+            write_index(Path(args.out_dir))
     return 0
 
 

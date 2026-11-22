@@ -822,7 +822,8 @@ function renderDiff(d) {
     section("Suggested config fixes", fixes, (f) => fixCard(f, d), true,
       h("div", { class: "fix-intro" },
         h("p", { class: "note" }, "Drafts for the fix_data_issues list in this election's config.json. Check the map before using one: each keeps the previous value, which is only right if the new file is wrong."),
-        copyable.length ? h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(copyable.map((f) => f.fix)), ev.currentTarget) }, `Copy all ${copyable.length} as a list`) : null)),
+        d.copy_all_conflict ? h("p", { class: "warn" }, "Copy all is unavailable because a fix changes a field used to select another fix. Check each fix and its order before applying it.")
+          : copyable.length ? h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(copyable.map((f) => f.fix)), ev.currentTarget) }, `Copy all ${copyable.length} as a list`) : null)),
     section("Possible matches (review band)", d.possible_matches, card, true),
     section("Likely replacements (removed + added nearby)", d.replacements, (p) => replacementCard(p, d), true),
     section("Changed", d.changed, card, true),

@@ -758,6 +758,130 @@ def test_duplicate_config_fixes_have_distinct_review_keys(pair):
     assert len(set(keys)) == 2
 
 
+def test_missing_address_component_keeps_raw_report_and_marks_checks_unavailable(tmp_path):
+    old = tmp_path / "20260101.csv"
+    new = tmp_path / "20260102.csv"
+    old.write_text("name,street,postcode,lat,lon,wheelchair_access\nHall,Main,2000,-33,151,Full\n")
+    new.write_text("name,street,lat,lon,wheelchair_access\nHall,Main,-33,151,\n")
+    (tmp_path / "config.json").write_text(json.dumps({
+        "address_fields": ["street", "postcode"],
+        "address_format": "{street} {postcode}",
+        "add_columns": {"state": "NSW"},
+    }))
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+    assert diff["loader"]["load_unavailable"]
+    assert any("postcode" in error for error in diff["loader"]["transformation_errors"])
+    assert diff["changed"]
+    assert diff["suggested_fixes"]
+    assert all(fix["fix"] is None for fix in diff["suggested_fixes"])
+    assert (folder / "report.html").exists()
+
+
+def test_suggested_fix_validation_reports_missing_address_component():
+    from ppdiff.loader_check import suggested_fix_problems
+
+    row = {"name": "Hall", "street": "Main", "lat": "-33", "lon": "151", "wheelchair_access": "Full"}
+    fix = {"field": "name", "value": "Hall", "overwrite": [{"field": "lat", "value": "-34"}]}
+    config = {"address_fields": ["street", "postcode"], "address_format": "{street} {postcode}"}
+
+    problems = suggested_fix_problems(fix, [row], config)
+    assert any("postcode" in problem for problem in problems)
+
+
+def test_report_disables_copy_all_when_one_fix_changes_another_selector(pair):
+    from ppdiff.report import write_report
+
+    root, old, new = pair
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    diff_path = target / "diff-rapidfuzz.json"
+    diff = json.loads(diff_path.read_text())
+    access = {"field": "name", "value": "", "overwrite": [{"field": "wheelchair_access", "value": "Full"}]}
+    name = {"field": "name", "value": "", "overwrite": [{"field": "name", "value": "Hall"}]}
+    diff["suggested_fixes"] = [{"fix": name}, {"fix": access}]
+    diff_path.write_text(json.dumps(diff))
+
+    data = json.loads(write_report(target).read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    assert data["diffs"][0]["copy_all_conflict"]
+    assert [item["fix"] for item in data["diffs"][0]["suggested_fixes"]] == [name, access]
+
+    diff["suggested_fixes"] = [{"fix": access}, {"fix": {**access, "overwrite": [{"field": "lat", "value": "-33"}]}}]
+    diff_path.write_text(json.dumps(diff))
+    data = json.loads(write_report(target).read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    assert not data["diffs"][0]["copy_all_conflict"]
+
+
+@pytest.mark.parametrize("relative_output", [True, False])
+def test_review_import_accepts_relative_output_and_dot_collection(pair, monkeypatch, relative_output):
+    from ppdiff.reviewed import import_reviewed
+
+    root, old, new = pair
+    monkeypatch.chdir(root)
+    out = Path("diffs") if relative_output else root / "diffs"
+    target = run_pair(old, new, out, matcher="rapidfuzz")
+    data = json.loads((target / "report.html").read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    assert data["pair"]["election"] == root.name
+    download = root / "review.json"
+    download.write_text(json.dumps({
+        "pair": data["pair"], "old_sha256": data["diffs"][0]["old"]["sha256"],
+        "new_sha256": data["diffs"][0]["new"]["sha256"], "reviewed": {"added-1": "tick"},
+    }))
+    expected_target = target.resolve()
+    monkeypatch.chdir(root / "diffs")
+    folder, _ = import_reviewed(download, Path("."))
+    assert folder.resolve() == expected_target
+    assert json.loads((folder / "reviewed.json").read_text())["reviewed"] == {"added-1": "tick"}
+
+
+def test_series_builds_index_once_and_single_run_still_builds_it(pair, monkeypatch):
+    from ppdiff.cli import main
+    import ppdiff.run as run_module
+
+    root, old, new = pair
+    _write(root / "data" / "20260115 places.csv", [_row("Alpha Hall", -33, 151)])
+    calls = []
+    write_index = run_module.write_index
+
+    def count_index(out_dir):
+        calls.append(out_dir)
+        return write_index(out_dir)
+
+    monkeypatch.setattr(run_module, "write_index", count_index)
+    monkeypatch.setattr("ppdiff.cli.write_index", count_index)
+    out = root / "diffs"
+    assert main(["series", str(root / "data" / "*.csv"), "--out-dir", str(out), "--matcher", "rapidfuzz"]) == 0
+    assert calls == [out]
+    assert (out / "index.html").exists()
+    calls.clear()
+    assert main(["run", str(old), str(new), "--out-dir", str(out), "--matcher", "rapidfuzz"]) == 0
+    assert calls == [out]
+
+
+def test_series_rebuilds_index_for_completed_pairs_when_later_pair_fails(pair, monkeypatch):
+    from ppdiff.cli import main
+    import ppdiff.cli as cli
+
+    root, _, _ = pair
+    _write(root / "data" / "20260115 places.csv", [_row("Alpha Hall", -33, 151)])
+    run = cli._run
+    calls = 0
+
+    def fail_second(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise RuntimeError("test failure")
+        return run(*args, **kwargs)
+
+    monkeypatch.setattr(cli, "_run", fail_second)
+    out = root / "diffs"
+    with pytest.raises(RuntimeError, match="test failure"):
+        main(["series", str(root / "data" / "*.csv"), "--out-dir", str(out), "--matcher", "rapidfuzz"])
+    data = json.loads((out / "index.html").read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    assert len(data["pairs"]) == 1
+
+
 @pytest.mark.parametrize("value", ["NaN", "inf", "-Infinity"])
 @pytest.mark.parametrize("axis", ["lat", "lon"])
 def test_nonfinite_coordinates_are_missing_and_reports_remain_valid(tmp_path, value, axis):

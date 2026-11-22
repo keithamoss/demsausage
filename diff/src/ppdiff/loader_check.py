@@ -93,6 +93,25 @@ def loaded_rows_by_index(d: Dataset, config: dict[str, Any]) -> dict[int, dict]:
     return {row[_ROW]: row for row in rows}
 
 
+def prepare_address(row: dict, config: dict[str, Any]) -> tuple[dict, bool]:
+    """Prepare a row's address using the loader's rules.
+
+    Args:
+        row: The converted loader row.
+        config: The election's loader configuration.
+
+    Returns:
+        The prepared row and whether it has an address.
+
+    Raises:
+        LoaderTransformationError: If an address component is missing.
+    """
+    try:
+        return loader_rules().merge_address(row, config.get("address_fields"), config.get("address_format"))
+    except KeyError as error:
+        raise LoaderTransformationError(f"Cannot prepare address: missing field {error}.") from error
+
+
 def suggested_fix_problems(fix: dict[str, Any], rows: list[dict], config: dict[str, Any]) -> list[str]:
     """Find new loader validation problems caused by an appended fix.
 
@@ -115,14 +134,17 @@ def suggested_fix_problems(fix: dict[str, Any], rows: list[dict], config: dict[s
         Returns:
             The loader validation problems on that row.
         """
-        row, _ = rules.merge_address(copy.deepcopy(row), config.get("address_fields"), config.get("address_format"))
+        row, _ = prepare_address(copy.deepcopy(row), config)
         return set(rules.row_problems(row))
 
     introduced = set()
     for row in rows:
-        before = problems(row)
-        after = rules.apply_fixes([copy.deepcopy(row)], [fix])[0]
-        introduced.update(problems(after) - before)
+        try:
+            before = problems(row)
+            after = rules.apply_fixes([copy.deepcopy(row)], [fix])[0]
+            introduced.update(problems(after) - before)
+        except LoaderTransformationError as error:
+            introduced.add(str(error))
     return sorted(introduced)
 
 
@@ -210,7 +232,7 @@ def load_problems(new: Dataset, config: dict[str, Any]) -> dict[str, Any]:
     rows, regex_errors = as_loaded(new, config, fixes=True)
     problems, skipped = [], []
     for row in rows:
-        row, has_address = rules.merge_address(row, config.get("address_fields"), config.get("address_format"))
+        row, has_address = prepare_address(row, config)
         found = rules.row_problems({k: v for k, v in row.items() if k != _ROW})
         if not has_address and "missing field 'address'" not in found:
             found.append("no address or address fields")

@@ -64,7 +64,8 @@ def import_reviewed(source: Path, diffs_dir: Path) -> tuple[Path, dict[str, int]
     if not isinstance(download, dict) or not isinstance(download.get("reviewed"), dict):
         raise ValueError(f"{source} must contain a 'reviewed' object")
     pair = download.get("pair")
-    if pair is not None and (pair["election"], pair["collection"]) != (diffs_dir.resolve().parent.name, diffs_dir.name):
+    resolved_dir = diffs_dir.resolve()
+    if pair is not None and (pair["election"], pair["collection"]) != (resolved_dir.parent.name, resolved_dir.name):
         raise ValueError(f"Review belongs to a different election or diffs folder, not {diffs_dir}")
     folder = find_pair_folder(diffs_dir, download["old_sha256"], download["new_sha256"], pair["folder"] if pair else None)
     path = folder / "reviewed.json"
