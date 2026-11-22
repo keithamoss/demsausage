@@ -367,6 +367,7 @@ def suggested_fixes(
                     "new_index": place["new_index"],
                     "name": place["name"],
                     "kind": "blank",
+                    "field": _schema(column, rename),
                     "likely": False,
                     "no_fix_needed": False,
                     "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",

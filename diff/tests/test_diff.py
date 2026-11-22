@@ -261,6 +261,26 @@ def test_suggested_fix_selector_uses_loader_cleaned_name(tmp_path):
     assert fix["fix"]["value"] != typo[0]["name"]
 
 
+def test_blank_suggestion_keeps_field_when_loader_filters_out_its_row(pair):
+    root, old, new = pair
+    with open(new, newline="") as f:
+        rows = list(csv.DictReader(f))
+    gamma = next(row for row in rows if row["name"] == "Gamma Church")
+    gamma["address"] = ""
+    gamma["lat"], gamma["lon"] = "-33.200000", "151.200000"
+    new = _write(root / "data" / "20260109 places.csv", rows)
+    (root / "config.json").write_text(json.dumps({
+        "filters": [{"type": "is_exactly", "column": "name", "matches": ["Alpha Hall", "Beta School", "Epsilon Centre"]}],
+    }))
+
+    target = run_pair(old, new, root / "diffs-filtered", matcher="rapidfuzz")
+    d = json.loads((target / "diff-rapidfuzz.json").read_text())
+
+    (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "blank"]
+    assert fix["fix"] is None
+    assert fix["field"] == "address"
+
+
 def test_nothing_changed_flag_and_latest_command(tmp_path, capsys):
     from ppdiff.cli import main
 
