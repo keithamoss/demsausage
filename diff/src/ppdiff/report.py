@@ -35,9 +35,12 @@ def write_report(folder: Path) -> Path:
     reviewed_path = folder / "reviewed.json"
     reviewed = json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}
     saved_hashes = (reviewed.get("old_sha256"), reviewed.get("new_sha256"))
-    if not diffs or saved_hashes != (diffs[0]["old"]["sha256"], diffs[0]["new"]["sha256"]):
+    if not diffs or saved_hashes != (diffs[0]["old"]["sha256"], diffs[0]["new"]["sha256"]) or (
+        reviewed.get("pair_folder") is not None and reviewed["pair_folder"] != folder.name
+    ):
         reviewed = {}
     data = {
+        "pair": {"election": folder.parent.parent.name, "collection": folder.parent.name, "folder": folder.name},
         # Ticks saved to the repo with `ppdiff reviewed import`; the browser adds its own on top.
         "reviewed": reviewed.get("reviewed", {}),
         "diffs": diffs,

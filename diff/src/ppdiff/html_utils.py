@@ -13,8 +13,11 @@ def embed_json(data: object) -> str:
 
     Returns:
         JSON text with HTML-significant characters escaped.
+
+    Raises:
+        ValueError: If the data contains a non-finite number.
     """
-    return json.dumps(data).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    return json.dumps(data, allow_nan=False).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
 
 def escape_html(text: str) -> str:

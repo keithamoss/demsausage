@@ -218,6 +218,7 @@ if (first) {
 }
 
 // ---------- storage (per pair of files) ----------
+const pairIdentity = JSON.stringify([DATA.pair.election, DATA.pair.collection, DATA.pair.folder]);
 const STORE_KEY = DIS ? `ppdiff-verdicts:${DIS.old_sha256}:${DIS.new_sha256}` : null;
 function loadVerdicts() {
   if (!STORE_KEY) return {};
@@ -251,7 +252,7 @@ function renderTabs() {
   const list = document.getElementById("tabs");
   list.replaceChildren(...TABS.map((t) =>
     h("button", { type: "button", class: "tab", role: "tab", id: `tab-${t.id}`, "aria-selected": String(t.id === current),
-      tabindex: t.id === current ? "0" : "-1", onclick: () => selectTab(t.id) }, tabTitle(t))));
+      tabindex: t.id === current ? "0" : "-1", onclick: () => selectTab(t.id, true) }, tabTitle(t))));
 }
 // Arrow keys move between tabs (selection follows focus); Home/End jump to the ends.
 document.getElementById("tabs").addEventListener("keydown", (ev) => {
@@ -375,6 +376,14 @@ function goTo(tabId, elementId) {
   if (current !== tabId) { current = tabId; render(); }
   const el = document.getElementById(elementId);
   if (!el) return;
+  if (el.style.display === "none") {
+    searchText = ""; hideReviewed = false;
+    const search = document.querySelector("#view input[type=search]");
+    const hide = document.querySelector("#view .hide-toggle input");
+    if (search) search.value = "";
+    if (hide) hide.checked = false;
+    setChip(null);
+  }
   openSectionOf(el);
   if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
   el.focus({ preventScroll: true });
@@ -391,7 +400,7 @@ function directionBadge(c) {
   return c.direction ? h("span", { class: "dir " + c.direction }, c.direction === "improved" ? "▲ improved" : "▼ worse") : null;
 }
 // ---------- reviewed ticks (per pair of files, shared by both matchers' tabs) ----------
-const REVIEW_STORE = first ? `ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}` : null;
+const REVIEW_STORE = first ? `ppdiff-reviewed:${pairIdentity}:${first.old.sha256}:${first.new.sha256}` : null;
 // Ticks saved in the repo (reviewed.json, embedded at build) plus any made in this browser since.
 let REVIEWED = (() => {
   let local = {};
@@ -399,8 +408,15 @@ let REVIEWED = (() => {
   return Object.fromEntries(Object.entries({ ...(DATA.reviewed || {}), ...local }).filter(([, value]) => value));
 })();
 const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
+const legacyPairTicks = Object.keys(DATA.reviewed || {}).filter((key) => /^pair-\d+$/.test(key)).length;
+let legacyBrowserData = false;
+if (first) {
+  try {
+    legacyBrowserData = Boolean(localStorage.getItem(`ppdiff-reviewed:${first.old.sha256}:${first.new.sha256}`));
+  } catch (e) { console.warn("Could not check for older browser review data", e); }
+}
 function downloadReview() {
-  const blob = new Blob([JSON.stringify({ old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify({ pair: DATA.pair, old_sha256: first.old.sha256, new_sha256: first.new.sha256, old_label: first.old.label, new_label: first.new.label, reviewed: REVIEWED }, null, 2)], { type: "application/json" });
   const a = h("a", { href: URL.createObjectURL(blob), download: `reviewed ${first.old.label || "old"} to ${first.new.label || "new"}.json`.replace(/[,:]/g, "") });
   document.body.append(a); a.click(); a.remove();
 }
@@ -435,7 +451,7 @@ const fixKey = (f) => `fix-${f.kind}-${f.new_index}${f.kind === "blank" ? "-" + 
 function fixFor(d, newIndex) { return (d.suggested_fixes || []).find((f) => f.new_index === newIndex && f.kind === "coordinates") || (d.suggested_fixes || []).find((f) => f.new_index === newIndex); }
 
 function pairCard(e, d) {
-  const key = `pair-${e.new_index}`, fix = fixFor(d, e.new_index);
+  const key = `pair-${e.old_index}-${e.new_index}`, fix = fixFor(d, e.new_index);
   return h("div", { ...reviewAttrs(key), id: `${d.matcher}-pair-${e.new_index}`, "data-search": `${e.name} ${e.old_name}`.toLowerCase(), "data-cats": entryCategories(e).join(" ") },
     cardHead(e.name, key),
     e.old_name !== e.name ? h("div", { class: "was" }, `was: ${e.old_name}`) : null,
@@ -772,6 +788,8 @@ function renderDiff(d) {
   const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
+    legacyPairTicks || legacyBrowserData ? h("div", { class: "warn" },
+      "Older review data may be ambiguous and is not shown on matching cards. It has not been deleted; see the review-data notes in the diff README before re-reviewing.") : null,
     h("div", { class: "tiles" },
       [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .filter(([k]) => (s[k] ?? 0) > 0 || ["changed", "added", "removed"].includes(k))

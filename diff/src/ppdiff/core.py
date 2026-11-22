@@ -423,7 +423,7 @@ def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[
     return checks
 
 
-def _schema(column: str | None, rename: dict[str, str]) -> str | None:
+def _schema(column: str, rename: dict[str, str]) -> str:
     """Get a column's name after the loader applies ``rename_columns``.
 
     Args:
@@ -431,9 +431,9 @@ def _schema(column: str | None, rename: dict[str, str]) -> str | None:
         rename: The loader's source-to-schema name mapping.
 
     Returns:
-        The renamed column name, or ``None`` when no source column was found.
+        The renamed column name, or the original name if it is not renamed.
     """
-    return None if column is None else rename.get(column, column)
+    return rename.get(column, column)
 
 
 def suggested_fixes(
@@ -465,14 +465,15 @@ def suggested_fixes(
     name_col, lat_col, lon_col = new.columns.name, new.columns.lat, new.columns.lon
     selector_field = _schema(name_col, rename)
     rows_by_index = selector_rows if selector_rows is not None else {
-        r.index: {selector_field: r.raw.get(name_col, "")} for r in new.records
+        r.index: {_schema(k, rename): v for k, v in r.raw.items()} for r in new.records
     }
 
-    def selector(new_index: int) -> tuple[dict[str, str] | None, str | None]:
+    def selector(new_index: int, overwrite_fields: list[str]) -> tuple[dict[str, str] | None, str | None]:
         """Build a safe loader selector for a place in the new dataset.
 
         Args:
             new_index: The row's index in the new dataset.
+            overwrite_fields: Loader fields the proposed fix would overwrite.
 
         Returns:
             The selector and a duplicate-name note, or ``None`` with a reason
@@ -480,7 +481,7 @@ def suggested_fixes(
         """
         source_index = new.records[new_index].index
         row = rows_by_index.get(source_index)
-        if selector_field is None or row is None or selector_field not in row:
+        if row is None or selector_field not in row:
             return None, "No pre-fix loader row has this selector field; a safe fix cannot be drafted."
         value = str(row[selector_field])
         matching_indices = [
@@ -490,6 +491,12 @@ def suggested_fixes(
         ]
         if source_index not in matching_indices:
             return None, "The loader selector does not match this place; a safe fix cannot be drafted."
+        missing = sorted({
+            field for index in matching_indices for field in overwrite_fields
+            if field not in rows_by_index[index]
+        })
+        if missing:
+            return None, f"The loader cannot overwrite missing fields: {', '.join(missing)}."
         note = None
         if len(matching_indices) > 1:
             note = f"{len(matching_indices)} places are named {value!r}: this fix would change all of them."
@@ -547,7 +554,8 @@ def suggested_fixes(
             and iso_new > 3 * iso_old
             and iso_new - iso_old > large_move_m
         )
-        sel, note = selector(e["new_index"])
+        overwrite_fields = [_schema(lat_col, rename), _schema(lon_col, rename)]
+        sel, note = selector(e["new_index"], overwrite_fields)
         fixes.append(
             {
                 "new_index": e["new_index"],
@@ -580,7 +588,8 @@ def suggested_fixes(
             continue
         column = q["check"].split(":", 1)[1]
         for place in q["places"]:
-            sel, note = selector(place["new_index"])
+            field = _schema(column, rename)
+            sel, note = selector(place["new_index"], [field])
             fixes.append(
                 {
                     "new_index": place["new_index"],

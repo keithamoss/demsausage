@@ -147,9 +147,11 @@ document.getElementById("pairs").replaceChildren(...groups.map((g) => {
 }).flat());
 
 let matcher = DATA.matchers[0];
+const matcherButtons = DATA.matchers.map((m) =>
+  h("button", { type: "button", class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m)));
+document.getElementById("matchers").replaceChildren(...matcherButtons);
 function renderHistory() {
-  document.getElementById("matchers").replaceChildren(...DATA.matchers.map((m) =>
-    h("button", { type: "button", class: "tab", "aria-pressed": String(m === matcher), onclick: () => { matcher = m; renderHistory(); } }, label(m))));
+  matcherButtons.forEach((button, i) => button.setAttribute("aria-pressed", String(DATA.matchers[i] === matcher)));
   const q = document.getElementById("search").value.trim().toLowerCase();
   const places = (DATA.history[matcher] || []).filter((p) => !q || (p.name || "").toLowerCase().includes(q));
   document.getElementById("history").replaceChildren(

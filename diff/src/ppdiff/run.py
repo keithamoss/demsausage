@@ -15,7 +15,7 @@ from linkage.run import file_sha256, link_files
 from .core import Settings, build_diff
 from .index import write_index
 from .loader_check import election_config, loader_checks, pre_fix_rows_by_index
-from .names import friendly_label
+from .names import friendly_label, sort_scrapes
 from .report import write_report
 
 
@@ -231,9 +231,7 @@ def run_pair(
 
 
 def series(pattern: str) -> list[tuple[Path, Path]]:
-    """Pair consecutive files matching a glob, ordered by filename.
-
-    Scraper filenames include timestamps, so filename order is scrape order.
+    """Pair consecutive files matching a glob in scrape-date order.
 
     Args:
         pattern: A glob that matches the source files.
@@ -241,10 +239,13 @@ def series(pattern: str) -> list[tuple[Path, Path]]:
     Returns:
         Each adjacent pair as ``(older_file, newer_file)``.
 
+    Raises:
+        ValueError: If dated and undated filenames are mixed.
+
     Example:
         ``series("data/*.csv")`` returns every consecutive pair in ``data``.
     """
-    files = sorted(Path(p) for p in globlib.glob(pattern))
+    files = sort_scrapes([Path(p) for p in globlib.glob(pattern)])
     return list(zip(files, files[1:]))
 
 

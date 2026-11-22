@@ -49,51 +49,93 @@ def _fmt_datetime(d: datetime) -> str:
     return f"{_fmt_date(d)}, {hour}:{d.minute:02d} {'am' if d.hour < 12 else 'pm'}"
 
 
-def _ymd_hms(m: re.Match) -> str | None:
-    """Format a regex match containing year, month, day, and time.
+def _ymd_hms(m: re.Match) -> datetime:
+    """Parse a regex match containing year, month, day, and time.
 
     Args:
         m: A match with six numeric date and time groups.
 
     Returns:
-        A short date-and-time label.
+        The parsed date and time.
     """
-    return _fmt_datetime(datetime(*map(int, m.groups())))
+    year, month, day, hour, minute, second = map(int, m.groups())
+    return datetime(year, month, day, hour, minute, second)
 
 
-def _ymd(m: re.Match) -> str | None:
-    """Format a regex match containing year, month, and day.
+def _ymd(m: re.Match) -> datetime:
+    """Parse a regex match containing year, month, and day.
 
     Args:
         m: A match with three numeric date groups.
 
     Returns:
-        A short date label.
+        The parsed date at midnight.
     """
-    return _fmt_date(datetime(*map(int, m.groups())))
+    year, month, day = map(int, m.groups())
+    return datetime(year, month, day)
 
 
-def _dmy(m: re.Match) -> str | None:
-    """Format a regex match containing day, month, and year.
+def _dmy(m: re.Match) -> datetime:
+    """Parse a regex match containing day, month, and year.
 
     Args:
         m: A match with three numeric date groups in day-first order.
 
     Returns:
-        A short date label.
+        The parsed date at midnight.
     """
     day, month, year = map(int, m.groups())
-    return _fmt_date(datetime(year, month, day))
+    return datetime(year, month, day)
 
 
-#: (pattern, formatter) tried in order against the file name; the first that yields
+#: (pattern, parser) tried in order against the file name; the first that yields
 #: a valid date wins. Digits must not be part of a longer number.
-ADAPTERS: list[tuple[re.Pattern, Callable[[re.Match], str | None]]] = [
+ADAPTERS: list[tuple[re.Pattern, Callable[[re.Match], datetime]]] = [
     (re.compile(r"(?<!\d)(\d{4})(\d{2})(\d{2})[_T-](\d{2})(\d{2})(\d{2})(?!\d)"), _ymd_hms),  # 20261104_204630
     (re.compile(r"(?<!\d)(\d{4})[-_](\d{2})[-_](\d{2})(?!\d)"), _ymd),  # 2026-11-21, 2024_10_14
     (re.compile(r"(?<!\d)(\d{2})[-_](\d{2})[-_](\d{4})(?!\d)"), _dmy),  # 18-08-2026
     (re.compile(r"(?<!\d)(\d{4})(\d{2})(\d{2})(?!\d)"), _ymd),  # 20210207
 ]
+
+
+def scrape_date(path: str | Path) -> tuple[datetime, bool] | None:
+    """Find a recognizable scrape date and whether it includes a time.
+
+    Args:
+        path: The scraper output file path.
+
+    Returns:
+        The date and a time-present flag, or ``None`` if no valid date is found.
+    """
+    for pattern, parser in ADAPTERS:
+        for match in pattern.finditer(Path(path).stem):
+            try:
+                return parser(match), len(match.groups()) == 6
+            except ValueError:
+                continue
+    return None
+
+
+def sort_scrapes(paths: list[Path]) -> list[Path]:
+    """Order scraped files by date, or by filename when none has a date.
+
+    Args:
+        paths: The files to order.
+
+    Returns:
+        Files in date order, with filenames breaking ties.
+
+    Raises:
+        ValueError: If some filenames have dates and others do not.
+    """
+    dates = {path: scrape_date(path) for path in paths}
+    if any(dates.values()) and not all(dates.values()):
+        raise ValueError("Cannot order a mixture of dated and undated filenames: " +
+                         ", ".join(str(p) for p in paths if dates[p] is None))
+    if not any(dates.values()):
+        return sorted(paths)
+    dated = {path: date[0] for path, date in dates.items() if date is not None}
+    return sorted(paths, key=lambda p: (dated[p], str(p)))
 
 
 def friendly_label(path: str | Path) -> str:
@@ -109,13 +151,8 @@ def friendly_label(path: str | Path) -> str:
         ``friendly_label("20261104_204630 polling places.csv")`` returns
         ``"Wed 4 Nov 2026, 8:46 pm"``.
     """
-    stem = Path(path).stem
-    for pattern, formatter in ADAPTERS:
-        for match in pattern.finditer(stem):
-            try:
-                label = formatter(match)
-            except ValueError:  # not a real date, e.g. 2023-13-45
-                continue
-            if label:
-                return label
-    return re.sub(r"[_\s]+", " ", stem).strip()
+    parsed = scrape_date(path)
+    if parsed:
+        date, has_time = parsed
+        return _fmt_datetime(date) if has_time else _fmt_date(date)
+    return re.sub(r"[_\s]+", " ", Path(path).stem).strip()

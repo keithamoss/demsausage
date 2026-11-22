@@ -426,3 +426,121 @@ def test_loader_checks_skip_without_config(pair):
     root, old, new = pair
     d = json.loads((run_pair(old, new, root / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
     assert d["loader"] == {"config_found": False}
+
+
+@pytest.mark.parametrize("value", ["NaN", "inf", "-Infinity"])
+@pytest.mark.parametrize("axis", ["lat", "lon"])
+def test_nonfinite_coordinates_are_missing_and_reports_remain_valid(tmp_path, value, axis):
+    old_row = _row("Hall", -33, 151)
+    new_row = {**old_row, axis: value}
+    old = _write(tmp_path / "20260101.csv", [old_row])
+    new = _write(tmp_path / "20260102.csv", [new_row])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+    assert diff["changed"][0]["location"]["new"] == [None, None]
+    assert diff["changed"][0]["location"]["note"] == "coordinates removed"
+    for html in (folder / "report.html", folder.parent / "index.html"):
+        embedded = html.read_text().split('id="data">', 1)[1].split("</script>", 1)[0]
+        json.loads(embedded, parse_constant=lambda value: pytest.fail(f"Invalid JSON number: {value}"))
+
+
+def test_embedded_json_rejects_nonfinite_numbers():
+    from ppdiff.html_utils import embed_json
+
+    with pytest.raises(ValueError, match="JSON compliant"):
+        embed_json({"value": float("nan")})
+
+
+def test_nonfinite_coordinates_are_safe_for_blocked_matching():
+    from linkage.matchers.rapidfuzz_lsa import RapidfuzzMatcher
+
+    row = _row("Hall", -33, 151)
+    left = _ds([{**row, "lat": "NaN"}])
+    right = _ds([row])
+    assert RapidfuzzMatcher(all_pairs_limit=0).candidates(left, right, [0], [0]) == {(0, 0)}
+
+
+@pytest.mark.parametrize(("kind", "field"), [("blank", "address"), ("coordinates", "lat")])
+def test_suggested_fixes_do_not_overwrite_loader_extras(tmp_path, kind, field):
+    election = tmp_path / "election"
+    election.mkdir()
+    old_rows, new_rows = _typo_files(tmp_path)
+    if kind == "blank":
+        new_rows[0]["lat"] = old_rows[0]["lat"]
+        new_rows[0]["address"] = ""
+    (election / "config.json").write_text(json.dumps({"extras": {"fields": [field]}}))
+    old = _write(election / "20260101.csv", old_rows)
+    new = _write(election / "20260102.csv", new_rows)
+
+    folder = run_pair(old, new, election / "diffs", matcher="rapidfuzz")
+    fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+    fix = next(f for f in fixes if f["kind"] == kind and f["new_index"] == 0)
+    assert fix["fix"] is None
+    assert field in fix["note"]
+
+
+def test_ambiguous_review_import_requires_pair_identity(pair, tmp_path):
+    from ppdiff.reviewed import import_reviewed
+
+    root, old, new = pair
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    link = json.loads((target / "link.json").read_text())
+    duplicate = target.parent / "another-pair"
+    duplicate.mkdir()
+    (duplicate / "link.json").write_text(json.dumps(link))
+    download = tmp_path / "review.json"
+    data = {"old_sha256": link["left"]["sha256"], "new_sha256": link["right"]["sha256"], "reviewed": {"added-1": "x"}}
+    download.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="multiple reports"):
+        import_reviewed(download, target.parent)
+    assert not (target / "reviewed.json").exists()
+    assert not (duplicate / "reviewed.json").exists()
+
+    data["pair"] = {"election": root.name, "collection": "diffs", "folder": target.name}
+    download.write_text(json.dumps(data))
+    assert import_reviewed(download, target.parent)[0] == target
+    assert not (duplicate / "reviewed.json").exists()
+    data["pair"]["election"] = "another-election"
+    download.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="different election"):
+        import_reviewed(download, target.parent)
+
+
+def test_series_and_index_use_scrape_dates_and_keep_history_in_order(tmp_path):
+    from ppdiff.index import history, pair_folders
+
+    paths = []
+    for day, access in [("31-08-2026", "None"), ("01-09-2026", "Assisted"), ("02-09-2026", "Full")]:
+        paths.append(_write(tmp_path / f"places-{day}.csv", [_row("Hall", -33, 151, access=access)]))
+    assert series(str(tmp_path / "*.csv")) == list(zip(paths, paths[1:]))
+    out = tmp_path / "diffs"
+    for old, new in zip(paths, paths[1:]):
+        run_pair(old, new, out, matcher="rapidfuzz")
+    folders = pair_folders(out)
+    assert [json.loads((p / "link.json").read_text())["left"]["path"] for p in folders] == [str(p) for p in paths[:-1]]
+    assert [e["text"] for e in history(folders, "rapidfuzz")[0]["events"]] == [
+        "wheelchair_access (improved)", "wheelchair_access (improved)",
+    ]
+
+
+def test_series_rejects_mixed_dated_and_undated_files(tmp_path):
+    (tmp_path / "20260101.csv").touch()
+    (tmp_path / "latest.csv").touch()
+    with pytest.raises(ValueError, match="dated and undated"):
+        series(str(tmp_path / "*.csv"))
+
+
+def test_series_uses_filename_order_for_undated_and_same_date_files(tmp_path):
+    a = tmp_path / "a.csv"
+    b = tmp_path / "b.csv"
+    a.touch()
+    b.touch()
+    assert series(str(tmp_path / "*.csv")) == [(a, b)]
+    a.unlink()
+    b.unlink()
+    a = tmp_path / "20260101_a.csv"
+    b = tmp_path / "20260101_b.csv"
+    a.touch()
+    b.touch()
+    assert series(str(tmp_path / "*.csv")) == [(a, b)]

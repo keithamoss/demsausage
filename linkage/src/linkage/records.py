@@ -9,6 +9,7 @@ can be mapped explicitly.
 from __future__ import annotations
 
 import csv
+import math
 import re
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
@@ -163,7 +164,7 @@ def _to_float(value: str | None) -> float | None:
     except (TypeError, ValueError):
         return None
     # 0,0 is a "no coordinates" placeholder in some commission files.
-    return None if number == 0 else number
+    return None if number == 0 or not math.isfinite(number) else number
 
 
 def _split_divisions(value: str | None) -> frozenset[str]:
@@ -180,14 +181,17 @@ def records_from_rows(
             return (row.get(column) or "").strip() if column else ""
 
         source_id = get(columns.id) or None
+        lat, lon = _to_float(get(columns.lat)), _to_float(get(columns.lon))
+        if lat is None or lon is None:
+            lat, lon = None, None
         records.append(
             Record(
                 index=index,
                 name=get(columns.name),
                 premises=get(columns.premises),
                 address=", ".join(get(c) for c in columns.address if get(c)),
-                lat=_to_float(get(columns.lat)),
-                lon=_to_float(get(columns.lon)),
+                lat=lat,
+                lon=lon,
                 divisions=_split_divisions(get(columns.divisions)),
                 source_id=source_id,
                 raw=dict(row),

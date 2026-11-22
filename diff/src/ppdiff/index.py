@@ -15,7 +15,7 @@ from typing import Any
 from linkage import verdicts as verdict_store
 
 from .html_utils import embed_json, escape_html
-from .names import friendly_label
+from .names import friendly_label, sort_scrapes
 
 TEMPLATE = Path(__file__).with_name("index_template.html")
 
@@ -27,9 +27,18 @@ def pair_folders(out_dir: Path) -> list[Path]:
         out_dir: The folder containing the pair reports.
 
     Returns:
-        Pair folders sorted by name.
+        Pair folders ordered by their input filenames' scrape dates.
+
+    Raises:
+        ValueError: If dated and undated input filenames are mixed.
     """
-    return sorted(p.parent for p in out_dir.glob("*/link.json"))
+    pairs = []
+    for link in out_dir.glob("*/link.json"):
+        data = json.loads(link.read_text())
+        pairs.append((link.parent, Path(data["left"]["path"]), Path(data["right"]["path"])))
+    ordered = sort_scrapes([path for _, old, new in pairs for path in (old, new)])
+    rank = {path: i for i, path in enumerate(ordered)}
+    return [folder for folder, _, _ in sorted(pairs, key=lambda pair: (rank[pair[1]], rank[pair[2]], str(pair[0])))]
 
 
 def _describe(entry: dict[str, Any]) -> str:
@@ -68,7 +77,7 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
     places: dict[int, dict[str, Any]] = {}
     ids: dict[int, int] = {}  # row index in the current file -> place id
     next_id = 0
-    previous_new_sha = None
+    previous_new = None
 
     def new_place() -> int:
         """Create an empty place record and return its internal identifier.
@@ -90,7 +99,8 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
         if result is None:
             continue
         diff = json.loads(diff_path.read_text())
-        if link_output["left"]["sha256"] != previous_new_sha:
+        old_file = link_output["left"]
+        if (Path(old_file["path"]).name, old_file["sha256"]) != previous_new:
             ids = {}  # the chain broke: start fresh from this pair's old file
         when = friendly_label(link_output["right"]["path"])
         pair = folder.name
@@ -142,7 +152,8 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
             next_ids[a["new_index"]] = place_id
             event(place_id, "added", "added", a["name"])
         ids = next_ids
-        previous_new_sha = link_output["right"]["sha256"]
+        new_file = link_output["right"]
+        previous_new = (Path(new_file["path"]).name, new_file["sha256"])
 
     out = [{"name": p["name"], "events": p["events"]} for p in places.values() if p["events"]]
     return sorted(out, key=lambda p: (-len(p["events"]), p["name"] or ""))

@@ -34,6 +34,8 @@ VIC 2026 writes to `scrapers/vic_2026/diffs-linkage/`, alongside the existing `d
 
 Reports and the index show files by when they were scraped, e.g. "Wed 4 Nov 2026, 8:46 pm" for `20261104_204630 polling places.csv`. `ppdiff/names.py` recognises the date styles our scrapers use (`20261104_204630`, `2026-11-21`, `(20210207)`, `18-08-2026`, `2024_10_14`). Files without one fall back to a tidied file name. To support another style, add a pattern to `ADAPTERS` there.
 
+`series`, `latest`, and the index order files by these dates, using filenames to break ties. If all filenames are undated they use filename order; a mixture of dated and undated filenames is an error because their relative order is unknown. A date without a time sorts at midnight, so use timestamps to distinguish scrapes on the same day.
+
 ## What you get
 
 Each pair of files gets a folder `<old>__<new>/` containing:
@@ -89,6 +91,7 @@ If the election has a `config.json` beside its diffs folder, each diff also chec
 - **Sections:** warnings, suggested config fixes, possible matches, likely replacements, changed, added, removed, data quality. Changed places come biggest first: warnings, then accessibility getting worse, then the largest moves, then the most fields changed. Possible matches come least confident first.
 - **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
 - **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. The button shows how many ticks aren't saved yet.
+- **Older review data:** Browser ticks from reports using the previous hash-only storage key remain in the browser but are not automatically loaded, because identical files can belong to different pairs. Open the older report to download them; older review downloads import only when their hashes identify a single pair. Older saved `pair-<new row>` ticks remain in `reviewed.json` but are not applied to linked cards, because they don't identify the old row. Review those matches again; no old data is deleted automatically.
 - **Keyboard:** `j` / `k` move to the next / previous card, and `x` ticks the current one as reviewed.
 - **Accessibility and browser behaviour:**
   - The views are proper tabs: use the arrow keys, Home and End to move between them.
