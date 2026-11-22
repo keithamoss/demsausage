@@ -23,13 +23,13 @@ This replaces the current monolithic "one task → one complete button" model wi
 | Question | Decision |
 |---|---|
 | Sub-task definition storage | Code-only (Python enum + config dict) — no DB table for definitions |
-| Sub-task definition location | Hanging off `MetaPollingPlaceSubTaskType` enum via a `.get_definition()` method backed by a config dict in a new `subtask_config.py` module |
+| Sub-task definition location | Hanging off `MetaPollingPlaceTaskType` enum via a `.get_subtasks()` method backed by a config dict in a new `subtask_config.py` module |
 | Sub-task completion trigger | Explicit "Mark done" button per sub-task |
 | Sub-task persistence | Real-time PATCH per sub-task (crash-safe, no deferred save) |
 | After all mandatory sub-tasks done | Auto-complete the parent task; show a summary card with explicit "Next task" button |
 | History scope | Both task-scoped and MPP-scoped, in a single unified chronological feed |
 | Re-review model | Append-only: insert a new `PENDING` sub-task row; current state = most recent row per `(task, type)` |
-| Re-review routing | If an `IN_PROGRESS` task already exists for the MPP: append a new `PENDING` sub-task row to it. Otherwise: create a new parent `MetaPollingPlacesTasks` row with its own `job_name` (enters the re-review queue). |
+| Re-review routing | A new parent `MetaPollingPlacesTasks` row with its own `job_name` (enters a separate dedicated re-review queue) |
 | Re-review UI | Only flagged (PENDING) sub-tasks rendered open; already-completed ones rendered collapsed |
 | Optional sub-tasks | User can leave them without dismissing — no skip/dismiss action required |
 | Defer / Close | Retained at the parent task level; completed sub-task rows are left as-is (task is partially resumable) |
@@ -141,10 +141,11 @@ class MetaPollingPlaceSubTaskType(str, EnumBase):
     REVIEW_ADDRESS = "Review Address"
     ADD_FACEBOOK_LINK = "Add Facebook Link"
 
-    def get_definition(self) -> "SubTaskDefinition":
-        """Return the standalone SubTaskDefinition for this sub-task type."""
-        from demsausage.app.subtask_config import SUBTASK_DEFINITIONS
-        return SUBTASK_DEFINITIONS.get(self)
+    def get_subtasks(self) -> list["SubTaskDefinition"]:
+        """Return the SubTaskDefinition for this sub-task type, or None."""
+        from demsausage.app.subtask_config import SUBTASK_DEFINITIONS_BY_TYPE
+
+        return SUBTASK_DEFINITIONS_BY_TYPE.get(self)
 
 
 class MetaPollingPlaceSubTaskStatus(str, EnumBase):
@@ -160,84 +161,73 @@ New file: `django/demsausage/app/subtask_config.py`
 
 ```python
 from dataclasses import dataclass
-from demsausage.app.enums import MetaPollingPlaceSubTaskType, MetaPollingPlaceTaskType, MetaPollingPlaceTaskCategory
+from demsausage.app.enums import (
+    MetaPollingPlaceSubTaskType,
+    MetaPollingPlaceTaskType,
+    MetaPollingPlaceTaskCategory,
+)
 
 
 @dataclass(frozen=True)
 class SubTaskDefinition:
-    """Standalone definition of a sub-task type — reusable across task types."""
     type: MetaPollingPlaceSubTaskType
     title: str
     description: str
-
-
-@dataclass(frozen=True)
-class TaskSubTaskConfig:
-    """Composition of a sub-task into a specific task type, with its mandatory flag."""
-    type: MetaPollingPlaceSubTaskType
     mandatory: bool
 
-    @property
-    def definition(self) -> SubTaskDefinition:
-        return SUBTASK_DEFINITIONS[self.type]
 
-
-# Global registry: one definition per sub-task type.
-# Title and description are defined once here and reused across any task type that includes this sub-task.
-SUBTASK_DEFINITIONS: dict[MetaPollingPlaceSubTaskType, SubTaskDefinition] = {
-    MetaPollingPlaceSubTaskType.REVIEW_DETAILS: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.REVIEW_DETAILS,
-        title="Review Details",
-        description="Check and correct the name, premises, facility type, and wheelchair access information.",
-    ),
-    MetaPollingPlaceSubTaskType.REVIEW_LOCATION: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.REVIEW_LOCATION,
-        title="Review Location",
-        description="Verify the map pin is correctly placed for this polling place.",
-    ),
-    MetaPollingPlaceSubTaskType.REVIEW_LINKED_PPS: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.REVIEW_LINKED_PPS,
-        title="Review Linked Polling Places",
-        description="Check that the polling places linked to this MPP are correct, and review any other nearby MPPs for potential matches or conflicts.",
-    ),
-    MetaPollingPlaceSubTaskType.ADD_LINKS: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.ADD_LINKS,
-        title="Add Links",
-        description="Add any known website, official, or other relevant URLs for this location.",
-    ),
-    MetaPollingPlaceSubTaskType.REVIEW_ADDRESS: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.REVIEW_ADDRESS,
-        title="Review Address",
-        description="Check and correct the street address details.",
-    ),
-    MetaPollingPlaceSubTaskType.ADD_FACEBOOK_LINK: SubTaskDefinition(
-        type=MetaPollingPlaceSubTaskType.ADD_FACEBOOK_LINK,
-        title="Find & Add Facebook Page",
-        description="Search for and add the Facebook page URL for this polling place location.",
-    ),
-}
-
-
-# Maps (category, task_type) → ordered list of TaskSubTaskConfigs.
-# Each entry references a standalone SubTaskDefinition and adds the task-specific mandatory flag.
+# Maps (category, task_type) → ordered list of sub-task definitions.
 # Key uses both category and type: today they map 1:1, but the combined key
 # future-proofs against task types being reused across categories.
-TASK_TYPE_SUBTASKS: dict[tuple[str, str], list[TaskSubTaskConfig]] = {
+TASK_TYPE_SUBTASKS: dict[tuple[str, str], list[SubTaskDefinition]] = {
     (MetaPollingPlaceTaskCategory.REVIEW, MetaPollingPlaceTaskType.REVIEW_DRAFT): [
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.REVIEW_DETAILS, mandatory=True),
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.REVIEW_LOCATION, mandatory=True),
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.REVIEW_LINKED_PPS, mandatory=True),
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.ADD_LINKS, mandatory=False),
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.REVIEW_ADDRESS, mandatory=False),
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.REVIEW_DETAILS,
+            title="Review Details",
+            description="Check and correct the name, premises, facility type, and wheelchair access information.",
+            mandatory=True,
+        ),
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.REVIEW_LOCATION,
+            title="Review Location",
+            description="Verify the map pin is correctly placed for this polling place.",
+            mandatory=True,
+        ),
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.REVIEW_LINKED_PPS,
+            title="Review Linked Polling Places",
+            description="Check that the polling places linked to this MPP are correct, and review any other nearby MPPs for potential matches or conflicts.",
+            mandatory=True,
+        ),
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.ADD_LINKS,
+            title="Add Links",
+            description="Add any known website, official, or other relevant URLs for this location.",
+            mandatory=False,
+        ),
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.REVIEW_ADDRESS,
+            title="Review Address",
+            description="Check and correct the street address details.",
+            mandatory=False,
+        ),
     ],
-    (MetaPollingPlaceTaskCategory.CROWDSOURCING, MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK): [
-        TaskSubTaskConfig(type=MetaPollingPlaceSubTaskType.ADD_FACEBOOK_LINK, mandatory=True),
+    (
+        MetaPollingPlaceTaskCategory.CROWDSOURCING,
+        MetaPollingPlaceTaskType.CROWDSOURCE_FROM_FACEBOOK,
+    ): [
+        SubTaskDefinition(
+            type=MetaPollingPlaceSubTaskType.ADD_FACEBOOK_LINK,
+            title="Find & Add Facebook Page",
+            description="Search for and add the Facebook page URL for this polling place location.",
+            mandatory=True,
+        ),
     ],
 }
 
 
-def get_subtask_configs(category: str, task_type: str) -> list[TaskSubTaskConfig]:
-    """Return the ordered list of TaskSubTaskConfigs for a given task category + type."""
+def get_subtask_definitions(category: str, task_type: str) -> list[SubTaskDefinition]:
+    """Return the ordered list of sub-task definitions for a given task category + type."""
     return TASK_TYPE_SUBTASKS.get((category, task_type), [])
 
 
@@ -250,13 +240,13 @@ def create_sub_tasks_for_task(task) -> None:
     """
     from demsausage.app.models import MetaPollingPlaceSubTasks
 
-    configs = get_subtask_configs(task.category, task.type)
+    definitions = get_subtask_definitions(task.category, task.type)
 
-    for config in configs:
+    for defn in definitions:
         sub_task = MetaPollingPlaceSubTasks(
             task=task,
             meta_polling_place=task.meta_polling_place,
-            type=config.type,
+            type=defn.type,
         )
         sub_task.full_clean()
         sub_task.save(force_insert=True)
@@ -280,8 +270,8 @@ def check_task_auto_complete(sender, instance, **kwargs):
     if task.status != MetaPollingPlaceTaskStatus.IN_PROGRESS:
         return
 
-    configs = get_subtask_configs(task.category, task.type)
-    mandatory_types = {c.type for c in configs if c.mandatory}
+    definitions = get_subtask_definitions(task.category, task.type)
+    mandatory_types = {d.type for d in definitions if d.mandatory}
 
     if not mandatory_types:
         return
@@ -333,28 +323,12 @@ Each event in the feed has a common shape:
 
 ```json
 {
-  "event_type": "subtask_completed",
+  "event_type": "sub_task_completed",
   "timestamp": "...",
   "user": "Alice",
   "detail": "Review Details marked done"
 }
 ```
-
-**Complete `event_type` enumeration:**
-
-| `event_type` | Source model | Trigger |
-|---|---|---|
-| `task_created` | `MetaPollingPlacesTasks.history` | Task row first created |
-| `task_started` | `MetaPollingPlacesTasks.history` | `status` transitions to `IN_PROGRESS` |
-| `task_completed` | `MetaPollingPlacesTasks.history` | `status` transitions to `COMPLETED` |
-| `task_deferred` | `MetaPollingPlacesTasks.history` | `outcome` set to `DEFERRED` |
-| `task_closed` | `MetaPollingPlacesTasks.history` | `outcome` set to `CLOSED` |
-| `subtask_created` | `MetaPollingPlaceSubTasks.history` | Sub-task row first created |
-| `subtask_completed` | `MetaPollingPlaceSubTasks.history` | `status` transitions to `COMPLETED` |
-| `subtask_rereview_flagged` | `MetaPollingPlaceSubTasks.history` | New `PENDING` sub-task row appended for a type that was previously `COMPLETED` |
-| `mpp_field_changed` | `MetaPollingPlaces.history` | Any tracked field on the MPP changes (name, geom, status, facility type, wheelchair access, etc.) |
-
-`detail` is a human-readable string generated per event type (e.g. `"Review Details marked done"`, `"Name changed: Old Name → New Name"`). `user` is `null` for system-generated events (e.g. auto-complete).
 
 Events are sorted descending by `timestamp`. The serialiser merges and sorts in Python (not at the DB level) since the three sources use `django-simple-history`'s `HistoricalRecords` and are not easily unioned in a single query.
 
@@ -369,9 +343,7 @@ Registered at `meta_polling_places/sub_tasks/`.
 | Action | Method | URL | Description |
 |---|---|---|---|
 | `complete` | POST | `/{id}/complete/` | Mark a sub-task as completed. Sets `status=COMPLETED`, `completed_on`, `completed_by`. Triggers auto-complete signal. |
-| `re_review` | POST | `/{id}/re_review/` | If the parent task is `IN_PROGRESS`: append a new `PENDING` sub-task row for each type in `sub_task_types` on the existing task. If no `IN_PROGRESS` task exists for the MPP: create a new parent `MetaPollingPlacesTasks` row with `status=PENDING` and the caller-supplied `job_name`, then append the sub-task rows to it. Does not modify any existing rows. |
-
-**Request body:** `{ "job_name": "...", "sub_task_types": ["Review Details", ...] }`. `job_name` is required when a new parent task must be created (ignored if an `IN_PROGRESS` task already exists). `sub_task_types` is always required and must be a non-empty list of valid `MetaPollingPlaceSubTaskType` values.
+| `re_review` | POST | `/{id}/re_review/` | Append a new PENDING sub-task row for the same `(task, type)`. Does not modify the existing row. |
 
 No `list` or `destroy` actions are exposed — sub-tasks are always fetched as a nested list on the parent task serialiser.
 
@@ -404,13 +376,13 @@ def migrate_existing_tasks(apps, schema_editor):
     MetaPollingPlaceSubTasks = apps.get_model("app", "MetaPollingPlaceSubTasks")
 
     for task in MetaPollingPlacesTasks.objects.filter(status="In Progress"):
-        configs = get_subtask_configs(task.category, task.type)
+        definitions = get_subtask_definitions(task.category, task.type)
 
-        for config in configs:
+        for defn in definitions:
             MetaPollingPlaceSubTasks.objects.create(
                 task=task,
                 meta_polling_place=task.meta_polling_place,
-                type=config.type.value,
+                type=defn.type.value,
                 status="Pending",
             )
 ```
@@ -437,7 +409,7 @@ Tasks are ordered to minimise time where the codebase is in a partially-broken s
 ### Phase 2 — Config module
 
 5. Create `subtask_config.py` with `SubTaskDefinition`, `TASK_TYPE_SUBTASKS`, `get_subtask_definitions()`, and `create_sub_tasks_for_task()`
-6. Add `.get_definition()` method to `MetaPollingPlaceSubTaskType` enum
+6. Add `.get_subtasks()` method to `MetaPollingPlaceTaskType` enum
 
 ### Phase 3 — Business logic
 
