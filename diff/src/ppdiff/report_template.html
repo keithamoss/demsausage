@@ -11,7 +11,6 @@
      the npm packages; deferred so the report renders before ~1 MB of map code arrives. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.11.0/ol.css" integrity="sha384-Jpg1uvTciFJuHq+90Ly0/2SKRT9yS5OhbIN5FuFoFWji9fc44ok8xxO88CJi8Z5W" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script defer src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js" integrity="sha384-rwbCGPbgxLkcQaFvIra1Vz3KBT1yBeF2/1VgLs/gCCNCJ61GHJGimHpkufVKcqap" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js" integrity="sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 :root {
   --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e3e2dd;
@@ -181,7 +180,24 @@ const MATCHER_LABEL = { rapidfuzz: "rapidfuzz", splink: "Splink" };
 const label = (m) => MATCHER_LABEL[m] || m;
 const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 // OpenLayers loads with `defer`, so it's ready by DOMContentLoaded.
-const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true })));
+const olReady = new Promise((resolve) => (window.ol ? resolve() : document.addEventListener("DOMContentLoaded", resolve, { once: true }))).then(async () => {
+  if (!window.ol) throw new Error("OpenLayers failed to load.");
+
+  // olms captures this enum when it loads; the OpenLayers global bundle omits it.
+  const { default: ImageState } = await import("https://cdn.jsdelivr.net/npm/ol@10.11.0/ImageState.js");
+  window.ol.ImageState = ImageState;
+
+  await new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js";
+    script.integrity = "sha384-Xbk1VLBOGZzxFc+vH6YhRApEzUWaH7jCPftmttvh7cgU4ty0zfQi3px71k4b5pwi";
+    script.crossOrigin = "anonymous";
+    script.referrerPolicy = "no-referrer";
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("The map style library failed to load."));
+    document.head.append(script);
+  });
+});
 function announce(message) {  // the page's live region, for screen readers
   const live = document.getElementById("live");
   live.textContent = "";

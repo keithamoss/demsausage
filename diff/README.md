@@ -110,7 +110,7 @@ not run; suggestions needing unavailable loaded values are withheld.
   - Animation is turned off when the system asks for reduced motion.
   - "Copy" results are announced to screen readers, and each map has a text summary.
   - Long sections only render the cards on screen.
-  - OpenLayers loads deferred from jsDelivr, with Subresource Integrity hashes. When you upgrade it, update the `integrity` attributes in `report_template.html`.
+  - OpenLayers loads deferred from jsDelivr, with Subresource Integrity hashes. Its version-pinned `ImageState` module loads before `ol-mapbox-style`, because the OpenLayers global bundle omits that export and patterned basemap fills need it. When you upgrade the map libraries, update their version URLs and Subresource Integrity hashes in `report_template.html`.
 - **Cosmetic changes** are listed in their own folded section, and tagged "cosmetic" where they appear alongside real changes.
 - **"No changes"** shown at the top when nothing changed.
 - **Copy summary:** plain text for Slack or a commit message.

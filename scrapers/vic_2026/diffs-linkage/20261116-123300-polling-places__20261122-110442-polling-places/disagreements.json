@@ -1,0 +1,16 @@
+{
+  "election": "vic_2026",
+  "old_file": "20261116_123300 polling places.csv",
+  "new_file": "20261122_110442 polling places.csv",
+  "old_label": "Mon 16 Nov 2026, 12:33 pm",
+  "new_label": "Sun 22 Nov 2026, 11:04 am",
+  "old_sha256": "8777bdb1e0171b0243429b51b0748794e9496ace395067d89d5b1b632770191e",
+  "new_sha256": "3bff231d3b2c3848db1ef072529e525250deae621092054094a01b0d997164e5",
+  "matchers": [
+    "rapidfuzz",
+    "splink"
+  ],
+  "agree": 1652,
+  "left_records": 1652,
+  "items": []
+}
