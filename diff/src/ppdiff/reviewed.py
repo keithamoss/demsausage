@@ -1,9 +1,9 @@
 """Review ticks saved in the repo: <pair folder>/reviewed.json.
 
-A report's "Download review" button saves the browser's ticks with the two input files'
-hashes; import_reviewed() finds the pair folder with those hashes and replaces its
-reviewed.json with the downloaded ticks (the download already includes the saved ones,
-so unticking in the browser removes a tick here too).
+A report's "Download review" button saves the browser's ticks with the pair identity
+and input file hashes. import_reviewed() verifies these before replacing reviewed.json.
+Older downloads without a pair identity are accepted only if their hashes identify
+one report. A download includes saved ticks, so unticking removes a tick from the repo.
 """
 
 from __future__ import annotations
@@ -54,6 +54,10 @@ def import_reviewed(source: Path, diffs_dir: Path) -> tuple[Path, dict[str, int]
 
     Returns:
         The pair folder and counts of saved, newly added, and removed ticks.
+
+    Raises:
+        FileNotFoundError: If no pair matches the downloaded review.
+        ValueError: If the pair identity does not match, or the hashes are ambiguous.
     """
     download: dict[str, Any] = json.loads(source.read_text())
     pair = download.get("pair")

@@ -536,7 +536,7 @@ function fixCard(f, d) {
              h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(f.fix), ev.currentTarget) }, "Copy fix")] : null);
 }
 
-// ---------- map (inline SVG, works offline) ----------
+// ---------- map features (the map libraries and basemap load separately) ----------
 function mapFeatures(d) {
   const f = [];
   for (const e of d.changed.concat(d.possible_matches)) {
@@ -694,7 +694,7 @@ function applyFilters() {
     c.style.display = okText && okCat && okReview ? "" : "none";
   });
 }
-function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
+function filter(q) { searchText = q.trim().toLowerCase(); applyFilters(); }
 function summaryText(d) {
   const s = d.summary, lines = [];
   lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
@@ -798,7 +798,7 @@ function renderDiff(d) {
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
     renderMap(d),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(ev.target.value) }),
       h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
       h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
@@ -870,7 +870,7 @@ function renderDisagreements() {
   const wrap = h("div", {},
     h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(ev.target.value) }),
       h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
     DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
   return wrap;

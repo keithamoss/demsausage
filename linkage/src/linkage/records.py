@@ -159,11 +159,19 @@ def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
 
 
 def _to_float(value: str | None) -> float | None:
+    """Read one coordinate, treating invalid values and zero as missing.
+
+    Args:
+        value: The coordinate text from the source file.
+
+    Returns:
+        A finite, non-zero number, or ``None`` if the coordinate is missing or invalid.
+    """
     try:
         number = float(value)  # type: ignore[arg-type]
     except (TypeError, ValueError):
         return None
-    # 0,0 is a "no coordinates" placeholder in some commission files.
+    # A zero on either axis is treated as a missing coordinate.
     return None if number == 0 or not math.isfinite(number) else number
 
 
@@ -174,6 +182,15 @@ def _split_divisions(value: str | None) -> frozenset[str]:
 def records_from_rows(
     rows: Sequence[dict[str, str]], columns: ColumnMap
 ) -> list[Record]:
+    """Turn source rows into records used by the matchers.
+
+    Args:
+        rows: Source rows in their original order.
+        columns: The source columns that hold each record field.
+
+    Returns:
+        Records indexed by row position; incomplete coordinate pairs are missing.
+    """
     records = []
     for index, row in enumerate(rows):
 

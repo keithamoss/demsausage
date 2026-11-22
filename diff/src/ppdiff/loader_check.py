@@ -24,7 +24,6 @@ _ROW = "_ppdiff_row"  # carries each row's index through the loader's steps
 
 
 def loader_rules():
-    """Import the loader's rules from the repo's django/ folder (no Django needed)."""
     """Load the loader's transformation functions without importing Django.
 
     Returns:

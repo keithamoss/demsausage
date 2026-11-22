@@ -171,14 +171,12 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
     rows = []
     for folder in folders:
         link_output = json.loads((folder / "link.json").read_text())
-        summaries = {}
-        for diff_path in sorted(folder.glob("diff-*.json")):
-            d = json.loads(diff_path.read_text())
-            summaries[d["matcher"]] = d["summary"]
+        diffs = [json.loads(path.read_text()) for path in sorted(folder.glob("diff-*.json"))]
+        summaries = {diff["matcher"]: diff["summary"] for diff in diffs}
         dis_path = folder / "disagreements.json"
         dis = json.loads(dis_path.read_text()) if dis_path.exists() else None
         disagreements = len(dis["items"]) if dis and len(dis["matchers"]) > 1 else None
-        nothing = all(json.loads(p.read_text()).get("nothing_changed") for p in folder.glob("diff-*.json"))
+        nothing = all(diff.get("nothing_changed") for diff in diffs)
         rows.append(
             {
                 "folder": folder.name,

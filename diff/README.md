@@ -16,7 +16,7 @@ uv run ppdiff index ../scrapers/<election>/diffs                                
 uv run ppdiff latest "../scrapers/<election>/data/*.csv" --out-dir ../scrapers/<election>/diffs    # newest two only (scrapers call this)
 ```
 
-**Run automatically by scrapers.** `scrapers/nsw_coffs_harbour_2026/scraper.py` and `scrapers/vic_2026/run.py` (into `diffs-linkage/`) call `ppdiff latest` after writing each CSV, so every scrape leaves a report in its `diffs/` folder (open `diffs/index.html`). `--no-diff` skips it, and a failed diff never fails the scrape. Other scrapers can do the same: copy `diff_against_previous()` from that scraper. Scraper outputs need a timestamp in the file name so same-day scrapes don't overwrite each other.
+**Run automatically by scrapers.** `scrapers/vic_2026/run.py` calls `ppdiff latest` after writing each CSV. Reports go into `diffs-linkage/`; open the `index.html` in that folder. `--no-linkage-diff` skips the generic diff, and a failed generic diff never fails the scrape. Other scrapers can do the same: see `linkage_diff()` in the VIC runner. Scraper outputs need a timestamp in the file name so same-day scrapes don't overwrite each other.
 
 Options: `--matcher rapidfuzz|splink|both`, `--ignore COLUMN` (repeatable), `--large-move-m`, `--replacement-radius-m`, and `--election LABEL`, which defaults to the out-dir's parent folder.
 
@@ -45,7 +45,7 @@ Each pair of files gets a folder `<old>__<new>/` containing:
 | `link.json` | Both matchers' linkage results (compact JSON), with each input's path and SHA-256 |
 | `diff-rapidfuzz.json`, `diff-splink.json` | One diff per matcher |
 | `disagreements.json` | Each place the matchers handled differently, with both decisions and their reasoning |
-| `report.html` | A self-contained report: a tab per matcher's diff, plus a Disagreements tab for verdicts |
+| `report.html` | An HTML report: a tab per matcher's diff, plus a Disagreements tab for verdicts |
 
 The diffs folder also gets an `index.html`, rebuilt after every run. It shows:
 - a **matcher comparison**: how many places the matchers disagreed on, in how many pairs, and a tally of the verdicts recorded in `linkage/verdicts/verdicts.jsonl` (who was right, by reason) for this election and for all elections.

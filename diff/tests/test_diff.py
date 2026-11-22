@@ -7,23 +7,54 @@ from pathlib import Path
 import pytest
 
 from ppdiff.core import changed_text, location_change, warnings_for
-from ppdiff.run import run_pair, series
+from ppdiff.run import disagreements, run_pair, series
 
 from linkage.records import ColumnMap, Dataset, records_from_rows
+from linkage.result import Link, LinkResult
 
 COLUMNS = ColumnMap(name="name", premises="premises", address=("address",), lat="lat", lon="lon")
 FIELDS = ["name", "premises", "address", "lat", "lon", "wheelchair_access"]
 
 
 def _ds(rows):
+    """Make a dataset from test rows.
+
+    Args:
+        rows: Source rows in their original order.
+
+    Returns:
+        A dataset using the test column mapping.
+    """
     return Dataset(path="x.csv", columns=COLUMNS, records=records_from_rows(rows, COLUMNS))
 
 
 def _row(name, lat, lon, address="1 Main St, Town", access="Full", premises=""):
+    """Make a source row for a polling place.
+
+    Args:
+        name: Place name.
+        lat: Latitude.
+        lon: Longitude.
+        address: Street address.
+        access: Wheelchair access description.
+        premises: Building name.
+
+    Returns:
+        A row using the test column names.
+    """
     return {"name": name, "premises": premises, "address": address, "lat": f"{lat:.6f}", "lon": f"{lon:.6f}", "wheelchair_access": access}
 
 
 def _write(path: Path, rows):
+    """Write test rows to a CSV.
+
+    Args:
+        path: Destination file.
+        rows: Source rows to write.
+
+    Returns:
+        The destination path.
+    """
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
@@ -54,6 +85,14 @@ def test_location_change_reports_coordinates_appearing():
 
 @pytest.fixture
 def pair(tmp_path):
+    """Create two test scrapes with additions, removals and changes.
+
+    Args:
+        tmp_path: Temporary directory supplied by pytest.
+
+    Returns:
+        The directory and the earlier and later CSV paths.
+    """
     (tmp_path / "data").mkdir()
     old = _write(tmp_path / "data" / "20260101 places.csv", [
         _row("Alpha Hall", -33.00, 151.00),
@@ -117,6 +156,26 @@ def test_run_pair_with_both_matchers_records_disagreements(pair):
     assert dis["election"] == "test_2026" and dis["matchers"] == ["rapidfuzz", "splink"]
     for item in dis["items"]:
         assert set(item["decisions"]) == {"rapidfuzz", "splink"}
+
+
+def test_disagreements_keep_each_matcher_decision():
+    old = _ds([_row("A", -33, 151), _row("B", -33.1, 151.1)])
+    new = _ds([_row("C", -33, 151), _row("D", -33.1, 151.1)])
+    first = LinkResult("first", [Link(0, 0, 0.9, "auto", "matcher")], [1], [1])
+    second = LinkResult("second", [Link(1, 1, 0.8, "review", "matcher")], [0], [0])
+    link_output = {
+        "left": {"path": "old.csv", "sha256": "old"},
+        "right": {"path": "new.csv", "sha256": "new"},
+        "results": [first.to_dict(), second.to_dict()],
+        "comparison": {"disagreements": [{"left": 0}, {"left": 1}]},
+    }
+
+    items = disagreements(old, new, link_output, "test")["items"]
+
+    assert items[0]["decisions"]["first"]["right"]["name"] == "C"
+    assert items[0]["decisions"]["second"] is None
+    assert items[1]["decisions"]["first"] is None
+    assert items[1]["decisions"]["second"]["right"]["name"] == "D"
 
 
 def test_series_pairs_consecutive_files(pair):
@@ -189,11 +248,26 @@ def test_index_follows_a_place_across_the_series(pair):
 
 
 def _town(prefix, lat, lon, n=4):
-    """A small cluster of places around a town centre."""
+    """Make a small cluster of places around a town centre.
+
+    Args:
+        prefix: Town name used to label the places.
+        lat: Centre latitude.
+        lon: Centre longitude.
+        n: Number of places.
+
+    Returns:
+        Source rows for the places.
+    """
     return [_row(f"{prefix} Hall {i}", lat + 0.002 * i, lon + 0.002 * i, address=f"{i} {prefix} St") for i in range(n)]
 
 
-def _typo_files(root):
+def _typo_files():
+    """Make matching rows with and without a latitude typo.
+
+    Returns:
+        The correct rows followed by a copy with one incorrect latitude.
+    """
     good = _town("Northam", -31.656, 116.671) + _town("York", -31.888, 116.770)
     typo = [dict(r) for r in good]
     typo[0]["lat"] = "-32.656000"  # latitude off by one degree, far from every other place
@@ -201,7 +275,7 @@ def _typo_files(root):
 
 
 def test_suggested_fix_when_new_file_has_the_typo(tmp_path):
-    good, typo = _typo_files(tmp_path)
+    good, typo = _typo_files()
     (tmp_path / "data").mkdir()
     old = _write(tmp_path / "data" / "20260101 a.csv", good)
     new = _write(tmp_path / "data" / "20260102 b.csv", typo)
@@ -216,7 +290,7 @@ def test_suggested_fix_when_new_file_has_the_typo(tmp_path):
 
 
 def test_no_fix_needed_when_new_file_corrects_the_typo(tmp_path):
-    good, typo = _typo_files(tmp_path)
+    good, typo = _typo_files()
     (tmp_path / "data").mkdir()
     old = _write(tmp_path / "data" / "20260101 a.csv", typo)
     new = _write(tmp_path / "data" / "20260102 b.csv", good)
@@ -226,14 +300,25 @@ def test_no_fix_needed_when_new_file_corrects_the_typo(tmp_path):
 
 
 def test_fix_fields_use_the_loaders_renamed_columns(tmp_path):
-    good, typo = _typo_files(tmp_path)
+    good, typo = _typo_files()
     renamed = lambda rows: [{"PPName": r["name"], "premises": r["premises"], "address": r["address"], "Lat": r["lat"], "Long": r["lon"]} for r in rows]
     election = tmp_path / "fed"
     (election / "data").mkdir(parents=True)
     (election / "config.json").write_text(json.dumps({"rename_columns": {"PPName": "name", "Lat": "lat", "Long": "lon"}}))
     def write(path, rows):
+        """Write rows using the renamed source columns.
+
+        Args:
+            path: Destination file.
+            rows: Source rows to write.
+
+        Returns:
+            The destination path.
+        """
         with open(path, "w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=["PPName", "premises", "address", "Lat", "Long"]); w.writeheader(); w.writerows(rows)
+            w = csv.DictWriter(f, fieldnames=["PPName", "premises", "address", "Lat", "Long"])
+            w.writeheader()
+            w.writerows(rows)
         return path
     old = write(election / "data" / "20260101 a.csv", renamed(good))
     new = write(election / "data" / "20260102 b.csv", renamed(typo))
@@ -243,7 +328,7 @@ def test_fix_fields_use_the_loaders_renamed_columns(tmp_path):
 
 
 def test_suggested_fix_selector_uses_loader_cleaned_name(tmp_path):
-    good, typo = _typo_files(tmp_path)
+    good, typo = _typo_files()
     typo[0]["name"] += " Polling Place"
     election = tmp_path / "fed"
     (election / "data").mkdir(parents=True)
@@ -386,11 +471,34 @@ def test_loader_checks_audit_fixes_and_find_load_problems(tmp_path):
     hdr = ["PPName", "premises", "address", "lat", "lon", "access"]
 
     def write(path, rows):
+        """Write rows using the loader test's source columns.
+
+        Args:
+            path: Destination file.
+            rows: Source rows to write.
+
+        Returns:
+            The destination path.
+        """
         with open(path, "w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=hdr); w.writeheader(); w.writerows(rows)
+            w = csv.DictWriter(f, fieldnames=hdr)
+            w.writeheader()
+            w.writerows(rows)
         return path
 
     def row(name, lat, lon, access="Full", address="1 Main St"):
+        """Make a row with the loader test's source column names.
+
+        Args:
+            name: Place name.
+            lat: Latitude.
+            lon: Longitude.
+            access: Wheelchair access description.
+            address: Street address.
+
+        Returns:
+            A row using the loader test's source columns.
+        """
         return {"PPName": name, "premises": "", "address": address, "lat": f"{lat:.6f}", "lon": f"{lon:.6f}", "access": access}
 
     old_rows = [row("Alpha", -33.0, 151.0), row("Beta", -33.1, 151.1), row("Gone", -33.2, 151.2), row("Twin", -33.3, 151.3), row("Twin", -33.4, 151.4)]
@@ -465,7 +573,7 @@ def test_nonfinite_coordinates_are_safe_for_blocked_matching():
 def test_suggested_fixes_do_not_overwrite_loader_extras(tmp_path, kind, field):
     election = tmp_path / "election"
     election.mkdir()
-    old_rows, new_rows = _typo_files(tmp_path)
+    old_rows, new_rows = _typo_files()
     if kind == "blank":
         new_rows[0]["lat"] = old_rows[0]["lat"]
         new_rows[0]["address"] = ""

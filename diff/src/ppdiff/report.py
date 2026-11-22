@@ -1,8 +1,9 @@
 """The static HTML report for one pair folder.
 
-Everything is embedded in a single file (no external scripts, fonts or styles) so
-it opens offline and anywhere. Verdicts are kept in the browser's localStorage as
-you go, and "Download verdicts" saves a JSON file for `linkage verdicts import`.
+Report data and interface code are embedded in one file. Maps load their libraries
+and basemap from external services, so they need an internet connection. Verdicts
+are kept in the browser's localStorage, and "Download verdicts" saves a JSON file
+for `linkage verdicts import`.
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ TEMPLATE = Path(__file__).with_name("report_template.html")
 
 
 def write_report(folder: Path) -> Path:
-    """Rebuild the self-contained HTML report from a pair folder's JSON files.
+    """Rebuild the HTML report from a pair folder's JSON files.
 
     Args:
         folder: The folder containing the pair's diff and linkage results.

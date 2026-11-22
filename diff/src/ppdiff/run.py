@@ -77,13 +77,13 @@ def disagreements(old: Dataset, new: Dataset, link_output: dict[str, Any], elect
     Returns:
         A JSON-ready record with each differing decision and its evidence.
     """
-    results = {r["matcher"]: LinkResult.from_dict(r) for r in link_output["results"]}
+    results = {r["matcher"]: LinkResult.from_dict(r).by_left() for r in link_output["results"]}
     comparison = link_output.get("comparison") or {"disagreements": [], "matchers": list(results)}
     items = []
     for d in comparison["disagreements"]:
         decisions = {}
-        for matcher, result in results.items():
-            chosen = result.by_left().get(d["left"])
+        for matcher, links in results.items():
+            chosen = links.get(d["left"])
             decisions[matcher] = (
                 None
                 if chosen is None

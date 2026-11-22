@@ -7,7 +7,6 @@ ones used for matching, so wheelchair access, opening hours and so on show up.
 
 from __future__ import annotations
 
-import math
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -28,22 +27,6 @@ LARGE_MOVE_M = 1000.0
 #: One axis agreeing within this many degrees (~50 m) while the place moved more
 #: than LARGE_MOVE_M looks like a typo in the other coordinate.
 SINGLE_AXIS_TOLERANCE_DEG = 0.0005
-
-
-def _to_float(value: str | None) -> float | None:
-    """Convert a coordinate value to a finite number.
-
-    Args:
-        value: The text value read from the source file.
-
-    Returns:
-        The number, or ``None`` if it is missing, invalid, or infinite.
-    """
-    try:
-        number = float(value)  # type: ignore[arg-type]
-    except (TypeError, ValueError):
-        return None
-    return number if math.isfinite(number) else None
 
 
 def changed_text(a: str | None, b: str | None) -> bool:
@@ -577,8 +560,8 @@ def suggested_fixes(
                 "fix": {
                     **sel,
                     "overwrite": [
-                        {"field": _schema(lat_col, rename), "value": loc["old"][0]},
-                        {"field": _schema(lon_col, rename), "value": loc["old"][1]},
+                        {"field": overwrite_fields[0], "value": loc["old"][0]},
+                        {"field": overwrite_fields[1], "value": loc["old"][1]},
                     ],
                 } if sel else None,
             }
@@ -595,14 +578,14 @@ def suggested_fixes(
                     "new_index": place["new_index"],
                     "name": place["name"],
                     "kind": "blank",
-                    "field": _schema(column, rename),
+                    "field": field,
                     "likely": False,
                     "no_fix_needed": False,
                     "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",
                     "note": note,
                     "fix": {
                         **sel,
-                        "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}],
+                        "overwrite": [{"field": field, "value": place["old_value"]}],
                     } if sel else None,
                 }
             )

@@ -228,7 +228,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_rev = sub.add_parser("reviewed", help="Save review ticks downloaded from a report into the repo")
     rsub = p_rev.add_subparsers(dest="reviewed_command", required=True)
-    p_rimp = rsub.add_parser("import", help="Merge a 'Download review' file into its pair folder's reviewed.json")
+    p_rimp = rsub.add_parser("import", help="Save a 'Download review' file as its pair folder's reviewed.json")
     p_rimp.add_argument("file")
     p_rimp.add_argument("--diffs-dir", required=True, help="The diffs folder holding the report")
     p_rimp.set_defaults(func=cmd_reviewed_import)
