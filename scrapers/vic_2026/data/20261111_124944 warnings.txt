@@ -1,0 +1,6 @@
+Campbells Creek Primary School (Bendigo West): no election day hours on the VEC map (closed or provisional?)
+Anglican Parish Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+Strathbogie Memorial Hall (Euroa): no election day hours on the VEC map (closed or provisional?)
+Murrabit Group School (Murray Plains): wheelchair rating is LNWA in the spreadsheet but 'Independent Wheelchair Access(IWA)' (id 2) on the VEC map
+Harrietville Community Hall (Ovens Valley): no election day hours on the VEC map (closed or provisional?)
+Christ Church Grammar School (Prahran): wheelchair rating is AWA in the spreadsheet but 'Limited OR No Wheelchair Access (LNWA)' (id 0) on the VEC map

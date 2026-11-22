@@ -1,14 +1,14 @@
 import csv
 import json
-import re
 from datetime import datetime, timezone
 from io import StringIO
+from typing import Any, cast
 
 import chardet
 import googlemaps
 from django.contrib.gis.geos import Point
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Field, Q
 from rq import get_current_job
 
 from demsausage.app.enums import (
@@ -26,6 +26,7 @@ from demsausage.app.models import (
     PollingPlaces,
     Stalls,
 )
+from demsausage.app.sausage import loader_rules
 from demsausage.app.sausage.chance_of_sausage import (
     calculate_chance_of_sausage_stats,
 )
@@ -36,9 +37,7 @@ from demsausage.app.serializers import (
 )
 from demsausage.rq.jobs import task_regenerate_cached_election_data
 from demsausage.util import (
-    convert_string_to_number,
     get_env,
-    is_numeric,
     make_logger,
     merge_and_sum_dicts,
 )
@@ -93,6 +92,11 @@ class PollingPlacesIngestBase:
     """
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
+
+    election: Any
+    dry_run: bool
+    job: Any
+    is_reload: bool
 
     # ------------------------------------------------------------------
     # New structured log transport (Phase 2)
@@ -289,10 +293,10 @@ class PollingPlacesIngestBase:
             # so tests can access it via getattr(exc, "_partial_payload") even
             # when the exception is raised from __init__ (before the loader
             # variable is bound in the caller).
-            exc._partial_payload = self.collect_structured_logs()
+            setattr(exc, "_partial_payload", self.collect_structured_logs())
             raise exc
 
-    def is_dry_run(self):
+    def is_dry_run(self) -> bool:
         return self.dry_run
 
     def has_pending_stalls(self):
@@ -356,7 +360,7 @@ class PollingPlacesIngestBase:
         self.stages.append(
             self._build_stage(
                 name=method_name,
-                label=STAGE_LABELS.get(method_name, method_name),
+                label=cast(str, STAGE_LABELS.get(method_name, method_name)),
                 started_at=started_at,
                 finished_at=finished_at,
                 stage_entries=stage_entries,
@@ -366,7 +370,11 @@ class PollingPlacesIngestBase:
 
         if mid_stage_exc is not None:
             # Re-raise with updated partial payload now that the stage is recorded.
-            mid_stage_exc._partial_payload = self.collect_structured_logs()
+            setattr(
+                mid_stage_exc,
+                "_partial_payload",
+                self.collect_structured_logs(),
+            )
             raise mid_stage_exc
 
         self.raise_exception_if_errors()
@@ -377,10 +385,46 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
 
+    filters: list[dict] | None
+    exclude_columns: list[str] | None
+    rename_columns: dict[str, str] | None
+    add_columns: dict[str, Any] | None
+    extras: dict[str, Any] | None
+    cleaning_regexes: list[dict] | None
+    address_fields: list[str] | None
+    address_format: str | None
+    division_fields: list[str] | None
+    fix_data_issues: list[dict] | None
+    overwrite_distance_thresholds: dict | None
+    geocoding: dict[str, Any] | None
+    bbox_validation: dict[str, Any] | None
+    multiple_division_handling: dict[str, Any] | None
+    gmaps: Any
+    polling_places: list[dict[str, Any]]
+    file: Any
+    reader: Any
+    has_config: bool
+
     def __init__(self, election, file, dry_run, config, user_email=None):
         # Initialise new structured log transport first so _log() is available
         # before check_config_is_valid runs.
         self._init_log_transport()
+        self.job = None
+        self.gmaps = None
+        self.filters = None
+        self.exclude_columns = None
+        self.rename_columns = None
+        self.add_columns = None
+        self.extras = None
+        self.cleaning_regexes = None
+        self.address_fields = None
+        self.address_format = None
+        self.division_fields = None
+        self.fix_data_issues = None
+        self.overwrite_distance_thresholds = None
+        self.geocoding = None
+        self.bbox_validation = None
+        self.multiple_division_handling = None
 
         def _get_config_or_none(param_name, config):
             return (
@@ -488,180 +532,50 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         return True
 
     def convert_to_demsausage_schema(self):
-        def _filter():
-            def _apply_filter(polling_place):
-                for filter in self.filters:
-                    if filter["type"] == "is_exactly":
-                        if polling_place[filter["column"]] not in filter["matches"]:
-                            return False
-                return True
-
-            if self.filters is not None:
-                filtered_polling_places = []
-                for polling_place in self.polling_places:
-                    if _apply_filter(polling_place) is True:
-                        filtered_polling_places.append(polling_place)
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="{} of {} polling places filtered out".format(
-                        len(self.polling_places) - len(filtered_polling_places),
-                        len(self.polling_places),
-                    ),
+        # The steps themselves live in loader_rules (no Django) so other tools can apply
+        # an election's config exactly as the loader does. This method only logs.
+        def log_step(step, before, after, errors):
+            if step == "filters":
+                message = "{} of {} polling places filtered out".format(
+                    before - after, before
                 )
-                self.polling_places = filtered_polling_places
-
-        def _exclude_columns():
-            def _remove_excluded_fields(polling_place):
-                return {
-                    field_name: polling_place[field_name]
-                    for idx, field_name in enumerate(polling_place)
-                    if field_name not in self.exclude_columns
-                }
-
-            if self.exclude_columns is not None:
-                processed_polling_places = []
-                for polling_place in self.polling_places:
-                    processed_polling_places.append(
-                        _remove_excluded_fields(polling_place)
-                    )
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Removed {} columns".format(len(self.exclude_columns)),
+            elif step == "rename_columns":
+                rename_columns = self.rename_columns or {}
+                message = "Renamed {} columns".format(len(rename_columns))
+            elif step == "add_columns":
+                add_columns = self.add_columns or {}
+                message = "Added {} new columns".format(len(add_columns))
+            elif step == "extras":
+                extras = self.extras or {}
+                message = "Packed {} column(s) into the extras field".format(
+                    len(extras.get("fields", []))
                 )
-                self.polling_places = processed_polling_places
-
-        def _rename_columns():
-            def _rename_fields(polling_place):
-                for current_name, new_name in self.rename_columns.items():
-                    polling_place[new_name] = polling_place[current_name]
-                    del polling_place[current_name]
-                return polling_place
-
-            if self.rename_columns is not None:
-                processed_polling_places = []
-                for polling_place in self.polling_places:
-                    processed_polling_places.append(_rename_fields(polling_place))
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Renamed {} columns".format(len(self.rename_columns)),
+            elif step == "exclude_columns":
+                exclude_columns = self.exclude_columns or []
+                message = "Removed {} columns".format(len(exclude_columns))
+            else:
+                for regex_error in errors:
+                    self._log("error", "text", message=regex_error)
+                cleaning_regexes = self.cleaning_regexes or []
+                message = "Ran {} cleaning regexes".format(
+                    len(cleaning_regexes)
                 )
-                self.polling_places = processed_polling_places
 
-        def _add_columns():
-            def _add_fields(polling_place):
-                for column_name, column_value in self.add_columns.items():
-                    polling_place[column_name] = column_value
-                return polling_place
+            self._log("summary", "text", message=message)
 
-            if self.add_columns is not None:
-                processed_polling_places = []
-                for polling_place in self.polling_places:
-                    processed_polling_places.append(_add_fields(polling_place))
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Added {} new columns".format(len(self.add_columns)),
-                )
-                self.polling_places = processed_polling_places
-
-        def _create_extras():
-            def _create(polling_place):
-                extras = {}
-                for field_name in self.extras["fields"]:
-                    if is_numeric(polling_place[field_name]) is True:
-                        extras[field_name] = convert_string_to_number(
-                            polling_place[field_name]
-                        )
-                    elif polling_place[field_name] is not None:
-                        extras[field_name] = polling_place[field_name]
-                    del polling_place[field_name]
-
-                polling_place["extras"] = extras
-                return polling_place
-
-            if self.extras is not None:
-                processed_polling_places = []
-                for polling_place in self.polling_places:
-                    processed_polling_places.append(_create(polling_place))
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Packed {} column(s) into the extras field".format(
-                        len(self.extras["fields"])
-                    ),
-                )
-                self.polling_places = processed_polling_places
-
-        # def _skip_blank_coordinates():
-        #     def _has_blank_coordinates(polling_place):
-        #         return len(polling_place["lon"].strip()) == 0 or len(polling_place["lat"].strip()) == 0
-
-        #     processed_polling_places = []
-        #     skipped_polling_places = []
-        #     for polling_place in self.polling_places:
-        #         if _has_blank_coordinates(polling_place) is False:
-        #             processed_polling_places.append(polling_place)
-        #         else:
-        #             skipped_polling_places.append("{} ({})".format(polling_place["name"], polling_place["premises"]))
-
-        #     self.polling_places = processed_polling_places
-
-        #     if len(skipped_polling_places) > 0:
-        #         self.logger.warning("Skipped {} polling places with blank coordinates. {}".format(len(skipped_polling_places), ", ".join(skipped_polling_places)))
-
-        def _run_regexes():
-            def _apply_regexes(polling_place):
-                for regex in self.cleaning_regexes:
-                    # If we need to include field names at some point in the future
-                    # field_data = {key: value.strip() for (key, value) in dict(polling_place).items() if key in regex["fields"]}
-                    # match = re.search(regex["regex"].format(**field_data), polling_place[regex["field"]])
-
-                    match = re.search(
-                        regex["regex"], polling_place[regex["field"]].strip()
-                    )
-                    if match:
-                        polling_place[regex["field"]] = match.groupdict()[
-                            "main"
-                        ].strip()
-                    else:
-                        self._log(
-                            "error",
-                            "text",
-                            message="Cleaning regex '{}' did not match field value '{}'".format(
-                                regex["regex"], polling_place[regex["field"]]
-                            ),
-                        )
-                return polling_place
-
-            if self.cleaning_regexes is not None:
-                processed_polling_places = []
-                for polling_place in self.polling_places:
-                    processed_polling_places.append(_apply_regexes(polling_place))
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Ran {} cleaning regexes".format(
-                        len(self.cleaning_regexes)
-                    ),
-                )
-                self.polling_places = processed_polling_places
-
-        _filter()
-        _rename_columns()
-        _add_columns()
-        _create_extras()
-        _exclude_columns()
-        # _skip_blank_coordinates()
-        _run_regexes()
+        config = {
+            "filters": self.filters,
+            "rename_columns": self.rename_columns,
+            "add_columns": self.add_columns,
+            "extras": self.extras,
+            "exclude_columns": self.exclude_columns,
+            "cleaning_regexes": self.cleaning_regexes,
+        }
+        self.polling_places, _ = loader_rules.to_schema(
+            self.polling_places,
+            cast(loader_rules.SchemaConfig, config),
+            on_step=log_step,
+        )
 
         self.raise_exception_if_errors()
 
@@ -681,9 +595,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             required_model_field_names = [
                 f.name
                 for f in PollingPlaces._meta.get_fields()
-                if hasattr(f, "blank")
+                if isinstance(f, Field)
                 and f.blank is False
-                and hasattr(f, "null")
                 and f.null is False
                 and f.name not in ("geom", "election", "status")
             ] + ["lat", "lon"]
@@ -787,38 +700,11 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def prepare_polling_places(self):
         def _prepare_polling_place(polling_place):
             def get_or_merge_address_fields(polling_place):
-                if "address" in polling_place:
+                polling_place, has_address = loader_rules.merge_address(
+                    polling_place, self.address_fields, self.address_format
+                )
+                if has_address:
                     return polling_place
-
-                if self.address_format is not None:
-                    address_data = {
-                        key: value.strip()
-                        for (key, value) in dict(polling_place).items()
-                        if key in self.address_fields
-                    }
-                    address = self.address_format.format(**address_data)
-
-                    # Handle missing address components
-                    address = re.sub(r"\s{2,}", " ", address)
-                    address = (
-                        address.replace(", ,", ",")
-                        .replace(" , ", ", ")
-                        .replace(",, ", ", ")
-                        .strip()
-                    )
-                    if address.startswith(",") is True:
-                        address = address[1:]
-                    if address.endswith(",") is True:
-                        address = address[:-1]
-
-                    polling_place["address"] = address
-
-                    # Trim now merged polling place address component fields
-                    for field in self.address_fields:
-                        del polling_place[field]
-
-                    return polling_place
-
                 self._log(
                     "error",
                     "text",
@@ -828,26 +714,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 )
 
             def get_or_merge_divisions_fields(polling_place):
-                if "divisions" in polling_place:
-                    polling_place["divisions"] = [
-                        d.strip() for d in polling_place["divisions"].split(",")
-                    ]
-                    return polling_place
-
-                if self.division_fields is not None:
-                    polling_place["divisions"] = [
-                        value.strip()
-                        for (key, value) in dict(polling_place).items()
-                        if key in self.division_fields and value.strip() != ""
-                    ]
-
-                    # Trim the now merged divisions fields
-                    for field in self.division_fields:
-                        del polling_place[field]
-
-                    return polling_place
-
-                return polling_place
+                return loader_rules.merge_divisions(polling_place, self.division_fields)
 
             def _has_blank_coordinates(polling_place):
                 # Blank (empty)
@@ -912,8 +779,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         else:
                             return True
 
-                    geocode_result = self.gmaps.geocode(
-                        term, components=self.geocoding["components"]
+                    geocoding = self.geocoding or {}
+                    geocode_result = getattr(self.gmaps, "geocode")(
+                        term, components=geocoding["components"]
                     )
 
                     if _is_good_result(geocode_result) is False:
@@ -1029,45 +897,17 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         self.raise_exception_if_errors()
 
     def fix_polling_places(self):
-        def _fix():
-            def _apply_fix(config, polling_place):
-                fixed_polling_place = polling_place
-                for defn in config["overwrite"]:
-                    if defn["field"] in polling_place:
-                        # self.logger.info("Setting {} to {} for {} = {} for '{}'".format(defn["field"], defn["value"], config["field"], config["value"], polling_place["premises"]))
-                        polling_place[defn["field"]] = defn["value"]
-                return fixed_polling_place
-
-            def _fix_matching_polling_places(config, polling_places):
-                processed_polling_places = []
-
-                for polling_place in polling_places:
-                    if config["field"] in polling_place and str(
-                        polling_place[config["field"]]
-                    ) == str(config["value"]):
-                        processed_polling_places.append(
-                            _apply_fix(config, polling_place)
-                        )
-                    else:
-                        processed_polling_places.append(polling_place)
-
-                return processed_polling_places
-
-            if self.fix_data_issues is not None:
-                processed_polling_places = self.polling_places
-                for config in self.fix_data_issues:
-                    processed_polling_places = _fix_matching_polling_places(
-                        config, processed_polling_places
-                    )
-
-                self._log(
-                    "summary",
-                    "text",
-                    message="Ran {} field fixers".format(len(self.fix_data_issues)),
-                )
-                self.polling_places = processed_polling_places
-
-        _fix()
+        # Shared with tools outside Django: see loader_rules.apply_fixes.
+        if self.fix_data_issues is not None:
+            self.polling_places = loader_rules.apply_fixes(
+                self.polling_places,
+                cast(list[loader_rules.FixRule], self.fix_data_issues),
+            )
+            self._log(
+                "summary",
+                "text",
+                message="Ran {} field fixers".format(len(self.fix_data_issues)),
+            )
 
         self.raise_exception_if_errors()
 
@@ -1088,7 +928,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # Normalise DRF error dict to a list of {field, messages} objects
                 fields = [
                     {"field": field, "messages": list(msgs)}
-                    for field, msgs in validation.items()
+                    for field, msgs in cast(dict[str, list[Any]], validation).items()
                 ]
                 self._log(
                     "error",
@@ -1190,15 +1030,17 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                             )
                             return None
 
-            # We'll just use the first one - it'll probably be wrong but whatever
-            return polling_places[0]["divisions"][0]
+            # Use the first available division when boundaries are not configured.
+            return next(
+                (division for pp in polling_places for division in pp["divisions"]),
+                None,
+            )
 
         def _merge_divisions(polling_places):
             home_division = _find_home_division(polling_places)
 
             if home_division is None:
-                # find_home_division_error was already logged by _find_home_division;
-                # do not emit an additional redundant entry.
+                # Either no divisions were supplied, or boundary matching logged an error.
                 return []
 
             # Flatten and dedupe
@@ -1373,7 +1215,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # pragma: no cover — check_polling_place_validity bails first in normal execution
                 fields = [
                     {"field": field, "messages": list(msgs)}
-                    for field, msgs in serialiser.errors.items()
+                    for field, msgs in cast(
+                        dict[str, list[Any]], serialiser.errors
+                    ).items()
                 ]
                 self._log(
                     "error",

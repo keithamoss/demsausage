@@ -28,6 +28,8 @@ Or run the steps on their own:
 | `uv run python transform.py [cache]` | No | Reads a scrape cache and writes `data/<stamp> polling places.csv` plus `data/<stamp> warnings.txt`. |
 | `uv run python diff.py [old new]` | No | Compares two outputs by VEC venue ID, including new and resolved warnings. Saves the report to `diffs/`. |
 
+The generic polling place diff (`diff/` at the repo root) also runs on these outputs, without using the VEC venue ID. It writes one diff per matcher plus an HTML report to `diffs-linkage/`: from `diff/`, `uv run ppdiff series "../scrapers/vic_2026/data/*polling places.csv" --out-dir ../scrapers/vic_2026/diffs-linkage`.
+
 Load the CSV via the admin elections page using `config.json` (dry run first).
 
 ## Errors vs warnings
@@ -39,12 +41,14 @@ Load the CSV via the admin elections page using `config.json` (dry run first).
 - a stale entry in `VENUE_KEY_ALIASES`
 - changed spreadsheet headers or map fields
 
+Confirmed map-only venues can be explicitly added by VEC venue ID to `API_ONLY_VENUE_IDS` in `common.py`. The allowlist is currently empty. For an approved map-only venue, the label and wheelchair classification come from the API; vote estimates and spreadsheet-only accessibility/entrance descriptions are unavailable. Remove its ID once it appears in the spreadsheet.
+
 **Warnings** are written to `warnings.txt` but don't stop the run; the spreadsheet value is used. They cover:
 
 - venues with no election day hours on the map, or hours other than 8am-6pm
 - wheelchair ratings that differ between the spreadsheet and the map
 
-The diff groups warnings by issue and shows which are still present, new, or resolved since the previous output.
+The diff summarises new, changed and resolved warnings, then lists warnings by issue. A warning is changed when its details differ for the same VEC venue ID and recognised issue; ambiguous or unrecognised warnings are reported as new and resolved instead.
 
 ## When a venue doesn't match
 
@@ -60,7 +64,6 @@ Venues are matched on name + address line 1 + suburb. If the scrape or transform
 - The loader packs these columns into `extras`:
   - `vec_venue_id`
   - `host_district`
-  - `is_early_voting_centre` (1/0)
   - `est_ordinary_votes`
   - `est_absent_votes`
   

@@ -33,6 +33,8 @@ Distances were measured from the archived pre-load polling-place coordinates in 
 - **5 November 2026:** Added Fairfield Primary School after a newly approved stall at the same school/address was 136m from the official pin. Added Glen Katherine Primary School after confirming it shares a large campus with St Helena Secondary College; the next-nearest official polling place was about 953m away. Their initial thresholds were 250m and 450m respectively.
 - **5 November 2026:** Replaced the broad initial radii with the measured distance rounded up to the next 5m, plus 25m. This produced the current values above.
 - **7 November 2026:** Rechecked all 14 against the refreshed 7 November CSV. Every threshold still selected exactly one official polling place. Coordinate changes in that scrape did not invalidate these matches.
+- **14 November 2026:** Removed early-voting-centre matching and the `is_early_voting_centre` output/config field: only election-day voting centres are in scope. Regenerated the 13 November CSV; comparison with the reconstructed previous transform confirmed all 1,652 rows, their remaining fields and order, and all six warnings were unchanged.
+- **14 November 2026:** Removed Ringwood Heights Primary School from the API-only allowlist after it appeared in the 12 November spreadsheet. The empty allowlist remains available for explicitly approved future map-only venues; other map-only venues are errors.
 
 ## Related Unmatched Cases
 
@@ -54,7 +56,7 @@ Glen Katherine Primary School is not in the holding pen: the team confirmed it s
 
 These are key aliases in `common.py`, not distance overrides:
 
-- The Hellenic Orthodox Community of Geelong Parish Hall is called the Community Hall by the map; the address and suburb identify the same place.
+- The Hellenic Orthodox Community of Geelong was previously called Parish Hall in the spreadsheet and Community Hall on the map. The 12 November spreadsheet agrees with the map, so the alias was removed.
 - St Francis Catholic College Melton previously had a suburb mismatch between sources. The 7 November spreadsheet and map both say Melton West, so its now-redundant identity alias was removed on 7 November 2026.
 
 ## Maintenance

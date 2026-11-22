@@ -6,7 +6,6 @@
     "fields": [
       "vec_venue_id",
       "host_district",
-      "is_early_voting_centre",
       "est_ordinary_votes",
       "est_absent_votes"
     ]
@@ -14,6 +13,32 @@
   "geocoding": {
     "enabled": false
   },
+  "fix_data_issues": [
+    {
+      "field": "premises",
+      "value": "Aberfeldie Primary School",
+      "overwrite": [
+        {
+          "field": "address",
+          "value": "1 Doone Street, Aberfeldie VIC 3040"
+        }
+      ]
+    },
+    {
+      "field": "premises",
+      "value": "Loch Sport Community House",
+      "overwrite": [
+        {
+          "field": "wheelchair_access",
+          "value": "Full"
+        },
+        {
+          "field": "wheelchair_access_description",
+          "value": ""
+        }
+      ]
+    }
+  ],
   "overwrite_distance_thresholds": [
     {
       "name": "Brunswick North",
