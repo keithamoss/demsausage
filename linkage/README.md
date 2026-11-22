@@ -82,9 +82,9 @@ These figures are with the exact pass on. With it off, every matcher is still pe
 |---|---|---|
 | WA 2025, QLD 2024, QLD 2020, TAS 2025, TAS 2021, ACT 2024 (first → last snapshot) | all | 0 |
 | WA 2021 | 721 / 722 | 1 |
-| Coffs Harbour 2023 state → 2026 council | Snapshot unavailable | Skipped |
+| Coffs Harbour 2023 state → 2026 council | 20 / 23 | 3 |
 
-The disagreements, with my reading of them:
+The WA 2021 disagreements, with my reading of them:
 - **WA 2021, Northam Town Hall:** the old file's latitude was a typo, 111 km off. Originally only rapidfuzz linked it. Both matchers now link it, after the changes under "Coordinate typos".
 - **WA 2021, South West Health Campus → ECU South West Campus:** different names and addresses, 500 m apart. Rapidfuzz auto-linked it, and Splink didn't. This looks like a venue swap, so rapidfuzz is probably wrong.
 

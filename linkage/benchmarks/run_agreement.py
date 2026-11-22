@@ -37,7 +37,7 @@ PAIRS = [
         "coffs_harbour_2023_state_to_2026_council",
         Path(__file__).parent / "data/nsw_coffs_harbour_state_2023_SG2301-020.csv",
         SCRAPERS
-        / "nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
+        / "nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_20261121_095224.csv",
     ),
 ]
 
