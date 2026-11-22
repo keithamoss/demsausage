@@ -219,11 +219,19 @@ def records_from_rows(
 
 @dataclass
 class Dataset:
-    """A loaded file: its records, the column map used and where it came from."""
+    """A loaded file and the information used to interpret it.
+
+    Attributes:
+        path: The source file's path.
+        columns: The mapping from source columns to record fields.
+        records: The polling places read from the file.
+        header: Source column names in order, or ``None`` for an in-memory dataset.
+    """
 
     path: str
     columns: ColumnMap
     records: list[Record]
+    header: list[str] | None = None
 
     def fields_present(self) -> set[str]:
         """Fields with a value in at least one record."""
@@ -254,4 +262,4 @@ def load_csv(
         header = reader.fieldnames or []
         rows = [row for row in reader if row_filter is None or row_filter(row)]
     columns = columns or ColumnMap.detect(header, id_column=id_column)
-    return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns))
+    return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns), header=header)

@@ -109,12 +109,16 @@ function tallyBlock(title, t) {
         h("tr", { class: "total" }, h("th", { scope: "row" }, "All"), order.map((k) => h("td", {}, t.by_verdict[k] || 0)))))));
 }
 {
-  const withDis = DATA.pairs.filter((p) => p.disagreements);
+  const compared = DATA.pairs.filter((p) => p.disagreements !== null);
+  const withDis = compared.filter((p) => p.disagreements > 0);
   const places = withDis.reduce((n, p) => n + p.disagreements, 0);
+  const coverage = compared.length < DATA.pairs.length
+    ? ` ${compared.length} of ${DATA.pairs.length} pairs were compared.`
+    : "";
   document.getElementById("comparison").replaceChildren(
-    h("p", { class: "note" }, DATA.pairs.some((p) => p.disagreements !== null)
-      ? (places ? `The two matchers disagreed on ${places} place${places === 1 ? "" : "s"} across ${withDis.length} of ${DATA.pairs.length} pairs. Record verdicts in each report's Disagreements tab, then import them (uv run linkage verdicts import FILE).`
-                : `The two matchers agreed on every place in all ${DATA.pairs.length} pairs.`)
+    h("p", { class: "note" }, compared.length
+      ? (places ? `The two matchers disagreed on ${places} place${places === 1 ? "" : "s"} across ${withDis.length} of ${compared.length} compared pair${compared.length === 1 ? "" : "s"}.${coverage} Record verdicts in each report's Disagreements tab, then import them (uv run linkage verdicts import FILE).`
+                : `The two matchers agreed on every place in all ${compared.length} compared pair${compared.length === 1 ? "" : "s"}.${coverage}`)
       : "Only one matcher was run, so there's nothing to compare."),
     tallyBlock("This election", DATA.tally_here),
     tallyBlock("All elections", DATA.tally_all));

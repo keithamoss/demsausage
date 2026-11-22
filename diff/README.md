@@ -30,6 +30,10 @@ Every key is optional. Command-line `--ignore` adds to the file's list, and the 
 
 VIC 2026 writes to `scrapers/vic_2026/diffs-linkage/`, alongside the existing `diffs/` from its own `diff.py`.
 
+Report rebuilds check source hashes using paths relative to the pair folder, so the
+check works from any working directory. For older reports with unresolved relative
+paths, run the diff again to record their locations.
+
 ## File names
 
 Reports and the index show files by when they were scraped, e.g. "Wed 4 Nov 2026, 8:46 pm" for `20261104_204630 polling places.csv`. `ppdiff/names.py` recognises the date styles our scrapers use (`20261104_204630`, `2026-11-21`, `(20210207)`, `18-08-2026`, `2024_10_14`). Files without one fall back to a tidied file name. To support another style, add a pattern to `ADAPTERS` there.
@@ -59,7 +63,7 @@ A diff contains:
 - **added and removed:** full rows.
 - **columns:** columns added, removed or ignored.
 - **replacements:** a removed place and an added place within 500 m are paired as a likely replacement (a venue swap the matcher rightly didn't link). The removed and added entries point at each other.
-- **suggested_fixes:** draft `fix_data_issues` entries for the election's `config.json`, using the loader's column names after `rename_columns`. Each one puts back the previous value, for a move of 1 km or more or a field gone blank, selecting the place by name (with a warning if the name isn't unique). For big moves it guesses which side is wrong by how isolated each position is from the other polling places. If the old position was the outlier, it says "no fix needed" instead of offering a fix.
+- **suggested_fixes:** draft `fix_data_issues` entries for the election's `config.json`, using the loader's column names after `rename_columns`. Each one puts back the previous value, for a move of 1 km or more or a field gone blank, selecting the place by its name after existing loader fixes (with a warning if the name isn't unique). Blank-field fixes use the old value after loader conversion and existing fixes; they are withheld if that value is unavailable or introduces a loader validation problem. Ignored fields do not produce newly-blank checks or fixes. For big moves it guesses which side is wrong by how isolated each position is from the other polling places. If the old position was the outlier, it says "no fix needed" instead of offering a fix.
 - **cosmetic:** linked places whose only differences are ones the linkage module treats as the same value (`linkage.normalise.equivalent`): case, punctuation, spacing, address abbreviations, noise words in names, number formatting, and how opening hours are written ("8am to 6pm" = "08:00 AM - 06:00 PM"). Each change carries `cosmetic: true/false`. Only linkage decides this; the diff does no matching of its own. Cosmetic-only places aren't counted as changed.
 - **nothing_changed:** true when the two files have the same places, with no differences beyond cosmetic ones.
 - **quality:** checks on the new file. Different places at identical coordinates, coordinates with 3 or fewer decimal places, missing coordinates, and fields that had a value and are now blank.
@@ -90,7 +94,7 @@ If the election has a `config.json` beside its diffs folder, each diff also chec
 - **Loader sections first:** config fixes to look at, config fixes that still apply (folded), and problems that would stop the load, with tiles counting them.
 - **Sections:** warnings, suggested config fixes, possible matches, likely replacements, changed, added, removed, data quality. Changed places come biggest first: warnings, then accessibility getting worse, then the largest moves, then the most fields changed. Possible matches come least confident first.
 - **Suggested config fixes**, each with its JSON, a copy button, and a link to the change; "Copy all" copies them as a list. Changed cards show a "suggested fix" badge.
-- **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. The button shows how many ticks aren't saved yet.
+- **Reviewed ticks** on every card, shared by both matchers' tabs. Section headers count how many are reviewed, and "Hide reviewed" hides them. Ticks are kept in the browser. To keep them in the repo, press **Download review**, then run `uv run ppdiff reviewed import FILE --diffs-dir ../scrapers/<election>/diffs`. That writes the pair folder's `reviewed.json` (unticked places are removed too) and rebuilds the report, which then opens with those ticks. An explicitly empty `reviewed` object removes all ticks; files without that object are rejected. The button shows how many ticks aren't saved yet.
 - **Older review data:** Browser ticks from reports using the previous hash-only storage key remain in the browser but are not automatically loaded, because identical files can belong to different pairs. Open the older report to download them; older review downloads import only when their hashes identify a single pair. Older saved `pair-<new row>` ticks remain in `reviewed.json` but are not applied to linked cards, because they don't identify the old row. Review those matches again; no old data is deleted automatically.
 - **Keyboard:** `j` / `k` move to the next / previous card, and `x` ticks the current one as reviewed.
 - **Accessibility and browser behaviour:**

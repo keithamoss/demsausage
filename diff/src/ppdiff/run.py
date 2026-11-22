@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import glob as globlib
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -14,7 +15,7 @@ from linkage.run import file_sha256, link_files
 
 from .core import Settings, build_diff
 from .index import write_index
-from .loader_check import election_config, loader_checks, pre_fix_rows_by_index
+from .loader_check import election_config, loaded_rows_by_index, loader_checks
 from .names import friendly_label, sort_scrapes
 from .report import write_report
 
@@ -208,15 +209,19 @@ def run_pair(
     left, right, link_output = link_files(old, new, matcher=matcher, splink_model=splink_model)
     target = pair_dir(out_dir, old, new)
     target.mkdir(parents=True, exist_ok=True)
+    for side, source in (("left", old), ("right", new)):
+        link_output[side]["path_from_report"] = os.path.relpath(source.resolve(), target.resolve())
     (target / "link.json").write_text(json.dumps(link_output, separators=(",", ":")))
     # Checks against the loader (its own rules via loader_rules); the same for every matcher.
     config = election_config(out_dir)
     checks = loader_checks(left, right, config)
-    selector_rows = pre_fix_rows_by_index(right, config or {})
+    selector_rows = loaded_rows_by_index(right, config or {})
+    old_loaded_rows = loaded_rows_by_index(left, config or {})
     rename = (config or {}).get("rename_columns") or {}
     for r in link_output["results"]:
         diff = build_diff(
-            left, right, LinkResult.from_dict(r), link_output, settings, rename, selector_rows
+            left, right, LinkResult.from_dict(r), link_output, settings, rename,
+            selector_rows, old_loaded_rows, config or {}
         )
         diff["loader"] = checks
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
@@ -259,11 +264,15 @@ def check_inputs_unchanged(target: Path) -> None:
         ``None`` when the inputs are unchanged or no longer present.
 
     Raises:
-        RuntimeError: If a present source file has changed since linking.
+        RuntimeError: If a present source file has changed, or a legacy relative
+            path cannot be resolved from the current directory.
     """
     link_output = json.loads((target / "link.json").read_text())
     for side in ("left", "right"):
         info = link_output[side]
-        path = Path(info["path"])
+        stored_relative = info.get("path_from_report")
+        path = target / stored_relative if stored_relative is not None else Path(info["path"])
+        if stored_relative is None and not path.is_absolute() and not path.exists():
+            raise RuntimeError(f"Cannot resolve legacy input {path}; re-run the diff to record its location")
         if path.exists() and file_sha256(path) != info["sha256"]:
             raise RuntimeError(f"{path} has changed since {target / 'link.json'} was written; re-run the diff")

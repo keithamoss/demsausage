@@ -148,6 +148,45 @@ def test_ignored_coordinate_suppresses_location_changes_and_fixes(pair, ignored_
     assert not [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
 
 
+@pytest.mark.parametrize("column", ["address", "lat"])
+def test_ignored_newly_blank_field_has_no_quality_check_or_fix(tmp_path, column):
+    row = _row("Hall", -33, 151)
+    old = _write(tmp_path / "20260101.csv", [row])
+    new = _write(tmp_path / "20260102.csv", [{**row, column: ""}])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz", ignore={column})
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+
+    assert diff["nothing_changed"]
+    assert not any(q["check"] == f"newly_blank:{column}" for q in diff["quality"])
+    assert not any(f.get("field") == column for f in diff["suggested_fixes"])
+
+
+@pytest.mark.parametrize("old_rows,new_rows", [([_row("Hall", -33, 151)], []), ([], [])])
+def test_header_only_csv_preserves_column_changes(tmp_path, old_rows, new_rows):
+    old = _write(tmp_path / "20260101.csv", old_rows)
+    new = _write(tmp_path / "20260102.csv", new_rows)
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+
+    assert diff["columns"]["old"] == FIELDS
+    assert diff["columns"]["new"] == FIELDS
+    assert diff["columns"]["added"] == diff["columns"]["removed"] == []
+
+
+def test_header_changes_between_empty_csvs_are_detected(tmp_path):
+    old = _write(tmp_path / "20260101.csv", [])
+    new = tmp_path / "20260102.csv"
+    new.write_text("name,address,lat,lon,new_column\n")
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+
+    assert diff["columns"]["added"] == ["new_column"]
+    assert "wheelchair_access" in diff["columns"]["removed"]
+    assert not diff["nothing_changed"]
+
+
 def test_run_pair_with_both_matchers_records_disagreements(pair):
     root, old, new = pair
     target = run_pair(old, new, root / "diffs", matcher="both", election="test_2026")
@@ -441,6 +480,59 @@ def test_reviewed_import_saves_ticks_into_the_pair_folder(pair, tmp_path):
     assert list(json.loads((target / "reviewed.json").read_text())["reviewed"]) == ["added-3"]
 
 
+@pytest.mark.parametrize("bad_review", [None, [], "ticks"])
+def test_review_import_rejects_missing_or_invalid_ticks_without_overwriting(pair, tmp_path, bad_review):
+    from ppdiff.reviewed import import_reviewed
+
+    root, old, new = pair
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    link = json.loads((target / "link.json").read_text())
+    saved = target / "reviewed.json"
+    saved.write_text(json.dumps({"reviewed": {"added-1": "x"}}))
+    data = {"old_sha256": link["left"]["sha256"], "new_sha256": link["right"]["sha256"]}
+    if bad_review is not None:
+        data["reviewed"] = bad_review
+    download = tmp_path / "download.json"
+    download.write_text(json.dumps(data))
+
+    with pytest.raises(ValueError, match="reviewed"):
+        import_reviewed(download, target.parent)
+    assert json.loads(saved.read_text())["reviewed"] == {"added-1": "x"}
+
+    download.write_text(json.dumps({**data, "reviewed": {}}))
+    import_reviewed(download, target.parent)
+    assert json.loads(saved.read_text())["reviewed"] == {}
+
+
+def test_report_rebuild_checks_relative_inputs_from_another_directory(pair, monkeypatch):
+    from ppdiff.run import check_inputs_unchanged
+
+    root, old, new = pair
+    monkeypatch.chdir(root)
+    target = run_pair(old.relative_to(root), new.relative_to(root), Path("diffs"), matcher="rapidfuzz")
+    monkeypatch.chdir(root / "data")
+    check_inputs_unchanged(root / target)
+    new.write_text(new.read_text() + "\n")
+    with pytest.raises(RuntimeError, match="has changed"):
+        check_inputs_unchanged(root / target)
+
+
+def test_legacy_relative_inputs_that_cannot_be_resolved_are_not_silently_skipped(pair, monkeypatch):
+    from ppdiff.run import check_inputs_unchanged
+
+    root, old, new = pair
+    monkeypatch.chdir(root)
+    target = run_pair(old.relative_to(root), new.relative_to(root), Path("diffs"), matcher="rapidfuzz")
+    link_path = target / "link.json"
+    link = json.loads(link_path.read_text())
+    for side in ("left", "right"):
+        link[side].pop("path_from_report", None)
+    link_path.write_text(json.dumps(link))
+    monkeypatch.chdir(root / "data")
+    with pytest.raises(RuntimeError, match="re-run the diff"):
+        check_inputs_unchanged(root / target)
+
+
 def test_index_flags_quiet_pairs_and_tallies_this_elections_verdicts(tmp_path, monkeypatch):
     from linkage import verdicts as verdict_store
     from ppdiff.index import write_index
@@ -586,6 +678,59 @@ def test_suggested_fixes_do_not_overwrite_loader_extras(tmp_path, kind, field):
     fix = next(f for f in fixes if f["kind"] == kind and f["new_index"] == 0)
     assert fix["fix"] is None
     assert field in fix["note"]
+
+
+def test_blank_fix_uses_value_after_existing_loader_fixes(tmp_path):
+    from linkage.records import load_csv
+    from ppdiff.loader_check import as_loaded
+
+    config = {
+        "fix_data_issues": [
+            {"field": "wheelchair_access", "value": "Assistance",
+             "overwrite": [{"field": "wheelchair_access", "value": "Assisted"}]},
+        ]
+    }
+    (tmp_path / "config.json").write_text(json.dumps(config))
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151, access="Assistance")])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -33, 151, access="")])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+    fix = next(f for f in fixes if f.get("field") == "wheelchair_access")
+    assert fix["fix"]["overwrite"] == [{"field": "wheelchair_access", "value": "Assisted"}]
+    loaded, errors = as_loaded(load_csv(new), {**config, "fix_data_issues": [*config["fix_data_issues"], fix["fix"]]}, True)
+    assert not errors
+    assert loaded[0]["wheelchair_access"] == "Assisted"
+
+
+def test_blank_fix_selector_uses_name_after_existing_loader_fixes(tmp_path):
+    config = {
+        "fix_data_issues": [
+            {"field": "name", "value": "Hall",
+             "overwrite": [{"field": "name", "value": "Corrected Hall"}]},
+        ]
+    }
+    (tmp_path / "config.json").write_text(json.dumps(config))
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151)])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -33, 151, address="")])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+    fix = next(f for f in fixes if f.get("field") == "address")
+    assert fix["fix"]["value"] == "Corrected Hall"
+
+
+def test_blank_fix_is_withheld_when_loaded_old_value_is_invalid_or_filtered(tmp_path):
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151, access="Invalid")])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -33, 151, access="")])
+
+    for config in ({}, {"filters": [{"type": "is_exactly", "column": "wheelchair_access", "matches": [""]}]}):
+        (tmp_path / "config.json").write_text(json.dumps(config))
+        folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+        fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+        fix = next(f for f in fixes if f.get("field") == "wheelchair_access")
+        assert fix["fix"] is None
+        assert fix["note"]
 
 
 def test_ambiguous_review_import_requires_pair_identity(pair, tmp_path):

@@ -57,16 +57,19 @@ def import_reviewed(source: Path, diffs_dir: Path) -> tuple[Path, dict[str, int]
 
     Raises:
         FileNotFoundError: If no pair matches the downloaded review.
-        ValueError: If the pair identity does not match, or the hashes are ambiguous.
+        ValueError: If the review is invalid, the pair identity does not match,
+            or the hashes are ambiguous.
     """
     download: dict[str, Any] = json.loads(source.read_text())
+    if not isinstance(download, dict) or not isinstance(download.get("reviewed"), dict):
+        raise ValueError(f"{source} must contain a 'reviewed' object")
     pair = download.get("pair")
     if pair is not None and (pair["election"], pair["collection"]) != (diffs_dir.resolve().parent.name, diffs_dir.name):
         raise ValueError(f"Review belongs to a different election or diffs folder, not {diffs_dir}")
     folder = find_pair_folder(diffs_dir, download["old_sha256"], download["new_sha256"], pair["folder"] if pair else None)
     path = folder / "reviewed.json"
     before = json.loads(path.read_text()).get("reviewed", {}) if path.exists() else {}
-    after = dict(sorted(download.get("reviewed", {}).items()))
+    after = dict(sorted(download["reviewed"].items()))
     path.write_text(
         json.dumps(
             {"pair_folder": folder.name, "old_sha256": download["old_sha256"], "new_sha256": download["new_sha256"], "reviewed": after},

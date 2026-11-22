@@ -69,18 +69,51 @@ def as_loaded(d: Dataset, config: dict[str, Any], fixes: bool) -> tuple[list[dic
     return rows, regex_errors
 
 
-def pre_fix_rows_by_index(d: Dataset, config: dict[str, Any]) -> dict[int, dict]:
-    """Get converted rows before fixes, keyed by their source row indices.
+def loaded_rows_by_index(d: Dataset, config: dict[str, Any]) -> dict[int, dict]:
+    """Get converted rows after existing fixes, keyed by their source indices.
 
     Args:
         d: The dataset to convert.
         config: The election's loader configuration.
 
     Returns:
-        Rows after filters and column conversion, before ``fix_data_issues``.
+        Rows after filtering, conversion, and ``fix_data_issues``.
     """
-    rows, _ = as_loaded(d, config, fixes=False)
+    rows, _ = as_loaded(d, config, fixes=True)
     return {row[_ROW]: row for row in rows}
+
+
+def suggested_fix_problems(fix: dict[str, Any], rows: list[dict], config: dict[str, Any]) -> list[str]:
+    """Find new loader validation problems caused by an appended fix.
+
+    Args:
+        fix: The proposed ``fix_data_issues`` entry.
+        rows: Matching rows after the existing loader fixes.
+        config: The election's loader configuration.
+
+    Returns:
+        New problems introduced by the fix, without unrelated existing problems.
+    """
+    rules = loader_rules()
+
+    def problems(row: dict) -> set[str]:
+        """Check one copied row after the loader prepares its address.
+
+        Args:
+            row: The row to check.
+
+        Returns:
+            The loader validation problems on that row.
+        """
+        row, _ = rules.merge_address(copy.deepcopy(row), config.get("address_fields"), config.get("address_format"))
+        return set(rules.row_problems(row))
+
+    introduced = set()
+    for row in rows:
+        before = problems(row)
+        after = rules.apply_fixes([copy.deepcopy(row)], [fix])[0]
+        introduced.update(problems(after) - before)
+    return sorted(introduced)
 
 
 def _label(d: Dataset, row: dict) -> str:

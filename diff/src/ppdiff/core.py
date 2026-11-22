@@ -16,6 +16,7 @@ from linkage.normalise import distance_m, equivalent
 from linkage.records import Dataset, Record
 from linkage.result import Link, LinkResult
 
+from .loader_check import suggested_fix_problems
 from .names import friendly_label
 
 SCHEMA_VERSION = 3
@@ -55,9 +56,9 @@ def header(d: Dataset) -> list[str]:
         d: The dataset to inspect.
 
     Returns:
-        The first record's column names, or an empty list for an empty dataset.
+        The CSV header, or the first record's column names for an in-memory dataset.
     """
-    return list(d.records[0].raw) if d.records else []
+    return d.header if d.header is not None else (list(d.records[0].raw) if d.records else [])
 
 
 def location_change(
@@ -330,13 +331,14 @@ def _decimals(text: str) -> int:
     return len(text.split(".", 1)[1]) if "." in text else 0
 
 
-def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[str, Any]]:
+def quality_checks(old: Dataset, new: Dataset, result: LinkResult, ignore: set[str]) -> list[dict[str, Any]]:
     """Find data-quality issues that are useful to check in the newer file.
 
     Args:
         old: The earlier dataset.
         new: The later dataset.
         result: The matcher's links between the two datasets.
+        ignore: Source columns excluded from comparisons.
 
     Returns:
         Checks for duplicate coordinates, rough or missing coordinates, and newly blank fields.
@@ -394,8 +396,9 @@ def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[
             continue
         a, b = old.records[link.left].raw, new.records[link.right].raw
         for column, value in a.items():
-            if column in b and (value or "").strip() and not (b[column] or "").strip():
+            if column not in ignore and column in b and (value or "").strip() and not (b[column] or "").strip():
                 blanked.setdefault(column, []).append({
+                    "old_index": link.left,
                     "new_index": link.right,
                     "name": new.records[link.right].label(),
                     "detail": f"was: {value}",
@@ -427,6 +430,8 @@ def suggested_fixes(
     rename: dict[str, str],
     large_move_m: float = LARGE_MOVE_M,
     selector_rows: dict[int, dict[str, Any]] | None = None,
+    old_loaded_rows: dict[int, dict[str, Any]] | None = None,
+    loader_config: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Draft loader fixes for problems a person confirms in the report.
 
@@ -440,7 +445,9 @@ def suggested_fixes(
         quality: Data-quality checks for the newer dataset.
         rename: The loader's source-to-schema column mapping.
         large_move_m: The distance used to consider a coordinate change for a fix.
-        selector_rows: New-file rows after loader conversion but before fixes, keyed by source row index.
+        selector_rows: New-file rows after the loader's existing fixes, keyed by source row index.
+        old_loaded_rows: Old-file rows after the loader's existing fixes, keyed by source row index.
+        loader_config: The configuration used to validate proposed fixes.
 
     Returns:
         Suggested fixes, including notes when a safe selector cannot be drafted.
@@ -465,7 +472,7 @@ def suggested_fixes(
         source_index = new.records[new_index].index
         row = rows_by_index.get(source_index)
         if row is None or selector_field not in row:
-            return None, "No pre-fix loader row has this selector field; a safe fix cannot be drafted."
+            return None, "No loaded row has this selector field; a safe fix cannot be drafted."
         value = str(row[selector_field])
         matching_indices = [
             index
@@ -573,6 +580,23 @@ def suggested_fixes(
         for place in q["places"]:
             field = _schema(column, rename)
             sel, note = selector(place["new_index"], [field])
+            old_row = old_loaded_rows.get(old.records[place["old_index"]].index) if old_loaded_rows is not None else None
+            value = old_row.get(field) if old_row is not None else None
+            if old_loaded_rows is None:
+                value = place["old_value"]
+            if sel and (value is None or not str(value).strip()):
+                sel = None
+                note = f"The old loaded row has no usable value for {field}; a safe fix cannot be drafted."
+            fix = {**sel, "overwrite": [{"field": field, "value": value}]} if sel else None
+            if fix and loader_config is not None:
+                matching_rows = [
+                    row for row in rows_by_index.values()
+                    if sel["field"] in row and str(row[sel["field"]]) == sel["value"]
+                ]
+                problems = suggested_fix_problems(fix, matching_rows, loader_config)
+                if problems:
+                    fix = None
+                    note = f"The proposed fix would cause loader problems: {'; '.join(problems)}."
             fixes.append(
                 {
                     "new_index": place["new_index"],
@@ -583,10 +607,7 @@ def suggested_fixes(
                     "no_fix_needed": False,
                     "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",
                     "note": note,
-                    "fix": {
-                        **sel,
-                        "overwrite": [{"field": field, "value": place["old_value"]}],
-                    } if sel else None,
+                    "fix": fix,
                 }
             )
     return fixes
@@ -627,6 +648,8 @@ def build_diff(
     settings: Settings | None = None,
     rename: dict[str, str] | None = None,
     selector_rows: dict[int, dict[str, Any]] | None = None,
+    old_loaded_rows: dict[int, dict[str, Any]] | None = None,
+    loader_config: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build the report data for one matcher's results.
 
@@ -637,7 +660,9 @@ def build_diff(
         link_output: Provenance and matcher results produced by the linkage step.
         settings: Options controlling ignored columns and distance thresholds.
         rename: The loader's source-to-schema column mapping.
-        selector_rows: New-file rows after loader conversion but before fixes.
+        selector_rows: New-file rows after loader conversion and existing fixes.
+        old_loaded_rows: Old-file rows after loader conversion and existing fixes.
+        loader_config: The configuration used to validate proposed fixes.
 
     Returns:
         A JSON-ready record with changes, summaries, quality checks, and suggested fixes.
@@ -684,7 +709,7 @@ def build_diff(
 
     added = [{"new_index": j, **place(new, j), "replaces": replaces.get(j)} for j in result.unmatched_right]
     removed = [{"old_index": i, **place(old, i), "replaced_by": replaced_by.get(i)} for i in result.unmatched_left]
-    quality = quality_checks(old, new, result)
+    quality = quality_checks(old, new, result, ignore)
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -723,7 +748,8 @@ def build_diff(
         "replacements": replacements,
         "quality": quality,
         "suggested_fixes": suggested_fixes(
-            old, new, changed + possible, quality, rename, settings.large_move_m, selector_rows
+            old, new, changed + possible, quality, rename, settings.large_move_m,
+            selector_rows, old_loaded_rows, loader_config
         ),
         "settings": settings.to_dict(),
         "context_points": context_points(new),
