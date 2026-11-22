@@ -162,3 +162,29 @@ def test_first_division_fallback_no_error(test_election):
         f"Expected 'Southern Division' first (fallback=first row first div); "
         f"got {pp.divisions}"
     )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("first", "second", "expected"),
+    [
+        ("", "Hotham", ["Hotham"]),
+        ("", "", []),
+    ],
+)
+def test_fallback_with_blank_divisions(test_election, first, second, expected):
+    """Deduplicate rows with blank divisions without losing a later division.
+
+    Args:
+        test_election: Election used for the load.
+        first: Divisions value in the first source row.
+        second: Divisions value in the second source row.
+        expected: Divisions stored on the merged polling place.
+    """
+    rows = _two_rows_at_same_location(div1=first, div2=second)
+    run_loader_full(test_election, make_csv(rows), config=None)
+
+    polling_place = PollingPlaces.objects.get(
+        election=test_election, status=PollingPlaceStatus.ACTIVE
+    )
+    assert polling_place.divisions == expected
