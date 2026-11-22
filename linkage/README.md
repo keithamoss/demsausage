@@ -8,11 +8,12 @@ It has two matchers behind one interface so they can run side by side on real da
 
 1. **Load.** `ColumnMap.detect()` finds the name, premises, address, coordinate, division and ID columns in our loader CSVs, AEC files and the SA, VIC, TAS, WA and QLD scraper outputs. Other formats take an explicit `ColumnMap`. IDs are carried through for evaluation but never used for matching.
 2. **Normalise.** Fold accents, lowercase, `&` → "and", strip punctuation, drop noise words from names ("polling", "centre", …). Drop a trailing "(Division)" when it names one of the record's own divisions, as in the AEC's "Allawah (Barton)". In addresses, expand common abbreviations ("Cnr" → "corner", "St" → "street") and drop a leading part that just repeats the place's name ("Northam Town Hall, Cnr Wellington…").
+   Numeric unit slashes are preserved as unit markers: `1/5 Luck St` is not equivalent to the street-number range `1-5 Luck St`.
 3. **Exact-key pass (shared).** Normalised name + sorted divisions, when unique in both files and corroborated: within 1 km, or the same address or premises.
 4. **Matcher.** Scores the remaining pairs:
    - `rapidfuzz`: hand-built weighted string similarity plus distance, ported from the experiments. Weights are spread over only the fields both files have.
    - `splink`: a Fellegi-Sunter model with term-frequency adjustments, trained from labelled pairs (`src/linkage/models/splink_default.json`). The prior is set from the input sizes. `SplinkMatcher(unsupervised=True)` fits by EM on the inputs instead, which needs a few hundred records. Its distance comparison has a level for "one coordinate agrees, the other is far off", so a one-coordinate typo isn't treated as "far apart" (see "Coordinate typos" below).
-5. **Assign one-to-one** with the Hungarian algorithm per connected component. Splink assigns on match weight, because its probabilities saturate at 1.0.
+5. **Assign one-to-one** with the Hungarian algorithm per connected component. RapidFuzz maximises weighted similarity, with zero utility for unmatched records. Splink uses full match weights because probabilities saturate at 1.0, with unmatched utility set to the log odds of the review threshold. A strong link can therefore outweigh several weak alternatives; we do not maximise the number of links first.
 6. **Band.** `auto` (confident) or `review` (plausible, needs a human). Unlinked records are added or removed.
 
 ## Running it
@@ -31,6 +32,12 @@ uv run linkage verdicts tally                                # who was right whe
 
 Python 3.10+ (Django runs 3.10). The rapidfuzz matcher only needs `rapidfuzz`, `scipy` and `numpy`.
 
+Splink leaves logging and warning configuration to the calling application; linkage does not silence library diagnostics or install logging handlers.
+
+Benchmark inputs live in `benchmarks/cases.py`; snapshot discovery runs only when a benchmark is executed. Results retain `seconds` for compatibility and also separate `training_seconds` (labelled model training) from `linking_seconds` (the complete link pipeline, including EM when requested). Timing values vary between runs.
+
+For example, at a 50% Splink review threshold, one 99% candidate has weight about 6.63, while two competing 60% candidates have total weight about 1.17. Assignment keeps the strong link and leaves the other records unmatched. At a 10% threshold, unmatched weight is about -3.17, so a 20% candidate with weight -2 still beats being unmatched. Diagnostic thresholds of zero or one use the nearest finite probabilities inside that interval.
+
 ## "Same value" for other tools
 
 `linkage.normalise.equivalent(kind, a, b)` is the module's definition of two values meaning the same thing. The diff uses it to mark cosmetic changes. It applies the same normalisers as matching:
@@ -46,7 +53,9 @@ Python 3.10+ (Django runs 3.10). The rapidfuzz matcher only needs `rapidfuzz`, `
 
 [`../diff/`](../diff/) turns linkage results into one diff per matcher, with an HTML report. Its Disagreements tab records which matcher was right. Those verdicts are imported into [`verdicts/verdicts.jsonl`](verdicts/) with `uv run linkage verdicts import FILE` and summarised with `uv run linkage verdicts tally`.
 
-## Results so far (2026-11-21)
+Linkage keeps contiguous filtered indices for matching and original `source_index` values for place identity. Dataset summaries expose `source_indices` in filtered record order; disagreement reports include `left_source_index` and `right_source_index`. Verdict exporters must carry the original left source index into schema-version-2 downloads. See [`verdicts/README.md`](verdicts/README.md) for the format and legacy-import limits.
+
+## Results so far (2026-11-22)
 
 ### Labelled data: the files share a trusted ID
 
@@ -58,12 +67,12 @@ For each test case, the Splink model is trained only on the other cases, so it n
 | VIC 2026 snapshots (`vec_venue_id`) | 1,650 | 8 | 1,650 / 0 / 0 | 1,650 / 0 / 0 | 1,650 / 0 / 0 |
 | VIC 2026, each consecutive snapshot pair (4 pairs) | 1,650–1,652 each | 4, 2, 3, 0 | all correct | all correct | all correct |
 | SA 2025, each consecutive snapshot pair (4 pairs) | 685–688 each | 4, 3, 0, 1 | all correct | all correct | all correct |
-| Federal 2022 → 2025 (`PPId`) | 6,731 | 3,153 | 6,542 / 74 / 115 | 6,349 / 68 / 314 | 6,532 / 77 / 122 |
+| Federal 2022 → 2025 (`PPId`) | 6,731 | 3,153 | 6,542 / 74 / 115 | 6,349 / 68 / 314 | 6,533 / 77 / 121 |
 
 These figures are with the exact pass on. With it off, every matcher is still perfect within an election. Full detail is in `benchmarks/results.json`.
 
 - **Within an election, both matchers are perfect.** Nearly everything goes through the exact pass, and every changed place was linked.
-- **Across elections, they tie** when Splink is trained fairly (`splink-em`). Splink with labels from the within-election snapshots misses more (316). Those labels show almost no drift, so the model learns to be strict.
+- **Across elections, they tie** when Splink is trained fairly (`splink-em`). Splink with labels from the within-election snapshots misses more (314). Those labels show almost no drift, so the model learns to be strict.
 - **Federal "wrong" is partly noise in the answer key.** `PPId` identifies a booth, not a venue. Many "wrong" links are the right venue paired with a different division's booth, after the boundaries changed.
 - **The review bands behave very differently.** Rapidfuzz puts about 400 correct federal links in review. Splink's probabilities sit near 0 or 1, so it puts almost nothing there. Neither matcher's thresholds are calibrated yet.
 
@@ -73,12 +82,11 @@ These figures are with the exact pass on. With it off, every matcher is still pe
 |---|---|---|
 | WA 2025, QLD 2024, QLD 2020, TAS 2025, TAS 2021, ACT 2024 (first → last snapshot) | all | 0 |
 | WA 2021 | 721 / 722 | 1 |
-| Coffs Harbour 2023 state → 2026 council | 20 / 23 | 3 |
+| Coffs Harbour 2023 state → 2026 council | Snapshot unavailable | Skipped |
 
 The disagreements, with my reading of them:
 - **WA 2021, Northam Town Hall:** the old file's latitude was a typo, 111 km off. Originally only rapidfuzz linked it. Both matchers now link it, after the changes under "Coordinate typos".
 - **WA 2021, South West Health Campus → ECU South West Campus:** different names and addresses, 500 m apart. Rapidfuzz auto-linked it, and Splink didn't. This looks like a venue swap, so rapidfuzz is probably wrong.
-- **Coffs Harbour:** rapidfuzz also linked Corindi Public School → Corindi Beach Community Hall (review), Dance Centre → Exhibition Halls at the Showground (auto), and Woolgoolga Public School → Woolgoolga Uniting Church (review). Splink linked none of them. Two look like real venue changes, and the showground one is arguable.
 
 So rapidfuzz is more forgiving and Splink stricter. Each has been right in a different case.
 

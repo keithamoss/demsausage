@@ -5,7 +5,8 @@ One validator library, used by the scraper CLI (writes `quality_report.json` bes
 
 ### Static checks on corrections
 
-*Status (2026-11-21): the first checks below are in the scraper diff's config fix audit (`diff/README.md`, "Loader checks"): overwrite fields that don't exist after renaming, selectors that match nothing, and fixes the source has caught up with. It runs on every diff using the loader's shared `loader_rules.py`. Provenance, reasons and duplicate selectors are still to do.*
+> **Status (2026-11-21):** The first checks below are in the scraper diff's config fix audit (`diff/README.md`, "Loader checks"): overwrite fields that don't exist after renaming, selectors that match nothing, and fixes the source has caught up with. It runs on every diff using the loader's shared `loader_rules.py`. Provenance, reasons and duplicate selectors are still to do.
+
 - Overwrite field must exist after the column rename (would have caught `EntrancesDesc` and `lng`).
 - Selector must match at least one row.
 - Record an expected source value; if the source now equals the fix, mark the correction obsolete (the "AEC fixed it" cases).

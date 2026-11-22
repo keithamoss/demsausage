@@ -219,7 +219,15 @@ if (first) {
 
 // ---------- storage (per pair of files) ----------
 const pairIdentity = JSON.stringify([DATA.pair.election, DATA.pair.collection, DATA.pair.folder]);
-const STORE_KEY = DIS ? `ppdiff-verdicts:${DIS.old_sha256}:${DIS.new_sha256}` : null;
+const stableVerdictIds = DIS && DIS.items.every((it) => Number.isInteger(it.left.source_index) && it.left.source_index >= 0);
+const oldVerdictStore = DIS ? `ppdiff-verdicts:${DIS.old_sha256}:${DIS.new_sha256}` : null;
+const STORE_KEY = DIS ? stableVerdictIds ? `ppdiff-verdicts-v2:${DIS.old_sha256}:${DIS.new_sha256}` : oldVerdictStore : null;
+const verdictKey = (item) => stableVerdictIds ? item.left.source_index : item.left.index;
+let oldVerdictsExist = false;
+if (stableVerdictIds) {
+  try { oldVerdictsExist = Boolean(localStorage.getItem(oldVerdictStore)); }
+  catch (e) { console.warn("Could not check for older browser verdicts", e); }
+}
 function loadVerdicts() {
   if (!STORE_KEY) return {};
   try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (e) { return {}; }
@@ -239,7 +247,7 @@ try { const saved = localStorage.getItem("ppdiff-tab"); if (TABS.some((t) => t.i
 function tabTitle(t) {
   if (t.id !== "disagreements") return t.title;
   if (!DIS.items.length) return "Disagreements (none)";
-  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).length;
+  const done = DIS.items.filter((it) => VERDICTS[verdictKey(it)] && VERDICTS[verdictKey(it)].verdict).length;
   return `Disagreements (${done}/${DIS.items.length} reviewed)`;
 }
 function selectTab(id, focus) {
@@ -855,12 +863,13 @@ function decisionBox(matcher, dec) {
 }
 function verdictCard(item) {
   const idx = item.left.index;
-  const v = VERDICTS[idx] || {};
+  const key = verdictKey(item);
+  const v = VERDICTS[key] || {};
   const name = `verdict-${idx}`;
   const card = h("div", { class: "card" + (v.verdict ? " done" : ""), id: `dis-${idx}`, "data-search": item.left.name.toLowerCase() });
   const set = (patch) => {
-    VERDICTS[idx] = Object.assign({}, VERDICTS[idx], patch, { updated_at: new Date().toISOString() });
-    card.classList.toggle("done", Boolean(VERDICTS[idx].verdict));
+    VERDICTS[key] = Object.assign({}, VERDICTS[key], patch, { updated_at: new Date().toISOString() });
+    card.classList.toggle("done", Boolean(VERDICTS[key].verdict));
     saveVerdicts(); renderTabs();
   };
   const options = DIS.matchers.map((m) => [m, `${label(m)} was right`]).concat([["neither", "Both wrong"], ["both", "Both defensible"]]);
@@ -879,6 +888,9 @@ function verdictCard(item) {
 function renderDisagreements() {
   const wrap = h("div", {},
     h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
+    !stableVerdictIds
+      ? h("p", { class: "warn" }, "This older report lacks original source-row identities. Re-run the diff before downloading those verdicts for import.") : null,
+    oldVerdictsExist ? h("p", { class: "warn" }, "Older browser verdicts use ambiguous row positions and are not applied here. They remain saved in the browser; review these places again.") : null,
     h("div", { class: "toolbar" },
       h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(ev.target.value) }),
       h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
@@ -888,14 +900,14 @@ function renderDisagreements() {
 function updateBar() {
   const bar = document.getElementById("bar");
   if (!DIS || current !== "disagreements") { bar.classList.remove("show"); return; }
-  const done = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict);
+  const done = DIS.items.filter((it) => VERDICTS[verdictKey(it)] && VERDICTS[verdictKey(it)].verdict);
   document.getElementById("bar-status").textContent = `${done.length} of ${DIS.items.length} reviewed`;
-  document.getElementById("download").disabled = done.length === 0;
+  document.getElementById("download").disabled = done.length === 0 || !stableVerdictIds;
   bar.classList.add("show");
 }
 document.getElementById("download").addEventListener("click", () => {
-  const records = DIS.items.filter((it) => VERDICTS[it.left.index] && VERDICTS[it.left.index].verdict).map((it) => {
-    const v = VERDICTS[it.left.index];
+  const records = DIS.items.filter((it) => VERDICTS[verdictKey(it)] && VERDICTS[verdictKey(it)].verdict).map((it) => {
+    const v = VERDICTS[verdictKey(it)];
     const decisions = {};
     for (const m of DIS.matchers) {
       const d = it.decisions[m];

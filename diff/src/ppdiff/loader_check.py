@@ -110,6 +110,8 @@ def prepare_address(row: dict, config: dict[str, Any]) -> tuple[dict, bool]:
         return loader_rules().merge_address(row, config.get("address_fields"), config.get("address_format"))
     except KeyError as error:
         raise LoaderTransformationError(f"Cannot prepare address: missing field {error}.") from error
+    except ValueError as error:
+        raise LoaderTransformationError(f"Cannot prepare address: {error}.") from error
 
 
 def suggested_fix_problems(fix: dict[str, Any], rows: list[dict], config: dict[str, Any]) -> list[str]:

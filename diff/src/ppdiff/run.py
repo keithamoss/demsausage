@@ -53,10 +53,11 @@ def snapshot(record: Record) -> dict[str, Any]:
         record: The linked place to include.
 
     Returns:
-        A JSON-ready snapshot with its source row index and key details.
+        A JSON-ready snapshot with filtered and original row indices and key details.
     """
     return {
         "index": record.index,
+        "source_index": record.source_index,
         "name": record.name,
         "premises": record.premises,
         "address": record.address,

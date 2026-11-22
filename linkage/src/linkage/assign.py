@@ -17,7 +17,20 @@ from scipy.optimize import linear_sum_assignment
 from .result import ScoredPair
 
 
-def assign(pairs: Iterable[ScoredPair], min_score: float) -> list[ScoredPair]:
+def assign(
+    pairs: Iterable[ScoredPair], min_score: float, unmatched_value: float = 0.0
+) -> list[ScoredPair]:
+    """Choose one-to-one partners meeting or exceeding ``min_score``.
+
+    Args:
+        pairs: Candidate pairs that may connect records on the left and right.
+        min_score: Minimum matcher score a candidate pair must have.
+        unmatched_value: Utility of leaving a record unmatched, on the same scale
+            as the candidate assignment values.
+
+    Returns:
+        The selected one-to-one pairs. Candidates not chosen are left unmatched.
+    """
     candidates = [p for p in pairs if p.score >= min_score]
     if not candidates:
         return []
@@ -25,13 +38,22 @@ def assign(pairs: Iterable[ScoredPair], min_score: float) -> list[ScoredPair]:
     parent: dict[tuple[str, int], tuple[str, int]] = {}
 
     def find(x: tuple[str, int]) -> tuple[str, int]:
+        """Find a record's component root, shortening the path for later lookups.
+
+        Args:
+            x: Dataset side and record index.
+
+        Returns:
+            The identifier of the connected component.
+        """
         while parent.setdefault(x, x) != x:
             parent[x] = parent[parent[x]]
             x = parent[x]
         return x
 
-    for p in candidates:
-        parent[find(("l", p.left))] = find(("r", p.right))
+    # Solve disconnected candidate groups independently.
+    for pair in candidates:
+        parent[find(("l", pair.left))] = find(("r", pair.right))
 
     components: dict[tuple[str, int], list[ScoredPair]] = defaultdict(list)
     for p in candidates:
@@ -41,21 +63,21 @@ def assign(pairs: Iterable[ScoredPair], min_score: float) -> list[ScoredPair]:
     for component in components.values():
         lefts = sorted({p.left for p in component})
         rights = sorted({p.right for p in component})
-        li = {v: k for k, v in enumerate(lefts)}
-        ri = {v: k for k, v in enumerate(rights)}
-        matrix = np.zeros((len(lefts), len(rights)))
+        left_positions = {value: position for position, value in enumerate(lefts)}
+        right_positions = {value: position for position, value in enumerate(rights)}
+        # Each left record can choose a real partner or an unmatched dummy.
+        matrix = np.full((len(lefts), len(rights) + len(lefts)), -np.inf)
+        matrix[:, len(rights) :] = unmatched_value
         best: dict[tuple[int, int], ScoredPair] = {}
-        for p in component:
-            key = (li[p.left], ri[p.right])
+        for pair in component:
+            key = (left_positions[pair.left], right_positions[pair.right])
             # A matcher may emit the same pair twice (several blocking rules); keep the best.
-            if key not in best or p.assignment_value > best[key].assignment_value:
-                best[key] = p
-        # Shift values so every real pair is positive and preferred over "no pair" (0).
-        floor = min(p.assignment_value for p in best.values())
-        for key, p in best.items():
-            matrix[key] = p.assignment_value - floor + 1.0
+            if key not in best or pair.assignment_value > best[key].assignment_value:
+                best[key] = pair
+        for key, pair in best.items():
+            matrix[key] = pair.assignment_value
         rows, cols = linear_sum_assignment(-matrix)
         for r, c in zip(rows, cols):
-            if matrix[r, c] > 0:
+            if c < len(rights):
                 chosen.append(best[(r, c)])
     return chosen

@@ -124,6 +124,12 @@ When you're done:
 2. From `linkage/`, run `uv run linkage verdicts import FILE`. This merges the file into `linkage/verdicts/verdicts.jsonl`; a later verdict on the same place replaces the earlier one.
 3. `uv run linkage verdicts tally` shows who was right, by reason.
 
+Verdicts use original CSV row positions, even when linkage filters the input.
+Older reports without these positions must be regenerated before their verdicts
+can be downloaded for import. Older browser choices stay saved but are not
+applied to regenerated reports, because filtered row positions can change;
+review those places again.
+
 ## Notes
 
 - The report refuses to rebuild if the source CSVs have changed since `link.json` was written. Run the diff again instead.

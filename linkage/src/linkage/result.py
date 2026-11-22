@@ -16,6 +16,13 @@ class ScoredPair:
     `score` is what thresholds and bands use. `rank`, if set, is what one-to-one
     assignment maximises instead: Splink's probabilities saturate at 1.0, so two
     competing pairs can tie on score while their match weights differ a lot.
+
+    Attributes:
+        score: Matcher score used for thresholds and confidence bands.
+        left: Row index in the left dataset.
+        right: Row index in the right dataset.
+        explain: Field-level evidence used in reports.
+        rank: Optional assignment utility on the matcher's own scale.
     """
 
     score: float
@@ -26,6 +33,11 @@ class ScoredPair:
 
     @property
     def assignment_value(self) -> float:
+        """Return the value used to optimise one-to-one assignment.
+
+        Returns:
+            The matcher's rank when supplied, otherwise its score.
+        """
         return self.score if self.rank is None else self.rank
 
 
@@ -35,6 +47,14 @@ class Link:
 
     `band` is "auto" (confident) or "review" (plausible, needs a human look).
     `via` is "exact" (shared exact-key pass) or "matcher" (the named matcher).
+
+    Attributes:
+        left: Row index in the left dataset.
+        right: Row index in the right dataset.
+        score: Matcher score, rounded for reporting.
+        band: Confidence or human-review classification.
+        via: Whether the shared exact pass or matcher produced the link.
+        explain: Evidence supporting the link.
     """
 
     left: int
@@ -47,6 +67,16 @@ class Link:
 
 @dataclass
 class LinkResult:
+    """The complete result of applying one matcher to two datasets.
+
+    Attributes:
+        matcher: Short name of the matcher that produced the result.
+        links: One-to-one decisions for records considered the same place.
+        unmatched_left: Row indices that remain unmatched in the left dataset.
+        unmatched_right: Row indices that remain unmatched in the right dataset.
+        params: Matcher settings recorded alongside the decisions.
+    """
+
     matcher: str
     links: list[Link]
     unmatched_left: list[int]
@@ -54,12 +84,27 @@ class LinkResult:
     params: dict[str, Any] = field(default_factory=dict)
 
     def by_left(self) -> dict[int, Link]:
+        """Index linked decisions by left record index.
+
+        Returns:
+            Mapping from left record index to its link decision.
+        """
         return {link.left: link for link in self.links}
 
     def by_right(self) -> dict[int, Link]:
+        """Index linked decisions by right record index.
+
+        Returns:
+            Mapping from right record index to its link decision.
+        """
         return {link.right: link for link in self.links}
 
     def counts(self) -> dict[str, int]:
+        """Summarise link decisions and unmatched records.
+
+        Returns:
+            Counts for total, exact, automatic, review, and unmatched links.
+        """
         return {
             "links": len(self.links),
             "exact": sum(1 for x in self.links if x.via == "exact"),
@@ -71,7 +116,14 @@ class LinkResult:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> LinkResult:
-        """Inverse of to_dict(), for tools that read saved linkage output."""
+        """Restore a result from saved linkage output.
+
+        Args:
+            data: Dictionary previously produced by ``to_dict()``.
+
+        Returns:
+            The restored link result.
+        """
         return cls(
             matcher=data["matcher"],
             links=[Link(**link) for link in data["links"]],
@@ -81,6 +133,11 @@ class LinkResult:
         )
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert the result into JSON-ready data.
+
+        Returns:
+            Matcher settings, counts, links, and unmatched record indices.
+        """
         return {
             "matcher": self.matcher,
             "params": self.params,

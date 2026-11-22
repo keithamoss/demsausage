@@ -230,6 +230,37 @@ def test_disagreements_keep_each_matcher_decision():
     assert items[1]["decisions"]["second"]["right"]["name"] == "D"
 
 
+def test_disagreement_verdict_preserves_original_indices_after_filtering(tmp_path):
+    from linkage.records import load_csv
+    from linkage.verdicts import import_file
+
+    old_path = _write(tmp_path / "old.csv", [_row("Skip", -33, 151), _row("Hall", -33.1, 151.1)])
+    new_path = _write(tmp_path / "new.csv", [_row("Skip", -33, 151), _row("Hall", -33.1, 151.1)])
+    keep_hall = lambda row: row["name"] == "Hall"
+    old = load_csv(old_path, row_filter=keep_hall)
+    new = load_csv(new_path, row_filter=keep_hall)
+    linked = LinkResult("first", [Link(0, 0, 0.9, "auto", "matcher")], [], [])
+    unlinked = LinkResult("second", [], [0], [0])
+    output = {
+        "left": {"path": str(old_path), "sha256": "old"},
+        "right": {"path": str(new_path), "sha256": "new"},
+        "results": [linked.to_dict(), unlinked.to_dict()],
+        "comparison": {"disagreements": [{"left": 0}]},
+    }
+
+    item = disagreements(old, new, output, "test")["items"][0]
+    assert (item["left"]["index"], item["left"]["source_index"]) == (0, 1)
+    assert item["decisions"]["first"]["right"]["source_index"] == 1
+    download = tmp_path / "verdicts.json"
+    download.write_text(json.dumps([{
+        "schema_version": 2, "old_sha256": "old", "new_sha256": "new",
+        "left": item["left"], "decisions": item["decisions"], "verdict": "rapidfuzz",
+    }]))
+    store = tmp_path / "verdicts.jsonl"
+    assert import_file(download, store)["added"] == 1
+    assert json.loads(store.read_text())["left"]["source_index"] == 1
+
+
 def test_series_pairs_consecutive_files(pair):
     root, old, new = pair
     later = _write(root / "data" / "20260115 places.csv", [_row("Alpha Hall", -33.0, 151.0)])
