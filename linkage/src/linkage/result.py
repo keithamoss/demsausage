@@ -16,6 +16,13 @@ class ScoredPair:
     `score` is what thresholds and bands use. `rank`, if set, is what one-to-one
     assignment maximises instead: Splink's probabilities saturate at 1.0, so two
     competing pairs can tie on score while their match weights differ a lot.
+
+    Attributes:
+        score: Matcher score used for thresholds and confidence bands.
+        left: Row index in the left dataset.
+        right: Row index in the right dataset.
+        explain: Field-level evidence used in reports.
+        rank: Optional assignment utility on the matcher's own scale.
     """
 
     score: float
@@ -29,15 +36,9 @@ class ScoredPair:
         """Return the value used to optimise one-to-one assignment.
 
         Returns:
-            Splink match rank when positive, otherwise the match probability.
+            The matcher's rank when supplied, otherwise its score.
         """
-        # Non-positive Splink match weights mean the fields do not strongly support a match, but
-        # the candidate has already passed the probability threshold.  Use the
-        # probability for assignment in that case so it can still beat an unmatched
-        # dummy (whose value is 0).  Positive weights continue to break score ties.
-        if self.rank is None or self.rank <= 0:
-            return self.score
-        return self.rank
+        return self.score if self.rank is None else self.rank
 
 
 @dataclass(frozen=True)
@@ -46,6 +47,14 @@ class Link:
 
     `band` is "auto" (confident) or "review" (plausible, needs a human look).
     `via` is "exact" (shared exact-key pass) or "matcher" (the named matcher).
+
+    Attributes:
+        left: Row index in the left dataset.
+        right: Row index in the right dataset.
+        score: Matcher score, rounded for reporting.
+        band: Confidence or human-review classification.
+        via: Whether the shared exact pass or matcher produced the link.
+        explain: Evidence supporting the link.
     """
 
     left: int
@@ -67,6 +76,7 @@ class LinkResult:
         unmatched_right: Row indices that remain unmatched in the right dataset.
         params: Matcher settings recorded alongside the decisions.
     """
+
     matcher: str
     links: list[Link]
     unmatched_left: list[int]
@@ -106,7 +116,14 @@ class LinkResult:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> LinkResult:
-        """Inverse of to_dict(), for tools that read saved linkage output."""
+        """Restore a result from saved linkage output.
+
+        Args:
+            data: Dictionary previously produced by ``to_dict()``.
+
+        Returns:
+            The restored link result.
+        """
         return cls(
             matcher=data["matcher"],
             links=[Link(**link) for link in data["links"]],

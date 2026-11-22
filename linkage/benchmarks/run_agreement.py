@@ -13,8 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from run_benchmark import REPO, SCRAPERS
-
+from cases import REPO, SCRAPERS
 from linkage.compare import compare_results
 from linkage.matchers.rapidfuzz_lsa import RapidfuzzMatcher
 from linkage.matchers.splink_matcher import SplinkMatcher
@@ -37,7 +36,8 @@ PAIRS = [
     (
         "coffs_harbour_2023_state_to_2026_council",
         Path(__file__).parent / "data/nsw_coffs_harbour_state_2023_SG2301-020.csv",
-        SCRAPERS / "nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
+        SCRAPERS
+        / "nsw_coffs_harbour_2026/data/nsw_coffs_harbour_LB2615-031_2026-11-21.csv",
     ),
 ]
 
@@ -63,7 +63,14 @@ def main() -> int:
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(Path(__file__).parent / "agreement.json"))
-    parser.add_argument("--extra", nargs=3, action="append", default=[], metavar=("NAME", "OLD", "NEW"), help="Another pair to compare")
+    parser.add_argument(
+        "--extra",
+        nargs=3,
+        action="append",
+        default=[],
+        metavar=("NAME", "OLD", "NEW"),
+        help="Another pair to compare",
+    )
     args = parser.parse_args()
 
     pairs = []
@@ -86,7 +93,8 @@ def main() -> int:
     for name, old, new in pairs:
         left, right = load_csv(old), load_csv(new)
         results = [link(left, right, m) for m in (RapidfuzzMatcher(), SplinkMatcher())]
-        comparison = compare_results(*results, left, right)
+        first_result, second_result = results
+        comparison = compare_results(first_result, second_result, left, right)
         counts = {r.matcher: r.counts() for r in results}
         print(
             f"{name:10} {len(left.records):5} -> {len(right.records):5} | agree {comparison['agree']}/{comparison['left_records']} "
@@ -94,7 +102,15 @@ def main() -> int:
             f"(review {counts['rapidfuzz']['review']}) | splink links {counts['splink']['links']} (review {counts['splink']['review']})",
             flush=True,
         )
-        out.append({"name": name, "old": _rel(old), "new": _rel(new), "counts": counts, **comparison})
+        out.append(
+            {
+                "name": name,
+                "old": _rel(old),
+                "new": _rel(new),
+                "counts": counts,
+                **comparison,
+            }
+        )
     Path(args.out).write_text(json.dumps(out, indent=2))
     print(f"Wrote {args.out}", file=sys.stderr)
     return 0

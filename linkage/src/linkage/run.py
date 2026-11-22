@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Callable
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from .compare import compare_results
+from .matchers.base import Matcher
 from .matchers.rapidfuzz_lsa import RapidfuzzMatcher
 from .pipeline import link
 from .records import Dataset, load_csv
@@ -28,12 +30,12 @@ def file_sha256(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def make_matchers(which: str, splink_model: str | None = None) -> list:
+def make_matchers(which: str, splink_model: str | None = None) -> list[Matcher]:
     """Create the requested matcher instances.
 
     Args:
         which: ``rapidfuzz``, ``splink``, or ``both``.
-        splink_model: Optional path or JSON model source for Splink.
+        splink_model: Optional path to a Splink model JSON file.
 
     Returns:
         Configured matcher objects.
@@ -43,7 +45,7 @@ def make_matchers(which: str, splink_model: str | None = None) -> list:
     """
     if which not in MATCHER_CHOICES:
         raise ValueError(f"matcher must be one of {MATCHER_CHOICES}")
-    matchers: list = []
+    matchers: list[Matcher] = []
     if which in ("rapidfuzz", "both"):
         matchers.append(RapidfuzzMatcher())
     if which in ("splink", "both"):
@@ -66,7 +68,7 @@ def dataset_summary(d: Dataset) -> dict[str, Any]:
         "path": d.path,
         "sha256": file_sha256(d.path),
         "records": len(d.records),
-        "columns": d.columns.__dict__,
+        "columns": asdict(d.columns),
     }
 
 
@@ -83,15 +85,32 @@ def link_files(
 
     The output's record indices are row positions in each file (after any
     row_filter), which is how downstream tools such as the diff find rows.
+
+    Args:
+        old: First CSV path.
+        new: Second CSV path.
+        matcher: ``rapidfuzz``, ``splink``, or ``both``.
+        id_column: Optional source ID column carried through for evaluation.
+        splink_model: Optional path to a trained Splink model.
+        use_exact_pass: Whether unique corroborated keys are linked first.
+        row_filter: Optional predicate selecting rows before indexing.
+
+    Returns:
+        Both loaded datasets and the JSON-ready linkage report.
     """
     left = load_csv(old, id_column=id_column, row_filter=row_filter)
     right = load_csv(new, id_column=id_column, row_filter=row_filter)
-    results = [link(left, right, m, use_exact_pass=use_exact_pass) for m in make_matchers(matcher, splink_model)]
+    results = [
+        link(left, right, configured_matcher, use_exact_pass=use_exact_pass)
+        for configured_matcher in make_matchers(matcher, splink_model)
+    ]
     output: dict[str, Any] = {
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "left": dataset_summary(left),
         "right": dataset_summary(right),
-        "row_filter": None if row_filter is None else getattr(row_filter, "__name__", "custom"),
+        "row_filter": None
+        if row_filter is None
+        else getattr(row_filter, "__name__", "custom"),
         "results": [r.to_dict() for r in results],
     }
     if len(results) == 2:

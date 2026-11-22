@@ -11,6 +11,7 @@ from __future__ import annotations
 import csv
 import math
 import re
+from collections import Counter
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -18,8 +19,20 @@ from pathlib import Path
 from .normalise import norm, norm_address, norm_name
 
 # Candidate source columns for each field, in order of preference.
-_NAME_COLUMNS = ("name", "PPName", "Polling_Place_Name", "Polling Place Name", "polling_place_name")
-_PREMISES_COLUMNS = ("premises", "PremisesName", "Premise_Name", "Premise Name", "premises_name")
+_NAME_COLUMNS = (
+    "name",
+    "PPName",
+    "Polling_Place_Name",
+    "Polling Place Name",
+    "polling_place_name",
+)
+_PREMISES_COLUMNS = (
+    "premises",
+    "PremisesName",
+    "Premise_Name",
+    "Premise Name",
+    "premises_name",
+)
 # Every present column is joined, so put these in reading order.
 _ADDRESS_COLUMNS = (
     "address",
@@ -39,8 +52,23 @@ _ADDRESS_COLUMNS = (
     "Postcode",
     "Premise_Postcode",
 )
-_LAT_COLUMNS = ("lat", "Lat", "latitude", "Latitude", "Premise_Latitude", "Premise Latitude")
-_LON_COLUMNS = ("lon", "Long", "lng", "longitude", "Longitude", "Premise_Longitude", "Premise Longitude")
+_LAT_COLUMNS = (
+    "lat",
+    "Lat",
+    "latitude",
+    "Latitude",
+    "Premise_Latitude",
+    "Premise Latitude",
+)
+_LON_COLUMNS = (
+    "lon",
+    "Long",
+    "lng",
+    "longitude",
+    "Longitude",
+    "Premise_Longitude",
+    "Premise Longitude",
+)
 _DIVISION_COLUMNS = ("divisions", "DivName", "Division", "division", "district")
 _ID_COLUMNS = ("ec_id", "PPId", "vec_venue_id", "id")
 _HOURS_COLUMNS = ("opening_hours", "OpeningHours", "hours", "election_day_hours")
@@ -102,9 +130,18 @@ class ColumnMap:
             A column map using the detected source headers.
 
         Raises:
-            ValueError: If no name column or the requested ID column is missing.
+            ValueError: If the name column or requested ID column is missing.
         """
+
         def first(options: Iterable[str]) -> str | None:
+            """Select the first candidate header present in the file.
+
+            Args:
+                options: Header names in preference order.
+
+            Returns:
+                The first matching header, or ``None``.
+            """
             return next((c for c in options if c in header), None)
 
         name = first(_NAME_COLUMNS)
@@ -128,7 +165,22 @@ class ColumnMap:
 
 @dataclass(frozen=True)
 class Record:
-    """One polling place. `index` is its row position in the source file (0-based)."""
+    """One polling place, with raw and normalised identity fields.
+
+    Attributes:
+        index: Zero-based row position after filtering the source file.
+        name: Source polling-place name.
+        premises: Source venue name.
+        address: Joined source address fields.
+        lat: Parsed latitude, or ``None`` when missing or invalid.
+        lon: Parsed longitude, or ``None`` when missing or invalid.
+        divisions: Normalised divisions served by the place.
+        source_id: Source identifier carried through for evaluation, not matching.
+        raw: Original CSV row.
+        n_name: Normalised name without its own division suffix.
+        n_premises: Normalised venue name.
+        n_address: Normalised address without a repeated leading venue name.
+    """
 
     index: int
     name: str
@@ -146,16 +198,26 @@ class Record:
     n_address: str = field(init=False, compare=False, repr=False)
 
     def __post_init__(self) -> None:
-        """Compute stable normalised fields after the dataclass is initialized."""
-        object.__setattr__(self, "n_name", norm_name(_strip_own_division(self.name, self.divisions)))
+        """Compute stable normalised fields after the dataclass is initialized.
+
+        Returns:
+            None. Normalised identity fields are stored on this record.
+        """
+        object.__setattr__(
+            self, "n_name", norm_name(_strip_own_division(self.name, self.divisions))
+        )
         object.__setattr__(self, "n_premises", norm(self.premises))
         object.__setattr__(
-            self, "n_address", norm_address(_strip_leading_place_name(self.address, self.name, self.premises))
+            self,
+            "n_address",
+            norm_address(
+                _strip_leading_place_name(self.address, self.name, self.premises)
+            ),
         )
 
     @property
     def has_coords(self) -> bool:
-        """Return whether both finite coordinate values are available.
+        """Return whether both coordinate values are available.
 
         Returns:
             ``True`` when latitude and longitude are both present.
@@ -163,7 +225,11 @@ class Record:
         return self.lat is not None and self.lon is not None
 
     def label(self) -> str:
-        """Short human description for reports."""
+        """Describe the place briefly for reports.
+
+        Returns:
+            The name, followed by the premises in parentheses when present.
+        """
         return f"{self.name} ({self.premises})" if self.premises else self.name
 
 
@@ -218,8 +284,10 @@ def _to_float(value: str | None) -> float | None:
     Returns:
         A finite, non-zero float, or ``None`` when the value is unusable.
     """
+    if value is None:
+        return None
     try:
-        number = float(value)  # type: ignore[arg-type]
+        number = float(value)
     except (TypeError, ValueError, OverflowError):
         return None
     # 0,0 is a "no coordinates" placeholder in some commission files.
@@ -235,7 +303,8 @@ def _split_divisions(value: str | None) -> frozenset[str]:
     Returns:
         A set of non-empty normalised division names.
     """
-    return frozenset(norm(part) for part in (value or "").split(",") if norm(part))
+    normalised = (norm(part) for part in (value or "").split(","))
+    return frozenset(part for part in normalised if part)
 
 
 def records_from_rows(
@@ -250,39 +319,80 @@ def records_from_rows(
     Returns:
         One :class:`Record` for each source row, in source order.
     """
-    records = []
-    for index, row in enumerate(rows):
+    return [_record_from_row(index, row, columns) for index, row in enumerate(rows)]
 
-        def get(column: str | None) -> str:
-            return (row.get(column) or "").strip() if column else ""
 
-        source_id = get(columns.id) or None
-        records.append(
-            Record(
-                index=index,
-                name=get(columns.name),
-                premises=get(columns.premises),
-                address=", ".join(get(c) for c in columns.address if get(c)),
-                lat=_to_float(get(columns.lat)),
-                lon=_to_float(get(columns.lon)),
-                divisions=_split_divisions(get(columns.divisions)),
-                source_id=source_id,
-                raw=dict(row),
-            )
-        )
-    return records
+def _record_from_row(index: int, row: dict[str, str], columns: ColumnMap) -> Record:
+    """Parse one source row using its field mapping.
+
+    Args:
+        index: Row position after filtering the file.
+        row: Source CSV fields.
+        columns: Source headers mapped to place fields.
+
+    Returns:
+        A record with parsed coordinates and normalised identity fields.
+    """
+
+    def get(column: str | None) -> str:
+        """Read a mapped source field.
+
+        Args:
+            column: Header to read, or ``None`` for an unmapped field.
+
+        Returns:
+            Stripped text, or empty text when absent.
+        """
+        return (row.get(column) or "").strip() if column else ""
+
+    return Record(
+        index=index,
+        name=get(columns.name),
+        premises=get(columns.premises),
+        address=", ".join(part for part in map(get, columns.address) if part),
+        lat=_to_float(get(columns.lat)),
+        lon=_to_float(get(columns.lon)),
+        divisions=_split_divisions(get(columns.divisions)),
+        source_id=get(columns.id) or None,
+        raw=dict(row),
+    )
 
 
 @dataclass
 class Dataset:
-    """A loaded file: its records, the column map used and where it came from."""
+    """A loaded file and the column map used to interpret it.
+
+    Attributes:
+        path: Source file path or synthetic dataset label.
+        columns: Source headers mapped to place fields.
+        records: Records in filtered source order.
+    """
 
     path: str
     columns: ColumnMap
     records: list[Record]
 
+    def unique_source_ids(self) -> dict[str, int]:
+        """Index non-empty source IDs that occur exactly once.
+
+        Returns:
+            Mapping from usable source ID to record index.
+        """
+        counts = Counter(
+            record.source_id for record in self.records if record.source_id
+        )
+        return {
+            record.source_id: record.index
+            for record in self.records
+            if record.source_id and counts[record.source_id] == 1
+        }
+
     def fields_present(self) -> set[str]:
-        """Fields with a value in at least one record."""
+        """Identify which identity fields are available for comparison.
+
+        Returns:
+            Names of fields with a value in at least one record.
+        """
         present = set()
         for r in self.records:
             if r.n_name:
@@ -304,10 +414,22 @@ def load_csv(
     id_column: str | None = None,
     row_filter: Callable[[dict[str, str]], bool] | None = None,
 ) -> Dataset:
-    """Load a CSV. Rows failing `row_filter` are dropped before indexing."""
+    """Load a CSV, filtering rows before assigning their indices.
+
+    Args:
+        path: UTF-8 CSV file to load.
+        columns: Explicit field mapping, or ``None`` to detect source headers.
+        id_column: Optional source ID column used when detecting headers.
+        row_filter: Optional predicate selecting rows to retain.
+
+    Returns:
+        The dataset with parsed and normalised records.
+    """
     with open(path, newline="", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         header = reader.fieldnames or []
         rows = [row for row in reader if row_filter is None or row_filter(row)]
     columns = columns or ColumnMap.detect(header, id_column=id_column)
-    return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns))
+    return Dataset(
+        path=str(path), columns=columns, records=records_from_rows(rows, columns)
+    )

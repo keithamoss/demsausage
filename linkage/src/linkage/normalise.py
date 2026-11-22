@@ -97,10 +97,15 @@ def norm_address(text: str | None) -> str:
     Returns:
         A compact address key where common abbreviations use one spelling.
     """
-    return " ".join(ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split())
+    return " ".join(
+        ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split()
+    )
 
 
-_TIME = re.compile(r"(?<![\d:.])(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?(?![\d:])", re.IGNORECASE)
+_TIME = re.compile(
+    r"(?<![\d:.])(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?(?![\d:])",
+    re.IGNORECASE,
+)
 
 
 def norm_hours(text: str | None) -> str:
@@ -186,10 +191,10 @@ def distance_m(
     Returns:
         Distance in metres, or ``None`` if either point is missing.
     """
-    if None in (lat1, lon1, lat2, lon2):
+    if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
         return None
-    p1, p2 = math.radians(lat1), math.radians(lat2)  # type: ignore[arg-type]
+    p1, p2 = math.radians(lat1), math.radians(lat2)
     dp = p2 - p1
-    dl = math.radians(lon2 - lon1)  # type: ignore[operator]
+    dl = math.radians(lon2 - lon1)
     a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
     return 2 * 6_371_000 * math.asin(math.sqrt(a))

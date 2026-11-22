@@ -35,11 +35,11 @@ Each of these produced wrong results without any error. Most would apply to any 
 
 4. **Term frequencies must come from the whole files, not the records still to link.** We first sent Splink only the leftovers after the exact pass. In VIC that was sometimes just two records sharing a name, so each premises value looked like it made up half the data. An exact premises match then counted for almost nothing, and Splink swapped two different Whittlesea venues. Fix: give Splink every record, and drop pairs outside the requested set after prediction.
 
-5. **Probabilities saturate at 1.0, so they can't be used to choose between competing pairs.** When two candidate pairings both score 1.0, one-to-one assignment ties and picks arbitrarily. Fix: assign on the match weight (`ScoredPair.rank`), which doesn't saturate, and keep the probability for thresholds and bands.
+5. **Probabilities saturate at 1.0, so they can't be used to choose between competing pairs.** When two candidate pairings both score 1.0, one-to-one assignment ties and picks arbitrarily. Fix: assign on the match weight (`ScoredPair.rank`), which doesn't saturate, and keep the probability for thresholds and bands. Unmatched records use the review threshold's log odds on the same scale. Never mix probabilities and weights: replacing negative weights with probabilities can make a weaker candidate win.
 
-6. **The prior has to fit each pair of files.** A trained model carries the match rate of its training data. For a 23-place by-election the right prior is about 1 in 23, not whatever the training corpus had. We set `probability_two_random_records_match = min(n) / (n_left × n_right)` at prediction time.
+6. **The prior has to fit each pair of files.** A trained model carries the match rate of its training data. For a 23-place by-election the right prior is about 1 in 23, not whatever the training corpus had. We set `probability_two_random_records_match = min(n) / (n_left × n_right)`, capped at 0.5 for tiny inputs, when constructing prediction settings rather than modifying Splink's private settings after construction.
 
-7. **Unsupervised EM needs volume.** It works on hundreds of records, but not on a 23-place by-election. Small files have to use the trained model.
+7. **Unsupervised EM needs volume.** It works on hundreds of records, but not on a 23-place by-election. Small files have to use the trained model. Empty training rules are reported as warnings; unexpected training failures propagate instead of being silently ignored.
 
 8. **The prediction threshold hides scores.** We predicted at a 0.01 floor, so Northam Town Hall (0.0002) didn't appear at all, and we couldn't see why it was missed. The floor now follows the review threshold when that's lower. For diagnosis, run with `review_threshold=0.0`.
 

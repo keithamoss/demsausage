@@ -30,6 +30,15 @@ def exact_key(record: Record) -> str | None:
 
 
 def _corroborated(a: Record, b: Record) -> tuple[bool, dict]:
+    """Check that exact-key records also share a venue detail or nearby location.
+
+    Args:
+        a: First record.
+        b: Second record.
+
+    Returns:
+        Whether corroborating evidence exists, together with report details.
+    """
     dist = distance_m(a.lat, a.lon, b.lat, b.lon)
     same_address = bool(a.n_address) and a.n_address == b.n_address
     same_premises = bool(a.n_premises) and a.n_premises == b.n_premises
@@ -66,12 +75,21 @@ def exact_pass(left: Dataset, right: Dataset) -> list[Link]:
         ok, explain = _corroborated(left.records[i], right.records[j])
         if ok:
             links.append(
-                Link(left=i, right=j, score=1.0, band="auto", via="exact", explain=explain)
+                Link(
+                    left=i,
+                    right=j,
+                    score=1.0,
+                    band="auto",
+                    via="exact",
+                    explain=explain,
+                )
             )
     return links
 
 
-def link(left: Dataset, right: Dataset, matcher: Matcher, use_exact_pass: bool = True) -> LinkResult:
+def link(
+    left: Dataset, right: Dataset, matcher: Matcher, use_exact_pass: bool = True
+) -> LinkResult:
     """Link two datasets, first exactly and then with one matcher.
 
     Args:
@@ -84,23 +102,25 @@ def link(left: Dataset, right: Dataset, matcher: Matcher, use_exact_pass: bool =
         Links, unmatched record indices, and matcher parameters.
     """
     links = exact_pass(left, right) if use_exact_pass else []
-    done_left = {x.left for x in links}
-    done_right = {x.right for x in links}
+    done_left = {decision.left for decision in links}
+    done_right = {decision.right for decision in links}
     left_rest = [r.index for r in left.records if r.index not in done_left]
     right_rest = [r.index for r in right.records if r.index not in done_right]
 
     if left_rest and right_rest:
         scored = matcher.score(left, right, left_rest, right_rest)
-        for p in assign(scored, matcher.review_threshold):
-            band = "auto" if p.score >= matcher.auto_threshold else "review"
+        for pair in assign(
+            scored, matcher.review_threshold, matcher.assignment_baseline()
+        ):
+            band = "auto" if pair.score >= matcher.auto_threshold else "review"
             links.append(
                 Link(
-                    left=p.left,
-                    right=p.right,
-                    score=round(p.score, 4),
+                    left=pair.left,
+                    right=pair.right,
+                    score=round(pair.score, 4),
                     band=band,
                     via="matcher",
-                    explain=p.explain,
+                    explain=pair.explain,
                 )
             )
 

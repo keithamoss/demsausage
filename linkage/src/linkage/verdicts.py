@@ -15,7 +15,7 @@ import json
 from collections import Counter, defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict, TypeGuard
 
 #: In the source tree: linkage/verdicts/verdicts.jsonl
 DEFAULT_PATH = Path(__file__).resolve().parents[2] / "verdicts" / "verdicts.jsonl"
@@ -44,12 +44,71 @@ REASONS = [
 REQUIRED = ("old_sha256", "new_sha256", "left", "decisions", "verdict")
 
 
-def key(v: dict[str, Any]) -> tuple:
-    """One verdict per place per pair of files; a later import replaces an earlier one."""
+class VerdictIdentity(TypedDict):
+    """Required fields identifying a human judgement.
+
+    Attributes:
+        old_sha256: Fingerprint of the first CSV.
+        new_sha256: Fingerprint of the second CSV.
+        left: Record details, including its integer row index.
+        decisions: Matcher decisions, each an object or ``None``.
+        verdict: Human judgement from the allowed verdict choices.
+    """
+
+    old_sha256: str
+    new_sha256: str
+    left: dict[str, Any]
+    decisions: dict[str, dict[str, Any] | None]
+    verdict: str
+
+
+class Verdict(VerdictIdentity, total=False):
+    """A judgement with optional contextual metadata.
+
+    Attributes:
+        schema_version: Version of the verdict format.
+        election: Election label.
+        reason: Short reason for the judgement.
+        note: Free-text explanation.
+        recorded_at: Timestamp supplied by the report.
+    """
+
+    schema_version: int
+    election: str
+    reason: str
+    note: str
+    recorded_at: str
+
+
+class VerdictTally(TypedDict):
+    """Summary counts for stored judgements.
+
+    Attributes:
+        total: Total judgement count.
+        by_verdict: Counts by outcome.
+        by_reason: Outcome counts grouped by reason.
+        elections: Sorted election labels.
+    """
+
+    total: int
+    by_verdict: dict[str, int]
+    by_reason: dict[str, dict[str, int]]
+    elections: list[str]
+
+
+def key(v: Verdict) -> tuple[str, str, int]:
+    """Identify a judgement so later imports replace the same place's verdict.
+
+    Args:
+        v: Validated judgement.
+
+    Returns:
+        The input fingerprints and left row index.
+    """
     return (v["old_sha256"], v["new_sha256"], v["left"]["index"])
 
 
-def validate(v: dict[str, Any]) -> list[str]:
+def validate(v: object) -> list[str]:
     """Check a downloaded verdict for required fields and allowed verdict values.
 
     Args:
@@ -58,35 +117,104 @@ def validate(v: dict[str, Any]) -> list[str]:
     Returns:
         Human-readable validation problems, or an empty list when valid.
     """
+    if not isinstance(v, dict):
+        return ["verdict must be an object"]
+
     problems = [f"missing {field!r}" for field in REQUIRED if field not in v]
-    if "verdict" in v and v["verdict"] not in VERDICTS:
+    for field_name in ("old_sha256", "new_sha256"):
+        if field_name in v and not isinstance(v[field_name], str):
+            problems.append(f"{field_name} must be a string")
+    if "verdict" in v and (
+        not isinstance(v["verdict"], str) or v["verdict"] not in VERDICTS
+    ):
         problems.append(f"verdict {v['verdict']!r} is not one of {sorted(VERDICTS)}")
-    if "left" in v and "index" not in v["left"]:
-        problems.append("left record has no index")
+
+    # Check nested record and decision details before accepting the report.
+    if "left" in v:
+        if not isinstance(v["left"], dict):
+            problems.append("left record must be an object")
+        elif "index" not in v["left"]:
+            problems.append("left record has no index")
+        elif type(v["left"]["index"]) is not int or v["left"]["index"] < 0:
+            problems.append("left record index must be a non-negative integer")
+
+    if "decisions" in v:
+        decisions = v["decisions"]
+        if not isinstance(decisions, dict) or any(
+            not isinstance(name, str)
+            or (decision is not None and not isinstance(decision, dict))
+            for name, decision in decisions.items()
+        ):
+            problems.append("decisions must map matcher names to objects or null")
+
+    for field_name in ("election", "reason", "note", "recorded_at"):
+        if field_name in v and not isinstance(v[field_name], str):
+            problems.append(f"{field_name} must be a string")
+    if "schema_version" in v and (
+        type(v["schema_version"]) is not int or v["schema_version"] != SCHEMA_VERSION
+    ):
+        problems.append(f"schema_version must be {SCHEMA_VERSION}")
+
     return problems
 
 
-def load(path: Path | None = None) -> list[dict[str, Any]]:
+def _is_verdict(value: object) -> TypeGuard[Verdict]:
+    """Check the runtime shape before exposing a typed judgement.
+
+    Args:
+        value: Untrusted JSON value.
+
+    Returns:
+        Whether the value satisfies the verdict schema.
+    """
+    return not validate(value)
+
+
+def _parse_verdict(value: object) -> Verdict:
+    """Validate an external JSON judgement without discarding extra report fields.
+
+    Args:
+        value: JSON value read from a report or store.
+
+    Returns:
+        A validated judgement.
+
+    Raises:
+        ValueError: If required fields or their types are invalid.
+    """
+    if not _is_verdict(value):
+        raise ValueError(f"Bad verdict: {'; '.join(validate(value))}")
+    return value
+
+
+def load(path: Path | None = None) -> list[Verdict]:
     """Load verdict records from a JSON Lines file.
 
     Args:
         path: Verdict file to load, or the default verdict store.
 
     Returns:
-        Parsed verdict dictionaries.
+        Validated verdict dictionaries, or an empty list if the store is absent.
     """
     path = path or DEFAULT_PATH
     if not path.exists():
         return []
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [
+        _parse_verdict(json.loads(line))
+        for line in path.read_text().splitlines()
+        if line.strip()
+    ]
 
 
-def save(verdicts: Iterable[dict[str, Any]], path: Path | None = None) -> None:
+def save(verdicts: Iterable[Verdict], path: Path | None = None) -> None:
     """Write sorted verdict records to a JSON Lines file.
 
     Args:
         verdicts: Verdict dictionaries to store.
         path: Destination file, or the default verdict store.
+
+    Returns:
+        None. The destination file is replaced with the sorted verdicts.
     """
     path = path or DEFAULT_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -110,13 +238,18 @@ def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
     path = path or DEFAULT_PATH
     incoming = json.loads(source.read_text())
     if isinstance(incoming, dict):
-        incoming = incoming.get("verdicts", [])
+        if "verdicts" not in incoming:
+            raise ValueError("Verdict report must contain a 'verdicts' list")
+        incoming = incoming["verdicts"]
+    if not isinstance(incoming, list):
+        # Invalid report shapes are validation errors, like malformed verdict rows.
+        raise ValueError(  # noqa: TRY004 - invalid report schema, like malformed rows
+            "Verdict import must be a list or a report containing a 'verdicts' list"
+        )
     existing = {key(v): v for v in load(path)}
     added = replaced = 0
-    for v in incoming:
-        problems = validate(v)
-        if problems:
-            raise ValueError(f"Bad verdict for {v.get('left', {}).get('name')!r}: {'; '.join(problems)}")
+    for value in incoming:
+        v = _parse_verdict(value)
         v.setdefault("schema_version", SCHEMA_VERSION)
         if key(v) in existing:
             replaced += existing[key(v)] != v
@@ -127,7 +260,7 @@ def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
     return {"added": added, "replaced": replaced, "total": len(existing)}
 
 
-def tally(verdicts: list[dict[str, Any]]) -> dict[str, Any]:
+def tally(verdicts: list[Verdict]) -> VerdictTally:
     """Summarise verdicts by outcome, reason, and election.
 
     Args:
@@ -148,7 +281,7 @@ def tally(verdicts: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def format_tally(t: dict[str, Any]) -> str:
+def format_tally(t: VerdictTally) -> str:
     """Format a verdict tally as a human-readable text report.
 
     Args:
@@ -157,7 +290,9 @@ def format_tally(t: dict[str, Any]) -> str:
     Returns:
         A multi-line report of verdict and reason totals.
     """
-    lines = [f"{t['total']} verdicts across {', '.join(t['elections']) or 'no elections'}"]
+    lines = [
+        f"{t['total']} verdicts across {', '.join(t['elections']) or 'no elections'}"
+    ]
     for verdict, label in VERDICTS.items():
         lines.append(f"  {label:22} {t['by_verdict'].get(verdict, 0)}")
     if t["by_reason"]:
