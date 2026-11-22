@@ -411,7 +411,7 @@ def _coordinate_is_valid(value: Any, low: float, high: float) -> bool:
         return False
     try:
         number = float(value)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return False
     return math.isfinite(number) and low <= number <= high
 

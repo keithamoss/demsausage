@@ -216,6 +216,8 @@ def test_row_problems_accepts_coordinate_endpoints(field, value):
         ("lat", float("nan")),
         ("lon", float("inf")),
         ("lon", float("-inf")),
+        pytest.param("lat", 10**400, id="oversized-latitude"),
+        pytest.param("lon", -(10**400), id="oversized-longitude"),
     ],
 )
 def test_row_problems_rejects_out_of_range_and_non_finite_coordinates(field, value):
