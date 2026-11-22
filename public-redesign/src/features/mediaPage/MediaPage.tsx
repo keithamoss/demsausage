@@ -26,6 +26,11 @@ const PageWrapper = styled('div')(({ theme }) => ({
 
 const mediaReleases = [
 	{
+		title: "Community fundraisers ready for next week's Victorian State election",
+		date: 'November 23rd 2026',
+		filename: '2026-Victoria_23-November.pdf',
+	},
+	{
 		title: "It's on: Be part of Victorian Democracy Sausage Day on 28 November",
 		date: 'November 9th 2026',
 		filename: '2026-Victoria_9-November.pdf',
