@@ -88,15 +88,24 @@ ADDRESS_ABBREVIATIONS = {
 }
 
 
+_UNIT_SEPARATOR = re.compile(r"(\d+[a-z]?)\s*/\s*(?=\d)", re.IGNORECASE)
+
+
 def norm_address(text: str | None) -> str:
-    """Normalise an address and expand common street abbreviations.
+    """Normalise an address without losing unit-number separators.
 
     Args:
         text: Address text to normalise, or ``None``.
 
     Returns:
-        A compact address key where common abbreviations use one spelling.
+        An address key with expanded abbreviations and numeric slashes marked as units.
+
+    Examples:
+        ``"1/5 Luck St"`` becomes ``"1 unit 5 luck street"``, distinct from
+        the street-number range ``"1-5 Luck St"``.
     """
+    # Numeric slashes identify units, not the street-number ranges denoted by hyphens.
+    text = _UNIT_SEPARATOR.sub(r"\1 unit ", text or "")
     return " ".join(
         ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split()
     )

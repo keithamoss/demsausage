@@ -169,6 +169,8 @@ class Record:
 
     Attributes:
         index: Zero-based row position after filtering the source file.
+        source_index: Zero-based CSV data-row position before filtering, excluding
+            the header. Stable for this source file, even if the filter changes.
         name: Source polling-place name.
         premises: Source venue name.
         address: Joined source address fields.
@@ -183,6 +185,7 @@ class Record:
     """
 
     index: int
+    source_index: int
     name: str
     premises: str
     address: str
@@ -313,22 +316,29 @@ def records_from_rows(
     """Convert CSV rows into normalised polling-place records.
 
     Args:
-        rows: Row dictionaries returned by a CSV reader.
+        rows: Row dictionaries in original source order. Use ``load_csv`` with
+            ``row_filter`` when filtering a CSV while retaining source positions.
         columns: Mapping from source headers to polling-place fields.
 
     Returns:
         One :class:`Record` for each source row, in source order.
     """
-    return [_record_from_row(index, row, columns) for index, row in enumerate(rows)]
+    return [
+        _record_from_row(index, row, columns, source_index=index)
+        for index, row in enumerate(rows)
+    ]
 
 
-def _record_from_row(index: int, row: dict[str, str], columns: ColumnMap) -> Record:
+def _record_from_row(
+    index: int, row: dict[str, str], columns: ColumnMap, source_index: int
+) -> Record:
     """Parse one source row using its field mapping.
 
     Args:
         index: Row position after filtering the file.
         row: Source CSV fields.
         columns: Source headers mapped to place fields.
+        source_index: CSV data-row position before filtering, excluding the header.
 
     Returns:
         A record with parsed coordinates and normalised identity fields.
@@ -347,6 +357,7 @@ def _record_from_row(index: int, row: dict[str, str], columns: ColumnMap) -> Rec
 
     return Record(
         index=index,
+        source_index=source_index,
         name=get(columns.name),
         premises=get(columns.premises),
         address=", ".join(part for part in map(get, columns.address) if part),
@@ -423,13 +434,22 @@ def load_csv(
         row_filter: Optional predicate selecting rows to retain.
 
     Returns:
-        The dataset with parsed and normalised records.
+        Parsed records with contiguous filtered indices and original source-row indices.
     """
     with open(path, newline="", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         header = reader.fieldnames or []
-        rows = [row for row in reader if row_filter is None or row_filter(row)]
+        rows = [
+            (source_index, row)
+            for source_index, row in enumerate(reader)
+            if row_filter is None or row_filter(row)
+        ]
     columns = columns or ColumnMap.detect(header, id_column=id_column)
     return Dataset(
-        path=str(path), columns=columns, records=records_from_rows(rows, columns)
+        path=str(path),
+        columns=columns,
+        records=[
+            _record_from_row(index, row, columns, source_index)
+            for index, (source_index, row) in enumerate(rows)
+        ],
     )

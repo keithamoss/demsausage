@@ -8,6 +8,7 @@ It has two matchers behind one interface so they can run side by side on real da
 
 1. **Load.** `ColumnMap.detect()` finds the name, premises, address, coordinate, division and ID columns in our loader CSVs, AEC files and the SA, VIC, TAS, WA and QLD scraper outputs. Other formats take an explicit `ColumnMap`. IDs are carried through for evaluation but never used for matching.
 2. **Normalise.** Fold accents, lowercase, `&` → "and", strip punctuation, drop noise words from names ("polling", "centre", …). Drop a trailing "(Division)" when it names one of the record's own divisions, as in the AEC's "Allawah (Barton)". In addresses, expand common abbreviations ("Cnr" → "corner", "St" → "street") and drop a leading part that just repeats the place's name ("Northam Town Hall, Cnr Wellington…").
+   Numeric unit slashes are preserved as unit markers: `1/5 Luck St` is not equivalent to the street-number range `1-5 Luck St`.
 3. **Exact-key pass (shared).** Normalised name + sorted divisions, when unique in both files and corroborated: within 1 km, or the same address or premises.
 4. **Matcher.** Scores the remaining pairs:
    - `rapidfuzz`: hand-built weighted string similarity plus distance, ported from the experiments. Weights are spread over only the fields both files have.
@@ -51,6 +52,8 @@ For example, at a 50% Splink review threshold, one 99% candidate has weight abou
 ## Downstream: diffs and verdicts
 
 [`../diff/`](../diff/) turns linkage results into one diff per matcher, with an HTML report. Its Disagreements tab records which matcher was right. Those verdicts are imported into [`verdicts/verdicts.jsonl`](verdicts/) with `uv run linkage verdicts import FILE` and summarised with `uv run linkage verdicts tally`.
+
+Linkage keeps contiguous filtered indices for matching and original `source_index` values for place identity. Dataset summaries expose `source_indices` in filtered record order; disagreement reports include `left_source_index` and `right_source_index`. Verdict exporters must carry the original left source index into schema-version-2 downloads. See [`verdicts/README.md`](verdicts/README.md) for the format and legacy-import limits.
 
 ## Results so far (2026-11-22)
 

@@ -22,6 +22,7 @@ def _describe_link(link: Link | None, right: Dataset) -> dict[str, Any] | None:
         return None
     return {
         "right": link.right,
+        "right_source_index": right.records[link.right].source_index,
         "right_label": right.records[link.right].label(),
         "score": link.score,
         "band": link.band,
@@ -59,6 +60,7 @@ def compare_results(
         disagreements.append(
             {
                 "left": record.index,
+                "left_source_index": record.source_index,
                 "left_label": record.label(),
                 a.matcher: _describe_link(first, right),
                 b.matcher: _describe_link(second, right),

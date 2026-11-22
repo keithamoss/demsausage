@@ -7,7 +7,7 @@ from linkage.compare import compare_results
 from linkage.evaluate import evaluate
 from linkage.matchers.rapidfuzz_lsa import RapidfuzzMatcher, text_similarity
 from linkage.matchers.splink_matcher import SplinkMatcher, labelled_rows
-from linkage.normalise import distance_m, norm, norm_name
+from linkage.normalise import distance_m, equivalent, norm, norm_name
 from linkage.pipeline import exact_pass, link
 from linkage.records import ColumnMap
 from linkage.result import Link, LinkResult, ScoredPair
@@ -162,6 +162,40 @@ def test_training_and_evaluation_share_unique_id_rules():
     result = LinkResult("test", [Link(0, 0, 1.0, "auto", "exact")], [1, 2, 3], [1, 2])
     metrics = evaluate(result, left, right)
     assert metrics.truth_pairs == metrics.correct == 1
+
+
+def test_labelled_rows_reject_duplicate_training_groups():
+    records = dataset([place("shared", "Hall")])
+    with pytest.raises(ValueError, match="Duplicate training groups.*same"):
+        labelled_rows([("same", records, records), ("same", records, records)])
+
+
+def test_labelled_rows_keep_ids_separate_for_distinct_groups():
+    records = dataset([place("shared", "Hall")])
+    left_rows, right_rows = labelled_rows(
+        [("first", records, records), ("second", records, records)]
+    )
+    assert len({row["unique_id"] for row in left_rows + right_rows}) == 4
+    assert (
+        sum(
+            left["truth"] == right["truth"]
+            for left in left_rows
+            for right in right_rows
+        )
+        == 2
+    )
+
+
+@pytest.mark.parametrize("unit_number", ["1", "1A"])
+def test_unit_addresses_are_not_equivalent_to_number_ranges(unit_number):
+    unit_address = f"{unit_number}/5 Luck St"
+    range_address = f"{unit_number}-5 Luck St"
+    assert not equivalent("address", unit_address, range_address)
+    assert equivalent("address", unit_address, f"{unit_number} / 5 Luck Street")
+
+    left = dataset([place("unit", "Hall", address=unit_address)])
+    right = dataset([place("range", "Hall", address=range_address)])
+    assert exact_pass(left, right) == []
 
 
 def test_splink_rejects_non_object_model_json(tmp_path):

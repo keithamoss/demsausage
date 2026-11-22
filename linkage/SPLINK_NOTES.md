@@ -43,6 +43,8 @@ Each of these produced wrong results without any error. Most would apply to any 
 
 8. **The prediction threshold hides scores.** We predicted at a 0.01 floor, so Northam Town Hall (0.0002) didn't appear at all, and we couldn't see why it was missed. The floor now follows the review threshold when that's lower. For diagnosis, run with `review_threshold=0.0`.
 
+9. **Training groups must be unique per input pair.** Reusing a group repeats internal record IDs and trusted labels, so Splink joins labels across snapshots that were never supplied as training pairs. Training now rejects duplicate groups before building input rows. Give each `--pair` its own group name, even when several pairs come from the same election.
+
 ## Coordinate typos: the worked example
 
 WA 2021, Northam Town Hall: latitude −32.656 in one file and −31.656 in the other. It's the same place, about 111 km apart on paper.

@@ -20,7 +20,7 @@ from typing import Any, TypedDict, TypeGuard
 #: In the source tree: linkage/verdicts/verdicts.jsonl
 DEFAULT_PATH = Path(__file__).resolve().parents[2] / "verdicts" / "verdicts.jsonl"
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 #: Allowed values for "verdict".
 VERDICTS = {
@@ -50,7 +50,8 @@ class VerdictIdentity(TypedDict):
     Attributes:
         old_sha256: Fingerprint of the first CSV.
         new_sha256: Fingerprint of the second CSV.
-        left: Record details, including its integer row index.
+        left: Record details with filtered ``index`` and original ``source_index``.
+            Legacy verdicts may omit ``source_index``.
         decisions: Matcher decisions, each an object or ``None``.
         verdict: Human judgement from the allowed verdict choices.
     """
@@ -66,7 +67,7 @@ class Verdict(VerdictIdentity, total=False):
     """A judgement with optional contextual metadata.
 
     Attributes:
-        schema_version: Version of the verdict format.
+        schema_version: Format version; version 2 requires an original source-row index.
         election: Election label.
         reason: Short reason for the judgement.
         note: Free-text explanation.
@@ -96,16 +97,21 @@ class VerdictTally(TypedDict):
     elections: list[str]
 
 
-def key(v: Verdict) -> tuple[str, str, int]:
+def key(v: Verdict) -> tuple[str, str, str, int]:
     """Identify a judgement so later imports replace the same place's verdict.
 
     Args:
         v: Validated judgement.
 
     Returns:
-        The input fingerprints and left row index.
+        Input fingerprints, identity kind, and the original source-row index.
+        Legacy filtered indices use a separate identity kind so they cannot
+        replace judgements with known source-row identities.
     """
-    return (v["old_sha256"], v["new_sha256"], v["left"]["index"])
+    left = v["left"]
+    identity_kind = "source" if "source_index" in left else "legacy"
+    index = left["source_index"] if identity_kind == "source" else left["index"]
+    return (v["old_sha256"], v["new_sha256"], identity_kind, index)
 
 
 def validate(v: object) -> list[str]:
@@ -133,10 +139,19 @@ def validate(v: object) -> list[str]:
     if "left" in v:
         if not isinstance(v["left"], dict):
             problems.append("left record must be an object")
-        elif "index" not in v["left"]:
-            problems.append("left record has no index")
-        elif type(v["left"]["index"]) is not int or v["left"]["index"] < 0:
-            problems.append("left record index must be a non-negative integer")
+        else:
+            left = v["left"]
+            if "index" not in left:
+                problems.append("left record has no index")
+            for field_name in ("index", "source_index"):
+                if field_name in left and (
+                    type(left[field_name]) is not int or left[field_name] < 0
+                ):
+                    problems.append(
+                        f"left record {field_name} must be a non-negative integer"
+                    )
+            if v.get("schema_version") == SCHEMA_VERSION and "source_index" not in left:
+                problems.append("schema_version 2 requires left.source_index")
 
     if "decisions" in v:
         decisions = v["decisions"]
@@ -151,9 +166,10 @@ def validate(v: object) -> list[str]:
         if field_name in v and not isinstance(v[field_name], str):
             problems.append(f"{field_name} must be a string")
     if "schema_version" in v and (
-        type(v["schema_version"]) is not int or v["schema_version"] != SCHEMA_VERSION
+        type(v["schema_version"]) is not int
+        or v["schema_version"] not in (1, SCHEMA_VERSION)
     ):
-        problems.append(f"schema_version must be {SCHEMA_VERSION}")
+        problems.append(f"schema_version must be 1 or {SCHEMA_VERSION}")
 
     return problems
 
@@ -233,7 +249,7 @@ def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
         Counts of new verdicts, replacements, and the final total.
 
     Raises:
-        ValueError: If one of the incoming verdict objects is invalid.
+        ValueError: If a verdict is invalid or lacks an original source-row identity.
     """
     path = path or DEFAULT_PATH
     incoming = json.loads(source.read_text())
@@ -250,12 +266,19 @@ def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
     added = replaced = 0
     for value in incoming:
         v = _parse_verdict(value)
-        v.setdefault("schema_version", SCHEMA_VERSION)
-        if key(v) in existing:
-            replaced += existing[key(v)] != v
+        if "source_index" not in v["left"]:
+            raise ValueError(
+                "Verdict download has no original source-row identity "
+                "(left.source_index). Regenerate the report before importing."
+            )
+        v["schema_version"] = SCHEMA_VERSION
+        identity = key(v)
+        if identity in existing:
+            replaced += existing[identity] != v
         else:
             added += 1
-        existing[key(v)] = v
+        existing[identity] = v
+
     save(existing.values(), path)
     return {"added": added, "replaced": replaced, "total": len(existing)}
 

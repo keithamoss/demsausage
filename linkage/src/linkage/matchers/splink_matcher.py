@@ -19,6 +19,7 @@ import importlib
 import json
 import logging
 import math
+from collections import Counter
 from collections.abc import Sequence
 from copy import deepcopy
 from dataclasses import dataclass, field
@@ -394,16 +395,28 @@ def _prediction_pair(row: dict[str, Any]) -> ScoredPair:
 def labelled_rows(
     pairs: Sequence[tuple[str, Dataset, Dataset]],
 ) -> tuple[list[SplinkRow], list[SplinkRow]]:
-    """Build Splink input rows from (group, left, right) pairs labelled by source_id.
+    """Prepare training rows for file pairs with trusted shared IDs.
+
+    Only nonblank IDs appearing once in each file become matching labels.
+    Each input pair needs its own group name.
 
     Args:
-        pairs: Named left/right dataset pairs to label.
+        pairs: Unique group names with their left and right datasets.
 
     Returns:
         Separate left and right row lists containing training labels.
 
-    Only IDs that are present and unique in both files become labels.
+    Raises:
+        ValueError: If a group name is reused for more than one input pair.
     """
+    duplicates = [
+        group
+        for group, count in Counter(group for group, _, _ in pairs).items()
+        if count > 1
+    ]
+    if duplicates:
+        raise ValueError(f"Duplicate training groups: {', '.join(sorted(duplicates))}")
+
     left_rows: list[SplinkRow] = []
     right_rows: list[SplinkRow] = []
     for group, left, right in pairs:
@@ -459,6 +472,9 @@ def train_from_labels(
 
     Returns:
         The trained model dictionary, optionally also written to ``out_path``.
+
+    Raises:
+        ValueError: If a group name is reused for more than one input pair.
     """
     left_rows, right_rows = labelled_rows(pairs)
     linker = _linker(

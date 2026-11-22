@@ -62,12 +62,13 @@ def dataset_summary(d: Dataset) -> dict[str, Any]:
         d: Dataset that was loaded from a CSV file.
 
     Returns:
-        The file path, fingerprint, record count, and detected column map.
+        File metadata, the column map, and source-row indices in filtered record order.
     """
     return {
         "path": d.path,
         "sha256": file_sha256(d.path),
         "records": len(d.records),
+        "source_indices": [record.source_index for record in d.records],
         "columns": asdict(d.columns),
     }
 
@@ -85,6 +86,8 @@ def link_files(
 
     The output's record indices are row positions in each file (after any
     row_filter), which is how downstream tools such as the diff find rows.
+    Dataset summaries include ``source_indices`` mapping these positions back to
+    the unfiltered CSV. Verdict exporters must use those stable source positions.
 
     Args:
         old: First CSV path.
