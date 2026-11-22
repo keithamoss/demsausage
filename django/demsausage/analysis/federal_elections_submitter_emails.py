@@ -5,6 +5,10 @@ import json
 # This script assumes that submitter_emails.py has been run and already produced its outputs.
 # We rely on these outputs for the email address categorisation.
 
+
+# NOTE! This DOESN'T do what we want because it doesn't say which polling place they submitted for, so we can't exclude emails who've already submitted for a polling place we have data for in this election. See the spreadsheet H sent for an example of the end product.
+
+
 output = {}
 
 with open("output_submitter_emails_20250323.json") as fo:
