@@ -131,7 +131,7 @@ def test_run_pair_writes_one_diff_per_matcher_and_a_report(pair):
     html = (target / "report.html").read_text()
     assert "<title>Thu 1 Jan 2026 → Thu 8 Jan 2026</title>" in html
     assert 'src="https://cdn.jsdelivr.net/npm/ol@10.11.0/dist/ol.js"' in html
-    assert 'src="https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"' in html
+    assert 'script.src = "https://cdn.jsdelivr.net/npm/ol-mapbox-style@13.9.0/dist/olms.js"' in html
     assert "tiles.openfreemap.org/styles/liberty" in html and "google.com/maps/search" in html
     assert "cartocdn" not in html and "arcgisonline" not in html
     assert "Gamma Church" in html and "{{DATA}}" not in html and "</script" not in html.split('id="data">')[1].split("</script>")[0]
