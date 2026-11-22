@@ -605,7 +605,10 @@ def test_stats_always_include_benchmark(
     monkeypatch,
     election_is_active,
 ):
-    monkeypatch.setattr(Elections, "is_active", lambda self: election_is_active)
+    monkeypatch.setattr(
+        "demsausage.app.serializers.is_election_active",
+        lambda election: election_is_active,
+    )
     current = make_election("Election today", days_from_now(0))
 
     stats = ElectionsStatsSerializer(current).data["stats"]

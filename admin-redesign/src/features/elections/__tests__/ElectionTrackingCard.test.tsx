@@ -238,7 +238,7 @@ describe('ElectionTrackingCard', () => {
 		const { container } = render(
 			<ElectionTrackingCard electionName="This election" benchmark={{ ...benchmark, is_active: false }} />,
 		);
-		expect(screen.queryByText(/Today's figure only includes reports received so far/)).not.toBeInTheDocument();
+		expect(screen.queryByText(/Today's figure includes all reports received so far/)).not.toBeInTheDocument();
 		expect(screen.getByText(/Past figures use information still held today/)).toBeInTheDocument();
 		expect(screen.queryByText('Today')).not.toBeInTheDocument();
 		expect(container.querySelector('[data-reference-x]')).not.toBeInTheDocument();
