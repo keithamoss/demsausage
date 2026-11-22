@@ -25,23 +25,63 @@ MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", 
 
 
 def _fmt_date(d: datetime) -> str:
+    """Format a date with a short weekday and month name.
+
+    Args:
+        d: The date to format.
+
+    Returns:
+        A label such as ``"Wed 4 Nov 2026"``.
+    """
     return f"{DAYS[d.weekday()]} {d.day} {MONTHS[d.month - 1]} {d.year}"
 
 
 def _fmt_datetime(d: datetime) -> str:
+    """Format a date and time using a 12-hour clock.
+
+    Args:
+        d: The date and time to format.
+
+    Returns:
+        A label such as ``"Wed 4 Nov 2026, 8:46 pm"``.
+    """
     hour = d.hour % 12 or 12
     return f"{_fmt_date(d)}, {hour}:{d.minute:02d} {'am' if d.hour < 12 else 'pm'}"
 
 
 def _ymd_hms(m: re.Match) -> str | None:
+    """Format a regex match containing year, month, day, and time.
+
+    Args:
+        m: A match with six numeric date and time groups.
+
+    Returns:
+        A short date-and-time label.
+    """
     return _fmt_datetime(datetime(*map(int, m.groups())))
 
 
 def _ymd(m: re.Match) -> str | None:
+    """Format a regex match containing year, month, and day.
+
+    Args:
+        m: A match with three numeric date groups.
+
+    Returns:
+        A short date label.
+    """
     return _fmt_date(datetime(*map(int, m.groups())))
 
 
 def _dmy(m: re.Match) -> str | None:
+    """Format a regex match containing day, month, and year.
+
+    Args:
+        m: A match with three numeric date groups in day-first order.
+
+    Returns:
+        A short date label.
+    """
     day, month, year = map(int, m.groups())
     return _fmt_date(datetime(year, month, day))
 
@@ -57,6 +97,18 @@ ADAPTERS: list[tuple[re.Pattern, Callable[[re.Match], str | None]]] = [
 
 
 def friendly_label(path: str | Path) -> str:
+    """Make a scraper output filename easier to read in a report.
+
+    Args:
+        path: The scraper output file path.
+
+    Returns:
+        A friendly date label, or a tidied filename when no date is recognized.
+
+    Example:
+        ``friendly_label("20261104_204630 polling places.csv")`` returns
+        ``"Wed 4 Nov 2026, 8:46 pm"``.
+    """
     stem = Path(path).stem
     for pattern, formatter in ADAPTERS:
         for match in pattern.finditer(stem):

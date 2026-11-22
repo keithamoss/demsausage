@@ -14,19 +14,38 @@ from typing import Any
 
 from linkage import verdicts as verdict_store
 
+from .html_utils import embed_json, escape_html
 from .names import friendly_label
-from .report import _embed, _html_escape
 
 TEMPLATE = Path(__file__).with_name("index_template.html")
 
 
 def pair_folders(out_dir: Path) -> list[Path]:
-    """Pair folders in series order (folder names start with the old file's timestamped name)."""
+    """Find pair folders in the order of their older input files.
+
+    Args:
+        out_dir: The folder containing the pair reports.
+
+    Returns:
+        Pair folders sorted by name.
+    """
     return sorted(p.parent for p in out_dir.glob("*/link.json"))
 
 
 def _describe(entry: dict[str, Any]) -> str:
-    parts = [c["field"] + (f" ({c['direction']})" if c.get("direction") else "") for c in entry["changes"] if not c.get("cosmetic")]
+    """Summarize a changed or possibly matched place for the history view.
+
+    Args:
+        entry: A changed-place record from one diff.
+
+    Returns:
+        A short list of non-cosmetic changes and any location note.
+    """
+    parts = [
+        c["field"] + (f" ({c['direction']})" if c.get("direction") else "")
+        for c in entry["changes"]
+        if not c.get("cosmetic")
+    ]
     loc = entry.get("location")
     if loc and loc.get("moved_m") is not None:
         km = loc["moved_m"] / 1000
@@ -37,15 +56,29 @@ def _describe(entry: dict[str, Any]) -> str:
 
 
 def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
+    """Follow a matcher's links to build each place's history across files.
+
+    Args:
+        folders: Pair folders in chronological order.
+        matcher: The matcher whose links should define place identity.
+
+    Returns:
+        Places that changed at least once, with their ordered events.
+    """
     places: dict[int, dict[str, Any]] = {}
     ids: dict[int, int] = {}  # row index in the current file -> place id
     next_id = 0
     previous_new_sha = None
 
-    def new_place(name: str | None = None) -> int:
+    def new_place() -> int:
+        """Create an empty place record and return its internal identifier.
+
+        Returns:
+            The identifier used to connect this place's events.
+        """
         nonlocal next_id
         next_id += 1
-        places[next_id] = {"name": name, "events": []}
+        places[next_id] = {"name": None, "events": []}
         return next_id
 
     for folder in folders:
@@ -63,11 +96,30 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
         pair = folder.name
 
         def pid(old_index: int) -> int:
+            """Get or create the history identifier for an old-file row.
+
+            Args:
+                old_index: The row index in this pair's older file.
+
+            Returns:
+                The place identifier for that row.
+            """
             if old_index not in ids:
                 ids[old_index] = new_place()
             return ids[old_index]
 
         def event(place_id: int, kind: str, text: str, name: str) -> None:
+            """Record a change and update the place's latest name.
+
+            Args:
+                place_id: The place whose history should be updated.
+                kind: The event type, such as ``"changed"`` or ``"removed"``.
+                text: The short description shown in the history.
+                name: The place's name in this event.
+
+            Returns:
+                ``None``.
+            """
             places[place_id]["events"].append({"when": when, "pair": pair, "kind": kind, "text": text})
             places[place_id]["name"] = name
 
@@ -97,6 +149,14 @@ def history(folders: list[Path], matcher: str) -> list[dict[str, Any]]:
 
 
 def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
+    """Collect the summaries shown for each pair in the index.
+
+    Args:
+        folders: Pair folders to include.
+
+    Returns:
+        One index-ready summary record per pair folder.
+    """
     rows = []
     for folder in folders:
         link_output = json.loads((folder / "link.json").read_text())
@@ -129,15 +189,30 @@ def pair_rows(folders: list[Path]) -> list[dict[str, Any]]:
 
 
 def write_index(out_dir: Path) -> Path:
+    """Build the HTML index for all reports in a diffs folder.
+
+    Args:
+        out_dir: The folder containing the pair reports.
+
+    Returns:
+        The path to the written ``index.html`` file.
+    """
     folders = pair_folders(out_dir)
     rows = pair_rows(folders)
-    matchers = sorted({m for r in rows for m in r["summaries"]}, key=lambda m: ({"rapidfuzz": 0, "splink": 1}.get(m, 9), m))
+    matchers = sorted(
+        {m for row in rows for m in row["summaries"]},
+        key=lambda matcher: ({"rapidfuzz": 0, "splink": 1}.get(matcher, 9), matcher),
+    )
     election = out_dir.resolve().parent.name
     all_verdicts = verdict_store.load()
     pair_keys = {(r["old_sha256"], r["new_sha256"]) for r in rows}
     here = [v for v in all_verdicts if (v["old_sha256"], v["new_sha256"]) in pair_keys or v.get("election") == election]
     for r in rows:
-        r["verdicts"] = sum(1 for v in all_verdicts if (v["old_sha256"], v["new_sha256"]) == (r["old_sha256"], r["new_sha256"]))
+        r["verdicts"] = sum(
+            1
+            for verdict in all_verdicts
+            if (verdict["old_sha256"], verdict["new_sha256"]) == (r["old_sha256"], r["new_sha256"])
+        )
     data = {
         "title": election,
         "verdict_labels": verdict_store.VERDICTS,
@@ -149,8 +224,8 @@ def write_index(out_dir: Path) -> Path:
     }
     html = (
         TEMPLATE.read_text()
-        .replace("{{TITLE}}", _html_escape(f"{data['title']} diffs"))
-        .replace("{{DATA}}", _embed(data))
+        .replace("{{TITLE}}", escape_html(f"{data['title']} diffs"))
+        .replace("{{DATA}}", embed_json(data))
     )
     out = out_dir / "index.html"
     out.write_text(html)

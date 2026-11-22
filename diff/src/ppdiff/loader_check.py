@@ -25,6 +25,11 @@ _ROW = "_ppdiff_row"  # carries each row's index through the loader's steps
 
 def loader_rules():
     """Import the loader's rules from the repo's django/ folder (no Django needed)."""
+    """Load the loader's transformation functions without importing Django.
+
+    Returns:
+        The shared loader-rules module.
+    """
     django_dir = str(REPO / "django")
     if django_dir not in sys.path:
         sys.path.insert(0, django_dir)
@@ -34,12 +39,29 @@ def loader_rules():
 
 
 def election_config(out_dir: Path) -> dict[str, Any] | None:
+    """Read the election's loader configuration beside its diffs folder.
+
+    Args:
+        out_dir: The folder containing the election's diff reports.
+
+    Returns:
+        The parsed configuration, or ``None`` if no ``config.json`` exists.
+    """
     path = out_dir.resolve().parent / "config.json"
     return json.loads(path.read_text()) if path.exists() else None
 
 
 def as_loaded(d: Dataset, config: dict[str, Any], fixes: bool) -> tuple[list[dict], list[str]]:
-    """The file's rows after the loader's conversion (and optionally its fixes)."""
+    """Convert dataset rows using the same steps as the polling-place loader.
+
+    Args:
+        d: The dataset to convert.
+        config: The election's loader configuration.
+        fixes: Whether to apply ``fix_data_issues`` after conversion.
+
+    Returns:
+        Converted rows with source indices, and any cleaning-regex errors.
+    """
     rules = loader_rules()
     rows = [{**copy.deepcopy(r.raw), _ROW: r.index} for r in d.records]
     rows, regex_errors = rules.to_schema(rows, config)
@@ -49,16 +71,43 @@ def as_loaded(d: Dataset, config: dict[str, Any], fixes: bool) -> tuple[list[dic
 
 
 def pre_fix_rows_by_index(d: Dataset, config: dict[str, Any]) -> dict[int, dict]:
-    """Rows as the loader sees them before fix_data_issues, keyed by source row index."""
+    """Get converted rows before fixes, keyed by their source row indices.
+
+    Args:
+        d: The dataset to convert.
+        config: The election's loader configuration.
+
+    Returns:
+        Rows after filters and column conversion, before ``fix_data_issues``.
+    """
     rows, _ = as_loaded(d, config, fixes=False)
     return {row[_ROW]: row for row in rows}
 
 
 def _label(d: Dataset, row: dict) -> str:
+    """Get the report label for a converted row.
+
+    Args:
+        d: The original dataset.
+        row: A converted row carrying its source index.
+
+    Returns:
+        The label created from the matching source record.
+    """
     return d.records[row[_ROW]].label()
 
 
 def fix_audit(old: Dataset, new: Dataset, config: dict[str, Any]) -> list[dict[str, Any]]:
+    """Check each configured fix against the old and new scrapes in order.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        config: The election's loader configuration.
+
+    Returns:
+        An audit record for each configured fix, including its status and matches.
+    """
     rules = loader_rules()
     old_rows, _ = as_loaded(old, config, fixes=False)
     new_rows, _ = as_loaded(new, config, fixes=False)
@@ -106,7 +155,15 @@ def fix_audit(old: Dataset, new: Dataset, config: dict[str, Any]) -> list[dict[s
 
 
 def load_problems(new: Dataset, config: dict[str, Any]) -> dict[str, Any]:
-    """What the loader would reject in the new file (after its config and fixes)."""
+    """Find rows the loader would reject after applying its configuration and fixes.
+
+    Args:
+        new: The later dataset.
+        config: The election's loader configuration.
+
+    Returns:
+        Problems, regex errors, and the number of rows remaining after filters.
+    """
     rules = loader_rules()
     rows, regex_errors = as_loaded(new, config, fixes=True)
     problems = []
@@ -120,8 +177,17 @@ def load_problems(new: Dataset, config: dict[str, Any]) -> dict[str, Any]:
     return {"problems": problems, "regex_errors": regex_errors, "rows_after_filters": len(rows)}
 
 
-def loader_checks(old: Dataset, new: Dataset, out_dir: Path) -> dict[str, Any]:
-    config = election_config(out_dir)
+def loader_checks(old: Dataset, new: Dataset, config: dict[str, Any] | None) -> dict[str, Any]:
+    """Run loader checks when an election configuration is available.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        config: The parsed election configuration, or ``None`` when it is absent.
+
+    Returns:
+        Loader audit and validation results, or a marker that no config was found.
+    """
     if config is None:
         return {"config_found": False}
     return {

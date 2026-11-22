@@ -26,7 +26,13 @@ HERE = Path(__file__).resolve().parent
 
 
 def linkage_diff() -> None:
-    """Run the generic diff (repo's diff/ tool) on the newest two outputs, into diffs-linkage/."""
+    """Run the repository's generic diff on the newest two polling-place files.
+
+    The scraper succeeds even if the optional diff is unavailable or fails.
+
+    Returns:
+        ``None``.
+    """
     if shutil.which("uv") is None:
         print("\nSkipping the linkage diff: uv isn't installed.")
         return
@@ -45,6 +51,16 @@ def linkage_diff() -> None:
 
 
 def main(fresh: bool, run_linkage_diff: bool = True) -> int:
+    """Scrape, transform, and compare the latest output with the previous one.
+
+    Args:
+        fresh: Start a new scrape instead of resuming an incomplete one.
+        run_linkage_diff: Whether to also run the generic linkage-based diff.
+
+    Returns:
+        A non-zero status if scraping or transforming fails; otherwise the
+        scraper-specific diff's status.
+    """
     if scrape.main(fresh=fresh) != 0:
         return 1
     print()

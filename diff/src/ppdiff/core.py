@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from linkage.normalise import distance_m, equivalent
-from linkage.records import Dataset
+from linkage.records import Dataset, Record
 from linkage.result import Link, LinkResult
 
 from .names import friendly_label
@@ -31,6 +31,14 @@ SINGLE_AXIS_TOLERANCE_DEG = 0.0005
 
 
 def _to_float(value: str | None) -> float | None:
+    """Convert a coordinate value to a finite number.
+
+    Args:
+        value: The text value read from the source file.
+
+    Returns:
+        The number, or ``None`` if it is missing, invalid, or infinite.
+    """
     try:
         number = float(value)  # type: ignore[arg-type]
     except (TypeError, ValueError):
@@ -39,16 +47,55 @@ def _to_float(value: str | None) -> float | None:
 
 
 def changed_text(a: str | None, b: str | None) -> bool:
-    """Whether the text differs at all (ignoring surrounding whitespace). Whether a
-    difference matters is linkage's call: see linkage.normalise.equivalent."""
+    """Check whether two text values differ beyond surrounding whitespace.
+
+    Whether a difference matters is decided separately by
+    ``linkage.normalise.equivalent``.
+
+    Args:
+        a: The value from the older file.
+        b: The value from the newer file.
+
+    Returns:
+        ``True`` if the trimmed values differ.
+
+    Example:
+        ``changed_text(" Hall ", "Hall")`` returns ``False``.
+    """
     return (a or "").strip() != (b or "").strip()
 
 
 def header(d: Dataset) -> list[str]:
+    """Get the source columns in their original order.
+
+    Args:
+        d: The dataset to inspect.
+
+    Returns:
+        The first record's column names, or an empty list for an empty dataset.
+    """
     return list(d.records[0].raw) if d.records else []
 
 
-def location_change(old: Dataset, new: Dataset, i: int, j: int, large_move_m: float = LARGE_MOVE_M) -> dict[str, Any] | None:
+def location_change(
+    old: Dataset,
+    new: Dataset,
+    i: int,
+    j: int,
+    large_move_m: float = LARGE_MOVE_M,
+) -> dict[str, Any] | None:
+    """Describe a linked place's coordinate change.
+
+    Args:
+        old: The dataset with the earlier locations.
+        new: The dataset with the later locations.
+        i: The place's row index in ``old``.
+        j: The place's row index in ``new``.
+        large_move_m: The distance at which a one-axis change is flagged as a likely typo.
+
+    Returns:
+        A location-change record, or ``None`` when the coordinates did not meaningfully change.
+    """
     a, b = old.records[i], new.records[j]
     if not (a.has_coords and b.has_coords):
         if a.has_coords == b.has_coords:
@@ -72,6 +119,15 @@ def location_change(old: Dataset, new: Dataset, i: int, j: int, large_move_m: fl
 
 
 def warnings_for(location: dict[str, Any] | None, large_move_m: float = LARGE_MOVE_M) -> list[str]:
+    """Turn a location change into readable warnings.
+
+    Args:
+        location: The location-change record, if coordinates changed.
+        large_move_m: The distance at which a move should be called out.
+
+    Returns:
+        Human-readable warnings, or an empty list when there is nothing to flag.
+    """
     if not location or location.get("moved_m") is None:
         return [location["note"]] if location and location.get("note") else []
     moved = location["moved_m"]
@@ -83,7 +139,25 @@ def warnings_for(location: dict[str, Any] | None, large_move_m: float = LARGE_MO
     return [f"Moved {km}"]
 
 
-def describe_pair(old: Dataset, new: Dataset, link: Link, ignore: set[str], large_move_m: float = LARGE_MOVE_M) -> dict[str, Any]:
+def describe_pair(
+    old: Dataset,
+    new: Dataset,
+    link: Link,
+    ignore: set[str],
+    large_move_m: float = LARGE_MOVE_M,
+) -> dict[str, Any]:
+    """Describe the changes for one pair of linked places.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        link: The matcher's link between the two row indices.
+        ignore: Column names that should not contribute to the diff.
+        large_move_m: The distance used when creating location warnings.
+
+    Returns:
+        A record containing changed fields, location details, warnings, and link evidence.
+    """
     a, b = old.records[link.left], new.records[link.right]
     coord_columns = {c for c in (old.columns.lat, old.columns.lon, new.columns.lat, new.columns.lon) if c}
     shared = [c for c in header(old) if c in b.raw and c not in ignore and c not in coord_columns]
@@ -134,24 +208,60 @@ REPLACEMENT_RADIUS_M = 500.0
 
 @dataclass(frozen=True)
 class Settings:
-    """Per-election diff settings, usually from diff.json beside the election's config.json."""
+    """Per-election options for building a diff.
+
+    Attributes:
+        ignore: Columns to leave out of comparisons.
+        large_move_m: Distance at which a location change is warned about.
+        replacement_radius_m: Maximum distance for pairing a removed and added place.
+    """
 
     ignore: frozenset[str] = frozenset()
     large_move_m: float = LARGE_MOVE_M
     replacement_radius_m: float = REPLACEMENT_RADIUS_M
 
     def to_dict(self) -> dict[str, Any]:
-        return {"ignore": sorted(self.ignore), "large_move_m": self.large_move_m, "replacement_radius_m": self.replacement_radius_m}
+        """Return the options in a JSON-friendly form.
+
+        Returns:
+            A dictionary with sorted ignored columns and both distance thresholds.
+        """
+        return {
+            "ignore": sorted(self.ignore),
+            "large_move_m": self.large_move_m,
+            "replacement_radius_m": self.replacement_radius_m,
+        }
 
 #: Places listed per quality check (the count is always complete).
 QUALITY_LIST_LIMIT = 50
 
 
 def field_category(field: str) -> str:
+    """Group a column name into a report category.
+
+    Args:
+        field: The source column name.
+
+    Returns:
+        The matching category, or ``"other"`` when no category fits.
+
+    Example:
+        ``field_category("wheelchair_access")`` returns ``"accessibility"``.
+    """
     return next((name for name, pattern in FIELD_CATEGORIES if pattern.search(field)), "other")
 
 
 def access_direction(field: str, old: str, new: str) -> str | None:
+    """Tell whether a wheelchair-access value improved or got worse.
+
+    Args:
+        field: The changed column name.
+        old: The value from the earlier file.
+        new: The value from the later file.
+
+    Returns:
+        ``"improved"``, ``"worse"``, or ``None`` when the change cannot be ranked.
+    """
     if not re.search(r"wheelchair|disab", field, re.I) or "desc" in field.lower():
         return None
     a, b = ACCESS_RANK.get(old.strip().lower()), ACCESS_RANK.get(new.strip().lower())
@@ -161,6 +271,14 @@ def access_direction(field: str, old: str, new: str) -> str | None:
 
 
 def annotate_changes(changes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Add report categories and accessibility direction to changed fields.
+
+    Args:
+        changes: Field changes to annotate.
+
+    Returns:
+        The same list, with category and optional direction added to each change.
+    """
     for c in changes:
         c["category"] = field_category(c["field"])
         direction = access_direction(c["field"], c["old"], c["new"])
@@ -169,8 +287,27 @@ def annotate_changes(changes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return changes
 
 
-def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: list[int], radius_m: float = REPLACEMENT_RADIUS_M) -> list[dict[str, Any]]:
-    """Pair removed and added places that sit close together, nearest first, each used once."""
+def find_replacements(
+    old: Dataset,
+    new: Dataset,
+    removed: list[int],
+    added: list[int],
+    radius_m: float = REPLACEMENT_RADIUS_M,
+) -> list[dict[str, Any]]:
+    """Pair nearby removed and added places as possible venue replacements.
+
+    The closest pairs are chosen first, and each place can appear in at most one pair.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        removed: Row indices with no link in the later dataset.
+        added: Row indices with no link in the earlier dataset.
+        radius_m: The greatest distance at which two places can be paired.
+
+    Returns:
+        Replacement records ordered by the new place's name.
+    """
     candidates = []
     for i in removed:
         a = old.records[i]
@@ -198,20 +335,47 @@ def find_replacements(old: Dataset, new: Dataset, removed: list[int], added: lis
 
 
 def _decimals(text: str) -> int:
+    """Count the decimal places in a coordinate string.
+
+    Args:
+        text: The coordinate text to inspect.
+
+    Returns:
+        The number of digits after the decimal point.
+    """
     text = (text or "").strip()
     return len(text.split(".", 1)[1]) if "." in text else 0
 
 
 def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[str, Any]]:
-    """Problems worth a look in the new file, whichever matcher you trust."""
+    """Find data-quality issues that are useful to check in the newer file.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        result: The matcher's links between the two datasets.
+
+    Returns:
+        Checks for duplicate coordinates, rough or missing coordinates, and newly blank fields.
+    """
     checks: list[dict[str, Any]] = []
 
     def add(check: str, title: str, places: list[dict[str, Any]]) -> None:
+        """Add a check only when there are places to show.
+
+        Args:
+            check: Stable identifier for this kind of quality check.
+            title: Human-readable check name.
+            places: Rows with this issue in the newer dataset.
+
+        Returns:
+            ``None``.
+        """
         if places:
             checks.append({"check": check, "title": title, "count": len(places), "places": places[:QUALITY_LIST_LIMIT]})
 
     # Same coordinates, different place: a commission copying one venue's coordinates to another.
-    groups: dict[tuple[float, float], list] = {}
+    groups: dict[tuple[float, float], list[Record]] = {}
     for r in new.records:
         if r.has_coords:
             groups.setdefault((round(r.lat, 5), round(r.lon, 5)), []).append(r)  # type: ignore[arg-type]
@@ -220,7 +384,10 @@ def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[
         identities = {r.n_premises or r.n_name for r in recs}
         if len(identities) > 1:
             names = ", ".join(sorted({r.label() for r in recs}))
-            same += [{"new_index": r.index, "name": r.label(), "detail": f"shares coordinates with: {names}"} for r in recs]
+            same.extend(
+                {"new_index": r.index, "name": r.label(), "detail": f"shares coordinates with: {names}"}
+                for r in recs
+            )
     add("same_coordinates", "Different places at identical coordinates", same)
 
     lat_col, lon_col = new.columns.lat, new.columns.lon
@@ -245,16 +412,27 @@ def quality_checks(old: Dataset, new: Dataset, result: LinkResult) -> list[dict[
         a, b = old.records[link.left].raw, new.records[link.right].raw
         for column, value in a.items():
             if column in b and (value or "").strip() and not (b[column] or "").strip():
-                blanked.setdefault(column, []).append(
-                    {"new_index": link.right, "name": new.records[link.right].label(), "detail": f"was: {value}", "old_value": value}
-                )
+                blanked.setdefault(column, []).append({
+                    "new_index": link.right,
+                    "name": new.records[link.right].label(),
+                    "detail": f"was: {value}",
+                    "old_value": value,
+                })
     for column, places in sorted(blanked.items()):
         add(f"newly_blank:{column}", f"{column} is now blank", places)
     return checks
 
 
 def _schema(column: str | None, rename: dict[str, str]) -> str | None:
-    """The column's name after the loader's rename_columns (fix_data_issues runs after renaming)."""
+    """Get a column's name after the loader applies ``rename_columns``.
+
+    Args:
+        column: The source column name.
+        rename: The loader's source-to-schema name mapping.
+
+    Returns:
+        The renamed column name, or ``None`` when no source column was found.
+    """
     return None if column is None else rename.get(column, column)
 
 
@@ -267,10 +445,22 @@ def suggested_fixes(
     large_move_m: float = LARGE_MOVE_M,
     selector_rows: dict[int, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Draft fix_data_issues entries for the loader's config.json, for problems a human confirms.
+    """Draft loader fixes for problems a person confirms in the report.
 
     Each fix selects the place by name in the new file and puts back the previous
     value. They are suggestions: only copy one in after checking the map.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        changed: Linked places that changed or need review.
+        quality: Data-quality checks for the newer dataset.
+        rename: The loader's source-to-schema column mapping.
+        large_move_m: The distance used to consider a coordinate change for a fix.
+        selector_rows: New-file rows after loader conversion but before fixes, keyed by source row index.
+
+    Returns:
+        Suggested fixes, including notes when a safe selector cannot be drafted.
     """
     name_col, lat_col, lon_col = new.columns.name, new.columns.lat, new.columns.lon
     selector_field = _schema(name_col, rename)
@@ -279,6 +469,15 @@ def suggested_fixes(
     }
 
     def selector(new_index: int) -> tuple[dict[str, str] | None, str | None]:
+        """Build a safe loader selector for a place in the new dataset.
+
+        Args:
+            new_index: The row's index in the new dataset.
+
+        Returns:
+            The selector and a duplicate-name note, or ``None`` with a reason
+            when a safe selector cannot be made.
+        """
         source_index = new.records[new_index].index
         row = rows_by_index.get(source_index)
         if selector_field is None or row is None or selector_field not in row:
@@ -299,6 +498,16 @@ def suggested_fixes(
     others = [(r.lat, r.lon) for r in new.records if r.has_coords]
 
     def nearest_other_m(lat: float, lon: float, exclude: tuple[float, float]) -> float | None:
+        """Find the distance to the nearest other polling place.
+
+        Args:
+            lat: Latitude of the position to check.
+            lon: Longitude of the position to check.
+            exclude: Coordinates that should not count as another place.
+
+        Returns:
+            The nearest distance in metres, or ``None`` when no other place has coordinates.
+        """
         dists = [distance_m(lat, lon, a, b) for a, b in others if (a, b) != exclude]
         dists = [d for d in dists if d is not None]
         return min(dists) if dists else None
@@ -332,7 +541,12 @@ def suggested_fixes(
                 }
             )
             continue
-        new_isolated = iso_new is not None and iso_old is not None and iso_new > 3 * iso_old and iso_new - iso_old > large_move_m
+        new_isolated = (
+            iso_new is not None
+            and iso_old is not None
+            and iso_new > 3 * iso_old
+            and iso_new - iso_old > large_move_m
+        )
         sel, note = selector(e["new_index"])
         fixes.append(
             {
@@ -343,7 +557,12 @@ def suggested_fixes(
                 "no_fix_needed": False,
                 "reason": (
                     f"{moved}."
-                    + (f" The new position is {iso_new / 1000:.1f} km from any other polling place, the old one {iso_old / 1000:.1f} km." if new_isolated else "")
+                    + (
+                        f" The new position is {iso_new / 1000:.1f} km from any other polling place, "
+                        f"the old one {iso_old / 1000:.1f} km."
+                        if new_isolated
+                        else ""
+                    )
                     + " If the new position is wrong, this keeps the previous one."
                 ),
                 "note": note,
@@ -372,14 +591,24 @@ def suggested_fixes(
                     "no_fix_needed": False,
                     "reason": f"{column} is now blank. If that's a mistake, this keeps the previous value.",
                     "note": note,
-                    "fix": {**sel, "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}]} if sel else None,
+                    "fix": {
+                        **sel,
+                        "overwrite": [{"field": _schema(column, rename), "value": place["old_value"]}],
+                    } if sel else None,
                 }
             )
     return fixes
 
 
 def severity(e: dict[str, Any]) -> tuple:
-    """Sort key putting the changes most worth a look first."""
+    """Build a sort key that puts the most important changes first.
+
+    Args:
+        e: A changed-place record.
+
+    Returns:
+        A tuple ordered by warnings, worsening access, move distance, field count, and name.
+    """
     worse = any(c.get("direction") == "worse" for c in e["changes"])
     loc = e.get("location") or {}
     moved = loc.get("moved_m") or 0
@@ -387,7 +616,14 @@ def severity(e: dict[str, Any]) -> tuple:
 
 
 def context_points(new: Dataset) -> list[list[float]]:
-    """Every place's coordinates in the new file, rounded (~1 m), as map background."""
+    """Get the newer file's coordinates for the report's map background.
+
+    Args:
+        new: The later dataset.
+
+    Returns:
+        Latitude/longitude pairs rounded to roughly one metre.
+    """
     return [[round(r.lat, 5), round(r.lon, 5)] for r in new.records if r.has_coords]  # type: ignore[arg-type]
 
 
@@ -400,6 +636,20 @@ def build_diff(
     rename: dict[str, str] | None = None,
     selector_rows: dict[int, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    """Build the report data for one matcher's results.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        result: The matcher's links and unmatched rows.
+        link_output: Provenance and matcher results produced by the linkage step.
+        settings: Options controlling ignored columns and distance thresholds.
+        rename: The loader's source-to-schema column mapping.
+        selector_rows: New-file rows after loader conversion but before fixes.
+
+    Returns:
+        A JSON-ready record with changes, summaries, quality checks, and suggested fixes.
+    """
     settings = settings or Settings()
     ignore = set(settings.ignore)
     rename = rename or {}
@@ -417,11 +667,26 @@ def build_diff(
         else:
             unchanged += 1
     old_cols, new_cols = header(old), header(new)
-    replacements = find_replacements(old, new, result.unmatched_left, result.unmatched_right, settings.replacement_radius_m)
+    replacements = find_replacements(
+        old,
+        new,
+        result.unmatched_left,
+        result.unmatched_right,
+        settings.replacement_radius_m,
+    )
     replaced_by = {p["old_index"]: p["new_index"] for p in replacements}
     replaces = {p["new_index"]: p["old_index"] for p in replacements}
 
     def place(d: Dataset, i: int) -> dict[str, Any]:
+        """Build the report record for an added or removed place.
+
+        Args:
+            d: The dataset containing the place.
+            i: The place's row index.
+
+        Returns:
+            Its name, coordinates, and original row data.
+        """
         r = d.records[i]
         return {"name": r.label(), "lat": r.lat, "lon": r.lon, "record": r.raw}
 

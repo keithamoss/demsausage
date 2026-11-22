@@ -267,11 +267,12 @@ def test_blank_suggestion_keeps_field_when_loader_filters_out_its_row(pair):
         rows = list(csv.DictReader(f))
     gamma = next(row for row in rows if row["name"] == "Gamma Church")
     gamma["address"] = ""
+    # Keep the place confidently linked so the blank-field check includes it.
     gamma["lat"], gamma["lon"] = "-33.200000", "151.200000"
     new = _write(root / "data" / "20260109 places.csv", rows)
-    (root / "config.json").write_text(json.dumps({
-        "filters": [{"type": "is_exactly", "column": "name", "matches": ["Alpha Hall", "Beta School", "Epsilon Centre"]}],
-    }))
+    (root / "config.json").write_text(json.dumps(
+        {"filters": [{"type": "is_exactly", "column": "name", "matches": ["Alpha Hall", "Beta School", "Epsilon Centre"]}]}
+    ))
 
     target = run_pair(old, new, root / "diffs-filtered", matcher="rapidfuzz")
     d = json.loads((target / "diff-rapidfuzz.json").read_text())

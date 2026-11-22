@@ -28,16 +28,47 @@ from .run import check_inputs_unchanged, pair_dir, run_pair, series
 
 
 def _common(p: argparse.ArgumentParser) -> None:
+    """Add options shared by the commands that run diffs.
+
+    Args:
+        p: The command parser to add options to.
+
+    Returns:
+        ``None``.
+    """
     p.add_argument("--out-dir", required=True, help="Usually the scraper's diffs folder")
     p.add_argument("--matcher", choices=MATCHER_CHOICES, help="Default: diff.json's, else both")
-    p.add_argument("--ignore", action="append", default=[], help="Column to leave out of the diff (repeatable; adds to diff.json's)")
-    p.add_argument("--large-move-m", type=float, help="Warn about moves at least this far (default: diff.json's, else 1000)")
-    p.add_argument("--replacement-radius-m", type=float, help="Pair removed + added places this close (default: diff.json's, else 500)")
+    p.add_argument(
+        "--ignore",
+        action="append",
+        default=[],
+        help="Column to leave out of the diff (repeatable; adds to diff.json's)",
+    )
+    p.add_argument(
+        "--large-move-m",
+        type=float,
+        help="Warn about moves at least this far (default: diff.json's, else 1000)",
+    )
+    p.add_argument(
+        "--replacement-radius-m",
+        type=float,
+        help="Pair removed + added places this close (default: diff.json's, else 500)",
+    )
     p.add_argument("--election", help="Label stored with verdicts (default: the out-dir's parent folder name)")
     p.add_argument("--splink-model", help="Splink model JSON (default: the bundled model)")
 
 
 def _run(args: argparse.Namespace, old: Path, new: Path) -> None:
+    """Run one pair and print the path to its report.
+
+    Args:
+        args: Parsed command-line options.
+        old: The earlier input file.
+        new: The later input file.
+
+    Returns:
+        ``None``.
+    """
     target = run_pair(
         old,
         new,
@@ -53,11 +84,27 @@ def _run(args: argparse.Namespace, old: Path, new: Path) -> None:
 
 
 def cmd_run(args: argparse.Namespace) -> int:
+    """Run the diff command for two named files.
+
+    Args:
+        args: Parsed options and input file paths.
+
+    Returns:
+        The process exit code.
+    """
     _run(args, Path(args.old), Path(args.new))
     return 0
 
 
 def cmd_series(args: argparse.Namespace) -> int:
+    """Run a diff for every consecutive pair matched by a glob.
+
+    Args:
+        args: Parsed options, input glob, and force flag.
+
+    Returns:
+        ``1`` when fewer than two files match, otherwise ``0``.
+    """
     pairs = series(args.pattern)
     if not pairs:
         print(f"Need at least two files matching {args.pattern!r}", file=sys.stderr)
@@ -71,6 +118,14 @@ def cmd_series(args: argparse.Namespace) -> int:
 
 
 def cmd_latest(args: argparse.Namespace) -> int:
+    """Run a diff for the newest two files matched by a glob.
+
+    Args:
+        args: Parsed options, input glob, and force flag.
+
+    Returns:
+        The process exit code.
+    """
     pairs = series(args.pattern)
     if not pairs:
         print(f"Nothing to diff yet: need at least two files matching {args.pattern!r}")
@@ -84,16 +139,35 @@ def cmd_latest(args: argparse.Namespace) -> int:
 
 
 def cmd_reviewed_import(args: argparse.Namespace) -> int:
+    """Import downloaded review ticks and rebuild the affected reports.
+
+    Args:
+        args: Parsed download path and diffs-folder path.
+
+    Returns:
+        ``0`` after the report and index have been rebuilt.
+    """
     from .reviewed import import_reviewed
 
     folder, counts = import_reviewed(Path(args.file), Path(args.diffs_dir))
     write_report(folder)
     write_index(folder.parent)
-    print(f"{folder.name}: {counts['ticked']} ticked ({counts['added']} new, {counts['removed']} unticked); report rebuilt")
+    print(
+        f"{folder.name}: {counts['ticked']} ticked "
+        f"({counts['added']} new, {counts['removed']} unticked); report rebuilt"
+    )
     return 0
 
 
 def cmd_report(args: argparse.Namespace) -> int:
+    """Rebuild a pair report after confirming its inputs are unchanged.
+
+    Args:
+        args: Parsed pair-folder path.
+
+    Returns:
+        ``0`` after the report and index have been rebuilt.
+    """
     target = Path(args.folder)
     check_inputs_unchanged(target)
     print(write_report(target))
@@ -102,12 +176,32 @@ def cmd_report(args: argparse.Namespace) -> int:
 
 
 def cmd_index(args: argparse.Namespace) -> int:
+    """Rebuild a diffs folder's index page.
+
+    Args:
+        args: Parsed diffs-folder path.
+
+    Returns:
+        ``0`` after the index has been written.
+    """
     print(write_index(Path(args.folder)))
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="ppdiff", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    """Parse command-line arguments and run the selected command.
+
+    Args:
+        argv: Arguments to parse, or ``None`` to use the process command line.
+
+    Returns:
+        The selected command's process exit code.
+    """
+    parser = argparse.ArgumentParser(
+        prog="ppdiff",
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_run = sub.add_parser("run", help="Diff two files")

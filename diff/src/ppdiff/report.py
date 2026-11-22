@@ -12,17 +12,21 @@ from pathlib import Path
 
 from linkage.verdicts import REASONS, SCHEMA_VERSION, VERDICTS
 
+from .html_utils import embed_json, escape_html
 from .names import friendly_label
 
 TEMPLATE = Path(__file__).with_name("report_template.html")
 
 
-def _embed(data: object) -> str:
-    # Safe inside <script type="application/json">: no "</script>" can appear.
-    return json.dumps(data).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
-
-
 def write_report(folder: Path) -> Path:
+    """Rebuild the self-contained HTML report from a pair folder's JSON files.
+
+    Args:
+        folder: The folder containing the pair's diff and linkage results.
+
+    Returns:
+        The path to the written ``report.html`` file.
+    """
     diffs = [json.loads(p.read_text()) for p in sorted(folder.glob("diff-*.json"))]
     # rapidfuzz first, then Splink, then anything else, for a stable tab order.
     order = {"rapidfuzz": 0, "splink": 1}
@@ -45,11 +49,7 @@ def write_report(folder: Path) -> Path:
     title = "Polling place diff"
     if diffs:
         title = f"{friendly_label(diffs[0]['old']['path'])} → {friendly_label(diffs[0]['new']['path'])}"
-    html = TEMPLATE.read_text().replace("{{TITLE}}", _html_escape(title)).replace("{{DATA}}", _embed(data))
+    html = TEMPLATE.read_text().replace("{{TITLE}}", escape_html(title)).replace("{{DATA}}", embed_json(data))
     out = folder / "report.html"
     out.write_text(html)
     return out
-
-
-def _html_escape(text: str) -> str:
-    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")

@@ -20,14 +20,40 @@ from .report import write_report
 
 
 def slug(text: str) -> str:
+    """Make a lowercase, filesystem-friendly name from text.
+
+    Args:
+        text: The text to turn into a folder-name part.
+
+    Returns:
+        Lowercase words separated by hyphens.
+    """
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
 def pair_dir(out_dir: Path, old: Path, new: Path) -> Path:
+    """Build the output folder path for a pair of source files.
+
+    Args:
+        out_dir: The folder that holds all pair reports.
+        old: The earlier input file.
+        new: The later input file.
+
+    Returns:
+        A folder path named after both input files.
+    """
     return out_dir / f"{slug(old.stem)}__{slug(new.stem)}"
 
 
 def snapshot(record: Record) -> dict[str, Any]:
+    """Copy the place details needed to review a matcher disagreement.
+
+    Args:
+        record: The linked place to include.
+
+    Returns:
+        A JSON-ready snapshot with its source row index and key details.
+    """
     return {
         "index": record.index,
         "name": record.name,
@@ -40,7 +66,17 @@ def snapshot(record: Record) -> dict[str, Any]:
 
 
 def disagreements(old: Dataset, new: Dataset, link_output: dict[str, Any], election: str) -> dict[str, Any]:
-    """Each place the matchers handled differently, with everything a reviewer needs."""
+    """Build the disagreement records a person reviews in the report.
+
+    Args:
+        old: The earlier dataset.
+        new: The later dataset.
+        link_output: The matchers' links and comparison results.
+        election: The election label to store with review verdicts.
+
+    Returns:
+        A JSON-ready record with each differing decision and its evidence.
+    """
     results = {r["matcher"]: LinkResult.from_dict(r) for r in link_output["results"]}
     comparison = link_output.get("comparison") or {"disagreements": [], "matchers": list(results)}
     items = []
@@ -75,24 +111,24 @@ def disagreements(old: Dataset, new: Dataset, link_output: dict[str, Any], elect
     }
 
 
-def loader_renames(out_dir: Path) -> dict[str, str]:
-    """rename_columns from the election's config.json (beside the diffs folder), if any."""
-    config = out_dir.resolve().parent / "config.json"
-    if not config.exists():
-        return {}
-    try:
-        return json.loads(config.read_text()).get("rename_columns") or {}
-    except json.JSONDecodeError:
-        return {}
-
-
 DIFF_SETTINGS_FILE = "diff.json"
 
 
 def election_settings(out_dir: Path) -> dict[str, Any]:
-    """diff.json beside the election's config.json (the diffs folder's parent), if any.
+    """Read the optional ``diff.json`` beside the election's loader config.
+
+    Example settings::
 
         {"ignore": ["est_ordinary_votes"], "large_move_m": 1000, "replacement_radius_m": 500, "matcher": "both"}
+
+    Args:
+        out_dir: The folder holding the election's pair reports.
+
+    Returns:
+        The parsed settings, or an empty dictionary when no settings file exists.
+
+    Raises:
+        ValueError: If the settings file contains an unknown option.
     """
     path = out_dir.resolve().parent / DIFF_SETTINGS_FILE
     if not path.exists():
@@ -111,14 +147,30 @@ def resolve_settings(
     replacement_radius_m: float | None = None,
     matcher: str | None = None,
 ) -> tuple[Settings, str]:
-    """diff.json, then command-line options on top (extra ignores add to the file's)."""
+    """Combine the election's saved settings with command-line overrides.
+
+    The command line can add ignored columns and override the distance and matcher
+    settings in ``diff.json``.
+
+    Args:
+        out_dir: The folder holding the election's pair reports.
+        ignore: Extra column names to ignore.
+        large_move_m: Replacement value for the move-warning threshold.
+        replacement_radius_m: Replacement value for the possible-replacement radius.
+        matcher: Replacement matcher choice.
+
+    Returns:
+        The resolved diff settings and matcher name.
+    """
     file = election_settings(out_dir)
     defaults = Settings()
     settings = Settings(
         ignore=frozenset(file.get("ignore", [])) | frozenset(ignore or ()),
         large_move_m=large_move_m if large_move_m is not None else file.get("large_move_m", defaults.large_move_m),
         replacement_radius_m=(
-            replacement_radius_m if replacement_radius_m is not None else file.get("replacement_radius_m", defaults.replacement_radius_m)
+            replacement_radius_m
+            if replacement_radius_m is not None
+            else file.get("replacement_radius_m", defaults.replacement_radius_m)
         ),
     )
     return settings, matcher or file.get("matcher", "both")
@@ -135,6 +187,22 @@ def run_pair(
     large_move_m: float | None = None,
     replacement_radius_m: float | None = None,
 ) -> Path:
+    """Link and compare two source files, then write their report.
+
+    Args:
+        old: The earlier input file.
+        new: The later input file.
+        out_dir: The folder where pair reports are stored.
+        matcher: The matcher to run, or the election's configured default.
+        ignore: Column names to leave out of comparisons.
+        election: Label to store with disagreement verdicts.
+        splink_model: Optional path to a Splink model file.
+        large_move_m: Distance at which a location change is warned about.
+        replacement_radius_m: Maximum distance for pairing a removed and added place.
+
+    Returns:
+        The folder containing this pair's linkage, diff, and HTML reports.
+    """
     election = election or out_dir.resolve().parent.name
     settings, matcher = resolve_settings(out_dir, ignore, large_move_m, replacement_radius_m, matcher)
     left, right, link_output = link_files(old, new, matcher=matcher, splink_model=splink_model)
@@ -142,11 +210,13 @@ def run_pair(
     target.mkdir(parents=True, exist_ok=True)
     (target / "link.json").write_text(json.dumps(link_output, separators=(",", ":")))
     # Checks against the loader (its own rules via loader_rules); the same for every matcher.
-    checks = loader_checks(left, right, out_dir)
-    selector_rows = pre_fix_rows_by_index(right, election_config(out_dir) or {})
+    config = election_config(out_dir)
+    checks = loader_checks(left, right, config)
+    selector_rows = pre_fix_rows_by_index(right, config or {})
+    rename = (config or {}).get("rename_columns") or {}
     for r in link_output["results"]:
         diff = build_diff(
-            left, right, LinkResult.from_dict(r), link_output, settings, loader_renames(out_dir), selector_rows
+            left, right, LinkResult.from_dict(r), link_output, settings, rename, selector_rows
         )
         diff["loader"] = checks
         (target / f"diff-{r['matcher']}.json").write_text(json.dumps(diff, indent=2))
@@ -161,13 +231,35 @@ def run_pair(
 
 
 def series(pattern: str) -> list[tuple[Path, Path]]:
-    """Consecutive pairs of the files matching a glob, in name order (our files are timestamped)."""
+    """Pair consecutive files matching a glob, ordered by filename.
+
+    Scraper filenames include timestamps, so filename order is scrape order.
+
+    Args:
+        pattern: A glob that matches the source files.
+
+    Returns:
+        Each adjacent pair as ``(older_file, newer_file)``.
+
+    Example:
+        ``series("data/*.csv")`` returns every consecutive pair in ``data``.
+    """
     files = sorted(Path(p) for p in globlib.glob(pattern))
     return list(zip(files, files[1:]))
 
 
 def check_inputs_unchanged(target: Path) -> None:
-    """Refuse to report on a folder whose source files have changed since linking."""
+    """Ensure the source files still match the hashes used to build a report.
+
+    Args:
+        target: The pair folder containing ``link.json``.
+
+    Returns:
+        ``None`` when the inputs are unchanged or no longer present.
+
+    Raises:
+        RuntimeError: If a present source file has changed since linking.
+    """
     link_output = json.loads((target / "link.json").read_text())
     for side in ("left", "right"):
         info = link_output[side]
