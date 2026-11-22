@@ -6,6 +6,7 @@
 		"useIgnoreFile": false
 	},
 	"files": {
+		"maxSize": 2097152,
 		"ignoreUnknown": false,
 		"ignore": [
 			".pnpm-store/",
