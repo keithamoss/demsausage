@@ -2,12 +2,13 @@ import csv
 import json
 from datetime import datetime, timezone
 from io import StringIO
+from typing import Any, cast
 
 import chardet
 import googlemaps
 from django.contrib.gis.geos import Point
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Field, Q
 from rq import get_current_job
 
 from demsausage.app.enums import (
@@ -91,6 +92,11 @@ class PollingPlacesIngestBase:
     """
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
+
+    election: Any
+    dry_run: bool
+    job: Any
+    is_reload: bool
 
     # ------------------------------------------------------------------
     # New structured log transport (Phase 2)
@@ -287,10 +293,10 @@ class PollingPlacesIngestBase:
             # so tests can access it via getattr(exc, "_partial_payload") even
             # when the exception is raised from __init__ (before the loader
             # variable is bound in the caller).
-            exc._partial_payload = self.collect_structured_logs()
+            setattr(exc, "_partial_payload", self.collect_structured_logs())
             raise exc
 
-    def is_dry_run(self):
+    def is_dry_run(self) -> bool:
         return self.dry_run
 
     def has_pending_stalls(self):
@@ -354,7 +360,7 @@ class PollingPlacesIngestBase:
         self.stages.append(
             self._build_stage(
                 name=method_name,
-                label=STAGE_LABELS.get(method_name, method_name),
+                label=cast(str, STAGE_LABELS.get(method_name, method_name)),
                 started_at=started_at,
                 finished_at=finished_at,
                 stage_entries=stage_entries,
@@ -364,7 +370,11 @@ class PollingPlacesIngestBase:
 
         if mid_stage_exc is not None:
             # Re-raise with updated partial payload now that the stage is recorded.
-            mid_stage_exc._partial_payload = self.collect_structured_logs()
+            setattr(
+                mid_stage_exc,
+                "_partial_payload",
+                self.collect_structured_logs(),
+            )
             raise mid_stage_exc
 
         self.raise_exception_if_errors()
@@ -375,10 +385,46 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     IMPORTANT: This class assumes it is run inside an @transaction.atomic block.
     """
 
+    filters: list[dict] | None
+    exclude_columns: list[str] | None
+    rename_columns: dict[str, str] | None
+    add_columns: dict[str, Any] | None
+    extras: dict[str, Any] | None
+    cleaning_regexes: list[dict] | None
+    address_fields: list[str] | None
+    address_format: str | None
+    division_fields: list[str] | None
+    fix_data_issues: list[dict] | None
+    overwrite_distance_thresholds: dict | None
+    geocoding: dict[str, Any] | None
+    bbox_validation: dict[str, Any] | None
+    multiple_division_handling: dict[str, Any] | None
+    gmaps: Any
+    polling_places: list[dict[str, Any]]
+    file: Any
+    reader: Any
+    has_config: bool
+
     def __init__(self, election, file, dry_run, config, user_email=None):
         # Initialise new structured log transport first so _log() is available
         # before check_config_is_valid runs.
         self._init_log_transport()
+        self.job = None
+        self.gmaps = None
+        self.filters = None
+        self.exclude_columns = None
+        self.rename_columns = None
+        self.add_columns = None
+        self.extras = None
+        self.cleaning_regexes = None
+        self.address_fields = None
+        self.address_format = None
+        self.division_fields = None
+        self.fix_data_issues = None
+        self.overwrite_distance_thresholds = None
+        self.geocoding = None
+        self.bbox_validation = None
+        self.multiple_division_handling = None
 
         def _get_config_or_none(param_name, config):
             return (
@@ -488,73 +534,48 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
     def convert_to_demsausage_schema(self):
         # The steps themselves live in loader_rules (no Django) so other tools can apply
         # an election's config exactly as the loader does. This method only logs.
-        if self.filters is not None:
-            before = len(self.polling_places)
-            self.polling_places = loader_rules.filter_rows(
-                self.polling_places, self.filters
-            )
-            self._log(
-                "summary",
-                "text",
-                message="{} of {} polling places filtered out".format(
-                    before - len(self.polling_places),
-                    before,
-                ),
-            )
+        def log_step(step, before, after, errors):
+            if step == "filters":
+                message = "{} of {} polling places filtered out".format(
+                    before - after, before
+                )
+            elif step == "rename_columns":
+                rename_columns = self.rename_columns or {}
+                message = "Renamed {} columns".format(len(rename_columns))
+            elif step == "add_columns":
+                add_columns = self.add_columns or {}
+                message = "Added {} new columns".format(len(add_columns))
+            elif step == "extras":
+                extras = self.extras or {}
+                message = "Packed {} column(s) into the extras field".format(
+                    len(extras.get("fields", []))
+                )
+            elif step == "exclude_columns":
+                exclude_columns = self.exclude_columns or []
+                message = "Removed {} columns".format(len(exclude_columns))
+            else:
+                for regex_error in errors:
+                    self._log("error", "text", message=regex_error)
+                cleaning_regexes = self.cleaning_regexes or []
+                message = "Ran {} cleaning regexes".format(
+                    len(cleaning_regexes)
+                )
 
-        if self.rename_columns is not None:
-            self.polling_places = loader_rules.rename_columns(
-                self.polling_places, self.rename_columns
-            )
-            self._log(
-                "summary",
-                "text",
-                message="Renamed {} columns".format(len(self.rename_columns)),
-            )
+            self._log("summary", "text", message=message)
 
-        if self.add_columns is not None:
-            self.polling_places = loader_rules.add_columns(
-                self.polling_places, self.add_columns
-            )
-            self._log(
-                "summary",
-                "text",
-                message="Added {} new columns".format(len(self.add_columns)),
-            )
-
-        if self.extras is not None:
-            self.polling_places = loader_rules.create_extras(
-                self.polling_places, self.extras
-            )
-            self._log(
-                "summary",
-                "text",
-                message="Packed {} column(s) into the extras field".format(
-                    len(self.extras["fields"])
-                ),
-            )
-
-        if self.exclude_columns is not None:
-            self.polling_places = loader_rules.exclude_columns(
-                self.polling_places, self.exclude_columns
-            )
-            self._log(
-                "summary",
-                "text",
-                message="Removed {} columns".format(len(self.exclude_columns)),
-            )
-
-        if self.cleaning_regexes is not None:
-            self.polling_places, regex_errors = loader_rules.run_regexes(
-                self.polling_places, self.cleaning_regexes
-            )
-            for message in regex_errors:
-                self._log("error", "text", message=message)
-            self._log(
-                "summary",
-                "text",
-                message="Ran {} cleaning regexes".format(len(self.cleaning_regexes)),
-            )
+        config = {
+            "filters": self.filters,
+            "rename_columns": self.rename_columns,
+            "add_columns": self.add_columns,
+            "extras": self.extras,
+            "exclude_columns": self.exclude_columns,
+            "cleaning_regexes": self.cleaning_regexes,
+        }
+        self.polling_places, _ = loader_rules.to_schema(
+            self.polling_places,
+            cast(loader_rules.SchemaConfig, config),
+            on_step=log_step,
+        )
 
         self.raise_exception_if_errors()
 
@@ -574,9 +595,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
             required_model_field_names = [
                 f.name
                 for f in PollingPlaces._meta.get_fields()
-                if hasattr(f, "blank")
+                if isinstance(f, Field)
                 and f.blank is False
-                and hasattr(f, "null")
                 and f.null is False
                 and f.name not in ("geom", "election", "status")
             ] + ["lat", "lon"]
@@ -759,8 +779,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                         else:
                             return True
 
-                    geocode_result = self.gmaps.geocode(
-                        term, components=self.geocoding["components"]
+                    geocoding = self.geocoding or {}
+                    geocode_result = getattr(self.gmaps, "geocode")(
+                        term, components=geocoding["components"]
                     )
 
                     if _is_good_result(geocode_result) is False:
@@ -879,7 +900,8 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
         # Shared with tools outside Django: see loader_rules.apply_fixes.
         if self.fix_data_issues is not None:
             self.polling_places = loader_rules.apply_fixes(
-                self.polling_places, self.fix_data_issues
+                self.polling_places,
+                cast(list[loader_rules.FixRule], self.fix_data_issues),
             )
             self._log(
                 "summary",
@@ -906,7 +928,7 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # Normalise DRF error dict to a list of {field, messages} objects
                 fields = [
                     {"field": field, "messages": list(msgs)}
-                    for field, msgs in validation.items()
+                    for field, msgs in cast(dict[str, list[Any]], validation).items()
                 ]
                 self._log(
                     "error",
@@ -1191,7 +1213,9 @@ class LoadPollingPlaces(PollingPlacesIngestBase):
                 # pragma: no cover — check_polling_place_validity bails first in normal execution
                 fields = [
                     {"field": field, "messages": list(msgs)}
-                    for field, msgs in serialiser.errors.items()
+                    for field, msgs in cast(
+                        dict[str, list[Any]], serialiser.errors
+                    ).items()
                 ]
                 self._log(
                     "error",

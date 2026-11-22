@@ -15,8 +15,14 @@ import urllib.parse
 import pytz
 from django.conf import settings
 
-# Number helpers live in a Django-free module so the loader's rules can be used outside Django.
-from demsausage.numbers import convert_string_to_number, is_float, is_int, is_numeric  # noqa: F401
+# Number helpers live in a Django-free module so shared loader rules can use
+# the same implementations while older imports continue to work here.
+from demsausage.numbers import (  # noqa: F401
+    convert_string_to_number,
+    is_float,
+    is_int,
+    is_numeric,
+)
 
 
 def make_logger(name, handler=logging.StreamHandler(), formatter=None):
