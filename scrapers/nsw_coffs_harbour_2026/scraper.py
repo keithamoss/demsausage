@@ -1,25 +1,27 @@
 #!/usr/bin/env python
 """
-Scraper for the City of Coffs Harbour Council By-Election (12 Dec 2026),
-part of NSWEC's "December 2026 Local Government By-Elections" event (LB2615).
+Fetch and validate polling places for the City of Coffs Harbour Council
+by-election on 12 December 2026.
 
-Pulls polling places from the NSWEC map's PlacemarkApi (the same API the
-nsw_by_2024 scraper uses) and writes a CSV in the same shape as
-nsw_kiama_2026/data, so the existing config.json can be used to load it.
+This scraper reads the NSW Electoral Commission's Placemark API and writes
+one CSV in the format used by the Democracy Sausage polling-place loader.
+The event ID can be provided on the command line.
 
-Usage:
+Example:
     python scraper.py                 # uses EVENT_ID below
     python scraper.py LB2615-031      # override the event/area ID
     python scraper.py --no-diff       # skip the diff against the previous scrape
 
-After writing the CSV, the scraper diffs it against the previous one with the
-repo's diff tool (diff/, via uv) into diffs/: open diffs/index.html. If uv isn't
-available the diff is skipped with a message; run it later with:
+After writing the CSV, the scraper compares it with the most recent scrape
+using the repository's diff tool. The report is written to
+``scrapers/nsw_coffs_harbour_2026/diffs/index.html``. When ``uv`` is unavailable,
+the comparison is skipped and this command can be run later:
+
     cd ../../diff && uv run ppdiff latest "../scrapers/nsw_coffs_harbour_2026/data/*.csv" --out-dir ../scrapers/nsw_coffs_harbour_2026/diffs
 
-IDs are "<event>-<area>". For local government events the area is the council
-(Coffs Harbour = 031); for state events it's the electoral district (Coffs
-Harbour = 020). Event codes are listed at https://map.elections.nsw.gov.au/.
+Event IDs contain an event code and an area code, such as ``LB2615-031``.
+For local-government events, the area code identifies the council. Event
+codes are listed at https://map.elections.nsw.gov.au/.
 
 Errors (missing API fields, a ward or another council, a name appearing twice
 with different details, missing or out-of-area coordinates, a blank address)
@@ -112,8 +114,17 @@ SUSPICIOUS_ADDRESS_PATTERN = re.compile(
 )
 
 
-
 def scrape(event_id: str) -> str:
+    """Fetch, validate, and save polling places for one NSWEC event.
+
+    Args:
+        event_id: NSWEC event and area identifier, such as ``LB2615-031``.
+
+    Returns:
+        The absolute path to the timestamped CSV file that was written.
+
+    The process stops before writing any CSV if validation finds an error.
+    """
     url = API_URL.format(event_id=event_id)
     print(f"Fetching {url}")
     response = requests.get(url, timeout=60)
@@ -157,7 +168,12 @@ def scrape(event_id: str) -> str:
 
 
 def diff_against_previous() -> None:
-    """Diff the newest two CSVs in data/ with the repo's diff tool, if it can run."""
+    """Compare the newest two CSV snapshots using the repository diff tool.
+
+    Returns:
+        None. A missing ``uv`` installation or an unsuccessful diff is reported
+        on the command line without deleting the newly written CSV.
+    """
     if shutil.which("uv") is None:
         print("\nSkipping the diff: uv isn't installed. See the module docstring to run it later.")
         return
@@ -177,8 +193,25 @@ def diff_against_previous() -> None:
         print(f"Open {os.path.join(DIFFS_DIR, 'index.html')} in a browser.")
 
 
-def _check_api_fields(records: list[dict], errors: list[str], warnings: list[str]):
+def _check_api_fields(
+    records: list[dict],
+    errors: list[str],
+    warnings: list[str],
+) -> None:
+    """Check the API response for missing or newly added fields.
+
+    Args:
+        records: Polling-place records returned by NSWEC.
+        errors: List to receive validation errors.
+        warnings: List to receive validation warnings.
+
+    Returns:
+        None. Validation findings are appended to ``errors`` and ``warnings``.
+    """
     seen_fields = set().union(*(record.keys() for record in records))
+
+    # Missing required fields are fatal because the loader cannot safely use
+    # the record. Unknown fields are warnings so future API additions are visible.
     for record in records:
         missing = REQUIRED_API_FIELDS - record.keys()
         if missing:
@@ -191,10 +224,27 @@ def _check_api_fields(records: list[dict], errors: list[str], warnings: list[str
         warnings.append(f"New API field(s), worth a look: {', '.join(sorted(new_fields))}")
 
 
-def _build_rows(records: list[dict], errors: list[str], warnings: list[str]) -> list[dict]:
+def _build_rows(
+    records: list[dict],
+    errors: list[str],
+    warnings: list[str],
+) -> list[dict]:
+    """Convert NSWEC records into loader-ready CSV rows.
+
+    Args:
+        records: Polling-place records returned by NSWEC.
+        errors: List to receive validation errors.
+        warnings: List to receive validation warnings.
+
+    Returns:
+        A list of de-duplicated polling-place dictionaries.
+    """
     rows_by_name: dict[str, dict] = {}
     for record in records:
         name = record["Name"]
+
+        # Stop if the response belongs to another council or assumes wards.
+        # This scraper currently supports Coffs Harbour's undivided council area.
         if record["LgaName"] != DISTRICT_NAME:
             errors.append(f"{name}: in {record['LgaName']!r}, expected {DISTRICT_NAME!r}")
         if record["Ward"]:
@@ -217,8 +267,21 @@ def _build_rows(records: list[dict], errors: list[str], warnings: list[str]) -> 
     return list(rows_by_name.values())
 
 
-def _check_row(row: dict, errors: list[str], warnings: list[str]):
+def _check_row(row: dict, errors: list[str], warnings: list[str]) -> None:
+    """Check one converted row for coordinates, address, and note problems.
+
+    Args:
+        row: Loader-ready polling-place dictionary.
+        errors: List to receive validation errors.
+        warnings: List to receive validation warnings.
+
+    Returns:
+        None. Validation findings are appended to ``errors`` and ``warnings``.
+    """
     name = row["name"]
+
+    # Coordinates must be numeric and inside a deliberately broad Coffs
+    # Harbour area box, so a swapped or grossly wrong location is caught.
     try:
         lat, lon = float(row["lat"]), float(row["lon"])
     except (TypeError, ValueError):
@@ -236,7 +299,16 @@ def _check_row(row: dict, errors: list[str], warnings: list[str]):
         warnings.append(f"{name}: address may contain a note: {row['address']!r}")
 
 
-def _print_list(title: str, items: list[str]):
+def _print_list(title: str, items: list[str]) -> None:
+    """Print a labelled list of validation messages.
+
+    Args:
+        title: Heading to print above the messages.
+        items: Messages to print beneath the heading.
+
+    Returns:
+        None.
+    """
     if items:
         print(f"\n{title} ({len(items)}):")
         for item in items:
@@ -244,20 +316,37 @@ def _print_list(title: str, items: list[str]):
         print()
 
 
-def _report_and_exit(errors: list[str], warnings: list[str]):
+def _report_and_exit(errors: list[str], warnings: list[str]) -> None:
+    """Print validation findings and stop the scraper.
+
+    Args:
+        errors: Fatal validation errors found before output.
+        warnings: Non-fatal validation warnings found before output.
+
+    Returns:
+        None. This function exits the process with a failure message.
+    """
     _print_list("Warnings", warnings)
     _print_list("Errors", errors)
     sys.exit("No CSV written.")
 
 
 def _to_row(record: dict) -> dict:
+    """Convert one NSWEC API record into one CSV row.
+
+    Args:
+        record: One polling-place record returned by NSWEC.
+
+    Returns:
+        A dictionary with the scraper's CSV field names and values.
+    """
     wheelchair_access, wheelchair_access_description = _get_wheelchair_access(record)
     address, entrance_desc = _split_address_note(record["Address"])
     return {
         "name": record["Name"],
-        # NSWEC's Premises is always identical to Name. Following nsw_kiama_2026, we
-        # leave premises blank: the redesigned frontends fall back to name
-        # (premises || name), and name is required by the model and permalinks.
+        # NSWEC's premises value is identical to Name. Leave premises blank,
+        # matching the Kiama 2026 scraper and allowing the frontend to fall back
+        # to Name, which is required by the polling-place model and permalinks.
         "premises": "",
         "address": address,
         "suburb": record["Locality"],
@@ -273,7 +362,15 @@ def _to_row(record: dict) -> dict:
 
 
 def _split_address_note(address: str) -> tuple[str, str]:
-    """Move any 'NOTE: ...' text out of the address and into entrance_desc."""
+    """Move NSWEC's ``NOTE:`` text out of the address.
+
+    Args:
+        address: Street address text returned by NSWEC.
+
+    Returns:
+        A tuple containing the cleaned street address and any entrance
+        information. The entrance information is empty when no note is present.
+    """
     parts = ADDRESS_NOTE_PATTERN.split(address, maxsplit=1)
     if len(parts) == 1:
         return address.strip(), ""
@@ -281,6 +378,19 @@ def _split_address_note(address: str) -> tuple[str, str]:
 
 
 def _get_wheelchair_access(record: dict) -> tuple[str, str]:
+    """Translate NSWEC wheelchair-access fields into loader values.
+
+    Args:
+        record: One polling-place record returned by NSWEC.
+
+    Returns:
+        A tuple containing the wheelchair-access level and a human-readable
+        description of any assisted-access limitations.
+
+    Raises:
+        ValueError: The API response contains an unsupported combination of
+            full-access and assisted-access flags.
+    """
     if record["Access"] is True:
         return "Full", ""
     if record["AssistedAccess"] is True:
