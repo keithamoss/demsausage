@@ -32,15 +32,34 @@ DEFAULT_WEIGHTS = {
 
 
 def text_similarity(a: str, b: str) -> float:
-    if a == b:
-        return 1.0
+    """Compare two normalised text values on a 0.0 to 1.0 scale.
+
+    Args:
+        a: First normalised text value.
+        b: Second normalised text value.
+
+    Returns:
+        ``1.0`` for identical values, ``0.0`` when either value is blank,
+        otherwise the average of two RapidFuzz similarity scores.
+    """
     if not a or not b:
         return 0.0
+    if a == b:
+        return 1.0
     return (fuzz.ratio(a, b) + fuzz.token_sort_ratio(a, b)) / 200
 
 
 def geo_similarity(dist: float | None, full_m: float, zero_m: float) -> float:
-    """1.0 within full_m, falling linearly to 0 at zero_m. Unknown distance is neutral."""
+    """Convert a geographic distance into a 0.0 to 1.0 similarity.
+
+    Args:
+        dist: Distance in metres, or ``None`` when coordinates are unknown.
+        full_m: Distance at or below which similarity is 1.0.
+        zero_m: Distance at or above which similarity is 0.0.
+
+    Returns:
+        1.0 for nearby places, 0.0 for distant places, or 0.5 when unknown.
+    """
     if dist is None:
         return 0.5
     if dist <= full_m:
@@ -49,11 +68,32 @@ def geo_similarity(dist: float | None, full_m: float, zero_m: float) -> float:
 
 
 def _grid(lat: float, lon: float) -> tuple[float, float]:
+    """Round coordinates to the RapidFuzz candidate-blocking grid.
+
+    Args:
+        lat: Latitude value.
+        lon: Longitude value.
+
+    Returns:
+        Rounded latitude and longitude values.
+    """
     return round(lat, 2), round(lon, 2)
 
 
 @dataclass
 class RapidfuzzMatcher:
+    """Score places using weighted text and geographic similarity.
+
+    Attributes:
+        name: Short matcher identifier used in reports.
+        auto_threshold: Scores at or above this value are confident matches.
+        review_threshold: Scores at or above this value need human review.
+        weights: Relative importance of each comparable place attribute.
+        geo_full_m: Distance at which geographic similarity starts decreasing.
+        geo_zero_m: Distance at which geographic similarity reaches zero.
+        all_pairs_limit: Maximum pair count that is safe to compare directly.
+    """
+
     name: str = "rapidfuzz"
     auto_threshold: float = 0.75
     review_threshold: float = 0.65
@@ -64,6 +104,11 @@ class RapidfuzzMatcher:
     all_pairs_limit: int = 250_000
 
     def params(self) -> dict[str, Any]:
+        """Return matcher settings for saved output.
+
+        Returns:
+            Thresholds, field weights, and geographic scoring settings.
+        """
         return {
             "auto_threshold": self.auto_threshold,
             "review_threshold": self.review_threshold,
@@ -73,6 +118,18 @@ class RapidfuzzMatcher:
         }
 
     def active_weights(self, left: Dataset, right: Dataset) -> dict[str, float]:
+        """Spread configured weights over fields present in both datasets.
+
+        Args:
+            left: First input dataset.
+            right: Second input dataset.
+
+        Returns:
+            Normalised field weights used for comparison.
+
+        Raises:
+            ValueError: If the datasets share no comparable positive-weight field.
+        """
         shared = left.fields_present() & right.fields_present()
         active = {k: w for k, w in self.weights.items() if k in shared and w > 0}
         total = sum(active.values())
@@ -81,6 +138,16 @@ class RapidfuzzMatcher:
         return {k: w / total for k, w in active.items()}
 
     def compare(self, a: Record, b: Record, weights: dict[str, float]) -> ScoredPair:
+        """Score one record pair.
+
+        Args:
+            a: Record from the left dataset.
+            b: Record from the right dataset.
+            weights: Normalised weights for fields shared by both datasets.
+
+        Returns:
+            A pair containing the weighted score and field-level explanation.
+        """
         dist = distance_m(a.lat, a.lon, b.lat, b.lon)
         parts: dict[str, float] = {}
         if "name" in weights:
@@ -106,6 +173,17 @@ class RapidfuzzMatcher:
     def candidates(
         self, left: Dataset, right: Dataset, li: Sequence[int], ri: Sequence[int]
     ) -> set[tuple[int, int]]:
+        """Find the record pairs worth comparing.
+
+        Args:
+            left: First input dataset.
+            right: Second input dataset.
+            li: Left record indices to consider.
+            ri: Right record indices to consider.
+
+        Returns:
+            A set of left-and-right record index pairs.
+        """
         if len(li) * len(ri) <= self.all_pairs_limit:
             return {(i, j) for i in li for j in ri}
         index: dict[tuple, list[int]] = defaultdict(list)
@@ -137,6 +215,17 @@ class RapidfuzzMatcher:
         left_indices: Sequence[int],
         right_indices: Sequence[int],
     ) -> list[ScoredPair]:
+        """Score all candidate pairs in the requested record subsets.
+
+        Args:
+            left: First input dataset.
+            right: Second input dataset.
+            left_indices: Left record indices still available for linking.
+            right_indices: Right record indices still available for linking.
+
+        Returns:
+            Scored candidate pairs for one-to-one assignment.
+        """
         weights = self.active_weights(left, right)
         return [
             self.compare(left.records[i], right.records[j], weights)

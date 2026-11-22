@@ -9,7 +9,17 @@ from .result import LinkResult
 
 
 def compare_results(a: LinkResult, b: LinkResult, left: Dataset, right: Dataset) -> dict[str, Any]:
-    """Where the two results agree, and every left record where they don't."""
+    """Compare two matcher results and describe their disagreements.
+
+    Args:
+        a: Result from the first matcher.
+        b: Result from the second matcher.
+        left: Left dataset used to produce both results.
+        right: Right dataset used to produce both results.
+
+    Returns:
+        Agreement counts and details for every left record with a disagreement.
+    """
     la, lb = a.by_left(), b.by_left()
     agree = 0
     disagreements = []

@@ -26,7 +26,18 @@ class ScoredPair:
 
     @property
     def assignment_value(self) -> float:
-        return self.score if self.rank is None else self.rank
+        """Return the value used to optimise one-to-one assignment.
+
+        Returns:
+            Splink match rank when positive, otherwise the match probability.
+        """
+        # Non-positive Splink match weights mean the fields do not strongly support a match, but
+        # the candidate has already passed the probability threshold.  Use the
+        # probability for assignment in that case so it can still beat an unmatched
+        # dummy (whose value is 0).  Positive weights continue to break score ties.
+        if self.rank is None or self.rank <= 0:
+            return self.score
+        return self.rank
 
 
 @dataclass(frozen=True)
@@ -47,6 +58,15 @@ class Link:
 
 @dataclass
 class LinkResult:
+    """The complete result of applying one matcher to two datasets.
+
+    Attributes:
+        matcher: Short name of the matcher that produced the result.
+        links: One-to-one decisions for records considered the same place.
+        unmatched_left: Row indices that remain unmatched in the left dataset.
+        unmatched_right: Row indices that remain unmatched in the right dataset.
+        params: Matcher settings recorded alongside the decisions.
+    """
     matcher: str
     links: list[Link]
     unmatched_left: list[int]
@@ -54,12 +74,27 @@ class LinkResult:
     params: dict[str, Any] = field(default_factory=dict)
 
     def by_left(self) -> dict[int, Link]:
+        """Index linked decisions by left record index.
+
+        Returns:
+            Mapping from left record index to its link decision.
+        """
         return {link.left: link for link in self.links}
 
     def by_right(self) -> dict[int, Link]:
+        """Index linked decisions by right record index.
+
+        Returns:
+            Mapping from right record index to its link decision.
+        """
         return {link.right: link for link in self.links}
 
     def counts(self) -> dict[str, int]:
+        """Summarise link decisions and unmatched records.
+
+        Returns:
+            Counts for total, exact, automatic, review, and unmatched links.
+        """
         return {
             "links": len(self.links),
             "exact": sum(1 for x in self.links if x.via == "exact"),
@@ -81,6 +116,11 @@ class LinkResult:
         )
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert the result into JSON-ready data.
+
+        Returns:
+            Matcher settings, counts, links, and unmatched record indices.
+        """
         return {
             "matcher": self.matcher,
             "params": self.params,

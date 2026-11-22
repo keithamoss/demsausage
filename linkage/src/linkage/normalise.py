@@ -33,7 +33,17 @@ _SPACES = re.compile(r"\s+")
 
 
 def norm(text: str | None) -> str:
-    """Unicode-fold, lowercase, '&' -> 'and', strip punctuation, collapse spaces."""
+    """Create a compact, punctuation-free text key.
+
+    Args:
+        text: Text to normalise, or ``None``.
+
+    Returns:
+        Folded lowercase text with punctuation removed and spaces collapsed.
+
+    Examples:
+        ``norm("St. Mary's Café & Hall")`` returns ``"st mary s cafe and hall"``.
+    """
     folded = unicodedata.normalize("NFKD", text or "")
     folded = "".join(ch for ch in folded if not unicodedata.combining(ch))
     folded = folded.lower().replace("&", " and ")
@@ -41,7 +51,14 @@ def norm(text: str | None) -> str:
 
 
 def norm_name(text: str | None) -> str:
-    """norm() plus dropping noise words. Used for names, where the noise is common."""
+    """Normalise a place name and remove common noise words.
+
+    Args:
+        text: Place name to normalise, or ``None``.
+
+    Returns:
+        A compact name key suitable for exact matching.
+    """
     return " ".join(word for word in norm(text).split() if word not in NOISE_WORDS)
 
 
@@ -72,7 +89,14 @@ ADDRESS_ABBREVIATIONS = {
 
 
 def norm_address(text: str | None) -> str:
-    """norm() plus expanding common street abbreviations."""
+    """Normalise an address and expand common street abbreviations.
+
+    Args:
+        text: Address text to normalise, or ``None``.
+
+    Returns:
+        A compact address key where common abbreviations use one spelling.
+    """
     return " ".join(ADDRESS_ABBREVIATIONS.get(word, word) for word in norm(text).split())
 
 
@@ -81,7 +105,14 @@ _TIME = re.compile(r"(?<![\d:.])(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm|a\.m\.|p\.m\.
 
 def norm_hours(text: str | None) -> str:
     """Opening hours as 24-hour times: "8am to 6pm" and "08:00 AM - 06:00 PM" both become
-    "08:00-18:00". Text without recognisable times falls back to norm()."""
+    "08:00-18:00".
+
+    Args:
+        text: Opening-hours text, or ``None``.
+
+    Returns:
+        A canonical time range, or the ordinary normalised text fallback.
+    """
     raw = (text or "").strip()
     # Only discard separators when the entire value is a supported time range.
     if not re.fullmatch(
@@ -118,6 +149,14 @@ def equivalent(kind: str, a: str | None, b: str | None) -> bool:
     """True when two values differ only in ways matching ignores (case, punctuation,
     spacing, address abbreviations, noise words in names, how times are written).
 
+    Args:
+        kind: Field type used to select normalisation rules.
+        a: First raw value.
+        b: Second raw value.
+
+    Returns:
+        ``True`` when the values are considered the same.
+
     This is the linkage module's definition of "the same value"; other tools (such as
     the diff) should use it rather than their own comparisons.
     """
@@ -136,7 +175,17 @@ def equivalent(kind: str, a: str | None, b: str | None) -> bool:
 def distance_m(
     lat1: float | None, lon1: float | None, lat2: float | None, lon2: float | None
 ) -> float | None:
-    """Haversine distance in metres, or None if either point is missing."""
+    """Calculate great-circle distance between two coordinate points.
+
+    Args:
+        lat1: Latitude of the first point, or ``None``.
+        lon1: Longitude of the first point, or ``None``.
+        lat2: Latitude of the second point, or ``None``.
+        lon2: Longitude of the second point, or ``None``.
+
+    Returns:
+        Distance in metres, or ``None`` if either point is missing.
+    """
     if None in (lat1, lon1, lat2, lon2):
         return None
     p1, p2 = math.radians(lat1), math.radians(lat2)  # type: ignore[arg-type]

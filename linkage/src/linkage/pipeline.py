@@ -16,6 +16,14 @@ EXACT_MAX_DISTANCE_M = 1000.0
 
 
 def exact_key(record: Record) -> str | None:
+    """Build the exact-link identity for a record.
+
+    Args:
+        record: Polling-place record to identify.
+
+    Returns:
+        A normalised name-and-divisions key, or ``None`` for an unnamed record.
+    """
     if not record.n_name:
         return None
     return f"{record.n_name}|{','.join(sorted(record.divisions))}"
@@ -35,7 +43,15 @@ def _corroborated(a: Record, b: Record) -> tuple[bool, dict]:
 
 
 def exact_pass(left: Dataset, right: Dataset) -> list[Link]:
-    """Link records whose normalised name + divisions key is unique on both sides."""
+    """Link records with a unique, corroborated name-and-divisions key.
+
+    Args:
+        left: Records from the old or first dataset.
+        right: Records from the new or second dataset.
+
+    Returns:
+        Confident exact links found on both sides.
+    """
     left_keys = {r.index: exact_key(r) for r in left.records}
     right_keys = {r.index: exact_key(r) for r in right.records}
     left_counts = Counter(k for k in left_keys.values() if k)
@@ -56,6 +72,17 @@ def exact_pass(left: Dataset, right: Dataset) -> list[Link]:
 
 
 def link(left: Dataset, right: Dataset, matcher: Matcher, use_exact_pass: bool = True) -> LinkResult:
+    """Link two datasets, first exactly and then with one matcher.
+
+    Args:
+        left: Records from the old or first dataset.
+        right: Records from the new or second dataset.
+        matcher: Matcher used to score candidate pairs.
+        use_exact_pass: Whether to use unique exact keys before matcher scoring.
+
+    Returns:
+        Links, unmatched record indices, and matcher parameters.
+    """
     links = exact_pass(left, right) if use_exact_pass else []
     done_left = {x.left for x in links}
     done_right = {x.right for x in links}

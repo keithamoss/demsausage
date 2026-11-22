@@ -22,6 +22,14 @@ from .run import MATCHER_CHOICES, link_files, make_matchers
 
 
 def cmd_link(args: argparse.Namespace) -> int:
+    """Run a link command and print or save its JSON report.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     _, _, output = link_files(
         args.old,
         args.new,
@@ -45,6 +53,14 @@ def cmd_link(args: argparse.Namespace) -> int:
 
 
 def cmd_evaluate(args: argparse.Namespace) -> int:
+    """Evaluate selected matchers against trusted ID columns.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     left = load_csv(args.old, id_column=args.id_column)
     right = load_csv(args.new, id_column=args.id_column)
     for m in make_matchers(args.matcher, args.splink_model):
@@ -54,6 +70,14 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
 
 
 def cmd_train_splink(args: argparse.Namespace) -> int:
+    """Train and save a Splink model from labelled file pairs.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     from .matchers.splink_matcher import train_from_labels
 
     pairs = [
@@ -66,17 +90,41 @@ def cmd_train_splink(args: argparse.Namespace) -> int:
 
 
 def cmd_verdicts_import(args: argparse.Namespace) -> int:
+    """Import downloaded human verdicts into the local verdict store.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     counts = verdict_store.import_file(Path(args.file), Path(args.store))
     print(f"Imported into {args.store}: {counts['added']} new, {counts['replaced']} updated, {counts['total']} in total")
     return 0
 
 
 def cmd_verdicts_tally(args: argparse.Namespace) -> int:
+    """Print a summary of stored human verdicts.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     print(verdict_store.format_tally(verdict_store.tally(verdict_store.load(Path(args.store)))))
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Parse linkage command-line arguments and run the requested command.
+
+    Args:
+        argv: Optional argument list; defaults to the process command line.
+
+    Returns:
+        Process exit status returned by the selected command.
+    """
     parser = argparse.ArgumentParser(prog="linkage", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
 

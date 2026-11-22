@@ -30,11 +30,30 @@ EM_MIN_RECORDS = 200
 
 
 def _not_abolished(row: dict[str, str]) -> bool:
+    """Return whether a federal-election row is not marked abolished.
+
+    Args:
+        row: CSV row dictionary.
+
+    Returns:
+        ``True`` unless the row's ``Status`` is ``Abolition``.
+    """
     return row.get("Status") != "Abolition"
 
 
 @dataclass
 class Case:
+    """One trusted-ID benchmark pair and its metadata.
+
+    Attributes:
+        name: Human-readable case name.
+        kind: Whether the pair is within or across elections.
+        old: Path to the first snapshot.
+        new: Path to the second snapshot.
+        id_column: CSV column containing the trusted source ID.
+        note: Optional explanation for known benchmark noise.
+        group: Training group used to keep leave-one-dataset-out splits independent.
+    """
     name: str
     kind: str  # "within election" or "cross election"
     old: Path
@@ -45,9 +64,15 @@ class Case:
     group: str = ""
 
     def __post_init__(self) -> None:
+        """Set a default training group from the case name."""
         self.group = self.group or self.name
 
     def load(self) -> tuple[Dataset, Dataset]:
+        """Load this case's two datasets with the appropriate row filter.
+
+        Returns:
+            The old and new datasets.
+        """
         row_filter = _not_abolished if "federal" in self.name else None
         return (
             load_csv(self.old, id_column=self.id_column, row_filter=row_filter),
@@ -84,7 +109,16 @@ CASES = [
 
 
 def snapshot_cases(group: str, pattern: str, id_column: str) -> list[Case]:
-    """Every consecutive pair of snapshots in a series (what a re-scrape diff sees)."""
+    """Build benchmark cases from every consecutive pair in a snapshot series.
+
+    Args:
+        group: Election or scraper series name.
+        pattern: Glob pattern used to find snapshot CSV files.
+        id_column: Column containing the trusted source ID.
+
+    Returns:
+        Consecutive snapshot pairs, in filename order.
+    """
     files = sorted(SCRAPERS.glob(pattern))
     return [
         Case(f"{group} {a.name[:15]} -> {b.name[:15]}", "within election (consecutive)", a, b, id_column, group=group)
@@ -100,6 +134,11 @@ TEST_CASES = (
 
 
 def main() -> int:
+    """Run benchmark cases and write metrics to a JSON file.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(Path(__file__).parent / "results.json"))
     parser.add_argument("--only", help="Run only this case")

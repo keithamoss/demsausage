@@ -21,6 +21,15 @@ CHANGED_MOVE_M = 11.0
 
 
 def truth_pairs(left: Dataset, right: Dataset) -> dict[int, int]:
+    """Map uniquely shared trusted IDs to their row indices.
+
+    Args:
+        left: Dataset containing source IDs.
+        right: Dataset containing source IDs.
+
+    Returns:
+        A mapping from left record index to matching right record index.
+    """
     lc = Counter(r.source_id for r in left.records if r.source_id)
     rc = Counter(r.source_id for r in right.records if r.source_id)
     right_by_id = {r.source_id: r.index for r in right.records if r.source_id and rc[r.source_id] == 1}
@@ -32,6 +41,15 @@ def truth_pairs(left: Dataset, right: Dataset) -> dict[int, int]:
 
 
 def is_changed(a: Record, b: Record) -> bool:
+    """Return whether a truth pair represents a meaningful changed place.
+
+    Args:
+        a: Record in the first dataset.
+        b: Matching record in the second dataset.
+
+    Returns:
+        ``True`` if a name, premises, address, or position changed.
+    """
     dist = distance_m(a.lat, a.lon, b.lat, b.lon)
     return (
         a.n_name != b.n_name
@@ -43,6 +61,23 @@ def is_changed(a: Record, b: Record) -> bool:
 
 @dataclass
 class Evaluation:
+    """Metrics and sample examples produced when checking a result against IDs.
+
+    Attributes:
+        matcher: Name of the matcher being evaluated.
+        truth_pairs: Number of usable trusted identity pairs.
+        changed_pairs: Number of truth pairs that represent meaningful changes.
+        links: Number of matcher links that have a usable truth partner.
+        correct: Number of links that matched the trusted right record.
+        wrong: Number of links that chose the wrong right record.
+        missed: Number of trusted left records that were not linked.
+        changed_correct: Number of changed truth pairs linked correctly.
+        wrong_auto: Wrong links placed in the confident band.
+        wrong_review: Wrong links placed in the review band.
+        correct_review: Correct links placed in the review band.
+        false_links: Removed left records incorrectly linked to a surviving ID.
+        examples: Small lists of wrong, missed, and review examples for reports.
+    """
     matcher: str
     truth_pairs: int
     changed_pairs: int
@@ -60,14 +95,29 @@ class Evaluation:
 
     @property
     def precision(self) -> float:
+        """Return correct links divided by all judged links.
+
+        Returns:
+            Precision as a value from 0.0 to 1.0.
+        """
         judged_links = self.links + self.false_links
         return self.correct / judged_links if judged_links else 1.0
 
     @property
     def recall(self) -> float:
+        """Return correct links divided by all usable truth pairs.
+
+        Returns:
+            Recall as a value from 0.0 to 1.0.
+        """
         return self.correct / self.truth_pairs if self.truth_pairs else 1.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert metrics to a JSON-ready dictionary.
+
+        Returns:
+            Dataclass fields plus rounded precision and recall values.
+        """
         out = asdict(self)
         out["precision"] = round(self.precision, 5)
         out["recall"] = round(self.recall, 5)
@@ -75,6 +125,17 @@ class Evaluation:
 
 
 def evaluate(result: LinkResult, left: Dataset, right: Dataset, max_examples: int = 10) -> Evaluation:
+    """Score a link result against trusted IDs shared by both datasets.
+
+    Args:
+        result: Link decisions produced by a matcher.
+        left: Dataset containing the trusted left IDs.
+        right: Dataset containing the trusted right IDs.
+        max_examples: Maximum number of examples retained for each report category.
+
+    Returns:
+        Counts and representative examples describing matcher accuracy.
+    """
     truth = truth_pairs(left, right)
     changed = {i for i, j in truth.items() if is_changed(left.records[i], right.records[j])}
     examples: dict[str, list[dict[str, Any]]] = {"wrong": [], "missed": [], "review": []}

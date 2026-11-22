@@ -50,6 +50,14 @@ def key(v: dict[str, Any]) -> tuple:
 
 
 def validate(v: dict[str, Any]) -> list[str]:
+    """Check a downloaded verdict for required fields and allowed verdict values.
+
+    Args:
+        v: Verdict object to validate.
+
+    Returns:
+        Human-readable validation problems, or an empty list when valid.
+    """
     problems = [f"missing {field!r}" for field in REQUIRED if field not in v]
     if "verdict" in v and v["verdict"] not in VERDICTS:
         problems.append(f"verdict {v['verdict']!r} is not one of {sorted(VERDICTS)}")
@@ -59,6 +67,14 @@ def validate(v: dict[str, Any]) -> list[str]:
 
 
 def load(path: Path | None = None) -> list[dict[str, Any]]:
+    """Load verdict records from a JSON Lines file.
+
+    Args:
+        path: Verdict file to load, or the default verdict store.
+
+    Returns:
+        Parsed verdict dictionaries.
+    """
     path = path or DEFAULT_PATH
     if not path.exists():
         return []
@@ -66,6 +82,12 @@ def load(path: Path | None = None) -> list[dict[str, Any]]:
 
 
 def save(verdicts: Iterable[dict[str, Any]], path: Path | None = None) -> None:
+    """Write sorted verdict records to a JSON Lines file.
+
+    Args:
+        verdicts: Verdict dictionaries to store.
+        path: Destination file, or the default verdict store.
+    """
     path = path or DEFAULT_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     rows = sorted(verdicts, key=lambda v: (v.get("recorded_at", ""), key(v)))
@@ -73,7 +95,18 @@ def save(verdicts: Iterable[dict[str, Any]], path: Path | None = None) -> None:
 
 
 def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
-    """Merge a downloaded verdicts file into the record. Returns counts."""
+    """Merge a downloaded verdict file into the local verdict record.
+
+    Args:
+        source: Downloaded JSON file containing verdict objects.
+        path: Existing verdict store to update, or the default store.
+
+    Returns:
+        Counts of new verdicts, replacements, and the final total.
+
+    Raises:
+        ValueError: If one of the incoming verdict objects is invalid.
+    """
     path = path or DEFAULT_PATH
     incoming = json.loads(source.read_text())
     if isinstance(incoming, dict):
@@ -95,6 +128,14 @@ def import_file(source: Path, path: Path | None = None) -> dict[str, int]:
 
 
 def tally(verdicts: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summarise verdicts by outcome, reason, and election.
+
+    Args:
+        verdicts: Verdict dictionaries to tally.
+
+    Returns:
+        Counts and sorted election names suitable for reports.
+    """
     by_verdict = Counter(v["verdict"] for v in verdicts)
     by_reason: dict[str, Counter] = defaultdict(Counter)
     for v in verdicts:
@@ -108,6 +149,14 @@ def tally(verdicts: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def format_tally(t: dict[str, Any]) -> str:
+    """Format a verdict tally as a human-readable text report.
+
+    Args:
+        t: Tally dictionary produced by :func:`tally`.
+
+    Returns:
+        A multi-line report of verdict and reason totals.
+    """
     lines = [f"{t['total']} verdicts across {', '.join(t['elections']) or 'no elections'}"]
     for verdict, label in VERDICTS.items():
         lines.append(f"  {label:22} {t['by_verdict'].get(verdict, 0)}")

@@ -34,6 +34,15 @@ COMPARISON_FIELDS = ("name", "premises", "address", "geo", "divisions")
 
 
 def _splink():
+    """Load Splink imports and give a clear error when the extra is missing.
+
+    Returns:
+        Splink comparison libraries, database API, linker, settings creator,
+        and blocking helper.
+
+    Raises:
+        ImportError: If the optional Splink dependency is not installed.
+    """
     try:
         import splink.comparison_library as cl
         from splink import DuckDBAPI, Linker, SettingsCreator, block_on
@@ -45,15 +54,36 @@ def _splink():
 
 
 def _quiet() -> None:
+    """Reduce Splink and dependency warning output during normal use."""
     logging.getLogger("splink").setLevel(logging.ERROR)
     warnings.filterwarnings("ignore", module="splink")
 
 
 def _grid(value: float | None, offset: float = 0.0) -> str | None:
+    """Round a coordinate to a blocking-grid key.
+
+    Args:
+        value: Latitude or longitude value.
+        offset: Small grid offset, usually half of a grid cell.
+
+    Returns:
+        A two-decimal coordinate string, or ``None`` for a missing value.
+    """
     return None if value is None else str(round(value + offset, 2))
 
 
 def splink_row(record: Record, uid: str, label: str | None = None, group: str = "") -> dict:
+    """Convert a polling-place record into a Splink input row.
+
+    Args:
+        record: Record to convert.
+        uid: Unique Splink identifier for this record.
+        label: Optional trusted identity label used during training.
+        group: Optional election or file group label.
+
+    Returns:
+        A dictionary containing Splink comparison and blocking fields.
+    """
     return {
         "unique_id": uid,
         "grp": group,
@@ -92,6 +122,12 @@ SINGLE_AXIS_TOLERANCE_DEG = 0.0005
 def geo_comparison(single_axis_level: bool = True):
     """Distance bands, plus (optionally) a level for "one axis agrees, the other doesn't".
 
+    Args:
+        single_axis_level: Whether to add a level for likely single-axis coordinate typos.
+
+    Returns:
+        A configured Splink custom comparison.
+
     Without that level a typo in one coordinate lands in "more than 5 km apart",
     which in a model trained on clean data is near-conclusive evidence against a
     match. As its own level, Splink learns how much that pattern should count:
@@ -123,7 +159,15 @@ def geo_comparison(single_axis_level: bool = True):
 
 
 def settings(all_pairs: bool = False, single_axis_level: bool = True):
-    """Comparisons and blocking. Shared by training and prediction."""
+    """Build the Splink settings shared by training and prediction.
+
+    Args:
+        all_pairs: Whether to disable blocking and compare every pair in a group.
+        single_axis_level: Whether to include the coordinate-typo comparison level.
+
+    Returns:
+        A Splink settings object.
+    """
     cl, _, _, SettingsCreator, block_on = _splink()
     blocking = [
         block_on("grp", "name"),
@@ -156,14 +200,47 @@ def settings(all_pairs: bool = False, single_axis_level: bool = True):
 
 
 def _linker(left_rows: list[dict], right_rows: list[dict], model: Any):
+    """Create a Splink linker from explicitly typed input tables.
+
+    Args:
+        left_rows: Records for the left dataset.
+        right_rows: Records for the right dataset.
+        model: Settings dictionary or Splink settings object.
+
+    Returns:
+        A configured Splink linker.
+    """
     _, DuckDBAPI, Linker, _, _ = _splink()
     _quiet()
+    try:
+        import pyarrow as pa
+    except ImportError as e:  # pragma: no cover - installed with the Splink extra
+        raise ImportError("PyArrow is required by the Splink matcher") from e
+
+    schema = pa.schema([
+        pa.field("unique_id", pa.string(), nullable=False),
+        pa.field("grp", pa.string()),
+        pa.field("name", pa.string()),
+        pa.field("premises", pa.string()),
+        pa.field("address", pa.string()),
+        pa.field("lat", pa.float64()),
+        pa.field("lon", pa.float64()),
+        pa.field("divisions", pa.list_(pa.string())),
+        pa.field("g1", pa.string()),
+        pa.field("g2", pa.string()),
+        pa.field("g3", pa.string()),
+        pa.field("g4", pa.string()),
+        pa.field("truth", pa.string()),
+    ])
+    left_table = pa.Table.from_pylist(left_rows, schema=schema)
+    right_table = pa.Table.from_pylist(right_rows, schema=schema)
+
     db = DuckDBAPI()
     db.duckdb_con.execute("SET memory_limit='2GB'")
     return Linker(
         [
-            db.register(left_rows, dataset_display_name="left_ds", table_name="left_ds"),
-            db.register(right_rows, dataset_display_name="right_ds", table_name="right_ds"),
+            db.register(left_table, dataset_display_name="left_ds", table_name="left_ds"),
+            db.register(right_table, dataset_display_name="right_ds", table_name="right_ds"),
         ],
         model,
         log_level=logging.ERROR,
@@ -171,6 +248,15 @@ def _linker(left_rows: list[dict], right_rows: list[dict], model: Any):
 
 
 def _match_prior(n_left: int, n_right: int) -> float:
+    """Estimate the probability that two random records from two datasets match.
+
+    Args:
+        n_left: Number of records on the left.
+        n_right: Number of records on the right.
+
+    Returns:
+        A prior capped at 0.5 so tiny datasets cannot create invalid probabilities.
+    """
     if n_left <= 0 or n_right <= 0:
         return 0.5
     return min(min(n_left, n_right) / (n_left * n_right), 0.5)
@@ -178,6 +264,12 @@ def _match_prior(n_left: int, n_right: int) -> float:
 
 def labelled_rows(pairs: Sequence[tuple[str, Dataset, Dataset]]) -> tuple[list[dict], list[dict]]:
     """Build Splink input rows from (group, left, right) pairs labelled by source_id.
+
+    Args:
+        pairs: Named left/right dataset pairs to label.
+
+    Returns:
+        Separate left and right row lists containing training labels.
 
     Only IDs that are present and unique in both files become labels.
     """
@@ -198,6 +290,11 @@ def labelled_rows(pairs: Sequence[tuple[str, Dataset, Dataset]]) -> tuple[list[d
 def smooth_m_probabilities(model: dict, n_labelled: int, pseudo_count: float) -> None:
     """Additive smoothing of m-probabilities, in place.
 
+    Args:
+        model: Splink model dictionary to update.
+        n_labelled: Number of labelled pairs in the training data.
+        pseudo_count: Imaginary observations added to each non-null comparison level.
+
     Within one election almost nothing drifts, so labelled pairs leave many levels
     (e.g. "name Jaro-Winkler >= 0.92") with m = 0, which Splink reads as "a true match
     can never look like this" and vetoes the pair. Adding `pseudo_count` imaginary
@@ -217,7 +314,17 @@ def train_from_labels(
     pseudo_count: float = 1.0,
     single_axis_level: bool = True,
 ) -> dict:
-    """Train m and u probabilities from labelled pairs; return (and optionally save) the model."""
+    """Train m and u probabilities from labelled pairs.
+
+    Args:
+        pairs: Named left/right datasets containing trusted source IDs.
+        out_path: Optional path at which to save the trained model JSON.
+        pseudo_count: Smoothing observations added to each comparison level.
+        single_axis_level: Whether to include the single-axis coordinate-typo level.
+
+    Returns:
+        The trained model dictionary, optionally also written to ``out_path``.
+    """
     left_rows, right_rows = labelled_rows(pairs)
     linker = _linker(left_rows, right_rows, settings(single_axis_level=single_axis_level))
     linker.training.estimate_u_using_random_sampling(max_pairs=2e6, seed=1)
@@ -240,6 +347,17 @@ def train_from_labels(
 
 @dataclass
 class SplinkMatcher:
+    """Score places using a bundled or trained Splink probabilistic model.
+
+    Attributes:
+        name: Short matcher identifier used in reports.
+        auto_threshold: Match probability treated as a confident link.
+        review_threshold: Match probability treated as a review link.
+        model: Model dictionary, JSON path, or ``None`` for the bundled model.
+        unsupervised: Whether to estimate probabilities with EM instead of a model.
+        single_axis_level: Whether to use the coordinate-typo comparison level.
+        all_pairs_limit: Maximum pair count that is safe to compare directly.
+    """
     name: str = "splink"
     #: Thresholds are on Splink's match_probability.
     auto_threshold: float = 0.95
@@ -255,6 +373,11 @@ class SplinkMatcher:
     _model_dict: dict | None = field(default=None, init=False, repr=False)
 
     def params(self) -> dict[str, Any]:
+        """Return matcher settings and model provenance.
+
+        Returns:
+            Thresholds, model source, and training metadata.
+        """
         source = (
             "unsupervised EM on the inputs"
             if self.unsupervised
@@ -271,6 +394,14 @@ class SplinkMatcher:
         }
 
     def _load_model(self) -> dict:
+        """Load or cache the configured Splink model dictionary.
+
+        Returns:
+            The model dictionary.
+
+        Raises:
+            FileNotFoundError: If a configured model JSON file does not exist.
+        """
         if self._model_dict is None:
             if isinstance(self.model, dict):
                 self._model_dict = self.model
@@ -284,6 +415,15 @@ class SplinkMatcher:
         return self._model_dict
 
     def _prediction_settings(self, n_left: int, n_right: int) -> Any:
+        """Build settings for a prediction, including the correct random-match prior.
+
+        Args:
+            n_left: Number of records in the left dataset.
+            n_right: Number of records in the right dataset.
+
+        Returns:
+            A settings dictionary or settings object accepted by Splink.
+        """
         all_pairs = n_left * n_right <= self.all_pairs_limit
         if self.unsupervised:
             return settings(all_pairs, self.single_axis_level)
@@ -306,6 +446,17 @@ class SplinkMatcher:
         left_indices: Sequence[int],
         right_indices: Sequence[int],
     ) -> list[ScoredPair]:
+        """Predict candidate pairs using Splink.
+
+        Args:
+            left: First input dataset.
+            right: Second input dataset.
+            left_indices: Left record indices still available for linking.
+            right_indices: Right record indices still available for linking.
+
+        Returns:
+            Match probabilities, ranks, and field-level match explanations.
+        """
         # Give Splink every record, not just the ones still to link: term frequencies
         # (how common each name/premises/address is) must come from the whole files.
         # With only the leftovers, two records sharing a name look like a 50% value

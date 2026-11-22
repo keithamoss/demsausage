@@ -17,10 +17,30 @@ MATCHER_CHOICES = ("rapidfuzz", "splink", "both")
 
 
 def file_sha256(path: str | Path) -> str:
+    """Return the SHA-256 fingerprint of a file.
+
+    Args:
+        path: File system path to the file.
+
+    Returns:
+        A hexadecimal SHA-256 digest.
+    """
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def make_matchers(which: str, splink_model: str | None = None) -> list:
+    """Create the requested matcher instances.
+
+    Args:
+        which: ``rapidfuzz``, ``splink``, or ``both``.
+        splink_model: Optional path or JSON model source for Splink.
+
+    Returns:
+        Configured matcher objects.
+
+    Raises:
+        ValueError: If ``which`` is not a supported matcher choice.
+    """
     if which not in MATCHER_CHOICES:
         raise ValueError(f"matcher must be one of {MATCHER_CHOICES}")
     matchers: list = []
@@ -34,6 +54,14 @@ def make_matchers(which: str, splink_model: str | None = None) -> list:
 
 
 def dataset_summary(d: Dataset) -> dict[str, Any]:
+    """Build a JSON-ready description of an input dataset.
+
+    Args:
+        d: Dataset that was loaded from a CSV file.
+
+    Returns:
+        The file path, fingerprint, record count, and detected column map.
+    """
     return {
         "path": d.path,
         "sha256": file_sha256(d.path),

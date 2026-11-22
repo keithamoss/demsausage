@@ -14,6 +14,20 @@ COLUMNS = ColumnMap(
 
 
 def place(id, name, premises="", address="", lat=None, lon=None, divisions=""):
+    """Create a synthetic CSV row for linkage tests.
+
+    Args:
+        id: Stable source identifier.
+        name: Polling-place name.
+        premises: Optional premises name.
+        address: Optional address.
+        lat: Optional latitude.
+        lon: Optional longitude.
+        divisions: Optional comma-separated divisions.
+
+    Returns:
+        A dictionary shaped like a CSV row.
+    """
     return {
         "id": str(id),
         "name": name,
@@ -26,4 +40,13 @@ def place(id, name, premises="", address="", lat=None, lon=None, divisions=""):
 
 
 def dataset(rows, path="test.csv") -> Dataset:
+    """Create a linkage dataset from synthetic CSV-shaped rows.
+
+    Args:
+        rows: Dictionaries containing the test record fields.
+        path: Optional label used to identify the synthetic dataset.
+
+    Returns:
+        A loaded dataset ready for matcher tests.
+    """
     return Dataset(path=path, columns=COLUMNS, records=records_from_rows(rows, COLUMNS))

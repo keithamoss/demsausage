@@ -7,6 +7,7 @@ from linkage.assign import assign
 from linkage.compare import compare_results
 from linkage.evaluate import evaluate
 from linkage.matchers.rapidfuzz_lsa import RapidfuzzMatcher
+from linkage.matchers.rapidfuzz_lsa import text_similarity
 from linkage.normalise import distance_m, norm, norm_name
 from linkage.pipeline import exact_pass, link
 from linkage.records import ColumnMap
@@ -74,6 +75,23 @@ def test_assign_uses_rank_to_break_saturated_scores():
 
 def test_assign_respects_min_score():
     assert assign([ScoredPair(0.4, 0, 0)], min_score=0.5) == []
+
+
+@pytest.mark.parametrize("rank", [-2, 0])
+def test_assign_accepts_non_positive_rank_when_probability_passes_threshold(rank):
+    pairs = [ScoredPair(0.2, 0, 0, rank=rank)]
+    assert assign(pairs, min_score=0.1) == pairs
+
+
+def test_blank_text_is_never_exactly_similar():
+    assert text_similarity("", "") == 0.0
+    assert text_similarity("", "Hall") == 0.0
+
+
+@pytest.mark.parametrize("value", ["NaN", "Infinity", "-Infinity", "1e999"])
+def test_non_finite_coordinates_are_missing(value):
+    d = dataset([place(1, "A", lat=value, lon=value)])
+    assert not d.records[0].has_coords
 
 
 def test_exact_pass_needs_unique_keys_and_corroboration():

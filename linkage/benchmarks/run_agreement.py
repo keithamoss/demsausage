@@ -43,11 +43,24 @@ PAIRS = [
 
 
 def _rel(path: Path) -> str:
+    """Convert a path to a repository-relative string when possible.
+
+    Args:
+        path: Path to format.
+
+    Returns:
+        A repository-relative path, or an absolute path outside the repository.
+    """
     path = path.resolve()
     return str(path.relative_to(REPO)) if path.is_relative_to(REPO) else str(path)
 
 
 def main() -> int:
+    """Generate an agreement report for repeated election data snapshots.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(Path(__file__).parent / "agreement.json"))
     parser.add_argument("--extra", nargs=3, action="append", default=[], metavar=("NAME", "OLD", "NEW"), help="Another pair to compare")
@@ -58,7 +71,15 @@ def main() -> int:
         files = sorted(SCRAPERS.glob(pattern))
         if len(files) >= 2:
             pairs.append((name, files[0], files[-1]))
-    pairs += PAIRS
+    for name, old, new in PAIRS:
+        if old.is_file() and new.is_file():
+            pairs.append((name, old, new))
+        else:
+            missing = [str(path) for path in (old, new) if not path.is_file()]
+            print(
+                f"Skipping {name}: snapshot unavailable: {', '.join(missing)}",
+                file=sys.stderr,
+            )
     pairs += [(n, Path(o), Path(w)) for n, o, w in args.extra]
 
     out = []

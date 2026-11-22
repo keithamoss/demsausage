@@ -18,6 +18,15 @@ from .result import ScoredPair
 
 
 def assign(pairs: Iterable[ScoredPair], min_score: float) -> list[ScoredPair]:
+    """Choose at most one partner for each record without exceeding ``min_score``.
+
+    Args:
+        pairs: Candidate pairs that may connect records on the left and right.
+        min_score: Minimum probability score a candidate pair must have.
+
+    Returns:
+        The selected one-to-one pairs. Candidates not chosen are left unmatched.
+    """
     candidates = [p for p in pairs if p.score >= min_score]
     if not candidates:
         return []

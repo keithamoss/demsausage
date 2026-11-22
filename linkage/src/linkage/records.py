@@ -9,6 +9,7 @@ can be mapped explicitly.
 from __future__ import annotations
 
 import csv
+import math
 import re
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
@@ -47,7 +48,18 @@ _HOURS_COLUMNS = ("opening_hours", "OpeningHours", "hours", "election_day_hours"
 
 @dataclass(frozen=True)
 class ColumnMap:
-    """Which source columns hold each field. Address columns are joined with ', '."""
+    """Describe which source CSV columns hold each polling-place field.
+
+    Attributes:
+        name: Column containing the place name.
+        premises: Optional column containing the premises name.
+        address: Address columns to join in source-file order.
+        lat: Optional latitude column.
+        lon: Optional longitude column.
+        divisions: Optional division or district column.
+        id: Optional stable source identifier column.
+        hours: Optional opening-hours column used outside matching.
+    """
 
     name: str
     premises: str | None = None
@@ -60,7 +72,14 @@ class ColumnMap:
     hours: str | None = None
 
     def kind_of(self, column: str) -> str:
-        """What kind of value a column holds, for normalise.equivalent()."""
+        """Identify the normalisation kind used for a source column.
+
+        Args:
+            column: Header name to classify.
+
+        Returns:
+            ``name``, ``premises``, ``address``, ``hours``, or ``text``.
+        """
         if column == self.name:
             return "name"
         if column == self.premises:
@@ -73,6 +92,18 @@ class ColumnMap:
 
     @classmethod
     def detect(cls, header: Sequence[str], id_column: str | None = None) -> ColumnMap:
+        """Detect common Australian election CSV column names.
+
+        Args:
+            header: Column names present in the source CSV.
+            id_column: Optional explicitly named stable ID column.
+
+        Returns:
+            A column map using the detected source headers.
+
+        Raises:
+            ValueError: If no name column or the requested ID column is missing.
+        """
         def first(options: Iterable[str]) -> str | None:
             return next((c for c in options if c in header), None)
 
@@ -115,6 +146,7 @@ class Record:
     n_address: str = field(init=False, compare=False, repr=False)
 
     def __post_init__(self) -> None:
+        """Compute stable normalised fields after the dataclass is initialized."""
         object.__setattr__(self, "n_name", norm_name(_strip_own_division(self.name, self.divisions)))
         object.__setattr__(self, "n_premises", norm(self.premises))
         object.__setattr__(
@@ -123,6 +155,11 @@ class Record:
 
     @property
     def has_coords(self) -> bool:
+        """Return whether both finite coordinate values are available.
+
+        Returns:
+            ``True`` when latitude and longitude are both present.
+        """
         return self.lat is not None and self.lon is not None
 
     def label(self) -> str:
@@ -136,6 +173,13 @@ _TRAILING_PARENS = re.compile(r"\s*\(([^()]*)\)\s*$")
 def _strip_own_division(name: str, divisions: frozenset[str]) -> str:
     """Drop a trailing "(Division)" when it names one of the record's own divisions.
 
+    Args:
+        name: Polling-place name that may end with a division in parentheses.
+        divisions: Divisions associated with the record.
+
+    Returns:
+        The name with its own division suffix removed.
+
     Commissions label booths serving another division this way (AEC: "Allawah
     (Barton)"); it says which division the booth serves, not which place it is.
     """
@@ -148,6 +192,14 @@ def _strip_own_division(name: str, divisions: frozenset[str]) -> str:
 def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
     """Drop a first comma-separated part that just repeats the place's name or premises.
 
+    Args:
+        address: Full address text.
+        name: Normalisable place name.
+        premises: Normalisable premises name.
+
+    Returns:
+        Address text with the repeated leading place name removed.
+
     Some files write "Northam Town Hall, Cnr Wellington & Gordon Streets" where
     others write "Corner Wellington & Gordon Streets".
     """
@@ -158,21 +210,46 @@ def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
 
 
 def _to_float(value: str | None) -> float | None:
+    """Parse a CSV coordinate while rejecting placeholders and invalid numbers.
+
+    Args:
+        value: Raw coordinate text.
+
+    Returns:
+        A finite, non-zero float, or ``None`` when the value is unusable.
+    """
     try:
         number = float(value)  # type: ignore[arg-type]
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
     # 0,0 is a "no coordinates" placeholder in some commission files.
-    return None if number == 0 else number
+    return None if number == 0 or not math.isfinite(number) else number
 
 
 def _split_divisions(value: str | None) -> frozenset[str]:
+    """Split and normalise a comma-separated division field.
+
+    Args:
+        value: Raw division text.
+
+    Returns:
+        A set of non-empty normalised division names.
+    """
     return frozenset(norm(part) for part in (value or "").split(",") if norm(part))
 
 
 def records_from_rows(
     rows: Sequence[dict[str, str]], columns: ColumnMap
 ) -> list[Record]:
+    """Convert CSV rows into normalised polling-place records.
+
+    Args:
+        rows: Row dictionaries returned by a CSV reader.
+        columns: Mapping from source headers to polling-place fields.
+
+    Returns:
+        One :class:`Record` for each source row, in source order.
+    """
     records = []
     for index, row in enumerate(rows):
 

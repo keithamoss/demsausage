@@ -18,6 +18,11 @@ from linkage.matchers.splink_matcher import DEFAULT_MODEL_PATH, train_from_label
 
 
 def main() -> int:
+    """Train and save the default Splink model used by the package.
+
+    Returns:
+        Process exit status, always zero on success.
+    """
     pairs = [(case.name, *case.load()) for case in CASES]
     model = train_from_labels(pairs)
     model["training"]["files"] = [
