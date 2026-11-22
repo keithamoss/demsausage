@@ -3,6 +3,14 @@
 ### Principle
 One validator library, used by the scraper CLI (writes `quality_report.json` beside the CSV; errors block output), CI (against fixtures) and the loader (cheap re-check; refuses data without a passing report). The loader stops being where problems are first found.
 
+### Source-adapter contract
+- Preserve raw downloads and raw records before normalisation, with retrieval time, source URL, content hash and publisher-provided update time where available. Do not confuse retrieval time with the age of the published information.
+- Classify records using explicit source types, then exclude early-voting centres and election offices before election-day matching, validation and reporting. A premises used for both purposes can still have an eligible election-day record.
+- Parse spatial data without letting an unusable optional Z dimension erase valid XY. Distinguish null/empty geometry, invalid or non-finite XY, and missing/non-finite Z. Validate CRS and coordinate order, and use XY for map output, distances and diffs while retaining raw geometry.
+- Treat omitted properties, explicit nulls and blank strings as distinct raw observations. Report required-field and optional-ID coverage, including by record category such as shared versus standalone venues.
+- Normalise known HTML entities and typography for comparison and display without discarding the original text. Identify likely truncation from field limits and incomplete endings; a description below the maximum width is not necessarily complete.
+- Surface disagreements between independently published sources rather than silently treating the newest download as the newest information. The adapter's source-of-truth policy must be explicit.
+
 ### Static checks on corrections
 - Overwrite field must exist after the column rename (would have caught `EntrancesDesc` and `lng`).
 - Selector must match at least one row.
@@ -17,6 +25,7 @@ One validator library, used by the scraper CLI (writes `quality_report.json` bes
 4. Cross-election drift: link booths with the matcher and flag premises that moved with no address change; also flags redundant corrections.
 5. Address-vs-coordinate check: geocode only flagged or low-precision rows and compare.
 6. Cheap signals: low decimal precision, distance from postcode centroid, unknown vocabulary values, new blank counts per column, column-set changes versus the previous election.
+7. Spatial-export integrity: null shapes, non-finite XY, optional Z problems, missing-property coverage and likely clipped text. Diagnose concentrations by source category, not just aggregate counts.
 
 Detectors propose a candidate correction (a geocode or the prior election's location); a human approves it into the `Correction` table. Severity tiers decide what blocks a run and what warns.
 
@@ -65,6 +74,16 @@ Same coordinates on different premises: 4 groups (13 booths) in federal 2022; 1 
 - Point-in-polygon on 2025 (2025 boundaries aren't in the repo) and on non-federal sets.
 - Federal 2016 to 2022 and VIC 2018 to 2022 drift: automatic linking failed (the column mappings and venue names differ); needs the matcher.
 - Address-vs-geocode (needs live geocoding).
+
+### VIC 2026 spatial-export observations and proposed regressions
+These are source inspections from November 2026, not a backtest of an implemented validator.
+
+- The 16 November shapefile contained 277 true null shapes, all shared venues with guest electorates. Separately, valid XY points with NaN Z became null geometries in a default GDAL GeoJSON conversion. A 2D conversion distinguished the two issues.
+- The 17 November replacement restored all 277 shapes. The 18 November GeoJSON contains 1,950 valid XY points with no null geometries, but 1,443 points have a third coordinate of `null`. Test optional-Z handling independently of geometry presence.
+- In the 18 November GeoJSON, `VenueId` is absent for the same 277 shared venues. After election-day filtering, report 191 missing IDs out of 1,652 eligible records; the 86 early-voting records must not inflate election-day warnings or diffs.
+- Shapefile accessibility descriptions were clipped, including some ending at 253 rather than 254 bytes. The GeoJSON restores longer descriptions: Kilcunda Community Centre has 321 bytes and Golden Square Girl Guide Hall has 344. Include clipped and complete variants, plus literal `&amp;` and sentence reordering, in focused fixtures.
+- Bundalaguah's approximately 1.7 km relocation changes both address and premises. Report a significant location change, not a coordinate typo solely because it moved. Its API/GeoJSON versus spreadsheet disagreement also exercises source freshness and provenance reporting.
+- The 1,950-record source includes 1,652 election-day centres, 210 early-voting centres and 88 election offices. Fixtures should prove exclusion by record type, including where premises are shared, before downstream checks run.
 
 ## Where we got to
 - The design is one validator library used at scrape time, in CI and in the loader.
