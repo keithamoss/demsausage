@@ -79,6 +79,23 @@ def test_zero_coordinates_are_treated_as_missing():
     assert not d.records[0].has_coords
 
 
+def test_filtered_short_csv_retains_header_source_position_and_missing_coordinates(tmp_path):
+    from linkage.records import load_csv
+
+    path = tmp_path / "places.csv"
+    path.write_text("name,lat,lon,wheelchair_access\nSkip,-33,151,Full\nHall,-33,151\n")
+    loaded = load_csv(path, row_filter=lambda row: row["name"] == "Hall")
+    record = loaded.records[0]
+
+    assert loaded.header == ["name", "lat", "lon", "wheelchair_access"]
+    assert (record.index, record.source_index) == (0, 1)
+    assert record.raw["wheelchair_access"] == ""
+
+    path.write_text("name,lat,lon\nHall,-33,\n")
+    record = load_csv(path).records[0]
+    assert (record.lat, record.lon) == (None, None)
+
+
 def test_assign_is_one_to_one_and_maximises_total():
     # Greedy would take (0,0)=0.9 and leave 1 unmatched; the optimum is 0->1, 1->0.
     pairs = [ScoredPair(0.9, 0, 0), ScoredPair(0.85, 0, 1), ScoredPair(0.8, 1, 0)]

@@ -279,13 +279,13 @@ def _strip_leading_place_name(address: str, name: str, premises: str) -> str:
 
 
 def _to_float(value: str | None) -> float | None:
-    """Parse a CSV coordinate while rejecting placeholders and invalid numbers.
+    """Read one coordinate, treating invalid values and zero as missing.
 
     Args:
-        value: Raw coordinate text.
+        value: The coordinate text from the source file.
 
     Returns:
-        A finite, non-zero float, or ``None`` when the value is unusable.
+        A finite, non-zero number, or ``None`` if the coordinate is missing or invalid.
     """
     if value is None:
         return None
@@ -293,7 +293,7 @@ def _to_float(value: str | None) -> float | None:
         number = float(value)
     except (TypeError, ValueError, OverflowError):
         return None
-    # 0,0 is a "no coordinates" placeholder in some commission files.
+    # A zero on either axis is treated as a missing coordinate.
     return None if number == 0 or not math.isfinite(number) else number
 
 
@@ -355,14 +355,17 @@ def _record_from_row(
         """
         return (row.get(column) or "").strip() if column else ""
 
+    lat, lon = _to_float(get(columns.lat)), _to_float(get(columns.lon))
+    if lat is None or lon is None:
+        lat, lon = None, None
     return Record(
         index=index,
         source_index=source_index,
         name=get(columns.name),
         premises=get(columns.premises),
         address=", ".join(part for part in map(get, columns.address) if part),
-        lat=_to_float(get(columns.lat)),
-        lon=_to_float(get(columns.lon)),
+        lat=lat,
+        lon=lon,
         divisions=_split_divisions(get(columns.divisions)),
         source_id=get(columns.id) or None,
         raw=dict(row),
@@ -377,11 +380,13 @@ class Dataset:
         path: Source file path or synthetic dataset label.
         columns: Source headers mapped to place fields.
         records: Records in filtered source order.
+        header: Source column names in order, or ``None`` for an in-memory dataset.
     """
 
     path: str
     columns: ColumnMap
     records: list[Record]
+    header: list[str] | None = None
 
     def unique_source_ids(self) -> dict[str, int]:
         """Index non-empty source IDs that occur exactly once.
@@ -437,8 +442,8 @@ def load_csv(
         Parsed records with contiguous filtered indices and original source-row indices.
     """
     with open(path, newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        header = reader.fieldnames or []
+        reader = csv.DictReader(f, restval="")
+        header = list(reader.fieldnames or [])
         rows = [
             (source_index, row)
             for source_index, row in enumerate(reader)
@@ -452,4 +457,5 @@ def load_csv(
             _record_from_row(index, row, columns, source_index)
             for index, (source_index, row) in enumerate(rows)
         ],
+        header=header,
     )

@@ -28,6 +28,8 @@ Or run the steps on their own:
 | `uv run python transform.py [cache]` | No | Reads a scrape cache and writes `data/<stamp> polling places.csv` plus `data/<stamp> warnings.txt`. |
 | `uv run python diff.py [old new]` | No | Compares two outputs by VEC venue ID, including new and resolved warnings. Saves the report to `diffs/`. |
 
+The generic polling place diff (`diff/` at the repo root) also runs on these outputs, without using the VEC venue ID. It writes one diff per matcher plus an HTML report to `diffs-linkage/`: from `diff/`, `uv run ppdiff series "../scrapers/vic_2026/data/*polling places.csv" --out-dir ../scrapers/vic_2026/diffs-linkage`.
+
 Load the CSV via the admin elections page using `config.json` (dry run first).
 
 ## Errors vs warnings
