@@ -17,7 +17,7 @@ The model change is to:
   admin comparisons; check backend and other API consumers too. The WA Senate
   re-run's comparison treatment must not silently change unrelated behaviour.
 - Use the agreed classifications to backfill existing events and to drive the
-  chart, benchmark candidate selection and diagnostic command consistently.
+  chart and benchmark candidate selection consistently.
 
 The WA Senate re-run should compare with WA general elections, and the 2023
 referendum with federal general elections, both in either direction.
@@ -26,6 +26,7 @@ appear in other events' comparisons. The proposed operational treatment is to
 classify the WA Senate re-run at state level for comparison purposes; review
 the implications at the other boolean-use sites before finalising the model.
 
-Replace the benchmark's interim 50-polling-place heuristic with explicit
-classification. Retain the historical-quality checks. The model change is not
-implemented.
+Replace the benchmark's temporary named inventory mapping with explicit
+classification. Its 50-polling-place heuristic and historical-quality thresholds
+have been removed under [the agreed benchmark rules](ELECTION_BENCHMARK_RELIABILITY.md).
+The classification model change is not implemented.
