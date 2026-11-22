@@ -8,6 +8,7 @@ for `linkage verdicts import`.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -32,6 +33,14 @@ def write_report(folder: Path) -> Path:
     # rapidfuzz first, then Splink, then anything else, for a stable tab order.
     order = {"rapidfuzz": 0, "splink": 1}
     diffs.sort(key=lambda d: (order.get(d["matcher"], 9), d["matcher"]))
+    for diff in diffs:
+        loader = diff.get("loader") or {}
+        counts: dict[str, int] = {}
+        for fix in loader.get("fix_audit", []):
+            content = json.dumps(fix["fix"], sort_keys=True, separators=(",", ":"))
+            digest = hashlib.sha256(content.encode()).hexdigest()
+            counts[digest] = counts.get(digest, 0) + 1
+            fix["review_key"] = f"cfgfix-v2-{loader.get('config_hash', 'legacy')}-{digest}-{counts[digest]}"
     disagreements_path = folder / "disagreements.json"
     reviewed_path = folder / "reviewed.json"
     reviewed = json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}

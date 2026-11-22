@@ -7,6 +7,7 @@ ones used for matching, so wheelchair access, opening hours and so on show up.
 
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -509,6 +510,52 @@ def suggested_fixes(
         dists = [d for d in dists if d is not None]
         return min(dists) if dists else None
 
+    def checked_fix(
+        sel: dict[str, str] | None, overwrite: list[dict[str, Any]], note: str | None
+    ) -> tuple[dict[str, Any] | None, str | None]:
+        """Validate a proposed fix against the rows its selector matches.
+
+        Args:
+            sel: The proposed loader selector, if one is safe to use.
+            overwrite: Field values the fix would apply.
+            note: Any existing explanation or duplicate-name warning.
+
+        Returns:
+            The copyable fix and note, or ``None`` and a validation explanation.
+        """
+        if sel is None:
+            return None, note
+        fix = {**sel, "overwrite": overwrite}
+        if loader_config is not None:
+            matching_rows = [
+                row for row in rows_by_index.values()
+                if sel["field"] in row and str(row[sel["field"]]) == sel["value"]
+            ]
+            problems = suggested_fix_problems(fix, matching_rows, loader_config)
+            if problems:
+                return None, f"The proposed fix would cause loader problems: {'; '.join(problems)}."
+        return fix, note
+
+    def loaded_coordinates(row: dict[str, Any] | None, fields: list[str]) -> tuple[float, float] | None:
+        """Read a usable coordinate pair from a converted loader row.
+
+        Args:
+            row: The converted row, or ``None`` when it was unavailable.
+            fields: The loader's latitude and longitude field names.
+
+        Returns:
+            A valid coordinate pair, or ``None`` if either value is unusable.
+        """
+        if row is None:
+            return None
+        try:
+            lat, lon = (float(row[field]) for field in fields)
+        except (KeyError, TypeError, ValueError):
+            return None
+        if not (math.isfinite(lat) and math.isfinite(lon) and -90 <= lat <= 90 and -180 <= lon <= 180):
+            return None
+        return (lat, lon) if lat and lon else None
+
     fixes = []
     for e in changed:
         loc = e.get("location")
@@ -546,31 +593,45 @@ def suggested_fixes(
         )
         overwrite_fields = [_schema(lat_col, rename), _schema(lon_col, rename)]
         sel, note = selector(e["new_index"], overwrite_fields)
+        old_fields = [
+            _schema(old.columns.lat, rename) if old.columns.lat else "",
+            _schema(old.columns.lon, rename) if old.columns.lon else "",
+        ]
+        old_row = old_loaded_rows.get(old.records[e["old_index"]].index) if old_loaded_rows is not None else None
+        loaded_old = loaded_coordinates(old_row, old_fields) if old_loaded_rows is not None else tuple(loc["old"])
+        loaded_new = loaded_coordinates(rows_by_index.get(new.records[e["new_index"]].index), overwrite_fields)
+        if loaded_old is None and sel is not None:
+            sel = None
+            note = "The old loaded row has no usable coordinates; a safe fix cannot be drafted."
+        loaded_distance = distance_m(*loaded_old, *loaded_new) if loaded_old is not None and loaded_new is not None else None
+        already_correct = loaded_distance is not None and loaded_distance < MIN_MOVE_M
+        if already_correct:
+            sel = None
+            note = "The existing loader fixes already give this place the previous coordinates."
+        fix, note = checked_fix(
+            sel,
+            [{"field": field, "value": value} for field, value in zip(overwrite_fields, loaded_old or ())],
+            note,
+        )
         fixes.append(
             {
                 "new_index": e["new_index"],
                 "name": e["name"],
                 "kind": "coordinates",
-                "likely": bool(typo) or new_isolated,
-                "no_fix_needed": False,
-                "reason": (
+                "likely": not already_correct and (bool(typo) or new_isolated),
+                "no_fix_needed": already_correct,
+                "reason": f"{moved}. The existing loader fixes already restore the previous coordinates." if already_correct else (
                     f"{moved}."
                     + (
                         f" The new position is {iso_new / 1000:.1f} km from any other polling place, "
                         f"the old one {iso_old / 1000:.1f} km."
-                        if new_isolated
+                        if new_isolated and iso_new is not None and iso_old is not None
                         else ""
                     )
                     + " If the new position is wrong, this keeps the previous one."
                 ),
                 "note": note,
-                "fix": {
-                    **sel,
-                    "overwrite": [
-                        {"field": overwrite_fields[0], "value": loc["old"][0]},
-                        {"field": overwrite_fields[1], "value": loc["old"][1]},
-                    ],
-                } if sel else None,
+                "fix": fix,
             }
         )
     for q in quality:
@@ -587,16 +648,7 @@ def suggested_fixes(
             if sel and (value is None or not str(value).strip()):
                 sel = None
                 note = f"The old loaded row has no usable value for {field}; a safe fix cannot be drafted."
-            fix = {**sel, "overwrite": [{"field": field, "value": value}]} if sel else None
-            if fix and loader_config is not None:
-                matching_rows = [
-                    row for row in rows_by_index.values()
-                    if sel["field"] in row and str(row[sel["field"]]) == sel["value"]
-                ]
-                problems = suggested_fix_problems(fix, matching_rows, loader_config)
-                if problems:
-                    fix = None
-                    note = f"The proposed fix would cause loader problems: {'; '.join(problems)}."
+            fix, note = checked_fix(sel, [{"field": field, "value": value}], note)
             fixes.append(
                 {
                     "new_index": place["new_index"],

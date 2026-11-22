@@ -258,8 +258,8 @@ def load_csv(
 ) -> Dataset:
     """Load a CSV. Rows failing `row_filter` are dropped before indexing."""
     with open(path, newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        header = reader.fieldnames or []
+        reader = csv.DictReader(f, restval="")
+        header = list(reader.fieldnames or [])
         rows = [row for row in reader if row_filter is None or row_filter(row)]
     columns = columns or ColumnMap.detect(header, id_column=id_column)
     return Dataset(path=str(path), columns=columns, records=records_from_rows(rows, columns), header=header)

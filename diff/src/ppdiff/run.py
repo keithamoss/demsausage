@@ -15,7 +15,7 @@ from linkage.run import file_sha256, link_files
 
 from .core import Settings, build_diff
 from .index import write_index
-from .loader_check import election_config, loaded_rows_by_index, loader_checks
+from .loader_check import LoaderTransformationError, election_config, loaded_rows_by_index, loader_checks
 from .names import friendly_label, sort_scrapes
 from .report import write_report
 
@@ -215,8 +215,14 @@ def run_pair(
     # Checks against the loader (its own rules via loader_rules); the same for every matcher.
     config = election_config(out_dir)
     checks = loader_checks(left, right, config)
-    selector_rows = loaded_rows_by_index(right, config or {})
-    old_loaded_rows = loaded_rows_by_index(left, config or {})
+    loaded_rows = []
+    for dataset in (right, left):
+        try:
+            loaded_rows.append(loaded_rows_by_index(dataset, config or {}))
+        except LoaderTransformationError:
+            # The loader check already reports the incompatible transformation.
+            loaded_rows.append({})
+    selector_rows, old_loaded_rows = loaded_rows
     rename = (config or {}).get("rename_columns") or {}
     for r in link_output["results"]:
         diff = build_diff(

@@ -409,6 +409,7 @@ let REVIEWED = (() => {
 })();
 const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
 const legacyPairTicks = Object.keys(DATA.reviewed || {}).filter((key) => /^pair-\d+$/.test(key)).length;
+const legacyConfigTicks = Object.keys(REVIEWED).some((key) => /^cfgfix-\d+$/.test(key));
 let legacyBrowserData = false;
 if (first) {
   try {
@@ -536,7 +537,7 @@ function fixCard(f, d) {
              h("button", { class: "ghost small", onclick: (ev) => copyText(fixJSON(f.fix), ev.currentTarget) }, "Copy fix")] : null);
 }
 
-// ---------- map (inline SVG, works offline) ----------
+// ---------- map features (the map libraries and basemap load separately) ----------
 function mapFeatures(d) {
   const f = [];
   for (const e of d.changed.concat(d.possible_matches)) {
@@ -694,7 +695,7 @@ function applyFilters() {
     c.style.display = okText && okCat && okReview ? "" : "none";
   });
 }
-function filter(root, q) { searchText = q.trim().toLowerCase(); applyFilters(); }
+function filter(q) { searchText = q.trim().toLowerCase(); applyFilters(); }
 function summaryText(d) {
   const s = d.summary, lines = [];
   lines.push(`${d.old.label || d.old.path.split("/").pop()} → ${d.new.label || d.new.path.split("/").pop()} (${label(d.matcher)})`);
@@ -741,7 +742,7 @@ const FIX_STATUS = {
 };
 const fixNeedsLook = (f) => f.status !== "applies";
 function configFixCard(f) {
-  const key = `cfgfix-${f.number}`;
+  const key = f.review_key;
   const [text, tone] = FIX_STATUS[f.status] || [f.status, "warn"];
   return h("div", { ...reviewAttrs(key), "data-search": f.matches.join(" ").toLowerCase() },
     cardHead(`fix_data_issues entry ${f.number}: ${f.fix.field} = ${JSON.stringify(f.fix.value)}`, key),
@@ -764,13 +765,20 @@ function renderLoaderChecks(d) {
     h("p", { class: "note" }, "No config.json beside this diffs folder, so the loader checks didn't run."));
   const look = L.fix_audit.filter(fixNeedsLook), fine = L.fix_audit.filter((f) => !fixNeedsLook(f));
   const intro = h("p", { class: "note" },
-    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters} places after its filters. `,
+    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters === null ? "Filtered place count unavailable" : `${L.rows_after_filters} places after its filters`}. `,
     "Load problems are what the loader would reject, as far as can be checked without the database: required fields, allowed values, coordinates and cleaning regexes.");
   return [
-    section("Loader: config fixes to look at", look, configFixCard, true, intro),
-    section("Loader: config fixes that still apply", fine, configFixCard, false),
-    section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
-      L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+    (L.transformation_errors || []).length ? h("div", { class: "warn" },
+      "Some loader checks could not run: ", L.transformation_errors.join("; ")) : null,
+    L.audit_unavailable ? h("p", { class: "note" }, "Config fix audit unavailable.") : [
+      section("Loader: config fixes to look at", look, configFixCard, true, intro),
+      section("Loader: config fixes that still apply", fine, configFixCard, false),
+    ],
+    L.load_unavailable ? h("p", { class: "note" }, "Load problem and skipped-place checks unavailable.") : [
+      section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
+        L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+      section("Loader: places skipped when geocoding is disabled", L.skipped || [], loadProblemCard, true),
+    ],
   ];
 }
 
@@ -782,23 +790,24 @@ function renderDiff(d) {
   const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
   activeChip = null; searchText = "";
   const card = (e) => pairCard(e, d);
-  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length : 0;
+  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length + (d.loader.transformation_errors || []).length : 0;
+  s.load_skipped = d.loader && d.loader.config_found ? (d.loader.skipped || []).length : 0;
   s.config_fixes = d.loader && d.loader.config_found ? d.loader.fix_audit.filter(fixNeedsLook).length : 0;
   // Likely-needed fixes first, then "only if wrong", then the "no fix needed" notes.
   const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
-    legacyPairTicks || legacyBrowserData ? h("div", { class: "warn" },
+    legacyPairTicks || legacyBrowserData || legacyConfigTicks ? h("div", { class: "warn" },
       "Older review data may be ambiguous and is not shown on matching cards. It has not been deleted; see the review-data notes in the diff README before re-reviewing.") : null,
     h("div", { class: "tiles" },
-      [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
+      [["load_problems", "Load problems"], ["load_skipped", "Skipped without geocoding"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .filter(([k]) => (s[k] ?? 0) > 0 || ["changed", "added", "removed"].includes(k))
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),
       `All ${d.new.records} places in ${d.new.label || "the new file"} are the same as in ${d.old.label || "the old file"}.`) : null,
     renderMap(d),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(ev.target.value) }),
       h("label", { class: "review hide-toggle" }, h("input", { type: "checkbox", checked: hideReviewed, onchange: (ev) => { hideReviewed = ev.target.checked; applyFilters(); } }), "Hide reviewed"),
       h("button", { class: "ghost", id: "download-review", title: "Save your ticks to a file, then: uv run ppdiff reviewed import FILE --diffs-dir <this diffs folder>", onclick: downloadReview }, "Download review"),
       h("button", { class: "ghost", onclick: (ev) => copyText(summaryText(d), ev.currentTarget) }, "Copy summary")),
@@ -870,7 +879,7 @@ function renderDisagreements() {
   const wrap = h("div", {},
     h("p", { class: "note" }, `The matchers agree on ${DIS.agree} of ${DIS.left_records} places in the old file. These are the rest. Pick who was right; your choices are saved in this browser until you download them.`),
     h("div", { class: "toolbar" },
-      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(wrap, ev.target.value) }),
+      h("input", { type: "search", "aria-label": "Filter places by name", placeholder: "Filter by name…", oninput: (ev) => filter(ev.target.value) }),
       h("button", { class: "ghost", onclick: () => { if (confirm("Clear all verdicts for this pair of files in this browser?")) { VERDICTS = {}; saveVerdicts(); render(); } } }, "Clear verdicts")),
     DIS.items.length ? DIS.items.map(verdictCard) : h("p", { class: "note" }, "No disagreements: both matchers made the same links."));
   return wrap;

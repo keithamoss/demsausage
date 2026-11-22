@@ -409,6 +409,7 @@ let REVIEWED = (() => {
 })();
 const SAVED_REVIEWED = new Set(Object.keys(DATA.reviewed || {}));
 const legacyPairTicks = Object.keys(DATA.reviewed || {}).filter((key) => /^pair-\d+$/.test(key)).length;
+const legacyConfigTicks = Object.keys(REVIEWED).some((key) => /^cfgfix-\d+$/.test(key));
 let legacyBrowserData = false;
 if (first) {
   try {
@@ -741,7 +742,7 @@ const FIX_STATUS = {
 };
 const fixNeedsLook = (f) => f.status !== "applies";
 function configFixCard(f) {
-  const key = `cfgfix-${f.number}`;
+  const key = f.review_key;
   const [text, tone] = FIX_STATUS[f.status] || [f.status, "warn"];
   return h("div", { ...reviewAttrs(key), "data-search": f.matches.join(" ").toLowerCase() },
     cardHead(`fix_data_issues entry ${f.number}: ${f.fix.field} = ${JSON.stringify(f.fix.value)}`, key),
@@ -764,13 +765,20 @@ function renderLoaderChecks(d) {
     h("p", { class: "note" }, "No config.json beside this diffs folder, so the loader checks didn't run."));
   const look = L.fix_audit.filter(fixNeedsLook), fine = L.fix_audit.filter((f) => !fixNeedsLook(f));
   const intro = h("p", { class: "note" },
-    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters} places after its filters. `,
+    `Uses the loader's own rules (loader_rules.py) with this election's config.json. ${L.rows_after_filters === null ? "Filtered place count unavailable" : `${L.rows_after_filters} places after its filters`}. `,
     "Load problems are what the loader would reject, as far as can be checked without the database: required fields, allowed values, coordinates and cleaning regexes.");
   return [
-    section("Loader: config fixes to look at", look, configFixCard, true, intro),
-    section("Loader: config fixes that still apply", fine, configFixCard, false),
-    section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
-      L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+    (L.transformation_errors || []).length ? h("div", { class: "warn" },
+      "Some loader checks could not run: ", L.transformation_errors.join("; ")) : null,
+    L.audit_unavailable ? h("p", { class: "note" }, "Config fix audit unavailable.") : [
+      section("Loader: config fixes to look at", look, configFixCard, true, intro),
+      section("Loader: config fixes that still apply", fine, configFixCard, false),
+    ],
+    L.load_unavailable ? h("p", { class: "note" }, "Load problem and skipped-place checks unavailable.") : [
+      section("Loader: problems that would stop the load", L.problems, loadProblemCard, true,
+        L.regex_errors.length ? h("div", { class: "warn" }, h("b", {}, "Cleaning regex errors: "), L.regex_errors.slice(0, 10).join("; ")) : null),
+      section("Loader: places skipped when geocoding is disabled", L.skipped || [], loadProblemCard, true),
+    ],
   ];
 }
 
@@ -782,16 +790,17 @@ function renderDiff(d) {
   const cats = Object.keys(CATEGORY_LABEL).filter((c) => counts[c]);
   activeChip = null; searchText = "";
   const card = (e) => pairCard(e, d);
-  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length : 0;
+  s.load_problems = d.loader && d.loader.config_found ? d.loader.problems.length + d.loader.regex_errors.length + (d.loader.transformation_errors || []).length : 0;
+  s.load_skipped = d.loader && d.loader.config_found ? (d.loader.skipped || []).length : 0;
   s.config_fixes = d.loader && d.loader.config_found ? d.loader.fix_audit.filter(fixNeedsLook).length : 0;
   // Likely-needed fixes first, then "only if wrong", then the "no fix needed" notes.
   const fixes = (d.suggested_fixes || []).slice().sort((a, b) => (b.likely - a.likely) || (a.no_fix_needed - b.no_fix_needed));
   const copyable = fixes.filter((f) => f.fix);
   const wrap = h("div", {},
-    legacyPairTicks || legacyBrowserData ? h("div", { class: "warn" },
+    legacyPairTicks || legacyBrowserData || legacyConfigTicks ? h("div", { class: "warn" },
       "Older review data may be ambiguous and is not shown on matching cards. It has not been deleted; see the review-data notes in the diff README before re-reviewing.") : null,
     h("div", { class: "tiles" },
-      [["load_problems", "Load problems"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
+      [["load_problems", "Load problems"], ["load_skipped", "Skipped without geocoding"], ["config_fixes", "Config fixes to check"], ["changed", "Changed"], ["added", "Added"], ["removed", "Removed"], ["possible_matches", "Possible matches"], ["likely_replacements", "Likely replacements"], ["warnings", "Warnings"], ["quality_issues", "Data quality"], ["unchanged", "Unchanged"], ["cosmetic", "Cosmetic only"]]
         .filter(([k]) => (s[k] ?? 0) > 0 || ["changed", "added", "removed"].includes(k))
         .map(([k, t]) => h("div", { class: "tile" }, h("b", {}, s[k] ?? 0), h("span", {}, t)))),
     d.nothing_changed ? h("div", { class: "allclear" }, h("b", {}, "No changes. "),

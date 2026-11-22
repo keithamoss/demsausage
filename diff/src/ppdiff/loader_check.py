@@ -12,6 +12,7 @@ django/demsausage/app/sausage/loader_rules.py, the same functions the loader run
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -21,6 +22,10 @@ from linkage.records import Dataset
 
 REPO = Path(__file__).resolve().parents[3]
 _ROW = "_ppdiff_row"  # carries each row's index through the loader's steps
+
+
+class LoaderTransformationError(ValueError):
+    """The loader configuration cannot transform one of the source files."""
 
 
 def loader_rules():
@@ -63,7 +68,12 @@ def as_loaded(d: Dataset, config: dict[str, Any], fixes: bool) -> tuple[list[dic
     """
     rules = loader_rules()
     rows = [{**copy.deepcopy(r.raw), _ROW: r.index} for r in d.records]
-    rows, regex_errors = rules.to_schema(rows, config)
+    try:
+        rows, regex_errors = rules.to_schema(rows, config)
+    except KeyError as error:
+        raise LoaderTransformationError(
+            f"Cannot apply loader transformations to {Path(d.path).name}: missing field {error}."
+        ) from error
     if fixes:
         rows = rules.apply_fixes(rows, config.get("fix_data_issues"))
     return rows, regex_errors
@@ -194,11 +204,11 @@ def load_problems(new: Dataset, config: dict[str, Any]) -> dict[str, Any]:
         config: The election's loader configuration.
 
     Returns:
-        Problems, regex errors, and the number of rows remaining after filters.
+        Problems, skipped rows, regex errors, and the number of rows after filters.
     """
     rules = loader_rules()
     rows, regex_errors = as_loaded(new, config, fixes=True)
-    problems = []
+    problems, skipped = [], []
     for row in rows:
         row, has_address = rules.merge_address(row, config.get("address_fields"), config.get("address_format"))
         found = rules.row_problems({k: v for k, v in row.items() if k != _ROW})
@@ -206,7 +216,13 @@ def load_problems(new: Dataset, config: dict[str, Any]) -> dict[str, Any]:
             found.append("no address or address fields")
         if found:
             problems.append({"new_index": row[_ROW], "name": _label(new, row), "problems": found})
-    return {"problems": problems, "regex_errors": regex_errors, "rows_after_filters": len(rows)}
+        if (config.get("geocoding") or {}).get("enabled") is not True and all(k in row for k in ("lat", "lon")):
+            if any(str(row[k]).strip() in {"", "0"} for k in ("lat", "lon")):
+                skipped.append({
+                    "new_index": row[_ROW], "name": _label(new, row),
+                    "problems": ["Missing coordinates; the loader skips this place when geocoding is disabled."],
+                })
+    return {"problems": problems, "skipped": skipped, "regex_errors": regex_errors, "rows_after_filters": len(rows)}
 
 
 def loader_checks(old: Dataset, new: Dataset, config: dict[str, Any] | None) -> dict[str, Any]:
@@ -222,8 +238,27 @@ def loader_checks(old: Dataset, new: Dataset, config: dict[str, Any] | None) -> 
     """
     if config is None:
         return {"config_found": False}
-    return {
+    result: dict[str, Any] = {
         "config_found": True,
-        "fix_audit": fix_audit(old, new, config),
-        **load_problems(new, config),
+        "config_hash": hashlib.sha256(json.dumps(config, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
+        "fix_audit": [],
+        "problems": [],
+        "skipped": [],
+        "regex_errors": [],
+        "rows_after_filters": None,
+        "transformation_errors": [],
+        "audit_unavailable": False,
+        "load_unavailable": False,
     }
+    try:
+        result["fix_audit"] = fix_audit(old, new, config)
+    except LoaderTransformationError as error:
+        result["audit_unavailable"] = True
+        result["transformation_errors"].append(str(error))
+    try:
+        result.update(load_problems(new, config))
+    except LoaderTransformationError as error:
+        result["load_unavailable"] = True
+        if str(error) not in result["transformation_errors"]:
+            result["transformation_errors"].append(str(error))
+    return result

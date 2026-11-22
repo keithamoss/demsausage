@@ -162,6 +162,19 @@ def test_ignored_newly_blank_field_has_no_quality_check_or_fix(tmp_path, column)
     assert not any(f.get("field") == column for f in diff["suggested_fixes"])
 
 
+def test_short_csv_row_is_reported_as_blank_instead_of_crashing(tmp_path):
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151)])
+    new = tmp_path / "20260102.csv"
+    new.write_text("name,premises,address,lat,lon,wheelchair_access\nHall,,1 Main St,-33,151\n")
+    (tmp_path / "config.json").write_text(json.dumps({"add_columns": {"state": "NSW"}}))
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+
+    assert diff["changed"][0]["changes"][-1]["new"] == ""
+    assert any("wheelchair_access" in problem for p in diff["loader"]["problems"] for problem in p["problems"])
+
+
 @pytest.mark.parametrize("old_rows,new_rows", [([_row("Hall", -33, 151)], []), ([], [])])
 def test_header_only_csv_preserves_column_changes(tmp_path, old_rows, new_rows):
     old = _write(tmp_path / "20260101.csv", old_rows)
@@ -336,6 +349,39 @@ def test_no_fix_needed_when_new_file_corrects_the_typo(tmp_path):
     d = json.loads((run_pair(old, new, tmp_path / "e" / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
     (fix,) = [f for f in d["suggested_fixes"] if f["kind"] == "coordinates"]
     assert fix["no_fix_needed"] and fix["fix"] is None
+
+
+def test_coordinate_fix_respects_existing_loader_correction(tmp_path):
+    config = {"fix_data_issues": [
+        {"field": "name", "value": "Hall", "overwrite": [{"field": "lat", "value": "-33.2"}]}
+    ]}
+    (tmp_path / "config.json").write_text(json.dumps(config))
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151)])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -34, 151)])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+    fix = next(f for f in fixes if f["kind"] == "coordinates")
+    assert fix["fix"] is None
+    assert fix["no_fix_needed"]
+
+
+@pytest.mark.parametrize("old_lat, expected", [("-33.2", -33.2), ("invalid", None)])
+def test_coordinate_fix_uses_and_validates_loaded_old_coordinates(tmp_path, old_lat, expected):
+    config = {"fix_data_issues": [
+        {"field": "wheelchair_access", "value": "Assisted", "overwrite": [{"field": "lat", "value": old_lat}]}
+    ]}
+    (tmp_path / "config.json").write_text(json.dumps(config))
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151, access="Assisted")])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -34, 151)])
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    fixes = json.loads((folder / "diff-rapidfuzz.json").read_text())["suggested_fixes"]
+    fix = next(f for f in fixes if f["kind"] == "coordinates")
+    if expected is None:
+        assert fix["fix"] is None and fix["note"]
+    else:
+        assert fix["fix"]["overwrite"][0] == {"field": "lat", "value": expected}
 
 
 def test_fix_fields_use_the_loaders_renamed_columns(tmp_path):
@@ -626,6 +672,90 @@ def test_loader_checks_skip_without_config(pair):
     root, old, new = pair
     d = json.loads((run_pair(old, new, root / "diffs", matcher="rapidfuzz") / "diff-rapidfuzz.json").read_text())
     assert d["loader"] == {"config_found": False}
+
+
+def test_missing_old_loader_column_reports_diagnostic_and_keeps_raw_diff(tmp_path):
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151, address="Old")])
+    new = tmp_path / "20260102.csv"
+    new.write_text("name,premises,address,lat,lon,wheelchair_access,new_column\nHall,,,-33,151,Full,x\n")
+    (tmp_path / "config.json").write_text(json.dumps({"rename_columns": {"new_column": "extra"}}))
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+    assert "new_column" in diff["columns"]["added"]
+    assert any("new_column" in error and "20260101.csv" in error for error in diff["loader"]["transformation_errors"])
+    fix = next(f for f in diff["suggested_fixes"] if f.get("field") == "address")
+    assert fix["fix"] is None
+    assert "new_column" in (folder / "report.html").read_text()
+
+
+def test_missing_new_loader_column_marks_checks_unavailable(tmp_path):
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151)])
+    new = _write(tmp_path / "20260102.csv", [_row("Hall", -33, 151)])
+    (tmp_path / "config.json").write_text(json.dumps({"rename_columns": {"missing": "other"}}))
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    loader = json.loads((folder / "diff-rapidfuzz.json").read_text())["loader"]
+    assert loader["audit_unavailable"] and loader["load_unavailable"]
+    assert len(loader["transformation_errors"]) == 2
+    assert all("missing" in error for error in loader["transformation_errors"])
+
+
+@pytest.mark.parametrize(("geocoding", "lat", "expected"), [
+    (False, "", True), (False, "0", True), (False, "-33", False), (True, "", False), ("yes", "", True),
+])
+def test_loader_reports_places_skipped_without_geocoding(tmp_path, geocoding, lat, expected):
+    old = _write(tmp_path / "20260101.csv", [_row("Hall", -33, 151)])
+    new = _write(tmp_path / "20260102.csv", [{**_row("Hall", -33, 151), "lat": lat}])
+    (tmp_path / "config.json").write_text(json.dumps({
+        "add_columns": {"state": "NSW"}, "geocoding": {"enabled": geocoding},
+    }))
+
+    folder = run_pair(old, new, tmp_path / "diffs", matcher="rapidfuzz")
+    diff = json.loads((folder / "diff-rapidfuzz.json").read_text())
+    skipped = diff["loader"]["skipped"]
+    assert bool(skipped) is expected
+    if expected:
+        assert skipped[0]["name"] == "Hall"
+        assert "geocoding" in skipped[0]["problems"][0]
+
+
+def test_config_fix_review_identity_changes_when_config_is_reordered(pair, tmp_path):
+    from ppdiff.reviewed import import_reviewed
+
+    root, old, new = pair
+    fixes = [
+        {"field": "name", "value": "Alpha Hall", "overwrite": [{"field": "address", "value": "2 Main St"}]},
+        {"field": "name", "value": "Alpha Hall", "overwrite": [{"field": "wheelchair_access", "value": "Assisted"}]},
+    ]
+    config = root / "config.json"
+    config.write_text(json.dumps({"fix_data_issues": fixes}))
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    data = json.loads((target / "report.html").read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    original_key = data["diffs"][0]["loader"]["fix_audit"][0]["review_key"]
+    download = tmp_path / "review.json"
+    download.write_text(json.dumps({
+        "old_sha256": data["diffs"][0]["old"]["sha256"], "new_sha256": data["diffs"][0]["new"]["sha256"],
+        "reviewed": {original_key: "tick", "cfgfix-1": "legacy"},
+    }))
+    import_reviewed(download, target.parent)
+    config.write_text(json.dumps({"fix_data_issues": fixes[::-1]}))
+
+    run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    data = json.loads((target / "report.html").read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    new_keys = [fix["review_key"] for fix in data["diffs"][0]["loader"]["fix_audit"]]
+    assert original_key not in new_keys
+    assert data["reviewed"]["cfgfix-1"] == "legacy"
+
+
+def test_duplicate_config_fixes_have_distinct_review_keys(pair):
+    root, old, new = pair
+    fix = {"field": "name", "value": "Alpha Hall", "overwrite": [{"field": "address", "value": "2 Main St"}]}
+    (root / "config.json").write_text(json.dumps({"fix_data_issues": [fix, fix]}))
+    target = run_pair(old, new, root / "diffs", matcher="rapidfuzz")
+    data = json.loads((target / "report.html").read_text().split('id="data">', 1)[1].split("</script>", 1)[0])
+    keys = [entry["review_key"] for entry in data["diffs"][0]["loader"]["fix_audit"]]
+    assert len(set(keys)) == 2
 
 
 @pytest.mark.parametrize("value", ["NaN", "inf", "-Infinity"])
