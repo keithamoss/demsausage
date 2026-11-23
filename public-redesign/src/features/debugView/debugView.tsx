@@ -81,7 +81,7 @@ export default function DebugView() {
 					},
 					{
 						url: '/federal_election_2022/polling_places/Darlinghurst_South/COMA_Gallery/NSW/',
-						text: 'Stall with no reports at all, pretty long entrance instructions, and a single divison',
+						text: 'Stall with no reports at all, pretty long entrance instructions, and a single division',
 					},
 					{
 						url: '/federal_election_2022/polling_places/Pyrmont/Pyrmont_Community_Centre/NSW/',
