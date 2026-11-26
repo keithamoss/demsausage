@@ -84,7 +84,10 @@ function ElectionsManager(props: Props) {
 	const onClickAddElection = () => navigateToAddElection(navigate);
 
 	const liveElections = elections.filter((e) => isElectionLive(e) === true && e.is_hidden === false);
-	const hiddenElections = elections.filter((e) => e.is_hidden === true);
+	// Ensure hidden elections are sorted by election day so that the next upcoming hidden election comes first
+	const hiddenElections = elections
+		.filter((e) => e.is_hidden === true)
+		.sort((a, b) => new Date(a.election_day).getTime() - new Date(b.election_day).getTime());
 	const historicalElections = elections.filter((e) => isElectionLive(e) === false);
 	const completedElectionsWithoutAnalyticsStatsSaved = elections.filter(
 		(e) => isItAfterElectionDay(e) === true && e.analytics_stats_saved === false,
