@@ -1,8 +1,8 @@
-import { type Middleware, type MiddlewareAPI, isAction, isRejectedWithValue } from '@reduxjs/toolkit';
+import { type Middleware, type MiddlewareAPI, isAction, isRejected } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import * as Sentry from '@sentry/browser';
 import Cookies from 'js-cookie';
 import { getAPIBaseURL, isDevelopment } from '../utils';
+import { reportRtkQueryRejectedAction } from './rtkQueryErrorReporting';
 
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
@@ -41,7 +41,7 @@ export const api = createApi({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action) => {
 	// c.f. https://github.com/reduxjs/redux-toolkit/issues/331
-	if (isRejectedWithValue(action) && isAction(action) === true) {
+	if (isRejected(action) && isAction(action) === true) {
 		if (isDevelopment() === true) {
 			// eslint-disable-next-line no-console
 			console.error(
@@ -53,11 +53,7 @@ export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) =
 				action,
 			);
 		} else {
-			// Sentry.captureException(
-			// 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-			// 	`${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`,
-			// );
-			Sentry.captureException(action);
+			reportRtkQueryRejectedAction(action);
 		}
 	}
 
