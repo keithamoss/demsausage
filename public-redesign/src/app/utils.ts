@@ -19,16 +19,18 @@ export function isDevelopment(): boolean {
 	return getEnvironment() === eAppEnv.DEVELOPMENT;
 }
 
+export function getMapboxAPIKey(): string {
+	return getEnvironment() === eAppEnv.DEVELOPMENT
+		? import.meta.env.VITE_MAPBOX_API_KEY_DEV
+		: import.meta.env.VITE_MAPBOX_API_KEY_PROD;
+}
+
 export function getAPIBaseURL(): string {
 	return import.meta.env.VITE_API_BASE_URL;
 }
 
 export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
-}
-
-export function getCartoAPIKey(): string {
-	return import.meta.env.VITE_CARTO_API_KEY;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

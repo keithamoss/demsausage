@@ -17,12 +17,12 @@ import type { MapBrowserEvent } from 'ol';
 import type Feature from 'ol/Feature';
 import View from 'ol/View';
 import type { EventsKey } from 'ol/events';
-import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
+import XYZ from 'ol/source/XYZ';
 import type { StyleFunction } from 'ol/style/Style';
 import * as React from 'react';
 import type { Election } from '../../../app/services/elections';
-import { getAPIBaseURL, getCartoAPIKey } from '../../../app/utils';
+import { getAPIBaseURL, getMapboxAPIKey } from '../../../app/utils';
 import type { OLMapView } from '../../app/appSlice';
 import type { IMapFilterSettings } from '../../pollingPlaces/pollingPlacesInterfaces';
 import type { IMapPollingPlaceFeature, IMapPollingPlaceGeoJSONFeatureCollection } from '../mapHelpers';
@@ -432,19 +432,15 @@ class DemSausageOpenLayersMap extends React.PureComponent<IProps, {}> {
 	}
 
 	private getBasemap() {
-		// gaTrack.event({
-		//   category: 'OpenLayersMap',
-		//   action: 'Basemap Shown',
-		//   label: 'Carto',
-		// })
-
 		return [
 			new TileLayer({
-				source: new OSM({
-					// https://carto.com/location-data-services/basemaps/
-					url: `https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${getCartoAPIKey()}`,
+				source: new XYZ({
+					url: `https://api.mapbox.com/styles/v1/ausdemocracysausage/cmwxhvpi200kw01st8m630112/tiles/512/{z}/{x}/{y}@2x?access_token=${getMapboxAPIKey()}`,
+					maxZoom: 22,
+					tileSize: 512,
+					attributionsCollapsible: false,
 					attributions: [
-						'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://carto.com/attributions">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+						'© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 					],
 				}),
 			}),
