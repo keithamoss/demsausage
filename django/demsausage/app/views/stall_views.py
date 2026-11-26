@@ -12,6 +12,7 @@ from simple_history.utils import update_change_reason
 
 from demsausage.app.enums import (
     PollingPlaceNomsChangeReason,
+    PollingPlaceStatus,
     StallStatus,
     StallSubmitterType,
 )
@@ -284,12 +285,16 @@ class PendingStallsViewSet(generics.ListAPIView):
 
             We look at the latest 24 saved snapshots with a polling-place ID.
             A submission can appear more than once if it was reviewed again.
+            When the submission has a current active polling place, its name and
+            ID are returned. Otherwise, the historical name is returned if
+            available, without a link.
 
-            Reloading election data can delete old polling places while keeping
-            submission history. If the original place has gone, we show the
-            submission's current place instead; it may not be the same place
-            that was reviewed. If neither exists, we skip that entry without
-            replacing it with an older one.
+            Args:
+                electionId: ID of the election whose changes are being shown.
+
+            Returns:
+                A list of changes with a polling-place name and, when available,
+                the ID of the current active polling place.
             """
             data = []
 
@@ -307,20 +312,17 @@ class PendingStallsViewSet(generics.ListAPIView):
             current_polling_places = {
                 stall.id: stall.polling_place
                 for stall in Stalls.objects.filter(
-                    id__in=[
-                        stall.id
-                        for stall in history
-                        if stall.polling_place_id not in polling_places
-                    ]
+                    election_id=electionId,
+                    id__in=[stall.id for stall in history],
+                    polling_place__election_id=electionId,
+                    polling_place__status=PollingPlaceStatus.ACTIVE,
                 ).select_related("polling_place")
             }
 
             for stall in history:
-                polling_place = polling_places.get(
-                    stall.polling_place_id
-                ) or current_polling_places.get(stall.id)
-                if polling_place is None:
-                    continue
+                historical_place = polling_places.get(stall.polling_place_id)
+                current_place = current_polling_places.get(stall.id)
+                display_place = current_place or historical_place
 
                 data.append(
                     {
@@ -329,8 +331,10 @@ class PendingStallsViewSet(generics.ListAPIView):
                         "triaged_by": stall.triaged_by.first_name.split(" ")[0],
                         "status": stall.status,
                         "stall_id": stall.id,
-                        "polling_place_name": polling_place.name,
-                        "polling_place_id": polling_place.id,
+                        "polling_place_name": display_place.name
+                        if display_place
+                        else None,
+                        "polling_place_id": current_place.id if current_place else None,
                     }
                 )
 

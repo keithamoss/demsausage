@@ -439,7 +439,7 @@ export default function PollingPlaceCard(props: Props) {
 									</StyledListItemIcon>
 
 									<StyledListItemText
-										primary={pollingPlace.divisions.length >= 2 ? 'Divisions' : 'Divison'}
+										primary={pollingPlace.divisions.length >= 2 ? 'Divisions' : 'Division'}
 										secondary={getPollingPlaceDivisionsDescriptiveText(pollingPlace)}
 									/>
 								</StyledListItem>

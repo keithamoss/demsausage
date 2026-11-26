@@ -1,9 +1,9 @@
 import {
 	type EMapboxFeatureType,
 	type IMapboxSearchboxAPIV1Response,
-	getMapboxAPIKey,
 	getMapboxPOICategories,
 } from '../../features/search/searchBarHelpers';
+import { getMapboxAPIKey } from '../utils';
 import { api } from './api';
 
 export const mapboxGeocodingApi = api.injectEndpoints({

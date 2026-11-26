@@ -242,6 +242,7 @@ class ApproveUnofficialStallView(generics.GenericAPIView):
                 "description": stall.description,
                 "opening_hours": stall.opening_hours,
                 "website": stall.website,
+                "source": "Direct",
             },
             # The reverse polling_place relation is otherwise required
             partial=True,

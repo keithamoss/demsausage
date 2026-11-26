@@ -5,7 +5,7 @@ import React from 'react';
 import type { NavigateFunction, Params } from 'react-router-dom';
 import { navigateToMapAndUpdateMapWithNewView } from '../../app/routing/navigationHelpers/navigationHelpersMap';
 import type { IGeoJSONPoylgon } from '../../app/services/elections';
-import { eAppEnv, getCSVStringsAsFloats, getEnvironment } from '../../app/utils';
+import { getCSVStringsAsFloats } from '../../app/utils';
 import { getAllFoodsAvailableOnStalls, supportingIcons } from '../icons/iconHelpers';
 import { getStandardViewPadding } from '../map/mapHelpers';
 import type { IPollingPlace } from '../pollingPlaces/pollingPlacesInterfaces';
@@ -154,12 +154,6 @@ export const mapboxSearchTypesForElectionsWithoutPollingPlaces = [
 ];
 
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
-
-export function getMapboxAPIKey(): string {
-	return getEnvironment() === eAppEnv.DEVELOPMENT
-		? import.meta.env.VITE_MAPBOX_API_KEY_DEV
-		: import.meta.env.VITE_MAPBOX_API_KEY_PROD;
-}
 
 export const getBBoxFromGeoJSONPolygonCoordinates = (geometry: IGeoJSONPoylgon): [number, number, number, number] => {
 	return [

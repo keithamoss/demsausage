@@ -51,8 +51,15 @@ export const sentryInit = () => {
 		// sessions when an error occurs.
 		replaysOnErrorSampleRate: 1.0,
 
-		beforeSend(event) {
-			if (event.exception) {
+		beforeSend(event, hint) {
+			// API failures are reported for diagnosis, but shouldn't prompt users for feedback.
+			// Check both the original error and its tag in case the error has been transformed.
+			const originalException = hint.originalException;
+			const isRtkQueryError =
+				(originalException instanceof Error && originalException.name === 'RTKQueryError') ||
+				event.tags?.['rtk.endpoint'] !== undefined;
+
+			if (event.exception && !isRtkQueryError) {
 				Sentry.showReportDialog({ eventId: event.event_id });
 			}
 

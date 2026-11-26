@@ -14,9 +14,8 @@ import {
 	Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { navigateToPollingPlaceSearchResultsFromElectionAndSearchTermDirectly } from '../../app/routing/navigationHelpers/navigationHelpersPollingPlace';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import type { Election } from '../../app/services/elections';
 import {
 	type ElectionPendingStallsLatestChanges,
@@ -82,15 +81,6 @@ type Props = {
 function ElectionPendingStallsLatestChangesList(props: Props) {
 	const { election, latest_changes, onClose } = props;
 
-	const navigate = useNavigate();
-
-	const onNavigateToPollingPlace = useCallback(
-		(pollingPlaceName: string) => () => {
-			navigateToPollingPlaceSearchResultsFromElectionAndSearchTermDirectly(navigate, election, pollingPlaceName);
-		},
-		[navigate, election],
-	);
-
 	return (
 		<DialogWithTransition onClose={onClose}>
 			<AppBar color="secondary" sx={{ position: 'sticky' }}>
@@ -128,7 +118,17 @@ function ElectionPendingStallsLatestChangesList(props: Props) {
 									primary={
 										<React.Fragment>
 											{item.triaged_by} {item.status.toLowerCase()} submission #{item.stall_id} at{' '}
-											<Link onClick={onNavigateToPollingPlace(item.polling_place_name)}>{item.polling_place_name}</Link>
+											{item.polling_place_id !== null ? (
+												<Link
+													component={RouterLink}
+													to={`/polling-places/${election.name_url_safe}/${item.polling_place_id}/`}
+												>
+													{item.polling_place_name}
+												</Link>
+											) : (
+												(item.polling_place_name ?? 'a polling place whose details are no longer available')
+											)}
+											{item.polling_place_id === null && ' (current polling place unavailable)'}
 										</React.Fragment>
 									}
 									secondary={`${dayjs(item.datetime).format('D MMMM YYYY')} at ${dayjs(item.datetime).format('HH:mm')}`}

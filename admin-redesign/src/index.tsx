@@ -38,7 +38,12 @@ root.render(
 							<RouterProvider
 								router={router}
 								future={{
-									v7_startTransition: true,
+									// Disabled because the drawer backdrop can get stuck and block clicks after navigation:
+									// https://github.com/mui/material-ui/issues/32286
+									// MUI 9.3.1 includes a fix for stuck exit transitions:
+									// https://github.com/mui/material-ui/releases/tag/v9.3.1
+									// Re-enable this flag after upgrading MUI and verifying the drawer works.
+									v7_startTransition: false,
 								}}
 							/>
 						</HelmetProvider>

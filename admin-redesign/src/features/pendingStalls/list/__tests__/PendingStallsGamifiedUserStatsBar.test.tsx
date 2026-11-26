@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import PendingStallsGamifiedUserStatsBar from '../PendingStallsGamifiedUserStatsBar';
 
@@ -56,6 +56,82 @@ describe('PendingStallsGamifiedUserStatsBar', () => {
 		expect(within(dialog).getByText('Blair')).toBeInTheDocument();
 		expect(within(dialog).getByText('1')).toBeInTheDocument();
 		expect(within(dialog).getByText('2')).toBeInTheDocument();
+	});
+
+	it('splits a chain of nearby scores into separate stacks when they fit', () => {
+		trackWidth = 300;
+		renderBar([
+			{ ...users[0], total: 5 },
+			{ ...users[1], total: 13 },
+			{ ...users[2], total: 49 },
+			{ id: 4, name: 'Devon', initials: 'D', image_url: '', total: 89 },
+			{ id: 5, name: 'Eden', initials: 'E', image_url: '', total: 256 },
+		]);
+
+		const stacks = screen.getAllByRole('button', { name: 'View 2 contributors' });
+		expect(stacks).toHaveLength(2);
+		fireEvent.click(stacks[0]);
+		let dialog = screen.getByRole('dialog', { name: 'Contribution details' });
+		expect(within(dialog).getByText('5')).toBeInTheDocument();
+		expect(within(dialog).getByText('13')).toBeInTheDocument();
+		fireEvent.keyDown(document, { key: 'Escape' });
+		fireEvent.click(stacks[1]);
+		dialog = screen.getByRole('dialog', { name: 'Contribution details' });
+		expect(within(dialog).getByText('49')).toBeInTheDocument();
+		expect(within(dialog).getByText('89')).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'View contributions for Eden', hidden: true })).toBeInTheDocument();
+	});
+
+	it('keeps neighbouring stacks together when there is not enough room', () => {
+		trackWidth = 260;
+		renderBar([
+			{ ...users[0], total: 5 },
+			{ ...users[1], total: 13 },
+			{ ...users[2], total: 49 },
+			{ id: 4, name: 'Devon', initials: 'D', image_url: '', total: 89 },
+			{ id: 5, name: 'Eden', initials: 'E', image_url: '', total: 256 },
+		]);
+
+		expect(screen.getByRole('button', { name: 'View 4 contributors' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'View contributions for Eden' })).toBeInTheDocument();
+	});
+
+	it.each([12, 13])('prefers less total displacement for nearby scores ending at %i', async (thirdScore) => {
+		trackWidth = 200;
+		renderBar([
+			{ ...users[0], total: 5 },
+			{ ...users[1], total: 12 },
+			{ ...users[2], total: thirdScore },
+			{ id: 4, name: 'Devon', initials: 'D', image_url: '', total: 83 },
+			{ id: 5, name: 'Eden', initials: 'E', image_url: '', total: 150 },
+		]);
+
+		fireEvent.click(screen.getByRole('button', { name: 'View 3 contributors' }));
+		const dialog = screen.getByRole('dialog', { name: 'Contribution details' });
+		expect(within(dialog).getByText('Alex')).toBeInTheDocument();
+		expect(within(dialog).getByText('Blair')).toBeInTheDocument();
+		expect(within(dialog).getByText('Casey')).toBeInTheDocument();
+		fireEvent.keyDown(dialog, { key: 'Escape' });
+		await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Contribution details' })).not.toBeInTheDocument());
+
+		fireEvent.click(screen.getByRole('button', { name: 'View 2 contributors' }));
+		const secondDialog = screen.getByRole('dialog', { name: 'Contribution details' });
+		expect(within(secondDialog).getByText('Devon')).toBeInTheDocument();
+		expect(within(secondDialog).getByText('Eden')).toBeInTheDocument();
+	});
+
+	it('prefers more markers when arrangements have the same total displacement', () => {
+		trackWidth = 200;
+		renderBar([
+			{ ...users[0], total: 5 },
+			{ ...users[1], total: 12 },
+			{ ...users[2], total: 14 },
+			{ id: 4, name: 'Devon', initials: 'D', image_url: '', total: 83 },
+			{ id: 5, name: 'Eden', initials: 'E', image_url: '', total: 150 },
+		]);
+
+		expect(screen.getAllByRole('button', { name: 'View 2 contributors' })).toHaveLength(2);
+		expect(screen.getByRole('button', { name: 'View contributions for Eden' })).toBeInTheDocument();
 	});
 
 	it('regroups when the available width changes', () => {

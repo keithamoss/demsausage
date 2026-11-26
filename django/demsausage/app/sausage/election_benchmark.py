@@ -29,6 +29,7 @@ EXCLUDED_EVENTS = (
     "NSW By-Elections 2024",
     "Secret Harbour By-election 2026",
     "Kiama By-election 2026",
+    "Coffs Harbour By-election 2026",
     "NSW Local Govt Elections 2021",
     "QLD Local Govt Elections 2024",
     "NSW Local Government Elections 2024",
