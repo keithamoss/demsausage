@@ -97,6 +97,14 @@ function PendingStalls(props: Props) {
 		[navigate],
 	);
 
+	// Sort active elections so that the election that is next up comes first
+	const pendingElections = electionsWithPendingStalls
+		.flatMap((data) => {
+			const election = elections.find((elec) => elec.id === data.election_id);
+			return election === undefined ? [] : [{ data, election }];
+		})
+		.sort((a, b) => new Date(a.election.election_day).getTime() - new Date(b.election.election_day).getTime());
+
 	const [selectedElection, setSelectedElection] = useState<Election | undefined>(undefined);
 
 	// ######################
@@ -161,13 +169,7 @@ function PendingStalls(props: Props) {
 						},
 					}}
 				>
-					{electionsWithPendingStalls.map((data) => {
-						const election = elections.find((elec) => elec.id === data.election_id);
-
-						if (election === undefined) {
-							return;
-						}
-
+					{pendingElections.map(({ data, election }) => {
 						return (
 							<React.Fragment key={election.id}>
 								<Card variant="outlined" sx={{ mb: 1 }}>
