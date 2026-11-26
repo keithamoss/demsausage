@@ -54,34 +54,25 @@ export const navigateToPollingPlaceSearchResultsFromURLSearchTerm = (
 	navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/`, { state: { disableAutoFocus: true } });
 };
 
-export const navigateToPollingPlaceSearchResultsFromElectionAndSearchTermDirectly = (
-	navigate: NavigateFunction,
-	election: Election,
-	searchTerm: string,
-) => {
-	// We handle going to all of these routes:
-	// /polling-places/:election_name/search/:search_term/
-
-	navigate(`/polling-places/${election.name_url_safe}/search/${searchTerm}/`);
-};
-
 export const navigateToPollingPlaceEditorForm = (
 	params: Params<string>,
 	navigate: NavigateFunction,
 	pollingPlace: IPollingPlace,
 ) => {
 	// We handle going to all of these routes:
+	// /polling-places/:election_name/:polling_place_id/
 	// /polling-places/:election_name/search/:search_term/:polling_place_id/
 	const { id } = pollingPlace;
 
 	const { urlElectionName, urlSearchTerm } = getURLParams(params);
 
-	if (urlElectionName === undefined || urlSearchTerm === undefined) {
+	if (urlElectionName === undefined) {
 		return;
 	}
 
 	if (Number.isInteger(id) === true) {
-		navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/${id}/`);
+		const searchPath = urlSearchTerm === undefined ? '' : `search/${urlSearchTerm}/`;
+		navigate(`/polling-places/${urlElectionName}/${searchPath}${id}/`);
 	}
 };
 
@@ -91,17 +82,19 @@ export const navigateToPollingPlaceHistory = (
 	pollingPlace: IPollingPlace,
 ) => {
 	// We handle going to all of these routes:
+	// /polling-places/:election_name/:polling_place_id/history/
 	// /polling-places/:election_name/search/:search_term/:polling_place_id/history/
 	const { id } = pollingPlace;
 
 	const { urlElectionName, urlSearchTerm } = getURLParams(params);
 
-	if (urlElectionName === undefined || urlSearchTerm === undefined) {
+	if (urlElectionName === undefined) {
 		return;
 	}
 
 	if (Number.isInteger(id) === true) {
-		navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/${id}/history/`);
+		const searchPath = urlSearchTerm === undefined ? '' : `search/${urlSearchTerm}/`;
+		navigate(`/polling-places/${urlElectionName}/${searchPath}${id}/history/`);
 	}
 };
 
@@ -111,16 +104,18 @@ export const navigateToPollingPlaceStalls = (
 	pollingPlace: IPollingPlace,
 ) => {
 	// We handle going to all of these routes:
+	// /polling-places/:election_name/:polling_place_id/stalls/
 	// /polling-places/:election_name/search/:search_term/:polling_place_id/stalls/
 	const { id } = pollingPlace;
 
 	const { urlElectionName, urlSearchTerm } = getURLParams(params);
 
-	if (urlElectionName === undefined || urlSearchTerm === undefined) {
+	if (urlElectionName === undefined) {
 		return;
 	}
 
 	if (Number.isInteger(id) === true) {
-		navigate(`/polling-places/${urlElectionName}/search/${urlSearchTerm}/${id}/stalls/`);
+		const searchPath = urlSearchTerm === undefined ? '' : `search/${urlSearchTerm}/`;
+		navigate(`/polling-places/${urlElectionName}/${searchPath}${id}/stalls/`);
 	}
 };

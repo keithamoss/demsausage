@@ -238,8 +238,8 @@ export interface ElectionPendingStallsLatestChanges {
 	triaged_by: string;
 	status: StallStatus;
 	stall_id: number;
-	polling_place_name: string;
-	polling_place_id: number;
+	polling_place_name: string | null;
+	polling_place_id: number | null;
 }
 
 export interface ElectionPendingStallsGamifiedUserStats {
