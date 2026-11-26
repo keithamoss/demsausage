@@ -305,7 +305,7 @@ function ElectionStats(props: Props) {
 						<CardContent sx={{ pt: 1, pb: '16px !important' }}>
 							<Typography variant="body1" sx={{ mb: 2 }}>
 								Polling places with data of any sort - noms or Red Cross of Shame. Source is based on the source of the
-								first submission.
+								first submission. Unknown means no source was recorded.
 							</Typography>
 
 							<TableContainer

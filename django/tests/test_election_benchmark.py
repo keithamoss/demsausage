@@ -379,6 +379,25 @@ def test_deleted_and_archived_noms_do_not_affect_selection_or_current_coverage(
 
 
 @pytest.mark.django_db
+@patch("demsausage.app.serializers.getGamifiedElectionStats", return_value=[])
+def test_source_stats_group_missing_sources_as_unknown(_gamified):
+    current = make_election("Current", days_from_now(10))
+    add_polling_places(current, 4, [20, 20, 20, 20])
+    noms = list(PollingPlaceNoms.objects.filter(polling_place__election=current))
+    PollingPlaceNoms.objects.filter(pk=noms[0].pk).update(source="Direct")
+    PollingPlaceNoms.objects.filter(pk=noms[1].pk).update(source="Unknown")
+    PollingPlaceNoms.objects.filter(pk=noms[2].pk).update(source="Facebook")
+
+    result = ElectionsStatsSerializer(current).data["stats"]
+
+    assert {row["source"]: row["count"] for row in result["by_source"]} == {
+        "Direct": 1,
+        "Unknown": 2,
+        "Facebook": 1,
+    }
+
+
+@pytest.mark.django_db
 def test_perth_calendar_cutoff_includes_last_instant_but_not_next_midnight(monkeypatch):
     # Perth is already November 16 while UTC is still November 15.
     monkeypatch.setattr(

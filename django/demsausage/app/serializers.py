@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models.functions import Distance
 from django.core.cache import cache
-from django.db.models import Count, Q
+from django.db.models import Case, Count, F, Q, TextField, Value, When
 from django.db.models.functions import TruncDay
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
@@ -175,7 +175,14 @@ class ElectionsStatsSerializer(ElectionsSerializer):
                     polling_place__status=PollingPlaceStatus.ACTIVE,
                     deleted=False,
                 )
-                .values("source")
+                .annotate(
+                    source_label=Case(
+                        When(source="", then=Value("Unknown")),
+                        default=F("source"),
+                        output_field=TextField(),
+                    )
+                )
+                .values("source_label")
                 .annotate(count=Count("id"))
                 .order_by("-count")
             )
@@ -351,7 +358,10 @@ class ElectionsStatsSerializer(ElectionsSerializer):
             "total": PollingPlaces.objects.filter(
                 election=obj.id, status=PollingPlaceStatus.ACTIVE
             ).count(),
-            "by_source": list(_get_by_source()),
+            "by_source": [
+                {"source": row["source_label"], "count": row["count"]}
+                for row in _get_by_source()
+            ],
             "subs_by_type_and_day": list(_get_subs_by_type_and_day()),
             "subs_by_category": _get_subs_by_category(),
             "triage_actions_by_day": list(_get_triage_actions_by_day()),
