@@ -2,6 +2,11 @@
 
 In longer functions, separate logical sections with whitespace and add brief inline comments explaining each section's purpose where helpful. Prefer comments that clarify intent over narrating individual statements.
 
+# Docstrings
+
+- Document functions and methods in clear, human-friendly language, including their parameters and return values. Document properties where applicable, and include examples when they help explain usage.
+- Before finishing a code change, review each new or changed function for its docstring and check longer functions for helpful comments and whitespace. Update documentation when behavior or signatures change.
+
 # Testing
 
 - Add tests for meaningful behaviour and regressions, not simply to mirror each code change. Prefer existing coverage when it already protects the behaviour that matters.
