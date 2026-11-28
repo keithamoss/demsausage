@@ -1470,7 +1470,7 @@ __metadata:
     redux-responsive: "npm:^4.3.8"
     redux-thunk: "npm:^3.1.0"
     reselect: "npm:^5.3.0"
-    styled-components: "npm:6.6.0"
+    styled-components: "npm:6.7.0"
     typescript: "npm:^7.0.2"
     vite: "npm:^8.3.8"
     vite-plugin-checker: "npm:^1.0.0"
@@ -4093,9 +4093,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6.6.0":
-  version: 6.6.0
-  resolution: "styled-components@npm:6.6.0"
+"styled-components@npm:6.7.0":
+  version: 6.7.0
+  resolution: "styled-components@npm:6.7.0"
   dependencies:
     "@emotion/is-prop-valid": "npm:1.4.0"
     "@types/stylis": "npm:4.2.7"
@@ -4114,7 +4114,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 10c0/7496a42169119fd042344875fb9247599674df1b884b78a10a03d415a638192432009ed6f9c542db7c898e5ee6292a2cdb887252e0ea4b513361635aa49d3a55
+  checksum: 10c0/31b2036002d139068d5a71f9229608cf90579ca0da802153048c8c96c38f2dcf2f05e15d27539e02b150d58ba7c1fa9834a8275ccbfd6157b17a8a13571b67f1
   languageName: node
   linkType: hard
 
