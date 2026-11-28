@@ -7,7 +7,7 @@
     "@sentry/browser": "^11.17.0",
     "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.12",
+    "@testing-library/user-event": "^14.6.13",
     "copy-to-clipboard": "^4.0.2",
     "core-js": "^3.51.0",
     "deep-object-diff": "^1.1.9",
